@@ -190,7 +190,7 @@ class VegaTimeseriesPlot extends Component {
           },
         },
         layer: [
-        ],
+        ]
       },
     };
   }
@@ -323,6 +323,7 @@ class VegaTimeseriesPlot extends Component {
       data: { name: dataName },
       mark: {
         type: 'bar',
+        size: 20
       },
       encoding: {
         x: {
@@ -612,6 +613,132 @@ class VegaTimeseriesPlot extends Component {
     };
   };
 
+  makeBigoteLayer = (dataName) => {
+    const styleEncoding = this.makeStyleEncoding();
+    return {
+      data: { name: dataName },
+       transform: [
+        {
+          calculate: '(datum.mean + datum.delta)',
+          as: 'plus'
+        },
+        {
+          calculate: '(datum.mean - datum.delta)',
+          as: 'minus'
+        },
+        {
+          calculate: '(datum.mean + datum.delta) - 2 > 0 ? (datum.mean + datum.delta) - 1 : 0',
+          as: 'plus_limit'
+        },
+        {
+          calculate: '(datum.mean - datum.delta) > 0 ? (datum.mean - datum.delta) + 1 : 0',
+          as: 'minus_limit'
+        }
+      ],
+      layer: [
+        {
+          mark: {
+            type: 'bar',
+            clip: true,
+            size: 2
+          },
+          encoding: {
+            x: {
+              field: 'x',
+              type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
+                format: '%H:%M:%S',
+              },
+              scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
+            },
+            y: {
+              field: 'plus',
+              type: 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
+              }
+            },
+            y2: {
+              field: 'minus',
+              type: 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
+              }
+            },
+            color: styleEncoding.color
+          }
+        },
+        {
+          mark: {
+            type: 'bar',
+            clip: true,
+            size: 20
+          },
+          encoding: {
+            x: {
+              field: 'x',
+              type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
+                format: '%H:%M:%S',
+              },
+              scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
+            },
+            y: {
+              field: 'plus',
+              type: 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
+              }
+            },
+            y2: {
+              field: 'plus_limit',
+              type: 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
+              }
+            },
+            color: styleEncoding.color
+          }
+        },
+        {
+          mark: {
+            type: 'bar',
+            clip: true,
+            size: 20
+          },
+          encoding: {
+            x: {
+              field: 'x',
+              type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
+                format: '%H:%M:%S',
+              },
+              scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
+            },
+            y: {
+              field: 'minus_limit',
+              type: 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
+              },
+            },
+            y2: {
+              field: 'minus',
+              type: 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
+              }
+            },
+            color: styleEncoding.color
+          }
+        }
+      ]
+    };
+  };
+
   updateSpec = () => {
     this.setState({
       spec: {
@@ -655,6 +782,7 @@ class VegaTimeseriesPlot extends Component {
           this.makeAreaLayer('areas'),
           this.makeSpreadLayer('spreads'),
           this.makeBarLayer('bars'),
+          this.makeBigoteLayer('bigotes'),
           this.makeLineLayer('pointLines'),
           this.makePointsLayer('pointLines'),
           this.makeLineLayer('lines'),
