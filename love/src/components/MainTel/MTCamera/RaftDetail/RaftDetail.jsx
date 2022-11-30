@@ -19,14 +19,135 @@ const ccds = [
 class RaftDetail extends Component {
   constructor(props) {
     super(props);
+    this.refs = [
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+    ];
     this.state = {};
   }
 
   renderCCDsPlots() {
+    const ccds = [
+      {
+        PLOT1: {
+          category: 'telemetry',
+          csc: 'ATDome',
+          salindex: 0,
+          topic: 'position',
+          item: 'azimuthPosition',
+          type: 'line',
+          accessor: (x) => x,
+        },
+      },
+      {
+        PLOT2: {
+          category: 'telemetry',
+          csc: 'ATDome',
+          salindex: 0,
+          topic: 'position',
+          item: 'azimuthPosition',
+          type: 'line',
+          accessor: (x) => x,
+        },
+      },
+      {
+        PLOT3: {
+          category: 'telemetry',
+          csc: 'ATDome',
+          salindex: 0,
+          topic: 'position',
+          item: 'azimuthPosition',
+          type: 'line',
+          accessor: (x) => x,
+        },
+      },
+      {
+        PLOT4: {
+          category: 'telemetry',
+          csc: 'ATDome',
+          salindex: 0,
+          topic: 'position',
+          item: 'azimuthPosition',
+          type: 'line',
+          accessor: (x) => x,
+        },
+      },
+      {
+        PLOT5: {
+          category: 'telemetry',
+          csc: 'ATDome',
+          salindex: 0,
+          topic: 'position',
+          item: 'azimuthPosition',
+          type: 'line',
+          accessor: (x) => x,
+        },
+      },
+      {
+        PLOT6: {
+          category: 'telemetry',
+          csc: 'ATDome',
+          salindex: 0,
+          topic: 'position',
+          item: 'azimuthPosition',
+          type: 'line',
+          accessor: (x) => x,
+        },
+      },
+      {
+        PLOT7: {
+          category: 'telemetry',
+          csc: 'ATDome',
+          salindex: 0,
+          topic: 'position',
+          item: 'azimuthPosition',
+          type: 'line',
+          accessor: (x) => x,
+        },
+      },
+      {
+        PLOT8: {
+          category: 'telemetry',
+          csc: 'ATDome',
+          salindex: 0,
+          topic: 'position',
+          item: 'azimuthPosition',
+          type: 'line',
+          accessor: (x) => x,
+        },
+      },
+      {
+        PLOT9: {
+          category: 'telemetry',
+          csc: 'ATDome',
+          salindex: 0,
+          topic: 'position',
+          item: 'azimuthPosition',
+          type: 'line',
+          accessor: (x) => x,
+        },
+      },
+    ];
+
     return (
       <div className={styles.ccdsContainer}>
         {ccds.map((ccd, i) => (
-          <CCDDetail ccd={ccd} selectNeighboorCCD={this.selectNeighboorCCD} />
+          <div ref={this.refs[i]} className={styles.plot}>
+            <PlotContainer
+              inputs={ccd}
+              containerNode={this.refs[i]}
+              xAxisTitle="Time"
+              yAxisTitle="Value"
+              legendPosition="bottom"
+            />
+          </div>
         ))}
       </div>
     );
@@ -88,15 +209,15 @@ class RaftDetail extends Component {
     );
   }
 
-  render() {
-    const { ccd, showNeighboors, selectNeighboorCCD } = this.props;
-    const barHeight = 20;
-    return showNeighboors ? (
-      <Neighboors selectNeighboor={selectNeighboorCCD}>{this.renderPlots()}</Neighboors>
-    ) : (
-      <div style={{ height: '100%' }}>{this.renderPlots()}</div>
-    );
-  }
+  // render() {
+  //   const { ccd, showNeighboors, selectNeighboorCCD } = this.props;
+  //   const barHeight = 20;
+  //   return showNeighboors ? (
+  //     <Neighboors selectNeighboor={selectNeighboorCCD}>{this.renderPlots()}</Neighboors>
+  //   ) : (
+  //     <div style={{ height: '100%' }}>{this.renderPlots()}</div>
+  //   );
+  // }
 
   render() {
     const { raft, showNeighboors, selectNeighboorRaft } = this.props;
