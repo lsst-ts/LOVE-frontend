@@ -19,20 +19,30 @@ class MTCamera extends Component {
       width: 480,
       zoomLevel: 1,
       activeViewId: 'focalplane',
-      selectedRaft: { id: 100, top: 1, right: 2, bottom: 3, left: 4 },
-      selectedCCD: { id: 100, top: 1, right: 2, bottom: 3, left: 4 },
+      // selectedRaft: { id: 100, top: 1, right: 2, bottom: 3, left: 4 },
+      // selectedCCD: { id: 100, top: 1, right: 2, bottom: 3, left: 4 },
+      selectedRaft: null,
+      selectedCCD: null,
       hoveredRaft: null,
       hoveredCCD: null,
       hoveredReb: null,
     };
   }
 
-  setSelectedRaft = (id) => {
-    this.setState({ selectedRaft: id });
+  setSelectedRaft = (raft) => {
+    this.setState({ selectedRaft: raft });
   };
 
-  setHoveredRaft = (id) => {
-    this.setState({ hoveredRaft: id });
+  setHoveredRaft = (raft) => {
+    this.setState({ hoveredRaft: raft });
+  };
+
+  setSelectedCCD = (ccd) => {
+    this.setState({ selectedCCD: ccd });
+  };
+
+  setHoveredCCD = (ccd) => {
+    this.setState({ hoveredCCD: ccd });
   };
 
   preventDefault(e) {
@@ -42,16 +52,6 @@ class MTCamera extends Component {
     }
     e.returnValue = false;
   }
-
-  disableScroll = () => {
-    document.addEventListener('wheel', this.preventDefault, {
-      passive: false,
-    });
-  };
-
-  enableScroll = () => {
-    document.removeEventListener('wheel', this.preventDefault, false);
-  };
 
   findRaftById(id) {
     return { id, top: 100, right: 101, bottom: 102, left: 103 };
@@ -65,20 +65,18 @@ class MTCamera extends Component {
     const { selectedRaft } = this.state;
     const nextRaftId = selectedRaft[direction];
     const nextRaft = this.findRaftById(nextRaftId);
-    console.log(selectedRaft, direction, nextRaftId, nextraft);
-    this.setState({ selectedRaft: nextRaft });
+    this.setSelectedRaft(nextRaft);
   };
 
   selectNeighboorCCD = (direction) => {
     const { selectedCCD } = this.state;
     const nextCCDId = selectedCCD[direction];
     const nextCCD = this.findCCDById(nextCCDId);
-    console.log(selectedCCD, direction, nextCCDId, nextCCD);
-    this.setState({ selectedCCD: nextCCD });
+    this.setSelectedCCD(nextCCD);
   };
 
   componentDidMount() {
-    let yMax = -Infinity;
+    /*  let yMax = -Infinity;
     let xMax = -Infinity;
     let yMin = Infinity;
     let xMin = Infinity;
@@ -94,13 +92,13 @@ class MTCamera extends Component {
       xRadius: (xMax - xMin) / 2,
       yRadius: (yMax - yMin) / 2,
       maxRadius,
-    });
+    }); */
   }
 
   componentDidUpdate() {
-    d3.select('#focalplane').call(d3.zoom().scaleExtent([0, Infinity]).on('zoom', this.zoomed));
-    d3.select('#raftdetail').call(d3.zoom().scaleExtent([0, Infinity]).on('zoom', this.zoomed));
-    d3.select('#ccddetail').call(d3.zoom().scaleExtent([0, Infinity]).on('zoom', this.zoomed));
+    d3.select('#focalplane').call(d3.zoom().scaleExtent([0.5, 5]).on('zoom', this.zoomed));
+    d3.select('#raftdetail').call(d3.zoom().scaleExtent([0.5, 5]).on('zoom', this.zoomed));
+    d3.select('#ccddetail').call(d3.zoom().scaleExtent([0.5, 5]).on('zoom', this.zoomed));
   }
 
   zoomed = () => {
@@ -112,7 +110,8 @@ class MTCamera extends Component {
     else if (targetId === 'ccddetail') baseK = 2;
 
     const k = d3.event.transform.k + baseK;
-    console.log(targetId, k);
+    // console.log(targetId, k);
+    // console.log(d3.event.transform.toString());
     let newActiveViewId, newSelectedRaft;
     if (k >= 0 && k < 2) {
       // d3.select('#focalplane').style('visibility', 'visible');
@@ -137,14 +136,16 @@ class MTCamera extends Component {
     function d3TransformToString(transform) {
       console.log('X', transform.x);
       console.log('Y', transform.y);
-      return `translate(${transform.x}px, ${transform.y}px) scale(${transform.k})`;
+      return `translate(${transform.x * 0.5}px, ${transform.y * 0.5}px) scale(${transform.k})`;
     }
 
-    if (targetId === 'focalplane') d3.select('#focalplane').style('transform', d3TransformToString(d3.event.transform));
-    else if (targetId === 'raftdetail')
+    if (targetId === 'focalplane') {
+      d3.select('#focalplane').style('transform', d3TransformToString(d3.event.transform));
+    } else if (targetId === 'raftdetail') {
       d3.select('#raftdetail').style('transform', d3TransformToString(d3.event.transform));
-    else if (targetId === 'ccddetail')
+    } else if (targetId === 'ccddetail') {
       d3.select('#ccddetail').style('transform', d3TransformToString(d3.event.transform));
+    }
 
     this.setState((prevState) => ({
       activeViewId: newActiveViewId,
@@ -178,8 +179,9 @@ class MTCamera extends Component {
   }
 
   getMTCamera() {
+    const { selectedRaft } = this.state;
     return (
-      <div id="focalplane" style={{ visibility: 'visible' }}>
+      <div id="focalplane" style={{ visibility: 'visible', transformOrigin: 'center' }}>
         <FocalPlane
           id="focalplane"
           selectedRaft={this.state.selectedRaft}
