@@ -116,69 +116,27 @@ class VegaLegendMiniPlot extends React.PureComponent {
   };
 
   areaSpec = (markType) => {
-    if (markType !== 'area' ) {
+    if (markType !== 'area') {
       return {};
     }
     return {
       data: {
-        values: [{ a: -10, b: 19, c: 11}, { a: 0,  b: 34, c: 8 }, { a: 10, b: 27, c: 18 }, {a: 25, b: 29, c: 12}],
-      },
-      mark: {
-        type: 'area',
-        color: this.props.color,
-      },
-      encoding: {
-        x: {
-          field: 'a',
-          type: 'quantitative',
-          scale: {
-            domain: [0, 25],
-          },
-          axis: {
-            title: null,
-          },
-        },
-        y: {
-          field: 'b',
-          aggregate: 'max',
-          axis: { title: null },
-        },
-        y2: {
-          field: 'c',
-          aggregate: 'min',
-          axis: { title: null },
-        },
-        opacity: {
-          value: 0.8
-        }
-      },
-      config: {
-        background: null,
-        axis: false,
-      },
-    };
-  };
-
-  spreadSpec = (markType) => {
-    if (markType !== 'spread' ) {
-      return {};
-    }
-    return {
-      data: {
-        values: [{ a: -2, b: 2, c: 4, mean: 3}, { a: 0, b: 1, c: 5, mean: 3}, { a: 2, b: 2, c: 4, mean: 3}, { a: 4, b: 3, c: 6, mean: 4}],
+        values: [{ a: -10, b: 2, c: 7}, { a: 0, b: 2, c: 7 }, { a: 10, b: 2, c: 7 }],
       },
       layer: [
         {
           mark: {
-            type: 'area',
+            type: 'line',
             color: this.props.color,
+            clip: true,
+            strokeDash: this.props.dash,
           },
           encoding: {
             x: {
               field: 'a',
               type: 'quantitative',
               scale: {
-                domain: [-1, 4],
+                domain: [-5, 5],
               },
               axis: {
                 title: null,
@@ -186,46 +144,171 @@ class VegaLegendMiniPlot extends React.PureComponent {
             },
             y: {
               field: 'b',
-              aggregate: 'max',
-              axis: { title: null },
+              type: 'quantitative',
+              scale: {
+                domain: [0, 9],
+              },
+              axis: {
+                title: null,
+              },
             },
-            y2: {
-              field: 'c',
-              aggregate: 'min',
-              axis: { title: null },
-            },
-            opacity: {
-              value: 0.6
-            }
-          }
+          },
         },
         {
           mark: {
             type: 'line',
             color: this.props.color,
+            clip: true,
+            strokeDash: this.props.dash,
           },
           encoding: {
             x: {
               field: 'a',
               type: 'quantitative',
               scale: {
-                domain: [-1, 4],
+                domain: [-5, 5],
               },
               axis: {
                 title: null,
               },
             },
             y: {
-              field: 'mean',
-              axis: { title: null },
+              field: 'c',
+              type: 'quantitative',
+              scale: {
+                domain: [0, 9],
+              },
+              axis: {
+                title: null,
+              },
+            },
+          },
+        },
+        {
+          mark: {
+            type: 'area',
+            color: this.props.color,
+            clip: true,
+            strokeDash: this.props.dash,
+          },
+          encoding: {
+            x: {
+              field: 'a',
+              type: 'quantitative',
+              scale: {
+                domain: [-5, 5],
+              },
+              axis: {
+                title: null,
+              },
+            },
+            y: {
+              field: 'b',
+              type: 'quantitative',
+              scale: {
+                domain: [0, 9],
+              },
+            },
+            y2: {
+              field: 'c',
+              type: 'quantitative',
+              scale: {
+                domain: [0, 9],
+              },
+            },
+            opacity: {
+              value: 0.5
             }
-          }
-      }
-      
-    ],
+          },
+        }
+      ],
       config: {
         background: null,
-        axis: false,
+        axis: false
+      },
+    };
+  };
+
+  spreadSpec = (markType) => {
+    if (markType !== 'spread') {
+      return {};
+    }
+    return {
+      data: {
+        values: [{ a: -10, b: 2, c: 8, d: 5 }, { a: 0, b: 2, c: 8, d: 5 }, { a: 10, b: 2, c: 8, d: 5 }],
+      },
+      layer: [
+        {
+          mark: {
+            type: 'line',
+            color: this.props.color,
+            clip: true,
+            strokeDash: this.props.dash,
+          },
+          encoding: {
+            x: {
+              field: 'a',
+              type: 'quantitative',
+              scale: {
+                domain: [-5, 5],
+              },
+              axis: {
+                title: null,
+              },
+            },
+            y: {
+              field: 'd',
+              type: 'quantitative',
+              scale: {
+                domain: [0, 9],
+              },
+              axis: {
+                title: null,
+              },
+            },
+          },
+        },
+        {
+          mark: {
+            type: 'area',
+            color: this.props.color,
+            clip: true,
+            strokeDash: this.props.dash,
+          },
+          encoding: {
+            x: {
+              field: 'a',
+              type: 'quantitative',
+              scale: {
+                domain: [-5, 5],
+              },
+              axis: {
+                title: null,
+              },
+            },
+            y: {
+              field: 'b',
+              type: 'quantitative',
+              scale: {
+                domain: [0, 9],
+              },
+            },
+            y2: {
+              field: 'c',
+              type: 'quantitative',
+              scale: {
+                domain: [0, 9],
+              },
+            },
+            opacity: {
+              value: 0.5
+            }
+          },
+        }
+      ],
+      config: {
+        background: null,
+        axis: false
       },
     };
   };
@@ -320,6 +403,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
     const areaSpec = this.areaSpec(this.props.markType);
     const arrowSpec = this.arrowSpec(this.props.markType);
     const spreadSpec = this.spreadSpec(this.props.markType);
+    /* const bigoteSpec = this.barSpec(this.props.markType); */
     const spec = {
       schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       width: 24,
@@ -333,6 +417,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
       ...arrowSpec,
       ...areaSpec,
       ...spreadSpec,
+      /* ...bigoteSpec, */
     };
 
     return <VegaLite renderer="svg" spec={spec} actions={false} />;
