@@ -99,25 +99,20 @@ export default class MirrorCovers extends Component {
     );
 
     return (
-        <svg
-            id="mirrorCoverSvg"
-            data-name="mirrorCoverSvg"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 385 385"
+      <svg id="mirrorCoverSvg" data-name="mirrorCoverSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 385 385">
+        {this.getBase(x0, y0, equivalentAzimuthActual)}
+
+        <g
+          style={{
+            transition: 'transform 1.5s linear 0s',
+            transform: `rotateZ(${equivalentAzimuthActual}deg)`,
+            transformOrigin: `50% 50%`,
+          }}
         >
-          { this.getBase(x0, y0, equivalentAzimuthActual) }
-          
-            <g
-                style={{
-                  transition: 'transform 1.5s linear 0s',
-                  transform: `rotateZ(${equivalentAzimuthActual}deg)`,
-                  transformOrigin: `50% 50%`
-                }}
-            >
-              { this.getMirrorCover(angleClosed, angleClosedBorder, viewBoxSize) }
-              { this.getMount(x0, y0) }
-            </g>
-          { equivalentAzimuthDemand !== equivalentAzimuthActual ?? this.getDemand(equivalentAzimuthDemand) }
+          {this.getMirrorCover(angleClosed, angleClosedBorder, viewBoxSize)}
+          {this.getMount(x0, y0)}
+        </g>
+        {equivalentAzimuthDemand !== equivalentAzimuthActual ?? this.getDemand(equivalentAzimuthDemand)}
       </svg>
     );
   };
@@ -137,20 +132,20 @@ export default class MirrorCovers extends Component {
           }}
         />
         <g
-            style={{
-              transition: 'transform 1.5s linear 0s',
-              transform: `rotateZ(${equivalentAzimuthActual}deg)`,
-              transformOrigin: `50% 50%`
-            }}
+          style={{
+            transition: 'transform 1.5s linear 0s',
+            transform: `rotateZ(${equivalentAzimuthActual}deg)`,
+            transformOrigin: `50% 50%`,
+          }}
         >
-            <path
-                className={styles.cls3}
-                d="M19.95 168.14h48.69v48.71H19.95zM316.36 168.14h48.69v48.71h-48.69zM302.63 40.57H82.37L38.31 87.89l-3.25 19.02 47.31 15.66h220.26l47.31-15.66-2.44-19.02-44.87-47.32z"
-            />
-            <path
-                className={styles.cls3}
-                d="M323.24 97.41 289 62.6H96L61.76 97.41l-11.28 60.28v69.62l11.28 60.28L96 322.4h193l34.26-34.81 11.28-60.28v-69.62ZM192.5 298A105.54 105.54 0 1 1 298 192.5 105.52 105.52 0 0 1 192.5 298Z"
-            />
+          <path
+            className={styles.cls3}
+            d="M19.95 168.14h48.69v48.71H19.95zM316.36 168.14h48.69v48.71h-48.69zM302.63 40.57H82.37L38.31 87.89l-3.25 19.02 47.31 15.66h220.26l47.31-15.66-2.44-19.02-44.87-47.32z"
+          />
+          <path
+            className={styles.cls3}
+            d="M323.24 97.41 289 62.6H96L61.76 97.41l-11.28 60.28v69.62l11.28 60.28L96 322.4h193l34.26-34.81 11.28-60.28v-69.62ZM192.5 298A105.54 105.54 0 1 1 298 192.5 105.52 105.52 0 0 1 192.5 298Z"
+          />
         </g>
       </>
     );
