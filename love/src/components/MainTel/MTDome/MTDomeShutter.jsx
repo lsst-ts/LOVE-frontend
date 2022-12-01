@@ -186,7 +186,7 @@ export default class MTDomeShutter extends Component {
         </g>
 
         {/* Dome, commanded position */}
-        {positionCommandedDomeAz !== positionActualDomeAz && (
+        {/* {positionCommandedDomeAz !== positionActualDomeAz && (
           <g
             style={{
               transformOrigin: `50% 50%`,
@@ -200,7 +200,7 @@ export default class MTDomeShutter extends Component {
               d="M72.99,6.09H28.26v4.05h40.12L22.67,50.39,1.3,102.86l1.62,53.83,58.95,77.23h-23.89v4.86h27.6l1.42,1.86h96l1.42-1.86h27.6v-4.86h-23.89l58.95-77.23,1.62-53.83-21.37-52.47L161.65,10.14h40.12V6.09h-44.72l-.51-.45H73.5l-.51,.45Zm83.8,3.65V156.87H73.71V9.74h83.08Z"
             />
           </g>
-        )}
+        )} */}
       </svg>
     );
   }
