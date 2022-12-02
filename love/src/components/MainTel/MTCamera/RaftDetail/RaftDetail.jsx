@@ -30,7 +30,6 @@ class RaftDetail extends Component {
       React.createRef(),
       React.createRef(),
     ];
-    this.state = {};
   }
 
   renderCCDsPlots() {
@@ -154,9 +153,11 @@ class RaftDetail extends Component {
   }
 
   renderRebsPlots() {
-    const plots = [
-      {
-        REB1: {
+    const { raft, selectedReb, setSelectedReb } = this.props;
+    const plots = [];
+    raft.rebs.forEach((r) => {
+      plots.push({
+        [`REB${r.id}`]: {
           category: 'telemetry',
           csc: 'ATDome',
           salindex: 0,
@@ -165,37 +166,23 @@ class RaftDetail extends Component {
           type: 'line',
           accessor: (x) => x,
         },
-      },
-      {
-        REB2: {
-          category: 'telemetry',
-          csc: 'ATDome',
-          salindex: 0,
-          topic: 'position',
-          item: 'azimuthPosition',
-          type: 'line',
-          accessor: (x) => x,
-        },
-      },
-      {
-        REB3: {
-          category: 'telemetry',
-          csc: 'ATDome',
-          salindex: 0,
-          topic: 'position',
-          item: 'azimuthPosition',
-          type: 'line',
-          accessor: (x) => x,
-        },
-      },
-    ];
+      });
+    });
 
     const refs = [React.createRef(), React.createRef(), React.createRef()];
 
     return (
       <div className={styles.rebsContainer}>
         {plots.map((p, i) => (
-          <div ref={refs[i]} className={styles.plot}>
+          <div
+            key={`r${i}`}
+            ref={refs[i]}
+            style={{ border: selectedReb?.id === raft.rebs[i].id ? '2px solid white' : `` }}
+            className={styles.plot}
+            onClick={() => {
+              setSelectedReb(raft.rebs[i]);
+            }}
+          >
             <PlotContainer
               inputs={p}
               containerNode={refs[i]}
@@ -220,7 +207,7 @@ class RaftDetail extends Component {
   // }
 
   render() {
-    const { raft, showNeighboors, selectNeighboorRaft } = this.props;
+    const { raft, showNeighboors, selectedReb, selectNeighboorRaft } = this.props;
     const barHeight = 20;
     return showNeighboors ? (
       <Neighboors selectNeighboor={selectNeighboorRaft}>

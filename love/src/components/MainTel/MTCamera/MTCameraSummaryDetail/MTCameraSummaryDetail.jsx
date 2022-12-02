@@ -10,30 +10,38 @@ import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
 import styles from './MTCameraSummaryDetail.module.css';
 
 class RaftDetail extends Component {
+  constructor() {
+    super();
+    this.state = {
+      ccdsData: [],
+      rebsData: [],
+    };
+  }
+
   REBs = [
     {
-      field: 'FirstColumn',
+      field: 'firstColumn',
       title: '',
     },
     {
-      field: 'Bias',
-      title: 'Bias',
+      field: 'bias',
+      title: 'bias',
     },
     {
-      field: 'Voltaje',
-      title: 'Voltaje [V]',
+      field: 'voltage',
+      title: 'voltage [V]',
       type: 'number',
     },
     {
-      field: 'Power',
-      title: 'Power [P]',
+      field: 'power',
+      title: 'power [P]',
       type: 'number',
     },
   ];
 
   CCDs = [
     {
-      field: 'FirstColumn',
+      field: 'firstColumn',
       title: '',
     },
     {
@@ -68,31 +76,46 @@ class RaftDetail extends Component {
     },
   ];
 
+  getSummaryDetailData() {
+    const { selectedRaft, selectedCCD, selectedReb } = this.props;
+    const { ccds, rebs } = selectedRaft;
+    const ccdsData = [];
+
+    const rebsData = [];
+    rebs.forEach((r) => {
+      rebsData.push({
+        firstColumn: `REB ${r.id}`,
+        bias: Math.random() > 0.5 ? 'On' : 'Off',
+        voltage: Math.random() * 100,
+        power: Math.random() * 50,
+        rowClass: selectedReb?.id === r.id ? styles.selectedRow : '',
+      });
+    });
+    console.log(rebsData);
+
+    this.setState({ ccdsData, rebsData });
+  }
+
+  componentDidMount() {
+    this.getSummaryDetailData();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      (this.props.selectedRaft && this.props.selectedRaft.id !== prevProps.selectedRaft?.id) ||
+      (this.props.selectedReb && this.props.selectedReb.id !== prevProps.selectedReb?.id)
+    ) {
+      this.getSummaryDetailData();
+    }
+  }
+
   render() {
     const { selectedRaft } = this.props;
-    const rebs_data = [
-      {
-        FirstColumn: 'REB 01',
-        Bias: 'On',
-        Voltaje: '1.123',
-        Power: '1.123',
-      },
-      {
-        FirstColumn: 'REB 02',
-        Bias: 'Off',
-        Voltaje: '1.123',
-        Power: '1.123',
-      },
-      {
-        FirstColumn: 'REB 03',
-        Bias: 'On',
-        Voltaje: '1.123',
-        Power: '1.123',
-      },
-    ];
+    const { ccdsData, rebsData } = this.state;
+
     const ccds_data = [
       {
-        FirstColumn: 'CCD 01',
+        firstColumn: 'CCD 01',
         'GD 0': '1.123',
         'OD 0': '1.123',
         'GV 0': '1.123',
@@ -100,7 +123,7 @@ class RaftDetail extends Component {
         'SW 0': '1.123',
       },
       {
-        FirstColumn: 'CCD 02',
+        firstColumn: 'CCD 02',
         'GD 0': '1.123',
         'OD 0': '1.123',
         'GV 0': '1.123',
@@ -108,7 +131,7 @@ class RaftDetail extends Component {
         'SW 0': '1.123',
       },
       {
-        FirstColumn: 'CCD 03',
+        firstColumn: 'CCD 03',
         'GD 0': '1.123',
         'OD 0': '1.123',
         'GV 0': '1.123',
@@ -116,7 +139,7 @@ class RaftDetail extends Component {
         'SW 0': '1.123',
       },
       {
-        FirstColumn: 'CCD 04',
+        firstColumn: 'CCD 04',
         'GD 0': '1.123',
         'OD 0': '1.123',
         'GV 0': '1.123',
@@ -124,7 +147,7 @@ class RaftDetail extends Component {
         'SW 0': '1.123',
       },
       {
-        FirstColumn: 'CCD 04',
+        firstColumn: 'CCD 04',
         'GD 0': '1.123',
         'OD 0': '1.123',
         'GV 0': '1.123',
@@ -132,7 +155,7 @@ class RaftDetail extends Component {
         'SW 0': '1.123',
       },
       {
-        FirstColumn: 'CCD 05',
+        firstColumn: 'CCD 05',
         'GD 0': '1.123',
         'OD 0': '1.123',
         'GV 0': '1.123',
@@ -140,7 +163,7 @@ class RaftDetail extends Component {
         'SW 0': '1.123',
       },
       {
-        FirstColumn: 'CCD 06',
+        firstColumn: 'CCD 06',
         'GD 0': '1.123',
         'OD 0': '1.123',
         'GV 0': '1.123',
@@ -148,7 +171,7 @@ class RaftDetail extends Component {
         'SW 0': '1.123',
       },
       {
-        FirstColumn: 'CCD 07',
+        firstColumn: 'CCD 07',
         'GD 0': '1.123',
         'OD 0': '1.123',
         'GV 0': '1.123',
@@ -156,7 +179,7 @@ class RaftDetail extends Component {
         'SW 0': '1.123',
       },
       {
-        FirstColumn: 'CCD 08',
+        firstColumn: 'CCD 08',
         'GD 0': '1.123',
         'OD 0': '1.123',
         'GV 0': '1.123',
@@ -164,7 +187,7 @@ class RaftDetail extends Component {
         'SW 0': '1.123',
       },
       {
-        FirstColumn: 'CCD 09',
+        firstColumn: 'CCD 09',
         'GD 0': '1.123',
         'OD 0': '1.123',
         'GV 0': '1.123',
@@ -175,7 +198,7 @@ class RaftDetail extends Component {
     return (
       <div>
         <div>
-          <Title>Raft 15</Title>
+          <Title>Raft {selectedRaft.id}</Title>
           <Value>
             <StatusText>OK</StatusText>
           </Value>
@@ -186,11 +209,11 @@ class RaftDetail extends Component {
         </div>
         {/* REBs table */}
         <div>
-          <SimpleTable headers={this.REBs} data={rebs_data} />
+          <SimpleTable headers={this.REBs} data={rebsData} />
         </div>
         {/* CCDs table */}
         <div>
-          <SimpleTable headers={this.CCDs} data={ccds_data} />
+          <SimpleTable headers={this.CCDs} data={ccdsData} />
         </div>
       </div>
     );

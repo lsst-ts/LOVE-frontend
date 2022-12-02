@@ -8,6 +8,26 @@ import PropTypes from 'prop-types';
 import styles from './MTCamera.module.css';
 import MTCameraSummaryDetail from './MTCameraSummaryDetail/MTCameraSummaryDetail';
 
+const rafts = [];
+const secondaryRafts = [0, 4, 20, 24];
+for (let i = 0; i < 25; i++) {
+  const ccds = [];
+  const rebs = [];
+  if (!secondaryRafts.includes(i)) {
+    for (let j = 0; j < 9; j++) {
+      ccds.push({
+        id: i * 9 + (j + 1),
+        status: Math.ceil(Math.random() * 3),
+      });
+    }
+    for (let j = 0; j < 3; j++) {
+      rebs.push({
+        id: i * 3 + (j + 1),
+      });
+    }
+  }
+  rafts.push({ id: i + 1, status: 1, ccds, rebs });
+}
 class MTCamera extends Component {
   constructor(props) {
     super(props);
@@ -23,6 +43,7 @@ class MTCamera extends Component {
       // selectedCCD: { id: 100, top: 1, right: 2, bottom: 3, left: 4 },
       selectedRaft: null,
       selectedCCD: null,
+      selectedReb: null,
       hoveredRaft: null,
       hoveredCCD: null,
       hoveredReb: null,
@@ -43,6 +64,14 @@ class MTCamera extends Component {
 
   setHoveredCCD = (ccd) => {
     this.setState({ hoveredCCD: ccd });
+  };
+
+  setSelectedReb = (reb) => {
+    this.setState({ selectedReb: reb });
+  };
+
+  setHoveredReb = (reb) => {
+    this.setState({ hoveredReb: reb });
   };
 
   preventDefault(e) {
@@ -149,7 +178,7 @@ class MTCamera extends Component {
 
     this.setState((prevState) => ({
       activeViewId: newActiveViewId,
-      selectedRaft: newSelectedRaft,
+      selectedRaft: newSelectedRaft ?? prevState.selectedRaft,
       zoomLevel: k,
     }));
   };
@@ -158,22 +187,30 @@ class MTCamera extends Component {
     const { selectedCCD, hoveredRaft, selectedRaft, hoveredCCD } = this.state;
     // console.log('Selected', selectedCCD);
     // console.log('Hovered', hoveredCCD);
-    // console.log('Selected', selectedRaft);
-    // console.log('Hovered', hoveredRaft);
+    console.log('Selected', selectedRaft);
+    console.log('Hovered', hoveredRaft);
     // console.log(this.state.activeViewId);
-    return <div className={styles.container}>{this.getComponent()}</div>;
+    return this.getComponent();
   }
 
   getComponent() {
-    const { zoomLevel, selectedCCD } = this.state;
+    const { selectedRaft, selectedCCD, selectedReb, zoomLevel } = this.state;
     return (
-      <div>
-        <div>
+      <div className={styles.container}>
+        <div className={styles.focalPlanceContainer}>
           {zoomLevel >= 3 && zoomLevel < 4 && this.getCCDdetail()}
           {zoomLevel >= 2 && zoomLevel < 3 && this.getRaftdetail()}
           {zoomLevel >= 0 && zoomLevel < 2 && this.getMTCamera()}
         </div>
-        <div>{selectedCCD ? MTCameraSummaryDetail : ''}</div>
+        <div className={styles.summaryDetailContainer}>
+          {selectedRaft ? (
+            <div className={styles.summaryDetail}>
+              <MTCameraSummaryDetail selectedRaft={selectedRaft} selectedCCD={selectedCCD} selectedReb={selectedReb} />
+            </div>
+          ) : (
+            <div className={styles.emptySummaryDetail}>No existe nada</div>
+          )}
+        </div>
       </div>
     );
   }
@@ -184,6 +221,7 @@ class MTCamera extends Component {
       <div id="focalplane" style={{ visibility: 'visible', transformOrigin: 'center' }}>
         <FocalPlane
           id="focalplane"
+          rafts={rafts}
           selectedRaft={this.state.selectedRaft}
           setSelectedRaft={this.setSelectedRaft}
           setHoveredRaft={this.setHoveredRaft}
@@ -193,10 +231,18 @@ class MTCamera extends Component {
   }
 
   getRaftdetail() {
-    const { selectedRaft } = this.state;
+    const { selectedRaft, selectedCCD, selectedReb } = this.state;
     return (
       <div id="raftdetail" /* style={{visibility: 'hidden'}} */>
-        <RaftDetail raft={selectedRaft} showNeighboors={true} selectNeighboorRaft={this.selectNeighboorRaft} />
+        <RaftDetail
+          raft={selectedRaft}
+          showNeighboors={true}
+          selectedCCD={selectedCCD}
+          selectedReb={selectedReb}
+          setSelectedCCD={this.setSelectedCCD}
+          setSelectedReb={this.setSelectedReb}
+          selectNeighboorRaft={this.selectNeighboorRaft}
+        />
       </div>
     );
   }

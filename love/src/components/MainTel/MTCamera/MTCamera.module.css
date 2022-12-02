@@ -14,3 +14,27 @@
 .foreignObjectSvg {
   /* overflow-y: scroll; */
 }
+
+.container {
+  width: 100%;
+  display: grid;
+  grid-gap: 2em;
+  grid-template-columns: 50% 1fr;
+  align-items: center;
+}
+
+.summaryDetailContainer {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--second-tertiary-background-color);
+  /* overflow: hidden; */
+}
+
+.summaryDetail {
+  margin: 1em;
+}
+
+.emptySummaryDetail {
+}
