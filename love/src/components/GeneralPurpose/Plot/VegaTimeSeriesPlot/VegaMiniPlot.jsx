@@ -79,7 +79,9 @@ class VegaLegendMiniPlot extends React.PureComponent {
       ],
       config: {
         background: null,
-        axis: false,
+        axis: {
+          orient: "right"
+        },
         style: {
           triangle: {
             shape: this.props.shape,
@@ -121,7 +123,9 @@ class VegaLegendMiniPlot extends React.PureComponent {
       },
       config: {
         background: null,
-        axis: false,
+        axis: {
+          orient: "right"
+        },
         bar: {
           continuousBandSize: 5,
         },
@@ -238,7 +242,9 @@ class VegaLegendMiniPlot extends React.PureComponent {
       ],
       config: {
         background: null,
-        axis: false
+        axis: {
+          orient: "right"
+        },
       },
     };
   };
@@ -322,7 +328,9 @@ class VegaLegendMiniPlot extends React.PureComponent {
       ],
       config: {
         background: null,
-        axis: false
+        axis: {
+          orient: "right"
+        },
       },
     };
   };
@@ -334,7 +342,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
     return {
       data: {
         values: [
-          {x: -2, y: 0.5, angle: 165}, {x: 0, y: 2, angle: 105}, {x: 2, y: 1, angle: 25}
+          {x: -1, y: 0.5, angle: 165}, {x: 0.5, y: 2, angle: 105}, {x: 2, y: 1, angle: 25}
         ]
       },
       layer: [
@@ -406,7 +414,9 @@ class VegaLegendMiniPlot extends React.PureComponent {
       ],
       config: {
         background: null,
-        axis: false,
+        axis: {
+          orient: "right"
+        },
       },
     }
   }
@@ -534,7 +544,9 @@ class VegaLegendMiniPlot extends React.PureComponent {
       
       config: {
         background: null,
-        axis: false,
+        axis: {
+          orient: "right"
+        },
         bar: {
           continuousBandSize: 5,
         },
@@ -584,7 +596,9 @@ class VegaLegendMiniPlot extends React.PureComponent {
       },
       config: {
         background: null,
-        axis: false,
+        axis: {
+          orient: "right"
+        },
         /* bar: {
           continuousBandSize: 5,
         }, */
@@ -604,7 +618,6 @@ class VegaLegendMiniPlot extends React.PureComponent {
       schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       width: 30,
       height: 31,
-      padding: 0,
       view: {
         stroke: null,
       },
@@ -617,7 +630,18 @@ class VegaLegendMiniPlot extends React.PureComponent {
       ...rectSpec,
     };
 
-    return <VegaLite renderer="svg" spec={spec} actions={false} />;
+    return <VegaLite
+        style={{
+          display: 'flex'
+        }}
+        padding={{
+          right: '10px',
+          left: '0px'
+        }}
+        renderer="svg"
+        spec={spec}
+        actions={false}
+      />;
   }
 }
 
