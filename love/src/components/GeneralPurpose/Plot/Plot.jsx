@@ -316,7 +316,7 @@ export default class Plot extends Component {
 
     const units = {y: streamsItems.find((item) => item?.units !== undefined && item?.units !== '')?.units};
 
-    const layerTypes = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads', 'bigotes'];
+    const layerTypes = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads', 'bigotes', 'rects'];
     const layers = {};
     for (const [inputName, inputConfig] of Object.entries(inputs)) {
       const { type } = inputConfig;

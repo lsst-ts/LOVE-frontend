@@ -739,6 +739,67 @@ class VegaTimeseriesPlot extends Component {
     };
   };
 
+  makeRectLayer = (dataName) => {
+    const styleEncoding = this.makeStyleEncoding();
+    return {
+      data: { name: dataName },
+      transform: [
+        {
+          calculate: '(datum.x - 1800)',
+          as: 'x2'
+        },
+      ],
+      layer: [
+        {
+          mark: {
+            type: 'rect',
+            clip: true,
+            strokeWidth: 3
+          },
+          encoding: {
+            x: {
+              field: 'x',
+              type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
+                format: '%H:%M:%S',
+              },
+              scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
+            },
+             x2: {
+              field: 'x2',
+              type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
+                format: '%H:%M:%S',
+              },
+              scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
+            },
+            y: {
+              field: 'y',
+              type: 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
+              }
+            },
+            y2: {
+              field: 'y2',
+              type: 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
+              }
+            },
+            fill: styleEncoding.color,
+            fillOpacity: {
+              value: 0.5
+            },
+            stroke: styleEncoding.color,
+          }
+        }
+      ]
+    };
+  };
+
   updateSpec = () => {
     this.setState({
       spec: {
@@ -781,6 +842,7 @@ class VegaTimeseriesPlot extends Component {
         layer: [
           this.makeAreaLayer('areas'),
           this.makeSpreadLayer('spreads'),
+          this.makeRectLayer('rects'),
           this.makeBarLayer('bars'),
           this.makeBigoteLayer('bigotes'),
           this.makeLineLayer('pointLines'),
