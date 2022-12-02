@@ -36,33 +36,47 @@ class VegaLegendMiniPlot extends React.PureComponent {
     }
     return {
       data: {
-        values: [{ a: -100 }, { a: 0 }, { a: 100 }],
+        values: [{ a: -10, b: 2, c: 8, d: 5 }, { a: 0, b: 2, c: 8, d: 5 }, { a: 10, b: 2, c: 8, d: 5 }],
       },
-      mark: {
-        type: 'line',
-        point:
-          markType === 'line'
-            ? null
-            : {
-                style: 'triangle',
-                filled: this.props.filled,
+      layer: [
+        {
+          mark: {
+            type: 'line',
+            point:
+              markType === 'line'
+                ? null
+                : {
+                    style: 'triangle',
+                    filled: this.props.filled,
+                  },
+            color: this.props.color,
+            clip: true,
+            strokeDash: this.props.dash,
+          },
+          encoding: {
+            x: {
+              field: 'a',
+              type: 'quantitative',
+              scale: {
+                domain: [-5, 5],
               },
-        color: this.props.color,
-        clip: true,
-        strokeDash: this.props.dash,
-      },
-      encoding: {
-        x: {
-          field: 'a',
-          type: 'quantitative',
-          scale: {
-            domain: [-5, 5],
+              axis: {
+                title: null,
+              },
+            },
+            y: {
+              field: 'd',
+              type: 'quantitative',
+              scale: {
+                domain: [0, 9],
+              },
+              axis: {
+                title: null,
+              },
+            },
           },
-          axis: {
-            title: null,
-          },
-        },
-      },
+        }
+      ],
       config: {
         background: null,
         axis: false,
@@ -83,7 +97,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
       return {};
     }
     return {
-      data: { values: [{ a: -2, b: 4 },{ a: 1, b: 6 },{ a: 4, b: 3}] },
+      data: { values: [{ a: 1, b: 4 },{ a: 3, b: 6 },{ a: 5, b: 3}] },
       mark: {
         type: 'bar',
         color: this.props.color,
@@ -397,17 +411,199 @@ class VegaLegendMiniPlot extends React.PureComponent {
     }
   }
 
+  bigoteSpec = (markType) => {
+    if (markType !== 'bigote') {
+      return {};
+    }
+    return {
+      data: { values: [
+        { x: 1, x2: 1.2, y: 0.5, y2: 3, lux: 0.5, lux2: 1.7, luy: 3, luy2: 3.1, ldy: 0.4 },
+        { x: 2.5, x2: 2.7, y: 1.5, y2: 4, lux: 2, lux2: 3.2, luy: 4, luy2: 4.1, ldy: 1.4  }, 
+        { x: 4, x2: 4.2, y: 0.64, y2: 2.5, lux: 3.5, lux2: 4.7, luy: 2.5, luy2: 2.6, ldy: 0.74 }, 
+      ] },
+      layer: [
+        {
+          mark: {
+            type: 'bar',
+            color: this.props.color,
+            /* clip: true, */
+          },
+          encoding: {
+            x: {
+              field: 'x',
+              type: 'quantitative',
+              scale: { domain: [0, 5] },
+              axis: { title: null },
+            },
+            x2: {
+              field: 'x2',
+              type: 'quantitative',
+              scale: { domain: [0, 5] },
+              axis: { title: null },
+            },
+            y: {
+              field: 'y',
+              type: 'quantitative',
+              scale: { domain: [0, 5] },
+              axis: { title: null },
+            },
+            y2: {
+              field: 'y2',
+              type: 'quantitative',
+              scale: { domain: [0, 5] },
+              axis: { title: null },
+            },
+            opacity: {
+              value: 0.9
+            }
+          },
+        },
+        {
+          mark: {
+            type: 'bar',
+            color: this.props.color,
+            /* clip: true, */
+          },
+          encoding: {
+            x: {
+              field: 'lux',
+              type: 'quantitative',
+              scale: { domain: [0, 5] },
+              axis: { title: null },
+            },
+            x2: {
+              field: 'lux2',
+              type: 'quantitative',
+              scale: { domain: [0, 5] },
+              axis: { title: null },
+            },
+            y: {
+              field: 'luy',
+              type: 'quantitative',
+              scale: { domain: [0, 5] },
+              axis: { title: null },
+            },
+            y2: {
+              field: 'luy2',
+              type: 'quantitative',
+              scale: { domain: [0, 5] },
+              axis: { title: null },
+            },
+            opacity: {
+              value: 0.9
+            }
+          },
+        },
+        {
+          mark: {
+            type: 'bar',
+            color: this.props.color,
+            /* clip: true, */
+          },
+          encoding: {
+            x: {
+              field: 'lux',
+              type: 'quantitative',
+              scale: { domain: [0, 5] },
+              axis: { title: null },
+            },
+            x2: {
+              field: 'lux2',
+              type: 'quantitative',
+              scale: { domain: [0, 5] },
+              axis: { title: null },
+            },
+            y: {
+              field: 'y',
+              type: 'quantitative',
+              scale: { domain: [0, 5] },
+              axis: { title: null },
+            },
+            y2: {
+              field: 'ldy',
+              type: 'quantitative',
+              scale: { domain: [0, 5] },
+              axis: { title: null },
+            },
+            opacity: {
+              value: 0.9
+            }
+          },
+        }
+      ],
+      
+      config: {
+        background: null,
+        axis: false,
+        bar: {
+          continuousBandSize: 5,
+        },
+      },
+    };
+  };
+
+  rectSpec = (markType) => {
+    if (markType !== 'rect') {
+      return {};
+    }
+    return {
+      data: { values: [{ a: 0.5, b: 3, c: 0, d: 2 },{ a: 2.5, b: 4, c: 0, d: 4 },{ a: 4.5, b: 3, c: 0, d: 6}] },
+      mark: {
+        type: 'rect',
+        strokeWidth: 1,
+        stroke: this.props.color,
+        fill: this.props.color,
+        /* clip: true, */
+      },
+      encoding: {
+        x: {
+          field: 'a',
+          type: 'quantitative',
+          scale: { domain: [0, 6] },
+          axis: { title: null },
+        },
+        y: {
+          field: 'b',
+          type: 'quantitative',
+          axis: { title: null },
+        },
+        x2: {
+          field: 'd',
+          type: 'quantitative',
+          scale: { domain: [0, 6] },
+          axis: { title: null },
+        },
+        y2: {
+          field: 'c',
+          type: 'quantitative',
+          axis: { title: null },
+        },
+        fillOpacity: {
+          value: 0.5
+        },
+      },
+      config: {
+        background: null,
+        axis: false,
+        /* bar: {
+          continuousBandSize: 5,
+        }, */
+      },
+    };
+  };
+
   render() {
     const lineSpec = this.lineSpec(this.props.markType);
     const barSpec = this.barSpec(this.props.markType);
     const areaSpec = this.areaSpec(this.props.markType);
     const arrowSpec = this.arrowSpec(this.props.markType);
     const spreadSpec = this.spreadSpec(this.props.markType);
-    /* const bigoteSpec = this.barSpec(this.props.markType); */
+    const bigoteSpec = this.bigoteSpec(this.props.markType);
+    const rectSpec = this.rectSpec(this.props.markType);
     const spec = {
       schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-      width: 24,
-      height: 23,
+      width: 30,
+      height: 31,
       padding: 0,
       view: {
         stroke: null,
@@ -417,7 +613,8 @@ class VegaLegendMiniPlot extends React.PureComponent {
       ...arrowSpec,
       ...areaSpec,
       ...spreadSpec,
-      /* ...bigoteSpec, */
+      ...bigoteSpec,
+      ...rectSpec,
     };
 
     return <VegaLite renderer="svg" spec={spec} actions={false} />;
