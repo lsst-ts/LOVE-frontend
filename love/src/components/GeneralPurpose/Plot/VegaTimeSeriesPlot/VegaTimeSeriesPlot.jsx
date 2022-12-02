@@ -745,7 +745,7 @@ class VegaTimeseriesPlot extends Component {
       data: { name: dataName },
       transform: [
         {
-          calculate: '(datum.x - 1800)',
+          calculate: 'datum.x2 ? datum.x2 : ( datum.deltatime ? (datum.x + datum.deltatime) : (datum.x + 1800))',
           as: 'x2'
         },
       ],
@@ -931,7 +931,7 @@ class VegaTimeseriesPlot extends Component {
     return (
       <VegaLite
         style={{
-          display: 'flex',
+          display: 'flex'
         }}
         renderer="svg"
         spec={this.state.spec}
