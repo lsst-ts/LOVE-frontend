@@ -33,9 +33,11 @@ class RaftDetail extends Component {
   }
 
   renderCCDsPlots() {
-    const ccds = [
-      {
-        PLOT1: {
+    const { raft, selectedCCD, setSelectedCCD } = this.props;
+    const plots = [];
+    raft.ccds.forEach((c) => {
+      plots.push({
+        [`CCD${c.id}`]: {
           category: 'telemetry',
           csc: 'ATDome',
           salindex: 0,
@@ -44,104 +46,26 @@ class RaftDetail extends Component {
           type: 'line',
           accessor: (x) => x,
         },
-      },
-      {
-        PLOT2: {
-          category: 'telemetry',
-          csc: 'ATDome',
-          salindex: 0,
-          topic: 'position',
-          item: 'azimuthPosition',
-          type: 'line',
-          accessor: (x) => x,
-        },
-      },
-      {
-        PLOT3: {
-          category: 'telemetry',
-          csc: 'ATDome',
-          salindex: 0,
-          topic: 'position',
-          item: 'azimuthPosition',
-          type: 'line',
-          accessor: (x) => x,
-        },
-      },
-      {
-        PLOT4: {
-          category: 'telemetry',
-          csc: 'ATDome',
-          salindex: 0,
-          topic: 'position',
-          item: 'azimuthPosition',
-          type: 'line',
-          accessor: (x) => x,
-        },
-      },
-      {
-        PLOT5: {
-          category: 'telemetry',
-          csc: 'ATDome',
-          salindex: 0,
-          topic: 'position',
-          item: 'azimuthPosition',
-          type: 'line',
-          accessor: (x) => x,
-        },
-      },
-      {
-        PLOT6: {
-          category: 'telemetry',
-          csc: 'ATDome',
-          salindex: 0,
-          topic: 'position',
-          item: 'azimuthPosition',
-          type: 'line',
-          accessor: (x) => x,
-        },
-      },
-      {
-        PLOT7: {
-          category: 'telemetry',
-          csc: 'ATDome',
-          salindex: 0,
-          topic: 'position',
-          item: 'azimuthPosition',
-          type: 'line',
-          accessor: (x) => x,
-        },
-      },
-      {
-        PLOT8: {
-          category: 'telemetry',
-          csc: 'ATDome',
-          salindex: 0,
-          topic: 'position',
-          item: 'azimuthPosition',
-          type: 'line',
-          accessor: (x) => x,
-        },
-      },
-      {
-        PLOT9: {
-          category: 'telemetry',
-          csc: 'ATDome',
-          salindex: 0,
-          topic: 'position',
-          item: 'azimuthPosition',
-          type: 'line',
-          accessor: (x) => x,
-        },
-      },
-    ];
+      });
+    });
+
+    const refs = [React.createRef(), React.createRef(), React.createRef()];
 
     return (
       <div className={styles.ccdsContainer}>
-        {ccds.map((ccd, i) => (
-          <div ref={this.refs[i]} className={styles.plot}>
+        {plots.map((p, i) => (
+          <div
+            key={`r${i}`}
+            ref={refs[i]}
+            style={{ border: selectedCCD?.id === raft.ccds[i].id ? '2px solid white' : `` }}
+            className={styles.plot}
+            onClick={() => {
+              setSelectedCCD(raft.ccds[i]);
+            }}
+          >
             <PlotContainer
-              inputs={ccd}
-              containerNode={this.refs[i]}
+              inputs={p}
+              containerNode={refs[i]}
               xAxisTitle="Time"
               yAxisTitle="Value"
               legendPosition="bottom"
@@ -196,24 +120,17 @@ class RaftDetail extends Component {
     );
   }
 
-  // render() {
-  //   const { ccd, showNeighboors, selectNeighboorCCD } = this.props;
-  //   const barHeight = 20;
-  //   return showNeighboors ? (
-  //     <Neighboors selectNeighboor={selectNeighboorCCD}>{this.renderPlots()}</Neighboors>
-  //   ) : (
-  //     <div style={{ height: '100%' }}>{this.renderPlots()}</div>
-  //   );
-  // }
-
   render() {
     const { raft, showNeighboors, selectedReb, selectNeighboorRaft } = this.props;
     const barHeight = 20;
     return showNeighboors ? (
-      <Neighboors selectNeighboor={selectNeighboorRaft}>
-        {this.renderCCDsPlots()}
-        {this.renderRebsPlots()}
-      </Neighboors>
+      <div style={{ height: '100%' }}>
+        <span>RaftDetail component</span>
+        <Neighboors selectNeighboor={selectNeighboorRaft}>
+          {this.renderCCDsPlots()}
+          {this.renderRebsPlots()}
+        </Neighboors>
+      </div>
     ) : (
       <div style={{ height: '100%' }}>
         <span>RaftDetail component</span>
@@ -221,14 +138,6 @@ class RaftDetail extends Component {
         {this.renderRebsPlots()}
       </div>
     );
-
-    // return (
-    //   <div className={styles.container}>
-    //     <span>RaftDetail component</span>
-    //     {this.renderCCDsPlots()}
-    //     {this.renderRebsPlots()}
-    //   </div>
-    // );
   }
 }
 

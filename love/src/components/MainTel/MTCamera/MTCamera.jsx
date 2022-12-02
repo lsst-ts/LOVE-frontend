@@ -208,7 +208,7 @@ class MTCamera extends Component {
               <MTCameraSummaryDetail selectedRaft={selectedRaft} selectedCCD={selectedCCD} selectedReb={selectedReb} />
             </div>
           ) : (
-            <div className={styles.emptySummaryDetail}>No existe nada</div>
+            <div className={styles.emptySummaryDetail}>Nothing to show, No CCD select</div>
           )}
         </div>
       </div>

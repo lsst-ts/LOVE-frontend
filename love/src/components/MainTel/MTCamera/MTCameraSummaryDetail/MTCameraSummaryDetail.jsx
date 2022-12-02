@@ -25,17 +25,21 @@ class RaftDetail extends Component {
     },
     {
       field: 'bias',
-      title: 'bias',
+      title: 'Bias',
     },
     {
       field: 'voltage',
-      title: 'voltage [V]',
+      title: 'Voltage [V]',
       type: 'number',
+      className: styles.columns,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'power',
-      title: 'power [P]',
+      title: 'Power [P]',
       type: 'number',
+      className: styles.columns,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
   ];
 
@@ -45,34 +49,46 @@ class RaftDetail extends Component {
       title: '',
     },
     {
-      field: 'GD 0',
+      field: 'GD',
       title: 'GD 0 [V]',
       type: 'number',
+      className: styles.columns,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
-      field: 'OD 0',
+      field: 'ODm',
       title: 'OD 0 [mA]',
       type: 'number',
+      className: styles.columns,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
-      field: 'OD 0',
+      field: 'ODv',
       title: 'OD 0 [V]',
       type: 'number',
+      className: styles.columns,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
-      field: 'GV 0',
+      field: 'GV',
       title: 'GV 0 [V]',
       type: 'number',
+      className: styles.columns,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
-      field: 'RD 0',
+      field: 'RD',
       title: 'RD 0 [V]',
       type: 'number',
+      className: styles.columns,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
-      field: 'SW 0',
+      field: 'SW',
       title: 'SW 0 [C°]',
       type: 'number',
+      className: styles.columns,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
   ];
 
@@ -80,6 +96,18 @@ class RaftDetail extends Component {
     const { selectedRaft, selectedCCD, selectedReb } = this.props;
     const { ccds, rebs } = selectedRaft;
     const ccdsData = [];
+    ccds.forEach((c) => {
+      ccdsData.push({
+        firstColumn: `CCD ${c.id}`,
+        GD: Math.random() * 75,
+        ODm: Math.random() * 100,
+        ODv: Math.random() * 50,
+        GV: Math.random() * 75,
+        RD: Math.random() * 50,
+        SW: Math.random() * 100,
+        rowClass: selectedCCD?.id === c.id ? styles.selectedRow : '',
+      });
+    });
 
     const rebsData = [];
     rebs.forEach((r) => {
@@ -103,7 +131,8 @@ class RaftDetail extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (
       (this.props.selectedRaft && this.props.selectedRaft.id !== prevProps.selectedRaft?.id) ||
-      (this.props.selectedReb && this.props.selectedReb.id !== prevProps.selectedReb?.id)
+      (this.props.selectedReb && this.props.selectedReb.id !== prevProps.selectedReb?.id) ||
+      (this.props.selectedCCD && this.props.selectedCCD.id !== prevProps.selectedCCD?.id)
     ) {
       this.getSummaryDetailData();
     }
@@ -113,99 +142,19 @@ class RaftDetail extends Component {
     const { selectedRaft } = this.props;
     const { ccdsData, rebsData } = this.state;
 
-    const ccds_data = [
-      {
-        firstColumn: 'CCD 01',
-        'GD 0': '1.123',
-        'OD 0': '1.123',
-        'GV 0': '1.123',
-        'RD 0': '1.123',
-        'SW 0': '1.123',
-      },
-      {
-        firstColumn: 'CCD 02',
-        'GD 0': '1.123',
-        'OD 0': '1.123',
-        'GV 0': '1.123',
-        'RD 0': '1.123',
-        'SW 0': '1.123',
-      },
-      {
-        firstColumn: 'CCD 03',
-        'GD 0': '1.123',
-        'OD 0': '1.123',
-        'GV 0': '1.123',
-        'RD 0': '1.123',
-        'SW 0': '1.123',
-      },
-      {
-        firstColumn: 'CCD 04',
-        'GD 0': '1.123',
-        'OD 0': '1.123',
-        'GV 0': '1.123',
-        'RD 0': '1.123',
-        'SW 0': '1.123',
-      },
-      {
-        firstColumn: 'CCD 04',
-        'GD 0': '1.123',
-        'OD 0': '1.123',
-        'GV 0': '1.123',
-        'RD 0': '1.123',
-        'SW 0': '1.123',
-      },
-      {
-        firstColumn: 'CCD 05',
-        'GD 0': '1.123',
-        'OD 0': '1.123',
-        'GV 0': '1.123',
-        'RD 0': '1.123',
-        'SW 0': '1.123',
-      },
-      {
-        firstColumn: 'CCD 06',
-        'GD 0': '1.123',
-        'OD 0': '1.123',
-        'GV 0': '1.123',
-        'RD 0': '1.123',
-        'SW 0': '1.123',
-      },
-      {
-        firstColumn: 'CCD 07',
-        'GD 0': '1.123',
-        'OD 0': '1.123',
-        'GV 0': '1.123',
-        'RD 0': '1.123',
-        'SW 0': '1.123',
-      },
-      {
-        firstColumn: 'CCD 08',
-        'GD 0': '1.123',
-        'OD 0': '1.123',
-        'GV 0': '1.123',
-        'RD 0': '1.123',
-        'SW 0': '1.123',
-      },
-      {
-        firstColumn: 'CCD 09',
-        'GD 0': '1.123',
-        'OD 0': '1.123',
-        'GV 0': '1.123',
-        'RD 0': '1.123',
-        'SW 0': '1.123',
-      },
-    ];
     return (
       <div>
-        <div>
-          <Title>Raft {selectedRaft.id}</Title>
-          <Value>
-            <StatusText>OK</StatusText>
-          </Value>
-          <Label>Temp Control</Label>
-          <Value>
-            <StatusText>Active</StatusText>
-          </Value>
+        <div className={styles.container}>
+          <SummaryPanel className={styles.summaryPanel}>
+            <Title>Raft {selectedRaft.id}</Title>
+            <Value>
+              <StatusText>OK</StatusText>
+            </Value>
+            <Label>Temp Control</Label>
+            <Value>
+              <StatusText>Active</StatusText>
+            </Value>
+          </SummaryPanel>
         </div>
         {/* REBs table */}
         <div>

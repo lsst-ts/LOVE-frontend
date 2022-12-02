@@ -1,3 +1,37 @@
 .selectedRow {
   background-color: white !important;
 }
+
+.container {
+  width: 100%;
+  display: inline-flex;
+  margin-bottom: 20px;
+  border-radius: 15px;
+}
+
+.summaryPanel {
+  width: 100%;
+  margin-bottom: 1em;
+  grid-template-columns: 1fr 1.2fr;
+  background: transparent !important;
+}
+
+.summaryDetail {
+  display: grid;
+}
+
+.summaryStatusDetail {
+  display: flex;
+}
+
+.summaryState {
+  border-radius: 1rem;
+  font-weight: 700;
+  text-align: center;
+  display: inline-block;
+  width: 11em;
+}
+
+.columns {
+  text-align: center !important;
+}
