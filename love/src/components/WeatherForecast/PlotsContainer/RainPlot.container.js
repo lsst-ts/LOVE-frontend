@@ -137,13 +137,13 @@ export const schema = {
               accessor: '(x) => x[0]',
             },
             {
-              variable: 'x2',
-              category: 'telemetry',
+              variable: 'deltatime',
+              /* category: 'telemetry',
               csc: 'WeatherForecast',
               salindex: 0,
               topic: 'WeatherForecast_dailyTrend',
-              item: 'timestamp',
-              accessor: '(x) => x[0] + 1800',
+              item: 'timestamp', */
+              accessor: '(x) => (30 * 60)',
             },
             {
               variable: 'y2',
@@ -272,13 +272,13 @@ export const schema = {
               accessor: '(x) => 0',
             },
             {
-              variable: 'x2',
-              category: 'telemetry',
+              variable: 'deltatime',
+              /* category: 'telemetry',
               csc: 'ATMCS',
               salindex: 0,
               topic: 'mount_AzEl_Encoders',
-              item: 'elevationCalculatedAngle',
-              accessor: '(x) => x[0] + 1800',
+              item: 'elevationCalculatedAngle', */
+              accessor: '(x) => (30 * 60)',
             },
             {
               variable: 'y2',
@@ -287,7 +287,7 @@ export const schema = {
               salindex: 0,
               topic: 'mount_AzEl_Encoders',
               item: 'elevationCalculatedAngle',
-              accessor: '(x) => 40',
+              accessor: '(x) => 30',
             },
           ],
         }
@@ -316,12 +316,14 @@ const RainPlotContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props 
     );
 
   } else {
-    return <Plot
-      subscribeToStreams={subscribeToStreams}
-      unsubscribeToStreams={unsubscribeToStreams}
-      {...props}
-      containerNode={containerNode}
-    />;
+    return (
+      <Plot
+        subscribeToStreams={subscribeToStreams}
+        unsubscribeToStreams={unsubscribeToStreams}
+        {...props}
+        containerNode={containerNode}
+      />
+    );
   }
 };
 
