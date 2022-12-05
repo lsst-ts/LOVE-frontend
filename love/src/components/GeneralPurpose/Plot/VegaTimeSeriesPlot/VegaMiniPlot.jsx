@@ -17,7 +17,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
   };
 
   static propTypes = {
-    markType: PropTypes.oneOf(['line', 'pointLine', 'bar', 'area', 'arrow', 'spread']),
+    markType: PropTypes.oneOf(['line', 'pointLine', 'bar', 'area', 'arrow', 'spread', 'bigote', 'rect']),
     /** (All layers) hex color */
     color: PropTypes.string,
     /** (Only `lines` layer). Dash pattern for segmented lines passed to the strokeDash channel. E.g, [2, 1] draws
