@@ -51,9 +51,9 @@ const mapDispatchToProps = (dispatch) => {
     'telemetry-MTM1M3-0-forceActuatorData',
     'telemetry-MTM1M3-0-hardpointActuatorData',
     'telemetry-MTM1M3-0-imsData',
+    'telemetry-MTM1M3-0-appliedForces',
     'event-MTM1M3-0-summaryState',
     'event-MTM1M3-0-detailedState',
-    'event-MTM1M3-0-appliedForces',
   ];
   return {
     subscriptions,

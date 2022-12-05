@@ -338,6 +338,29 @@ export const m1CoverStateStateMap = {
   0: 'UNKNOWN',
 };
 
+export const mainValveStateMap = {
+  1: 'OPEN',
+  2: 'CLOSED',
+  0: 'UNKNOWN',
+};
+
+export const instrumentStateMap = {
+  1: 'OPEN',
+  2: 'CLOSED',
+  0: 'UNKNOWN',
+};
+
+export const ATPneumaticsLimits = {
+  cellLoad: {
+    min: 3.83,
+    max: 117.80,
+  },
+  pressure: {
+    min: 47160.14,
+    max: 182159.49,
+  },
+};
+
 export const m1CoverLimitSwitchesStateMap = {
   1: 'OPEN',
   2: 'CLOSED',
@@ -998,18 +1021,6 @@ export const M1M3ActuatorForces = {
   appliedStaticForces: ['xForces', 'yForces', 'zForces'],
   appliedThermalForces: ['xForces', 'yForces', 'zForces'],
   appliedVelocityForces: ['xForces', 'yForces', 'zForces'],
-  preclippedAberrationForces: ['zForces'],
-  preclippedAccelerationForces: ['xForces', 'yForces', 'zForces'],
-  preclippedActiveOpticForces: ['zForces'],
-  preclippedAzimuthForces: ['xForces', 'yForces', 'zForces'],
-  preclippedBalanceForces: ['xForces', 'yForces', 'zForces'],
-  preclippedCylinderForces: ['secondaryCylinderForces', 'primaryCylinderForces'],
-  preclippedElevationForces: ['xForces', 'yForces', 'zForces'],
-  preclippedForces: ['xForces', 'yForces', 'zForces'],
-  preclippedOffsetForces: ['xForces', 'yForces', 'zForces'],
-  preclippedStaticForces: ['xForces', 'yForces', 'zForces'],
-  preclippedThermalForces: ['xForces', 'yForces', 'zForces'],
-  preclippedVelocityForces: ['xForces', 'yForces', 'zForces'],
 };
 
 export const M1M3ActuatorPositions = [

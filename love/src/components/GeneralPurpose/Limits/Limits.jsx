@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './Limits.module.css';
 
 export default class Limits extends Component {
+
   static propTypes = {
     /** Minimum possible value, start of the limit bar */
     lowerLimit: PropTypes.number,
@@ -14,6 +15,8 @@ export default class Limits extends Component {
     targetValue: PropTypes.number,
     /** Option to show labels */
     displayLabels: PropTypes.bool,
+    /** Display Label Units */
+    displayLabelsUnit: PropTypes.string,
     /** Height of the limit bar */
     height: PropTypes.number,
     /** Size of the warning zone in the same scale as lowerLimit and upperLimit */
@@ -26,12 +29,13 @@ export default class Limits extends Component {
     currentValue: 30,
     targetValue: 60,
     displayLabels: true,
+    displayLabelsUnit: 'º',
     height: 15,
     limitWarning: 5,
   };
 
   render() {
-    const { lowerLimit, upperLimit, limitWarning, currentValue, targetValue, height } = this.props;
+    const { lowerLimit, upperLimit, limitWarning, currentValue, targetValue, height, displayLabelsUnit} = this.props;
     const barHeight = height / 7;
     const xMargin = 5;
     const currentValueX = ((100 - 2 * xMargin) * (currentValue - lowerLimit)) / (upperLimit - lowerLimit);
@@ -42,7 +46,7 @@ export default class Limits extends Component {
 
     return (
       <div className={styles.container}>
-        <svg version="1.1" x="0px" y="0px" viewBox={`0 0 100 ${height}`} className={styles.container}>
+        <svg version="1.1" x="0px" y="0px" viewBox={`0 0 100 ${height+1}`} className={styles.container}>
           <line
             className={styles.backgroundBar}
             x1={xMargin}
@@ -67,6 +71,7 @@ export default class Limits extends Component {
             y2={height / 2 + yOffset}
             strokeWidth={barHeight}
           />
+          {this.props.currentValue !== 'Unknown' && (
           <rect
             className={styles.currentValue}
             x={currentValueX + xMargin}
@@ -75,6 +80,9 @@ export default class Limits extends Component {
             width={1}
             strokeWidth={0}
           />
+          )}
+
+          {this.props.targetValue !== 'Unknown' && (
           <line
             className={styles.targetValue}
             x1={targetValueX + xMargin}
@@ -82,21 +90,23 @@ export default class Limits extends Component {
             x2={targetValueX + xMargin}
             y2={(2 * height) / 3 + yOffset}
           />
+          )}
+
           {this.props.displayLabels && (
             <>
               <text
-                className={[styles.text, styles.bottom].join(' ')}
+                className={[styles.text, styles.bottom, styles.bottomLeft].join(' ')}
                 x={xMargin}
                 y={height / 2 + yOffset + barHeight / 2}
               >
-                {lowerLimit}º
+                {lowerLimit}{displayLabelsUnit}
               </text>
               <text
-                className={[styles.text, styles.bottom].join(' ')}
+                className={[styles.text, styles.bottom, styles.bottomRight].join(' ')}
                 x={100 - xMargin}
                 y={height / 2 + yOffset + barHeight / 2}
               >
-                {upperLimit}º
+                {upperLimit}{displayLabelsUnit}
               </text>
             </>
           )}
