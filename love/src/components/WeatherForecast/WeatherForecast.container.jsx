@@ -7,13 +7,43 @@ import WeatherForecast from './WeatherForecast';
 
 export const schema = {
   description: 'View of Weather Forecast',
-  defaultSize: [61, 32],
+  defaultSize: [62, 65],
   props: {
     title: {
       type: 'string',
       description: 'Name diplayed in the title bar (if visible)',
       isPrivate: false,
       default: 'Weather Forecast',
+    },
+    controls: {
+      type: 'boolean',
+      description: "Whether to display controls to configure periods of time'",
+      default: true,
+      isPrivate: false,
+    },
+    hasRawMode: {
+      type: 'boolean',
+      description: 'Whether the component has a raw mode version',
+      isPrivate: false,
+      default: true,
+    },
+    wind: {
+      type: 'boolean',
+      description: "Whether to display plot of wind'",
+      default: true,
+      isPrivate: false,
+    },
+    temperature: {
+      type: 'boolean',
+      description: "Whether to display plot of temperature'",
+      default: true,
+      isPrivate: false,
+    },
+    rain: {
+      type: 'boolean',
+      description: "Whether to display  plot of precipitation'",
+      default: true,
+      isPrivate: false,
     },
   },
 };

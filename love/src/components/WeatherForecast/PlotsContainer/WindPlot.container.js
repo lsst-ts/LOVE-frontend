@@ -7,14 +7,33 @@ import Plot from 'components/GeneralPurpose/Plot/Plot';
 
 
 export const schema = {
-  description: 'View of Weather Forecast',
-  defaultSize: [61, 32],
+  description: 'View of Wind Plot of Weather Forecast',
+  defaultSize: [62, 18],
   props: {
     title: {
       type: 'string',
       description: 'Name diplayed in the title bar (if visible)',
       isPrivate: false,
-      default: 'Weather Forecast',
+      default: 'Wind Plot Weather Forecast',
+    },
+    xAxisTitle: {
+      type: 'string',
+      description: 'Title of the horizontal axis of this plot',
+      default: 'Time',
+      isPrivate: false,
+    },
+    yAxisTitle: {
+      type: 'string',
+      description: 'Title of the vertical axis of this plot',
+      default: 'Wind',
+      isPrivate: false,
+    },
+    legendPosition: {
+      type: 'string',
+      description:
+        "Whether to display the legend to the right of the plot or at the bottom. One of 'right' or 'bottom'",
+      default: 'bottom',
+      isPrivate: false,
     },
     inputs: {
       type: 'object',
@@ -302,7 +321,7 @@ const getGroupNames = (inputs) => {
       }
     },
   );
-  return inputsMap.flat();
+  return [...new Set(inputsMap.flat())];
 }
 
 const mapStateToProps = (state, ownProps) => {

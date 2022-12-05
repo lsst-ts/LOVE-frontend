@@ -174,6 +174,36 @@ export const observatoryIndex = {
       },
     },
   },
+  WindPlotWeatherForecast: {
+    component: require('../WeatherForecast/PlotsContainer/WindPlot.container').default,
+    schema: {
+      ...require('../WeatherForecast/PlotsContainer/WindPlot.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../WeatherForecast/PlotsContainer/WindPlot.container').schema.props,
+      },
+    },
+  },
+  TemperaturePlotWeatherForecast: {
+    component: require('../WeatherForecast/PlotsContainer/TemperaturePlot.container').default,
+    schema: {
+      ...require('../WeatherForecast/PlotsContainer/TemperaturePlot.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../WeatherForecast/PlotsContainer/TemperaturePlot.container').schema.props,
+      },
+    },
+  },
+  RainPlotWeatherForecast: {
+    component: require('../WeatherForecast/PlotsContainer/RainPlot.container').default,
+    schema: {
+      ...require('../WeatherForecast/PlotsContainer/RainPlot.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../WeatherForecast/PlotsContainer/RainPlot.container').schema.props,
+      },
+    },
+  },
   TimeDisplay: {
     component: require('../Time/TimeDisplay.container').default,
     schema: require('../Time/TimeDisplay.container').schema,
