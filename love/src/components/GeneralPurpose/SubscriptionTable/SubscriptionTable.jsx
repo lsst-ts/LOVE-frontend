@@ -120,35 +120,38 @@ export default class SubscriptionTable extends Component {
                   const groupKey = [type, cscKey, topic].join('-');
                   const streamData = this.props.getStreamData(groupKey);
                   const accessor = this.getAccessor(groupKey);
-                  const dict = accessor(streamData);
-                  const dictKeys = Object.keys(dict);
-                  return (
-                    <React.Fragment key={topicKey}>
-                      <SubTitle className={styles.subTitle}>
-                        <span>{topic}</span>
-                        <span className={styles.topicType}>{type}</span>
-                      </SubTitle>
-                      {dictKeys.length > 0
-                        ? dictKeys.map((key) => {
-                            const itemFilter = this.state.itemFilter === '' || this.state.itemRegExp?.test(key);
-                            const emptyField = this.state.itemFilter !== '' && dict[key] === '';
-                            if (!itemFilter || emptyField) return null;
-                            return (
-                              <Card key={key} className={styles.card}>
-                                <span className={styles.streamLabel}>{key}</span>
-                                <span className={styles.streamValue}>
-                                  <Value raw={true}>{dict[key]}</Value>
-                                </span>
+                  if (accessor instanceof Function) {
+                    const dict = accessor(streamData);
+                    const dictKeys = Object.keys(dict);
+                    return (
+                      <React.Fragment key={topicKey}>
+                        <SubTitle className={styles.subTitle}>
+                          <span>{topic}</span>
+                          <span className={styles.topicType}>{type}</span>
+                        </SubTitle>
+                        {dictKeys.length > 0
+                          ? dictKeys.map((key) => {
+                              const itemFilter = this.state.itemFilter === '' || this.state.itemRegExp?.test(key);
+                              const emptyField = this.state.itemFilter !== '' && dict[key] === '';
+                              if (!itemFilter || emptyField) return null;
+                              return (
+                                <Card key={key} className={styles.card}>
+                                  <span className={styles.streamLabel}>{key}</span>
+                                  <span className={styles.streamValue}>
+                                    <Value raw={true}>{dict[key]}</Value>
+                                  </span>
+                                </Card>
+                              );
+                            })
+                          : this.state.itemFilter === '' && (
+                              <Card className={styles.card}>
+                                <div>No value</div>
                               </Card>
-                            );
-                          })
-                        : this.state.itemFilter === '' && (
-                            <Card className={styles.card}>
-                              <div>No value</div>
-                            </Card>
-                          )}
-                    </React.Fragment>
-                  );
+                            )}
+                      </React.Fragment>
+                    );
+                  }
+                  
                 })}
               </React.Fragment>
             );
