@@ -539,13 +539,13 @@ export const mainIndex = {
       },
     },
   },
-  MTCameraSummary: {
-    component: require('../MainTel/MTCameraSummary/MTCameraSummary.container').default,
+  MTCameraSummaryDetail: {
+    component: require('../MainTel/MTCameraSummaryDetail/MTCameraSummaryDetail.container').default,
     schema: {
-      ...require('../MainTel/MTCameraSummary/MTCameraSummary.container').schema,
+      ...require('../MainTel/MTCameraSummaryDetail/MTCameraSummaryDetail.container').schema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/MTCameraSummary/MTCameraSummary.container').schema.props,
+        ...require('../MainTel/MTCameraSummaryDetail/MTCameraSummaryDetail.container').schema.props,
       },
     },
   },

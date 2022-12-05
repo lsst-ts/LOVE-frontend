@@ -7,9 +7,9 @@ import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
-import styles from './MTCameraSummaryDetail.module.css';
+import styles from './FocalPlaneSummaryDetail.module.css';
 
-class RaftDetail extends Component {
+class FocalPlaneSummaryDetail extends Component {
   constructor() {
     super();
     this.state = {
@@ -169,4 +169,4 @@ class RaftDetail extends Component {
   }
 }
 
-export default RaftDetail;
+export default FocalPlaneSummaryDetail;

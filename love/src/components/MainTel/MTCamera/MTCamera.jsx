@@ -6,7 +6,7 @@ import FocalPlane from './FocalPlane/FocalPlane';
 import CCDDetail from './CCDDetail/CCDDetail';
 import PropTypes from 'prop-types';
 import styles from './MTCamera.module.css';
-import MTCameraSummaryDetail from './MTCameraSummaryDetail/MTCameraSummaryDetail';
+import FocalPlaneSummaryDetail from './FocalPlaneSummaryDetail/FocalPlaneSummaryDetail';
 
 const rafts = [];
 const secondaryRafts = [0, 4, 20, 24];
@@ -205,7 +205,11 @@ class MTCamera extends Component {
         <div className={styles.summaryDetailContainer}>
           {selectedRaft ? (
             <div className={styles.summaryDetail}>
-              <MTCameraSummaryDetail selectedRaft={selectedRaft} selectedCCD={selectedCCD} selectedReb={selectedReb} />
+              <FocalPlaneSummaryDetail
+                selectedRaft={selectedRaft}
+                selectedCCD={selectedCCD}
+                selectedReb={selectedReb}
+              />
             </div>
           ) : (
             <div className={styles.emptySummaryDetail}>Nothing to show, No CCD select</div>

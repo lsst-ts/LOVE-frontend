@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import MTCameraSummary from './MTCameraSummary';
+import MTCameraSummaryDetail from './MTCameraSummaryDetail';
 import { getCameraState } from '../../../redux/selectors';
 import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
@@ -11,14 +11,14 @@ export const schema = {
   props: {
     title: {
       type: 'string',
-      description: 'Name diplayed in the title bar (if visible)',
+      description: 'Name displayed in the title bar (if visible)',
       isPrivate: false,
       default: 'Main Telescope Camera',
     },
   },
 };
 
-const MTCameraCummaryContainer = ({
+const MTCameraSummaryDetailContainer = ({
   raftsDetailedState,
   imageReadinessDetailedState,
   calibrationDetailedState,
@@ -30,7 +30,7 @@ const MTCameraCummaryContainer = ({
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
   return (
-    <MTCameraSummary
+    <MTCameraSummaryDetail
       raftsDetailedState={raftsDetailedState}
       imageReadinessDetailedState={imageReadinessDetailedState}
       calibrationDetailedState={calibrationDetailedState}
@@ -69,4 +69,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MTCameraCummaryContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(MTCameraSummaryDetailContainer);
