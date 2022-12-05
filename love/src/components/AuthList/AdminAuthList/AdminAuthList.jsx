@@ -162,6 +162,8 @@ export default class AdminAuthList extends Component {
         return formatSecondsToDigital(secondsLeft);
       },
     },
+    { field: 'execution_status', title: 'Execution status' },
+    { field: 'execution_message', title: 'Execution message' },
   ];
 
   REJECTED_HEADERS = [
