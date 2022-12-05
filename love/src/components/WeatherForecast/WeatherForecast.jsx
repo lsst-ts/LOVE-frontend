@@ -14,9 +14,11 @@ export default class WeatherForecast extends Component {
     subscribeToStreams: PropTypes.func,
     unsubscribeToStreams: PropTypes.func,
     /* Weather stream data */
-    weather: PropTypes.object,
-    /* Wind stream data */
-    wind: PropTypes.object,
+    weather: PropTypes.object,    
+    controls: PropTypes.bool,
+    wind: PropTypes.bool,
+    temperature: PropTypes.bool,
+    rain: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -125,45 +127,50 @@ export default class WeatherForecast extends Component {
           </div>
         )}
 
-
-        <div className={styles.fullSection}>
-          <div className={styles.sectionTitle}>Wind</div>
-          <div ref={this.windPlotRef} className={styles.plot}>
-            <WindPlotContainer
-              timeSeriesControlsProps={timeSeriesControlsProps}
-              containerNode={this.windPlotRef.current}
-              xAxisTitle="Time"
-              yAxisTitle="Wind"
-              legendPosition="right"
-            />
+        {this.props.wind && (
+          <div className={styles.fullSection}>
+            <div className={styles.sectionTitle}>Wind</div>
+            <div ref={this.windPlotRef} className={styles.plot}>
+              <WindPlotContainer
+                timeSeriesControlsProps={timeSeriesControlsProps}
+                containerNode={this.windPlotRef.current}
+                xAxisTitle="Time"
+                yAxisTitle="Wind"
+                legendPosition="bottom"
+              />
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className={styles.fullSection}>
-          <div className={styles.sectionTitle}>Temperature</div>
-          <div ref={this.temperaturePlotRef} className={styles.plot}>
-            <TemperaturePlotContainer
-              timeSeriesControlsProps={timeSeriesControlsProps}
-              containerNode={this.temperaturePlotRef.current}
-              xAxisTitle="Time"
-              yAxisTitle="Temperature"
-              legendPosition="right"
-            />
+        {this.props.temperature && (
+          <div className={styles.fullSection}>
+            <div className={styles.sectionTitle}>Temperature</div>
+            <div ref={this.temperaturePlotRef} className={styles.plot}>
+              <TemperaturePlotContainer
+                timeSeriesControlsProps={timeSeriesControlsProps}
+                containerNode={this.temperaturePlotRef.current}
+                xAxisTitle="Time"
+                yAxisTitle="Temperature"
+                legendPosition="bottom"
+              />
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className={styles.fullSection}>
-          <div className={styles.sectionTitle}>Rain</div>
-          <div ref={this.rainPlotRef} className={styles.plot}>
-            <RainPlotContainer
-              timeSeriesControlsProps={timeSeriesControlsProps}
-              containerNode={this.rainPlotRef.current}
-              xAxisTitle="Time"
-              yAxisTitle="Precipitation"
-              legendPosition="right"
-            />
+        {this.props.rain && (
+          <div className={styles.fullSection}>
+            <div className={styles.sectionTitle}>Rain</div>
+            <div ref={this.rainPlotRef} className={styles.plot}>
+              <RainPlotContainer
+                timeSeriesControlsProps={timeSeriesControlsProps}
+                containerNode={this.rainPlotRef.current}
+                xAxisTitle="Time"
+                yAxisTitle="Precipitation"
+                legendPosition="bottom"
+              />
+            </div>
           </div>
-        </div>
+        )}
 
         {/* <div className={styles.section}>
           <div className={styles.sectionTitle}>Wind</div>
