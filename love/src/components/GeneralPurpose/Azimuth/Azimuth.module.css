@@ -1,0 +1,79 @@
+
+
+.backgroundBar {
+  stroke: var(--second-quaternary-background-color);
+}
+
+.warningBar {
+  stroke: var(--status-warning-dimmed-color-2);
+}
+
+.activeWarning {
+  animation: warning 0.5s infinite;
+  animation-direction: alternate;
+  transition: stroke ease-in-out;
+}
+
+.currentValue {
+  fill: white;
+  transition: x 0.5s ease;
+}
+
+.originText {
+  fill: var(--secondary-font-color);
+  font-size: 1em;
+  text-anchor: start;
+}
+
+.targetText {
+  fill: var(--base-font-color);
+  font-size: 1em;
+  transition: transform 0.5s linear 0s;
+}
+
+.textQ1{
+  text-anchor: start;
+}
+.textQ2{
+  text-anchor: end;
+}
+.textQ3{
+  alignment-baseline:text-before-edge;
+  text-anchor: end;
+}
+.textQ4{
+  alignment-baseline:text-before-edge;
+  text-anchor: start;
+}
+
+.cutOut{
+  fill:rgb(17,31,39);
+}
+
+.bg{
+  fill: #182e39;
+}
+.bgTarget{
+  fill: transparent;
+  stroke:#3a525f;
+  opacity:0.25;
+  transition: stroke-dasharray linear 0.5s;
+  transition: transform ease-out 0.5s;
+}
+.gaugeL1{
+  fill:#2e6261;
+}
+
+.targetValue{
+  stroke:#c1ced2;
+  fill: transparent;
+  stroke-width: 2px;
+  stroke-dasharray:4 4;
+  transition: transform ease-out 0.5s;
+}
+.currentValue{
+  stroke:#c1ced2;
+  fill: transparent;
+  stroke-width: 2px;
+  transition: transform ease-out 0.5s;
+}

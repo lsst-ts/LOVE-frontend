@@ -104,10 +104,21 @@
   width: 12%;
 }
 
+.elevationContainer {
+  position: absolute;
+  left: 75%;
+  top: 25%;
+  width:70%;
+}
+
+.elevationContainer svg{
+  width:60%;
+}
+
 .vignettingDistanceContainer {
   position: absolute;
   left: 50%;
-  bottom: 2%;
+  bottom: 0%;
   transform: translate(-50%, 0);
 }
 
@@ -125,4 +136,14 @@
 .mountTop {
   stroke: var(--default-active-background-color);
   fill: var(--second-quaternary-background-dimmed-color);
+}
+
+.svgAzimuth{
+  transform-origin:50% 50%;
+  transform: scale(1.1);
+  width:100%
+}
+
+.svgAzimuth svg{
+  width:110%;
 }

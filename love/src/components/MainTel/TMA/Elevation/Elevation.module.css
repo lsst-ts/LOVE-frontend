@@ -73,3 +73,13 @@
 .cls6 {
     stroke-linecap: round;
 }
+
+
+.gpElevationContainer {
+    position: absolute;
+    top: 10%;
+    width:30%;
+}
+.gpElevationContainer svg{
+    transform: translate(0, 50%);
+}

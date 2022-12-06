@@ -34,7 +34,7 @@
 .svgOverlay {
   position: absolute;
   left: calc(50% - 130px);
-  top: 5%;
+  top: 7%;
   width: auto;
   overflow: visible;
 }
@@ -66,7 +66,7 @@
 .svgLouvers {
   position: absolute;
   left: calc(50% - 308px);
-  top: 60%;
+  top: 65%;
   width: auto;
 }
 
@@ -92,6 +92,16 @@
 
 .svgLouvers rect {
   transition: x 0.5s, width 0.5s;
+}
+
+.svgAzimuth{
+  position:absolute;
+  left: calc(50% - 134px);
+  top: 8%;
+  width:auto;
+  overflow:visible;
+  transform-origin: center;
+  transform: scale(1.05);
 }
 
 .telemetryTable {
@@ -125,6 +135,16 @@
   left: 3%;
   top: 1%;
   width: 4%;
+}
+.elevationContainer {
+  position: absolute;
+  left: calc(100% - 600px);
+  top: 14%;
+}
+.azimuthContainer {
+  position: absolute;
+  left: calc(50% - 299px);
+  top: 5%;
 }
 
 .vignettingDistanceContainer {

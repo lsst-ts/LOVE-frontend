@@ -9,15 +9,23 @@
 .container svg {
     vertical-align: top;
     margin: auto;
-    width: 70%;
+    width: 50%;
     height: auto;
+    z-index:1;
   }
 
 .windRoseContainer {
     position: absolute;
-    left: 10%;
-    top: 0%;
-    width: 13%;
+    left: 0%;
+    top: -20%;
+    width: 20%;
+  }
+
+  .azContainer {
+    position: absolute;
+    left: -60%;
+    top: -60%;
+    width: 220%;
   }
 
 .cls1 {
