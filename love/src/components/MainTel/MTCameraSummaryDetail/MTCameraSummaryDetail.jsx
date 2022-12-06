@@ -7,6 +7,7 @@ import { getCameraStatusStyle } from '../../../Config';
 import LoadingBar from '../../GeneralPurpose/LoadingBar/LoadingBar';
 import { stateToStyleCamera } from '../../../Config';
 import { formatTimestamp } from '../../../Utils';
+import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 
 export default class Camera extends Component {
   static propTypes = {
@@ -65,36 +66,149 @@ export default class Camera extends Component {
     });
   };
 
+  camHeaders = [
+    {
+      field: 'firstColumn',
+      title: '',
+    },
+    {
+      field: 'image',
+      title: 'Image',
+      type: 'string',
+    },
+    {
+      field: 'timestamp',
+      title: 'Timestamp',
+      type: 'timestamp',
+    },
+    {
+      field: 'imgName',
+      title: 'Image Name',
+      type: 'string',
+    },
+    {
+      field: 'sequence',
+      title: 'Sequence',
+      type: 'string',
+    },
+    {
+      field: 'exposureTime',
+      title: 'Exposure Time',
+      type: 'string',
+    },
+    {
+      field: 'state',
+      title: 'State',
+      type: 'string',
+    },
+  ];
+
   render() {
+    const cameraData = [
+      {
+        firstColumn: '>',
+        image: ':)',
+        timestamp: '2022/05/03 23:34:44',
+        imgName: 'CC_O_20220505_000005',
+        sequence: '5/5',
+        exposureTime: '100s',
+        state: 'Start Integration',
+      },
+      {
+        firstColumn: '>',
+        image: ':)',
+        timestamp: '2022/05/03 23:34:44',
+        imgName: 'CC_O_20220505_000004',
+        sequence: '4/5',
+        exposureTime: '5s',
+        state: 'End Readout',
+      },
+      {
+        firstColumn: '>',
+        image: ':)',
+        timestamp: '2022/05/03 23:34:44',
+        imgName: 'CC_O_20220505_000003',
+        sequence: '3/5',
+        exposureTime: '0s',
+        state: 'End Telemetry',
+      },
+      {
+        firstColumn: '>',
+        image: ':)',
+        timestamp: '2022/05/03 23:34:44',
+        imgName: 'CC_O_20220505_000002',
+        sequence: '2/5',
+        exposureTime: '0s',
+        state: 'End Telemetry',
+      },
+      {
+        firstColumn: '>',
+        image: ':)',
+        timestamp: '2022/05/03 23:34:44',
+        imgName: 'CC_O_20220505_000001',
+        sequence: '1/5',
+        exposureTime: '0s',
+        state: 'End Telemetry',
+      },
+    ];
     return (
       <div className={styles.cameraContainer}>
         <div className={styles.statesContainer}>
           <div className={styles.stateContainer}>
-            <span className={styles.statusTextLabel}>Rafts state:</span>
+            <span className={styles.statusTextLabel}>MTCamera</span>
             <StatusText status={stateToStyleCamera[this.props.raftsDetailedState]}>
               {this.props.raftsDetailedState}
             </StatusText>
           </div>
           <div className={styles.stateContainer}>
-            <span className={styles.statusTextLabel}>Image readiness state:</span>
+            <span className={styles.statusTextLabel}>Command</span>
             <StatusText status={stateToStyleCamera[this.props.imageReadinessDetailedState]}>
               {this.props.imageReadinessDetailedState}
             </StatusText>
           </div>
           <div className={styles.stateContainer}>
-            <span className={styles.statusTextLabel}>Calibration state:</span>
+            <span className={styles.statusTextLabel}>Calibration</span>
             <StatusText status={stateToStyleCamera[this.props.calibrationDetailedState]}>
               {this.props.calibrationDetailedState}
             </StatusText>
           </div>
           <div className={styles.stateContainer}>
-            <span className={styles.statusTextLabel}>Shutter state:</span>
+            <span className={styles.statusTextLabel}>Offline</span>
+            <StatusText status={stateToStyleCamera[this.props.shutterDetailedState]}>
+              {this.props.shutterDetailedState}
+            </StatusText>
+          </div>
+        </div>
+        <div className={styles.statesContainer}>
+          <div className={styles.stateContainer}>
+            <span className={styles.statusTextLabel}>Take Image</span>
+            <StatusText status={stateToStyleCamera[this.props.raftsDetailedState]}>
+              {this.props.raftsDetailedState}
+            </StatusText>
+          </div>
+          <div className={styles.stateContainer}>
+            <span className={styles.statusTextLabel}>Shutter</span>
+            <StatusText status={stateToStyleCamera[this.props.imageReadinessDetailedState]}>
+              {this.props.imageReadinessDetailedState}
+            </StatusText>
+          </div>
+          <div className={styles.stateContainer}>
+            <span className={styles.statusTextLabel}>Filter Changer</span>
+            <StatusText status={stateToStyleCamera[this.props.calibrationDetailedState]}>
+              {this.props.calibrationDetailedState}
+            </StatusText>
+          </div>
+          <div className={styles.stateContainer}>
+            <span className={styles.statusTextLabel}>Rafts</span>
             <StatusText status={stateToStyleCamera[this.props.shutterDetailedState]}>
               {this.props.shutterDetailedState}
             </StatusText>
           </div>
         </div>
         <div>
+          <SimpleTable headers={this.camHeaders} data={cameraData} />
+        </div>
+        {/* <div>
           <div className={styles.imageSequenceName}>{this.props.imageSequence.name}</div>
           <div className={styles.imageTableWrapper}>
             <table className={styles.imageTable}>
@@ -186,7 +300,7 @@ export default class Camera extends Component {
               </tbody>
             </table>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }
