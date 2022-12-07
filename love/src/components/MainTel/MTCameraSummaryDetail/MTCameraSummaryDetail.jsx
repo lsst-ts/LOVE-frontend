@@ -66,91 +66,7 @@ export default class Camera extends Component {
     });
   };
 
-  camHeaders = [
-    {
-      field: 'firstColumn',
-      title: '',
-    },
-    {
-      field: 'image',
-      title: 'Image',
-      type: 'string',
-    },
-    {
-      field: 'timestamp',
-      title: 'Timestamp',
-      type: 'timestamp',
-    },
-    {
-      field: 'imgName',
-      title: 'Image Name',
-      type: 'string',
-    },
-    {
-      field: 'sequence',
-      title: 'Sequence',
-      type: 'string',
-    },
-    {
-      field: 'exposureTime',
-      title: 'Exposure Time',
-      type: 'string',
-    },
-    {
-      field: 'state',
-      title: 'State',
-      type: 'string',
-    },
-  ];
-
   render() {
-    const cameraData = [
-      {
-        firstColumn: '>',
-        image: ':)',
-        timestamp: '2022/05/03 23:34:44',
-        imgName: 'CC_O_20220505_000005',
-        sequence: '5/5',
-        exposureTime: '100s',
-        state: 'Start Integration',
-      },
-      {
-        firstColumn: '>',
-        image: ':)',
-        timestamp: '2022/05/03 23:34:44',
-        imgName: 'CC_O_20220505_000004',
-        sequence: '4/5',
-        exposureTime: '5s',
-        state: 'End Readout',
-      },
-      {
-        firstColumn: '>',
-        image: ':)',
-        timestamp: '2022/05/03 23:34:44',
-        imgName: 'CC_O_20220505_000003',
-        sequence: '3/5',
-        exposureTime: '0s',
-        state: 'End Telemetry',
-      },
-      {
-        firstColumn: '>',
-        image: ':)',
-        timestamp: '2022/05/03 23:34:44',
-        imgName: 'CC_O_20220505_000002',
-        sequence: '2/5',
-        exposureTime: '0s',
-        state: 'End Telemetry',
-      },
-      {
-        firstColumn: '>',
-        image: ':)',
-        timestamp: '2022/05/03 23:34:44',
-        imgName: 'CC_O_20220505_000001',
-        sequence: '1/5',
-        exposureTime: '0s',
-        state: 'End Telemetry',
-      },
-    ];
     return (
       <div className={styles.cameraContainer}>
         <div className={styles.statesContainer}>
@@ -206,9 +122,6 @@ export default class Camera extends Component {
           </div>
         </div>
         <div>
-          <SimpleTable headers={this.camHeaders} data={cameraData} />
-        </div>
-        {/* <div>
           <div className={styles.imageSequenceName}>{this.props.imageSequence.name}</div>
           <div className={styles.imageTableWrapper}>
             <table className={styles.imageTable}>
@@ -300,7 +213,7 @@ export default class Camera extends Component {
               </tbody>
             </table>
           </div>
-        </div> */}
+        </div>
       </div>
     );
   }
