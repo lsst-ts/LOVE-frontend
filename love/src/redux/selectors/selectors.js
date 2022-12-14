@@ -1445,6 +1445,114 @@ export const getBlocksInfo = (state, salindex) => {
   };
 };
 
+//MTCamera
+export const getMTCamSummaryStatus = (state) => {
+  const subscriptions = ['event-MTCamera-0-summaryStatus'];
+  const summaryData = getStreamData(state, subscriptions);
+  return {
+    subSystems: summaryData['event-MTCamera-0-summaryStatus']?.[0]?.subsystems.value ?? [],
+    subSystemState: summaryData['event-MTCamera-0-summaryStatus']?.[0]?.subsystemState.value ?? [],
+    subSystemColor: summaryData['event-MTCamera-0-summaryStatus']?.[0]?.subsystemColor.value ?? [],
+  };
+};
+
+export const getStartIntegration = (state) => {
+  const subscriptions = ['event-MTCamera-0-startIntegration'];
+  const startIntegrationData = getStreamData(state, subscriptions);
+  return {
+    imagesInSequence: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imagesInSequence.value ?? 0,
+    imageName: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageName.value ?? '',
+    imageIndex: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageIndex.value ?? 0,
+    imageSource: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageSource.value ?? '',
+    imageController: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageController.value ?? '',
+    imageDate: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageDate.value ?? '',
+    imageNumber: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStart:
+      startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.timestampAcquisitionStart.value ?? 0,
+    exposureTime: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.exposureTime.value ?? '',
+    mode: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.mode.value ?? '',
+    timeout: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.timeout.value ?? 0,
+  };
+};
+
+export const getStartReadout = (state) => {
+  const subscriptions = ['event-MTCamera-0-startReadout'];
+  const startReadOutData = getStreamData(state, subscriptions);
+  return {
+    imagesInSequence: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imagesInSequence.value ?? 0,
+    imageName: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageName.value ?? '',
+    imageIndex: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageIndex.value ?? 0,
+    imageSource: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageSource.value ?? '',
+    imageController: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageController.value ?? '',
+    imageDate: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageDate.value ?? '',
+    imageNumber: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStart:
+      startReadOutData['event-MTCamera-0-startReadout']?.[0]?.timestampAcquisitionStart.value ?? 0,
+    exposureTime: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.exposureTime.value ?? 0,
+    timestampStartOfReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.timestampStartOfReadout.value ?? 0,
+  };
+};
+
+export const getEndReadout = (state) => {
+  const subscriptions = ['event-MTCamera-0-endReadout'];
+  const endReadOutData = getStreamData(state, subscriptions);
+  return {
+    imagesInSequence: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imagesInSequence.value ?? 0,
+    imageName: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageName.value ?? '',
+    imageIndex: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageIndex.value ?? 0,
+    imageSource: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageSource.value ?? '',
+    imageController: endReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageController.value ?? '',
+    imageDate: startReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageDate.value ?? '',
+    imageNumber: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStart: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.timestampAcquisitionStart.value ?? 0,
+    requestedExposureTime: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.requestedExposureTime.value ?? 0,
+    timestampEndOfReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.timestampEndOfReadout.value ?? 0,
+  };
+};
+
+export const getEndOfImageTelemetry = (state) => {
+  const subscriptions = ['event-MTCamera-0-endOfImageTelemetry'];
+  const endOfImageTelemetryData = getStreamData(state, subscriptions);
+  return {
+    imagesInSequence: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imagesInSequence.value ?? 0,
+    imageName: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageName.value ?? '',
+    imageIndex: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageIndex.value ?? 0,
+    imageSource: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageSource.value ?? '',
+    imageController: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageController.value ?? '',
+    imageDate: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageDate.value ?? '',
+    imageNumber: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStart:
+      endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.timestampAcquisitionStart.value ?? 0,
+    exposureTime: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.exposureTime.value ?? 0,
+    imageTag: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageTag.value ?? '',
+    timestampDateObs: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.timestampDateObs.value ?? 0,
+    timestampDateEnd: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.timestampDateEnd.value ?? 0,
+    measuredShutterOpenTime:
+      endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.measuredShutterOpenTime.value ?? 0,
+    darkTime: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.darkTime.value ?? 0,
+    emulatedImage: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.emulatedImage.value ?? '',
+  };
+};
+
+export const getTempControlStatus = (state) => {
+  const subscriptions = ['event-MTCamera-0-focal_plane_Raft_RaftTempControlStatusConfiguration'];
+  const tempControlData = getStreamData(state, subscriptions);
+  return {
+    tempControlActive:
+      tempControlData['event-MTCamera-0-focal_plane_Raft_RaftTempControlStatusConfiguration']?.[0]?.tempcontrol_active
+        .value ?? [],
+  };
+};
+
+export const getFocalPlaneReb = (state) => {
+  const subscriptions = ['telemetry-MTCamera-0-focal_plane_Reb'];
+  const focalPlaneReb = getStreamData(state, subscriptions);
+  return {
+    hVBiasSwitch: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.[0]?.hVBiasSwitch.value ?? [],
+    anaV: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.[0]?.anaV.value ?? [],
+  };
+};
+
 /**
  * Selects the Weather Forecast State for Weather Forecat view
  * @param {object} state
