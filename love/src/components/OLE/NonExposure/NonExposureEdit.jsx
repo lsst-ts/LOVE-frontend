@@ -10,12 +10,10 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
-import { defaultCSCList /* LOG_TYPE_OPTIONS */ } from 'Config';
-import ManagerInterface from 'Utils';
-import { getLinkJira, getFileURL, getFilename } from 'Utils';
-import { LSST_SYSTEMS, LSST_SUBSYSTEMS, iconLevelOLE } from 'Config';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
+import { defaultCSCList, LSST_SYSTEMS, LSST_SUBSYSTEMS, iconLevelOLE } from 'Config';
+import ManagerInterface, { getLinkJira, getFileURL, getFilename } from 'Utils';
 import styles from './NonExposure.module.css';
 
 export default class NonExposureEdit extends Component {
@@ -73,11 +71,16 @@ export default class NonExposureEdit extends Component {
       }
     });
 
+    logEdit.date_begin = logEdit.date_begin
+      ? new Date(logEdit.date_begin + 'Z')
+      : new Date(new Date() - 24 * 60 * 60 * 1000);
+
+    logEdit.date_end = logEdit.date_end ? new Date(logEdit.date_end + 'Z') : new Date();
+
     this.state = {
       logEdit,
       confirmationModalShown: false,
       confirmationModalText: '',
-      imageTags: [],
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -135,6 +138,8 @@ export default class NonExposureEdit extends Component {
     payload['date_begin'] = beginDateISO.substring(0, beginDateISO.length - 1); // remove Zone due to backend standard
     payload['date_end'] = endDateISO.substring(0, endDateISO.length - 1); // remove Zone due to backend standard
 
+    payload['tags'] = [...(payload['systems'] ?? []), ...(payload['subsystems'] ?? []), ...(payload['cscs'] ?? [])];
+
     if (this.state.logEdit.id) {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
         this.setState({ confirmationModalShown: false });
@@ -164,24 +169,29 @@ export default class NonExposureEdit extends Component {
     }
   }
 
-  componentDidMount() {
-    ManagerInterface.getListImageTags().then((data) => {
-      this.setState({
-        imageTags: data.map((tag) => ({ name: tag.label, id: tag.key })),
-      });
-    });
-  }
+  componentDidMount() {}
 
   componentDidUpdate(prevProps, prevState) {
     if (
       prevState.logEdit?.date_begin !== this.state.logEdit?.date_begin ||
       prevState.logEdit?.date_end !== this.state.logEdit?.date_end
     ) {
+      const newDateBegin = this.state.logEdit.date_begin
+        ? new Date(this.state.logEdit.date_begin + 'Z')
+        : new Date(new Date() - 24 * 60 * 60 * 1000);
+
+      const newDateEnd = this.state.logEdit.date_end ? new Date(this.state.logEdit.date_end + 'Z') : new Date();
+
       const start = Moment(this.state.logEdit.date_begin);
       const end = Moment(this.state.logEdit.date_end);
       const duration_hr = end.diff(start, 'hours', true);
       this.setState((state) => ({
-        logEdit: { ...state.logEdit, time_lost: duration_hr.toFixed(2) },
+        logEdit: {
+          ...state.logEdit,
+          time_lost: duration_hr.toFixed(2),
+          date_begin: newDateBegin,
+          date_end: newDateEnd,
+        },
       }));
     }
   }
@@ -393,14 +403,8 @@ export default class NonExposureEdit extends Component {
                         <DateTimeRange
                           className={styles.dateTimeRangeStyle}
                           onChange={(date, type) => this.handleTimeOfIncident(date, type)}
-                          startDate={
-                            this.state.logEdit.date_begin
-                              ? new Date(this.state.logEdit.date_begin + 'Z')
-                              : new Date(new Date() - 24 * 60 * 60 * 1000)
-                          }
-                          endDate={
-                            this.state.logEdit.date_end ? new Date(this.state.logEdit.date_end + 'Z') : new Date()
-                          }
+                          startDate={this.state.logEdit.date_begin}
+                          endDate={this.state.logEdit.date_end}
                         />
                       </span>
                       <span className={styles.label}>Obs. Time Loss [hours]</span>
