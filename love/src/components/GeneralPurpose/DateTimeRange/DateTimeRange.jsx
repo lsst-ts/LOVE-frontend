@@ -63,7 +63,7 @@ DateTimeRange.propTypes = {
   /** Classname of the component */
   className: PropTypes.string,
   /** Date for the datetime range start */
-  startDate: PropTypes.number,
+  startDate: PropTypes.instanceOf(Date),
   /** Date for the datetime range end */
   endtDate: PropTypes.instanceOf(Date),
   /** Properties to add to the start DateTime component */
