@@ -84,6 +84,12 @@ export default class NonExposureEdit extends Component {
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.multiselectRefs = {
+      systems: React.createRef(),
+      subsystems: React.createRef(),
+      cscs: React.createRef(),
+    };
   }
 
   getIconLevel(level) {
@@ -92,6 +98,9 @@ export default class NonExposureEdit extends Component {
   }
 
   cleanForm() {
+    this.multiselectRefs.systems.current.resetSelectedValues();
+    this.multiselectRefs.subsystems.current.resetSelectedValues();
+    this.multiselectRefs.cscs.current.resetSelectedValues();
     this.setState({ logEdit: NonExposureEdit.defaultProps.logEdit });
   }
 
@@ -139,6 +148,13 @@ export default class NonExposureEdit extends Component {
     payload['date_end'] = endDateISO.substring(0, endDateISO.length - 1); // remove Zone due to backend standard
 
     payload['tags'] = [...(payload['systems'] ?? []), ...(payload['subsystems'] ?? []), ...(payload['cscs'] ?? [])];
+
+    // Clean null and empty values to avoid API errors
+    Object.keys(payload).forEach((key) => {
+      if (payload[key] === null || (Array.isArray(payload[key]) && payload[key].length === 0)) {
+        delete payload[key];
+      }
+    });
 
     if (this.state.logEdit.id) {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
@@ -292,6 +308,7 @@ export default class NonExposureEdit extends Component {
                 <span className={styles.label}>Systems</span>
                 <span className={styles.value}>
                   <Multiselect
+                    innerRef={this.multiselectRefs.systems}
                     className={styles.select}
                     options={systemOptions}
                     selectedValues={this.state.logEdit.systems}
@@ -307,6 +324,7 @@ export default class NonExposureEdit extends Component {
                 <span className={styles.label}>Subsystems</span>
                 <span className={styles.value}>
                   <Multiselect
+                    innerRef={this.multiselectRefs.subsystems}
                     className={styles.select}
                     options={subsystemOptions}
                     selectedValues={this.state.logEdit.subsystems}
@@ -322,6 +340,7 @@ export default class NonExposureEdit extends Component {
                 <span className={styles.label}>CSCs</span>
                 <span className={[styles.value].join(' ')}>
                   <Multiselect
+                    innerRef={this.multiselectRefs.cscs}
                     className={styles.select}
                     options={cscOptions}
                     selectedValues={this.state.logEdit.cscs}

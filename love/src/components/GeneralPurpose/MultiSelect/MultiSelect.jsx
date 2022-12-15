@@ -3,10 +3,11 @@ import { Multiselect as ReactMultiselect } from 'multiselect-react-dropdown';
 import styles from './MultiSelect.module.css';
 
 const MultiSelect = ({ options = [], onChange = () => {}, ...props }) => {
-  const { className: propsClassName, ...otherProps } = props;
+  const { className: propsClassName, innerRef, ...otherProps } = props;
 
   return (
     <ReactMultiselect
+      ref={innerRef}
       isObject={false}
       className={[styles.dropDownClassName, propsClassName].join(' ')}
       options={options}
