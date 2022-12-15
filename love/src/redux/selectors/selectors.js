@@ -1550,6 +1550,20 @@ export const getFocalPlaneReb = (state) => {
   return {
     hVBiasSwitch: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.[0]?.hVBiasSwitch.value ?? [],
     anaV: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.[0]?.anaV.value ?? [],
+    power: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.[0]?.power.value ?? [],
+  };
+};
+
+export const getFocalPlaneCCD = (state) => {
+  const subscriptions = ['telemetry-MTCamera-0-focal_plane_Ccd'];
+  const focalPlaneCCD = getStreamData(state, subscriptions);
+  return {
+    gDV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.[0]?.gDV.value ?? [],
+    oDI: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.[0]?.oDI.value ?? [],
+    oDV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.[0]?.oDV.value ?? [],
+    oGV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.[0]?.oGV.value ?? [],
+    rDV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.[0]?.rDV.value ?? [],
+    temp: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.[0]?.temp.value ?? [],
   };
 };
 
