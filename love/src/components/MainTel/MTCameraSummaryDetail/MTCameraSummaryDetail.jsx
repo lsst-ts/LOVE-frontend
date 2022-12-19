@@ -7,25 +7,32 @@ import { getCameraStatusStyle } from '../../../Config';
 import LoadingBar from '../../GeneralPurpose/LoadingBar/LoadingBar';
 import { stateToStyleCamera } from '../../../Config';
 import { formatTimestamp } from '../../../Utils';
-import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
+import {
+  mtcameraCcsCommandStateMap,
+  mtcameaCcsCommandStateToStyle,
+  mtcameraCalibrationDetailedStateMap,
+  mtcameraCalibrationDetailedStateToStyle,
+  mtcameraOffLineDetailedStateMap,
+  mtcameraOffLineDetailedStateToStyle,
+  mtcameraImageReadlinessDetailedStateMap,
+  mtcameraImageReadlinessDetailedStateToStyle,
+  mtcameraShutterDetailedStateMap,
+  mtcameraShutterDetailedStateToStyle,
+  mtcameraFilterChangerDetailedStateMap,
+  mtcameraFilterChangerDetailedStateToStyle,
+  mtCameraRaftsDetailedStateMap,
+  mtCameraRaftsDetailedStateToSTyle,
+} from 'Config';
 
 export default class Camera extends Component {
   static propTypes = {
-    raftsDetailedState: PropTypes.string,
-    imageReadinessDetailedState: PropTypes.string,
-    calibrationDetailedState: PropTypes.string,
-    shutterDetailedState: PropTypes.string,
-    imageSequence: PropTypes.object,
     subscribeToStreams: PropTypes.func,
     unsubscribeToStreams: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
-    this.state = {
-      timers: {},
-      expandedRows: {},
-    };
+    this.state = {};
   }
 
   componentDidMount = () => {

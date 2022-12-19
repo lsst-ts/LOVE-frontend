@@ -2765,7 +2765,7 @@ export const mtcameraFilterChangerDetailedStateToStyle = {
   ROTATING: 'ok',
 };
 
-export const mtCameraRaftDetailedStateMap2 = {
+export const mtCameraRaftsDetailedStateMap = {
   0: 'NEEDS_CLEAR',
   1: CLEARING,
   2: INTEGRATING,
@@ -2774,7 +2774,7 @@ export const mtCameraRaftDetailedStateMap2 = {
   5: DISCARDING,
 };
 
-export const mtCameraRaftDetailedStateToSTyle2 = {
+export const mtCameraRaftsDetailedStateToSTyle = {
   NEEDS_CLEAR: 'warning',
   CLEARING: 'ok',
   INTEGRATING: 'ok',
