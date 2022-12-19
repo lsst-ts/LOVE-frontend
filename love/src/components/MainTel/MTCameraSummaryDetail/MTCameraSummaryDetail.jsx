@@ -127,8 +127,11 @@ export default class Camera extends Component {
             <table className={styles.imageTable}>
               <thead>
                 <tr>
+                  <th></th>
+                  <th>Image</th>
                   <th>Timestamp</th>
                   <th>Image name</th>
+                  <th>Secuence</th>
                   <th className={styles.narrowCol}>Exposure time</th>
                   <th className={styles.mediumCol}>State</th>
                 </tr>
@@ -149,8 +152,11 @@ export default class Camera extends Component {
                     return (
                       <React.Fragment key={imageKey}>
                         <tr>
+                          <td></td>
+                          <td></td>
                           <td className={styles.string}>{formatTimestamp(image.timeStamp * 1000)}</td>
                           <td className={styles.string}>{imageName}</td>
+                          <td></td>
                           <td className={[styles.narrowCol].join(' ')}>
                             <LoadingBar
                               percentage={(currentExposureTime / image.exposureTime) * 100}

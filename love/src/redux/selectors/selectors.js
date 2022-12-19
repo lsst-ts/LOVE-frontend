@@ -1460,18 +1460,18 @@ export const getStartIntegration = (state) => {
   const subscriptions = ['event-MTCamera-0-startIntegration'];
   const startIntegrationData = getStreamData(state, subscriptions);
   return {
-    imagesInSequence: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imagesInSequence.value ?? 0,
-    imageName: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageName.value ?? '',
-    imageIndex: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageIndex.value ?? 0,
-    imageSource: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageSource.value ?? '',
-    imageController: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageController.value ?? '',
-    imageDate: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageDate.value ?? '',
-    imageNumber: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageNumber.value ?? 0,
-    timestampAcquisitionStart:
+    imagesInSequenceInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imagesInSequence.value ?? 0,
+    imageNameInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageName.value ?? '',
+    imageIndexInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageIndex.value ?? 0,
+    imageSourceInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageSource.value ?? '',
+    imageControllerInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageController.value ?? '',
+    imageDateInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageDate.value ?? '',
+    imageNumberInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStartInt:
       startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.timestampAcquisitionStart.value ?? 0,
-    exposureTime: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.exposureTime.value ?? '',
-    mode: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.mode.value ?? '',
-    timeout: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.timeout.value ?? 0,
+    exposureTimeInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.exposureTime.value ?? '',
+    modeInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.mode.value ?? '',
+    timeoutInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.timeout.value ?? 0,
   };
 };
 
@@ -1479,17 +1479,18 @@ export const getStartReadout = (state) => {
   const subscriptions = ['event-MTCamera-0-startReadout'];
   const startReadOutData = getStreamData(state, subscriptions);
   return {
-    imagesInSequence: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imagesInSequence.value ?? 0,
-    imageName: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageName.value ?? '',
-    imageIndex: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageIndex.value ?? 0,
-    imageSource: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageSource.value ?? '',
-    imageController: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageController.value ?? '',
-    imageDate: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageDate.value ?? '',
-    imageNumber: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageNumber.value ?? 0,
-    timestampAcquisitionStart:
+    imagesInSequenceSReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imagesInSequence.value ?? 0,
+    imageNameSReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageName.value ?? '',
+    imageIndexSReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageIndex.value ?? 0,
+    imageSourceSReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageSource.value ?? '',
+    imageControllerSReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageController.value ?? '',
+    imageDateSReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageDate.value ?? '',
+    imageNumberSReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStartSReadout:
       startReadOutData['event-MTCamera-0-startReadout']?.[0]?.timestampAcquisitionStart.value ?? 0,
-    exposureTime: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.exposureTime.value ?? 0,
-    timestampStartOfReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.timestampStartOfReadout.value ?? 0,
+    exposureTimeSReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.exposureTime.value ?? 0,
+    timestampStartOfReadoutSReadout:
+      startReadOutData['event-MTCamera-0-startReadout']?.[0]?.timestampStartOfReadout.value ?? 0,
   };
 };
 
@@ -1497,16 +1498,17 @@ export const getEndReadout = (state) => {
   const subscriptions = ['event-MTCamera-0-endReadout'];
   const endReadOutData = getStreamData(state, subscriptions);
   return {
-    imagesInSequence: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imagesInSequence.value ?? 0,
-    imageName: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageName.value ?? '',
-    imageIndex: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageIndex.value ?? 0,
-    imageSource: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageSource.value ?? '',
-    imageController: endReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageController.value ?? '',
-    imageDate: startReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageDate.value ?? '',
-    imageNumber: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageNumber.value ?? 0,
-    timestampAcquisitionStart: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.timestampAcquisitionStart.value ?? 0,
-    requestedExposureTime: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.requestedExposureTime.value ?? 0,
-    timestampEndOfReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.timestampEndOfReadout.value ?? 0,
+    imagesInSequenceEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imagesInSequence.value ?? 0,
+    imageNameEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageName.value ?? '',
+    imageIndexEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageIndex.value ?? 0,
+    imageSourceEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageSource.value ?? '',
+    imageControllerEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageController.value ?? '',
+    imageDateEReadout: startReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageDate.value ?? '',
+    imageNumberEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStartEReadout:
+      endReadOutData['event-MTCamera-0-endReadout']?.[0]?.timestampAcquisitionStart.value ?? 0,
+    requestedExposureTimeEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.requestedExposureTime.value ?? 0,
+    timestampEndOfReadoutEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.timestampEndOfReadout.value ?? 0,
   };
 };
 
@@ -1514,23 +1516,29 @@ export const getEndOfImageTelemetry = (state) => {
   const subscriptions = ['event-MTCamera-0-endOfImageTelemetry'];
   const endOfImageTelemetryData = getStreamData(state, subscriptions);
   return {
-    imagesInSequence: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imagesInSequence.value ?? 0,
-    imageName: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageName.value ?? '',
-    imageIndex: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageIndex.value ?? 0,
-    imageSource: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageSource.value ?? '',
-    imageController: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageController.value ?? '',
-    imageDate: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageDate.value ?? '',
-    imageNumber: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageNumber.value ?? 0,
-    timestampAcquisitionStart:
+    imagesInSequenceTelemetry:
+      endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imagesInSequence.value ?? 0,
+    imageNameTelemetry: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageName.value ?? '',
+    imageIndexTelemetry: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageIndex.value ?? 0,
+    imageSourceTelemetry: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageSource.value ?? '',
+    imageControllerTelemetry:
+      endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageController.value ?? '',
+    imageDateTelemetry: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageDate.value ?? '',
+    imageNumberTelemetry: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStartTelemetry:
       endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.timestampAcquisitionStart.value ?? 0,
-    exposureTime: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.exposureTime.value ?? 0,
-    imageTag: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageTag.value ?? '',
-    timestampDateObs: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.timestampDateObs.value ?? 0,
-    timestampDateEnd: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.timestampDateEnd.value ?? 0,
-    measuredShutterOpenTime:
+    exposureTimeTelemetry:
+      endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.exposureTime.value ?? 0,
+    imageTagTelemetry: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageTag.value ?? '',
+    timestampDateObsTelemetry:
+      endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.timestampDateObs.value ?? 0,
+    timestampDateEndTelemetry:
+      endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.timestampDateEnd.value ?? 0,
+    measuredShutterOpenTimeTelemetry:
       endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.measuredShutterOpenTime.value ?? 0,
-    darkTime: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.darkTime.value ?? 0,
-    emulatedImage: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.emulatedImage.value ?? '',
+    darkTimeTelemetry: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.darkTime.value ?? 0,
+    emulatedImageTelemetry:
+      endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.emulatedImage.value ?? '',
   };
 };
 
@@ -1548,9 +1556,9 @@ export const getFocalPlaneReb = (state) => {
   const subscriptions = ['telemetry-MTCamera-0-focal_plane_Reb'];
   const focalPlaneReb = getStreamData(state, subscriptions);
   return {
-    hVBiasSwitch: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.[0]?.hVBiasSwitch.value ?? [],
-    anaV: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.[0]?.anaV.value ?? [],
-    power: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.[0]?.power.value ?? [],
+    hVBiasSwitch: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.hVBiasSwitch.value ?? [],
+    anaV: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.anaV.value ?? [],
+    power: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.power.value ?? [],
   };
 };
 
@@ -1558,12 +1566,12 @@ export const getFocalPlaneCCD = (state) => {
   const subscriptions = ['telemetry-MTCamera-0-focal_plane_Ccd'];
   const focalPlaneCCD = getStreamData(state, subscriptions);
   return {
-    gDV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.[0]?.gDV.value ?? [],
-    oDI: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.[0]?.oDI.value ?? [],
-    oDV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.[0]?.oDV.value ?? [],
-    oGV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.[0]?.oGV.value ?? [],
-    rDV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.[0]?.rDV.value ?? [],
-    temp: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.[0]?.temp.value ?? [],
+    gDV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.gDV.value ?? [],
+    oDI: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.oDI.value ?? [],
+    oDV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.oDV.value ?? [],
+    oGV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.oGV.value ?? [],
+    rDV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.rDV.value ?? [],
+    temp: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.temp.value ?? [],
   };
 };
 
