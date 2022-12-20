@@ -10,14 +10,13 @@ import WarningIcon from '../../icons/WarningIcon/WarningIcon';
 import { cscText, formatTimestamp } from '../../../Utils';
 
 export default class CSCExpanded extends PureComponent {
-
   constructor(props) {
     super(props);
     this.state = {
       summaryStateCommand: null,
-      configurationOverride: "",
+      configurationOverride: '',
       logLevel: 20,
-    }
+    };
   }
 
   static propTypes = {
@@ -111,26 +110,26 @@ export default class CSCExpanded extends PureComponent {
   };
 
   static validLogLevel = {
-    "DEBUG": 10,
-    "INFO": 20,
-    "WARNING": 30,
-    "ERROR": 40,
-    "CRITICAL": 50,
-  }
+    DEBUG: 10,
+    INFO: 20,
+    WARNING: 30,
+    ERROR: 40,
+    CRITICAL: 50,
+  };
 
   static logLevelNames = {
-    10: "DEBUG",
-    20: "INFO",
-    30: "WARNING",
-    40: "ERROR",
-    50: "CRITICAL",
-  }
+    10: 'DEBUG',
+    20: 'INFO',
+    30: 'WARNING',
+    40: 'ERROR',
+    50: 'CRITICAL',
+  };
 
   static validState = {
-    start: "STANDBY",
-    enable: "DISABLED",
-    disable: "ENABLED",
-    standby: "DISABLED or FAULT",
+    start: 'STANDBY',
+    enable: 'DISABLED',
+    disable: 'ENABLED',
+    standby: 'DISABLED or FAULT',
   };
 
   setSummaryStateCommand(option) {
@@ -139,60 +138,71 @@ export default class CSCExpanded extends PureComponent {
       summaryStateCommand: option,
       configurationOverride: configurationOverride,
     });
-  };
+  }
 
   setLogLevel(option) {
     this.setState({
       logLevel: CSCExpanded.validLogLevel[option],
     });
-  };
+  }
 
   setConfigurationOverride(option) {
     const { summaryStateCommand } = this.state;
     this.setState({
       summaryStateCommand: summaryStateCommand,
       configurationOverride: option,
-    })
-  };
+    });
+  }
 
   sendSummaryStateCommand(event) {
-    this.props.requestSALCommand(
-      {
-        cmd: `cmd_${this.state.summaryStateCommand}`,
-        csc: this.props.name,
-        salindex: this.props.salindex,
-        params: this.state.summaryStateCommand === "start" ? {
-          configurationOverride: this.state.configurationOverride,
-        } : {},
-      }
-    );
-  };
+    this.props.requestSALCommand({
+      cmd: `cmd_${this.state.summaryStateCommand}`,
+      csc: this.props.name,
+      salindex: this.props.salindex,
+      params:
+        this.state.summaryStateCommand === 'start'
+          ? {
+              configurationOverride: this.state.configurationOverride,
+            }
+          : {},
+    });
+  }
 
   sendSetLogLevel(event) {
-    this.props.requestSALCommand(
-      {
-        cmd: "cmd_setLogLevel",
-        csc: this.props.name,
-        salindex: this.props.salindex,
-        params: {
-          level: this.state.logLevel,
-        },
-      }
-    );
-  };
+    this.props.requestSALCommand({
+      cmd: 'cmd_setLogLevel',
+      csc: this.props.name,
+      salindex: this.props.salindex,
+      params: {
+        level: this.state.logLevel,
+      },
+    });
+  }
 
   render() {
     const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value : 0;
-    const cscVersion = this.props.softwareVersions ? this.props.softwareVersions.cscVersion.value : "Unknown";
-    const xmlVersion = this.props.softwareVersions ? this.props.softwareVersions.xmlVersion.value : "Unknown";
-    const salVersion = this.props.softwareVersions ? this.props.softwareVersions.salVersion.value : "Unknown";
-    const openSpliceVersion = this.props.softwareVersions ? this.props.softwareVersions.openSpliceVersion.value : "Unknown";
-    const configurationsAvailable = this.props.configurationsAvailable ? this.props.configurationsAvailable.overrides.value.split(",") : null;
+    const cscVersion = this.props.softwareVersions ? this.props.softwareVersions.cscVersion.value : 'Unknown';
+    const xmlVersion = this.props.softwareVersions ? this.props.softwareVersions.xmlVersion.value : 'Unknown';
+    const salVersion = this.props.softwareVersions ? this.props.softwareVersions.salVersion.value : 'Unknown';
+    const openSpliceVersion = this.props.softwareVersions
+      ? this.props.softwareVersions.openSpliceVersion.value
+      : 'Unknown';
+    const configurationsAvailable = this.props.configurationsAvailable
+      ? this.props.configurationsAvailable.overrides.value.split(',')
+      : null;
     const summaryState = CSCExpanded.states[summaryStateValue];
-    const cscLogLevel = this.props.cscLogLevelData ? this.props.cscLogLevelData.level.value : null
-    const { props } = this;
+    const cscLogLevel = this.props.cscLogLevelData ? this.props.cscLogLevelData.level.value : null;
 
-    const configurationsAvailableMenuOptions = configurationsAvailable !== null && configurationsAvailable.length > 0 ? [...['',], ...configurationsAvailable] : null;
+    const configurationApplied = this.props.configurationApplied?.configurations.value;
+    const configurationVersion = this.props.configurationApplied?.version.value;
+    const configurationUrl = this.props.configurationApplied?.url.value;
+    const configurationSchemaVersion = this.props.configurationApplied?.schemaVersion.value;
+    const configurationOtherInfo = this.props.configurationApplied?.otherInfo.value.replaceAll(',', ', ');
+
+    const configurationsAvailableMenuOptions =
+      configurationsAvailable !== null && configurationsAvailable.length > 0
+        ? [...[''], ...configurationsAvailable]
+        : null;
 
     let heartbeatStatus = 'unknown';
     let nLost = 0;
@@ -241,7 +251,7 @@ export default class CSCExpanded extends PureComponent {
                       className={styles.breadcrumbGroup}
                       onClick={() => this.props.onCSCClick({ group: this.props.group, csc: 'all' })}
                     >
-                      {props.group}
+                      {this.props.group}
                     </span>
                     <span> &#62; </span>
                   </>
@@ -265,30 +275,49 @@ export default class CSCExpanded extends PureComponent {
               )}
             </div>
           </div>
-          {this.props.name !== "Script" &&
+          {this.props.name !== 'Script' && (
             <div className={styles.topBarContainerWrapper}>
               <div className={styles.topBarContainer}>
                 <div className={styles.breadcrumContainer}>
                   <div className={styles.titlePadding}>
-                    Software Versions: csc={cscVersion}, xml={xmlVersion}, sal={salVersion}, openSplice={openSpliceVersion}
+                    Software Versions: csc={cscVersion}, xml={xmlVersion}, sal={salVersion}, openSplice=
+                    {openSpliceVersion}
                   </div>
                 </div>
               </div>
             </div>
-          }
-          {this.props.name !== "Script" && (
+          )}
+          {this.props.name !== 'Script' && this.props.configurationApplied && (
+            <div className={styles.topBarContainerWrapper}>
+              <div className={styles.topBarContainer}>
+                <div className={styles.breadcrumContainer}>
+                  <div className={styles.titlePadding}>
+                    Configurations applied: configuration={configurationApplied}, version={configurationVersion},
+                    schema={configurationSchemaVersion}, url=
+                    <a target="_blank" href={configurationUrl}>
+                      {configurationUrl}
+                    </a>
+                  </div>
+                  {/* <div className={styles.titlePadding}>
+                    Configurations applied other info: {configurationOtherInfo}
+                  </div> */}
+                </div>
+              </div>
+            </div>
+          )}
+          {this.props.name !== 'Script' && (
             <div className={styles.topBarContainerWrapper}>
               <div className={styles.topBarContainer}>
                 <div className={styles.breadcrumContainer}>
                   <div className={styles.titlePadding}>Select State transition Command:</div>
                   <Select
-                    options={["start", "enable", "disable", "standby"]}
+                    options={['start', 'enable', 'disable', 'standby']}
                     onChange={(option) => this.setSummaryStateCommand(option.value)}
                     value=""
                     placeholder="Select state"
                   />
                 </div>
-                {configurationsAvailableMenuOptions !== null && this.state.summaryStateCommand === "start" && (
+                {configurationsAvailableMenuOptions !== null && this.state.summaryStateCommand === 'start' && (
                   <div className={styles.breadcrumContainer}>
                     <div className={styles.titlePadding}>Configurations available:</div>
                     <Select
@@ -305,7 +334,7 @@ export default class CSCExpanded extends PureComponent {
                     title="set state"
                     status="info"
                     shape="rounder"
-                    padding='30px'
+                    padding="30px"
                     disabled={this.state.summaryStateCommand === null}
                     onClick={(event) => {
                       this.sendSummaryStateCommand(event);
@@ -316,7 +345,8 @@ export default class CSCExpanded extends PureComponent {
                   </Button>
                 </div>
               </div>
-            </div>)}
+            </div>
+          )}
 
           {this.state.summaryStateCommand !== null && (
             <div className={styles.topBarContainerWrapper}>
@@ -327,47 +357,52 @@ export default class CSCExpanded extends PureComponent {
                       <span className={styles.warningIcon}>
                         <WarningIcon></WarningIcon>
                       </span>
-                      <span>
-                        CSC must be in {CSCExpanded.validState[this.state.summaryStateCommand]}.
-                      </span>
+                      <span>CSC must be in {CSCExpanded.validState[this.state.summaryStateCommand]}.</span>
                     </span>
                   </div>
                 </div>
               </div>
-            </div>)}
+            </div>
+          )}
 
-          {(cscLogLevel !== null || this.props.name === "Script") && (<div className={styles.topBarContainerWrapper}>
-            <div className={styles.topBarContainer}>
-              <div className={styles.breadcrumContainer}>
-                <div className={styles.titlePadding}>Set Log Level:</div>
-                <Select
-                  options={["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]}
-                  onChange={(option) => this.setLogLevel(option.value)}
-                  value={cscLogLevel ? CSCExpanded.logLevelNames[cscLogLevel] : "INFO"}
-                  placeholder="Select log Level"
-                />
-              </div>{cscLogLevel !== null && (
+          {(cscLogLevel !== null || this.props.name === 'Script') && (
+            <div className={styles.topBarContainerWrapper}>
+              <div className={styles.topBarContainer}>
                 <div className={styles.breadcrumContainer}>
-                  <div className={styles.titlePadding}>Current log level:  {CSCExpanded.logLevelNames[cscLogLevel]}</div>
-                </div>)}
-              <div>
-                <br />
-                <Button
-                  title="set log level"
-                  status="info"
-                  shape="rounder"
-                  padding='30px'
-                  disabled={false}
-                  onClick={(event) => {
-                    this.sendSetLogLevel(event);
-                  }}
-                  command
-                >
-                  SEND
-                </Button>
+                  <div className={styles.titlePadding}>Set Log Level:</div>
+                  <Select
+                    options={['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']}
+                    onChange={(option) => this.setLogLevel(option.value)}
+                    value={cscLogLevel ? CSCExpanded.logLevelNames[cscLogLevel] : 'INFO'}
+                    placeholder="Select log Level"
+                  />
+                </div>
+                {cscLogLevel !== null && (
+                  <div className={styles.breadcrumContainer}>
+                    <div className={styles.titlePadding}>
+                      Current log level: {CSCExpanded.logLevelNames[cscLogLevel]}
+                    </div>
+                  </div>
+                )}
+                <div>
+                  <br />
+                  <Button
+                    title="set log level"
+                    status="info"
+                    shape="rounder"
+                    padding="30px"
+                    disabled={false}
+                    onClick={(event) => {
+                      this.sendSetLogLevel(event);
+                    }}
+                    command
+                  >
+                    SEND
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>)}
+          )}
 
           {this.props.errorCodeData.length > 0 && (
             <div className={[styles.logContainer, styles.errorCodeContainer].join(' ')}>
