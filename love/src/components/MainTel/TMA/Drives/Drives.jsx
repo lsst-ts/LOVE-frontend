@@ -28,7 +28,6 @@ export default class Drives extends Component {
       type: 'number',
       className: styles.angleColumn,
       render: (value) => (isNaN(value) || Number.isInteger(value) ? value : `${value.toFixed(2)}º`),
-
     };
   }
 

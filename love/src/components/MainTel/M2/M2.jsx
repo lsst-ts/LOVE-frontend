@@ -5,7 +5,6 @@ import Actuators from './Actuators/Actuators';
 import styles from './M2.module.css';
 
 export default class M2 extends Component {
-
   static propTypes = {
     /** Function to subscribe to streams to receive */
     subscribeToStreams: PropTypes.func,
@@ -52,11 +51,11 @@ export default class M2 extends Component {
     minForceLimit: PropTypes.number,
     /** Number of the maximum force limit, used for the gradiant color */
     maxForceLimit: PropTypes.number,
-  }
+  };
   static defaultProps = {
     minForceLimit: 0,
     maxForceLimit: 1000,
-  }
+  };
 
   componentDidMount() {
     this.props.subscribeToStreams();
@@ -67,7 +66,7 @@ export default class M2 extends Component {
   }
 
   render() {
-    const { 
+    const {
       actuatorIlcState,
       axialActuatorSteps,
       axialEncoderPositions,
@@ -89,13 +88,12 @@ export default class M2 extends Component {
           summaryState={summaryState}
           commandableByDDS={commandableByDDS}
           forceBalanceSystemStatus={forceBalanceSystemStatus}
-          m2AssemblyInPosition={m2AssemblyInPosition}  
+          m2AssemblyInPosition={m2AssemblyInPosition}
         />
 
         <Actuators
           zenithAngleMeasured={zenithAngleMeasured}
           inclinationTelemetrySource={inclinationTelemetrySource}
-
           actuatorIlcState={actuatorIlcState}
           axialActuatorSteps={axialActuatorSteps}
           axialEncoderPositions={axialEncoderPositions}

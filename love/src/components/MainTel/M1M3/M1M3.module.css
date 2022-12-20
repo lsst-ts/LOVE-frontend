@@ -1,13 +1,11 @@
-
-
 .cursorMove {
   cursor: crosshair;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .borderCircleOverlay {
@@ -54,7 +52,7 @@
 }
 
 .state :first-child {
-  margin-right: .5em;
+  margin-right: 0.5em;
 }
 
 .summaryState {
@@ -101,22 +99,21 @@
   text-align: left;
 }
 
-.summaryPanelControls > .controls > .control{
+.summaryPanelControls > .controls > .control {
   flex-grow: 1;
 }
 
-.summaryPanelControls > .controls > .control > span{
-  margin-bottom: .5em;
+.summaryPanelControls > .controls > .control > span {
+  margin-bottom: 0.5em;
   display: block;
 }
 
-.summaryPanelControls > .controls > .control > .toggleContainer{
+.summaryPanelControls > .controls > .control > .toggleContainer {
   display: flex;
 }
 
 .summaryPanelControls > .controls > div {
   margin-right: 1em;
-
 }
 
 .svgContainer {
@@ -144,12 +141,12 @@
 .hardpoints > span:first-child {
   text-align: left;
   font-weight: bold;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
 
 .borderCircleHardpoint {
-  opacity:0.85;
-  fill:#152f3b;
+  opacity: 0.85;
+  fill: #152f3b;
 }
 
 .textHardpoint {
@@ -162,7 +159,7 @@
   /*fill:#8bea96;*/
   stroke-width: 2px;
   /*stroke: gray;*/
-  opacity:0.71;
+  opacity: 0.71;
   cursor: pointer;
 }
 
@@ -201,7 +198,7 @@
 .forceGradientWrapper > span:first-child {
   text-align: left;
   font-weight: bold;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
 
 .forceGradient {
@@ -245,7 +242,7 @@
 }
 
 .actuatorValue > .summaryState {
-  font-size: .8em;
+  font-size: 0.8em;
   line-height: 1.7em;
 }
 
@@ -254,11 +251,11 @@
 }
 
 .stopLeft {
-  stop-color: #3f51b5;  /* Indigo */
+  stop-color: #3f51b5; /* Indigo */
 }
 
 .stopRright {
-  stop-color: #009688;  /* Teal */
+  stop-color: #009688; /* Teal */
 }
 
 .filled {
@@ -358,13 +355,12 @@
   border-right: 3px solid var(--status-alert-dimmed-color-2);
 }
 
-
 .plotSection {
   margin: 4em 2em;
   display: grid;
   grid-template-columns: 1fr 5fr 2fr;
   grid-auto-rows: minmax(100px, auto);
-  grid-template-areas: "hp plot group";
+  grid-template-areas: 'hp plot group';
 }
 
 .gridHardpoint {

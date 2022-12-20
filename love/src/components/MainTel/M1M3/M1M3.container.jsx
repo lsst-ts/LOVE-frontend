@@ -1,8 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getM1M3State, getM1M3ActuatorsState, getM1M3ActuatorForces,
-         getM1M3HardpointMonitorData, getM1M3HardpointActuatorState } from 'redux/selectors';
+import {
+  getM1M3State,
+  getM1M3ActuatorsState,
+  getM1M3ActuatorForces,
+  getM1M3HardpointMonitorData,
+  getM1M3HardpointActuatorState,
+} from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import M1M3 from './M1M3';
 

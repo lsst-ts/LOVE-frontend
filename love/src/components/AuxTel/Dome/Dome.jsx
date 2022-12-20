@@ -8,6 +8,8 @@ import DomeTopView from './DomeTopView';
 import DomePointing from './DomePointing';
 import DomeShutter from './DomeShutter';
 import MountTopView from './MountTopView';
+import Elevation from 'components/GeneralPurpose/Elevation/Elevation';
+import Azimuth from 'components/GeneralPurpose/Azimuth/Azimuth';
 
 import WindRose from '../../icons/WindRose/WindRose';
 import DomeSummaryTable from './DomeSummaryTable/DomeSummaryTable';
@@ -208,8 +210,30 @@ export default class Dome extends Component {
             <div className={styles.windRoseContainer}>
               <WindRose />
             </div>
+            <div className={styles.elevationContainer}>
+              <Elevation
+                height={height}
+                width={width}
+                radius={width / 2}
+                maxL3={90}
+                maxL2={85}
+                maxL1={80}
+                minL1={10}
+                minL2={5}
+                minL3={0}
+                currentValue={currentPointing.el}
+                targetValue={currentPointing.az}
+              />
+            </div>
 
-            <DomeTopView width={width} height={height} />
+            <Azimuth
+              className={styles.svgAzimuth}
+              width={width}
+              height={height}
+              currentValue={domeAz}
+              targetValue={domeTargetAz}
+            />
+            {/*<DomeTopView width={width} height={height} />*/}
             <MountTopView currentPointing={currentPointing} />
             <DomeShutter
               width={width}

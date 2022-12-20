@@ -41,7 +41,7 @@
   font-size: 0.5em;
   stroke: #000;
   stroke-width: 0.2px;
-};
+}
 
 .circleOverlayDisabled {
   fill: var(--status-disabled-dimmed-color-2);
@@ -63,7 +63,6 @@
   font-size: 1.2em;
   fill: white;
 }
-
 
 .hardpoints {
   /*max-width: 160px;
@@ -143,4 +142,3 @@
   fill: white !important;
   stroke: white !important;
 }
-
