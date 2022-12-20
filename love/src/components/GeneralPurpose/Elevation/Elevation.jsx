@@ -32,175 +32,185 @@ export default class Limits extends Component {
   };
 
   static defaultProps = {
-    height:75,
-    maxL3: 110,
-    maxL2: 100,
-    maxL1: 90,
-    minL1: 0,
-    minL2: -10,
-    minL3: -20,
+    height: 75,
+    maxL3: 90,
+    maxL2: 80,
+    maxL1: 70,
+    minL1: 10,
+    minL2: 5,
+    minL3: 0,
 
     radius: 10,
 
     valueOrigin: 0,
-    currentValue: -45,
-    targetValue: 95,
+    currentValue: 0,
+    targetValue: 0,
 
     displayLabels: true,
   };
 
-  constructor() {
-    super();
-    this.state = {
-      currentValue: 0,
-      targetValue:0,
-    };
-  }
-
-  componentDidMount() {
-    setInterval(() => {
-      const randomValue = Math.ceil(Math.random()*130-20)
-
-      this.setState((prevState) => ({
-        ...prevState,targetValue: randomValue
-      }))
-      
-      setTimeout(() => console.log(this.setState((prevState) => ({
-        ...prevState,currentValue: randomValue
-      }))), 2500);
-
-    }, 5000);
-  }
-
   render() {
-    const { currentValue, targetValue, height, maxL3, maxL2, maxL1, minL1, minL2, minL3, radius, valueOrigin, displayLabels } = this.props;
+    const {
+      currentValue,
+      targetValue,
+      height,
+      maxL3,
+      maxL2,
+      maxL1,
+      minL1,
+      minL2,
+      minL3,
+      radius,
+      valueOrigin,
+      displayLabels,
+    } = this.props;
 
-    //const {currentValue, targetValue} = this.state;
+    {
+      /* Convert Angles to pie % */
+    }
+    const percMaxL3 = (maxL3 / 360) * (radius * 3.142) - (minL3 / 360) * (radius * 3.142) + ' ' + radius * 3.142;
+    const percMaxL2 = (maxL2 / 360) * (radius * 3.142) - (minL2 / 360) * (radius * 3.142) + ' ' + radius * 3.142;
+    const percMaxL1 = (maxL1 / 360) * (radius * 3.142) - (minL1 / 360) * (radius * 3.142) + ' ' + radius * 3.142;
+    const percTarget = Math.abs((targetValue / 360) * (radius * 3.142)) + ' ' + radius * 3.142;
+    const percCurrent = Math.abs((currentValue / 360) * (radius * 3.142)) + ' ' + radius * 3.142;
 
-    {/* Convert Angles to pie % */}   
-    const percMaxL3 = (maxL3/360*(radius*3.142)-minL3/360*(radius*3.142))+" "+(radius*3.142);
-    const percMaxL2 = maxL2/360*(radius*3.142)-minL2/360*(radius*3.142)+" "+(radius*3.142);
-    const percMaxL1 = maxL1/360*(radius*3.142)-minL1/360*(radius*3.142)+" "+(radius*3.142);
-    const percTarget = (Math.abs(targetValue/360*(radius*3.142)))+" "+(radius*3.142);
-    const percCurrent = (Math.abs(currentValue/360*(radius*3.142)))+" "+(radius*3.142);
+    const rad = Math.PI / 180;
 
-    const rad = Math.PI/180;
+    const currentText_X = radius * Math.cos(currentValue * rad);
+    const currentText_Y = -1 * radius * Math.sin(currentValue * rad);
 
-    const currentText_X = radius*(Math.cos(currentValue*rad));
-    const currentText_Y = -1*radius*(Math.sin(currentValue*rad));
-    
-    const rotTarget = "rotate("+(targetValue-minL3)+") scale(1, 1)";
+    const rotTarget = 'rotate(' + (targetValue - minL3) + ') scale(1, 1)';
 
-    const gaugeRotation = "rotate("+-minL3+") scale(1, -1)";
-    const rotMinL3 = "rotate("+-minL3+")";
-    const rotMinL2 = "rotate("+(-1*minL3+minL2)+")";
-    const rotMinL1 = "rotate("+(-1*minL3+minL1)+")";
+    const gaugeRotation = 'rotate(' + -minL3 + ') scale(1, -1)';
+    const rotMinL3 = 'rotate(' + -minL3 + ')';
+    const rotMinL2 = 'rotate(' + (-1 * minL3 + minL2) + ')';
+    const rotMinL1 = 'rotate(' + (-1 * minL3 + minL1) + ')';
 
-    {/* Check if current or target value is within danger or warning zone */}   
+    {
+      /* Check if current or target value is within danger or warning zone */
+    }
     const isInWarningZone = currentValue > maxL1 || currentValue < minL1;
     const isInDangerZone = currentValue > maxL2 || currentValue < minL2;
     const isTargetWarningZone = targetValue > maxL1 || targetValue < minL1;
     const isTargetDangerZone = targetValue > maxL2 || targetValue < minL2;
 
+    console.log(minL3);
+
     return (
-        <svg className={styles.svgElevation} height={height/2} viewBox={`0 0 ${height} ${height}`}>
+      <svg className={styles.svgElevation} height={height / 2} viewBox={`0 0 ${height} ${height}`}>
+        {/* Current value */}
+        <text className={styles.originText} transform={`${'translate(' + (radius + 1) + ' 0)'}`}>
+          <tspan>0º</tspan>
+        </text>
 
-          {/* Current value */}   
+        <g className={styles.targetText} transform={`${'rotate(' + currentValue * -1 + ')'}`}>
           <text
-            className={styles.originText}
-            transform={`${"translate("+(radius+1)+" 0)"}`}
-          >
-            <tspan>0º</tspan>
-          </text>
-
-          <g
-            className={styles.targetText}
-            transform={`${"rotate("+(currentValue*-1)+")"}`}
-          >
-          <text
-            //transform={`${"translate("+currentText_X+" "+currentText_Y+")"}`}
-            transform={`${"translate("+radius+" 0) rotate("+(currentValue)+")"}`}
+            transform={`${'translate(' + radius + ' 0) rotate(' + currentValue + ')'}`}
             transition=" transform 1.5s linear 0s"
           >
-
             <tspan
-              className={[(currentText_X<0) ? [(currentText_Y<0)?styles.textQ2:styles.textQ3] : [(currentText_Y<0)?styles.textQ1:styles.textQ4]].join(' ')}
-            >{`${currentValue+"º"}`}</tspan>
-          </text></g>
+              className={[
+                currentText_X < 0
+                  ? [currentText_Y < 0 ? styles.textQ2 : styles.textQ3]
+                  : [currentText_Y < 0 ? styles.textQ1 : styles.textQ4],
+              ].join(' ')}
+            >{`${currentValue + 'º'}`}</tspan>
+          </text>
+        </g>
 
-          <g transform={`${gaugeRotation}`}>
+        <g transform={`${gaugeRotation}`}>
+          {/* Cartoon background */}
+          <circle
+            r={`${radius / 2}`}
+            cx="0"
+            cy="0"
+            className={styles.bg}
+            stroke-width={`${radius}`}
+            stroke-dasharray={`${percMaxL3}`}
+          />
 
-            {/* Cartoon background */}   
-            <circle
-              r={`${radius/2}`} cx="0" cy="0" className={styles.bg}
-              stroke-width={`${radius}`}
-              stroke-dasharray={`${percMaxL3}`}
-             />
+          {/* Target background */}
+          <circle
+            r={`${radius / 2}`}
+            cx="0"
+            cy="0"
+            className={styles.bgTarget}
+            stroke-width={`${radius}`}
+            stroke-dasharray={`${percTarget}`}
+            transform={`${'rotate(' + (0 - minL3) + ') scale(1, ' + [targetValue < 0 ? -1 : 1] + ')'}`}
+          />
 
-             {/* Target background */} 
-             <circle
-              r={`${radius/2}`} cx="0" cy="0" className={styles.bgTarget}
-              stroke-width={`${radius}`}
-              stroke-dasharray={`${percTarget}`}
-              transform={`${"rotate("+(0-minL3)+") scale(1, "+[(targetValue < 0) ? (-1) : (1)]+")"}`}
-             />
+          {/* Current background */}
+          <circle
+            r={`${radius / 2}`}
+            cx="0"
+            cy="0"
+            className={styles.bgCurrent}
+            stroke-width={`${radius}`}
+            stroke-dasharray={`${percCurrent}`}
+            transform={`${'rotate(' + (0 - minL3) + ') scale(1, ' + [currentValue < 0 ? -1 : 1] + ')'}`}
+            transition=" transform 1.5s linear 0s"
+          />
 
-             {/* Current background */} 
-             <circle
-              r={`${radius/2}`} cx="0" cy="0" className={styles.bgCurrent}
-              stroke-width={`${radius}`}
-              stroke-dasharray={`${percCurrent}`}
-              transform={`${"rotate("+(0-minL3)+") scale(1, "+[(currentValue < 0) ? (-1) : (1)]+")"}`}
-              transition=" transform 1.5s linear 0s"
-             />
+          {/* L3 Gauge */}
+          <circle
+            r={`${radius / 2}`}
+            cx="0"
+            cy="0"
+            className={styles.gaugeL3}
+            stroke-width={`${radius / 10}`}
+            stroke-dasharray={`${percMaxL3}`}
+          />
 
-             {/* L3 Gauge */} 
-             <circle
-              r={`${radius/2}`} cx="0" cy="0" className={styles.gaugeL3}
-              stroke-width={`${radius/10}`}
-              stroke-dasharray={`${percMaxL3}`}
-             />
+          {/* L2 Gauge */}
+          <circle
+            r={`${radius / 2}`}
+            cx="0"
+            cy="0"
+            className={styles.gaugeL2}
+            stroke-width={`${radius / 10}`}
+            stroke-dasharray={`${percMaxL2}`}
+            transform={`${rotMinL2}`}
+          />
 
-             {/* L2 Gauge */} 
-             <circle
-              r={`${radius/2}`} cx="0" cy="0" className={styles.gaugeL2}
-              stroke-width={`${radius/10}`}
-              stroke-dasharray={`${percMaxL2}`}
-              transform={`${rotMinL2}`}
-             />
+          {/* L1 Gauge */}
+          <circle
+            r={`${radius / 2}`}
+            cx="0"
+            cy="0"
+            className={styles.gaugeL1}
+            stroke-width={`${radius / 10}`}
+            stroke-dasharray={`${percMaxL1}`}
+            transform={`${rotMinL1}`}
+          />
 
-             {/* L1 Gauge */} 
-             <circle
-              r={`${radius/2}`} cx="0" cy="0" className={styles.gaugeL1}
-              stroke-width={`${radius/10}`}
-              stroke-dasharray={`${percMaxL1}`}
-              transform={`${rotMinL1}`}
-             />
+          {/* Current Gauge */}
+          <circle
+            className={[isInDangerZone ? styles.fillL3 : [isInWarningZone ? styles.fillL2 : styles.fillL1]]}
+            r={`${radius / 2}`}
+            cx="0"
+            cy="0"
+            stroke-width={`${radius / 10}`}
+            stroke-dasharray={`${percCurrent}`}
+            transform={`${'rotate(' + (0 - minL3) + ') scale(1, ' + [currentValue < 0 ? -1 : 1] + ')'}`}
+            transition=" transform 1.5s linear 0s"
+          />
 
-             {/* Current Gauge */}  
-             <circle
-              className={[isInDangerZone ? styles.fillL3 : [isInWarningZone ? styles.fillL2 : styles.fillL1]]}
-              r={`${radius/2}`} cx="0" cy="0"
-              stroke-width={`${radius/10}`}
-              stroke-dasharray={`${percCurrent}`}
-              transform={`${"rotate("+(0-minL3)+") scale(1, "+[(currentValue < 0) ? (-1) : (1)]+")"}`}
-              transition=" transform 1.5s linear 0s"
-             />
+          {/* Target Value line */}
+          <path
+            className={[
+              isTargetDangerZone
+                ? styles.targetValueDanger
+                : [isTargetWarningZone ? styles.targetValueWarning : styles.targetValue],
+            ]}
+            d={`M 0 0 L ${radius} 0`}
+            transform={`${rotTarget}`}
+          />
 
-             {/* Target Value line */}
-             <path className={[isTargetDangerZone ? styles.targetValueDanger : [isTargetWarningZone ? styles.targetValueWarning : styles.targetValue]]}
-              d={`M 0 0 L ${radius} 0`}
-              transform={`${rotTarget}`}
-             />
-
-             {/* Front Mask */}
-             <circle
-              r={`${radius/2}`} cx="0" cy="0" className={styles.cutOut}
-             />
-
-          </g>
-
-          </svg>
+          {/* Front Mask */}
+          <circle r={`${radius / 2}`} cx="0" cy="0" className={styles.cutOut} />
+        </g>
+      </svg>
     );
   }
 }

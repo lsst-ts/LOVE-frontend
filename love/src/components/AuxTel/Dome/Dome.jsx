@@ -210,29 +210,28 @@ export default class Dome extends Component {
             <div className={styles.windRoseContainer}>
               <WindRose />
             </div>
-            <div className={styles.elevationContainer} >
+            <div className={styles.elevationContainer}>
               <Elevation
                 height={height}
                 width={width}
-                radius={width/2}
-                maxL3 ={90}
-                maxL2 ={89}
-                maxL1 ={88}
-                minL1 ={0}
-                minL2 ={0}
-                minL3 ={0}
+                radius={width / 2}
+                maxL3={90}
+                maxL2={85}
+                maxL1={80}
+                minL1={10}
+                minL2={5}
+                minL3={0}
                 currentValue={currentPointing.el}
                 targetValue={currentPointing.az}
               />
             </div>
-            
+
             <Azimuth
               className={styles.svgAzimuth}
               width={width}
               height={height}
               currentValue={domeAz}
               targetValue={domeTargetAz}
-
             />
             {/*<DomeTopView width={width} height={height} />*/}
             <MountTopView currentPointing={currentPointing} />

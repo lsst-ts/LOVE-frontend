@@ -537,33 +537,32 @@ export default class MTDome extends Component {
           <div className={styles.windRoseContainer}>
             <WindRose />
           </div>
-          <div className={styles.elevationContainer} height={`${height/2}px`}>
+          <div className={styles.elevationContainer} height={`${height / 2}px`}>
             <Elevation
-              height={height*0.75}
-              radius={width*0.75}
-              maxL3 ={90}
-              maxL2 ={89}
-              maxL1 ={88}
-              minL1 ={0}
-              minL2 ={0}
-              minL3 ={0}
+              height={height * 0.75}
+              radius={width * 0.75}
+              maxL3={86.5}
+              maxL2={85}
+              maxL1={84}
+              minL1={18}
+              minL2={19}
+              minL3={20}
               currentValue={positionActualLightWindScreen}
               targetValue={positionCommandedLightWindScreen}
               className={styles.svgElevation}
             />
           </div>
-          
 
           <div className={styles.divDome}>
             <div className={styles.divDomeLouvers}>
-             <Azimuth
-              className={styles.svgAzimuth}
-              width={width}
-              height={height}
-              currentValue={positionActualDomeAz}
-              targetValue={positionCommandedDomeAz}
-             />
-             <MTDomeShutter
+              <Azimuth
+                className={styles.svgAzimuth}
+                width={width}
+                height={height}
+                currentValue={positionActualDomeAz}
+                targetValue={positionCommandedDomeAz}
+              />
+              <MTDomeShutter
                 width={width}
                 height={height}
                 positionActualShutter={positionActualShutter}
@@ -585,7 +584,6 @@ export default class MTDome extends Component {
                 actualPositionLouvers={actualPositionLouvers}
                 commandedPositionLouvers={commandedPositionLouvers}
               />
-
             </div>
             <div className={styles.divSummaryTable}>
               <MTDomeSummaryTable
