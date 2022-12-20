@@ -1,5 +1,3 @@
-
-
 .backgroundBar {
   stroke: var(--second-quaternary-background-color);
 }
@@ -31,48 +29,48 @@
   transition: transform 0.5s linear 0s;
 }
 
-.textQ1{
+.textQ1 {
   text-anchor: start;
 }
-.textQ2{
+.textQ2 {
   text-anchor: end;
 }
-.textQ3{
-  alignment-baseline:text-before-edge;
+.textQ3 {
+  alignment-baseline: text-before-edge;
   text-anchor: end;
 }
-.textQ4{
-  alignment-baseline:text-before-edge;
+.textQ4 {
+  alignment-baseline: text-before-edge;
   text-anchor: start;
 }
 
-.cutOut{
-  fill:rgb(17,31,39);
+.cutOut {
+  fill: rgb(17, 31, 39);
 }
 
-.bg{
+.bg {
   fill: #182e39;
 }
-.bgTarget{
+.bgTarget {
   fill: transparent;
-  stroke:#3a525f;
-  opacity:0.25;
+  stroke: #3a525f;
+  opacity: 0.25;
   transition: stroke-dasharray linear 0.5s;
   transition: transform ease-out 0.5s;
 }
-.gaugeL1{
-  fill:#2e6261;
+.gaugeL1 {
+  fill: #2e6261;
 }
 
-.targetValue{
-  stroke:#c1ced2;
+.targetValue {
+  stroke: #c1ced2;
   fill: transparent;
   stroke-width: 2px;
-  stroke-dasharray:4 4;
+  stroke-dasharray: 4 4;
   transition: transform ease-out 0.5s;
 }
-.currentValue{
-  stroke:#c1ced2;
+.currentValue {
+  stroke: #c1ced2;
   fill: transparent;
   stroke-width: 2px;
   transition: transform ease-out 0.5s;

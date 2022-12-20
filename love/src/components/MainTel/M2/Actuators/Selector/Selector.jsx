@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
-import {
-  M2ActuatorPositions,
-  M2ActuatorTangentPositions,
-} from 'Config';
+import { M2ActuatorPositions, M2ActuatorTangentPositions } from 'Config';
 import ForceGradiant from '../ForceGradiant/ForceGradiant';
 import styles from './Selector.module.css';
 
@@ -122,9 +119,12 @@ export default class Selector extends Component {
 
   getGradiantColorX = (value) => {
     const { minForceLimit, maxForceLimit } = this.props;
-    const colorInterpolate = d3.scaleLinear().domain(d3.extent([minForceLimit, maxForceLimit])).range([0, 1]);
+    const colorInterpolate = d3
+      .scaleLinear()
+      .domain(d3.extent([minForceLimit, maxForceLimit]))
+      .range([0, 1]);
     return ForceGradiant.COLOR_SCALE(1 - colorInterpolate(value));
-  }
+  };
 
   getActuator = (id) => {
     if (id === 0 || id === null) {
@@ -134,11 +134,7 @@ export default class Selector extends Component {
         colorForceMeasured: '#FFF',
       };
     }
-    const {
-      actuatorReferenceId,
-      axialForceApplied,
-      axialForceMeasured,
-    } = this.props;
+    const { actuatorReferenceId, axialForceApplied, axialForceMeasured } = this.props;
 
     const actuatorIndex = actuatorReferenceId.indexOf(id);
     const actuator = {
@@ -149,7 +145,7 @@ export default class Selector extends Component {
       colorForceMeasured: this.getGradiantColorX(axialForceMeasured[actuatorIndex]),
     };
     return actuator;
-  }
+  };
 
   getActuatorTangent = (id) => {
     if (id === 0 || id === null) {
@@ -159,11 +155,7 @@ export default class Selector extends Component {
         colorForceMeasured: '#FFF',
       };
     }
-    const {
-      actuatorTangentReferenceId,
-      tangentForceApplied,
-      tangentForceMeasured,
-    } = this.props;
+    const { actuatorTangentReferenceId, tangentForceApplied, tangentForceMeasured } = this.props;
 
     const actuatorIndex = actuatorTangentReferenceId.indexOf(id);
     const actuator = {
@@ -174,7 +166,7 @@ export default class Selector extends Component {
       colorForceMeasured: this.getGradiantColorX(tangentForceMeasured[actuatorIndex]),
     };
     return actuator;
-  }
+  };
 
   componentDidMount() {
     let yMax = -Infinity;
@@ -244,17 +236,18 @@ export default class Selector extends Component {
   };
 
   render() {
-    return (
-      <div className={styles.container}>
-        {this.getSvg()}
-      </div>
-    );
+    return <div className={styles.container}>{this.getSvg()}</div>;
   }
 
   getSvg() {
-    const { showActuatorsID, showCommandedForce, showMeasuredForce,
-      actuatorSelect, selectedActuator,
-      actuatorTangentSelect, selectedActuatorTangent,
+    const {
+      showActuatorsID,
+      showCommandedForce,
+      showMeasuredForce,
+      actuatorSelect,
+      selectedActuator,
+      actuatorTangentSelect,
+      selectedActuatorTangent,
     } = this.props;
 
     const { zoomLevel } = this.state;
@@ -263,19 +256,32 @@ export default class Selector extends Component {
     const margin = 60;
 
     return (
-        <svg
-          className={styles.svgContainer}
-          viewBox={`0 0 ${this.state.width} ${this.state.width}`}
-          onMouseEnter={this.disableScroll}
-          onMouseLeave={this.enableScroll}
-        >
-          {this.getBackground()}
-          {this.getScatter(scale, margin, showActuatorsID, showMeasuredForce, showCommandedForce,
-            zoomLevel, actuatorSelect, selectedActuator)}
-          {this.getAxis(margin, actuatorSelect)}
-          {this.getTangentActuators(showActuatorsID, showMeasuredForce, showCommandedForce,
-            actuatorTangentSelect, selectedActuatorTangent)}
-        </svg>
+      <svg
+        className={styles.svgContainer}
+        viewBox={`0 0 ${this.state.width} ${this.state.width}`}
+        onMouseEnter={this.disableScroll}
+        onMouseLeave={this.enableScroll}
+      >
+        {this.getBackground()}
+        {this.getScatter(
+          scale,
+          margin,
+          showActuatorsID,
+          showMeasuredForce,
+          showCommandedForce,
+          zoomLevel,
+          actuatorSelect,
+          selectedActuator,
+        )}
+        {this.getAxis(margin, actuatorSelect)}
+        {this.getTangentActuators(
+          showActuatorsID,
+          showMeasuredForce,
+          showCommandedForce,
+          actuatorTangentSelect,
+          selectedActuatorTangent,
+        )}
+      </svg>
     );
   }
 
@@ -298,21 +304,15 @@ export default class Selector extends Component {
                 cx={(act.position[0] + this.state.xRadius) * scale + margin}
                 cy={(act.position[1] + this.state.yRadius) * scale + margin}
                 key={act.id}
-                fill={
-                  showMeasuredForce
-                    ? this.getActuator(act.id)?.colorForceMeasured
-                    : 'gray'
-                }
+                fill={showMeasuredForce ? this.getActuator(act.id)?.colorForceMeasured : 'gray'}
                 stroke={
                   selectedActuator === act.id
                     ? this.strokeActuatorSelected(act.id)
                     : showCommandedForce
-                      ? this.getActuator(act.id)?.colorForceApplied
-                      : 'none'
+                    ? this.getActuator(act.id)?.colorForceApplied
+                    : 'none'
                 }
-                strokeWidth={
-                  act.id === selectedActuator ? 6 : 4
-                }
+                strokeWidth={act.id === selectedActuator ? 6 : 4}
                 r={(this.state.maxRadius * scale) / 16}
                 pointerEvents="all"
               />
@@ -344,85 +344,72 @@ export default class Selector extends Component {
     const y0 = this.state.width / 2;
 
     return (
-      <g
-        id="tangent-actuators"
-      >
-      { this.state.actuatorsTangent.map((act) => {
+      <g id="tangent-actuators">
+        {this.state.actuatorsTangent.map((act) => {
+          const x1 = x0 + act.position[0];
+          const y1 = y0 + act.position[1];
 
-        const x1 = x0 + act.position[0];
-        const y1 = y0 + act.position[1];
+          const x2 = x0 + act.position[2];
+          const y2 = y0 + act.position[3];
 
-        const x2 = x0 + act.position[2];
-        const y2 = y0 + act.position[3];
+          let x3 = x0 + act.position[2] * 1.1;
+          let y3 = y0 + act.position[3] * 1.1;
 
-        let x3 = x0 + act.position[2] * 1.1;
-        let y3 = y0 + act.position[3] * 1.1;
+          let x4 = x0 + act.position[0] * 1.1;
+          let y4 = y0 + act.position[1] * 1.1;
 
-        let x4 = x0 + act.position[0] * 1.1;
-        let y4 = y0 + act.position[1] * 1.1;
+          const centerX1 = (x1 + x2) / 2;
+          const centerY1 = (y1 + y2) / 2;
 
-        const centerX1 = (x1 + x2) / 2;
-        const centerY1 = (y1 + y2) / 2;
+          const centerX2 = (x3 + x4) / 2;
+          const centerY2 = (y3 + y4) / 2;
 
-        const centerX2 = (x3 + x4) / 2;
-        const centerY2 = (y3 + y4) / 2;
+          const difX1 = centerX1 - x1;
+          const difY1 = centerY1 - y1;
 
-        const difX1 = centerX1 - x1;
-        const difY1 = centerY1 - y1;
+          x4 = centerX2 - difX1;
+          y4 = centerY2 - difY1;
 
-        x4 = centerX2 - difX1;
-        y4 = centerY2 - difY1;
+          x3 = centerX2 + difX1;
+          y3 = centerY2 + difY1;
 
-        x3 = centerX2 + difX1;
-        y3 = centerY2 + difY1;
+          const centerX = (centerX1 + centerX2) / 2;
+          const centerY = (centerY1 + centerY2) / 2;
 
-        const centerX = (centerX1 + centerX2) / 2;
-        const centerY = (centerY1 + centerY2) / 2;
-
-        return (
-          <g
-            key={act.id}
-            className={styles.actuatorTangent}
-            onClick={() => actuatorTangentSelect(act.id)}
-          >
-            <path
-              d={`
+          return (
+            <g key={act.id} className={styles.actuatorTangent} onClick={() => actuatorTangentSelect(act.id)}>
+              <path
+                d={`
                 M ${x1} ${y1}
                 L ${x2} ${y2}
                 L ${x3} ${y3}
                 L ${x4} ${y4}
                 z
               `}
-              strokeWidth={
-                act.id === selectedActuatorTangent ? 6 : 4
-              }
-              fill={
-                showMeasuredForce
-                  ? this.getActuatorTangent(act.id)?.colorForceMeasured
-                  : 'gray'
-              }
-              stroke={
-                selectedActuatorTangent === act.id
-                  ? this.strokeActuatorTangentSelected(act.id)
-                  : showCommandedForce
+                strokeWidth={act.id === selectedActuatorTangent ? 6 : 4}
+                fill={showMeasuredForce ? this.getActuatorTangent(act.id)?.colorForceMeasured : 'gray'}
+                stroke={
+                  selectedActuatorTangent === act.id
+                    ? this.strokeActuatorTangentSelected(act.id)
+                    : showCommandedForce
                     ? this.getActuatorTangent(act.id)?.colorForceApplied
                     : 'none'
-              }
-            />
-            <text
-              x={centerX}
-              y={centerY}
-              textAnchor="middle"
-              alignmentBaseline="middle"
-              className={showActuatorsID || selectedActuatorTangent === act.id ? '' : styles.hidden}
-              pointerEvents="none"
-            >
-              {act.id}
-            </text>
-          </g>
-        );
-      })}
-    </g>
+                }
+              />
+              <text
+                x={centerX}
+                y={centerY}
+                textAnchor="middle"
+                alignmentBaseline="middle"
+                className={showActuatorsID || selectedActuatorTangent === act.id ? '' : styles.hidden}
+                pointerEvents="none"
+              >
+                {act.id}
+              </text>
+            </g>
+          );
+        })}
+      </g>
     );
   }
 

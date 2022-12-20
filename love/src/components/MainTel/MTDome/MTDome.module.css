@@ -94,12 +94,12 @@
   transition: x 0.5s, width 0.5s;
 }
 
-.svgAzimuth{
-  position:absolute;
+.svgAzimuth {
+  position: absolute;
   left: calc(50% - 134px);
   top: 8%;
-  width:auto;
-  overflow:visible;
+  width: auto;
+  overflow: visible;
   transform-origin: center;
   transform: scale(1.05);
 }

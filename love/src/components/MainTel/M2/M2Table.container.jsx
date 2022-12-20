@@ -1,9 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import {
-  getM2ActuatorTable,
-} from 'redux/selectors';
+import { getM2ActuatorTable } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import M2Table from './M2Table';
 
