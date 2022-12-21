@@ -76,62 +76,55 @@ export default class Camera extends Component {
 
   render() {
     const mtCameraStatus = CSCDetail.states[this.props.mtcameraSummaryState];
-    const commandState = mtcameraCcsCommandStateMap[this.props.mtcameraCcsCmdState];
+    const commandState = mtcameraCcsCommandStateMap[this.props?.mtcameraCcsCmdState];
     const calibrationState = mtcameraCalibrationDetailedStateMap[this.props.mtcameraCalibrationDetailedStatus];
     const offlineState = mtcameraOffLineDetailedStateMap[this.props.mtcameraOffLineDetailedState];
-
+    const imageState = mtcameraImageReadlinessDetailedStateMap[this.props.mtcameraImageReadinessDetailedState];
+    const shutterState = mtcameraShutterDetailedStateMap[this.props.mtCameraShutterDetailedState];
+    const filterChangerStatus = mtcameraFilterChangerDetailedStateMap[this.props.mtCameraFilterChangerDetailedState];
+    const raftsStatus = mtCameraRaftsDetailedStateMap[this.props.mtCameraRaftsDetailedState];
     return (
       <div className={styles.cameraContainer}>
         <div className={styles.statesContainer}>
           <div className={styles.stateContainer}>
-            <span className={styles.statusTextLabel}>MTCamera</span>
-            <StatusText status={stateToStyleCamera[this.props.raftsDetailedState]}>
-              {this.props.raftsDetailedState}
-            </StatusText>
+            <Title>MTCamera</Title>
+            <Value>
+              <span className={[mtCameraStatus.class, styles.summaryState].join(' ')}>{mtCameraStatus.name}</span>
+            </Value>
           </div>
           <div className={styles.stateContainer}>
             <span className={styles.statusTextLabel}>Command</span>
-            <StatusText status={stateToStyleCamera[this.props.imageReadinessDetailedState]}>
-              {this.props.imageReadinessDetailedState}
-            </StatusText>
+            <StatusText status={mtcameaCcsCommandStateToStyle[commandState]}>{commandState}</StatusText>
           </div>
           <div className={styles.stateContainer}>
             <span className={styles.statusTextLabel}>Calibration</span>
-            <StatusText status={stateToStyleCamera[this.props.calibrationDetailedState]}>
-              {this.props.calibrationDetailedState}
+            <StatusText status={mtcameraCalibrationDetailedStateToStyle[calibrationState]}>
+              {calibrationState}
             </StatusText>
           </div>
           <div className={styles.stateContainer}>
             <span className={styles.statusTextLabel}>Offline</span>
-            <StatusText status={stateToStyleCamera[this.props.shutterDetailedState]}>
-              {this.props.shutterDetailedState}
-            </StatusText>
+            <StatusText status={mtcameraOffLineDetailedStateToStyle[offlineState]}>{offlineState}</StatusText>
           </div>
         </div>
         <div className={styles.statesContainer}>
           <div className={styles.stateContainer}>
             <span className={styles.statusTextLabel}>Take Image</span>
-            <StatusText status={stateToStyleCamera[this.props.raftsDetailedState]}>
-              {this.props.raftsDetailedState}
-            </StatusText>
+            <StatusText status={mtcameraImageReadlinessDetailedStateToStyle[imageState]}>{imageState}</StatusText>
           </div>
           <div className={styles.stateContainer}>
             <span className={styles.statusTextLabel}>Shutter</span>
-            <StatusText status={stateToStyleCamera[this.props.imageReadinessDetailedState]}>
-              {this.props.imageReadinessDetailedState}
-            </StatusText>
+            <StatusText status={mtcameraShutterDetailedStateToStyle[shutterState]}>{shutterState}</StatusText>
           </div>
           <div className={styles.stateContainer}>
             <span className={styles.statusTextLabel}>Filter Changer</span>
-            <StatusText status={stateToStyleCamera[this.props.calibrationDetailedState]}>
-              {this.props.calibrationDetailedState}
+            <StatusText status={mtcameraFilterChangerDetailedStateToStyle[filterChangerStatus]}>
+              {filterChangerStatus}
             </StatusText>
           </div>
           <div className={styles.stateContainer}>
             <span className={styles.statusTextLabel}>Rafts</span>
-            <StatusText status={stateToStyleCamera[this.props.shutterDetailedState]}>
-              {this.props.shutterDetailedState}
-            </StatusText>
+            <StatusText status={mtCameraRaftsDetailedStateToSTyle[raftsStatus]}>{raftsStatus}</StatusText>
           </div>
         </div>
         <div>

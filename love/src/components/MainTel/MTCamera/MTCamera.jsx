@@ -195,6 +195,7 @@ class MTCamera extends Component {
 
   getComponent() {
     const { selectedRaft, selectedCCD, selectedReb, zoomLevel } = this.state;
+    const { tempControlActive, hVBiasSwitch, anaV, power, gDV, oDI, oDV, oGV, rDV, temp } = this.props;
     return (
       <div className={styles.container}>
         <div className={styles.focalPlanceContainer}>

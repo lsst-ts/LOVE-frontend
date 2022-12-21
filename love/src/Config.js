@@ -2692,8 +2692,8 @@ export const mtcameraSummaryStateToStyle = {
 
 // TODO: Validate this with @MiaRoseElbo
 export const mtcameraCcsCommandStateMap = {
-  0: IDLE,
-  1: BUSY,
+  0: 'IDLE',
+  1: 'BUSY',
 };
 
 export const mtcameaCcsCommandStateToStyle = {
@@ -2702,9 +2702,9 @@ export const mtcameaCcsCommandStateToStyle = {
 };
 
 export const mtcameraCalibrationDetailedStateMap = {
-  0: DISABLED,
-  1: ENABLED,
-  2: INTEGRATING,
+  0: 'DISABLED',
+  1: 'ENABLED',
+  2: 'INTEGRATING',
 };
 
 export const mtcameraCalibrationDetailedStateToStyle = {
@@ -2724,7 +2724,7 @@ export const mtcameraOffLineDetailedStateToStyle = {
 };
 
 export const mtcameraImageReadlinessDetailedStateMap = {
-  0: READY,
+  0: 'READY',
   1: 'NOT_READY',
   2: 'GETTING_READY',
 };
@@ -2736,10 +2736,10 @@ export const mtcameraImageReadlinessDetailedStateToStyle = {
 };
 
 export const mtcameraShutterDetailedStateMap = {
-  0: CLOSED,
-  1: OPEN,
-  2: CLOSING,
-  3: OPENING,
+  0: 'CLOSED',
+  1: 'OPEN',
+  2: 'CLOSING',
+  3: 'OPENING',
 };
 
 export const mtcameraShutterDetailedStateToStyle = {
@@ -2750,11 +2750,11 @@ export const mtcameraShutterDetailedStateToStyle = {
 };
 
 export const mtcameraFilterChangerDetailedStateMap = {
-  0: UNLOADING,
-  1: LOADING,
-  2: LOADED,
-  3: UNLOADED,
-  4: ROTATING,
+  0: 'UNLOADING',
+  1: 'LOADING',
+  2: 'LOADED',
+  3: 'UNLOADED',
+  4: 'ROTATING',
 };
 
 export const mtcameraFilterChangerDetailedStateToStyle = {
@@ -2767,11 +2767,11 @@ export const mtcameraFilterChangerDetailedStateToStyle = {
 
 export const mtCameraRaftsDetailedStateMap = {
   0: 'NEEDS_CLEAR',
-  1: CLEARING,
-  2: INTEGRATING,
+  1: 'CLEARING',
+  2: 'INTEGRATING',
   3: 'READING_OUT',
-  4: QUIESCENT,
-  5: DISCARDING,
+  4: 'QUIESCENT',
+  5: 'DISCARDING',
 };
 
 export const mtCameraRaftsDetailedStateToSTyle = {
