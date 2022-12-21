@@ -60,6 +60,7 @@ const CSCExpandedContainer = ({
   softwareVersions,
   cscLogLevelData,
   configurationsAvailable,
+  configurationApplied,
   logMessageData,
   errorCodeData,
   subscribeToStreams,
@@ -81,6 +82,7 @@ const CSCExpandedContainer = ({
       softwareVersions={softwareVersions}
       cscLogLevelData={cscLogLevelData}
       configurationsAvailable={configurationsAvailable}
+      configurationApplied={configurationApplied}
       subscribeToStreams={subscribeToStreams}
       unsubscribeToStreams={unsubscribeToStreams}
       logMessageData={logMessageData}
@@ -102,6 +104,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(addGroup(`event-${cscName}-${index}-errorCode`));
       dispatch(addGroup(`event-${cscName}-${index}-softwareVersions`));
       dispatch(addGroup(`event-${cscName}-${index}-configurationsAvailable`));
+      dispatch(addGroup(`event-${cscName}-${index}-configurationApplied`));
     },
     unsubscribeToStreams: (cscName, index) => {
       dispatch(removeGroup('event-Heartbeat-0-stream'));
@@ -111,6 +114,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(removeGroup(`event-${cscName}-${index}-errorCode`));
       dispatch(removeGroup(`event-${cscName}-${index}-softwareVersions`));
       dispatch(removeGroup(`event-${cscName}-${index}-configurationsAvailable`));
+      dispatch(removeGroup(`event-${cscName}-${index}-configurationApplied`));
     },
     clearCSCLogMessages: (csc, salindex) => {
       dispatch(removeCSCLogMessages(csc, salindex));
@@ -120,11 +124,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     requestSALCommand: (cmd) => {
       dispatch(
-        requestSALCommand(
-          {
-            ...cmd,
-          }
-        )
+        requestSALCommand({
+          ...cmd,
+        }),
       );
     },
   };
@@ -134,7 +136,11 @@ const mapStateToProps = (state, ownProps) => {
   let summaryStateData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-summaryState`);
   let heartbeatData = getCSCHeartbeat(state, ownProps.name, ownProps.salindex);
   let softwareVersions = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-softwareVersions`);
-  let configurationsAvailable = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-configurationsAvailable`);
+  let configurationsAvailable = getStreamData(
+    state,
+    `event-${ownProps.name}-${ownProps.salindex}-configurationsAvailable`,
+  );
+  let configurationApplied = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-configurationApplied`);
   let cscLogLevelData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-logLevel`);
 
   const logMessageData = getCSCLogMessages(state, ownProps.name, ownProps.salindex);
@@ -145,6 +151,7 @@ const mapStateToProps = (state, ownProps) => {
     summaryStateData: summaryStateData ? summaryStateData?.[0] : undefined,
     softwareVersions: softwareVersions ? softwareVersions?.[0] : undefined,
     configurationsAvailable: configurationsAvailable ? configurationsAvailable?.[0] : undefined,
+    configurationApplied: configurationApplied ? configurationApplied?.[0] : undefined,
     cscLogLevelData: cscLogLevelData ? cscLogLevelData?.[0] : undefined,
     heartbeatData,
     logMessageData,
