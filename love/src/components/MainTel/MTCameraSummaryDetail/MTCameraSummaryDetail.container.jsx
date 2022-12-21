@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import MTCameraSummaryDetail from './MTCameraSummaryDetail';
 import {
-  getMTCamSummaryStatus,
+  getMTCameraSummary,
   getStartIntegration,
   getStartReadout,
   getEndReadout,
@@ -27,9 +27,14 @@ export const schema = {
 const MTCameraSummaryDetailContainer = ({
   subscribeToStream,
   unsubscribeToStream,
-  subSystems,
-  subSystemState,
-  subSystemColor,
+  mtcameraSummaryState,
+  mtcameraCcsCmdState,
+  mtcameraCalibrationDetailedStatus,
+  mtcameraOffLineDetailedState,
+  mtcameraImageReadinessDetailedState,
+  mtCameraShutterDetailedState,
+  mtCameraFilterChangerDetailedState,
+  mtCameraRaftsDetailedState,
   imagesInSequenceInt,
   imageNameInt,
   imageIndexInt,
@@ -93,9 +98,14 @@ const MTCameraSummaryDetailContainer = ({
   }
   return (
     <MTCameraSummaryDetail
-      subSystems={subSystems}
-      subSystemState={subSystemState}
-      subSystemColor={subSystemColor}
+      mtcameraSummaryState={mtcameraSummaryState}
+      mtcameraCcsCmdState={mtcameraCcsCmdState}
+      mtcameraCalibrationDetailedStatus={mtcameraCalibrationDetailedStatus}
+      mtcameraOffLineDetailedState={mtcameraOffLineDetailedState}
+      mtcameraImageReadinessDetailedState={mtcameraImageReadinessDetailedState}
+      mtCameraShutterDetailedState={mtCameraShutterDetailedState}
+      mtCameraFilterChangerDetailedState={mtCameraFilterChangerDetailedState}
+      mtCameraRaftsDetailedState={mtCameraRaftsDetailedState}
       imagesInSequenceInt={imagesInSequenceInt}
       imageNameInt={imageNameInt}
       imageIndexInt={imageIndexInt}
@@ -148,7 +158,7 @@ const MTCameraSummaryDetailContainer = ({
 };
 
 const mapStateToProps = (state) => {
-  const summaryStatus = getMTCamSummaryStatus(state);
+  const summaryStatus = getMTCameraSummary(state);
   const startIntegration = getStartIntegration(state);
   const startReadout = getStartReadout(state);
   const endReadout = getEndReadout(state);
@@ -165,6 +175,13 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
     'event-MTCamera-0-summaryStatus',
+    'event-MTCamera-0-ccsCommandState',
+    'event-MTCamera-0-calibrationDetailedState',
+    'event-MTCamera-0-offlineDetailedState',
+    'event-MTCamera-0-imageReadinessDetailedState',
+    'event-MTCamera-0-shutterDetailedState',
+    'event-MTCamera-0-filterChangerDetailedState',
+    'event-MTCamera-0-raftsDetailedState',
     'event-MTCamera-0-startIntegration',
     'event-MTCamera-0-startReadout',
     'event-MTCamera-0-endReadout',

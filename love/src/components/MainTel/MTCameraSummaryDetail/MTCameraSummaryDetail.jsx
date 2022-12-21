@@ -8,6 +8,7 @@ import LoadingBar from '../../GeneralPurpose/LoadingBar/LoadingBar';
 import { stateToStyleCamera } from '../../../Config';
 import { formatTimestamp } from '../../../Utils';
 import {
+  mtcameraSummaryStateToStyle,
   mtcameraCcsCommandStateMap,
   mtcameaCcsCommandStateToStyle,
   mtcameraCalibrationDetailedStateMap,
@@ -23,7 +24,7 @@ import {
   mtCameraRaftsDetailedStateMap,
   mtCameraRaftsDetailedStateToSTyle,
 } from 'Config';
-
+import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 export default class Camera extends Component {
   static propTypes = {
     subscribeToStreams: PropTypes.func,
@@ -74,6 +75,11 @@ export default class Camera extends Component {
   };
 
   render() {
+    const mtCameraStatus = CSCDetail.states[this.props.mtcameraSummaryState];
+    const commandState = mtcameraCcsCommandStateMap[this.props.mtcameraCcsCmdState];
+    const calibrationState = mtcameraCalibrationDetailedStateMap[this.props.mtcameraCalibrationDetailedStatus];
+    const offlineState = mtcameraOffLineDetailedStateMap[this.props.mtcameraOffLineDetailedState];
+
     return (
       <div className={styles.cameraContainer}>
         <div className={styles.statesContainer}>

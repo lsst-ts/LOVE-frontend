@@ -1446,13 +1446,30 @@ export const getBlocksInfo = (state, salindex) => {
 };
 
 //MTCamera
-export const getMTCamSummaryStatus = (state) => {
-  const subscriptions = ['event-MTCamera-0-summaryStatus'];
+export const getMTCameraSummary = (state) => {
+  const subscriptions = [
+    'event-MTCamera-0-summaryStatus',
+    'event-MTCamera-0-ccsCommandState',
+    'event-MTCamera-0-calibrationDetailedState',
+    'event-MTCamera-0-offlineDetailedState',
+    'event-MTCamera-0-imageReadinessDetailedState',
+    'event-MTCamera-0-shutterDetailedState',
+    'event-MTCamera-0-filterChangerDetailedState',
+    'event-MTCamera-0-raftsDetailedState',
+  ];
   const summaryData = getStreamData(state, subscriptions);
   return {
-    subSystems: summaryData['event-MTCamera-0-summaryStatus']?.[0]?.subsystems.value ?? [],
-    subSystemState: summaryData['event-MTCamera-0-summaryStatus']?.[0]?.subsystemState.value ?? [],
-    subSystemColor: summaryData['event-MTCamera-0-summaryStatus']?.[0]?.subsystemColor.value ?? [],
+    mtcameraSummaryState: summaryData['event-MTCamera-0-summaryStatus']?.[0]?.summaryState.value ?? 0,
+    mtcameraCcsCmdState: summaryData['event-MTCamera-0-ccsCommandState']?.[0]?.substate.value ?? 0,
+    mtcameraCalibrationDetailedStatus:
+      summaryData['event-MTCamera-0-calibrationDetailedState']?.[0]?.substate.value ?? 0,
+    mtcameraOffLineDetailedState: summaryData['event-MTCamera-0-offlineDetailedState']?.[0]?.substate.value ?? 0,
+    mtcameraImageReadinessDetailedState:
+      summaryData['event-MTCamera-0-imageReadinessDetailedState']?.[0]?.substate.value ?? 0,
+    mtCameraShutterDetailedState: summaryData['event-MTCamera-0-shutterDetailedState']?.[0]?.substate.value ?? 0,
+    mtCameraFilterChangerDetailedState:
+      summaryData['event-MTCamera-0-filterChangerDetailedState']?.[0]?.substate.value ?? 0,
+    mtCameraRaftsDetailedState: summaryData['event-MTCamera-0-raftsDetailedState']?.[0]?.substate.value ?? 0,
   };
 };
 
