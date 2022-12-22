@@ -210,6 +210,16 @@ class MTCamera extends Component {
                 selectedRaft={selectedRaft}
                 selectedCCD={selectedCCD}
                 selectedReb={selectedReb}
+                tempControlActive={tempControlActive}
+                hVBiasSwitch={hVBiasSwitch}
+                anaV={anaV}
+                power={power}
+                gDV={gDV}
+                oDI={oDI}
+                oDV={oDV}
+                oGV={oGV}
+                rDV={rDV}
+                temp={temp}
               />
             </div>
           ) : (

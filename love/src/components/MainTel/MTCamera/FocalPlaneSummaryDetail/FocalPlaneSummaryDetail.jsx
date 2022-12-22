@@ -141,7 +141,7 @@ class FocalPlaneSummaryDetail extends Component {
   render() {
     const { selectedRaft } = this.props;
     const { ccdsData, rebsData } = this.state;
-
+    const { tempControlActive, hVBiasSwitch, anaV, power, gDV, oDI, oDV, oGV, rDV, temp } = this.props;
     return (
       <div>
         <div className={styles.container}>
@@ -152,7 +152,7 @@ class FocalPlaneSummaryDetail extends Component {
             </Value>
             <Label>Temp Control</Label>
             <Value>
-              <StatusText>Active</StatusText>
+              <StatusText>{tempControlActive}</StatusText>
             </Value>
           </SummaryPanel>
         </div>
