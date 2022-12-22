@@ -240,6 +240,15 @@ class MTCamera extends Component {
           selectedRaft={this.state.selectedRaft}
           setSelectedRaft={this.setSelectedRaft}
           setHoveredRaft={this.setHoveredRaft}
+          hVBiasSwitch={hVBiasSwitch}
+          anaV={anaV}
+          power={power}
+          gDV={gDV}
+          oDI={oDI}
+          oDV={oDV}
+          oGV={oGV}
+          rDV={rDV}
+          temp={temp}
         />
       </div>
     );
@@ -257,6 +266,9 @@ class MTCamera extends Component {
           setSelectedCCD={this.setSelectedCCD}
           setSelectedReb={this.setSelectedReb}
           selectNeighboorRaft={this.selectNeighboorRaft}
+          hVBiasSwitch={hVBiasSwitch}
+          anaV={anaV}
+          power={power}
         />
       </div>
     );
@@ -266,7 +278,17 @@ class MTCamera extends Component {
     const { selectedCCD } = this.state;
     return (
       <div id="ccddetail" /* style={{visibility: 'hidden'}} */>
-        <CCDDetail ccd={selectedCCD} showNeighboors={true} selectNeighboorCCD={this.selectNeighboorCCD} />
+        <CCDDetail
+          ccd={selectedCCD}
+          showNeighboors={true}
+          selectNeighboorCCD={this.selectNeighboorCCD}
+          gDV={gDV}
+          oDI={oDI}
+          oDV={oDV}
+          oGV={oGV}
+          rDV={rDV}
+          temp={temp}
+        />
       </div>
     );
   }
