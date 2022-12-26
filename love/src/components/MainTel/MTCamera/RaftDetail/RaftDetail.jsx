@@ -49,14 +49,12 @@ class RaftDetail extends Component {
       });
     });
 
-    const refs = [React.createRef(), React.createRef(), React.createRef()];
-
     return (
       <div className={styles.ccdsContainer}>
         {plots.map((p, i) => (
           <div
             key={`r${i}`}
-            ref={refs[i]}
+            ref={this.refs[i]}
             style={{ border: selectedCCD?.id === raft.ccds[i].id ? '2px solid white' : `` }}
             className={styles.plot}
             onClick={() => {
@@ -65,7 +63,7 @@ class RaftDetail extends Component {
           >
             <PlotContainer
               inputs={p}
-              containerNode={refs[i]}
+              containerNode={this.refs[i]}
               xAxisTitle="Time"
               yAxisTitle="Value"
               legendPosition="bottom"

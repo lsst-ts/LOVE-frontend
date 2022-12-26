@@ -15,6 +15,7 @@ class FocalPlane extends Component {
     const borderColor = this.getColors(mtCameraRaftDetailedStateToStyle[mtCameraRaftDetailedStateMap[status]]);
     return (
       <div
+        key={`Raft-${id}`}
         style={{ border: selectedRaft?.id === id ? '2px solid white' : `2px solid ${borderColor}` }}
         className={styles.raftContainer}
         onClick={() => setSelectedRaft(raft)}
@@ -28,7 +29,7 @@ class FocalPlane extends Component {
   renderCCD(ccd) {
     const { id, status } = ccd;
     const bgColor = this.getColors(mtCameraRaftDetailedStateToStyle[mtCameraRaftDetailedStateMap[status]]);
-    return <div style={{ backgroundColor: bgColor }} className={styles.ccdContainer} />;
+    return <div key={`CCD-${id}`} style={{ backgroundColor: bgColor }} className={styles.ccdContainer} />;
   }
 
   getColors(type) {

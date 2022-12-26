@@ -38,3 +38,12 @@
 
 .emptySummaryDetail {
 }
+
+.focalPlanceContainer {
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+}
+
+.focalPlanceContainer > * {
+  height: 100%;
+}

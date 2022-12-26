@@ -2681,16 +2681,17 @@ export const MessagesWarningM1M3ThermalSystem = {
 };
 
 // MTCamera
-export const mtcameraSummaryStateToStyle = {
-  UNKNOWN: 'undefined',
-  DISABLED: 'disabled',
-  ENABLED: 'enabled',
-  FAULT: 'fault',
-  OFFLINE: 'offline',
-  STANDBY: 'standby',
+// TODO: Validate this with @MiaRoseElbo
+export const mtcameraRaftTempControlState = {
+  0: 'NON ACTIVE',
+  1: 'ACTIVE',
 };
 
-// TODO: Validate this with @MiaRoseElbo
+export const mtcameraRaftTempControlStateToStyle = {
+  'NON ACTIVE': 'warning',
+  ACTIVE: 'ok',
+};
+
 export const mtcameraCcsCommandStateMap = {
   0: 'IDLE',
   1: 'BUSY',

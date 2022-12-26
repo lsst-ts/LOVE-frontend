@@ -5,6 +5,8 @@ import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import GearIcon from '../../icons/GearIcon/GearIcon';
 import { getCameraStatusStyle } from '../../../Config';
 import LoadingBar from '../../GeneralPurpose/LoadingBar/LoadingBar';
+import Title from '../../GeneralPurpose/SummaryPanel/Title';
+import Value from '../../GeneralPurpose/SummaryPanel/Value';
 import { stateToStyleCamera } from '../../../Config';
 import { formatTimestamp } from '../../../Utils';
 import {
@@ -33,7 +35,9 @@ export default class Camera extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      timers: {},
+    };
   }
 
   componentDidMount = () => {
@@ -176,7 +180,7 @@ export default class Camera extends Component {
           </div>
         </div>
         <div>
-          <div className={styles.imageSequenceName}>{this.props.imageSequence.name}</div>
+          <div className={styles.imageSequenceName}>{this.props.imageSequence?.name}</div>
           <div className={styles.imageTableWrapper}>
             <table className={styles.imageTable}>
               <thead>
@@ -191,10 +195,10 @@ export default class Camera extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.props.imageSequence.images &&
-                  Object.keys(this.props.imageSequence.images).map((imageName) => {
-                    const image = this.props.imageSequence.images[imageName];
-                    const imageKey = `${this.props.imageSequence.name}-${imageName}`;
+                {this.props.imageSequence?.images &&
+                  Object.keys(this.props.imageSequence?.images).map((imageName) => {
+                    const image = this.props.imageSequence?.images[imageName];
+                    const imageKey = `${this.props.imageSequence?.name}-${imageName}`;
                     const isIntegrating = image.state === 'INTEGRATING';
                     let currentExposureTime =
                       this.state.timers[imageKey] !== undefined

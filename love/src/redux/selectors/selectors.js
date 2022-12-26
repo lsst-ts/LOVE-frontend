@@ -1457,7 +1457,7 @@ export const getMTCameraSummary = (state) => {
     'event-MTCamera-0-filterChangerDetailedState',
     'event-MTCamera-0-raftsDetailedState',
   ];
-  const summaryData = getStreamData(state, subscriptions);
+  const summaryData = getStreamsData(state, subscriptions);
   return {
     mtcameraSummaryState: summaryData['event-MTCamera-0-summaryStatus']?.[0]?.summaryState.value ?? 0,
     mtcameraCcsCmdState: summaryData['event-MTCamera-0-ccsCommandState']?.[0]?.substate.value ?? 0,
@@ -1475,7 +1475,7 @@ export const getMTCameraSummary = (state) => {
 
 export const getStartIntegration = (state) => {
   const subscriptions = ['event-MTCamera-0-startIntegration'];
-  const startIntegrationData = getStreamData(state, subscriptions);
+  const startIntegrationData = getStreamsData(state, subscriptions);
   return {
     imagesInSequenceInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imagesInSequence.value ?? 0,
     imageNameInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageName.value ?? '',
@@ -1494,7 +1494,7 @@ export const getStartIntegration = (state) => {
 
 export const getStartReadout = (state) => {
   const subscriptions = ['event-MTCamera-0-startReadout'];
-  const startReadOutData = getStreamData(state, subscriptions);
+  const startReadOutData = getStreamsData(state, subscriptions);
   return {
     imagesInSequenceSReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imagesInSequence.value ?? 0,
     imageNameSReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageName.value ?? '',
@@ -1513,14 +1513,14 @@ export const getStartReadout = (state) => {
 
 export const getEndReadout = (state) => {
   const subscriptions = ['event-MTCamera-0-endReadout'];
-  const endReadOutData = getStreamData(state, subscriptions);
+  const endReadOutData = getStreamsData(state, subscriptions);
   return {
     imagesInSequenceEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imagesInSequence.value ?? 0,
     imageNameEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageName.value ?? '',
     imageIndexEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageIndex.value ?? 0,
     imageSourceEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageSource.value ?? '',
     imageControllerEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageController.value ?? '',
-    imageDateEReadout: startReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageDate.value ?? '',
+    imageDateEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageDate.value ?? '',
     imageNumberEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageNumber.value ?? 0,
     timestampAcquisitionStartEReadout:
       endReadOutData['event-MTCamera-0-endReadout']?.[0]?.timestampAcquisitionStart.value ?? 0,
@@ -1531,7 +1531,7 @@ export const getEndReadout = (state) => {
 
 export const getEndOfImageTelemetry = (state) => {
   const subscriptions = ['event-MTCamera-0-endOfImageTelemetry'];
-  const endOfImageTelemetryData = getStreamData(state, subscriptions);
+  const endOfImageTelemetryData = getStreamsData(state, subscriptions);
   return {
     imagesInSequenceTelemetry:
       endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imagesInSequence.value ?? 0,
@@ -1561,34 +1561,42 @@ export const getEndOfImageTelemetry = (state) => {
 
 export const getTempControlStatus = (state) => {
   const subscriptions = ['event-MTCamera-0-focal_plane_Raft_RaftTempControlStatusConfiguration'];
-  const tempControlData = getStreamData(state, subscriptions);
+  const tempControlData = getStreamsData(state, subscriptions);
   return {
-    tempControlActive:
-      tempControlData['event-MTCamera-0-focal_plane_Raft_RaftTempControlStatusConfiguration']?.[0]?.tempcontrol_active
-        .value ?? [],
+    // tempControlData['event-MTCamera-0-focal_plane_Raft_RaftTempControlStatusConfiguration']?.[0]?.tempcontrol_active.value ?? [],
+    tempControlActive: new Array(25).fill(null).map((x) => (Math.random() > 0.5 ? true : false)),
   };
 };
 
 export const getFocalPlaneReb = (state) => {
   const subscriptions = ['telemetry-MTCamera-0-focal_plane_Reb'];
-  const focalPlaneReb = getStreamData(state, subscriptions);
+  const focalPlaneReb = getStreamsData(state, subscriptions);
   return {
-    hVBiasSwitch: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.hVBiasSwitch.value ?? [],
-    anaV: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.anaV.value ?? [],
-    power: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.power.value ?? [],
+    // hVBiasSwitch: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.hVBiasSwitch.value ?? [],
+    // anaV: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.anaV.value ?? [],
+    // power: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.power.value ?? [],
+    hVBiasSwitch: new Array(71).fill(null).map((x) => Math.random() * 1000),
+    anaV: new Array(71).fill(null).map((x) => Math.random() * 1000 + 1000),
+    power: new Array(71).fill(null).map((x) => Math.random() * 1000 + 2000),
   };
 };
 
 export const getFocalPlaneCCD = (state) => {
   const subscriptions = ['telemetry-MTCamera-0-focal_plane_Ccd'];
-  const focalPlaneCCD = getStreamData(state, subscriptions);
+  const focalPlaneCCD = getStreamsData(state, subscriptions);
   return {
-    gDV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.gDV.value ?? [],
-    oDI: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.oDI.value ?? [],
-    oDV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.oDV.value ?? [],
-    oGV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.oGV.value ?? [],
-    rDV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.rDV.value ?? [],
-    temp: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.temp.value ?? [],
+    // gDV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.gDV.value ?? [],
+    // oDI: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.oDI.value ?? [],
+    // oDV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.oDV.value ?? [],
+    // oGV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.oGV.value ?? [],
+    // rDV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.rDV.value ?? [],
+    // temp: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.temp.value ?? [],
+    gDV: new Array(201).fill(null).map((x) => Math.random() * 1000),
+    oDI: new Array(201).fill(null).map((x) => Math.random() * 1000),
+    oDV: new Array(201).fill(null).map((x) => Math.random() * 1000),
+    oGV: new Array(201).fill(null).map((x) => Math.random() * 1000),
+    rDV: new Array(201).fill(null).map((x) => Math.random() * 1000),
+    temp: new Array(201).fill(null).map((x) => Math.random() * 1000),
   };
 };
 

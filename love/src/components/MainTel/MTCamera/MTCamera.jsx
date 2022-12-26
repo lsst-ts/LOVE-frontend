@@ -232,6 +232,7 @@ class MTCamera extends Component {
 
   getMTCamera() {
     const { selectedRaft } = this.state;
+    const { hVBiasSwitch, anaV, power, gDV, oDI, oDV, oGV, rDV, temp } = this.props;
     return (
       <div id="focalplane" style={{ visibility: 'visible', transformOrigin: 'center' }}>
         <FocalPlane
@@ -256,6 +257,7 @@ class MTCamera extends Component {
 
   getRaftdetail() {
     const { selectedRaft, selectedCCD, selectedReb } = this.state;
+    const { hVBiasSwitch, anaV, power } = this.props;
     return (
       <div id="raftdetail" /* style={{visibility: 'hidden'}} */>
         <RaftDetail
