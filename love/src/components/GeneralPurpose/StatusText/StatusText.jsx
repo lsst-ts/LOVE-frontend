@@ -13,12 +13,10 @@ export default class StatusText extends Component {
   render() {
     const { status } = this.props;
     let statusStyle = styles.undefined;
-    if (status === 'ok') statusStyle = styles.ok;
-    if (status === 'running') statusStyle = styles.ok;
+    if (status === 'ok' || status === 'running') statusStyle = styles.ok;
     if (status === 'warning') statusStyle = styles.warning;
-    if (status === 'alert' || status === 'serious') statusStyle = styles.alert;
-    if (status === 'critical') statusStyle = styles.critical;
-    if (status === 'invalid'  || status === 'undefined') statusStyle = styles.invalid;
+    if (status === 'alert' || status === 'serious' || status === 'critical') statusStyle = styles.alert;
+    if (status === 'invalid' || status === 'unknown' || status === 'undefined') statusStyle = styles.invalid;
 
     return (
       <span
