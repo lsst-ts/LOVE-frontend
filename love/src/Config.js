@@ -2681,7 +2681,40 @@ export const MessagesWarningM1M3ThermalSystem = {
 };
 
 // MTCamera
-// TODO: Validate this with @MiaRoseElbo
+
+/** Considering rafts from 1 to 25, from top-left to bottom-righ */
+export const mtcameraRaftsNeighborsMapping = {
+  1: { top: null, right: 2, bottom: 6, left: null },
+  2: { top: null, right: 3, bottom: 7, left: 1 },
+  3: { top: null, right: 4, bottom: 8, left: 2 },
+  4: { top: null, right: 5, bottom: 9, left: 3 },
+  5: { top: null, right: null, bottom: 10, left: 4 },
+
+  6: { top: 1, right: 7, bottom: 11, left: null },
+  7: { top: 2, right: 8, bottom: 12, left: 6 },
+  8: { top: 3, right: 9, bottom: 13, left: 7 },
+  9: { top: 4, right: 10, bottom: 14, left: 8 },
+  10: { top: 5, right: null, bottom: 15, left: 9 },
+
+  11: { top: 6, right: 12, bottom: 16, left: null },
+  12: { top: 7, right: 13, bottom: 17, left: 11 },
+  13: { top: 8, right: 14, bottom: 18, left: 12 },
+  14: { top: 9, right: 15, bottom: 19, left: 13 },
+  15: { top: 10, right: null, bottom: 20, left: 14 },
+
+  16: { top: 11, right: 17, bottom: 21, left: null },
+  17: { top: 12, right: 18, bottom: 22, left: 16 },
+  18: { top: 13, right: 19, bottom: 23, left: 17 },
+  19: { top: 14, right: 20, bottom: 24, left: 18 },
+  20: { top: 15, right: null, bottom: 25, left: 19 },
+
+  21: { top: 16, right: 22, bottom: null, left: null },
+  22: { top: 17, right: 23, bottom: null, left: 21 },
+  23: { top: 18, right: 24, bottom: null, left: 22 },
+  24: { top: 19, right: 25, bottom: null, left: 23 },
+  25: { top: 20, right: null, bottom: null, left: 24 },
+};
+
 export const mtcameraRaftTempControlState = {
   0: 'NON ACTIVE',
   1: 'ACTIVE',
