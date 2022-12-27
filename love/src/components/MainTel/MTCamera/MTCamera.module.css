@@ -40,7 +40,7 @@
 }
 
 .focalPlanceContainer {
-  overflow: hidden;
+  /* overflow: hidden; */
   aspect-ratio: 1 / 1;
 }
 

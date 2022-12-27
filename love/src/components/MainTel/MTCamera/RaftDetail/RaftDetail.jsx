@@ -1,25 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
-import Neighboors from 'components/GeneralPurpose/Neighboors/Neighboors';
+import Neighbors from 'components/GeneralPurpose/Neighbors/Neighbors';
 import CCDDetail from '../CCDDetail/CCDDetail';
 import styles from './RaftDetail.module.css';
+import { mtcameraRaftsNeighborsMapping } from 'Config';
 
-const ccds = [
-  { id: 101, top: 1, right: 2, bottom: 3, left: 4 },
-  { id: 102, top: 5, right: 2, bottom: 3, left: 6 },
-  { id: 103, top: 7, right: 8, bottom: 3, left: 4 },
-  { id: 104, top: 9, right: 10, bottom: 11, left: 12 },
-  { id: 105, top: 13, right: 21, bottom: 23, left: 43 },
-  { id: 106, top: 14, right: 22, bottom: 31, left: 44 },
-  { id: 107, top: 15, right: 23, bottom: 31, left: 47 },
-  { id: 108, top: 16, right: 24, bottom: 23, left: 43 },
-  { id: 109, top: 17, right: 26, bottom: 31, left: 42 },
-];
 class RaftDetail extends Component {
   constructor(props) {
     super(props);
-    this.refs = [
+    this.CCDsrefs = [
       React.createRef(),
       React.createRef(),
       React.createRef(),
@@ -30,6 +20,7 @@ class RaftDetail extends Component {
       React.createRef(),
       React.createRef(),
     ];
+    this.rebsRefs = [React.createRef(), React.createRef(), React.createRef()];
   }
 
   renderCCDsPlots() {
@@ -53,8 +44,8 @@ class RaftDetail extends Component {
       <div className={styles.ccdsContainer}>
         {plots.map((p, i) => (
           <div
-            key={`r${i}`}
-            ref={this.refs[i]}
+            key={`c${i}`}
+            ref={this.CCDsrefs[i]}
             style={{ border: selectedCCD?.id === raft.ccds[i].id ? '2px solid white' : `` }}
             className={styles.plot}
             onClick={() => {
@@ -63,9 +54,9 @@ class RaftDetail extends Component {
           >
             <PlotContainer
               inputs={p}
-              containerNode={this.refs[i]}
+              containerNode={this.CCDsrefs[i]?.current}
               xAxisTitle="Time"
-              yAxisTitle="Value"
+              yAxisTitle={`Value-${i}`}
               legendPosition="bottom"
             />
           </div>
@@ -91,14 +82,12 @@ class RaftDetail extends Component {
       });
     });
 
-    const refs = [React.createRef(), React.createRef(), React.createRef()];
-
     return (
       <div className={styles.rebsContainer}>
         {plots.map((p, i) => (
           <div
             key={`r${i}`}
-            ref={refs[i]}
+            ref={this.rebsRefs[i]}
             style={{ border: selectedReb?.id === raft.rebs[i].id ? '2px solid white' : `` }}
             className={styles.plot}
             onClick={() => {
@@ -107,9 +96,9 @@ class RaftDetail extends Component {
           >
             <PlotContainer
               inputs={p}
-              containerNode={refs[i]}
+              containerNode={this.rebsRefs[i]?.current}
               xAxisTitle="Time"
-              yAxisTitle="Value"
+              yAxisTitle={`Value-${i}`}
               legendPosition="bottom"
             />
           </div>
@@ -119,19 +108,28 @@ class RaftDetail extends Component {
   }
 
   render() {
-    const { raft, showNeighboors, selectedReb, selectNeighboorRaft } = this.props;
+    const { raft, showNeighbors, selectedReb, selectNeighborRaft } = this.props;
     const barHeight = 20;
-    return showNeighboors ? (
+    const colorMapping = {
+      1: 'var(--status-ok-dimmed-color-3)',
+      2: 'var(--status-warning-dimmed-color-3)',
+    };
+
+    const edgesColors = {
+      top: raft.neighbors.top ? colorMapping[raft.neighbors.top.status] : 'transparent',
+      right: raft.neighbors.right ? colorMapping[raft.neighbors.right.status] : 'transparent',
+      bottom: raft.neighbors.bottom ? colorMapping[raft.neighbors.bottom.status] : 'transparent',
+      left: raft.neighbors.left ? colorMapping[raft.neighbors.left.status] : 'transparent',
+    };
+    return showNeighbors ? (
       <div style={{ height: '100%' }}>
-        <span>RaftDetail component</span>
-        <Neighboors selectNeighboor={selectNeighboorRaft}>
+        <Neighbors edgesColors={edgesColors} selectNeighbor={selectNeighborRaft}>
           {this.renderCCDsPlots()}
           {this.renderRebsPlots()}
-        </Neighboors>
+        </Neighbors>
       </div>
     ) : (
       <div style={{ height: '100%' }}>
-        <span>RaftDetail component</span>
         {this.renderCCDsPlots()}
         {this.renderRebsPlots()}
       </div>

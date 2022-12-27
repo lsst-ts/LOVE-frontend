@@ -104,7 +104,7 @@ class RebDetail extends Component {
   }
 
   render() {
-    const { reb, selectNeighboorReb } = this.props;
+    const { reb, selectNeighborReb } = this.props;
     const barHeight = 20;
     return (
       <div className={styles.container} style={{ padding: barHeight }}>
@@ -117,7 +117,7 @@ class RebDetail extends Component {
             height: barHeight,
             backgroundColor: 'rgb(255,0,0,.5)',
           }}
-          onClick={() => selectNeighboorReb('top')}
+          onClick={() => selectNeighborReb('top')}
         >
           UP
         </div>
@@ -132,7 +132,7 @@ class RebDetail extends Component {
             transformOrigin: 'center',
             transform: 'rotate(90deg) translate(50%, -230px)',
           }}
-          onClick={() => selectNeighboorReb('right')}
+          onClick={() => selectNeighborReb('right')}
         >
           RIGHT
         </div>
@@ -145,7 +145,7 @@ class RebDetail extends Component {
             height: barHeight,
             backgroundColor: 'rgb(255,150,50,.5)',
           }}
-          onClick={() => selectNeighboorReb('bottom')}
+          onClick={() => selectNeighborReb('bottom')}
         >
           BOTTOM
         </div>
@@ -160,7 +160,7 @@ class RebDetail extends Component {
             transformOrigin: 'center',
             transform: 'rotate(90deg) translate(50%, 230px)',
           }}
-          onClick={() => selectNeighboorReb('left')}
+          onClick={() => selectNeighborReb('left')}
         >
           LEFT
         </div>

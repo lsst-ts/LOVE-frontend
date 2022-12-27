@@ -35,6 +35,7 @@ class FocalPlaneSummaryDetail extends Component {
     {
       field: 'bias',
       title: 'Bias',
+      render: (value) => defaultNumberFormatter(value),
     },
     {
       field: 'voltage',
@@ -134,12 +135,12 @@ class FocalPlaneSummaryDetail extends Component {
     ccds.forEach((c) => {
       ccdsData.push({
         identifier: `CCD ${c.id}`,
-        GD: gDV[getCCDIndex(c.id)],
-        ODm: oDI[getCCDIndex(c.id)],
-        ODv: oDV[getCCDIndex(c.id)],
-        GV: oGV[getCCDIndex(c.id)],
-        RD: rDV[getCCDIndex(c.id)],
-        SW: temp[getCCDIndex(c.id)],
+        GD: gDV[this.getCCDIndex(c.id)],
+        ODm: oDI[this.getCCDIndex(c.id)],
+        ODv: oDV[this.getCCDIndex(c.id)],
+        GV: oGV[this.getCCDIndex(c.id)],
+        RD: rDV[this.getCCDIndex(c.id)],
+        SW: temp[this.getCCDIndex(c.id)],
         rowClass: selectedCCD?.id === c.id ? styles.selectedRow : '',
       });
     });
@@ -148,9 +149,9 @@ class FocalPlaneSummaryDetail extends Component {
     rebs.forEach((r) => {
       rebsData.push({
         identifier: `REB ${r.id}`,
-        bias: hVBiasSwitch[getRebIndex(r.id)],
-        voltage: anaV[getRebIndex(r.id)],
-        power: power[getRebIndex(r.id)],
+        bias: hVBiasSwitch[this.getRebIndex(r.id)],
+        voltage: anaV[this.getRebIndex(r.id)],
+        power: power[this.getRebIndex(r.id)],
         rowClass: selectedReb?.id === r.id ? styles.selectedRow : '',
       });
     });

@@ -3,16 +3,20 @@
 
 .ccdsContainer {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 50px 50px 50px;
+  /* grid-template-columns: 1fr 1fr 1fr; BUG, reference: https://css-tricks.com/preventing-a-grid-blowout/  */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: 120px 120px 120px;
 }
 
 .rebsContainer {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: 160px;
 }
 
 .plot {
-  width: 100%;
+  /* width: 100%;
+  overflow: hidden; */
+  border: 1px solid transparent;
   overflow: hidden;
 }

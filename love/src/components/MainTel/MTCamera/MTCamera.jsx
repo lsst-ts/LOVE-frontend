@@ -7,6 +7,7 @@ import CCDDetail from './CCDDetail/CCDDetail';
 import PropTypes from 'prop-types';
 import styles from './MTCamera.module.css';
 import FocalPlaneSummaryDetail from './FocalPlaneSummaryDetail/FocalPlaneSummaryDetail';
+import { mtcameraRaftsNeighborsMapping } from 'Config';
 
 const rafts = [];
 const secondaryRafts = [0, 4, 20, 24];
@@ -90,14 +91,14 @@ class MTCamera extends Component {
     return { id, top: 100, right: 101, bottom: 102, left: 103 };
   }
 
-  selectNeighboorRaft = (direction) => {
+  selectNeighborRaft = (direction) => {
     const { selectedRaft } = this.state;
     const nextRaftId = selectedRaft[direction];
     const nextRaft = this.findRaftById(nextRaftId);
     this.setSelectedRaft(nextRaft);
   };
 
-  selectNeighboorCCD = (direction) => {
+  selectNeighborCCD = (direction) => {
     const { selectedCCD } = this.state;
     const nextCCDId = selectedCCD[direction];
     const nextCCD = this.findCCDById(nextCCDId);
@@ -258,16 +259,27 @@ class MTCamera extends Component {
   getRaftdetail() {
     const { selectedRaft, selectedCCD, selectedReb } = this.state;
     const { hVBiasSwitch, anaV, power } = this.props;
+
+    const raftNeighbors = mtcameraRaftsNeighborsMapping[selectedRaft.id];
+    const raftWithNeighbors = {
+      ...selectedRaft,
+      neighbors: {
+        top: rafts.find((r) => r.id === raftNeighbors.top),
+        right: rafts.find((r) => r.id === raftNeighbors.right),
+        bottom: rafts.find((r) => r.id === raftNeighbors.bottom),
+        left: rafts.find((r) => r.id === raftNeighbors.left),
+      },
+    };
     return (
       <div id="raftdetail" /* style={{visibility: 'hidden'}} */>
         <RaftDetail
-          raft={selectedRaft}
-          showNeighboors={true}
+          raft={raftWithNeighbors}
+          showNeighbors={true}
           selectedCCD={selectedCCD}
           selectedReb={selectedReb}
           setSelectedCCD={this.setSelectedCCD}
           setSelectedReb={this.setSelectedReb}
-          selectNeighboorRaft={this.selectNeighboorRaft}
+          selectNeighborRaft={this.selectNeighborRaft}
           hVBiasSwitch={hVBiasSwitch}
           anaV={anaV}
           power={power}
@@ -282,8 +294,8 @@ class MTCamera extends Component {
       <div id="ccddetail" /* style={{visibility: 'hidden'}} */>
         <CCDDetail
           ccd={selectedCCD}
-          showNeighboors={true}
-          selectNeighboorCCD={this.selectNeighboorCCD}
+          showNeighbors={true}
+          selectNeighborCCD={this.selectNeighborCCD}
           gDV={gDV}
           oDI={oDI}
           oDV={oDV}

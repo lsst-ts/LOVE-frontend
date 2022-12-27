@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
-import Neighboors from 'components/GeneralPurpose/Neighboors/Neighboors';
+import Neighbors from 'components/GeneralPurpose/Neighbors/Neighbors';
 import styles from './CCDDetail.module.css';
 
 class CCDDetail extends Component {
@@ -106,10 +106,10 @@ class CCDDetail extends Component {
   }
 
   render() {
-    const { ccd, showNeighboors, selectNeighboorCCD } = this.props;
+    const { ccd, showNeighbors, selectNeighborCCD } = this.props;
     const barHeight = 20;
-    return showNeighboors ? (
-      <Neighboors selectNeighboor={selectNeighboorCCD}>{this.renderPlots()}</Neighboors>
+    return showNeighbors ? (
+      <Neighbors selectNeighbor={selectNeighborCCD}>{this.renderPlots()}</Neighbors>
     ) : (
       <div style={{ height: '100%' }}>{this.renderPlots()}</div>
     );
