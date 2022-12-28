@@ -1,18 +1,19 @@
 .selectedRow {
-  background-color: white !important;
+  background-color: var(--quinary-background-color) !important;
+}
+
+.selectedRow > * {
+  color: var(--base-font-color) !important;
 }
 
 .container {
-  width: 100%;
-  display: inline-flex;
   margin-bottom: 20px;
-  border-radius: 15px;
 }
 
 .summaryPanel {
-  width: 100%;
+  max-width: 100%;
   margin-bottom: 1em;
-  grid-template-columns: 1fr 1.2fr;
+  grid-template-columns: 2fr 1fr;
   background: transparent !important;
 }
 

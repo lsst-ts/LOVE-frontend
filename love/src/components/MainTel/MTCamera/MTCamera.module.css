@@ -28,19 +28,20 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--second-tertiary-background-color);
   /* overflow: hidden; */
 }
 
 .summaryDetail {
-  margin: 1em;
+  padding: 1em;
+  background-color: var(--second-tertiary-background-color);
+  border-radius: 0.5em;
 }
 
 .emptySummaryDetail {
 }
 
 .focalPlanceContainer {
-  /* overflow: hidden; */
+  overflow: hidden;
   aspect-ratio: 1 / 1;
 }
 
