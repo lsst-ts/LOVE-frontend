@@ -176,24 +176,18 @@ class MTCamera extends Component {
     }
 
     function d3TransformToString(transform) {
-      console.log('[X, Y, K]', [transform.x, transform.y, transform.k]);
-      // const shift = 30 * transform.k;
-      const shift = 0;
-      const zooming = zoomLevel !== k;
-      console.log('Is zooming', zooming);
-      console.log('+', shift);
-
-      // if (zooming) return `scale(${transform.k})`;
-      // else return `translate(${transform.x + shift}px, ${transform.y + shift}px) scale(${transform.k})`;
-      return `translate(${transform.x + shift}px, ${transform.y + shift}px) scale(${transform.k})`;
+      return `translate(${transform.x}px, ${transform.y}px) scale(${transform.k})`;
     }
 
     if (targetId === 'focalplane') {
       d3.select('#focalplane').style('transform', d3TransformToString(d3.event.transform));
+      d3.select('#focalplane').style('transform-origin', '0 0');
     } else if (targetId === 'raftdetail') {
       d3.select('#raftdetail').style('transform', d3TransformToString(d3.event.transform));
+      d3.select('#raftdetail').style('transform-origin', '0 0');
     } else if (targetId === 'ccddetail') {
       d3.select('#ccddetail').style('transform', d3TransformToString(d3.event.transform));
+      d3.select('#ccddetail').style('transform-origin', '0 0');
     }
 
     // Debounce the transform to avoid lag
@@ -287,8 +281,6 @@ class MTCamera extends Component {
   getRaftdetail() {
     const { selectedRaft, selectedCCD, selectedReb } = this.state;
     const { hVBiasSwitch, anaV, power } = this.props;
-
-    console.log(selectedRaft);
 
     const raftWithNeighbors = {
       ...selectedRaft,
