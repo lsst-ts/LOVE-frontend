@@ -53,6 +53,7 @@ class RaftDetail extends Component {
             }}
           >
             <PlotContainer
+              memorySize={50}
               inputs={p}
               containerNode={this.CCDsrefs[i]?.current}
               xAxisTitle="Time"
@@ -95,6 +96,7 @@ class RaftDetail extends Component {
             }}
           >
             <PlotContainer
+              memorySize={50}
               inputs={p}
               containerNode={this.rebsRefs[i]?.current}
               xAxisTitle="Time"
