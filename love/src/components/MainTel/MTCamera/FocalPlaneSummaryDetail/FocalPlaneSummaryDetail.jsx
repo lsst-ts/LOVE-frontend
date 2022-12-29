@@ -53,54 +53,109 @@ class FocalPlaneSummaryDetail extends Component {
     },
   ];
 
-  CCDs = [
-    {
-      field: 'identifier',
-      title: '',
-    },
-    {
-      field: 'GD',
-      title: 'GD 0 [V]',
-      type: 'number',
-      className: styles.columns,
-      render: (value) => defaultNumberFormatter(value),
-    },
-    {
-      field: 'ODm',
-      title: 'OD 0 [mA]',
-      type: 'number',
-      className: styles.columns,
-      render: (value) => defaultNumberFormatter(value),
-    },
-    {
-      field: 'ODv',
-      title: 'OD 0 [V]',
-      type: 'number',
-      className: styles.columns,
-      render: (value) => defaultNumberFormatter(value),
-    },
-    {
-      field: 'GV',
-      title: 'GV 0 [V]',
-      type: 'number',
-      className: styles.columns,
-      render: (value) => defaultNumberFormatter(value),
-    },
-    {
-      field: 'RD',
-      title: 'RD 0 [V]',
-      type: 'number',
-      className: styles.columns,
-      render: (value) => defaultNumberFormatter(value),
-    },
-    {
-      field: 'SW',
-      title: 'SW 0 [C°]',
-      type: 'number',
-      className: styles.columns,
-      render: (value) => defaultNumberFormatter(value),
-    },
-  ];
+  getCCDsHeaders() {
+    return [
+      {
+        field: 'identifier',
+        title: '',
+      },
+      {
+        field: 'GD',
+        title: (
+          <span
+            style={{ color: this.props.selectedCCDVar === 'gDV' ? 'red' : 'black' }}
+            className={styles.clickableHeader}
+            onClick={() => this.changeCCDsPlotsVariable('gDV')}
+          >
+            GD 0 [V]
+          </span>
+        ),
+        type: 'number',
+        className: styles.columns,
+        render: (value) => defaultNumberFormatter(value),
+      },
+      {
+        field: 'ODm',
+        title: (
+          <span
+            style={{ color: this.props.selectedCCDVar === 'oDI' ? 'red' : 'black' }}
+            className={styles.clickableHeader}
+            onClick={() => this.changeCCDsPlotsVariable('oDI')}
+          >
+            OD 0 [mA]
+          </span>
+        ),
+        type: 'number',
+        className: styles.columns,
+        render: (value) => defaultNumberFormatter(value),
+      },
+      {
+        field: 'ODv',
+        title: (
+          <span
+            style={{ color: this.props.selectedCCDVar === 'oDV' ? 'red' : 'black' }}
+            className={styles.clickableHeader}
+            onClick={() => this.changeCCDsPlotsVariable('oDV')}
+          >
+            OD 0 [V]
+          </span>
+        ),
+        type: 'number',
+        className: styles.columns,
+        render: (value) => defaultNumberFormatter(value),
+      },
+      {
+        field: 'GV',
+        title: (
+          <span
+            style={{ color: this.props.selectedCCDVar === 'oGV' ? 'red' : 'black' }}
+            className={styles.clickableHeader}
+            onClick={() => this.changeCCDsPlotsVariable('oGV')}
+          >
+            GV 0 [V]
+          </span>
+        ),
+        type: 'number',
+        className: styles.columns,
+        render: (value) => defaultNumberFormatter(value),
+      },
+      {
+        field: 'RD',
+        title: (
+          <span
+            style={{ color: this.props.selectedCCDVar === 'rDV' ? 'red' : 'black' }}
+            className={styles.clickableHeader}
+            onClick={() => this.changeCCDsPlotsVariable('rDV')}
+          >
+            RD 0 [V]
+          </span>
+        ),
+        type: 'number',
+        className: styles.columns,
+        render: (value) => defaultNumberFormatter(value),
+      },
+      {
+        field: 'SW',
+        title: (
+          <span
+            style={{ color: this.props.selectedCCDVar === 'temp' ? 'red' : 'black' }}
+            className={styles.clickableHeader}
+            onClick={() => this.changeCCDsPlotsVariable('temp')}
+          >
+            SW 0 [C°]
+          </span>
+        ),
+        type: 'number',
+        className: styles.columns,
+        render: (value) => defaultNumberFormatter(value),
+      },
+    ];
+  }
+
+  changeCCDsPlotsVariable(variable) {
+    const { setSelectedCCDVar } = this.props;
+    setSelectedCCDVar(variable);
+  }
 
   getCCDIndex(id) {
     return parseInt(id) - 1;
@@ -203,7 +258,7 @@ class FocalPlaneSummaryDetail extends Component {
         </div>
         {/* CCDs table */}
         <div>
-          <SimpleTable headers={this.CCDs} data={ccdsData} />
+          <SimpleTable headers={this.getCCDsHeaders()} data={ccdsData} />
         </div>
       </div>
     );

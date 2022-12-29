@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
-import throttle from 'lodash.throttle';
 import RaftDetail from './RaftDetail/RaftDetail';
-// import RebDetail from './RebDetail/RebDetail';
 import FocalPlane from './FocalPlane/FocalPlane';
 import CCDDetail from './CCDDetail/CCDDetail';
 import PropTypes from 'prop-types';
@@ -43,14 +41,14 @@ class MTCamera extends Component {
       width: 480,
       zoomLevel: 1,
       activeViewId: 'focalplane',
-      // selectedRaft: { id: 100, top: 1, right: 2, bottom: 3, left: 4 },
-      // selectedCCD: { id: 100, top: 1, right: 2, bottom: 3, left: 4 },
       selectedRaft: null,
       selectedCCD: null,
       selectedReb: null,
       hoveredRaft: null,
       hoveredCCD: null,
       hoveredReb: null,
+      selectedCCDVar: 'gDV',
+      selectedRebVar: 'anaI',
     };
   }
 
@@ -78,6 +76,14 @@ class MTCamera extends Component {
     this.setState({ hoveredReb: reb });
   };
 
+  setSelectedCCDVar = (variable) => {
+    this.setState({ selectedCCDVar: variable });
+  };
+
+  setSelectedRebVar = (variable) => {
+    this.setState({ selectedRebVar: variable });
+  };
+
   preventDefault(e) {
     e = e || window.event;
     if (e.preventDefault) {
@@ -96,7 +102,6 @@ class MTCamera extends Component {
 
   selectNeighborRaft = (direction) => {
     const { selectedRaft } = this.state;
-    console.log(selectedRaft);
     const nextRaftId = selectedRaft.neighborsIds[direction];
     if (nextRaftId) {
       const nextRaft = this.findRaftById(nextRaftId);
@@ -111,35 +116,13 @@ class MTCamera extends Component {
     this.setSelectedCCD(nextCCD);
   };
 
-  componentDidMount() {
-    /*  let yMax = -Infinity;
-    let xMax = -Infinity;
-    let yMin = Infinity;
-    let xMin = Infinity;
-    let maxRadius = 0;
-
-    xMin = -150;
-    xMax = 160;
-    yMin = -150;
-    yMax = 160;
-    maxRadius = 160;
-
-    this.setState({
-      xRadius: (xMax - xMin) / 2,
-      yRadius: (yMax - yMin) / 2,
-      maxRadius,
-    }); */
-  }
+  // componentDidMount() {}
 
   componentDidUpdate() {
     d3.select('#focalplane').call(d3.zoom().scaleExtent([0.5, 5]).on('zoom', this.zoomed));
     d3.select('#raftdetail').call(d3.zoom().scaleExtent([0.5, 5]).on('zoom', this.zoomed));
     d3.select('#ccddetail').call(d3.zoom().scaleExtent([0.5, 5]).on('zoom', this.zoomed));
   }
-
-  debouncedTransform = throttle((targetId, transformString) => {
-    d3.select(`#${targetId}`).style('transform', transformString);
-  }, 200);
 
   zoomed = () => {
     const { zoomLevel } = this.state;
@@ -152,26 +135,15 @@ class MTCamera extends Component {
     else if (targetId === 'ccddetail') baseK = 2;
 
     const k = d3.event.transform.k + baseK;
-    // console.log(targetId, k);
-    // console.log(d3.event.transform.toString());
     let newActiveViewId, newSelectedRaft;
     if (k >= 0 && k < 2) {
-      // d3.select('#focalplane').style('visibility', 'visible');
-      // d3.select('#raftdetail').style('visibility', 'hidden');
-      // d3.select('#ccddetail').style('visibility', 'hidden');
       newActiveViewId = 'focalplane';
     }
     if (k >= 2 && k < 3) {
-      // d3.select('#focalplane').style('visibility', 'hidden');
-      // d3.select('#raftdetail').style('visibility', 'visible');
-      // d3.select('#ccddetail').style('visibility', 'hidden');
       newActiveViewId = 'raftdetail';
       newSelectedRaft = this.state.hoveredRaft;
     }
     if (k >= 3 && k < 4) {
-      // d3.select('#focalplane').style('visibility', 'hidden');
-      // d3.select('#raftdetail').style('visibility', 'hidden');
-      // d3.select('#ccddetail').style('visibility', 'visible');
       newActiveViewId = 'ccddetail';
     }
 
@@ -190,15 +162,6 @@ class MTCamera extends Component {
       d3.select('#ccddetail').style('transform-origin', '0 0');
     }
 
-    // Debounce the transform to avoid lag
-    // if (targetId === 'focalplane') {
-    //   this.debouncedTransform('focalplane', d3TransformToString(d3.event.transform));
-    // } else if (targetId === 'raftdetail') {
-    //   this.debouncedTransform('raftdetail', d3TransformToString(d3.event.transform));
-    // } else if (targetId === 'ccddetail') {
-    //   this.debouncedTransform('ccddetail', d3TransformToString(d3.event.transform));
-    // }
-
     this.setState((prevState) => ({
       activeViewId: newActiveViewId,
       selectedRaft: newSelectedRaft ?? prevState.selectedRaft,
@@ -208,16 +171,11 @@ class MTCamera extends Component {
 
   render() {
     const { selectedCCD, hoveredRaft, selectedRaft, hoveredCCD } = this.state;
-    // console.log('Selected', selectedCCD);
-    // console.log('Hovered', hoveredCCD);
-    // console.log('Selected', selectedRaft);
-    // console.log('Hovered', hoveredRaft);
-    // console.log(this.state.activeViewId);
     return this.getComponent();
   }
 
   getComponent() {
-    const { selectedRaft, selectedCCD, selectedReb, zoomLevel } = this.state;
+    const { selectedRaft, selectedCCD, selectedReb, selectedCCDVar, selectedRebVar, zoomLevel } = this.state;
     const { tempControlActive, hVBiasSwitch, anaV, power, gDV, oDI, oDV, oGV, rDV, temp } = this.props;
     return (
       <div className={styles.container}>
@@ -233,6 +191,10 @@ class MTCamera extends Component {
                 selectedRaft={selectedRaft}
                 selectedCCD={selectedCCD}
                 selectedReb={selectedReb}
+                selectedCCDVar={selectedCCDVar}
+                selectedRebVar={selectedRebVar}
+                setSelectedCCDVar={this.setSelectedCCDVar}
+                setSelectedRebVar={this.setSelectedRebVar}
                 tempControlActive={tempControlActive}
                 hVBiasSwitch={hVBiasSwitch}
                 anaV={anaV}
@@ -257,7 +219,7 @@ class MTCamera extends Component {
     const { selectedRaft } = this.state;
     const { hVBiasSwitch, anaV, power, gDV, oDI, oDV, oGV, rDV, temp } = this.props;
     return (
-      <div id="focalplane" style={{ visibility: 'visible', transformOrigin: 'center' }}>
+      <div id="focalplane">
         <FocalPlane
           id="focalplane"
           rafts={rafts}
@@ -279,7 +241,7 @@ class MTCamera extends Component {
   }
 
   getRaftdetail() {
-    const { selectedRaft, selectedCCD, selectedReb } = this.state;
+    const { selectedRaft, selectedCCD, selectedCCDVar, selectedReb } = this.state;
     const { hVBiasSwitch, anaV, power } = this.props;
 
     const raftWithNeighbors = {
@@ -292,14 +254,16 @@ class MTCamera extends Component {
       },
     };
     return (
-      <div id="raftdetail" /* style={{visibility: 'hidden'}} */>
+      <div id="raftdetail">
         <RaftDetail
           raft={raftWithNeighbors}
           showNeighbors={true}
           selectedCCD={selectedCCD}
           selectedReb={selectedReb}
+          selectedCCDVar={selectedCCDVar}
           setSelectedCCD={this.setSelectedCCD}
           setSelectedReb={this.setSelectedReb}
+          setSelectedCCDVar={this.setSelectedCCDVar}
           selectNeighborRaft={this.selectNeighborRaft}
           hVBiasSwitch={hVBiasSwitch}
           anaV={anaV}
@@ -312,7 +276,7 @@ class MTCamera extends Component {
   getCCDdetail() {
     const { selectedCCD } = this.state;
     return (
-      <div id="ccddetail" /* style={{visibility: 'hidden'}} */>
+      <div id="ccddetail">
         <CCDDetail
           ccd={selectedCCD}
           showNeighbors={true}

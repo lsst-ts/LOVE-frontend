@@ -24,9 +24,11 @@ class RaftDetail extends Component {
   }
 
   renderCCDsPlots() {
-    const { raft, selectedCCD, setSelectedCCD } = this.props;
+    const { raft, selectedCCD, selectedCCDVar, setSelectedCCD } = this.props;
     const plots = [];
+    const ccsdIds = [];
     raft.ccds.forEach((c) => {
+      ccsdIds.push(c.id);
       plots.push({
         [`CCD${c.id}`]: {
           category: 'telemetry',
@@ -37,6 +39,15 @@ class RaftDetail extends Component {
           type: 'line',
           accessor: (x) => x,
         },
+        // [`CCD${c.id}`]: {
+        //   category: 'telemetry',
+        //   csc: 'MTCamera',
+        //   salindex: 0,
+        //   topic: 'focal_plane_Ccd',
+        //   item: selectedCCDVar,
+        //   type: 'line',
+        //   accessor: (x) => x[c.id],
+        // },
       });
     });
 
@@ -57,7 +68,7 @@ class RaftDetail extends Component {
               inputs={p}
               containerNode={this.CCDsrefs[i]?.current}
               xAxisTitle="Time"
-              yAxisTitle={`Value-${i}`}
+              yAxisTitle={`${selectedCCDVar} - ${ccsdIds[i]}`}
               legendPosition="bottom"
             />
           </div>
@@ -67,7 +78,7 @@ class RaftDetail extends Component {
   }
 
   renderRebsPlots() {
-    const { raft, selectedReb, setSelectedReb } = this.props;
+    const { raft, selectedReb, selectedRebVar, setSelectedReb } = this.props;
     const plots = [];
     raft.rebs.forEach((r) => {
       plots.push({
@@ -80,6 +91,15 @@ class RaftDetail extends Component {
           type: 'line',
           accessor: (x) => x,
         },
+        // [`REB${r.id}`]: {
+        //   category: 'telemetry',
+        //   csc: 'MTCamera',
+        //   salindex: 0,
+        //   topic: 'focal_plane_Reb',
+        //   item: selectedRebVar,
+        //   type: 'line',
+        //   accessor: (x) => x[r.id],
+        // },
       });
     });
 

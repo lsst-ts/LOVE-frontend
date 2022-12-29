@@ -36,3 +36,7 @@
 .columns {
   text-align: center !important;
 }
+
+.clickableHeader {
+  cursor: pointer;
+}
