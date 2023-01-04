@@ -1,0 +1,58 @@
+
+.temperatureMax {
+  color: white !important;
+  font-size: 18px;
+}
+
+.alignRight {
+  text-align: right;
+}
+
+.veryLow {
+  background:#DB5B3E;
+}
+
+.low {
+  background: #F9B200;
+}
+
+.medium {
+  background: #DEE250;
+}
+
+.high {
+  background: #97E54F;
+}
+
+.veryHigh {
+  background: #00A26D;
+}
+
+.predictability {
+  height: 15px;
+}
+
+td {
+  text-align: center;
+}
+
+td > .backgroundPredictability {
+  display: inline-block;
+  vertical-align: middle ;
+  height: 15px;
+  background: var(--tertiary-background-color);
+}
+
+td > .predictability {
+  display: inline-block;
+  vertical-align: middle ;
+}
+
+.padding0 {
+  padding: 0px !important;
+}
+
+.scrollX {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
