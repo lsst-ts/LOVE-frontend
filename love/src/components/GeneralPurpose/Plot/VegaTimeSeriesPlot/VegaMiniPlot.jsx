@@ -17,7 +17,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
   };
 
   static propTypes = {
-    markType: PropTypes.oneOf(['line', 'pointLine', 'bar', 'area', 'arrow', 'spread', 'bigote', 'rect']),
+    markType: PropTypes.oneOf(['line', 'pointLine', 'bar', 'area', 'arrow', 'spread', 'bigote', 'rect', 'cloud']),
     /** (All layers) hex color */
     color: PropTypes.string,
     /** (Only `lines` layer). Dash pattern for segmented lines passed to the strokeDash channel. E.g, [2, 1] draws
@@ -606,6 +606,54 @@ class VegaLegendMiniPlot extends React.PureComponent {
     };
   };
 
+  cloudSpec = (markType) => {
+    if (markType !== 'cloud') {
+      return {};
+    }
+    return {
+      data: {
+        values: [{ a: -10, b: 2, c: 8, d: 5 }, { a: 0, b: 2, c: 8, d: 5 }, { a: 10, b: 2, c: 8, d: 5 }],
+      },
+      layer: [
+        {
+          transform: [
+            {
+              fold: [ 'b', 'c', 'd'],
+              as: ['category', 'value']
+            }
+          ],
+          mark: {
+            type: 'bar',
+            clip: true
+          },
+          encoding: {
+            y: {
+              field: 'category',
+              type: 'ordinal',
+            },
+            color: {
+              field: 'value',
+              type: 'quantitative',
+              scale: {
+                range: [this.props.color.slice(0,7) + '00', this.props.color.slice(0,7) + 'ff']
+              },
+              legend: null
+            },
+            opacity: {
+              value: 0.6
+            }
+          },
+        }
+      ],
+      config: {
+        background: null,
+        axis: {
+          orient: "right"
+        },
+      },
+    };
+  };
+
   render() {
     const lineSpec = this.lineSpec(this.props.markType);
     const barSpec = this.barSpec(this.props.markType);
@@ -614,6 +662,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
     const spreadSpec = this.spreadSpec(this.props.markType);
     const bigoteSpec = this.bigoteSpec(this.props.markType);
     const rectSpec = this.rectSpec(this.props.markType);
+    const cloudSpec = this.cloudSpec(this.props.markType);
     const spec = {
       schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       width: 30,
@@ -628,6 +677,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
       ...spreadSpec,
       ...bigoteSpec,
       ...rectSpec,
+      ...cloudSpec,
     };
 
     return <VegaLite

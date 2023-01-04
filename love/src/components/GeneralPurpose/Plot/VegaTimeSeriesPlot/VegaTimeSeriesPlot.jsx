@@ -84,13 +84,31 @@ class VegaTimeseriesPlot extends Component {
        *  - name distinguishes a mark from another
        *  - x,y,y2 are the plot-axis coordinates of a point in that area
        */
-       areas: PropTypes.arrayOf(PropTypes.object),
-       /**
+      areas: PropTypes.arrayOf(PropTypes.object),
+      /**
        * List of `{name, x, y, y2}` of area plot to be plotted.
        *  - name distinguishes a mark from another
        *  - x,y,y2 are the plot-axis coordinates of a point in that area
        */
-        spreads: PropTypes.arrayOf(PropTypes.object),
+      spreads: PropTypes.arrayOf(PropTypes.object),
+      /**
+       * List of `{name, x, lowclouds, midclouds, hiclouds}` of area plot to be plotted.
+       *  - name distinguishes a mark from another
+       *  - x,y1,y2, y3 are the plot-axis coordinates of a point in that area
+       */
+      clouds: PropTypes.arrayOf(PropTypes.object),
+      /**
+       * List of `{name, x, x2 or deltatime, y, y2}` of rect plot to be plotted.
+       *  - name distinguishes a mark from another
+       *  - x,x2 or deltatime,y,y2 are the plot-axis coordinates of a point in rect
+       */
+      rects: PropTypes.arrayOf(PropTypes.object),
+      /**
+       * List of `{name, x, mean, delta}` of bar plot to be plotted.
+       *  - name distinguishes a mark from another
+       *  - x,mean,delta are the plot-axis coordinates of a point in bar
+       */
+      bigotes: PropTypes.arrayOf(PropTypes.object),
     }).isRequired,
 
     /**
@@ -180,6 +198,9 @@ class VegaTimeseriesPlot extends Component {
             domainColor: '#626262',
             gridColor: '#424242',
             tickColor: null,
+            domain: true,
+            /* domainColor: '#000',
+            tickColor: '#000' */
           },
           axisX: {
             titlePadding: 16,
@@ -188,6 +209,10 @@ class VegaTimeseriesPlot extends Component {
             labelFontWeight: 750,
             tickCount: 5,
           },
+          view: {
+            strokeWidth: 1,
+            step: 23
+          }
         },
         layer: [
         ]
@@ -800,7 +825,85 @@ class VegaTimeseriesPlot extends Component {
     };
   };
 
+  makeCloudLayer = (dataName) => {
+    const markType = dataName.slice(0, -1);
+    const markStyle = this.props.marksStyles.filter((l) => l.markType === markType);
+    const color = markStyle[0].color.slice(0,7);
+    
+    return {
+      data: { name: dataName },
+      transform: [
+        {
+          fold: ['lowclouds', 'midclouds', 'hiclouds'], as: ['category', 'value']
+        }
+      ],
+      layer: [
+        {
+          mark: {
+            type: 'bar',
+            clip: true,
+            size: this.props.height ? (this.props.height - 58) / 3 : (240 - 58) / 3
+          },
+          encoding: {
+            x: {
+              field: 'x',
+              type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
+                format: '%H:%M:%S',
+              },
+            },
+            y: {
+              type: 'ordinal',
+              field: 'category',
+              axis: {
+                title: null,
+              },
+              sort: [
+                'hiclouds', 'midclouds', 'lowclouds'
+              ],
+            },
+            color: {
+              field: 'value',
+              type: 'quantitative',
+              scale: {
+                range: [color + '00', color + 'ff']
+              },
+              title: this.makeAxisTitle('Clouds', this.props.units?.y)
+            }
+          }
+        }
+      ]
+    };
+  };
+
   updateSpec = () => {
+    console.log('VegaTimeSeriesPlot.updateSpec()');
+    const layer = [];
+    if (this.props.layers.clouds) layer.push(this.makeCloudLayer('clouds'));
+    if (this.props.layers.areas) layer.push(this.makeAreaLayer('areas'));
+    if (this.props.layers.spreads) layer.push(this.makeSpreadLayer('spreads'));
+    if (this.props.layers.rects) layer.push(this.makeRectLayer('rects'));
+    if (this.props.layers.bars) layer.push(this.makeBarLayer('bars'));
+    if (this.props.layers.bigotes) layer.push(this.makeBigoteLayer('bigotes'));
+    if (this.props.layers.pointLines) layer.push(this.makeLineLayer('pointLines'));
+    if (this.props.layers.pointLines) layer.push(this.makePointsLayer('pointLines'));
+    layer.push(this.makeLineLayer('lines'));
+    if (this.props.layers.arrows) layer.push(this.makeArrowLayer('arrows'));
+
+    /* const layer = [
+      this.makeAreaLayer('areas'),
+      this.makeSpreadLayer('spreads'),
+      this.makeRectLayer('rects'),
+      this.makeBarLayer('bars'),
+      this.makeBigoteLayer('bigotes'),
+      this.makeLineLayer('pointLines'),
+      this.makePointsLayer('pointLines'),
+      this.makeLineLayer('lines'),
+      this.makeArrowLayer('arrows')
+    ];
+    if (this.props.layers.clouds) layer.push(this.makeCloudLayer('clouds')); */
+
     this.setState({
       spec: {
         width:
@@ -834,22 +937,11 @@ class VegaTimeseriesPlot extends Component {
           axisX: {
             titlePadding: 16,
             titleFontWeight: 750,
-            // labelAngle: -45,
             labelFontWeight: 750,
             tickCount: 5,
           },
         },
-        layer: [
-          this.makeAreaLayer('areas'),
-          this.makeSpreadLayer('spreads'),
-          this.makeRectLayer('rects'),
-          this.makeBarLayer('bars'),
-          this.makeBigoteLayer('bigotes'),
-          this.makeLineLayer('pointLines'),
-          this.makePointsLayer('pointLines'),
-          this.makeLineLayer('lines'),
-          this.makeArrowLayer('arrows')
-        ],
+        layer: layer,
       },
     });
   };
@@ -862,6 +954,8 @@ class VegaTimeseriesPlot extends Component {
       if (this.props.containerNode) {
         this.resizeObserver = new ResizeObserver((entries) => {
           const container = entries[0];
+
+          console.log('componentDidUpdate() container.contentRect.height', container.contentRect.height )
           this.setState({
             containerHeight: container.contentRect.height,
             containerWidth: container.contentRect.width,
@@ -896,12 +990,13 @@ class VegaTimeseriesPlot extends Component {
       if (this.props.containerNode) {
         this.resizeObserver = new ResizeObserver((entries) => {
           const container = entries[0];
+          
+          console.log('componentDidUpdate() container.contentRect.height', container.contentRect.height );
           this.setState({
             containerHeight: container.contentRect.height,
             containerWidth: container.contentRect.width,
           });
         });
-
         this.resizeObserver.observe(this.props.containerNode);
       }
     }
@@ -928,6 +1023,9 @@ class VegaTimeseriesPlot extends Component {
 
   render() {
     const { layers } = this.props;
+
+    console.log('layers', layers);
+    console.log('spec', this.state.spec);
     return (
       <VegaLite
         style={{
