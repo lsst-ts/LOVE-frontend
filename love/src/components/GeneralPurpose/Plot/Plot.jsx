@@ -40,7 +40,7 @@ export default class Plot extends Component {
   };
 
   static defaultProps = {
-    maxHeight: undefined,
+    maxHeight: 240,
     inputs: {},
   };
 
@@ -157,11 +157,15 @@ export default class Plot extends Component {
       if (this.props.containerNode) {
         this.resizeObserver = new ResizeObserver((entries) => {
           const container = entries[0];
-          this.setState({
-            containerHeight: container.contentRect.height,
-            containerWidth: container.contentRect.width,
-            resizeObserverListener: true,
-          });
+          const diffControl = this.timeSeriesControlRef && this.timeSeriesControlRef.current ? this.timeSeriesControlRef.current.offsetHeight + 19 : 0;
+          const diffLegend = this.props.legendPosition === 'bottom' && this.legendRef.current ? this.legendRef.current.offsetHeight : 0;
+          if(container.contentRect.height !== 0 && container.contentRect.width !== 0) {
+            this.setState({
+              containerHeight: container.contentRect.height - diffControl - diffLegend,
+              containerWidth: container.contentRect.width,
+              resizeObserverListener: true,
+            });
+          }
         });
         if (!(this.props.containerNode instanceof Element)) return;
         this.resizeObserver.observe(this.props.containerNode);
@@ -269,10 +273,12 @@ export default class Plot extends Component {
           const container = entries[0];
           const diffControl = this.timeSeriesControlRef && this.timeSeriesControlRef.current ? this.timeSeriesControlRef.current.offsetHeight + 19 : 0;
           const diffLegend = this.props.legendPosition === 'bottom' && this.legendRef.current ? this.legendRef.current.offsetHeight : 0;
-          this.setState({
-            containerHeight: container.contentRect.height - diffControl - diffLegend,
-            containerWidth: container.contentRect.width,
-          });
+          if (container.contentRect.height !== 0 && container.contentRect.width !== 0) {
+            this.setState({
+              containerHeight: container.contentRect.height - diffControl - diffLegend,
+              containerWidth: container.contentRect.width,
+            });
+          }
         });
         if (!(this.props.containerNode instanceof Element)) return;
         this.resizeObserver.observe(this.props.containerNode);
@@ -316,7 +322,7 @@ export default class Plot extends Component {
 
     const units = {y: streamsItems.find((item) => item?.units !== undefined && item?.units !== '')?.units};
 
-    const layerTypes = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads', 'bigotes', 'rects'];
+    const layerTypes = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads', 'bigotes', 'rects', 'clouds'];
     const layers = {};
     for (const [inputName, inputConfig] of Object.entries(inputs)) {
       const { type } = inputConfig;
@@ -365,8 +371,7 @@ export default class Plot extends Component {
           ...style,
           ...(markType !== undefined ? { markType } : {}),
         };
-      });  
-    
+      });
 
     return (
       <>
