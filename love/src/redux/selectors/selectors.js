@@ -954,6 +954,38 @@ export const getRawStatus = (state) => {
 };
 
 /**
+ * Selects the Weather Forecast Daily Trend
+ * @param {object} state
+ */
+export const getInfoHeaderDailyTrend = (state) => {
+  const subscriptions = ['telemetry-WeatherForecast-0-WeatherForecast_dailyTrend'];
+  const dailyTrendData = getStreamsData(state, subscriptions);
+  return {
+    pictocode: dailyTrendData['telemetry-WeatherForecast-0-WeatherForecast_dailyTrend']?.pictocode.value ?? [],
+    temperatureMax: dailyTrendData['telemetry-WeatherForecast-0-WeatherForecast_dailyTrend']?.temperatureMax.value ?? [],
+    temperatureMin: dailyTrendData['telemetry-WeatherForecast-0-WeatherForecast_dailyTrend']?.temperatureMin.value ?? [],
+    predictability: dailyTrendData['telemetry-WeatherForecast-0-WeatherForecast_dailyTrend']?.predictability.value ?? [],
+    predictabilityClass: dailyTrendData['telemetry-WeatherForecast-0-WeatherForecast_dailyTrend']?.predictabilityClass.value ?? [],
+  };
+};
+
+/**
+ * Selects the Weather Forecast sHourly Trend
+ * @param {object} state
+ */
+export const getInfoHeaderHourlyTrend = (state) => {
+  const subscriptions = ['telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend'];
+  const hourlyTrendData = getStreamsData(state, subscriptions);
+  return {
+    pictocode: hourlyTrendData['telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend']?.pictocode.value ?? [],
+    temperatureMax: hourlyTrendData['telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend']?.temperatureMax.value ?? [],
+    temperatureMin: hourlyTrendData['telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend']?.temperatureMin.value ?? [],
+    predictability: hourlyTrendData['telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend']?.predictability.value ?? [],
+    predictabilityClass: hourlyTrendData['telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend']?.predictabilityClass.value ?? [],
+  };
+};
+
+/**
  * Returns events related to the LATISS instrument in the state.
  *
  * @param {obj} state
