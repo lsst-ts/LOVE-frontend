@@ -3,10 +3,14 @@ import PropTypes from 'prop-types';
 import ManagerInterface, { parseCommanderData } from 'Utils';
 import { DATE_TIME_FORMAT } from 'Config';
 import TimeSeriesControls from 'components/GeneralPurpose/Plot/TimeSeriesControls/TimeSeriesControls';
+import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
+import Title from 'components/GeneralPurpose/SummaryPanel/Title';
 import styles from './WeatherForecast.module.css';
 import WindPlotContainer from './PlotsContainer/WindPlot.container';
 import TemperaturePlotContainer from './PlotsContainer/TemperaturePlot.container';
 import RainPlotContainer from './PlotsContainer/RainPlot.container';
+import CloudPlotContainer from './PlotsContainer/CloudPlot.container';
+import InfoHeader from './InfoHeader/InfoHeader';
 
 
 export default class WeatherForecast extends Component {
@@ -14,8 +18,12 @@ export default class WeatherForecast extends Component {
     subscribeToStreams: PropTypes.func,
     unsubscribeToStreams: PropTypes.func,
     /* Weather stream data */
+    frecuencyOptions: PropTypes.arrayOf(PropTypes.string),
+    frecuency: PropTypes.oneOf(['daily', 'hourly']),
     weather: PropTypes.object,    
     controls: PropTypes.bool,
+    infoHeader: PropTypes.bool,
+    cloud: PropTypes.bool,
     wind: PropTypes.bool,
     temperature: PropTypes.bool,
     rain: PropTypes.bool,
@@ -33,11 +41,16 @@ export default class WeatherForecast extends Component {
       isLive: true,
       timeWindow: 60,
       historicalData: [],
+      frecuency: 'daily',
     };
+
+    this.frecuencyOptions = ['daily', 'hours'];
 
     this.windPlotRef = React.createRef();
     this.temperaturePlotRef = React.createRef();
     this.rainPlotRef = React.createRef();
+    this.cloudPlotRef = React.createRef();
+
   }
 
   componentDidMount = () => {
@@ -93,9 +106,31 @@ export default class WeatherForecast extends Component {
       historicalData: this.state.historicalData,
     };
 
+    const weatherForecastState = {
+      class: styles.ok,
+      name: 'ENABLED'
+    };
+
+    console.log('this.props.infoHeader: ', this.props.infoHeader);
+
     return (
       <div className={styles.container}>
-
+        
+        <div className={styles.weatherForecastControls}>
+          <span className={styles.title}>WeatherForecast</span>
+          <span className={[weatherForecastState.class, styles.weatherForecastState].join(' ')}>{weatherForecastState.name}</span>
+          <span>
+            <div className={styles.toggleContainer}>
+              <Toggle
+                labels={['14 days', '28 hours']}
+                isLive={this.state.frecuency === this.frecuencyOptions[1]}
+                setLiveMode={(optionHours) => this.setState({frecuency: optionHours ? this.frecuencyOptions[1] : this.frecuencyOptions[0]})}
+              />
+            </div>
+          </span>
+        </div>
+       
+{/* 
         {this.props.controls && (
           <div className={styles.fullSection}>
             <div className={styles.sectionTitle}>Timeseries Controls</div>
@@ -126,13 +161,37 @@ export default class WeatherForecast extends Component {
             )}
           </div>
         )}
+*/}
+
+        {this.props.infoHeader && (
+          <div className={styles.fullSection}>
+            <InfoHeader
+              frecuency={this.state.frecuency}
+            />
+          </div>
+        )}
+
+        {this.props.cloud && (
+          <div className={styles.fullSection}>
+            <div className={styles.sectionTitle}>Cloud</div>
+            <div ref={this.cloudPlotRef} className={styles.plot}>
+              <CloudPlotContainer
+                //timeSeriesControlsProps={timeSeriesControlsProps}
+                containerNode={this.cloudPlotRef.current}
+                xAxisTitle="Time"
+                yAxisTitle=""
+                legendPosition="bottom"
+              />
+            </div>
+          </div>
+        )}
 
         {this.props.wind && (
           <div className={styles.fullSection}>
             <div className={styles.sectionTitle}>Wind</div>
             <div ref={this.windPlotRef} className={styles.plot}>
               <WindPlotContainer
-                timeSeriesControlsProps={timeSeriesControlsProps}
+                //timeSeriesControlsProps={timeSeriesControlsProps}
                 containerNode={this.windPlotRef.current}
                 xAxisTitle="Time"
                 yAxisTitle="Wind"
@@ -147,7 +206,7 @@ export default class WeatherForecast extends Component {
             <div className={styles.sectionTitle}>Temperature</div>
             <div ref={this.temperaturePlotRef} className={styles.plot}>
               <TemperaturePlotContainer
-                timeSeriesControlsProps={timeSeriesControlsProps}
+                //timeSeriesControlsProps={timeSeriesControlsProps}
                 containerNode={this.temperaturePlotRef.current}
                 xAxisTitle="Time"
                 yAxisTitle="Temperature"
@@ -162,7 +221,7 @@ export default class WeatherForecast extends Component {
             <div className={styles.sectionTitle}>Rain</div>
             <div ref={this.rainPlotRef} className={styles.plot}>
               <RainPlotContainer
-                timeSeriesControlsProps={timeSeriesControlsProps}
+                //timeSeriesControlsProps={timeSeriesControlsProps}
                 containerNode={this.rainPlotRef.current}
                 xAxisTitle="Time"
                 yAxisTitle="Precipitation"
