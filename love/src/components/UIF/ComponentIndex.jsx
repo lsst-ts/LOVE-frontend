@@ -209,7 +209,7 @@ export const observatoryIndex = {
       },
     },
   },
-  WindPlotWeatherForecast: {
+  WindPlotForecast: {
     component: require('../WeatherForecast/PlotsContainer/WindPlot.container').default,
     schema: {
       ...require('../WeatherForecast/PlotsContainer/WindPlot.container').schema,
@@ -219,7 +219,7 @@ export const observatoryIndex = {
       },
     },
   },
-  TemperaturePlotWeatherForecast: {
+  TemperaturePlotForecast: {
     component: require('../WeatherForecast/PlotsContainer/TemperaturePlot.container').default,
     schema: {
       ...require('../WeatherForecast/PlotsContainer/TemperaturePlot.container').schema,
@@ -229,13 +229,33 @@ export const observatoryIndex = {
       },
     },
   },
-  RainPlotWeatherForecast: {
+  RainPlotForecast: {
     component: require('../WeatherForecast/PlotsContainer/RainPlot.container').default,
     schema: {
       ...require('../WeatherForecast/PlotsContainer/RainPlot.container').schema,
       props: {
         ...defaultSchemaProps,
         ...require('../WeatherForecast/PlotsContainer/RainPlot.container').schema.props,
+      },
+    },
+  },
+  CloudPlotForecast: {
+    component: require('../WeatherForecast/PlotsContainer/CloudPlot.container').default,
+    schema: {
+      ...require('../WeatherForecast/PlotsContainer/CloudPlot.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../WeatherForecast/PlotsContainer/CloudPlot.container').schema.props,
+      },
+    },
+  },
+  InfoHeaderForecast: {
+    component: require('../WeatherForecast/InfoHeader/InfoHeader.container').default,
+    schema: {
+      ...require('../WeatherForecast/InfoHeader/InfoHeader.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../WeatherForecast/InfoHeader/InfoHeader.container').schema.props,
       },
     },
   },
