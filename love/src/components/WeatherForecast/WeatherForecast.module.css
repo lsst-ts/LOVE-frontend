@@ -116,3 +116,63 @@
   padding: 7px;
   margin: auto;
 }
+
+.weatherForecastControls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: left;
+  margin-top: 1em;
+}
+
+.title {
+  color: white;
+  font-weight: bold;
+  font-size: var(--font-size-large);
+}
+
+.weatherForecastState {
+  margin-left: 1em;
+  margin-right: 1em;
+  border-radius: 1rem;
+  font-weight: 700;
+  text-align: center;
+  width: 8em;
+  margin-bottom: 2px;
+}
+
+.toggleContainer {
+  display: flex;
+}
+
+
+/* state classes */
+.alert {
+  background: var(--status-alert-color);
+  color: var(--second-tertiary-background-color);
+}
+
+.ok {
+  background: var(--status-ok-color);
+  color: var(--second-tertiary-background-color);
+}
+
+.warning {
+  color: var(--status-warning-color);
+  background: var(--status-warning-dimmed-color-2);
+}
+
+.unknown {
+  background: var(--status-disabled-dimmed-color-2);
+  color: var(--second-quinary-background-color);
+}
+
+.offline {
+  background: var(--status-disabled-dimmed-color-2);
+  color: var(--secondary-font-color);
+}
+
+.disabled {
+  background: var(--primary-background-color);
+  color: var(--base-font-color);
+}

@@ -27,6 +27,18 @@ export const schema = {
       isPrivate: false,
       default: true,
     },
+    infoHeader: {
+      type: 'boolean',
+      description: "Whether to display info header'",
+      default: true,
+      isPrivate: false,
+    },
+    cloud: {
+      type: 'boolean',
+      description: "Whether to display plot of cloud'",
+      default: true,
+      isPrivate: false,
+    },
     wind: {
       type: 'boolean',
       description: "Whether to display plot of wind'",
@@ -63,6 +75,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
     'telemetry-WeatherForecast-0-WeatherForecast_dailyTrend',
+    'telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend',
   ];
   return {
     subscriptions,
