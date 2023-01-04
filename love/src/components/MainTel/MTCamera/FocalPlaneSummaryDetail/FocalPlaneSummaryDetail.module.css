@@ -37,6 +37,11 @@
   text-align: center !important;
 }
 
+.columnsHighlighted {
+  text-align: center !important;
+  background-color: var(--quinary-background-color) !important;
+}
+
 .clickableHeader {
   cursor: pointer;
 }

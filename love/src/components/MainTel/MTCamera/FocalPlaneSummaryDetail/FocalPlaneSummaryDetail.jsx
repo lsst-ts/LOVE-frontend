@@ -54,6 +54,7 @@ class FocalPlaneSummaryDetail extends Component {
   ];
 
   getCCDsHeaders() {
+    const { selectedCCDVar } = this.props;
     return [
       {
         field: 'identifier',
@@ -63,7 +64,6 @@ class FocalPlaneSummaryDetail extends Component {
         field: 'GD',
         title: (
           <span
-            style={{ color: this.props.selectedCCDVar === 'gDV' ? 'red' : 'black' }}
             className={styles.clickableHeader}
             onClick={() => this.changeCCDsPlotsVariable('gDV')}
           >
@@ -71,14 +71,13 @@ class FocalPlaneSummaryDetail extends Component {
           </span>
         ),
         type: 'number',
-        className: styles.columns,
+        className: selectedCCDVar === 'gDV' ? styles.columnsHighlighted : styles.columns,
         render: (value) => defaultNumberFormatter(value),
       },
       {
         field: 'ODm',
         title: (
           <span
-            style={{ color: this.props.selectedCCDVar === 'oDI' ? 'red' : 'black' }}
             className={styles.clickableHeader}
             onClick={() => this.changeCCDsPlotsVariable('oDI')}
           >
@@ -86,14 +85,13 @@ class FocalPlaneSummaryDetail extends Component {
           </span>
         ),
         type: 'number',
-        className: styles.columns,
+        className: selectedCCDVar === 'oDI' ? styles.columnsHighlighted : styles.columns,
         render: (value) => defaultNumberFormatter(value),
       },
       {
         field: 'ODv',
         title: (
           <span
-            style={{ color: this.props.selectedCCDVar === 'oDV' ? 'red' : 'black' }}
             className={styles.clickableHeader}
             onClick={() => this.changeCCDsPlotsVariable('oDV')}
           >
@@ -101,14 +99,13 @@ class FocalPlaneSummaryDetail extends Component {
           </span>
         ),
         type: 'number',
-        className: styles.columns,
+        className: selectedCCDVar === 'oDV' ? styles.columnsHighlighted : styles.columns,
         render: (value) => defaultNumberFormatter(value),
       },
       {
         field: 'GV',
         title: (
           <span
-            style={{ color: this.props.selectedCCDVar === 'oGV' ? 'red' : 'black' }}
             className={styles.clickableHeader}
             onClick={() => this.changeCCDsPlotsVariable('oGV')}
           >
@@ -116,14 +113,13 @@ class FocalPlaneSummaryDetail extends Component {
           </span>
         ),
         type: 'number',
-        className: styles.columns,
+        className: selectedCCDVar === 'oGV' ? styles.columnsHighlighted : styles.columns,
         render: (value) => defaultNumberFormatter(value),
       },
       {
         field: 'RD',
         title: (
           <span
-            style={{ color: this.props.selectedCCDVar === 'rDV' ? 'red' : 'black' }}
             className={styles.clickableHeader}
             onClick={() => this.changeCCDsPlotsVariable('rDV')}
           >
@@ -131,14 +127,13 @@ class FocalPlaneSummaryDetail extends Component {
           </span>
         ),
         type: 'number',
-        className: styles.columns,
+        className: selectedCCDVar === 'rDV' ? styles.columnsHighlighted : styles.columns,
         render: (value) => defaultNumberFormatter(value),
       },
       {
         field: 'SW',
         title: (
           <span
-            style={{ color: this.props.selectedCCDVar === 'temp' ? 'red' : 'black' }}
             className={styles.clickableHeader}
             onClick={() => this.changeCCDsPlotsVariable('temp')}
           >
@@ -146,7 +141,7 @@ class FocalPlaneSummaryDetail extends Component {
           </span>
         ),
         type: 'number',
-        className: styles.columns,
+        className: selectedCCDVar === 'temp' ? styles.columnsHighlighted : styles.columns,
         render: (value) => defaultNumberFormatter(value),
       },
     ];
