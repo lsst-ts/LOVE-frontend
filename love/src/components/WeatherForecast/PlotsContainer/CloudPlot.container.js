@@ -203,7 +203,7 @@ const CloudPlotContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props
           subscribeToStreams={subscribeToStreams}
           unsubscribeToStreams={unsubscribeToStreams}
           {...props}
-          containerNode={containerRef?.current}
+          containerNode={containerRef?.current?.parentNode}
         />
       </div>
     );

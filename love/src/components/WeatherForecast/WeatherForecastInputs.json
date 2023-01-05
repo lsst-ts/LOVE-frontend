@@ -1,0 +1,2080 @@
+{
+  "daily": {
+    "cloud": {
+      "Total cloud cover (%)": {
+        "type":"line",
+        "color":"#ff7f0e",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"totalCloudCover",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Total cloud cover spread": {
+        "type":"spread",
+        "color":"#ff7f0e",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"mean",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"totalCloudCover",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"delta",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"totalCloudCoverSpread",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Ex windspread": {
+        "type":"spread",
+        "color":"#ff7f0e",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"mean",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"delta",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 25"
+          }
+        ]
+      },
+      "Ex Clouds": {
+        "type":"cloud",
+        "color":"#19659b",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"hiclouds",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 45"
+          },
+          {
+            "variable":"midclouds",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 25"
+          },
+          {
+            "variable":"lowclouds",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 15"
+          }
+        ]
+      }
+    },
+    "wind": {
+      "Wind speed": {
+        "type":"area",
+        "color":"#4682b4",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"windspeedMin",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y2",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"windspeedMax",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Windspeed spread": {
+        "type":"spread",
+        "color":"#4682b4",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"mean",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"windspeedMean",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"delta",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"windspeedSpread",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Wind direction": {
+        "type":"arrow",
+        "color":"#4682b4",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"windspeedMean",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"angle",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"windDirection",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Gust Wind": {
+        "type":"line",
+        "color":"#97e54f",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"gust",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Ex Gust": {
+        "type":"line",
+        "color":"#97e54f",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 35"
+          }
+        ]
+      },
+      "Ex direction": {
+        "type":"arrow",
+        "color":"#4682b4",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => x[0] - 50"
+          },
+          {
+            "variable":"angle",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 210"
+          }
+        ]
+      },
+      "Ex windspread": {
+        "type":"spread",
+        "color":"#4682b4",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"mean",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"delta",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 30"
+          }
+        ]
+      }
+    },
+    "temperature": {
+      "Temperature": {
+        "type":"line",
+        "color":"#ff7bb5",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"temperature",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Temperature Spread": {
+        "type":"spread",
+        "color":"#ff7bb5",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"mean",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"temperature",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"delta",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"temperatureSpread",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Temperature Min/Max": {
+        "type":"area",
+        "color":"#ff7bb5",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          8,
+          4
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"temperatureMin",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y2",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"temperatureMax",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Dew Point Temp": {
+        "type":"line",
+        "color":"#e77bff",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"dewPointtemperature",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Dew Point Temp Min/Max": {
+        "type":"area",
+        "color":"#e77bff",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          2
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"dewPointTemperatureMin",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y2",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"dewPointTemperatureMax",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Ex temp": {
+        "type":"line",
+        "color":"#ff7bb5",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Ex temp min/max": {
+        "type":"area",
+        "color":"#ff7bb5",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          8,
+          4
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => x[0] - 20"
+          },
+          {
+            "variable":"y2",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => x[0] + 25"
+          }
+        ]
+      },
+      "Ex temp spread": {
+        "type":"spread",
+        "color":"#ff7bb5",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"mean",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"delta",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 20"
+          }
+        ]
+      },
+      "Ex dash": {
+        "type":"area",
+        "color":"#e77bff",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          2
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => x[0] - 45"
+          },
+          {
+            "variable":"y2",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => x[0] - 30"
+          }
+        ]
+      }
+    },
+    "rain": {
+      "Precipitation %": {
+        "type":"line",
+        "color":"#2ca02c",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"precipitationProbability",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Precipitation [mm]": {
+        "type":"bar",
+        "color":"#4682b4",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"precipitation",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Prec Spread [mm]": {
+        "type":"bigote",
+        "color":"#bcddf7",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"mean",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"precipitation",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"delta",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"precipitationSpread",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Snow Fraction [mm]": {
+        "type":"rect",
+        "color":"#2ca02c",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"precipitation",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"deltatime",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => (30 * 60)"
+          },
+          {
+            "variable":"y2",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"precipitation",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Ex Precipitation %": {
+        "type":"line",
+        "color":"#2ca02c",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 35"
+          }
+        ]
+      },
+      "Ex Bar": {
+        "type":"bar",
+        "color":"#4682b4",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 25"
+          }
+        ]
+      },
+      "Ex Bigote": {
+        "type":"bigote",
+        "color":"#bcddf7",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"mean",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 60"
+          },
+          {
+            "variable":"delta",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 15"
+          }
+        ]
+      },
+      "Ex Snow ": {
+        "type":"rect",
+        "color":"#2ca02c",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_dailyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 0"
+          },
+          {
+            "variable":"deltatime",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => (30 * 60)"
+          },
+          {
+            "variable":"y2",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 65"
+          }
+        ]
+      }
+    }
+  },
+  "hourly": {
+    "cloud": {
+      "Total cloud cover (%)": {
+        "type":"line",
+        "color":"#ff7f0e",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"totalCloudCover",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Total cloud cover spread": {
+        "type":"spread",
+        "color":"#ff7f0e",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"mean",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"totalCloudCover",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"delta",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"totalCloudCoverSpread",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Ex windspread": {
+        "type":"spread",
+        "color":"#ff7f0e",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"mean",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"delta",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 10"
+          }
+        ]
+      },
+      "Ex Clouds": {
+        "type":"cloud",
+        "color":"#19659b",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"hiclouds",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 75"
+          },
+          {
+            "variable":"midclouds",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 45"
+          },
+          {
+            "variable":"lowclouds",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 25"
+          }
+        ]
+      }
+    },
+    "wind": {
+      "Wind speed": {
+        "type":"area",
+        "color":"#4682b4",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"windspeedMin",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y2",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"windspeedMax",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Windspeed spread": {
+        "type":"spread",
+        "color":"#4682b4",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"mean",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"windspeedMean",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"delta",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"windspeedSpread",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Wind direction": {
+        "type":"arrow",
+        "color":"#4682b4",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"windspeedMean",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"angle",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"windDirection",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Gust Wind": {
+        "type":"line",
+        "color":"#97e54f",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"gust",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Ex Gust": {
+        "type":"line",
+        "color":"#97e54f",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 15"
+          }
+        ]
+      },
+      "Ex direction": {
+        "type":"arrow",
+        "color":"#4682b4",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => x[0] - 40"
+          },
+          {
+            "variable":"angle",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 45"
+          }
+        ]
+      },
+      "Ex windspread": {
+        "type":"spread",
+        "color":"#4682b4",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"mean",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"delta",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 10"
+          }
+        ]
+      }
+    },
+    "temperature": {
+      "Temperature": {
+        "type":"line",
+        "color":"#ff7bb5",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"temperature",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Temperature Spread": {
+        "type":"spread",
+        "color":"#ff7bb5",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"mean",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"temperature",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"delta",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"temperatureSpread",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Temperature Min/Max": {
+        "type":"area",
+        "color":"#ff7bb5",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          8,
+          4
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"temperatureMin",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y2",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"temperatureMax",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Dew Point Temp": {
+        "type":"line",
+        "color":"#e77bff",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"dewPointtemperature",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Dew Point Temp Min/Max": {
+        "type":"area",
+        "color":"#e77bff",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          2
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"dewPointTemperatureMin",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y2",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"dewPointTemperatureMax",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Ex temp": {
+        "type":"line",
+        "color":"#ff7bb5",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Ex temp min/max": {
+        "type":"area",
+        "color":"#ff7bb5",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          8,
+          4
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => x[0] - 50"
+          },
+          {
+            "variable":"y2",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => x[0] + 15"
+          }
+        ]
+      },
+      "Ex temp spread": {
+        "type":"spread",
+        "color":"#ff7bb5",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"mean",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"delta",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 10"
+          }
+        ]
+      },
+      "Ex dash": {
+        "type":"area",
+        "color":"#e77bff",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          2
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => x[0] - 75"
+          },
+          {
+            "variable":"y2",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => x[0] - 45"
+          }
+        ]
+      }
+    },
+    "rain": {
+      "Precipitation %": {
+        "type":"line",
+        "color":"#2ca02c",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"precipitationProbability",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Precipitation [mm]": {
+        "type":"bar",
+        "color":"#4682b4",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"precipitation",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Prec Spread [mm]": {
+        "type":"bigote",
+        "color":"#bcddf7",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"mean",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"precipitation",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"delta",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"precipitationSpread",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Snow Fraction [mm]": {
+        "type":"rect",
+        "color":"#2ca02c",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"precipitation",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"deltatime",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => (30 * 60)"
+          },
+          {
+            "variable":"y2",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"precipitation",
+            "accessor":"(x) => x[0]"
+          }
+        ]
+      },
+      "Ex Precipitation %": {
+        "type":"line",
+        "color":"#2ca02c",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 15"
+          }
+        ]
+      },
+      "Ex Bar": {
+        "type":"bar",
+        "color":"#4682b4",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 35"
+          }
+        ]
+      },
+      "Ex Bigote": {
+        "type":"bigote",
+        "color":"#bcddf7",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"mean",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 40"
+          },
+          {
+            "variable":"delta",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 25"
+          }
+        ]
+      },
+      "Ex Snow ": {
+        "type":"rect",
+        "color":"#2ca02c",
+        "shape":"circle",
+        "filled":false,
+        "dash": [
+          4,
+          0
+        ],
+        "values": [
+          {
+            "variable":"x",
+            "category":"telemetry",
+            "csc":"WeatherForecast",
+            "salindex":0,
+            "topic":"WeatherForecast_hourlyTrend",
+            "item":"timestamp",
+            "accessor":"(x) => x[0]"
+          },
+          {
+            "variable":"y",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 0"
+          },
+          {
+            "variable":"deltatime",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => (30 * 60)"
+          },
+          {
+            "variable":"y2",
+            "category":"telemetry",
+            "csc":"ATMCS",
+            "salindex":0,
+            "topic":"mount_AzEl_Encoders",
+            "item":"elevationCalculatedAngle",
+            "accessor":"(x) => 30"
+          }
+        ]
+      }
+    }
+  }
+}

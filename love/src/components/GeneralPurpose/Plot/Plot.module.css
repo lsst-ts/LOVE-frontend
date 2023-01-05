@@ -13,7 +13,7 @@
 .containerFlexCol{
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  /* overflow: hidden; */
   /* max-height: 500px; */
 }
 

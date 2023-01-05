@@ -2,6 +2,7 @@ import React, { Component }  from 'react';
 import PropTypes from 'prop-types';
 import {Table, Th, Tr, Td} from 'components/GeneralPurpose/SimpleTable/TableBorder';
 import CloudlessSkyIcon from 'components/icons/Weather/CloudlessSkyIcon/CloudlessSkyIcon';
+import CloudInSkyIcon from 'components/icons/Weather/CloudInSkyIcon/CloudInSkyIcon';
 import styles from './InfoHeader.module.css';
 
 export default class InfoHeader extends Component {
@@ -38,7 +39,7 @@ export default class InfoHeader extends Component {
       },
       {
         dayHour: 'Nov 21',
-        pictocode: <CloudlessSkyIcon/>,
+        pictocode: <CloudInSkyIcon/>,
         temperatureMax: 28,
         temperatureMin: 16,
         predictability: 20,
@@ -46,7 +47,7 @@ export default class InfoHeader extends Component {
       },
       {
         dayHour: 'Nov 22',
-        pictocode: <CloudlessSkyIcon/>,
+        pictocode: <CloudInSkyIcon/>,
         temperatureMax: 28,
         temperatureMin: 16,
         predictability: 50,
@@ -54,7 +55,7 @@ export default class InfoHeader extends Component {
       },
       {
         dayHour: 'Nov 23',
-        pictocode: <CloudlessSkyIcon/>,
+        pictocode: <CloudInSkyIcon/>,
         temperatureMax: 28,
         temperatureMin: 16,
         predictability: 80,
@@ -126,7 +127,7 @@ export default class InfoHeader extends Component {
       },
       {
         dayHour: 'Dic 02',
-        pictocode: <CloudlessSkyIcon/>,
+        pictocode: <CloudInSkyIcon/>,
         temperatureMax: 28,
         temperatureMin: 16,
         predictability: 40,
