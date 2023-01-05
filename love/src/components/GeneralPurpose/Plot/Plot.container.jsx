@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addGroup, requestGroupRemoval } from 'redux/actions/ws';
+import { addGroup, removeGroup, requestGroupRemoval } from 'redux/actions/ws';
 import { getStreamsData, getEfdConfig, getTaiToUtc } from 'redux/selectors';
 import Plot from './Plot';
 
@@ -144,7 +144,7 @@ const PlotContainer = ({
 
   const { containerNode } = props;
 
-  if (!containerNode) {
+  if (!props.containerNode) {
     return (
       <div ref={containerRef}>
         <Plot
@@ -153,7 +153,7 @@ const PlotContainer = ({
           unsubscribeToStreams={unsubscribeToStreams}
           getStreamData={getStreamData}
           {...props}
-          containerNode={containerRef.current?.parentNode}
+          containerNode={containerRef?.current?.parentNode}
         />
       </div>
     );
@@ -183,24 +183,19 @@ const getGroupNames = (inputs) => {
       }
     },
   );
-  return inputsMap.flat();
+  return [...new Set(inputsMap.flat())];
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
+  const inputs = ownProps.inputs || schema.props.inputs.default;
+  const subscriptions = getGroupNames(inputs);
   return {
+    subscriptions,
     subscribeToStreams: () => {
-      const inputs = ownProps.inputs || schema.props.inputs.default;
-      const groupNames = getGroupNames(inputs);
-      groupNames.forEach((groupName) => {
-        dispatch(addGroup(groupName));
-      });
+      subscriptions.forEach((s) => dispatch(addGroup(s)));
     },
     unsubscribeToStreams: () => {
-      const inputs = ownProps.inputs || schema.props.inputs.default;
-      const groupNames = getGroupNames(inputs);
-      groupNames.forEach((groupName) => {
-        dispatch(requestGroupRemoval(groupName));
-      });
+      subscriptions.forEach((s) => dispatch(removeGroup(s)));
     },
   };
 };
@@ -212,6 +207,7 @@ const mapStateToProps = (state, ownProps) => {
   const taiToUtc = getTaiToUtc(state);
   const efdConfigFile = getEfdConfig(state);
   return {
+    inputs,
     streams,
     taiToUtc,
     efdConfigFile,

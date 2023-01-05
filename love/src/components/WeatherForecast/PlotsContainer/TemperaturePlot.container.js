@@ -356,7 +356,7 @@ const TemperaturePlotContainer = ({ subscribeToStreams, unsubscribeToStreams, ..
           subscribeToStreams={subscribeToStreams}
           unsubscribeToStreams={unsubscribeToStreams}
           {...props}
-          containerNode={containerRef?.current}
+          containerNode={containerRef?.current?.parentNode}
         />
       </div>
     );

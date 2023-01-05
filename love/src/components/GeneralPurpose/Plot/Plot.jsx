@@ -67,6 +67,7 @@ export default class Plot extends Component {
 
   constructor(props) {
     super(props);
+    console.log('maxHeight', this.props.maxHeight);
     this.state = {
       data: {},
       isLive: true,
@@ -372,6 +373,8 @@ export default class Plot extends Component {
           ...(markType !== undefined ? { markType } : {}),
         };
       });
+
+    console.log('PLOT this.props.container', this.props.containerNode);
 
     return (
       <>

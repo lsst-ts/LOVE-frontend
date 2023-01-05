@@ -405,7 +405,6 @@ class VegaTimeseriesPlot extends Component {
           mark: {
             type: 'text',
             dx: 0,
-            dy: 0,
             fontSize: 24,
             color: "#d3e1eb"
           },
@@ -955,7 +954,6 @@ class VegaTimeseriesPlot extends Component {
         this.resizeObserver = new ResizeObserver((entries) => {
           const container = entries[0];
 
-          console.log('componentDidUpdate() container.contentRect.height', container.contentRect.height )
           this.setState({
             containerHeight: container.contentRect.height,
             containerWidth: container.contentRect.width,
@@ -991,7 +989,6 @@ class VegaTimeseriesPlot extends Component {
         this.resizeObserver = new ResizeObserver((entries) => {
           const container = entries[0];
           
-          console.log('componentDidUpdate() container.contentRect.height', container.contentRect.height );
           this.setState({
             containerHeight: container.contentRect.height,
             containerWidth: container.contentRect.width,
@@ -1024,8 +1021,6 @@ class VegaTimeseriesPlot extends Component {
   render() {
     const { layers } = this.props;
 
-    console.log('layers', layers);
-    console.log('spec', this.state.spec);
     return (
       <VegaLite
         style={{
