@@ -107,11 +107,11 @@ class CCDDetail extends Component {
 
   render() {
     const { ccd, showNeighbors, selectNeighborCCD } = this.props;
-    const barHeight = 20;
+    console.log(ccd);
     return showNeighbors ? (
       <Neighbors selectNeighbor={selectNeighborCCD}>{this.renderPlots()}</Neighbors>
     ) : (
-      <div style={{ height: '100%' }}>{this.renderPlots()}</div>
+      <div>{this.renderPlots()}</div>
     );
   }
 }

@@ -30,7 +30,7 @@ class RaftDetail extends Component {
   }
 
   renderCCDsPlots() {
-    const { raft, selectedCCD, selectedCCDVar, setSelectedCCD } = this.props;
+    const { raft, selectedCCD, selectedCCDVar, setSelectedCCD, setHoveredCCD, setHoveredReb } = this.props;
     const plots = [];
     raft.ccds.forEach((c) => {
       plots.push({
@@ -61,10 +61,14 @@ class RaftDetail extends Component {
           <div
             key={`c${i}`}
             ref={this.CCDsrefs[i]}
-            style={{ border: `2px solid ${COLOR_MAPPING[raft.ccds[i].status]}` }}
+            style={{ border: `4px solid ${COLOR_MAPPING[raft.ccds[i].status]}` }}
             className={styles.plot}
             onClick={() => {
               setSelectedCCD(raft.ccds[i]);
+            }}
+            onMouseOver={() => {
+              setHoveredCCD(raft.ccds[i]);
+              setHoveredReb(null);
             }}
           >
             <PlotContainer
@@ -82,7 +86,7 @@ class RaftDetail extends Component {
   }
 
   renderRebsPlots() {
-    const { raft, selectedReb, selectedRebVar, setSelectedReb } = this.props;
+    const { raft, selectedReb, selectedRebVar, setSelectedReb, setHoveredCCD, setHoveredReb } = this.props;
     const plots = [];
     raft.rebs.forEach((r) => {
       plots.push({
@@ -117,6 +121,11 @@ class RaftDetail extends Component {
             className={styles.plot}
             onClick={() => {
               setSelectedReb(raft.rebs[i]);
+            }}
+            onMouseOver={() => {
+              setHoveredReb(raft.rebs[i]);
+              setHoveredCCD(null);
+              
             }}
           >
             <PlotContainer

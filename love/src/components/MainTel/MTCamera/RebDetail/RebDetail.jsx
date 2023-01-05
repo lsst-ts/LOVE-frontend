@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
+import Neighbors from 'components/GeneralPurpose/Neighbors/Neighbors';
 import styles from './RebDetail.module.css';
-import { rgb } from 'd3';
 
 class RebDetail extends Component {
   constructor() {
     super();
+    this.refs = [
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+    ];
     this.state = {};
   }
   renderPlots() {
@@ -78,25 +86,19 @@ class RebDetail extends Component {
         },
       },
     ];
-    const refs = [
-      React.createRef(),
-      React.createRef(),
-      React.createRef(),
-      React.createRef(),
-      React.createRef(),
-      React.createRef(),
-    ];
+
     return (
       <div className={styles.plotsContainer}>
         {plots.map((p, i) => (
-          <div ref={refs[i]} className={styles.plot}>
+          <div ref={this.refs[i]} className={styles.plot}>
             <PlotContainer
               inputs={p}
-              containerNode={refs[i]}
+              containerNode={this.refs[i]}
               xAxisTitle="Time"
               yAxisTitle="Value"
-              // legendPosition="bottom"
+              legendPosition="bottom"
             />
+            <div>Plot</div>
           </div>
         ))}
       </div>
@@ -104,68 +106,11 @@ class RebDetail extends Component {
   }
 
   render() {
-    const { reb, selectNeighborReb } = this.props;
-    const barHeight = 20;
-    return (
-      <div className={styles.container} style={{ padding: barHeight }}>
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: barHeight,
-            backgroundColor: 'rgb(255,0,0,.5)',
-          }}
-          onClick={() => selectNeighborReb('top')}
-        >
-          UP
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: barHeight,
-            backgroundColor: 'rgb(255,50,0,.5)',
-            transformOrigin: 'center',
-            transform: 'rotate(90deg) translate(50%, -230px)',
-          }}
-          onClick={() => selectNeighborReb('right')}
-        >
-          RIGHT
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: barHeight,
-            backgroundColor: 'rgb(255,150,50,.5)',
-          }}
-          onClick={() => selectNeighborReb('bottom')}
-        >
-          BOTTOM
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: barHeight,
-            backgroundColor: 'rgb(50,255,50,.5)',
-            transformOrigin: 'center',
-            transform: 'rotate(90deg) translate(50%, 230px)',
-          }}
-          onClick={() => selectNeighborReb('left')}
-        >
-          LEFT
-        </div>
-        {this.renderPlots()}
-      </div>
+    const { reb, showNeighbors, selectNeighborReb } = this.props;
+    return showNeighbors ? (
+      <Neighbors selectNeighbor={selectNeighborReb}>{this.renderPlots()}</Neighbors>
+    ) : (
+      <div>{this.renderPlots()}</div>
     );
   }
 }

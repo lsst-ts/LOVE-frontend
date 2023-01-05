@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import styles from './MTCamera.module.css';
 import FocalPlaneSummaryDetail from './FocalPlaneSummaryDetail/FocalPlaneSummaryDetail';
 import { mtcameraRaftsNeighborsMapping } from 'Config';
+import RebDetail from './RebDetail/RebDetail';
 
 const rafts = [];
 const secondaryRafts = [0, 4, 20, 24];
@@ -121,7 +122,7 @@ class MTCamera extends Component {
   componentDidUpdate() {
     d3.select('#focalplane').call(d3.zoom().scaleExtent([0.5, 5]).on('zoom', this.zoomed));
     d3.select('#raftdetail').call(d3.zoom().scaleExtent([0.5, 5]).on('zoom', this.zoomed));
-    d3.select('#ccddetail').call(d3.zoom().scaleExtent([0.5, 5]).on('zoom', this.zoomed));
+    d3.select('#ccdrebdetail').call(d3.zoom().scaleExtent([0.5, 5]).on('zoom', this.zoomed));
   }
 
   zoomed = () => {
@@ -132,10 +133,10 @@ class MTCamera extends Component {
     if (targetId == null) return;
     if (targetId === 'focalplane') baseK = 0;
     else if (targetId === 'raftdetail') baseK = 1;
-    else if (targetId === 'ccddetail') baseK = 2;
+    else if (targetId === 'ccdrebdetail') baseK = 2;
 
     const k = d3.event.transform.k + baseK;
-    let newActiveViewId, newSelectedRaft;
+    let newActiveViewId, newSelectedRaft, newSelectedCCD, newSelectedReb;
     if (k >= 0 && k < 2) {
       newActiveViewId = 'focalplane';
     }
@@ -144,7 +145,9 @@ class MTCamera extends Component {
       newSelectedRaft = this.state.hoveredRaft;
     }
     if (k >= 3 && k < 4) {
-      newActiveViewId = 'ccddetail';
+      newActiveViewId = 'ccdrebdetail';
+      if (this.state.hoveredCCD) newSelectedCCD = this.state.hoveredCCD;
+      else if (this.state.hoveredReb) newSelectedReb = this.state.hoveredReb;
     }
 
     function d3TransformToString(transform) {
@@ -157,20 +160,23 @@ class MTCamera extends Component {
     } else if (targetId === 'raftdetail') {
       d3.select('#raftdetail').style('transform', d3TransformToString(d3.event.transform));
       d3.select('#raftdetail').style('transform-origin', '0 0');
-    } else if (targetId === 'ccddetail') {
-      d3.select('#ccddetail').style('transform', d3TransformToString(d3.event.transform));
-      d3.select('#ccddetail').style('transform-origin', '0 0');
+    } else if (targetId === 'ccdrebdetail') {
+      d3.select('#ccdrebdetail').style('transform', d3TransformToString(d3.event.transform));
+      d3.select('#ccdrebdetail').style('transform-origin', '0 0');
     }
 
     this.setState((prevState) => ({
       activeViewId: newActiveViewId,
       selectedRaft: newSelectedRaft ?? prevState.selectedRaft,
+      selectedCCD: newSelectedCCD,
+      selectedReb: newSelectedReb,
       zoomLevel: k,
     }));
   };
 
   render() {
-    const { selectedCCD, hoveredRaft, selectedRaft, hoveredCCD } = this.state;
+    const { selectedCCD, hoveredRaft, selectedRaft, hoveredCCD, hoveredReb } = this.state;
+    // console.log(hoveredCCD, hoveredReb);
     return this.getComponent();
   }
 
@@ -180,7 +186,8 @@ class MTCamera extends Component {
     return (
       <div className={styles.container}>
         <div className={styles.focalPlanceContainer}>
-          {zoomLevel >= 3 && zoomLevel < 4 && this.getCCDdetail()}
+          {zoomLevel >= 3 && zoomLevel < 4 && selectedCCD && this.getCCDdetail()}
+          {zoomLevel >= 3 && zoomLevel < 4 && selectedReb && this.getRebDetail()}
           {zoomLevel >= 2 && zoomLevel < 3 && this.getRaftdetail()}
           {zoomLevel >= 0 && zoomLevel < 2 && this.getMTCamera()}
         </div>
@@ -264,6 +271,8 @@ class MTCamera extends Component {
           setSelectedCCD={this.setSelectedCCD}
           setSelectedReb={this.setSelectedReb}
           setSelectedCCDVar={this.setSelectedCCDVar}
+          setHoveredCCD={this.setHoveredCCD}
+          setHoveredReb={this.setHoveredReb}
           selectNeighborRaft={this.selectNeighborRaft}
           hVBiasSwitch={hVBiasSwitch}
           anaV={anaV}
@@ -276,17 +285,22 @@ class MTCamera extends Component {
   getCCDdetail() {
     const { selectedCCD } = this.state;
     return (
-      <div id="ccddetail">
+      <div id="ccdrebdetail">
         <CCDDetail
           ccd={selectedCCD}
           showNeighbors={true}
           selectNeighborCCD={this.selectNeighborCCD}
-          gDV={gDV}
-          oDI={oDI}
-          oDV={oDV}
-          oGV={oGV}
-          rDV={rDV}
-          temp={temp}
+        />
+      </div>
+    );
+  }
+
+  getRebDetail() {
+    const { selectedReb } = this.state;
+    return (
+      <div id="ccdrebdetail">
+        <RebDetail
+          reb={selectedReb}
         />
       </div>
     );
