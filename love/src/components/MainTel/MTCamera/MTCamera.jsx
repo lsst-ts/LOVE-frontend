@@ -10,22 +10,26 @@ import { mtcameraRaftsNeighborsMapping } from 'Config';
 import RebDetail from './RebDetail/RebDetail';
 
 const rafts = [];
-const secondaryRafts = [0, 4, 20, 24];
+const secondaryCCDs = [
+  0, 1, 2, 3, 4, /* 5, */ 6, /* 7, */ /* 8, */
+  36, 37, 38, /* 39, */ 40, 41, /* 42, */ /* 43, */ 44,
+  180, /* 181, */ /* 182, */ 183, 184, /* 185, */ 186, 187, 188,
+  /* 216, */ /* 217, */ 218, /* 219, */ 220, 221, 222, 223, 224,
+];
 for (let i = 0; i < 25; i++) {
   const ccds = [];
   const rebs = [];
-  if (!secondaryRafts.includes(i)) {
-    for (let j = 0; j < 9; j++) {
-      ccds.push({
-        id: i * 9 + (j + 1),
-        status: Math.ceil(Math.random() * 3),
-      });
-    }
-    for (let j = 0; j < 3; j++) {
-      rebs.push({
-        id: i * 3 + (j + 1),
-      });
-    }
+  for (let j = 0; j < 9; j++) {
+    const ccdId = i * 9 + (j + 1);
+    ccds.push({
+      id: ccdId,
+      status: !secondaryCCDs.includes(ccdId-1) ? Math.ceil(Math.random() * 3) : 0,
+    });
+  }
+  for (let j = 0; j < 3; j++) {
+    rebs.push({
+      id: i * 3 + (j + 1),
+    });
   }
 
   const neighborsIds = mtcameraRaftsNeighborsMapping[i + 1];
@@ -48,7 +52,8 @@ class MTCamera extends Component {
       hoveredRaft: null,
       hoveredCCD: null,
       hoveredReb: null,
-      selectedCCDVar: 'gDV',
+      // selectedCCDVar: 'gDV',
+      selectedCCDVar: null,
       selectedRebVar: 'anaI',
     };
   }
@@ -125,9 +130,15 @@ class MTCamera extends Component {
     d3.select('#ccdrebdetail').call(d3.zoom().scaleExtent([0.5, 5]).on('zoom', this.zoomed));
   }
 
+  /**
+   * Function to handle zooming in/out of the focalplane, raftdetail, and ccdrebdetail views
+   * It defines a baseK value that is added to the zoom level to determine which view to show
+   * Makes transformations to the shown view based on the zoom level
+   * Set the activeViewId and prevActiveViewId state variables and selectedRaft, selectedCCD, and selectedRebS
+   * @param {Object} d3.event - d3 event object
+   */
   zoomed = () => {
-    const { zoomLevel } = this.state;
-    const targetId = this.state.activeViewId;
+    const { zoomLevel, activeViewId:targetId, prevActiveViewId:prevTargetId, selectedCCDVar } = this.state;
 
     let baseK = 0;
     if (targetId == null) return;
@@ -136,15 +147,18 @@ class MTCamera extends Component {
     else if (targetId === 'ccdrebdetail') baseK = 2;
 
     const k = d3.event.transform.k + baseK;
-    let newActiveViewId, newSelectedRaft, newSelectedCCD, newSelectedReb;
-    if (k >= 0 && k < 2) {
+    console.log(targetId, d3.event.transform.k, baseK);
+    let newActiveViewId, newPrevActiveId, newSelectedRaft, newSelectedCCD, newSelectedReb, newSelectedCCDVar;
+    if (k >= 0 && k <= 1.5) {
       newActiveViewId = 'focalplane';
+      newSelectedCCDVar = null;
     }
-    if (k >= 2 && k < 3) {
+    if (k > 1.5 && k <= 2.5) {
       newActiveViewId = 'raftdetail';
       newSelectedRaft = this.state.hoveredRaft;
+      newSelectedCCDVar = selectedCCDVar ?? 'gDV';
     }
-    if (k >= 3 && k < 4) {
+    if (k > 2.5 && k <= 3.5) {
       newActiveViewId = 'ccdrebdetail';
       if (this.state.hoveredCCD) newSelectedCCD = this.state.hoveredCCD;
       else if (this.state.hoveredReb) newSelectedReb = this.state.hoveredReb;
@@ -170,6 +184,7 @@ class MTCamera extends Component {
       selectedRaft: newSelectedRaft ?? prevState.selectedRaft,
       selectedCCD: newSelectedCCD,
       selectedReb: newSelectedReb,
+      selectedCCDVar: newActiveViewId === 'focalplane' ? null : newSelectedCCDVar,
       zoomLevel: k,
     }));
   };
@@ -181,20 +196,21 @@ class MTCamera extends Component {
   }
 
   getComponent() {
-    const { selectedRaft, selectedCCD, selectedReb, selectedCCDVar, selectedRebVar, zoomLevel } = this.state;
+    const { selectedRaft, selectedCCD, selectedReb, selectedCCDVar, selectedRebVar, zoomLevel, activeViewId } = this.state;
     const { tempControlActive, hVBiasSwitch, anaV, power, gDV, oDI, oDV, oGV, rDV, temp } = this.props;
     return (
       <div className={styles.container}>
         <div className={styles.focalPlanceContainer}>
-          {zoomLevel >= 3 && zoomLevel < 4 && selectedCCD && this.getCCDdetail()}
-          {zoomLevel >= 3 && zoomLevel < 4 && selectedReb && this.getRebDetail()}
-          {zoomLevel >= 2 && zoomLevel < 3 && this.getRaftdetail()}
-          {zoomLevel >= 0 && zoomLevel < 2 && this.getMTCamera()}
+          {zoomLevel > 2.5 && zoomLevel <= 3.5 && selectedCCD && this.getCCDdetail()}
+          {zoomLevel > 2.5 && zoomLevel <= 3.5 && selectedReb && this.getRebDetail()}
+          {zoomLevel > 1.5 && zoomLevel <= 2.5 && this.getRaftdetail()}
+          {zoomLevel >= 0 && zoomLevel <= 1.5 && this.getMTCamera()}
         </div>
         <div className={styles.summaryDetailContainer}>
           {selectedRaft ? (
             <div className={styles.summaryDetail}>
               <FocalPlaneSummaryDetail
+                activeViewId={activeViewId}
                 selectedRaft={selectedRaft}
                 selectedCCD={selectedCCD}
                 selectedReb={selectedReb}
