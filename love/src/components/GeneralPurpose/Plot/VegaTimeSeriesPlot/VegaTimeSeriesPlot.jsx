@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { VegaLite } from 'react-vega';
 import styles from './VegaTimeSeriesPlot.module.css';
+import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
 
 
@@ -877,7 +878,6 @@ class VegaTimeseriesPlot extends Component {
   };
 
   updateSpec = () => {
-    console.log('VegaTimeSeriesPlot.updateSpec()');
     const layer = [];
     if (this.props.layers.clouds) layer.push(this.makeCloudLayer('clouds'));
     if (this.props.layers.areas) layer.push(this.makeAreaLayer('areas'));
@@ -1007,6 +1007,11 @@ class VegaTimeseriesPlot extends Component {
     }
 
     if (this.props.units?.x !== prevProps.units?.x || this.props.units?.y !== prevProps.units?.y) {
+      this.updateSpec();
+    }
+
+    console.log('isEqual layers', isEqual(prevProps.layers, this.props.layers));
+    if (!isEqual(prevProps.layers, this.props.layers) ) {
       this.updateSpec();
     }
   };

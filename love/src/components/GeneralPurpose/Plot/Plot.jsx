@@ -67,7 +67,6 @@ export default class Plot extends Component {
 
   constructor(props) {
     super(props);
-    console.log('maxHeight', this.props.maxHeight);
     this.state = {
       data: {},
       isLive: true,
@@ -188,7 +187,7 @@ export default class Plot extends Component {
       this.setState({ ...timeSeriesControlsProps });
     }
 
-    if (prevProps.inputs !== inputs) {
+    if (!isEqual(prevProps.inputs, inputs)) {
       const data = {};
       for (const key of Object.keys(inputs)) {
         data[key] = [];
@@ -196,7 +195,7 @@ export default class Plot extends Component {
       this.setState({ data });
     }
 
-    if (prevProps.inputs !== inputs || prevProps.streams !== streams) {
+    if (!isEqual(prevProps.inputs, inputs) || !isEqual(prevProps.streams, streams)) {
       const newData = {};
       for (const [inputName, inputConfig] of Object.entries(inputs)) {
         if (inputConfig.values) {
@@ -373,8 +372,6 @@ export default class Plot extends Component {
           ...(markType !== undefined ? { markType } : {}),
         };
       });
-
-    console.log('PLOT this.props.container', this.props.containerNode);
 
     return (
       <>
