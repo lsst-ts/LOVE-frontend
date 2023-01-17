@@ -1,8 +1,7 @@
 import React, { Component }  from 'react';
 import PropTypes from 'prop-types';
 import {Table, Th, Tr, Td} from 'components/GeneralPurpose/SimpleTable/TableBorder';
-import CloudlessSkyIcon from 'components/icons/Weather/CloudlessSkyIcon/CloudlessSkyIcon';
-import CloudInSkyIcon from 'components/icons/Weather/CloudInSkyIcon/CloudInSkyIcon';
+import WeatherForecastIcon from 'components/icons/WeatherForecastIcon/WeatherForecastIcon';
 import styles from './InfoHeader.module.css';
 
 export default class InfoHeader extends Component {
@@ -23,7 +22,7 @@ export default class InfoHeader extends Component {
     const data = [
       {
         dayHour: 'Nov 19',
-        pictocode: <CloudlessSkyIcon/>,
+        pictocode: <WeatherForecastIcon pictogramNumber={29}/>,
         temperatureMax: 28,
         temperatureMin: 16,
         predictability: 80,
@@ -31,7 +30,7 @@ export default class InfoHeader extends Component {
       },
       {
         dayHour: 'Nov 20',
-        pictocode: <CloudlessSkyIcon/>,
+        pictocode: <WeatherForecastIcon pictogramNumber={30}/>,
         temperatureMax: 28,
         temperatureMin: 16,
         predictability: 80,
@@ -39,7 +38,7 @@ export default class InfoHeader extends Component {
       },
       {
         dayHour: 'Nov 21',
-        pictocode: <CloudInSkyIcon/>,
+        pictocode: <WeatherForecastIcon pictogramNumber={31}/>,
         temperatureMax: 28,
         temperatureMin: 16,
         predictability: 20,
@@ -47,7 +46,7 @@ export default class InfoHeader extends Component {
       },
       {
         dayHour: 'Nov 22',
-        pictocode: <CloudInSkyIcon/>,
+        pictocode: <WeatherForecastIcon pictogramNumber={32}/>,
         temperatureMax: 28,
         temperatureMin: 16,
         predictability: 50,
@@ -55,7 +54,7 @@ export default class InfoHeader extends Component {
       },
       {
         dayHour: 'Nov 23',
-        pictocode: <CloudInSkyIcon/>,
+        pictocode: <WeatherForecastIcon pictogramNumber={33}/>,
         temperatureMax: 28,
         temperatureMin: 16,
         predictability: 80,
@@ -63,7 +62,7 @@ export default class InfoHeader extends Component {
       },
       {
         dayHour: 'Nov 24',
-        pictocode: <CloudlessSkyIcon/>,
+        pictocode: <WeatherForecastIcon pictogramNumber={34}/>,
         temperatureMax: 28,
         temperatureMin: 16,
         predictability: 60,
@@ -71,7 +70,7 @@ export default class InfoHeader extends Component {
       },
       {
         dayHour: 'Nov 25',
-        pictocode: <CloudlessSkyIcon/>,
+        pictocode: <WeatherForecastIcon pictogramNumber={35}/>,
         temperatureMax: 28,
         temperatureMin: 16,
         predictability: 40,
@@ -79,7 +78,7 @@ export default class InfoHeader extends Component {
       },
       {
         dayHour: 'Nov 26',
-        pictocode: <CloudlessSkyIcon/>,
+        pictocode: <WeatherForecastIcon pictogramNumber={22}/>,
         temperatureMax: 28,
         temperatureMin: 16,
         predictability: 80,
@@ -87,7 +86,7 @@ export default class InfoHeader extends Component {
       },
       {
         dayHour: 'Nov 27',
-        pictocode: <CloudlessSkyIcon/>,
+        pictocode: <WeatherForecastIcon pictogramNumber={23}/>,
         temperatureMax: 28,
         temperatureMin: 16,
         predictability: 80,
@@ -95,7 +94,7 @@ export default class InfoHeader extends Component {
       },
       {
         dayHour: 'Nov 28',
-        pictocode: <CloudlessSkyIcon/>,
+        pictocode: <WeatherForecastIcon pictogramNumber={24}/>,
         temperatureMax: 28,
         temperatureMin: 16,
         predictability: 80,
@@ -103,7 +102,7 @@ export default class InfoHeader extends Component {
       },
       {
         dayHour: 'Nov 29',
-        pictocode: <CloudlessSkyIcon/>,
+        pictocode: <WeatherForecastIcon pictogramNumber={25}/>,
         temperatureMax: 28,
         temperatureMin: 16,
         predictability: 100,
@@ -111,7 +110,7 @@ export default class InfoHeader extends Component {
       },
       {
         dayHour: 'Nov 30',
-        pictocode: <CloudlessSkyIcon/>,
+        pictocode: <WeatherForecastIcon pictogramNumber={26}/>,
         temperatureMax: 28,
         temperatureMin: 16,
         predictability: 90,
@@ -119,7 +118,7 @@ export default class InfoHeader extends Component {
       },
       {
         dayHour: 'Dic 01',
-        pictocode: <CloudlessSkyIcon/>,
+        pictocode: <WeatherForecastIcon pictogramNumber={27}/>,
         temperatureMax: 28,
         temperatureMin: 16,
         predictability: 70,
@@ -127,7 +126,7 @@ export default class InfoHeader extends Component {
       },
       {
         dayHour: 'Dic 02',
-        pictocode: <CloudInSkyIcon/>,
+        pictocode: <WeatherForecastIcon pictogramNumber={28}/>,
         temperatureMax: 28,
         temperatureMin: 16,
         predictability: 40,
