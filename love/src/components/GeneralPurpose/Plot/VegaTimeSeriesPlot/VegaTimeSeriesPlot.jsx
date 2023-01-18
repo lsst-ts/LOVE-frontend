@@ -143,6 +143,8 @@ class VegaTimeseriesPlot extends Component {
     /** If true, x axis labels will be rendered as timestamps */
     temporalXAxis: PropTypes.bool,
 
+    temporalXAxisFormat: PropTypes.string,
+
     /** Dictionary with units of measurements.
      * Will be rendered in the title as [<unit>]
      */
@@ -163,6 +165,7 @@ class VegaTimeseriesPlot extends Component {
     className: '',
     xAxisTitle: 'time',
     yAxisTitle: 'y axis title',
+    temporalXAxisFormat: '%H:%M:%S',
   };
 
   constructor(props) {
@@ -297,7 +300,7 @@ class VegaTimeseriesPlot extends Component {
           type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
           axis: {
             title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
-            format: '%H:%M:%S',
+            format: this.props.temporalXAxisFormat,
           },
           scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
         },
@@ -387,7 +390,7 @@ class VegaTimeseriesPlot extends Component {
               type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
               axis: {
                 title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
-                format: '%H:%M:%S',
+                format: this.props.temporalXAxisFormat,
               },
               scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
             },
@@ -418,7 +421,7 @@ class VegaTimeseriesPlot extends Component {
               type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
               axis: {
                 title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
-                format: '%H:%M:%S',
+                format: this.props.temporalXAxisFormat,
               },
               scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
             },
@@ -462,7 +465,7 @@ class VegaTimeseriesPlot extends Component {
               type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
               axis: {
                 title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
-                format: '%H:%M:%S',
+                format: this.props.temporalXAxisFormat,
               },
               scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
             },
@@ -488,7 +491,7 @@ class VegaTimeseriesPlot extends Component {
               type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
               axis: {
                 title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
-                format: '%H:%M:%S',
+                format: this.props.temporalXAxisFormat,
               },
               scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
             },
@@ -514,7 +517,7 @@ class VegaTimeseriesPlot extends Component {
               type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
               axis: {
                 title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
-                format: '%H:%M:%S',
+                format: this.props.temporalXAxisFormat,
               },
               scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
             },
@@ -578,7 +581,7 @@ class VegaTimeseriesPlot extends Component {
               type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
               axis: {
                 title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
-                format: '%H:%M:%S',
+                format: this.props.temporalXAxisFormat,
               },
               scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
             },
@@ -604,7 +607,7 @@ class VegaTimeseriesPlot extends Component {
               type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
               axis: {
                 title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
-                format: '%H:%M:%S',
+                format: this.props.temporalXAxisFormat,
               },
               scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
             },
@@ -673,7 +676,7 @@ class VegaTimeseriesPlot extends Component {
               type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
               axis: {
                 title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
-                format: '%H:%M:%S',
+                format: this.props.temporalXAxisFormat,
               },
               scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
             },
@@ -706,7 +709,7 @@ class VegaTimeseriesPlot extends Component {
               type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
               axis: {
                 title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
-                format: '%H:%M:%S',
+                format: this.props.temporalXAxisFormat,
               },
               scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
             },
@@ -739,7 +742,7 @@ class VegaTimeseriesPlot extends Component {
               type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
               axis: {
                 title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
-                format: '%H:%M:%S',
+                format: this.props.temporalXAxisFormat,
               },
               scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
             },
@@ -787,7 +790,7 @@ class VegaTimeseriesPlot extends Component {
               type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
               axis: {
                 title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
-                format: '%H:%M:%S',
+                format: this.props.temporalXAxisFormat,
               },
               scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
             },
@@ -796,7 +799,7 @@ class VegaTimeseriesPlot extends Component {
               type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
               axis: {
                 title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
-                format: '%H:%M:%S',
+                format: this.props.temporalXAxisFormat,
               },
               scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
             },
@@ -850,7 +853,7 @@ class VegaTimeseriesPlot extends Component {
               type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
               axis: {
                 title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
-                format: '%H:%M:%S',
+                format: this.props.temporalXAxisFormat,
               },
             },
             y: {

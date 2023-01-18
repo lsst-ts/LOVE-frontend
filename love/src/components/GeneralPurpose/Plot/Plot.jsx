@@ -38,12 +38,14 @@ export default class Plot extends Component {
     efdConfigFile: PropTypes.object,
     maxHeight: PropTypes.number,
     sliceSize: PropTypes.number,
+    temporalXAxisFormat: PropTypes.string,
   };
 
   static defaultProps = {
     maxHeight: 240,
     inputs: {},
     sliceSize: 1800,
+    temporalXAxisFormat: '%H:%M:%S',
   };
 
   static defaultStyles = [
@@ -306,7 +308,7 @@ export default class Plot extends Component {
     const { data, efdClients, containerWidth, containerHeight } = this.state;
     const { controls, xAxisTitle, yAxisTitle, inputs, legendPosition, timeSeriesControlsProps } = this.props;
     const { isLive, timeWindow, historicalData } = timeSeriesControlsProps ?? this.state;
-    const { streams } = this.props;
+    const { streams, temporalXAxisFormat } = this.props;
 
     const streamsItems = Object.entries(inputs).map(([_, inputConfig]) => {
       if (inputConfig.values) {
@@ -404,6 +406,7 @@ export default class Plot extends Component {
             width={containerWidth - 160} // from the .autogrid grid-template-columns
             height={containerHeight}
             className={styles.plot}
+            temporalXAxisFormat={temporalXAxisFormat}
           />
           <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
         </div>
@@ -420,6 +423,7 @@ export default class Plot extends Component {
               width={containerWidth - 30} // from the .autogrid grid-template-columns
               height={containerHeight}
               className={styles.plot}
+              temporalXAxisFormat={temporalXAxisFormat}
             />
           </div>
           <div ref={this.legendRef} className={styles.marginLegend}>
