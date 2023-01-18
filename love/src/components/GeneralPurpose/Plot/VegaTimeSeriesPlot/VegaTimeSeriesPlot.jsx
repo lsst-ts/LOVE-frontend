@@ -1010,7 +1010,6 @@ class VegaTimeseriesPlot extends Component {
       this.updateSpec();
     }
 
-    console.log('isEqual layers', isEqual(prevProps.layers, this.props.layers));
     if (!isEqual(prevProps.layers, this.props.layers) ) {
       this.updateSpec();
     }
