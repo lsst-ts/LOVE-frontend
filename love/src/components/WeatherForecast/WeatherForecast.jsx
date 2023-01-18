@@ -10,6 +10,7 @@ import WindPlotContainer from './PlotsContainer/WindPlot.container';
 import TemperaturePlotContainer from './PlotsContainer/TemperaturePlot.container';
 import RainPlotContainer from './PlotsContainer/RainPlot.container';
 import CloudPlotContainer from './PlotsContainer/CloudPlot.container';
+import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import InfoHeader from './InfoHeader/InfoHeader';
 import WEATHER from './WeatherForecastInputs.json';
 
@@ -36,17 +37,74 @@ export default class WeatherForecast extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      frecuency: 'daily',
-    };
 
     this.frecuencyOptions = ['daily', 'hourly'];
+    this.sliceSizeOptions = {'daily': 15, 'hourly': 28};
 
     this.windPlotRef = React.createRef();
     this.temperaturePlotRef = React.createRef();
     this.rainPlotRef = React.createRef();
     this.cloudPlotRef = React.createRef();
 
+    this.state = {
+      frecuency: 'daily',
+      cloud: WEATHER['cloud'],
+      wind: WEATHER['wind'],
+      temperature: WEATHER['temperature'],
+      rain: WEATHER['rain'],
+      sliceSize: this.getSliceSize('daily'),
+    };
+  }
+
+  getSliceSize(frecuency) {
+    if (frecuency === this.frecuencyOptions[0] || frecuency === this.frecuencyOptions[1]) {
+      console.log(this.sliceSizeOptions, this.sliceSizeOptions[frecuency]);
+      return this.sliceSizeOptions[frecuency];
+    } else {
+      return this.sliceSizeOptions[this.frecuencyOptions[0]]; // DEFAULT
+    }
+  }
+
+  getTopicWithFrecuency(prevTopic, frecuency){
+    if (prevTopic === 'WeatherForecast_dailyTrend' || prevTopic === 'WeatherForecast_hourlyTrend') {
+      if (frecuency === 'daily') return 'WeatherForecast_dailyTrend';
+      if (frecuency === 'hourly') return 'WeatherForecast_hourlyTrend';
+    } else {
+      return prevTopic;
+    }
+  }
+
+  getInput(plotName, frecuency) {
+    const inputs = this.props.weather[plotName];
+    let newInputs = {};
+    Object.entries(inputs).forEach(([name, input]) => {
+      newInputs[name] = {};
+      Object.entries(input).forEach(([key, value]) => {
+        if (key === 'values') {
+          newInputs[name]['values'] = [];
+          value.forEach((v) => {
+            let newValue = v;
+            newValue['topic'] = this.getTopicWithFrecuency(v.topic, frecuency);
+            newInputs[name][key].push(newValue);
+          })
+        } else {
+          newInputs[name][key] = value;
+        }
+      });
+    });
+    return newInputs;
+  }
+
+  toggleFrecuency(optionHourly) {
+    const option = optionHourly ? this.frecuencyOptions[1] : this.frecuencyOptions[0];
+    this.setState({
+      frecuency: option,
+      cloud: this.getInput('cloud', option),
+      wind: this.getInput('wind', option),
+      temperature: this.getInput('temperature', option),
+      rain: this.getInput('rain', option),
+      sliceSize: this.getSliceSize(option),
+    });
   }
 
   componentDidMount = () => {
@@ -75,7 +133,7 @@ export default class WeatherForecast extends Component {
               <Toggle
                 labels={['14 days', '28 hours']}
                 isLive={this.state.frecuency === this.frecuencyOptions[1]}
-                setLiveMode={(optionHours) => this.setState({frecuency: optionHours ? this.frecuencyOptions[1] : this.frecuencyOptions[0]})}
+                setLiveMode={(optionHours) => this.toggleFrecuency(optionHours)}
               />
             </div>
           </span>
@@ -93,12 +151,13 @@ export default class WeatherForecast extends Component {
           <div className={styles.fullSection}>
             <div className={styles.sectionTitle}>Cloud</div>
             <div ref={this.cloudPlotRef} className={styles.plot}>
-              <CloudPlotContainer
+              <PlotContainer
                 containerNode={this.cloudPlotRef.current}
                 xAxisTitle="Time"
                 yAxisTitle=""
                 legendPosition="bottom"
-                inputs={this.props.weather[this.state.frecuency]?.['cloud'] ?? {}}
+                inputs={this.state.cloud}
+                sliceSize={this.state.sliceSize}
               />
             </div>
           </div>
@@ -108,12 +167,13 @@ export default class WeatherForecast extends Component {
           <div className={styles.fullSection}>
             <div className={styles.sectionTitle}>Wind</div>
             <div ref={this.windPlotRef} className={styles.plot}>
-              <WindPlotContainer
+              <PlotContainer
                 containerNode={this.windPlotRef.current}
                 xAxisTitle="Time"
                 yAxisTitle="Wind"
                 legendPosition="bottom"
-                inputs={this.props.weather[this.state.frecuency]?.['wind'] ?? {}}
+                inputs={this.state.wind}
+                sliceSize={this.state.sliceSize}
               />
             </div>
           </div>
@@ -123,12 +183,13 @@ export default class WeatherForecast extends Component {
           <div className={styles.fullSection}>
             <div className={styles.sectionTitle}>Temperature</div>
             <div ref={this.temperaturePlotRef} className={styles.plot}>
-              <TemperaturePlotContainer
+              <PlotContainer
                 containerNode={this.temperaturePlotRef.current}
                 xAxisTitle="Time"
                 yAxisTitle="Temperature"
                 legendPosition="bottom"
-                inputs={this.props.weather[this.state.frecuency]?.['temperature'] ?? {}}
+                inputs={this.state.temperature}
+                sliceSize={this.state.sliceSize}
               />
             </div>
           </div>
@@ -138,12 +199,13 @@ export default class WeatherForecast extends Component {
           <div className={styles.fullSection}>
             <div className={styles.sectionTitle}>Rain</div>
             <div ref={this.rainPlotRef} className={styles.plot}>
-              <RainPlotContainer
+              <PlotContainer
                 containerNode={this.rainPlotRef.current}
                 xAxisTitle="Time"
                 yAxisTitle="Precipitation"
                 legendPosition="bottom"
-                inputs={this.props.weather[this.state.frecuency]?.['rain'] ?? {}}
+                inputs={this.state.rain}
+                sliceSize={this.state.sliceSize}
               />
             </div>
           </div>
