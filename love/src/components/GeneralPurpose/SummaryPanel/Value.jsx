@@ -34,6 +34,7 @@ const Value = ({
    otherwise use the stringified version */
   if (typeof children === 'object' && !React.isValidElement(children)) {
     if (children.value !== undefined) parsedChild = children.value;
+    if (children.units !== undefined) parsedChild = `${parsedChild.toFixed(2)} ${children.units}`;
     else parsedChild = JSON.stringify(children);
   }
   /** Display array of values when children is an array */
@@ -51,7 +52,7 @@ const Value = ({
     );
   }
   /** Display strings and numbers. Truncate to 4 decimal places in the case of numbers */
-  return <span className={styles.value}>{parsedChild.toFixed ? parsedChild.toFixed(3) : parsedChild}</span>;
+  return <span className={styles.value}>{parsedChild}</span>;
 };
 
 export default Value;
