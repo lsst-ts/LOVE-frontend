@@ -37,11 +37,13 @@ export default class Plot extends Component {
     timeSeriesControlsProps: PropTypes.object,
     efdConfigFile: PropTypes.object,
     maxHeight: PropTypes.number,
+    sliceSize: PropTypes.number,
   };
 
   static defaultProps = {
     maxHeight: 240,
     inputs: {},
+    sliceSize: 1800,
   };
 
   static defaultStyles = [
@@ -181,7 +183,7 @@ export default class Plot extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { timeSeriesControlsProps, inputs, streams } = this.props;
+    const { timeSeriesControlsProps, inputs, streams, sliceSize } = this.props;
     const { data } = this.state;
     if (prevProps.timeSeriesControlsProps !== timeSeriesControlsProps) {
       this.setState({ ...timeSeriesControlsProps });
@@ -224,9 +226,9 @@ export default class Plot extends Component {
             inputData.push(newValue);
           }
 
-          // Slice inputData array if it has more than 1800 datapoints (corresponding to one hour if telemetry is received every two seconds)
-          if (inputData.length > 1800) {
-            inputData = inputData.slice(-1800);
+          // Slice inputData array if it has more than sliceSize datapoints (corresponding to one hour if telemetry is received every two seconds)
+          if (inputData.length > sliceSize) {
+            inputData = inputData.slice(-1 * sliceSize);
           }
           newData[inputName] = inputData;
           
@@ -252,9 +254,9 @@ export default class Plot extends Component {
               inputData.push(newValue);
             }
 
-            // Slice inputData array if it has more than 1800 datapoints (corresponding to one hour if telemetry is received every two seconds)
-            if (inputData.length > 1800) {
-              inputData = inputData.slice(-1800);
+            // Slice inputData array if it has more than sliceSize datapoints (corresponding to one hour if telemetry is received every two seconds)
+            if (inputData.length > sliceSize) {
+              inputData = inputData.slice(-1 * sliceSize);
             }
             newData[inputName] = inputData;
         }
