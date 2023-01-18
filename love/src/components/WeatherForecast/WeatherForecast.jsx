@@ -40,6 +40,7 @@ export default class WeatherForecast extends Component {
 
     this.frecuencyOptions = ['daily', 'hourly'];
     this.sliceSizeOptions = {'daily': 15, 'hourly': 28};
+    this.temporalFormatOptions = {'daily': '%Y-%m-%d', 'hourly': '%H:%M:%S'};
 
     this.windPlotRef = React.createRef();
     this.temperaturePlotRef = React.createRef();
@@ -53,12 +54,20 @@ export default class WeatherForecast extends Component {
       temperature: WEATHER['temperature'],
       rain: WEATHER['rain'],
       sliceSize: this.getSliceSize('daily'),
+      temporalXAxisFormat: '%Y-%m-%d',
     };
+  }
+
+  getTemporalFormat(frecuency) {
+    if (frecuency === this.frecuencyOptions[0] || frecuency === this.frecuencyOptions[1]) {
+      return this.temporalFormatOptions[frecuency];
+    } else {
+      this.temporalFormatOptions[this.frecuencyOptions[0]]; // DEFAULT
+    }
   }
 
   getSliceSize(frecuency) {
     if (frecuency === this.frecuencyOptions[0] || frecuency === this.frecuencyOptions[1]) {
-      console.log(this.sliceSizeOptions, this.sliceSizeOptions[frecuency]);
       return this.sliceSizeOptions[frecuency];
     } else {
       return this.sliceSizeOptions[this.frecuencyOptions[0]]; // DEFAULT
@@ -104,6 +113,7 @@ export default class WeatherForecast extends Component {
       temperature: this.getInput('temperature', option),
       rain: this.getInput('rain', option),
       sliceSize: this.getSliceSize(option),
+      temporalXAxisFormat: this.getTemporalFormat(option),
     });
   }
 
@@ -158,6 +168,7 @@ export default class WeatherForecast extends Component {
                 legendPosition="bottom"
                 inputs={this.state.cloud}
                 sliceSize={this.state.sliceSize}
+                temporalXAxisFormat={this.state.temporalXAxisFormat}
               />
             </div>
           </div>
