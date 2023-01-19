@@ -1,0 +1,33 @@
+.container {
+    box-sizing: border-box;
+    border: 3px solid var(--second-primary-background-color);
+    border-radius: 0.5em;
+    padding: 1.5em 0.5em;
+    width: calc(50% - var(--content-padding));
+    box-sizing: border-box;
+    display: inline-grid;
+    align-content: flex-start;
+    background-color: var(--second-secondary-background-color);
+}
+
+.title {
+    text-align: left;
+}
+
+.filters {
+    display:grid;
+    grid-template-columns: 0.5em 0.5em 0.5em 0.5em 0.5em 0.5em;
+    padding: 0 1em;
+}
+
+.filter {
+    width: 20%;
+    border: 3px solid var(--second-primary-background-color);
+    box-sizing: border-box;
+    padding: 2em;
+}
+
+.separator {
+    border-top: 2px solid gray;
+    padding: 1em 0;
+}

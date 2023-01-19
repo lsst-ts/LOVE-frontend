@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.allComponentes {
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-row-gap: 0.5em;
+    grid-column-gap: 1em;
+    align-items: center;
+    padding: 1em 2em;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5em;
+}

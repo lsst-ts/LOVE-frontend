@@ -1,0 +1,14 @@
+.container {
+    background-color: var(--second-secondary-background-color);
+    border-radius: 0.5em;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 1em 2em;
+    border: 3px solid var(--second-primary-background-color);
+    border-radius: 0.5em;
+}
+
+.summaryPanel {
+    display: contents;
+    padding: 20px;
+  }

@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './Scheduler.modules.css';
+import styles from './Scheduler.module.css';
+import Headers from './Headers/Headers';
+import Filters from './Filters/Filters';
+import Summary from './Summary/Summary';
+import CurrentTarget from './CurrentTarget/CurrentTarget';
+import SkyMap from './SkyMap/SkyMap';
+import Plots from './Plots/Plots';
+import AccordionSummary from './AccordionSummary/AccordionSummary';
 
 export default class Scheduler extends Component {
     static propTypes = {
@@ -28,8 +35,25 @@ export default class Scheduler extends Component {
 
     render() {
         return (
-            <div>
-                <h2>Scheduler components</h2>
+            <div className={styles.container}>
+                <Headers/>
+                <div className={styles.allComponentes}>
+                    {/* column 1 */}
+                    <div>
+                        <Filters/>
+                        <Summary/>
+                    </div>
+                    {/* column 2 */}
+                    <div>
+                        <CurrentTarget/>
+                        <SkyMap/>
+                        <Plots/>
+                    </div>
+                    {/* column 3 */}
+                    <div>
+                        <AccordionSummary/>
+                    </div>
+                </div>
             </div>
         );
     };
