@@ -20,6 +20,7 @@ import NonExposureDetail from './NonExposureDetail';
 import NonExposureEdit from './NonExposureEdit';
 import styles from './NonExposure.module.css';
 import { CSVLink } from 'react-csv';
+import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 
 const moment = extendMoment(Moment);
 
@@ -55,6 +56,7 @@ export default class NonExposure extends Component {
       modeEdit: false,
       selected: null,
       updatingLogs: false,
+      showDateRangeFilter: false,
       logs: [],
       range: [],
     };
@@ -235,15 +237,17 @@ export default class NonExposure extends Component {
   }
 
   render() {
-    const modeView = this.state.modeView;
-    const modeEdit = this.state.modeEdit;
+    const { modeView, modeEdit, showDateRangeFilter } = this.state;
     const headers = Object.values(this.getHeaders());
 
     let filteredData = this.state.logs ?? [];
 
     // Filter by date range
-    const range = moment.range(this.props.selectedDateStart, this.props.selectedDateEnd);
-    filteredData = filteredData.filter((log) => range.contains(Moment(log.date_added + 'Z'))); // Need to add Z so moment identifies date as UTC
+    if (showDateRangeFilter) {
+      const range = moment.range(this.props.selectedDateStart, this.props.selectedDateEnd);
+      filteredData = filteredData.filter((log) => range.contains(Moment(log.date_added + 'Z'))); // Need to add Z so moment identifies date as UTC
+    }
+
 
     // Filter by type
     filteredData =
@@ -324,18 +328,26 @@ export default class NonExposure extends Component {
             Refresh data
           </Button>
 
-          <DateTimeRange
-            onChange={(date, type) => this.props.handleDateTimeRange(date, type)}
-            label="From:"
-            startDate={this.props.selectedDateStart}
-            endDate={this.props.selectedDateEnd}
-            startDateProps={{
-              maxDate: this.props.selectedDateEnd,
-            }}
-            endDateProps={{
-              minDate: this.props.selectedDateStart,
-            }}
+          <Toggle
+            isLive={showDateRangeFilter}
+            setLiveMode={(event) => this.setState({ showDateRangeFilter: event })}
+            labels={['Hide date range filter', 'Show']}
           />
+
+          {showDateRangeFilter &&
+            <DateTimeRange
+              onChange={(date, type) => this.props.handleDateTimeRange(date, type)}
+              label="From:"
+              startDate={this.props.selectedDateStart}
+              endDate={this.props.selectedDateEnd}
+              startDateProps={{
+                maxDate: this.props.selectedDateEnd,
+              }}
+              endDateProps={{
+                minDate: this.props.selectedDateStart,
+              }}
+            />
+          }
 
           <Select
             options={commentTypeOptions}
