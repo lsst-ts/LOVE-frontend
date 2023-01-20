@@ -53,8 +53,8 @@ export default class WeatherForecast extends Component {
       wind: WEATHER['wind'],
       temperature: WEATHER['temperature'],
       rain: WEATHER['rain'],
-      sliceSize: this.getSliceSize('daily'),
-      temporalXAxisFormat: '%Y-%m-%d',
+      sliceSize: this.sliceSizeOptions['daily'],
+      temporalXAxisFormat: this.temporalFormatOptions['daily'],
     };
   }
 
