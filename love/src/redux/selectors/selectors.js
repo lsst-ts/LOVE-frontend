@@ -755,6 +755,9 @@ export const getApertureShutter = (state) => {
     positionCommandedShutter: apertureShutter['telemetry-MTDome-0-apertureShutter']
       ? apertureShutter['telemetry-MTDome-0-apertureShutter'].positionCommanded.value
       : 0,
+    powerDrawShutter: apertureShutter['telemetry-MTDome-0-apertureShutter']
+      ? apertureShutter['telemetry-MTDome-0-apertureShutter']
+      : {},
   };
 };
 
@@ -781,6 +784,9 @@ export const getLightWindScreen = (state) => {
     positionCommandedLightWindScreen: ligthWindScreen['telemetry-MTDome-0-lightWindScreen']
       ? ligthWindScreen['telemetry-MTDome-0-lightWindScreen'].positionCommanded.value
       : 0,
+    powerDrawLWS: ligthWindScreen['telemetry-MTDome-0-lightWindScreen']
+      ? ligthWindScreen['telemetry-MTDome-0-lightWindScreen']
+      : {},
   };
 };
 
@@ -804,7 +810,7 @@ export const getPointingStatus = (state) => {
 };
 
 export const getLouversStatus = (state) => {
-  const subscriptions = ['telemetry-MTDome-0-louvers'];
+  const subscriptions = ['telemetry-MTDome-0-louvers', 'telemetry-ATDome-0-position',];
   const louvers = getStreamsData(state, subscriptions);
   return {
     actualPositionLouvers: louvers['telemetry-MTDome-0-louvers']
@@ -813,6 +819,12 @@ export const getLouversStatus = (state) => {
     commandedPositionLouvers: louvers['telemetry-MTDome-0-louvers']
       ? louvers['telemetry-MTDome-0-louvers'].positionCommanded.value
       : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    powerDrawLouvers: louvers['telemetry-MTDome-0-louvers']
+      ? louvers['telemetry-MTDome-0-louvers']
+      : {},
+    atDomePosition: louvers['telemetry-ATDome-0-position']
+      ? louvers['telemetry-ATDome-0-position']
+      : {},
   };
 };
 
