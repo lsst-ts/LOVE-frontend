@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './Scheduler.module.css';
 import Headers from './Headers/Headers';
 import Filters from './Filters/Filters';
-import Summary from './Summary/Summary';
+import Pointing from './Summary/Pointing/Pointing';
 import CurrentTarget from './CurrentTarget/CurrentTarget';
 import SkyMap from './SkyMap/SkyMap';
 import Plots from './Plots/Plots';
@@ -41,7 +41,7 @@ export default class Scheduler extends Component {
                     {/* column 1 */}
                     <div>
                         <Filters/>
-                        <Summary/>
+                        <Pointing/>
                     </div>
                     {/* column 2 */}
                     <div>

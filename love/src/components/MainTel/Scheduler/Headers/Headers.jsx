@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import styles from './Headers.module.css';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
-import Row from '../../../GeneralPurpose/SummaryPanel/Row';
 import Label from '../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
