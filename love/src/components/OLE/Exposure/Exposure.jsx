@@ -226,6 +226,7 @@ export default class Exposure extends Component {
 
           this.setState((prevState) => ({
             exposureFlags: { ...prevState.exposureFlags, [exposure['obs_id']]: flags },
+            messages: [...prevState.messages, ...messages]
           }));
         });
 
@@ -237,9 +238,6 @@ export default class Exposure extends Component {
   }
 
   componentDidMount() {
-    ManagerInterface.getListAllMessagesExposureLogs().then((data) => {
-      this.setState({ messages: data });
-    });
     this.setState({ range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd) });
     this.queryExposures();
   }
