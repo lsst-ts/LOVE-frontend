@@ -74,6 +74,7 @@ export default class ExposureAdd extends Component {
       confirmationModalText: '',
       imageTags: [],
       selectedTags: [],
+      updatingExposures: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -106,18 +107,23 @@ export default class ExposureAdd extends Component {
   componentDidUpdate(prevProps, prevState) {
     // TODO: only when the filter is shown
     if (prevState.selectedInstrument !== this.state.selectedInstrument) {
-      ManagerInterface.getListExposureLogs(this.state.selectedInstrument).then((data) => {
-        const observationIds = data.map((exposure) => exposure.obs_id);
-        const dayObs = data.map((exposure) => ({
-          obs_id: exposure.obs_id,
-          day_obs: exposure.day_obs,
-        }));
-        this.setState({
-          observationIds,
-          dayObs,
-        });
-      });
+      this.queryExposures();
     }
+  }
+
+  queryExposures(callback) {
+    ManagerInterface.getListExposureLogs(this.state.selectedInstrument).then((data) => {
+      const observationIds = data.map((exposure) => exposure.obs_id);
+      const dayObs = data.map((exposure) => ({
+        obs_id: exposure.obs_id,
+        day_obs: exposure.day_obs,
+      }));
+      this.setState({
+        observationIds,
+        dayObs,
+      });
+    });
+    if (callback) callback();
   }
 
   handleSubmit(event) {
@@ -261,6 +267,18 @@ export default class ExposureAdd extends Component {
                   />
                 </span>
 
+                <Button
+                  disabled={this.state.updatingExposures}
+                  onClick={() => {
+                    this.setState({ updatingExposures: true });
+                    this.queryExposures(() => {
+                      this.setState({ updatingExposures: false });
+                    });
+                  }}
+                >
+                  Refresh data
+                </Button>
+
                 <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
                 <span className={styles.value}>
                   <Multiselect
@@ -325,6 +343,18 @@ export default class ExposureAdd extends Component {
                         selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
                       />
                     </span>
+
+                    <Button
+                      disabled={this.state.updatingExposures}
+                      onClick={() => {
+                        this.setState({ updatingExposures: true });
+                        this.queryExposures(() => {
+                          this.setState({ updatingExposures: false });
+                        });
+                      }}
+                    >
+                      Refresh data
+                    </Button>
 
                     <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
                     <span className={styles.value} style={{ flex: 1 }}>
