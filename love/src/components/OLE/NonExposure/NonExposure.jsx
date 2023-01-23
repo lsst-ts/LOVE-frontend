@@ -337,7 +337,7 @@ export default class NonExposure extends Component {
           {showDateRangeFilter &&
             <DateTimeRange
               onChange={(date, type) => this.props.handleDateTimeRange(date, type)}
-              label="From:"
+              label="Date & Time (UTC)"
               startDate={this.props.selectedDateStart}
               endDate={this.props.selectedDateEnd}
               startDateProps={{
