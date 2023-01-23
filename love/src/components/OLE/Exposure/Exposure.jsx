@@ -366,7 +366,7 @@ export default class Exposure extends Component {
               onChange={(date, type) => {
                 this.props.handleDateTimeRange(date, type);
               }}
-              label="Date & Time"
+              label="Date & Time (UTC)"
               startDate={this.props.selectedDateStart}
               endDate={this.props.selectedDateEnd}
               startDateProps={{ closeOnSelect: true }}
