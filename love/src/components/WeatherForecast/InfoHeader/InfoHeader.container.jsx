@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getInfoHeaderDailyTrend, getInfoHeaderHourlyTrend, getEfdConfig, getTaiToUtc } from 'redux/selectors';
+import { getInfoHeaderDailyTrend, getInfoHeaderHourlyTrend, getEfdConfig, getTaiToUtc, getWeatherForecastState } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import InfoHeader from './InfoHeader';
 
@@ -38,14 +38,15 @@ const InfoHeaderContainer = ({ subscribeToStreams, unsubscribeToStreams, ...prop
 };
 
 const mapStateToProps = (state) => {
-  const infoHeaderDailyTrend = getInfoHeaderDailyTrend(state);
-  const infoHeaderHourlyTrend = getInfoHeaderHourlyTrend(state);
+  const daily = getInfoHeaderDailyTrend(state);
+  const hourly = getInfoHeaderHourlyTrend(state);
   const taiToUtc = getTaiToUtc(state);
   const efdConfigFile = getEfdConfig(state);
 
   return {
-    infoHeaderDailyTrend,
-    infoHeaderHourlyTrend,
+    state,
+    daily,
+    hourly,
     taiToUtc,
     efdConfigFile,
   };

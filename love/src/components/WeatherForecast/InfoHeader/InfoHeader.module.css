@@ -24,6 +24,10 @@
   background: #00A26D;
 }
 
+.default {
+  background: #808080;
+}
+
 .predictability {
   height: 15px;
 }
@@ -48,7 +52,11 @@ td > .predictability {
   padding: 0px !important;
 }
 
-.scrollX {
+.infoHeaderTable {
   overflow-x: auto;
   overflow-y: hidden;
+}
+
+.paddingInfoHeader {
+  padding: 0.2em 0.4em !important;
 }

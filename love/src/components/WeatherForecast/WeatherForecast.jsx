@@ -11,7 +11,9 @@ import TemperaturePlotContainer from './PlotsContainer/TemperaturePlot.container
 import RainPlotContainer from './PlotsContainer/RainPlot.container';
 import CloudPlotContainer from './PlotsContainer/CloudPlot.container';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
-import InfoHeader from './InfoHeader/InfoHeader';
+import InfoHeaderContainer from './InfoHeader/InfoHeader.container';
+import {weatherForecastStateMap, weatherForecastStatetoStyle} from 'Config';
+import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import WEATHER from './WeatherForecastInputs.json';
 
 
@@ -126,18 +128,19 @@ export default class WeatherForecast extends Component {
   };
 
   render() {
-
-    const weatherForecastState = {
-      class: styles.ok,
-      name: 'ENABLED'
-    };
+    const { weatherForecastState } = this.props;
+    const summaryState = CSCDetail.states[weatherForecastState];
+    const detailedStateValue = {
+      name: summaryState.name,
+      class: summaryState.class,
+    }; 
 
     return (
       <div className={styles.container}>
         
         <div className={styles.weatherForecastControls}>
           <span className={styles.title}>WeatherForecast</span>
-          <span className={[weatherForecastState.class, styles.weatherForecastState].join(' ')}>{weatherForecastState.name}</span>
+          <span className={[detailedStateValue.class, styles.weatherForecastState].join(' ')}>{summaryState.name}</span>
           <span>
             <div className={styles.toggleContainer}>
               <Toggle
@@ -151,7 +154,7 @@ export default class WeatherForecast extends Component {
 
         {this.props.infoHeader && (
           <div className={styles.fullSection}>
-            <InfoHeader
+            <InfoHeaderContainer
               frecuency={this.state.frecuency}
             />
           </div>
