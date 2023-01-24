@@ -1,5 +1,6 @@
 import { createCachedSelector } from 're-reselect';
 import { flatMap, arrayRandomBoolean } from '../../Utils';
+import Moment from 'moment';
 
 export const getToken = (state) => state.auth.token;
 
@@ -1388,18 +1389,32 @@ export const getBlocksInfo = (state, salindex) => {
 };
 
 /**
+ * Selects the Weather Forecast State for Weather Forecat view
+ * @param {object} state
+ */
+export const getWeatherForecastState = (state) => {
+  const subscriptions = ['event-WeatherForecast-0-summaryState'];
+  const summaryData = getStreamsData(state, subscriptions);
+  return {
+    weatherForecastState: summaryData['event-WeatherForecast-0-summaryState']?.[0]?.state.value ?? 0,
+  };
+}
+
+/**
  * Selects the Weather Forecast Daily Trend
  * @param {object} state
  */
 export const getInfoHeaderDailyTrend = (state) => {
   const subscriptions = ['telemetry-WeatherForecast-0-WeatherForecast_dailyTrend'];
   const dailyTrendData = getStreamsData(state, subscriptions);
+  const now = Moment()
   return {
-    pictocode: dailyTrendData['telemetry-WeatherForecast-0-WeatherForecast_dailyTrend']?.pictocode.value ?? [],
-    temperatureMax: dailyTrendData['telemetry-WeatherForecast-0-WeatherForecast_dailyTrend']?.temperatureMax.value ?? [],
-    temperatureMin: dailyTrendData['telemetry-WeatherForecast-0-WeatherForecast_dailyTrend']?.temperatureMin.value ?? [],
-    predictability: dailyTrendData['telemetry-WeatherForecast-0-WeatherForecast_dailyTrend']?.predictability.value ?? [],
-    predictabilityClass: dailyTrendData['telemetry-WeatherForecast-0-WeatherForecast_dailyTrend']?.predictabilityClass.value ?? [],
+    timestamp: dailyTrendData['telemetry-WeatherForecast-0-WeatherForecast_dailyTrend']?.timestamp.value ?? [now, now, now, now, now, now, now, now, now, now, now, now, now, now, now],
+    pictocode: dailyTrendData['telemetry-WeatherForecast-0-WeatherForecast_dailyTrend']?.pictocode.value ?? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+    temperatureMax: dailyTrendData['telemetry-WeatherForecast-0-WeatherForecast_dailyTrend']?.temperatureMax.value ?? [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35],
+    temperatureMin: dailyTrendData['telemetry-WeatherForecast-0-WeatherForecast_dailyTrend']?.temperatureMin.value ?? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+    predictability: dailyTrendData['telemetry-WeatherForecast-0-WeatherForecast_dailyTrend']?.predictability.value ?? [70, 60, 63, 64, 65, 66, 77, 78, 79, 80, 81, 82, 83, 84, 85],
+    predictabilityClass: dailyTrendData['telemetry-WeatherForecast-0-WeatherForecast_dailyTrend']?.predictabilityClass.value ?? ['very low', 'very low', 'low', 'low', 'low', 'very high', 'very high', 'very high', 'high', 'high', 'medium', 'medium', 'medium', 'medium', 'medium'],
   };
 };
 
@@ -1411,11 +1426,12 @@ export const getInfoHeaderHourlyTrend = (state) => {
   const subscriptions = ['telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend'];
   const hourlyTrendData = getStreamsData(state, subscriptions);
   return {
-    pictocode: hourlyTrendData['telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend']?.pictocode.value ?? [],
-    temperatureMax: hourlyTrendData['telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend']?.temperatureMax.value ?? [],
-    temperatureMin: hourlyTrendData['telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend']?.temperatureMin.value ?? [],
-    predictability: hourlyTrendData['telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend']?.predictability.value ?? [],
-    predictabilityClass: hourlyTrendData['telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend']?.predictabilityClass.value ?? [],
+    timestamp: hourlyTrendData['telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend']?.timestamp.value ?? [],
+    pictocode: hourlyTrendData['telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend']?.pictocode.value ?? [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 1, 2, 3, 4, 5, 6, 7, 8],
+    temperatureMax: hourlyTrendData['telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend']?.temperatureMax.value ?? [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33],
+    temperatureMin: hourlyTrendData['telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend']?.temperatureMin.value ?? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+    predictability: hourlyTrendData['telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend']?.predictability.value ?? [70, 60, 63, 64, 65, 66, 77, 78, 79, 80, 81, 82, 83, 84, 85, 70, 60, 63, 64, 65, 66, 77, 78, 79, 80, 81, 82, 83],
+    predictabilityClass: hourlyTrendData['telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend']?.predictabilityClass.value ?? ['very low', 'very low', 'very low', 'very low', 'very low', 'very high', 'very high', 'very high', 'very high', 'very high', 'medium', 'medium', 'medium', 'medium', 'medium', 'high', 'high', 'high', 'high', 'low', 'low', 'low', 'low', 'very low', 'very high', 'medium', 'high', 'low'],
   };
 };
 

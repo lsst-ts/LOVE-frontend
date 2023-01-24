@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getM1M3State} from 'redux/selectors';
+import { getWeatherForecastState} from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import WeatherForecast from './WeatherForecast';
 
@@ -68,12 +68,13 @@ const WeatherForecastContainer = ({ subscribeToStreams, unsubscribeToStreams, ..
 };
 
 const mapStateToProps = (state) => {
-  const weatherState = {}; // = getWeatherState(state);
-  return { ...weatherState };
+  const weatherForecastState = getWeatherForecastState(state);
+  return { ...weatherForecastState };
 };
 
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
+    'event-WeatherForecast-0-summaryState',
     'telemetry-WeatherForecast-0-WeatherForecast_dailyTrend',
     'telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend',
   ];
