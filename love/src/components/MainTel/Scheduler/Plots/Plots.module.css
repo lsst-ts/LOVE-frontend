@@ -1,7 +1,17 @@
 .container {
-    border: 1px solid red;
-    border-radius: 0.5em;
+    position: relative;
     box-sizing: border-box;
-    width: 100%;
     height: 100%;
+  }
+  
+.plotsContainer {
+    display: grid;
+    grid-template-rows: 200px;
+    gap: 1em;
+    overflow: hidden;
+}
+
+.plot {
+    width: 100%;
+    overflow: hidden;
 }
