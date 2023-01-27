@@ -1,0 +1,26 @@
+.container{
+	align-self:center;
+	padding:20px
+}
+
+.plot {
+	display:flex;
+	background-color:#1a2d37;
+	border-radius:5px;
+}
+
+.titleContainer{
+	align-content:left;
+}
+
+.plotContainer svg{
+	background:none !important;
+}
+
+.powerDraw{
+	color: #c1ced2;
+	font-weight:bold;
+	font-size:1em;
+	position:relative;
+	width:60px;
+}

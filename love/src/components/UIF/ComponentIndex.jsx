@@ -314,6 +314,16 @@ export const mainIndex = {
       },
     },
   },
+  MTDomePower: {
+    component: require('../MainTel/MTDomePower/MTDomePower.container').default,
+    schema: {
+      ...require('../MainTel/MTDomePower/MTDomePower.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/MTDomePower/MTDomePower.container').schema.props,
+      },
+    },
+  },
   TMA: {
     component: require('../MainTel/TMA/TMA.container').default,
     schema: {
