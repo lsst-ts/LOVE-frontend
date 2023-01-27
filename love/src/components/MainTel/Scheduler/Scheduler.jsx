@@ -4,6 +4,9 @@ import styles from './Scheduler.module.css';
 import Headers from './Headers/Headers';
 import Filters from './Filters/Filters';
 import Pointing from './Summary/Pointing/Pointing';
+import Simonyi from './Summary/Simonyi/Simonyi';
+import Moon from './Summary/Moon/Moon';
+import Sun from './Summary/Sun/Sun';
 import CurrentTarget from './CurrentTarget/CurrentTarget';
 import SkyMap from './SkyMap/SkyMap';
 import Plots from './Plots/Plots';
@@ -39,18 +42,21 @@ export default class Scheduler extends Component {
                 <Headers/>
                 <div className={styles.allComponentes}>
                     {/* column 1 */}
-                    <div>
+                    <div className={styles.leftDiv}>
                         <Filters/>
                         <Pointing/>
+                        <Simonyi/>
+                        <Moon/>
+                        <Sun />
                     </div>
                     {/* column 2 */}
-                    <div>
+                    <div className={styles.middleDiv}>
                         <CurrentTarget/>
                         <SkyMap/>
                         <Plots/>
                     </div>
                     {/* column 3 */}
-                    <div>
+                    <div className={styles.rigthDiv}>
                         <AccordionSummary/>
                     </div>
                 </div>

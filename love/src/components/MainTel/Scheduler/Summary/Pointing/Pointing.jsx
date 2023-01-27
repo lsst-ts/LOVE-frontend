@@ -5,7 +5,7 @@ import Label from '../../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../../GeneralPurpose/SummaryPanel/Title';
 
-export default class SchedulerSummary extends Component {
+export default class Pointing extends Component {
 
     render() {
         return (

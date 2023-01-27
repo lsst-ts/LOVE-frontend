@@ -21,8 +21,9 @@
     display: inline-flex;
     flex-direction: row;
     text-align: center;
-    margin-left: 2.5em;
+    /* margin-left: 2.5em; */
     margin-right: 0.5em;
+    overflow: hidden;
 }
 
 .filter {
@@ -36,4 +37,5 @@
 .separator {
     border-top: 2px solid gray;
     padding: 1em 0;
+    overflow: hidden;
 }

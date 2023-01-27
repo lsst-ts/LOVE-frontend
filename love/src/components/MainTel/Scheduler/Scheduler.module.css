@@ -7,7 +7,7 @@
 }
 
 .allComponentes {
-    display: inline-grid;
+    /* display: inline-grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-row-gap: 0.5em;
     grid-column-gap: 1em;
@@ -15,6 +15,23 @@
     padding: 1em 2em;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 0.5em;
+    gap: 0.5em; */
     width: 100%;
+    /* margin: 0 auto; */
+    display: flex;
+}
+
+.leftDiv {
+    float: left;
+    width: 25%;
+}
+
+.middleDiv {
+    float: left;
+    width: 50%;
+}
+
+.rigthDiv {
+    float: right;
+    width: 25%;
 }

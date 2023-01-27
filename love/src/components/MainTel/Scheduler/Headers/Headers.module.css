@@ -15,7 +15,7 @@
 }
 
 .headersLeft {
-    display: inline-table;
+    display: inline-flex;
     float: left;
     width: 26%;
 }
