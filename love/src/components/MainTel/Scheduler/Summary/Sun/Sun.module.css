@@ -13,11 +13,7 @@
 }
 
 .summaryPanel {
-    width: 100%;
-    padding: 1em;
-    margin-bottom: 1em;
-    grid-template-columns: 1fr 1.2fr;
-    display: contents;
+    background-color: var(--second-secondary-background-color) !important;
 }
 
 .titles {
@@ -27,20 +23,7 @@
     margin-bottom: 2em;
 }
 
-.div1 {
-    display: grid;
-    float: left;
-}
-
 .divContainer {
     display: grid;
     grid-template-columns: 1fr 1fr;
-}
-
-.div2 {
-    display: inline-grid;
-}
-
-.div3 {
-    display: inline-grid;
 }

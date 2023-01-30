@@ -1,6 +1,36 @@
 .container {
-    border: 1px solid red;
+    background-color: var(--quaternary-background-color);
     border-radius: 0.5em;
     box-sizing: border-box;
+    width: 100%;
+}
+
+.headers{
+    display: flex;
+}
+
+.currentTarget{
+    float: left;
+    margin-left: 0.5em;
+}
+
+.spanRigth{
+    float: right;
+    margin: 0 auto;
+}
+
+.separator {
+    border-top: 2px solid gray;
+    padding: 1em 0;
+    overflow: hidden;
+}
+
+.summaryPanel {
+    background-color: var(--quaternary-background-color);
+}
+
+.currentTargetDiv {
+    grid-template-columns: 0.5fr 0.5fr !important;
+    display: grid !important;
     width: 100%;
 }

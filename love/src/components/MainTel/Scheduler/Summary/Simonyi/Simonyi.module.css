@@ -13,11 +13,16 @@
 }
 
 .summaryPanel {
+    /* width: 100%; */
+    grid-template-columns: 0.5fr 1fr;
+    display: grid;
+    background-color: var(--second-secondary-background-color) !important;
+}
+
+.mountDomeDiv {
+    grid-template-columns: 0.5fr 0.5fr;
+    display: grid;
     width: 100%;
-    padding: 1em;
-    margin-bottom: 1em;
-    grid-template-columns: 1fr 1.2fr;
-    display: contents;
 }
 
 .titles {

@@ -128,7 +128,6 @@ export default class SkyMap extends Component {
   render() {
     return(
       <div className={styles.container}>
-        <h2>SkyMap component</h2>
         <div id="map-container">
           <div id="map"></div>
         </div>

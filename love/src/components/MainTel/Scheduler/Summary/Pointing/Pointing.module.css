@@ -2,7 +2,7 @@
     box-sizing: border-box;
     border: 3px solid var(--second-primary-background-color);
     border-radius: 0.5em;
-    padding: 1.5em 0.5em;
+    /* padding: 1.5em 0.5em; */
     /* width: calc(50% - var(--content-padding)); */
     width: 100%;
     box-sizing: border-box;
@@ -13,11 +13,7 @@
 }
 
 .summaryPanel {
-    width: 100%;
-    padding: 1em;
-    margin-bottom: 1em;
-    grid-template-columns: 1fr 1.2fr;
-    display: contents;
+    background-color: var(--second-secondary-background-color) !important;
 }
 
 .titles {

@@ -14,13 +14,10 @@ export default class Pointing extends Component {
                     <Title wide className={styles.titles}>Pointing</Title>
                     <Label>Ra</Label>
                     <Value>15" 32' 38s</Value>
-                    
                     <Label>Dec</Label>
                     <Value>-20° 00' 15"</Value>
-
                     <Label>Sky pos</Label>
                     <Value>135.00°</Value>
-
                     <Label>Parallactic</Label>
                     <Value>62.00°</Value>
                 </SummaryPanel>
