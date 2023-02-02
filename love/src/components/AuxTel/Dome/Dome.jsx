@@ -222,7 +222,7 @@ export default class Dome extends Component {
                 minL2={5}
                 minL3={0}
                 currentValue={currentPointing.el}
-                targetValue={currentPointing.az}
+                targetValue={targetPointing.el}
               />
             </div>
 

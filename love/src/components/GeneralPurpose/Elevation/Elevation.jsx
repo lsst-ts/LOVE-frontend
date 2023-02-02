@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { fixedFloat } from 'Utils';
 import styles from './Elevation.module.css';
 
 export default class Limits extends Component {
@@ -114,7 +115,7 @@ export default class Limits extends Component {
                   ? [currentText_Y < 0 ? styles.textQ2 : styles.textQ3]
                   : [currentText_Y < 0 ? styles.textQ1 : styles.textQ4],
               ].join(' ')}
-            >{`${currentValue + 'º'}`}</tspan>
+            >{`${fixedFloat(currentValue, 2) + 'º'}`}</tspan>
           </text>
         </g>
 
