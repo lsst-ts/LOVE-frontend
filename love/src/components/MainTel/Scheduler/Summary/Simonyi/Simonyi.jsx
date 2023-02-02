@@ -16,22 +16,22 @@ export default class Simonyi extends Component {
                 </SummaryPanel>
                 <div className={styles.mountDomeDiv}>
                     <SummaryPanel className={styles.summaryPanel}>
-                                <Title>Mount</Title>
-                                <span></span>
-                                <Label>Altitude</Label>
-                                <Value>45.00°</Value>
-                                <Label>Azimuth</Label>
-                                <Value>273.00°</Value>
-                                <Label>Rotator</Label>
-                                <Value>64.91°</Value>
+                        <Title>Mount</Title>
+                        <span></span>
+                        <Label>Altitude</Label>
+                        <Value>45.00°</Value>
+                        <Label>Azimuth</Label>
+                        <Value>273.00°</Value>
+                        <Label>Rotator</Label>
+                        <Value>64.91°</Value>
                     </SummaryPanel>
                     <SummaryPanel className={styles.summaryPanel}>
-                                <Title>Dome</Title>
-                                <span></span>
-                                <Label>Altitude</Label>
-                                <Value>45.00°</Value>
-                                <Label>Azimuth</Label>
-                                <Value>273.00°</Value>
+                        <Title>Dome</Title>
+                        <span></span>
+                        <Label>Altitude</Label>
+                        <Value>45.00°</Value>
+                        <Label>Azimuth</Label>
+                        <Value>273.00°</Value>
                     </SummaryPanel>
                 </div>
             </div>

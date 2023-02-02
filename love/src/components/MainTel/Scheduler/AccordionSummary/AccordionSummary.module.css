@@ -1,6 +1,33 @@
 .container {
-    border: 1px solid red;
     border-radius: 0.5em;
     box-sizing: border-box;
     width: 100%;
+    display: inline-grid;
+    align-content: flex-start;
+    background-color: var(--second-secondary-background-color);
+}
+
+.title {
+    text-align: left;
+}
+
+.separator {
+    border-top: 2px solid gray;
+    padding: 1em 0;
+    overflow: hidden;
+}
+
+.header {
+    height: 30%;
+    padding: 2em;
+}
+
+.isOpen {
+    transition: 0.2s ease-in-out;
+    transform-origin: center;
+    margin-bottom: 10px;
+}
+.title:hover {
+    background-color: var(--secondary-background-color);
+    cursor: pointer;
 }
