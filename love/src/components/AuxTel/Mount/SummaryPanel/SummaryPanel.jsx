@@ -211,7 +211,7 @@ export default class SummaryTable extends Component {
             <Limits
               lowerLimit={ATPneumaticsLimits.cellLoad.min}
               upperLimit={ATPneumaticsLimits.cellLoad.max}
-              currentValue={this.props.loadCell}
+              currentValue={this.props.loadCell.value}
               targetValue="Unknown"
               height={30}
               displayLabels={true}
@@ -226,7 +226,7 @@ export default class SummaryTable extends Component {
             <Limits
               lowerLimit={ATPneumaticsLimits.pressure.min}
               upperLimit={ATPneumaticsLimits.pressure.max}
-              currentValue={this.props.m1AirPressure}
+              currentValue={this.props.m1AirPressure.value}
               targetValue={this.props.m1SetPressure}
               height={30}
               displayLabels={true}
