@@ -69,7 +69,7 @@ export default class OLE extends Component {
     this.setState({ selectedInstrument: value });
   }
 
-  changeExposureType(value) {
+  changeExposureTypeSelect(value) {
     this.setState({ selectedExposureType: value });
   }
 
@@ -133,7 +133,7 @@ export default class OLE extends Component {
             selectedInstrument={this.state.selectedInstrument}
             changeInstrumentSelect={(value) => this.changeInstrumentSelect(value)}
             selectedExposureType={this.state.selectedExposureType}
-            changeExposureType={(value) => this.changeExposureType(value)}
+            changeExposureTypeSelect={(value) => this.changeExposureTypeSelect(value)}
             selectedDateStart={this.state.selectedDateStartExposure}
             selectedDateEnd={this.state.selectedDateEndExposure}
             handleDateTimeRange={(date, type) => this.handleDateTimeRangeExposure(date, type)}
