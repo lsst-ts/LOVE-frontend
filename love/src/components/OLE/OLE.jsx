@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Moment from 'moment';
-import { extendMoment } from 'moment-range';
 import PropTypes from 'prop-types';
 import ManagerInterface from 'Utils';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -31,13 +30,10 @@ export default class OLE extends Component {
       selectedDateStartNonExposure: new Date() - 24 * 60 * 60 * 1000,
       selectedDateEndNonExposure: new Date(Date.now() + 37 * 1000), // Add 37 seconds to comply with TAI
       // Exposure filters
-      selectedDateStartExposure: new Date() - 24 * 60 * 60 * 1000,
-      selectedDateEndExposure: new Date(Date.now() + 37 * 1000), // Add 37 seconds to comply with TAI
       selectedInstrument: null,
       instruments: [],
       selectedExposureType: 'all',
       selectedDayExposure: new Date(),
-      selectedDayOrRange: 'day',
     };
   }
 
@@ -90,14 +86,6 @@ export default class OLE extends Component {
     }
   }
 
-  handleDateTimeRangeExposure(date, type) {
-    if (type === 'start') {
-      this.setState({ selectedDateStartExposure: date });
-    } else if (type === 'end') {
-      this.setState({ selectedDateEndExposure: date });
-    }
-  }
-
   changeTab(tab) {
     this.setState({ selectedTab: tab });
   }
@@ -134,13 +122,8 @@ export default class OLE extends Component {
             changeInstrumentSelect={(value) => this.changeInstrumentSelect(value)}
             selectedExposureType={this.state.selectedExposureType}
             changeExposureTypeSelect={(value) => this.changeExposureTypeSelect(value)}
-            selectedDateStart={this.state.selectedDateStartExposure}
-            selectedDateEnd={this.state.selectedDateEndExposure}
-            handleDateTimeRange={(date, type) => this.handleDateTimeRangeExposure(date, type)}
             selectedDayExposure={this.state.selectedDayExposure}
             changeDayExposure={(day) => this.changeDayExposure(day)}
-            selectedDayOrRange={this.state.selectedDayOrRange}
-            changeDayOrRangeSelect={(value) => this.changeDayOrRangeSelect(value)}
           />
         );
       }

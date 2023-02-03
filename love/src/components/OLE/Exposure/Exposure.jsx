@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import { CSVLink } from 'react-csv';
-import { exposureFlagStateToStyle } from 'Config';
+import { exposureFlagStateToStyle, ISO_INTEGER_DATE_FORMAT } from 'Config';
 import ManagerInterface from 'Utils';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
@@ -12,7 +12,6 @@ import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
-import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import ExposureAdd from './ExposureAdd';
@@ -166,10 +165,10 @@ export default class Exposure extends Component {
               <div className={styles.flags}>
                 {Object.keys(flags).map((flag) => {
                   return (
-                    <>
+                    <span key={flag}>
                       <FlagIcon title={flag} status={this.statusFlag(flag)} className={styles.iconFlag} />{' '}
                       <span className={styles.badge}>{flags[flag]}</span>
-                    </>
+                    </span>
                   );
                 })}
               </div>
@@ -219,29 +218,31 @@ export default class Exposure extends Component {
   };
 
   queryExposures(callback) {
-    const { selectedInstrument,  } = this.props;
-    ManagerInterface.getListExposureLogs(selectedInstrument).then((data) => {
+    const { selectedInstrument, selectedDayExposure } = this.props;
+    const obsDayInteger = parseInt(moment(selectedDayExposure).format(ISO_INTEGER_DATE_FORMAT));
+    ManagerInterface.getListExposureLogs(selectedInstrument, obsDayInteger).then((data) => {
       const exposureTypes = new Set();
-      const exposures = data.slice(0,10).map((exposure) => {
+      const exposures = data.map((exposure) => {
         exposureTypes.add(exposure.observation_type);
+        return exposure;
+      });
 
-        ManagerInterface.getListMessagesExposureLogs(exposure['obs_id']).then((messages) => {
-          const flags = messages
-            .map((message) => message['exposure_flag'])
-            .reduce((acc, curr) => {
-              if (curr in acc) acc[curr]++;
-              else acc[curr] = 1;
-              return acc;
-            }, {});
-
-          this.setState((prevState) => ({
-            exposureFlags: { ...prevState.exposureFlags, [exposure['obs_id']]: flags },
-            messages: [...prevState.messages, ...messages]
-          }));
+      ManagerInterface.getListAllMessagesExposureLogs(obsDayInteger).then((messages) => {
+        const exposureFlags = {};
+        messages.forEach((message) => {
+          if (!exposureFlags[message.obs_id]) {
+            exposureFlags[message.obs_id] = {};
+          }
+          if (exposureFlags[message.obs_id]?.[message.exposure_flag]) {
+            exposureFlags[message.obs_id][message.exposure_flag]++;
+          } else {
+            exposureFlags[message.obs_id][message.exposure_flag] = 1;
+          }
         });
 
-        return { ...exposure };
+        this.setState({ exposureFlags, messages});
       });
+
       this.setState({ exposurelogs: exposures, exposureTypes: Array.from(exposureTypes) });
       if (callback) callback();
     });
@@ -254,7 +255,7 @@ export default class Exposure extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.selectedInstrument !== this.props.selectedInstrument) {
+    if (prevProps.selectedInstrument !== this.props.selectedInstrument || prevProps.selectedDayExposure !== this.props.selectedDayExposure) {
       this.queryExposures();
     }
 
@@ -269,8 +270,7 @@ export default class Exposure extends Component {
   render() {
     const {
       instruments:instrumentsOptions, selectedInstrument, selectedDayOrRange, selectedDayExposure,
-      selectedExposureType, selectedDateStart, selectedDateEnd,
-      changeDayExposure, changeDayOrRangeSelect, changeExposureTypeSelect, changeInstrumentSelect,
+      selectedExposureType, changeDayExposure, changeExposureTypeSelect, changeInstrumentSelect,
       handleDateTimeRange,
     } = this.props;
     const { exposurelogs:tableData, modeView, modeAdd, range } = this.state;
@@ -354,34 +354,14 @@ export default class Exposure extends Component {
             className={styles.select}
           />
 
-          <Select
-            options={dayOrRangeExposureOptions}
-            option={selectedDayOrRange}
-            onChange={({ value }) => changeDayOrRangeSelect(value)}
-            className={styles.select}
+          <DateTime
+            label="Observation day"
+            value={selectedDayExposure}
+            onChange={(day) => changeDayExposure(day)}
+            dateFormat="YYYY/MM/DD"
+            timeFormat={false}
+            closeOnSelect={true}
           />
-
-          {selectedDayOrRange === 'day' ? (
-            <DateTime
-              value={selectedDayExposure}
-              onChange={(day) => changeDayExposure(day)}
-              dateFormat="YYYY/MM/DD"
-              timeFormat={false}
-              closeOnSelect={true}
-            />
-          ) : selectedDayOrRange === 'range' ? (
-            <DateTimeRange
-              onChange={(date, type) => {
-                handleDateTimeRange(date, type);
-              }}
-              label="Date & Time (UTC)"
-              startDate={selectedDateStart}
-              endDate={selectedDateEnd}
-              startDateProps={{ closeOnSelect: true }}
-            />
-          ) : (
-            <></>
-          )}
 
           <Select
             options={exposureTypeOptions}

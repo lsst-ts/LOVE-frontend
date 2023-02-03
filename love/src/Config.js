@@ -25,6 +25,7 @@ export const SCRIPT_DOCUMENTATION_BASE_URL = 'https://ts-standardscripts.lsst.io
 
 // Moment formats
 export const ISO_DATE_FORMAT = 'YYYY/MM/DD';
+export const ISO_INTEGER_DATE_FORMAT = 'YYYYMMDD';
 export const TIME_FORMAT = 'HH:mm:ss';
 export const DATE_TIME_FORMAT = 'YYYY/MM/DD, HH:mm:ss';
 
