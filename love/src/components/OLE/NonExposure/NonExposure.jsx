@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
-import ManagerInterface from 'Utils';
+import { CSVLink } from 'react-csv';
 import { LSST_SYSTEMS, LSST_SUBSYSTEMS, iconLevelOLE } from 'Config';
-import { formatSecondsToDigital, openInNewTab } from 'Utils';
-import { getLinkJira, getFileURL } from 'Utils';
+import ManagerInterface, { formatSecondsToDigital, openInNewTab, getLinkJira, getFileURL } from 'Utils';
 // import { LOG_TYPE_OPTIONS } from 'Config';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -16,36 +15,48 @@ import EditIcon from 'components/icons/EditIcon/EditIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
+import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import NonExposureDetail from './NonExposureDetail';
 import NonExposureEdit from './NonExposureEdit';
 import styles from './NonExposure.module.css';
-import { CSVLink } from 'react-csv';
-import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
+
 
 const moment = extendMoment(Moment);
 
 export default class NonExposure extends Component {
   static propTypes = {
+    /** Start date of the date range filter */
     selectedDateStart: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+    /** End date of the date range filter */
     selectedDateEnd: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+    /** Function to handle the date range filter */
     handleDateTimeRange: PropTypes.func,
-    selectedCommentType: PropTypes.object,
+    /** Selected comment type of the comment type filter */
+    selectedCommentType: PropTypes.shape({
+      value: PropTypes.oneOf(['all', 0, 100]),
+      label: PropTypes.string,
+    }),
+    /** Function to handle the comment type filter */
     changeCommentTypeSelect: PropTypes.func,
+    /** Selected system of the system filter */
     selectedSystem: PropTypes.string,
-    changeSubsystemSelect: PropTypes.func,
+    /** Function to handle the system filter */
+    changeSystemSelect: PropTypes.func,
+    /** Selected obs time loss of the obs time loss filter */
     selectedObsTimeLoss: PropTypes.bool,
+    /** Function to handle the obs time loss filter */
     changeObsTimeLossSelect: PropTypes.func,
   };
 
   static defaultProps = {
     selectedDateStart: null,
     selectedDateEnd: null,
-    handleDateTimeRange: () => {},
-    selectedCommentType: 'all',
-    changeCommentTypeSelect: () => {},
+    selectedCommentType: { value: 'all', label: 'All comment types' },
     selectedSystem: 'all',
-    changeSubsystemSelect: () => {},
     selectedObsTimeLoss: false,
+    handleDateTimeRange: () => {},
+    changeCommentTypeSelect: () => {},
+    changeSystemSelect: () => {},
     changeObsTimeLossSelect: () => {},
   };
 
@@ -237,6 +248,9 @@ export default class NonExposure extends Component {
   }
 
   render() {
+    const {
+      selectedObsTimeLoss, selectedCommentType, selectedSystem, selectedDateStart, selectedDateEnd,
+      handleDateTimeRange, changeCommentTypeSelect, changeSystemSelect, changeObsTimeLossSelect } = this.props;
     const { modeView, modeEdit, showDateRangeFilter } = this.state;
     const headers = Object.values(this.getHeaders());
 
@@ -244,25 +258,22 @@ export default class NonExposure extends Component {
 
     // Filter by date range
     if (showDateRangeFilter) {
-      const range = moment.range(this.props.selectedDateStart, this.props.selectedDateEnd);
+      const range = moment.range(selectedDateStart, selectedDateEnd);
       filteredData = filteredData.filter((log) => range.contains(Moment(log.date_added + 'Z'))); // Need to add Z so moment identifies date as UTC
     }
 
-
     // Filter by type
-    filteredData =
-      this.props.selectedCommentType?.value !== 'all'
-        ? filteredData.filter((log) => log.level === this.props.selectedCommentType.value)
+    filteredData = selectedCommentType.value !== 'all'
+        ? filteredData.filter((log) => log.level === selectedCommentType.value)
         : filteredData;
 
     // Filter by system
-    filteredData =
-      this.props.selectedSystem !== 'all'
-        ? filteredData.filter((log) => log.systems.includes(this.props.selectedSystem))
+    filteredData = selectedSystem !== 'all'
+        ? filteredData.filter((log) => log.systems.includes(selectedSystem))
         : filteredData;
 
     // Filter by obs time loss
-    filteredData = this.props.selectedObsTimeLoss ? filteredData.filter((log) => log.time_lost > 0) : filteredData;
+    filteredData = selectedObsTimeLoss ? filteredData.filter((log) => log.time_lost > 0) : filteredData;
 
     const tableData = filteredData;
 
@@ -277,12 +288,8 @@ export default class NonExposure extends Component {
       { label: 'Urgent', value: 100 },
       { label: 'Non urgent', value: 0 },
     ];
-    const selectedCommentType = this.props.selectedCommentType;
-
     const systemOptions = [{ label: 'All systems', value: 'all' }, ...LSST_SYSTEMS];
-    const selectedSystem = this.props.selectedSystem;
 
-    const selectedObsTimeLoss = this.props.selectedObsTimeLoss;
 
     return modeView && !modeEdit ? (
       <NonExposureDetail
@@ -336,15 +343,15 @@ export default class NonExposure extends Component {
 
           {showDateRangeFilter &&
             <DateTimeRange
-              onChange={(date, type) => this.props.handleDateTimeRange(date, type)}
+              onChange={(date, type) => handleDateTimeRange(date, type)}
               label="Date & Time (UTC)"
-              startDate={this.props.selectedDateStart}
-              endDate={this.props.selectedDateEnd}
+              startDate={selectedDateStart}
+              endDate={selectedDateEnd}
               startDateProps={{
-                maxDate: this.props.selectedDateEnd,
+                maxDate: selectedDateEnd,
               }}
               endDateProps={{
-                minDate: this.props.selectedDateStart,
+                minDate: selectedDateStart,
               }}
             />
           }
@@ -352,14 +359,14 @@ export default class NonExposure extends Component {
           <Select
             options={commentTypeOptions}
             option={selectedCommentType}
-            onChange={(value) => this.props.changeCommentTypeSelect(value)}
+            onChange={(value) => changeCommentTypeSelect(value)}
             className={styles.select}
           />
 
           <Select
             options={systemOptions}
             option={selectedSystem}
-            onChange={({ value }) => this.props.changeSubsystemSelect(value)}
+            onChange={({ value }) => changeSystemSelect(value)}
             className={styles.select}
           />
 
@@ -368,7 +375,7 @@ export default class NonExposure extends Component {
             <Input
               type="checkbox"
               checked={selectedObsTimeLoss}
-              onChange={(event) => this.props.changeObsTimeLossSelect(event.target.checked)}
+              onChange={(event) => changeObsTimeLossSelect(event.target.checked)}
             />
           </div>
 

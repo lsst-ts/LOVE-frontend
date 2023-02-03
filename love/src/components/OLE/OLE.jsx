@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
+import PropTypes from 'prop-types';
+import ManagerInterface from 'Utils';
+import Button from 'components/GeneralPurpose/Button/Button';
 import Exposure from './Exposure/Exposure';
 import NonExposure from './NonExposure/NonExposure';
 import ExposureAdd from './Exposure/ExposureAdd';
 import NonExposureEdit from './NonExposure/NonExposureEdit';
-import Button from 'components/GeneralPurpose/Button/Button';
-import ManagerInterface from 'Utils';
 import styles from './OLE.module.css';
 
 export default class OLE extends Component {
@@ -57,7 +57,7 @@ export default class OLE extends Component {
     this.setState({ selectedCommentType: value });
   }
 
-  changeSubsystemSelect(value) {
+  changeSystemSelect(value) {
     this.setState({ selectedSystem: value });
   }
 
@@ -154,7 +154,7 @@ export default class OLE extends Component {
             selectedCommentType={this.state.selectedCommentType}
             changeCommentTypeSelect={(value) => this.changeCommentTypeSelect(value)}
             selectedSystem={this.state.selectedSystem}
-            changeSubsystemSelect={(value) => this.changeSubsystemSelect(value)}
+            changeSystemSelect={(value) => this.changeSystemSelect(value)}
             selectedObsTimeLoss={this.state.selectedObsTimeLoss}
             changeObsTimeLossSelect={(value) => this.changeObsTimeLossSelect(value)}
           />
