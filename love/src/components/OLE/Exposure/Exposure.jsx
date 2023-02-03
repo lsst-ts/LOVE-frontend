@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
+import { CSVLink } from 'react-csv';
+import { exposureFlagStateToStyle } from 'Config';
+import ManagerInterface from 'Utils';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
@@ -12,9 +15,6 @@ import Select from 'components/GeneralPurpose/Select/Select';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
-import { CSVLink } from 'react-csv';
-import ManagerInterface from 'Utils';
-import { exposureFlagStateToStyle } from 'Config';
 import ExposureAdd from './ExposureAdd';
 import ExposureDetail from './ExposureDetail';
 import styles from './Exposure.module.css';
@@ -23,36 +23,45 @@ const moment = extendMoment(Moment);
 
 export default class Exposure extends Component {
   static propTypes = {
-    // Day Exposure
-    selectedDayExposure: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-    changeDayExposure: PropTypes.func,
     // Instrument Options
     instruments: PropTypes.arrayOf(PropTypes.string),
+    /** Selected observation day */
+    selectedDayExposure: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+    /** Selected instrument */
     selectedInstrument: PropTypes.string,
-    changeInstrumentSelect: PropTypes.func,
-    // Exposure Type Options
+    /** Selected exposure type */
     selectedExposureType: PropTypes.string,
-    // Filter date & time
-    selectedDateStart: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-    selectedDateEnd: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-    handleDateTimeRange: PropTypes.func,
+    /** Selected type of date filter: range or day */
     selectedDayOrRange: PropTypes.string,
-    changeDayOrRange: PropTypes.func,
+    /** Selected start date */
+    selectedDateStart: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+    /** Selected end date */
+    selectedDateEnd: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+    /** Function to handle type of date filter */
+    changeDayOrRangeSelect: PropTypes.func,
+    /** Function to handle observation day filter*/
+    changeDayExposure: PropTypes.func,
+    /** Function to handle exposure type filter*/
+    changeExposureTypeSelect: PropTypes.func,
+    /** Function to handle instrument filter*/
+    changeInstrumentSelect: PropTypes.func,
+    /** Function to handle date time range filter*/
+    handleDateTimeRange: PropTypes.func,
   };
 
   static defaultProps = {
     instruments: [],
-    selectedInstrument: null,
-    changeInstrumentSelect: () => {},
-    selectedExposureType: null,
-    changeExposureTypeSelect: () => {},
+    selectedDayExposure: null,
     selectedExposureType: 'all',
+    selectedInstrument: null,
     selectedDateStart: null,
     selectedDateEnd: null,
-    handleDateTimeRange: () => {},
-    selectedDayExposure: null,
     selectedDayOrRange: null,
     changeDayOrRangeSelect: () => {},
+    changeDayExposure: () => {},
+    changeExposureTypeSelect: () => {},
+    changeInstrumentSelect: () => {},
+    handleDateTimeRange: () => {},
   };
 
   constructor(props) {
@@ -210,9 +219,10 @@ export default class Exposure extends Component {
   };
 
   queryExposures(callback) {
-    ManagerInterface.getListExposureLogs(this.props.selectedInstrument).then((data) => {
+    const { selectedInstrument,  } = this.props;
+    ManagerInterface.getListExposureLogs(selectedInstrument).then((data) => {
       const exposureTypes = new Set();
-      const exposures = data.map((exposure) => {
+      const exposures = data.slice(0,10).map((exposure) => {
         exposureTypes.add(exposure.observation_type);
 
         ManagerInterface.getListMessagesExposureLogs(exposure['obs_id']).then((messages) => {
@@ -238,7 +248,8 @@ export default class Exposure extends Component {
   }
 
   componentDidMount() {
-    this.setState({ range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd) });
+    const { selectedDateStart, selectedDateEnd } = this.props;
+    this.setState({ range: moment.range(selectedDateStart, selectedDateEnd) });
     this.queryExposures();
   }
 
@@ -256,13 +267,16 @@ export default class Exposure extends Component {
   }
 
   render() {
-    const modeView = this.state.modeView;
-    const modeAdd = this.state.modeAdd;
-    const headers = this.getHeaders();
+    const {
+      instruments:instrumentsOptions, selectedInstrument, selectedDayOrRange, selectedDayExposure,
+      selectedExposureType, selectedDateStart, selectedDateEnd,
+      changeDayExposure, changeDayOrRangeSelect, changeExposureTypeSelect, changeInstrumentSelect,
+      handleDateTimeRange,
+    } = this.props;
+    const { exposurelogs:tableData, modeView, modeAdd, range } = this.state;
 
-    const tableData = this.state.exposurelogs;
-    const instrumentsOptions = this.props.instruments;
-    const selectedInstrument = this.props.selectedInstrument;
+    const headers = this.getHeaders();
+    
     const exposureTypeOptions = [
       { label: 'All observation types', value: 'all' },
       ...this.state.exposureTypes.map((type) => ({ label: type, value: type })),
@@ -271,12 +285,6 @@ export default class Exposure extends Component {
       { label: 'Day Observation', value: 'day' },
       { label: 'Range', value: 'range' },
     ];
-    const selectedDayOrRange = this.props.selectedDayOrRange;
-    const selectedDayExposure = this.props.selectedDayExposure;
-
-    const selectedExposureType = this.props.selectedExposureType;
-
-    const range = this.state.range;
 
     // Filter by date range
     let filteredData = tableData;
@@ -342,21 +350,21 @@ export default class Exposure extends Component {
           <Select
             options={instrumentsOptions}
             option={selectedInstrument}
-            onChange={({ value }) => this.props.changeInstrumentSelect(value)}
+            onChange={({ value }) => changeInstrumentSelect(value)}
             className={styles.select}
           />
 
           <Select
             options={dayOrRangeExposureOptions}
             option={selectedDayOrRange}
-            onChange={({ value }) => this.props.changeDayOrRangeSelect(value)}
+            onChange={({ value }) => changeDayOrRangeSelect(value)}
             className={styles.select}
           />
 
           {selectedDayOrRange === 'day' ? (
             <DateTime
-              value={this.props.selectedDayExposure}
-              onChange={(day) => this.props.changeDayExposure(day)}
+              value={selectedDayExposure}
+              onChange={(day) => changeDayExposure(day)}
               dateFormat="YYYY/MM/DD"
               timeFormat={false}
               closeOnSelect={true}
@@ -364,11 +372,11 @@ export default class Exposure extends Component {
           ) : selectedDayOrRange === 'range' ? (
             <DateTimeRange
               onChange={(date, type) => {
-                this.props.handleDateTimeRange(date, type);
+                handleDateTimeRange(date, type);
               }}
               label="Date & Time (UTC)"
-              startDate={this.props.selectedDateStart}
-              endDate={this.props.selectedDateEnd}
+              startDate={selectedDateStart}
+              endDate={selectedDateEnd}
               startDateProps={{ closeOnSelect: true }}
             />
           ) : (
@@ -378,7 +386,7 @@ export default class Exposure extends Component {
           <Select
             options={exposureTypeOptions}
             option={selectedExposureType}
-            onChange={({ value }) => this.props.changeExposureType(value)}
+            onChange={({ value }) => changeExposureTypeSelect(value)}
             className={styles.select}
           />
           <div className={styles.divExportBtn}>
