@@ -11,23 +11,38 @@
     text-align: left;
 }
 
-.separator {
-    border-top: 2px solid gray;
-    padding: 1em 0;
-    overflow: hidden;
-}
-
 .header {
+    padding: 1em;
+    display: flex;
+    align-items: center;
+    background-color: #1A2D37;
     height: 30%;
-    padding: 2em;
 }
 
-.isOpen {
-    transition: 0.2s ease-in-out;
-    transform-origin: center;
-    margin-bottom: 10px;
-}
-.title:hover {
-    background-color: var(--secondary-background-color);
+.header:hover {
     cursor: pointer;
+}
+
+.icons {
+    width: 5%;
+    float: right;
+    margin: 0 auto;
+    margin-right: 2em;
+}
+
+.summaryPanel {
+    background-color: #15242D !important;
+}
+.infoLabel {
+    text-align: left;
+    font-weight: bold;
+    padding: 0.5em;
+}
+
+.infoContent {
+    background-color: #101F27;
+    border: 1px solid var(--quaternary-background-color);
+    padding: 1em;
+    margin: 1em;
+    text-align: left;
 }

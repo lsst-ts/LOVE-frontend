@@ -24,14 +24,20 @@
 .leftDiv {
     float: left;
     width: 25%;
+    padding: 0.5em;
+    height: 95%;
 }
 
 .middleDiv {
     float: left;
     width: 50%;
+    padding: 0.5em;
+    height: 95%;
 }
 
 .rigthDiv {
     float: right;
     width: 25%;
+    padding: 0.5em;
+    height: 95%;
 }
