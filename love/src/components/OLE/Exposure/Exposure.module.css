@@ -155,6 +155,7 @@
 
 .inline {
   display: inline-flex;
+  align-items: baseline;
   column-gap: 10px;
 }
 
@@ -423,4 +424,10 @@ th.tableHead {
 .flags {
   display: flex;
   align-items: center;
+}
+
+.spinnerIcon {
+  height: var(--font-size-small);
+  width: var(--font-size-small);
+  margin-left: var(--small-padding);
 }
