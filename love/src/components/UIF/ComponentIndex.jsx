@@ -304,7 +304,7 @@ export const mainIndex = {
       },
     },
   },
-  MTDome: {
+  SimonyiDome: {
     component: require('../MainTel/MTDome/MTDome.container').default,
     schema: {
       ...require('../MainTel/MTDome/MTDome.container').schema,
@@ -314,7 +314,7 @@ export const mainIndex = {
       },
     },
   },
-  MTDomePower: {
+  SimonyiDomePower: {
     component: require('../MainTel/MTDomePower/MTDomePower.container').default,
     schema: {
       ...require('../MainTel/MTDomePower/MTDomePower.container').schema,
@@ -495,7 +495,7 @@ export const indexes = [
     index: auxtelIndex,
   },
   {
-    name: 'Main Telescope',
+    name: 'Simonyi Telescope',
     index: mainIndex,
   },
   {

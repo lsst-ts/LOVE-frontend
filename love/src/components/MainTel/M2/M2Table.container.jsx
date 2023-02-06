@@ -6,14 +6,14 @@ import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTa
 import M2Table from './M2Table';
 
 export const schema = {
-  description: 'Table containing low level information about the MTM2 forces',
+  description: 'Table containing low level information about the Simonyi M2 forces',
   defaultSize: [60, 12],
   props: {
     title: {
       type: 'string',
       description: 'Name diplayed in the title bar (if visible)',
       isPrivate: false,
-      default: 'MTM2 Forces',
+      default: 'Simonyi M2 Forces',
     },
     hasRawMode: {
       type: 'boolean',

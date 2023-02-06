@@ -17,7 +17,7 @@ export const schema = {
     },
     salindex: {
       type: 'number',
-      description: 'Salindex of MTHexapod. 1 for Camera Hexapod and 2 for M2 Hexapod',
+      description: 'Salindex of Simonyi Hexapod. 1 for Camera Hexapod and 2 for M2 Hexapod',
       isPrivate: false,
       default: 1,
     },

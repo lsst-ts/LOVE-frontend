@@ -13,14 +13,14 @@ import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
-  description: 'Summary view of the MTDome. Contains general information about the dome and louvers state',
+  description: 'Summary view of the Simonyi Dome. Contains general information about the dome and louvers state',
   defaultSize: [51, 45],
   props: {
     title: {
       type: 'string',
       description: 'Name displayed in the title bar (if visible)',
       isPrivate: false,
-      default: 'Main Telescope Dome',
+      default: 'Simonyi Telescope Dome',
     },
     controls: {
       type: 'boolean',

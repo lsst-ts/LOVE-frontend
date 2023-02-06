@@ -11,14 +11,14 @@ import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
-  description: 'Summary view of the MTDome Power. Contains general information about the MTDome moving parts power draw',
+  description: 'Summary view of the Simonyi Dome Power. Contains general information about the Simonyi Dome moving parts power draw',
   defaultSize: [51, 45],
   props: {
     title: {
       type: 'string',
       description: 'Name displayed in the title bar (if visible)',
       isPrivate: false,
-      default: 'Main Telescope Dome Power',
+      default: 'Simonyi Telescope Dome Power',
     },
     controls: {
       type: 'boolean',
