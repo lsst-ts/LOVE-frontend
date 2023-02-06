@@ -46,3 +46,35 @@
     margin: 1em;
     text-align: left;
 }
+
+.predTargets {
+    display: inline-flex;
+    margin-right: 10em;
+}
+
+.surveysTexts {
+    text-align: left;
+    margin: 0.5em;
+}
+
+.predictedTargetsDiv {
+    margin: 0.5em;
+    height: 200px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align: justify;
+}
+
+.generalDiv {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.surveysDivs {
+    background-color: var(--quinary-background-color);
+    border: 1px solid;
+    padding: 1em;
+    margin: 0.5em;
+    width: 55%;
+    height: 30%;
+}
