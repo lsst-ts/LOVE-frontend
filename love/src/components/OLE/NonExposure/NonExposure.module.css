@@ -361,3 +361,9 @@ th.tableHead {
   display: inline-flex;
   vertical-align: middle;
 }
+
+.spinnerIcon {
+  height: var(--font-size-small);
+  width: var(--font-size-small);
+  margin-left: var(--small-padding);
+}

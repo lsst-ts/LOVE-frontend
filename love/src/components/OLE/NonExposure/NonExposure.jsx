@@ -13,6 +13,7 @@ import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
+import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
@@ -333,6 +334,7 @@ export default class NonExposure extends Component {
             }}
           >
             Refresh data
+            {this.state.updatingLogs && <SpinnerIcon className={styles.spinnerIcon}/>}
           </Button>
 
           <Toggle

@@ -9,6 +9,7 @@ import AddIcon from 'components/icons/AddIcon/AddIcon';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
+import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
@@ -346,6 +347,7 @@ export default class Exposure extends Component {
             }}
           >
             Refresh data
+            {this.state.updatingLogs && <SpinnerIcon className={styles.spinnerIcon}/>}
           </Button>
           <Select
             options={instrumentsOptions}

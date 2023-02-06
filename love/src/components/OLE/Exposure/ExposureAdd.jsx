@@ -4,6 +4,7 @@ import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import { EXPOSURE_FLAG_OPTIONS /* LOG_TYPE_OPTIONS */ } from 'Config';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
+import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -118,12 +119,14 @@ export default class ExposureAdd extends Component {
         obs_id: exposure.obs_id,
         day_obs: exposure.day_obs,
       }));
+      
       this.setState({
         observationIds,
         dayObs,
       });
+
+      if (callback) callback();
     });
-    if (callback) callback();
   }
 
   handleSubmit(event) {
@@ -267,6 +270,7 @@ export default class ExposureAdd extends Component {
                   />
                 </span>
 
+                <span className={[styles.value, styles.paddingTop].join(' ')}>
                 <Button
                   disabled={this.state.updatingExposures}
                   onClick={() => {
@@ -276,8 +280,10 @@ export default class ExposureAdd extends Component {
                     });
                   }}
                 >
-                  Refresh data
+                  Refresh exposures
+                  {this.state.updatingExposures && <SpinnerIcon className={styles.spinnerIcon}/>}
                 </Button>
+                </span>
 
                 <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
                 <span className={styles.value}>
@@ -353,7 +359,8 @@ export default class ExposureAdd extends Component {
                         });
                       }}
                     >
-                      Refresh data
+                      Refresh exposures
+                      {this.state.updatingExposures && <SpinnerIcon className={styles.spinnerIcon}/>}
                     </Button>
 
                     <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
