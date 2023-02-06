@@ -12,14 +12,14 @@ import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTa
 import M1M3Table from './M1M3Table';
 
 export const schema = {
-  description: `Table containing low level information about the MTM1M3 forces`,
+  description: `Table containing low level information about the Simonyi M1M3 forces`,
   defaultSize: [55, 14],
   props: {
     title: {
       type: 'string',
       description: 'Name diplayed in the title bar (if visible)',
       isPrivate: false,
-      default: 'MTM1M3 Forces',
+      default: 'Simonyi M1M3 Forces',
     },
   },
 };

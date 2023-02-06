@@ -10,6 +10,15 @@
   background-color: var(--second-secondary-background-color);
   position: relative;
   padding-bottom: 0;
+  transition:all .5s cubic-bezier(.06,1.06,.85,1.49);
+}
+
+.view:hover {
+  transform: scale(0.94);
+}
+
+.view:hover .new {
+  background-color:var(--secondary-font-dimmed-color);
 }
 
 .view .name {

@@ -12,7 +12,7 @@ import CableWraps from './CableWraps';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
-  description: 'View of both MT azimuth and Camera cable wraps',
+  description: 'View of both Simonyi azimuth and Camera cable wraps',
   defaultSize: [61, 32],
   props: {
     title: {

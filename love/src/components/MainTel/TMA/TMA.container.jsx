@@ -13,14 +13,14 @@ import {
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
-  description: 'View of Telescope Mount Assembly',
+  description: 'View of Simonyi Telescope Mount Assembly',
   defaultSize: [90, 53],
   props: {
     title: {
       type: 'string',
       description: 'Name diplayed in the title bar (if visible)',
       isPrivate: false,
-      default: 'Telescope Mount Assembly',
+      default: 'Simonyi Telescope Mount Assembly',
     },
   },
 };
