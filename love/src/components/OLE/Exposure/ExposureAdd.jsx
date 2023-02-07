@@ -17,6 +17,7 @@ import Modal from 'components/GeneralPurpose/Modal/Modal';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
 import { exposureFlagStateToStyle } from 'Config';
 import styles from './Exposure.module.css';
+import { style } from 'd3';
 
 export default class ExposureAdd extends Component {
   static propTypes = {
@@ -108,6 +109,9 @@ export default class ExposureAdd extends Component {
   componentDidUpdate(prevProps, prevState) {
     // TODO: only when the filter is shown
     if (prevState.selectedInstrument !== this.state.selectedInstrument) {
+      this.setState((prevState) => ({
+        newMessage: { ...prevState, obs_id: [] },
+      }));
       this.queryExposures();
     }
   }
@@ -272,6 +276,7 @@ export default class ExposureAdd extends Component {
 
                 <span className={[styles.value, styles.paddingTop].join(' ')}>
                 <Button
+                  className={styles.refreshDataBtn}
                   disabled={this.state.updatingExposures}
                   onClick={() => {
                     this.setState({ updatingExposures: true });
@@ -351,6 +356,7 @@ export default class ExposureAdd extends Component {
                     </span>
 
                     <Button
+                      className={styles.refreshDataBtn}
                       disabled={this.state.updatingExposures}
                       onClick={() => {
                         this.setState({ updatingExposures: true });
