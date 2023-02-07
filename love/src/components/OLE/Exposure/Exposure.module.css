@@ -431,3 +431,7 @@ th.tableHead {
   width: var(--font-size-small);
   margin-left: var(--small-padding);
 }
+
+.refreshDataBtn {
+  height: 2.4em;
+}
