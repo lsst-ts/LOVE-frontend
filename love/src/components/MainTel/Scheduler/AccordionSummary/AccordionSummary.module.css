@@ -41,7 +41,7 @@
 
 .infoContent {
     background-color: #101F27;
-    border: 1px solid var(--quaternary-background-color);
+    border: 1px solid var(--tertiary-background-color);
     padding: 1em;
     margin: 1em;
     text-align: left;
@@ -63,6 +63,7 @@
     overflow-x: hidden;
     overflow-y: auto;
     text-align: justify;
+    border: 1px solid var(--tertiary-background-color);
 }
 
 .generalDiv {
@@ -72,9 +73,58 @@
 
 .surveysDivs {
     background-color: var(--quinary-background-color);
-    border: 1px solid;
+    border: 1px solid var(--tertiary-background-color);
     padding: 1em;
     margin: 0.5em;
     width: 55%;
     height: 30%;
+}
+
+.surveysTextsDiv {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    margin-left: 0.5em;
+}
+
+.blocksTargetsDiv {
+    margin: 0.5em;
+    height: 200px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align: justify;
+    border: 1px solid var(--tertiary-background-color);
+}
+
+.executionsDiv {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    margin-left: 0.5em;
+}
+
+.executionsText {
+    display: inline-flex;
+    margin-bottom: 2em;
+    margin-top: 2em;
+    font-weight: bold;
+}
+
+.divButtonBlocks {
+    display: inline-flex;
+    margin-bottom: 2em;
+}
+
+.buttonBlocks {
+    background-color: var(--status-running-color);
+    color: white;
+    cursor: pointer;
+    float: right;
+}
+
+.blocksPanel {
+    margin: 0.5em;
+    height: 200px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align: justify;
+    border: 1px solid var(--tertiary-background-color);
 }

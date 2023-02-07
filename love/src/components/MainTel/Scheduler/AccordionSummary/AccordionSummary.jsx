@@ -46,7 +46,7 @@ export default class AccordionSummary extends Component {
                 <NextTarget showContent={() => this.toggleContentNext()} isOpen={this.state.isOpenNext} />
                 <PredictedTarget showContent={() => this.toggleContentPredicted()} isOpen={this.state.isOpenPredicted} />
                 <Surveys showContent={() => this.toggleContentSurveys()} isOpen={this.state.isOpenSurveys} />
-                <Blocks showContent={() => this.toggleContentBlocks()} isOpen={this.state.isOpenPredicted} />
+                <Blocks showContent={() => this.toggleContentBlocks()} isOpen={this.state.isOpenBlocks} />
             </div>
         );
     };

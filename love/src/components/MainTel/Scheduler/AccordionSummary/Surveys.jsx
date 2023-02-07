@@ -26,7 +26,7 @@ export default class Surveys extends Component {
                         overflow: "hidden", 
                         transition: "height 0.7s ease",
                     }}>
-                    <div className={styles.proposalTitles}>
+                    <div className={styles.surveysTextsDiv}>
                         <span className={styles.surveysTexts}>General Proposals</span>
                         <span>{generalProposals.length}</span>
                     </div>
@@ -37,7 +37,7 @@ export default class Surveys extends Component {
                             </div>
                         )}
                     </div>
-                    <div className={styles.proposalTitles}>
+                    <div className={styles.surveysTextsDiv}>
                         <span className={styles.surveysTexts}>TimedProposals</span>
                         <span>{timedProposals.length}</span>
                     </div>
