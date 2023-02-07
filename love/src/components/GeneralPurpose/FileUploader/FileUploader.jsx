@@ -6,6 +6,7 @@ const FileUploader = ({ value = '', handleFile = () => {}, handleDelete = () => 
   const hiddenFileInput = React.useRef(null);
 
   const handleClick = () => {
+    hiddenFileInput.current.value = null;
     hiddenFileInput.current.click();
   };
   const handleChange = (event) => {
