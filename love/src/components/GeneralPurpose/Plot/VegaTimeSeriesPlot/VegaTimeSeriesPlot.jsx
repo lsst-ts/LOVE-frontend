@@ -372,12 +372,6 @@ class VegaTimeseriesPlot extends Component {
     const styleEncoding = this.makeStyleEncoding();
     return {
       data: { name: dataName },
-      /* transform: [
-        {
-          calculate: '90',
-          as: 'angle'
-        },
-      ], */
       layer: [
         {
           mark: {
@@ -890,21 +884,12 @@ class VegaTimeseriesPlot extends Component {
     if (this.props.layers.bigotes) layer.push(this.makeBigoteLayer('bigotes'));
     if (this.props.layers.pointLines) layer.push(this.makeLineLayer('pointLines'));
     if (this.props.layers.pointLines) layer.push(this.makePointsLayer('pointLines'));
-    layer.push(this.makeLineLayer('lines'));
+    if (this.props.layers.lines) layer.push(this.makeLineLayer('lines'));
     if (this.props.layers.arrows) layer.push(this.makeArrowLayer('arrows'));
 
-    /* const layer = [
-      this.makeAreaLayer('areas'),
-      this.makeSpreadLayer('spreads'),
-      this.makeRectLayer('rects'),
-      this.makeBarLayer('bars'),
-      this.makeBigoteLayer('bigotes'),
-      this.makeLineLayer('pointLines'),
-      this.makePointsLayer('pointLines'),
-      this.makeLineLayer('lines'),
-      this.makeArrowLayer('arrows')
-    ];
-    if (this.props.layers.clouds) layer.push(this.makeCloudLayer('clouds')); */
+    if (layer.length === 0) {
+      layer.push(this.makeLineLayer('lines'));
+    }
 
     this.setState({
       spec: {
@@ -1027,7 +1012,6 @@ class VegaTimeseriesPlot extends Component {
 
   render() {
     const { layers } = this.props;
-
     return (
       <VegaLite
         style={{
