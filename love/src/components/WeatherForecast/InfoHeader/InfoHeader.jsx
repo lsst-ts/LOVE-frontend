@@ -2,12 +2,15 @@ import React, { Component }  from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import isEqual from 'lodash/isEqual';
+import { fixedFloat } from 'Utils';
 import {Table, Th, Tr, Td} from 'components/GeneralPurpose/SimpleTable/TableBorder';
 import WeatherForecastIcon from 'components/icons/WeatherForecastIcon/WeatherForecastIcon';
 import styles from './InfoHeader.module.css';
 
 export default class InfoHeader extends Component {
   static propTypes = {
+    subscribeToStreams: PropTypes.func,
+    unsubscribeToStreams: PropTypes.func,
     frecuency: PropTypes.oneOf(['daily', 'hourly']),
     daily: PropTypes.objectOf(
         PropTypes.shape({
@@ -34,6 +37,8 @@ export default class InfoHeader extends Component {
   };
 
   static defaultProps = {
+    subscribeToStreams: () => undefined,
+    unsubscribeToStreams: () => undefined,
     frecuency: 'daily',
     daily: {
       timestamp: [],
@@ -65,21 +70,32 @@ export default class InfoHeader extends Component {
     };
   }
 
-  getStyle(className) {
-    switch (className) {
-      case 'very low':
-        return styles.veryLow;
-      case 'low':
-        return styles.low;
-      case 'medium':
-        return styles.medium;
-      case 'high':
-        return styles.high;
-      case 'very high':
-        return styles.veryHigh;
-      default:
-        return styles.default;
-    }
+  getPredictabilityClass(value) {
+    return {
+      1: {
+        name: 'very low',
+        class: styles.veryLow,
+      },
+      2: {
+        name: 'low',
+        class: styles.low,
+      },
+      3: {
+        name: 'medium',
+        class: styles.medium,
+      },
+      4: {
+        name: 'high',
+        class: styles.high,
+      },
+      5: {
+        name: 'very high',
+        class: styles.veryHigh,
+      }
+    }[value] ?? {
+      name: 'undefined',
+      class: styles.default,
+    };
   }
 
   getStructures(frecuency) {
@@ -95,10 +111,10 @@ export default class InfoHeader extends Component {
       return ({
         dayHour:  Moment(_d.timestamp).format(this.temporalFormatOptions[frecuency]),
         pictocode: <WeatherForecastIcon pictogramNumber={_d.pictocode}/>,
-        temperatureMax: _d.temperatureMax,
-        temperatureMin: _d.temperatureMin,
-        predictability: _d.predictability,
-        predictabilityClass: _d.predictabilityClass,
+        temperatureMax: _d.temperatureMax ? fixedFloat(_d.temperatureMax, 1) : '',
+        temperatureMin: _d.temperatureMin ? fixedFloat(_d.temperatureMin, 1) : '',
+        predictability: _d.predictability ? fixedFloat(_d.predictability, 0) : '',
+        predictabilityClass: _d.predictabilityClass ?? '',
       })
     });
   }
@@ -118,6 +134,14 @@ export default class InfoHeader extends Component {
         data: this.getStructures(this.props.frecuency)
       });
     }
+  };
+
+  componentDidMount = () => {
+    this.props.subscribeToStreams();
+  };
+
+  componentWillUnmount = () => {
+    this.props.unsubscribeToStreams();
   };
 
   render() {
@@ -159,13 +183,21 @@ export default class InfoHeader extends Component {
             {data.map((row) => {
               return (
                 <Td className={styles.padding0}>
-                  <span className={styles.backgroundPredictability} style={{'width': ((100 - row.predictability) / 2) + '%'}}></span>
                   <span
-                    className={[this.getStyle(row.predictabilityClass), styles.predictability].join(' ')}
-                    style={{'width': row.predictability + '%'}}
-                    title={row. predictabilityClass + ' -- ' + row.predictability + '%'}
+                    className={styles.backgroundPredictability}
+                    style={{'width': ((100 - row.predictability) / 2) + '%'}}
+                    title={this.getPredictabilityClass(row.predictabilityClass).name + ' -- ' + row.predictability + '%'}
                   ></span>
-                  <span className={styles.backgroundPredictability} style={{'width': ((100 - row.predictability) / 2) + '%'}}></span>
+                  <span
+                    className={[this.getPredictabilityClass(row.predictabilityClass).class, styles.predictability].join(' ')}
+                    style={{'width': row.predictability + '%'}}
+                    title={this.getPredictabilityClass(row.predictabilityClass).name + ' -- ' + row.predictability + '%'}
+                  ></span>
+                  <span
+                    className={styles.backgroundPredictability}
+                    style={{'width': ((100 - row.predictability) / 2) + '%'}}
+                    title={this.getPredictabilityClass(row.predictabilityClass).name + ' -- ' + row.predictability + '%'}
+                  ></span>
                 </Td>
               );
             })}

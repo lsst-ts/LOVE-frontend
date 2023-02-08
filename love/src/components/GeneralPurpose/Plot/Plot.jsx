@@ -39,6 +39,7 @@ export default class Plot extends Component {
     maxHeight: PropTypes.number,
     sliceSize: PropTypes.number,
     temporalXAxisFormat: PropTypes.string,
+    isForecast: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -46,6 +47,7 @@ export default class Plot extends Component {
     inputs: {},
     sliceSize: 1800,
     temporalXAxisFormat: '%H:%M:%S',
+    isForecast: false,
   };
 
   static defaultStyles = [
@@ -130,13 +132,22 @@ export default class Plot extends Component {
       const joinedData = parsedHistoricalData.concat(data);
       filteredData = joinedData.filter((val) => {
         const currentSeconds = new Date().getTime() / 1000;
-        const dataSeconds = val.x.toMillis() / 1000 + this.props.taiToUtc;
+        const timemillis = (val.x && val.x.ts) ? val.x.ts : val.x;
+        const dataSeconds = timemillis/ 1000 + this.props.taiToUtc;
         if (currentSeconds - timeWindow * 60 <= dataSeconds) return true;
         return false;
       });
     }
     return filteredData;
   };
+
+  getForecastData = (inputName, data) => {
+    let result = [];
+    data.forEach((d) => {
+      result.push({name: inputName, ...d});
+    });
+    return result;
+  }
 
   componentDidMount() {
     this.props.subscribeToStreams();
@@ -205,10 +216,11 @@ export default class Plot extends Component {
         if (inputConfig.values) {
           let inputData = data[inputName] || [];
           const lastValue = inputData[inputData.length - 1];
-          const newValue = {
+          let newValue = {
             name: inputName,
+            values: {},
           };
-
+          
           for (const value of Object.values(inputConfig.values)) {
             const { category, csc, salindex, topic, item, accessor, variable } = value;
             /* eslint no-eval: 0 */
@@ -219,19 +231,37 @@ export default class Plot extends Component {
               continue;
             }
             const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
-            newValue['x'] = parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
-            newValue[variable] = accessorFunc(streamValue[item]?.value);
+            newValue['x'] = parseTimestamp(streamValue.private_rcvStamp?.value * 1000);
+
+            const val = accessorFunc(streamValue[item]?.value);
+            if (Array.isArray(val)) {
+              newValue[variable] = val;
+              for (let i = 0; i < val.length; i++) {
+                if (newValue.values[i] === undefined) newValue.values[i] = {};
+                newValue.values[i][variable] = val[i];
+              }
+            } else {
+              newValue[variable] = val;
+            }
           }
 
-          // TODO: use reselect to never get repeated timestamps
-          if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
-            inputData.push(newValue);
+          if (!this.props.isForecast) {
+            // TODO: use reselect to never get repeated timestamps
+            if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
+              inputData.push(newValue);
+            }
+          } else {
+            Object.entries(newValue.values).forEach((entry) => {
+              let input = Object.assign({}, entry[1]);
+              input['x'] = parseTimestamp(entry[1]['x'] * 1000);
+              inputData.push(input);
+            });
           }
 
           // Slice inputData array if it has more than sliceSize datapoints (corresponding to one hour if telemetry is received every two seconds)
           if (inputData.length > sliceSize) {
-            inputData = inputData.slice(-1 * sliceSize);
-          }
+             inputData = inputData.slice(-1 * sliceSize);
+           }
           newData[inputName] = inputData;
           
         } else {
@@ -310,21 +340,35 @@ export default class Plot extends Component {
     const { isLive, timeWindow, historicalData } = timeSeriesControlsProps ?? this.state;
     const { streams, temporalXAxisFormat } = this.props;
 
-    const streamsItems = Object.entries(inputs).map(([_, inputConfig]) => {
+
+    const streamsItems = Object.entries(inputs).map(([name, inputConfig]) => {
       if (inputConfig.values) {
+        let newStreams = [];
         for (const value of Object.values(inputConfig.values)) {
-          const { category, csc, salindex, topic, item } = value;
+          const { variable, category, csc, salindex, topic, item } = value;
           const streamName = `${category}-${csc}-${salindex}-${topic}`;
-          return streams[streamName]?.[item];
+          const stream = {name: name, variable: variable, value: streams[streamName]?.[item]}
+          newStreams.push(stream);
         }
+        return newStreams;
       } else {
         const { category, csc, salindex, topic, item } = inputConfig;
         const streamName = `${category}-${csc}-${salindex}-${topic}`;
         return streams[streamName]?.[item];
       }
-    });
+    }).flat();
 
-    const units = {y: streamsItems.find((item) => item?.units !== undefined && item?.units !== '')?.units};
+    const units = { y: streamsItems.map((item) => {
+      if (item?.variable === 'y') {
+        let result = {
+          name: item.name,
+          variable: item.variable,
+          units: item.value?.units
+        };
+        return result;
+      }
+    }).find((item) => item?.units !== undefined && item?.units !== '')?.units
+    }; // PENDING: Multi-Axis
 
     const layerTypes = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads', 'bigotes', 'rects', 'clouds'];
     const layers = {};
@@ -338,7 +382,7 @@ export default class Plot extends Component {
       if (isLive && !data[inputName]) continue;
 
       let rangedInputData;
-      rangedInputData = this.getRangedData(data[inputName], timeWindow, historicalData, isLive, inputs);
+      rangedInputData = this.props.isForecast ? this.getForecastData(inputName, data[inputName]) : this.getRangedData(data[inputName], timeWindow, historicalData, isLive, inputs);
       layers[typeStr] = (layers[typeStr] ?? []).concat(rangedInputData);
     }
 
