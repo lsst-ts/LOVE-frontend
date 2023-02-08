@@ -41,7 +41,7 @@ export default class WeatherForecast extends Component {
     super(props);
 
     this.frecuencyOptions = ['daily', 'hourly'];
-    this.sliceSizeOptions = {'daily': 15, 'hourly': 28};
+    this.sliceSizeOptions = {'daily': 15, 'hourly': 382};
     this.temporalFormatOptions = {'daily': '%Y-%m-%d', 'hourly': '%H:%M:%S'};
 
     this.windPlotRef = React.createRef();
@@ -77,9 +77,9 @@ export default class WeatherForecast extends Component {
   }
 
   getTopicWithFrecuency(prevTopic, frecuency){
-    if (prevTopic === 'WeatherForecast_dailyTrend' || prevTopic === 'WeatherForecast_hourlyTrend') {
-      if (frecuency === 'daily') return 'WeatherForecast_dailyTrend';
-      if (frecuency === 'hourly') return 'WeatherForecast_hourlyTrend';
+    if (prevTopic === 'dailyTrend' || prevTopic === 'hourlyTrend') {
+      if (frecuency === 'daily') return 'dailyTrend';
+      if (frecuency === 'hourly') return 'hourlyTrend';
     } else {
       return prevTopic;
     }
@@ -172,6 +172,7 @@ export default class WeatherForecast extends Component {
                 inputs={this.state.cloud}
                 sliceSize={this.state.sliceSize}
                 temporalXAxisFormat={this.state.temporalXAxisFormat}
+                isForecast={true}
               />
             </div>
           </div>
@@ -188,6 +189,8 @@ export default class WeatherForecast extends Component {
                 legendPosition="bottom"
                 inputs={this.state.wind}
                 sliceSize={this.state.sliceSize}
+                temporalXAxisFormat={this.state.temporalXAxisFormat}
+                isForecast={true}
               />
             </div>
           </div>
@@ -204,6 +207,8 @@ export default class WeatherForecast extends Component {
                 legendPosition="bottom"
                 inputs={this.state.temperature}
                 sliceSize={this.state.sliceSize}
+                temporalXAxisFormat={this.state.temporalXAxisFormat}
+                isForecast={true}
               />
             </div>
           </div>
@@ -220,6 +225,8 @@ export default class WeatherForecast extends Component {
                 legendPosition="bottom"
                 inputs={this.state.rain}
                 sliceSize={this.state.sliceSize}
+                temporalXAxisFormat={this.state.temporalXAxisFormat}
+                isForecast={true}
               />
             </div>
           </div>

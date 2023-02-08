@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getWeatherForecastState} from 'redux/selectors';
+import { getWeatherForecastState, getInfoHeaderDailyTrend, getInfoHeaderHourlyTrend} from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import WeatherForecast from './WeatherForecast';
 
 export const schema = {
   description: 'View of Weather Forecast',
-  defaultSize: [62, 65],
+  defaultSize: [70, 65],
   props: {
     title: {
       type: 'string',
@@ -60,31 +60,34 @@ export const schema = {
   },
 };
 
-const WeatherForecastContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
+const WeatherForecastContainer = ({ ...props }) => {
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
-  return <WeatherForecast subscribeToStreams={subscribeToStreams} unsubscribeToStreams={unsubscribeToStreams} {...props} />;
+  return <WeatherForecast {...props} />;
 };
 
 const mapStateToProps = (state) => {
   const weatherForecastState = getWeatherForecastState(state);
-  return { ...weatherForecastState };
+  const daily = getInfoHeaderDailyTrend(state);
+  const hourly = getInfoHeaderHourlyTrend(state);
+  return { ...weatherForecastState, daily, hourly };
 };
 
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
     'event-WeatherForecast-0-summaryState',
-    'telemetry-WeatherForecast-0-WeatherForecast_dailyTrend',
-    'telemetry-WeatherForecast-0-WeatherForecast_hourlyTrend',
+    'telemetry-WeatherForecast-0-dailyTrend',
+    'telemetry-WeatherForecast-0-hourlyTrend',
+    'telemetry-ATMCS-0-mount_AzEl_Encoders',
   ];
   return {
     subscriptions,
     subscribeToStreams: () => {
-      subscriptions.forEach((s) => dispatch(addGroup(s)));
+      subscriptions.forEach((stream) => dispatch(addGroup(stream)));
     },
     unsubscribeToStreams: () => {
-      subscriptions.forEach((s) => dispatch(removeGroup(s)));
+      subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
     },
   };
 };
