@@ -50,6 +50,7 @@
 .predTargets {
     display: inline-flex;
     margin-right: 10em;
+    margin-left: 1em;
 }
 
 .surveysTexts {
@@ -109,8 +110,10 @@
 }
 
 .divButtonBlocks {
-    display: inline-flex;
+    display: inline-grid;
     margin-bottom: 2em;
+    grid-template-rows: 1fr 1fr;
+    float: right;
 }
 
 .buttonBlocks {
@@ -120,11 +123,17 @@
     float: right;
 }
 
+.currentBlock {
+    margin-left: 2.5em;
+    background-color: var(--second-primary-background-color) !important;
+}
+
 .blocksPanel {
-    margin: 0.5em;
+    margin-left: 2.5em;
     height: 200px;
     overflow-x: hidden;
     overflow-y: auto;
     text-align: justify;
     border: 1px solid var(--tertiary-background-color);
+    display: block;
 }

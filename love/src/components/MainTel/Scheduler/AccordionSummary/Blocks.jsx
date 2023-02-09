@@ -185,7 +185,7 @@ export default class Blocks extends Component {
                         overflow: "hidden", 
                         transition: "height 0.7s ease",
                 }}>
-                    <SummaryPanel>
+                    <SummaryPanel className={styles.currentBlock}>
                         <Label>{listOfBlocks[0].name}</Label>
                         <Value>{listOfBlocks[0].status}</Value>
                     </SummaryPanel>
@@ -217,7 +217,7 @@ export default class Blocks extends Component {
                     </div>
                     <SummaryPanel className={styles.blocksPanel}>
                         {listOfBlocks.map(b =>
-                            <div>
+                            <div className={styles.predTargets}>
                                 <Label>{b.name}</Label>
                                 <Value>{b.status}</Value>
                             </div>
