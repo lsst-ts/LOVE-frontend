@@ -62,7 +62,7 @@ export default class InfoHeader extends Component {
     super(props);
 
     this.frecuencyOptions = ['daily', 'hourly'];
-    this.sliceSizeOptions = {'daily': 15, 'hourly': 28};
+    this.sliceSizeOptions = {'daily': 15, 'hourly': 382};
     this.temporalFormatOptions = {'daily': 'MMM DD', 'hourly': 'HH:mm:ss'};
 
     this.state = {
