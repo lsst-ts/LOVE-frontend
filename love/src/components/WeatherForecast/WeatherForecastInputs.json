@@ -1,7 +1,7 @@
 {
   "cloud": {
     "Total cloud cover (%)": {
-      "type":"line",
+      "type":"pointLine",
       "color":"#ff7f0e",
       "shape":"circle",
       "filled":false,
@@ -25,7 +25,7 @@
           "csc":"WeatherForecast",
           "salindex":0,
           "topic":"dailyTrend",
-          "item":"totalCloudCover",
+          "item":"totalCloudCoverMean",
           "accessor":"(x) => x"
         }
       ]
@@ -55,7 +55,7 @@
           "csc":"WeatherForecast",
           "salindex":0,
           "topic":"dailyTrend",
-          "item":"totalCloudCover",
+          "item":"totalCloudCoverMean",
           "accessor":"(x) => x"
         },
         {
@@ -65,6 +65,54 @@
           "salindex":0,
           "topic":"dailyTrend",
           "item":"totalCloudCoverSpread",
+          "accessor":"(x) => x"
+        }
+      ]
+    },
+    "Clouds": {
+      "type":"cloud",
+      "color":"#4682b4",
+      "shape":"circle",
+      "filled":false,
+      "dash": [
+        4,
+        0
+      ],
+      "values": [
+        {
+          "variable":"x",
+          "category":"telemetry",
+          "csc":"WeatherForecast",
+          "salindex":0,
+          "topic":"dailyTrend",
+          "item":"timestamp",
+          "accessor":"(x) => x"
+        },
+        {
+          "variable":"lowclouds",
+          "category":"telemetry",
+          "csc":"WeatherForecast",
+          "salindex":0,
+          "topic":"dailyTrend",
+          "item":"lowCloudsMean",
+          "accessor":"(x) => x"
+        },
+        {
+          "variable":"midclouds",
+          "category":"telemetry",
+          "csc":"WeatherForecast",
+          "salindex":0,
+          "topic":"dailyTrend",
+          "item":"midCloudsMean",
+          "accessor":"(x) => x"
+        },
+        {
+          "variable":"hiclouds",
+          "category":"telemetry",
+          "csc":"WeatherForecast",
+          "salindex":0,
+          "topic":"dailyTrend",
+          "item":"hiCloudsMean",
           "accessor":"(x) => x"
         }
       ]
@@ -399,7 +447,7 @@
     }
   },
   "rain": {
-    "Precipitation %": {
+    "Precipitation Prob. %": {
       "type":"line",
       "color":"#2ca02c",
       "shape":"circle",
@@ -459,7 +507,7 @@
         }
       ]
     },
-    "Prec Spread [mm]": {
+    "Precipitation Spread [mm]": {
       "type":"bigote",
       "color":"#bcddf7",
       "shape":"circle",
