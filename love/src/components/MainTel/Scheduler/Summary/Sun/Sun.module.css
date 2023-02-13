@@ -14,6 +14,7 @@
 
 .summaryPanel {
     background-color: var(--second-secondary-background-color) !important;
+    min-width: 12em !important;
 }
 
 .titles {

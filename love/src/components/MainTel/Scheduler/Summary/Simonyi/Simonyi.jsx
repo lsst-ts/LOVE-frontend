@@ -11,8 +11,8 @@ export default class Simonyi extends Component {
         return (
             <div className={styles.container}>
                 <SummaryPanel className={styles.summaryPanel}>
-                        <Title>Simonyi</Title>
-                        <Value>TRACKING</Value>
+                    <Title>Simonyi</Title>
+                    <Value>TRACKING</Value>
                 </SummaryPanel>
                 <div className={styles.mountDomeDiv}>
                     <SummaryPanel className={styles.summaryPanel}>

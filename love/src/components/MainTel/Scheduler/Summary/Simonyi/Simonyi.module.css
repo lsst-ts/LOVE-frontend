@@ -3,7 +3,6 @@
     border: 3px solid var(--second-primary-background-color);
     border-radius: 0.5em;
     padding: 1.5em 0.5em;
-    /* width: calc(50% - var(--content-padding)); */
     width: 100%;
     box-sizing: border-box;
     display: inline-grid;
@@ -13,10 +12,8 @@
 }
 
 .summaryPanel {
-    /* width: 100%; */
-    grid-template-columns: 0.5fr 1fr;
-    display: grid;
     background-color: var(--second-secondary-background-color) !important;
+    min-width: 12em !important;
 }
 
 .mountDomeDiv {

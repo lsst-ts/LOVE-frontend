@@ -18,12 +18,7 @@
 
 .filters {
     width: 100%;
-    display: inline-flex;
-    flex-direction: row;
     text-align: center;
-    /* margin-left: 2.5em; */
-    margin-right: 0.5em;
-    overflow: hidden;
 }
 
 .filter {
