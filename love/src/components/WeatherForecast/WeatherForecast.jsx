@@ -51,10 +51,10 @@ export default class WeatherForecast extends Component {
 
     this.state = {
       frecuency: 'daily',
-      cloud: WEATHER['cloud'],
-      wind: WEATHER['wind'],
-      temperature: WEATHER['temperature'],
-      rain: WEATHER['rain'],
+      cloud: WEATHER['daily']['cloud'],
+      wind: WEATHER['daily']['wind'],
+      temperature: WEATHER['daily']['temperature'],
+      rain: WEATHER['daily']['rain'],
       sliceSize: this.sliceSizeOptions['daily'],
       temporalXAxisFormat: this.temporalFormatOptions['daily'],
     };
@@ -86,24 +86,25 @@ export default class WeatherForecast extends Component {
   }
 
   getInput(plotName, frecuency) {
-    const inputs = this.props.weather[plotName];
+    const inputs = this.props.weather[frecuency][plotName];
     let newInputs = {};
-    Object.entries(inputs).forEach(([name, input]) => {
-      newInputs[name] = {};
-      Object.entries(input).forEach(([key, value]) => {
-        if (key === 'values') {
-          newInputs[name]['values'] = [];
-          value.forEach((v) => {
-            let newValue = v;
-            newValue['topic'] = this.getTopicWithFrecuency(v.topic, frecuency);
-            newInputs[name][key].push(newValue);
-          })
-        } else {
-          newInputs[name][key] = value;
-        }
-      });
-    });
-    return newInputs;
+    // Object.entries(inputs).forEach(([name, input]) => {
+    //   newInputs[name] = {};
+    //   Object.entries(input).forEach(([key, value]) => {
+    //     if (key === 'values') {
+    //       newInputs[name]['values'] = [];
+    //       value.forEach((v) => {
+    //         let newValue = v;
+    //         newValue['topic'] = this.getTopicWithFrecuency(v.topic, frecuency);
+    //         newInputs[name][key].push(newValue);
+    //       })
+    //     } else {
+    //       newInputs[name][key] = value;
+    //     }
+    //   });
+    // });
+    // return newInputs;
+    return inputs;
   }
 
   toggleFrecuency(optionHourly) {
