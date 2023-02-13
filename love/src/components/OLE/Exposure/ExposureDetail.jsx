@@ -179,9 +179,14 @@ export default class ExposureDetail extends Component {
       return log.message_text.includes(this.state.textFilter) || log.id.includes(this.state.textFilter);
     });
 
-    const logExample = filteredLogMessages?.[0];
-    const logExampleKeys = Object.keys(logExample ?? {});
-    const csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
+    // Obtain headers to create csv report
+    let csvHeaders = null;
+    let csvData =  "There aren't logs created for the current search...";
+    if (filteredLogMessages.length > 0) {
+      const logExampleKeys = Object.keys(filteredLogMessages?.[0] ?? {});
+      csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
+      csvData = filteredLogMessages;
+    }
 
     const duration = Moment(logDetail.timespan_end).diff(Moment(logDetail.timespan_begin), 'seconds', true);
 
@@ -252,7 +257,7 @@ export default class ExposureDetail extends Component {
                 placeholder="Enter a word or phrase to find messages with that text on their id or message fields"
               />
               <div className={styles.divExportBtn}>
-                <CSVLink data={filteredLogMessages} headers={csvHeaders} filename="exposureDetailLogMessages.csv">
+                <CSVLink data={csvData} headers={csvHeaders} filename="exposureDetailLogMessages.csv">
                   <Hoverable top={true} left={true} center={true} inside={true}>
                     <span className={styles.infoIcon}>
                       <DownloadIcon className={styles.iconCSV} />
