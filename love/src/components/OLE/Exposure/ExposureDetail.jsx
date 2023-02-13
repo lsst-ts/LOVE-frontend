@@ -42,17 +42,11 @@ export default class ExposureDetail extends Component {
   };
 
   saveMessage(message) {
-    console.log('save message', message);
-    ManagerInterface.updateMessageExposureLogs(message.id, message).then((response) => {
-      console.log('result', response);
-    });
+    ManagerInterface.updateMessageExposureLogs(message.id, message);
   }
 
   deleteMessage(message) {
-    console.log('deleteMessage', message);
-    ManagerInterface.deleteMessageExposureLogs(message.id).then((response) => {
-      console.log('result', response);
-    });
+    ManagerInterface.deleteMessageExposureLogs(message.id);
   }
 
   constructor(props) {
@@ -71,12 +65,6 @@ export default class ExposureDetail extends Component {
       confirmationModalText: '',
       actionModal: () => {},
     };
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.logMessages !== this.state.logMessages) {
-      console.log('logMessages', this.state.logMessages);
-    }
   }
 
   saveMessage(message) {
