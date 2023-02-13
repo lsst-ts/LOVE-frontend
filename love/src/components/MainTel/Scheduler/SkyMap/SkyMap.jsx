@@ -14,7 +14,7 @@ export default class SkyMap extends Component {
     this.state = {
       config: {
         width: 0,
-        projection: 'airy',
+        projection: 'aitoff',
         transform: 'equatorial',
         center: [-65, 0], // TODO : Fix it to const ID
         adaptable: true,
@@ -182,7 +182,7 @@ export default class SkyMap extends Component {
   actConfig = (transformUpdated) => {
     const configUpdated = {
       width: 0,
-      projection: 'airy',
+      projection: 'aitoff',
       transform: `${transformUpdated}`,
       center: [-65, 0], // TODO : Fix it to const ID
       adaptable: true,
