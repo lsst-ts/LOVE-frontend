@@ -307,10 +307,15 @@ export default class Exposure extends Component {
         ? filteredData.filter((exp) => exp.observation_type === selectedExposureType)
         : filteredData;
 
+    
     // Obtain headers to create csv report
-    const logExample = this.state.messages?.[0];
-    const logExampleKeys = Object.keys(logExample ?? {});
-    const csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
+    let csvHeaders = null;
+    let csvData =  "There aren't logs created for the current search...";
+    if (this.state.messages.length > 0) {
+      const logExampleKeys = Object.keys(this.state.messages?.[0] ?? {});
+      csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
+      csvData = this.state.messages;
+    }
 
     return modeView && !modeAdd ? (
       <ExposureDetail
@@ -372,7 +377,7 @@ export default class Exposure extends Component {
             className={styles.select}
           />
           <div className={styles.divExportBtn}>
-            <CSVLink data={this.state.messages} headers={csvHeaders} filename="exposureLogMessages.csv">
+            <CSVLink data={csvData} headers={csvHeaders} filename="exposureLogMessages.csv">
               <Hoverable top={true} left={true} center={true} inside={true}>
                 <span className={styles.infoIcon}>
                   <DownloadIcon className={styles.iconCSV} />

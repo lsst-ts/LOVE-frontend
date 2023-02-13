@@ -278,9 +278,14 @@ export default class NonExposure extends Component {
 
     const tableData = filteredData;
 
-    const logExample = this.state.logs?.[0];
-    const logExampleKeys = Object.keys(logExample ?? {});
-    const csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
+    // Obtain headers to create csv report
+    let csvHeaders = null;
+    let csvData =  "There aren't logs created for the current search...";
+    if (filteredData.length > 0) {
+      const logExampleKeys = Object.keys(filteredData?.[0] ?? {});
+      csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
+      csvData = filteredData;
+    }
 
     // Uncomment next code block to use several level options
     // const commentTypeOptions = [{ label: 'All comment types', value: 'all' }, ...LOG_TYPE_OPTIONS];
@@ -382,7 +387,7 @@ export default class NonExposure extends Component {
           </div>
 
           <div className={styles.divExportBtn}>
-            <CSVLink data={tableData} headers={csvHeaders} filename="narrativeLogs.csv">
+            <CSVLink data={csvData} headers={csvHeaders} filename="narrativeLogs.csv">
               <Hoverable top={true} left={true} inside={true}>
                 <span className={styles.infoIcon}>
                   <DownloadIcon className={styles.iconCSV} />
