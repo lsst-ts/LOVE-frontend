@@ -167,12 +167,14 @@ export default class WeatherForecast extends Component {
               <PlotContainer
                 containerNode={this.cloudPlotRef.current}
                 xAxisTitle="Time"
-                yAxisTitle=""
+                yAxisTitle="Cloud"
                 legendPosition="bottom"
                 inputs={this.state.cloud}
                 sliceSize={this.state.sliceSize}
                 temporalXAxisFormat={this.state.temporalXAxisFormat}
                 isForecast={true}
+                scaleDomain={{domainMin: 0, domainMax:100}}
+                scaleIndependent={true}
               />
             </div>
           </div>
@@ -227,6 +229,8 @@ export default class WeatherForecast extends Component {
                 sliceSize={this.state.sliceSize}
                 temporalXAxisFormat={this.state.temporalXAxisFormat}
                 isForecast={true}
+                scaleIndependent={true}
+                scaleDomain={{domainMin: 0, domainMax:100}}
               />
             </div>
           </div>

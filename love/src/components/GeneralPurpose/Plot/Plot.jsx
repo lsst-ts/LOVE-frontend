@@ -40,6 +40,11 @@ export default class Plot extends Component {
     sliceSize: PropTypes.number,
     temporalXAxisFormat: PropTypes.string,
     isForecast: PropTypes.bool,
+    scaleIndependent: PropTypes.bool,
+    scaleDomain: PropTypes.shape({
+      domainMax: PropTypes.number,
+      domainMin: PropTypes.number,
+    }),
   };
 
   static defaultProps = {
@@ -48,6 +53,8 @@ export default class Plot extends Component {
     sliceSize: 1800,
     temporalXAxisFormat: '%H:%M:%S',
     isForecast: false,
+    scaleIndependent: false,
+    scaleDomain: {},
   };
 
   static defaultStyles = [
@@ -338,7 +345,7 @@ export default class Plot extends Component {
     const { data, efdClients, containerWidth, containerHeight } = this.state;
     const { controls, xAxisTitle, yAxisTitle, inputs, legendPosition, timeSeriesControlsProps } = this.props;
     const { isLive, timeWindow, historicalData } = timeSeriesControlsProps ?? this.state;
-    const { streams, temporalXAxisFormat } = this.props;
+    const { streams, temporalXAxisFormat, scaleIndependent, scaleDomain } = this.props;
 
 
     const streamsItems = Object.entries(inputs).map(([name, inputConfig]) => {
@@ -359,7 +366,7 @@ export default class Plot extends Component {
     }).flat();
 
     const units = { y: streamsItems.map((item) => {
-      if (item?.variable === 'y') {
+      if (item?.variable === 'y' || item?.variable === 'mean') {
         let result = {
           name: item.name,
           variable: item.variable,
@@ -451,6 +458,8 @@ export default class Plot extends Component {
             height={containerHeight}
             className={styles.plot}
             temporalXAxisFormat={temporalXAxisFormat}
+            scaleIndependent={scaleIndependent}
+            scaleDomain={scaleDomain}
           />
           <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
         </div>
@@ -468,6 +477,8 @@ export default class Plot extends Component {
               height={containerHeight}
               className={styles.plot}
               temporalXAxisFormat={temporalXAxisFormat}
+              scaleIndependent={scaleIndependent}
+              scaleDomain={scaleDomain}
             />
           </div>
           <div ref={this.legendRef} className={styles.marginLegend}>
