@@ -2,4 +2,9 @@
     border-radius: 0.5em;
     box-sizing: border-box;
     width: 100%;
-}
+  }
+  
+  .selectSystemCoord {
+    display: flex;
+    transform: translate(80%);
+  }

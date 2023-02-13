@@ -18,10 +18,12 @@ export default class Scheduler extends Component {
         subscribeToStreams: PropTypes.func,
         /** Function to unsubscribe to streams to stop receiving */
         unsubscribeToStreams: PropTypes.func,
-    };
-    static defaultProps = {
-
-    };
+        /** MT azimuth actual position telemetry */
+        azimuthActualPosition: PropTypes.number,
+        /** MT elevation actual position telemetry*/
+        elevationActualPosition: PropTypes.number,
+      };
+    static defaultProps = {};
 
     constructor(props) {
         super(props);
@@ -37,30 +39,31 @@ export default class Scheduler extends Component {
     };
 
     render() {
+        const { azimuthActualPosition, elevationActualPosition } = this.props;
         return (
-            <div className={styles.container}>
-                <Headers/>
-                <div className={styles.allComponentes}>
-                    {/* column 1 */}
-                    <div className={styles.leftDiv}>
-                        <Filters/>
-                        <Pointing/>
-                        <Simonyi/>
-                        <Moon/>
-                        <Sun />
-                    </div>
-                    {/* column 2 */}
-                    <div className={styles.middleDiv}>
-                        <CurrentTarget/>
-                        <SkyMap/>
-                        <Plots/>
-                    </div>
-                    {/* column 3 */}
-                    <div className={styles.rigthDiv}>
-                        <AccordionSummary/>
-                    </div>
-                </div>
+          <div className={styles.container}>
+            <Headers />
+            <div className={styles.allComponentes}>
+              {/* column 1 */}
+              <div className={styles.leftDiv}>
+                <Filters />
+                <Pointing />
+                <Simonyi />
+                <Moon />
+                <Sun />
+              </div>
+              {/* column 2 */}
+              <div className={styles.middleDiv}>
+                <CurrentTarget />
+                <SkyMap az={azimuthActualPosition} el={elevationActualPosition} />
+                <Plots />
+              </div>
+              {/* column 3 */}
+              <div className={styles.rigthDiv}>
+                <AccordionSummary />
+              </div>
             </div>
+          </div>
         );
-    };
+    }
 }
