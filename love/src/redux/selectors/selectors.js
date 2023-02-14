@@ -1412,8 +1412,8 @@ export const getInfoHeaderDailyTrend = (state) => {
     pictocode: dailyTrendData['telemetry-WeatherForecast-0-dailyTrend']?.pictocode.value ?? [],
     temperatureMax: dailyTrendData['telemetry-WeatherForecast-0-dailyTrend']?.temperatureMax.value ?? [],
     temperatureMin: dailyTrendData['telemetry-WeatherForecast-0-dailyTrend']?.temperatureMin.value ?? [],
-    predictability: dailyTrendData['telemetry-WeatherForecast-0-dailyTrend']?.predictability.value ?? [10, 20, 10, 30, 30, 40, 50, 10, 10, 10, 20, 30, 20, 30, 40],
-    predictabilityClass: dailyTrendData['telemetry-WeatherForecast-0-dailyTrend']?.predictabilityClass.value ?? [1, 2, 1, 3, 3, 4, 5, 1, 1, 1, 2, 3, 2, 3, 4],
+    predictability: dailyTrendData['telemetry-WeatherForecast-0-dailyTrend']?.predictability.value ?? [],
+    predictabilityClass: dailyTrendData['telemetry-WeatherForecast-0-dailyTrend']?.predictabilityClass.value ?? [],
   };
 };
 
@@ -1427,10 +1427,8 @@ export const getInfoHeaderHourlyTrend = (state) => {
   return {
     timestamp: hourlyTrendData['telemetry-WeatherForecast-0-hourlyTrend']?.timestamp.value ?? [],
     pictocode: hourlyTrendData['telemetry-WeatherForecast-0-hourlyTrend']?.pictocode.value ?? [],
-    //temperatureMax: hourlyTrendData['telemetry-WeatherForecast-0-hourlyTrend']?.temperatureMax.value ?? [],
-    //temperatureMin: hourlyTrendData['telemetry-WeatherForecast-0-hourlyTrend']?.temperatureMin.value ?? [],
-    //predictability: hourlyTrendData['telemetry-WeatherForecast-0-hourlyTrend']?.predictability.value ?? [],
-    //predictabilityClass: hourlyTrendData['telemetry-WeatherForecast-0-hourlyTrend']?.predictabilityClass.value ?? [],
+    temperature: hourlyTrendData['telemetry-WeatherForecast-0-hourlyTrend']?.temperature.value ?? [],
+    temperatureSpread: hourlyTrendData['telemetry-WeatherForecast-0-hourlyTrend']?.temperatureSpread.value ?? [],
   };
 };
 
