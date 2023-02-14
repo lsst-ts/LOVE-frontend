@@ -1189,6 +1189,121 @@ export const getRawStatus = (state) => {
   };
 };
 
+// Scheduler
+export const getDetailedState = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-detailedState`];
+  const summaryData = getStreamData(state, subscriptions);
+  return {
+    subState: summaryData[`event-Scheduler-${salindex}-detailedState`]?.[0]?.subState.value ?? 0,
+  }
+};
+
+export const getObservingMode = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-observingMode`];
+  const observingMode = getStreamData(state, subscriptions);
+  return {
+    mode: observingMode[`event-Scheduler-${salindex}-observingMode`]?.[0]?.mode.value ?? '',
+    type: observingMode[`event-Scheduler-${salindex}-observingMode`]?.[0]?.type.value ?? '',
+  }
+};
+
+export const getGeneralInfo = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-generalInfo`];
+  const generalInfo = getStreamData(state, subscriptions);
+  return {
+    isNigth: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.isNigth.value ?? false, 
+    night: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.nigth.value ?? 0,
+    sunset: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.sunset.value ?? 0,
+    sunrise: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.sunrise.value ?? 0,
+  }
+};
+
+export const getFilterSwap = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-needFilterSwap`];
+  const filterSwap = getStreamData(state, subscriptions);
+  return {
+    needSwap: filterSwap[`event-Scheduler-${salindex}-needFilterSwap`]?.[0]?.needSwap.value ?? false,
+    filterToMount: filterSwap[`event-Scheduler-${salindex}-needFilterSwap`]?.[0]?.filterToMount.value ?? '',
+    filterToUnmount: filterSwap[`event-Scheduler-${salindex}-needFilterSwap`]?.[0]?.filterToUnmount.value ?? '',
+  }
+};
+
+export const getObservatoryStatus = (state, salindex) => {
+  const subscriptions = [`telemetry-Scheduler-${salindex}-observatoryState`, `event-Scheduler-${salindex}-target`];
+  const observatoryStatus = getStreamData(state, subscriptions);
+  return {
+    pointingRa: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.ra.value ?? 0,
+    pointingDecl: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.declination.value ?? 0,
+    pointingPosAngle: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.positionAngle.value ?? 0,
+    pointingParallAngle: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.parallacticAngle.value ?? 0,
+    simonyiTracking: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.tacking.value ?? false,
+    simonyiAl: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.telescopeAltitude.value ?? 0,
+    simonyiAz: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.telescopeAzimuth.value ?? 0,
+    simonyiRot: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.telescopeRotator.value ?? 0,
+    moonRa: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonRa.value ?? 0,
+    moonDec: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonDec.value ?? 0,
+    moonAlt: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonAlt.value ?? 0,
+    moonAz: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonAz.value ?? 0,
+    moonDistance: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonDistance.value ?? 0,
+    moonPhase: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonPhase.value ?? 0,
+    sunRa: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunRa.value ?? 0,
+    sunDec: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunDec.value ?? 0,
+    sunAlt: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunAlt.value ?? 0,
+    sunAz: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunAz.value ?? 0,
+    solarElong: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.solarElong.value ?? 0,
+  }
+};
+
+export const getCurrentTargetInfo = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-target`];
+  const currentTarget =  getStreamData(state, subscriptions);
+  return {
+    targetId: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.targetId.value ?? 0,
+    requestTime: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.requestTime.value ?? 0,
+    requestMjd: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.requestMjd.value ?? 0,
+    ra: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.ra.value ?? 0,
+    decl: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.decl.value ?? 0,
+    skyAngle: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.skyAngle.value ?? 0,
+    filter: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.filter.value ?? '',
+    numExposures: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.numExposures.value ?? 0,
+    exposureTimes: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.exposureTimes.value ?? 0,
+    slewTime: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.slewTime.value ?? 0,
+    offsetX: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.offsetX.value ?? 0,
+    offsetY: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.offsetY.value ?? 0,
+    numProposals: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.numProposals.value ?? 0,
+    proposalId: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.proposalId.value ?? [],
+    sequenceDuration: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.sequenceDuration.value ?? 0,
+  }
+};
+
+export const getSkyMapInfo = (state, salindex) => {
+  const subscriptions = [
+    [`event-Scheduler-${salindex}-observation`],
+    [`event-Scheduler-${salindex}-predictedSchedule`],
+  ];
+  const skyMapInfo = getStreamData(state, subscriptions);
+  return {
+    rotSkyPos: skyMapInfo[`event-Scheduler-${salindex}-observation`]?.[0]?.rotSkyPos.value ?? 0,
+    predictedTargetsRa: skyMapInfo[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.ra.value ?? 0,
+    predictedTargetsDecl: skyMapInfo[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.decl.value ?? 0,
+    predictedTargetsRotSkyPos: skyMapInfo[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.rotSkyPos.value ?? 0,
+  }
+};
+
+export const lastTargetInfo = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-observation`];
+  const lastTarget = getStreamData(state, subscriptions);
+  return {
+    targetId: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.targetId.value ?? 0,
+    ra: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.ra.value ?? 0,
+    decl: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.decl.value ?? 0,
+    rotSkyPos: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.rotSkyPos.value ?? 0,
+    mjd: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.mjd.value ?? 0,
+    expTime: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.exptiime.value ?? 0,
+    
+  }
+};
+
 /**
  * Returns events related to the LATISS instrument in the state.
  *
