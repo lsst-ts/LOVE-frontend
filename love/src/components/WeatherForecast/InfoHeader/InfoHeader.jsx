@@ -6,6 +6,7 @@ import { fixedFloat } from 'Utils';
 import {Table, Th, Tr, Td} from 'components/GeneralPurpose/SimpleTable/TableBorder';
 import WeatherForecastIcon from 'components/icons/WeatherForecastIcon/WeatherForecastIcon';
 import styles from './InfoHeader.module.css';
+import PlusMinusIcon from 'components/icons/PlusMinus/PlusMinusIcon';
 
 export default class InfoHeader extends Component {
   static propTypes = {
@@ -27,11 +28,8 @@ export default class InfoHeader extends Component {
       PropTypes.shape({
         timestamp: PropTypes.arrayOf(PropTypes.number),
         pictocode: PropTypes.arrayOf(PropTypes.number),
-        temperatureMax: PropTypes.arrayOf(PropTypes.number),
-        temperatureMin: PropTypes.arrayOf(PropTypes.number),
-        predictability: PropTypes.arrayOf(PropTypes.number),
-        predictabilityClass: PropTypes.arrayOf(PropTypes.oneOf(
-          ['very low', 'low', 'medium', 'high', 'very high'])),
+        temperature: PropTypes.arrayOf(PropTypes.number),
+        temperatureSpread: PropTypes.arrayOf(PropTypes.number),
       }),
     ),
   };
@@ -51,10 +49,8 @@ export default class InfoHeader extends Component {
     hourly: {
       timestamp: [],
       pictocode: [],
-      temperatureMax: [],
-      temperatureMin: [],
-      predictability: [],
-      predictabilityClass: [],
+      temperature: [],
+      temperatureSpread: [],
     },
   };
 
@@ -62,8 +58,8 @@ export default class InfoHeader extends Component {
     super(props);
 
     this.frecuencyOptions = ['daily', 'hourly'];
-    this.sliceSizeOptions = {'daily': 15, 'hourly': 382};
-    this.temporalFormatOptions = {'daily': 'MMM DD', 'hourly': 'HH:mm:ss'};
+    this.sliceSizeOptions = {'daily': 15, 'hourly': 29};
+    this.temporalFormatOptions = {'daily': 'MMM DD', 'hourly': 'HH:mm'};
 
     this.state = {
       data: [],
@@ -109,12 +105,14 @@ export default class InfoHeader extends Component {
     }
     return result.map((_d) => {
       return ({
-        dayHour:  Moment(_d.timestamp).format(this.temporalFormatOptions[frecuency]),
-        pictocode: <WeatherForecastIcon pictogramNumber={_d.pictocode}/>,
+        dayHour: Moment.unix(_d.timestamp).format(this.temporalFormatOptions[frecuency]),
+        pictocode: <WeatherForecastIcon pictogramNumber={_d.pictocode ?? 0}/>,
         temperatureMax: _d.temperatureMax ? fixedFloat(_d.temperatureMax, 1) : '',
         temperatureMin: _d.temperatureMin ? fixedFloat(_d.temperatureMin, 1) : '',
         predictability: _d.predictability ? fixedFloat(_d.predictability, 0) : '',
         predictabilityClass: _d.predictabilityClass ?? '',
+        temperature: _d.temperature ? fixedFloat(_d.temperature, 1) : '',
+        temperatureSpread: _d.temperatureSpread ? fixedFloat(_d.temperatureSpread, 1) : '',
       })
     });
   }
@@ -151,11 +149,11 @@ export default class InfoHeader extends Component {
       <div className={styles.infoHeaderTable }>
         <Table>
           <Tr>
-            <Td className={styles.paddingInfoHeader}>Day</Td>
+            <Td className={styles.paddingInfoHeader}>{this.props.frecuency === this.frecuencyOptions[0] ? 'Day' : 'Hour' }</Td>
             {data.map((row) => {
               return (<Td className={styles.paddingInfoHeader}>{row.dayHour}</Td>);
             })}
-            <Td className={styles.paddingInfoHeader}>Day</Td>
+            <Td className={styles.paddingInfoHeader}>{this.props.frecuency === this.frecuencyOptions[0] ? 'Day' : 'Hour' }</Td>
           </Tr>
           <Tr>
             <Td className={styles.paddingInfoHeader}>Pictocode</Td>
@@ -164,45 +162,68 @@ export default class InfoHeader extends Component {
             })}
             <Td className={styles.paddingInfoHeader}>Pictocode</Td>
           </Tr>
-          <Tr>
-            <Td className={styles.paddingInfoHeader}>High °C</Td>
-            {data.map((row) => {
-              return (<Td className={[styles.temperatureMax,styles.paddingInfoHeader].join(' ')}>{row.temperatureMax}</Td>);
-            })}
-            <Td className={styles.paddingInfoHeader}>High °C</Td>
-          </Tr>
-          <Tr>
-            <Td className={styles.paddingInfoHeader}>Low °C</Td>
-            {data.map((row) => {
-              return (<Td className={styles.paddingInfoHeader}>{row.temperatureMin}</Td>);
-            })}
-            <Td className={styles.paddingInfoHeader}>Low °C</Td>
-          </Tr>
-          <Tr>
-            <Td className={styles.paddingInfoHeader}>Predictability</Td>
-            {data.map((row) => {
-              return (
-                <Td className={styles.padding0}>
-                  <span
-                    className={styles.backgroundPredictability}
-                    style={{'width': ((100 - row.predictability) / 2) + '%'}}
-                    title={this.getPredictabilityClass(row.predictabilityClass).name + ' -- ' + row.predictability + '%'}
-                  ></span>
-                  <span
-                    className={[this.getPredictabilityClass(row.predictabilityClass).class, styles.predictability].join(' ')}
-                    style={{'width': row.predictability + '%'}}
-                    title={this.getPredictabilityClass(row.predictabilityClass).name + ' -- ' + row.predictability + '%'}
-                  ></span>
-                  <span
-                    className={styles.backgroundPredictability}
-                    style={{'width': ((100 - row.predictability) / 2) + '%'}}
-                    title={this.getPredictabilityClass(row.predictabilityClass).name + ' -- ' + row.predictability + '%'}
-                  ></span>
-                </Td>
-              );
-            })}
-            <Td className={styles.paddingInfoHeader}>Predictability</Td>
-          </Tr>
+          {this.props.frecuency === this.frecuencyOptions[0] ? (
+            <>
+              <Tr>
+                <Td className={styles.paddingInfoHeader}>High °C</Td>
+                {data.map((row) => {
+                  return (<Td className={[styles.temperatureMax,styles.paddingInfoHeader].join(' ')}>{row.temperatureMax}</Td>);
+                })}
+                <Td className={styles.paddingInfoHeader}>High °C</Td>
+              </Tr>
+              <Tr>
+                <Td className={styles.paddingInfoHeader}>Low °C</Td>
+                {data.map((row) => {
+                  return (<Td className={styles.paddingInfoHeader}>{row.temperatureMin}</Td>);
+                })}
+                <Td className={styles.paddingInfoHeader}>Low °C</Td>
+              </Tr>
+            </>
+          ) : (
+            <Tr>
+              <Td className={styles.paddingInfoHeader}>Temp. °C</Td>
+              {data.map((row) => {
+                return (
+                <Td className={styles.paddingInfoHeader}>
+                  <span className={styles.temperatureMax}>
+                    {row.temperature}
+                  </span>
+                  <span className={styles.spread}>
+                    <PlusMinusIcon className={styles.littleIcon}/>
+                    <span>{row.temperatureSpread}</span>
+                  </span>
+                </Td>);
+              })}
+              <Td className={styles.paddingInfoHeader}>Temp. °C</Td>
+            </Tr>
+          )}
+          {this.props.frecuency === this.frecuencyOptions[0] && (
+            <Tr>
+              <Td className={styles.paddingInfoHeader}>Predictability</Td>
+              {data.map((row) => {
+                return (
+                  <Td className={styles.padding0}>
+                    <span
+                      className={styles.backgroundPredictability}
+                      style={{'width': ((100 - row.predictability) / 2) + '%'}}
+                      title={this.getPredictabilityClass(row.predictabilityClass).name + ' -- ' + row.predictability + '%'}
+                    ></span>
+                    <span
+                      className={[this.getPredictabilityClass(row.predictabilityClass).class, styles.predictability].join(' ')}
+                      style={{'width': row.predictability + '%'}}
+                      title={this.getPredictabilityClass(row.predictabilityClass).name + ' -- ' + row.predictability + '%'}
+                    ></span>
+                    <span
+                      className={styles.backgroundPredictability}
+                      style={{'width': ((100 - row.predictability) / 2) + '%'}}
+                      title={this.getPredictabilityClass(row.predictabilityClass).name + ' -- ' + row.predictability + '%'}
+                    ></span>
+                  </Td>
+                );
+              })}
+              <Td className={styles.paddingInfoHeader}>Predictability</Td>
+            </Tr>
+          )}
         </Table>
       </div>
     );

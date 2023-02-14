@@ -60,3 +60,14 @@ td > .predictability {
 .paddingInfoHeader {
   padding: 0.2em 0.4em !important;
 }
+
+.littleIcon {
+  width: 1.3em;
+}
+
+.spread {
+  display: grid;
+  grid-template-columns: min-content min-content;
+  column-gap: 0.1em;
+  justify-content: center;
+}
