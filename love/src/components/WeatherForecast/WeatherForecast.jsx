@@ -23,7 +23,6 @@ export default class WeatherForecast extends Component {
     unsubscribeToStreams: PropTypes.func,
     /* Weather stream data */
     weather: PropTypes.object,    
-    controls: PropTypes.bool,
     infoHeader: PropTypes.bool,
     cloud: PropTypes.bool,
     wind: PropTypes.bool,
@@ -41,7 +40,7 @@ export default class WeatherForecast extends Component {
     super(props);
 
     this.frecuencyOptions = ['daily', 'hourly'];
-    this.sliceSizeOptions = {'daily': 15, 'hourly': 382};
+    this.sliceSizeOptions = {'daily': 15, 'hourly': 29};
     this.temporalFormatOptions = {'daily': '%Y-%m-%d', 'hourly': '%H:%M:%S'};
 
     this.windPlotRef = React.createRef();
@@ -76,35 +75,8 @@ export default class WeatherForecast extends Component {
     }
   }
 
-  getTopicWithFrecuency(prevTopic, frecuency){
-    if (prevTopic === 'dailyTrend' || prevTopic === 'hourlyTrend') {
-      if (frecuency === 'daily') return 'dailyTrend';
-      if (frecuency === 'hourly') return 'hourlyTrend';
-    } else {
-      return prevTopic;
-    }
-  }
-
   getInput(plotName, frecuency) {
-    const inputs = this.props.weather[frecuency][plotName];
-    let newInputs = {};
-    // Object.entries(inputs).forEach(([name, input]) => {
-    //   newInputs[name] = {};
-    //   Object.entries(input).forEach(([key, value]) => {
-    //     if (key === 'values') {
-    //       newInputs[name]['values'] = [];
-    //       value.forEach((v) => {
-    //         let newValue = v;
-    //         newValue['topic'] = this.getTopicWithFrecuency(v.topic, frecuency);
-    //         newInputs[name][key].push(newValue);
-    //       })
-    //     } else {
-    //       newInputs[name][key] = value;
-    //     }
-    //   });
-    // });
-    // return newInputs;
-    return inputs;
+    return this.props.weather[frecuency][plotName];
   }
 
   toggleFrecuency(optionHourly) {

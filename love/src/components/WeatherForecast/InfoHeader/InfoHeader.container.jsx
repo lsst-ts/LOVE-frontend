@@ -48,7 +48,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
-    // 'event-WeatherForecast-0-summaryState',
     'telemetry-WeatherForecast-0-dailyTrend',
     'telemetry-WeatherForecast-0-hourlyTrend',
   ];
