@@ -817,15 +817,15 @@ class VegaTimeseriesPlot extends Component {
           as: 'plus'
         },
         {
-          calculate: '(datum.mean - datum.delta) > 0 ? datum.mean - datum.delta : 0',
+          calculate: 'datum.mean !== 0 && datum.delta !== 0 && (datum.mean - datum.delta) > 0 ? datum.mean - datum.delta : 0',
           as: 'minus'
         },
         {
-          calculate: '(datum.mean + datum.delta) - 0.04 > 0 ? (datum.mean + datum.delta) - 0.04 : 0',
+          calculate: 'datum.mean !== 0 && datum.delta !== 0 && (datum.mean + datum.delta) - 0.04 > 0 ? (datum.mean + datum.delta) - 0.04 : 0',
           as: 'plus_limit'
         },
         {
-          calculate: '(datum.mean - datum.delta) + 0.04 > 0 ? (datum.mean - datum.delta) + 0.04 : 0',
+          calculate: 'datum.mean !== 0 && datum.delta !== 0 && (datum.mean - datum.delta) + 0.04 > 0 ? (datum.mean - datum.delta) + 0.04 : 0',
           as: 'minus_limit'
         },
       ],
