@@ -529,8 +529,8 @@
       "Snow Fraction [mm]": {
         "type":"rect",
         "color":"#2ca02c",
-        "shape":"circle",
-        "filled":false,
+        "shape":"square",
+        "filled":true,
         "dash": [
           4,
           0
@@ -555,13 +555,13 @@
             "accessor":"(x) => x"
           },
           {
-            "variable":"deltatime",
+            "variable":"x2",
             "category":"telemetry",
             "csc":"WeatherForecast",
             "salindex":0,
             "topic":"dailyTrend",
             "item":"timestamp",
-            "accessor":"(x) => (30 * 60)"
+            "accessor":"(x) => x.map((v) => v * 1000 + 60 * 60 * 24 * 1000 - 60000)"
           },
           {
             "variable":"y2",
@@ -570,7 +570,7 @@
             "salindex":0,
             "topic":"dailyTrend",
             "item":"snowFraction",
-            "accessor":"(x) => x"
+            "accessor":"(x) => x.map((v) => 0)"
           }
         ]
       }
@@ -1010,8 +1010,8 @@
       "Snow Fraction [mm]": {
         "type":"rect",
         "color":"#2ca02c",
-        "shape":"circle",
-        "filled":false,
+        "shape":"square",
+        "filled":true,
         "dash": [
           4,
           0
@@ -1036,13 +1036,13 @@
             "accessor":"(x) => x"
           },
           {
-            "variable":"deltatime",
+            "variable":"x2",
             "category":"telemetry",
             "csc":"WeatherForecast",
             "salindex":0,
             "topic":"hourlyTrend",
             "item":"timestamp",
-            "accessor":"(x) => (30 * 60)"
+            "accessor":"(x) => x.map((v) => v * 1000 + 60 * 60 * 1000 - 1000)"
           },
           {
             "variable":"y2",
@@ -1051,7 +1051,7 @@
             "salindex":0,
             "topic":"hourlyTrend",
             "item":"snowFraction",
-            "accessor":"(x) => x"
+            "accessor":"(x) => x.map((v) => 0)"
           }
         ]
       }
