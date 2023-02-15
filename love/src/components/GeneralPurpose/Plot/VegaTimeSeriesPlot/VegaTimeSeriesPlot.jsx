@@ -336,7 +336,9 @@ class VegaTimeseriesPlot extends Component {
                 field: 'name'
               },
               {
-                field: 'x'
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               },
               {
                 field: 'y', title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y)
@@ -365,7 +367,9 @@ class VegaTimeseriesPlot extends Component {
                 field: 'name'
               },
               {
-                field: 'x'
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               },
               {
                 field: 'y', title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y)
@@ -405,7 +409,9 @@ class VegaTimeseriesPlot extends Component {
                 field: 'name'
               },
               {
-                field: 'x'
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               },
               {
                 field: 'y', title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y)
@@ -433,7 +439,9 @@ class VegaTimeseriesPlot extends Component {
                 field: 'name'
               },
               {
-                field: 'x'
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               },
               {
                 field: 'y', title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y)
@@ -462,7 +470,9 @@ class VegaTimeseriesPlot extends Component {
                 field: 'name'
               },
               {
-                field: 'x'
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               },
               {
                 field: 'y', title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y)
@@ -498,7 +508,9 @@ class VegaTimeseriesPlot extends Component {
                 field: 'name'
               },
               {
-                field: 'x'
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               },
               {
                 field: 'y', title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y)
@@ -535,7 +547,9 @@ class VegaTimeseriesPlot extends Component {
                 field: 'name'
               },
               {
-                field: 'x'
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               },
               {
                 field: 'y'
@@ -571,7 +585,9 @@ class VegaTimeseriesPlot extends Component {
                 field: 'name'
               },
               {
-                field: 'x'
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               },
               {
                 field: 'y', title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y)
@@ -617,7 +633,9 @@ class VegaTimeseriesPlot extends Component {
                 field: 'name'
               },
               {
-                field: 'x'
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               },
               {
                 field: 'y', title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y)
@@ -645,7 +663,9 @@ class VegaTimeseriesPlot extends Component {
                 field: 'name'
               },
               {
-                field: 'x'
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               },
               {
                 field: 'y', title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y)
@@ -684,7 +704,9 @@ class VegaTimeseriesPlot extends Component {
                 field: 'name'
               },
               {
-                field: 'x'
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               },
               {
                 field: 'y', title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y)
@@ -767,7 +789,9 @@ class VegaTimeseriesPlot extends Component {
                 field: 'name'
               },
               {
-                field: 'x'
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               },
               {
                 field: 'mean', title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y)
@@ -825,7 +849,9 @@ class VegaTimeseriesPlot extends Component {
                 field: 'name'
               },
               {
-                field: 'x'
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               },
               {
                 field: 'mean', title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.mean)
@@ -857,7 +883,9 @@ class VegaTimeseriesPlot extends Component {
                 field: 'name'
               },
               {
-                field: 'x'
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               },
               {
                 field: 'mean'
@@ -892,7 +920,9 @@ class VegaTimeseriesPlot extends Component {
                 field: 'name'
               },
               {
-                field: 'x'
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               },
               {
                 field: 'mean'
@@ -927,7 +957,9 @@ class VegaTimeseriesPlot extends Component {
                 field: 'name'
               },
               {
-                field: 'x'
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               },
               {
                 field: 'mean'
@@ -972,11 +1004,13 @@ class VegaTimeseriesPlot extends Component {
             y: {
               field: 'y',
               type: 'quantitative',
+              axis: null,
             },
             y2: {
               field: 'y2',
               type: 'quantitative',
               title: '',
+              axis: null,
             },
             fill: styleEncoding.color,
             fillOpacity: {
@@ -988,7 +1022,9 @@ class VegaTimeseriesPlot extends Component {
                 field: 'name'
               },
               {
-                field: 'x'
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               },
               {
                 field: 'x2'
@@ -1049,7 +1085,9 @@ class VegaTimeseriesPlot extends Component {
                 field: 'name'
               },
               {
-                field: 'x'
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               },
               {
                 field: 'lowclouds'
@@ -1120,6 +1158,12 @@ class VegaTimeseriesPlot extends Component {
             tickCount: 5,
           },
         },
+        transform: [
+          {
+            calculate: 'datetime(datum.x)',
+            as: 'convertedDatetime'
+          }
+        ],
         encoding: {
           x: {
             field: 'x',
