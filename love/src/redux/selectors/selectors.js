@@ -1294,12 +1294,61 @@ export const lastTargetInfo = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-observation`];
   const lastTarget = getStreamData(state, subscriptions);
   return {
-    targetId: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.targetId.value ?? 0,
-    ra: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.ra.value ?? 0,
-    decl: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.decl.value ?? 0,
-    rotSkyPos: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.rotSkyPos.value ?? 0,
-    mjd: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.mjd.value ?? 0,
-    expTime: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.exptiime.value ?? 0,
+    lastTargetId: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.targetId.value ?? 0,
+    lastTargetRa: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.ra.value ?? 0,
+    lastTargetDecl: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.decl.value ?? 0,
+    lastTargetRotSkyPos: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.rotSkyPos.value ?? 0,
+    lastTargetMjd: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.mjd.value ?? 0,
+    lastTargetExpTime: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.exptime.value ?? 0,
+    lastTargetFilter: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.filter.value ?? '',
+    lastTargetNexp: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.nexp.value ?? 0,
+    lastTargetMoreInfo: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.additionalInformation.value ?? '',
+  }
+};
+
+export const nextTargetInfo = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-timeToNextTarget`];
+  const nextTarget = getStreamData(state, subscriptions);
+  return {
+    nextTargetCurrentTime: nextTarget[`event-Scheduler-${salindex}-timeToNextTarget`]?.[0]?.currentTime.value ?? 0,
+    nextTimeWaitTime: nextTarget[`event-Scheduler-${salindex}-timeToNextTarget`]?.[0]?.waitTime.value ?? 0,
+    nextTargetRa: nextTarget[`event-Scheduler-${salindex}-timeToNextTarget`]?.[0]?.ra.value ?? 0,
+    nextTargetDecl: nextTarget[`event-Scheduler-${salindex}-timeToNextTarget`]?.[0]?.decl.value ?? 0,
+    nextTargetRotSkyPos: nextTarget[`event-Scheduler-${salindex}-timeToNextTarget`]?.[0]?.rotSkyPos.value ?? 0,
+  }
+};
+
+export const predictedTargetsInfo = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-predictedSchedule`];
+  const predictedTargets = getStreamData(state, subscriptions);
+  return {
+    predTargetsNumTargets: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.numberOfTargets.value ?? 0,
+    predTargetsRa: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.ra.value ?? [],
+    predTargetsDecl: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.decl.value ?? [],
+    predTargetsRotSkyPos: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.rotSkyPos.value ?? [],
+    predTargetsMjd: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.mjd.value ?? [],
+    predTargetsExpTime: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.exptime.value ?? [],
+    predTargetsInstrConfig: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.instrumentConfiguration.value ?? '',
+    predTargetsNexp: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.nexp.value ?? [],
+  }
+};
+
+export const getSurveysInfo = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-surveyTopology`];
+  const surveys = getStreamData(state, subscriptions);
+  return {
+    surveysNumGenProps: surveys[`event-Scheduler-${salindex}-surveyTopology`]?.[0]?.numGeneralProps.value ?? 0,
+    surveysGenProps: surveys[`event-Scheduler-${salindex}-surveyTopology`]?.[0]?.generalPropos.value ?? '',
+    surveysNumSeqProps: surveys[`event-Scheduler-${salindex}-surveyTopology`]?.[0]?.numSeqProps.value ?? 0,
+    surveysSeqProps: surveys[`event-Scheduler-${salindex}-surveyTopology`]?.[0]?.generalPropos.value ?? '',
+  }
+};
+
+export const getBlocksInfo = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-blockInventory`, `event-Scheduler-${salindex}-blockStatus`];
+  const blocks = getStreamData(state, subscriptions);
+  return {
+    blockInvId: blocks[`event-Scheduler-${salindex}-blockInventory`]?.[0]?.ids.vallue ?? '',
     
   }
 };
