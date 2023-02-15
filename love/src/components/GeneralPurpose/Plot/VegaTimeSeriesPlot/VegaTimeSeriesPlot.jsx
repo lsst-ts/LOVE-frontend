@@ -151,8 +151,12 @@ class VegaTimeseriesPlot extends Component {
     units: PropTypes.shape({
       /** For the x axis */
       x: PropTypes.string,
+      x2: PropTypes.string,
       /** For the y axis */
       y: PropTypes.string,
+      y2: PropTypes.string,
+      mean: PropTypes.string,
+      delta: PropTypes.string,
     }),
 
     /** classname to be appended to the default one in <VegaLite ...> */
@@ -232,7 +236,7 @@ class VegaTimeseriesPlot extends Component {
             type: props.temporalXAxis ? 'temporal' : 'quantitative',
             timeUnit: props.temporalXAxisFormat,
             axis: {
-              title: this.makeAxisTitle(props.xAxisTitle, props.units?.x),
+              title: this.makeAxisTitle(props.xAxisTitle, undefined),
               format: props.temporalXAxisFormat,
             },
             scale: props.xDomain ? { domain: props.xDomain } : { type: 'utc' },
@@ -478,10 +482,9 @@ class VegaTimeseriesPlot extends Component {
         {
           mark: {
             type: 'bar',
-            size: 40
+            size: 25
           },
           encoding: {
-
             y: {
               field: 'y',
               type: 'quantitative',
@@ -781,9 +784,10 @@ class VegaTimeseriesPlot extends Component {
 
   makeBigoteLayer = (dataName) => {
     const styleEncoding = this.makeStyleEncoding();
+    const color = '#bcddf7';
     return {
       data: { name: dataName },
-       transform: [
+      transform: [
         {
           calculate: '(datum.mean + datum.delta)',
           as: 'plus'
@@ -793,135 +797,150 @@ class VegaTimeseriesPlot extends Component {
           as: 'minus'
         },
         {
-          calculate: '(datum.mean + datum.delta) - 0.03 > 0 ? (datum.mean + datum.delta) - 0.03 : 0',
+          calculate: '(datum.mean + datum.delta) - 0.04 > 0 ? (datum.mean + datum.delta) - 0.04 : 0',
           as: 'plus_limit'
         },
         {
-          calculate: '(datum.mean - datum.delta) + 0.03 > 0 ? (datum.mean - datum.delta) + 0.03 : 0',
+          calculate: '(datum.mean - datum.delta) + 0.04 > 0 ? (datum.mean - datum.delta) + 0.04 : 0',
           as: 'minus_limit'
         },
-        {
-          calculate: '(datum.mean)',
-          as: 'mean'
-        }
       ],
       layer: [
         {
-          layer: [
-            {
-              mark: {
-                type: 'bar',
-                clip: true,
-                size: 22,
-                
+          mark: {
+            type: 'bar',
+            size: 25
+          },
+          encoding: {
+            y: {
+              field: 'mean',
+              type: 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.mean),
               },
-              encoding: {
-                y: {
-                  field: 'plus_limit',
-                  type: 'quantitative',
-                  title: '',
-                  axis: null,
-                },
-                y2: {
-                  field: 'plus',
-                  type: 'quantitative',
-                  title: '',
-                  axis: null,
-                },
-                color: styleEncoding.color,
-                tooltip: [
-                  {
-                    field: 'name'
-                  },
-                  {
-                    field: 'x'
-                  },
-                  {
-                    field: 'mean'
-                  },
-                  {
-                    field: 'delta'
-                  },
-                ]
-              }
             },
-            {
-              mark: {
-                type: 'bar',
-                clip: true,
-                size: 22
+            color: styleEncoding.color,
+            tooltip: [
+              {
+                field: 'name'
               },
-              encoding: {
-                y: {
-                  field: 'minus',
-                  type: 'quantitative',
-                  title: '',
-                  axis: null,
-                },
-                y2: {
-                  field: 'minus_limit',
-                  type: 'quantitative',
-                  title: '',
-                  axis: null,
-                },
-                color: styleEncoding.color,
-                tooltip: [
-                  {
-                    field: 'name'
-                  },
-                  {
-                    field: 'x'
-                  },
-                  {
-                    field: 'y', title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y)
-                  },
-                  {
-                    field: 'y2'
-                  },
-                ]
-              }
+              {
+                field: 'x'
+              },
+              {
+                field: 'mean', title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.mean)
+              },
+            ]
+          },
+        },
+        {
+          mark: {
+            type: 'bar',
+            clip: true,
+            size: 25,
+            color: color,
+            
+          },
+          encoding: {
+            y: {
+              field: 'plus_limit',
+              type: 'quantitative',
+              title: '',
             },
-            {
-              mark: {
-                type: 'bar',
-                clip: true,
-                size: 6
+            y2: {
+              field: 'plus',
+              type: 'quantitative',
+              title: '',
+            },
+            tooltip: [
+              {
+                field: 'name'
               },
-              encoding: {
-                y: {
-                  field: 'plus',
-                  type: 'quantitative',
-                  title: '',
-                  axis: null,
-                },
-                y2: {
-                  field: 'minus',
-                  type: 'quantitative',
-                  title: '',
-                  axis: null,
-                },
-                color: styleEncoding.color,
-                tooltip: [
-                  {
-                    field: 'name'
-                  },
-                  {
-                    field: 'x'
-                  },
-                  {
-                    field: 'y', title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y)
-                  },
-                  {
-                    field: 'y2'
-                  },
-                ]
-              }
-            }
-          ]
+              {
+                field: 'x'
+              },
+              {
+                field: 'mean'
+              },
+              {
+                field: 'delta'
+              },
+            ]
+          }
+        },
+        {
+          mark: {
+            type: 'bar',
+            clip: true,
+            size: 25,
+            color: color,
+            
+          },
+          encoding: {
+            y: {
+              field: 'minus_limit',
+              type: 'quantitative',
+              title: '',
+            },
+            y2: {
+              field: 'minus',
+              type: 'quantitative',
+              title: '',
+            },
+            tooltip: [
+              {
+                field: 'name'
+              },
+              {
+                field: 'x'
+              },
+              {
+                field: 'mean'
+              },
+              {
+                field: 'delta'
+              },
+            ]
+          }
+        },
+        {
+          mark: {
+            type: 'bar',
+            clip: true,
+            size: 3,
+            color: color,
+            
+          },
+          encoding: {
+            y: {
+              field: 'plus',
+              type: 'quantitative',
+              title: '',
+            },
+            y2: {
+              field: 'minus',
+              type: 'quantitative',
+              title: '',
+            },
+            tooltip: [
+              {
+                field: 'name'
+              },
+              {
+                field: 'x'
+              },
+              {
+                field: 'mean'
+              },
+              {
+                field: 'delta'
+              },
+            ]
+          }
         }
-      ]
+      ],
     };
-  };
+  }
 
   makeRectLayer = (dataName) => {
     const styleEncoding = this.makeStyleEncoding();
@@ -953,13 +972,11 @@ class VegaTimeseriesPlot extends Component {
             y: {
               field: 'y',
               type: 'quantitative',
-              axis: null,
             },
             y2: {
               field: 'y2',
               type: 'quantitative',
               title: '',
-              axis: null,
             },
             fill: styleEncoding.color,
             fillOpacity: {
@@ -1108,7 +1125,7 @@ class VegaTimeseriesPlot extends Component {
             field: 'x',
             type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
             axis: {
-              title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
+              title: this.makeAxisTitle(this.props.xAxisTitle, undefined),
               format: this.props.temporalXAxisFormat,
             },
             scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
