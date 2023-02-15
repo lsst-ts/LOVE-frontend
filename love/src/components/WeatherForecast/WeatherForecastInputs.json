@@ -479,7 +479,7 @@
         ]
       },
       "Precipitation [mm]": {
-        "type":"bar",
+        "type":"bigote",
         "color":"#4682b4",
         "shape":"circle",
         "filled":false,
@@ -504,27 +504,6 @@
             "salindex":0,
             "topic":"dailyTrend",
             "item":"precipitation",
-            "accessor":"(x) => x"
-          }
-        ]
-      },
-      "Precipitation Spread [mm]": {
-        "type":"bigote",
-        "color":"#bcddf7",
-        "shape":"circle",
-        "filled":false,
-        "dash": [
-          4,
-          0
-        ],
-        "values": [
-          {
-            "variable":"x",
-            "category":"telemetry",
-            "csc":"WeatherForecast",
-            "salindex":0,
-            "topic":"dailyTrend",
-            "item":"timestamp",
             "accessor":"(x) => x"
           },
           {
@@ -990,36 +969,6 @@
         ]
       },
       "Precipitation [mm]": {
-        "type":"bar",
-        "color":"#4682b4",
-        "shape":"circle",
-        "filled":false,
-        "dash": [
-          4,
-          0
-        ],
-        "values": [
-          {
-            "variable":"x",
-            "category":"telemetry",
-            "csc":"WeatherForecast",
-            "salindex":0,
-            "topic":"hourlyTrend",
-            "item":"timestamp",
-            "accessor":"(x) => x"
-          },
-          {
-            "variable":"y",
-            "category":"telemetry",
-            "csc":"WeatherForecast",
-            "salindex":0,
-            "topic":"hourlyTrend",
-            "item":"precipitation",
-            "accessor":"(x) => x"
-          }
-        ]
-      },
-      "Precipitation Spread [mm]": {
         "type":"bigote",
         "color":"#bcddf7",
         "shape":"circle",

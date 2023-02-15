@@ -365,17 +365,13 @@ export default class Plot extends Component {
       }
     }).flat();
 
-    const units = { y: streamsItems.map((item) => {
-      if (item?.variable === 'y' || item?.variable === 'mean') {
-        let result = {
-          name: item.name,
-          variable: item.variable,
-          units: item.value?.units
-        };
-        return result;
+    const units = {};
+    streamsItems.forEach(element => {
+      if (!units[element.variable]) {
+        units[element.variable] = {};
       }
-    }).find((item) => item?.units !== undefined && item?.units !== '')?.units
-    }; // PENDING: Multi-Axis
+      units[element.variable] = element.value?.units;
+    });
 
     const layerTypes = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads', 'bigotes', 'rects', 'clouds'];
     const layers = {};
