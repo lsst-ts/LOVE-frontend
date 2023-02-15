@@ -42,6 +42,7 @@ export default class WeatherForecast extends Component {
     this.frecuencyOptions = ['daily', 'hourly'];
     this.sliceSizeOptions = {'daily': 15, 'hourly': 29};
     this.temporalFormatOptions = {'daily': '%Y-%m-%d', 'hourly': '%H:%M'};
+    this.deltaTimeOptions = {'daily': 60 * 60 * 24, 'hourly': 60 * 60};
 
     this.windPlotRef = React.createRef();
     this.temperaturePlotRef = React.createRef();
