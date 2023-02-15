@@ -817,15 +817,15 @@ class VegaTimeseriesPlot extends Component {
           as: 'plus'
         },
         {
-          calculate: 'datum.mean !== 0 && datum.delta !== 0 && (datum.mean - datum.delta) > 0 ? datum.mean - datum.delta : 0',
+          calculate: '(datum.mean !== 0 || datum.delta !== 0) && (datum.mean - datum.delta) > 0 ? datum.mean - datum.delta : 0',
           as: 'minus'
         },
         {
-          calculate: 'datum.mean !== 0 && datum.delta !== 0 && (datum.mean + datum.delta) - 0.04 > 0 ? (datum.mean + datum.delta) - 0.04 : 0',
+          calculate: '(datum.mean !== 0 || datum.delta !== 0) && (datum.mean + datum.delta) - 0.04 > 0 ? (datum.mean + datum.delta) - 0.04 : 0',
           as: 'plus_limit'
         },
         {
-          calculate: 'datum.mean !== 0 && datum.delta !== 0 && (datum.mean - datum.delta) + 0.04 > 0 ? (datum.mean - datum.delta) + 0.04 : 0',
+          calculate: '(datum.mean !== 0 || datum.delta !== 0) && (datum.mean - datum.delta) + 0.04 > 0 ? (datum.mean - datum.delta) + 0.04 : 0',
           as: 'minus_limit'
         },
       ],
@@ -976,14 +976,15 @@ class VegaTimeseriesPlot extends Component {
 
   makeRectLayer = (dataName) => {
     const styleEncoding = this.makeStyleEncoding();
+    console.log('makeRectLayer', dataName);
     return {
       data: { name: dataName },
-      transform: [
-        {
-          calculate: 'datum.x2 ? datum.x2 : ( datum.deltatime ? (datum.x + datum.deltatime) : (datum.x + 1800))',
-          as: 'x2'
-        },
-      ],
+      // transform: [
+      //   {
+      //     calculate: '(datum.deltatime ? (datum.x + datum.deltatime) : (datum.x + 1800 * 60))',
+      //     as: 'x2'
+      //   },
+      // ],
       layer: [
         {
           mark: {
@@ -1009,7 +1010,6 @@ class VegaTimeseriesPlot extends Component {
             y2: {
               field: 'y2',
               type: 'quantitative',
-              title: '',
               axis: null,
             },
             fill: styleEncoding.color,
@@ -1027,7 +1027,9 @@ class VegaTimeseriesPlot extends Component {
                 format: this.props.temporalXAxisFormat
               },
               {
-                field: 'x2'
+                field: 'x2',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               },
               {
                 field: 'y', title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y)

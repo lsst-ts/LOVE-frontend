@@ -45,13 +45,14 @@ export default class Plot extends Component {
       domainMax: PropTypes.number,
       domainMin: PropTypes.number,
     }),
+    deltaTime: PropTypes.number,
   };
 
   static defaultProps = {
     maxHeight: 240,
     inputs: {},
     sliceSize: 1800,
-    temporalXAxisFormat: '%H:%M:%S',
+    temporalXAxisFormat: '%H:%M',
     isForecast: false,
     scaleIndependent: false,
     scaleDomain: {},
@@ -241,6 +242,7 @@ export default class Plot extends Component {
             newValue['x'] = parseTimestamp(streamValue.private_rcvStamp?.value * 1000);
 
             const val = accessorFunc(streamValue[item]?.value);
+
             if (Array.isArray(val)) {
               newValue[variable] = val;
               for (let i = 0; i < val.length; i++) {
