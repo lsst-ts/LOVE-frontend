@@ -1,28 +1,35 @@
-
 .container {
-    display: flex;
-    align-self: center;
-    flex-wrap: wrap;
-    position: relative;
+  display: flex;
+  align-self: center;
+  flex-wrap: wrap;
+  position: relative;
 }
 
 .container svg {
-    vertical-align: top;
-    margin: auto;
-    width: 70%;
-    height: auto;
-  }
+  vertical-align: top;
+  margin: auto;
+  width: 50%;
+  height: auto;
+  z-index: 1;
+}
 
 .windRoseContainer {
-    position: absolute;
-    left: 10%;
-    top: 0%;
-    width: 13%;
-  }
+  position: absolute;
+  left: 0%;
+  top: -20%;
+  width: 20%;
+}
+
+.azContainer {
+  position: absolute;
+  left: -60%;
+  top: -60%;
+  width: 220%;
+}
 
 .cls1 {
-    fill: #15242d;
-    stroke: #182e39;
+  fill: #15242d;
+  stroke: #182e39;
 }
 
 .cls1,
@@ -33,7 +40,7 @@
 .cls6,
 .cls7,
 .cls8 {
-    stroke-miterlimit: 10;
+  stroke-miterlimit: 10;
 }
 
 .cls1,
@@ -41,52 +48,53 @@
 .cls5,
 .cls6,
 .cls7 {
-    stroke-width: 2px;
+  stroke-width: 2px;
 }
 
 .cls2,
 .cls6 {
-    fill: none;
+  fill: none;
 }
 
 .cls2 {
-    stroke: #e4e4e7;
-    stroke-width: 0.5px;
-    stroke-dasharray: 6;
+  stroke: #e4e4e7;
+  stroke-width: 0.5px;
+  stroke-dasharray: 6;
 }
 
 .cls3,
 .cls8 {
-    fill: #182e39;
+  fill: #182e39;
 }
 
 .cls3,
 .cls7,
 .cls8 {
-    stroke: #27434f;
+  stroke: #27434f;
 }
 
-.cls4, .cls5 {
-    stroke: none;
+.cls4,
+.cls5 {
+  stroke: none;
 }
 
 .cls4 {
-    fill: #bcd8e2;
-  }
+  fill: #bcd8e2;
+}
 
 .cls5 {
-    fill: #fff;
+  fill: #fff;
 }
 
 .cls6 {
-    stroke: #f2f2f2;
+  stroke: #f2f2f2;
 }
 
 .cls7 {
-    fill: #27434f;
+  fill: #27434f;
 }
 
 .cls8 {
-    stroke-linecap: round;
-    stroke-width: 4px;
+  stroke-linecap: round;
+  stroke-width: 4px;
 }

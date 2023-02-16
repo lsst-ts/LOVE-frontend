@@ -13,34 +13,23 @@ import {
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
-  description:
-    'View of Telescope Mount Assembly',
+  description: 'View of Simonyi Telescope Mount Assembly',
   defaultSize: [90, 53],
   props: {
     title: {
       type: 'string',
       description: 'Name diplayed in the title bar (if visible)',
       isPrivate: false,
-      default: 'Telescope Mount Assembly',
+      default: 'Simonyi Telescope Mount Assembly',
     },
   },
 };
 
-const TMAContainer = ({
-  subscribeToStreams,
-  unsubscribeToStreams,
-  ...props
-}) => {
+const TMAContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
   if (props.isRaw) {
-     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
-   }
-  return (
-    <TMA
-      subscribeToStreams={subscribeToStreams}
-      unsubscribeToStreams={unsubscribeToStreams}
-      {...props}
-    />
-  );
+    return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
+  }
+  return <TMA subscribeToStreams={subscribeToStreams} unsubscribeToStreams={unsubscribeToStreams} {...props} />;
 };
 
 const mapStateToProps = (state) => {
@@ -49,13 +38,13 @@ const mapStateToProps = (state) => {
   const elevation = getElevationState(state);
   const drives = getDrivesAzimuthElevationState(state);
   const mirror = getMirrorCoversMotionState(state);
-  return { 
+  return {
     ...tmaSummary,
     ...azimuth,
     ...elevation,
     ...drives,
     ...mirror,
-   };
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {

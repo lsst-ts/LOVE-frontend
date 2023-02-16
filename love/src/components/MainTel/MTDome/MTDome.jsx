@@ -5,6 +5,8 @@ import MTDomeLouvers from './MTDomeLouvers';
 import MTDomePointing from './MTDomePointing';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
+import Azimuth from 'components/GeneralPurpose/Azimuth/Azimuth';
+import Elevation from 'components/GeneralPurpose/Elevation/Elevation';
 import WindRose from '../../icons/WindRose/WindRose';
 import MTDomeSummaryTable from './MTDomeSummaryTable/MTDomeSummaryTable';
 import styles from './MTDome.module.css';
@@ -535,9 +537,31 @@ export default class MTDome extends Component {
           <div className={styles.windRoseContainer}>
             <WindRose />
           </div>
+          <div className={styles.elevationContainer} height={`${height / 2}px`}>
+            <Elevation
+              height={height * 0.75}
+              radius={width * 0.75}
+              maxL3={86.5}
+              maxL2={85}
+              maxL1={84}
+              minL1={18}
+              minL2={19}
+              minL3={20}
+              currentValue={positionActualLightWindScreen}
+              targetValue={positionCommandedLightWindScreen}
+              className={styles.svgElevation}
+            />
+          </div>
 
           <div className={styles.divDome}>
             <div className={styles.divDomeLouvers}>
+              <Azimuth
+                className={styles.svgAzimuth}
+                width={width}
+                height={height}
+                currentValue={positionActualDomeAz}
+                targetValue={positionCommandedDomeAz}
+              />
               <MTDomeShutter
                 width={width}
                 height={height}
@@ -556,7 +580,6 @@ export default class MTDome extends Component {
                 targetPointing={targetPointing}
                 isProjected={isProjected}
               />
-
               <MTDomeLouvers
                 actualPositionLouvers={actualPositionLouvers}
                 commandedPositionLouvers={commandedPositionLouvers}

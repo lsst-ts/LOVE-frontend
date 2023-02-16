@@ -1,9 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styles from './SummaryPanel.module.css';
 
 const Value = ({
   children,
-  /** Wheter to display raw values, instead of truncating to decimal places  */
   raw = false,
 }) => {
   if (raw) {
@@ -43,7 +43,7 @@ const Value = ({
         {parsedChild.map((c) => {
           return (
             <span key={c} className={styles.value}>
-              {c.toFixed ? c.toFixed(3) : c}
+              {c.toFixed ? c.toFixed(2) : c}
             </span>
           );
         })}
@@ -51,7 +51,14 @@ const Value = ({
     );
   }
   /** Display strings and numbers. Truncate to 4 decimal places in the case of numbers */
-  return <span className={styles.value}>{parsedChild.toFixed ? parsedChild.toFixed(3) : parsedChild}</span>;
+  return <span className={styles.value}>{parsedChild.toFixed ? parsedChild.toFixed(2) : parsedChild}{children.units ? ' '+children.units : ''}</span>;
 };
+
+Value.propTypes = {
+  /** The value to display */
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object, PropTypes.array]),
+  /** Wheter to display raw values, instead of truncating to decimal places  */
+  raw: PropTypes.bool,
+}
 
 export default Value;

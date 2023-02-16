@@ -1,12 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import {
-  getM2State,
-  getM2Inclinometer,
-  getM2Actuator,
-  getM2ActuatorForce,
-} from 'redux/selectors';
+import { getM2State, getM2Inclinometer, getM2Actuator, getM2ActuatorForce } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import M2 from './M2';
 

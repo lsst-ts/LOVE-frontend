@@ -837,7 +837,7 @@ export const parseTimestamp = (timestamp) => {
 };
 
 /**
- * Returns value if it is integer or float fixed to 5 decimals
+ * Returns value if it is integer or float fixed to 4 decimals
  * @param {number} value, number to convert
  */
 export const defaultNumberFormatter = (value) => {

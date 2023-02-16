@@ -19,7 +19,7 @@
     "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
-    "luxon": "^1.23.0",
+    "luxon": "^1.28.1",
     "ml-matrix": "^6.5.0",
     "moment-range": "^4.0.0",
     "path-js": "^1.0.1",

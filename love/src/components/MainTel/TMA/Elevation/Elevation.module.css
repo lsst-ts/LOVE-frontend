@@ -1,27 +1,26 @@
-
 .container {
-    display: flex;
-    align-self: center;
-    flex-wrap: wrap;
-    position: relative;
+  display: flex;
+  align-self: center;
+  flex-wrap: wrap;
+  position: relative;
 }
 
 .container svg {
-    vertical-align: top;
-    margin: auto;
-    width: 85%;
-    height: auto;
-  }
+  vertical-align: top;
+  margin: auto;
+  width: 85%;
+  height: auto;
+}
 
 .cls1,
 .cls8 {
-    fill: none;
+  fill: none;
 }
 
 .cls1 {
-    stroke: #e4e4e7;
-    stroke-width: 0.5px;
-    stroke-dasharray: 6;
+  stroke: #e4e4e7;
+  stroke-width: 0.5px;
+  stroke-dasharray: 6;
 }
 
 .cls1,
@@ -31,11 +30,11 @@
 .cls6,
 .cls8,
 .cls9 {
-    stroke-miterlimit: 10;
+  stroke-miterlimit: 10;
 }
 
 .cls2 {
-    fill: #182e39;
+  fill: #182e39;
 }
 
 .cls2,
@@ -43,33 +42,42 @@
 .cls6,
 .cls8,
 .cls9 {
-    stroke: #27434f;
+  stroke: #27434f;
 }
 
 .cls2,
 .cls3,
 .cls4,
 .cls5 {
-    stroke-width: 2px;
+  stroke-width: 2px;
 }
 
 .cls3,
 .cls6,
 .cls7,
 .cls9 {
-    fill: #27434f;
+  fill: #27434f;
 }
 
 .cls4,
 .cls5 {
-    fill: #15242d;
-    stroke: #182e39;
+  fill: #15242d;
+  stroke: #182e39;
 }
 
 .cls5 {
-    stroke-linejoin: round;
+  stroke-linejoin: round;
 }
 
 .cls6 {
-    stroke-linecap: round;
+  stroke-linecap: round;
+}
+
+.gpElevationContainer {
+  position: absolute;
+  top: 10%;
+  width: 30%;
+}
+.gpElevationContainer svg {
+  transform: translate(0, 50%);
 }

@@ -49,9 +49,7 @@ export default class Summary extends Component {
         <SummaryPanel className={styles.summaryPanelStates}>
           <div className={styles.state}>
             <Title>M2 Status</Title>
-            <span className={[summaryStateValue?.class, styles.summaryState].join(' ')}>
-              {summaryStateValue?.name}
-            </span>
+            <span className={[summaryStateValue?.class, styles.summaryState].join(' ')}>{summaryStateValue?.name}</span>
           </div>
           <div className={styles.state}>
             <Title>Command</Title>

@@ -40,7 +40,7 @@ export const CSCSummaryHierarchy = {
       { name: 'ATSpectrograph', salindex: 0 },
     ],
   },
-  'Main Telescope': {
+  'Simonyi Telescope': {
     MTCS: [
       { name: 'MTMount', salindex: 0 },
       { name: 'MTPtg', salindex: 0 },

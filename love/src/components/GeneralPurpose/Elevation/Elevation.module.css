@@ -1,0 +1,145 @@
+.svgElevation {
+  overflow: visible;
+}
+
+svg text {
+  padding: 4px;
+}
+
+.backgroundBar {
+  stroke: var(--second-quaternary-background-color);
+}
+
+.warningBar {
+  stroke: var(--status-warning-dimmed-color-2);
+}
+
+.activeWarning {
+  animation: warning 0.5s infinite;
+  animation-direction: alternate;
+  transition: stroke ease-in-out;
+}
+
+@keyframes warning {
+  from {
+    stroke: var(--status-warning-dimmed-color-2);
+  }
+  to {
+    stroke: var(--status-warning-dimmed-color);
+  }
+}
+
+.currentValue {
+  fill: white;
+  transition: x 0.5s ease;
+}
+
+.originText {
+  fill: var(--secondary-font-color);
+  font-size: 2em;
+  text-anchor: start;
+}
+
+.targetText {
+  fill: var(--base-font-color);
+  font-size: 2em;
+  transition: transform 0.5s linear 0s;
+}
+
+.textQ1 {
+  text-anchor: start;
+}
+.textQ2 {
+  text-anchor: end;
+}
+.textQ3 {
+  alignment-baseline: text-before-edge;
+  text-anchor: end;
+}
+.textQ4 {
+  alignment-baseline: text-before-edge;
+  text-anchor: start;
+}
+
+.top {
+  dominant-baseline: text-after-edge;
+}
+
+.bottom {
+  dominant-baseline: text-before-edge;
+}
+
+.cutOut {
+  fill: rgb(17, 31, 39);
+}
+
+.bg {
+  fill: transparent;
+  stroke: #182e39;
+}
+.bgTarget {
+  fill: transparent;
+  stroke: #3a525f;
+  opacity: 0.25;
+  transition: stroke-dasharray linear 0.5s;
+  transition: transform ease-out 0.5s;
+}
+.bgCurrent {
+  fill: transparent;
+  stroke: #3a525f;
+  transition: stroke-dasharray linear 0.5s;
+}
+.gaugeL1 {
+  fill: transparent;
+  stroke: #2e6261;
+  transition: stroke-dasharray linear 0.5s;
+}
+.gaugeL2 {
+  fill: transparent;
+  stroke: #3f4720;
+  transition: stroke-dasharray linear 0.5s;
+}
+.gaugeL3 {
+  fill: transparent;
+  stroke: #3c2b20;
+  transition: stroke-dasharray linear 0.5s;
+}
+.fillL1 {
+  fill: transparent;
+  stroke: #00a26d;
+  transition: stroke-dasharray linear 0.5s;
+}
+.fillL2 {
+  fill: transparent;
+  stroke: #eee203;
+  transition: stroke-dasharray linear 0.5s;
+}
+.fillL3 {
+  fill: transparent;
+  stroke: #db5826;
+  transition: stroke-dasharray linear 0.5s;
+}
+
+.targetValue {
+  stroke: #c1ced2;
+  fill: transparent;
+  stroke-width: 2px;
+  stroke-dasharray: 6;
+  transition: transform ease-out 0.5s;
+}
+
+.targetValueWarning {
+  stroke: #eee203;
+  fill: transparent;
+  stroke-width: 2px;
+  stroke-dasharray: 6;
+  transition: transform ease-out 0.5s;
+}
+
+.targetValueDanger {
+  stroke: #db5826;
+  fill: transparent;
+  stroke-width: 2px;
+  stroke-dasharray: 6;
+  transition: transform ease-out 0.5s;
+}

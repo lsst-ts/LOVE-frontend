@@ -28,11 +28,11 @@
 }
 
 .state :first-child {
-  margin-right: .5em;
+  margin-right: 0.5em;
 }
 
 .summaryState {
-  border-radius: .2rem;
+  border-radius: 0.2rem;
   font-weight: 700;
   text-align: center;
   width: 8em;
@@ -65,18 +65,17 @@
   text-align: left;
 }
 
-.summaryPanelControls > .controls > .control{
+.summaryPanelControls > .controls > .control {
   flex-grow: 1;
 }
 
-.summaryPanelControls > .controls > .control > span{
-  margin-bottom: .5em;
+.summaryPanelControls > .controls > .control > span {
+  margin-bottom: 0.5em;
   display: block;
 }
 
 .summaryPanelControls > .controls > div {
   margin-right: 1em;
-
 }
 
 .plotSection {
@@ -139,11 +138,11 @@
 }
 
 .stopLeft {
-  stop-color: #3f51b5;  /* Indigo */
+  stop-color: #3f51b5; /* Indigo */
 }
 
 .stopRright {
-  stop-color: #009688;  /* Teal */
+  stop-color: #009688; /* Teal */
 }
 
 .filled {
