@@ -1349,7 +1349,14 @@ export const getBlocksInfo = (state, salindex) => {
   const blocks = getStreamData(state, subscriptions);
   return {
     blockInvId: blocks[`event-Scheduler-${salindex}-blockInventory`]?.[0]?.ids.vallue ?? '',
-    
+    blockInvStatus: blocks[`event-Scheduler-${salindex}-blockInventory`]?.[0]?.status.value ?? '',
+    blockId: blocks[`event-Scheduler-${salindex}-blockStatus`]?.[0]?.id.value ?? '',
+    blockStatusId: blocks[`event-Scheduler-${salindex}-blockStatus`]?.[0]?.statusId.value ?? 0,
+    blockStatus: blocks[`event-Scheduler-${salindex}-blockStatus`]?.[0]?.status.value ?? '',
+    blockExecCompl: blocks[`event-Scheduler-${salindex}-blockStatus`]?.[0]?.executionsCompleted.value ?? 0,
+    blockExecTotal: blocks[`event-Scheduler-${salindex}-blockStatus`]?.[0]?.executionsTotal.value ?? 0,
+    blockHash: blocks[`event-Scheduler-${salindex}-blockStatus`]?.[0]?.hash.value ?? '',
+    blockDef: blocks[`event-Scheduler-${salindex}-blockStatus`]?.[0]?.definition.value ?? '',
   }
 };
 
