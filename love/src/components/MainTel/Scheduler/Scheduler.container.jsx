@@ -3,7 +3,19 @@ import { connect } from 'react-redux';
 import Scheduler from './Scheduler';
 import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
-import { getAzimuthState, getElevationState } from '../../../redux/selectors';
+import { getDetailedState,
+  getObservingMode,
+  getGeneralInfo,
+  getFilterSwap,
+  getObservatoryStatus,
+  getCurrentTargetInfo,
+  getSkyMapInfo,
+  lastTargetInfo,
+  nextTargetInfo,
+  predictedTargetsInfo,
+  getSurveysInfo,
+  getBlocksInfo, 
+  } from '../../../redux/selectors';
 
 export const schema = {
   description: 'Summary view of the Scheduler. Contains general information about the scheduler state',
@@ -27,8 +39,32 @@ export const schema = {
 const SchedulerContainer = ({
   subscribeToStream,
   unsubscribeToStream,
-  azimuthActualPosition,
-  elevationActualPosition,
+  subState,
+  mode,
+  type,
+  isNigth,
+  night,
+  sunset,
+  sunrise,
+  needSwap,
+  filterToMount,
+  filterToUnmount,
+  pointingRa,
+  pointingDecl,
+  pointingPosAngle,
+  pointingParallAngle,
+  simonyiTracking,
+  simonyiAl,
+  simonyiAz,
+  simonyiRot,
+  moonRa,
+  moonDec,
+  moonAlt,
+  moonAz,
+  moonDistance,
+  moonPhase,
+  sunRa,
+  sunDec,
   ...props
 }) => {
   if (props.isRaw) {
