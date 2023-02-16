@@ -310,11 +310,11 @@ export default class Exposure extends Component {
     
     // Obtain headers to create csv report
     let csvHeaders = null;
-    let csvData =  "There aren't logs created for the current search...";
-    if (this.state.messages.length > 0) {
-      const logExampleKeys = Object.keys(this.state.messages?.[0] ?? {});
+    let csvData =  "There aren't exposures created for the current search...";
+    if (filteredData.length > 0) {
+      const logExampleKeys = Object.keys(filteredData[0] ?? {});
       csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
-      csvData = this.state.messages;
+      csvData = filteredData;
     }
 
     return modeView && !modeAdd ? (
@@ -382,7 +382,7 @@ export default class Exposure extends Component {
                 <span className={styles.infoIcon}>
                   <DownloadIcon className={styles.iconCSV} />
                 </span>
-                <div className={styles.hover}>Download messages associated with the shown exposures</div>
+                <div className={styles.hover}>Download this report as csv file</div>
               </Hoverable>
             </CSVLink>
           </div>
