@@ -174,8 +174,6 @@ export default class NonExposureDetail extends Component {
               <span className={styles.value}>{logDetail.subsystems?.join(', ')}</span>
               <span className={styles.label}>CSCs</span>
               <span className={styles.value}>{logDetail.cscs?.join(', ')}</span>
-              <span className={styles.label}>Tags</span>
-              <span className={styles.value}>{logDetail.tags?.join(', ')}</span>
             </div>
             <div className={styles.description}>
               <div className={styles.floatLeft}>
