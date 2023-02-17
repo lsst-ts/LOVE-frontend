@@ -5,10 +5,10 @@ import AddIcon from 'components/icons/AddIcon/AddIcon';
 
 
 /** Contents of the User details Dropdown Menu */
-export default function OLEMenu ({
+const OLEMenu = ({
   newNonExposureClick,
   newExposureClick
-}) {
+}) => {
   return (
     <>
       <div className={styles.menuElement}>
@@ -34,3 +34,5 @@ export default function OLEMenu ({
     </>
   )
 }
+
+export default OLEMenu;
