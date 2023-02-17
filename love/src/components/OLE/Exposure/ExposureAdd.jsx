@@ -48,7 +48,6 @@ export default class ExposureAdd extends Component {
       user_id: undefined,
       user_agent: undefined,
       is_human: true,
-      is_new: true,
       exposure_flag: 'none',
       jira: false,
       tags: undefined,
