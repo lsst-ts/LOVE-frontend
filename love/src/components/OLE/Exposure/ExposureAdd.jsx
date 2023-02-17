@@ -48,6 +48,7 @@ export default class ExposureAdd extends Component {
       user_id: undefined,
       user_agent: undefined,
       is_human: true,
+      is_new: false,
       exposure_flag: 'none',
       jira: false,
       tags: undefined,
@@ -109,7 +110,7 @@ export default class ExposureAdd extends Component {
     // TODO: only when the filter is shown
     if (prevState.selectedInstrument !== this.state.selectedInstrument) {
       this.setState((prevState) => ({
-        newMessage: { ...prevState, obs_id: [] },
+        newMessage: { ...prevState.newMessage, obs_id: [] },
       }));
       this.queryExposures();
     }
