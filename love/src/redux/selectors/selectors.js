@@ -1258,21 +1258,21 @@ export const getCurrentTargetInfo = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-target`];
   const currentTarget =  getStreamData(state, subscriptions);
   return {
-    targetId: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.targetId.value ?? 0,
-    requestTime: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.requestTime.value ?? 0,
-    requestMjd: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.requestMjd.value ?? 0,
-    ra: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.ra.value ?? 0,
-    decl: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.decl.value ?? 0,
-    skyAngle: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.skyAngle.value ?? 0,
-    filter: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.filter.value ?? '',
-    numExposures: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.numExposures.value ?? 0,
-    exposureTimes: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.exposureTimes.value ?? 0,
-    slewTime: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.slewTime.value ?? 0,
-    offsetX: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.offsetX.value ?? 0,
-    offsetY: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.offsetY.value ?? 0,
-    numProposals: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.numProposals.value ?? 0,
-    proposalId: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.proposalId.value ?? [],
-    sequenceDuration: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.sequenceDuration.value ?? 0,
+    currentTargetId: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.targetId.value ?? 0,
+    currentRequestTime: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.requestTime.value ?? 0,
+    currentRequestMjd: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.requestMjd.value ?? 0,
+    currentRa: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.ra.value ?? 0,
+    currentDecl: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.decl.value ?? 0,
+    currentSkyAngle: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.skyAngle.value ?? 0,
+    currentFilter: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.filter.value ?? '',
+    currentNumExposures: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.numExposures.value ?? 0,
+    currentExposureTimes: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.exposureTimes.value ?? 0,
+    currentSlewTime: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.slewTime.value ?? 0,
+    currentOffsetX: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.offsetX.value ?? 0,
+    currentOffsetY: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.offsetY.value ?? 0,
+    currentNumProposals: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.numProposals.value ?? 0,
+    currentProposalId: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.proposalId.value ?? [],
+    currentSequenceDuration: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.sequenceDuration.value ?? 0,
   }
 };
 
