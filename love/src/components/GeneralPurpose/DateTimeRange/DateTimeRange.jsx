@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
-import { DATE_TIME_FORMAT } from 'Config';
+import lodash from 'lodash';
+import Moment from 'moment';
 import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
 import styles from './DateTimeRange.module.css';
 
@@ -15,11 +16,6 @@ const DateTimeRange = ({
 }) => {
   const [dateStart, setDateStart] = useState(startDate ?? new Date(Date.now() - 24 * 60 * 60 * 1000));
   const [dateEnd, setDateEnd] = useState(endDate ?? new Date(Date.now() + 37 * 1000)); // Add 37 seconds to comply with TAI
-
-  useEffect(() => {
-    onChange(dateStart, 'start');
-    onChange(dateEnd, 'end');
-  }, [startDate, endDate]);
 
   const handleChangeStart = (changeEvent) => {
     setDateStart(changeEvent);
@@ -63,9 +59,15 @@ DateTimeRange.propTypes = {
   /** Classname of the component */
   className: PropTypes.string,
   /** Date for the datetime range start */
-  startDate: PropTypes.instanceOf(Date),
+  startDate: PropTypes.oneOfType([
+    PropTypes.instanceOf(Date),
+    PropTypes.instanceOf(Moment),
+  ]),
   /** Date for the datetime range end */
-  endtDate: PropTypes.instanceOf(Date),
+  endtDate: PropTypes.oneOfType([
+    PropTypes.instanceOf(Date),
+    PropTypes.instanceOf(Moment),
+  ]),
   /** Properties to add to the start DateTime component */
   startDateProps: PropTypes.object,
   /** Properties to add to the end DateTime component */
@@ -76,4 +78,12 @@ DateTimeRange.propTypes = {
   onChange: PropTypes.func,
 };
 
-export default DateTimeRange;
+const checkChangeProps = (prevProps, nextProps) => {
+  return prevProps.className === nextProps.className
+    && prevProps.startDate === nextProps.startDate
+    && prevProps.endDate === nextProps.endDate
+    && lodash.isEqual(prevProps.startDateProps, nextProps.startDateProps)
+    && lodash.isEqual(prevProps.endDateProps, nextProps.endDateProps)
+    && prevProps.label === nextProps.label;
+};
+export default memo(DateTimeRange, checkChangeProps);
