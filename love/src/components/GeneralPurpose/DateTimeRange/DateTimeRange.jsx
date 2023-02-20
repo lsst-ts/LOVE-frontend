@@ -17,6 +17,13 @@ const DateTimeRange = ({
   const [dateStart, setDateStart] = useState(startDate ?? new Date(Date.now() - 24 * 60 * 60 * 1000));
   const [dateEnd, setDateEnd] = useState(endDate ?? new Date(Date.now() + 37 * 1000)); // Add 37 seconds to comply with TAI
 
+  // Effect used to update startDate and endDate
+  // When first pased, the arguments could be undefined
+  useEffect(() => {
+    onChange(dateStart, 'start');
+    onChange(dateEnd, 'end');
+  }, []);
+
   const handleChangeStart = (changeEvent) => {
     setDateStart(changeEvent);
     onChange(changeEvent, 'start');
