@@ -367,3 +367,7 @@ th.tableHead {
   width: var(--font-size-small);
   margin-left: var(--small-padding);
 }
+
+.divExportBtn {
+  margin-left: auto;
+}
