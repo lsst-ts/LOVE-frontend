@@ -32,6 +32,7 @@ export default class Scheduler extends Component {
 
     componentDidMount = () => {
         this.props.subscribeToStream();
+        this.skyMap = <SkyMap></SkyMap>;
       };
     
     componentWillUnmount = () => {
@@ -55,7 +56,7 @@ export default class Scheduler extends Component {
               {/* column 2 */}
               <div className={styles.middleDiv}>
                 <CurrentTarget />
-                <SkyMap az={azimuthActualPosition} el={elevationActualPosition} />
+                {this.skyMap?? ''}
                 <Plots />
               </div>
               {/* column 3 */}

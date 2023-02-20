@@ -27,11 +27,11 @@ export const schema = {
       isPrivate: false,
       default: 'Scheduler',
     },
-    controls: {
-      type: 'boolean',
-      description: "Whether to display controls to configure periods of time'",
-      default: true,
+    salindex: {
+      type: 'number',
+      description: 'Salindex of Scheduler. 1 for ATScheduler and 2 for Simonyi Scheduler',
       isPrivate: false,
+      default: 1,
     },
   },
 };
@@ -213,18 +213,19 @@ const SchedulerContainer = ({
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const schedulerState = getDetailedState(state, ownProps.salindex);
-  const observingMode = getObservingMode(state, ownProps.salindex);
-  const generalInfo = getGeneralInfo(state, ownProps.salindex);
-  const filterInfo = getFilterSwap(state, ownProps.salindex);
-  const observatoryStatus = getObservatoryStatus(state, ownProps.salindex);
-  const currentTarget = getCurrentTargetInfo(state, ownProps.salindex);
-  const skyMap = getSkyMapInfo(state, ownProps.salindex);
-  const lastTarget = lastTargetInfo(state, ownProps.salindex);
-  const nextTarget = nextTargetInfo(state, ownProps.salindex);
-  const predictedTargets = predictedTargetsInfo(state, ownProps.salindex);
-  const surveys = getSurveysInfo(state, ownProps.salindex);
-  const blocks = getBlocksInfo(state, ownProps.salindex);
+
+  const schedulerState = getDetailedState(state, ownProps?.salindex);
+  const observingMode = getObservingMode(state, ownProps?.salindex);
+  const generalInfo = getGeneralInfo(state, ownProps?.salindex);
+  const filterInfo = getFilterSwap(state, ownProps?.salindex);
+  const observatoryStatus = getObservatoryStatus(state, ownProps?.salindex);
+  const currentTarget = getCurrentTargetInfo(state, ownProps?.salindex);
+  const skyMap = getSkyMapInfo(state, ownProps?.salindex);
+  const lastTarget = lastTargetInfo(state, ownProps?.salindex);
+  const nextTarget = nextTargetInfo(state, ownProps?.salindex);
+  const predictedTargets = predictedTargetsInfo(state, ownProps?.salindex);
+  const surveys = getSurveysInfo(state, ownProps?.salindex);
+  const blocks = getBlocksInfo(state, ownProps?.salindex);
   return {
     ...schedulerState,
     ...observingMode,
@@ -243,18 +244,18 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const subscriptions = [
-    `event-Scheduler-${ownProps.salindex}-detailedState`,
-    `event-Scheduler-${ownProps.salindex}-observingMode`,
-    `event-Scheduler-${ownProps.salindex}-generalInfo`,
-    `event-Scheduler-${ownProps.salindex}-needFilterSwap`,
-    `telemetry-Scheduler-${ownProps.salindex}-observatoryState`,
-    `event-Scheduler-${ownProps.salindex}-target`,
-    `event-Scheduler-${ownProps.salindex}-observation`,
-    `event-Scheduler-${ownProps.salindex}-predictedSchedule`,
-    `event-Scheduler-${ownProps.salindex}-timeToNextTarget`,
-    `event-Scheduler-${ownProps.salindex}-surveyTopology`,
-    `event-Scheduler-${ownProps.salindex}-blockInventory`,
-    `event-Scheduler-${ownProps.salindex}-blockStatus`,
+    `event-Scheduler-${ownProps?.salindex}-detailedState`,
+    `event-Scheduler-${ownProps?.salindex}-observingMode`,
+    `event-Scheduler-${ownProps?.salindex}-generalInfo`,
+    `event-Scheduler-${ownProps?.salindex}-needFilterSwap`,
+    `telemetry-Scheduler-${ownProps?.salindex}-observatoryState`,
+    `event-Scheduler-${ownProps?.salindex}-target`,
+    `event-Scheduler-${ownProps?.salindex}-observation`,
+    `event-Scheduler-${ownProps?.salindex}-predictedSchedule`,
+    `event-Scheduler-${ownProps?.salindex}-timeToNextTarget`,
+    `event-Scheduler-${ownProps?.salindex}-surveyTopology`,
+    `event-Scheduler-${ownProps?.salindex}-blockInventory`,
+    `event-Scheduler-${ownProps?.salindex}-blockStatus`,
   ];
   return {
     subscriptions,

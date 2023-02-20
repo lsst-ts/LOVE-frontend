@@ -1192,15 +1192,16 @@ export const getRawStatus = (state) => {
 // Scheduler
 export const getDetailedState = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-detailedState`];
-  const summaryData = getStreamData(state, subscriptions);
+  const summaryData = getStreamsData(state, subscriptions);
+  console.log(summaryData);
   return {
-    subState: summaryData[`event-Scheduler-${salindex}-detailedState`]?.[0]?.subState.value ?? 0,
+    subState: summaryData?.[`event-Scheduler-${salindex}-detailedState`]?.[0]?.subState.value ?? 0,
   }
 };
 
 export const getObservingMode = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-observingMode`];
-  const observingMode = getStreamData(state, subscriptions);
+  const observingMode = getStreamsData(state, subscriptions);
   return {
     mode: observingMode[`event-Scheduler-${salindex}-observingMode`]?.[0]?.mode.value ?? '',
     type: observingMode[`event-Scheduler-${salindex}-observingMode`]?.[0]?.type.value ?? '',
@@ -1209,7 +1210,7 @@ export const getObservingMode = (state, salindex) => {
 
 export const getGeneralInfo = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-generalInfo`];
-  const generalInfo = getStreamData(state, subscriptions);
+  const generalInfo = getStreamsData(state, subscriptions);
   return {
     isNigth: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.isNigth.value ?? false, 
     night: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.nigth.value ?? 0,
@@ -1220,7 +1221,7 @@ export const getGeneralInfo = (state, salindex) => {
 
 export const getFilterSwap = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-needFilterSwap`];
-  const filterSwap = getStreamData(state, subscriptions);
+  const filterSwap = getStreamsData(state, subscriptions);
   return {
     needSwap: filterSwap[`event-Scheduler-${salindex}-needFilterSwap`]?.[0]?.needSwap.value ?? false,
     filterToMount: filterSwap[`event-Scheduler-${salindex}-needFilterSwap`]?.[0]?.filterToMount.value ?? '',
@@ -1230,7 +1231,7 @@ export const getFilterSwap = (state, salindex) => {
 
 export const getObservatoryStatus = (state, salindex) => {
   const subscriptions = [`telemetry-Scheduler-${salindex}-observatoryState`, `event-Scheduler-${salindex}-target`];
-  const observatoryStatus = getStreamData(state, subscriptions);
+  const observatoryStatus = getStreamsData(state, subscriptions);
   return {
     pointingRa: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.ra.value ?? 0,
     pointingDecl: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.declination.value ?? 0,
@@ -1256,7 +1257,7 @@ export const getObservatoryStatus = (state, salindex) => {
 
 export const getCurrentTargetInfo = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-target`];
-  const currentTarget =  getStreamData(state, subscriptions);
+  const currentTarget =  getStreamsData(state, subscriptions);
   return {
     currentTargetId: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.targetId.value ?? 0,
     currentRequestTime: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.requestTime.value ?? 0,
@@ -1281,7 +1282,7 @@ export const getSkyMapInfo = (state, salindex) => {
     [`event-Scheduler-${salindex}-observation`],
     [`event-Scheduler-${salindex}-predictedSchedule`],
   ];
-  const skyMapInfo = getStreamData(state, subscriptions);
+  const skyMapInfo = getStreamsData(state, subscriptions);
   return {
     rotSkyPos: skyMapInfo[`event-Scheduler-${salindex}-observation`]?.[0]?.rotSkyPos.value ?? 0,
     predictedTargetsRa: skyMapInfo[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.ra.value ?? 0,
@@ -1292,7 +1293,7 @@ export const getSkyMapInfo = (state, salindex) => {
 
 export const lastTargetInfo = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-observation`];
-  const lastTarget = getStreamData(state, subscriptions);
+  const lastTarget = getStreamsData(state, subscriptions);
   return {
     lastTargetId: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.targetId.value ?? 0,
     lastTargetRa: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.ra.value ?? 0,
@@ -1308,7 +1309,7 @@ export const lastTargetInfo = (state, salindex) => {
 
 export const nextTargetInfo = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-timeToNextTarget`];
-  const nextTarget = getStreamData(state, subscriptions);
+  const nextTarget = getStreamsData(state, subscriptions);
   return {
     nextTargetCurrentTime: nextTarget[`event-Scheduler-${salindex}-timeToNextTarget`]?.[0]?.currentTime.value ?? 0,
     nextTimeWaitTime: nextTarget[`event-Scheduler-${salindex}-timeToNextTarget`]?.[0]?.waitTime.value ?? 0,
@@ -1320,7 +1321,7 @@ export const nextTargetInfo = (state, salindex) => {
 
 export const predictedTargetsInfo = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-predictedSchedule`];
-  const predictedTargets = getStreamData(state, subscriptions);
+  const predictedTargets = getStreamsData(state, subscriptions);
   return {
     predTargetsNumTargets: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.numberOfTargets.value ?? 0,
     predTargetsRa: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.ra.value ?? [],
@@ -1335,7 +1336,7 @@ export const predictedTargetsInfo = (state, salindex) => {
 
 export const getSurveysInfo = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-surveyTopology`];
-  const surveys = getStreamData(state, subscriptions);
+  const surveys = getStreamsData(state, subscriptions);
   return {
     surveysNumGenProps: surveys[`event-Scheduler-${salindex}-surveyTopology`]?.[0]?.numGeneralProps.value ?? 0,
     surveysGenProps: surveys[`event-Scheduler-${salindex}-surveyTopology`]?.[0]?.generalPropos.value ?? '',
@@ -1346,7 +1347,7 @@ export const getSurveysInfo = (state, salindex) => {
 
 export const getBlocksInfo = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-blockInventory`, `event-Scheduler-${salindex}-blockStatus`];
-  const blocks = getStreamData(state, subscriptions);
+  const blocks = getStreamsData(state, subscriptions);
   return {
     blockInvId: blocks[`event-Scheduler-${salindex}-blockInventory`]?.[0]?.ids.vallue ?? '',
     blockInvStatus: blocks[`event-Scheduler-${salindex}-blockInventory`]?.[0]?.status.value ?? '',
