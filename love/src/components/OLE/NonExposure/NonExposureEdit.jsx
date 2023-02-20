@@ -71,12 +71,6 @@ export default class NonExposureEdit extends Component {
       }
     });
 
-    logEdit.date_begin = logEdit.date_begin
-      ? new Date(logEdit.date_begin + 'Z')
-      : new Date(new Date() - 24 * 60 * 60 * 1000);
-
-    logEdit.date_end = logEdit.date_end ? new Date(logEdit.date_end + 'Z') : new Date();
-
     this.state = {
       logEdit,
       confirmationModalShown: false,
@@ -175,38 +169,28 @@ export default class NonExposureEdit extends Component {
 
   handleTimeOfIncident(date, type) {
     if (type === 'start') {
-      this.setState((state) => ({
-        logEdit: { ...state.logEdit, date_begin: date },
+      this.setState((prevState) => ({
+        logEdit: { ...prevState.logEdit, date_begin: date },
       }));
     } else if (type === 'end') {
-      this.setState((state) => ({
-        logEdit: { ...state.logEdit, date_end: date },
+      this.setState((prevState) => ({
+        logEdit: { ...prevState.logEdit, date_end: date },
       }));
     }
   }
-
-  componentDidMount() {}
 
   componentDidUpdate(prevProps, prevState) {
     if (
       prevState.logEdit?.date_begin !== this.state.logEdit?.date_begin ||
       prevState.logEdit?.date_end !== this.state.logEdit?.date_end
     ) {
-      const newDateBegin = this.state.logEdit.date_begin
-        ? new Date(this.state.logEdit.date_begin + 'Z')
-        : new Date(new Date() - 24 * 60 * 60 * 1000);
-
-      const newDateEnd = this.state.logEdit.date_end ? new Date(this.state.logEdit.date_end + 'Z') : new Date();
-
       const start = Moment(this.state.logEdit.date_begin);
       const end = Moment(this.state.logEdit.date_end);
       const duration_hr = end.diff(start, 'hours', true);
-      this.setState((state) => ({
+      this.setState((prevState) => ({
         logEdit: {
-          ...state.logEdit,
+          ...prevState.logEdit,
           time_lost: duration_hr.toFixed(2),
-          date_begin: newDateBegin,
-          date_end: newDateEnd,
         },
       }));
     }
@@ -376,20 +360,14 @@ export default class NonExposureEdit extends Component {
 
                 {isMenu ? (
                   <>
-                    <span className={styles.label}>Time of Incident</span>
+                    <span className={styles.label}>Time of Incident (UTC)</span>
                     <span className={styles.value}>
                       <DateTimeRange
                         className={styles.dateTimeRangeStyle}
                         onChange={(date, type) => this.handleTimeOfIncident(date, type)}
-                        startDate={
-                          this.state.logEdit.date_begin
-                            ? new Date(this.state.logEdit.date_begin + 'Z')
-                            : new Date(new Date() - 24 * 60 * 60 * 1000)
-                        }
-                        endDate={this.state.logEdit.date_end ? new Date(this.state.logEdit.date_end + 'Z') : new Date()}
                       />
                     </span>
-                    <span className={styles.label}>Obs. Time Loss [hours]</span>
+                    <span className={styles.label}>Obs. Time Loss (hours)</span>
                     <span className={styles.value}>
                       <Input
                         type="number"
@@ -417,16 +395,14 @@ export default class NonExposureEdit extends Component {
                     <></>
                   ) : (
                     <>
-                      <span className={styles.label}>Time of Incident</span>
+                      <span className={styles.label}>Time of Incident (UTC)</span>
                       <span className={styles.value}>
                         <DateTimeRange
                           className={styles.dateTimeRangeStyle}
                           onChange={(date, type) => this.handleTimeOfIncident(date, type)}
-                          startDate={this.state.logEdit.date_begin}
-                          endDate={this.state.logEdit.date_end}
                         />
                       </span>
-                      <span className={styles.label}>Obs. Time Loss [hours]</span>
+                      <span className={styles.label}>Obs. Time Loss (hours)</span>
                       <span className={styles.value}>
                         <Input
                           type="number"
@@ -550,7 +526,7 @@ export default class NonExposureEdit extends Component {
               parentSelector={() => document.querySelector(`#${this.id}`)}
               size={50}
             >
-              {confirmationModalText}
+              <p style={{textAlign: 'center'}}>{confirmationModalText}</p>
               {this.renderModalFooter()}
             </Modal>
           </div>
