@@ -522,7 +522,7 @@ export default class ExposureAdd extends Component {
               parentSelector={() => document.querySelector(`#${this.id}`)}
               size={50}
             >
-              {confirmationModalText}
+              <p style={{textAlign: 'center'}}>{confirmationModalText}</p>
               {this.renderModalFooter()}
             </Modal>
           </div>
