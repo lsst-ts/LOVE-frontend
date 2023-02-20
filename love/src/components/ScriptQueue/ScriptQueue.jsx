@@ -436,7 +436,7 @@ export default class ScriptQueue extends Component {
     this.props.requestSALCommand({
       cmd: 'cmd_move',
       params: {
-        salIndex: scriptIndex,
+        scriptSalIndex: scriptIndex,
         location: location,
         locationSalIndex: locationSalIndex,
       },
