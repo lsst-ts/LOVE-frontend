@@ -71,11 +71,7 @@ export default class PredictedTarget extends Component {
                         <MinusIcon />}
                     </div>
                 </div>
-                <div style={{
-                        height: isOpen ? "100%" : "0%", 
-                        overflow: "hidden", 
-                        transition: "height 0.7s ease",
-                }}>
+                <div className={isOpen? [styles.openPanel, styles.panel].join(' ') : [styles.closePanel, styles.panel].join(' ')}>
                     <div className={styles.predictedTargetsDiv}>
                         {predictedTargets.map(pt => 
                             <div>

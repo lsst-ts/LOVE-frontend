@@ -21,11 +21,7 @@ export default class NextTarget extends Component {
                         <MinusIcon />}
                     </div>
                 </div>
-                <div style={{
-                        height: isOpen ? "100%" : "0%", 
-                        overflow: "hidden", 
-                        transition: "height 0.7s ease",
-                    }}>
+                <div className={isOpen? [styles.openPanel, styles.panel].join(' ') : [styles.closePanel, styles.panel].join(' ')}>
                     <SummaryPanel>
                         <Label>Time on target</Label>
                         <Value>00:12:42</Value>

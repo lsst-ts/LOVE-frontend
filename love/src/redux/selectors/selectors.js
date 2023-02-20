@@ -1193,7 +1193,6 @@ export const getRawStatus = (state) => {
 export const getDetailedState = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-detailedState`];
   const summaryData = getStreamsData(state, subscriptions);
-  console.log(summaryData);
   return {
     subState: summaryData?.[`event-Scheduler-${salindex}-detailedState`]?.[0]?.subState.value ?? 0,
   }

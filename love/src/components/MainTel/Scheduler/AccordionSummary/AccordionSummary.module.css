@@ -16,7 +16,8 @@
     display: flex;
     align-items: center;
     background-color: #1A2D37;
-    height: 30%;
+    height: 3em;
+    margin-block: 0.5em;
 }
 
 .header:hover {
@@ -60,7 +61,7 @@
 
 .predictedTargetsDiv {
     margin: 0.5em;
-    height: 200px;
+    height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
     text-align: justify;
@@ -136,4 +137,18 @@
     text-align: justify;
     border: 1px solid var(--tertiary-background-color);
     display: block;
+}
+
+.panel{
+    overflow: hidden; 
+    transition: height 0.7s ease;
+}
+
+.openPanel {
+    height: 100%; 
+}
+
+.closePanel {
+    height: 0%; 
+    position: fixed;
 }
