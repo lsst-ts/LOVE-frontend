@@ -5,6 +5,8 @@
     display: inline-grid;
     align-content: flex-start;
     background-color: var(--second-secondary-background-color);
+    height: 100%;
+    overflow-y: scroll;
 }
 
 .title {
@@ -149,6 +151,5 @@
 }
 
 .closePanel {
-    height: 0%; 
-    position: fixed;
+    height: 0px;
 }

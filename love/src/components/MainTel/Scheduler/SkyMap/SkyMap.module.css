@@ -2,9 +2,31 @@
     border-radius: 0.5em;
     box-sizing: border-box;
     width: 100%;
+    margin-bottom: 2em;
+    margin-top: 1em;
+  }
+
+  .headerDiv {
+    display: contents;
+    margin-bottom: 1em;
   }
   
   .selectSystemCoord {
-    display: flex;
+    display: contents;
     transform: translate(80%);
+  }
+
+  .legend {
+    float: left;
+    margin-bottom: 2em;
+  }
+
+  .circleIcon {
+    width: 5%;
+    fill: lightblue !important;
+  }
+
+  .plusIcon {
+    transform: rotate(45deg);
+    width: 5%;
   }

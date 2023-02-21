@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import celestial from 'd3-celestial';
 import styles from './SkyMap.module.css';
 import Select from 'components/GeneralPurpose/Select/Select';
+import CircleIcon from 'components/icons/CircleIcon/CircleIcon';
+import PlusIcon from 'components/icons/PlusIcon/PlusIcon';
 
 const Celestial = celestial.Celestial();
 window.Celestial = Celestial;
@@ -122,7 +124,7 @@ export default class SkyMap extends Component {
               '11px Helvetica, Arial, sans-serif',
             ],
           }, // ranked constellations
-          lines: true, // Show constellation lines, style below
+          lines: false, // Show constellation lines, style below
           linestyle: { stroke: '#cccccc', width: 1, opacity: 0.6 },
           bounds: false, // Show constellation boundaries, style below
           boundstyle: { stroke: '#cccc00', width: 0.5, opacity: 0.8, dash: [2, 4] },
@@ -207,6 +209,29 @@ export default class SkyMap extends Component {
           n: 'Summer Triangle',
           // Location of name text on the map
           loc: [-67.5, 52],
+        },
+        geometry: {
+          // the line object as an array of point coordinates
+          type: 'MultiLineString',
+          coordinates: [
+            [
+              [-80.7653, 38.7837],
+              [-62.3042, 8.8683],
+              [-49.642, 45.2803],
+              [-80.7653, 38.7837],
+            ],
+          ],
+        },
+      },
+      {
+        // target
+        type: 'Feature',
+        id: 'Target',
+        properties: {
+          // Name
+          n: 'Target',
+          // Location of name text on the map
+          loc: [-69.5, 52],
         },
         geometry: {
           // the line object as an array of point coordinates
@@ -393,15 +418,20 @@ export default class SkyMap extends Component {
     const selectOptions = ['equatorial', 'ecliptic', 'galactic', 'supergalactic'];
     return (
       <div className={styles.container}>
-        <br></br>
-        <div className={styles.selectSystemCoord}>
-          <Select
-            options={selectOptions}
-            onChange={(e) => {
-              e.value ? this.actConfig(e.value) : true;
-            }}
-            value={'equatorial'}
-          ></Select>
+        <div className={styles.headerDiv}>
+          <div className={styles.legend}>
+              <span><CircleIcon className={styles.circleIcon}/>Pointing</span>
+              <span><PlusIcon className={styles.plusIcon} /> Targets</span>
+          </div>
+          <div className={styles.selectSystemCoord}>
+            <Select
+              options={selectOptions}
+              onChange={(e) => {
+                e.value ? this.actConfig(e.value) : true;
+              }}
+              value={'equatorial'}
+            ></Select>
+          </div>
         </div>
         <div id="map-container">
           <div id="map"></div>
