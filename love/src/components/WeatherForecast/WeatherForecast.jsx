@@ -161,7 +161,7 @@ export default class WeatherForecast extends Component {
               <PlotContainer
                 containerNode={this.windPlotRef.current}
                 xAxisTitle="Time"
-                yAxisTitle="Wind"
+                yAxisTitle=""
                 legendPosition="bottom"
                 inputs={this.state.wind}
                 sliceSize={this.state.sliceSize}
@@ -197,7 +197,7 @@ export default class WeatherForecast extends Component {
               <PlotContainer
                 containerNode={this.rainPlotRef.current}
                 xAxisTitle="Time"
-                yAxisTitle="Precipitation"
+                yAxisTitle=""
                 legendPosition="bottom"
                 inputs={this.state.rain}
                 sliceSize={this.state.sliceSize}
