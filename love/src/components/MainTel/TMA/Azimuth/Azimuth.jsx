@@ -131,7 +131,7 @@ export default class Limits extends Component {
                   : [currentText_Y < 1 ? styles.textQ1 : styles.textQ2],
               ].join(' ')}
             >
-              {`${currentValue + 'º'}`}
+              {`${currentValue.toFixed(2) + 'º'}`}
             </tspan>
           </text>
         </g>
