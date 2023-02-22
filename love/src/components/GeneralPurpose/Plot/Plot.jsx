@@ -227,6 +227,7 @@ export default class Plot extends Component {
           let newValue = {
             name: inputName,
             values: {},
+            units: {}
           };
           
           for (const value of Object.values(inputConfig.values)) {
@@ -242,15 +243,18 @@ export default class Plot extends Component {
             newValue['x'] = parseTimestamp(streamValue.private_rcvStamp?.value * 1000);
 
             const val = accessorFunc(streamValue[item]?.value);
-
+            const units = streamValue[item]?.units;
+            
             if (Array.isArray(val)) {
               newValue[variable] = val;
+              newValue['units'][variable] = units;
               for (let i = 0; i < val.length; i++) {
                 if (newValue.values[i] === undefined) newValue.values[i] = {};
                 newValue.values[i][variable] = val[i];
               }
             } else {
               newValue[variable] = val;
+              newValue['units'][variable] = units;
             }
           }
 
@@ -262,6 +266,7 @@ export default class Plot extends Component {
           } else {
             Object.entries(newValue.values).forEach((entry) => {
               let input = Object.assign({}, entry[1]);
+              input['units'] = newValue.units;
               input['x'] = parseTimestamp(entry[1]['x'] * 1000);
               inputData.push(input);
             });
@@ -270,7 +275,7 @@ export default class Plot extends Component {
           // Slice inputData array if it has more than sliceSize datapoints (corresponding to one hour if telemetry is received every two seconds)
           if (inputData.length > sliceSize) {
              inputData = inputData.slice(-1 * sliceSize);
-           }
+          }
           newData[inputName] = inputData;
           
         } else {
@@ -351,12 +356,13 @@ export default class Plot extends Component {
 
 
     const streamsItems = Object.entries(inputs).map(([name, inputConfig]) => {
+      const {type} = inputConfig;
       if (inputConfig.values) {
         let newStreams = [];
         for (const value of Object.values(inputConfig.values)) {
           const { variable, category, csc, salindex, topic, item } = value;
           const streamName = `${category}-${csc}-${salindex}-${topic}`;
-          const stream = {name: name, variable: variable, value: streams[streamName]?.[item]}
+          const stream = {name: name, variable: variable, type: type + 's', value: streams[streamName]?.[item]}
           newStreams.push(stream);
         }
         return newStreams;
@@ -366,14 +372,6 @@ export default class Plot extends Component {
         return streams[streamName]?.[item];
       }
     }).flat();
-
-    const units = {};
-    streamsItems.forEach(element => {
-      if (!units[element.variable]) {
-        units[element.variable] = {};
-      }
-      units[element.variable] = element.value?.units;
-    });
 
     const layerTypes = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads', 'bigotes', 'rects', 'clouds'];
     const layers = {};
@@ -449,7 +447,6 @@ export default class Plot extends Component {
             layers={layers}
             xAxisTitle={xAxisTitle}
             yAxisTitle={yAxisTitle}
-            units={units}
             marksStyles={completedMarksStyles}
             temporalXAxis
             width={containerWidth - 160} // from the .autogrid grid-template-columns
@@ -468,7 +465,6 @@ export default class Plot extends Component {
               layers={layers}
               xAxisTitle={xAxisTitle}
               yAxisTitle={yAxisTitle}
-              units={units}
               marksStyles={completedMarksStyles}
               temporalXAxis
               width={containerWidth - 30} // from the .autogrid grid-template-columns
