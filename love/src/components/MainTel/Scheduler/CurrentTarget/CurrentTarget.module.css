@@ -34,3 +34,23 @@
     display: grid !important;
     width: 100%;
 }
+.proposals {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}
+
+.generalDiv {
+    /* display: grid; */
+    /* grid-template-columns: 1fr 1fr 1fr 1fr; */
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}
+
+.surveysDivs {
+    background-color: var(--quinary-background-color);
+    border: 1px solid var(--tertiary-background-color);
+    padding: 1em;
+    margin: 0.5em;
+    width: 55%;
+    height: 30%;
+}

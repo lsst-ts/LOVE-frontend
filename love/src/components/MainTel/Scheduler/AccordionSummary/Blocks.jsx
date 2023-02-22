@@ -180,7 +180,7 @@ export default class Blocks extends Component {
                         <MinusIcon />}
                     </div>
                 </div>
-                <div className={isOpen? [styles.openPanel, styles.panel].join(' ') : [styles.closePanel, styles.panel].join(' ')}>
+                <div className={isOpen? [styles.openPanel, styles.panel].join(' ') : [styles.closePanel, styles.panel].join(' ') }>
                     <SummaryPanel className={styles.currentBlock}>
                         <Label>{listOfBlocks[0].name}</Label>
                         <Value>{listOfBlocks[0].status}</Value>

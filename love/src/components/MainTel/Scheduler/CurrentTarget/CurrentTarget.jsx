@@ -3,12 +3,11 @@ import styles from './CurrentTarget.module.css';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Label from 'components/GeneralPurpose/SummaryPanel/Label';
 import Value from 'components/GeneralPurpose/SummaryPanel/Value';
-import Title from 'components/GeneralPurpose/SummaryPanel/Title';
-import { style } from 'd3';
 
 export default class CurrentTarget extends Component {
 
     render() {
+        const proposals = ['63-EFD', '95ONES', 'AB987', 'DR-2345', 'GP-0002', 'GP-0167', 'OC124', 'TP0001', 'Q24', 'Z_DD01'];
         return (
             <div className={styles.container}>
                 <div className={styles.headers}>
@@ -43,7 +42,16 @@ export default class CurrentTarget extends Component {
                         <Label>Exposure time</Label>
                         <Value>2s</Value>
                         <Label>Proposals</Label>
-                        <span></span>
+                        {/* <div className={styles.proposals}>
+                            <Label>Proposals</Label>
+                            <div className={styles.generalDiv}>
+                                {proposals.map(gp => 
+                                    <div className={styles.surveysDivs}>
+                                        {gp}
+                                    </div>
+                                )}
+                            </div>
+                        </div> */}
                     </SummaryPanel>
                 </div>
             </div>

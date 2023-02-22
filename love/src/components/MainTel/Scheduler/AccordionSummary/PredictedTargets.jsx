@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import styles from './AccordionSummary.module.css';
-// import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
-// import Label from 'components/GeneralPurpose/SummaryPanel/Label';
-// import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 import MinusIcon from 'components/icons/MinusIcon/MinusIcon';
 

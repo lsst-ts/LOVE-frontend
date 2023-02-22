@@ -7,17 +7,19 @@
   }
 
   .headerDiv {
-    display: contents;
+    display: flex;
     margin-bottom: 1em;
+    justify-content: space-between;
   }
   
   .selectSystemCoord {
-    display: contents;
-    transform: translate(80%);
+    display: flex;
+    /* transform: translate(80%);
+    margin-left: -15em; */
   }
 
   .legend {
-    float: left;
+    /* float: left; */
     margin-bottom: 2em;
   }
 

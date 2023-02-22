@@ -23,19 +23,20 @@ export default class SkyMap extends Component {
 
   static defaultProps = {
     subscribeToStreams: (value) => console.log(value),
-    pointing: [-82.7653, 30.7837],
-    targets: [{ id: 'actualTarget', position: [] }],
+    pointing: [30.7653, 22.7837],
+    targets: [{ id: 'actualTarget', lat: 37, long: 29 }],
     darkZones: [],
   };
 
   constructor(props) {
     super(props);
     this.state = {
+      //Config from https://github.com/ofrohn/d3-celestial
       config: {
         width: 0,
         projection: 'aitoff',
         transform: 'equatorial',
-        center: [-65, 0], // TODO : Fix it to const ID
+        center: null, 
         adaptable: true,
         interactive: true,
         form: false,
@@ -46,7 +47,7 @@ export default class SkyMap extends Component {
         // STARS
         stars: {
           show: true, // Show stars
-          limit: 3, // Show only stars brighter than limit magnitude
+          limit: 5, // Show only stars brighter than limit magnitude
           colors: true, // Show stars in spectral colors, if not use "color"
           style: { fill: '#ffffff', opacity: 1 }, // Default style for stars
           names: false, // Show star names (Bayer, Flamsteed, Variable star, Gliese, whichever applies first)
@@ -67,19 +68,21 @@ export default class SkyMap extends Component {
           },
           propernamelimit: 1.5, // Show proper names for stars brighter than propernamelimit
           size: 7, // Maximum size (radius) of star circle in pixels
-          exponent: -0.58, // Scale exponent for star size, larger = more linear
+          exponent: -0.40, // Scale exponent for star size, larger = more linear
           data: 'stars.6.json', // Data source for stellar data
           //data: 'stars.8.json' // Alternative deeper data source for stellar data
         },
         planets: {
           show: true,
+          which: ["sol", "ter", "lun"],
           symbolType: 'disk',
+          names: true,
         },
         // DEEP SKY OBJECTS
         dsos: {
           show: false, // Show Deep Space Objects
           limit: 6, // Show only DSOs brighter than limit magnitude
-          names: true, // Show DSO names
+          names: false, // Show DSO names
           desig: true, // Show short DSO names
           namelimit: 4, // Show only names for DSOs brighter than namelimit
           namestyle: { fill: '#cccccc', font: '11px Helvetica, Arial, serif', align: 'left', baseline: 'top' },
@@ -161,7 +164,7 @@ export default class SkyMap extends Component {
         background: {
           fill: '#000000', // Area fill
           opacity: 1,
-          stroke: '#3e3d40', // Outline
+          stroke: '#000000', // Outline
           width: 1.5,
         },
         // HORIZON
@@ -177,27 +180,35 @@ export default class SkyMap extends Component {
     };
   }
 
-  // Asterisms canvas style properties for lines, text and pointing
+  // Asterisms canvas style of polygons lines
   lineStyle = {
-    stroke: '#f00',
-    fill: 'rgba(255, 204, 204, 0.4)',
+    stroke: 'white',
+    fill: 'rgba(255, 255, 255, 0.1)',
     width: 3,
   };
+  // Asterisms canvas style of targets lines
+  lineTargetStyle = {
+    stroke: 'green',
+    fill: 'none',
+    width: 3,
+  };
+  // Asterisms canvas style of targets text
   textStyle = {
-    fill: '#f00',
+    fill: 'white',
     font: 'bold 15px Helvetica, Arial, sans-serif',
     align: 'center',
     baseline: 'middle',
   };
+  // Asterisms canvas style of pointing
   pointStyle = {
     stroke: '#1ecfe8',
     width: 1,
     fill: 'rgba(0, 0, 0, 0.0)',
   };
 
-  // JSON structure of the object to be displayed, in this case
-  // the Summer Triangle between Vega, Deneb and Altair
-  jsonLine = {
+  // JSON structure of the object to be displayed
+  // Polygons of dark Zones
+  jsonPolygons = {
     type: 'FeatureCollection',
     // this is an array, add as many objects as you want
     features: [
@@ -206,7 +217,7 @@ export default class SkyMap extends Component {
         id: 'SummerTriangle',
         properties: {
           // Name
-          n: 'Summer Triangle',
+          n: 'DarkZone1',
           // Location of name text on the map
           loc: [-67.5, 52],
         },
@@ -216,31 +227,12 @@ export default class SkyMap extends Component {
           coordinates: [
             [
               [-80.7653, 38.7837],
+              [-76.7653, 22.7837],
               [-62.3042, 8.8683],
-              [-49.642, 45.2803],
-              [-80.7653, 38.7837],
-            ],
-          ],
-        },
-      },
-      {
-        // target
-        type: 'Feature',
-        id: 'Target',
-        properties: {
-          // Name
-          n: 'Target',
-          // Location of name text on the map
-          loc: [-69.5, 52],
-        },
-        geometry: {
-          // the line object as an array of point coordinates
-          type: 'MultiLineString',
-          coordinates: [
-            [
-              [-80.7653, 38.7837],
-              [-62.3042, 8.8683],
-              [-49.642, 45.2803],
+              [-55.3042, 10.8683],
+              [-47.642, 25.2803],
+              [-49.642, 42.2803],
+              [-65.642, 45.2803],
               [-80.7653, 38.7837],
             ],
           ],
@@ -250,7 +242,7 @@ export default class SkyMap extends Component {
   };
 
   //JSON with the pointing position
-  jsonSnr = {
+  jsonPointing = {
     type: 'FeatureCollection',
     features: [
       {
@@ -272,7 +264,7 @@ export default class SkyMap extends Component {
   //targets features
   features = [];
 
-  //JSON with the targets position
+  //JSON with the targets position in the format of celestial
   jsonTargets = {};
 
   /**
@@ -295,35 +287,53 @@ export default class SkyMap extends Component {
 
   componentDidMount = () => {
     const config = this.state.config;
+    //Add objects only one time
     this.addObjects(config);
     Celestial.display(config);
   };
 
   addObjects = (config) => {
-    let jsonLine = this.jsonLine,
-      jsonSnr = this.jsonSnr,
+    let jsonPolygons = this.jsonPolygons,
+      jsonPointing = this.jsonPointing,
       jsonTargets = this.jsonTargets,
       lineStyle = this.lineStyle,
+      lineTargetStyle = this.lineTargetStyle,
       textStyle = this.textStyle,
       pointStyle = this.pointStyle,
       features = this.features;
 
-    this.props.targets.map((t) => {
+    //Generate dic to draw with celestial from targets
+    this.props.targets?.map((t, index) => {
+      const [lat, long] = [t.lat, t.long];
+      let coords1 = [
+          [lat - 2, long],
+          [lat + 2, long],
+        ],
+        coords2 = [
+          [lat, long - 2],
+          [lat, long + 2],
+        ];
+
       features.push({
         type: 'Feature',
-        id: 'SomeDesignator',
+        id: t.id,
         properties: {
-          name: 'Some Name',
-          mag: 10,
-          dim: 250,
+          // Name
+          n: 'Target' + index.toString(),
+          // Location of name text on the map
+          loc: [lat - 2, long + 2],
+          style: {},
         },
         geometry: {
-          type: 'Point',
-          coordinates: t.loc,
+          // the line object as an array of point coordinates
+          type: 'MultiLineString',
+          // This is an array of array of coords. One array represent a polygon
+          coordinates: [coords1, coords2],
         },
       });
     });
 
+    //Make the dicc with the celestial format to render on the map
     jsonTargets = {
       type: 'FeatureCollection',
       features: features,
@@ -336,8 +346,9 @@ export default class SkyMap extends Component {
         if (error) return console.warn(error);
 
         // Load the geoJSON file and transform to correct coordinate system, if necessary
-        let jsonLineCopy = structuredClone(jsonLine);
-        var asterism = Celestial.getData(jsonLineCopy, config.transform);
+        let jsonPolygonsCopy = structuredClone(jsonPolygons);
+        // getData modifica el diccionario por lo que es necesario pasarle una copia 
+        var asterism = Celestial.getData(jsonPolygonsCopy, config.transform);
 
         // Add to celestial objects container in d3
         Celestial.container.selectAll('.asterisms').data(asterism.features).enter().append('path').attr('class', 'ast');
@@ -376,8 +387,8 @@ export default class SkyMap extends Component {
       callback: function (error, json) {
         if (error) return console.warn(error);
         // Load the geoJSON file and transform to correct coordinate system, if necessary
-        let jsonSnrCopy = structuredClone(jsonSnr);
-        var dsos = Celestial.getData(jsonSnrCopy, config.transform);
+        let jsonPointingCopy = structuredClone(jsonPointing);
+        var dsos = Celestial.getData(jsonPointingCopy, config.transform);
         // Add to celestiasl objects container in d3
         Celestial.container.selectAll('.snrs').data(dsos.features).enter().append('path').attr('class', 'snr');
         // Trigger redraw to display changes
@@ -407,6 +418,68 @@ export default class SkyMap extends Component {
             Celestial.context.stroke();
             // Fill the object path with the prevoiusly set fill color
             Celestial.context.fill();
+
+            //ADD TEXT
+            // Set text styles
+            Celestial.setTextStyle({
+              fill: '#1ecfe8',
+              font: 'bold 7.5px Helvetica, Arial, sans-serif',
+              align: 'center',
+              baseline: 'middle',
+            });
+            // and draw text on canvas
+            Celestial.context.fillText('POINTING', pt[0], pt[1] - 15);
+          }
+        });
+      },
+    });
+
+    //Add the targets
+    Celestial.add({
+      type: 'line',
+
+      callback: (error, json) => {
+        if (error) return console.warn(error);
+
+        // Load the geoJSON file and transform to correct coordinate system, if necessary
+        let jsonTargetsCopy = structuredClone(jsonTargets);
+        var asterism = Celestial.getData(jsonTargetsCopy, config.transform);
+
+        // Add to celestial objects container in d3
+        Celestial.container
+          .selectAll('.targets')
+          .data(asterism.features)
+          .enter()
+          .append('path')
+          .attr('class', 'target');
+        // Trigger redraw to display changes
+        Celestial.redraw();
+      },
+      redraw: () => {
+        // Select the added objects by class name as given previously
+        Celestial.container.selectAll('.target').each(function (d) {
+          // Set line styles
+          Celestial.setStyle(lineTargetStyle);
+          // Project objects on map
+          Celestial.map(d);
+          // draw on canvas
+          Celestial.context.fill();
+          Celestial.context.stroke();
+
+          // If point is visible (this doesn't work automatically for points)
+          if (Celestial.clip(d.properties.loc)) {
+            // get point coordinates
+            let pt = Celestial.getPoint(d.properties.loc, config.transform);
+            pt = Celestial.mapProjection(pt);
+            // Set text styles
+            Celestial.setTextStyle({
+              fill: 'green',
+              font: 'bold 15px Helvetica, Arial, sans-serif',
+              align: 'center',
+              baseline: 'middle',
+            });
+            // and draw text on canvas
+            Celestial.context.fillText(d.properties.n, pt[0], pt[1]);
           }
         });
       },
@@ -414,7 +487,6 @@ export default class SkyMap extends Component {
   };
 
   render() {
-    console.log("render Skymap")
     const selectOptions = ['equatorial', 'ecliptic', 'galactic', 'supergalactic'];
     return (
       <div className={styles.container}>
@@ -423,6 +495,7 @@ export default class SkyMap extends Component {
               <span><CircleIcon className={styles.circleIcon}/>Pointing</span>
               <span><PlusIcon className={styles.plusIcon} /> Targets</span>
           </div>
+          <div></div>
           <div className={styles.selectSystemCoord}>
             <Select
               options={selectOptions}

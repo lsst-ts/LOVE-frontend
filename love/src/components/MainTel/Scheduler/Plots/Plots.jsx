@@ -27,7 +27,7 @@ export default class SchedulerPlots extends Component {
         return (
             <div className={styles.plotsContainer}>
               {plots.map((p, i) => (
-                <div ref={this.refs[i]} className={styles.plot}>
+                <div key={p} ref={this.refs[i]} className={styles.plot}>
                   <PlotContainer
                     inputs={p}
                     containerNode={this.refs[i]}
