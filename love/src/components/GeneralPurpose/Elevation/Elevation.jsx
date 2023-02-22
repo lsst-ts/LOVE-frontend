@@ -95,8 +95,6 @@ export default class Limits extends Component {
     const isTargetWarningZone = targetValue > maxL1 || targetValue < minL1;
     const isTargetDangerZone = targetValue > maxL2 || targetValue < minL2;
 
-    console.log(minL3);
-
     return (
       <svg className={styles.svgElevation} height={height / 2} viewBox={`0 0 ${height} ${height}`}>
         {/* Current value */}
