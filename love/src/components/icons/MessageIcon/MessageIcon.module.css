@@ -1,0 +1,4 @@
+.fill {
+  fill: var(--secondary-font-color);
+  opacity: 1;
+}

@@ -13,7 +13,8 @@ import { clockStart, clockStop, receiveServerTime, tick, SYNC_PERIOD } from '../
 import { clockStatuses, initialState } from '../reducers/time';
 import { connectionStates } from '../actions/ws';
 import { getConnectionStatus, getAllTime } from '../selectors';
-import ManagerInterface, { siderealSecond } from '../../Utils';
+import ManagerInterface from '../../Utils';
+import { SIDEREAL_SECOND } from '../../Constants';
 
 let store;
 let server;
@@ -129,9 +130,9 @@ describe('Given the inital state', () => {
       expect(time.clock.tai.toSeconds()).toEqual(serverTime.tai + diff);
       expect(time.clock.mjd).toEqual(serverTime.mjd + diff / (3600 * 24));
       expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(
-        serverTime.sidereal_greenwich * 3600 + diff * siderealSecond,
+        serverTime.sidereal_greenwich * 3600 + diff * SIDEREAL_SECOND,
       );
-      expect(time.clock.sidereal_summit.toSeconds()).toEqual(serverTime.sidereal_summit * 3600 + diff * siderealSecond);
+      expect(time.clock.sidereal_summit.toSeconds()).toEqual(serverTime.sidereal_summit * 3600 + diff * SIDEREAL_SECOND);
     }
   });
 });
@@ -167,9 +168,9 @@ describe('Given the inital state', () => {
     expect(time.clock.tai.toSeconds()).toEqual(server_time.tai + 1);
     expect(time.clock.mjd).toEqual(server_time.mjd + 1 / (3600 * 24));
     expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(
-      server_time.sidereal_greenwich * 3600 + 1 * siderealSecond,
+      server_time.sidereal_greenwich * 3600 + 1 * SIDEREAL_SECOND,
     );
-    expect(time.clock.sidereal_summit.toSeconds()).toEqual(server_time.sidereal_summit * 3600 + 1 * siderealSecond);
+    expect(time.clock.sidereal_summit.toSeconds()).toEqual(server_time.sidereal_summit * 3600 + 1 * SIDEREAL_SECOND);
 
     // Next 10 ticks
     for (let diff = 2; diff < 10; diff++) {
@@ -182,10 +183,10 @@ describe('Given the inital state', () => {
       expect(time.clock.tai.toSeconds()).toEqual(server_time.tai + diff);
       expect(time.clock.mjd).toEqual(server_time.mjd + diff / (3600 * 24));
       expect(time.clock.sidereal_greenwich.toSeconds().toFixed(10)).toEqual(
-        (server_time.sidereal_greenwich * 3600 + diff * siderealSecond).toFixed(10),
+        (server_time.sidereal_greenwich * 3600 + diff * SIDEREAL_SECOND).toFixed(10),
       );
       expect(time.clock.sidereal_summit.toSeconds().toFixed(10)).toEqual(
-        (server_time.sidereal_summit * 3600 + diff * siderealSecond).toFixed(10),
+        (server_time.sidereal_summit * 3600 + diff * SIDEREAL_SECOND).toFixed(10),
       );
     }
 

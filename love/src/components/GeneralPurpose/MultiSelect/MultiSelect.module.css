@@ -1,0 +1,7 @@
+:global(.multiSelectContainer .searchWrapper ::placeholder) {
+  color: var(--base-font-color);
+}
+
+.dropDownClassName {
+  min-height: 2.4em;
+}

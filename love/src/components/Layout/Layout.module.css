@@ -319,5 +319,17 @@
   visibility: hidden;
 }
 
+.title {
+  line-height: 1.7em;
+  white-space: pre;
+  text-align: left;
+  padding: 0.5em 0.5em;
+}
 
+.bold {
+  font-weight: bold;
+}
 
+.floatRight {
+  float: right;
+}

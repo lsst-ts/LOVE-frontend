@@ -1,12 +1,11 @@
-/* eslint camelcase: 0 */
 
-import React, { useState } from 'react';
 import html2canvas from 'html2canvas';
 import { DateTime } from 'luxon';
 import { toast } from 'react-toastify';
 import Moment from 'moment';
 import { WEBSOCKET_SIMULATION } from 'Config.js';
 import { SALCommandStatus } from 'redux/actions/ws';
+
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -21,8 +20,7 @@ if (Array.prototype.flat === undefined) {
   });
 }
 
-export const sockette = (url, optsPar) => {
-  /**
+/**
    MIT License
 Copyright (c) Luke Edwards <luke.edwards05@gmail.com> (lukeed.com)
 
@@ -30,7 +28,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   */
-
+export const sockette = (url, optsPar) => {
   function noop() {}
   const opts = optsPar || {};
 
@@ -51,15 +49,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     };
 
     ws.onclose = (e) => {
-      // eslint-disable-next-line
-      // console.log('******** \nonclose, e: ', e);
-      // e.code === 1e3 || e.code === 1005 || $.reconnect(e);
       (opts.onclose || noop)(e);
     };
 
     ws.onerror = (e) => {
-      // eslint-disable-next-line
-      // e && e.code === 'ECONNREFUSED' ? $.reconnect(e) : (opts.onerror || noop)(e);
       (opts.onerror || noop)(e);
     };
   };
@@ -91,20 +84,16 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     ws.close(x, y);
   };
 
-  $.open(); // init
+  $.open();
   $.ws = ws;
   return $;
 };
 
-function fetchWithTimeout(url, options={}, timeout=2000) {
-  return Promise.race([
-    fetch(url, options),
-    new Promise((_, reject) => {
-      setTimeout(() => reject(new Error('timeout')), timeout)
-    })
-  ]);
-}
 
+/**
+ * LOVE-manager interface
+ * It is used to connect to the implemented endpoints
+*/
 export default class ManagerInterface {
   constructor() {
     this.callback = null;
@@ -147,6 +136,16 @@ export default class ManagerInterface {
     });
   }
 
+  static getSimpleHeaders() {
+    const token = ManagerInterface.getToken();
+    if (token) {
+      return new Headers({
+        Authorization: `Token ${token}`,
+      });
+    }
+    return new Headers({});
+  }
+
   static getToken() {
     return localStorage.getItem('LOVE-TOKEN');
   }
@@ -174,7 +173,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}salinfo/metadata`;
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         return false;
@@ -206,7 +205,7 @@ export default class ManagerInterface {
 
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         // console.error('Error communicating with the server.);
@@ -230,7 +229,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}configfile/`;
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         return false;
@@ -253,7 +252,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}configfile/${index}/content`;
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         return false;
@@ -302,7 +301,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}emergencycontact`;
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         return false;
@@ -338,6 +337,7 @@ export default class ManagerInterface {
     });
   }
 
+  // EFD APIs
   static getEFDTimeseries(start_date, time_window, cscs, resample, efd_instance) {
     const token = ManagerInterface.getToken();
     if (token === null) {
@@ -346,7 +346,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}efd/timeseries`;
     return fetch(url, {
       method: 'POST',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
         start_date,
         time_window,
@@ -382,7 +382,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}efd/logmessages`;
     return fetch(url, {
       method: 'POST',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
         start_date,
         end_date,
@@ -418,7 +418,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}efd/efd_clients`;
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         return false;
@@ -433,6 +433,7 @@ export default class ManagerInterface {
     });
   }
 
+  // TCS APIs
   static runATCSCommand(commandName, params = {}) {
     const token = ManagerInterface.getToken();
     if (token === null) {
@@ -441,7 +442,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}tcs/aux`;
     return fetch(url, {
       method: 'POST',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
         command_name: commandName,
         params,
@@ -476,7 +477,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}tcs/aux/docstrings`;
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         return false;
@@ -499,7 +500,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}tcs/main`;
     return fetch(url, {
       method: 'POST',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
         command_name: commandName,
         params,
@@ -534,7 +535,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}tcs/main/docstrings`;
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         return false;
@@ -549,6 +550,7 @@ export default class ManagerInterface {
     });
   }
 
+  // Authlist APIs
   static getAuthListRequests() {
     const token = ManagerInterface.getToken();
     if (token === null) {
@@ -557,7 +559,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}authlistrequest/`;
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         return false;
@@ -589,7 +591,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}authlistrequest/`;
     return fetch(url, {
       method: 'POST',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
         cscs_to_change: cscsToChange,
         authorized_users: authorizedUsers,
@@ -627,7 +629,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}authlistrequest/${authRequestId}/`;
     return fetch(url, {
       method: 'PATCH',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
         status,
         message,
@@ -653,6 +655,396 @@ export default class ManagerInterface {
       });
     });
   }
+
+  // OLE APIs
+  static getListExposureLogs(instrument, obsDay) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/exposures?instrument=${instrument}&registry=2&order_by=-obs_id&limit=1500${obsDay ? `&min_day_obs=${obsDay}&max_day_obs=${obsDay+1}` : ''}`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static getListAllMessagesExposureLogs(obsDay) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/?order_by=-date_added&limit=1000${obsDay ? `&min_day_obs=${obsDay}&max_day_obs=${obsDay+1}` : ''}`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static getListMessagesExposureLogs(obsId) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/?obs_id=${obsId}&order_by=-date_added`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static getRetrieveMessageExposureLogs(msgExposureId) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/${msgExposureId}/`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static createMessageExposureLogs(params = {}) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const formData = new FormData();
+    for (const param in params) {
+      formData.append(param, params[param]);
+    }
+
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/`;
+    return fetch(url, {
+      method: 'POST',
+      headers: ManagerInterface.getSimpleHeaders(),
+      body: formData,
+    }).then((response) => {
+      if (response.status >= 500) {
+        toast.error('Error communicating with the server.');
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status === 400) {
+        return response.json().then((resp) => {
+          toast.error(resp.ack);
+        });
+      }
+      return response.json().then((resp) => {
+        toast.success('Log added succesfully.');
+        return resp;
+      });
+    });
+  }
+
+  static updateMessageExposureLogs(msgExposureId, params) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const formData = new FormData();
+    for (const param in params) {
+      formData.append(param, params[param]);
+    }
+
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/${msgExposureId}/`;
+    return fetch(url, {
+      method: 'PUT',
+      headers: ManagerInterface.getSimpleHeaders(),
+      body: formData,
+    }).then((response) => {
+      if (response.status >= 500) {
+        toast.error('Error communicating with the server.');
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        toast.error('Session expired. Logging out.');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status >= 400 && response.status < 500) {
+        toast.error('Unable to save request.');
+        return false;
+      }
+      return response.json().then((resp) => {
+        toast.success('Log edited succesfully.');
+        return resp;
+      });
+    });
+  }
+
+  static deleteMessageExposureLogs(msgExposureId) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/${msgExposureId}/`;
+    return fetch(url, {
+      method: 'DELETE',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        toast.error('Error communicating with the server.');
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        toast.error('Session expired. Logging out.');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status >= 400 && response.status < 500) {
+        toast.error('Unable to save request.');
+        return false;
+      }
+      return response.json().then((resp) => {
+        toast.success(resp.ack);
+        return resp;
+      });
+    });
+  }
+
+  static getListExposureInstruments() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/instruments`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static getListMessagesNarrativeLogs() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/?order_by=-date_added`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static createMessageNarrativeLogs(params = {}) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const formData = new FormData();
+    for (const param in params) {
+      formData.append(param, params[param]);
+    }
+
+    const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/`;
+    return fetch(url, {
+      method: 'POST',
+      headers: ManagerInterface.getSimpleHeaders(),
+      body: formData,
+    }).then((response) => {
+      if (response.status >= 500) {
+        toast.error('Error communicating with the server.');
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status === 400) {
+        return response.json().then((resp) => {
+          toast.error(resp.ack);
+        });
+      }
+      if (response.status === 422) {
+        return response.json().then((resp) => {
+          toast.error(resp.detail);
+        });
+      }
+      return response.json().then((resp) => {
+        toast.success('Log added succesfully.');
+        return resp;
+      });
+    });
+  }
+
+  static updateMessageNarrativeLogs(msgNarrativeId, params) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const formData = new FormData();
+    for (const param in params) {
+      formData.append(param, params[param]);
+    }
+
+    const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/${msgNarrativeId}/`;
+    return fetch(url, {
+      method: 'PUT',
+      headers: ManagerInterface.getSimpleHeaders(),
+      body: formData,
+    }).then((response) => {
+      if (response.status >= 500) {
+        toast.error('Error communicating with the server.');
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        toast.error('Session expired. Logging out.');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status >= 400 && response.status < 500) {
+        toast.error('Unable to save request.');
+        return false;
+      }
+      return response.json().then((resp) => {
+        toast.success('Log edited succesfully.');
+        return resp;
+      });
+    });
+  }
+
+  static deleteMessageNarrativeLogs(msgExposureId) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/${msgExposureId}/`;
+    return fetch(url, {
+      method: 'DELETE',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        toast.error('Error communicating with the server.');
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        toast.error('Session expired. Logging out.');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status >= 400 && response.status < 500) {
+        toast.error('Unable to save request.');
+        return false;
+      }
+      return response.json().then((resp) => {
+        toast.success(resp.ack);
+        return resp;
+      });
+    });
+  }
+
+  static getListImageTags() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}imagetag/`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+} // END ManagerInterface
+
+/**
+ * Function to execute the fetch method with a specified timeout
+ * @param {string} url - URL to query
+ * @param {object} options - Options to be added to the request
+ * @param {number} timeout - Timeout of the request
+ */
+ function fetchWithTimeout(url, options={}, timeout=2000) {
+  return Promise.race([
+    fetch(url, options),
+    new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('timeout')), timeout)
+    })
+  ]);
 }
 
 /**
@@ -685,126 +1077,48 @@ export const telemetryObjectToVegaList = (telemetries, parametersNames, timestam
   return newEntries;
 };
 
-export const tableRowListToTimeSeriesObject = (selectedRows) => {
-  const telemetries = {};
-
-  selectedRows.forEach((row) => {
-    const [csc, stream, parameter] = row.key.split('-');
-    if (telemetries[csc] === undefined) {
-      telemetries[csc] = {};
-    }
-    if (telemetries[csc][stream] === undefined) {
-      telemetries[csc][stream] = {};
-    }
-
-    telemetries[csc][stream][parameter] = {
-      value: row.value.value,
-      dataType: row.value.dataType,
-    };
-  });
-
-  return telemetries;
-};
-
 /**
  * Returns the value for a fake unit name, based on the name of a telemetry
  * @param {string} name
+ * @returns {string} unit name
  */
 export const getFakeUnits = (name) => {
   const fakeUnits = ['unit1', 'unit2', 'unit3', 'unit4'];
   return fakeUnits[name.charCodeAt(0) % 4];
 };
 
-export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) => {
-  const { dataType } = selectedRows[0].value;
-  const stringValues = ['a', 'b', 'c'];
-  const telemetries = tableRowListToTimeSeriesObject(selectedRows);
-  let timestep = 2000;
-  const timeWindow = new Date(dateEnd).getTime() - new Date(dateStart).getTime();
-  let arraySize = timeWindow / timestep;
-  if (arraySize > 1000) {
-    arraySize = 1000;
-    timestep = timeWindow / 1000;
-  }
-
-  const time = new Array(arraySize);
-  const tStart = new Date(dateStart).getTime();
-  for (let i = 0; i < arraySize; i += 1) {
-    let currentDate = new Date(tStart + i * timestep);
-    let dateString = [currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1, currentDate.getUTCDate()].join('/');
-
-    currentDate = new Date(currentDate.getTime() + 3 * 60 * 60 * 1000);
-    const hours = currentDate.getHours();
-    const minutes = currentDate.getMinutes();
-    const seconds = currentDate.getSeconds();
-    dateString += ` ${hours}:${minutes}:${seconds}`;
-
-    time[i] = dateString;
-  }
-
-  return time
-    .map((t) => {
-      const currentValue = telemetryObjectToVegaList(telemetries, selectedRows, t);
-      const dateValue = new Date(t).getTime();
-
-      currentValue.forEach((value) => {
-        if (dataType === 'String') {
-          // eslint-disable-next-line
-          value.value = stringValues[Math.floor(Math.random() * stringValues.length)];
-        } else {
-          // eslint-disable-next-line
-          value.value =
-            ((Math.cos((dateValue / 24 / 60 / 60 / 1000) * 2 * Math.PI) + 1) / 2) * 0.7 + Math.random() * 0.3;
-        }
-      });
-      return currentValue;
-    })
-    .flat();
-};
-
-export const saveGroupSubscriptions = (Component) => {
-  return () => {
-    const [subscriptionsList, setSubscriptionsList] = useState([]);
-
-    const saveSubscriptionLocally = (groupName) => {
-      if (!subscriptionsList.includes(groupName)) {
-        setSubscriptionsList([...subscriptionsList, groupName]);
-      }
-    };
-
-    const removeSubscriptionLocally = (groupName) => {
-      setSubscriptionsList(subscriptionsList.filter((name) => name !== groupName));
-    };
-
-    return (
-      <Component
-        subscriptionsList={subscriptionsList}
-        saveSubscriptionLocally={saveSubscriptionLocally}
-        removeSubscriptionLocally={removeSubscriptionLocally}
-      />
-    );
-  };
-};
-
+/**
+ * Custom implementation of Array.prototype.flatMap()
+ * It maps values of a using the cb callback
+ * @param {*} a array to be flattened
+ * @param {function} cb callback to be used on the map of a
+ * @returns {Array} flattened array
+ */
 export const flatMap = (a, cb) => [].concat(...a.map(cb));
 
-const watcherSuccessfulCmds = {
-  cmd_acknowledge: 'acknowledged',
-  cmd_unacknowledge: 'unacknowledged',
-  cmd_mute: 'muted',
-  cmd_unmute: 'unmuted',
-};
-
-const watcherErrorCmds = {
-  cmd_acknowledge: 'acknowledging',
-  cmd_mute: 'muting',
-  cmd_unmute: 'unmuting',
-};
-
+/**
+ * Returns <CSC>:<salindex> format from input values
+ * @param {string} csc CSC salname
+ * @param {number|string} salindex CSC salindex
+ * @returns {string} returns <CSC>:<salindex> string
+ */
 export const getNotificationMessage = (salCommand) => {
   const { cmd } = salCommand;
   const { result } = salCommand;
   const component = salCommand.component ?? salCommand.csc;
+
+  const watcherSuccessfulCmds = {
+    cmd_acknowledge: 'acknowledged',
+    cmd_unacknowledge: 'unacknowledged',
+    cmd_mute: 'muted',
+    cmd_unmute: 'unmuted',
+  };
+  
+  const watcherErrorCmds = {
+    cmd_acknowledge: 'acknowledging',
+    cmd_mute: 'muting',
+    cmd_unmute: 'unmuting',
+  };
 
   if (salCommand.status === SALCommandStatus.REQUESTED) {
     return [`Requesting command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd}`];
@@ -824,10 +1138,25 @@ export const getNotificationMessage = (salCommand) => {
   return [`Command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd} returned ${result}`, result];
 };
 
+/**
+ * Returns <CSC>:<salindex> format from input values
+ * @param {string} csc CSC salname
+ * @param {number|string} salindex CSC salindex
+ * @returns {string} returns <CSC>:<salindex> string
+ */
 export const cscText = (csc, salindex) => {
   return csc + (salindex === 0 ? '' : `.${salindex}`);
 };
 
+/**
+ * Parse a timestamp value to date format
+ * if timestamp is instance of DateTime it returns the same value
+ * if timestamp is instance of Date it returns DateTime from a date
+ * if timestamp is typeof number it returns a DateTime from milliseconds number
+ * if timestamp is typeof string it returns DateTime from ISO string
+ * @param {DateTime|Date|number|string} timestamp timestamp to be formatted
+ * @returns {DateTime} parsed timestamp to date format
+ */
 export const parseTimestamp = (timestamp) => {
   if (timestamp instanceof DateTime) return timestamp;
   if (timestamp instanceof Date) return DateTime.fromJSDate(timestamp);
@@ -839,6 +1168,7 @@ export const parseTimestamp = (timestamp) => {
 /**
  * Returns value if it is integer or float fixed to 4 decimals
  * @param {number} value, number to convert
+ * @returns {number|string} integer value or fixed float string of value
  */
 export const defaultNumberFormatter = (value) => {
   if (Number.isNaN(value)) return value;
@@ -847,8 +1177,9 @@ export const defaultNumberFormatter = (value) => {
 
 /**
  * Converts a timestamp into  "YYYY/MM/DD HH:MM:SS  <location>" formatted string
- * @param {date-able} timestamp, if float it must be in milliseconds
- * @param {string} location, optional location to append to the timestamp, TAI by default
+ * @param {date-able} timestamp if float it must be in milliseconds
+ * @param {string} location optional location to append to the timestamp, TAI by default
+ * @returns {string} "YYYY/MM/DD HH:MM:SS  <location>" formatted string
  */
 export const formatTimestamp = (timestamp, location = 'TAI') => {
   const t = parseTimestamp(timestamp);
@@ -857,8 +1188,9 @@ export const formatTimestamp = (timestamp, location = 'TAI') => {
 
 /**
  * Converts a timestamp into  "YYYY/MM/DD HH:MM:SS  <location>" formatted string
- * @param {date-able} timestamp, if float it must be in milliseconds
- * @param {string} location, optional location to append to the timestamp, empty by default
+ * @param {date-able} timestamp if float it must be in milliseconds
+ * @param {string} location optional location to append to the timestamp, empty by default
+ * @returns {string} ISO time string
  */
 export const isoTimestamp = (timestamp, location = null) => {
   const t = parseTimestamp(timestamp);
@@ -867,8 +1199,9 @@ export const isoTimestamp = (timestamp, location = null) => {
 
 /**
  * Converts seconds to a human readable difference like 'a few seconds ago'
- * @param {date-able} timestamp, if float it must be in milliseconds
- * @param {number} taiToUtc, difference in seconds between TAI and UTC timestamps
+ * @param {date-able} timestamp if float it must be in milliseconds
+ * @param {number} taiToUtc difference in seconds between TAI and UTC timestamps
+ * @returns {string} human readable time
  */
 export const relativeTime = (timestamp, taiToUtc) => {
   const t_tai = parseTimestamp(timestamp);
@@ -878,17 +1211,25 @@ export const relativeTime = (timestamp, taiToUtc) => {
 };
 
 /**
- * Converts seconds to digital format as '00:00'
- * @param {number} time, seconds to be converted
+ * Converts seconds to digital format as '00:00:00'
+ * @param {number} time seconds to be converted
+ * @returns {string} seconds in digitial format
  */
 export const formatSecondsToDigital = (time) => {
   let seconds = time % 60;
-  let minutes = Math.floor(time / 60);
+  let minutes = Math.floor((time % 3600) / 60);
+  let hours = Math.floor(time / 3600);
   minutes = minutes.toString().length === 1 ? `0${minutes}` : minutes;
   seconds = seconds.toString().length === 1 ? `0${seconds}` : seconds;
-  return `${minutes}:${seconds}`;
+  hours = hours.toString().length === 1 ? `0${hours}` : hours;
+  return `${hours}:${minutes}:${seconds}`;
 };
 
+/**
+ * Function to transform a string to a regex expression
+ * @param {string} str string to be transformed
+ * @returns {RegExp} regex expression in base to str
+ */
 export const getStringRegExp = (str) => {
   try {
     return new RegExp(str, 'i');
@@ -897,8 +1238,11 @@ export const getStringRegExp = (str) => {
   }
 };
 
-export const siderealSecond = 1.00273788;
 
+/**
+ * Function to take screenshots using html2canvas
+ * @param {function} callback the callback to be executed after the screen is taken
+ */
 export const takeScreenshot = (callback) => {
   const el = document.children[0];
   html2canvas(el, {
@@ -1005,14 +1349,31 @@ export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y') => {
   return newData;
 };
 
+/**
+ * Function to transform degrees to radians
+ * @param {number} degrees degrees to be transformed
+ * @returns {number} radians equivalent
+ */
 export function radians(degrees) {
   return (degrees * Math.PI) / 180;
 }
 
+/**
+ * Function to transform radians to degrees
+ * @param {number} radians radians to be transformed
+ * @returns {number} degrees equivalent
+ */
 export function degrees(radians) {
   return (radians * 180) / Math.PI;
 }
 
+/**
+ * Function to pase a number or string to float with fixed decimal points
+ * as specified by the points param
+ * @param {string|number} x value to be parsed to float
+ * @param {number} points number of decimal digits to be fixed
+ * @returns {string} string with the input value as a float fixed to the specified decimal points
+ */
 export function fixedFloat(x, points = 3) {
   return Number.parseFloat(x).toFixed(points);
 }
@@ -1020,9 +1381,9 @@ export function fixedFloat(x, points = 3) {
 /**
  * Function used to calculate the left duration from startDate + shift to current time.
  * If difference is negative the return value is 0
- * @param {moment} startDate - The initial date
- * @param {number} shift - The shift added to the startDate in seconds
- * @returns {number} Left duration from startDate + shift to current time
+ * @param {moment} startDate the initial date
+ * @param {number} shift the shift added to the startDate in seconds
+ * @returns {number} left duration from startDate + shift to current time
  */
 export function calculateTimeoutToNow(startDate, shift = 0) {
   const diff = Moment.duration(Moment().diff(startDate));
@@ -1032,9 +1393,9 @@ export function calculateTimeoutToNow(startDate, shift = 0) {
 
 /**
  * Function used to check if an entity is present in some parameter of the authlist event.
- * @param {object} authlist - The authlist object with params: authorizedUsers & nonAuthorizedCSCs
- * @param {entity} string - Entity to be checked on authlist, can take two formats: <user@host> or <CSC:salindex>
- * @returns {object} Object with two boolean parameters: inAuthorizedUsers and inNonAuthorizedCSCs
+ * @param {object} authlist the authlist object with params: authorizedUsers & nonAuthorizedCSCs
+ * @param {entity} string entity to be checked on authlist, can take two formats: <user@host> or <CSC:salindex>
+ * @returns {object} object with two boolean parameters: inAuthorizedUsers and inNonAuthorizedCSCs
  */
 export function checkAuthlist(authlist, entity) {
   const inAuthorizedUsers = authlist?.authorizedUsers?.value?.includes(entity);
@@ -1042,6 +1403,12 @@ export function checkAuthlist(authlist, entity) {
   return { inAuthorizedUsers, inNonAuthorizedCSCs };
 }
 
+/**
+ * Function used to get the user@host string .
+ * @param {string} user user
+ * @param {string} host host
+ * @returns {string} user@host string
+ */
 export function getUserHost(user, host) {
   try {
     return `${user}@${host}`;
@@ -1052,11 +1419,60 @@ export function getUserHost(user, host) {
 
 /**
  * Function for get desplace in angle for the SVG
- * @param {number in degree to initial} from 
- * @param {number in degree to end} to 
- * @returns {number to desplace}
+ * @param {number} from in degree to initia
+ * @param {number} to in degree to end
+ * @returns {number} displaced angle
  */
 export function closestEquivalentAngle(from, to) {
   const delta = ((((to - from) % 360) + 540) % 360) - 180;
   return from + delta;
 };
+
+/**
+ * Function used to open new tabs from a url.
+ * @param {number} url URL to point the new tab
+ */
+export function openInNewTab(url) {
+  const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+  if (newWindow) newWindow.opener = null;
+}
+
+/**
+ * Function to get OLE Narrative and Exposure logs parameters from urls field.
+ * @param {string} urls array of urls that comes from OLE message
+ * @returns {string} string with first url with the condition if jira link
+ */
+export function getLinkJira(urls) {
+  if (!urls) return '';
+  const filtered = urls.filter((url) => url.includes('jira'));
+  if (filtered.length > 0) {
+    return filtered[0];
+  }
+  return '';
+}
+
+/**
+ * Function to get OLE Narrative and Exposure logs parameters from urls field.
+ * @param {string} urls array of urls that comes from OLE message
+ * @returns {string} string with first url with the condition if not jira link
+ */
+export function getFileURL(urls) {
+  if (!urls) return '';
+  const filtered = urls.filter((url) => !url.includes('jira'));
+  if (filtered.length > 0) {
+    return filtered[0];
+  }
+  return '';
+}
+
+/**
+ * Function to get OLE Narrative and Exposure logs parameters from url.
+ * @param {string} url string of url that comes from OLE message
+ * @returns {string} string parse of the filename from url parameter
+ */
+export function getFilename(url) {
+  if (url) {
+    return url.substring(url.lastIndexOf('/') + 1);
+  }
+  return '';
+}
