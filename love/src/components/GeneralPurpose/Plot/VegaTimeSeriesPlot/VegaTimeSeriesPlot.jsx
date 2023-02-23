@@ -106,11 +106,12 @@ class VegaTimeseriesPlot extends Component {
        */
       rects: PropTypes.arrayOf(PropTypes.object),
       /**
-       * List of `{name, x, mean, delta}` of bar plot to be plotted.
+       * List of `{name, x, base, delta}` of bar plot to be plotted.
        *  - name distinguishes a mark from another
-       *  - x,mean,delta are the plot-axis coordinates of a point in bar
+       *  - x,base,delta are the plot-axis coordinates of a point in bar
        */
       bigotes: PropTypes.arrayOf(PropTypes.object),
+      heatmaps: PropTypes.arrayOf(PropTypes.object),
     }).isRequired,
 
     /**
@@ -661,7 +662,7 @@ class VegaTimeseriesPlot extends Component {
                 title: namesUnits,
                 orient: 'left',
                 titleColor: colors[0].color,
-                offset: 35,
+                offset: 45,
               },
             },
             color: styleEncoding.color,
@@ -732,7 +733,7 @@ class VegaTimeseriesPlot extends Component {
             },
             color: styleEncoding.color,
             opacity: {
-              value: 0.6
+              value: 0.3
             },
             tooltip: [
               {
@@ -762,15 +763,15 @@ class VegaTimeseriesPlot extends Component {
       data: { name: dataName },
       transform: [
         {
-          calculate: '(datum.mean + datum.delta)',
+          calculate: '(datum.base + datum.delta)',
           as: 'y2'
         },
         {
-          calculate: '(datum.mean - datum.delta)',
+          calculate: '(datum.base - datum.delta)',
           as: 'y'
         },
         {
-          calculate: 'datum.name + " [" + datum.units.mean + "]"',
+          calculate: 'datum.name + " [" + datum.units.base + "]"',
           as: 'labelY'
         }
       ],
@@ -782,7 +783,7 @@ class VegaTimeseriesPlot extends Component {
           },
           encoding: {
             y: {
-              field: 'mean',
+              field: 'base',
               type: 'quantitative',
               axis: {
                 title: '',
@@ -817,7 +818,7 @@ class VegaTimeseriesPlot extends Component {
             },
             color: styleEncoding.color,
             opacity: {
-              value: 0.6
+              value: 0.4
             },
             tooltip: [
               {
@@ -829,7 +830,7 @@ class VegaTimeseriesPlot extends Component {
                 format: this.props.temporalXAxisFormat
               },
               {
-                field: 'mean', format: '.2f',
+                field: 'base', format: '.2f',
               },
               {
                 field: 'delta', format: '.2f'
@@ -858,23 +859,23 @@ class VegaTimeseriesPlot extends Component {
       data: { name: dataName },
       transform: [
         {
-          calculate: '(datum.mean + datum.delta)',
+          calculate: '(datum.base + datum.delta)',
           as: 'plus'
         },
         {
-          calculate: '(datum.mean !== 0 || datum.delta !== 0) && (datum.mean - datum.delta) > 0 ? datum.mean - datum.delta : 0',
+          calculate: '(datum.base !== 0 || datum.delta !== 0) && (datum.base - datum.delta) > 0 ? datum.base - datum.delta : 0',
           as: 'minus'
         },
         {
-          calculate: '(datum.mean !== 0 || datum.delta !== 0) && (datum.mean + datum.delta) - 0.04 > 0 ? (datum.mean + datum.delta) - 0.04 : 0',
+          calculate: '(datum.base !== 0 || datum.delta !== 0) && (datum.base + datum.delta) - (datum.plus) * 0.05 > 0 ? (datum.base + datum.delta) - (datum.plus) * 0.05 : 0',
           as: 'plus_limit'
         },
         {
-          calculate: '(datum.mean !== 0 || datum.delta !== 0) && (datum.mean - datum.delta) + 0.04 > 0 ? (datum.mean - datum.delta) + 0.04 : 0',
+          calculate: '(datum.base !== 0 || datum.delta !== 0) && (datum.base - datum.delta) + (datum.plus) * 0.05 > 0 ? (datum.base - datum.delta) + (datum.plus) * 0.05 : 0',
           as: 'minus_limit'
         },
         {
-          calculate: 'datum.name + " [" + datum.units.mean + "]"',
+          calculate: 'datum.name + " [" + datum.units.base + "]"',
           as: 'labelY'
         }
       ],
@@ -886,7 +887,7 @@ class VegaTimeseriesPlot extends Component {
           },
           encoding: {
             y: {
-              field: 'mean',
+              field: 'base',
               type: 'quantitative',
               axis: {
                 title: namesUnits,
@@ -904,7 +905,7 @@ class VegaTimeseriesPlot extends Component {
                 format: this.props.temporalXAxisFormat
               },
               {
-                field: 'mean', format: '.2f'
+                field: 'base', format: '.2f'
               },
             ]
           },
@@ -924,6 +925,7 @@ class VegaTimeseriesPlot extends Component {
               title: '',
             },
             y2: {
+              aggregate: 'max',
               field: 'plus',
               type: 'quantitative',
               title: '',
@@ -938,7 +940,7 @@ class VegaTimeseriesPlot extends Component {
                 format: this.props.temporalXAxisFormat
               },
               {
-                field: 'mean', format: '.2f'
+                field: 'base', format: '.2f'
               },
               {
                 field: 'delta', format: '.2f'
@@ -975,7 +977,7 @@ class VegaTimeseriesPlot extends Component {
                 format: this.props.temporalXAxisFormat
               },
               {
-                field: 'mean', format: '.2f'
+                field: 'base', format: '.2f'
               },
               {
                 field: 'delta', format: '.2f'
@@ -993,6 +995,7 @@ class VegaTimeseriesPlot extends Component {
           },
           encoding: {
             y: {
+              aggregate: 'max',
               field: 'plus',
               type: 'quantitative',
               title: '',
@@ -1012,7 +1015,7 @@ class VegaTimeseriesPlot extends Component {
                 format: this.props.temporalXAxisFormat
               },
               {
-                field: 'mean', format: '.2f'
+                field: 'base', format: '.2f'
               },
               {
                 field: 'delta', format: '.2f'
@@ -1111,52 +1114,81 @@ class VegaTimeseriesPlot extends Component {
     };
   };
 
-  makeCloudLayer = (dataName) => {
+  makeHeatmapLayer = (dataName) => {
     const markType = dataName.slice(0, -1);
     const markStyle = this.props.marksStyles.filter((l) => l.markType === markType);
     const color = markStyle[0].color.slice(0,7);
 
-    
+    const arr = Object.values(this.props.layers[dataName] ?? {});
+    const names = [...new Set(arr.map((layer) => layer.name))];
+    const units = names.map((name) => ({name: name, units: arr.filter((l) => l.name === name)[0].units}));
+
+    const nameUnit = units.map((u) => u.name + ' [' + u.units.lowclouds + ']')[0];
+
     return {
       data: { name: dataName },
       transform: [
         {
-          fold: ['lowclouds', 'midclouds', 'hiclouds'], as: ['category', 'value']
+          calculate: '0',
+          as: 'y0'
         },
         {
-          calculate: 'datum.name + " [" + datum.units.y + "]"',
-          as: 'labelY'
-        }
+          calculate: '1',
+          as: 'y1'
+        },
+        {
+          calculate: '2',
+          as: 'y2'
+        },
+        {
+          calculate: '3',
+          as: 'y3'
+        },
       ],
       layer: [
         {
           mark: {
-            type: 'bar',
-            clip: true,
-            size: this.props.height ? (this.props.height - 58) / 3 : (240 - 58) / 3
+            type: 'rect',
           },
           encoding: {
-            y: {
-              type: 'ordinal',
-              field: 'category',
+            x2: {
+              field: 'x2',
+              type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
               axis: {
-                title: null,
+                title: this.makeAxisTitle(this.props.xAxisTitle, ''),
+                format: this.props.temporalXAxisFormat,
               },
-              sort: [
-                'hiclouds', 'midclouds', 'lowclouds'
-              ],
+              scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
+            },
+            y: {
+              field: 'y0',
+              type: 'quantitative',
+              axis: {
+                grid: false,
+                labels: false,
+              }
+            },
+            y2: {
+              field: 'y1',
+              type: 'quantitative',
+              title: '',
+              axis: {
+                grid: false,
+                labels: false,
+              }
             },
             color: {
-              field: 'value',
+              field: 'lowclouds',
               type: 'quantitative',
+              title: nameUnit,
               scale: {
-                range: [color + '00', color + 'ff']
+                domain: [0, 100],
+                range: [color + '05', color + 'ff']
               },
-              title: this.makeAxisTitle('Clouds', '')
             },
             tooltip: [
               {
-                title: 'name', field: 'labelY',
+                title: 'Lowclouds', field: 'lowclouds'
               },
               {
                 field: 'x',
@@ -1164,24 +1196,136 @@ class VegaTimeseriesPlot extends Component {
                 format: this.props.temporalXAxisFormat
               },
               {
-                field: 'lowclouds'
-              },
-              {
-                field: 'midclouds'
-              },
-              {
-                field: 'hiclouds'
+                field: 'x2',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
               }
             ]
           }
         },
+        {
+          mark: {
+            type: 'rect',
+          },
+          encoding: {
+            x2: {
+              field: 'x2',
+              type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.xAxisTitle, ''),
+                format: this.props.temporalXAxisFormat,
+              },
+              scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
+            },
+            y: {
+              field: 'y1',
+              type: 'quantitative',
+              title: '',
+              axis: {
+                grid: false,
+                labels: false,
+              }
+            },
+            y2: {
+              field: 'y2',
+              type: 'quantitative',
+              title: '',
+              axis: {
+                grid: false,
+                labels: false,
+              }
+            },
+            color: {
+              field: 'midclouds',
+              type: 'quantitative',
+              title: nameUnit,
+              scale: {
+                domain: [0, 100],
+                range: [color + '05', color + 'ff']
+              },
+            },
+            tooltip: [
+              {
+                title: 'Midclouds', field: 'midclouds'
+              },
+              {
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
+              },
+              {
+                field: 'x2',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
+              }
+            ]
+          }
+        },
+        {
+          mark: {
+            type: 'rect',
+          },
+          encoding: {
+            x2: {
+              field: 'x2',
+              type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.xAxisTitle, ''),
+                format: this.props.temporalXAxisFormat,
+              },
+              scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
+            },
+            y: {
+              field: 'y2',
+              type: 'quantitative',
+              title: '',
+              axis: {
+                grid: false,
+                labels: false,
+              }
+            },
+            y2: {
+              field: 'y3',
+              type: 'quantitative',
+              title: '',
+              axis: {
+                grid: false,
+                labels: false,
+              }
+            },
+            color: {
+              field: 'hiclouds',
+              type: 'quantitative',
+              title: nameUnit,
+              scale: {
+                domain: [0, 100],
+                range: [color + '05', color + 'ff']
+              },
+            },
+            tooltip: [
+              {
+                title: 'Hiclouds', field: 'hiclouds'
+              },
+              {
+                field: 'x',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
+              },
+              {
+                field: 'x2',
+                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+                format: this.props.temporalXAxisFormat
+              }
+            ]
+          }
+        }
       ]
     };
-  };
+  }
 
   updateSpec = () => {
     const layer = [];
-    if (this.props.layers.clouds) layer.push(this.makeCloudLayer('clouds'));
+    if (this.props.layers.heatmaps) layer.push(this.makeHeatmapLayer('heatmaps'));
     if (this.props.layers.areas) layer.push(this.makeAreaLayer('areas'));
     if (this.props.layers.spreads) layer.push(this.makeSpreadLayer('spreads'));
     if (this.props.layers.rects) layer.push(this.makeRectLayer('rects'));
@@ -1344,7 +1488,6 @@ class VegaTimeseriesPlot extends Component {
 
   render() {
     const { layers } = this.props;
-    console.log('layers', layers);
     return (
       <VegaLite
         style={{
