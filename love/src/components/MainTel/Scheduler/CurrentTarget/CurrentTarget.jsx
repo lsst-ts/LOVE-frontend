@@ -42,16 +42,17 @@ export default class CurrentTarget extends Component {
                         <Label>Exposure time</Label>
                         <Value>2s</Value>
                         <Label>Proposals</Label>
-                        {/* <div className={styles.proposals}>
-                            <Label>Proposals</Label>
+                        <br></br>
+                        <div className={styles.proposals}>
+                            {/* <Label>Proposals</Label> */}
                             <div className={styles.generalDiv}>
                                 {proposals.map(gp => 
                                     <div className={styles.surveysDivs}>
-                                        {gp}
+                                        <span>{gp}</span>
                                     </div>
                                 )}
                             </div>
-                        </div> */}
+                        </div>
                     </SummaryPanel>
                 </div>
             </div>

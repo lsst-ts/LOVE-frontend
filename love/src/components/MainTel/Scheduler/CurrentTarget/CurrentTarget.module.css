@@ -7,16 +7,19 @@
 
 .headers{
     display: flex;
+    justify-content: space-between;
+    align-content: stretch;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
 }
 
 .currentTarget{
-    float: left;
-    margin-left: 0.5em;
+    margin-left: 1em;
 }
 
 .spanRigth{
-    float: right;
-    margin: 0 auto;
+    margin-right: 1em;
 }
 
 .separator {
@@ -36,14 +39,15 @@
 }
 .proposals {
     display: grid;
-    grid-template-rows: 1fr 1fr;
+    justify-content: center;
+    overflow: auto;
 }
 
 .generalDiv {
     /* display: grid; */
     /* grid-template-columns: 1fr 1fr 1fr 1fr; */
-    display: grid;
-    grid-template-rows: 1fr 1fr;
+    display: flex;
+    /* grid-template-rows: 1fr 1fr; */
 }
 
 .surveysDivs {
@@ -51,6 +55,6 @@
     border: 1px solid var(--tertiary-background-color);
     padding: 1em;
     margin: 0.5em;
-    width: 55%;
-    height: 30%;
+    width: 60%;
+    height: 15%;
 }
