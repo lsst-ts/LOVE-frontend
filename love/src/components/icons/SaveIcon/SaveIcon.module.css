@@ -1,13 +1,10 @@
-/* .path {
-  fill: var(--secondary-font-color);
-  stroke: var(--secondary-font-color);
-} */
 .svg {
   vertical-align: top;
   fill: var(--secondary-font-color);
-  /*stroke: var(--base-font-color);*/
 }
+
 .cls-1 {
-  fill:#798d99;
-  fill-rule:evenodd;
+  fill-rule: evenodd;
+  fill: var(--default-font-color);
+  opacity: 1;
 }

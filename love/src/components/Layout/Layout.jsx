@@ -18,6 +18,8 @@ import IconBadge from '../icons/IconBadge/IconBadge';
 import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
 import EditIcon from '../icons/EditIcon/EditIcon';
+import MessageIcon from 'components/icons/MessageIcon/MessageIcon';
+import OLEMenu from 'components/OLE/Menu/OLEMenu';
 import ClockContainer from '../Time/Clock/Clock.container';
 import { HEARTBEAT_COMPONENTS } from '../../Config';
 import AlarmAudioContainer from '../Watcher/AlarmAudio/AlarmAudio.container';
@@ -32,6 +34,8 @@ import UserSwapContainer from '../Login/UserSwap.container';
 import { severityEnum } from '../../Config';
 import ManagerInterface from 'Utils';
 import styles from './Layout.module.css';
+import ExposureAdd from 'components/OLE/Exposure/ExposureAdd';
+import NonExposureEdit from 'components/OLE/NonExposure/NonExposureEdit';
 
 export const LAYOUT_CONTAINER_ID = 'layoutContainer';
 const BREAK_1 = 865;
@@ -107,6 +111,8 @@ class Layout extends Component {
       isLightHidden: true,
       efdStatus: {label: "EFD Healthy status Unknown", style: "invalid"},
       salStatus: {label: "SAL status Unknown", style: "invalid"},
+      isNewNonExposureOpen: false,
+      isNewExposureOpen: false,
     };
 
     this.requestToastID = null;
@@ -553,6 +559,62 @@ class Layout extends Component {
 
             <div className={styles.rightTopbar}>
               {this.renderHeartbeatsMenu()}
+
+              <DropdownMenu className={styles.settingsDropdown} disabledToggle={true}>
+                <Button className={styles.iconBtn} title="Exposure and Narrative Logs" status="transparent">
+                  <MessageIcon className={styles.icon} />
+                </Button>
+                <div className={styles.userMenu}>
+                  {!this.state.isNewNonExposureOpen && !this.state.isNewExposureOpen ? (
+                    <OLEMenu
+                      newNonExposureClick={() => {
+                        this.setState({ isNewNonExposureOpen: true });
+                      }}
+                      newExposureClick={() => {
+                        this.setState({ isNewExposureOpen: true });
+                      }}
+                    />
+                  ) : this.state.isNewNonExposureOpen ? (
+                    <>
+                      <div className={styles.title}>
+                        <span className={styles.bold}>New Narrative Log</span>
+                        <span className={styles.floatRight}>
+                          <Button
+                            status="link"
+                            onClick={() => {
+                              this.setState({ isNewNonExposureOpen: false });
+                            }}
+                          >
+                            <span className={styles.bold}>{`< Back`}</span>
+                          </Button>
+                        </span>
+                      </div>
+                      <div className={styles.divider}></div>
+                    </>
+                  ) : this.state.isNewExposureOpen ? (
+                    <>
+                      <div className={styles.title}>
+                        <span className={styles.bold}>New Exposure Log</span>
+                        <span className={styles.floatRight}>
+                          <Button
+                            status="link"
+                            onClick={() => {
+                              this.setState({ isNewExposureOpen: false });
+                            }}
+                          >
+                            <span className={styles.bold}>{`< Back`}</span>
+                          </Button>
+                        </span>
+                      </div>
+                      <div className={styles.divider}></div>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                  {this.state.isNewNonExposureOpen && <NonExposureEdit isMenu={true} back={() => this.setState({ isNewNonExposureOpen: false })}/>}
+                  {this.state.isNewExposureOpen && <ExposureAdd isMenu={true} back={() => this.setState({ isNewExposureOpen: false })} />}
+                </div>
+              </DropdownMenu>
 
               <DropdownMenu className={styles.settingsDropdown}>
                 <Button className={styles.iconBtn} title="View notifications" onClick={() => {}} status="transparent">

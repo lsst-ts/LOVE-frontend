@@ -178,6 +178,26 @@ export const observatoryIndex = {
       },
     },
   },
+  OLE: {
+    component: require('../OLE/OLE.container').default,
+    schema: {
+      ...require('../OLE/OLE.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../OLE/OLE.container').schema.props,
+      },
+    },
+  },
+  CreateOLE: {
+    component: require('../OLE/CreateOLE.container').default,
+    schema: {
+      ...require('../OLE/CreateOLE.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../OLE/CreateOLE.container').schema.props,
+      },
+    },
+  },
 };
 
 export const auxtelIndex = {

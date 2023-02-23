@@ -144,6 +144,7 @@ body {
   backface-visibility: hidden;
   --topbar-height: 2em;
   --content-padding: 1em;
+  --small-padding: 0.5em;
   --base-font-color: hsl(194, 16%, 79%);
   --second-base-font-color: hsl(240, 4%, 90%, 0.7);
   --secondary-font-color: hsl(201, 15%, 54%);

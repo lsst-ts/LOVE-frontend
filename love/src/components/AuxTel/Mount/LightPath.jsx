@@ -101,9 +101,9 @@ export default class LightPath extends Component {
     const m1CoverStateText = m1CoverStateStateMap[props.m1CoverState];
     const m1CoverLimitSwitches = props.m1CoverLimitSwitches;
     const getLimitSwitchStatus = (number) => {
-      if (!m1CoverLimitSwitches[`cover${number}ClosedActive`] && m1CoverLimitSwitches[`cover${number}OpenActive`])
+      if (!m1CoverLimitSwitches[`cover${number}ClosedActive`]?.value && m1CoverLimitSwitches[`cover${number}OpenedActive`]?.value)
         return m1CoverLimitSwitchesStateMap[1];
-      if (m1CoverLimitSwitches[`cover${number}ClosedActive`] && !m1CoverLimitSwitches[`cover${number}OpenActive`])
+      if (m1CoverLimitSwitches[`cover${number}ClosedActive`]?.value && !m1CoverLimitSwitches[`cover${number}OpenedActive`]?.value)
         return m1CoverLimitSwitchesStateMap[2];
       return m1CoverLimitSwitchesStateMap[0];
     };

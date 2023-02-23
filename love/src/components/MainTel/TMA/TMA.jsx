@@ -71,6 +71,10 @@ export default class TMA extends Component {
     elevationDrives: [],
   };
 
+  componentDidMount() {
+    this.props.subscribeToStreams();
+  }
+
   componentWillUnmount() {
     this.props.unsubscribeToStreams();
   }

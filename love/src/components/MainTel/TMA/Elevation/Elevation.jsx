@@ -75,7 +75,7 @@ export default class Elevation extends Component {
         <g
           style={{
             transition: 'transform 1.5s linear 0s',
-            transform: `rotateZ(${equivalentElevationActual}deg)`,
+            transform: `rotateZ(${90 - equivalentElevationActual}deg)`,
             transformOrigin: `50% 50%`,
           }}
         >
