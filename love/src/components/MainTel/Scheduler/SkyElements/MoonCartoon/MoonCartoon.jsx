@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './Moon.module.css';
+import styles from './MoonCartoon.module.css';
 
 function Moon(props) {
     let {ilumination} = props;

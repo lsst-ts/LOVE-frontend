@@ -4,6 +4,7 @@ import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Label from '../../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../../GeneralPurpose/SummaryPanel/Title';
+import Sky from '../../SkyElements/Sky/Sky';
 
 export default class Sun extends Component {
 
@@ -27,8 +28,8 @@ export default class Sun extends Component {
                         <Label>Elongation</Label>
                         <Value>24.00°</Value>
                     </SummaryPanel>
-                    <div className={styles.div3}>
-                        <span>Sun cartoon</span>
+                    <div className={styles.sunCartoon}>
+                        <Sky />
                     </div>
                 </div>
             </div>

@@ -5,6 +5,8 @@ import Label from '../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
 import GearIcon from 'components/icons/ScriptQueue/GearIcon/GearIcon.jsx';
+import Sun from '../SkyElements/SunCartoon/SunCartoon';
+import Stars from '../SkyElements/Stars/Stars';
 
 export default class Headers extends Component {
 

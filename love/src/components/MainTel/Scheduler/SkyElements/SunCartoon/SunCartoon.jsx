@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './Sun.module.css';
+import styles from './SunCartoon.module.css';
 
 function Sun(props) {
     return (

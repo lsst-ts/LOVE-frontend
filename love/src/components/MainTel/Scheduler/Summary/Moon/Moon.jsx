@@ -4,6 +4,7 @@ import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Label from '../../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../../GeneralPurpose/SummaryPanel/Title';
+import MoonCartoon from '../../SkyElements/MoonCartoon/MoonCartoon';
 
 export default class Moon extends Component {
 
@@ -27,8 +28,8 @@ export default class Moon extends Component {
                         <Label>Distance</Label>
                         <Value>377.202 km</Value>
                     </SummaryPanel>
-                    <div className={styles.div3}>
-                        <span>Moon cartoon</span>
+                    <div className={styles.divMoonCartoon}>
+                        <MoonCartoon />
                     </div>
                 </div>
             </div>
