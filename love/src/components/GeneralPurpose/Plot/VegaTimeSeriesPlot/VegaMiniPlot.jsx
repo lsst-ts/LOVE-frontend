@@ -17,7 +17,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
   };
 
   static propTypes = {
-    markType: PropTypes.oneOf(['line', 'pointLine', 'bar', 'area', 'arrow', 'spread', 'bigote', 'rect', 'cloud']),
+    markType: PropTypes.oneOf(['line', 'pointLine', 'bar', 'area', 'arrow', 'spread', 'bigote', 'rect', 'heatmap']),
     /** (All layers) hex color */
     color: PropTypes.string,
     /** (Only `lines` layer). Dash pattern for segmented lines passed to the strokeDash channel. E.g, [2, 1] draws
@@ -62,6 +62,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
               },
               axis: {
                 title: null,
+                labels: false,
               },
             },
             y: {
@@ -72,6 +73,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
               },
               axis: {
                 title: null,
+                labels: false,
               },
             },
           },
@@ -110,12 +112,18 @@ class VegaLegendMiniPlot extends React.PureComponent {
           field: 'a',
           type: 'quantitative',
           scale: { domain: [0, 6] },
-          axis: { title: null },
+          axis: {
+            title: null,
+            labels: false,
+          },
         },
         y: {
           field: 'b',
           type: 'quantitative',
-          axis: { title: null },
+          axis: {
+            title: null,
+            labels: false,
+          },
         },
         opacity: {
           value: 0.9
@@ -158,6 +166,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
               },
               axis: {
                 title: null,
+                labels: false,
               },
             },
             y: {
@@ -168,6 +177,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
               },
               axis: {
                 title: null,
+                labels: false,
               },
             },
           },
@@ -188,6 +198,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
               },
               axis: {
                 title: null,
+                labels: false,
               },
             },
             y: {
@@ -198,6 +209,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
               },
               axis: {
                 title: null,
+                labels: false,
               },
             },
           },
@@ -218,6 +230,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
               },
               axis: {
                 title: null,
+                labels: false,
               },
             },
             y: {
@@ -226,12 +239,20 @@ class VegaLegendMiniPlot extends React.PureComponent {
               scale: {
                 domain: [0, 9],
               },
+              axis: {
+                title: null,
+                labels: false,
+              },
             },
             y2: {
               field: 'c',
               type: 'quantitative',
               scale: {
                 domain: [0, 9],
+              },
+              axis: {
+                title: null,
+                labels: false,
               },
             },
             opacity: {
@@ -274,6 +295,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
               },
               axis: {
                 title: null,
+                labels: false,
               },
             },
             y: {
@@ -284,6 +306,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
               },
               axis: {
                 title: null,
+                labels: false,
               },
             },
           },
@@ -304,6 +327,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
               },
               axis: {
                 title: null,
+                labels: false,
               },
             },
             y: {
@@ -312,12 +336,20 @@ class VegaLegendMiniPlot extends React.PureComponent {
               scale: {
                 domain: [0, 9],
               },
+              axis: {
+                title: null,
+                labels: false,
+              },
             },
             y2: {
               field: 'c',
               type: 'quantitative',
               scale: {
                 domain: [0, 9],
+              },
+              axis: {
+                title: null,
+                labels: false,
               },
             },
             opacity: {
@@ -360,12 +392,16 @@ class VegaLegendMiniPlot extends React.PureComponent {
               },
               axis: {
                 title: null,
+                labels: false,
               },
             },
             y: {
               field: 'y',
               type: 'quantitative',
-              axis: { title: null },
+              axis: {
+                title: null,
+                labels: false,
+              },
               scale: {
                 domain: [0, 2.5],
               },
@@ -394,12 +430,16 @@ class VegaLegendMiniPlot extends React.PureComponent {
               },
               axis: {
                 title: null,
+                labels: false,
               },
             },
             y: {
               field: 'y',
               type: 'quantitative',
-              axis: { title: null },
+              axis: {
+                title: null,
+                labels: false,
+              },
               scale: {
                 domain: [0, 2.5],
               },
@@ -443,25 +483,37 @@ class VegaLegendMiniPlot extends React.PureComponent {
               field: 'x',
               type: 'quantitative',
               scale: { domain: [0, 5] },
-              axis: { title: null },
+              axis: {
+                title: null,
+                labels: false,
+              },
             },
             x2: {
               field: 'x2',
               type: 'quantitative',
               scale: { domain: [0, 5] },
-              axis: { title: null },
+              axis: {
+                title: null,
+                labels: false,
+              },
             },
             y: {
               field: 'y',
               type: 'quantitative',
               scale: { domain: [0, 5] },
-              axis: { title: null },
+              axis: {
+                title: null,
+                labels: false,
+              },
             },
             y2: {
               field: 'y2',
               type: 'quantitative',
               scale: { domain: [0, 5] },
-              axis: { title: null },
+              axis: {
+                title: null,
+                labels: false,
+              },
             },
             opacity: {
               value: 0.9
@@ -479,25 +531,37 @@ class VegaLegendMiniPlot extends React.PureComponent {
               field: 'lux',
               type: 'quantitative',
               scale: { domain: [0, 5] },
-              axis: { title: null },
+              axis: {
+                title: null,
+                labels: false,
+              },
             },
             x2: {
               field: 'lux2',
               type: 'quantitative',
               scale: { domain: [0, 5] },
-              axis: { title: null },
+              axis: {
+                title: null,
+                labels: false,
+              },
             },
             y: {
               field: 'luy',
               type: 'quantitative',
               scale: { domain: [0, 5] },
-              axis: { title: null },
+              axis: {
+                title: null,
+                labels: false,
+              },
             },
             y2: {
               field: 'luy2',
               type: 'quantitative',
               scale: { domain: [0, 5] },
-              axis: { title: null },
+              axis: {
+                title: null,
+                labels: false,
+              },
             },
             opacity: {
               value: 0.9
@@ -515,25 +579,37 @@ class VegaLegendMiniPlot extends React.PureComponent {
               field: 'lux',
               type: 'quantitative',
               scale: { domain: [0, 5] },
-              axis: { title: null },
+              axis: {
+                title: null,
+                labels: false,
+              },
             },
             x2: {
               field: 'lux2',
               type: 'quantitative',
               scale: { domain: [0, 5] },
-              axis: { title: null },
+              axis: {
+                title: null,
+                labels: false,
+              },
             },
             y: {
               field: 'y',
               type: 'quantitative',
               scale: { domain: [0, 5] },
-              axis: { title: null },
+              axis: {
+                title: null,
+                labels: false,
+              },
             },
             y2: {
               field: 'ldy',
               type: 'quantitative',
               scale: { domain: [0, 5] },
-              axis: { title: null },
+              axis: {
+                title: null,
+                labels: false,
+              },
             },
             opacity: {
               value: 0.9
@@ -572,23 +648,35 @@ class VegaLegendMiniPlot extends React.PureComponent {
           field: 'a',
           type: 'quantitative',
           scale: { domain: [0, 6] },
-          axis: { title: null },
+          axis: {
+            title: null,
+            labels: false,
+          },
         },
         y: {
           field: 'b',
           type: 'quantitative',
-          axis: { title: null },
+          axis: {
+            title: null,
+            labels: false,
+          },
         },
         x2: {
           field: 'd',
           type: 'quantitative',
           scale: { domain: [0, 6] },
-          axis: { title: null },
+          axis: {
+            title: null,
+            labels: false,
+          },
         },
         y2: {
           field: 'c',
           type: 'quantitative',
-          axis: { title: null },
+          axis: {
+            title: null,
+            labels: false,
+          },
         },
         fillOpacity: {
           value: 0.5
@@ -606,8 +694,8 @@ class VegaLegendMiniPlot extends React.PureComponent {
     };
   };
 
-  cloudSpec = (markType) => {
-    if (markType !== 'cloud') {
+  heatmapSpec = (markType) => {
+    if (markType !== 'heatmap') {
       return {};
     }
     return {
@@ -630,6 +718,10 @@ class VegaLegendMiniPlot extends React.PureComponent {
             y: {
               field: 'category',
               type: 'ordinal',
+              axis: {
+                title: null,
+                labels: false,
+              },
             },
             color: {
               field: 'value',
@@ -662,7 +754,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
     const spreadSpec = this.spreadSpec(this.props.markType);
     const bigoteSpec = this.bigoteSpec(this.props.markType);
     const rectSpec = this.rectSpec(this.props.markType);
-    const cloudSpec = this.cloudSpec(this.props.markType);
+    const heatmapSpec = this.heatmapSpec(this.props.markType);
     const spec = {
       schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       width: 30,
@@ -677,7 +769,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
       ...spreadSpec,
       ...bigoteSpec,
       ...rectSpec,
-      ...cloudSpec,
+      ...heatmapSpec,
     };
 
     return <VegaLite

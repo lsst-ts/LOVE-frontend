@@ -373,7 +373,7 @@ export default class Plot extends Component {
       }
     }).flat();
 
-    const layerTypes = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads', 'bigotes', 'rects', 'clouds'];
+    const layerTypes = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads', 'bigotes', 'rects', 'heatmaps'];
     const layers = {};
     for (const [inputName, inputConfig] of Object.entries(inputs)) {
       const { type } = inputConfig;

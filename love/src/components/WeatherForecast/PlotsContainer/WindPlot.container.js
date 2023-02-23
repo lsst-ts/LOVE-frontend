@@ -93,7 +93,7 @@ export const schema = {
               accessor: '(x) => x[0]',
             },
             {
-              variable: 'mean',
+              variable: 'base',
               category: 'telemetry',
               csc: 'WeatherForecast',
               salindex: 0,
