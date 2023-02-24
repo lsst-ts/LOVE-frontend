@@ -36,7 +36,7 @@ const InfoHeaderContainer = ({ ...props }) => {
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
-  return <InfoHeader {...props} />;
+  return <InfoHeader daily={props.daily} hourly={props.hourly} {...props} />;
 };
 
 const mapStateToProps = (state) => {
