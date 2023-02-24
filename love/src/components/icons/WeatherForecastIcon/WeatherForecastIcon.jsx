@@ -966,15 +966,15 @@ function switchCloud(number) {
 
 
 function WeatherForecastIcon(props) {
-  const {pictogramNumber} = props;
+  const {pictocode = 0} = props;
   return (
     <svg className={styles.icon} viewBox="0 0 40 40" {...props}>
-      { switchCloud(pictogramNumber) }
+      { switchCloud(pictocode) }
     </svg>
   );
 }
 
 export default WeatherForecastIcon;
 WeatherForecastIcon.defaultProps = {
-  pictogramNumber: 0,
+  pictocode: 0,
 };
