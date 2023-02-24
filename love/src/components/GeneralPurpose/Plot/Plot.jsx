@@ -38,6 +38,8 @@ export default class Plot extends Component {
     efdConfigFile: PropTypes.object,
     maxHeight: PropTypes.number,
     sliceSize: PropTypes.number,
+    sliceInvert: PropTypes.bool,
+    sizeLimit: PropTypes.number,
     temporalXAxisFormat: PropTypes.string,
     isForecast: PropTypes.bool,
     scaleIndependent: PropTypes.bool,
@@ -52,6 +54,8 @@ export default class Plot extends Component {
     maxHeight: 240,
     inputs: {},
     sliceSize: 1800,
+    sliceInvert: false,
+    sizeLimit: 1800,
     temporalXAxisFormat: '%H:%M',
     isForecast: false,
     scaleIndependent: false,
@@ -204,7 +208,7 @@ export default class Plot extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { timeSeriesControlsProps, inputs, streams, sliceSize } = this.props;
+    const { timeSeriesControlsProps, inputs, streams, sliceSize, sizeLimit } = this.props;
     const { data } = this.state;
     if (prevProps.timeSeriesControlsProps !== timeSeriesControlsProps) {
       this.setState({ ...timeSeriesControlsProps });
@@ -274,8 +278,17 @@ export default class Plot extends Component {
 
           // Slice inputData array if it has more than sliceSize datapoints (corresponding to one hour if telemetry is received every two seconds)
           if (inputData.length > sliceSize) {
-             inputData = inputData.slice(-1 * sliceSize);
+            if (this.props.sliceInvert) {
+              if (inputData.length > sizeLimit) {
+                inputData = inputData.slice(-1 * sizeLimit).slice(0, sliceSize);
+              } else {
+                inputData = inputData.slice(0, sliceSize);
+              }
+            } else {
+              inputData = inputData.slice(-1 * sliceSize);
+            }
           }
+
           newData[inputName] = inputData;
           
         } else {
@@ -302,7 +315,15 @@ export default class Plot extends Component {
 
             // Slice inputData array if it has more than sliceSize datapoints (corresponding to one hour if telemetry is received every two seconds)
             if (inputData.length > sliceSize) {
-              inputData = inputData.slice(-1 * sliceSize);
+              if (this.props.sliceInvert) {
+                if (inputData.length > sizeLimit) {
+                  inputData = inputData.slice(-1 * sizeLimit).slice(0, sliceSize);
+                } else {
+                  inputData = inputData.slice(0, sliceSize);
+                }
+              } else {
+                inputData = inputData.slice(-1 * sliceSize);
+              }
             }
             newData[inputName] = inputData;
         }
