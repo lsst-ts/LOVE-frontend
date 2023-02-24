@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Moment from 'moment';
 import isEqual from 'lodash/isEqual';
 import { fixedFloat } from 'Utils';
-import {Table, Th, Tr, Td} from 'components/GeneralPurpose/SimpleTable/TableBorder';
+import {Table, Tr, Td} from 'components/GeneralPurpose/SimpleTable/TableBorder';
 import WeatherForecastIcon from 'components/icons/WeatherForecastIcon/WeatherForecastIcon';
 import styles from './InfoHeader.module.css';
 import PlusMinusIcon from 'components/icons/PlusMinus/PlusMinusIcon';
@@ -12,26 +12,26 @@ export default class InfoHeader extends Component {
   static propTypes = {
     subscribeToStreams: PropTypes.func,
     unsubscribeToStreams: PropTypes.func,
-    frecuency: PropTypes.oneOf(['daily', 'hourly']),
+    frecuency: PropTypes.oneOf(['daily', 'hourly']).isRequired,
     daily: PropTypes.objectOf(
         PropTypes.shape({
-          timestamp: PropTypes.arrayOf(PropTypes.number),
-          pictocode: PropTypes.arrayOf(PropTypes.number),
-          temperatureMax: PropTypes.arrayOf(PropTypes.number),
-          temperatureMin: PropTypes.arrayOf(PropTypes.number),
-          predictability: PropTypes.arrayOf(PropTypes.number),
+          timestamp: PropTypes.arrayOf(PropTypes.number).isRequired,
+          pictocode: PropTypes.arrayOf(PropTypes.number).isRequired,
+          temperatureMax: PropTypes.arrayOf(PropTypes.number).isRequired,
+          temperatureMin: PropTypes.arrayOf(PropTypes.number).isRequired,
+          predictability: PropTypes.arrayOf(PropTypes.number).isRequired,
           predictabilityClass: PropTypes.arrayOf(PropTypes.oneOf(
-            ['very low', 'low', 'medium', 'high', 'very high'])),
+            ['very low', 'low', 'medium', 'high', 'very high'])).isRequired,
         }),
-    ),
+    ).isRequired,
     hourly: PropTypes.objectOf(
       PropTypes.shape({
-        timestamp: PropTypes.arrayOf(PropTypes.number),
-        pictocode: PropTypes.arrayOf(PropTypes.number),
-        temperature: PropTypes.arrayOf(PropTypes.number),
-        temperatureSpread: PropTypes.arrayOf(PropTypes.number),
+        timestamp: PropTypes.arrayOf(PropTypes.number).isRequired,
+        pictocode: PropTypes.arrayOf(PropTypes.number).isRequired,
+        temperature: PropTypes.arrayOf(PropTypes.number).isRequired,
+        temperatureSpread: PropTypes.arrayOf(PropTypes.number).isRequired,
       }),
-    ),
+    ).isRequired,
   };
 
   static defaultProps = {
@@ -106,7 +106,7 @@ export default class InfoHeader extends Component {
     return result.map((_d) => {
       return ({
         dayHour: Moment.unix(_d.timestamp).format(this.temporalFormatOptions[frecuency]),
-        pictocode: <WeatherForecastIcon pictogramNumber={_d.pictocode ?? 0}/>,
+        pictocode: <WeatherForecastIcon pictocode={_d.pictocode ?? 0}/>,
         temperatureMax: _d.temperatureMax ? fixedFloat(_d.temperatureMax, 1) : '',
         temperatureMin: _d.temperatureMin ? fixedFloat(_d.temperatureMin, 1) : '',
         predictability: _d.predictability ? fixedFloat(_d.predictability, 0) : '',
@@ -148,43 +148,43 @@ export default class InfoHeader extends Component {
     return (
       <div className={styles.infoHeaderTable }>
         <Table>
-          <Tr>
-            <Td className={styles.paddingInfoHeader}>{this.props.frecuency === this.frecuencyOptions[0] ? 'Day' : 'Hour' }</Td>
-            {data.map((row) => {
-              return (<Td className={styles.paddingInfoHeader}>{row.dayHour}</Td>);
+          <Tr key={'row[0]'}>
+            <Td key={'row[0]_col[]'} className={styles.paddingInfoHeader}>{this.props.frecuency === this.frecuencyOptions[0] ? 'Day' : 'Hour' }</Td>
+            {data.map((row, i) => {
+              return (<Td key={'row[0]_col[' + (i) + ']'} className={styles.paddingInfoHeader}>{row.dayHour}</Td>);
             })}
-            <Td className={styles.paddingInfoHeader}>{this.props.frecuency === this.frecuencyOptions[0] ? 'Day' : 'Hour' }</Td>
+            <Td key={'row[0]_col[' + (data.length) + ']'} className={styles.paddingInfoHeader}>{this.props.frecuency === this.frecuencyOptions[0] ? 'Day' : 'Hour' }</Td>
           </Tr>
-          <Tr>
-            <Td className={styles.paddingInfoHeader}>Pictocode</Td>
-            {data.map((row) => {
-              return (<Td className={styles.paddingInfoHeader}>{row.pictocode}</Td>);
+          <Tr key={'row[1]'}>
+            <Td ey={'row[1]_col[]'}  className={styles.paddingInfoHeader}>Pictocode</Td>
+            {data.map((row, i) => {
+              return (<Td key={'row[1]_col[' + (i) + ']'}  className={styles.paddingInfoHeader}>{row.pictocode}</Td>);
             })}
-            <Td className={styles.paddingInfoHeader}>Pictocode</Td>
+            <Td key={'row[1]_col[' + data.length + ']'} className={styles.paddingInfoHeader}>Pictocode</Td>
           </Tr>
           {this.props.frecuency === this.frecuencyOptions[0] ? (
             <>
-              <Tr>
-                <Td className={styles.paddingInfoHeader}>High °C</Td>
-                {data.map((row) => {
-                  return (<Td className={[styles.temperatureMax,styles.paddingInfoHeader].join(' ')}>{row.temperatureMax}</Td>);
+              <Tr key={'row[2]'}>
+                <Td key={'row[2]_col[]'}  className={styles.paddingInfoHeader}>High °C</Td>
+                {data.map((row, i) => {
+                  return (<Td key={'row[2]_col[' + (i) + ']'} className={[styles.temperatureMax,styles.paddingInfoHeader].join(' ')}>{row.temperatureMax}</Td>);
                 })}
-                <Td className={styles.paddingInfoHeader}>High °C</Td>
+                <Td key={'row[2]_col[' + data.length + ']'} className={styles.paddingInfoHeader}>High °C</Td>
               </Tr>
-              <Tr>
-                <Td className={styles.paddingInfoHeader}>Low °C</Td>
-                {data.map((row) => {
-                  return (<Td className={styles.paddingInfoHeader}>{row.temperatureMin}</Td>);
+              <Tr key={'row[3]'}>
+                <Td key={'row[3]_col[]'} className={styles.paddingInfoHeader}>Low °C</Td>
+                {data.map((row, i) => {
+                  return (<Td key={'row[3]_col[' + (i) + ']'} className={styles.paddingInfoHeader}>{row.temperatureMin}</Td>);
                 })}
-                <Td className={styles.paddingInfoHeader}>Low °C</Td>
+                <Td key={'row[3]_col[' + data.length + ']'} className={styles.paddingInfoHeader}>Low °C</Td>
               </Tr>
             </>
           ) : (
-            <Tr>
-              <Td className={styles.paddingInfoHeader}>Temp. °C</Td>
-              {data.map((row) => {
+            <Tr key={'row[4]'}>
+              <Td key={'row[4]_col[]'} className={styles.paddingInfoHeader}>Temp. °C</Td>
+              {data.map((row, i) => {
                 return (
-                <Td className={styles.paddingInfoHeader}>
+                <Td key={'row[4]_col[' + (i) + ']'} className={styles.paddingInfoHeader}>
                   <span className={styles.temperatureMax}>
                     {row.temperature}
                   </span>
@@ -194,15 +194,15 @@ export default class InfoHeader extends Component {
                   </span>
                 </Td>);
               })}
-              <Td className={styles.paddingInfoHeader}>Temp. °C</Td>
+              <Td key={'row[4]_col[' + data.length + ']'} className={styles.paddingInfoHeader}>Temp. °C</Td>
             </Tr>
           )}
           {this.props.frecuency === this.frecuencyOptions[0] && (
-            <Tr>
-              <Td className={styles.paddingInfoHeader}>Predictability</Td>
-              {data.map((row) => {
+            <Tr key={'row[5]'}>
+              <Td key={'row[5]_col[]'} className={styles.paddingInfoHeader}>Predictability</Td>
+              {data.map((row, i) => {
                 return (
-                  <Td className={styles.padding0}>
+                  <Td key={'row[5]_col[' + (i) + ']'} className={styles.padding0}>
                     <span
                       className={styles.backgroundPredictability}
                       style={{'width': ((100 - row.predictability) / 2) + '%'}}
@@ -221,7 +221,7 @@ export default class InfoHeader extends Component {
                   </Td>
                 );
               })}
-              <Td className={styles.paddingInfoHeader}>Predictability</Td>
+              <Td key={'row[5]_col[' + data.length + ']'}  className={styles.paddingInfoHeader}>Predictability</Td>
             </Tr>
           )}
         </Table>
