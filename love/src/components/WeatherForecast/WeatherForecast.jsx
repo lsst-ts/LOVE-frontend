@@ -41,8 +41,10 @@ export default class WeatherForecast extends Component {
 
     this.frecuencyOptions = ['daily', 'hourly'];
     this.sliceSizeOptions = {'daily': 15, 'hourly': 29};
-    this.temporalFormatOptions = {'daily': '%Y-%m-%d', 'hourly': '%H:%M'};
+    this.temporalFormatOptions = {'daily': '%Y-%m-%d %H:%M', 'hourly': '%Y-%m-%d %H:%M'};
     this.deltaTimeOptions = {'daily': 60 * 60 * 24, 'hourly': 60 * 60};
+    this.sliceInvert = {'daily': false, 'hourly': true};
+    this.sizeLimit = {'daily': 15, 'hourly': 382};
 
     this.windPlotRef = React.createRef();
     this.temperaturePlotRef = React.createRef();
@@ -56,6 +58,7 @@ export default class WeatherForecast extends Component {
       temperature: WEATHER['daily']['temperature'],
       rain: WEATHER['daily']['rain'],
       sliceSize: this.sliceSizeOptions['daily'],
+      sliceInvert: false,
       temporalXAxisFormat: this.temporalFormatOptions['daily'],
     };
   }
@@ -89,6 +92,8 @@ export default class WeatherForecast extends Component {
       temperature: this.getInput('temperature', option),
       rain: this.getInput('rain', option),
       sliceSize: this.getSliceSize(option),
+      sliceInvert: this.sliceInvert[option],
+      sizeLimit: this.sizeLimit[option],
       temporalXAxisFormat: this.getTemporalFormat(option),
     });
   }
@@ -145,6 +150,8 @@ export default class WeatherForecast extends Component {
                 legendPosition="bottom"
                 inputs={this.state.cloud}
                 sliceSize={this.state.sliceSize}
+                sliceInvert={this.state.sliceInvert}
+                sizeLimit={this.state.sizeLimit}
                 temporalXAxisFormat={this.state.temporalXAxisFormat}
                 isForecast={true}
                 scaleDomain={{domainMin: 0, domainMax:100}}
@@ -165,6 +172,8 @@ export default class WeatherForecast extends Component {
                 legendPosition="bottom"
                 inputs={this.state.wind}
                 sliceSize={this.state.sliceSize}
+                sliceInvert={this.state.sliceInvert}
+                sizeLimit={this.state.sizeLimit}
                 temporalXAxisFormat={this.state.temporalXAxisFormat}
                 isForecast={true}
               />
@@ -183,6 +192,8 @@ export default class WeatherForecast extends Component {
                 legendPosition="bottom"
                 inputs={this.state.temperature}
                 sliceSize={this.state.sliceSize}
+                sliceInvert={this.state.sliceInvert}
+                sizeLimit={this.state.sizeLimit}
                 temporalXAxisFormat={this.state.temporalXAxisFormat}
                 isForecast={true}
               />
@@ -201,6 +212,8 @@ export default class WeatherForecast extends Component {
                 legendPosition="bottom"
                 inputs={this.state.rain}
                 sliceSize={this.state.sliceSize}
+                sliceInvert={this.state.sliceInvert}
+                sizeLimit={this.state.sizeLimit}
                 temporalXAxisFormat={this.state.temporalXAxisFormat}
                 isForecast={true}
                 scaleIndependent={true}
