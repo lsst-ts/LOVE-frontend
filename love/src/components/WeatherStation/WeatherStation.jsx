@@ -19,99 +19,139 @@ export default class WeatherStation extends Component {
 
   temperaturePlot = {
     'Air temperature': {
-      category: 'telemetry',
-      csc: 'WeatherStation',
-      salindex: this.props.salindex,
-      topic: 'airTemperature',
-      item: 'avg1M',
       type: 'line',
-      accessor: (x) => x,
       color: COLORS[0],
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'WeatherStation',
+          salindex: this.props.salindex,
+          topic: 'airTemperature',
+          item: 'avg1M',
+          accessor: '(x) => x',
+        }
+      ]
     },
     'Soil temperature': {
-      category: 'telemetry',
-      csc: 'WeatherStation',
-      salindex: this.props.salindex,
-      topic: 'soilTemperature',
-      item: 'avg1M',
       type: 'line',
-      accessor: (x) => x,
       color: COLORS[1],
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'WeatherStation',
+          salindex: this.props.salindex,
+          topic: 'soilTemperature',
+          item: 'avg1M',
+          accessor: '(x) => x',
+        }
+      ],
     },
     'Dew point': {
-      category: 'telemetry',
-      csc: 'WeatherStation',
-      salindex: this.props.salindex,
-      topic: 'dewPoint',
-      item: 'avg1M',
       type: 'line',
-      accessor: (x) => x,
       color: COLORS[2],
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'WeatherStation',
+          salindex: this.props.salindex,
+          topic: 'dewPoint',
+          item: 'avg1M',
+          accessor: '(x) => x',
+        }
+      ]
     },
   };
 
   humidityPlot = {
     Humidity: {
-      category: 'telemetry',
-      csc: 'WeatherStation',
-      salindex: this.props.salindex,
-      topic: 'relativeHumidity',
-      item: 'avg1M',
       type: 'line',
-      accessor: (x) => x,
       color: COLORS[0],
-    },
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'WeatherStation',
+          salindex: this.props.salindex,
+          topic: 'relativeHumidity',
+          item: 'avg1M',
+          accessor: '(x) => x',
+        },
+      ]
+    }
   };
 
   pressurePlot = {
     'Air pressure': {
-      category: 'telemetry',
-      csc: 'WeatherStation',
-      salindex: this.props.salindex,
-      topic: 'airPressure',
-      item: 'paAvg1M',
       type: 'line',
-      accessor: (x) => x,
       color: COLORS[0],
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'WeatherStation',
+          salindex: this.props.salindex,
+          topic: 'airPressure',
+          item: 'paAvg1M',
+          accessor: '(x) => x',
+        }
+      ]
     },
   };
 
   solarPlot = {
     'Solar radiation': {
-      category: 'telemetry',
-      csc: 'WeatherStation',
-      salindex: this.props.salindex,
-      topic: 'solarNetRadiation',
-      item: 'avg1M',
       type: 'line',
-      accessor: (x) => x,
       color: COLORS[0],
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'WeatherStation',
+          salindex: this.props.salindex,
+          topic: 'solarNetRadiation',
+          item: 'avg1M',
+          accessor: '(x) => x',
+        }
+      ]
     },
   };
 
   precipitationPlot = {
     Precipitation: {
-      category: 'telemetry',
-      csc: 'WeatherStation',
-      salindex: this.props.salindex,
-      topic: 'precipitation',
-      item: 'prSum1M',
       type: 'line',
-      accessor: (x) => x,
       color: COLORS[0],
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'WeatherStation',
+          salindex: this.props.salindex,
+          topic: 'precipitation',
+          item: 'prSum1M',
+          accessor: '(x) => x',
+        }
+      ]
     },
   };
 
   snowDepthPlot = {
     'Snow depth': {
-      category: 'telemetry',
-      csc: 'WeatherStation',
-      salindex: this.props.salindex,
-      topic: 'snowDepth',
-      item: 'avg1M',
       type: 'line',
-      accessor: (x) => x,
       color: COLORS[0],
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'WeatherStation',
+          salindex: this.props.salindex,
+          topic: 'snowDepth',
+          item: 'avg1M',
+          accessor: '(x) => x',
+        }
+      ]
     },
   };
 
