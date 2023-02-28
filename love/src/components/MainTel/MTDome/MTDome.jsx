@@ -55,46 +55,66 @@ const defaultValuesGN = {
 
 const azimuthPlotInputs = {
   'Dome Azimuth': {
-    category: 'telemetry',
-    csc: 'MTDome',
-    salindex: 0,
-    topic: 'azimuth',
-    item: 'positionActual',
     type: 'line',
-    accessor: (x) => x,
     color: 'hsl(201, 70%, 40%)',
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'MTDome',
+        salindex: '0',
+        topic: 'azimuth',
+        item: 'positionActual',
+        accessor: '(x) => x',
+      }
+    ]
   },
   'Dome Target Az': {
-    category: 'telemetry',
-    csc: 'MTDome',
-    salindex: 0,
-    topic: 'azimuth',
-    item: 'positionCommanded',
     type: 'line',
-    accessor: (x) => x,
     color: 'hsl(201, 70%, 40%)',
     dash: [4, 1],
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'MTDome',
+        salindex: '0',
+        topic: 'azimuth',
+        item: 'positionCommanded',
+        accessor: '(x) => x',
+      }
+    ]
   },
   'Mount Azimuth': {
-    category: 'telemetry',
-    csc: 'MTMount',
-    salindex: 0,
-    topic: 'azimuth',
-    item: 'actualPosition',
     type: 'line',
-    accessor: (x) => x,
     color: 'hsl(160, 70%, 40%)',
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'MTMount',
+        salindex: 0,
+        topic: 'azimuth',
+        item: 'actualPosition',
+        accessor: '(x) => x',
+      }
+    ]
   },
   'Mount Target': {
-    category: 'telemetry',
-    csc: 'MTMount',
-    salindex: 0,
-    topic: 'azimuth',
-    item: 'demandPosition',
     type: 'line',
-    accessor: (x) => x,
     color: 'hsl(160, 70%, 40%)',
     dash: [4, 1],
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'MTMount',
+        salindex: 0,
+        topic: 'azimuth',
+        item: 'demandPosition',
+        accessor: '(x) => x',
+      }
+    ]
   },
 };
 
