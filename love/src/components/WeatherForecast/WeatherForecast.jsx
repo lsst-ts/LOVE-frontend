@@ -41,7 +41,7 @@ export default class WeatherForecast extends Component {
 
     this.frecuencyOptions = ['daily', 'hourly'];
     this.sliceSizeOptions = {'daily': 15, 'hourly': 49};
-    this.temporalFormatOptions = {'daily': '%Y-%m-%d', 'hourly': '%d %H:%M'};
+    this.temporalFormatOptions = {'daily': '%Y-%m-%d', 'hourly': '%d, %H:%M'};
     this.deltaTimeOptions = {'daily': 60 * 60 * 24, 'hourly': 60 * 60};
     this.sliceInvert = {'daily': false, 'hourly': true};
     this.sizeLimit = {'daily': 15, 'hourly': 382};
@@ -50,10 +50,12 @@ export default class WeatherForecast extends Component {
     this.temperaturePlotRef = React.createRef();
     this.rainPlotRef = React.createRef();
     this.cloudPlotRef = React.createRef();
+    this.cloudComplementPlotRef = React.createRef();
 
     this.state = {
       frecuency: 'daily',
       cloud: WEATHER['daily']['cloud'],
+      cloudComplement: WEATHER['daily']['cloudComplement'],
       wind: WEATHER['daily']['wind'],
       temperature: WEATHER['daily']['temperature'],
       rain: WEATHER['daily']['rain'],
@@ -88,6 +90,7 @@ export default class WeatherForecast extends Component {
     this.setState({
       frecuency: option,
       cloud: this.getInput('cloud', option),
+      cloudComplement: this.getInput('cloudComplement', option),
       wind: this.getInput('wind', option),
       temperature: this.getInput('temperature', option),
       rain: this.getInput('rain', option),
@@ -146,9 +149,25 @@ export default class WeatherForecast extends Component {
               <PlotContainer
                 containerNode={this.cloudPlotRef.current}
                 xAxisTitle="Time"
+                yAxisTitle=""
+                legendPosition=""
+                inputs={this.state.cloud}
+                sliceSize={this.state.sliceSize}
+                sliceInvert={this.state.sliceInvert}
+                sizeLimit={this.state.sizeLimit}
+                temporalXAxisFormat={this.state.temporalXAxisFormat}
+                isForecast={true}
+                scaleDomain={{domainMin: 0, domainMax:100}}
+                maxHeight={130}
+              />
+            </div>
+            <div ref={this.cloudComplementPlotRef} className={styles.plot}>
+              <PlotContainer
+                containerNode={this.cloudComplementPlotRef.current}
+                xAxisTitle="Time"
                 yAxisTitle="Cloud"
                 legendPosition="bottom"
-                inputs={this.state.cloud}
+                inputs={this.state.cloudComplement}
                 sliceSize={this.state.sliceSize}
                 sliceInvert={this.state.sliceInvert}
                 sizeLimit={this.state.sizeLimit}

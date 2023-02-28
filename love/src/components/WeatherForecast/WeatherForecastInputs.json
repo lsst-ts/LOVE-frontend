@@ -57,7 +57,9 @@
             "accessor": "(x) => x"
           }
         ]
-      },
+      }
+    },
+    "cloudComplement": {
       "Total Cloud cover spread": {
         "type": "spread",
         "color": "#ff7f0e60",
@@ -712,7 +714,9 @@
             "accessor": "(x) => x"
           }
         ]
-      },
+      }
+    },
+    "cloudComplement": {
       "Total cloud cover spread": {
         "type": "spread",
         "color": "#ff7f0e",
@@ -1072,6 +1076,15 @@
             "salindex": 0,
             "topic": "hourlyTrend",
             "item": "timestamp",
+            "accessor": "(x) => x"
+          },
+          {
+            "variable": "y",
+            "category": "telemetry",
+            "csc": "WeatherForecast",
+            "salindex": 0,
+            "topic": "hourlyTrend",
+            "item": "precipitation",
             "accessor": "(x) => x"
           },
           {

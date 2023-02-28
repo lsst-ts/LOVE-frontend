@@ -7,7 +7,7 @@ import WeatherForecast from './WeatherForecast';
 
 export const schema = {
   description: 'View of Weather Forecast',
-  defaultSize: [70, 65],
+  defaultSize: [65, 87],
   props: {
     title: {
       type: 'string',
