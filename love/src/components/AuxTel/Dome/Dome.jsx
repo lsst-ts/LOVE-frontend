@@ -54,70 +54,100 @@ export default class Dome extends Component {
 
   elevationPlotInputs = {
     'Mount elevation': {
-      category: 'telemetry',
-      csc: 'ATMCS',
-      salindex: '0',
-      topic: 'mount_AzEl_Encoders',
-      item: 'elevationCalculatedAngle',
       type: 'line',
-      accessor: (x) => x[0],
       color: 'hsl(201, 70%, 40%)',
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'ATMCS',
+          salindex: '0',
+          topic: 'mount_AzEl_Encoders',
+          item: 'elevationCalculatedAngle',
+          accessor: '(x) => x[0]',
+        }
+      ]
     },
     'Mount target': {
-      category: 'event',
-      csc: 'ATMCS',
-      salindex: '0',
-      topic: 'target',
-      item: 'elevation',
       type: 'line',
-      accessor: (x) => x,
       color: 'white',
       dash: [4, 1],
+      values: [
+        {
+          variable: 'y',
+          category: 'event',
+          csc: 'ATMCS',
+          salindex: '0',
+          topic: 'target',
+          item: 'elevation',
+          accessor: '(x) => x',
+        }
+      ]
     },
   };
 
   azimuthPlotInputs = {
     'Dome Azimuth': {
-      category: 'telemetry',
-      csc: 'ATDome',
-      salindex: 0,
-      topic: 'position',
-      item: 'azimuthPosition',
       type: 'line',
-      accessor: (x) => x,
       color: 'hsl(201, 70%, 40%)',
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'ATDome',
+          salindex: '0',
+          topic: 'position',
+          item: 'azimuthPosition',
+          accessor: '(x) => x',
+        }
+      ]
     },
     'Dome Target Az': {
-      category: 'event',
-      csc: 'ATDome',
-      salindex: 0,
-      topic: 'azimuthCommandedState',
-      item: 'azimuth',
       type: 'line',
-      accessor: (x) => x,
       color: 'hsl(201, 70%, 40%)',
       dash: [4, 1],
+      values: [
+        {
+          variable: 'y',
+          category: 'event',
+          csc: 'ATDome',
+          salindex: '0',
+          topic: 'azimuthCommandedState',
+          item: 'azimuth',
+          accessor: '(x) => x',
+        }
+      ]
     },
     'Mount Azimuth': {
-      category: 'telemetry',
-      csc: 'ATMCS',
-      salindex: 0,
-      topic: 'mount_AzEl_Encoders',
-      item: 'azimuthCalculatedAngle',
       type: 'line',
-      accessor: (x) => (x[0] < 0 ? x[0] + 360 : x[0]),
       color: 'hsl(160, 70%, 40%)',
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'ATMCS',
+          salindex: '0',
+          topic: 'mount_AzEl_Encoders',
+          item: 'azimuthCalculatedAngle',
+          accessor: '(x) => (x[0] < 0 ? x[0] + 360 : x[0])',
+        }
+      ]
     },
     'Mount Target': {
-      category: 'event',
-      csc: 'ATMCS',
-      salindex: 0,
-      topic: 'target',
-      item: 'azimuth',
       type: 'line',
-      accessor: (x) => x,
       color: 'hsl(160, 70%, 40%)',
       dash: [4, 1],
+      values: [
+        {
+          variable: 'y',
+          category: 'event',
+          csc: 'ATMCS',
+          salindex: '0',
+          topic: 'target',
+          item: 'azimuth',
+          accessor: '(x) => x',
+        }
+      ]
     },
   };
 
