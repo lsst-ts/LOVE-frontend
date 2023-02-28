@@ -40,8 +40,8 @@ export default class WeatherForecast extends Component {
     super(props);
 
     this.frecuencyOptions = ['daily', 'hourly'];
-    this.sliceSizeOptions = {'daily': 15, 'hourly': 29};
-    this.temporalFormatOptions = {'daily': '%Y-%m-%d %H:%M', 'hourly': '%Y-%m-%d %H:%M'};
+    this.sliceSizeOptions = {'daily': 15, 'hourly': 49};
+    this.temporalFormatOptions = {'daily': '%Y-%m-%d', 'hourly': '%d %H:%M'};
     this.deltaTimeOptions = {'daily': 60 * 60 * 24, 'hourly': 60 * 60};
     this.sliceInvert = {'daily': false, 'hourly': true};
     this.sizeLimit = {'daily': 15, 'hourly': 382};
@@ -123,7 +123,7 @@ export default class WeatherForecast extends Component {
           <span>
             <div className={styles.toggleContainer}>
               <Toggle
-                labels={['14 days', '28 hours']}
+                labels={['14 days', '48 hours']}
                 isLive={this.state.frecuency === this.frecuencyOptions[1]}
                 setLiveMode={(optionHours) => this.toggleFrecuency(optionHours)}
               />

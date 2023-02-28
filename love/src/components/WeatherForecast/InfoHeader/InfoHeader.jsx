@@ -58,8 +58,8 @@ export default class InfoHeader extends Component {
     super(props);
 
     this.frecuencyOptions = ['daily', 'hourly'];
-    this.sliceSizeOptions = {'daily': 15, 'hourly': 29};
-    this.temporalFormatOptions = {'daily': 'MMM DD', 'hourly': 'DD HH:mm'};
+    this.sliceSizeOptions = {'daily': 15, 'hourly': 49};
+    this.temporalFormatOptions = {'daily': 'MMM DD', 'hourly': 'MMM DD, HH:mm'};
 
     this.state = {
       data: [],
@@ -151,7 +151,7 @@ export default class InfoHeader extends Component {
           <Tr key={'row[0]'}>
             <Td key={'row[0]_col[]'} className={styles.paddingInfoHeader}>{this.props.frecuency === this.frecuencyOptions[0] ? 'Day' : 'Hour' }</Td>
             {data.map((row, i) => {
-              return (<Td key={'row[0]_col[' + (i) + ']'} className={styles.paddingInfoHeader}>{row.dayHour}</Td>);
+              return (<Td key={'row[0]_col[' + (i) + ']'} className={styles.paddingInfoHeader}>{row.dayHour.split(',').map((d) => <div>{d}</div>)}</Td>);
             })}
             <Td key={'row[0]_col[' + (data.length) + ']'} className={styles.paddingInfoHeader}>{this.props.frecuency === this.frecuencyOptions[0] ? 'Day' : 'Hour' }</Td>
           </Tr>
