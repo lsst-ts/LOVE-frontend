@@ -21,7 +21,7 @@ export const schema = {
       type: 'boolean',
       description: 'Whether the component has a raw mode version',
       isPrivate: true,
-      default: false,
+      default: true,
     },
     xAxisTitle: {
       type: 'string',
@@ -215,7 +215,6 @@ export const schema = {
 const containerRef =  React.createRef();
 
 const WindPlotContainer = ({
-    subscriptions,
     subscribeToStreams,
     unsubscribeToStreams,
     ...props
@@ -229,10 +228,8 @@ const WindPlotContainer = ({
     return (
       <div ref={containerRef}>
         <Plot
-          subscriptions={subscriptions}
           subscribeToStreams={subscribeToStreams}
           unsubscribeToStreams={unsubscribeToStreams}
-          inputs={props.inputs}
           {...props}
           containerNode={containerRef?.current?.parentNode}
         />
@@ -241,13 +238,11 @@ const WindPlotContainer = ({
 
   } else {
     return <Plot
-      subscriptions={subscriptions}
       subscribeToStreams={subscribeToStreams}
       unsubscribeToStreams={unsubscribeToStreams}
-      inputs={props.inputs}
       {...props}
       containerNode={containerNode}
-    />;
+    />
   }
 };
 

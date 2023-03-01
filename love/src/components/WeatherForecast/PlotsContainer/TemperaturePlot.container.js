@@ -16,6 +16,12 @@ export const schema = {
       isPrivate: false,
       default: 'Temperature Plot Weather Forecast',
     },
+    hasRawMode: {
+      type: 'boolean',
+      description: 'Whether the component has a raw mode version',
+      isPrivate: false,
+      default: true,
+    },
     xAxisTitle: {
       type: 'string',
       description: 'Title of the horizontal axis of this plot',
