@@ -211,10 +211,6 @@ export default class Plot extends Component {
     this.parseInputStream();
   }
 
-  componentWillUnmount() {
-    this.props.unsubscribeToStreams();
-  }
-
   parseInputStream() {
     const { inputs, streams, sliceSize, sizeLimit } = this.props;
     const { data } = this.state;
@@ -372,6 +368,10 @@ export default class Plot extends Component {
         containerWidth: this.props.width,
       });
     }
+  }
+
+  componentWillUnmount() {
+    this.props.unsubscribeToStreams();
   }
 
   render() {
