@@ -30,24 +30,33 @@
 
 .summaryPanel {
     background-color: var(--quaternary-background-color);
+    min-width: 14em !important;
 }
 
 .currentTargetDiv {
     grid-template-columns: 0.5fr 0.5fr !important;
     display: grid !important;
     width: 100%;
+    align-items: start;
+    justify-items: stretch;
 }
+
+
 .proposals {
-    display: grid;
-    justify-content: center;
-    overflow: auto;
+    display: flex;
+    grid-column-start: span 2;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: stretch;
 }
 
 .generalDiv {
-    /* display: grid; */
-    /* grid-template-columns: 1fr 1fr 1fr 1fr; */
     display: flex;
-    /* grid-template-rows: 1fr 1fr; */
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .surveysDivs {
@@ -55,6 +64,6 @@
     border: 1px solid var(--tertiary-background-color);
     padding: 1em;
     margin: 0.5em;
-    width: 60%;
-    height: 15%;
+    width: 20%;
+    height: 8%;
 }

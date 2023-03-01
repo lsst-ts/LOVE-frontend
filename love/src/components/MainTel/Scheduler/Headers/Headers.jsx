@@ -11,6 +11,7 @@ import Stars from '../SkyElements/Stars/Stars';
 export default class Headers extends Component {
 
     render() {
+        const isNigth = true;
         return (
             <div className={styles.container}>
                 <SummaryPanel className={styles.summaryPanel}>
