@@ -440,7 +440,7 @@ class VegaTimeseriesPlot extends Component {
               type: 'quantitative',
               title: namesUnits,
               axis: {
-                titleColor: colors[0].color,
+                titleColor: colors[0]?.color,
               },
             },
             color: styleEncoding.color,
@@ -513,7 +513,7 @@ class VegaTimeseriesPlot extends Component {
               title: namesUnits,
               axis: {
                 orient: 'left',
-                titleColor: colors[0].color,
+                titleColor: colors[0]?.color,
               },
             },
             color: styleEncoding.color,
@@ -566,7 +566,7 @@ class VegaTimeseriesPlot extends Component {
               type: 'quantitative',
               axis: {
                 title: namesUnits,
-                titleColor: colors[0].color,
+                titleColor: colors[0]?.color,
                 orient: 'left',
               },
             },
@@ -661,7 +661,7 @@ class VegaTimeseriesPlot extends Component {
               axis: {
                 title: namesUnits,
                 orient: 'left',
-                titleColor: colors[0].color,
+                titleColor: colors[0]?.color,
                 offset: 45,
               },
             },
@@ -891,7 +891,7 @@ class VegaTimeseriesPlot extends Component {
               type: 'quantitative',
               axis: {
                 title: namesUnits,
-                titleColor: colors[0].title,
+                titleColor: colors[0]?.title,
               },
             },
             color: styleEncoding.color,
@@ -1068,7 +1068,7 @@ class VegaTimeseriesPlot extends Component {
               type: 'quantitative',
               axis: {
                 orient: 'right',
-                titleColor: colors[0].color,
+                titleColor: colors[0]?.color,
                 title: namesUnits,
                 offset: 45,
               },
