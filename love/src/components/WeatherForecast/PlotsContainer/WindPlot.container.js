@@ -4,6 +4,7 @@ import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getStreamsData, getEfdConfig, getTaiToUtc } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import Plot from 'components/GeneralPurpose/Plot/Plot';
+import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 
 
 export const schema = {
@@ -15,6 +16,12 @@ export const schema = {
       description: 'Name diplayed in the title bar (if visible)',
       isPrivate: false,
       default: 'Wind Plot Weather Forecast',
+    },
+    hasRawMode: {
+      type: 'boolean',
+      description: 'Whether the component has a raw mode version',
+      isPrivate: true,
+      default: false,
     },
     xAxisTitle: {
       type: 'string',
@@ -35,17 +42,42 @@ export const schema = {
       default: 'bottom',
       isPrivate: false,
     },
+    temporalXAxisFormat: {
+      type: 'string',
+      description:
+        "Format the time, for example the daily use '%Y-%m-%d' and hourly '%d, %H:%M'",
+      default: '%Y-%m-%d',
+      isPrivate: false,
+    },
+    isForecast: {
+      type: 'boolean',
+      description: "When is the Weather Forecast, the telemetries receive all data of the interval, and this case, the data its diference process",
+      default: true,
+      isPrivate: false,
+    },
+    scaleIndependent: {
+      type: 'boolean',
+      description: "When plot contain multi-axis, can set the scale indenpend",
+      default: false,
+      isPrivate: false,
+    },
+    scaleDomain: {
+      type: 'object',
+      description: 'object for domain min and domain max of plot',
+      default: {},
+      isPrivate: false,
+    },
     inputs: {
       type: 'object',
       description: 'list of inputs',
       isPrivate: false,
       default: {
-        'Wind speed': {
+        'Wind speed Min/Max': {
           type: 'area',
-          color: '#4682b4',
+          color: '#4662b4',
           shape: 'circle',
           filled: false,
-          dash: [4, 0],
+          dash: [8, 4],
           values: [
             {
               variable: 'x',
@@ -54,7 +86,7 @@ export const schema = {
               salindex: 0,
               topic: 'dailyTrend',
               item: 'timestamp',
-              accessor: '(x) => x[0]',
+              accessor: '(x) => x',
             },
             {
               variable: 'y',
@@ -63,7 +95,7 @@ export const schema = {
               salindex: 0,
               topic: 'dailyTrend',
               item: 'windspeedMin',
-              accessor: '(x) => x[0]',
+              accessor: '(x) => x',
             },
             {
               variable: 'y2',
@@ -72,7 +104,7 @@ export const schema = {
               salindex: 0,
               topic: 'dailyTrend',
               item: 'windspeedMax',
-              accessor: '(x) => x[0]',
+              accessor: '(x) => x',
             }
           ],
         },
@@ -90,7 +122,7 @@ export const schema = {
               salindex: 0,
               topic: 'dailyTrend',
               item: 'timestamp',
-              accessor: '(x) => x[0]',
+              accessor: '(x) => x',
             },
             {
               variable: 'base',
@@ -99,7 +131,7 @@ export const schema = {
               salindex: 0,
               topic: 'dailyTrend',
               item: 'windspeedMean',
-              accessor: '(x) => x[0]',
+              accessor: '(x) => x',
             },
             {
               variable: 'delta',
@@ -108,7 +140,7 @@ export const schema = {
               salindex: 0,
               topic: 'dailyTrend',
               item: 'windspeedSpread',
-              accessor: '(x) => x[0]',
+              accessor: '(x) => x',
             }
           ],
         },
@@ -126,7 +158,7 @@ export const schema = {
               salindex: 0,
               topic: 'dailyTrend',
               item: 'timestamp',
-              accessor: '(x) => x[0]',
+              accessor: '(x) => x',
             },
             {
               variable: 'y',
@@ -135,7 +167,7 @@ export const schema = {
               salindex: 0,
               topic: 'dailyTrend',
               item: 'windspeedMean',
-              accessor: '(x) => x[0]',
+              accessor: '(x) => x',
             },
             {
               variable: 'angle',
@@ -144,7 +176,7 @@ export const schema = {
               salindex: 0,
               topic: 'dailyTrend',
               item: 'windDirection',
-              accessor: '(x) => x[0]',
+              accessor: '(x) => x',
             }
           ],
         },
@@ -162,7 +194,7 @@ export const schema = {
               salindex: 0,
               topic: 'dailyTrend',
               item: 'timestamp',
-              accessor: '(x) => x[0]',
+              accessor: '(x) => x',
             },
             {
               variable: 'y',
@@ -170,8 +202,8 @@ export const schema = {
               csc: 'WeatherForecast',
               salindex: 0,
               topic: 'dailyTrend',
-              item: 'gust',
-              accessor: '(x) => x[0]',
+              item: 'gustMean',
+              accessor: '(x) => x',
             },
           ],
         }
@@ -182,8 +214,14 @@ export const schema = {
 
 const containerRef =  React.createRef();
 
-const WindPlotContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
+const WindPlotContainer = ({
+    subscriptions,
+    subscribeToStreams,
+    unsubscribeToStreams,
+    ...props
+  }) => {
   const { containerNode } = props;
+
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
@@ -191,8 +229,10 @@ const WindPlotContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props 
     return (
       <div ref={containerRef}>
         <Plot
+          subscriptions={subscriptions}
           subscribeToStreams={subscribeToStreams}
           unsubscribeToStreams={unsubscribeToStreams}
+          inputs={props.inputs}
           {...props}
           containerNode={containerRef?.current?.parentNode}
         />
@@ -201,8 +241,10 @@ const WindPlotContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props 
 
   } else {
     return <Plot
+      subscriptions={subscriptions}
       subscribeToStreams={subscribeToStreams}
       unsubscribeToStreams={unsubscribeToStreams}
+      inputs={props.inputs}
       {...props}
       containerNode={containerNode}
     />;
