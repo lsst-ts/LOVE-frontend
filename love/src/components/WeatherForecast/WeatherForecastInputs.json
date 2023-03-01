@@ -126,15 +126,6 @@
             "topic": "dailyTrend",
             "item": "totalCloudCoverMin",
             "accessor": "(x) => x"
-          },
-          {
-            "variable": "y2",
-            "category": "telemetry",
-            "csc": "WeatherForecast",
-            "salindex": 0,
-            "topic": "dailyTrend",
-            "item": "totalCloudCoverMax",
-            "accessor": "(x) => x"
           }
         ]
       },
@@ -239,9 +230,9 @@
           }
         ]
       },
-      "Wind speed": {
+      "Wind speed Min/Max": {
         "type": "area",
-        "color": "#4682b4",
+        "color": "#4662b4",
         "shape": "circle",
         "filled": false,
         "dash": [
@@ -827,9 +818,9 @@
           }
         ]
       },
-      "Wind speed": {
+      "Wind speed Min/Max": {
         "type": "line",
-        "color": "#4682b4",
+        "color": "#4662b4",
         "shape": "circle",
         "filled": false,
         "dash": [

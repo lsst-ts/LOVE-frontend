@@ -35,12 +35,41 @@ export const schema = {
       default: 'bottom',
       isPrivate: false,
     },
+    temporalXAxisFormat: {
+      type: 'string',
+      description:
+        "Format the time, for example the daily use '%Y-%m-%d' and hourly '%d, %H:%M'",
+      default: '%Y-%m-%d',
+      isPrivate: false,
+    },
+    isForecast: {
+      type: 'boolean',
+      description: "When is the Weather Forecast, the telemetries receive all data of the interval, and this case, the data its diference process",
+      default: true,
+      isPrivate: false,
+    },
+    scaleIndependent: {
+      type: 'boolean',
+      description: "When plot contain multi-axis, can set the scale indenpend",
+      default: true,
+      isPrivate: false,
+    },
+    scaleDomain: {
+      type: 'object',
+      description: 'object for domain min and domain max of plot',
+      default: {
+        domainMin: 0,
+        domainMax: 100
+      },
+      isPrivate: false,
+    },
     inputs: {
       type: 'object',
       description: 'list of inputs',
       isPrivate: false,
       default: {
-        'Total cloud cover (%)': {
+        
+        'Total cloud cover': {
           type: 'line',
           color: '#ff7f0e',
           shape: 'circle',
@@ -52,18 +81,18 @@ export const schema = {
               category: 'telemetry',
               csc: 'WeatherForecast',
               salindex: 0,
-              topic: 'hourlyTrend',
+              topic: 'dailyTrend',
               item: 'timestamp',
-              accessor: '(x) => x[0]',
+              accessor: '(x) => x',
             },
             {
               variable: 'y',
               category: 'telemetry',
               csc: 'WeatherForecast',
               salindex: 0,
-              topic: 'hourlyTrend',
-              item: 'totalCloudCover',
-              accessor: '(x) => x[0]',
+              topic: 'dailyTrend',
+              item: 'totalCloudCoverMean',
+              accessor: '(x) => x',
             },
           ],
         },
@@ -79,33 +108,127 @@ export const schema = {
               category: 'telemetry',
               csc: 'WeatherForecast',
               salindex: 0,
-              topic: 'hourlyTrend',
+              topic: 'dailyTrend',
               item: 'timestamp',
-              accessor: '(x) => x[0]',
+              accessor: '(x) => x',
             },
             {
               variable: 'base',
               category: 'telemetry',
               csc: 'WeatherForecast',
               salindex: 0,
-              topic: 'hourlyTrend',
-              item: 'totalCloudCover',
-              accessor: '(x) => x[0]',
+              topic: 'dailyTrend',
+              item: 'totalCloudCoverMean',
+              accessor: '(x) => x',
             },
             {
               variable: 'delta',
               category: 'telemetry',
               csc: 'WeatherForecast',
               salindex: 0,
-              topic: 'hourlyTrend',
+              topic: 'dailyTrend',
               item: 'totalCloudCoverSpread',
-              accessor: '(x) => x[0]',
+              accessor: '(x) => x',
             }
           ],
-        }
+        },
+        'Total cover Min/Max': {
+          type: 'area',
+          color: '#ff5f0e',
+          dash: [
+            8,
+            4
+          ],
+          values: [
+            {
+              "variable": "x",
+              "category": "telemetry",
+              "csc": "WeatherForecast",
+              "salindex": 0,
+              "topic": "dailyTrend",
+              "item": "timestamp",
+              "accessor": "(x) => x"
+            },
+            {
+              "variable": "y",
+              "category": "telemetry",
+              "csc": "WeatherForecast",
+              "salindex": 0,
+              "topic": "dailyTrend",
+              "item": "totalCloudCoverMax",
+              "accessor": "(x) => x"
+            },
+            {
+              "variable": "y2",
+              "category": "telemetry",
+              "csc": "WeatherForecast",
+              "salindex": 0,
+              "topic": "dailyTrend",
+              "item": "totalCloudCoverMin",
+              "accessor": "(x) => x"
+            },
+          ]
+        },
+        "Clouds": {
+          "type": "heatmap",
+          "color": "#4682b4",
+          "shape": "circle",
+          "filled": false,
+          "dash": [
+            4,
+            0
+          ],
+          "values": [
+            {
+              "variable": "x",
+              "category": "telemetry",
+              "csc": "WeatherForecast",
+              "salindex": 0,
+              "topic": "dailyTrend",
+              "item": "timestamp",
+              "accessor": "(x) => x.slice(1)"
+            },
+            {
+              "variable": "x2",
+              "category": "telemetry",
+              "csc": "WeatherForecast",
+              "salindex": 0,
+              "topic": "dailyTrend",
+              "item": "timestamp",
+              "accessor": "(x) => x.map((v) => v * 1000 - (60 * 60 * 24 * 1000)).slice(1)"
+            },
+            {
+              "variable": "lowclouds",
+              "category": "telemetry",
+              "csc": "WeatherForecast",
+              "salindex": 0,
+              "topic": "dailyTrend",
+              "item": "lowCloudsMean",
+              "accessor": "(x) => x"
+            },
+            {
+              "variable": "midclouds",
+              "category": "telemetry",
+              "csc": "WeatherForecast",
+              "salindex": 0,
+              "topic": "dailyTrend",
+              "item": "midCloudsMean",
+              "accessor": "(x) => x"
+            },
+            {
+              "variable": "hiclouds",
+              "category": "telemetry",
+              "csc": "WeatherForecast",
+              "salindex": 0,
+              "topic": "dailyTrend",
+              "item": "hiCloudsMean",
+              "accessor": "(x) => x"
+            }
+          ]
+        },
       }
     }
-  },
+  }
 };
 
 const containerRef =  React.createRef();
