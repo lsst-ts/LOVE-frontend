@@ -94,7 +94,7 @@ class VegaTimeseriesPlot extends Component {
        */
       spreads: PropTypes.arrayOf(PropTypes.object),
       /**
-       * List of `{name, x, lowclouds, midclouds, hiclouds}` of area plot to be plotted.
+       * List of `{name, x, low, mid, hi}` of area plot to be plotted.
        *  - name distinguishes a mark from another
        *  - x,y1,y2, y3 are the plot-axis coordinates of a point in that area
        */
@@ -1123,7 +1123,14 @@ class VegaTimeseriesPlot extends Component {
     const names = [...new Set(arr.map((layer) => layer.name))];
     const units = names.map((name) => ({name: name, units: arr.filter((l) => l.name === name)[0].units}));
 
-    const nameUnit = units.map((u) => u.name + ' [' + u.units?.lowclouds + ']')[0];
+    const nameUnit = units.map((u) => u.name + ' [' + u.units?.low + ']')[0];
+
+    const scale = {
+      type:  "quantize",
+      domain: [0, 100],
+      zero: true,
+      scheme: [color + '00', color + '10', color + '88' , color + 'bb', color + 'ff'],
+    };
 
     return {
       data: { name: dataName },
@@ -1178,17 +1185,14 @@ class VegaTimeseriesPlot extends Component {
               }
             },
             color: {
-              field: 'lowclouds',
+              scale: scale,
+              field: 'low',
               type: 'quantitative',
               title: nameUnit,
-              scale: {
-                domain: [0, 100],
-                range: [color + '05', color + 'ff']
-              },
             },
             tooltip: [
               {
-                title: 'Lowclouds', field: 'lowclouds'
+                title: 'Lowclouds', field: 'low'
               },
               {
                 field: 'x',
@@ -1236,17 +1240,14 @@ class VegaTimeseriesPlot extends Component {
               }
             },
             color: {
-              field: 'midclouds',
+              scale: scale,
+              field: 'mid',
               type: 'quantitative',
               title: nameUnit,
-              scale: {
-                domain: [0, 100],
-                range: [color + '05', color + 'ff']
-              },
             },
             tooltip: [
               {
-                title: 'Midclouds', field: 'midclouds'
+                title: 'Midclouds', field: 'mid'
               },
               {
                 field: 'x',
@@ -1294,17 +1295,14 @@ class VegaTimeseriesPlot extends Component {
               }
             },
             color: {
-              field: 'hiclouds',
+              scale: scale,
+              field: 'hi',
               type: 'quantitative',
               title: nameUnit,
-              scale: {
-                domain: [0, 100],
-                range: [color + '05', color + 'ff']
-              },
             },
             tooltip: [
               {
-                title: 'Hiclouds', field: 'hiclouds'
+                title: 'Hiclouds', field: 'hi'
               },
               {
                 field: 'x',
@@ -1374,6 +1372,11 @@ class VegaTimeseriesPlot extends Component {
             titleFontWeight: 750,
             labelFontWeight: 750,
             tickCount: 5,
+          },
+          legend : {
+            gradientLength: this.props.height - 45,
+            gradientHorizontalMaxLength: this.props.height - 45,
+            gradientVerticalMaxLength: this.props.height - 45,
           },
         },
         transform: [

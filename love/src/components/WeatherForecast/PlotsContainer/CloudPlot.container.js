@@ -204,7 +204,7 @@ export const schema = {
               "accessor": "(x) => x.map((v) => v * 1000 - (60 * 60 * 24 * 1000)).slice(1)"
             },
             {
-              "variable": "lowclouds",
+              "variable": "low",
               "category": "telemetry",
               "csc": "WeatherForecast",
               "salindex": 0,
@@ -213,7 +213,7 @@ export const schema = {
               "accessor": "(x) => x"
             },
             {
-              "variable": "midclouds",
+              "variable": "mid",
               "category": "telemetry",
               "csc": "WeatherForecast",
               "salindex": 0,
@@ -222,7 +222,7 @@ export const schema = {
               "accessor": "(x) => x"
             },
             {
-              "variable": "hiclouds",
+              "variable": "hi",
               "category": "telemetry",
               "csc": "WeatherForecast",
               "salindex": 0,
