@@ -89,7 +89,7 @@ export default class MTDomeSummaryTable extends Component {
       <div className={styles.divSummary}>
         <SummaryPanel className={styles.summaryTable}>
           <Title>Track ID</Title>
-          <Value>{trackID}</Value>
+          <Value>{trackID?.toString()}</Value>
           <Title>Dome</Title>
           <Value>
             <span className={[domeStatus.class, styles.summaryState].join(' ')}>{domeStatus.name}</span>

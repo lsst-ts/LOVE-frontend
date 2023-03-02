@@ -51,27 +51,34 @@ export default class MTDomePointing extends Component {
   render() {
     const { width, height } = this.props;
     const zenithPixels = this.azelToPixel({ az: 0, el: 90 }, false);
-    const el = this.props.currentPointing.el;
-    const az = this.props.currentPointing.az;
+    const {currentPointing, targetPointing} = this.props;
+
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 300 300">
         {/* pointing */}
-        <g className={styles.pointing}>
-          <circle
-            className={styles.targetPointing}
-            r={16}
-            strokeWidth={2}
-            cx={zenithPixels.x}
-            cy={zenithPixels.y}
+        {(targetPointing?.az !== currentPointing?.az || targetPointing?.el !== currentPointing?.el) && (
+          <g className={styles.pointing}
             style={{
-              transform: `rotateZ(${this.props.targetPointing.az}deg) rotateX(${this.props.targetPointing.el - 90}deg)`,
+              transform: `rotateZ(${targetPointing?.az}deg)`,
               transformOrigin: `50% 50%`,
             }}
-          />
+          >
+            <circle
+              className={styles.targetPointing}
+              r={16}
+              strokeWidth={2}
+              cx={zenithPixels.x}
+              cy={zenithPixels.y}
+              style={{
+                transform: `rotateX(${targetPointing?.el - 90}deg)`,
+              }}
+            />
+          </g>
+        )}
 
           <g
             style={{
-              transform: `rotateZ(${az}deg)`,
+              transform: `rotateZ(${currentPointing?.az}deg)`,
               transformOrigin: `50% 50%`,
             }}
           >
@@ -82,11 +89,10 @@ export default class MTDomePointing extends Component {
               cx={zenithPixels.x}
               cy={zenithPixels.y}
               style={{
-                transform: `rotateX(${el - 90}deg)`,
+                transform: `rotateX(${currentPointing?.el - 90}deg)`,
               }}
             />
           </g>
-        </g>
       </svg>
     );
   }

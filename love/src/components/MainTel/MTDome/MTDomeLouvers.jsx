@@ -95,31 +95,35 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* A2 */}
-          <line
-            className={styles.louver5}
-            x1="34.52"
-            y1="105.15"
-            x2="61.52"
-            y2="105.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[0] / 100) * commandedPositionLouvers[0]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[0] !== actualPositionLouvers[0] && (
+            <line
+              className={styles.louver5}
+              x1="34.52"
+              y1="105.15"
+              x2="61.52"
+              y2="105.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[0] / 100) * commandedPositionLouvers[0]}px)`,
+              }}
+            />)
+          }
           {/* A1 */}
-          <line
-            className={styles.louver5}
-            x1="34.52"
-            y1="134.15"
-            x2="61.52"
-            y2="134.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[1] / 100) * commandedPositionLouvers[1]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[1] !== actualPositionLouvers[1] && (
+            <line
+              className={styles.louver5}
+              x1="34.52"
+              y1="134.15"
+              x2="61.52"
+              y2="134.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[1] / 100) * commandedPositionLouvers[1]}px)`,
+              }}
+            />)
+          }
         </g>
 
         {/* from left to right (2) */}
@@ -175,44 +179,50 @@ export default class MTDomeLouvers extends Component {
           />
 
           {/* B3 */}
-          <line
-            className={styles.louver5}
-            x1="73.27"
-            y1="60.15"
-            x2="100.27"
-            y2="60.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[2] / 100) * commandedPositionLouvers[2]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[2] !== actualPositionLouvers[2] && (
+            <line
+              className={styles.louver5}
+              x1="73.27"
+              y1="60.15"
+              x2="100.27"
+              y2="60.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[2] / 100) * commandedPositionLouvers[2]}px)`,
+              }}
+            />)
+          }
           {/* B2 */}
-          <line
-            className={styles.louver5}
-            x1="73.27"
-            y1="89.15"
-            x2="100.27"
-            y2="89.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[3] / 100) * commandedPositionLouvers[3]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[3] !== actualPositionLouvers[3] && (
+            <line
+              className={styles.louver5}
+              x1="73.27"
+              y1="89.15"
+              x2="100.27"
+              y2="89.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[3] / 100) * commandedPositionLouvers[3]}px)`,
+              }}
+            />)
+          }
           {/* B1 */}
-          <line
-            className={styles.louver5}
-            x1="73.27"
-            y1="134.15"
-            x2="100.27"
-            y2="134.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[4] / 100) * commandedPositionLouvers[4]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[4] !== actualPositionLouvers[4] && (
+            <line
+              className={styles.louver5}
+              x1="73.27"
+              y1="134.15"
+              x2="100.27"
+              y2="134.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[4] / 100) * commandedPositionLouvers[4]}px)`,
+              }}
+            />)
+          }
         </g>
 
         {/* from left to right (3) */}
@@ -267,44 +277,50 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* C3 */}
-          <line
-            className={styles.louver5}
-            x1="112.27"
-            y1="44.15"
-            x2="139.27"
-            y2="44.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[5] / 100) * commandedPositionLouvers[5]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[5] !== actualPositionLouvers[5] && (
+            <line
+              className={styles.louver5}
+              x1="112.27"
+              y1="44.15"
+              x2="139.27"
+              y2="44.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[5] / 100) * commandedPositionLouvers[5]}px)`,
+              }}
+            />)
+          }
           {/* C2 */}
-          <line
-            className={styles.louver5}
-            x1="112.27"
-            y1="89.15"
-            x2="139.27"
-            y2="89.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[6] / 100) * commandedPositionLouvers[6]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[6] !== actualPositionLouvers[6] && (
+            <line
+              className={styles.louver5}
+              x1="112.27"
+              y1="89.15"
+              x2="139.27"
+              y2="89.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[6] / 100) * commandedPositionLouvers[6]}px)`,
+              }}
+            />)
+          }
           {/* C1 */}
-          <line
-            className={styles.louver5}
-            x1="112.27"
-            y1="134.15"
-            x2="139.27"
-            y2="134.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[7] / 100) * commandedPositionLouvers[7]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[7] !== actualPositionLouvers[7] && (
+            <line
+              className={styles.louver5}
+              x1="112.27"
+              y1="134.15"
+              x2="139.27"
+              y2="134.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[7] / 100) * commandedPositionLouvers[7]}px)`,
+              }}
+            />)
+          }
         </g>
 
         {/* from left to right (4) */}
@@ -359,44 +375,50 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* D3 */}
-          <line
-            className={styles.louver5}
-            x1="151.27"
-            y1="44.15"
-            x2="178.27"
-            y2="44.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[8] / 100) * commandedPositionLouvers[8]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[8] !== actualPositionLouvers[8] && (
+            <line
+              className={styles.louver5}
+              x1="151.27"
+              y1="44.15"
+              x2="178.27"
+              y2="44.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[8] / 100) * commandedPositionLouvers[8]}px)`,
+              }}
+            />)
+          }
           {/* D2 */}
-          <line
-            className={styles.louver5}
-            x1="151.27"
-            y1="89.15"
-            x2="178.27"
-            y2="89.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[9] / 100) * commandedPositionLouvers[9]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[9] !== actualPositionLouvers[9] && (
+            <line
+              className={styles.louver5}
+              x1="151.27"
+              y1="89.15"
+              x2="178.27"
+              y2="89.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[9] / 100) * commandedPositionLouvers[9]}px)`,
+              }}
+            />)
+          }
           {/* D1 */}
-          <line
-            className={styles.louver5}
-            x1="151.27"
-            y1="134.15"
-            x2="178.27"
-            y2="134.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[10] / 100) * commandedPositionLouvers[10]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[10] !== actualPositionLouvers[10] && (
+            <line
+              className={styles.louver5}
+              x1="151.27"
+              y1="134.15"
+              x2="178.27"
+              y2="134.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[10] / 100) * commandedPositionLouvers[10]}px)`,
+              }}
+            />)
+          }
         </g>
 
         {/* from left to right (5) */}
@@ -451,44 +473,50 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* E3 */}
-          <line
-            className={styles.louver5}
-            x1="194.77"
-            y1="60.15"
-            x2="221.77"
-            y2="60.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[11] / 100) * commandedPositionLouvers[11]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[11] !== actualPositionLouvers[11] && (
+            <line
+              className={styles.louver5}
+              x1="194.77"
+              y1="60.15"
+              x2="221.77"
+              y2="60.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[11] / 100) * commandedPositionLouvers[11]}px)`,
+              }}
+            />)
+          }
           {/* E2 */}
-          <line
-            className={styles.louver5}
-            x1="194.77"
-            y1="89.15"
-            x2="221.77"
-            y2="89.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[12] / 100) * commandedPositionLouvers[12]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[12] !== actualPositionLouvers[12] && (
+            <line
+              className={styles.louver5}
+              x1="194.77"
+              y1="89.15"
+              x2="221.77"
+              y2="89.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[12] / 100) * commandedPositionLouvers[12]}px)`,
+              }}
+            />)
+          }
           {/* E1 */}
-          <line
-            className={styles.louver5}
-            x1="194.77"
-            y1="134.15"
-            x2="221.77"
-            y2="134.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[13] / 100) * commandedPositionLouvers[13]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[13] !== actualPositionLouvers[13] && (
+            <line
+              className={styles.louver5}
+              x1="194.77"
+              y1="134.15"
+              x2="221.77"
+              y2="134.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[13] / 100) * commandedPositionLouvers[13]}px)`,
+              }}
+            />)
+          }
         </g>
 
         {/* from left to right (6) (the middle) */}
@@ -584,83 +612,95 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* F3 */}
-          <line
-            className={styles.louver5}
-            x1="244.52"
-            y1="60.15"
-            x2="271.52"
-            y2="60.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[14] / 100) * commandedPositionLouvers[14]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[14] !== actualPositionLouvers[14] && (
+            <line
+              className={styles.louver5}
+              x1="244.52"
+              y1="60.15"
+              x2="271.52"
+              y2="60.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[14] / 100) * commandedPositionLouvers[14]}px)`,
+              }}
+            />)
+          }
           {/* F2 */}
-          <line
-            className={styles.louver5}
-            x1="244.52"
-            y1="93.15"
-            x2="271.52"
-            y2="93.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[15] / 100) * commandedPositionLouvers[15]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[15] !== actualPositionLouvers[15] && (
+            <line
+              className={styles.louver5}
+              x1="244.52"
+              y1="93.15"
+              x2="271.52"
+              y2="93.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[15] / 100) * commandedPositionLouvers[15]}px)`,
+              }}
+            />)
+          }
           {/* F1 */}
-          <line
-            className={styles.louver5}
-            x1="239.52"
-            y1="134.15"
-            x2="266.52"
-            y2="134.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[16] / 100) * commandedPositionLouvers[16]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[16] !== actualPositionLouvers[16] && (
+            <line
+              className={styles.louver5}
+              x1="239.52"
+              y1="134.15"
+              x2="266.52"
+              y2="134.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[16] / 100) * commandedPositionLouvers[16]}px)`,
+              }}
+            />)
+          }
           {/* G3 */}
-          <line
-            className={styles.louver5}
-            x1="316.02"
-            y1="60.15"
-            x2="289.02"
-            y2="60.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[17] / 100) * commandedPositionLouvers[17]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[17] !== actualPositionLouvers[17] && (
+            <line
+              className={styles.louver5}
+              x1="316.02"
+              y1="60.15"
+              x2="289.02"
+              y2="60.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[17] / 100) * commandedPositionLouvers[17]}px)`,
+              }}
+            />)
+          }
           {/* G2 */}
-          <line
-            className={styles.louver5}
-            x1="316.02"
-            y1="93.15"
-            x2="289.02"
-            y2="93.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[18] / 100) * commandedPositionLouvers[18]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[18] !== actualPositionLouvers[18] && (
+            <line
+              className={styles.louver5}
+              x1="316.02"
+              y1="93.15"
+              x2="289.02"
+              y2="93.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[18] / 100) * commandedPositionLouvers[18]}px)`,
+              }}
+            />)
+          }
           {/* G1 */}
-          <line
-            className={styles.louver5}
-            x1="321.02"
-            y1="134.15"
-            x2="294.02"
-            y2="134.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[19] / 100) * commandedPositionLouvers[19]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[19] !== actualPositionLouvers[19] && (
+            <line
+              className={styles.louver5}
+              x1="321.02"
+              y1="134.15"
+              x2="294.02"
+              y2="134.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[19] / 100) * commandedPositionLouvers[19]}px)`,
+              }}
+            />)
+          }
         </g>
 
         {/* from left to right (7) */}
@@ -715,44 +755,50 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* H3 */}
-          <line
-            className={styles.louver5}
-            x1="365.27"
-            y1="60.15"
-            x2="339.27"
-            y2="60.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[20] / 100) * commandedPositionLouvers[20]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[20] !== actualPositionLouvers[20] && (
+            <line
+              className={styles.louver5}
+              x1="365.27"
+              y1="60.15"
+              x2="339.27"
+              y2="60.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[20] / 100) * commandedPositionLouvers[20]}px)`,
+              }}
+            />)
+          }
           {/* H2 */}
-          <line
-            className={styles.louver5}
-            x1="365.77"
-            y1="89.15"
-            x2="338.77"
-            y2="89.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[21] / 100) * commandedPositionLouvers[21]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[21] !== actualPositionLouvers[21] && (
+            <line
+              className={styles.louver5}
+              x1="365.77"
+              y1="89.15"
+              x2="338.77"
+              y2="89.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[21] / 100) * commandedPositionLouvers[21]}px)`,
+              }}
+            />)
+          }
           {/* H1 */}
-          <line
-            className={styles.louver5}
-            x1="365.77"
-            y1="134.15"
-            x2="338.77"
-            y2="134.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[22] / 100) * commandedPositionLouvers[22]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[22] !== actualPositionLouvers[22] && (
+            <line
+              className={styles.louver5}
+              x1="365.77"
+              y1="134.15"
+              x2="338.77"
+              y2="134.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[22] / 100) * commandedPositionLouvers[22]}px)`,
+              }}
+            />)
+          }
         </g>
 
         {/* from left to right (8) */}
@@ -820,44 +866,50 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* I3 */}
-          <line
-            className={styles.louver5}
-            x1="409.27"
-            y1="44.15"
-            x2="382.27"
-            y2="44.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[23] / 100) * commandedPositionLouvers[23]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[23] !== actualPositionLouvers[23] && (
+            <line
+              className={styles.louver5}
+              x1="409.27"
+              y1="44.15"
+              x2="382.27"
+              y2="44.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[23] / 100) * commandedPositionLouvers[23]}px)`,
+              }}
+            />)
+          }
           {/* I2 */}
-          <line
-            className={styles.louver5}
-            x1="409.27"
-            y1="89.15"
-            x2="382.27"
-            y2="89.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[24] / 100) * commandedPositionLouvers[24]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[24] !== actualPositionLouvers[24] && (
+            <line
+              className={styles.louver5}
+              x1="409.27"
+              y1="89.15"
+              x2="382.27"
+              y2="89.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[24] / 100) * commandedPositionLouvers[24]}px)`,
+              }}
+            />)
+          }
           {/* I3 */}
-          <line
-            className={styles.louver5}
-            x1="409.27"
-            y1="134.15"
-            x2="382.27"
-            y2="134.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[25] / 100) * commandedPositionLouvers[25]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[25] !== actualPositionLouvers[25] && (
+            <line
+              className={styles.louver5}
+              x1="409.27"
+              y1="134.15"
+              x2="382.27"
+              y2="134.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[25] / 100) * commandedPositionLouvers[25]}px)`,
+              }}
+            />)
+          }
         </g>
 
         {/* from left to right (9) */}
@@ -925,44 +977,50 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* L3 */}
-          <line
-            className={styles.louver5}
-            x1="448.27"
-            y1="44.15"
-            x2="421.27"
-            y2="44.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[26] / 100) * commandedPositionLouvers[26]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[26] !== actualPositionLouvers[26] && (
+            <line
+              className={styles.louver5}
+              x1="448.27"
+              y1="44.15"
+              x2="421.27"
+              y2="44.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[26] / 100) * commandedPositionLouvers[26]}px)`,
+              }}
+            />)
+          }
           {/* L2 */}
-          <line
-            className={styles.louver5}
-            x1="448.27"
-            y1="89.15"
-            x2="421.27"
-            y2="89.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[27] / 100) * commandedPositionLouvers[27]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[27] !== actualPositionLouvers[27] && (
+            <line
+              className={styles.louver5}
+              x1="448.27"
+              y1="89.15"
+              x2="421.27"
+              y2="89.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[27] / 100) * commandedPositionLouvers[27]}px)`,
+              }}
+            />)
+          }
           {/* L1 */}
-          <line
-            className={styles.louver5}
-            x1="448.27"
-            y1="134.15"
-            x2="421.27"
-            y2="134.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[28] / 100) * commandedPositionLouvers[28]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[28] !== actualPositionLouvers[28] && (
+            <line
+              className={styles.louver5}
+              x1="448.27"
+              y1="134.15"
+              x2="421.27"
+              y2="134.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[28] / 100) * commandedPositionLouvers[28]}px)`,
+              }}
+            />)
+          }
         </g>
 
         {/* from left to right (10) */}
@@ -1038,44 +1096,50 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* M3 */}
-          <line
-            className={styles.louver5}
-            x1="487.27"
-            y1="60.15"
-            x2="460.27"
-            y2="60.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[29] / 100) * commandedPositionLouvers[29]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[29] !== actualPositionLouvers[29] && (
+            <line
+              className={styles.louver5}
+              x1="487.27"
+              y1="60.15"
+              x2="460.27"
+              y2="60.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[29] / 100) * commandedPositionLouvers[29]}px)`,
+              }}
+            />)
+          }
           {/* M2 */}
-          <line
-            className={styles.louver5}
-            x1="487.27"
-            y1="89.15"
-            x2="460.27"
-            y2="89.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[30] / 100) * commandedPositionLouvers[30]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[30] !== actualPositionLouvers[30] && (
+            <line
+              className={styles.louver5}
+              x1="487.27"
+              y1="89.15"
+              x2="460.27"
+              y2="89.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[30] / 100) * commandedPositionLouvers[30]}px)`,
+              }}
+            />)
+          }
           {/* M1 */}
-          <line
-            className={styles.louver5}
-            x1="487.27"
-            y1="134.15"
-            x2="460.27"
-            y2="134.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[31] / 100) * commandedPositionLouvers[31]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[31] !== actualPositionLouvers[31] && (
+            <line
+              className={styles.louver5}
+              x1="487.27"
+              y1="134.15"
+              x2="460.27"
+              y2="134.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[31] / 100) * commandedPositionLouvers[31]}px)`,
+              }}
+            />)
+          }
         </g>
 
         {/* from left to right (11) */}
@@ -1129,31 +1193,35 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* N2 */}
-          <line
-            className={styles.louver5}
-            x1="526.02"
-            y1="105.15"
-            x2="499.02"
-            y2="105.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[32] / 100) * commandedPositionLouvers[32]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[32] !== actualPositionLouvers[32] && (
+            <line
+              className={styles.louver5}
+              x1="526.02"
+              y1="105.15"
+              x2="499.02"
+              y2="105.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[32] / 100) * commandedPositionLouvers[32]}px)`,
+              }}
+            />)
+          }
           {/* N1 */}
-          <line
-            className={styles.louver5}
-            x1="526.02"
-            y1="134.15"
-            x2="499.02"
-            y2="134.15"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `translateY(${(heightsLouvers[33] / 100) * commandedPositionLouvers[33]}px)`,
-            }}
-          />
+          { commandedPositionLouvers[33] !== actualPositionLouvers[33] && (
+            <line
+              className={styles.louver5}
+              x1="526.02"
+              y1="134.15"
+              x2="499.02"
+              y2="134.15"
+              style={{
+                transformOrigin: 'top center',
+                transformBox: 'fill-box',
+                transform: `translateY(${(heightsLouvers[33] / 100) * commandedPositionLouvers[33]}px)`,
+              }}
+            />)
+          }
         </g>
         {/* horizontal labels */}
         <g className={styles.louver6}>

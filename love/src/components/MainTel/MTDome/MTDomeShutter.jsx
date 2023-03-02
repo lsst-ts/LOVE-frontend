@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { fixedFloat } from 'Utils';
 import styles from './MTDome.module.css';
 
 const widthShutters = [-50, 50];
@@ -53,7 +54,11 @@ export default class MTDomeShutter extends Component {
   };
 
   render() {
-    const { width, height, positionActualDomeAz, positionCommandedDomeAz } = this.props;
+    const { width, height,
+      positionActualDomeAz, positionCommandedDomeAz,
+      positionActualShutter, positionCommandedShutter
+    } = this.props;
+
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 235 235">
         {/* Dome, actual position */}
@@ -113,7 +118,7 @@ export default class MTDomeShutter extends Component {
             className={styles.shutterCommanded}
             style={{
               transformOrigin: `50% 50%`,
-              transform: `translate(${(this.props.positionCommandedShutter * widthShutters[1]) / 100}px, 0)`,
+              transform: `translate(${(positionCommandedShutter * widthShutters[1]) / 100}px, 0)`,
             }}
           >
             <polygon
@@ -126,12 +131,13 @@ export default class MTDomeShutter extends Component {
             />
             <rect className={styles.shutterCommanded} x="151.53" y="188.53" width="50.27" height="12.97" />
           </g>
+
           {/* Shutter commanded left */}
           <g
             className={styles.shutterCommanded}
             style={{
               transformOrigin: `50% 50%`,
-              transform: `translate(${(this.props.positionCommandedShutter * widthShutters[0]) / 100}px, 0)`,
+              transform: `translate(${(positionCommandedShutter * widthShutters[0]) / 100}px, 0)`,
             }}
           >
             <polygon
@@ -149,7 +155,7 @@ export default class MTDomeShutter extends Component {
             className={styles.shutter}
             style={{
               transformOrigin: `50% 50%`,
-              transform: `translate(${(this.props.positionActualShutter * widthShutters[1]) / 100}px, 0)`,
+              transform: `translate(${(positionActualShutter * widthShutters[1]) / 100}px, 0)`,
             }}
           >
             <polygon
@@ -167,7 +173,7 @@ export default class MTDomeShutter extends Component {
             className={styles.shutter}
             style={{
               transformOrigin: `50% 50%`,
-              transform: `translate(${(this.props.positionActualShutter * widthShutters[0]) / 100}px, 0)`,
+              transform: `translate(${(positionActualShutter * widthShutters[0]) / 100}px, 0)`,
             }}
           >
             <polygon
@@ -183,7 +189,7 @@ export default class MTDomeShutter extends Component {
         </g>
 
         {/* Dome, commanded position */}
-        {positionCommandedDomeAz !== positionActualDomeAz && (
+        { fixedFloat(positionCommandedDomeAz, 1) !== fixedFloat(positionActualDomeAz, 1) && (
           <g
             style={{
               transformOrigin: `50% 50%`,

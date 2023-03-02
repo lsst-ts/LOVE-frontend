@@ -103,7 +103,7 @@ export default class DomeSummaryTable extends Component {
     return (
       <SummaryPanel className={styles.summaryTable}>
         <Title>Track ID</Title>
-        <Value>{this.props.trackID}</Value>
+        <Value>{this.props.trackID?.toString()}</Value>
         {/* Dome */}
         <Title>Dome</Title>
         <Value>

@@ -100,7 +100,7 @@ export default class Summary extends Component {
       <div className={styles.container}>
         <SummaryPanel>
           <Title>Track ID</Title>
-          <Value>{trackId}</Value>
+          <Value>{trackId?.toString()}</Value>
           <Label>Commander</Label>
           <Value>
             <StatusText title={commanderValue} status={stateToStyleMTMountCommander[commanderValue]} small>

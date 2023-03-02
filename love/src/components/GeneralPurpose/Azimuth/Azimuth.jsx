@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { fixedFloat } from 'Utils';
 import styles from './Azimuth.module.css';
 
 export default class Limits extends Component {
@@ -77,7 +78,7 @@ export default class Limits extends Component {
                       ? [currentValue > 180 ? [currentValue > 270 ? styles.textQ2 : styles.textQ3] : styles.textQ4]
                       : styles.textQ1,
                   ].join(' ')}
-                >{`${currentValue + 'º'}`}</tspan>
+                >{`${fixedFloat(currentValue, 2) + 'º'}`}</tspan>
               </text>
             </g>
 
