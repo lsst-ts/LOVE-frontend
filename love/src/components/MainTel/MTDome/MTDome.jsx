@@ -120,25 +120,35 @@ const azimuthPlotInputs = {
 
 const elevationPlotInputs = {
   'Mount elevation': {
-    category: 'telemetry',
-    csc: 'MTMount',
-    salindex: '0',
-    topic: 'elevation',
-    item: 'actualPosition',
     type: 'line',
-    accessor: (x) => x,
     color: 'hsl(201, 70%, 40%)',
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'MTMount',
+        salindex: '0',
+        topic: 'elevation',
+        item: 'actualPosition',
+        accessor: '(x) => x',
+      }
+    ]
   },
   'Mount target': {
-    category: 'telemetry',
-    csc: 'MTMount',
-    salindex: '0',
-    topic: 'elevation',
-    item: 'demandPosition',
     type: 'line',
-    accessor: (x) => x,
     color: 'white',
     dash: [4, 1],
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'MTMount',
+        salindex: '0',
+        topic: 'elevation',
+        item: 'demandPosition',
+        accessor: '(x) => x',
+      }
+    ]
   },
 };
 
