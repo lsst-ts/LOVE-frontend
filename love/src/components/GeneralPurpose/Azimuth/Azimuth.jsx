@@ -42,7 +42,7 @@ export default class Limits extends Component {
           {/* Origin value text */}
           <text
             className={styles.originText}
-            transform={`${'translate(' + radius + ' 0) rotate(' + valueOrigin * -1 + ')'}`}
+            transform={`${'translate(' + (radius + 10) + ' 0) rotate(' + valueOrigin * -1 + ')'}`}
           >
             <tspan>0º</tspan>
           </text>
@@ -95,7 +95,7 @@ export default class Limits extends Component {
             />
 
             {/* Gauge */}
-            <circle
+            {/* <circle
               style={{
                 transition: 'transform 1.5s linear 0s',
                 transformBox: 'fill-box',
@@ -104,7 +104,7 @@ export default class Limits extends Component {
               cx={`${0}`}
               cy={`${0}`}
               className={styles.gaugeL1}
-            />
+            /> */}
 
             {/* Target Line */}
             <path

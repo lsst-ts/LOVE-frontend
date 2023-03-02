@@ -34,8 +34,8 @@ const ProgressBar = (props) => {
 
   const targetValueLine = {
     stroke: 'white',
-    strokeWidth: 1,
-    strokeDasharray: 1.3,
+    strokeWidth: 2,
+    strokeDasharray: 1.8,
     strokeOpacity: 0.5,
   };
 
