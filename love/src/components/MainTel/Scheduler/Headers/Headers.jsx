@@ -14,23 +14,47 @@ export default class Headers extends Component {
         const isNigth = true;
         return (
             <div className={styles.container}>
-                <SummaryPanel className={styles.summaryPanel}>
+                <div className={styles.leftDivs}>
                     <div className={styles.headersLeft}>
-                        <Label>Summary State</Label>
-                        <Value>ENABLED</Value>
-                        <GearIcon className={styles.gearIcon}/>
-                        <Value>RUNNING</Value>
+                        <SummaryPanel className={styles.summaryPanel1}>
+                            <Title>Summary State</Title>
+                            <Value>ENABLED</Value>
+                            <GearIcon className={styles.gearIcon}/>
+                            <Value>RUNNING</Value>
+                        </SummaryPanel>
                     </div>
                     <div className={styles.headersCenter}>
-                        <Label>Obs. Mode</Label>
-                        <Value>Automatic</Value>
-                        <Label>Obs. Type</Label>
-                        <Value>Scheduler Target of Opportunity</Value>
+                        <SummaryPanel className={styles.summaryPanel2}>
+                            <Label>Obs. Mode</Label>
+                            <Value>Automatic</Value>
+                            <Label>Obs. Type</Label>
+                            <Value>Scheduler Target of Opportunity</Value>
+                        </SummaryPanel>
                     </div>
-                    <div className={styles.headersRigth}>
-                        <Label>Night #13</Label>-<Value>03:21:52 till</Value>  <Label>Sunrise</Label>
+                </div>
+                <div>
+                    {isNigth ? 
+                     (<div className={styles.headersRigth}>
+                        <div className={styles.icon}>
+                            <Stars/>
+                        </div>
+                        <div>
+                            Night #13
+                            -
+                            <span>03:21:52 till</span>
+                            <span>Sunrise</span>
+                        </div>
                     </div>
-                </SummaryPanel>
+                    ) :
+                    (<div>
+                        <div>
+                            <Sun className={styles.icon}/> 
+                            Day
+                        </div>-
+                        <span>03:21:52 till</span>
+                        <span>Sunset</span>
+                    </div>)}
+                </div>
             </div>
         );
     };

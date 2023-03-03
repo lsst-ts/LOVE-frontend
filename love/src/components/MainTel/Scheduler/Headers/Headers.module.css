@@ -1,36 +1,61 @@
 .container {
-    /* background-color: var(--second-secondary-background-color); */
     border-radius: 0.5em;
     box-sizing: border-box;
     width: 100%;
-    padding: 1em 2em;
-    /* border: 3px solid var(--second-primary-background-color); */
+    padding: 1em;
     border-radius: 0.5em;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.summaryPanel {
+.leftDivs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.summaryPanel1 {
+    display: flex;
+    padding: 20px;
+    width: 100%;
+    background: #101F27 !important;
+}
+
+.summaryPanel2 {
     display: contents;
     padding: 20px;
     width: 100%;
+    background-color: var(--second-secondary-background-color) !important;
+    /* background: var(--second-quaternary-background-dimmed-color) !important; */
 }
 
 .headersLeft {
-    display: inline-flex;
-    float: left;
-    width: 26%;
+    margin-left: -1em;
 }
 
 .headersCenter {
-    display: inline-table;
-    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
 }
 
 .headersRigth {
     display: inline-table;
-    float: right;
+    grid-column-start: span 2;
 }
 
 .gearIcon {
     width: 5%;
     padding-left: 1em;
+}
+
+.nightDayDiv {
+    display: flex;
+}
+
+.icon {
+    width: 60% !important;
 }
