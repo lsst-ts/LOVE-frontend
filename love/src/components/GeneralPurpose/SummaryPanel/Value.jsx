@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { fixedFloat } from 'Utils';
 import styles from './SummaryPanel.module.css';
 
 const Value = ({
@@ -43,7 +44,7 @@ const Value = ({
         {parsedChild.map((c) => {
           return (
             <span key={c} className={styles.value}>
-              {c.toFixed ? c.toFixed(2) : c}
+              {c?.toFixed ? fixedFloat(c, 2) : c}
             </span>
           );
         })}
@@ -51,7 +52,7 @@ const Value = ({
     );
   }
   /** Display strings and numbers. Truncate to 4 decimal places in the case of numbers */
-  return <span className={styles.value}>{parsedChild.toFixed ? parsedChild.toFixed(2) : parsedChild}{children.units ? ' '+children.units : ''}</span>;
+  return <span className={styles.value}>{parsedChild?.toFixed ? fixedFloat(parsedChild, 2) : parsedChild}{children?.units ? ' ' + children?.units : ''}</span>;
 };
 
 Value.propTypes = {

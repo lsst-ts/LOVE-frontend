@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
-import ManagerInterface, { parseCommanderData } from 'Utils';
+import ManagerInterface, { fixedFloat, parseCommanderData } from 'Utils';
 // import SkymapGrid from '../Skymap/SkymapGrid';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import TimeSeriesControls from 'components/GeneralPurpose/Plot/TimeSeriesControls/TimeSeriesControls';
@@ -147,54 +147,97 @@ export default class Dome extends Component {
   render() {
     const width = this.props.width;
     const height = this.props.height;
-    const currentPointing = {
-      az: this.props.azElMountEncoders ? this.props.azElMountEncoders.azimuthCalculatedAngle.value[0] : 0,
-      el: this.props.azElMountEncoders ? this.props.azElMountEncoders.elevationCalculatedAngle.value[0] : 0,
-      nasmyth1: this.props.nasmythMountEncoders ? this.props.nasmythMountEncoders.nasmyth1CalculatedAngle.value[0] : 0,
-      nasmyth2: this.props.nasmythMountEncoders ? this.props.nasmythMountEncoders.nasmyth2CalculatedAngle.value[0] : 0,
-    };
-    const targetPointing = {
-      az: this.props.target ? this.props.target[this.props.target.length - 1].azimuth.value : 0,
-      el: this.props.target ? this.props.target[this.props.target.length - 1].elevation.value : 0,
-      nasmyth1: this.props.target ? this.props.target[this.props.target.length - 1].nasmyth1RotatorAngle.value : 0,
-      nasmyth2: this.props.target ? this.props.target[this.props.target.length - 1].nasmyth2RotatorAngle.value : 0,
-    };
-    const domeAz = this.props.azimuthPosition ? this.props.azimuthPosition.value : 0;
-    const domeTargetAz = this.props.azimuthCommandedState
-      ? this.props.azimuthCommandedState[this.props.azimuthCommandedState.length - 1].azimuth.value
-      : 0;
-    const mountTrackingState = this.props.atMountState
-      ? this.props.atMountState[this.props.atMountState.length - 1].state.value
-      : 0;
-    const azimuthState = this.props.azimuthState
-      ? this.props.azimuthState[this.props.azimuthState.length - 1].state.value
-      : 0;
-    const dropoutDoorState = this.props.dropoutDoorState
-      ? this.props.dropoutDoorState[this.props.dropoutDoorState.length - 1].state.value
-      : 0;
-    const mainDoorState = this.props.mainDoorState
-      ? this.props.mainDoorState[this.props.mainDoorState.length - 1].state.value
-      : 0;
-    const domeInPosition = this.props.domeInPosition;
-    const mountInPosition = this.props.mountInPosition;
 
-    const dropoutDoorOpeningPercentage = this.props.dropoutDoorOpeningPercentage
-      ? this.props.dropoutDoorOpeningPercentage.value
-      : 0;
-    const mainDoorOpeningPercentage = this.props.dropoutDoorOpeningPercentage
-      ? this.props.dropoutDoorOpeningPercentage.value
-      : 0;
-    const trackID = this.props.target ? this.props.target[this.props.target.length - 1].trackId.value : '';
-    const m3State = this.props.m3State ? this.props.m3State[this.props.m3State.length - 1].value : 2;
-    const currentTimesToLimits = this.props.currentTimesToLimits ? this.props.currentTimesToLimits : {};
-    const positionLimits = this.props.positionLimits
-      ? this.props.positionLimits[this.props.positionLimits.length - 1]
-      : {};
+    const {
+      dropoutDoorOpeningPercentage,
+      mainDoorOpeningPercentage,
+      azimuthPosition,
+      azimuthInPosition,
+      azimuthState,
+      azimuthCommanded,
+      domeInPosition,
+      dropoutDoorState,
+      mainDoorState,
+    } = this.props;
+
+    const {
+      detailedState,
+      atMountState,
+      mountInPosition,
+      trackID,
+      targetAzimuth,
+      targetElevation,
+      targetNasmyth1,
+      targetNasmyth2,
+      m3State,
+      minEl,
+      minAz,
+      minNas1,
+      minNas2,
+      minM3,
+      maxEl,
+      maxAz,
+      maxNas1,
+      maxNas2,
+      maxM3,
+      timeAzLim,
+      timeRotLim,
+      timeUnobservable,
+      currentPointingAz,
+      currentPointingEl,
+      currentPointingNasmyth1,
+      currentPointingNasmyth2,
+    } = this.props;
+
+    // const currentPointing = {
+    //   az: this.props.azElMountEncoders ? this.props.azElMountEncoders.azimuthCalculatedAngle.value[0] : 0,
+    //   el: this.props.azElMountEncoders ? this.props.azElMountEncoders.elevationCalculatedAngle.value[0] : 0,
+    //   nasmyth1: this.props.nasmythMountEncoders ? this.props.nasmythMountEncoders.nasmyth1CalculatedAngle.value[0] : 0,
+    //   nasmyth2: this.props.nasmythMountEncoders ? this.props.nasmythMountEncoders.nasmyth2CalculatedAngle.value[0] : 0,
+    // };
+    // const targetPointing = {
+    //   az: this.props.target ? this.props.target[this.props.target.length - 1].azimuth.value : 0,
+    //   el: this.props.target ? this.props.target[this.props.target.length - 1].elevation.value : 0,
+    //   nasmyth1: this.props.target ? this.props.target[this.props.target.length - 1].nasmyth1RotatorAngle.value : 0,
+    //   nasmyth2: this.props.target ? this.props.target[this.props.target.length - 1].nasmyth2RotatorAngle.value : 0,
+    // };
+    // const domeAz = this.props.azimuthPosition ? this.props.azimuthPosition.value : 0;
+    // const domeTargetAz = this.props.azimuthCommandedState
+    //   ? this.props.azimuthCommandedState[this.props.azimuthCommandedState.length - 1].azimuth.value
+    //   : 0;
+    // const mountTrackingState = this.props.atMountState
+    //   ? this.props.atMountState[this.props.atMountState.length - 1].state.value
+    //   : 0;
+    // const azimuthState = this.props.azimuthState
+    //   ? this.props.azimuthState[this.props.azimuthState.length - 1].state.value
+    //   : 0;
+    // const dropoutDoorState = this.props.dropoutDoorState
+    //   ? this.props.dropoutDoorState[this.props.dropoutDoorState.length - 1].state.value
+    //   : 0;
+    // const mainDoorState = this.props.mainDoorState
+    //   ? this.props.mainDoorState[this.props.mainDoorState.length - 1].state.value
+    //   : 0;
+    // const domeInPosition = this.props.domeInPosition;
+    // const mountInPosition = this.props.mountInPosition;
+
+    // const dropoutDoorOpeningPercentage = this.props.dropoutDoorOpeningPercentage
+    //   ? this.props.dropoutDoorOpeningPercentage.value
+    //   : 0;
+    // const mainDoorOpeningPercentage = this.props.dropoutDoorOpeningPercentage
+    //   ? this.props.dropoutDoorOpeningPercentage.value
+    //   : 0;
+    // const trackID = this.props.target ? this.props.target[this.props.target.length - 1].trackId.value : '';
+    // const m3State = this.props.m3State ? this.props.m3State[this.props.m3State.length - 1].value : 2;
+    // const currentTimesToLimits = this.props.currentTimesToLimits ? this.props.currentTimesToLimits : {};
+    // const positionLimits = this.props.positionLimits
+    //   ? this.props.positionLimits[this.props.positionLimits.length - 1]
+    //   : {};
 
     const isProjected = true;
-    let azDiff = Math.abs(domeAz - currentPointing.az);
+    let azDiff = Math.abs(azimuthPosition - currentPointingAz);
     if (azDiff > 180) azDiff = azDiff - 360;
-    const vignettingDistance = (Math.abs(azDiff) * Math.cos((currentPointing.el * Math.PI) / 180)).toFixed(2);
+
+    const vignettingDistance = fixedFloat(Math.abs(azDiff) * Math.cos((currentPointingEl * Math.PI) / 180), 2);
 
     const timeSeriesControlsProps = {
       timeWindow: this.state.timeWindow,
@@ -221,8 +264,8 @@ export default class Dome extends Component {
                 minL1={10}
                 minL2={5}
                 minL3={0}
-                currentValue={currentPointing.el}
-                targetValue={targetPointing.el}
+                currentValue={currentPointingEl}
+                targetValue={targetElevation}
               />
             </div>
 
@@ -230,24 +273,41 @@ export default class Dome extends Component {
               className={styles.svgAzimuth}
               width={width}
               height={height}
-              currentValue={domeAz}
-              targetValue={domeTargetAz}
+              currentValue={azimuthPosition}
+              targetValue={azimuthCommanded}
             />
             {/*<DomeTopView width={width} height={height} />*/}
-            <MountTopView currentPointing={currentPointing} />
+            <MountTopView 
+              currentPointing={{
+                az: currentPointingAz,
+                el: currentPointingEl,
+                nasmyth1: currentPointingNasmyth1,
+                nasmyth2: currentPointingNasmyth2,
+              }} 
+            />
             <DomeShutter
               width={width}
               height={height}
-              azimuthPosition={domeAz}
+              azimuthPosition={azimuthPosition}
               dropoutDoorOpeningPercentage={dropoutDoorOpeningPercentage}
               mainDoorOpeningPercentage={mainDoorOpeningPercentage}
-              targetAzimuthPosition={domeTargetAz}
+              targetAzimuthPosition={azimuthCommanded}
             />
             <DomePointing
               width={width}
               height={height}
-              currentPointing={currentPointing}
-              targetPointing={targetPointing}
+              currentPointing={{
+                az: currentPointingAz,
+                el: currentPointingEl,
+                nasmyth1: currentPointingNasmyth1,
+                nasmyth2: currentPointingNasmyth2,
+              }}
+              targetPointing={{
+                az: targetAzimuth,
+                el: targetElevation,
+                nasmyth1: targetNasmyth1,
+                nasmyth2: targetNasmyth2,
+              }}
               isProjected={isProjected}
             />
             <div
@@ -259,20 +319,43 @@ export default class Dome extends Component {
             </div>
           </div>
           <DomeSummaryTable
-            currentPointing={currentPointing}
-            targetPointing={targetPointing}
-            domeAz={domeAz}
-            domeTargetAz={domeTargetAz}
+            currentPointing={{
+              az: currentPointingAz,
+              el: currentPointingEl,
+              nasmyth1: currentPointingNasmyth1,
+              nasmyth2: currentPointingNasmyth2,
+            }}
+            targetPointing={{
+              az: targetAzimuth,
+              el: targetElevation,
+              nasmyth1: targetNasmyth1,
+              nasmyth2: targetNasmyth2,
+            }}
+            azimuthPosition={azimuthPosition}
+            azimuthCommanded={azimuthCommanded}
             domeInPosition={domeInPosition}
             azimuthState={azimuthState}
             dropoutDoorState={dropoutDoorState}
             mainDoorState={mainDoorState}
-            mountTrackingState={mountTrackingState}
+            mountTrackingState={atMountState}
             trackID={trackID}
             mountInPosition={mountInPosition}
             m3State={m3State}
-            currentTimesToLimits={currentTimesToLimits}
-            positionLimits={positionLimits}
+            timeAzLim={timeAzLim}
+            timeRotLim={timeRotLim}
+            timeUnobservable={timeUnobservable}
+            maxEl={maxEl}
+            maxAz={maxAz}
+            maxNas1={maxNas1}
+            maxNas2={maxNas2}
+            maxM3={maxM3}
+            minEl={minEl}
+            minAz={minAz}
+            minNas1={minNas1}
+            minNas2={minNas2}
+            minM3={minM3}
+            //currentTimesToLimits={currentTimesToLimits}
+            //positionLimits={positionLimits}
           />
         </div>
         {this.props.controls && (
