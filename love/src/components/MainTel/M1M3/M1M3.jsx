@@ -44,15 +44,30 @@ export default class M1M3 extends Component {
 
   static statesIlc = {
     0: {
-      name: 'WARNING',
+      name: 'STANDBY',
       class: styles.warning_summary,
       fill: styles.fill_warning_summary,
     },
     1: {
-      name: 'OK',
+      name: 'DISABLED',
+      class: styles.offline_summary,
+      fill: styles.fill_offline_summary,
+    },
+    2: {
+      name: 'ENABLED',
       class: styles.ok_summary,
       fill: styles.fill_ok_summary,
     },
+    3: {
+      name: 'FIRMWAREUPDATE',
+      class: styles.warning_summary,
+      fill: styles.fill_warning_summary,
+    },
+    4: {
+      name: 'OK',
+      class: styles.alert_summary,
+      fill: styles.fill_alert_summary,
+    }
   };
 
   static statesMotion = {

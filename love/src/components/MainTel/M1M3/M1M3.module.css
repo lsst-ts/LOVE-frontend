@@ -49,6 +49,7 @@
 .state {
   display: flex;
   margin-right: 1em;
+  align-items: center;
 }
 
 .state :first-child {
@@ -59,8 +60,8 @@
   border-radius: 1rem;
   font-weight: 700;
   text-align: center;
-  width: 8em;
   margin-bottom: 2px;
+  padding: var(--small-padding);
 }
 
 .detailState {
@@ -281,6 +282,14 @@
 
 .fill_warning_summary {
   fill: var(--status-warning-dimmed-color-2);
+}
+
+.fill_offline_summary {
+  fill: var(--status-disabled-dimmed-color-2);
+}
+
+.fill_alert_summary {
+  fill: var(--status-alert-color);
 }
 
 /* detailed state classes */
