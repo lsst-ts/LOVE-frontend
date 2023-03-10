@@ -16,7 +16,7 @@ import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Title from 'components/GeneralPurpose/SummaryPanel/Title';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
-import CSCDetailStyles from 'components/CSCSummary/CSCDetail/CSCDetail.module.css';
+import CSCDetailStyles from './CSCDetail.module.css';
 import styles from './M1M3.module.css';
 
 export default class M1M3 extends Component {
@@ -227,7 +227,6 @@ export default class M1M3 extends Component {
     };
 
     actuator.state = CSCDetail.states[actuator.state];
-    console.log(actuator);
     return actuator;
   };
 
