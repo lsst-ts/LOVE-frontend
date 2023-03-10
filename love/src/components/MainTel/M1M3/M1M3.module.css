@@ -119,17 +119,12 @@
 
 .svgContainer {
   flex-grow: 2;
-  /* max-width: 100%; */
   min-width: 300px;
-  /*border-radius: 50%;*/
 }
 
 .hardpoints {
-  /*max-width: 160px;
-  min-width: 60px;*/
   display: flex;
   flex-direction: column;
-  /* align-items: left; */
 }
 
 .hardpoints > svg {
@@ -151,13 +146,10 @@
 .textHardpoint {
   font-size: 21px !important;
   font-family: Helvetica !important;
-  /*fill: white !important;*/
 }
 
 .circleHardpoint {
-  /*fill:#8bea96;*/
   stroke-width: 2px;
-  /*stroke: gray;*/
   opacity: 0.71;
   cursor: pointer;
 }
@@ -191,7 +183,6 @@
   margin-bottom: 32px;
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
 }
 
 .forceGradientWrapper > span:first-child {
@@ -294,20 +285,14 @@
 .alert_summary {
   background: var(--status-alert-color);
   color: var(--second-tertiary-background-color);
-  /* color: var(--status-alert-color);
-  background: var(--status-alert-dimmed-color-2); */
 }
 
 .ok_summary {
   background: var(--status-ok-color);
   color: var(--second-tertiary-background-color);
-  /* color: var(--status-ok-color);
-  background: var(--status-ok-dimmed-color-2); */
 }
 
 .warning_summary {
-  /* background: var(--status-warning-color); */
-  /* color: var(--second-tertiary-background-color); */
   color: var(--status-warning-color);
   background: var(--status-warning-dimmed-color-2);
 }
