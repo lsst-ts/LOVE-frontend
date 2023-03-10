@@ -5,6 +5,8 @@ Version History
 v5.14.1
 -------
 
+* Fix styling issues and state mapping on M1M3 component `<https://github.com/lsst-ts/LOVE-frontend/pull/434>`_
+* Add repository version history `<https://github.com/lsst-ts/LOVE-frontend/pull/433>`_
 * Fix a state mapping of M1M3 `<https://github.com/lsst-ts/LOVE-frontend/pull/432>`_
 * Fix LOVE Config Files component `<https://github.com/lsst-ts/LOVE-frontend/pull/431>`_
 * Bump vega from 5.22.1 to 5.23.0 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/430>`_
