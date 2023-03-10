@@ -21,7 +21,7 @@
 
 .hiddenCircleOverlay {
   stroke: var(--second-primary-background-color);
-  stroke-width: 135px;
+  stroke-width: 250px;
 }
 
 .circleOverlay {
@@ -119,9 +119,7 @@
 
 .svgContainer {
   flex-grow: 2;
-  width: 100%;
-  height: 100%;
-  /* max-width: 480px; */
+  /* max-width: 100%; */
   min-width: 300px;
   /*border-radius: 50%;*/
 }

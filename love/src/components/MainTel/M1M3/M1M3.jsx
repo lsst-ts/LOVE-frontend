@@ -35,9 +35,8 @@ export default class M1M3 extends Component {
       showActuatorsID: true,
       showHardpoints: true,
       actuatorsForce: [],
-      selectedActuator: 0,
-      selectedHardpoint: 0,
-      optionsTree: null,
+      selectedActuatorId: 0,
+      selectedHardpointId: 0,
       forceParameters: [],
     };
   }
@@ -184,35 +183,35 @@ export default class M1M3 extends Component {
   };
 
   actuatorSelected = (id) => {
-    this.setState({ selectedActuator: id });
+    this.setState({ selectedActuatorId: id });
   };
 
   strokeActuatorSelected = (id) => {
-    if (this.state.selectedActuator === id) return 'white';
+    if (this.state.selectedActuatorId === id) return 'white';
     return 'none';
   };
 
   fillActuatorSelected = (id) => {
-    if (this.state.selectedActuator === id) return 'white';
+    if (this.state.selectedActuatorId === id) return 'white';
     return 'black';
   };
 
   hardpointSelected = (id) => {
-    this.setState({ selectedHardpoint: id });
+    this.setState({ selectedHardpointId: id });
   };
 
   strokeHardpointSelected = (id) => {
-    if (this.state.selectedHardpoint === id) return 'white';
+    if (this.state.selectedHardpointId === id) return 'white';
     return 'gray';
   };
 
   strokeHardpointActuatorSelected = (id) => {
-    if (this.state.selectedHardpoint === id) return 'white';
+    if (this.state.selectedHardpointId === id) return 'white';
     return 'gray';
   };
 
   fillHardpointSelected = (id) => {
-    if (this.state.selectedHardpoint === id) return 'white';
+    if (this.state.selectedHardpointId === id) return 'white';
     return 'black';
   };
 
@@ -228,6 +227,7 @@ export default class M1M3 extends Component {
     };
 
     actuator.state = CSCDetail.states[actuator.state];
+    console.log(actuator);
     return actuator;
   };
 
@@ -261,7 +261,7 @@ export default class M1M3 extends Component {
     };
 
     hardpoint.ilcStatus = {
-      name: m1mActuatorILCStateMap[hardpoint.ilcStatus],
+      name: M1M3.statesIlc[hardpoint.ilcStatus].name,
       class: M1M3.statesIlc[hardpoint.ilcStatus].class,
     };
     hardpoint.motionStatus = {
@@ -279,10 +279,6 @@ export default class M1M3 extends Component {
 
   forceInputSelected = (input) => {
     const force = input.value;
-    // Using SAL info
-    // const filteredParameters = Object.keys(this.state.optionsTree[force]).filter((x) => {
-    //   return !['timestamp'].includes(x);
-    // });
     const filteredParameters = M1M3ActuatorForces[force];
     this.setState({
       selectedForceInput: force,
@@ -322,11 +318,6 @@ export default class M1M3 extends Component {
         maxRadius = Math.floor(Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)));
       }
     });
-
-    // Using SAL info
-    // ManagerInterface.getTopicData('event-telemetry').then((data) => {
-    //   this.setState({ optionsTree: data.MTM1M3.event_data });
-    // });
 
     this.setState({
       actuators: M1M3ActuatorPositions,
@@ -434,11 +425,11 @@ export default class M1M3 extends Component {
       class: CSCDetailStyles[m1m3DetailedStateToStyle[m1m3DetailedStateMap[this.props.detailedState]]],
     };
 
-    const maxForce = Math.max(...actuatorsForce);
-    const minForce = Math.min(...actuatorsForce);
+    const maxForce = defaultNumberFormatter(Math.max(...actuatorsForce));
+    const minForce = defaultNumberFormatter(Math.min(...actuatorsForce));
 
-    const selectedActuator = this.getActuator(this.state.selectedActuator);
-    const selectedHardpoint = this.getHardpoint(this.state.selectedHardpoint);
+    const selectedActuator = this.getActuator(this.state.selectedActuatorId);
+    const selectedHardpoint = this.getHardpoint(this.state.selectedHardpointId);
     const forceInputs = Object.keys(M1M3ActuatorForces);
 
     return (
@@ -631,7 +622,7 @@ export default class M1M3 extends Component {
                 cx={this.state.width / 2}
                 cy={this.state.width / 2}
                 fill={'none'}
-                r={this.state.width / 2 + 40}
+                r={this.state.width * 0.7}
               />
 
               <g id="plot-axis">
