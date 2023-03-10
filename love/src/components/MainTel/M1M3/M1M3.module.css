@@ -21,7 +21,7 @@
 
 .hiddenCircleOverlay {
   stroke: var(--second-primary-background-color);
-  stroke-width: 135px;
+  stroke-width: 250px;
 }
 
 .circleOverlay {
@@ -49,6 +49,7 @@
 .state {
   display: flex;
   margin-right: 1em;
+  align-items: center;
 }
 
 .state :first-child {
@@ -59,8 +60,8 @@
   border-radius: 1rem;
   font-weight: 700;
   text-align: center;
-  width: 8em;
   margin-bottom: 2px;
+  padding: var(--small-padding);
 }
 
 .detailState {
@@ -118,19 +119,12 @@
 
 .svgContainer {
   flex-grow: 2;
-  width: 100%;
-  height: 100%;
-  /* max-width: 480px; */
   min-width: 300px;
-  /*border-radius: 50%;*/
 }
 
 .hardpoints {
-  /*max-width: 160px;
-  min-width: 60px;*/
   display: flex;
   flex-direction: column;
-  /* align-items: left; */
 }
 
 .hardpoints > svg {
@@ -152,13 +146,10 @@
 .textHardpoint {
   font-size: 21px !important;
   font-family: Helvetica !important;
-  /*fill: white !important;*/
 }
 
 .circleHardpoint {
-  /*fill:#8bea96;*/
   stroke-width: 2px;
-  /*stroke: gray;*/
   opacity: 0.71;
   cursor: pointer;
 }
@@ -192,7 +183,6 @@
   margin-bottom: 32px;
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
 }
 
 .forceGradientWrapper > span:first-child {
@@ -283,24 +273,26 @@
   fill: var(--status-warning-dimmed-color-2);
 }
 
+.fill_offline_summary {
+  fill: var(--status-disabled-dimmed-color-2);
+}
+
+.fill_alert_summary {
+  fill: var(--status-alert-color);
+}
+
 /* detailed state classes */
 .alert_summary {
   background: var(--status-alert-color);
   color: var(--second-tertiary-background-color);
-  /* color: var(--status-alert-color);
-  background: var(--status-alert-dimmed-color-2); */
 }
 
 .ok_summary {
   background: var(--status-ok-color);
   color: var(--second-tertiary-background-color);
-  /* color: var(--status-ok-color);
-  background: var(--status-ok-dimmed-color-2); */
 }
 
 .warning_summary {
-  /* background: var(--status-warning-color); */
-  /* color: var(--second-tertiary-background-color); */
   color: var(--status-warning-color);
   background: var(--status-warning-dimmed-color-2);
 }

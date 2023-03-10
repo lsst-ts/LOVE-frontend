@@ -142,7 +142,7 @@ class Layout extends Component {
 
   componentDidUpdate = (prevProps, prevState) => {
     if (!isEqual(this.props.config?.content?.alarms, prevProps.config?.content?.alarms)) {
-      const minSeverityNotification = this.props.config?.content.alarms.minSeverityNotification?.trim().toLowerCase();
+      const minSeverityNotification = this.props.config?.content?.alarms?.minSeverityNotification?.trim().toLowerCase();
       if (!minSeverityNotification || minSeverityNotification === 'mute' || minSeverityNotification === 'muted') {
         // If minSeverityNotification is null or "mute" or "muted", then do not play any sound
         this.setState({ minSeverityNotification: severityEnum.critical + 1 });
