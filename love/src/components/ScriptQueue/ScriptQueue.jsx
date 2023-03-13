@@ -23,6 +23,35 @@ import Input from '../GeneralPurpose/Input/Input';
 import GlobalState from './GlobalState/GlobalState';
 import ScriptDetails from './Scripts/ScriptDetails';
 
+
+/**
+ * Get the hierarchy of scripts and return it in a dictionary.
+ * @param {Array} scripts - List of scripts.
+ * @returns {Object} - Dictionary with the hierarchy of scripts.
+ * @example
+ * // returns { root: ['script1', 'script2'], folder1: { root: ['script3', 'script4'] } }
+ * getScriptHierarchy([{ path: 'script1' }, { path: 'script2' }, { path: 'folder1/script3' }, { path: 'folder1/script4' }])
+ * 
+*/
+const getScriptHierarchy = (scripts) => {
+  const mDict = {};
+  for (let i = 0; i < scripts.length; i++) {
+    const tokens = scripts[i].path.split('/');
+    let ref = mDict;
+    for (let j = 0; j < tokens.length; j++) {
+      if (j === tokens.length - 1) {
+        ref['root'] = ref['root'] ?? [];
+        ref['root'].push(tokens[j]);
+      }
+      else {
+        ref[tokens[j]] = ref[tokens[j]] ?? {};
+        ref = ref[tokens[j]];
+      }
+    }
+  }
+  return mDict;
+};
+
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
  *
@@ -56,6 +85,8 @@ export default class ScriptQueue extends Component {
       },
       resetButton: <span>Hide details &#9650;</span>,
       blockedByAuthlist: false,
+      scriptsTree: {},
+      collapseTree: {},
     };
 
     this.observer = null;
@@ -107,6 +138,13 @@ export default class ScriptQueue extends Component {
     },
   };
 
+  setCollapseTree = (key) => {
+    console.log(key, this.state.collapseTree[key]);
+    this.setState((state) => ({
+      collapseTree: { ...state.collapseTree, [key]: !state.collapseTree[key] },
+    }));
+  };
+
   componentDidUpdate = (prevProps, _prevState) => {
     if (this.state.currentScriptDetailState !== _prevState.currentScriptDetailState) {
       if (this.state.currentScriptDetailState.height < this.state.currentScriptDetailState.initialHeight) {
@@ -116,11 +154,25 @@ export default class ScriptQueue extends Component {
       }
     }
 
-    if (this.props.availableScriptList && this.props.availableScriptList !== prevProps.availableScriptList) {
+    if (this.props.availableScriptList && !isEqual(this.props.availableScriptList, prevProps.availableScriptList)) {
       this.props.availableScriptList.sort((a, b) => {
         return a.path.localeCompare(b.path, 'en', { sensitivity: 'base' });
       });
+
+      const filteredScripts = this.props.availableScriptList.filter((script) => {
+        if (script.path.toLowerCase().includes(this.state.availableScriptsFilter.toLowerCase())) {
+          return true;
+        }
+        return false;
+      });
+      const standard = filteredScripts.filter((script) => script.type === 'standard');
+      const external = filteredScripts.filter((script) => script.type === 'external');
+      const externalTree = getScriptHierarchy(external);
+      const standardTree = getScriptHierarchy(standard);
+      const scriptsTree = { standard: standardTree, external: externalTree };
+      this.setState({ scriptsTree });
     }
+
     if (this.props.heartbeats !== prevProps.heartbeats) {
       this.setState({
         indexedHeartbeats: this.props.heartbeats.reduce((map, heartbeat) => {
@@ -536,6 +588,52 @@ export default class ScriptQueue extends Component {
     );
   };
 
+  /**
+   * Recursive component to display the scripts tree.
+   * @param {Object} props - Properties.
+   * @param {String} props.category - Category of the scripts.
+   * @param {Object} props.scripts - Dictionary with the scripts.
+   * @param {String} props.breadCrumb - Bread crumb of the scripts.
+   * @returns {JSX.Element} - Recursive component.
+   */
+  RecursiveScriptsTree = ({ category, scripts, breadCrumb }) => {
+    if (!scripts) return null;
+
+    const { availableScriptList } = this.props;
+    const { collapseTree } = this.state;
+
+    const recursiveKeys = Object.keys(scripts).filter((key) => key !== 'root');
+    const collapsedCategory = collapseTree[category] || false;
+    return (
+      <div style={{ paddingLeft: "20px" }}>
+        <h6>
+          <span onClick={() => this.setCollapseTree(category)}>{collapsedCategory ? 'V' : '>'}</span>
+          {category}
+        </h6>
+        <div style={{
+          maxHeight: collapsedCategory ? 0 : 1000,
+          transition: 'max-height 500ms ease-in',
+        }}>
+          {scripts.root && scripts.root.map((script) => {
+            const fullScriptPath = breadCrumb ?  breadCrumb + '/' + script : script;
+            const scriptObject = availableScriptList?.find((s) => s.path === fullScriptPath);
+            return this.renderAvailableScript(scriptObject);
+          })}
+          {/* Base Condition and Rendering recursive component from inside itself */}
+          {recursiveKeys.length > 0 && recursiveKeys.map((key) => {
+            return (
+              <this.RecursiveScriptsTree
+                key={key}
+                category={category ? category + '-' + key : key}
+                scripts={scripts[key]}
+                breadCrumb={breadCrumb ? breadCrumb + '/' + key : key} />
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
   toggleAvailableScriptsExpanded = (scriptType) => {
     if (scriptType === 'standard') {
       this.setState({
@@ -559,12 +657,6 @@ export default class ScriptQueue extends Component {
     const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
     const availableScriptListClass = this.state.isAvailableScriptListVisible ? '' : styles.collapsedScriptList;
     const current = this.props.current === 'None' ? {} : { ...this.props.current };
-    // const now = new Date();
-    // Fix time zones for next line
-    // const currentScriptElapsedTime =
-    //   this.props.current === 'None' || current.timestampRunStart === undefined
-    //     ? 0
-    //     : now.getTime() / 1000.0 - current.timestampRunStart;
     const waitingList = this.state.useLocalWaitingList ? this.state.waitingScriptList : this.props.waitingScriptList;
 
     const totalWaitingSeconds = waitingList.reduce((previousSum, currentElement) => {
@@ -731,12 +823,13 @@ export default class ScriptQueue extends Component {
                         this.state.availableScriptsStandardExpanded ? '' : styles.availableListCollapsed,
                       ].join(' ')}
                     >
-                      {this.props.availableScriptList.map((script) => {
+                      {/* {this.props.availableScriptList.map((script) => {
                         if (script.type && script.type.toLowerCase() !== 'standard') return null;
                         if (!script.path.toLowerCase().includes(this.state.availableScriptsFilter.toLowerCase()))
                           return null;
                         return this.renderAvailableScript(script);
-                      })}
+                      })} */}
+                      <this.RecursiveScriptsTree category="standard" scripts={this.state.scriptsTree.standard}/>
                     </div>
                     <div className={styles.availableScriptTypeSeparator}></div>
                     <div
@@ -754,13 +847,14 @@ export default class ScriptQueue extends Component {
                         this.state.availableScriptsExternalExpanded ? '' : styles.availableListCollapsed,
                       ].join(' ')}
                     >
-                      {this.props.availableScriptList.map((script) => {
+                      {/* {this.props.availableScriptList.map((script) => {
                         if (script.type && script.type.toLowerCase() !== 'external') return null;
                         if (!script.path.toLowerCase().includes(this.state.availableScriptsFilter.toLowerCase())) {
                           return null;
                         }
                         return this.renderAvailableScript(script);
-                      })}
+                      })} */}
+                      <this.RecursiveScriptsTree category="external" scripts={this.state.scriptsTree.external}/>
                     </div>
                   </div>
                 </ScriptList>
