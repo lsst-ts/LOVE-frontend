@@ -43,8 +43,7 @@
 }
 
 .headersRigth {
-    display: inline-table;
-    grid-column-start: span 2;
+    display: contents;
 }
 
 .gearIcon {
@@ -54,8 +53,9 @@
 
 .nightDayDiv {
     display: flex;
+    width: 30%;
 }
 
 .icon {
-    width: 60% !important;
+    width: 5%;
 }

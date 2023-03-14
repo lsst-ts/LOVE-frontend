@@ -32,27 +32,14 @@ export default class Headers extends Component {
                         </SummaryPanel>
                     </div>
                 </div>
-                <div>
+                <div className={styles.headersRigth}>
                     {isNigth ? 
-                     (<div className={styles.headersRigth}>
-                        <div className={styles.icon}>
-                            <Stars/>
-                        </div>
-                        <div>
-                            Night #13
-                            -
-                            <span>03:21:52 till</span>
-                            <span>Sunrise</span>
-                        </div>
-                    </div>
+                        (<><div className={styles.icon}><Stars /></div>
+                            <span>Night #13 - 03:21:52 till Sunrise</span></>
                     ) :
-                    (<div>
-                        <div>
-                            <Sun className={styles.icon}/> 
-                            Day
-                        </div>-
-                        <span>03:21:52 till</span>
-                        <span>Sunset</span>
+                    (<div className={styles.nightDayDiv}>
+                        <Sun className={styles.icon}/> 
+                        <span>Day-03:21:52 till Sunset</span>
                     </div>)}
                 </div>
             </div>
