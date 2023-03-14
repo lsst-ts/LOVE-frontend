@@ -145,7 +145,6 @@
   display: flex;
 }
 
-
 /* state classes */
 .alert {
   background: var(--status-alert-color);

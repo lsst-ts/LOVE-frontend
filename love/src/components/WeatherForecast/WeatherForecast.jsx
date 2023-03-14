@@ -1,21 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ManagerInterface, { parseCommanderData } from 'Utils';
-import { DATE_TIME_FORMAT } from 'Config';
-import TimeSeriesControls from 'components/GeneralPurpose/Plot/TimeSeriesControls/TimeSeriesControls';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
-import Title from 'components/GeneralPurpose/SummaryPanel/Title';
 import styles from './WeatherForecast.module.css';
-import WindPlotContainer from './PlotsContainer/WindPlot.container';
-import TemperaturePlotContainer from './PlotsContainer/TemperaturePlot.container';
-import RainPlotContainer from './PlotsContainer/RainPlot.container';
-import CloudPlotContainer from './PlotsContainer/CloudPlot.container';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import InfoHeaderContainer from './InfoHeader/InfoHeader.container';
-import {weatherForecastStateMap, weatherForecastStatetoStyle} from 'Config';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import WEATHER from './WeatherForecastInputs.json';
-
 
 export default class WeatherForecast extends Component {
   static propTypes = {
@@ -34,17 +24,17 @@ export default class WeatherForecast extends Component {
     subscribeToStreams: () => undefined,
     unsubscribeToStreams: () => undefined,
     weather: WEATHER,
-  }
+  };
 
   constructor(props) {
     super(props);
 
     this.frecuencyOptions = ['daily', 'hourly'];
-    this.sliceSizeOptions = {'daily': 15, 'hourly': 49};
-    this.temporalFormatOptions = {'daily': '%Y-%m-%d', 'hourly': '%d, %H:%M'};
-    this.deltaTimeOptions = {'daily': 60 * 60 * 24, 'hourly': 60 * 60};
-    this.sliceInvert = {'daily': false, 'hourly': true};
-    this.sizeLimit = {'daily': 15, 'hourly': 382};
+    this.sliceSizeOptions = { daily: 15, hourly: 49 };
+    this.temporalFormatOptions = { daily: '%Y-%m-%d', hourly: '%d, %H:%M' };
+    this.deltaTimeOptions = { daily: 60 * 60 * 24, hourly: 60 * 60 };
+    this.sliceInvert = { daily: false, hourly: true };
+    this.sizeLimit = { daily: 15, hourly: 382 };
 
     this.windPlotRef = React.createRef();
     this.temperaturePlotRef = React.createRef();
@@ -135,9 +125,7 @@ export default class WeatherForecast extends Component {
 
         {this.props.infoHeader && (
           <div className={styles.fullSection}>
-            <InfoHeaderContainer
-              frecuency={this.state.frecuency}
-            />
+            <InfoHeaderContainer frecuency={this.state.frecuency} />
           </div>
         )}
 
@@ -156,7 +144,7 @@ export default class WeatherForecast extends Component {
                 sizeLimit={this.state.sizeLimit}
                 temporalXAxisFormat={this.state.temporalXAxisFormat}
                 isForecast={true}
-                scaleDomain={{domainMin: 0, domainMax:100}}
+                scaleDomain={{ domainMin: 0, domainMax: 100 }}
                 maxHeight={130}
               />
             </div>
@@ -172,7 +160,7 @@ export default class WeatherForecast extends Component {
                 sizeLimit={this.state.sizeLimit}
                 temporalXAxisFormat={this.state.temporalXAxisFormat}
                 isForecast={true}
-                scaleDomain={{domainMin: 0, domainMax:100}}
+                scaleDomain={{ domainMin: 0, domainMax: 100 }}
                 scaleIndependent={true}
               />
             </div>
@@ -235,7 +223,7 @@ export default class WeatherForecast extends Component {
                 temporalXAxisFormat={this.state.temporalXAxisFormat}
                 isForecast={true}
                 scaleIndependent={true}
-                scaleDomain={{domainMin: 0, domainMax:100}}
+                scaleDomain={{ domainMin: 0, domainMax: 100 }}
               />
             </div>
           </div>
@@ -254,7 +242,6 @@ export default class WeatherForecast extends Component {
             />
           </div>
         </div> */}
-
       </div>
     );
   }

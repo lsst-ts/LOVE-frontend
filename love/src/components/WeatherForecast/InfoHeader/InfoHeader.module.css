@@ -1,27 +1,26 @@
-
 .temperatureMax {
   color: white !important;
   font-size: 18px;
 }
 
 .veryLow {
-  background:#DB5B3E;
+  background: #db5b3e;
 }
 
 .low {
-  background: #F9B200;
+  background: #f9b200;
 }
 
 .medium {
-  background: #DEE250;
+  background: #dee250;
 }
 
 .high {
-  background: #97E54F;
+  background: #97e54f;
 }
 
 .veryHigh {
-  background: #00A26D;
+  background: #00a26d;
 }
 
 .default {
@@ -38,14 +37,14 @@ td {
 
 td > .backgroundPredictability {
   display: inline-block;
-  vertical-align: middle ;
+  vertical-align: middle;
   height: 15px;
   background: var(--tertiary-background-color);
 }
 
 td > .predictability {
   display: inline-block;
-  vertical-align: middle ;
+  vertical-align: middle;
 }
 
 .padding0 {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getWeatherForecastState, getInfoHeaderDailyTrend, getInfoHeaderHourlyTrend} from 'redux/selectors';
+import { getWeatherForecastState, getInfoHeaderDailyTrend, getInfoHeaderHourlyTrend } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import WeatherForecast from './WeatherForecast';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getInfoHeaderDailyTrend, getInfoHeaderHourlyTrend, getWeatherForecastState} from 'redux/selectors';
+import { getInfoHeaderDailyTrend, getInfoHeaderHourlyTrend, getWeatherForecastState } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import InfoHeader from './InfoHeader';
 
@@ -30,7 +30,6 @@ export const schema = {
   },
 };
 
-
 const InfoHeaderContainer = ({ ...props }) => {
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
@@ -46,10 +45,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  const subscriptions = [
-    'telemetry-WeatherForecast-0-dailyTrend',
-    'telemetry-WeatherForecast-0-hourlyTrend',
-  ];
+  const subscriptions = ['telemetry-WeatherForecast-0-dailyTrend', 'telemetry-WeatherForecast-0-hourlyTrend'];
   return {
     subscriptions,
     subscribeToStreams: () => {
