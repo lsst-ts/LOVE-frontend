@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup, requestGroupRemoval } from 'redux/actions/ws';
 import { getStreamsData, getEfdConfig, getTaiToUtc } from 'redux/selectors';
+import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import Plot from './Plot';
 
 export const defaultStyles = [
@@ -32,20 +33,14 @@ export const schema = {
     titleBar: {
       type: 'boolean',
       description: 'Whether to display the title bar',
-      isPrivate: true,
+      isPrivate: false,
       default: false,
     },
     title: {
       type: 'string',
       description: 'Name diplayed in the title bar (if visible)',
-      isPrivate: true,
+      isPrivate: false,
       default: 'Time series plot',
-    },
-    hasRawMode: {
-      type: 'boolean',
-      description: 'Whether the component has a raw mode version',
-      isPrivate: true,
-      default: false,
     },
     inputs: {
       // externalStep: 'TimeSeriesConfig',
@@ -129,6 +124,12 @@ export const schema = {
       default: true,
       isPrivate: false,
     },
+    hasRawMode: {
+      type: 'boolean',
+      description: 'Whether the component has a raw mode version',
+      isPrivate: false,
+      default: true,
+    },
   },
 };
 
@@ -136,13 +137,16 @@ const containerRef =  React.createRef();
 
 const PlotContainer = ({
   subscriptions,
-  getStreamData,
   subscribeToStreams,
   unsubscribeToStreams,
   ...props
 }) => {
 
   const { containerNode } = props;
+
+  if (props.isRaw) {
+    return <SubscriptionTableContainer subscriptions={subscriptions}></SubscriptionTableContainer>;
+  }
 
   if (!props.containerNode) {
     return (
@@ -151,7 +155,6 @@ const PlotContainer = ({
           subscriptions={subscriptions}
           subscribeToStreams={subscribeToStreams}
           unsubscribeToStreams={unsubscribeToStreams}
-          getStreamData={getStreamData}
           {...props}
           containerNode={containerRef?.current?.parentNode}
         />
@@ -163,7 +166,6 @@ const PlotContainer = ({
           subscriptions={subscriptions}
           subscribeToStreams={subscribeToStreams}
           unsubscribeToStreams={unsubscribeToStreams}
-          getStreamData={getStreamData}
           {...props}
           containerNode={containerNode}
       />);
