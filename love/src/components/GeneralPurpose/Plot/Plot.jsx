@@ -6,7 +6,7 @@ import VegaLegend from './VegaTimeSeriesPlot/VegaLegend';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData } from 'Utils';
-import isEqual from 'lodash/isEqual';
+import _ from 'lodash';
 import styles from './Plot.module.css';
 const moment = extendMoment(Moment);
 
@@ -37,17 +37,24 @@ export default class Plot extends Component {
     timeSeriesControlsProps: PropTypes.object,
     efdConfigFile: PropTypes.object,
     maxHeight: PropTypes.number,
+    /** Size of the slice array, when receive more the historical data that the window time for the visualization */
     sliceSize: PropTypes.number,
+    /** In the weatherforecast telemetries is received data in one array with time and value.
+     * In other telemetries, the data is received one to one */
+    isForecast: PropTypes.bool,
+    /** In weatherforecast for the hourly telemetry, receive 14 days to the future, but It's necessary the firts 48 hours.
+     * Used for the correctly operation of array between daily and hourly telemetry */
     sliceInvert: PropTypes.bool,
+    /** Size array of telemetry of the weatherforecast, It's needed for the correctly slice */
     sizeLimit: PropTypes.number,
     temporalXAxisFormat: PropTypes.string,
-    isForecast: PropTypes.bool,
+    /** Used for the multi axis when the scale of data is difference, for example the units data is percent and milimeters */
     scaleIndependent: PropTypes.bool,
+    /** Used for the set limit range of the plot */
     scaleDomain: PropTypes.shape({
       domainMax: PropTypes.number,
       domainMin: PropTypes.number,
-    }),
-    deltaTime: PropTypes.number,
+    })
   };
 
   static defaultProps = {
@@ -60,6 +67,7 @@ export default class Plot extends Component {
     isForecast: false,
     scaleIndependent: false,
     scaleDomain: {},
+    legendPosition: 'right',
   };
 
   static defaultStyles = [
@@ -203,77 +211,98 @@ export default class Plot extends Component {
     }
   }
 
-  componentWillUnmount() {
-    this.props.unsubscribeToStreams();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { timeSeriesControlsProps, inputs, streams, sliceSize, sizeLimit } = this.props;
+  parseInputStream(inputs, streams) {
+    const { sliceSize, sizeLimit } = this.props;
     const { data } = this.state;
-    if (prevProps.timeSeriesControlsProps !== timeSeriesControlsProps) {
-      this.setState({ ...timeSeriesControlsProps });
-    }
+    const newData = {};
 
-    if (!isEqual(prevProps.inputs, inputs)) {
-      const data = {};
-      for (const key of Object.keys(inputs)) {
-        data[key] = [];
-      }
-      this.setState({ data });
-    }
+    for (const [inputName, inputConfig] of Object.entries(inputs)) {
+      if (inputConfig.values) {
+        let inputData = data[inputName] || [];
+        const lastValue = inputData[inputData.length - 1];
+        let newValue = {
+          name: inputName,
+          values: {},
+          units: {}
+        };
 
-    if (!isEqual(prevProps.inputs, inputs) || !isEqual(prevProps.streams, streams)) {
-      const newData = {};
-      for (const [inputName, inputConfig] of Object.entries(inputs)) {
-        if (inputConfig.values) {
-          let inputData = data[inputName] || [];
-          const lastValue = inputData[inputData.length - 1];
-          let newValue = {
-            name: inputName,
-            values: {},
-            units: {}
-          };
-          
-          for (const value of Object.values(inputConfig.values)) {
-            const { category, csc, salindex, topic, item, accessor, variable } = value;
-            /* eslint no-eval: 0 */
-            const accessorFunc = eval(accessor);
-            
-            const streamName = `${category}-${csc}-${salindex}-${topic}`;
-            if (!streams[streamName] || !streams[streamName]?.[item]) {
-              continue;
-            }
-            const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
-            newValue['x'] = parseTimestamp(streamValue.private_rcvStamp?.value * 1000);
+        for (const value of Object.values(inputConfig.values)) {
+          const { category, csc, salindex, topic, item, accessor, variable = 'y' } = value;
+          /* eslint no-eval: 0 */
+          const accessorFunc = eval(accessor);
 
-            const val = accessorFunc(streamValue[item]?.value);
-            const units = streamValue[item]?.units;
-            
-            if (Array.isArray(val)) {
-              newValue[variable] = val;
-              newValue['units'][variable] = units;
-              for (let i = 0; i < val.length; i++) {
-                if (newValue.values[i] === undefined) newValue.values[i] = {};
-                newValue.values[i][variable] = val[i];
-              }
-            } else {
-              newValue[variable] = val;
-              newValue['units'][variable] = units;
-            }
+          const streamName = `${category}-${csc}-${salindex}-${topic}`;
+          if (!streams[streamName] || !streams[streamName]?.[item]) {
+            continue;
           }
+          const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
+          newValue['x'] = parseTimestamp(streamValue.private_rcvStamp?.value * 1000);
 
-          if (!this.props.isForecast) {
-            // TODO: use reselect to never get repeated timestamps
-            if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
-              inputData.push(newValue);
+          const val = accessorFunc(streamValue[item]?.value);
+          const units = streamValue[item]?.units;
+
+          if (Array.isArray(val)) {
+            newValue[variable] = val;
+            newValue['units'][variable] = units;
+            for (let i = 0; i < val.length; i++) {
+              if (newValue.values[i] === undefined) newValue.values[i] = {};
+              newValue.values[i][variable] = val[i];
             }
           } else {
-            Object.entries(newValue.values).forEach((entry) => {
-              let input = Object.assign({}, entry[1]);
-              input['units'] = newValue.units;
-              input['x'] = parseTimestamp(entry[1]['x'] * 1000);
-              inputData.push(input);
-            });
+            newValue[variable] = val;
+            newValue['units'][variable] = units;
+          }
+        }
+
+        if (!this.props.isForecast) {
+          // TODO: use reselect to never get repeated timestamps
+          if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
+            inputData.push(newValue);
+          }
+        } else {
+          Object.entries(newValue.values).forEach((entry) => {
+            let input = Object.assign({}, entry[1]);
+            input['units'] = newValue.units;
+            input['x'] = parseTimestamp(entry[1]['x'] * 1000);
+            inputData.push(input);
+          });
+        }
+
+        // Slice inputData array if it has more than sliceSize datapoints (corresponding to one hour if telemetry is received every two seconds)
+        if (inputData.length > sliceSize) {
+          if (this.props.sliceInvert) {
+            if (inputData.length > sizeLimit) {
+              inputData = inputData.slice(-1 * sizeLimit).slice(0, sliceSize);
+            } else {
+              inputData = inputData.slice(0, sliceSize);
+            }
+          } else {
+            inputData = inputData.slice(-1 * sliceSize);
+          }
+        }
+        newData[inputName] = inputData;
+
+      } else {
+        const { category, csc, salindex, topic, item, accessor} = inputConfig;
+          /* eslint no-eval: 0 */
+          const accessorFunc = eval(accessor);
+          let inputData = data[inputName] || [];
+          const lastValue = inputData[inputData.length - 1];
+          const streamName = `${category}-${csc}-${salindex}-${topic}`;
+          if (!streams[streamName] || !streams[streamName]?.[item]) {
+            continue;
+          }
+          const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
+          const newValue = {
+            name: inputName,
+            x: parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
+            y: accessorFunc(streamValue[item]?.value),
+            units: {y: streamValue[item]?.units},
+          };
+
+          // TODO: use reselect to never get repeated timestamps
+          if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
+            inputData.push(newValue);
           }
 
           // Slice inputData array if it has more than sliceSize datapoints (corresponding to one hour if telemetry is received every two seconds)
@@ -288,51 +317,23 @@ export default class Plot extends Component {
               inputData = inputData.slice(-1 * sliceSize);
             }
           }
-
           newData[inputName] = inputData;
-          
-        } else {
-          const { category, csc, salindex, topic, item, accessor} = inputConfig;
-            /* eslint no-eval: 0 */
-            const accessorFunc = eval(accessor);
-            let inputData = data[inputName] || [];
-            const lastValue = inputData[inputData.length - 1];
-            const streamName = `${category}-${csc}-${salindex}-${topic}`;
-            if (!streams[streamName] || !streams[streamName]?.[item]) {
-              continue;
-            }
-            const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
-            const newValue = {
-              name: inputName,
-              x: parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
-              y: accessorFunc(streamValue[item]?.value),
-            };
-
-            // TODO: use reselect to never get repeated timestamps
-            if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
-              inputData.push(newValue);
-            }
-
-            // Slice inputData array if it has more than sliceSize datapoints (corresponding to one hour if telemetry is received every two seconds)
-            if (inputData.length > sliceSize) {
-              if (this.props.sliceInvert) {
-                if (inputData.length > sizeLimit) {
-                  inputData = inputData.slice(-1 * sizeLimit).slice(0, sliceSize);
-                } else {
-                  inputData = inputData.slice(0, sliceSize);
-                }
-              } else {
-                inputData = inputData.slice(-1 * sliceSize);
-              }
-            }
-            newData[inputName] = inputData;
-        }
       }
+    }
+    if (!_.isEqual(data, newData)) {
       this.setState({ data: newData });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { timeSeriesControlsProps, inputs, streams } = this.props;
+
+    if (prevProps.timeSeriesControlsProps !== timeSeriesControlsProps) {
+      this.setState({ ...timeSeriesControlsProps });
     }
 
     if (
-      !isEqual(prevProps.containerNode, this.props.containerNode) &&
+      !_.isEqual(prevProps.containerNode, this.props.containerNode) &&
       // this.resizeObserver === undefined &&
       this.props.width === undefined && // width/height have more priority
       this.props.height === undefined
@@ -366,8 +367,26 @@ export default class Plot extends Component {
         containerWidth: this.props.width,
       });
     }
+
+    if (!_.isEqual(prevProps.inputs, inputs)) {
+      const {unsubscribeToStreams, subscribeToStreams} = this.props;
+      unsubscribeToStreams();
+      subscribeToStreams();
+      const _data = {};
+      for (const key of Object.keys(inputs)) {
+        _data[key] = [];
+      }
+      this.setState({ data: _data });
+    }
+
+    if (!_.isEqual(prevProps.inputs, inputs) || !_.isEqual(prevProps.streams, streams)) {
+      this.parseInputStream(inputs, streams);
+    }
   }
 
+  componentWillUnmount() {
+    this.props.unsubscribeToStreams();
+  }
 
   render() {
     const { data, efdClients, containerWidth, containerHeight } = this.state;
