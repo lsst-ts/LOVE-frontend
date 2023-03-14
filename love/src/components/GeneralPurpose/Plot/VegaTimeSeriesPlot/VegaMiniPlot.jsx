@@ -468,8 +468,8 @@ class VegaLegendMiniPlot extends React.PureComponent {
     return {
       data: { values: [
         { x: 1, x2: 1.2, y: 0.5, y2: 3, lux: 0.5, lux2: 1.7, luy: 3, luy2: 3.1, ldy: 0.4 },
-        { x: 2.5, x2: 2.7, y: 1.5, y2: 4, lux: 2, lux2: 3.2, luy: 4, luy2: 4.1, ldy: 1.4  }, 
-        { x: 4, x2: 4.2, y: 0.64, y2: 2.5, lux: 3.5, lux2: 4.7, luy: 2.5, luy2: 2.6, ldy: 0.74 }, 
+        { x: 2.5, x2: 2.7, y: 1.5, y2: 4, lux: 2, lux2: 3.2, luy: 4, luy2: 4.1, ldy: 1.4  },
+        { x: 4, x2: 4.2, y: 0.64, y2: 2.5, lux: 3.5, lux2: 4.7, luy: 2.5, luy2: 2.6, ldy: 0.74 },
       ] },
       layer: [
         {
@@ -617,7 +617,6 @@ class VegaLegendMiniPlot extends React.PureComponent {
           },
         }
       ],
-      
       config: {
         background: null,
         axis: {

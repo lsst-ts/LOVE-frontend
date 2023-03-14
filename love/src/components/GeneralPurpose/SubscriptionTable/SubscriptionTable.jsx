@@ -151,7 +151,6 @@ export default class SubscriptionTable extends Component {
                       </React.Fragment>
                     );
                   }
-                  
                 })}
               </React.Fragment>
             );

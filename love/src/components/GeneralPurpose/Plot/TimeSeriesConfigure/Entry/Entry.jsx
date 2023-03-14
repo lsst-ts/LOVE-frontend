@@ -122,12 +122,12 @@ export default class Entry extends Component {
     } else {
       newValues = [{...values[0], variable: 'y'}];
     }
-    
+
     if (type === 'area' || type === 'arrow') {
       this.setState({values: newValues, inputsRef: [this.state.inputsRef[0], React.createRef()]});
     } else {
       this.setState({values: newValues, inputsRef: [this.state.inputsRef[0]]});
-    }    
+    }
   }
 
   render() {
