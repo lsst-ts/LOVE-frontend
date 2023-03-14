@@ -309,7 +309,7 @@ class VegaTimeseriesPlot extends Component {
     const units = names.map((name) => ({name: name, units: arr.filter((l) => l.name === name)[0].units}));
     const colors = names.map((name) => ({name, color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color}));
     
-    const namesUnits = units.map((u) => u.name + ' [' + u.units?.y + ']');
+    const namesUnits = units.map((u) => u.name + (u.units?.y ? ' [' + u.units?.y + ']' : ''));
 
     const paramColor = {};
     colors.forEach((c) => {
@@ -397,7 +397,7 @@ class VegaTimeseriesPlot extends Component {
     const units = names.map((name) => ({name: name, units: arr.filter((l) => l.name === name)[0].units}));
     const colors = names.map((name) => ({name, color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color}));
     
-    const namesUnits = units.map((u) => u.name + ' [' + u.units?.y + ']');
+    const namesUnits = units.map((u) => u.name + (u.units?.y ? ' [' + u.units?.y + ']' : ''));
 
     return {
       data: { name: dataName }, // note: vega-lite data attribute is a plain object instead of an array
@@ -490,7 +490,7 @@ class VegaTimeseriesPlot extends Component {
     const units = names.map((name) => ({name: name, units: arr.filter((l) => l.name === name)[0].units}));
     const colors = names.map((name) => ({name, color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color}));
     
-    const namesUnits = units.map((u) => u.name + ' [' + u.units?.y + ']');
+    const namesUnits = units.map((u) => u.name + (u.units?.y ? ' [' + u.units?.y + ']' : ''));
 
     return {
       data: { name: dataName },
@@ -544,7 +544,7 @@ class VegaTimeseriesPlot extends Component {
     const units = names.map((name) => ({name: name, units: arr.filter((l) => l.name === name)[0].units}));
     const colors = names.map((name) => ({name, color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color}));
     
-    const namesUnits = units.map((u) => u.name + ' [' + u.units?.angle + ']');
+    const namesUnits = units.map((u) => u.name + (u.units?.angle ? ' [' + u.units?.angle + ']' : ''));
 
     return {
       data: { name: dataName },
@@ -638,7 +638,7 @@ class VegaTimeseriesPlot extends Component {
     const units = names.map((name) => ({name: name, units: arr.filter((l) => l.name === name)[0].units}));
     const colors = names.map((name) => ({name, color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color}));
     
-    const namesUnits = units.map((u) => u.name + ' [' + u.units?.y + ']');
+    const namesUnits = units.map((u) => u.name + (u.units?.y ? ' [' + u.units?.y + ']' : ''));
     
     return {
       data: { name: dataName },
@@ -852,7 +852,7 @@ class VegaTimeseriesPlot extends Component {
     const units = names.map((name) => ({name: name, units: arr.filter((l) => l.name === name)[0].units}));
     const colors = names.map((name) => ({name, color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color}));
     
-    const namesUnits = units.map((u) => u.name + ' [' + u.units?.y + ']');
+    const namesUnits = units.map((u) => u.name + (u.units?.y ? ' [' + u.units?.y + ']' : ''));
 
     const color = '#bcddf7';
     return {
@@ -1036,7 +1036,7 @@ class VegaTimeseriesPlot extends Component {
     const units = names.map((name) => ({name: name, units: arr.filter((l) => l.name === name)[0].units}));
     const colors = names.map((name) => ({name, color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color}));
     
-    const namesUnits = units.map((u) => u.name + ' [' + u.units?.y + ']');
+    const namesUnits = units.map((u) => u.name + (u.units?.y ? ' [' + u.units?.y + ']' : ''));
 
     return {
       data: { name: dataName },
@@ -1123,7 +1123,7 @@ class VegaTimeseriesPlot extends Component {
     const names = [...new Set(arr.map((layer) => layer.name))];
     const units = names.map((name) => ({name: name, units: arr.filter((l) => l.name === name)[0].units}));
 
-    const nameUnit = units.map((u) => u.name + ' [' + u.units?.low + ']')[0];
+    const namesUnits = units.map((u) => u.name + (u.units?.low ? ' [' + u.units?.low + ']' : ''));
 
     const scale = {
       type:  "quantize",
@@ -1188,7 +1188,7 @@ class VegaTimeseriesPlot extends Component {
               scale: scale,
               field: 'low',
               type: 'quantitative',
-              title: nameUnit,
+              title: namesUnits,
             },
             tooltip: [
               {
@@ -1243,7 +1243,7 @@ class VegaTimeseriesPlot extends Component {
               scale: scale,
               field: 'mid',
               type: 'quantitative',
-              title: nameUnit,
+              title: namesUnits,
             },
             tooltip: [
               {
@@ -1298,7 +1298,7 @@ class VegaTimeseriesPlot extends Component {
               scale: scale,
               field: 'hi',
               type: 'quantitative',
-              title: nameUnit,
+              title: namesUnits,
             },
             tooltip: [
               {
