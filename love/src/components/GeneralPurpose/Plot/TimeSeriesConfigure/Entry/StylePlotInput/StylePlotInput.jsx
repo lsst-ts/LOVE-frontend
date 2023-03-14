@@ -29,7 +29,7 @@ export default class StylePlotInput extends PureComponent {
       /** (optional) Whether to plot a filled or empty (contour only) point. Used in point and pointLine marks.*/
       filled: PropTypes.bool.isRequired,
     }),
-    
+
     /**
      * Callback to call when making a change, should have the followinf arguments:
      * - config

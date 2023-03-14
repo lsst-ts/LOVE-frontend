@@ -74,7 +74,6 @@ export const schema = {
       description: 'list of inputs',
       isPrivate: false,
       default: {
-        
         'Total cloud cover': {
           type: 'line',
           color: '#ff7f0e',

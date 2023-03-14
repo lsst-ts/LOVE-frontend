@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-// getEfdConfig, getTaiToUtc 
 import { getInfoHeaderDailyTrend, getInfoHeaderHourlyTrend, getWeatherForecastState} from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import InfoHeader from './InfoHeader';

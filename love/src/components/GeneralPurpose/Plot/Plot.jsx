@@ -33,7 +33,7 @@ export default class Plot extends Component {
     /** Node to be used to track width and height.
      *  Use this instead of props.width and props.height for responsive plots.
      *  Will be ignored if both props.width and props.height are provided */
-    containerNode: PropTypes.instanceOf(Element), 
+    containerNode: PropTypes.instanceOf(Element),
     timeSeriesControlsProps: PropTypes.object,
     efdConfigFile: PropTypes.object,
     maxHeight: PropTypes.number,
@@ -100,7 +100,7 @@ export default class Plot extends Component {
       historicalData: [],
       efdClients: [],
       selectedEfdClient: null,
-      containerWidth: undefined, 
+      containerWidth: undefined,
       containerHeight: undefined,
       resizeObserverListener: false,
     };
@@ -359,7 +359,7 @@ export default class Plot extends Component {
     }
 
     if (
-      ( this.props.width !== undefined && this.props.height !== undefined ) && 
+      ( this.props.width !== undefined && this.props.height !== undefined ) &&
       ( this.props.width !== prevProps.width || this.props.height !== prevProps.height )
     ) {
       this.setState({

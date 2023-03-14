@@ -71,7 +71,7 @@ export default class TimeSeriesConfigure extends PureComponent {
       input['name'] = key;
       return input;
     });
-    
+
     const refs = this.state.entries.map(item => React.createRef());
     this.setState({ entries, refs });
     /* ManagerInterface.getTopicData('event-telemetry').then((data) => {

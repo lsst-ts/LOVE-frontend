@@ -22,7 +22,7 @@ export default class WeatherForecast extends Component {
     subscribeToStreams: PropTypes.func,
     unsubscribeToStreams: PropTypes.func,
     /* Weather stream data */
-    weather: PropTypes.object,    
+    weather: PropTypes.object,
     infoHeader: PropTypes.bool,
     cloud: PropTypes.bool,
     wind: PropTypes.bool,
@@ -115,11 +115,10 @@ export default class WeatherForecast extends Component {
     const detailedStateValue = {
       name: summaryState.name,
       class: summaryState.class,
-    }; 
+    };
 
     return (
       <div className={styles.container}>
-        
         <div className={styles.weatherForecastControls}>
           <span className={styles.title}>WeatherForecast</span>
           <span className={[detailedStateValue.class, styles.weatherForecastState].join(' ')}>{summaryState.name}</span>
