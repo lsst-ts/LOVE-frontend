@@ -4,7 +4,6 @@ import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getStreamsData, getEfdConfig, getTaiToUtc } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import Plot from 'components/GeneralPurpose/Plot/Plot';
-import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 
 
 export const schema = {
