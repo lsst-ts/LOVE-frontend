@@ -23,6 +23,9 @@ export const WEBSOCKET_SIMULATION_FILE = 'test.json';
 // Base URL for ScriptQueue scripts' documentation
 export const SCRIPT_DOCUMENTATION_BASE_URL = 'https://ts-standardscripts.lsst.io/py-api';
 
+// URL for external Cloud Map Service
+export const CLOUD_MAP_SERVICE_URL = 'https://www.meteoblue.com/en/weather/maps/widget/la-serena_chile_3884373?windAnimation=0&gust=0&satellite=0&cloudsAndPrecipitation=0&cloudsAndPrecipitation=1&temperature=0&sunshine=0&extremeForecastIndex=0&geoloc=fixed&tempunit=C&windunit=km%252Fh&lengthunit=metric&zoom=10&autowidth=auto';
+
 // Moment formats
 export const ISO_DATE_FORMAT = 'YYYY/MM/DD';
 export const ISO_INTEGER_DATE_FORMAT = 'YYYYMMDD';
