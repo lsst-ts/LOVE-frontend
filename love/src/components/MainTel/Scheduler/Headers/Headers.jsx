@@ -34,13 +34,16 @@ export default class Headers extends Component {
                 </div>
                 <div className={styles.headersRigth}>
                     {isNigth ? 
-                        (<><div className={styles.icon}><Stars /></div>
-                            <span>Night #13 - 03:21:52 till Sunrise</span></>
+                        (<div className={styles.nightDiv}>
+                            <div className={styles.iconStars}><Stars /></div>
+                            <span>Night #13 - 03:21:52 till Sunrise</span>
+                        </div>
                     ) :
-                    (<div className={styles.nightDayDiv}>
-                        <Sun className={styles.icon}/> 
+                    (<div className={styles.dayDiv}>
+                        <div className={styles.iconSun}><Sun /></div> 
                         <span>Day-03:21:52 till Sunset</span>
-                    </div>)}
+                    </div>
+                    )}
                 </div>
             </div>
         );

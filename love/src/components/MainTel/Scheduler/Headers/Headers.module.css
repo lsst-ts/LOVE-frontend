@@ -51,11 +51,26 @@
     padding-left: 1em;
 }
 
-.nightDayDiv {
+.nightDiv {
     display: flex;
-    width: 30%;
+    width: 18%;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-around;
 }
 
-.icon {
-    width: 5%;
+.dayDiv {
+    display: flex;
+    width: 15%;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.iconStars {
+    width: 25%;
+}
+
+.iconSun {
+    width: 15%;
 }
