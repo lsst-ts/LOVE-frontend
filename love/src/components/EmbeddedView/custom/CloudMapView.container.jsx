@@ -12,6 +12,12 @@ export const schema = {
       isPrivate: false,
       default: 'Cloud Map',
     },
+    link: {
+      type: 'boolean',
+      description: 'Whether the component has a raw mode version',
+      isPrivate: true,
+      default: CLOUD_MAP_SERVICE.copyrigth,
+    },
     hasRawMode: {
       type: 'boolean',
       description: 'Whether the component has a raw mode version',
