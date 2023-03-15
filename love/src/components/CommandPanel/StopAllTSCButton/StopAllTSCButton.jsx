@@ -18,7 +18,6 @@ export default class StopAllTSCButton extends Component {
 
   render() {
     const { title, commandExecutePermission, queueState } = this.props;
-    console.log(title, queueState);
     const isAvailable = commandExecutePermission && queueState.state !== 'Running';
     return (
       <div className={styles.buttonWrapper}>

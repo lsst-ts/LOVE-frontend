@@ -20,12 +20,6 @@ export const schema = {
       isPrivate: true,
       default: false,
     },
-    // scriptQueueIndex: {
-    //   type: 'number',
-    //   description: 'Salindex of the ScriptQueue to listen events',
-    //   isPrivate: false,
-    //   default: 2,
-    // },
   },
 };
 
