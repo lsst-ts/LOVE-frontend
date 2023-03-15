@@ -366,6 +366,19 @@ export const mainIndex = {
   },
 };
 
+const environmentIndex = {
+  CloudMap: {
+    component: require('../EmbeddedView/custom/CloudMapView.container').default,
+    schema: {
+      ...require('../EmbeddedView/custom/CloudMapView.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../EmbeddedView/custom/CloudMapView.container').schema.props,
+      },
+    },
+  },
+};
+
 export const authlistIndex = {
   SummaryAuthList: {
     component: require('../AuthList/SummaryAuthList/SummaryAuthList.container').default,
@@ -519,6 +532,10 @@ export const indexes = [
     index: mainIndex,
   },
   {
+    name: 'Environment',
+    index: environmentIndex,
+  },
+  {
     name: 'Authlist',
     index: authlistIndex,
   },
@@ -536,6 +553,7 @@ export default {
   ...observatoryIndex,
   ...auxtelIndex,
   ...mainIndex,
+  ...environmentIndex,
   ...authlistIndex,
   ...utilitiesIndex,
   ...internalIndex,
