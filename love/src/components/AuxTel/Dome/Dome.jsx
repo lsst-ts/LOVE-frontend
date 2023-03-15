@@ -152,7 +152,6 @@ export default class Dome extends Component {
       dropoutDoorOpeningPercentage,
       mainDoorOpeningPercentage,
       azimuthPosition,
-      azimuthInPosition,
       azimuthState,
       azimuthCommanded,
       domeInPosition,
@@ -183,6 +182,7 @@ export default class Dome extends Component {
       timeAzLim,
       timeRotLim,
       timeUnobservable,
+      timeElHighLimit,
       currentPointingAz,
       currentPointingEl,
       currentPointingNasmyth1,
@@ -337,13 +337,14 @@ export default class Dome extends Component {
             azimuthState={azimuthState}
             dropoutDoorState={dropoutDoorState}
             mainDoorState={mainDoorState}
-            mountTrackingState={atMountState}
+            atMountState={atMountState}
             trackID={trackID}
             mountInPosition={mountInPosition}
             m3State={m3State}
             timeAzLim={timeAzLim}
             timeRotLim={timeRotLim}
             timeUnobservable={timeUnobservable}
+            timeElHighLimit={timeElHighLimit}
             maxEl={maxEl}
             maxAz={maxAz}
             maxNas1={maxNas1}

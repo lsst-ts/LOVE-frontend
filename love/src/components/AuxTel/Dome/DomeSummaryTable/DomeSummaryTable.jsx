@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from './DomeSummaryTable.module.css';
-import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
-import CurrentTargetValue from '../../../GeneralPurpose/CurrentTargetValue/CurrentTargetValue';
+import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
+import CurrentTargetValue from 'components/GeneralPurpose/CurrentTargetValue/CurrentTargetValue';
 import PropTypes from 'prop-types';
 import {
   domeAzimuthStateMap,
@@ -10,12 +10,12 @@ import {
   mountTrackingStateMap,
   stateToStyleDomeAndMount,
 } from '../../../../Config';
-import Limits from '../../../GeneralPurpose/Limits/Limits';
-import SummaryPanel from '../../../GeneralPurpose/SummaryPanel/SummaryPanel';
-import Row from '../../../GeneralPurpose/SummaryPanel/Row';
-import Label from '../../../GeneralPurpose/SummaryPanel/Label';
-import Value from '../../../GeneralPurpose/SummaryPanel/Value';
-import Title from '../../../GeneralPurpose/SummaryPanel/Title';
+import Limits from 'components/GeneralPurpose/Limits/Limits';
+import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
+import Row from 'components/GeneralPurpose/SummaryPanel/Row';
+import Label from 'components/GeneralPurpose/SummaryPanel/Label';
+import Value from 'components/GeneralPurpose/SummaryPanel/Value';
+import Title from 'components/GeneralPurpose/SummaryPanel/Title';
 import { stateToStyleDome, stateToStyleMount } from '../../../../Config';
 import { fixedFloat } from 'Utils';
 
@@ -28,10 +28,11 @@ export default class DomeSummaryTable extends Component {
     azimuthState: PropTypes.number,
     dropoutDoorState: PropTypes.number,
     mainDoorState: PropTypes.number,
-    mountTrackingState: PropTypes.number,
+    atMountState: PropTypes.number,
     timeAzLim: PropTypes.number,
     timeRotLim: PropTypes.number,
     timeUnobservable: PropTypes.number,
+    timeElHighLimit: PropTypes.number,
     maxEl: PropTypes.number,
     maxAz: PropTypes.number,
     maxNas1: PropTypes.number,
@@ -69,6 +70,7 @@ export default class DomeSummaryTable extends Component {
       timeAzLim,
       timeRotLim,
       timeUnobservable,
+      timeElHighLimit,
       maxEl,
       maxAz,
       maxNas1,
@@ -87,7 +89,10 @@ export default class DomeSummaryTable extends Component {
     
     const domeInPositionValue = this.props.domeInPosition ? this.props.domeInPosition : 0;
     const mountInPositionValue = this.props.mountInPosition ? this.props.mountInPosition : 0;
-    const mountTrackingStateValue = mountTrackingStateMap[this.props.mountTrackingState];
+    const mountTrackingStateValue = mountTrackingStateMap[this.props.atMountState];
+
+    console.log('atMountState', this.props.atMountState);
+    console.log('mountTrackingStateMap', mountTrackingStateMap);
     
     const m3State = this.props.m3State;
     //const { positionLimits } = this.props;
@@ -96,14 +101,9 @@ export default class DomeSummaryTable extends Component {
     //const timeToRotLimit = timesToLimit.timeToRotlim ? timesToLimit.timeToRotlim.value : 0;
     //const timeToUnobservable = timesToLimit.timeToUnobservable ? timesToLimit.timeUnobservable.value : 0;
     
-    // PENDING: 
-    // const timeToBlindSpot = timesToLimit.timeToBlindSpot ? timesToLimit.timeToBlindSpot.value : 0;
-    // const closestLimit = timeToBlindSpot > timeUnobservable && timeToBlindSpot > 0 ? 'blind spot' : 'unobservable';
-    // const timeToElLimit = closestLimit === 'blind spot' ? timeToBlindSpot : timeUnobservable;
+    const closestLimit = timeElHighLimit > timeUnobservable && timeElHighLimit > 0 ? 'blind spot' : 'unobservable';
+    const timeToElLimit = closestLimit === 'blind spot' ? timeElHighLimit : timeUnobservable;
     
-    const closestLimit = '';
-    const timeToElLimit = 0;
-
     // L1 (software) position limits, in order elevation, azimuth, Nasmyth 1, Nasmyth 2 and M3.
     // const { maximum, minimum } = positionLimits;
     // let [maxEl, maxAz, maxNas1, maxNas2, maxM3] = maximum ? maximum.value : [];

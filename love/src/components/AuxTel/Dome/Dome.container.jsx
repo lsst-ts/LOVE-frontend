@@ -76,6 +76,7 @@ const DomeContainer = ({
     timeAzLim,
     timeRotLim,
     timeUnobservable,
+    timeElHighLimit,
     currentPointingAz,
     currentPointingEl,
     currentPointingNasmyth1,
@@ -87,7 +88,6 @@ const DomeContainer = ({
       dropoutDoorOpeningPercentage={dropoutDoorOpeningPercentage}
       mainDoorOpeningPercentage={mainDoorOpeningPercentage}
       azimuthPosition={azimuthPosition}
-      azimuthInPosition={azimuthInPosition}
       azimuthState={azimuthState}
       azimuthCommanded={azimuthCommanded}
       domeInPosition={domeInPosition}
@@ -107,6 +107,7 @@ const DomeContainer = ({
       timeAzLim={timeAzLim}
       timeRotLim={timeRotLim}
       timeUnobservable={timeUnobservable}
+      timeElHighLimit={timeElHighLimit}
       currentPointingAz={currentPointingAz}
       currentPointingEl={currentPointingEl}
       currentPointingNasmyth1={currentPointingNasmyth1}
