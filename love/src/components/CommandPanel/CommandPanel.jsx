@@ -5,6 +5,15 @@ import ManagerInterface from 'Utils';
 import styles from './CommandPanel.module.css';
 
 export default class CommandPanel extends Component {
+
+  componentDidMount() {
+    this.props.subscribeToStreams();
+  }
+
+  componentWillUnmount() {
+    this.props.unsubscribeToStreams();
+  }
+
   render() {
     const { commandExecutePermission, mainQueueState, auxQueueState } = this.props;
     return (
