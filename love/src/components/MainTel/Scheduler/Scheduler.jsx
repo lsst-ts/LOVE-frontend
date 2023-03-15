@@ -13,58 +13,58 @@ import Plots from './Plots/Plots';
 import AccordionSummary from './AccordionSummary/AccordionSummary';
 
 export default class Scheduler extends Component {
-    static propTypes = {
-        /** Function to subscribe to streams to receive */
-        subscribeToStreams: PropTypes.func,
-        /** Function to unsubscribe to streams to stop receiving */
-        unsubscribeToStreams: PropTypes.func,
-        /** MT azimuth actual position telemetry */
-        azimuthActualPosition: PropTypes.number,
-        /** MT elevation actual position telemetry*/
-        elevationActualPosition: PropTypes.number,
-      };
-    static defaultProps = {};
+  static propTypes = {
+    /** Function to subscribe to streams to receive */
+    subscribeToStreams: PropTypes.func,
+    /** Function to unsubscribe to streams to stop receiving */
+    unsubscribeToStreams: PropTypes.func,
+    /** MT azimuth actual position telemetry */
+    azimuthActualPosition: PropTypes.number,
+    /** MT elevation actual position telemetry*/
+    elevationActualPosition: PropTypes.number,
+  };
+  static defaultProps = {};
 
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-    componentDidMount = () => {
-        this.props.subscribeToStream();
-        this.skyMap = <SkyMap></SkyMap>;
-      };
-    
-    componentWillUnmount = () => {
+  componentDidMount = () => {
+    this.props.subscribeToStream();
+    this.skyMap = <SkyMap></SkyMap>;
+  };
+
+  componentWillUnmount = () => {
     this.props.unsubscribeToStream();
-    };
+  };
 
-    render() {
-        const { azimuthActualPosition, elevationActualPosition } = this.props;
-        return (
-          <div className={styles.container}>
-            <Headers />
-            <div className={styles.allComponentes}>
-              {/* column 1 */}
-              <div className={styles.leftDiv}>
-                <Filters />
-                <Pointing />
-                <Simonyi />
-                <Moon />
-                <Sun />
-              </div>
-              {/* column 2 */}
-              <div className={styles.middleDiv}>
-                <CurrentTarget />
-                {this.skyMap?? ''}
-                <Plots />
-              </div>
-              {/* column 3 */}
-              <div className={styles.rigthDiv}>
-                <AccordionSummary />
-              </div>
-            </div>
+  render() {
+    const { azimuthActualPosition, elevationActualPosition } = this.props;
+    return (
+      <div className={styles.container}>
+        <Headers />
+        <div className={styles.allComponentes}>
+          {/* column 1 */}
+          <div className={styles.leftDiv}>
+            <Filters />
+            <Pointing />
+            <Simonyi />
+            <Moon />
+            <Sun />
           </div>
-        );
-    }
+          {/* column 2 */}
+          <div className={styles.middleDiv}>
+            <CurrentTarget />
+            {this.skyMap ?? ''}
+            <Plots />
+          </div>
+          {/* column 3 */}
+          <div className={styles.rigthDiv}>
+            <AccordionSummary />
+          </div>
+        </div>
+      </div>
+    );
+  }
 }

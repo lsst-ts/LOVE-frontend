@@ -36,7 +36,7 @@ export default class SkyMap extends Component {
         width: 0,
         projection: 'aitoff',
         transform: 'equatorial',
-        center: null, 
+        center: null,
         adaptable: true,
         interactive: true,
         form: false,
@@ -68,13 +68,13 @@ export default class SkyMap extends Component {
           },
           propernamelimit: 1.5, // Show proper names for stars brighter than propernamelimit
           size: 7, // Maximum size (radius) of star circle in pixels
-          exponent: -0.40, // Scale exponent for star size, larger = more linear
+          exponent: -0.4, // Scale exponent for star size, larger = more linear
           data: 'stars.6.json', // Data source for stellar data
           //data: 'stars.8.json' // Alternative deeper data source for stellar data
         },
         planets: {
           show: true,
-          which: ["sol", "ter", "lun"],
+          which: ['sol', 'ter', 'lun'],
           symbolType: 'disk',
           names: true,
         },
@@ -347,7 +347,7 @@ export default class SkyMap extends Component {
 
         // Load the geoJSON file and transform to correct coordinate system, if necessary
         let jsonPolygonsCopy = structuredClone(jsonPolygons);
-        // getData modifica el diccionario por lo que es necesario pasarle una copia 
+        // getData modifica el diccionario por lo que es necesario pasarle una copia
         var asterism = Celestial.getData(jsonPolygonsCopy, config.transform);
 
         // Add to celestial objects container in d3
@@ -492,8 +492,13 @@ export default class SkyMap extends Component {
       <div className={styles.container}>
         <div className={styles.headerDiv}>
           <div className={styles.legend}>
-              <span><CircleIcon className={styles.circleIcon}/>Pointing</span>
-              <span><PlusIcon className={styles.plusIcon} /> Targets</span>
+            <span>
+              <CircleIcon className={styles.circleIcon} />
+              Pointing
+            </span>
+            <span>
+              <PlusIcon className={styles.plusIcon} /> Targets
+            </span>
           </div>
           <div></div>
           <div className={styles.selectSystemCoord}>

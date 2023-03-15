@@ -1,155 +1,155 @@
 .container {
-    border-radius: 0.5em;
-    box-sizing: border-box;
-    width: 100%;
-    display: inline-grid;
-    align-content: flex-start;
-    background-color: var(--second-secondary-background-color);
-    height: 100%;
-    overflow-y: scroll;
+  border-radius: 0.5em;
+  box-sizing: border-box;
+  width: 100%;
+  display: inline-grid;
+  align-content: flex-start;
+  background-color: var(--second-secondary-background-color);
+  height: 100%;
+  overflow-y: scroll;
 }
 
 .title {
-    text-align: left;
+  text-align: left;
 }
 
 .header {
-    padding: 1em;
-    display: flex;
-    align-items: center;
-    background-color: #1A2D37;
-    height: 3em;
-    margin-block: 0.5em;
+  padding: 1em;
+  display: flex;
+  align-items: center;
+  background-color: #1a2d37;
+  height: 3em;
+  margin-block: 0.5em;
 }
 
 .header:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .icons {
-    width: 5%;
-    float: right;
-    margin: 0 auto;
-    margin-right: 2em;
+  width: 5%;
+  float: right;
+  margin: 0 auto;
+  margin-right: 2em;
 }
 
 .summaryPanel {
-    background-color: #15242D !important;
+  background-color: #15242d !important;
 }
 .infoLabel {
-    text-align: left;
-    font-weight: bold;
-    padding: 0.5em;
+  text-align: left;
+  font-weight: bold;
+  padding: 0.5em;
 }
 
 .infoContent {
-    background-color: #101F27;
-    border: 1px solid var(--tertiary-background-color);
-    padding: 1em;
-    margin: 1em;
-    text-align: left;
+  background-color: #101f27;
+  border: 1px solid var(--tertiary-background-color);
+  padding: 1em;
+  margin: 1em;
+  text-align: left;
 }
 
 .predTargets {
-    display: inline-flex;
-    margin-right: 10em;
-    margin-left: 1em;
+  display: inline-flex;
+  margin-right: 10em;
+  margin-left: 1em;
 }
 
 .surveysTexts {
-    text-align: left;
-    margin: 0.5em;
+  text-align: left;
+  margin: 0.5em;
 }
 
 .predictedTargetsDiv {
-    margin: 0.5em;
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    text-align: justify;
-    border: 1px solid var(--tertiary-background-color);
+  margin: 0.5em;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  text-align: justify;
+  border: 1px solid var(--tertiary-background-color);
 }
 
 .generalDiv {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
 .surveysDivs {
-    background-color: var(--quinary-background-color);
-    border: 1px solid var(--tertiary-background-color);
-    padding: 1em;
-    margin: 0.5em;
-    width: 55%;
-    height: 30%;
+  background-color: var(--quinary-background-color);
+  border: 1px solid var(--tertiary-background-color);
+  padding: 1em;
+  margin: 0.5em;
+  width: 55%;
+  height: 30%;
 }
 
 .surveysTextsDiv {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    margin-left: 0.5em;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  margin-left: 0.5em;
 }
 
 .blocksTargetsDiv {
-    margin: 0.5em;
-    height: 200px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    text-align: justify;
-    border: 1px solid var(--tertiary-background-color);
+  margin: 0.5em;
+  height: 200px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  text-align: justify;
+  border: 1px solid var(--tertiary-background-color);
 }
 
 .executionsDiv {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    margin-left: 0.5em;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  margin-left: 0.5em;
 }
 
 .executionsText {
-    display: inline-flex;
-    margin-bottom: 2em;
-    margin-top: 2em;
-    font-weight: bold;
+  display: inline-flex;
+  margin-bottom: 2em;
+  margin-top: 2em;
+  font-weight: bold;
 }
 
 .divButtonBlocks {
-    display: inline-grid;
-    margin-bottom: 2em;
-    grid-template-rows: 1fr 1fr;
-    float: right;
+  display: inline-grid;
+  margin-bottom: 2em;
+  grid-template-rows: 1fr 1fr;
+  float: right;
 }
 
 .buttonBlocks {
-    background-color: var(--status-running-color);
-    color: white;
-    cursor: pointer;
-    float: right;
+  background-color: var(--status-running-color);
+  color: white;
+  cursor: pointer;
+  float: right;
 }
 
 .currentBlock {
-    margin-left: 2.5em;
-    background-color: var(--second-primary-background-color) !important;
+  margin-left: 2.5em;
+  background-color: var(--second-primary-background-color) !important;
 }
 
 .blocksPanel {
-    margin-left: 2.5em;
-    height: 200px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    text-align: justify;
-    border: 1px solid var(--tertiary-background-color);
-    display: block;
+  margin-left: 2.5em;
+  height: 200px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  text-align: justify;
+  border: 1px solid var(--tertiary-background-color);
+  display: block;
 }
 
-.panel{
-    overflow: hidden; 
-    transition: height 0.7s ease;
+.panel {
+  overflow: hidden;
+  transition: height 0.7s ease;
 }
 
 .openPanel {
-    height: 100%; 
+  height: 100%;
 }
 
 .closePanel {
-    height: 0px;
+  height: 0px;
 }

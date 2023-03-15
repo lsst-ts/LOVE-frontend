@@ -1,48 +1,48 @@
 .container {
-    box-sizing: border-box;
-    border: 3px solid var(--second-primary-background-color);
-    border-radius: 0.5em;
-    padding: 1.5em 0.5em;
-    width: 100%;
-    box-sizing: border-box;
-    display: inline-grid;
-    align-content: flex-start;
-    background-color: var(--second-secondary-background-color);
-    margin-bottom: 1.5em;
+  box-sizing: border-box;
+  border: 3px solid var(--second-primary-background-color);
+  border-radius: 0.5em;
+  padding: 1.5em 0.5em;
+  width: 100%;
+  box-sizing: border-box;
+  display: inline-grid;
+  align-content: flex-start;
+  background-color: var(--second-secondary-background-color);
+  margin-bottom: 1.5em;
 }
 
 .summaryPanel {
-    background-color: var(--second-secondary-background-color) !important;
-    min-width: 13em !important;
+  background-color: var(--second-secondary-background-color) !important;
+  min-width: 13em !important;
 }
 
 .mountDomeDiv {
-    grid-template-columns: 0.5fr 0.5fr;
-    display: grid;
-    width: 100%;
+  grid-template-columns: 0.5fr 0.5fr;
+  display: grid;
+  width: 100%;
 }
 
 .titles {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: clip;
-    margin-bottom: 2em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  margin-bottom: 2em;
 }
 
 .div1 {
-    display: grid;
-    float: left;
+  display: grid;
+  float: left;
 }
 
 .divContainer {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 .div2 {
-    display: inline-grid;
+  display: inline-grid;
 }
 
 .div3 {
-    display: inline-grid;
+  display: inline-grid;
 }

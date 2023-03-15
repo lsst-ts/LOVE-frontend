@@ -1,76 +1,76 @@
 .container {
-    border-radius: 0.5em;
-    box-sizing: border-box;
-    width: 100%;
-    padding: 1em;
-    border-radius: 0.5em;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: center;
+  border-radius: 0.5em;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 1em;
+  border-radius: 0.5em;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .leftDivs {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .summaryPanel1 {
-    display: flex;
-    padding: 20px;
-    width: 100%;
-    background: #101F27 !important;
+  display: flex;
+  padding: 20px;
+  width: 100%;
+  background: #101f27 !important;
 }
 
 .summaryPanel2 {
-    display: contents;
-    padding: 20px;
-    width: 100%;
-    background-color: var(--second-secondary-background-color) !important;
-    /* background: var(--second-quaternary-background-dimmed-color) !important; */
+  display: contents;
+  padding: 20px;
+  width: 100%;
+  background-color: var(--second-secondary-background-color) !important;
+  /* background: var(--second-quaternary-background-dimmed-color) !important; */
 }
 
 .headersLeft {
-    margin-left: -1em;
+  margin-left: -1em;
 }
 
 .headersCenter {
-    display: flex;
-    justify-content: space-between;
-    align-items: stretch;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
 }
 
 .headersRigth {
-    display: contents;
+  display: contents;
 }
 
 .gearIcon {
-    width: 5%;
-    padding-left: 1em;
+  width: 5%;
+  padding-left: 1em;
 }
 
 .nightDiv {
-    display: flex;
-    width: 18%;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: space-around;
+  display: flex;
+  width: 18%;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-around;
 }
 
 .dayDiv {
-    display: flex;
-    width: 15%;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  width: 15%;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
 }
 
 .iconStars {
-    width: 25%;
+  width: 25%;
 }
 
 .iconSun {
-    width: 15%;
+  width: 15%;
 }

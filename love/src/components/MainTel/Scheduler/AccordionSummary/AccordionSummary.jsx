@@ -7,47 +7,46 @@ import Surveys from './Surveys';
 import Blocks from './Blocks';
 
 export default class AccordionSummary extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            isOpenLast: false,
-            isOpenNext: false,
-            isOpenPredicted: false,
-            isOpenSurveys: false,
-            isOpenBlocks: false,
-        };
-    }
-
-    toggleContentLast() {
-        this.setState((prevState) => ({isOpenLast: !prevState.isOpenLast}));
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpenLast: false,
+      isOpenNext: false,
+      isOpenPredicted: false,
+      isOpenSurveys: false,
+      isOpenBlocks: false,
     };
+  }
 
-    toggleContentNext() {
-        this.setState((prevState) => ({isOpenNext: !prevState.isOpenNext}));
-    };
+  toggleContentLast() {
+    this.setState((prevState) => ({ isOpenLast: !prevState.isOpenLast }));
+  }
 
-    toggleContentPredicted() {
-        this.setState((prevState) => ({isOpenPredicted: !prevState.isOpenPredicted}));
-    };
+  toggleContentNext() {
+    this.setState((prevState) => ({ isOpenNext: !prevState.isOpenNext }));
+  }
 
-    toggleContentSurveys() {
-        this.setState((prevState) => ({isOpenSurveys: !prevState.isOpenSurveys}));
-    };
+  toggleContentPredicted() {
+    this.setState((prevState) => ({ isOpenPredicted: !prevState.isOpenPredicted }));
+  }
 
-    toggleContentBlocks() {
-        this.setState((prevState) => ({isOpenBlocks: !prevState.isOpenBlocks}));
-    };
+  toggleContentSurveys() {
+    this.setState((prevState) => ({ isOpenSurveys: !prevState.isOpenSurveys }));
+  }
 
-    render() {
-        return (
-            <div className={styles.container}>
-                <LastTarget showContent={() => this.toggleContentLast()} isOpen={this.state.isOpenLast}/>
-                <NextTarget showContent={() => this.toggleContentNext()} isOpen={this.state.isOpenNext} />
-                <PredictedTarget showContent={() => this.toggleContentPredicted()} isOpen={this.state.isOpenPredicted} />
-                <Surveys showContent={() => this.toggleContentSurveys()} isOpen={this.state.isOpenSurveys} />
-                <Blocks showContent={() => this.toggleContentBlocks()} isOpen={this.state.isOpenBlocks} />
-            </div>
-        );
-    };
+  toggleContentBlocks() {
+    this.setState((prevState) => ({ isOpenBlocks: !prevState.isOpenBlocks }));
+  }
+
+  render() {
+    return (
+      <div className={styles.container}>
+        <LastTarget showContent={() => this.toggleContentLast()} isOpen={this.state.isOpenLast} />
+        <NextTarget showContent={() => this.toggleContentNext()} isOpen={this.state.isOpenNext} />
+        <PredictedTarget showContent={() => this.toggleContentPredicted()} isOpen={this.state.isOpenPredicted} />
+        <Surveys showContent={() => this.toggleContentSurveys()} isOpen={this.state.isOpenSurveys} />
+        <Blocks showContent={() => this.toggleContentBlocks()} isOpen={this.state.isOpenBlocks} />
+      </div>
+    );
+  }
 }

@@ -1,16 +1,16 @@
 .container {
-    position: relative;
-    box-sizing: border-box;
-  }
-  
+  position: relative;
+  box-sizing: border-box;
+}
+
 .plotsContainer {
-    display: grid;
-    grid-template-rows: 200px;
-    gap: 1em;
-    overflow: hidden;
+  display: grid;
+  grid-template-rows: 200px;
+  gap: 1em;
+  overflow: hidden;
 }
 
 .plot {
-    width: 100%;
-    overflow: hidden;
+  width: 100%;
+  overflow: hidden;
 }

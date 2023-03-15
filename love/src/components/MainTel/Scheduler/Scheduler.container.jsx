@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import Scheduler from './Scheduler';
 import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
-import { getDetailedState,
+import {
+  getDetailedState,
   getObservingMode,
   getGeneralInfo,
   getFilterSwap,
@@ -14,8 +15,8 @@ import { getDetailedState,
   nextTargetInfo,
   predictedTargetsInfo,
   getSurveysInfo,
-  getBlocksInfo, 
-  } from '../../../redux/selectors';
+  getBlocksInfo,
+} from '../../../redux/selectors';
 
 export const schema = {
   description: 'Summary view of the Scheduler. Contains general information about the scheduler state',
@@ -213,7 +214,6 @@ const SchedulerContainer = ({
 };
 
 const mapStateToProps = (state, ownProps) => {
-
   const schedulerState = getDetailedState(state, ownProps?.salindex);
   const observingMode = getObservingMode(state, ownProps?.salindex);
   const generalInfo = getGeneralInfo(state, ownProps?.salindex);
