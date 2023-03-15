@@ -40,22 +40,123 @@ export default class Scheduler extends Component {
   };
 
   render() {
-    const { azimuthActualPosition, elevationActualPosition } = this.props;
+    const {  
+      subState,
+      mode,
+      type,
+      isNigth,
+      night,
+      sunset,
+      sunrise,
+      needSwap,
+      filterToMount,
+      filterToUnmount,
+      pointingRa,
+      pointingDecl,
+      pointingPosAngle,
+      pointingParallAngle,
+      simonyiTracking,
+      simonyiAl,
+      simonyiAz,
+      simonyiRot,
+      moonRa,
+      moonDec,
+      moonAlt,
+      moonAz,
+      moonDistance,
+      moonPhase,
+      sunRa,
+      sunDec,
+      sunAlt,
+      sunAz,
+      solarElong,
+      currentTargetId,
+      currentRequestTime,
+      currentRequestMjd,
+      currentRa,
+      currentDecl,
+      currentSkyAngle,
+      currentFilter,
+      currentNumExposures,
+      currentExposureTimes,
+      currentSlewTime,
+      currentOffsetX,
+      currentOffsetY,
+      currentNumProposals,
+      currentProposalId,
+      currentSequenceDuration,
+      rotSkyPos,
+      predictedTargetsRa,
+      predictedTargetsDecl,
+      predictedTargetsRotSkyPos,
+      lastTargetId,
+      lastTargetRa,
+      lastTargetDecl,
+      lastTargetRotSkyPos,
+      lastTargetMjd,
+      lastTargetExpTime,
+      lastTargetFilter,
+      lastTargetNexp,
+      lastTargetMoreInfo,
+      nextTargetCurrentTime,
+      nextTimeWaitTime,
+      nextTargetRa,
+      nextTargetDecl,
+      nextTargetRotSkyPos,
+      predTargetsNumTargets,
+      predTargetsRa,
+      predTargetsDecl,
+      predTargetsRotSkyPos,
+      predTargetsMjd,
+      predTargetsExpTime,
+      predTargetsInstrConfig,
+      predTargetsNexp,
+      surveysNumGenProps,
+      surveysGenProps,
+      surveysNumSeqProps,
+      surveysSeqProps,
+      blockInvId,
+      blockInvStatus,
+      blockId,
+      blockStatusId,
+      blockStatus,
+      blockExecCompl,
+      blockExecTotal,
+      blockHash,
+      blockDef } = this.props;
     return (
       <div className={styles.container}>
-        <Headers />
+        <Headers subState={subState} mode={mode} type={type} moonPhase={moonPhase} isNigth={isNigth} night={night} sunset={sunset} sunrise={sunrise} />
         <div className={styles.allComponentes}>
           {/* column 1 */}
           <div className={styles.leftDiv}>
-            <Filters />
-            <Pointing />
-            <Simonyi />
-            <Moon />
-            <Sun />
+            <Filters needSwap={needSwap} filterToMount={filterToMount} filterToUnmount={filterToUnmount} />
+            <Pointing pointingRa={pointingRa} pointingDecl={pointingDecl} pointingPosAngle={pointingPosAngle} pointingParallAngle={pointingParallAngle} />
+            <Simonyi simonyiTracking={simonyiTracking} simonyiAl={simonyiAl} simonyiAz={simonyiAz} simonyiRot={simonyiRot} />
+            <Moon moonRa={moonRa} moonDec={moonDec} moonAlt={moonAlt} moonAz={moonAz} moonDistance={moonDistance} moonPhase={moonPhase} />
+            <Sun sunRa={sunRa} sunDec={sunDec} sunset={sunset} sunrise={sunrise} sunAlt={sunAlt} sunAz={sunAz} solarElong={solarElong} />
           </div>
           {/* column 2 */}
           <div className={styles.middleDiv}>
-            <CurrentTarget />
+            <CurrentTarget 
+              currentTargetId={currentTargetId}
+              currentRequestTime={currentRequestTime}
+              currentRequestMjd={currentRequestMjd}
+              currentRa={currentRa}
+              currentDecl={currentDecl}
+              currentSkyAngle={currentSkyAngle}
+              currentFilter={currentFilter}
+              currentNumExposures={currentNumExposures}
+              currentExposureTimes={currentExposureTimes}
+              currentSlewTime={currentSlewTime}
+              currentOffsetX={currentOffsetX}
+              currentOffsetY={currentOffsetY}
+              currentNumProposals={currentNumProposals}
+              currentProposalId={currentProposalId}
+              currentSequenceDuration={currentSequenceDuration}
+              rotSkyPos={rotSkyPos}
+              filterToMount={filterToMount}
+            />
             {this.skyMap ?? ''}
             <Plots />
           </div>
