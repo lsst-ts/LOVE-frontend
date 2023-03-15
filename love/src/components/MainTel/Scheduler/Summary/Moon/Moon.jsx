@@ -30,6 +30,7 @@ export default class Moon extends Component {
                     </SummaryPanel>
                     <div className={styles.divMoonCartoon}>
                         <MoonCartoon />
+                        <span>100%</span>
                     </div>
                 </div>
             </div>

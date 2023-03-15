@@ -30,6 +30,7 @@ export default class Sun extends Component {
                     </SummaryPanel>
                     <div className={styles.sunCartoon}>
                         <Sky />
+                        <span>03:21:52</span>
                     </div>
                 </div>
             </div>

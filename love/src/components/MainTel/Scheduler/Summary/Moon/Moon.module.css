@@ -14,7 +14,7 @@
 
 .summaryPanel {
     background-color: var(--second-secondary-background-color) !important;
-    min-width: 12em !important;
+    min-width: 15em !important;
 }
 
 .divContainer {
