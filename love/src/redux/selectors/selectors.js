@@ -1284,9 +1284,9 @@ export const getSkyMapInfo = (state, salindex) => {
   const skyMapInfo = getStreamsData(state, subscriptions);
   return {
     rotSkyPos: skyMapInfo[`event-Scheduler-${salindex}-observation`]?.[0]?.rotSkyPos.value ?? 0,
-    predictedTargetsRa: skyMapInfo[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.ra.value ?? 0,
-    predictedTargetsDecl: skyMapInfo[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.decl.value ?? 0,
-    predictedTargetsRotSkyPos: skyMapInfo[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.rotSkyPos.value ?? 0,
+    predictedTargetsRa: skyMapInfo[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.ra.value ?? [],
+    predictedTargetsDecl: skyMapInfo[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.decl.value ?? [],
+    predictedTargetsRotSkyPos: skyMapInfo[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.rotSkyPos.value ?? [],
   }
 };
 
