@@ -48,7 +48,6 @@ export default class DomeSummaryTable extends Component {
   static defaultProps = {};
 
   render() {
-
     const {azimuthPosition, azimuthCommanded} = this.props;
     const {currentPointing, targetPointing} = this.props;
 
@@ -87,12 +86,9 @@ export default class DomeSummaryTable extends Component {
     const dropoutDoorStateValue = dropoutDoorStateMap[this.props.dropoutDoorState];
     const mainDoorStateValue = mainDoorStateMap[this.props.mainDoorState];
     
-    const domeInPositionValue = this.props.domeInPosition ? this.props.domeInPosition : 0;
-    const mountInPositionValue = this.props.mountInPosition ? this.props.mountInPosition : 0;
-    const mountTrackingStateValue = mountTrackingStateMap[this.props.atMountState];
-
-    console.log('atMountState', this.props.atMountState);
-    console.log('mountTrackingStateMap', mountTrackingStateMap);
+    const domeInPositionValue = this.props.domeInPosition ?? 0;
+    const mountInPositionValue = this.props.mountInPosition ?? 0;
+    const mountTrackingStateValue = mountTrackingStateMap[this.props.atMountState] ??  mountTrackingStateMap[0];
     
     const m3State = this.props.m3State;
     //const { positionLimits } = this.props;

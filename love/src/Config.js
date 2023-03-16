@@ -779,10 +779,15 @@ export const mainDoorStateMap = {
 };
 
 export const mountTrackingStateMap = {
-  1: 'DISABLED',
-  2: 'ENABLED',
-  3: 'STOPPING',
+  // 1: 'DISABLED',
+  // 2: 'ENABLED',
+  // 3: 'STOPPING',
   0: 'UNKNOWN',
+  6: 'REMOTECONTROL',
+  7: 'HANDPADDLECONTROL',
+  8: 'TRACKINGDISABLED',
+  9: 'TRACKINGENABLED',
+  10: 'STOPPING',
 };
 
 export const m3RotatorStateMap = {
@@ -797,9 +802,9 @@ export const m3RotatorStateMap = {
 };
 
 export const m3PortSelectedStateMap = {
-  6: 'NASMYTH1',
-  7: 'NASMYTH2',
-  8: 'PORT3',
+  1: 'NASMYTH1',
+  2: 'NASMYTH2',
+  3: 'PORT3',
   0: 'UNKNOWN',
 };
 
