@@ -504,6 +504,9 @@ export const stateToStyleMount = {
   'NOT IN POSITION': 'warning',
   UNKNOWN: 'invalid',
   'UNKNOWN POSITION': 'invalid',
+  TRACKINGDISABLED: 'warning',
+  TRACKINGENABLED: 'warning',
+  STOPPING: 'warning',
 };
 
 export const stateToStyleDome = {
