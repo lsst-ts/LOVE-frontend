@@ -3,6 +3,7 @@ import debounce from 'lodash.debounce';
 import isEqual from 'lodash/isEqual';
 import CSCExpandedContainer from 'components/CSCSummary/CSCExpanded/CSCExpanded.container';
 import { checkAuthlist } from 'Utils';
+import RecursiveScriptsTree from './RecursiveScriptsTree/RecursiveScriptsTree';
 import WaitingScript from './Scripts/WaitingScript/WaitingScript';
 import ScriptList from './Scripts/ScriptList/ScriptList';
 import CurrentScript from './Scripts/CurrentScript/CurrentScript';
@@ -86,7 +87,6 @@ export default class ScriptQueue extends Component {
       resetButton: <span>Hide details &#9650;</span>,
       blockedByAuthlist: false,
       scriptsTree: {},
-      collapseTree: {},
     };
 
     this.observer = null;
@@ -136,13 +136,6 @@ export default class ScriptQueue extends Component {
       name: 'STANDBY',
       statusText: 'warning',
     },
-  };
-
-  setCollapseTree = (key) => {
-    console.log(key, this.state.collapseTree[key]);
-    this.setState((state) => ({
-      collapseTree: { ...state.collapseTree, [key]: !state.collapseTree[key] },
-    }));
   };
 
   componentDidUpdate = (prevProps, _prevState) => {
@@ -562,78 +555,6 @@ export default class ScriptQueue extends Component {
     this.setState({ isContextMenuOpen: false });
   };
 
-  renderAvailableScript = (script) => {
-    if (!script) return null;
-    return (
-      <DraggableScript
-        key={`dragging-available-${script.type}-${script.path}`}
-        {...script}
-        dragSourceList="available"
-        onDragStart={(e, id) => this.onDragStart(e, id, 'available')}
-        onDragEnd={(e, id) => this.onDragEnd(e, id, 'available')}
-        draggingScriptInstance={this.state.draggingScriptInstance}
-        disabled={true}
-      >
-        <AvailableScript
-          key={`${script.type}-${script.path}`}
-          path={script.path}
-          isStandard={script.type ? script.type.toLowerCase() === 'standard' : true}
-          launchScriptConfig={this.launchScriptConfig}
-          script={script}
-          commandExecutePermission={this.props.commandExecutePermission && !this.state.blockedByAuthlist}
-          {...script}
-          isCompact={this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible}
-        />
-      </DraggableScript>
-    );
-  };
-
-  /**
-   * Recursive component to display the scripts tree.
-   * @param {Object} props - Properties.
-   * @param {String} props.category - Category of the scripts.
-   * @param {Object} props.scripts - Dictionary with the scripts.
-   * @param {String} props.breadCrumb - Bread crumb of the scripts.
-   * @returns {JSX.Element} - Recursive component.
-   */
-  RecursiveScriptsTree = ({ category, scripts, breadCrumb }) => {
-    if (!scripts) return null;
-
-    const { availableScriptList } = this.props;
-    const { collapseTree } = this.state;
-
-    const recursiveKeys = Object.keys(scripts).filter((key) => key !== 'root');
-    const collapsedCategory = collapseTree[category] || false;
-    return (
-      <div style={{ paddingLeft: "20px" }}>
-        <h6>
-          <span onClick={() => this.setCollapseTree(category)}>{collapsedCategory ? 'V' : '>'}</span>
-          {category}
-        </h6>
-        <div style={{
-          maxHeight: collapsedCategory ? 0 : 1000,
-          transition: 'max-height 500ms ease-in',
-        }}>
-          {scripts.root && scripts.root.map((script) => {
-            const fullScriptPath = breadCrumb ?  breadCrumb + '/' + script : script;
-            const scriptObject = availableScriptList?.find((s) => s.path === fullScriptPath);
-            return this.renderAvailableScript(scriptObject);
-          })}
-          {/* Base Condition and Rendering recursive component from inside itself */}
-          {recursiveKeys.length > 0 && recursiveKeys.map((key) => {
-            return (
-              <this.RecursiveScriptsTree
-                key={key}
-                category={category ? category + '-' + key : key}
-                scripts={scripts[key]}
-                breadCrumb={breadCrumb ? breadCrumb + '/' + key : key} />
-            );
-          })}
-        </div>
-      </div>
-    );
-  };
-
   toggleAvailableScriptsExpanded = (scriptType) => {
     if (scriptType === 'standard') {
       this.setState({
@@ -681,6 +602,12 @@ export default class ScriptQueue extends Component {
     ];
 
     const contextMenuOption = this.state.currentMenuSelected ? currentContextMenu : waitingContextMenu;
+
+    const filteredAvailableScripts = this.props.availableScriptList.filter((script) => {
+      if (!this.state.availableScriptsFilter) return true;
+      return script.path.toLowerCase().includes(this.state.availableScriptsFilter.toLowerCase());
+    });
+
     return (
       <div
         id="container"
@@ -823,13 +750,12 @@ export default class ScriptQueue extends Component {
                         this.state.availableScriptsStandardExpanded ? '' : styles.availableListCollapsed,
                       ].join(' ')}
                     >
-                      {/* {this.props.availableScriptList.map((script) => {
-                        if (script.type && script.type.toLowerCase() !== 'standard') return null;
-                        if (!script.path.toLowerCase().includes(this.state.availableScriptsFilter.toLowerCase()))
-                          return null;
-                        return this.renderAvailableScript(script);
-                      })} */}
-                      <this.RecursiveScriptsTree category="standard" scripts={this.state.scriptsTree.standard}/>
+                      <RecursiveScriptsTree
+                        availableScriptList={filteredAvailableScripts}
+                        category="standard"
+                        scriptsTree={this.state.scriptsTree.standard}
+                        launchScriptConfig={this.launchScriptConfig}
+                        scriptsBlocked={this.props.commandExecutePermission && !this.state.blockedByAuthlist}/>
                     </div>
                     <div className={styles.availableScriptTypeSeparator}></div>
                     <div
@@ -847,14 +773,12 @@ export default class ScriptQueue extends Component {
                         this.state.availableScriptsExternalExpanded ? '' : styles.availableListCollapsed,
                       ].join(' ')}
                     >
-                      {/* {this.props.availableScriptList.map((script) => {
-                        if (script.type && script.type.toLowerCase() !== 'external') return null;
-                        if (!script.path.toLowerCase().includes(this.state.availableScriptsFilter.toLowerCase())) {
-                          return null;
-                        }
-                        return this.renderAvailableScript(script);
-                      })} */}
-                      <this.RecursiveScriptsTree category="external" scripts={this.state.scriptsTree.external}/>
+                      <RecursiveScriptsTree
+                        availableScriptList={filteredAvailableScripts}
+                        category="external"
+                        scriptsTree={this.state.scriptsTree.external}
+                        launchScriptConfig={this.launchScriptConfig}
+                        scriptsBlocked={this.props.commandExecutePermission && !this.state.blockedByAuthlist}/>
                     </div>
                   </div>
                 </ScriptList>

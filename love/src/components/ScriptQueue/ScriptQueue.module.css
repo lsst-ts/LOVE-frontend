@@ -216,12 +216,8 @@
 .standardExternalContainer {
   display: grid;
   height: 100%;
-  grid-template-rows: min-content minmax(0, min-content) min-content min-content minmax(0, min-content);
+  grid-template-rows: min-content min-content min-content min-content min-content;
   max-height: 100%;
-}
-
-.standardExternalContainer div {
-  overflow: auto;
 }
 
 .standardExternalContainer .availableScriptTypeSeparator {
