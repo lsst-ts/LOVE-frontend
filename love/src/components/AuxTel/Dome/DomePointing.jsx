@@ -50,7 +50,7 @@ export default class DomePointing extends Component {
     const el = this.props.currentPointing.el;
     const az = this.props.currentPointing.az;
 
-    const posTranslate = Math.sin(((el - 90) * Math.PI) / 180) * 298;
+    const posTranslate = Math.sin(((el - 90) * Math.PI) / 180) * (298 - 30);
 
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596">

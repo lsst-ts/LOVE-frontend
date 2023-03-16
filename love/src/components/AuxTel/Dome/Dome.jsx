@@ -160,7 +160,6 @@ export default class Dome extends Component {
     } = this.props;
 
     const {
-      detailedState,
       atMountState,
       mountInPosition,
       trackID,

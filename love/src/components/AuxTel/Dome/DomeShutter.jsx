@@ -43,12 +43,12 @@ export default class DomeShutter extends Component {
     const x0 = viewBoxSize / 2 + offset;
     const y0 = viewBoxSize / 2 + offset;
     const r = viewBoxSize / 2;
-    const extraApperture = r / 4;
+    const extraApperture = r / 5;
     const alpha = Math.PI / 12;
     const rSinAlpha = r * Math.sin(alpha);
     const rCosAlpha = r * Math.cos(alpha);
-    const dropoutDoorWidth = (rCosAlpha + extraApperture) * 0.4;
-    const mainDoorWidth = (rCosAlpha + extraApperture) * 0.6;
+    const dropoutDoorWidth = (rCosAlpha + extraApperture) * 0.09;
+    const mainDoorWidth = (rCosAlpha + extraApperture) * 0.91;
     const equivalentAzimuth = closestEquivalentAngle(this.prevAzimuth, this.props.azimuthPosition);
 
     return (
@@ -67,11 +67,11 @@ export default class DomeShutter extends Component {
           stroke="white"
           strokeWidth="2"
           d={`
-          M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
-        L ${x0 - extraApperture} ${y0 + rSinAlpha}
-        L ${x0 - extraApperture} ${y0 - rSinAlpha}
-        L ${x0 + rCosAlpha} ${y0 - rSinAlpha}
-        `}
+            M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
+            L ${x0 - extraApperture} ${y0 + rSinAlpha}
+            L ${x0 - extraApperture} ${y0 - rSinAlpha}
+            L ${x0 + rCosAlpha} ${y0 - rSinAlpha}
+          `}
         />
         <g
           className={styles.rotatingDome}
@@ -118,10 +118,10 @@ export default class DomeShutter extends Component {
               stroke="white"
               strokeWidth="2"
               d={`
-            M ${x0 + rCosAlpha} ${y0 - rSinAlpha}
-            A ${r} ${r} 0 0 1 ${x0 + rCosAlpha} ${y0 + rSinAlpha}
-            M ${x0 + rCosAlpha} ${y0 - rSinAlpha}
-            `}
+                M ${x0 + rCosAlpha} ${y0 - rSinAlpha}
+                A ${r} ${r} 0 0 1 ${x0 + rCosAlpha} ${y0 + rSinAlpha}
+                M ${x0 + rCosAlpha} ${y0 - rSinAlpha}
+              `}
             />
             <rect
               x={
@@ -138,16 +138,32 @@ export default class DomeShutter extends Component {
           </g>
 
           {/* Main door */}
-          <rect
-            x={x0 - extraApperture - (mainDoorWidth * this.props.mainDoorOpeningPercentage) / 100}
-            y={y0 - rSinAlpha}
-            width={mainDoorWidth}
-            height={2 * rSinAlpha}
-            fill="white"
-            fillOpacity="0.2"
-            stroke="white"
-            strokeWidth="2"
-          />
+          <g clipPath={`circle(${r}px at center)`} style={{ mask: 'url(#domeMask)' }}>
+            <circle cx={x0} cy={y0} r={r} fill="none" stroke="none" />
+            <rect
+              x={x0 - extraApperture - (mainDoorWidth * this.props.mainDoorOpeningPercentage) / 100}
+              y={y0 - rSinAlpha}
+              width={mainDoorWidth}
+              height={2 * rSinAlpha}
+              fill="white"
+              fillOpacity="0.2"
+              stroke="white"
+              strokeWidth="2"
+            />
+            { this.props.mainDoorOpeningPercentage > 74 ? (
+              <path
+              fill="none"
+              stroke="white"
+              strokeWidth="2"
+              d={`
+                M ${x0 - rCosAlpha} ${y0 + rSinAlpha}
+                A ${r} ${r} 0 0 1 ${x0 - rCosAlpha} ${y0 - rSinAlpha}
+                M ${x0 - rCosAlpha} ${y0 + rSinAlpha}
+              `}
+            />
+            ) : <></>}
+
+          </g>
           {/* <circle cx={x0} cy={y0} r={r*0.91} fill="none" stroke="red" /> */}
         </g>
         {/* <style>.cls-1{fill:#152228;fill-opacity:0;}.cls-2{opacity:0.6;}.cls-3{fill:#18313d;stroke:#152228;stroke-miterlimit:10;}</style> */}
