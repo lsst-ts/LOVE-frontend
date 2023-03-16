@@ -23,6 +23,12 @@ export const WEBSOCKET_SIMULATION_FILE = 'test.json';
 // Base URL for ScriptQueue scripts' documentation
 export const SCRIPT_DOCUMENTATION_BASE_URL = 'https://ts-standardscripts.lsst.io/py-api';
 
+// URL for external Cloud Map Service
+export const CLOUD_MAP_SERVICE = {
+  url: 'https://www.meteoblue.com/en/weather/maps/widget/-30.245N-70.749E2605_America%2FSantiago?windAnimation=0&gust=0&satellite=0&cloudsAndPrecipitation=0&cloudsAndPrecipitation=1&temperature=0&sunshine=0&extremeForecastIndex=0&geoloc=fixed&tempunit=C&windunit=km%252Fh&lengthunit=metric&zoom=9&autowidth=auto',
+  copyrigth: 'https://www.meteoblue.com/en/weather/maps/-30.245N-70.749E2605_America%2FSantiago?utm_source=weather_widget&utm_medium=linkus&utm_content=map&utm_campaign=Weather%2BWidget',
+};
+
 // Moment formats
 export const ISO_DATE_FORMAT = 'YYYY/MM/DD';
 export const ISO_INTEGER_DATE_FORMAT = 'YYYYMMDD';
