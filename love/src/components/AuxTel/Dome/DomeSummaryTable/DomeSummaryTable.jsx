@@ -198,7 +198,7 @@ export default class DomeSummaryTable extends Component {
         </Value>
         <Label>Tracking</Label>
         <Value>
-          <StatusText title={mountTrackingStateValue} status={stateToStyleDomeAndMount[mountTrackingStateValue]} small>
+          <StatusText title={mountTrackingStateValue} status={stateToStyleMount[mountTrackingStateValue]} small>
             {mountTrackingStateValue}
           </StatusText>
         </Value>
