@@ -32,7 +32,13 @@ export default class Scheduler extends Component {
 
   componentDidMount = () => {
     this.props.subscribeToStream();
-    this.skyMap = <SkyMap></SkyMap>;
+    this.skyMap = <SkyMap
+    rotSkyPos={this.props.rotSkyPos}
+    predictedTargetsRa={this.props.predictedTargetsRa}
+    predictedTargetsDecl={this.props.predictedTargetsDecl}
+    predictedTargetsRotSkyPos={this.props.predictedTargetsRotSkyPos}
+    >
+    </SkyMap>;
   };
 
   componentWillUnmount = () => {
