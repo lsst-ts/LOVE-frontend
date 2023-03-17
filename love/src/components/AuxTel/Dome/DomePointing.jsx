@@ -80,8 +80,6 @@ export default class DomePointing extends Component {
             transformOrigin: '50% 50%',
           }}
         />
-
-        {/* <circle r={4} cx={targetPixels.x} cy={targetPixels.y} fill="gray" /> */}
       </svg>
     );
   }
