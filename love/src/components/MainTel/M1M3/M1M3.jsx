@@ -39,6 +39,9 @@ export default class M1M3 extends Component {
       selectedHardpointId: 0,
       forceParameters: [],
     };
+    this.uniqueGradient = lodash.uniqueId('m1m3-force-gradient-color-scale-');
+    this.uniqueScatter = lodash.uniqueId('m1m3-scatter-');
+    this.uniqueCircleOverlay = lodash.uniqueId('m1m3-circle-overlay-');
   }
 
   static statesIlc = {
@@ -155,7 +158,7 @@ export default class M1M3 extends Component {
     });
 
     //Create the gradient
-    const svg = d3.select('#color-scale svg').attr('width', width).attr('height', height);
+    const svg = d3.select(`#${this.uniqueGradient} svg`).attr('width', width).attr('height', height);
     svg
       .append('defs')
       .append('linearGradient')
@@ -331,7 +334,7 @@ export default class M1M3 extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    d3.select('#circle-overlay').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
+    d3.select(`#${this.uniqueCircleOverlay}`).call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
 
     if (
       this.state.selectedForceParameter !== prevState.selectedForceParameter ||
@@ -402,7 +405,7 @@ export default class M1M3 extends Component {
     d3.event.transform.x = Math.floor(transformX);
     d3.event.transform.y = Math.floor(transformY);
 
-    d3.select('#scatter').attr('transform', d3.event.transform);
+    d3.select(`#${this.uniqueScatter}`).attr('transform', d3.event.transform);
     // d3.select('#background-circle').attr('transform', d3.event.transform);
     // d3.select('#plot-axis').attr('transform', d3.event.transform);
     this.setState({
@@ -548,7 +551,7 @@ export default class M1M3 extends Component {
               />
 
               <circle
-                id="circle-overlay"
+                id={this.uniqueCircleOverlay}
                 className={this.state.actuators.length > 0 ? styles.cursorMove : styles.circleOverlayDisabled}
                 cx={this.state.width / 2}
                 cy={this.state.width / 2}
@@ -560,7 +563,7 @@ export default class M1M3 extends Component {
                 onMouseLeave={this.disableScroll}
               />
 
-              <g id="scatter" className={styles.scatter}>
+              <g id={this.uniqueScatter} className={styles.scatter}>
                 {this.state.actuators.map((act, i) => {
                   return (
                     <g key={act.id} className={styles.actuator} onClick={() => this.actuatorSelected(act.id)}>
@@ -668,7 +671,7 @@ export default class M1M3 extends Component {
           <div className={styles.gridGroupGradiantInfo}>
             <div className={styles.forceGradientWrapper}>
               <span>Force</span>
-              <div id="color-scale" className={styles.forceGradient}>
+              <div id={this.uniqueGradient} className={styles.forceGradient}>
                 <svg viewBox={`0 0 10 350`}></svg>
                 <div className={styles.forceGradientLabels}>
                   <span>{maxForce} [N]</span>
