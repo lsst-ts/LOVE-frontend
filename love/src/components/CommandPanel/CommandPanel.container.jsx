@@ -20,12 +20,6 @@ export const schema = {
       isPrivate: true,
       default: false,
     },
-    scriptQueueIndex: {
-      type: 'number',
-      description: 'Salindex of the ScriptQueue to listen events',
-      isPrivate: false,
-      default: 1,
-    },
   },
 };
 
@@ -34,7 +28,10 @@ const CommandPanelContainer = ({ ...props }) => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  const subscriptions = [`event-ScriptQueueState-${ownProps.scriptQueueIndex}-stream`];
+  const subscriptions = [
+    `event-ScriptQueueState-1-stream`,
+    `event-ScriptQueueState-2-stream`,
+  ];
   return {
     subscriptions,
     subscribeToStreams: () => {
@@ -51,10 +48,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 const mapStateToProps = (state, ownProps) => {
   const commandExecutePermission = getPermCmdExec(state);
-  const queueState = getScriptQueueState(state, ownProps.scriptQueueIndex);
+  const mainQueueState = getScriptQueueState(state, 1);
+  const auxQueueState = getScriptQueueState(state, 2);
   return {
     commandExecutePermission,
-    queueState,
+    auxQueueState,
+    mainQueueState,
   };
 };
 

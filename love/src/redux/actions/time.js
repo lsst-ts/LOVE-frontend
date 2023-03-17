@@ -2,7 +2,7 @@ import { DateTime } from 'luxon';
 import { RECEIVE_TIME_DATA, CLOCK_START, CLOCK_STOP, CLOCK_TICK } from './actionTypes';
 import { sendAction } from './ws';
 import { getAllTime, getSurveyConfig } from '../selectors';
-import { siderealSecond } from '../../Utils';
+import { SIDEREAL_SECOND } from '../../Constants';
 
 /**
  * Time to wait before requesting time syncronization from the server again
@@ -38,11 +38,11 @@ export function tick() {
         mjd: time.server_time.mjd + diffLocalUtc / (3600 * 24),
         survey_time: surveyTime,
         observing_day: time.server_time.observing_day,
-        sidereal_summit: DateTime.fromSeconds(time.server_time.sidereal_summit * 3600 + siderealSecond * diffLocalUtc, {
+        sidereal_summit: DateTime.fromSeconds(time.server_time.sidereal_summit * 3600 + SIDEREAL_SECOND * diffLocalUtc, {
           zone: 'utc',
         }),
         sidereal_greenwich: DateTime.fromSeconds(
-          time.server_time.sidereal_greenwich * 3600 + siderealSecond * diffLocalUtc,
+          time.server_time.sidereal_greenwich * 3600 + SIDEREAL_SECOND * diffLocalUtc,
           { zone: 'utc' },
         ),
       },

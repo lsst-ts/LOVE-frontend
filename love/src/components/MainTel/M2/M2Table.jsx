@@ -79,9 +79,8 @@ export default class MotorTable extends Component {
     positionIMSZ: 0,
     positionIMSXRot: 0,
     positionIMSYRot: 0,
-    positionIMSZRot: 0,    
+    positionIMSZRot: 0,
   };
-
 
   static forceTableHeaders() {
     return [

@@ -178,6 +178,26 @@ export const observatoryIndex = {
       },
     },
   },
+  OLE: {
+    component: require('../OLE/OLE.container').default,
+    schema: {
+      ...require('../OLE/OLE.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../OLE/OLE.container').schema.props,
+      },
+    },
+  },
+  CreateOLE: {
+    component: require('../OLE/CreateOLE.container').default,
+    schema: {
+      ...require('../OLE/CreateOLE.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../OLE/CreateOLE.container').schema.props,
+      },
+    },
+  },
 };
 
 export const auxtelIndex = {
@@ -304,13 +324,23 @@ export const mainIndex = {
       },
     },
   },
-  MTDome: {
+  SimonyiDome: {
     component: require('../MainTel/MTDome/MTDome.container').default,
     schema: {
       ...require('../MainTel/MTDome/MTDome.container').schema,
       props: {
         ...defaultSchemaProps,
         ...require('../MainTel/MTDome/MTDome.container').schema.props,
+      },
+    },
+  },
+  SimonyiDomePower: {
+    component: require('../MainTel/MTDomePower/MTDomePower.container').default,
+    schema: {
+      ...require('../MainTel/MTDomePower/MTDomePower.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/MTDomePower/MTDomePower.container').schema.props,
       },
     },
   },
@@ -331,6 +361,19 @@ export const mainIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../GIS/GIS.container').schema.props,
+      },
+    },
+  },
+};
+
+const environmentIndex = {
+  CloudMap: {
+    component: require('../EmbeddedView/custom/CloudMapView.container').default,
+    schema: {
+      ...require('../EmbeddedView/custom/CloudMapView.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../EmbeddedView/custom/CloudMapView.container').schema.props,
       },
     },
   },
@@ -485,8 +528,12 @@ export const indexes = [
     index: auxtelIndex,
   },
   {
-    name: 'Main Telescope',
+    name: 'Simonyi Telescope',
     index: mainIndex,
+  },
+  {
+    name: 'Environment',
+    index: environmentIndex,
   },
   {
     name: 'Authlist',
@@ -506,6 +553,7 @@ export default {
   ...observatoryIndex,
   ...auxtelIndex,
   ...mainIndex,
+  ...environmentIndex,
   ...authlistIndex,
   ...utilitiesIndex,
   ...internalIndex,

@@ -206,12 +206,12 @@ export default class SummaryTable extends Component {
         </Value>
 
         <Label>Cell load</Label>
-        <Value>{this.props.loadCell === "Unknown" ? (this.props.loadCell) : (this.props.loadCell).toFixed(2) + ' kg' }</Value> 
+        <Value>{this.props.loadCell}</Value>
         <Row>
             <Limits
               lowerLimit={ATPneumaticsLimits.cellLoad.min}
               upperLimit={ATPneumaticsLimits.cellLoad.max}
-              currentValue={this.props.loadCell}
+              currentValue={this.props.loadCell.value}
               targetValue="Unknown"
               height={30}
               displayLabels={true}
@@ -221,12 +221,12 @@ export default class SummaryTable extends Component {
         </Row>
 
         <Label>M1 Air pressure</Label>
-        <Value>{this.props.m1AirPressure === "Unknown" ? (this.props.m1AirPressure) : (this.props.m1AirPressure).toFixed(2) + ' Pa' }</Value>
+        <Value>{this.props.m1AirPressure}</Value>
         <Row>
             <Limits
               lowerLimit={ATPneumaticsLimits.pressure.min}
               upperLimit={ATPneumaticsLimits.pressure.max}
-              currentValue={this.props.m1AirPressure}
+              currentValue={this.props.m1AirPressure.value}
               targetValue={this.props.m1SetPressure}
               height={30}
               displayLabels={true}

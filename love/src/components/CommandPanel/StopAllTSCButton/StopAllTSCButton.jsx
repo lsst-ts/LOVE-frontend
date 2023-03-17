@@ -6,23 +6,26 @@ import ManagerInterface from 'Utils';
 export default class StopAllTSCButton extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
   }
 
   callTSCStopAll() {
-    // TODO: Reference command from variable
-    ManagerInterface.runATCSCommand('stop_all');
+    this.props.command();
+  }
+
+  static defaultProps = {
+    title: 'TSC STOP ALL',
   }
 
   render() {
-    const isAvailable = this.props.commandExecutePermission && this.props.queueState.state !== 'Running';
+    const { title, commandExecutePermission, queueState } = this.props;
+    const isAvailable = commandExecutePermission && queueState.state !== 'Running';
     return (
       <div className={styles.buttonWrapper}>
         <button
           className={styles.button}
           title={
             isAvailable
-              ? 'ATCS stop_all() implementation'
+              ? title
               : "Command is not allowed while queue is running either you don't have command execution permissions"
           }
           disabled={!isAvailable}
@@ -35,7 +38,7 @@ export default class StopAllTSCButton extends Component {
               transform="translate(-0.08 -0.62)"
             />
           </svg>
-          <span className={styles.buttonLabel}>TSC STOP ALL</span>
+          <span className={styles.buttonLabel}>{title}</span>
         </button>
       </div>
     );

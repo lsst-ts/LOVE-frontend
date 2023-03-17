@@ -1,13 +1,11 @@
-
-
 .cursorMove {
   cursor: crosshair;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .borderCircleOverlay {
@@ -23,7 +21,7 @@
 
 .hiddenCircleOverlay {
   stroke: var(--second-primary-background-color);
-  stroke-width: 135px;
+  stroke-width: 250px;
 }
 
 .circleOverlay {
@@ -51,18 +49,19 @@
 .state {
   display: flex;
   margin-right: 1em;
+  align-items: center;
 }
 
 .state :first-child {
-  margin-right: .5em;
+  margin-right: 0.5em;
 }
 
 .summaryState {
   border-radius: 1rem;
   font-weight: 700;
   text-align: center;
-  width: 8em;
   margin-bottom: 2px;
+  padding: var(--small-padding);
 }
 
 .detailState {
@@ -101,39 +100,31 @@
   text-align: left;
 }
 
-.summaryPanelControls > .controls > .control{
+.summaryPanelControls > .controls > .control {
   flex-grow: 1;
 }
 
-.summaryPanelControls > .controls > .control > span{
-  margin-bottom: .5em;
+.summaryPanelControls > .controls > .control > span {
+  margin-bottom: 0.5em;
   display: block;
 }
 
-.summaryPanelControls > .controls > .control > .toggleContainer{
+.summaryPanelControls > .controls > .control > .toggleContainer {
   display: flex;
 }
 
 .summaryPanelControls > .controls > div {
   margin-right: 1em;
-
 }
 
 .svgContainer {
   flex-grow: 2;
-  width: 100%;
-  height: 100%;
-  /* max-width: 480px; */
   min-width: 300px;
-  /*border-radius: 50%;*/
 }
 
 .hardpoints {
-  /*max-width: 160px;
-  min-width: 60px;*/
   display: flex;
   flex-direction: column;
-  /* align-items: left; */
 }
 
 .hardpoints > svg {
@@ -144,25 +135,22 @@
 .hardpoints > span:first-child {
   text-align: left;
   font-weight: bold;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
 
 .borderCircleHardpoint {
-  opacity:0.85;
-  fill:#152f3b;
+  opacity: 0.85;
+  fill: #152f3b;
 }
 
 .textHardpoint {
   font-size: 21px !important;
   font-family: Helvetica !important;
-  /*fill: white !important;*/
 }
 
 .circleHardpoint {
-  /*fill:#8bea96;*/
   stroke-width: 2px;
-  /*stroke: gray;*/
-  opacity:0.71;
+  opacity: 0.71;
   cursor: pointer;
 }
 
@@ -195,13 +183,12 @@
   margin-bottom: 32px;
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
 }
 
 .forceGradientWrapper > span:first-child {
   text-align: left;
   font-weight: bold;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
 
 .forceGradient {
@@ -245,7 +232,7 @@
 }
 
 .actuatorValue > .summaryState {
-  font-size: .8em;
+  font-size: 0.8em;
   line-height: 1.7em;
 }
 
@@ -254,11 +241,11 @@
 }
 
 .stopLeft {
-  stop-color: #3f51b5;  /* Indigo */
+  stop-color: #3f51b5; /* Indigo */
 }
 
 .stopRright {
-  stop-color: #009688;  /* Teal */
+  stop-color: #009688; /* Teal */
 }
 
 .filled {
@@ -286,24 +273,26 @@
   fill: var(--status-warning-dimmed-color-2);
 }
 
+.fill_offline_summary {
+  fill: var(--status-disabled-dimmed-color-2);
+}
+
+.fill_alert_summary {
+  fill: var(--status-alert-color);
+}
+
 /* detailed state classes */
 .alert_summary {
   background: var(--status-alert-color);
   color: var(--second-tertiary-background-color);
-  /* color: var(--status-alert-color);
-  background: var(--status-alert-dimmed-color-2); */
 }
 
 .ok_summary {
   background: var(--status-ok-color);
   color: var(--second-tertiary-background-color);
-  /* color: var(--status-ok-color);
-  background: var(--status-ok-dimmed-color-2); */
 }
 
 .warning_summary {
-  /* background: var(--status-warning-color); */
-  /* color: var(--second-tertiary-background-color); */
   color: var(--status-warning-color);
   background: var(--status-warning-dimmed-color-2);
 }
@@ -358,13 +347,12 @@
   border-right: 3px solid var(--status-alert-dimmed-color-2);
 }
 
-
 .plotSection {
   margin: 4em 2em;
   display: grid;
   grid-template-columns: 1fr 5fr 2fr;
   grid-auto-rows: minmax(100px, auto);
-  grid-template-areas: "hp plot group";
+  grid-template-areas: 'hp plot group';
 }
 
 .gridHardpoint {

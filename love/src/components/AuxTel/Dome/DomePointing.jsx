@@ -51,18 +51,17 @@ export default class DomePointing extends Component {
     const az = this.props.currentPointing.az;
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596">
-
-          <circle
-            className={styles.targetPointing}
-            r={16}
-            strokeWidth={2}
-            cx={zenithPixels.x}
-            cy={zenithPixels.y}
-            style={{
-              transform: `rotateZ(${this.props.targetPointing.az}deg) rotateX(${this.props.targetPointing.el - 90}deg)`,
-              transformOrigin: '50% 50% 298px',
-            }}
-          />
+        <circle
+          className={styles.targetPointing}
+          r={16}
+          strokeWidth={2}
+          cx={zenithPixels.x}
+          cy={zenithPixels.y}
+          style={{
+            transform: `rotateZ(${this.props.targetPointing.az}deg) rotateX(${this.props.targetPointing.el - 90}deg)`,
+            transformOrigin: '50% 50% 298px',
+          }}
+        />
 
         <g
           style={{

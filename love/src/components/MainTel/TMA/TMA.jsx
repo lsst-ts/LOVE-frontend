@@ -5,6 +5,8 @@ import styles from './TMA.module.css';
 import Summary from './Summary/Summary';
 import MirrorCovers from './MirrorCovers/MirrorCovers';
 import Elevation from './Elevation/Elevation';
+import GpElevation from 'components/GeneralPurpose/Elevation/Elevation';
+
 import Drives from './Drives/Drives';
 
 export default class TMA extends Component {
@@ -97,6 +99,7 @@ export default class TMA extends Component {
       azimuthDrives,
       elevationDrives,
     } = this.props;
+
     return (
       <>
         <div className={styles.summaryContainer}>
@@ -126,10 +129,12 @@ export default class TMA extends Component {
             />
           </div>
           <div className={styles.elevationContainer}>
-            <Elevation
-              elevationActualPosition={elevationActualPosition}
-              elevationDemandPosition={elevationDemandPosition}
-            />
+            <div className={styles.svgElevationContainer}>
+              <Elevation
+                elevationActualPosition={elevationActualPosition}
+                elevationDemandPosition={elevationDemandPosition}
+              />
+            </div>
           </div>
         </div>
 

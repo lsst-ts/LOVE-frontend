@@ -1,30 +1,30 @@
 .summaryContainer {
-    display: flex;
-    flex-grow: 1;
-    flex-direction: column;
-    padding: 1em;
-    border-radius: 5px;
-    background: var(--second-secondary-background-color);
-    margin-bottom: 1em;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  padding: 1em;
+  border-radius: 5px;
+  background: var(--second-secondary-background-color);
+  margin-bottom: 1em;
 }
 
 .mirrorAndElevationContainer {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: auto;
-    gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: auto;
+  gap: 10px;
 }
 
 .mirrorCoversContainer {
-    align-self: center;
+  align-self: center;
 }
 
 .elevationContainer {
-    align-self: center;
+  align-self: center;
 }
 
 .drivesContainer {
-    padding: 1em;
-    border-radius: 5px;
-    background: var(--second-secondary-background-color);
+  padding: 1em;
+  border-radius: 5px;
+  background: var(--second-secondary-background-color);
 }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { closestEquivalentAngle } from 'Utils';
 import WindRose from '../../../icons/WindRose/WindRose';
+import Azimuth from '../Azimuth/Azimuth';
 import {
   mtMountMirrorCoversStateMap,
   // stateToStyleMTMountMirrorCoversState,
@@ -50,6 +51,9 @@ export default class MirrorCovers extends Component {
       <div className={styles.container}>
         <div className={styles.windRoseContainer}>
           <WindRose />
+        </div>
+        <div className={styles.azContainer}>
+          <Azimuth currentValue={this.props.azimuthActualPosition} targetValue={this.props.azimuthDemandPosition} />
         </div>
         {this.getSvg()}
       </div>

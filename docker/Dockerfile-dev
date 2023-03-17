@@ -8,6 +8,7 @@ COPY love/yarn.lock .
 RUN yarn install
 
 RUN chown -R node:node node_modules
+RUN chmod -R 777 node_modules
 
 # Expose port
 EXPOSE 3000

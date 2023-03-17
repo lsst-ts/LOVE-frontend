@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { closestEquivalentAngle } from 'Utils';
 import styles from './Elevation.module.css';
+import GpElevation from 'components/GeneralPurpose/Elevation/Elevation';
 
 export default class Elevation extends Component {
   static propTypes = {
@@ -38,7 +39,26 @@ export default class Elevation extends Component {
   }
 
   render() {
-    return <div className={styles.container}>{this.getSvg()}</div>;
+    return (
+      <div className={styles.container}>
+        <div className={styles.gpElevationContainer}>
+          <GpElevation
+            height={300}
+            width={300}
+            radius={300 / 2}
+            maxL3={97}
+            maxL2={90}
+            maxL1={86.5}
+            minL1={15}
+            minL2={0}
+            minL3={-7}
+            currentValue={this.state.prevElevationActual}
+            targetValue={this.state.prevElevationDemand}
+          />
+        </div>
+        {this.getSvg()}
+      </div>
+    );
   }
 
   getSvg = () => {
@@ -63,9 +83,6 @@ export default class Elevation extends Component {
         </g>
 
         {equivalentElevationDemand !== equivalentElevationActual ?? this.getDemand(equivalentElevationDemand)}
-        {this.getBaseMount()}
-
-        {this.getDemand(equivalentElevationDemand)}
         {this.getBaseMount()}
       </svg>
     );

@@ -1,0 +1,54 @@
+.container {
+	display:flex;
+}
+
+.leftPanel {
+	display:flex;
+	background-color:#1a2d37;
+	border-radius:5px;
+	padding:5px;
+	margin:5px;
+
+}
+
+.rightPanel {
+	display:flex;
+	background-color:#1a2d37;
+	border-radius:5px;
+	padding:5px;
+	margin:5px;	
+    flex-wrap: wrap;
+}
+
+.plotContainer {
+}
+
+.plotContainer svg{
+	background:none !important;
+}
+
+.systemList {
+	text-align: left;
+	width:210px;
+	vertical-align:text-bottom;
+}
+
+.systemList div {
+	position: relative;
+}
+
+.kwBold{
+	font-weight:bold;
+	color:#a8b9c1;
+}
+
+.powerTotal{
+	color: #c1ced2;
+	font-weight:bold;
+	font-size:2em;
+	position:relative;
+}
+
+.powerTotal:after{
+	width: 0px
+}
