@@ -1194,7 +1194,7 @@ export const getDetailedState = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-detailedState`];
   const summaryData = getStreamsData(state, subscriptions);
   return {
-    subState: summaryData?.[`event-Scheduler-${salindex}-detailedState`]?.[0]?.subState.value ?? 0,
+    subState: summaryData[`event-Scheduler-${salindex}-detailedState`]?.[0]?.subState.value ?? 0,
   }
 };
 
@@ -1213,8 +1213,8 @@ export const getGeneralInfo = (state, salindex) => {
   return {
     isNigth: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.isNigth.value ?? false, 
     night: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.nigth.value ?? 0,
-    sunset: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.sunset.value ?? 0,
-    sunrise: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.sunrise.value ?? 0,
+    sunset: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.sunset.value ?? '20:00:00',
+    sunrise: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.sunrise.value ?? '07:46:00',
   }
 };
 
@@ -1240,6 +1240,8 @@ export const getObservatoryStatus = (state, salindex) => {
     simonyiAl: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.telescopeAltitude.value ?? 0,
     simonyiAz: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.telescopeAzimuth.value ?? 0,
     simonyiRot: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.telescopeRotator.value ?? 0,
+    domeAlt: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.domeAltitude.value ?? 0,
+    domeAz: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.domeAzimuth.value ?? 0,
     moonRa: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonRa.value ?? 0,
     moonDec: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonDec.value ?? 0,
     moonAlt: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonAlt.value ?? 0,

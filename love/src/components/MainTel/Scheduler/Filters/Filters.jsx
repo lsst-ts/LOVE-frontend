@@ -3,6 +3,7 @@ import styles from './Filters.module.css';
 
 export default class Filters extends Component {
   render() {
+    const { needSwap, filterToMount, filterToUnmount } = this.props;
     return (
       <div className={styles.container}>
         <h3 className={styles.title}>Filter</h3>

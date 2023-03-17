@@ -58,6 +58,8 @@ const SchedulerContainer = ({
   simonyiAl,
   simonyiAz,
   simonyiRot,
+  domeAlt,
+  domeAz,
   moonRa,
   moonDec,
   moonAlt,

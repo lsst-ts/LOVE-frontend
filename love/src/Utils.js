@@ -1281,6 +1281,14 @@ export const formatSecondsToDigital = (time) => {
   return `${hours}:${minutes}:${seconds}`;
 };
 
+// Function to calculate the difference between two dates in hours, using moment.js
+// Input: date1, date2
+// Output: difference in hours
+export function diffHours(date1, date2) {
+  let diff = Moment(date1).diff(Moment(date2), 'seconds');
+  return diff;
+}
+
 /**
  * Function to transform a string to a regex expression
  * @param {string} str string to be transformed

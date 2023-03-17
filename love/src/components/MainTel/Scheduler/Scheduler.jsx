@@ -54,6 +54,10 @@ export default class Scheduler extends Component {
     simonyiAz: PropTypes.number,
     /** Telescope rotator position */
     simonyiRot: PropTypes.number,
+    /** Dome altitude position */
+    domeAlt: PropTypes.number,
+    /** Dome azimuth position */
+    domeAz: PropTypes.number,
     /** Expected RA of the moon */
     moonRa: PropTypes.number,
     /** Expected Dec of the moon */
@@ -227,6 +231,8 @@ export default class Scheduler extends Component {
       simonyiAl,
       simonyiAz,
       simonyiRot,
+      domeAlt,
+      domeAz,
       moonRa,
       moonDec,
       moonAlt,
@@ -300,7 +306,7 @@ export default class Scheduler extends Component {
           <div className={styles.leftDiv}>
             <Filters needSwap={needSwap} filterToMount={filterToMount} filterToUnmount={filterToUnmount} />
             <Pointing pointingRa={pointingRa} pointingDecl={pointingDecl} pointingPosAngle={pointingPosAngle} pointingParallAngle={pointingParallAngle} />
-            <Simonyi simonyiTracking={simonyiTracking} simonyiAl={simonyiAl} simonyiAz={simonyiAz} simonyiRot={simonyiRot} />
+            <Simonyi simonyiTracking={simonyiTracking} simonyiAl={simonyiAl} simonyiAz={simonyiAz} simonyiRot={simonyiRot} domeAlt={domeAlt} domeAz={domeAz}/>
             <Moon moonRa={moonRa} moonDec={moonDec} moonAlt={moonAlt} moonAz={moonAz} moonDistance={moonDistance} moonPhase={moonPhase} />
             <Sun sunRa={sunRa} sunDec={sunDec} sunset={sunset} sunrise={sunrise} sunAlt={sunAlt} sunAz={sunAz} solarElong={solarElong} />
           </div>

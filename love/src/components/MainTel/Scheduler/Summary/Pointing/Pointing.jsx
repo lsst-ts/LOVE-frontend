@@ -7,6 +7,7 @@ import Title from '../../../../GeneralPurpose/SummaryPanel/Title';
 
 export default class Pointing extends Component {
   render() {
+    const {  pointingRa, pointingDecl, pointingPosAngle, pointingParallAngle } = this.props;
     return (
       <div className={styles.container}>
         <SummaryPanel className={styles.summaryPanel}>
@@ -14,13 +15,17 @@ export default class Pointing extends Component {
             Pointing
           </Title>
           <Label>Ra</Label>
-          <Value>15" 32' 38s</Value>
+          {/* <Value>15" 32' 38s</Value> */}
+          <Value>{pointingRa}</Value>
           <Label>Dec</Label>
-          <Value>-20° 00' 15"</Value>
+          {/* <Value>-20° 00' 15"</Value> */}
+          <Value>{pointingDecl}</Value>
           <Label>Sky pos</Label>
-          <Value>135.00°</Value>
+          {/* <Value>135.00°</Value> */}
+          <Value>{pointingPosAngle}</Value>
           <Label>Parallactic</Label>
-          <Value>62.00°</Value>
+          {/* <Value>62.00°</Value> */}
+          <Value>{pointingParallAngle}</Value>
         </SummaryPanel>
       </div>
     );
