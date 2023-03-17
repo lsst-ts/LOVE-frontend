@@ -85,39 +85,16 @@ export default class DomeSummaryTable extends Component {
     const azimuthStateValue = domeAzimuthStateMap[this.props.azimuthState];
     const dropoutDoorStateValue = dropoutDoorStateMap[this.props.dropoutDoorState];
     const mainDoorStateValue = mainDoorStateMap[this.props.mainDoorState];
-    
+
     const domeInPositionValue = this.props.domeInPosition ?? 0;
     const mountInPositionValue = this.props.mountInPosition ?? 0;
     const mountTrackingStateValue = mountTrackingStateMap[this.props.atMountState] ??  mountTrackingStateMap[0];
-    
+
     const m3State = this.props.m3State;
-    //const { positionLimits } = this.props;
-    //const timesToLimit = this.props.currentTimesToLimits;
-    //const timeToAzLimit = timesToLimit.timeToAzlim ? timesToLimit.timeToAzlim.value : 0;
-    //const timeToRotLimit = timesToLimit.timeToRotlim ? timesToLimit.timeToRotlim.value : 0;
-    //const timeToUnobservable = timesToLimit.timeToUnobservable ? timesToLimit.timeUnobservable.value : 0;
-    
+
     const closestLimit = timeElHighLimit > timeUnobservable && timeElHighLimit > 0 ? 'blind spot' : 'unobservable';
     const timeToElLimit = closestLimit === 'blind spot' ? timeElHighLimit : timeUnobservable;
-    
-    // L1 (software) position limits, in order elevation, azimuth, Nasmyth 1, Nasmyth 2 and M3.
-    // const { maximum, minimum } = positionLimits;
-    // let [maxEl, maxAz, maxNas1, maxNas2, maxM3] = maximum ? maximum.value : [];
-    // let [minEl, minAz, minNas1, minNas2, minM3] = minimum ? minimum.value : [];
-    // [maxEl, maxAz, maxNas1, maxNas2, maxM3] = [
-    //   maxEl ? maxEl : 90,
-    //   maxAz ? maxAz : 270,
-    //   maxNas1 ? maxNas1 : 165,
-    //   maxNas2 ? maxNas2 : 165,
-    //   maxM3 ? maxM3 : 180,
-    // ];
-    // [minEl, minAz, minNas1, minNas2, minM3] = [
-    //   minEl ? minEl : 5,
-    //   minAz ? minAz : -270,
-    //   minNas1 ? minNas1 : -165,
-    //   minNas2 ? minNas2 : -165,
-    //   minM3 ? minM3 : 0,
-    // ];
+
     const mountRotator =
       m3State === 1
         ? {

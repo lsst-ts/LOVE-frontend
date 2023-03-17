@@ -340,20 +340,18 @@ export const getATMCSState = (state) => {
   const subscriptions = [
     'telemetry-ATMCS-0-mount_AzEl_Encoders',
     'telemetry-ATMCS-0-mount_Nasmyth_Encoders',
-    'event-ATMCS-0-detailedState',
     'event-ATMCS-0-atMountState',
     'event-ATMCS-0-target',
     'event-ATMCS-0-allAxesInPosition',
     'event-ATMCS-0-m3State',
     'event-ATMCS-0-positionLimits',
-    'event-ATPtg-1-timesToLimits',
+    'event-ATPtg-1-timesOfLimits',
   ];
   const data = getStreamsData(state, subscriptions);
   const [minEl, minAz, minNas1, minNas2, minM3] = data['event-ATMCS-0-positionLimits']?.[0].minimum?.value ?? [5, -270, -165, -165, 0];
   const [maxEl, maxAz, maxNas1, maxNas2, maxM3] = data['event-ATMCS-0-positionLimits']?.[0].maximum?.value ?? [90, 270, 165, 165, 180];
 
   return {
-    detailedState: data['event-ATMCS-0-detailedState']?.[0].detailedState?.value ?? 0,
     atMountState: data['event-ATMCS-0-atMountState']?.[0].state?.value ?? 0,
     mountInPosition: data['event-ATMCS-0-allAxesInPosition']?.[0].inPosition?.value ?? false,
     trackID: data['event-ATMCS-0-target']?.[0].trackId?.value ?? 0,

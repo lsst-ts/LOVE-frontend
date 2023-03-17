@@ -188,50 +188,6 @@ export default class Dome extends Component {
       currentPointingNasmyth2,
     } = this.props;
 
-    // const currentPointing = {
-    //   az: this.props.azElMountEncoders ? this.props.azElMountEncoders.azimuthCalculatedAngle.value[0] : 0,
-    //   el: this.props.azElMountEncoders ? this.props.azElMountEncoders.elevationCalculatedAngle.value[0] : 0,
-    //   nasmyth1: this.props.nasmythMountEncoders ? this.props.nasmythMountEncoders.nasmyth1CalculatedAngle.value[0] : 0,
-    //   nasmyth2: this.props.nasmythMountEncoders ? this.props.nasmythMountEncoders.nasmyth2CalculatedAngle.value[0] : 0,
-    // };
-    // const targetPointing = {
-    //   az: this.props.target ? this.props.target[this.props.target.length - 1].azimuth.value : 0,
-    //   el: this.props.target ? this.props.target[this.props.target.length - 1].elevation.value : 0,
-    //   nasmyth1: this.props.target ? this.props.target[this.props.target.length - 1].nasmyth1RotatorAngle.value : 0,
-    //   nasmyth2: this.props.target ? this.props.target[this.props.target.length - 1].nasmyth2RotatorAngle.value : 0,
-    // };
-    // const domeAz = this.props.azimuthPosition ? this.props.azimuthPosition.value : 0;
-    // const domeTargetAz = this.props.azimuthCommandedState
-    //   ? this.props.azimuthCommandedState[this.props.azimuthCommandedState.length - 1].azimuth.value
-    //   : 0;
-    // const mountTrackingState = this.props.atMountState
-    //   ? this.props.atMountState[this.props.atMountState.length - 1].state.value
-    //   : 0;
-    // const azimuthState = this.props.azimuthState
-    //   ? this.props.azimuthState[this.props.azimuthState.length - 1].state.value
-    //   : 0;
-    // const dropoutDoorState = this.props.dropoutDoorState
-    //   ? this.props.dropoutDoorState[this.props.dropoutDoorState.length - 1].state.value
-    //   : 0;
-    // const mainDoorState = this.props.mainDoorState
-    //   ? this.props.mainDoorState[this.props.mainDoorState.length - 1].state.value
-    //   : 0;
-    // const domeInPosition = this.props.domeInPosition;
-    // const mountInPosition = this.props.mountInPosition;
-
-    // const dropoutDoorOpeningPercentage = this.props.dropoutDoorOpeningPercentage
-    //   ? this.props.dropoutDoorOpeningPercentage.value
-    //   : 0;
-    // const mainDoorOpeningPercentage = this.props.dropoutDoorOpeningPercentage
-    //   ? this.props.dropoutDoorOpeningPercentage.value
-    //   : 0;
-    // const trackID = this.props.target ? this.props.target[this.props.target.length - 1].trackId.value : '';
-    // const m3State = this.props.m3State ? this.props.m3State[this.props.m3State.length - 1].value : 2;
-    // const currentTimesToLimits = this.props.currentTimesToLimits ? this.props.currentTimesToLimits : {};
-    // const positionLimits = this.props.positionLimits
-    //   ? this.props.positionLimits[this.props.positionLimits.length - 1]
-    //   : {};
-
     const isProjected = true;
     let azDiff = Math.abs(azimuthPosition - currentPointingAz);
     if (azDiff > 180) azDiff = azDiff - 360;
@@ -354,8 +310,6 @@ export default class Dome extends Component {
             minNas1={minNas1}
             minNas2={minNas2}
             minM3={minM3}
-            //currentTimesToLimits={currentTimesToLimits}
-            //positionLimits={positionLimits}
           />
         </div>
         {this.props.controls && (

@@ -25,22 +25,33 @@ export const schema = {
 };
 
 const DomeContainer = ({
-  // dropoutDoorOpeningPercentage,
-  // mainDoorOpeningPercentage,
-  // azimuthPosition,
-  // azimuthState,
-  // domeInPosition,
-  // azimuthCommandedState,
-  // dropoutDoorState,
-  // mainDoorState,
-  // azElMountEncoders,
-  // nasmythMountEncoders,
-  // detailedState,
-  // atMountState,
-  // target,
-  // mountInPosition,
-  // currentTimesToLimits,
-  // positionLimits,
+  dropoutDoorOpeningPercentage,
+  mainDoorOpeningPercentage,
+  azimuthPosition,
+  azimuthState,
+  azimuthCommanded,
+  domeInPosition,
+  dropoutDoorState,
+  mainDoorState,
+  detailedState,
+  atMountState,
+  mountInPosition,
+  trackID,
+  targetAzimuth,
+  targetElevation,
+  targetNasmyth1,
+  targetNasmyth2,
+  m3State,
+  minEl,
+  maxEl,
+  timeAzLim,
+  timeRotLim,
+  timeUnobservable,
+  timeElHighLimit,
+  currentPointingAz,
+  currentPointingEl,
+  currentPointingNasmyth1,
+  currentPointingNasmyth2,
   width,
   height,
   subscribeToStream,
@@ -52,37 +63,6 @@ const DomeContainer = ({
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
 
-  const {
-    dropoutDoorOpeningPercentage,
-    mainDoorOpeningPercentage,
-    azimuthPosition,
-    azimuthInPosition,
-    azimuthState,
-    azimuthCommanded,
-    domeInPosition,
-    dropoutDoorState,
-    mainDoorState,
-    detailedState,
-    atMountState,
-    mountInPosition,
-    trackID,
-    targetAzimuth,
-    targetElevation,
-    targetNasmyth1,
-    targetNasmyth2,
-    m3State,
-    minEl,
-    maxEl,
-    timeAzLim,
-    timeRotLim,
-    timeUnobservable,
-    timeElHighLimit,
-    currentPointingAz,
-    currentPointingEl,
-    currentPointingNasmyth1,
-    currentPointingNasmyth2,
-  } = props;
-
   return (
     <Dome
       dropoutDoorOpeningPercentage={dropoutDoorOpeningPercentage}
@@ -93,7 +73,6 @@ const DomeContainer = ({
       domeInPosition={domeInPosition}
       dropoutDoorState={dropoutDoorState}
       mainDoorState={mainDoorState}
-      detailedState={detailedState}
       atMountState={atMountState}
       mountInPosition={mountInPosition}
       trackID={trackID}
@@ -112,31 +91,10 @@ const DomeContainer = ({
       currentPointingEl={currentPointingEl}
       currentPointingNasmyth1={currentPointingNasmyth1}
       currentPointingNasmyth2={currentPointingNasmyth2}
-
-      // dropoutDoorOpeningPercentage={dropoutDoorOpeningPercentage}
-      // mainDoorOpeningPercentage={mainDoorOpeningPercentage}
-      // domeInPosition={domeInPosition}
-      // azimuthPosition={azimuthPosition}
-      // azimuthState={azimuthState}
-      // azimuthCommanded={azimuthCommanded}
-      // dropoutDoorState={dropoutDoorState}
-
-      // mainDoorState={mainDoorState}
-      // azElMountEncoders={azElMountEncoders}
-      // nasmythMountEncoders={nasmythMountEncoders}
-      // detailedState={detailedState}
-      // atMountState={atMountState}
-      // target={target}
-      // mountInPosition={mountInPosition}
-
-      // currentTimesToLimits={currentTimesToLimits}
-      // positionLimits={positionLimits}
-
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
       width={width}
       height={height}
-      
       controls={controls}
     />
   );
@@ -151,7 +109,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
     'telemetry-ATDome-0-position',
-    'event-ATDome-0-azimuthInPosition',
     'event-ATDome-0-azimuthState',
     'event-ATDome-0-azimuthCommandedState',
     'event-ATDome-0-dropoutDoorState',
@@ -159,13 +116,12 @@ const mapDispatchToProps = (dispatch) => {
     'event-ATDome-0-allAxesInPosition',
     'telemetry-ATMCS-0-mount_AzEl_Encoders',
     'telemetry-ATMCS-0-mount_Nasmyth_Encoders',
-    'event-ATMCS-0-detailedState',
     'event-ATMCS-0-atMountState',
     'event-ATMCS-0-target',
     'event-ATMCS-0-allAxesInPosition',
     'event-ATMCS-0-m3State',
     'event-ATMCS-0-positionLimits',
-    'event-ATPtg-1-timesToLimits',
+    'event-ATPtg-1-timesOfLimits',
   ];
   return {
     subscriptions,
