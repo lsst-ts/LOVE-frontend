@@ -782,9 +782,6 @@ export const mainDoorStateMap = {
 };
 
 export const mountTrackingStateMap = {
-  // 1: 'DISABLED',
-  // 2: 'ENABLED',
-  // 3: 'STOPPING',
   0: 'UNKNOWN',
   6: 'REMOTECONTROL',
   7: 'HANDPADDLECONTROL',
