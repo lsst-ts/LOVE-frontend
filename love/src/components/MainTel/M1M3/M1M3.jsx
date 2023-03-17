@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
-import lodash from 'lodash';
+import { uniqueId, isEqual } from 'lodash';
 import { defaultNumberFormatter } from 'Utils';
 import {
   M1M3ActuatorPositions,
@@ -39,9 +39,10 @@ export default class M1M3 extends Component {
       selectedHardpointId: 0,
       forceParameters: [],
     };
-    this.uniqueGradient = lodash.uniqueId('m1m3-force-gradient-color-scale-');
-    this.uniqueScatter = lodash.uniqueId('m1m3-scatter-');
-    this.uniqueCircleOverlay = lodash.uniqueId('m1m3-circle-overlay-');
+    this.uniqueGradient = uniqueId('m1m3-force-gradient-color-scale-');
+    this.uniqueScatter = uniqueId('m1m3-scatter-');
+    this.uniqueCircleOverlay = uniqueId('m1m3-circle-overlay-');
+    this.uniqueForceGradient = uniqueId('m1m3-force-gradient');
   }
 
   static statesIlc = {
@@ -162,7 +163,7 @@ export default class M1M3 extends Component {
     svg
       .append('defs')
       .append('linearGradient')
-      .attr('id', 'force-gradient')
+      .attr('id', this.uniqueForceGradient)
       .attr('x1', '0%')
       .attr('y1', '100%')
       .attr('x2', '0%')
@@ -182,7 +183,7 @@ export default class M1M3 extends Component {
       .attr('ry', 5)
       .attr('width', 10)
       .attr('height', '100%')
-      .style('fill', 'url(#force-gradient)');
+      .style('fill', `url(#${this.uniqueForceGradient})`);
   };
 
   actuatorSelected = (id) => {
@@ -338,20 +339,20 @@ export default class M1M3 extends Component {
 
     if (
       this.state.selectedForceParameter !== prevState.selectedForceParameter ||
-      !lodash.isEqual(this.props[this.state.selectedForceInput], prevProps[this.state.selectedForceInput])
+      !isEqual(this.props[this.state.selectedForceInput], prevProps[this.state.selectedForceInput])
     ) {
       const forceData = this.props[this.state.selectedForceInput]?.[this.state.selectedForceParameter]?.value ?? [];
       this.setState({ actuatorsForce: forceData });
     }
 
-    if (!lodash.isEqual(this.state.actuators, prevState.actuators)) {
+    if (!isEqual(this.state.actuators, prevState.actuators)) {
       const data = this.state.actuators.map(
         (act) => Math.sqrt(act.position[0] ** 2 + act.position[1] ** 2) / this.state.maxRadius,
       );
       this.createColorScale(data);
     }
 
-    if (!lodash.isEqual(this.state.actuatorsForce, prevState.actuatorsForce)) {
+    if (!isEqual(this.state.actuatorsForce, prevState.actuatorsForce)) {
       this.createColorScale(this.state.actuatorsForce);
     }
 
@@ -360,7 +361,7 @@ export default class M1M3 extends Component {
       prevProps.xPosition !== xPosition ||
       prevProps.yPosition !== yPosition ||
       prevProps.zPosition !== zPosition ||
-      !lodash.isEqual(prevProps.actuatorReferenceId, actuatorReferenceId)
+      !isEqual(prevProps.actuatorReferenceId, actuatorReferenceId)
     ) {
       const actuators = M1M3.getActuatorsPositions(actuatorReferenceId, { xPosition, yPosition, zPosition });
       // const actuators = M1M3ActuatorPositions; // Old implementation

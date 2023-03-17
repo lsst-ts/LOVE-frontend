@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
+import { uniqueId } from 'lodash';
 import { M2ActuatorPositions, M2ActuatorTangentPositions } from 'Config';
 import ForceGradiant from '../ForceGradiant/ForceGradiant';
 import styles from './Selector.module.css';
@@ -67,6 +68,9 @@ export default class Selector extends Component {
       width: 480,
       zoomLevel: 1,
     };
+    this.uniqueCircleOverlay = uniqueId('m2-selector-circle-overlay-');
+    this.uniqueScatter = uniqueId('m2-selector-scatter-');
+    this.uniqueMirrorHole = uniqueId('m2-selector-mirror-hole-');
   }
 
   preventDefault(e) {
@@ -206,7 +210,7 @@ export default class Selector extends Component {
   }
 
   componentDidUpdate() {
-    d3.select('#circle-overlay').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
+    d3.select(`#${this.uniqueCircleOverlay}`).call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
   }
 
   zoomed = () => {
@@ -226,8 +230,8 @@ export default class Selector extends Component {
     d3.event.transform.x = Math.floor(transformX);
     d3.event.transform.y = Math.floor(transformY);
 
-    d3.select('#scatter').attr('transform', d3.event.transform);
-    d3.select('#mirror-hole').attr('transform', d3.event.transform);
+    d3.select(`#${this.uniqueScatter}`).attr('transform', d3.event.transform);
+    d3.select(`#${this.uniqueMirrorHole}`).attr('transform', d3.event.transform);
     // d3.select('#background-circle').attr('transform', d3.event.transform);
     // d3.select('#plot-axis').attr('transform', d3.event.transform);
     this.setState({
@@ -296,7 +300,7 @@ export default class Selector extends Component {
     selectedActuator,
   ) {
     return (
-      <g id="scatter" className={styles.scatter}>
+      <g id={this.uniqueScatter} className={styles.scatter}>
         {this.state.actuators.map((act) => {
           return (
             <g key={act.id} className={styles.actuator} onClick={() => actuatorSelect(act.id)}>
@@ -426,7 +430,7 @@ export default class Selector extends Component {
         />
 
         <circle
-          id="mirror-hole"
+          id={this.uniqueMirrorHole}
           cx={this.state.width / 2}
           cy={this.state.width / 2}
           r={this.state.width / 6}
@@ -436,7 +440,7 @@ export default class Selector extends Component {
         />
 
         <circle
-          id="circle-overlay"
+          id={this.uniqueCircleOverlay}
           className={this.state.actuators.length > 0 ? styles.cursorMove : styles.circleOverlayDisabled}
           cx={this.state.width / 2}
           cy={this.state.width / 2}
