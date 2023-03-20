@@ -500,7 +500,7 @@ export default class M1M3 extends Component {
 
                 {M1M3HardpointPositions.map((hardpoint) => {
                   return (
-                    <g className={styles.gHardpoint} onClick={() => this.hardpointSelected(hardpoint.id)}>
+                    <g key={hardpoint.id} className={styles.gHardpoint} onClick={() => this.hardpointSelected(hardpoint.id)}>
                       <circle
                         className={styles.circleHardpoint + ' ' + this.fillHardpoint(hardpoint.id)}
                         cx={hardpoint.mini.position[0]}
@@ -530,7 +530,7 @@ export default class M1M3 extends Component {
             </div>
           </div>
 
-          <div class={styles.gridWindowM1M3}>
+          <div className={styles.gridWindowM1M3}>
             <svg
               className={styles.svgContainer}
               viewBox={`0 0 ${this.state.width} ${this.state.width}`}
@@ -699,7 +699,7 @@ export default class M1M3 extends Component {
               </SummaryPanel>
             </div>
 
-            <div class={styles.gridHardpointInfo}>
+            <div className={styles.gridHardpointInfo}>
               <SummaryPanel className={styles.actuatorInfo}>
                 <div className={styles.actuatorValue}>
                   <Title>Hardpoint {selectedHardpoint.id}</Title>
