@@ -11,8 +11,8 @@ Here is an example file in `json` format:
         "minSeverityNotification": "mute"
     },
     "camFeeds": {
-        "generic": "/gencam",
-        "allSky": "/gencam"
+        "startrackera": "/startrackera",
+        "startrackerb": "/startrackerb"
     },
     "efd": {
         "defaultEfdInstance": "summit_efd",
@@ -29,8 +29,8 @@ Here is an example file in `json` format:
   - **minSeveritySound**: minimum level to reproduce sound alarm notifications. If set to “mute” or “muted” no sound is going to be reproduced. Available values: `["mute", "muted", "warning", "serious", "critical"]`.
   - **minSeverityNotification**: minimum level to report alarm notifications. If set to “mute” or “muted” no alarm will be reported. Available values: `["mute", "muted", "warning", "serious", "critical"]`.
 - **camFeeds**:
-  - **generic**: cam feed used on the GenericCamera component. This feed will be used if the “generic” value is set on the FEEDKEY configuration parameter of the Generic Camera component. Available values: `["/gencam"]`.
-  - **allSky**: cam feed used on the GenericCamera component. This feed will be used if the “allSky” value is set on the FEEDKEY configuration parameter of the Generic Camera component. Available values: `["/gencam"]`.
+  - **startrackera**: cam feed used on the GenericCamera component. This feed will be used if the “startrackera” value is set on the FEEDKEY configuration parameter of the GenericCamera or GenericCameraControls components. Available values: `["/startrackera"]`.
+  - **startrackerb**: cam feed used on the GenericCamera component. This feed will be used if the “startrackerb” value is set on the FEEDKEY configuration parameter of the GenericCamera or GenericCameraControls components. Available values: `["/startrackerb"]`.
 - **efd**:
   - **defaultEfdInstance**: default efd instance to be queried on the VegaTimeSeriesPlot component. Available values: `["summit_efd", "ncsa_teststand_efd", "ldf_stable_efd", "ldf_int_efd", "base_efd", "tucson_teststand_efd", "test_efd"]`.
   - **urlStatus**: this is the URL where the EFD health status will be queried. For example `"https://summit-lsp.lsst.codes/influxdb/health"`.
