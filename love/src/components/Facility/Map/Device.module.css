@@ -1,0 +1,79 @@
+.device{
+	filter: drop-shadow(0px 0px 1px rgb(0 0 0 / 0.25));
+}
+
+.container{
+	fill:var(--second-quaternary-background-color);
+}
+
+.titleRow2{
+	fill:var(--second-tertiary-background-color);
+}
+
+.titleBg{
+	fill:var(--second-primary-background-color);
+}
+
+.title{
+	fill:var(--base-font-color);
+	font-size:6px;
+	font-weight:bold;
+}
+
+.statusOk{
+	fill:var(--status-ok-color);
+}
+
+.statusWarning{
+	fill:var(--status-warning-color);
+}
+.statusAlert{
+	fill:var(--status-alert-color);
+}
+.statusDisabled{
+	fill:var(--status-disabled-color);
+}
+.statusNull{
+	fill:none;
+	stroke:var(--status-disabled-color);
+}
+
+.param{
+	fill:var(--base-font-color);
+	font-size:4px;
+}
+
+.paramGroup{
+	fill:var(--base-font-color);
+	font-size:4px;
+	font-weight:bold;
+}
+
+.boxParamOk{
+	font-size:4px;
+	fill:var(--satus-ok-dimmed-color-3)
+}
+
+.paramVal{
+	fill:var(--base-font-color);
+	font-size:4px;
+}
+.insideContent{
+	transition: all 0.25s;
+}
+.mask{
+	fill:white;
+}
+
+.arrowBg{
+	fill:var(--second-tertiary-background-color);
+	cursor:pointer;
+}
+
+.arrow{
+	stroke:var(--base-font-color);
+	fill:none;
+	transition: all 0.25s;
+	cursor:pointer;
+}
+

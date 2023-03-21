@@ -1,0 +1,22 @@
+.content{
+	display:flex;
+}
+
+.leftMenu div{
+	margin:1em;
+	padding:1em;
+}
+
+.section{
+	display:flex;
+}
+
+.section div{
+	display:flex;
+	background-color:var(--second-secondary-background-color)
+}
+
+.cscMenu{
+	border: 1px solid white;
+
+}
