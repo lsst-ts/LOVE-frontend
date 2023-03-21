@@ -157,9 +157,6 @@ export default class Dome extends Component {
       domeInPosition,
       dropoutDoorState,
       mainDoorState,
-    } = this.props;
-
-    const {
       atMountState,
       mountInPosition,
       trackID,
