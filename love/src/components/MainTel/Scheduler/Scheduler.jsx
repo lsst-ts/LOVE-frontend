@@ -259,6 +259,8 @@ export default class Scheduler extends Component {
       currentNumProposals,
       currentProposalId,
       currentSequenceDuration,
+      currentSequenceNVisits,
+      currentSequenceVisits,
       rotSkyPos,
       predictedTargetsRa,
       predictedTargetsDecl,
@@ -328,6 +330,8 @@ export default class Scheduler extends Component {
               currentNumProposals={currentNumProposals}
               currentProposalId={currentProposalId}
               currentSequenceDuration={currentSequenceDuration}
+              currentSequenceNVisits={currentSequenceNVisits}
+              currentSequenceVisits={currentSequenceVisits}
               rotSkyPos={rotSkyPos}
               filterToMount={filterToMount}
             />

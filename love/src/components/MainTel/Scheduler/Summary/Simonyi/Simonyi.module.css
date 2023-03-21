@@ -13,13 +13,17 @@
 
 .summaryPanel {
   background-color: var(--second-secondary-background-color) !important;
-  min-width: 13em !important;
+  min-width: 10em !important;
+  margin-left: 1.4em;
+  margin-right: 0.4em;
 }
 
 .mountDomeDiv {
   grid-template-columns: 0.5fr 0.5fr;
   display: grid;
   width: 100%;
+  justify-items: stretch;
+  align-items: start;
 }
 
 .titles {

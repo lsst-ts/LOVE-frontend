@@ -86,6 +86,8 @@ const SchedulerContainer = ({
   currentNumProposals,
   currentProposalId,
   currentSequenceDuration,
+  currentSequenceNVisits,
+  currentSequenceVisits,
   rotSkyPos,
   predictedTargetsRa,
   predictedTargetsDecl,
@@ -152,6 +154,8 @@ const SchedulerContainer = ({
       simonyiAl={simonyiAl}
       simonyiAz={simonyiAz}
       simonyiRot={simonyiRot}
+      domeAlt={domeAlt}
+      domeAz={domeAz}
       moonRa={moonRa}
       moonDec={moonDec}
       moonAlt={moonAlt}
@@ -160,6 +164,9 @@ const SchedulerContainer = ({
       moonPhase={moonPhase}
       sunRa={sunRa}
       sunDec={sunDec}
+      sunAlt={sunAlt}
+      sunAz={sunAz}
+      solarElong={solarElong}
       currentTargetId={currentTargetId}
       currentRequestTime={currentRequestTime}
       currentRequestMjd={currentRequestMjd}
@@ -175,6 +182,8 @@ const SchedulerContainer = ({
       currentNumProposals={currentNumProposals}
       currentProposalId={currentProposalId}
       currentSequenceDuration={currentSequenceDuration}
+      currentSequenceNVisits={currentSequenceNVisits}
+      currentSequenceVisits={currentSequenceVisits}
       rotSkyPos={rotSkyPos}
       predictedTargetsRa={predictedTargetsRa}
       predictedTargetsDecl={predictedTargetsDecl}

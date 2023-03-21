@@ -794,6 +794,18 @@ export const mtm1m3tsHeaterDisabledStateToStyle = {
   OFF: 'warning',
 };
 
+// Aircraft tracker
+export const aircraftTrackerStatetoStyle = {
+  DISCONNECTED: 'warning',
+  CONNECTED: 'running',
+};
+
+// Scheduler
+export const schedulerDomeTrackingStateToStyle = {
+  'NO TRACKING': 'undefined',
+  'TRACKING': 'ok',
+};
+
 /*****************************************************************************/
 /*******************************STATE MAPPINGS********************************/
 /*****************************************************************************/
@@ -1171,14 +1183,10 @@ export const mtdomeMotionStateMap = {
   32: 'STOPPING MOTOR COOLING',
 };
 
+// Aircraft Tracker
 export const aircraftTrackerStateToMap = {
   0: 'DISCONNECTED',
   1: 'CONNECTED',
-};
-
-export const aircraftTrackerStatetoStyle = {
-  DISCONNECTED: 'warning',
-  CONNECTED: 'running',
 };
 
 export const mtdomeElevationEnabledStateToMap = {
@@ -1224,9 +1232,17 @@ export const mtm1m3HeaterDisabledStateMap = {
   true: 'ON',
 };
 
+// Scheduler
+export const schedulerDomeTrackingStateToMap = {
+  false: 'NO TRACKING',
+  true: 'TRACKING'
+};
+
 /*****************************************************************************/
 /**************************MTM3 actuator and forces***************************/
 /*****************************************************************************/
+
+// Components configurations
 export const M1M3ActuatorForces = {
   appliedAberrationForces: ['zForces'],
   appliedAccelerationForces: ['xForces', 'yForces', 'zForces'],

@@ -18,45 +18,82 @@ export default class CurrentTarget extends Component {
       'Q24',
       'Z_DD01',
     ];
+    const { 
+      currentTargetId,
+      currentRequestTime,
+      currentRequestMjd,
+      currentRa,
+      currentDecl,
+      currentSkyAngle,
+      currentFilter,
+      currentNumExposures,
+      currentExposureTimes,
+      currentSlewTime,
+      currentOffsetX,
+      currentOffsetY,
+      currentNumProposals,
+      currentProposalId,
+      currentSequenceDuration,
+      currentSequenceNVisits,
+      currentSequenceVisits,
+      rotSkyPos} = this.props;
+
+      console.log(currentTargetId,
+        currentRequestTime,
+        currentRequestMjd,
+        currentRa,
+        currentDecl,
+        currentSkyAngle,
+        currentFilter,
+        currentNumExposures,
+        currentExposureTimes,
+        currentSlewTime,
+        currentOffsetX,
+        currentOffsetY,
+        currentNumProposals,
+        currentProposalId,
+        currentSequenceDuration,
+        currentSequenceNVisits,
+        currentSequenceVisits,
+        rotSkyPos);
     return (
       <div className={styles.container}>
         <div className={styles.headers}>
-          <h3 className={styles.currentTarget}>CurrentTarget - *number_targer*</h3>
-          <span className={styles.spanRigth}>03 of 10 in current sequence</span>
+          <h3 className={styles.currentTarget}>CurrentTarget - {currentTargetId}</h3>
+          <span className={styles.spanRigth}>{currentSequenceVisits} of {currentSequenceNVisits} in current sequence</span>
         </div>
         <div className={styles.separator}></div>
         <div className={styles.currentTargetDiv}>
           <SummaryPanel className={styles.summaryPanel}>
             <Label>Time on Target</Label>
-            <Value>00:00:12</Value>
+            <Value>{currentRequestTime}</Value>
             <Label>Modified julian date</Label>
-            <Value>59954</Value>
+            <Value>{currentRequestMjd}</Value>
             <Label>Rigth ascension</Label>
-            <Value>15" 32' 38s</Value>
+            <Value>{currentRa}</Value>
             <Label>Declination</Label>
-            <Value>-20° 00' 15"</Value>
+            <Value>{currentDecl}</Value>
             <Label>Sky position angle</Label>
-            <Value>135.00°</Value>
+            <Value>{currentSkyAngle}</Value>
             <Label>Slew time</Label>
-            <Value>60s</Value>
+            <Value>{currentSlewTime}</Value>
             <Label>Offset arcsec (x,y)</Label>
-            <Value>23,123</Value>
+            <Value>{(currentOffsetX, currentOffsetY)}</Value>
           </SummaryPanel>
           <SummaryPanel className={styles.summaryPanel}>
             <Label>Filter</Label>
-            <Value>r</Value>
+            <Value>{currentFilter}</Value>
             <Label>Seq. Duration</Label>
-            <Value>10 min</Value>
+            <Value>{currentSequenceDuration}</Value>
             <Label>No of exposures</Label>
-            <Value>10</Value>
+            <Value>{currentNumExposures}</Value>
             <Label>Exposure time</Label>
-            <Value>2s</Value>
+            <Value>{currentExposureTimes}</Value>
             <Label>Proposals</Label>
             <span></span>
             <div className={styles.proposals}>
-              {/* <Label>Proposals</Label> */}
               <div className={styles.generalDiv}>
-                {proposals.map((gp) => (
+                {currentProposalId.map((gp) => (
                   <div className={styles.surveysDivs}>{gp}</div>
                 ))}
               </div>

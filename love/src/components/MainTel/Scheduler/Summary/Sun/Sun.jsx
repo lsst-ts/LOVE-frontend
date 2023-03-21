@@ -8,6 +8,8 @@ import Sky from '../../SkyElements/Sky/Sky';
 
 export default class Sun extends Component {
   render() {
+    const { sunRa, sunDec, sunAlt, sunAz, solarElong } = this.props;
+    console.log(sunRa, sunDec, sunAlt, sunAz, solarElong);
     return (
       <div className={styles.container}>
         <SummaryPanel className={styles.summaryPanel}>
@@ -17,15 +19,15 @@ export default class Sun extends Component {
         <div className={styles.divContainer}>
           <SummaryPanel className={styles.summaryPanel}>
             <Label>Altitude</Label>
-            <Value>-23.24°</Value>
+            <Value>{sunAlt}</Value>
             <Label>Azimuth</Label>
-            <Value>64.13°</Value>
+            <Value>{sunAz}</Value>
             <Label>Ra</Label>
-            <Value>08h 42m 02s</Value>
+            <Value>{sunRa}</Value>
             <Label>Dec</Label>
-            <Value>-21° 17' 29"</Value>
+            <Value>{sunDec}</Value>
             <Label>Elongation</Label>
-            <Value>24.00°</Value>
+            <Value>{solarElong}</Value>
           </SummaryPanel>
           <div className={styles.sunCartoon}>
             <Sky />

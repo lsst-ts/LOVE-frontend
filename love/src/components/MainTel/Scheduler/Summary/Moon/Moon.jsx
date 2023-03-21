@@ -8,6 +8,7 @@ import MoonCartoon from '../../SkyElements/MoonCartoon/MoonCartoon';
 
 export default class Moon extends Component {
   render() {
+    const { moonRa, moonDec, moonAlt, moonAz, moonDistance, moonPhase, } = this.props;
     return (
       <div className={styles.container}>
         <SummaryPanel className={styles.summaryPanel}>
@@ -17,19 +18,19 @@ export default class Moon extends Component {
         <div className={styles.divContainer}>
           <SummaryPanel className={styles.summaryPanel}>
             <Label>Altitude</Label>
-            <Value>8.9°</Value>
+            <Value>{moonAlt}</Value>
             <Label>Azimuth</Label>
-            <Value>241.30°</Value>
+            <Value>{moonAz}</Value>
             <Label>Ra</Label>
-            <Value>14h 54m 34s</Value>
+            <Value>{moonRa}</Value>
             <Label>Dec</Label>
-            <Value>-18° 7' 43"</Value>
+            <Value>{moonDec}</Value>
             <Label>Distance</Label>
-            <Value>377.202 km</Value>
+            <Value>{moonDistance}</Value>
           </SummaryPanel>
           <div className={styles.divMoonCartoon}>
             <MoonCartoon />
-            <span>100%</span>
+            <span>{moonPhase}</span>
           </div>
         </div>
       </div>

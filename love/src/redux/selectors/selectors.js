@@ -1232,27 +1232,27 @@ export const getObservatoryStatus = (state, salindex) => {
   const subscriptions = [`telemetry-Scheduler-${salindex}-observatoryState`, `event-Scheduler-${salindex}-target`];
   const observatoryStatus = getStreamsData(state, subscriptions);
   return {
-    pointingRa: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.ra.value ?? 0,
-    pointingDecl: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.declination.value ?? 0,
-    pointingPosAngle: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.positionAngle.value ?? 0,
-    pointingParallAngle: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.parallacticAngle.value ?? 0,
+    pointingRa: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.ra.value ?? 0.0,
+    pointingDecl: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.declination.value ?? 0.0,
+    pointingPosAngle: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.positionAngle.value ?? 0.0,
+    pointingParallAngle: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.parallacticAngle.value ?? 0.0,
     simonyiTracking: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.tacking.value ?? false,
-    simonyiAl: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.telescopeAltitude.value ?? 0,
-    simonyiAz: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.telescopeAzimuth.value ?? 0,
-    simonyiRot: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.telescopeRotator.value ?? 0,
-    domeAlt: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.domeAltitude.value ?? 0,
+    simonyiAl: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.telescopeAltitude.value ?? 0.0,
+    simonyiAz: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.telescopeAzimuth.value ?? 0.0,
+    simonyiRot: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.telescopeRotator.value ?? 0.0,
+    domeAlt: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.domeAltitude.value ?? 0.0,
     domeAz: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.[0]?.domeAzimuth.value ?? 0,
-    moonRa: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonRa.value ?? 0,
-    moonDec: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonDec.value ?? 0,
-    moonAlt: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonAlt.value ?? 0,
-    moonAz: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonAz.value ?? 0,
-    moonDistance: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonDistance.value ?? 0,
-    moonPhase: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonPhase.value ?? 0,
-    sunRa: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunRa.value ?? 0,
-    sunDec: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunDec.value ?? 0,
-    sunAlt: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunAlt.value ?? 0,
-    sunAz: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunAz.value ?? 0,
-    solarElong: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.solarElong.value ?? 0,
+    moonRa: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonRa.value ?? 0.0,
+    moonDec: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonDec.value ?? 0.0,
+    moonAlt: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonAlt.value ?? 0.0,
+    moonAz: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonAz.value ?? 0.0,
+    moonDistance: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonDistance.value ?? 0.0,
+    moonPhase: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonPhase.value ?? 0.0,
+    sunRa: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunRa.value ?? 0.0,
+    sunDec: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunDec.value ?? 0.0,
+    sunAlt: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunAlt.value ?? 0.0,
+    sunAz: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunAz.value ?? 0.0,
+    solarElong: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.solarElong.value ?? 0.0,
   }
 };
 
@@ -1275,6 +1275,8 @@ export const getCurrentTargetInfo = (state, salindex) => {
     currentNumProposals: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.numProposals.value ?? 0,
     currentProposalId: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.proposalId.value ?? [],
     currentSequenceDuration: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.sequenceDuration.value ?? 0,
+    currentSequenceNVisits: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.sequenceNVisits.value ?? 0,
+    currentSequenceVisits: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.sequenceVisits.value ?? 0,
   }
 };
 
