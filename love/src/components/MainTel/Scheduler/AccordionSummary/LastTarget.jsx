@@ -8,7 +8,18 @@ import MinusIcon from 'components/icons/MinusIcon/MinusIcon';
 
 export default class LastTarget extends Component {
   render() {
-    const { isOpen } = this.props;
+    const { 
+      isOpen,
+      lastTargetId,
+      lastTargetRa,
+      lastTargetDecl,
+      lastTargetRotSkyPos,
+      lastTargetMjd,
+      lastTargetExpTime,
+      lastTargetFilter,
+      lastTargetNexp,
+      lastTargetMoreInfo
+    } = this.props;
     return (
       <div className={styles.container}>
         <div onClick={this.props.showContent} className={styles.header}>

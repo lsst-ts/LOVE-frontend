@@ -39,13 +39,98 @@ export default class AccordionSummary extends Component {
   }
 
   render() {
+    const { lastTargetId,
+      lastTargetRa,
+      lastTargetDecl,
+      lastTargetRotSkyPos,
+      lastTargetMjd,
+      lastTargetExpTime,
+      lastTargetFilter,
+      lastTargetNexp,
+      lastTargetMoreInfo,
+      nextTargetCurrentTime,
+      nextTimeWaitTime,
+      nextTargetRa,
+      nextTargetDecl,
+      nextTargetRotSkyPos,
+      predTargetsNumTargets,
+      predTargetsRa,
+      predTargetsDecl,
+      predTargetsRotSkyPos,
+      predTargetsMjd,
+      predTargetsExpTime,
+      predTargetsInstrConfig,
+      predTargetsNexp,
+      surveysNumGenProps,
+      surveysGenProps,
+      surveysNumSeqProps,
+      surveysSeqProps,
+      blockInvId,
+      blockInvStatus,
+      blockId,
+      blockStatusId,
+      blockStatus,
+      blockExecCompl,
+      blockExecTotal,
+      blockHash,
+      blockDef } = this.props;
     return (
       <div className={styles.container}>
-        <LastTarget showContent={() => this.toggleContentLast()} isOpen={this.state.isOpenLast} />
-        <NextTarget showContent={() => this.toggleContentNext()} isOpen={this.state.isOpenNext} />
-        <PredictedTarget showContent={() => this.toggleContentPredicted()} isOpen={this.state.isOpenPredicted} />
-        <Surveys showContent={() => this.toggleContentSurveys()} isOpen={this.state.isOpenSurveys} />
-        <Blocks showContent={() => this.toggleContentBlocks()} isOpen={this.state.isOpenBlocks} />
+        <LastTarget 
+          showContent={() => this.toggleContentLast()} 
+          isOpen={this.state.isOpenLast} 
+          lastTargetId={lastTargetId}
+          lastTargetRa={lastTargetRa}
+          lastTargetDecl={lastTargetDecl}
+          lastTargetRotSkyPos={lastTargetRotSkyPos}
+          lastTargetMjd={lastTargetMjd}
+          lastTargetExpTime={lastTargetExpTime}
+          lastTargetFilter={lastTargetFilter}
+          lastTargetNexp={lastTargetNexp}
+          lastTargetMoreInfo={lastTargetMoreInfo}
+        />
+        <NextTarget 
+          showContent={() => this.toggleContentNext()} 
+          isOpen={this.state.isOpenNext} 
+          nextTargetCurrentTime={nextTargetCurrentTime}
+          nextTimeWaitTime={nextTimeWaitTime}
+          nextTargetRa={nextTargetRa}
+          nextTargetDecl={nextTargetDecl}
+          nextTargetRotSkyPos={nextTargetRotSkyPos}
+        />
+        <PredictedTarget 
+          showContent={() => this.toggleContentPredicted()} 
+          isOpen={this.state.isOpenPredicted} 
+          predTargetsNumTargets={predTargetsNumTargets}
+          predTargetsRa={predTargetsRa}
+          predTargetsDecl={predTargetsDecl}
+          predTargetsRotSkyPos={predTargetsRotSkyPos}
+          predTargetsMjd={predTargetsMjd}
+          predTargetsExpTime={predTargetsExpTime}
+          predTargetsInstrConfig={predTargetsInstrConfig}
+          predTargetsNexp={predTargetsNexp}
+        />
+        <Surveys 
+          showContent={() => this.toggleContentSurveys()} 
+          isOpen={this.state.isOpenSurveys} 
+          surveysNumGenProps={surveysNumGenProps}
+          surveysGenProps={surveysGenProps}
+          surveysNumSeqProps={surveysNumSeqProps}
+          surveysSeqProps={surveysSeqProps}
+        />
+        <Blocks 
+          showContent={() => this.toggleContentBlocks()} 
+          isOpen={this.state.isOpenBlocks} 
+          blockInvId={blockInvId}
+          blockInvStatus={blockInvStatus}
+          blockId={blockId}
+          blockStatusId={blockStatusId}
+          blockStatus={blockStatus}
+          blockExecCompl={blockExecCompl}
+          blockExecTotal={blockExecTotal}
+          blockHash={blockHash}
+          blockDef={blockDef}
+        />
       </div>
     );
   }
