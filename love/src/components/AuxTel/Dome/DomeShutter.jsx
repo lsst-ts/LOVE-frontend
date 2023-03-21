@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { closestEquivalentAngle } from 'Utils';
+import { uniqueId } from 'lodash';
 import styles from './Dome.module.css';
 
 export default class DomeShutter extends Component {
@@ -29,6 +30,7 @@ export default class DomeShutter extends Component {
   constructor(props) {
     super(props);
     this.prevAzimuth = 0;
+    this.uniqueDomeMask = uniqueId('dome-mask-');
   }
 
   componentDidUpdate(prevProps) {
@@ -43,17 +45,18 @@ export default class DomeShutter extends Component {
     const x0 = viewBoxSize / 2 + offset;
     const y0 = viewBoxSize / 2 + offset;
     const r = viewBoxSize / 2;
-    const extraApperture = r / 4;
+    const extraApperture = r / 5;
     const alpha = Math.PI / 12;
     const rSinAlpha = r * Math.sin(alpha);
     const rCosAlpha = r * Math.cos(alpha);
-    const dropoutDoorWidth = (rCosAlpha + extraApperture) * 0.4;
-    const mainDoorWidth = (rCosAlpha + extraApperture) * 0.6;
+    const dropoutDoorWidth = (rCosAlpha + extraApperture) * 0.09;
+    const mainDoorWidth = (rCosAlpha + extraApperture) * 0.91;
     const equivalentAzimuth = closestEquivalentAngle(this.prevAzimuth, this.props.azimuthPosition);
+
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596">
         <defs>
-          <mask x="0" y="0" width="596" height="596" id="domeMask">
+          <mask x="0" y="0" width="596" height="596" id={this.uniqueDomeMask}>
             <circle cx={x0} cy={y0} r={r} fill="#fff" stroke="#" strokeWidth="2" />
           </mask>
         </defs>
@@ -66,11 +69,11 @@ export default class DomeShutter extends Component {
           stroke="white"
           strokeWidth="2"
           d={`
-          M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
-        L ${x0 - extraApperture} ${y0 + rSinAlpha}
-        L ${x0 - extraApperture} ${y0 - rSinAlpha}
-        L ${x0 + rCosAlpha} ${y0 - rSinAlpha}
-        `}
+            M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
+            L ${x0 - extraApperture} ${y0 + rSinAlpha}
+            L ${x0 - extraApperture} ${y0 - rSinAlpha}
+            L ${x0 + rCosAlpha} ${y0 - rSinAlpha}
+          `}
         />
         <g
           className={styles.rotatingDome}
@@ -107,19 +110,18 @@ export default class DomeShutter extends Component {
             fillOpacity="0.1"
             stroke="#152228"
           />
-          <rect x={0} y={0} width={4} height={4} />
           {/* Dropout door */}
-          <g clipPath={`circle(${r}px at center)`} style={{ mask: 'url(#domeMask)' }}>
+          <g clipPath={`circle(${r}px at center)`} style={{ mask: `url(#${this.uniqueDomeMask})` }}>
             <circle cx={x0} cy={y0} r={r} fill="none" stroke="none" />
             <path
               fill="none"
               stroke="white"
               strokeWidth="2"
               d={`
-            M ${x0 + rCosAlpha} ${y0 - rSinAlpha}
-            A ${r} ${r} 0 0 1 ${x0 + rCosAlpha} ${y0 + rSinAlpha}
-            M ${x0 + rCosAlpha} ${y0 - rSinAlpha}
-            `}
+                M ${x0 + rCosAlpha} ${y0 - rSinAlpha}
+                A ${r} ${r} 0 0 1 ${x0 + rCosAlpha} ${y0 + rSinAlpha}
+                M ${x0 + rCosAlpha} ${y0 - rSinAlpha}
+              `}
             />
             <rect
               x={
@@ -136,19 +138,32 @@ export default class DomeShutter extends Component {
           </g>
 
           {/* Main door */}
-          <rect
-            x={x0 - extraApperture - (mainDoorWidth * this.props.mainDoorOpeningPercentage) / 100}
-            y={y0 - rSinAlpha}
-            width={mainDoorWidth}
-            height={2 * rSinAlpha}
-            fill="white"
-            fillOpacity="0.2"
-            stroke="white"
-            strokeWidth="2"
-          />
-          {/* <circle cx={x0} cy={y0} r={r*0.91} fill="none" stroke="red" /> */}
+          <g clipPath={`circle(${r}px at center)`} style={{ mask: `url(#${this.uniqueDomeMask})` }}>
+            <circle cx={x0} cy={y0} r={r} fill="none" stroke="none" />
+            <rect
+              x={x0 - extraApperture - (mainDoorWidth * this.props.mainDoorOpeningPercentage) / 100}
+              y={y0 - rSinAlpha}
+              width={mainDoorWidth}
+              height={2 * rSinAlpha}
+              fill="white"
+              fillOpacity="0.2"
+              stroke="white"
+              strokeWidth="2"
+            />
+            { this.props.mainDoorOpeningPercentage > 74 ? (
+              <path
+              fill="none"
+              stroke="white"
+              strokeWidth="2"
+              d={`
+                M ${x0 - rCosAlpha} ${y0 + rSinAlpha}
+                A ${r} ${r} 0 0 1 ${x0 - rCosAlpha} ${y0 - rSinAlpha}
+                M ${x0 - rCosAlpha} ${y0 + rSinAlpha}
+              `}
+            />
+            ) : <></>}
+          </g>
         </g>
-        {/* <style>.cls-1{fill:#152228;fill-opacity:0;}.cls-2{opacity:0.6;}.cls-3{fill:#18313d;stroke:#152228;stroke-miterlimit:10;}</style> */}
       </svg>
     );
   }

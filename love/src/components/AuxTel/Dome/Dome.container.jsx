@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Dome from './Dome';
-import { getDomeState } from '../../../redux/selectors';
+import { getDomeState, getATMCSState } from '../../../redux/selectors';
 import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
@@ -29,18 +29,29 @@ const DomeContainer = ({
   mainDoorOpeningPercentage,
   azimuthPosition,
   azimuthState,
+  azimuthCommanded,
   domeInPosition,
-  azimuthCommandedState,
   dropoutDoorState,
   mainDoorState,
-  azElMountEncoders,
-  nasmythMountEncoders,
   detailedState,
   atMountState,
-  target,
   mountInPosition,
-  currentTimesToLimits,
-  positionLimits,
+  trackID,
+  targetAzimuth,
+  targetElevation,
+  targetNasmyth1,
+  targetNasmyth2,
+  m3State,
+  minEl,
+  maxEl,
+  timeAzLim,
+  timeRotLim,
+  timeUnobservable,
+  timeElHighLimit,
+  currentPointingAz,
+  currentPointingEl,
+  currentPointingNasmyth1,
+  currentPointingNasmyth2,
   width,
   height,
   subscribeToStream,
@@ -51,28 +62,39 @@ const DomeContainer = ({
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
+
   return (
     <Dome
       dropoutDoorOpeningPercentage={dropoutDoorOpeningPercentage}
       mainDoorOpeningPercentage={mainDoorOpeningPercentage}
-      domeInPosition={domeInPosition}
       azimuthPosition={azimuthPosition}
       azimuthState={azimuthState}
-      azimuthCommandedState={azimuthCommandedState}
+      azimuthCommanded={azimuthCommanded}
+      domeInPosition={domeInPosition}
       dropoutDoorState={dropoutDoorState}
       mainDoorState={mainDoorState}
-      azElMountEncoders={azElMountEncoders}
-      nasmythMountEncoders={nasmythMountEncoders}
-      detailedState={detailedState}
       atMountState={atMountState}
-      target={target}
       mountInPosition={mountInPosition}
+      trackID={trackID}
+      targetAzimuth={targetAzimuth}
+      targetElevation={targetElevation}
+      targetNasmyth1={targetNasmyth1}
+      targetNasmyth2={targetNasmyth2}
+      m3State={m3State}
+      minEl={minEl}
+      maxEl={maxEl}
+      timeAzLim={timeAzLim}
+      timeRotLim={timeRotLim}
+      timeUnobservable={timeUnobservable}
+      timeElHighLimit={timeElHighLimit}
+      currentPointingAz={currentPointingAz}
+      currentPointingEl={currentPointingEl}
+      currentPointingNasmyth1={currentPointingNasmyth1}
+      currentPointingNasmyth2={currentPointingNasmyth2}
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
       width={width}
       height={height}
-      currentTimesToLimits={currentTimesToLimits}
-      positionLimits={positionLimits}
       controls={controls}
     />
   );
@@ -80,14 +102,13 @@ const DomeContainer = ({
 
 const mapStateToProps = (state) => {
   const domeState = getDomeState(state);
-  return domeState;
+  const mountState = getATMCSState(state);
+  return {...domeState, ...mountState};
 };
 
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
-    'telemetry-ATDome-0-dropoutDoorOpeningPercentage',
-    'telemetry-ATDome-0-mainDoorOpeningPercentage',
-    'telemetry-ATDome-0-azimuthPosition',
+    'telemetry-ATDome-0-position',
     'event-ATDome-0-azimuthState',
     'event-ATDome-0-azimuthCommandedState',
     'event-ATDome-0-dropoutDoorState',
@@ -95,13 +116,12 @@ const mapDispatchToProps = (dispatch) => {
     'event-ATDome-0-allAxesInPosition',
     'telemetry-ATMCS-0-mount_AzEl_Encoders',
     'telemetry-ATMCS-0-mount_Nasmyth_Encoders',
-    'event-ATMCS-0-detailedState',
     'event-ATMCS-0-atMountState',
     'event-ATMCS-0-target',
     'event-ATMCS-0-allAxesInPosition',
     'event-ATMCS-0-m3State',
     'event-ATMCS-0-positionLimits',
-    'telemetry-ATPtg-1-currentTimesToLimits',
+    'event-ATPtg-1-timesOfLimits',
   ];
   return {
     subscriptions,

@@ -18,6 +18,10 @@
   stroke-miterlimit: 10;
 }
 
+.st3 {
+  fill: hsl(201, 40%, 16%);
+}
+
 .st2 {
   fill: none;
   stroke-width: 5;

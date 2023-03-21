@@ -49,39 +49,37 @@ export default class DomePointing extends Component {
     const zenithPixels = this.azelToPixel({ az: 0, el: 90 }, false);
     const el = this.props.currentPointing.el;
     const az = this.props.currentPointing.az;
+
+    const posTranslate = Math.sin(((el - 90) * Math.PI) / 180) * (298 - 30);
+
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596">
-        <circle
-          className={styles.targetPointing}
-          r={16}
-          strokeWidth={2}
-          cx={zenithPixels.x}
-          cy={zenithPixels.y}
-          style={{
-            transform: `rotateZ(${this.props.targetPointing.az}deg) rotateX(${this.props.targetPointing.el - 90}deg)`,
-            transformOrigin: '50% 50% 298px',
-          }}
-        />
 
-        <g
-          style={{
-            transform: `rotateZ(${az}deg)`,
-            transformOrigin: '50% 50%',
-          }}
-        >
+        {(this.props.targetPointing.az !== az && this.props.targetPointing.el !== el) && (
           <circle
-            className={styles.currentPointing}
+            className={styles.targetPointing}
             r={16}
             strokeWidth={2}
             cx={zenithPixels.x}
             cy={zenithPixels.y}
             style={{
-              transform: `rotateX(${el - 90}deg)`,
-              transformOrigin: '50% 50% 298px',
+              transform: `rotateZ(${this.props.targetPointing.az}deg) translate(0px, ${posTranslate}px) rotateX(${this.props.targetPointing.el - 90}deg)`,
+              transformOrigin: '50% 50%',
             }}
           />
-        </g>
-        {/* <circle r={4} cx={targetPixels.x} cy={targetPixels.y} fill="gray" /> */}
+        )}
+
+        <circle
+          className={styles.currentPointing}
+          r={16}
+          strokeWidth={2}
+          cx={zenithPixels.x}
+          cy={zenithPixels.y}
+          style={{
+            transform: `rotateZ(${az}deg) translate(0px, ${posTranslate}px) rotateX(${el - 90}deg)`,
+            transformOrigin: '50% 50%',
+          }}
+        />
       </svg>
     );
   }

@@ -562,21 +562,34 @@ export default class LightPath extends Component {
         <svg x={0} y={0} viewBox="0 0 244 416" xmlSpace="preserve">
           {/* Background */}
           {this.drawBackground()}
+
           {showLightPath && this.drawLightPath1(this.props)}
           {showLightPath && isM1CoverOpen && this.drawLightPath2(this.props)}
-          {/* Port 2 */}
-          {this.drawPort2(this.props)}
-          {/* M1 cover */}
-          {this.drawM1Cover(this.props)}
-          {/* M1 */}
-          {this.drawM1(this.props)}
+
           {/* M3 container */}
           <path
             className={styles.st1}
             d="M100.7 275.4h4.3v-9h32.7v72l1 2h-18l-17-.1 1.3-1.9V301h-4.3zM133.5 390.4v-21.9l3.2-.1-1.3-6H108l-1.3 5.8h3.3v22.2z"
           />
+
           {showLightPath && isM1CoverOpen && this.drawLightPath3(this.props)}
           {showLightPath && isM1CoverOpen && this.drawLightPath4(this.props)}
+
+          {/* M1 */}
+          {this.drawM1(this.props)}
+
+          {/* M3 container draw over M1 */}
+          <rect className={styles.st3}
+            x={106} y={310}
+            width="30.7" height="16.4"
+          />
+
+          {/* M1 cover */}
+          {this.drawM1Cover(this.props)}
+
+          {/* Port 2 */}
+          {this.drawPort2(this.props)}
+
           {/* M3 */}
           {this.drawM3(this.props)}
           {/* M2 */}
