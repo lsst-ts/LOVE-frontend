@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { closestEquivalentAngle } from 'Utils';
+import { uniqueId } from 'lodash';
 import styles from './Dome.module.css';
 
 export default class DomeShutter extends Component {
@@ -29,6 +30,7 @@ export default class DomeShutter extends Component {
   constructor(props) {
     super(props);
     this.prevAzimuth = 0;
+    this.uniqueDomeMask = uniqueId('dome-mask-');
   }
 
   componentDidUpdate(prevProps) {
@@ -54,7 +56,7 @@ export default class DomeShutter extends Component {
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596">
         <defs>
-          <mask x="0" y="0" width="596" height="596" id="domeMask">
+          <mask x="0" y="0" width="596" height="596" id={this.uniqueDomeMask}>
             <circle cx={x0} cy={y0} r={r} fill="#fff" stroke="#" strokeWidth="2" />
           </mask>
         </defs>
@@ -109,7 +111,7 @@ export default class DomeShutter extends Component {
             stroke="#152228"
           />
           {/* Dropout door */}
-          <g clipPath={`circle(${r}px at center)`} style={{ mask: 'url(#domeMask)' }}>
+          <g clipPath={`circle(${r}px at center)`} style={{ mask: `url(#${this.uniqueDomeMask})` }}>
             <circle cx={x0} cy={y0} r={r} fill="none" stroke="none" />
             <path
               fill="none"
@@ -136,7 +138,7 @@ export default class DomeShutter extends Component {
           </g>
 
           {/* Main door */}
-          <g clipPath={`circle(${r}px at center)`} style={{ mask: 'url(#domeMask)' }}>
+          <g clipPath={`circle(${r}px at center)`} style={{ mask: `url(#${this.uniqueDomeMask})` }}>
             <circle cx={x0} cy={y0} r={r} fill="none" stroke="none" />
             <rect
               x={x0 - extraApperture - (mainDoorWidth * this.props.mainDoorOpeningPercentage) / 100}
