@@ -10,6 +10,7 @@ export default class LastTarget extends Component {
   render() {
     const { 
       isOpen,
+      currentRequestTime,
       lastTargetId,
       lastTargetRa,
       lastTargetDecl,
@@ -23,7 +24,7 @@ export default class LastTarget extends Component {
     return (
       <div className={styles.container}>
         <div onClick={this.props.showContent} className={styles.header}>
-          <h3 className={styles.title}>Last Target</h3>
+          <h3 className={styles.title}>Last Target-{lastTargetId}</h3>
           <div className={styles.icons}>{!isOpen ? <AddIcon /> : <MinusIcon />}</div>
         </div>
         <div
@@ -31,29 +32,28 @@ export default class LastTarget extends Component {
         >
           <SummaryPanel>
             <Label>Time on target</Label>
-            <Value>00:00:12</Value>
+            <Value>{currentRequestTime}</Value>
             <Label>MJD</Label>
-            <Value>59954</Value>
+            <Value>{lastTargetMjd}</Value>
             <Label>Right ascension</Label>
-            <Value>15h 32m 38s</Value>
+            <Value>{lastTargetRa}</Value>
             <Label>Declination</Label>
-            <Value>-20° 00' 15"</Value>
+            <Value>{lastTargetDecl}</Value>
             <Label>Sky rotation</Label>
-            <Value>135.00°</Value>
+            <Value>{lastTargetRotSkyPos}</Value>
           </SummaryPanel>
           <SummaryPanel>
             <Label>Filter</Label>
-            <Value>r</Value>
+            <Value>{lastTargetFilter}</Value>
             <Label>N° of exposures</Label>
-            <Value>10</Value>
+            <Value>{lastTargetNexp}</Value>
             <Label>Exposure time</Label>
-            <Value>2s</Value>
+            <Value>{lastTargetExpTime}</Value>
           </SummaryPanel>
           <div className={styles.infoPanel}>
             <h4 className={styles.infoLabel}>Info</h4>
             <div className={styles.infoContent}>
-              Prediction algorith set error for target *name_target*, deprecated declination. Moved to next viable
-              target: *next_target*
+              {lastTargetMoreInfo}
             </div>
           </div>
         </div>

@@ -5,7 +5,17 @@ import MinusIcon from 'components/icons/MinusIcon/MinusIcon';
 
 export default class PredictedTarget extends Component {
   render() {
-    const { isOpen } = this.props;
+    const { 
+      isOpen,
+      predTargetsNumTargets,
+      predTargetsRa,
+      predTargetsDecl,
+      predTargetsRotSkyPos,
+      predTargetsMjd,
+      predTargetsExpTime,
+      predTargetsInstrConfig,
+      predTargetsNexp } = this.props;
+    
     const predictedTargets = [
       {
         name: 'Target 002 856gh',
@@ -56,10 +66,14 @@ export default class PredictedTarget extends Component {
         value: '0234/024s',
       },
     ];
+
     return (
       <div className={styles.container}>
         <div onClick={this.props.showContent} className={styles.header}>
-          <h3 className={styles.title}>Predicted Target</h3>
+          <div className={styles.targetsTitle}>
+            <h3 className={styles.title}>Predicted Target</h3>
+            <h6>{predTargetsNumTargets} targets predicted</h6>
+          </div>
           <div className={styles.icons}>{!isOpen ? <AddIcon /> : <MinusIcon />}</div>
         </div>
         <div

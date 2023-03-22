@@ -33,7 +33,12 @@ export default class Surveys extends Component {
       'W749-a',
       'WF',
     ];
-    const { isOpen } = this.props;
+    const { 
+      isOpen,
+      surveysNumGenProps,
+      surveysGenProps,
+      surveysNumSeqProps,
+      surveysSeqProps } = this.props;
     return (
       <div className={styles.container}>
         <div onClick={this.props.showContent} className={styles.header}>

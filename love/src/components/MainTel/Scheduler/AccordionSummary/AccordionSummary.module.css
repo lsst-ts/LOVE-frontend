@@ -153,3 +153,7 @@
 .closePanel {
   height: 0px;
 }
+
+.targetsTitle {
+  display: inline;
+}

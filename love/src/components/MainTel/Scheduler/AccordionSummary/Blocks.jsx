@@ -9,7 +9,15 @@ import Button from 'components/GeneralPurpose/Button/Button';
 
 export default class Blocks extends Component {
   render() {
-    const { isOpen } = this.props;
+    const { 
+      isOpen,
+      blockId,
+      blockStatusId,
+      blockStatus,
+      blockExecCompl,
+      blockExecTotal,
+      blockHash,
+      blockDef } = this.props;
     const executions = [
       {
         name: 'Target 002 856gh',

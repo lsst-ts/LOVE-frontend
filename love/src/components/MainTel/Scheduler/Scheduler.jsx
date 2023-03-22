@@ -344,6 +344,7 @@ export default class Scheduler extends Component {
               predictedTargetsRa={predictedTargetsRa}
               predictedTargetsDecl={predictedTargetsDecl}
               predictedTargetsRotSkyPos={predictedTargetsRotSkyPos}
+              currentRequestTime={currentRequestTime}
               lastTargetId={lastTargetId}
               lastTargetRa={lastTargetRa}
               lastTargetDecl={lastTargetDecl}

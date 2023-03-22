@@ -39,7 +39,9 @@ export default class AccordionSummary extends Component {
   }
 
   render() {
-    const { lastTargetId,
+    const { 
+      currentRequestTime,
+      lastTargetId,
       lastTargetRa,
       lastTargetDecl,
       lastTargetRotSkyPos,
@@ -78,7 +80,8 @@ export default class AccordionSummary extends Component {
       <div className={styles.container}>
         <LastTarget 
           showContent={() => this.toggleContentLast()} 
-          isOpen={this.state.isOpenLast} 
+          isOpen={this.state.isOpenLast}
+          currentRequestTime={currentRequestTime} 
           lastTargetId={lastTargetId}
           lastTargetRa={lastTargetRa}
           lastTargetDecl={lastTargetDecl}
