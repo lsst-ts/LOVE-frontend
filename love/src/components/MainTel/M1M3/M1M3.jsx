@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
-import lodash from 'lodash';
+import { uniqueId, isEqual } from 'lodash';
 import { defaultNumberFormatter } from 'Utils';
 import {
   M1M3ActuatorPositions,
@@ -39,6 +39,10 @@ export default class M1M3 extends Component {
       selectedHardpointId: 0,
       forceParameters: [],
     };
+    this.uniqueGradient = uniqueId('m1m3-force-gradient-color-scale-');
+    this.uniqueScatter = uniqueId('m1m3-scatter-');
+    this.uniqueCircleOverlay = uniqueId('m1m3-circle-overlay-');
+    this.uniqueForceGradient = uniqueId('m1m3-force-gradient');
   }
 
   static statesIlc = {
@@ -155,11 +159,11 @@ export default class M1M3 extends Component {
     });
 
     //Create the gradient
-    const svg = d3.select('#color-scale svg').attr('width', width).attr('height', height);
+    const svg = d3.select(`#${this.uniqueGradient} svg`).attr('width', width).attr('height', height);
     svg
       .append('defs')
       .append('linearGradient')
-      .attr('id', 'force-gradient')
+      .attr('id', this.uniqueForceGradient)
       .attr('x1', '0%')
       .attr('y1', '100%')
       .attr('x2', '0%')
@@ -179,7 +183,7 @@ export default class M1M3 extends Component {
       .attr('ry', 5)
       .attr('width', 10)
       .attr('height', '100%')
-      .style('fill', 'url(#force-gradient)');
+      .style('fill', `url(#${this.uniqueForceGradient})`);
   };
 
   actuatorSelected = (id) => {
@@ -331,24 +335,24 @@ export default class M1M3 extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    d3.select('#circle-overlay').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
+    d3.select(`#${this.uniqueCircleOverlay}`).call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
 
     if (
       this.state.selectedForceParameter !== prevState.selectedForceParameter ||
-      !lodash.isEqual(this.props[this.state.selectedForceInput], prevProps[this.state.selectedForceInput])
+      !isEqual(this.props[this.state.selectedForceInput], prevProps[this.state.selectedForceInput])
     ) {
       const forceData = this.props[this.state.selectedForceInput]?.[this.state.selectedForceParameter]?.value ?? [];
       this.setState({ actuatorsForce: forceData });
     }
 
-    if (!lodash.isEqual(this.state.actuators, prevState.actuators)) {
+    if (!isEqual(this.state.actuators, prevState.actuators)) {
       const data = this.state.actuators.map(
         (act) => Math.sqrt(act.position[0] ** 2 + act.position[1] ** 2) / this.state.maxRadius,
       );
       this.createColorScale(data);
     }
 
-    if (!lodash.isEqual(this.state.actuatorsForce, prevState.actuatorsForce)) {
+    if (!isEqual(this.state.actuatorsForce, prevState.actuatorsForce)) {
       this.createColorScale(this.state.actuatorsForce);
     }
 
@@ -357,7 +361,7 @@ export default class M1M3 extends Component {
       prevProps.xPosition !== xPosition ||
       prevProps.yPosition !== yPosition ||
       prevProps.zPosition !== zPosition ||
-      !lodash.isEqual(prevProps.actuatorReferenceId, actuatorReferenceId)
+      !isEqual(prevProps.actuatorReferenceId, actuatorReferenceId)
     ) {
       const actuators = M1M3.getActuatorsPositions(actuatorReferenceId, { xPosition, yPosition, zPosition });
       // const actuators = M1M3ActuatorPositions; // Old implementation
@@ -402,7 +406,7 @@ export default class M1M3 extends Component {
     d3.event.transform.x = Math.floor(transformX);
     d3.event.transform.y = Math.floor(transformY);
 
-    d3.select('#scatter').attr('transform', d3.event.transform);
+    d3.select(`#${this.uniqueScatter}`).attr('transform', d3.event.transform);
     // d3.select('#background-circle').attr('transform', d3.event.transform);
     // d3.select('#plot-axis').attr('transform', d3.event.transform);
     this.setState({
@@ -496,7 +500,7 @@ export default class M1M3 extends Component {
 
                 {M1M3HardpointPositions.map((hardpoint) => {
                   return (
-                    <g className={styles.gHardpoint} onClick={() => this.hardpointSelected(hardpoint.id)}>
+                    <g key={hardpoint.id} className={styles.gHardpoint} onClick={() => this.hardpointSelected(hardpoint.id)}>
                       <circle
                         className={styles.circleHardpoint + ' ' + this.fillHardpoint(hardpoint.id)}
                         cx={hardpoint.mini.position[0]}
@@ -526,7 +530,7 @@ export default class M1M3 extends Component {
             </div>
           </div>
 
-          <div class={styles.gridWindowM1M3}>
+          <div className={styles.gridWindowM1M3}>
             <svg
               className={styles.svgContainer}
               viewBox={`0 0 ${this.state.width} ${this.state.width}`}
@@ -548,7 +552,7 @@ export default class M1M3 extends Component {
               />
 
               <circle
-                id="circle-overlay"
+                id={this.uniqueCircleOverlay}
                 className={this.state.actuators.length > 0 ? styles.cursorMove : styles.circleOverlayDisabled}
                 cx={this.state.width / 2}
                 cy={this.state.width / 2}
@@ -560,7 +564,7 @@ export default class M1M3 extends Component {
                 onMouseLeave={this.disableScroll}
               />
 
-              <g id="scatter" className={styles.scatter}>
+              <g id={this.uniqueScatter} className={styles.scatter}>
                 {this.state.actuators.map((act, i) => {
                   return (
                     <g key={act.id} className={styles.actuator} onClick={() => this.actuatorSelected(act.id)}>
@@ -668,7 +672,7 @@ export default class M1M3 extends Component {
           <div className={styles.gridGroupGradiantInfo}>
             <div className={styles.forceGradientWrapper}>
               <span>Force</span>
-              <div id="color-scale" className={styles.forceGradient}>
+              <div id={this.uniqueGradient} className={styles.forceGradient}>
                 <svg viewBox={`0 0 10 350`}></svg>
                 <div className={styles.forceGradientLabels}>
                   <span>{maxForce} [N]</span>
@@ -695,7 +699,7 @@ export default class M1M3 extends Component {
               </SummaryPanel>
             </div>
 
-            <div class={styles.gridHardpointInfo}>
+            <div className={styles.gridHardpointInfo}>
               <SummaryPanel className={styles.actuatorInfo}>
                 <div className={styles.actuatorValue}>
                   <Title>Hardpoint {selectedHardpoint.id}</Title>

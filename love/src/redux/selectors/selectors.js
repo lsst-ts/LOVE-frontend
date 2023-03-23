@@ -322,43 +322,56 @@ export const getDomeState = (state) => {
     'event-ATDome-0-dropoutDoorState',
     'event-ATDome-0-mainDoorState',
     'event-ATDome-0-allAxesInPosition',
+  ];
+  const domeData = getStreamsData(state, domeSubscriptions);
+  return {
+    dropoutDoorOpeningPercentage: domeData['telemetry-ATDome-0-position']?.dropoutDoorOpeningPercentage?.value ?? 0,
+    mainDoorOpeningPercentage: domeData['telemetry-ATDome-0-position']?.mainDoorOpeningPercentage?.value ?? 0,
+    azimuthPosition: domeData['telemetry-ATDome-0-position']?.azimuthPosition?.value ?? 0,
+    azimuthState: domeData['event-ATDome-0-azimuthState']?.[0].state?.value ?? 0,
+    azimuthCommanded: domeData['event-ATDome-0-azimuthCommandedState']?.[0].azimuth?.value ?? 0,
+    domeInPosition: domeData['event-ATDome-0-allAxesInPosition']?.[0].inPosition?.value ?? 0,
+    dropoutDoorState: domeData['event-ATDome-0-dropoutDoorState']?.[0].state?.value ?? 0,
+    mainDoorState: domeData['event-ATDome-0-mainDoorState']?.[0].state?.value ?? 0,
+  };
+};
+
+export const getATMCSState = (state) => {
+  const subscriptions = [
     'telemetry-ATMCS-0-mount_AzEl_Encoders',
     'telemetry-ATMCS-0-mount_Nasmyth_Encoders',
-    'event-ATMCS-0-detailedState',
     'event-ATMCS-0-atMountState',
     'event-ATMCS-0-target',
     'event-ATMCS-0-allAxesInPosition',
     'event-ATMCS-0-m3State',
     'event-ATMCS-0-positionLimits',
-    'telemetry-ATPtg-1-currentTimesToLimits',
+    'event-ATPtg-1-timesOfLimits',
   ];
-  const domeData = getStreamsData(state, domeSubscriptions);
+  const data = getStreamsData(state, subscriptions);
+  const [minEl, minAz, minNas1, minNas2, minM3] = data['event-ATMCS-0-positionLimits']?.[0].minimum?.value ?? [5, -270, -165, -165, 0];
+  const [maxEl, maxAz, maxNas1, maxNas2, maxM3] = data['event-ATMCS-0-positionLimits']?.[0].maximum?.value ?? [90, 270, 165, 165, 180];
+
   return {
-    dropoutDoorOpeningPercentage: domeData['telemetry-ATDome-0-position']
-      ? domeData['telemetry-ATDome-0-position'].dropoutDoorOpeningPercentage
-      : 0,
-    mainDoorOpeningPercentage: domeData['telemetry-ATDome-0-position']
-      ? domeData['telemetry-ATDome-0-position'].mainDoorOpeningPercentage
-      : 0,
-    azimuthPosition: domeData['telemetry-ATDome-0-position']
-      ? domeData['telemetry-ATDome-0-position'].azimuthPosition
-      : 0,
-    azimuthState: domeData['event-ATDome-0-azimuthState'],
-    azimuthCommandedState: domeData['event-ATDome-0-azimuthCommandedState'],
-    domeInPosition: domeData['event-ATDome-0-allAxesInPosition'],
-    dropoutDoorState: domeData['event-ATDome-0-dropoutDoorState'],
-    mainDoorState: domeData['event-ATDome-0-mainDoorState'],
-    azElMountEncoders: domeData['telemetry-ATMCS-0-mount_AzEl_Encoders'],
-    nasmythMountEncoders: domeData['telemetry-ATMCS-0-mount_Nasmyth_Encoders'],
-    detailedState: domeData['event-ATMCS-0-detailedState'],
-    atMountState: domeData['event-ATMCS-0-atMountState'],
-    mountInPosition: domeData['event-ATMCS-0-allAxesInPosition'],
-    target: domeData['event-ATMCS-0-target'],
-    m3State: domeData['event-ATMCS-0-m3State'],
-    positionLimits: domeData['event-ATMCS-0-positionLimits'],
-    currentTimesToLimits: domeData.currentTimesToLimits,
-  };
-};
+    atMountState: data['event-ATMCS-0-atMountState']?.[0].state?.value ?? 0,
+    mountInPosition: data['event-ATMCS-0-allAxesInPosition']?.[0].inPosition?.value ?? false,
+    trackID: data['event-ATMCS-0-target']?.[0].trackId?.value ?? 0,
+    targetAzimuth: data['event-ATMCS-0-target']?.[0].azimuth?.value ?? 0,
+    targetElevation: data['event-ATMCS-0-target']?.[0].elevation?.value ?? 0,
+    targetNasmyth1: data['event-ATMCS-0-target']?.[0].nasmyth1RotatorAngle?.value ?? 0,
+    targetNasmyth2: data['event-ATMCS-0-target']?.[0].nasmyth2RotatorAngle?.value ?? 0,
+    m3State: data['event-ATMCS-0-m3State']?.[0].state?.value ?? 2,
+    minEl, minAz, minNas1, minNas2, minM3,
+    maxEl, maxAz, maxNas1, maxNas2, maxM3,
+    timeAzLim: data['event-ATPtg-1-timesOfLimits']?.[0].timeAzLim?.value ?? 0,
+    timeRotLim: data['event-ATPtg-1-timesOfLimits']?.[0].timeRotLim?.value ?? 0,
+    timeUnobservable: data['event-ATPtg-1-timesOfLimits']?.[0].timeUnobservable?.value ?? 0,
+    timeElHighLimit: data['event-ATPtg-1-timesOfLimits']?.[0].timeElHighLimit?.value ?? 0,
+    currentPointingAz: data['telemetry-ATMCS-0-mount_AzEl_Encoders']?.azimuthCalculatedAngle?.value?.[0],
+    currentPointingEl: data['telemetry-ATMCS-0-mount_AzEl_Encoders']?.elevationCalculatedAngle?.value?.[0],
+    currentPointingNasmyth1: data['telemetry-ATMCS-0-mount_Nasmyth_Encoders']?.nasmyth1CalculatedAngle?.value?.[0],
+    currentPointingNasmyth2: data['telemetry-ATMCS-0-mount_Nasmyth_Encoders']?.nasmyth2CalculatedAngle?.value?.[0],
+  }
+}
 
 export const getMountSubscriptions = (index) => {
   return [

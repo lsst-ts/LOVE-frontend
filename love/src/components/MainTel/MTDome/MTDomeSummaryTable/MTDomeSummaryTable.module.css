@@ -6,7 +6,7 @@
   background-color: var(--second-quaternary-background-dimmed-color);
 }
 
-.summaryTable {
+/* .summaryTable {
   align-self: center;
   grid-template-columns: 0.5fr 0.5fr;
   padding: 20px;
@@ -18,7 +18,7 @@
   text-align: center;
   display: inline-block;
   width: 10em;
-}
+} */
 
 .shutters {
   display: block;

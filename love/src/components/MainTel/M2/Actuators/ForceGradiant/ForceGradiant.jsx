@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
-import isEqual from 'lodash/isEqual';
+import { isEqual, uniqueId } from 'lodash';
 import { defaultNumberFormatter } from 'Utils';
 
 import styles from './ForceGradiant.module.css';
@@ -58,6 +58,8 @@ export default class ForceGradiant extends Component {
     this.state = {
       width: 350,
     };
+    this.uniqueColorScale = uniqueId('m2-forcegradient-color-scale-');
+    this.uniqueForceGradient = uniqueId('m2-forcegradient-');
   }
 
   getActuator = (id) => {
@@ -126,15 +128,15 @@ export default class ForceGradiant extends Component {
     const width = this.state.width;
 
     // Create the gradient
-    const svg = d3.select('#color-scale svg');
-    const forceGradientRect = d3.select('#color-scale svg #force-gradient-rect');
+    const svg = d3.select(`#${this.uniqueColorScale} svg`);
+    const forceGradientRect = d3.select(`#${this.uniqueColorScale} svg #${this.uniqueForceGradient}-rect`);
 
     if (forceGradientRect.empty()) {
       svg.attr('width', width).attr('height', height);
       svg
         .append('defs')
         .append('linearGradient')
-        .attr('id', 'force-gradient')
+        .attr('id', `${this.uniqueForceGradient}`)
         .attr('x1', '100%')
         .attr('y1', '0%')
         .attr('x2', '0%')
@@ -148,14 +150,14 @@ export default class ForceGradiant extends Component {
 
       svg
         .append('rect')
-        .attr('id', 'force-gradient-rect')
+        .attr('id', `${this.uniqueForceGradient}-rect`)
         .attr('x', 0)
         .attr('y', 0)
         .attr('rx', 0)
         .attr('ry', 0)
         .attr('width', width)
         .attr('height', 40)
-        .style('fill', 'url(#force-gradient)');
+        .style('fill', `url(#${this.uniqueForceGradient})`);
     }
   };
 
@@ -170,10 +172,10 @@ export default class ForceGradiant extends Component {
   setForce = (actuator) => {
     const { minForceLimit, maxForceLimit } = this.props;
 
-    const svg = d3.select('#color-scale svg');
+    const svg = d3.select(`#${this.uniqueColorScale} svg`);
     svg.style('z-index', 999);
-    const measuredText = d3.select('#color-scale svg #measured-text');
-    const measuredLine = d3.select('#color-scale svg #measured-line');
+    const measuredText = d3.select(`#${this.uniqueColorScale} svg #measured-text`);
+    const measuredLine = d3.select(`#${this.uniqueColorScale} svg #measured-line`);
     const measuredForceX = ForceGradiant.getGradiantPositionX(
       actuator.measured,
       minForceLimit,
@@ -225,8 +227,8 @@ export default class ForceGradiant extends Component {
         .text(`${defaultNumberFormatter(actuator.measured)} N`);
     }
 
-    const commandedText = d3.select('#color-scale svg #commanded-text');
-    const commandedLine = d3.select('#color-scale svg #commanded-line');
+    const commandedText = d3.select(`#${this.uniqueColorScale} svg #commanded-text`);
+    const commandedLine = d3.select(`#${this.uniqueColorScale} svg #commanded-line`);
 
     if (commandedText) {
       commandedText.remove();
@@ -285,7 +287,7 @@ export default class ForceGradiant extends Component {
     return (
       <>
         <p className={styles.title}>Force</p>
-        <div id="color-scale" className={styles.forceGradient}>
+        <div id={this.uniqueColorScale} className={styles.forceGradient}>
           <div style={{ width: this.state.width, marginBottom: '0.5em' }}>
             <span style={{ float: 'left' }}>{minForceLimit} [N]</span>
             <span style={{ float: 'right' }}>{maxForceLimit} [N]</span>
