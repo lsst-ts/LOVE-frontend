@@ -73,3 +73,7 @@
   display: grid;
   grid-template-rows: auto;
 }
+
+.col2{
+  grid-column: span 2;
+}

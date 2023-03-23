@@ -30,6 +30,7 @@ import XMLTable from './XMLTable/XMLTable';
 import ConfigPanel from './ConfigPanel/ConfigPanel';
 import EmergencyContactsPanel from './EmergencyContactsPanel/EmergencyContactsPanel';
 import UserDetails from './UserDetails/UserDetails';
+import ObservatorySummaryMenu from 'components/ObservatorySummary/Menu/ObservatorySummaryMenu';
 import UserSwapContainer from '../Login/UserSwap.container';
 import { severityEnum } from '../../Config';
 import ManagerInterface from 'Utils';
@@ -270,6 +271,82 @@ class Layout extends Component {
     const timeStatement = relativeTime(heartbeat.data.timestamp, 0);
     return `LOVE ${component} heartbeat not seen since ${timeStatement}`;
   };
+
+  getObsLocation = () => {
+    return(
+      'Summit'
+    )
+  }
+
+  getObsLocationIcon = (style) => {
+    var location = this.getObsLocation();
+
+    switch(location){
+      case 'Unknown':
+        return (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 19">
+            <path className={style} d="m7,0C3.13,0,0,3.13,0,7s7,12,7,12c0,0,7-8.13,7-12S10.87,0,7,0Zm0,12c-2.76,0-5-2.24-5-5S4.24,2,7,2s5,2.24,5,5-2.24,5-5,5Z"/>
+            <path className={style} d="m7,9.52c-.28,0-.5-.22-.5-.5v-1.68c0-.28.22-.5.5-.5.83,0,1.5-.67,1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5,1.5c0,.28-.22.5-.5.5s-.5-.22-.5-.5c0-1.38,1.12-2.5,2.5-2.5s2.5,1.12,2.5,2.5c0,1.21-.86,2.22-2,2.45v1.23c0,.28-.22.5-.5.5Z"/>
+            <circle className={style} cx="7" cy="10.6" r=".5"/>
+          </svg>
+        );
+      case 'Tucson':
+        return (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.84 20">
+            <path
+              className={style}
+              d="m17.84,6.35c-1.1,0-2,.9-2,2v3.8c0,.44-.36.81-.81.81h-1.11V4c0-2.21-1.79-4-4-4s-4,1.79-4,4v4.95h-1.11c-.44,0-.81-.36-.81-.81v-3.8c0-1.1-.9-2-2-2S0,3.24,0,4.35v3.8c0,2.65,2.16,4.81,4.81,4.81h1.11v6.05c0,.55.45,1,1,1h6c.55,0,1-.45,1-1v-2.05h1.11c2.65,0,4.81-2.16,4.81-4.81v-3.8c0-1.1-.9-2-2-2Z"/>
+          </svg>
+        );
+      case 'Base':
+        return (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18.34 20">
+            <path className={style} d="m.98,9.77c.13.66.84,1.02,1.47.8l.83-.3C1.78,5.99,3.08,1.64,6.21.5,2.36,1.89.21,5.88.98,9.77Z"/>
+            <path className={style} d="m6.02,9.26l5.97-2.17C10.41,2.85,7.84-.1,6.21.5c-1.63.59-1.71,4.51-.19,8.77Z"/>
+            <path className={style} d="m16.17,4.24C14.26.76,10.05-.9,6.21.5c3.13-1.14,6.92,1.36,8.52,5.6l.83-.3c.63-.23.94-.97.61-1.55Z"/>
+            <path className={style} d="m9.85,12.06h1.14l-2.69-7.38c-.1-.28-.41-.42-.69-.32-.28.1-.42.41-.32.69l2.55,7.02Z"/>
+            <path className={style} d="m16.77,12.06h-5.79l1.11,3.06c.1.28-.04.59-.32.69-.06.02-.12.03-.18.03-.22,0-.42-.14-.5-.35l-1.25-3.42h-4.51c-1.11,0-2.06.79-2.26,1.89-.14.77-.6,1.46-1.27,1.88l-.91.58c-.69.44-1.03,1.27-.86,2.06.19.89.99,1.53,1.9,1.53h14.83c.87,0,1.57-.7,1.57-1.57v-4.8c0-.87-.7-1.57-1.57-1.57Zm-13.47,6.32c.03.19.1.37.19.54h-1.54c-.41,0-.77-.29-.86-.69-.08-.36.08-.73.39-.93l.91-.58c.92-.58,1.55-1.53,1.75-2.59.11-.58.62-1.01,1.21-1.01h.71c-.17.27-.3.57-.34.9-.11.76-.5,1.44-1.1,1.92l-.62.5c-.56.45-.82,1.16-.69,1.94Zm4.88-4.26l-.02.23c-.06.6-.31,1.15-.71,1.6l-.54.6c-.38.42-.55.98-.48,1.54l.03.2c.03.23.1.44.2.63h-1.43c-.43,0-.79-.31-.88-.81-.05-.32.07-.64.32-.84l.62-.5c.81-.65,1.34-1.57,1.49-2.6.09-.6.61-1.05,1.22-1.05h.55c-.19.29-.31.62-.35.99Z"/>
+          </svg>
+        );
+      case 'Summit':
+        return (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17.12 18.46">
+            <path className={style} d="m1.15,17.54l1.61-4.14c.23-.59.94-.75,1.38-.32h0s2.11-6.49,2.11-6.49c.18-.55.51-1.04.95-1.4h0c1.38-1.12,3.37-.68,4.21.93l.76,1.47h0c.53-.19,1.1.09,1.32.64l3.59,9.3c.17.44-.13.92-.58.92H1.73c-.45,0-.75-.48-.58-.92Z"/>
+            <path className={style} d="m4.02,2.95l-1.2.35c-.15.06-.15.26,0,.32l1.2.35s.08.05.1.1l.35,1.2c.06.15.26.15.32,0l.35-1.2s.05-.08.1-.1l1.2-.35c.15-.06.15-.26,0-.32l-1.2-.35s-.08-.05-.1-.1l-.35-1.2c-.06-.15-.26-.15-.32,0l-.35,1.2s-.05.08-.1.1Z"/>
+            <path className={style} d="m10.21,1.33l-.76.22c-.09.04-.09.17,0,.2l.76.22s.05.03.06.06l.22.76c.04.09.17.09.2,0l.22-.76s.03-.05.06-.06l.76-.22c.09-.04.09-.17,0-.2l-.76-.22s-.05-.03-.06-.06l-.22-.76c-.04-.09-.17-.09-.2,0l-.22.76s-.03.05-.06.06Z"/>
+            <circle className={style} cx="2.34" cy="1.05" r="1.05"/>
+            <circle className={style} cx="13.83" cy="3.79" r="1.05"/>
+            <circle className={style} cx="7.78" cy=".56" r=".52"/>
+            <circle className={style} cx=".44" cy="3.43" r=".44"/>
+            <circle className={style} cx="15.99" cy="1.74" r=".44"/>
+          </svg>
+        );
+      case 'LSST':
+        return (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18.49 16.74">
+            <path className={style} d="m4.18.07L1.11,1.78c-.68.38-1.11,1.14-1.11,1.96v13h5.02V.62c0-.46-.45-.76-.83-.55Z"/>
+            <path className={style} d="m17.72,6.04H5.86v10.71h2.69v-2.28h7.26v2.28h2.69V6.81c0-.43-.35-.77-.77-.77Zm-8.86,4.2h-1.31v-2.38h1.31v2.38Zm5.91,0h-5.18v-2.38h5.18v2.38Zm2.04,0h-1.31v-2.38h1.31v2.38Z"/>
+          </svg>
+        );
+      default:
+        return (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 19">
+            <path className={style} d="m7,0C3.13,0,0,3.13,0,7s7,12,7,12c0,0,7-8.13,7-12S10.87,0,7,0Zm0,12c-2.76,0-5-2.24-5-5S4.24,2,7,2s5,2.24,5,5-2.24,5-5,5Z"/>
+            <path className={style} d="m7,9.52c-.28,0-.5-.22-.5-.5v-1.68c0-.28.22-.5.5-.5.83,0,1.5-.67,1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5,1.5c0,.28-.22.5-.5.5s-.5-.22-.5-.5c0-1.38,1.12-2.5,2.5-2.5s2.5,1.12,2.5,2.5c0,1.21-.86,2.22-2,2.45v1.23c0,.28-.22.5-.5.5Z"/>
+            <circle className={style} cx="7" cy="10.6" r=".5"/>
+          </svg>
+        );
+    }
+
+
+    return(
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.84 20">
+        <path
+          className={style}
+          d="m17.84,6.35c-1.1,0-2,.9-2,2v3.8c0,.44-.36.81-.81.81h-1.11V4c0-2.21-1.79-4-4-4s-4,1.79-4,4v4.95h-1.11c-.44,0-.81-.36-.81-.81v-3.8c0-1.1-.9-2-2-2S0,3.24,0,4.35v3.8c0,2.65,2.16,4.81,4.81,4.81h1.11v6.05c0,.55.45,1,1,1h6c.55,0,1-.45,1-1v-2.05h1.11c2.65,0,4.81-2.16,4.81-4.81v-3.8c0-1.1-.9-2-2-2Z"/>
+      </svg>
+    )
+  }
 
   handleClick = (event) => {
     if (
@@ -628,6 +705,29 @@ class Layout extends Component {
                   taiToUtc={this.props.taiToUtc}
                   user={this.props.user}
                 />
+              </DropdownMenu>
+
+              <DropdownMenu className={styles.settingsDropdown}>
+                <Button className={styles.iconBtn} title="Settings" status="transparent">
+                  {this.getObsLocationIcon((`${styles.icon}`+" "+`${styles.locationIcon}`))}
+                </Button>
+                <div className={styles.observatorySummaryMenu}>
+                  <ObservatorySummaryMenu
+                    dividerClassName={styles.divider}
+                    locationIcon={this.getObsLocationIcon()}
+                    location={this.getObsLocation()}
+
+                    simonyiState={'ENABLED'}
+                    simonyiOperationMode={'Calibration'}
+                    simonyiTrackingMode={'Sideral Tracking'}
+                    simonyiObsMode={'Automatic'}
+                    simonyiPower={'Generator G1'}
+
+                    auxtelState={'STANDBY'}
+                    auxtelOperationMode={'Science'}
+                    auxtelPower={'Generator G1'}
+                  ></ObservatorySummaryMenu>
+                </div>
               </DropdownMenu>
 
               <DropdownMenu className={styles.settingsDropdown}>
