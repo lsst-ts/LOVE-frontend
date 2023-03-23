@@ -2,6 +2,12 @@
 Version History
 ===============
 
+v5.15.1
+--------
+
+* Update docs: LOVE Config file `<https://github.com/lsst-ts/LOVE-frontend/pull/439>`_
+* Tickets/love 157 - changes about the Visit to Summit `<https://github.com/lsst-ts/LOVE-frontend/pull/438>`_
+
 v5.15.0
 -------
 
