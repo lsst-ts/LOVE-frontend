@@ -1213,8 +1213,8 @@ export const getGeneralInfo = (state, salindex) => {
   return {
     isNigth: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.isNigth.value ?? false, 
     night: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.nigth.value ?? 0,
-    sunset: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.sunset.value ?? '20:00:00',
-    sunrise: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.sunrise.value ?? '07:46:00',
+    sunset: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.sunset.value ?? 1679698547,
+    sunrise: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.sunrise.value ?? 1679738147,
   }
 };
 

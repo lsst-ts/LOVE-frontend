@@ -9,7 +9,7 @@ import Sky from '../../SkyElements/Sky/Sky';
 export default class Sun extends Component {
   render() {
     const { sunRa, sunDec, sunAlt, sunAz, solarElong } = this.props;
-    console.log(sunRa, sunDec, sunAlt, sunAz, solarElong);
+    
     return (
       <div className={styles.container}>
         <SummaryPanel className={styles.summaryPanel}>

@@ -37,25 +37,7 @@ export default class CurrentTarget extends Component {
       currentSequenceNVisits,
       currentSequenceVisits,
       rotSkyPos} = this.props;
-
-      console.log(currentTargetId,
-        currentRequestTime,
-        currentRequestMjd,
-        currentRa,
-        currentDecl,
-        currentSkyAngle,
-        currentFilter,
-        currentNumExposures,
-        currentExposureTimes,
-        currentSlewTime,
-        currentOffsetX,
-        currentOffsetY,
-        currentNumProposals,
-        currentProposalId,
-        currentSequenceDuration,
-        currentSequenceNVisits,
-        currentSequenceVisits,
-        rotSkyPos);
+      
     return (
       <div className={styles.container}>
         <div className={styles.headers}>

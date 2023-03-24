@@ -8,21 +8,16 @@ import GearIcon from 'components/icons/ScriptQueue/GearIcon/GearIcon.jsx';
 import Sun from '../SkyElements/SunCartoon/SunCartoon';
 import Stars from '../SkyElements/Stars/Stars';
 import Moment from 'moment';
-import diffHours from 'Utils';
-import formatSecondsToDigital from 'Utils';
+import { formatSecondsToDigital } from 'Utils';
 
 export default class Headers extends Component {
   render() {
-    const current_time = Moment().format('h:mm:ss');
-    console.log(current_time);
     const { subState, mode, type, isNigth, night, sunset, sunrise } = this.props;
-    console.log(isNigth, sunset, sunrise);
-    const formatSunset = Moment(sunset).format('h:mm:ss');
-    console.log(formatSunset);
-    // const diffToSunrise = diffHours(sunrise, current_time);
-    // console.log(diffHours(sunrise, current_time));
-    // const diffToSunset = diffHours(sunset, current_time);
-    // console.log(diffToSunset);
+    const current_time = Moment();
+    const diffSunset = Moment.unix(sunset).diff(current_time, 'seconds');
+    const diffSunrise = Moment.unix(sunrise).diff(current_time, 'seconds');
+    const diffSunsetDigital = formatSecondsToDigital(diffSunset);
+    const diffSunriseDigital = formatSecondsToDigital(diffSunrise);
     return (
       <div className={styles.container}>
         <div className={styles.leftDivs}>
@@ -49,14 +44,14 @@ export default class Headers extends Component {
               <div className={styles.iconStars}>
                 <Stars />
               </div>
-              <span>Night #{night} - {sunrise} till Sunrise</span>
+              <span>Night #{night} - {diffSunriseDigital} till Sunrise</span>
             </div>
           ) : (
             <div className={styles.dayDiv}>
               <div className={styles.iconSun}>
                 <Sun />
               </div>
-              <span>Day-{sunset} till Sunset</span>
+              <span>Day - {diffSunsetDigital} till Sunset</span>
             </div>
           )}
         </div>
