@@ -720,11 +720,12 @@ class Layout extends Component {
                     simonyiState={'ENABLED'}
                     simonyiOperationMode={'Calibration'}
                     simonyiTrackingMode={'Sideral Tracking'}
-                    simonyiObsMode={'Automatic'}
+                    simonyiObsMode={this.props.observatorySummary['simonyiObservingMode']}
                     simonyiPower={'Generator G1'}
 
                     auxtelState={'STANDBY'}
                     auxtelOperationMode={'Science'}
+                    auxtelObsMode={this.props.observatorySummary['auxtelObservingMode']}
                     auxtelPower={'Generator G1'}
                   ></ObservatorySummaryMenu>
                 </div>

@@ -40,6 +40,7 @@ export default function UserDetails({
   simonyiPower,
   auxtelState,
   auxtelOperationMode,
+  auxtelObsMode,
   auxtelPower,
 }) {
   return (
@@ -110,6 +111,9 @@ export default function UserDetails({
 
           <span className={styles.label}>Operation Mode</span>
           <span>{auxtelOperationMode}</span>
+
+          <span className={styles.label}>Obsv. Mode</span>
+          <span>{auxtelObsMode}</span>
 
           <span className={styles.label}>Power Source</span>
           <span>{auxtelPower}</span>

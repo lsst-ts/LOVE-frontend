@@ -1008,6 +1008,24 @@ export const getLATISSState = (state) => {
   };
 };
 
+export const getObservatoryState = (state) => {
+  const observatorySubscriptions = [
+    //Observatory
+    //Simonyi
+    'event-Scheduler-1-observingMode',
+    //Auxtel
+    'event-Scheduler-2-observingMode',
+  ];
+  const observatoryData = getStreamsData(state, observatorySubscriptions);
+  const simonyiObservingMode = observatoryData['event-Scheduler-1-observingMode'];
+  const auxtelObservingMode = observatoryData['event-Scheduler-2-observingMode'];
+
+  return {
+    simonyiObservingMode: simonyiObservingMode ? simonyiObservingMode.mode.value : 'Unknown',
+    auxtelObservingMode: auxtelObservingMode ? auxtelObservingMode.mode.value : 'Unknown',
+  };
+};
+
 export const getAuthlistState = (state, subscriptions) => {
   const authlistData = getStreamsData(state, subscriptions);
   return authlistData;

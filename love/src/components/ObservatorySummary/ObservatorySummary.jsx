@@ -24,14 +24,14 @@ export default class ObservatorySummary extends Component {
       	<Title wide>Simonyi Telescope</Title>
       	<Label>Summary</Label>
       	<Value>
-      		<StatusText status={1}>
+      		<StatusText status={'ok'}>
       			ENABLED
       		</StatusText>
       	</Value>
       	<Label>Operation Mode</Label>
-      	<Value>Operation</Value>
-      	<Label>Observation Mode</Label>
-      	<Value>Sideral Tracking</Value>
+      	<Value>Science</Value>
+      	<Label>Obsv. Mode</Label>
+      	<Value>{this.props.simonyiObservingMode}</Value>
       	<Label>Tracking Mode</Label>
       	<Value>Automatic</Value>
       	<Label>Power Source</Label>
@@ -50,12 +50,14 @@ export default class ObservatorySummary extends Component {
       	<Title wide>Auxiliary Telescope</Title>
       	<Label>Summary</Label>
       	<Value>
-      		<StatusText status={1}>
-      			ENABLED
+      		<StatusText status={'warning'}>
+      			STANDBY
       		</StatusText>
       	</Value>
       	<Label>Operation Mode</Label>
       	<Value>Calibration</Value>
+      	<Label>Obsv. Mode</Label>
+      	<Value>{this.props.auxtelObservingMode}</Value>
       	<Label>Power Source</Label>
       	<Value>Generator G1</Value>
       </SummaryPanel>

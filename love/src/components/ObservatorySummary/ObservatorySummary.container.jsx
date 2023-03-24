@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ObservatorySummary from './ObservatorySummary';
-import { getMountState, getMountSubscriptions } from '../../redux/selectors';
+import { getObservatoryState } from '../../redux/selectors';
 import { addGroup, removeGroup } from '../../redux/actions/ws';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
@@ -26,10 +26,10 @@ const ObservatorySummaryContainer = ({ ...props }) => {
 };
 
 const mapStateToProps = (state) => {
-  const mountState = getMountState(state, 0);
-  return mountState;
+  const observatorySummary = getObservatoryState(state);
+  return observatorySummary;
 };
-
+/*
 const mapDispatchToProps = (dispatch) => {
   const index = 0;
   const mountSubscriptions = getMountSubscriptions(index);
@@ -43,5 +43,5 @@ const mapDispatchToProps = (dispatch) => {
     },
   };
 };
-
-export default connect(mapStateToProps, mapDispatchToProps)(ObservatorySummaryContainer);
+*/
+export default connect(mapStateToProps)(ObservatorySummaryContainer);
