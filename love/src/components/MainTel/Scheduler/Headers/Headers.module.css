@@ -53,7 +53,7 @@
 
 .nightDiv {
   display: flex;
-  width: 18%;
+  width: 20%;
   flex-wrap: nowrap;
   align-items: center;
   justify-content: space-around;
