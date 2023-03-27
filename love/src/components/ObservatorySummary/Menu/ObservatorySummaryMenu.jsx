@@ -5,30 +5,40 @@ import Label from '../../GeneralPurpose/SummaryPanel/Label';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 
 UserDetails.propTypes = {
-  /** Name of the current user */
+  /** Locaation from where LOVE is being controlled from */
   location: PropTypes.string,
-  /** Wether or not the user has permissions to execute commands */
-  execPermission: PropTypes.bool,
+  /** An svg representing the location generated on Layout.jsx */
+  locationIcon: PropTypes.object, 
   /** Classname to add ot the menu elements */
   menuElementClassName: PropTypes.string,
   /** Classname to add ot the diveiders */
   dividerClassName: PropTypes.string,
-  /** Callback to execute when clicking on the XML menu element */
-  onXMLClick: PropTypes.func,
-  /** Callback to execute when clicking on the Config file menu element */
-  onConfigClick: PropTypes.func,
-  /** Callback to execute when clicking on the Emergency contact menu element */
-  onEmergencyContactsClick: PropTypes.func,
-  /** Callback to execute when clicking on the logout menu element */
-  logout: PropTypes.func,
-  /** Callback to execute when clicking on the user swap menu element */
-  requireUserSwap: PropTypes.func,
-  /** Callback to execute when clicking on the take screenshot menu element */
-  takeScreenshot: PropTypes.func,
+
+  /** Simonyi Telemetry and Event Data */
+  /** Simonyi Summary State */
+  simonyiState: PropTypes.string,
+  /** Simonyi Opearion Mode */
+  simonyiOperationMode: PropTypes.string,
+  /** Simonyi Tracking Mode */
+  simonyiTrackingMode: PropTypes.string,
+  /** Simonyi Observation Mode */
+  simonyiObsMode: PropTypes.string,
+  /** Simonyi Power Source */
+  simonyiPower: PropTypes.string,
+
+  /** Simonyi Summary State */
+  /** Auxiliary Telescope Summary State */
+  auxtelState: PropTypes.string,
+  /** Auxiliary Telescope Operation Mode */
+  auxtelOperationMode: PropTypes.string,
+  /** Auxiliary Telescope Observation Mode */
+  auxtelObsMode: PropTypes.string,
+  /** Auxiliary Telescope Power Source */
+  auxtelPower: PropTypes.string,
 };
 
-/** Contents of the User details Dropdown Menu */
-export default function UserDetails({
+/** Contents of the ObservatorySummary details Dropdown Menu */
+export default function ObservatorySummaryMenu({
   location,
   locationIcon,
   menuElementClassName,

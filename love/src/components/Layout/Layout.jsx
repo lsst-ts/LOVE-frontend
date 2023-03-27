@@ -83,6 +83,9 @@ class Layout extends Component {
     requireUserSwap: PropTypes.func,
     /** Function to call in order to reset subscriptions (when the manager heartbeat is missed) */
     resetSubscriptions: PropTypes.func,
+    /** Observatory Summary brings every telemetry needed for this dropdown menu with it's name as a key **/
+    observatorySummary: PropTypes.object
+
   };
 
   static defaultProps = {
@@ -272,12 +275,15 @@ class Layout extends Component {
     return `LOVE ${component} heartbeat not seen since ${timeStatement}`;
   };
 
+
+  /** This will most likely parse a location telemetry to string **/
   getObsLocation = () => {
     return(
       'Summit'
     )
   }
 
+  /** Returns the corresponding svg based on Observatory Control Location **/
   getObsLocationIcon = (style) => {
     var location = this.getObsLocation();
 
@@ -707,6 +713,7 @@ class Layout extends Component {
                 />
               </DropdownMenu>
 
+              {/** Observatory Summary  **/}
               <DropdownMenu className={styles.settingsDropdown}>
                 <Button className={styles.iconBtn} title="Settings" status="transparent">
                   {this.getObsLocationIcon((`${styles.icon}`+" "+`${styles.locationIcon}`))}
