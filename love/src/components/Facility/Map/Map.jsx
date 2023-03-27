@@ -35,21 +35,21 @@ export default class Map extends Component {
   floorSelect(tab){
         switch(tab){
       case 'level_1':
-        return (<Level1/>);
+        return (<Level1 hideHVAC={this.props.hideHVAC} />);
       case 'level_2':
-        return (<Level2/>);
+        return (<Level2 hideHVAC={this.props.hideHVAC} />);
       case 'level_3':
-        return (<Level3/>);
+        return (<Level3 hideHVAC={this.props.hideHVAC} />);
       case 'level_4':
-        return (<Level4/>);
+        return (<Level4 hideHVAC={this.props.hideHVAC} />);
       case 'level_5':
-        return (<Level5/>);
+        return (<Level5 hideHVAC={this.props.hideHVAC} />);
       case 'level_6':
-        return (<Level6/>);
+        return (<Level6 hideHVAC={this.props.hideHVAC} />);
       case 'level_7':
-        return (<Level7/>);
+        return (<Level7 hideHVAC={this.props.hideHVAC} />);
       case 'level_8':
-        return (<Level8/>);
+        return (<Level8 hideHVAC={this.props.hideHVAC} />);
       default:
         return'';
     }

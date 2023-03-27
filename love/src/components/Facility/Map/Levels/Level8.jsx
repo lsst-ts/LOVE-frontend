@@ -468,7 +468,7 @@ export default class Level8 extends Component {
         <circle className={styles.cls5} cx="160.53" cy="192.79" r="134.53" transform="translate(-89.3 169.98) rotate(-45)"/>
       </g>
     </g>
-    {this.getDevices()}
+    {this.props.hideHVAC?'':this.getDevices()}
   </g>
      );
   }

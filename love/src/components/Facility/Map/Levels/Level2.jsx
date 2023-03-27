@@ -1976,7 +1976,7 @@ export default class Level2 extends Component {
       </g>
     </g>
 
-    {this.getDevices()}
+    {this.props.hideHVAC?'':this.getDevices()}
 
   </g>
     );

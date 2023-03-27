@@ -1028,7 +1028,7 @@ export default class Level5 extends Component {
       <path className={styles.cls7} d="m226.66,332.93s16.26-7.95,24.35-14.51"/>
     </g>
     <rect className={styles.cls20} x="300.8" y="103.95" width="12.14" height="12.05"/>
-    {this.getDevices()}
+    {this.props.hideHVAC?'':this.getDevices()}
   </g>
     );
   }

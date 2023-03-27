@@ -182,7 +182,7 @@ export default class Level6 extends Component {
         </g>
       </g>
     </g>
-    {this.getDevices()}
+    {this.props.hideHVAC?'':this.getDevices()}
   </g>
     );
   }

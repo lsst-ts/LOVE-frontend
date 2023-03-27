@@ -664,7 +664,7 @@ export default class Level4 extends Component {
         <line className={styles.cls7} x1="832.8" y1="19.12" x2="811.17" y2="27.21"/>
       </g>
     </g>
-    {this.getDevices()}
+    {this.props.hideHVAC?'':this.getDevices()}
   </g>
     );
   }

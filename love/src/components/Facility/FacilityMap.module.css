@@ -2,21 +2,60 @@
 	display:flex;
 }
 
-.leftMenu div{
-	margin:1em;
-	padding:1em;
+.leftMenu {
+margin-right: 0.7em;
 }
 
 .section{
 	display:flex;
+	align-items: center;
+	justify-content:space-evenly;
+	background-color:var(--second-secondary-background-color);
+	padding:1em 0em;
+	margin:0.5em 0em;
 }
 
 .section div{
 	display:flex;
-	background-color:var(--second-secondary-background-color)
+	align-items: center;
+	
 }
 
 .cscMenu{
-	border: 1px solid white;
+	border-radius:4px;
+	border: 1px solid var(--secondary-font-dimmed-color);
 
+}
+
+.eye{
+	fill:var(--secondary-font-color);
+	opacity:25%;
+}
+
+.selected{
+	opacity:100%;
+}
+
+.iconWrapper{
+	width:1.5em;
+	height:1.5em;
+	cursor:pointer;
+	border-radius:100%;
+}
+
+.iconWrapper svg{
+	padding:0.1em;
+	width:100%;
+}
+
+.iconWrapper:hover{
+	background-color:var(--primary-active-background-color);
+}
+
+.title{
+	font-size: 1.17em;
+	font-weight:bold;
+	padding: 0.5em 2em;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
 }

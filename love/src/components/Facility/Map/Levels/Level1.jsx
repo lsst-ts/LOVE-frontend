@@ -825,7 +825,7 @@ export default class Level1 extends Component {
       </g>
     </g>
 
-    {this.getDevices()}
+    {this.props.hideHVAC?'':this.getDevices()}
 
   </g>
     );

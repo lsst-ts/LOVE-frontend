@@ -158,7 +158,7 @@ export default class Level7 extends Component {
         <polyline className={styles.cls6} points="69.8 277.82 56.84 259.22 47.64 265.78 60.38 284.19"/>
       </g>
     </g>
-    {this.getDevices()}
+    {this.props.hideHVAC?'':this.getDevices()}
   </g>
     );
   }
