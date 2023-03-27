@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import styles from './Simonyi.module.css';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
-import Label from '../../../../GeneralPurpose/SummaryPanel/Label';
-import Value from '../../../../GeneralPurpose/SummaryPanel/Value';
-import Title from '../../../../GeneralPurpose/SummaryPanel/Title';
-import StatusText from '../../../../GeneralPurpose/StatusText/StatusText';
+import Label from '../../../GeneralPurpose/SummaryPanel/Label';
+import Value from '../../../GeneralPurpose/SummaryPanel/Value';
+import Title from '../../../GeneralPurpose/SummaryPanel/Title';
+import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
 import { schedulerDomeTrackingStateToMap, schedulerDomeTrackingStateToStyle } from 'Config';
 
 export default class Simonyi extends Component {

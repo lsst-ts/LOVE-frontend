@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import styles from './Moon.module.css';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
-import Label from '../../../../GeneralPurpose/SummaryPanel/Label';
-import Value from '../../../../GeneralPurpose/SummaryPanel/Value';
-import Title from '../../../../GeneralPurpose/SummaryPanel/Title';
+import Label from '../../../GeneralPurpose/SummaryPanel/Label';
+import Value from '../../../GeneralPurpose/SummaryPanel/Value';
+import Title from '../../../GeneralPurpose/SummaryPanel/Title';
 import MoonCartoon from '../../SkyElements/MoonCartoon/MoonCartoon';
 
 export default class Moon extends Component {

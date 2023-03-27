@@ -20,7 +20,7 @@ export default class NextTarget extends Component {
         <div onClick={this.props.showContent} className={styles.header}>
           <div className={styles.targetsTitle}>
             <h3 className={styles.title}>Next Target</h3>
-            <h6>calculated at {nextTargetCurrentTime}</h6>
+            {/* <h6>calculated at {nextTargetCurrentTime}</h6> */}
           </div>
           <div className={styles.icons}>{!isOpen ? <AddIcon /> : <MinusIcon />}</div>
         </div>

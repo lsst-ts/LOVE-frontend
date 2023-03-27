@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import styles from './Headers.module.css';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
-import Label from '../../../GeneralPurpose/SummaryPanel/Label';
-import Value from '../../../GeneralPurpose/SummaryPanel/Value';
-import Title from '../../../GeneralPurpose/SummaryPanel/Title';
+import Label from '../../GeneralPurpose/SummaryPanel/Label';
+import Value from '../../GeneralPurpose/SummaryPanel/Value';
+import Title from '../../GeneralPurpose/SummaryPanel/Title';
 import GearIcon from 'components/icons/ScriptQueue/GearIcon/GearIcon.jsx';
 import Sun from '../SkyElements/SunCartoon/SunCartoon';
 import Stars from '../SkyElements/Stars/Stars';

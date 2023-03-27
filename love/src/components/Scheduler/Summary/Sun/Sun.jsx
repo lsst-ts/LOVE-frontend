@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import styles from './Sun.module.css';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
-import Label from '../../../../GeneralPurpose/SummaryPanel/Label';
-import Value from '../../../../GeneralPurpose/SummaryPanel/Value';
-import Title from '../../../../GeneralPurpose/SummaryPanel/Title';
+import Label from '../../../GeneralPurpose/SummaryPanel/Label';
+import Value from '../../../GeneralPurpose/SummaryPanel/Value';
+import Title from '../../../GeneralPurpose/SummaryPanel/Title';
 import Sky from '../../SkyElements/Sky/Sky';
 import Moment from 'moment';
 import { formatSecondsToDigital } from 'Utils';
