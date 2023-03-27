@@ -51,7 +51,6 @@
 
 .generalDiv {
   display: flex;
-  flex-wrap: wrap;
   flex-direction: row;
   align-content: center;
   justify-content: space-evenly;
@@ -65,4 +64,24 @@
   margin: 0.5em;
   width: 20%;
   height: 8%;
+}
+
+.exposures {
+  display: flex;
+  margin-left: 0.5em;
+}
+
+.expIndexes{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+}
+
+.exposuresDetail {
+  color: white;
+  border: 2px solid var(--second-senary-background-dimmed-color);
+  border-radius: 0.5em;
+  margin-right: 0.4em;
+  width: 1.6em;
 }
