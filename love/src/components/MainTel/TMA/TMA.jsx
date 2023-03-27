@@ -43,8 +43,10 @@ export default class TMA extends Component {
     elevationActualPosition: PropTypes.number,
     /** Elevation Position computed by the path generator */
     elevationDemandPosition: PropTypes.number,
-    /** Mirror Covers Motion Deployment State */
-    mirrorCovers: PropTypes.number,
+    /** Array data of Mirror Covers Motion Deployment State */
+    mirrorCoversState: PropTypes.arrayOf(PropTypes.number),
+    /** Array data of position about the mirror cover */
+    mirrorCoversPosition: PropTypes.arrayOf(PropTypes.number),
     /** Array data of Drivers about the azimuth */
     azimuthDrives: PropTypes.arrayOf(PropTypes.number),
     /** Array data of Drivers about the elevation */
@@ -66,7 +68,8 @@ export default class TMA extends Component {
     elevationLimits: 0,
     elevationActualPosition: 0,
     elevationDemandPosition: 0,
-    mirrorCovers: 0,
+    mirrorCoversState: [],
+    mirrorCoversPosition: [],
     azimuthDrives: [],
     elevationDrives: [],
   };
@@ -95,7 +98,8 @@ export default class TMA extends Component {
       elevationLimits,
       elevationActualPosition,
       elevationDemandPosition,
-      mirrorCovers,
+      mirrorCoversState,
+      mirrorCoversPosition,
       azimuthDrives,
       elevationDrives,
     } = this.props;
@@ -125,7 +129,8 @@ export default class TMA extends Component {
             <MirrorCovers
               azimuthActualPosition={azimuthActualPosition}
               azimuthDemandPosition={azimuthDemandPosition}
-              mirrorCovers={mirrorCovers}
+              mirrorCoversState={mirrorCoversState}
+              mirrorCoversPosition={mirrorCoversPosition}
             />
           </div>
           <div className={styles.elevationContainer}>
@@ -139,7 +144,11 @@ export default class TMA extends Component {
         </div>
 
         <div className={styles.drivesContainer}>
-          <Drives azimuthDrives={azimuthDrives} elevationDrives={elevationDrives} />
+          <Drives
+            azimuthDrives={azimuthDrives}
+            elevationDrives={elevationDrives}
+            mirrorCoversPosition={mirrorCoversPosition}
+          />
         </div>
       </>
     );

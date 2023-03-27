@@ -5,9 +5,15 @@ import WindRose from '../../../icons/WindRose/WindRose';
 import Azimuth from '../Azimuth/Azimuth';
 import {
   mtMountMirrorCoversStateMap,
-  // stateToStyleMTMountMirrorCoversState,
-} from '../../../../Config';
+  stateToStyleMTMountMirrorCoversState,
+} from 'Config';
+import InfoPanel from 'components/GeneralPurpose/InfoPanel/InfoPanel';
+import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
+import Label from 'components/GeneralPurpose/SummaryPanel/Label';
+import Value from 'components/GeneralPurpose/SummaryPanel/Value';
+import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import styles from './MirrorCovers.module.css';
+import { uniqueId, isEqual } from 'lodash';
 
 export default class MirrorCovers extends Component {
   static propTypes = {
@@ -16,13 +22,16 @@ export default class MirrorCovers extends Component {
     /** Azimuth Position computed by the path generator. */
     azimuthDemandPosition: PropTypes.number,
     /** Mirror Covers Motion Deployment State */
-    mirrorCovers: PropTypes.number,
+    mirrorCoversState: PropTypes.arrayOf(PropTypes.number),
+    /** Array data of position about the mirror cover */
+    mirrorCoversPosition: PropTypes.arrayOf(PropTypes.number),
   };
 
   static defaultProps = {
     azimuthActualPosition: 0,
     azimuthDemandPosition: 0,
-    mirrorCovers: 0,
+    mirrorCoversState: [0, 0, 0, 0],
+    mirrorCoversPosition: [0, 0, 0, 0],
   };
 
   constructor(props) {
@@ -30,7 +39,9 @@ export default class MirrorCovers extends Component {
     this.state = {
       prevAzimuthActual: 0,
       prevAzimuthDemand: 0,
+      showMirrorCoverInfo: false,
     };
+    this.uniqueMirrorCover = uniqueId('mirror-cover-');
   }
 
   componentDidUpdate(prevProps) {
@@ -52,36 +63,68 @@ export default class MirrorCovers extends Component {
         <div className={styles.windRoseContainer}>
           <WindRose />
         </div>
-        <div className={styles.azContainer}>
+        {/* <div className={styles.azContainer}>
           <Azimuth currentValue={this.props.azimuthActualPosition} targetValue={this.props.azimuthDemandPosition} />
-        </div>
+        </div> */}
         {this.getSvg()}
       </div>
     );
   }
 
-  getAngleClosedCoverMirror() {
-    const stateToClosedMTMountMirrorCoversState = {
-      RETRACTED: Math.PI / 12,
-      DEPLOYED: Math.PI / 2 + Math.PI / 4,
-      RETRACTING: Math.PI / 2,
-      DEPLOYING: Math.PI / 2 - Math.PI / 6,
-      LOST: -Math.PI / 36,
-    };
-    const mirrorCoversValue = mtMountMirrorCoversStateMap[this.props.mirrorCovers];
-    return stateToClosedMTMountMirrorCoversState[mirrorCoversValue];
-  }
+  // getAngleClosedCoverMirror() {
+  //   const stateToClosedMTMountMirrorCoversState = {
+  //     RETRACTED: Math.PI / 12,
+  //     DEPLOYED: Math.PI / 2 + Math.PI / 4,
+  //     RETRACTING: Math.PI / 2,
+  //     DEPLOYING: Math.PI / 2 - Math.PI / 6,
+  //     LOST: -Math.PI / 36,
+  //   };
+  //   // const mirrorCoversValue = this.props.mirrorCoversState.map((state) => mtMountMirrorCoversStateMap[state]);
+  //   // return mirrorCoversValue.map((value) => stateToClosedMTMountMirrorCoversState[value]);
+  //   return this.props.mirrorCoversPosition.map((value) => value + 5);
+  // }
 
-  getAngleClosedCoverMirrorBorder() {
-    const stateToClosedMTMountMirrorCoversState = {
-      RETRACTED: (3 * Math.PI) / 2 - Math.PI / 12,
-      DEPLOYED: Math.PI,
-      RETRACTING: Math.PI,
-      DEPLOYING: Math.PI + Math.PI / 6,
-      LOST: (3 * Math.PI) / 2 + Math.PI / 36,
-    };
-    const mirrorCoversValue = mtMountMirrorCoversStateMap[this.props.mirrorCovers];
-    return stateToClosedMTMountMirrorCoversState[mirrorCoversValue];
+  // getAngleClosedCoverMirrorBorder() {
+  //   const stateToClosedMTMountMirrorCoversState = {
+  //     RETRACTED: (3 * Math.PI) / 2 - Math.PI / 12,
+  //     DEPLOYED: Math.PI,
+  //     RETRACTING: Math.PI,
+  //     DEPLOYING: Math.PI + Math.PI / 6,
+  //     LOST: (3 * Math.PI) / 2 + Math.PI / 36,
+  //   };
+  //   const mirrorCoversValue = this.props.mirrorCoversState.map((state) => mtMountMirrorCoversStateMap[state]);
+  //   return mirrorCoversValue.map((value) => stateToClosedMTMountMirrorCoversState[value]);
+  //}
+
+  getInfoMirrorCover() {
+    const index = [0, 1, 2, 3];
+    const mirrorCoversValue = this.props.mirrorCoversState.map((state) => mtMountMirrorCoversStateMap[state]);
+    const mirrorCoversState = mirrorCoversValue.map((value) => stateToStyleMTMountMirrorCoversState[value]);
+    return (
+      <InfoPanel
+        title="Mirror Covers"
+        className={this.state.showMirrorCoverInfo === false ? styles.hide : styles.show}
+      >
+        <SummaryPanel className={[styles.summaryPanel, styles.m1Panel].join(' ')}>
+          {index.map((i) => {
+            return (
+              <>
+              <Label
+                key={`mirror-cover-status-label-${i}`}
+              >{`Mirror cover ${i + 1}`}</Label>
+              <Value
+                key={`mirror-cover-status-value-${i}`}
+              >
+                <StatusText status={mirrorCoversState[i]}>
+                  {mirrorCoversValue[i]}
+                </StatusText>
+              </Value>
+              </>
+            )
+          })}
+        </SummaryPanel>
+      </InfoPanel>
+    );
   }
 
   getSvg = () => {
@@ -90,8 +133,14 @@ export default class MirrorCovers extends Component {
     const x0 = viewBoxSize / 2 + offset;
     const y0 = viewBoxSize / 2 + offset;
 
-    const angleClosed = this.getAngleClosedCoverMirror();
-    const angleClosedBorder = this.getAngleClosedCoverMirrorBorder();
+    const angleClosed = this.props.mirrorCoversPosition.map((value) => value);
+    const statesStyle = this.props.mirrorCoversState?.map((state) => {
+      return {
+        //'ok': styles.ok,
+        //'warning': styles.warning,
+        'alert': styles.alert, // Only this representation for the color in mirror cover
+      }[stateToStyleMTMountMirrorCoversState[mtMountMirrorCoversStateMap[state]]];
+    });
 
     const equivalentAzimuthActual = closestEquivalentAngle(
       this.state.prevAzimuthActual,
@@ -103,22 +152,33 @@ export default class MirrorCovers extends Component {
     );
 
     return (
-      <svg id="mirrorCoverSvg" data-name="mirrorCoverSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 385 385">
-        {this.getBase(x0, y0, equivalentAzimuthActual)}
-
-        <g
-          style={{
-            transition: 'transform 1.5s linear 0s',
-            transform: `rotateZ(${equivalentAzimuthActual}deg)`,
-            transformOrigin: `50% 50%`,
-          }}
+      <>
+        <svg
+          data-name="mirrorCoverSvg"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 385 385"
         >
-          {this.getMirrorCover(angleClosed, angleClosedBorder, viewBoxSize)}
-          {this.getMount(x0, y0)}
-        </g>
-
-        {equivalentAzimuthDemand !== equivalentAzimuthActual ?? this.getDemand(equivalentAzimuthDemand)}
-      </svg>
+          <g>
+            {this.getBase(x0, y0, equivalentAzimuthActual)}
+            <g
+              style={{
+                transition: 'transform 1.5s linear 0s',
+                transform: `rotateZ(${equivalentAzimuthActual}deg)`,
+                transformOrigin: `50% 50%`,
+              }}
+            >
+              {this.getMount(x0, y0)}
+              {this.getMirrorCover(angleClosed, statesStyle, viewBoxSize)}
+            </g>
+            {equivalentAzimuthDemand !== equivalentAzimuthActual ?? this.getDemand(equivalentAzimuthDemand)}
+          </g>
+        </svg>
+        <div
+          style={{position: 'absolute', top: `${viewBoxSize/3}px`, left: `${viewBoxSize + 10}px`, zIndex: 1000}}
+        >
+          {this.getInfoMirrorCover()}
+        </div>
+      </>
     );
   };
 
@@ -174,119 +234,77 @@ export default class MirrorCovers extends Component {
     );
   }
 
-  getMirrorCover = (angleClosed, angleClosedBorder, viewBoxSize) => {
+  handleMouseEnter = () => {
+    if (this.state.showMirrorCoverInfo !== true) {
+      this.setState({
+        showMirrorCoverInfo: true,
+      });
+    }
+  }
+
+  handleMouseLeave = () => {
+    if (this.state.showMirrorCoverInfo !== false) {
+      this.setState({
+        showMirrorCoverInfo: false,
+      });
+    }
+  }
+
+  getMirrorCover = (angleClosed, statesStyle, viewBoxSize) => {
     const offset = 10;
     const x0 = viewBoxSize / 2 + offset;
     const y0 = viewBoxSize / 2 + offset;
 
     const r = viewBoxSize / 4;
 
-    const alpha1 = (3 * Math.PI) / 2;
+    const alpha1 = (3 * Math.PI) / 2 + (5 * Math.PI / 180.0); // Displace initial angle for always showing
     const rSinAlpha1 = r * Math.sin(alpha1);
     const rCosAlpha1 = r * Math.cos(alpha1);
 
-    const alpha2 = angleClosed;
-    const rSinAlpha2 = r * Math.sin(alpha2);
-    const rCosAlpha2 = r * Math.cos(alpha2);
+  const index = [0, 1, 2, 3];
 
-    const alpha3 = angleClosedBorder;
-    const rSinAlpha3 = r * Math.sin(alpha3);
-    const rCosAlpha3 = r * Math.cos(alpha3);
+    const transforms = [
+      `translate(110px, -45px)`,
+      `translate(45px, 110px) rotateZ(90deg)`,
+      `translate(-110px, 45px) rotateZ(180deg)`,
+      `translate(-45px, -110px) rotateZ(270deg)`,
+    ];
+
+    const alpha2 = angleClosed.map((angle) => angle * Math.PI / 180.0);
+    const rSinAlpha2 = alpha2.map((a2) => r * Math.sin(a2));
+    const rCosAlpha2 = alpha2.map((a2) => r * Math.cos(a2));
 
     return (
       <>
-        <g style={{ opacity: 0.45 }}>
-          <path
-            className={styles.cls4}
-            d={`
-                    M ${x0} ${y0}
-                    L ${x0 + rCosAlpha1} ${y0 - rSinAlpha1}
-                    A ${r} ${r} 0 0 1 ${x0 - rSinAlpha2} ${y0 + rCosAlpha2}
+        {index.map((i) => {
+          return (
+            <>
+              <path
+                key={`mirror-cover-${i}`}
+                className={[styles.cls4, statesStyle? statesStyle[i] : '' ].join(' ')}
+                d={`
+                  M ${x0} ${y0}
+                  L ${x0 + rCosAlpha1} ${y0 - rSinAlpha1}
+                  A ${r} ${r} 0 0 1 ${x0 - rSinAlpha2[i]} ${y0 + rCosAlpha2[i]}
+                  L ${x0 - rSinAlpha2[i]} ${y0 + rCosAlpha2[i]}
+                  L ${x0} ${y0}z
                 `}
-            style={{ transformOrigin: `50% 50%`, transform: `translate(110px, -45px)` }}
-          />
-          <path
-            className={styles.cls4}
-            d={`
-                    M ${x0} ${y0}
-                    L ${x0 + rCosAlpha1} ${y0 - rSinAlpha1}
-                    A ${r} ${r} 0 0 1 ${x0 - rSinAlpha2} ${y0 + rCosAlpha2}
-                `}
-            style={{ transformOrigin: `50% 50%`, transform: `translate(45px, 110px) rotateZ(90deg)` }}
-          />
-          <path
-            className={styles.cls4}
-            d={`
-                    M ${x0} ${y0}
-                    L ${x0 + rCosAlpha1} ${y0 - rSinAlpha1}
-                    A ${r} ${r} 0 0 1 ${x0 - rSinAlpha2} ${y0 + rCosAlpha2}
-                `}
-            style={{ transformOrigin: `50% 50%`, transform: `translate(-110px, 45px) rotateZ(180deg)` }}
-          />
-          <path
-            className={styles.cls4}
-            d={`
-                    M ${x0} ${y0}
-                    L ${x0 + rCosAlpha1} ${y0 - rSinAlpha1}
-                    A ${r} ${r} 0 0 1 ${x0 - rSinAlpha2} ${y0 + rCosAlpha2}
-                `}
-            style={{ transformOrigin: `50% 50%`, transform: `translate(-45px, -110px) rotateZ(270deg)` }}
-          />
-        </g>
-
-        <g style={{ opacity: 0.45 }}>
-          <path
-            className={styles.cls6}
-            d={`
-                    M ${x0} ${y0}
-                    L ${x0 + rCosAlpha1} ${y0 - rSinAlpha1}
-                    A ${r} ${r} 0 0 1 ${x0 + rCosAlpha3} ${y0 - rSinAlpha3}
-                    M ${x0} ${y0}
-                    L ${x0 - rSinAlpha2} ${y0 + rCosAlpha2}
-                `}
-            style={{ transformOrigin: `50% 50%`, transform: `translate(110px, -45px)` }}
-          />
-          <path
-            className={styles.cls6}
-            d={`
-                    M ${x0} ${y0}
-                    L ${x0 + rCosAlpha1} ${y0 - rSinAlpha1}
-                    A ${r} ${r} 0 0 1 ${x0 + rCosAlpha3} ${y0 - rSinAlpha3}
-                    M ${x0} ${y0}
-                    L ${x0 - rSinAlpha2} ${y0 + rCosAlpha2}
-                `}
-            style={{ transformOrigin: `50% 50%`, transform: `translate(45px, 110px) rotateZ(90deg)` }}
-          />
-          <path
-            className={styles.cls6}
-            d={`
-                    M ${x0} ${y0}
-                    L ${x0 + rCosAlpha1} ${y0 - rSinAlpha1}
-                    A ${r} ${r} 0 0 1 ${x0 + rCosAlpha3} ${y0 - rSinAlpha3}
-                    M ${x0} ${y0}
-                    L ${x0 - rSinAlpha2} ${y0 + rCosAlpha2}
-                `}
-            style={{ transformOrigin: `50% 50%`, transform: `translate(-110px, 45px) rotateZ(180deg)` }}
-          />
-          <path
-            className={styles.cls6}
-            d={`
-                    M ${x0} ${y0}
-                    L ${x0 + rCosAlpha1} ${y0 - rSinAlpha1}
-                    A ${r} ${r} 0 0 1 ${x0 + rCosAlpha3} ${y0 - rSinAlpha3}
-                    M ${x0} ${y0}
-                    L ${x0 - rSinAlpha2} ${y0 + rCosAlpha2}
-                `}
-            style={{ transformOrigin: `50% 50%`, transform: `translate(-45px, -110px) rotateZ(270deg)` }}
-          />
-        </g>
+                style={{ transformOrigin: `50% 50%`, transform: transforms[i] }}
+                onMouseEnter={() => {this.handleMouseEnter()}}
+                onMouseLeave={() => {this.handleMouseLeave()}}
+              />
+            </>
+          );
+        } 
+        )}
       </>
     );
   };
 
   getMount = (x0, y0) => {
     return (
-      <>
+      <g
+      >
         <rect
           className={styles.cls7}
           x={108.65}
@@ -407,7 +425,7 @@ export default class MirrorCovers extends Component {
         />
 
         <circle className={styles.cls3} cx={x0} cy={y0} r={26} />
-      </>
+      </g>
     );
   };
 }
