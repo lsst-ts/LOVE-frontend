@@ -1,4 +1,5 @@
 import React, {useState, useCallback, memo} from 'react';
+import RowExpansionIcon from 'components/icons/RowExpansionIcon/RowExpansionIcon';
 import AvailableScript from '../Scripts/AvailableScript/AvailableScript';
 import styles from './RecursiveScriptsTree.module.css'; 
 
@@ -10,23 +11,27 @@ const RecursiveScriptsTree = ({
   scriptsBlocked = false,
   launchScriptConfig = () => {},
 }) => {
-  console.log("HOLA");
   if (!scriptsTree) return null;
-  const [collapseTree, setCollapseTree] = useState({});
+  const [openTree, setOpenTree] = useState({});
   const cachedLaunchScriptConfig = useCallback(launchScriptConfig, []);
 
   const recursiveKeys = Object.keys(scriptsTree).filter((key) => key !== 'root');
-  const collapsedCategory = collapseTree[category] || false;
+  const openedCategory = openTree[category] || false;
+  const lastCategory = category.split('-').pop();
   return (
     <div className={styles.container}>
-      <h6>
-        <span onClick={() => setCollapseTree({...collapseTree, [category]: !collapseTree[category]})}>{collapsedCategory ? 'V' : '>'}</span>
-        {category}
+      <h6 onClick={() => setOpenTree({...openTree, [category]: !openTree[category]})}>
+        <div
+          className={styles.collapseIcon}>
+          {openedCategory ? <RowExpansionIcon expanded/> : <RowExpansionIcon/>}
+        </div>
+        {lastCategory.toUpperCase()}
       </h6>
+      <div className={styles.horizontalSeparation}/>
       <div
         className={styles.rootContainer}
         style={{
-          maxHeight: collapsedCategory ? 0 : '100%',
+          maxHeight: openedCategory ? '100%' : 0,
         }}
       >
         {scriptsTree.root &&
@@ -42,7 +47,8 @@ const RecursiveScriptsTree = ({
               commandExecutePermission={scriptsBlocked}
               isCompact={false}
               {...scriptObject}/>
-          })}
+          })
+        }
         {/* Base Condition and Rendering recursive component from inside itself */}
         {recursiveKeys.length > 0 &&
           recursiveKeys.map((key) => {
@@ -57,7 +63,8 @@ const RecursiveScriptsTree = ({
                 launchScriptConfig={cachedLaunchScriptConfig}
               />
             );
-          })}
+          })
+        }
       </div>
     </div>
   );

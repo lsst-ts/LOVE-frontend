@@ -736,15 +736,6 @@ export default class ScriptQueue extends Component {
                 <ScriptList noOverflow={true}>
                   <div className={styles.standardExternalContainer}>
                     <div
-                      className={styles.availableScriptTypeTitle}
-                      onClick={() => this.toggleAvailableScriptsExpanded('standard')}
-                    >
-                      <span>Standard scripts</span>
-                      <span>
-                        <RowExpansionIcon expanded={this.state.availableScriptsStandardExpanded} />
-                      </span>
-                    </div>
-                    <div
                       className={[
                         styles.standardScriptsContainer,
                         this.state.availableScriptsStandardExpanded ? '' : styles.availableListCollapsed,
@@ -756,16 +747,6 @@ export default class ScriptQueue extends Component {
                         scriptsTree={this.state.scriptsTree.standard}
                         launchScriptConfig={this.launchScriptConfig}
                         scriptsBlocked={this.props.commandExecutePermission && !this.state.blockedByAuthlist}/>
-                    </div>
-                    <div className={styles.availableScriptTypeSeparator}></div>
-                    <div
-                      className={styles.availableScriptTypeTitle}
-                      onClick={() => this.toggleAvailableScriptsExpanded('external')}
-                    >
-                      <span>External scripts</span>
-                      <span>
-                        <RowExpansionIcon expanded={this.state.availableScriptsExternalExpanded} />
-                      </span>
                     </div>
                     <div
                       className={[
