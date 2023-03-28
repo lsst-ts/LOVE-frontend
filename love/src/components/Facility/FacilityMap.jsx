@@ -4,6 +4,7 @@ import { M1M3ActuatorPositions } from 'Config';
 import styles from './FacilityMap.module.css';
 import Badge from '../GeneralPurpose/Badge/Badge';
 import Map from './Map/Map.jsx'
+import Device from './Map/Device.jsx';
 
 
 export default class FacilityMap extends Component {
@@ -48,6 +49,8 @@ export default class FacilityMap extends Component {
 
         <div className={styles.leftMenu}>
 
+
+          {/** CSC Section **/}
           <div className={styles.cscMenu}>
             <div className={styles.title}>CSC</div>
 
@@ -71,15 +74,56 @@ export default class FacilityMap extends Component {
               </div>
             </div>
           </div>
-          <div>
-            Legend
+
+        {/** Legend Section **/}
+          <div className={styles.legendMenu}>
+            <div className={styles.title}>Legend</div>
+            <div className={styles.legendContent}>
+
+            <svg width='100' height='54' className={styles.device}>
+              <g id="device">
+                <g id="TopBar">
+                  <g id="TitleBar">
+                    <rect className={styles.titleBg} width={100} height={20} />
+                    <text className={styles.deviceTitle} transform={'translate(6 18)'}>
+                      <tspan>{'Name'}</tspan>
+                    </text>
+                    <text className={styles.title} transform={'translate('+(100-6)+' 8)'} textAnchor='end'>
+                      <tspan>{''}</tspan>
+                    </text>
+                  </g>
+                  <g transform={'translate(0 24)'}>
+                    <rect className={styles.titleRow2} width={100} height={30}/>
+                      <g transform={'translate(6 7)'}>
+                        <rect className={styles.statusOk} width={15} height={15} />
+                        <rect className={styles.statusOk} width={15} height={15} transform={'translate(18 0)'}/>
+                        <rect className={styles.statusOk} width={15} height={15} transform={'translate(36 0)'}/>
+                        <rect className={styles.statusOk} width={15} height={15} transform={'translate(54 0)'}/>  
+                      </g>
+                      <g transform={'translate(11 20)'}>
+                        <text className={styles.boxText} ><tspan>{'1'}</tspan></text>
+                        <text className={styles.boxText} transform={'translate(16 0)'}><tspan>{'2'}</tspan></text>
+                        <text className={styles.boxText} transform={'translate(34 0)'}><tspan>{'3'}</tspan></text>
+                        <text className={styles.boxText} transform={'translate(52 0)'}><tspan>{'4'}</tspan></text>
+                      </g>
+                  </g>
+                </g>
+              </g>
+            </svg>
+
+              <ol className={styles.stateList}>
+                <li>Command started</li>
+                <li>Working</li>
+                <li>Unit state</li>
+                <li>Switch state</li>
+              </ol>
+
+            </div>
           </div>
         </div>
 
         <Map
-
-        hideHVAC={showHVAC}
-
+          hideHVAC={showHVAC}
         />
 
       </div>

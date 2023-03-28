@@ -4,6 +4,7 @@
 
 .leftMenu {
 margin-right: 0.7em;
+max-width:10em;
 }
 
 .section{
@@ -15,15 +16,17 @@ margin-right: 0.7em;
 	margin:0.5em 0em;
 }
 
-.section div{
-	display:flex;
-	align-items: center;
-	
-}
-
 .cscMenu{
 	border-radius:4px;
 	border: 1px solid var(--secondary-font-dimmed-color);
+	margin-bottom: 1em;
+
+}
+
+.legendMenu{
+	border-radius:4px;
+	border: 1px solid var(--secondary-font-dimmed-color);
+	margin-bottom: 1em;
 
 }
 
@@ -58,4 +61,89 @@ margin-right: 0.7em;
 	padding: 0.5em 2em;
     margin-left: 0.2em;
     margin-right: 0.2em;
+}
+
+.box{
+	width:1em;
+	height:1em;
+}
+
+.green{
+	background-color:var(--status-ok-color);
+}
+
+.warning{
+	background-color:var(--status-warning-color);
+}
+
+.alert{
+	background-color:var(--status-alert-color);
+}
+
+.disable{
+	background-color:var(--status-disabled-color);
+}
+
+.boxList{
+	display:grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.stateList{
+	text-align:left;
+	padding-left:1em;
+}
+
+.deviceTitle{
+	fill: var(--base-font-color);
+	font-weight:bold;
+	font-size:1em;
+}
+
+.legendContent{
+	Background-color: var(--second-secondary-background-color);
+    padding: 1em;
+}
+.titleBg{
+	fill:var(--second-primary-background-color);
+}
+
+
+
+
+.device{
+	border: 1px solid var(--secondary-font-dimmed-color);
+}
+
+
+.container{
+	fill:var(--second-quaternary-background-color);
+}
+
+.titleRow2{
+	fill:var(--second-tertiary-background-color);
+}
+
+
+.boxText{
+	fill:var(--second-tertiary-background-color);
+}
+
+
+.statusOk{
+	fill:var(--status-ok-color);
+}
+
+.statusWarning{
+	fill:var(--status-warning-color);
+}
+.statusAlert{
+	fill:var(--status-alert-color);
+}
+.statusDisabled{
+	fill:var(--status-disabled-color);
+}
+.statusNull{
+	fill:none;
+	stroke:var(--status-disabled-color);
 }
