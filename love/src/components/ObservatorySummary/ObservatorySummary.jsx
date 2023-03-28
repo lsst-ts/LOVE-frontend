@@ -24,42 +24,42 @@ export default class ObservatorySummary extends Component {
       	<Title wide>Simonyi Telescope</Title>
       	<Label>Summary</Label>
       	<Value>
-      		<StatusText status={'ok'}>
-      			ENABLED
+      		<StatusText status={'invalid'}>
+      			UNKNOWN
       		</StatusText>
       	</Value>
       	<Label>Operation Mode</Label>
-      	<Value>Science</Value>
+      	<Value>UNKNOWN</Value>
       	<Label>Obsv. Mode</Label>
       	<Value>{this.props.simonyiObservingMode}</Value>
       	<Label>Tracking Mode</Label>
-      	<Value>Automatic</Value>
+      	<Value>UNKNOWN</Value>
       	<Label>Power Source</Label>
-      	<Value>Generator G1</Value>
+      	<Value>UNKNOWN</Value>
       </SummaryPanel>
 
       <SummaryPanel>
       	<Title wide>Vera C. Rubin Observatory</Title>
       	<Label>Control</Label>
-      	<Value>Tucson Control Room</Value>
+      	<Value>UNKNOWN</Value>
       	<Label>Power Source</Label>
-      	<Value>Commercial Power</Value>
+      	<Value>UNKNOWN</Value>
       </SummaryPanel>
 
       <SummaryPanel>
       	<Title wide>Auxiliary Telescope</Title>
       	<Label>Summary</Label>
       	<Value>
-      		<StatusText status={'warning'}>
-      			STANDBY
+      		<StatusText status={'invalid'}>
+      			UNKNOWN
       		</StatusText>
       	</Value>
       	<Label>Operation Mode</Label>
-      	<Value>Calibration</Value>
+      	<Value>UNKNOWN</Value>
       	<Label>Obsv. Mode</Label>
       	<Value>{this.props.auxtelObservingMode}</Value>
       	<Label>Power Source</Label>
-      	<Value>Generator G1</Value>
+      	<Value>UNKNOWN</Value>
       </SummaryPanel>
     </div>
     );

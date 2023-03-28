@@ -4,7 +4,7 @@ import styles from './ObservatorySummaryMenu.module.css';
 import Label from '../../GeneralPurpose/SummaryPanel/Label';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 
-UserDetails.propTypes = {
+ObservatorySummaryMenu.propTypes = {
   /** Locaation from where LOVE is being controlled from */
   location: PropTypes.string,
   /** An svg representing the location generated on Layout.jsx */
@@ -82,7 +82,7 @@ export default function ObservatorySummaryMenu({
           </svg>
           <span className={styles.sectionTitle}>Simonyi</span>
           <span className={styles.state}>
-            <StatusText title={simonyiState} status='ok'>
+            <StatusText title={simonyiState} status='invalid'>
               {simonyiState}
             </StatusText>
           </span>
@@ -113,7 +113,7 @@ export default function ObservatorySummaryMenu({
           </svg>
           <span className={styles.sectionTitle}>Auxtel</span>
           <span className={styles.state}>
-            <StatusText title={auxtelState} status='warning'>
+            <StatusText title={auxtelState} status='invalid'>
               {auxtelState}
             </StatusText>
           </span>

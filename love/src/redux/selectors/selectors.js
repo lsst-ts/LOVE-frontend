@@ -1008,6 +1008,17 @@ export const getLATISSState = (state) => {
   };
 };
 
+export const getObservatorySubscriptions = () => {
+  return [
+    //Observatory
+    //Simonyi
+    'event-Scheduler-1-observingMode',
+    //Auxtel
+    'event-Scheduler-2-observingMode',
+  ];
+};
+
+
 export const getObservatoryState = (state) => {
   const observatorySubscriptions = [
     //Observatory
