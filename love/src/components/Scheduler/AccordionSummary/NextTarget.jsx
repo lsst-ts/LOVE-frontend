@@ -5,6 +5,7 @@ import Label from 'components/GeneralPurpose/SummaryPanel/Label';
 import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 import MinusIcon from 'components/icons/MinusIcon/MinusIcon';
+import { fixedFloat, isoTimestamp, formatSecondsToDigital } from 'Utils';
 
 export default class NextTarget extends Component {
   render() {
@@ -20,7 +21,7 @@ export default class NextTarget extends Component {
         <div onClick={this.props.showContent} className={styles.header}>
           <div className={styles.targetsTitle}>
             <h3 className={styles.title}>Next Target</h3>
-            {/* <h6>calculated at {nextTargetCurrentTime}</h6> */}
+            <h6>calculated at {isoTimestamp(nextTargetCurrentTime)}</h6>
           </div>
           <div className={styles.icons}>{!isOpen ? <AddIcon /> : <MinusIcon />}</div>
         </div>
@@ -29,13 +30,13 @@ export default class NextTarget extends Component {
         >
           <SummaryPanel>
             <Label>Time on target</Label>
-            <Value>{nextTimeWaitTime}</Value>
+            <Value>{`${formatSecondsToDigital(fixedFloat(nextTimeWaitTime, 0))} s`}</Value>
             <Label>Right ascension</Label>
-            <Value>{nextTargetRa}</Value>
+            <Value>{`${fixedFloat(nextTargetRa, 2)} °`}</Value>
             <Label>Declination</Label>
-            <Value>{nextTargetDecl}</Value>
+            <Value>{`${fixedFloat(nextTargetDecl, 2)} °`}</Value>
             <Label>Sky rotation</Label>
-            <Value>{nextTargetRotSkyPos}</Value>
+            <Value>{`${fixedFloat(nextTargetRotSkyPos, 2)} °`}</Value>
           </SummaryPanel>
         </div>
       </div>

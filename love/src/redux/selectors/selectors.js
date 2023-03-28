@@ -1202,8 +1202,8 @@ export const getObservingMode = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-observingMode`];
   const observingMode = getStreamsData(state, subscriptions);
   return {
-    mode: observingMode[`event-Scheduler-${salindex}-observingMode`]?.[0]?.mode?.value ?? '',
-    type: observingMode[`event-Scheduler-${salindex}-observingMode`]?.[0]?.type?.value ?? '',
+    mode: observingMode[`event-Scheduler-${salindex}-observingMode`]?.[0]?.mode?.value ?? 'No obs. mode',
+    type: observingMode[`event-Scheduler-${salindex}-observingMode`]?.[0]?.type?.value ?? 'No type obs.',
   }
 };
 
@@ -1247,7 +1247,7 @@ export const getObservatoryStatus = (state, salindex) => {
     moonAlt: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonAlt?.value ?? 0.0,
     moonAz: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonAz?.value ?? 0.0,
     moonDistance: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonDistance?.value ?? 0.0,
-    moonPhase: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonPhase?.value ?? 0.0,
+    moonPhase: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonPhase?.value ?? 0.32,
     sunRa: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunRa?.value ?? 0.0,
     sunDec: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunDec?.value ?? 0.0,
     sunAlt: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunAlt?.value ?? 0.0,
@@ -1266,7 +1266,7 @@ export const getCurrentTargetInfo = (state, salindex) => {
     currentRa: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.ra?.value ?? 0,
     currentDecl: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.decl?.value ?? 0,
     currentSkyAngle: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.skyAngle?.value ?? 0,
-    currentFilter: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.filter?.value ?? '',
+    currentFilter: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.filter?.value ?? 'No filter selected',
     currentNumExposures: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.numExposures?.value ?? 0,
     currentExposureTimes: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.exposureTimes?.value ?? [10, 40, 30, 5, 10, 2, 30, 0, 0, 0],
     currentSlewTime: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.slewTime?.value ?? 0,
@@ -1305,9 +1305,9 @@ export const lastTargetInfo = (state, salindex) => {
     lastTargetRotSkyPos: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.rotSkyPos?.value ?? 0,
     lastTargetMjd: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.mjd?.value ?? 0,
     lastTargetExpTime: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.exptime?.value ?? 0,
-    lastTargetFilter: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.filter?.value ?? '',
+    lastTargetFilter: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.filter?.value ?? 'No filter selected',
     lastTargetNexp: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.nexp?.value ?? 0,
-    lastTargetMoreInfo: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.additionalInformation?.value ?? '',
+    lastTargetMoreInfo: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.additionalInformation?.value ?? 'Without information',
   }
 };
 
@@ -1333,7 +1333,7 @@ export const predictedTargetsInfo = (state, salindex) => {
     predTargetsRotSkyPos: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.rotSkyPos?.value ?? [],
     predTargetsMjd: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.mjd?.value ?? [],
     predTargetsExpTime: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.exptime?.value ?? [],
-    predTargetsInstrConfig: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.instrumentConfiguration?.value ?? '',
+    predTargetsInstrConfig: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.instrumentConfiguration?.value ?? 'No instrument conf.',
     predTargetsNexp: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.nexp?.value ?? [],
   }
 };

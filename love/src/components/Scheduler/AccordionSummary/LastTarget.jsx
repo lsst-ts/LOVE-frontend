@@ -5,6 +5,7 @@ import Label from 'components/GeneralPurpose/SummaryPanel/Label';
 import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 import MinusIcon from 'components/icons/MinusIcon/MinusIcon';
+import { fixedFloat } from 'Utils';
 
 export default class LastTarget extends Component {
   render() {
@@ -32,28 +33,28 @@ export default class LastTarget extends Component {
         >
           <SummaryPanel>
             <Label>Time on target</Label>
-            <Value>{currentRequestTime}</Value>
+            <Value>{`${fixedFloat(currentRequestTime, 0)} s`}</Value>
             <Label>MJD</Label>
             <Value>{lastTargetMjd}</Value>
             <Label>Right ascension</Label>
-            <Value>{lastTargetRa}</Value>
+            <Value>{`${fixedFloat(lastTargetRa, 2)} °`}</Value>
             <Label>Declination</Label>
-            <Value>{lastTargetDecl}</Value>
+            <Value>{`${fixedFloat(lastTargetDecl, 2)} °`}</Value>
             <Label>Sky rotation</Label>
-            <Value>{lastTargetRotSkyPos}</Value>
+            <Value>{`${fixedFloat(lastTargetRotSkyPos, 2)} °`}</Value>
           </SummaryPanel>
           <SummaryPanel>
             <Label>Filter</Label>
             <Value>{lastTargetFilter}</Value>
             <Label>N° of exposures</Label>
-            <Value>{lastTargetNexp}</Value>
+            <Value>{`${fixedFloat(lastTargetNexp, 0)}`}</Value>
             <Label>Exposure time</Label>
             <Value>{lastTargetExpTime}</Value>
           </SummaryPanel>
           <div className={styles.infoPanel}>
             <h4 className={styles.infoLabel}>Info</h4>
             <div className={styles.infoContent}>
-              {lastTargetMoreInfo}
+              {lastTargetMoreInfo ? lastTargetMoreInfo : 'There is no additional information'}
             </div>
           </div>
         </div>

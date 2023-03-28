@@ -3,8 +3,7 @@ import styles from './CurrentTarget.module.css';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Label from 'components/GeneralPurpose/SummaryPanel/Label';
 import Value from 'components/GeneralPurpose/SummaryPanel/Value';
-import { formatSecondsToDigital } from 'Utils';
-import { fixedFloat } from 'Utils';
+import { fixedFloat, formatSecondsToDigital } from 'Utils';
 
 export default class CurrentTarget extends Component {
   render() {
@@ -28,10 +27,7 @@ export default class CurrentTarget extends Component {
       currentSequenceVisits,
       rotSkyPos} = this.props;
       
-      const offSet = `(${currentOffsetX}, ${currentOffsetY})`;
-      const Ra = fixedFloat(currentRa, 2);
-      const Decl = fixedFloat(currentDecl, 2);
-      const skyPosAngle = fixedFloat(currentSkyAngle, 2);
+    const offSet = `(${currentOffsetX}, ${currentOffsetY})`;
 
     return (
       <div className={styles.container}>
@@ -47,11 +43,11 @@ export default class CurrentTarget extends Component {
             <Label>Modified julian date</Label>
             <Value>{currentRequestMjd}</Value>
             <Label>Rigth ascension</Label>
-            <Value>{`${Ra} °`}</Value>
+            <Value>{`${fixedFloat(currentRa, 2)} °`}</Value>
             <Label>Declination</Label>
-            <Value>{`${Decl} °`}</Value>
+            <Value>{`${fixedFloat(currentDecl, 2)} °`}</Value>
             <Label>Sky position angle</Label>
-            <Value>{`${skyPosAngle} °`}</Value>
+            <Value>{`${fixedFloat(currentSkyAngle, 2)} °`}</Value>
             <Label>Slew time</Label>
             <Value>{`${currentSlewTime} s`}</Value>
             <Label>Offset arcsec (x,y)</Label>

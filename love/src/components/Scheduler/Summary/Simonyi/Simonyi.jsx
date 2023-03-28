@@ -6,6 +6,7 @@ import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
 import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
 import { schedulerDomeTrackingStateToMap, schedulerDomeTrackingStateToStyle } from 'Config';
+import { fixedFloat } from 'Utils';
 
 export default class Simonyi extends Component {
   render() {
@@ -24,19 +25,19 @@ export default class Simonyi extends Component {
             <Title>Mount</Title>
             <span></span>
             <Label>Altitude</Label>
-            <Value>{simonyiAl}</Value>
+            <Value>{`${fixedFloat(simonyiAl, 2)} °`}</Value>
             <Label>Azimuth</Label>
-            <Value>{simonyiAz}</Value>
+            <Value>{`${fixedFloat(simonyiAz, 2)} °`}</Value>
             <Label>Rotator</Label>
-            <Value>{simonyiRot}</Value>
+            <Value>{`${fixedFloat(simonyiRot, 2)} °`}</Value>
           </SummaryPanel>
           <SummaryPanel className={styles.summaryPanel}>
             <Title>Dome</Title>
             <span></span>
             <Label>Altitude</Label>
-            <Value>{domeAlt}</Value>
+            <Value>{`${fixedFloat(domeAlt, 2)} °`}</Value>
             <Label>Azimuth</Label>
-            <Value>{domeAz}</Value>
+            <Value>{`${fixedFloat(domeAz, 2)} °`}</Value>
           </SummaryPanel>
         </div>
       </div>

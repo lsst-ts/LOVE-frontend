@@ -4,6 +4,7 @@ import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Label from '../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
+import { fixedFloat } from 'Utils';
 
 export default class Pointing extends Component {
   render() {
@@ -15,13 +16,13 @@ export default class Pointing extends Component {
             Pointing
           </Title>
           <Label>Ra</Label>
-          <Value>{pointingRa}</Value>
+          <Value>{`${fixedFloat(pointingRa, 2)} °`}</Value>
           <Label>Dec</Label>
-          <Value>{pointingDecl}</Value>
+          <Value>{`${fixedFloat(pointingDecl, 2)} °`}</Value>
           <Label>Sky pos</Label>
-          <Value>{pointingPosAngle}</Value>
+          <Value>{`${fixedFloat(pointingPosAngle, 2)} °`}</Value>
           <Label>Parallactic</Label>
-          <Value>{pointingParallAngle}</Value>
+          <Value>{`${fixedFloat(pointingParallAngle, 2)} °`}</Value>
         </SummaryPanel>
       </div>
     );

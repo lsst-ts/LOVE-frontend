@@ -6,7 +6,7 @@ import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
 import Sky from '../../SkyElements/Sky/Sky';
 import Moment from 'moment';
-import { formatSecondsToDigital } from 'Utils';
+import { fixedFloat, formatSecondsToDigital } from 'Utils';
 
 export default class Sun extends Component {
   render() {
@@ -25,15 +25,15 @@ export default class Sun extends Component {
         <div className={styles.divContainer}>
           <SummaryPanel className={styles.summaryPanel}>
             <Label>Altitude</Label>
-            <Value>{sunAlt}</Value>
+            <Value>{`${fixedFloat(sunAlt, 2)} °`}</Value>
             <Label>Azimuth</Label>
-            <Value>{sunAz}</Value>
+            <Value>{`${fixedFloat(sunAz, 2)} °`}</Value>
             <Label>Ra</Label>
-            <Value>{sunRa}</Value>
+            <Value>{`${fixedFloat(sunRa, 2)} °`}</Value>
             <Label>Dec</Label>
-            <Value>{sunDec}</Value>
+            <Value>{`${fixedFloat(sunDec, 2)} °`}</Value>
             <Label>Elongation</Label>
-            <Value>{solarElong}</Value>
+            <Value>{`${fixedFloat(solarElong, 2)} °`}</Value>
           </SummaryPanel>
           <div className={styles.sunCartoon}>
             <Sky />
