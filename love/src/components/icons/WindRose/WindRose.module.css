@@ -11,12 +11,13 @@
   stroke-linejoin: round;
 }
 
-.cls-1, .cls-2 {
-  fill:#798d99;
+.cls-1,
+.cls-2 {
+  fill: #798d99;
 }
 
 .cls-2 {
-  stroke:#798d99;
-  stroke-linecap:round;
-  stroke-linejoin:round;
+  stroke: #798d99;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }

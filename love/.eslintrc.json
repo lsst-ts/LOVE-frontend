@@ -19,7 +19,8 @@
     "no-underscore-dangle": "off",
     "no-plusplus": [0, { "allowForLoopAfterthoughts": true }],
     "import/no-unresolved": "off",
-    "func-names": "off"
+    "func-names": "off",
+    "indent": "off"
   },
   "plugins": ["only-warn"],
   "settings": {

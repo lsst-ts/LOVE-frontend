@@ -4,7 +4,6 @@ import { DateTime } from 'luxon';
 import { toast } from 'react-toastify';
 import Moment from 'moment';
 import { WEBSOCKET_SIMULATION } from 'Config.js';
-import { SALCommandStatus } from 'redux/actions/ws';
 
 
 /* Backwards compatibility of Array.flat */
@@ -1120,7 +1119,7 @@ export const getNotificationMessage = (salCommand) => {
     cmd_unmute: 'unmuting',
   };
 
-  if (salCommand.status === SALCommandStatus.REQUESTED) {
+  if (salCommand.status === 'REQUESTED') {
     return [`Requesting command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd}`];
   }
 
