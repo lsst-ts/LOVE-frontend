@@ -41,8 +41,9 @@ export const getWebSocket = (state) => state.ws.socket;
 
 export const getSubscriptionsStatus = (state) => state.ws.subscriptionsState;
 
-export const getSubscription = (state, groupName) =>
-  state.ws.subscriptions.find((subscription) => subscription.groupName === groupName);
+export const getSubscription = (state, groupName) => {
+  return state.ws.subscriptions.find((subscription) => subscription.groupName === groupName);
+};
 
 export const getSubscriptions = (state) => state.ws.subscriptions;
 
@@ -348,8 +349,12 @@ export const getATMCSState = (state) => {
     'event-ATPtg-1-timesOfLimits',
   ];
   const data = getStreamsData(state, subscriptions);
-  const [minEl, minAz, minNas1, minNas2, minM3] = data['event-ATMCS-0-positionLimits']?.[0].minimum?.value ?? [5, -270, -165, -165, 0];
-  const [maxEl, maxAz, maxNas1, maxNas2, maxM3] = data['event-ATMCS-0-positionLimits']?.[0].maximum?.value ?? [90, 270, 165, 165, 180];
+  const [minEl, minAz, minNas1, minNas2, minM3] = data['event-ATMCS-0-positionLimits']?.[0].minimum?.value ?? [
+    5, -270, -165, -165, 0,
+  ];
+  const [maxEl, maxAz, maxNas1, maxNas2, maxM3] = data['event-ATMCS-0-positionLimits']?.[0].maximum?.value ?? [
+    90, 270, 165, 165, 180,
+  ];
 
   return {
     atMountState: data['event-ATMCS-0-atMountState']?.[0].state?.value ?? 0,
@@ -360,8 +365,16 @@ export const getATMCSState = (state) => {
     targetNasmyth1: data['event-ATMCS-0-target']?.[0].nasmyth1RotatorAngle?.value ?? 0,
     targetNasmyth2: data['event-ATMCS-0-target']?.[0].nasmyth2RotatorAngle?.value ?? 0,
     m3State: data['event-ATMCS-0-m3State']?.[0].state?.value ?? 2,
-    minEl, minAz, minNas1, minNas2, minM3,
-    maxEl, maxAz, maxNas1, maxNas2, maxM3,
+    minEl,
+    minAz,
+    minNas1,
+    minNas2,
+    minM3,
+    maxEl,
+    maxAz,
+    maxNas1,
+    maxNas2,
+    maxM3,
     timeAzLim: data['event-ATPtg-1-timesOfLimits']?.[0].timeAzLim?.value ?? 0,
     timeRotLim: data['event-ATPtg-1-timesOfLimits']?.[0].timeRotLim?.value ?? 0,
     timeUnobservable: data['event-ATPtg-1-timesOfLimits']?.[0].timeUnobservable?.value ?? 0,
@@ -370,8 +383,8 @@ export const getATMCSState = (state) => {
     currentPointingEl: data['telemetry-ATMCS-0-mount_AzEl_Encoders']?.elevationCalculatedAngle?.value?.[0],
     currentPointingNasmyth1: data['telemetry-ATMCS-0-mount_Nasmyth_Encoders']?.nasmyth1CalculatedAngle?.value?.[0],
     currentPointingNasmyth2: data['telemetry-ATMCS-0-mount_Nasmyth_Encoders']?.nasmyth2CalculatedAngle?.value?.[0],
-  }
-}
+  };
+};
 
 export const getMountSubscriptions = (index) => {
   return [
@@ -424,7 +437,6 @@ export const getMountState = (state, index) => {
   const mountEncoders = mountData[`telemetry-ATMCS-${index}-mountEncoders`];
   const hexapodInPosition = mountData[`event-ATHexapod-${index}-inPosition`];
   const m1CoverState = mountData[`event-ATPneumatics-${index}-m1CoverState`];
-  const m1SetPressure = mountData[`event-ATPneumatics-${index}-m1SetPressure`];
   const mainValveState = mountData[`event-ATPneumatics-${index}-mainValveState`];
   const instrumentState = mountData[`event-ATPneumatics-${index}-instrumentState`];
   const hexapodReadyForCommand = mountData[`event-ATPneumatics-${index}-readyForCommand`];
@@ -457,7 +469,7 @@ export const getMountState = (state, index) => {
       : 'Unknown',
     m1AirPressure: mountData[`telemetry-ATPneumatics-${index}-m1AirPressure`]
       ? mountData[`telemetry-ATPneumatics-${index}-m1AirPressure`].pressure
-      : 'Unknown', 
+      : 'Unknown',
     // ATMCS
     m3InPosition: m3InPosition ? m3InPosition[m3InPosition.length - 1].inPosition.value : 0,
     nasmyth1RotatorInPosition: nasmyth1RotatorInPosition
@@ -757,7 +769,7 @@ export const getHexapodTables = (state, salindex) => {
   };
 };
 
-//MTDome
+// MTDome
 export const getApertureShutter = (state) => {
   const subscriptions = ['telemetry-MTDome-0-apertureShutter'];
   const apertureShutter = getStreamsData(state, subscriptions);
@@ -823,7 +835,7 @@ export const getPointingStatus = (state) => {
 };
 
 export const getLouversStatus = (state) => {
-  const subscriptions = ['telemetry-MTDome-0-louvers', 'telemetry-ATDome-0-position',];
+  const subscriptions = ['telemetry-MTDome-0-louvers', 'telemetry-ATDome-0-position'];
   const louvers = getStreamsData(state, subscriptions);
   return {
     actualPositionLouvers: louvers['telemetry-MTDome-0-louvers']
@@ -832,12 +844,8 @@ export const getLouversStatus = (state) => {
     commandedPositionLouvers: louvers['telemetry-MTDome-0-louvers']
       ? louvers['telemetry-MTDome-0-louvers'].positionCommanded.value
       : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    powerDrawLouvers: louvers['telemetry-MTDome-0-louvers']
-      ? louvers['telemetry-MTDome-0-louvers']
-      : {},
-    atDomePosition: louvers['telemetry-ATDome-0-position']
-      ? louvers['telemetry-ATDome-0-position']
-      : {},
+    powerDrawLouvers: louvers['telemetry-MTDome-0-louvers'] ? louvers['telemetry-MTDome-0-louvers'] : {},
+    atDomePosition: louvers['telemetry-ATDome-0-position'] ? louvers['telemetry-ATDome-0-position'] : {},
   };
 };
 
@@ -867,7 +875,7 @@ export const getDomeStatus = (state) => {
   };
 };
 
-//MTMount
+// MTMount
 /**
  * Selects the TMA status for summary view
  * @param {object} state
@@ -1010,21 +1018,20 @@ export const getLATISSState = (state) => {
 
 export const getObservatorySubscriptions = () => {
   return [
-    //Observatory
-    //Simonyi
+    // Observatory
+    // Simonyi
     'event-Scheduler-1-observingMode',
-    //Auxtel
+    // Auxtel
     'event-Scheduler-2-observingMode',
   ];
 };
 
-
 export const getObservatoryState = (state) => {
   const observatorySubscriptions = [
-    //Observatory
-    //Simonyi
+    // Observatory
+    // Simonyi
     'event-Scheduler-1-observingMode',
-    //Auxtel
+    // Auxtel
     'event-Scheduler-2-observingMode',
   ];
   const observatoryData = getStreamsData(state, observatorySubscriptions);
@@ -1052,8 +1059,12 @@ export const getKey = (dict, key, def) => {
 export const getScriptQueueState = (state, salindex) => {
   const scriptQueueData = getStreamData(state, `event-ScriptQueueState-${salindex}-stream`);
   const runningState = getKey(scriptQueueData, 'running', undefined);
+  let runningLabel = 'Unknown';
+  if (runningState !== undefined) {
+    runningLabel = runningState ? 'Running' : 'Stopped';
+  }
   return {
-    state: runningState === undefined ? 'Unknown' : runningState ? 'Running' : 'Stopped',
+    state: runningLabel,
     availableScriptList: getKey(scriptQueueData, 'available_scripts', undefined),
     waitingScriptList: getKey(scriptQueueData, 'waiting_scripts', undefined),
     current: getKey(scriptQueueData, 'current', 'None'),
@@ -1149,7 +1160,8 @@ export const getAllStreamsAsDictionary = (state, category, CSCsSalindexList, str
     if (Object.keys(streams).includes(groupName)) {
       dictionary[`${CSC}-${salindex}`] = streams[groupName];
       if (dictionary[`${CSC}-${salindex}`] && lastDataOnly) {
-        dictionary[`${CSC}-${salindex}`] = dictionary[`${CSC}-${salindex}`][0];
+        const aux = dictionary[`${CSC}-${salindex}`][0];
+        dictionary[`${CSC}-${salindex}`] = aux;
       }
     }
   });

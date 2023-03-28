@@ -28,20 +28,20 @@
   column-gap: 0.5em;
   justify-items: center;
   align-items: center;
-  grid-column:span 2;
-  font-weight:600;
+  grid-column: span 2;
+  font-weight: 600;
 }
 
-.sectionTitle{
-  justify-self:left;
+.sectionTitle {
+  justify-self: left;
 }
 
 .iconContainer {
   padding: 0.1em;
-  display:flex;
+  display: flex;
 }
 
-.iconContainer svg{
+.iconContainer svg {
   fill: var(--secondary-font-color);
 }
 
@@ -59,31 +59,30 @@
   height: 1.4em;
 }
 
-.iconWhite{
+.iconWhite {
   fill: #7a8c97;
 }
 
-.iconBlack{
+.iconBlack {
   fill: #2e3e47;
 }
 
-.section{
+.section {
   display: grid;
   grid-template-columns: 0.35fr minmax(10em, 0.5fr);
   grid-auto-rows: max-content;
   grid-row-gap: 0.2em;
   grid-column-gap: 1em;
-
 }
 
-.label{
+.label {
   color: var(--secondary-font-color);
   font-weight: 400;
   padding-left: 0.4rem;
   line-height: 2em;
 }
 
-.state{
-  width:100%;
-  font-weight:400;
+.state {
+  width: 100%;
+  font-weight: 400;
 }

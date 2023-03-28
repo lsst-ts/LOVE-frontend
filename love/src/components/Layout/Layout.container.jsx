@@ -18,10 +18,9 @@ import {
   getEfdConfig,
   getObservatoryState,
 } from '../../redux/selectors';
-import { logout, receiveConfig } from '../../redux/actions/auth';
+import { logout, receiveConfig, requireSwapToken, cancelSwapToken } from '../../redux/actions/auth';
 import { addGroup, removeGroup, requestSALCommand, resetSubscriptions } from '../../redux/actions/ws';
 import { clearViewToEdit } from '../../redux/actions/uif';
-import { requireSwapToken, cancelSwapToken } from '../../redux/actions/auth';
 import Layout from './Layout';
 
 const LayoutContainer = ({ ...props }) => {

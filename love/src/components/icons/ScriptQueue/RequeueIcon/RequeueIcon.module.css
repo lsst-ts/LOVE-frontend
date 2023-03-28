@@ -13,10 +13,12 @@
   stroke-linejoin: round;
 }
 
-.cls-1, .cls-2 {
+.cls-1,
+.cls-2 {
   fill-rule: evenodd;
 }
 
-.cls-2, .cls-3 {
+.cls-2,
+.cls-3 {
   fill: #1ecfe8;
 }

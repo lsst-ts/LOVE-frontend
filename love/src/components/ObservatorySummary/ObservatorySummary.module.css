@@ -1,14 +1,14 @@
 .container {
-  display:grid;
-  grid-gap:1em;
+  display: grid;
+  grid-gap: 1em;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: fit-content;
-  max-width:fit-content;
+  max-width: fit-content;
 }
 .container div {
-  align-content:start;
-}  
+  align-content: start;
+}
 
-.row2{
-  grid-row: span 2
+.row2 {
+  grid-row: span 2;
 }

@@ -4,10 +4,23 @@ import { withRouter } from 'react-router-dom';
 import isEqual from 'lodash/isEqual';
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
+import MessageIcon from 'components/icons/MessageIcon/MessageIcon';
+import OLEMenu from 'components/OLE/Menu/OLEMenu';
+import ExposureAdd from 'components/OLE/Exposure/ExposureAdd';
+import NonExposureEdit from 'components/OLE/NonExposure/NonExposureEdit';
+import ObservatorySummaryMenu from 'components/ObservatorySummary/Menu/ObservatorySummaryMenu';
+import ManagerInterface, {
+  getNotificationMessage,
+  relativeTime,
+  takeScreenshot,
+  parseTimestamp,
+  formatTimestamp,
+} from 'Utils';
+import { severityEnum } from 'Config';
+
 import { viewsStates, modes } from '../../redux/reducers/uif';
 import { tokenSwapStates } from '../../redux/reducers/auth';
 import { SALCommandStatus } from '../../redux/actions/ws';
-import { getNotificationMessage, relativeTime, takeScreenshot, parseTimestamp, formatTimestamp } from '../../Utils';
 import Button from '../GeneralPurpose/Button/Button';
 import DropdownMenu from '../GeneralPurpose/DropdownMenu/DropdownMenu';
 import NotificationIcon from '../icons/NotificationIcon/NotificationIcon';
@@ -18,8 +31,6 @@ import IconBadge from '../icons/IconBadge/IconBadge';
 import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
 import EditIcon from '../icons/EditIcon/EditIcon';
-import MessageIcon from 'components/icons/MessageIcon/MessageIcon';
-import OLEMenu from 'components/OLE/Menu/OLEMenu';
 import ClockContainer from '../Time/Clock/Clock.container';
 import { HEARTBEAT_COMPONENTS } from '../../Config';
 import AlarmAudioContainer from '../Watcher/AlarmAudio/AlarmAudio.container';
@@ -30,15 +41,8 @@ import XMLTable from './XMLTable/XMLTable';
 import ConfigPanel from './ConfigPanel/ConfigPanel';
 import EmergencyContactsPanel from './EmergencyContactsPanel/EmergencyContactsPanel';
 import UserDetails from './UserDetails/UserDetails';
-import ObservatorySummaryMenu from 'components/ObservatorySummary/Menu/ObservatorySummaryMenu';
 import UserSwapContainer from '../Login/UserSwap.container';
-import { severityEnum } from '../../Config';
-import ManagerInterface from 'Utils';
 import styles from './Layout.module.css';
-import ExposureAdd from 'components/OLE/Exposure/ExposureAdd';
-import NonExposureEdit from 'components/OLE/NonExposure/NonExposureEdit';
-
-//Import Observatory Summary Icons//
 import CactusIcon from '../icons/CactusIcon/CactusIcon';
 import UnknownLocationIcon from '../icons/UnknownLocationIcon/UnknownLocationIcon';
 import BeachIcon from '../icons/BeachIcon/BeachIcon';
@@ -90,9 +94,8 @@ class Layout extends Component {
     requireUserSwap: PropTypes.func,
     /** Function to call in order to reset subscriptions (when the manager heartbeat is missed) */
     resetSubscriptions: PropTypes.func,
-    /** Observatory Summary brings every telemetry needed for this dropdown menu with it's name as a key **/
-    observatorySummary: PropTypes.object
-
+    /** Observatory Summary brings every telemetry needed for this dropdown menu with it's name as a key * */
+    observatorySummary: PropTypes.object,
   };
 
   static defaultProps = {
@@ -120,8 +123,8 @@ class Layout extends Component {
       tokenSwapRequested: false,
       isTakingScreenshot: false,
       isLightHidden: true,
-      efdStatus: {label: "EFD Healthy status Unknown", style: "invalid"},
-      salStatus: {label: "SAL status Unknown", style: "invalid"},
+      efdStatus: { label: 'EFD Healthy status Unknown', style: 'invalid' },
+      salStatus: { label: 'SAL status Unknown', style: 'invalid' },
       isNewNonExposureOpen: false,
       isNewExposureOpen: false,
     };
@@ -171,7 +174,7 @@ class Layout extends Component {
     } else if (this.props.token !== null && prevProps.token === null) {
       this.props.subscribeToStreams();
     }
-    const pathname = this.props.location.pathname;
+    const { pathname } = this.props.location;
     if (urls[pathname] && this.state.title !== urls[pathname]) {
       this.setState({
         id: null,
@@ -179,7 +182,7 @@ class Layout extends Component {
       });
     } else {
       const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
-      if (id && id !== this.state.id && !isNaN(id)) {
+      if (id && id !== this.state.id && !Number.isNaN(id)) {
         const view = this.props.getCurrentView(id);
         this.setState({ id, title: view ? view.name : null });
       } else if (!id && this.state.id) {
@@ -194,7 +197,7 @@ class Layout extends Component {
       });
     }
 
-    /* Check command ack for toast*/
+    /* Check command ack for toast */
     if (
       this.props.lastSALCommand.status === SALCommandStatus.REQUESTED &&
       this.props.lastSALCommand.status !== prevProps.lastSALCommand.status
@@ -214,12 +217,10 @@ class Layout extends Component {
 
       if (result === 'Done') {
         toast.success(message);
+      } else if (this.props.lastSALCommand.statusCode >= 300) {
+        toast.error(`${this.props.lastSALCommand.statusCode}: ${message}`);
       } else {
-        if (this.props.lastSALCommand.statusCode >= 300) {
-          toast.error(`${this.props.lastSALCommand.statusCode}: ${message}`);
-        } else {
-          toast.info(message);
-        }
+        toast.info(message);
       }
     }
 
@@ -242,12 +243,15 @@ class Layout extends Component {
       const heartbeatSource = HEARTBEAT_COMPONENTS[key];
       const componentHeartbeat = this.props.getLastComponentHeartbeat(heartbeatSource);
       const lastComponentHeartbeat = this.state.heartbeatInfo[heartbeatSource];
-      const componentHeartbeatStatus =
-        lastComponentHeartbeat?.data.timestamp !== componentHeartbeat?.data.timestamp
-          ? 'ok'
-          : componentHeartbeat && !lastComponentHeartbeat
-          ? 'ok'
-          : 'alert';
+
+      let componentHeartbeatStatus;
+      if (lastComponentHeartbeat?.data.timestamp !== componentHeartbeat?.data.timestamp) {
+        componentHeartbeatStatus = 'ok';
+      } else if (componentHeartbeat && !lastComponentHeartbeat) {
+        componentHeartbeatStatus = 'ok';
+      } else {
+        componentHeartbeatStatus = 'alert';
+      }
 
       heartbeatInfo[heartbeatSource] = componentHeartbeat;
       heartbeatStatus[heartbeatSource] = componentHeartbeatStatus;
@@ -261,12 +265,12 @@ class Layout extends Component {
   checkEfdStatus = () => {
     const url = this.props.efdConfigFile?.urlStatus;
     const status = ManagerInterface.getEFDStatus(url);
-    status.then(result => {
+    status.then((result) => {
       this.setState({
         efdStatus: result,
       });
     });
-  }
+  };
 
   getHeartbeatTitle = (component) => {
     if (component === '') return '';
@@ -282,45 +286,30 @@ class Layout extends Component {
     return `LOVE ${component} heartbeat not seen since ${timeStatement}`;
   };
 
-
-  /** This will most likely parse a location telemetry to string **/
+  /** This will most likely parse a location telemetry to string * */
   getObsLocation = () => {
-    return(
-      'Unknown'
-    )
-  }
+    return 'Unknown';
+  };
 
-  /** Returns the corresponding svg based on Observatory Control Location **/
+  /** Returns the corresponding svg based on Observatory Control Location * */
   getObsLocationIcon = (style) => {
-    var location = this.getObsLocation();
+    const location = this.getObsLocation();
 
-    switch(location){
+    switch (location) {
       case 'Unknown':
-        return (
-          <UnknownLocationIcon className={style} />
-        );
+        return <UnknownLocationIcon className={style} />;
       case 'Tucson':
-        return (
-          <CactusIcon className={style} />
-        );
+        return <CactusIcon className={style} />;
       case 'Base':
-        return (
-          <BeachIcon className={style} />
-        );
+        return <BeachIcon className={style} />;
       case 'Summit':
-        return (
-          <MountainIcon className={style} />
-        );
+        return <MountainIcon className={style} />;
       case 'LSST':
-        return (
-          <OfficeIcon className={style} />
-        );
+        return <OfficeIcon className={style} />;
       default:
-        return (
-          <UnknownLocationIcon className={style} />
-        );
+        return <UnknownLocationIcon className={style} />;
     }
-  }
+  };
 
   handleClick = (event) => {
     if (
@@ -339,7 +328,7 @@ class Layout extends Component {
       viewOnNotch: false,
       toolbarOverflow: true,
     });
-    const innerWidth = window.innerWidth;
+    const { innerWidth } = window;
     this.setState({
       collapsedLogo: innerWidth <= BREAK_3,
       viewOnNotch: BREAK_2 < innerWidth,
@@ -353,7 +342,7 @@ class Layout extends Component {
   };
 
   editView = (id) => {
-    this.props.history.push('/uif/view-editor?id=' + id);
+    this.props.history.push(`/uif/view-editor?id=${id}`);
   };
 
   navigateTo = (url) => {
@@ -518,10 +507,11 @@ class Layout extends Component {
   };
 
   render() {
-    const filteredAlarms = this.props.alarms.filter(
-      (a) =>
-        isActive(a) && !isAcknowledged(a) && !isMuted(a) && a.severity?.value >= this.state.minSeverityNotification,
-    );
+    const filteredAlarms = this.props.alarms.filter((a) => {
+      return (
+        isActive(a) && !isAcknowledged(a) && !isMuted(a) && a.severity?.value >= this.state.minSeverityNotification
+      );
+    });
     return (
       <>
         <AlarmAudioContainer />
@@ -545,7 +535,9 @@ class Layout extends Component {
               styles.leftNotchContainer,
               this.state.collapsedLogo && !this.state.sidebarVisible ? styles.collapsedLogo : null,
             ].join(' ')}
-            ref={(node) => (this.leftNotch = node)}
+            ref={(node) => {
+              this.leftNotch = node;
+            }}
           >
             <div
               className={[styles.leftTopbar, this.state.collapsedLogo ? styles.leftTopBarNoEditButton : ''].join(' ')}
@@ -636,7 +628,7 @@ class Layout extends Component {
                               this.setState({ isNewNonExposureOpen: false });
                             }}
                           >
-                            <span className={styles.bold}>{`< Back`}</span>
+                            <span className={styles.bold}>{'< Back'}</span>
                           </Button>
                         </span>
                       </div>
@@ -653,7 +645,7 @@ class Layout extends Component {
                               this.setState({ isNewExposureOpen: false });
                             }}
                           >
-                            <span className={styles.bold}>{`< Back`}</span>
+                            <span className={styles.bold}>{'< Back'}</span>
                           </Button>
                         </span>
                       </div>
@@ -662,8 +654,12 @@ class Layout extends Component {
                   ) : (
                     <></>
                   )}
-                  {this.state.isNewNonExposureOpen && <NonExposureEdit isMenu={true} back={() => this.setState({ isNewNonExposureOpen: false })}/>}
-                  {this.state.isNewExposureOpen && <ExposureAdd isMenu={true} back={() => this.setState({ isNewExposureOpen: false })} />}
+                  {this.state.isNewNonExposureOpen && (
+                    <NonExposureEdit isMenu={true} back={() => this.setState({ isNewNonExposureOpen: false })} />
+                  )}
+                  {this.state.isNewExposureOpen && (
+                    <ExposureAdd isMenu={true} back={() => this.setState({ isNewExposureOpen: false })} />
+                  )}
                 </div>
               </DropdownMenu>
 
@@ -681,26 +677,24 @@ class Layout extends Component {
                 />
               </DropdownMenu>
 
-              {/** Observatory Summary  **/}
+              {/** Observatory Summary  * */}
               <DropdownMenu className={styles.settingsDropdown}>
                 <Button className={styles.iconBtn} title="Settings" status="transparent">
-                  {this.getObsLocationIcon((`${styles.icon}`+" "+`${styles.locationIcon}`))}
+                  {this.getObsLocationIcon(`${styles.icon} ${styles.locationIcon}`)}
                 </Button>
                 <div className={styles.observatorySummaryMenu}>
                   <ObservatorySummaryMenu
                     dividerClassName={styles.divider}
                     locationIcon={this.getObsLocationIcon()}
                     location={this.getObsLocation()}
-
                     simonyiState={'UNKNOWN'}
                     simonyiOperationMode={'UNKNOWN'}
                     simonyiTrackingMode={'UNKNOWN'}
-                    simonyiObsMode={this.props.observatorySummary['simonyiObservingMode']}
+                    simonyiObsMode={this.props.observatorySummary.simonyiObservingMode}
                     simonyiPower={'UNKNOWN'}
-
                     auxtelState={'UNKNOWN'}
                     auxtelOperationMode={'UNKNOWN'}
-                    auxtelObsMode={this.props.observatorySummary['auxtelObservingMode']}
+                    auxtelObsMode={this.props.observatorySummary.auxtelObservingMode}
                     auxtelPower={'UNKNOWN'}
                   ></ObservatorySummaryMenu>
                 </div>
@@ -756,7 +750,9 @@ class Layout extends Component {
         <div className={styles.overflownToolbar} id="overflownToolbar" />
 
         <div
-          ref={(node) => (this.sidebar = node)}
+          ref={(node) => {
+            this.sidebar = node;
+          }}
           className={[styles.sidebar, !this.state.sidebarVisible ? styles.sidebarHidden : null].join(' ')}
         >
           <div className={styles.viewName}>{!this.state.viewOnNotch ? this.state.title : ' '}</div>

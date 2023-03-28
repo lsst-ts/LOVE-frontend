@@ -74,6 +74,6 @@
   grid-template-rows: auto;
 }
 
-.col2{
+.col2 {
   grid-column: span 2;
 }

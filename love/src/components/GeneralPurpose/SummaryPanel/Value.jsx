@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 import { fixedFloat } from 'Utils';
 import styles from './SummaryPanel.module.css';
 
-const Value = ({
-  children,
-  raw = false,
-}) => {
+const Value = ({ children, raw = false }) => {
   if (raw) {
     /** Display booleans as 'true' or 'false' */
     if (typeof children === 'boolean') {
@@ -52,7 +49,12 @@ const Value = ({
     );
   }
   /** Display strings and numbers. Truncate to 4 decimal places in the case of numbers */
-  return <span className={styles.value}>{parsedChild?.toFixed ? fixedFloat(parsedChild, 2) : parsedChild}{children?.units ? ' ' + children?.units : ''}</span>;
+  return (
+    <span className={styles.value}>
+      {parsedChild?.toFixed ? fixedFloat(parsedChild, 2) : parsedChild}
+      {children?.units ? ' ' + children?.units : ''}
+    </span>
+  );
 };
 
 Value.propTypes = {
@@ -60,6 +62,6 @@ Value.propTypes = {
   children: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object, PropTypes.array]),
   /** Wheter to display raw values, instead of truncating to decimal places  */
   raw: PropTypes.bool,
-}
+};
 
 export default Value;
