@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { closestEquivalentAngle } from 'Utils';
+import { closestEquivalentAngle, fixedFloat } from 'Utils';
 import WindRose from '../../../icons/WindRose/WindRose';
 import Azimuth from '../Azimuth/Azimuth';
 import {
@@ -13,7 +13,7 @@ import Label from 'components/GeneralPurpose/SummaryPanel/Label';
 import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import styles from './MirrorCovers.module.css';
-import { uniqueId, isEqual } from 'lodash';
+import { uniqueId } from 'lodash';
 
 export default class MirrorCovers extends Component {
   static propTypes = {
@@ -63,9 +63,12 @@ export default class MirrorCovers extends Component {
         <div className={styles.windRoseContainer}>
           <WindRose />
         </div>
-        {/* <div className={styles.azContainer}>
-          <Azimuth currentValue={this.props.azimuthActualPosition} targetValue={this.props.azimuthDemandPosition} />
-        </div> */}
+        {/* {<div className={styles.azContainer}>
+          <Azimuth
+            currentValue={this.props.azimuthActualPosition}
+            targetValue={this.props.azimuthDemandPosition}
+          />
+        </div>} */}
         {this.getSvg()}
       </div>
     );
@@ -128,7 +131,7 @@ export default class MirrorCovers extends Component {
   }
 
   getSvg = () => {
-    const offset = 10;
+    const offset = 35;
     const viewBoxSize = 385 - 2 * offset;
     const x0 = viewBoxSize / 2 + offset;
     const y0 = viewBoxSize / 2 + offset;
@@ -158,7 +161,14 @@ export default class MirrorCovers extends Component {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 385 385"
         >
-          <g>
+          <g
+            transform="scale(0.94 0.94) translate(15, 15)"
+          >
+            {this.getAzimuthChart(x0, y0, viewBoxSize, this.props.azimuthActualPosition, this.props.azimuthDemandPosition)}
+          </g>
+          <g
+            transform="scale(0.59 0.59) translate(138, 138)"
+          >
             {this.getBase(x0, y0, equivalentAzimuthActual)}
             <g
               style={{
@@ -168,13 +178,14 @@ export default class MirrorCovers extends Component {
               }}
             >
               {this.getMount(x0, y0)}
-              {this.getMirrorCover(angleClosed, statesStyle, viewBoxSize)}
+              {this.getMirrorCover(angleClosed, statesStyle, x0, y0, viewBoxSize)}
             </g>
             {equivalentAzimuthDemand !== equivalentAzimuthActual ?? this.getDemand(equivalentAzimuthDemand)}
           </g>
+          
         </svg>
         <div
-          style={{position: 'absolute', top: `${viewBoxSize/3}px`, left: `${viewBoxSize + 10}px`, zIndex: 1000}}
+          style={{position: 'absolute', top: `${viewBoxSize/3}px`, left: `${viewBoxSize + offset}px`, zIndex: 1000}}
         >
           {this.getInfoMirrorCover()}
         </div>
@@ -182,13 +193,351 @@ export default class MirrorCovers extends Component {
     );
   };
 
+  getArcLengthPixel(angle, radius) {
+    return `${angle / 360 * radius * Math.PI + ' ' + radius * Math.PI}`;
+  }
+
+  getBackgrownAzimuthChart(x0, y0, radius, rotationOffset) {
+    return (
+      <>
+        <circle
+          cx={x0}
+          cy={y0}
+          r={radius + 4}
+          className={styles.bg}
+        />
+
+        <g style={{ translate: `${x0}px ${y0}px`, transform: `rotate(${rotationOffset}deg)` }}>
+          {/* Origin value text */}
+          <text
+            className={styles.originText}
+            transform={`${'translate(' + (radius + 10) + ' -4) rotate(' + rotationOffset * -1 + ')'}`}
+          >
+            <tspan>0º</tspan>
+          </text>
+        </g>
+      </>
+    );
+  }
+
+  getTextAzimuthPosition(x0, y0, radius, azimuthActualPosition) {
+    const rad = Math.PI / 180;
+    const azimuthActualPositionText_X = radius * Math.cos(azimuthActualPosition * rad);
+    const azimuthActualPositionText_Y = -1 * radius * Math.sin(azimuthActualPosition * rad);
+    return (
+      <>
+        <g
+          className={styles.targetText}
+          transform={`${'translate(' + x0 + ' ' + (y0) + ') rotate(' + (azimuthActualPosition) + ')'}`}
+        >
+          <text
+            transform={`${'translate(0 ' + (radius * -1 - 4) + ') rotate(' + azimuthActualPosition * -1 + ')'}`}
+            transition=" transform 1.5s linear 0s"
+          >
+            <tspan
+              transition=" transform 1.5s linear 0s"
+              className={[
+                azimuthActualPositionText_X < 0
+                  ? [azimuthActualPositionText_Y < 0 ? styles.textQ4 : styles.textQ3]
+                  : [azimuthActualPositionText_Y < 0 ? styles.textQ1 : styles.textQ2],
+              ].join(' ')}
+            >
+              {`${fixedFloat(azimuthActualPosition, 1) + '°'}`}
+            </tspan>
+          </text>
+        </g>
+      </>
+    );
+  }
+
+  getAzimuthPositionBacklight(x0, y0, radius, rotationOffset, azimuthActualPosition) {
+    return (
+      <>
+        <g transform-origin="50% 50%" transform={`${'rotate(' + rotationOffset + ')'}`}>
+          {/* Target background */}
+          <circle
+            r={`${radius/2 + 4}`}
+            cx={`${x0}`}
+            cy={`${y0}`}
+            className={styles.bgTarget}
+            stroke-width={`${radius + 8}`}
+            transition=" transform 1s linear 0s"
+          />
+
+          {/* Current background POS */}
+          <circle
+            visibility={[azimuthActualPosition >= 0 ? 'visible' : 'hidden']}
+            r={`${radius/2 + 3}`}
+            cx={`${x0}`}
+            cy={`${y0}`}
+            className={styles.bgCurrent}
+            stroke-width={`${radius + 8}`}
+            stroke-dasharray={this.getArcLengthPixel(azimuthActualPosition, radius + 6)}
+            transition=" transform 1.7s linear 0s"
+          />
+        </g>
+        <g transform-origin="50% 50%" transform={`${'rotate(' + rotationOffset + ') scale(1 -1)'}`}>
+          {/* Current background NEG */}
+          <circle
+            visibility={[azimuthActualPosition < 0 ? 'visible' : 'hidden']}
+            r={`${radius/2 + 3}`}
+            cx={`${x0}`}
+            cy={`${y0}`}
+            className={styles.bgCurrent}
+            stroke-width={`${radius + 8}`}
+            stroke-dasharray={this.getArcLengthPixel(Math.abs(azimuthActualPosition), radius + 6)}
+            transition=" transform 1.7s linear 0s"
+          />
+        </g>
+      </>
+    )
+  }
+
+  getAzimuthPositionLight(x0, y0, radius, rotationOffset, azimuthActualPosition) {
+    return (
+      <>
+        <g transform-origin="50% 50%" transform={`${'rotate(' + rotationOffset + ')'}`}>
+          {/* Current background POS */}
+          <circle
+            visibility={[azimuthActualPosition >= 0 ? 'visible' : 'hidden']}
+            r={`${radius/2 + 3}`}
+            cx={`${x0}`}
+            cy={`${y0}`}
+            className={styles.lightCurrent}
+            stroke-width={`${radius + 8}`}
+            stroke-dasharray={this.getArcLengthPixel(azimuthActualPosition, radius + 6)}
+            transition=" transform 1.7s linear 0s"
+          />
+        </g>
+        <g transform-origin="50% 50%" transform={`${'rotate(' + rotationOffset + ') scale(1 -1)'}`}>
+          {/* Current background NEG */}
+          <circle
+            visibility={[azimuthActualPosition < 0 ? 'visible' : 'hidden']}
+            r={`${radius/2 + 3}`}
+            cx={`${x0}`}
+            cy={`${y0}`}
+            className={styles.lightCurrent}
+            stroke-width={`${radius + 8}`}
+            stroke-dasharray={this.getArcLengthPixel(Math.abs(azimuthActualPosition), radius + 6)}
+            transition=" transform 1.7s linear 0s"
+          />
+        </g>
+      </>
+    );
+  }
+
+  getLimitsGauge(x0, y0, radius, radiusInner, rotationOffset, azimuthActualPosition, azimuthDemandPosition){
+    const maxL3 = 270;
+    const maxL2 = 265;
+    const maxL1 = 260;
+    const minL1 = -260;
+    const minL2 = -265;
+    const minL3 = -270;
+
+    /* Check if current or target value is within danger or warning zone */
+    const isInWarningZone = azimuthActualPosition > maxL1 || azimuthActualPosition < minL1;
+    const isInDangerZone = azimuthActualPosition > maxL2 || azimuthActualPosition < minL2;
+
+    const radiusWidth = (radius - radiusInner) / 7;
+    const radiusWithoutBorder = radius - radiusWidth;
+    const radiusInnerWithoutBorder = radiusInner + radiusWidth * 4;
+
+    return (
+      <>
+        <g
+          // className={styles.clipPathPos}
+          transform-origin="50% 50%" transform={`${'rotate(' + rotationOffset + ')'}`}
+        >
+          {/* L3 Gauge */}
+          <circle
+            r={`${radiusWithoutBorder/2}`}
+            cx={`${x0 - radiusWidth}`}
+            cy={`${y0}`}
+            className={styles.gaugeL3}
+            stroke-width={`${radiusWithoutBorder}`}
+            stroke-dasharray={this.getArcLengthPixel(maxL3, radiusWithoutBorder)}
+          />
+
+          {/* L2 Gauge */}
+          <circle
+            r={`${radiusWithoutBorder/2}`}
+            cx={`${x0 - radiusWidth}`}
+            cy={`${y0}`}
+            className={styles.gaugeL2}
+            stroke-width={`${radiusWithoutBorder}`}
+            stroke-dasharray={this.getArcLengthPixel(maxL2, radiusWithoutBorder)}
+          />
+
+          {/* L1 Gauge */}
+          <circle
+            r={`${radiusWithoutBorder/2}`}
+            cx={`${x0 - radiusWidth}`}
+            cy={`${y0}`}
+            className={styles.gaugeL1}
+            stroke-width={`${radiusWithoutBorder}`}
+            stroke-dasharray={this.getArcLengthPixel(maxL1, radiusWithoutBorder)}
+          />
+
+          {/* Current Gauge */}
+          <circle
+            visibility={[azimuthActualPosition >= 0 ? 'visible' : 'hidden']}
+            className={[isInDangerZone ? styles.fillL3 : [isInWarningZone ? styles.fillL2 : styles.fillL1]]}
+            r={`${radiusWithoutBorder/2}`}
+            cx={`${x0 - radiusWidth}`}
+            cy={`${y0}`}
+            stroke-width={`${radiusWithoutBorder}`}
+            stroke-dasharray={this.getArcLengthPixel(azimuthActualPosition, azimuthActualPosition < 180 ? radiusWithoutBorder - radiusWidth/2 : radiusWithoutBorder)}
+          />
+
+          {/* border */}
+            <circle
+              cx={x0 - radiusWidth}
+              cy={y0}
+              r={radiusWithoutBorder - radiusWidth * 1.5}
+              className={styles.bg}
+            />
+        </g>
+
+        <g
+          // className={styles.clipPathNeg}
+          transform-origin="50% 50%" transform={`${'rotate(' + rotationOffset + ') scale(1 -1)'}`}
+        >
+          {/* L3 Gauge */}
+          <circle
+            r={`${radiusInnerWithoutBorder/2}`}
+            cx={`${x0 + radiusWidth}`}
+            cy={`${y0}`}
+            className={styles.gaugeL3}
+            stroke-width={`${radiusInnerWithoutBorder}`}
+            stroke-dasharray={this.getArcLengthPixel(Math.abs(minL3), radiusInnerWithoutBorder)}
+          />
+
+          {/* L2 Gauge */}
+          <circle
+            r={`${radiusInnerWithoutBorder/2}`}
+            cx={`${x0 + radiusWidth}`}
+            cy={`${y0}`}
+            className={styles.gaugeL2}
+            stroke-width={`${radiusInnerWithoutBorder}`}
+            stroke-dasharray={this.getArcLengthPixel(Math.abs(minL2), radiusInnerWithoutBorder)}
+          />
+
+          {/* L1 Gauge */}
+          <circle
+            r={`${radiusInnerWithoutBorder/2}`}
+            cx={`${x0 + radiusWidth}`}
+            cy={`${y0}`}
+            className={styles.gaugeL1}
+            stroke-width={`${radiusInnerWithoutBorder}`}
+            stroke-dasharray={this.getArcLengthPixel(Math.abs(minL1), radiusInnerWithoutBorder)}
+          />
+
+          {/* Current Gauge */}
+          <circle
+            visibility={[azimuthActualPosition < 0 ? 'visible' : 'hidden']}
+            className={[isInDangerZone ? styles.fillL3 : [isInWarningZone ? styles.fillL2 : styles.fillL1]]}
+            r={`${radiusInnerWithoutBorder/2}`}
+            cx={`${x0 + radiusWidth}`}
+            cy={`${y0}`}
+            stroke-width={`${radiusInnerWithoutBorder}`}
+            stroke-dasharray={this.getArcLengthPixel(Math.abs(azimuthActualPosition), Math.abs(azimuthActualPosition) < 180 ? radiusInnerWithoutBorder + radiusWidth/4 : radiusInnerWithoutBorder - radiusWidth/4)}
+          />
+
+          {/* border */}
+          <circle
+            cx={x0 + radiusWidth}
+            cy={y0}
+            r={radiusInnerWithoutBorder - radiusWidth*1.5}
+            className={styles.bg}
+          />
+        </g>
+
+        <g transform-origin="50% 50%" transform={`${'rotate(' + rotationOffset + ')'}`}>
+          {/* Current background POS */}
+          <circle
+            visibility={[azimuthActualPosition >= 0 ? 'visible' : 'hidden']}
+            r={`${(radiusInnerWithoutBorder)/2 - 8}`}
+            cx={`${x0}`}
+            cy={`${y0}`}
+            className={styles.bgCurrent}
+            stroke-width={`${radiusInnerWithoutBorder - 16}`}
+            stroke-dasharray={this.getArcLengthPixel(azimuthActualPosition, radiusInnerWithoutBorder - 16)}
+            transition=" transform 1.7s linear 0s"
+          />
+        </g>
+
+        <g transform-origin="50% 50%" transform={`${'rotate(' + rotationOffset + ') scale(1 -1)'}`}>
+          {/* Current background NEG */}
+          <circle
+            visibility={[azimuthActualPosition < 0 ? 'visible' : 'hidden']}
+            r={`${radiusInnerWithoutBorder/2 - 8}`}
+            cx={`${x0}`}
+            cy={`${y0}`}
+            className={styles.bgCurrent}
+            stroke-width={`${radiusInnerWithoutBorder - 16}`}
+            stroke-dasharray={this.getArcLengthPixel(Math.abs(azimuthActualPosition), radiusInnerWithoutBorder - 16)}
+            transition=" transform 1.5s linear 0s"
+          />
+        </g>
+      </>
+    );
+  }
+
+  getAzimuthChart(x0, y0, viewBoxSize, azimuthActualPosition, azimuthDemandPosition) {
+    const radius = viewBoxSize / 2 - 4;
+    const radiusInner = radius * 0.78;
+    const rotationOffset = -90;
+
+    const maxL3 = 270;
+    const maxL2 = 265;
+    const maxL1 = 260;
+    const minL1 = -260;
+    const minL2 = -265;
+    const minL3 = -270;
+
+    const isTargetWarningZone = azimuthDemandPosition > maxL1 || azimuthDemandPosition < minL1;
+    const isTargetDangerZone = azimuthDemandPosition > maxL2 || azimuthDemandPosition < minL2;
+
+    return (
+      <g>
+        {this.getAzimuthPositionBacklight(x0, y0, radius, rotationOffset, azimuthActualPosition)}
+        {this.getBackgrownAzimuthChart(x0, y0, radius, rotationOffset)}
+        {this.getLimitsGauge(x0, y0, radius, radiusInner, rotationOffset, azimuthActualPosition, azimuthDemandPosition)}
+        {this.getAzimuthPositionLight(x0, y0, radius, rotationOffset, azimuthActualPosition)}
+
+        {/* Target Value line */}
+        <g transform-origin="50% 50%" transform={`${'rotate(' + rotationOffset + ')'}`}>
+          <path
+            className={styles.targetBg}
+            d={`${'M 0 0 L ' + (radius + 8) + ' 0'}`}
+            transform={`${'translate(' + x0 + ' ' + y0 + ') rotate(' + (azimuthDemandPosition) + ')'}`}
+          />
+          <path
+            className={[
+              isTargetDangerZone
+                ? styles.targetValueDanger
+                : [isTargetWarningZone ? styles.targetValueWarning : styles.targetValue],
+            ]}
+            d={`${'M 0 0 L ' + (radius + 8) + ' 0'}`}
+            transform={`${'translate(' + x0 + ' ' + y0 + ') rotate(' + (azimuthDemandPosition) + ')'}`}
+          />
+        </g>
+
+        {this.getTextAzimuthPosition(x0, y0, radius, azimuthActualPosition)}
+
+        {/* Front Mask */}
+        <circle r={`${radiusInner }`} cx={`${x0}`} cy={`${y0}`} className={styles.cutOut} />
+      </g>
+    );
+  }
+
   getBase(x0, y0, equivalentAzimuthActual) {
     return (
       <>
         <circle
           cx={x0}
           cy={y0}
-          r={170}
+          r={165}
           style={{
             strokeWidth: 2,
             strokeMiterlimit: 10,
@@ -250,11 +599,7 @@ export default class MirrorCovers extends Component {
     }
   }
 
-  getMirrorCover = (angleClosed, statesStyle, viewBoxSize) => {
-    const offset = 10;
-    const x0 = viewBoxSize / 2 + offset;
-    const y0 = viewBoxSize / 2 + offset;
-
+  getMirrorCover = (angleClosed, statesStyle, x0, y0, viewBoxSize) => {
     const r = viewBoxSize / 4;
 
     const alpha1 = (3 * Math.PI) / 2 + (5 * Math.PI / 180.0); // Displace initial angle for always showing
