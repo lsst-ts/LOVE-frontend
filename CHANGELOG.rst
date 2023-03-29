@@ -7,6 +7,10 @@ v5.16.0
 
 * Update GIS component to adapt with newest CSC version `<https://github.com/lsst-ts/LOVE-frontend/pull/441>`_
 * Observatory Summary Component Implementation `<https://github.com/lsst-ts/LOVE-frontend/pull/440>`_
+
+v5.15.1
+--------
+
 * Update docs: LOVE Config file `<https://github.com/lsst-ts/LOVE-frontend/pull/439>`_
 * Tickets/love 157 - changes about the Visit to Summit `<https://github.com/lsst-ts/LOVE-frontend/pull/438>`_
 
