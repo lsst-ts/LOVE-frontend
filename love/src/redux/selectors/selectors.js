@@ -1345,7 +1345,7 @@ export const getSurveysInfo = (state, salindex) => {
     surveysNumGenProps: surveys[`event-Scheduler-${salindex}-surveyTopology`]?.[0]?.numGeneralProps?.value ?? 0,
     surveysGenProps: surveys[`event-Scheduler-${salindex}-surveyTopology`]?.[0]?.generalPropos?.value ?? '',
     surveysNumSeqProps: surveys[`event-Scheduler-${salindex}-surveyTopology`]?.[0]?.numSeqProps?.value ?? 0,
-    surveysSeqProps: surveys[`event-Scheduler-${salindex}-surveyTopology`]?.[0]?.generalPropos?.value ?? '',
+    surveysSeqProps: surveys[`event-Scheduler-${salindex}-surveyTopology`]?.[0]?.sequencePropos?.value ?? '',
   }
 };
 

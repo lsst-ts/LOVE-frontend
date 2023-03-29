@@ -6,39 +6,17 @@ import { count } from 'd3';
 
 export default class Surveys extends Component {
   render() {
-    const generalProposals = [
-      '63-EFD',
-      '95ONES',
-      'AB987',
-      'DR-2345',
-      'GP-0002',
-      'GP-0167',
-      'OC124',
-      'TP0001',
-      'Q24',
-      'Z_DD01',
-    ];
-    const timedProposals = [
-      '429-FV',
-      '766WF',
-      '90.09.09',
-      '975FG',
-      'Abs-01',
-      'DDW',
-      'DDW2',
-      'fav09',
-      'HI-00',
-      'LO-PQQ',
-      'LO-X01',
-      'W749-a',
-      'WF',
-    ];
     const { 
       isOpen,
       surveysNumGenProps,
       surveysGenProps,
       surveysNumSeqProps,
       surveysSeqProps } = this.props;
+
+    const generalProposals = surveysGenProps.split(",");
+    const timedProposals = surveysSeqProps.split(",");
+
+    console.log(generalProposals, timedProposals);
     return (
       <div className={styles.container}>
         <div onClick={this.props.showContent} className={styles.header}>
@@ -50,21 +28,27 @@ export default class Surveys extends Component {
         >
           <div className={styles.surveysTextsDiv}>
             <span className={styles.surveysTexts}>General Proposals</span>
-            <span>{generalProposals.length}</span>
+            <span>{surveysNumGenProps}</span>
           </div>
           <div className={styles.generalDiv}>
-            {generalProposals.map((gp) => (
-              <div className={styles.surveysDivs}>{gp}</div>
-            ))}
+            {surveysNumGenProps ? 
+              (generalProposals.map((gp) => (
+                <div className={styles.surveysDivs}>{gp}</div>
+              ))) :
+              ('No data')
+            }
           </div>
           <div className={styles.surveysTextsDiv}>
             <span className={styles.surveysTexts}>TimedProposals</span>
-            <span>{timedProposals.length}</span>
+            <span>{surveysNumSeqProps}</span>
           </div>
           <div className={styles.generalDiv}>
-            {timedProposals.map((tp) => (
-              <div className={styles.surveysDivs}>{tp}</div>
-            ))}
+            {surveysNumSeqProps ? 
+              (timedProposals.map((tp) => (
+                <div className={styles.surveysDivs}>{tp}</div>
+              ))) :
+              ('No data')
+            }
           </div>
         </div>
       </div>

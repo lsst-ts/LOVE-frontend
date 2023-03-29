@@ -72,7 +72,13 @@
 
 .generalDiv {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 0.5fr 0.5fr 0.5fr;
+  justify-content: space-evenly;
+  justify-items: stretch;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 25em;
+  width: 35em;
 }
 
 .surveysDivs {
@@ -80,14 +86,17 @@
   border: 1px solid var(--tertiary-background-color);
   padding: 1em;
   margin: 0.5em;
-  width: 55%;
-  height: 30%;
+  width: 6em;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .surveysTextsDiv {
   display: grid;
   grid-template-columns: 2fr 1fr;
   margin-left: 0.5em;
+  margin-bottom: 0.5em;
+  margin-top: 2.5em;
 }
 
 .blocksTargetsDiv {
