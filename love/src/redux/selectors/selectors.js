@@ -969,8 +969,8 @@ export const getRawStatus = (state) => {
   const interlocksData = getStreamsData(state, subscriptions);
   return {
     interlocksStatus: interlocksData['event-GIS-0-rawStatus']
-      ? interlocksData['event-GIS-0-rawStatus'][0].rawStatus.value
-      : Array(30).fill(0),
+      ? interlocksData['event-GIS-0-rawStatus'][0]?.status?.value
+      : "0".repeat(464),
   };
 };
 

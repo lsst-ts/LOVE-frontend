@@ -28,33 +28,46 @@ export default class GIS extends Component {
     };
   }
 
-  componentDidUpdate = (prevProps, prevState) => {
-    if (!isEqual(prevProps.interlocksStatus, this.props.interlocksStatus)) {
-      const systemsSignals = Object.entries(signals);
-      const rawStatus = this.props.interlocksStatus;
-      const alertEffects = [];
-      const alertSignals = [];
-      systemsSignals.forEach(([system, systemSignals]) => {
-        const sSignals = Object.keys(systemSignals);
-        sSignals.forEach((signal) => {
-          const effects = systemSignals[signal];
+  signalOnEnter = (effects) => {
+    this.setState({ activeEffects: effects });
+  };
 
-          const [systemIndex, bitIndex] = alertSignalIndexes[signal];
-          const bitArray = rawStatus[systemIndex].toString(2).padEnd(16, '0');
-          const activeAlert = bitArray[bitIndex] === '1';
+  signalOnLeave = () => {
+    this.setState({ activeEffects: [] });
+  };
 
-          const [bypassSystemIndex, bypassBitIndex] = signalBypassIndexes[signal];
-          const bypassBitArray = rawStatus[bypassSystemIndex].toString(2).padEnd(16, '0');
-          const bypassedAlert = bypassBitArray[bypassBitIndex] === '1';
+  updateInterlockStatuses = () => {
+    const { interlocksStatus } = this.props;
+    const systemsSignals = Object.entries(signals);
+    const rawStatus = interlocksStatus.match(/.{1,16}/g);
+    const alertEffects = [];
+    const alertSignals = [];
+    systemsSignals.forEach(([system, systemSignals]) => {
+      const sSignals = Object.keys(systemSignals);
+      sSignals.forEach((signal) => {
+        const effects = systemSignals[signal];
 
-          if (activeAlert && !bypassedAlert) {
-            alertEffects.push(...effects);
-            alertSignals.push(signal);
-          }
-        });
+        const [systemIndex, bitIndex] = alertSignalIndexes[signal];
+        const bitArray = rawStatus[systemIndex].padEnd(16, '0');
+        const activeAlert = bitArray[bitIndex] === '1';
+
+        const [bypassSystemIndex, bypassBitIndex] = signalBypassIndexes[signal];
+        const bypassBitArray = rawStatus[bypassSystemIndex].toString(2).padEnd(16, '0');
+        const bypassedAlert = bypassBitArray[bypassBitIndex] === '1';
+
+        if (activeAlert && !bypassedAlert) {
+          alertEffects.push(...effects);
+          alertSignals.push(signal);
+        }
       });
+    });
 
-      this.setState({ alertEffects, alertSignals });
+    this.setState({ alertEffects, alertSignals });
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.props.interlocksStatus && prevProps.interlocksStatus !== this.props.interlocksStatus) {
+      this.updateInterlockStatuses();
     }
   };
 
@@ -64,14 +77,6 @@ export default class GIS extends Component {
 
   componentWillUnmount = () => {
     this.props.unsubscribeToStream();
-  };
-
-  signalOnEnter = (effects) => {
-    this.setState({ activeEffects: effects });
-  };
-
-  signalOnLeave = () => {
-    this.setState({ activeEffects: [] });
   };
 
   render() {
