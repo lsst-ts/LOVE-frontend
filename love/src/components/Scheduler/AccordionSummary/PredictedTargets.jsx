@@ -5,6 +5,38 @@ import MinusIcon from 'components/icons/MinusIcon/MinusIcon';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 
 export default class PredictedTarget extends Component {
+  
+  HEADERS_PREDTARGETS = [
+    {
+      field: 'id',
+      title: 'ID',
+      // className: styles.columns,
+      type: 'number',
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(0)),
+    },
+    {
+      field: 'ra',
+      title: 'Ra',
+      // className: styles.columns,
+      type: 'number',
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(2)),
+    },
+    {
+      field: 'decl',
+      title: 'Decl',
+      // className: styles.columns,
+      type: 'number',
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(2)),
+    },
+    {
+      field: 'rotSky',
+      title: 'RotSkyPos',
+      className: styles.columns,
+      type: 'number',
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(2)),
+    },
+  ];
+
   render() {
     const { 
       isOpen,
@@ -17,8 +49,16 @@ export default class PredictedTarget extends Component {
       predTargetsInstrConfig,
       predTargetsNexp } = this.props;
 
-    const predData = {};
-
+    const predData = [];
+    for (let i = 0; i < predTargetsRa.length; i++){
+      const obj = {
+        id: i+1,
+        ra: predTargetsRa[i],
+        decl: predTargetsDecl[i],
+        rotSky: predTargetsRotSkyPos[i],
+      };
+      predData.push(obj);
+    }
 
     return (
       <div className={styles.container}>
@@ -33,7 +73,7 @@ export default class PredictedTarget extends Component {
           className={isOpen ? [styles.openPanel, styles.panel].join(' ') : [styles.closePanel, styles.panel].join(' ')}
         >
           <div className={styles.predictedTargetsDiv}>
-            
+            <SimpleTable headers={this.HEADERS_PREDTARGETS} data={predData} />
           </div>
         </div>
       </div>
