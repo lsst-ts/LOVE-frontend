@@ -2,7 +2,7 @@
 Version History
 ===============
 
-v5.15.1
+v5.16.0
 --------
 
 * Update GIS component to adapt with newest CSC version `<https://github.com/lsst-ts/LOVE-frontend/pull/441>`_
