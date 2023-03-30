@@ -194,7 +194,7 @@ export default class MirrorCovers extends Component {
   };
 
   getArcLengthPixel(angle, radius) {
-    return `${angle / 360 * radius * Math.PI + ' ' + radius * Math.PI}`;
+    return `${(angle / 360 * radius * Math.PI) + ' ' + (radius * Math.PI )}`;
   }
 
   getBackgrownAzimuthChart(x0, y0, radius, rotationOffset) {
@@ -386,9 +386,10 @@ export default class MirrorCovers extends Component {
             cx={`${x0 - radiusWidth}`}
             cy={`${y0}`}
             stroke-width={`${radiusWithoutBorder}`}
-            stroke-dasharray={this.getArcLengthPixel(azimuthActualPosition, azimuthActualPosition < 180 ? radiusWithoutBorder - radiusWidth/2 : radiusWithoutBorder)}
+            stroke-dasharray={
+              this.getArcLengthPixel(azimuthActualPosition - radiusWidth/2 * Math.sin(azimuthActualPosition * Math.PI / 180), radiusWithoutBorder)
+            }
           />
-
           {/* border */}
             <circle
               cx={x0 - radiusWidth}
@@ -507,20 +508,61 @@ export default class MirrorCovers extends Component {
 
         {/* Target Value line */}
         <g transform-origin="50% 50%" transform={`${'rotate(' + rotationOffset + ')'}`}>
-          <path
-            className={styles.targetBg}
-            d={`${'M 0 0 L ' + (radius + 8) + ' 0'}`}
-            transform={`${'translate(' + x0 + ' ' + y0 + ') rotate(' + (azimuthDemandPosition) + ')'}`}
-          />
-          <path
-            className={[
-              isTargetDangerZone
-                ? styles.targetValueDanger
-                : [isTargetWarningZone ? styles.targetValueWarning : styles.targetValue],
-            ]}
-            d={`${'M 0 0 L ' + (radius + 8) + ' 0'}`}
-            transform={`${'translate(' + x0 + ' ' + y0 + ') rotate(' + (azimuthDemandPosition) + ')'}`}
-          />
+          {azimuthDemandPosition <= 90 && azimuthDemandPosition >= -90 ? (
+            <>
+              <path
+                className={styles.targetBg}
+                d={`${'M 0 0 L ' + (radius + 8) + ' 0'}`}
+                transform={`${'translate(' + x0 + ' ' + y0 + ') rotate(' + (azimuthDemandPosition) + ')'}`}
+              />
+              <path
+                className={[
+                  isTargetDangerZone
+                    ? styles.targetValueDanger
+                    : [isTargetWarningZone ? styles.targetValueWarning : styles.targetValue],
+                ]}
+                d={`${'M 0 0 L ' + (radius + 8) + ' 0'}`}
+                transform={`${'translate(' + x0 + ' ' + y0 + ') rotate(' + (azimuthDemandPosition) + ')'}`}
+              />
+            </>
+          ) : (<></>)
+          }
+          {azimuthDemandPosition > 90 ? (
+              <>
+                <path
+                  className={styles.targetBg}
+                  d={`${'M 0 0 L ' + 22 + ' 0'}`}
+                  transform={`${'translate(' + (x0 + (radius - 14)* Math.cos(azimuthDemandPosition * Math.PI / 180) ) + ' ' + (y0 + (radius - 14)* Math.sin(azimuthDemandPosition * Math.PI / 180)) + ') rotate(' + (azimuthDemandPosition) + ')'}`}
+                />
+                <path
+                  className={[
+                    isTargetDangerZone
+                      ? styles.targetValueDanger
+                      : [isTargetWarningZone ? styles.targetValueWarning : styles.targetValue],
+                  ]}
+                  d={`${'M 0 0 L ' + 22 + ' 0'}`}
+                  transform={`${'translate(' + (x0 + (radius - 14) * Math.cos(azimuthDemandPosition * Math.PI / 180) ) + ' ' + (y0 + (radius - 14) * Math.sin(azimuthDemandPosition * Math.PI / 180)) + ') rotate(' + (azimuthDemandPosition) + ')'}`}
+                />
+              </>
+            ) : (<></>)}
+            {azimuthDemandPosition < -90 ? (
+              <>
+                <path
+                  className={styles.targetBg}
+                  d={`${'M 0 0 L ' + (radius - 12) + ' 0'}`}
+                  transform={`${'translate(' + x0 + ' ' + y0 + ') rotate(' + (azimuthDemandPosition) + ')'}`}
+                />
+                <path
+                  className={[
+                    isTargetDangerZone
+                      ? styles.targetValueDanger
+                      : [isTargetWarningZone ? styles.targetValueWarning : styles.targetValue],
+                  ]}
+                  d={`${'M 0 0 L ' + (radius - 12) + ' 0'}`}
+                  transform={`${'translate(' + x0 + ' ' + y0 + ') rotate(' + (azimuthDemandPosition) + ')'}`}
+                />
+              </>
+            ) : (<></>)}
         </g>
 
         {this.getTextAzimuthPosition(x0, y0, radius, azimuthActualPosition)}
