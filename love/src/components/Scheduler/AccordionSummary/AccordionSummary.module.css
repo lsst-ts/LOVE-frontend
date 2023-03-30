@@ -72,10 +72,10 @@
 
 .generalDiv {
   display: grid;
-  grid-template-columns: 0.5fr 0.5fr 0.5fr;
-  justify-content: space-evenly;
+  grid-template-columns: 0.2fr 0.2fr 0.2fr;
+  justify-content: flex-start;
   justify-items: stretch;
-  overflow-x: hidden;
+  overflow-x: auto;
   overflow-y: auto;
   height: 25em;
   width: 35em;
@@ -84,9 +84,9 @@
 .surveysDivs {
   background-color: var(--quinary-background-color);
   border: 1px solid var(--tertiary-background-color);
-  padding: 1em;
+  padding: 0.5em;
   margin: 0.5em;
-  width: 6em;
+  width: 4em;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }

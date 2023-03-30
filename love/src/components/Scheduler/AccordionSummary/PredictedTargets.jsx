@@ -65,7 +65,7 @@ export default class PredictedTarget extends Component {
         <div onClick={this.props.showContent} className={styles.header}>
           <div className={styles.targetsTitle}>
             <h3 className={styles.title}>Predicted Target</h3>
-            <h6>{predTargetsNumTargets} targets predicted. Instruments: {predTargetsInstrConfig}</h6>
+            <h5>{predTargetsNumTargets} targets predicted. Instruments: {predTargetsInstrConfig}</h5>
           </div>
           <div className={styles.icons}>{!isOpen ? <AddIcon /> : <MinusIcon />}</div>
         </div>

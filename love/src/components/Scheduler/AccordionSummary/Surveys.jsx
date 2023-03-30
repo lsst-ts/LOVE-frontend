@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import styles from './AccordionSummary.module.css';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 import MinusIcon from 'components/icons/MinusIcon/MinusIcon';
-import { count } from 'd3';
 
 export default class Surveys extends Component {
   render() {
