@@ -198,6 +198,16 @@ export const observatoryIndex = {
       },
     },
   },
+  ObservatorySummary: {
+    component: require('../ObservatorySummary/ObservatorySummary.container').default,
+    schema: {
+      ...require('../ObservatorySummary/ObservatorySummary.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../ObservatorySummary/ObservatorySummary.container').schema.props,
+      },
+    },
+  },
 };
 
 export const auxtelIndex = {

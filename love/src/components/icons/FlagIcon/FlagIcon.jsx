@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './FlagIcon.module.css';
 
-
 export default class FlagIcon extends Component {
   static propTypes = {
     status: PropTypes.oneOf(['ok', 'alert', 'warning', 'unknown']),
@@ -24,7 +23,7 @@ export default class FlagIcon extends Component {
       ok: styles.ok,
       alert: styles.alert,
       warning: styles.warning,
-      unknown: styles.unknown
+      unknown: styles.unknown,
     };
     return result[this.props.status] ? result[this.props.status] : styles.unknown;
   }
@@ -45,4 +44,3 @@ export default class FlagIcon extends Component {
     );
   }
 }
-

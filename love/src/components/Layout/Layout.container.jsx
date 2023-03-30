@@ -16,11 +16,11 @@ import {
   getTokenSwapStatus,
   getConfig,
   getEfdConfig,
+  getObservatoryState,
 } from '../../redux/selectors';
-import { logout, receiveConfig } from '../../redux/actions/auth';
+import { logout, receiveConfig, requireSwapToken, cancelSwapToken } from '../../redux/actions/auth';
 import { addGroup, removeGroup, requestSALCommand, resetSubscriptions } from '../../redux/actions/ws';
 import { clearViewToEdit } from '../../redux/actions/uif';
-import { requireSwapToken, cancelSwapToken } from '../../redux/actions/auth';
 import Layout from './Layout';
 
 const LayoutContainer = ({ ...props }) => {
@@ -44,6 +44,7 @@ const mapStateToProps = (state) => {
   const getExecPermission = () => getPermCmdExec(state);
   const tokenSwapStatus = getTokenSwapStatus(state);
   const efdConfigFile = getEfdConfig(state);
+  const observatorySummary = getObservatoryState(state);
   return {
     user,
     config,
@@ -61,6 +62,7 @@ const mapStateToProps = (state) => {
     getExecPermission,
     tokenSwapStatus,
     efdConfigFile,
+    observatorySummary,
   };
 };
 
