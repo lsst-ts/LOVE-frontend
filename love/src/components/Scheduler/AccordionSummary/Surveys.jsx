@@ -13,10 +13,9 @@ export default class Surveys extends Component {
       surveysNumSeqProps,
       surveysSeqProps } = this.props;
 
-    const generalProposals = surveysGenProps.split(",");
-    const timedProposals = surveysSeqProps.split(",");
+    const generalProposals = surveysGenProps?.split(",");
+    const timedProposals = surveysSeqProps?.split(",");
 
-    console.log(generalProposals, timedProposals);
     return (
       <div className={styles.container}>
         <div onClick={this.props.showContent} className={styles.header}>

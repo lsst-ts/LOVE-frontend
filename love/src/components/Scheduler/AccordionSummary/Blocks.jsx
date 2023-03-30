@@ -11,6 +11,8 @@ export default class Blocks extends Component {
   render() {
     const { 
       isOpen,
+      blockInvId,
+      blockInvStatus,
       blockId,
       blockStatusId,
       blockStatus,
@@ -18,163 +20,18 @@ export default class Blocks extends Component {
       blockExecTotal,
       blockHash,
       blockDef } = this.props;
-    const executions = [
-      {
-        name: 'Target 002 856gh',
-        id: '0.104',
-        description: 'lorem ipsum',
-        value: '0010/002s',
-      },
-      {
-        name: 'Target 003 Tau-43',
-        id: '0.104',
-        description: 'lorem ipsum',
-        value: '0234/024s',
-      },
-      {
-        name: 'Target 003 Tau-43',
-        id: '0.104',
-        description: 'lorem ipsum',
-        value: '0234/024s',
-      },
-      {
-        name: 'Target 003 Tau-43',
-        id: '0.104',
-        description: 'lorem ipsum',
-        value: '0234/024s',
-      },
-      {
-        name: 'Target 003 Tau-43',
-        id: '0.104',
-        description: 'lorem ipsum',
-        value: '0234/024s',
-      },
-      {
-        name: 'Target 003 Tau-43',
-        id: '0.104',
-        description: 'lorem ipsum',
-        value: '0234/024s',
-      },
-      {
-        name: 'Target 003 Tau-43',
-        id: '0.104',
-        description: 'lorem ipsum',
-        value: '0234/024s',
-      },
-      {
-        name: 'Target 003 Tau-43',
-        id: '0.104',
-        description: 'lorem ipsum',
-        value: '0234/024s',
-      },
-      {
-        name: 'Target 003 Tau-43',
-        id: '0.104',
-        description: 'lorem ipsum',
-        value: '0234/024s',
-      },
-      {
-        name: 'Target 003 Tau-43',
-        id: '0.104',
-        description: 'lorem ipsum',
-        value: '0234/024s',
-      },
-      {
-        name: 'Target 003 Tau-43',
-        id: '0.104',
-        description: 'lorem ipsum',
-        value: '0234/024s',
-      },
-      {
-        name: 'Target 003 Tau-43',
-        id: '0.104',
-        description: 'lorem ipsum',
-        value: '0234/024s',
-      },
-    ];
 
-    const listOfBlocks = [
-      {
-        name: 'OBS-115',
-        status: 'completed',
-      },
-      {
-        name: 'OBS-116',
-        status: 'dropped',
-      },
-      {
-        name: 'OBS-117',
-        status: 'completed',
-      },
-      {
-        name: 'OBS-118',
-        status: 'in progress',
-      },
-      {
-        name: 'OBS-119',
-        status: 'scheduled',
-      },
-      {
-        name: 'OBS-115',
-        status: 'completed',
-      },
-      {
-        name: 'OBS-116',
-        status: 'dropped',
-      },
-      {
-        name: 'OBS-117',
-        status: 'completed',
-      },
-      {
-        name: 'OBS-118',
-        status: 'in progress',
-      },
-      {
-        name: 'OBS-119',
-        status: 'scheduled',
-      },
-      {
-        name: 'OBS-115',
-        status: 'completed',
-      },
-      {
-        name: 'OBS-116',
-        status: 'dropped',
-      },
-      {
-        name: 'OBS-117',
-        status: 'completed',
-      },
-      {
-        name: 'OBS-118',
-        status: 'in progress',
-      },
-      {
-        name: 'OBS-119',
-        status: 'scheduled',
-      },
-      {
-        name: 'OBS-115',
-        status: 'completed',
-      },
-      {
-        name: 'OBS-116',
-        status: 'dropped',
-      },
-      {
-        name: 'OBS-117',
-        status: 'completed',
-      },
-      {
-        name: 'OBS-118',
-        status: 'in progress',
-      },
-      {
-        name: 'OBS-119',
-        status: 'scheduled',
-      },
-    ];
+    const listBlocksId = blockInvId?.split(",");
+    const listBlocksStatus = blockInvStatus?.split(",");
+
+    const listOfBlocks = [];
+    for (let i = 0; i < listBlocksId.length; i++){
+      const obj = {
+        id: listBlocksId[i],
+        status: listBlocksStatus[i],
+      };
+      listOfBlocks.push(obj);
+    }
 
     return (
       <div className={styles.container}>
@@ -198,28 +55,30 @@ export default class Blocks extends Component {
             <span>10</span>
           </div>
           <div className={styles.blocksTargetsDiv}>
-            {executions.map((pt) => (
+            {/* {executions.map((pt) => (
               <div>
                 <span className={styles.predTargets}>{pt.name}</span>
                 <span>{pt.value}</span>
               </div>
-            ))}
+            ))} */}
           </div>
           <div className={styles.divButtonBlocks}>
             <Button className={styles.buttonBlocks}>Add Block to Scheduler queue</Button>
-            <span>id</span>
+            <span>{blockHash ? blockHash : 'No data'}</span>
           </div>
           <div className={styles.executionsDiv}>
             <span className={styles.executionsText}>List of blocks</span>
             <span></span>
           </div>
           <SummaryPanel className={styles.blocksPanel}>
-            {listOfBlocks.map((b) => (
-              <div className={styles.predTargets}>
-                <Label>{b.name}</Label>
-                <Value>{b.status}</Value>
-              </div>
-            ))}
+            {listOfBlocks.length > 0 ?
+              (listOfBlocks.map((b) => (
+                <div className={styles.predTargets}>
+                  <Label>{b.id}</Label>
+                  <Value>{b.status}</Value>
+                </div>
+              ))) : 'No data'
+            }
           </SummaryPanel>
         </div>
       </div>
