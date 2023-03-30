@@ -5,8 +5,6 @@ import styles from './TMA.module.css';
 import Summary from './Summary/Summary';
 import MirrorCovers from './MirrorCovers/MirrorCovers';
 import Elevation from './Elevation/Elevation';
-import GpElevation from 'components/GeneralPurpose/Elevation/Elevation';
-
 import Drives from './Drives/Drives';
 
 export default class TMA extends Component {

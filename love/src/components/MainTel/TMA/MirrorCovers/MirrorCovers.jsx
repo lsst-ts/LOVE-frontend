@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { closestEquivalentAngle, fixedFloat } from 'Utils';
 import WindRose from '../../../icons/WindRose/WindRose';
-import Azimuth from '../Azimuth/Azimuth';
 import {
   mtMountMirrorCoversStateMap,
   stateToStyleMTMountMirrorCoversState,
