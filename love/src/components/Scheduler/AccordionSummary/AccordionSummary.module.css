@@ -136,12 +136,12 @@
 }
 
 .currentBlock {
-  margin-left: 2.5em;
+  margin-left: 0.5em;
   background-color: var(--second-primary-background-color) !important;
 }
 
 .blocksPanel {
-  margin-left: 2.5em;
+  margin-left: 0.5em;
   height: 200px;
   overflow-x: hidden;
   overflow-y: auto;

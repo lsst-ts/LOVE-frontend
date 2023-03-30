@@ -6,8 +6,42 @@ import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 import MinusIcon from 'components/icons/MinusIcon/MinusIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
+import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 
 export default class Blocks extends Component {
+
+
+  HEADERS_PREDTARGETS = [
+    {
+      field: 'id',
+      title: 'ID',
+      // className: styles.columns,
+      type: 'number',
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(0)),
+    },
+    {
+      field: 'ra',
+      title: 'Ra',
+      // className: styles.columns,
+      type: 'number',
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(2)),
+    },
+    {
+      field: 'decl',
+      title: 'Decl',
+      // className: styles.columns,
+      type: 'number',
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(2)),
+    },
+    {
+      field: 'rotSky',
+      title: 'RotSkyPos',
+      className: styles.columns,
+      type: 'number',
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(2)),
+    },
+  ];
+
   render() {
     const { 
       isOpen,
@@ -19,7 +53,10 @@ export default class Blocks extends Component {
       blockExecCompl,
       blockExecTotal,
       blockHash,
-      blockDef } = this.props;
+      blockDef,
+      predTargetsRa,
+      predTargetsDecl,
+      predTargetsRotSkyPos } = this.props;
 
     const listBlocksId = blockInvId?.split(",");
     const listBlocksStatus = blockInvStatus?.split(",");
@@ -33,6 +70,19 @@ export default class Blocks extends Component {
       listOfBlocks.push(obj);
     }
 
+    console.log(listOfBlocks);
+
+    const predData = [];
+    for (let i = 0; i < predTargetsRa.length; i++){
+      const obj = {
+        id: i+1,
+        ra: predTargetsRa[i],
+        decl: predTargetsDecl[i],
+        rotSky: predTargetsRotSkyPos[i],
+      };
+      predData.push(obj);
+    }
+
     return (
       <div className={styles.container}>
         <div onClick={this.props.showContent} className={styles.header}>
@@ -43,8 +93,8 @@ export default class Blocks extends Component {
           className={isOpen ? [styles.openPanel, styles.panel].join(' ') : [styles.closePanel, styles.panel].join(' ')}
         >
           <SummaryPanel className={styles.currentBlock}>
-            <Label>{listOfBlocks[0].name}</Label>
-            <Value>{listOfBlocks[0].status}</Value>
+            <Label>{blockId ? blockId : 'No data'}</Label>
+            <Value>{blockStatus ? blockStatus : 'No data'}</Value>
           </SummaryPanel>
           <div className={styles.executionsDiv}>
             <span className={styles.executionsText}>Executions</span>
@@ -55,12 +105,9 @@ export default class Blocks extends Component {
             <span>10</span>
           </div>
           <div className={styles.blocksTargetsDiv}>
-            {/* {executions.map((pt) => (
-              <div>
-                <span className={styles.predTargets}>{pt.name}</span>
-                <span>{pt.value}</span>
-              </div>
-            ))} */}
+            <div className={styles.predictedTargetsDiv}>
+              <SimpleTable headers={this.HEADERS_PREDTARGETS} data={predData} />
+            </div>
           </div>
           <div className={styles.divButtonBlocks}>
             <Button className={styles.buttonBlocks}>Add Block to Scheduler queue</Button>

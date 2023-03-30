@@ -133,6 +133,9 @@ export default class AccordionSummary extends Component {
           blockExecTotal={blockExecTotal}
           blockHash={blockHash}
           blockDef={blockDef}
+          predTargetsRa={predTargetsRa}
+          predTargetsDecl={predTargetsDecl}
+          predTargetsRotSkyPos={predTargetsRotSkyPos}
         />
       </div>
     );
