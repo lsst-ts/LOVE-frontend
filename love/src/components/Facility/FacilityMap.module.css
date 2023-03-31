@@ -1,149 +1,148 @@
-.content{
-	display:flex;
+.content {
+  display: flex;
 }
 
 .leftMenu {
-margin-right: 0.7em;
-max-width:10em;
+  margin-right: 0.7em;
+  max-width: 10em;
+  overflow: hidden;
+  transition: all 0.25s linear;
+
+  flex-basis: 100%;
+  position: relative;
 }
 
-.section{
-	display:flex;
-	align-items: center;
-	justify-content:space-evenly;
-	background-color:var(--second-secondary-background-color);
-	padding:1em 0em;
-	margin:0.5em 0em;
+.section {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: var(--second-secondary-background-color);
+  padding: 1em 0em;
+  margin: 0.5em 0em;
 }
 
-.cscMenu{
-	border-radius:4px;
-	border: 1px solid var(--secondary-font-dimmed-color);
-	margin-bottom: 1em;
-
+.cscMenu {
+  border-radius: 4px;
+  border: 1px solid var(--secondary-font-dimmed-color);
+  margin-bottom: 1em;
 }
 
-.legendMenu{
-	border-radius:4px;
-	border: 1px solid var(--secondary-font-dimmed-color);
-	margin-bottom: 1em;
-
+.legendMenu {
+  border-radius: 4px;
+  border: 1px solid var(--secondary-font-dimmed-color);
+  margin-bottom: 1em;
 }
 
-.eye{
-	fill:var(--secondary-font-color);
-	opacity:25%;
+.iconWrapper {
+  width: 1.5em;
+  height: 1.5em;
+  cursor: pointer;
+  border-radius: 100%;
 }
 
-.selected{
-	opacity:100%;
+.iconWrapper svg {
+  padding: 0.1em;
+  width: 100%;
 }
 
-.iconWrapper{
-	width:1.5em;
-	height:1.5em;
-	cursor:pointer;
-	border-radius:100%;
+.iconWrapper:hover {
+  background-color: var(--primary-active-background-color);
 }
 
-.iconWrapper svg{
-	padding:0.1em;
-	width:100%;
+.title {
+  font-size: 1.17em;
+  font-weight: bold;
+  padding: 0.5em 2em;
+  margin-left: 0.2em;
+  margin-right: 0.2em;
 }
 
-.iconWrapper:hover{
-	background-color:var(--primary-active-background-color);
+.box {
+  width: 1em;
+  height: 1em;
 }
 
-.title{
-	font-size: 1.17em;
-	font-weight:bold;
-	padding: 0.5em 2em;
-    margin-left: 0.2em;
-    margin-right: 0.2em;
+.green {
+  background-color: var(--status-ok-color);
 }
 
-.box{
-	width:1em;
-	height:1em;
+.warning {
+  background-color: var(--status-warning-color);
 }
 
-.green{
-	background-color:var(--status-ok-color);
+.alert {
+  background-color: var(--status-alert-color);
 }
 
-.warning{
-	background-color:var(--status-warning-color);
+.disable {
+  background-color: var(--status-disabled-color);
 }
 
-.alert{
-	background-color:var(--status-alert-color);
+.boxList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
-.disable{
-	background-color:var(--status-disabled-color);
+.stateList {
+  text-align: left;
+  padding-left: 1em;
 }
 
-.boxList{
-	display:grid;
-	grid-template-columns: 1fr 1fr;
+.deviceTitle {
+  fill: var(--base-font-color);
+  font-weight: bold;
+  font-size: 1em;
 }
 
-.stateList{
-	text-align:left;
-	padding-left:1em;
+.legendContent {
+  background-color: var(--second-secondary-background-color);
+  padding: 1em;
+}
+.titleBg {
+  fill: var(--second-primary-background-color);
 }
 
-.deviceTitle{
-	fill: var(--base-font-color);
-	font-weight:bold;
-	font-size:1em;
+.device {
+  border: 1px solid var(--secondary-font-dimmed-color);
 }
 
-.legendContent{
-	Background-color: var(--second-secondary-background-color);
-    padding: 1em;
-}
-.titleBg{
-	fill:var(--second-primary-background-color);
+.container {
+  fill: var(--second-quaternary-background-color);
 }
 
-
-
-
-.device{
-	border: 1px solid var(--secondary-font-dimmed-color);
+.titleRow2 {
+  fill: var(--second-tertiary-background-color);
 }
 
-
-.container{
-	fill:var(--second-quaternary-background-color);
+.boxText {
+  fill: var(--second-tertiary-background-color);
 }
 
-.titleRow2{
-	fill:var(--second-tertiary-background-color);
+.statusOk {
+  fill: var(--status-ok-color);
 }
 
-
-.boxText{
-	fill:var(--second-tertiary-background-color);
+.statusWarning {
+  fill: var(--status-warning-color);
+}
+.statusAlert {
+  fill: var(--status-alert-color);
+}
+.statusDisabled {
+  fill: var(--status-disabled-color);
+}
+.statusNull {
+  fill: none;
+  stroke: var(--status-disabled-color);
 }
 
-
-.statusOk{
-	fill:var(--status-ok-color);
+.arrow {
+  width: 1em;
+  margin: auto;
+  padding-right: 1em;
 }
 
-.statusWarning{
-	fill:var(--status-warning-color);
-}
-.statusAlert{
-	fill:var(--status-alert-color);
-}
-.statusDisabled{
-	fill:var(--status-disabled-color);
-}
-.statusNull{
-	fill:none;
-	stroke:var(--status-disabled-color);
+.hideLeftMenu {
+  flex-basis: 0%;
+  transition: all 0.25s linear;
 }

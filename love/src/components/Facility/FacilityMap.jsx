@@ -5,6 +5,8 @@ import styles from './FacilityMap.module.css';
 import Badge from '../GeneralPurpose/Badge/Badge';
 import Map from './Map/Map.jsx';
 import Device from './Map/Device.jsx';
+import EyeIcon from '../icons/EyeIcon/EyeIcon';
+import SimpleArrowIcon from '../icons/SimpleArrowIcon/SimpleArrowIcon';
 
 export default class FacilityMap extends Component {
   constructor(props) {
@@ -13,20 +15,14 @@ export default class FacilityMap extends Component {
     this.state = {
       showHVAC: true,
       showPower: true,
+      showMenu: true,
+      arrowDirection: 'right',
       alarms: [],
     };
   }
 
-  getEyeIcon = (style) => {
-    return (
-      <svg
-        className={[styles.eye, style ? '' : styles.selected].join(' ')}
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 13.81 7.55"
-      >
-        <path d="m12.25,2.21C9.3-.74,4.51-.74,1.56,2.21l-1.56,1.56,1.56,1.56c2.95,2.95,7.74,2.95,10.69,0l1.56-1.56-1.56-1.56Zm-5.34,4.06c-1.38,0-2.5-1.12-2.5-2.5s1.12-2.5,2.5-2.5,2.5,1.12,2.5,2.5-1.12,2.5-2.5,2.5Z" />
-      </svg>
-    );
+  getEyeIcon = (active) => {
+    return <EyeIcon active={!active} />;
   };
 
   hideHVAC = () => {
@@ -34,6 +30,16 @@ export default class FacilityMap extends Component {
       showHVAC: !prevState.showHVAC,
     }));
     console.log('Show HVAC? ' + this.state.showHVAC);
+  };
+
+  toggleLeftMenu = () => {
+    this.setState((prevState) => ({
+      showMenu: !prevState.showMenu,
+    }));
+    this.state.arrowDirection === 'right'
+      ? (this.state.arrowDirection = 'left')
+      : (this.state.arrowDirection = 'right');
+    console.log(this.state.arrowDirection);
   };
 
   hidePower = () => {
@@ -50,7 +56,8 @@ export default class FacilityMap extends Component {
 
     return (
       <div className={styles.content}>
-        <div className={styles.leftMenu}>
+        {/** Left Menu **/}
+        <div className={this.state.showMenu ? styles.leftMenu : [styles.leftMenu, styles.hideLeftMenu].join(' ')}>
           {/** CSC Section **/}
           <div className={styles.cscMenu}>
             <div className={styles.title}>CSC</div>
@@ -120,6 +127,12 @@ export default class FacilityMap extends Component {
                 <li>Switch state</li>
               </ol>
             </div>
+          </div>
+        </div>
+
+        <div className={styles.arrow}>
+          <div onClick={() => this.toggleLeftMenu()}>
+            <SimpleArrowIcon direction={this.state.arrowDirection} />
           </div>
         </div>
 
