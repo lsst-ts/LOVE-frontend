@@ -62,41 +62,10 @@ export default class MirrorCovers extends Component {
         <div className={styles.windRoseContainer}>
           <WindRose />
         </div>
-        {/* {<div className={styles.azContainer}>
-          <Azimuth
-            currentValue={this.props.azimuthActualPosition}
-            targetValue={this.props.azimuthDemandPosition}
-          />
-        </div>} */}
         {this.getSvg()}
       </div>
     );
   }
-
-  // getAngleClosedCoverMirror() {
-  //   const stateToClosedMTMountMirrorCoversState = {
-  //     RETRACTED: Math.PI / 12,
-  //     DEPLOYED: Math.PI / 2 + Math.PI / 4,
-  //     RETRACTING: Math.PI / 2,
-  //     DEPLOYING: Math.PI / 2 - Math.PI / 6,
-  //     LOST: -Math.PI / 36,
-  //   };
-  //   // const mirrorCoversValue = this.props.mirrorCoversState.map((state) => mtMountMirrorCoversStateMap[state]);
-  //   // return mirrorCoversValue.map((value) => stateToClosedMTMountMirrorCoversState[value]);
-  //   return this.props.mirrorCoversPosition.map((value) => value + 5);
-  // }
-
-  // getAngleClosedCoverMirrorBorder() {
-  //   const stateToClosedMTMountMirrorCoversState = {
-  //     RETRACTED: (3 * Math.PI) / 2 - Math.PI / 12,
-  //     DEPLOYED: Math.PI,
-  //     RETRACTING: Math.PI,
-  //     DEPLOYING: Math.PI + Math.PI / 6,
-  //     LOST: (3 * Math.PI) / 2 + Math.PI / 36,
-  //   };
-  //   const mirrorCoversValue = this.props.mirrorCoversState.map((state) => mtMountMirrorCoversStateMap[state]);
-  //   return mirrorCoversValue.map((value) => stateToClosedMTMountMirrorCoversState[value]);
-  //}
 
   getInfoMirrorCover() {
     const index = [0, 1, 2, 3];
@@ -343,8 +312,8 @@ export default class MirrorCovers extends Component {
 
     return (
       <>
+        {/** Path Positive */}
         <g
-          // className={styles.clipPathPos}
           transform-origin="50% 50%" transform={`${'rotate(' + rotationOffset + ')'}`}
         >
           {/* L3 Gauge */}
@@ -398,8 +367,8 @@ export default class MirrorCovers extends Component {
             />
         </g>
 
+        {/** Path Negative */}
         <g
-          // className={styles.clipPathNeg}
           transform-origin="50% 50%" transform={`${'rotate(' + rotationOffset + ') scale(1 -1)'}`}
         >
           {/* L3 Gauge */}
@@ -642,12 +611,10 @@ export default class MirrorCovers extends Component {
 
   getMirrorCover = (angleClosed, statesStyle, x0, y0, viewBoxSize) => {
     const r = viewBoxSize / 4;
-
     const alpha1 = (3 * Math.PI) / 2 + (5 * Math.PI / 180.0); // Displace initial angle for always showing
     const rSinAlpha1 = r * Math.sin(alpha1);
     const rCosAlpha1 = r * Math.cos(alpha1);
-
-  const index = [0, 1, 2, 3];
+    const index = [0, 1, 2, 3];
 
     const transforms = [
       `translate(110px, -45px)`,
@@ -689,8 +656,7 @@ export default class MirrorCovers extends Component {
 
   getMount = (x0, y0) => {
     return (
-      <g
-      >
+      <g>
         <rect
           className={styles.cls7}
           x={108.65}
