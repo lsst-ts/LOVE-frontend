@@ -11,11 +11,14 @@ export default class Drives extends Component {
     azimuthDrives: PropTypes.arrayOf(PropTypes.number),
     /** Array data of Drivers about the elevation */
     elevationDrivers: PropTypes.arrayOf(PropTypes.number),
+    /** Array data of mirror covers position */
+    mirrorCoversPosition: PropTypes.arrayOf(PropTypes.number),
   };
 
   static defaultProps = {
     azimuthDrives: [],
     elevationDrivers: [],
+    mirrorCoversPosition: [],
   };
 
   getFieldName(num) {
@@ -40,8 +43,11 @@ export default class Drives extends Component {
       },
       ...li,
     ];
-    const azimuthDrives = this.props.azimuthDrives;
-    const elevationDrives = this.props.elevationDrives;
+    const {
+      azimuthDrives,
+      elevationDrives,
+      mirrorCoversPosition,
+     } = this.props;
 
     const data = {
       azimuth: {
@@ -58,11 +64,21 @@ export default class Drives extends Component {
           </>
         ),
       },
+      covers: {
+        name: (
+          <>
+            Mirror covers <span className={styles.units}>[%]</span>
+          </>
+        ),
+      }
     };
 
     for (const i in range(16)) {
       data.azimuth[this.getFieldName(parseInt(i) + 1)] = azimuthDrives[i] >= 0 ? azimuthDrives[i] : '-';
       data.elevation[this.getFieldName(parseInt(i) + 1)] = elevationDrives[i] >= 0 ? elevationDrives[i] : '-';
+    }
+    for (const i in range(4)) {
+      data.covers[this.getFieldName(parseInt(i) + 1)] = mirrorCoversPosition[i] >= 0 ? mirrorCoversPosition[i] : '-';
     }
 
     const simpleData = Object.values(data);

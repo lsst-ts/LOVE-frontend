@@ -972,6 +972,15 @@ export const mtMountMirrorCoversStateMap = {
   4: 'LOST',
 };
 
+export const stateToStyleMTMountMirrorCoversState = {
+  'UNKNOWN': 'undefined',
+  'RETRACTED': 'ok',
+  'DEPLOYED': 'ok',
+  'RETRACTING': 'warning',
+  'DEPLOYING': 'warning',
+  'LOST': 'alert',
+};
+
 export const motorBrakeStateMap = {
   false: 'DISENGAGED',
   true: 'ENGAGED',
