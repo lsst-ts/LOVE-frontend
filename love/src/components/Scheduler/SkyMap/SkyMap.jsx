@@ -23,8 +23,8 @@ export default class SkyMap extends Component {
 
   static defaultProps = {
     subscribeToStreams: (value) => console.log(value),
-    pointing: [30.7653, 22.7837],
-    targets: [{ id: 'actualTarget', lat: 37, long: 29 }],
+    // pointing: [30.7653, 22.7837],
+    // targets: [{ id: 'actualTarget', lat: 37, long: 29 }],
     darkZones: [],
   };
 
@@ -73,7 +73,7 @@ export default class SkyMap extends Component {
           //data: 'stars.8.json' // Alternative deeper data source for stellar data
         },
         planets: {
-          show: true,
+          show: false,
           which: ['sol', 'ter', 'lun'],
           symbolType: 'disk',
           names: true,
@@ -208,34 +208,75 @@ export default class SkyMap extends Component {
 
   // JSON structure of the object to be displayed
   // Polygons of dark Zones
-  jsonPolygons = {
+  // jsonPolygons = {
+  //   type: 'FeatureCollection',
+  //   // this is an array, add as many objects as you want
+  //   features: [
+  //     {
+  //       type: 'Feature',
+  //       id: 'SummerTriangle',
+  //       properties: {
+  //         // Name
+  //         n: 'DarkZone1',
+  //         // Location of name text on the map
+  //         loc: [-67.5, 52],
+  //       },
+  //       geometry: {
+  //         // the line object as an array of point coordinates
+  //         type: 'MultiLineString',
+  //         coordinates: [
+  //           [
+  //             [-80.7653, 38.7837],
+  //             [-76.7653, 22.7837],
+  //             [-62.3042, 8.8683],
+  //             [-55.3042, 10.8683],
+  //             [-47.642, 25.2803],
+  //             [-49.642, 42.2803],
+  //             [-65.642, 45.2803],
+  //             [-80.7653, 38.7837],
+  //           ],
+  //         ],
+  //       },
+  //     },
+  //   ],
+  // };
+
+  //JSON with the sun position
+  jsonSun = {
     type: 'FeatureCollection',
-    // this is an array, add as many objects as you want
     features: [
       {
         type: 'Feature',
-        id: 'SummerTriangle',
+        id: 'SomeDesignator',
         properties: {
-          // Name
-          n: 'DarkZone1',
-          // Location of name text on the map
-          loc: [-67.5, 52],
+          name: 'Some Name',
+          mag: 10,
+          dim: 250,
         },
         geometry: {
-          // the line object as an array of point coordinates
-          type: 'MultiLineString',
-          coordinates: [
-            [
-              [-80.7653, 38.7837],
-              [-76.7653, 22.7837],
-              [-62.3042, 8.8683],
-              [-55.3042, 10.8683],
-              [-47.642, 25.2803],
-              [-49.642, 42.2803],
-              [-65.642, 45.2803],
-              [-80.7653, 38.7837],
-            ],
-          ],
+          type: 'Circle',
+          coordinates: [this.props.sunDecl, this.props.sunRa]
+        },
+      },
+    ],
+  };
+
+
+   //JSON with the moon position
+   jsonMoon = {
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        id: 'SomeDesignator',
+        properties: {
+          name: 'Some Name',
+          mag: 10,
+          dim: 250,
+        },
+        geometry: {
+          type: 'Circle',
+          coordinates: [this.props.moonDecl, this.props.moonRa]
         },
       },
     ],
@@ -255,7 +296,7 @@ export default class SkyMap extends Component {
         },
         geometry: {
           type: 'Point',
-          coordinates: this.props.pointing,
+          coordinates: [this.props.pointingDecl, this.props.pointingRa]
         },
       },
     ],
@@ -295,6 +336,8 @@ export default class SkyMap extends Component {
   addObjects = (config) => {
     let jsonPolygons = this.jsonPolygons,
       jsonPointing = this.jsonPointing,
+      jsonSun = this.jsonSun,
+      jsonMoon = this.jsonMoon,
       jsonTargets = this.jsonTargets,
       lineStyle = this.lineStyle,
       lineTargetStyle = this.lineTargetStyle,
@@ -319,7 +362,7 @@ export default class SkyMap extends Component {
         id: t.id,
         properties: {
           // Name
-          n: 'Target' + index.toString(),
+          n: 'Target' + t.id.toString(),
           // Location of name text on the map
           loc: [lat - 2, long + 2],
           style: {},
@@ -434,6 +477,115 @@ export default class SkyMap extends Component {
       },
     });
 
+    //Add the sun
+    Celestial.add({
+      type: 'line',
+
+      callback: function (error, json) {
+        if (error) return console.warn(error);
+        // Load the geoJSON file and transform to correct coordinate system, if necessary
+        let jsonSunCopy = structuredClone(jsonSun);
+        var dsos = Celestial.getData(jsonSunCopy, config.transform);
+        // Add to celestiasl objects container in d3
+        Celestial.container.selectAll('.snrs').data(dsos.features).enter().append('path').attr('class', 'snr');
+        // Trigger redraw to display changes
+        Celestial.redraw();
+      },
+
+      redraw: function () {
+        // Select the added objects by class name as given previously
+        Celestial.container.selectAll('.snr').each(function (d) {
+          // If point is visible (this doesn't work automatically for points)
+          if (Celestial.clip(d.geometry.coordinates)) {
+            // get point coordinates
+            var pt = Celestial.mapProjection(d.geometry.coordinates);
+            // object radius in pixel, could be varable depending on e.g. magnitude
+            var r = Math.pow(parseInt(d.properties.dim) * 0.25, 0.5);
+
+            // draw on canvas
+            // Set object styles
+            Celestial.setStyle(pointStyle);
+            // Start the drawing path
+            Celestial.context.beginPath();
+            // Thats a circle in html5 canvas
+            Celestial.context.arc(pt[0], pt[1], r, 0, 2 * Math.PI);
+            // Finish the drawing path
+            Celestial.context.closePath();
+            // Draw a line along the path with the prevoiusly set stroke color and line width
+            Celestial.context.stroke();
+            // Fill the object path with the prevoiusly set fill color
+            Celestial.context.fill();
+
+            //ADD TEXT
+            // Set text styles
+            Celestial.setTextStyle({
+              fill: '#1ecfe8',
+              font: 'bold 7.5px Helvetica, Arial, sans-serif',
+              align: 'center',
+              baseline: 'middle',
+            });
+            // and draw text on canvas
+            Celestial.context.fillText('Sun', pt[0], pt[1] - 15);
+          }
+        });
+      },
+    });
+
+
+    //Add the moon
+    Celestial.add({
+      type: 'line',
+
+      callback: function (error, json) {
+        if (error) return console.warn(error);
+        // Load the geoJSON file and transform to correct coordinate system, if necessary
+        let jsonMoonCopy = structuredClone(jsonMoon);
+        var dsos = Celestial.getData(jsonMoonCopy, config.transform);
+        // Add to celestiasl objects container in d3
+        Celestial.container.selectAll('.snrs').data(dsos.features).enter().append('path').attr('class', 'snr');
+        // Trigger redraw to display changes
+        Celestial.redraw();
+      },
+
+      redraw: function () {
+        // Select the added objects by class name as given previously
+        Celestial.container.selectAll('.snr').each(function (d) {
+          // If point is visible (this doesn't work automatically for points)
+          if (Celestial.clip(d.geometry.coordinates)) {
+            // get point coordinates
+            var pt = Celestial.mapProjection(d.geometry.coordinates);
+            // object radius in pixel, could be varable depending on e.g. magnitude
+            var r = Math.pow(parseInt(d.properties.dim) * 0.25, 0.5);
+
+            // draw on canvas
+            // Set object styles
+            Celestial.setStyle(pointStyle);
+            // Start the drawing path
+            Celestial.context.beginPath();
+            // Thats a circle in html5 canvas
+            Celestial.context.arc(pt[0], pt[1], r, 0, 2 * Math.PI);
+            // Finish the drawing path
+            Celestial.context.closePath();
+            // Draw a line along the path with the prevoiusly set stroke color and line width
+            Celestial.context.stroke();
+            // Fill the object path with the prevoiusly set fill color
+            Celestial.context.fill();
+
+            //ADD TEXT
+            // Set text styles
+            Celestial.setTextStyle({
+              fill: '#1ecfe8',
+              font: 'bold 7.5px Helvetica, Arial, sans-serif',
+              align: 'center',
+              baseline: 'middle',
+            });
+            // and draw text on canvas
+            Celestial.context.fillText('Moon', pt[0], pt[1] - 15);
+          }
+        });
+      },
+    });
+
     //Add the targets
     Celestial.add({
       type: 'line',
@@ -474,7 +626,7 @@ export default class SkyMap extends Component {
             // Set text styles
             Celestial.setTextStyle({
               fill: 'green',
-              font: 'bold 15px Helvetica, Arial, sans-serif',
+              font: '15px Helvetica, Arial, sans-serif',
               align: 'center',
               baseline: 'middle',
             });
@@ -488,6 +640,7 @@ export default class SkyMap extends Component {
 
   render() {
     const selectOptions = ['equatorial', 'ecliptic', 'galactic', 'supergalactic'];
+    console.log(this.props);
     return (
       <div className={styles.container}>
         <div className={styles.headerDiv}>

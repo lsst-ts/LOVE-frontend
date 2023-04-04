@@ -55,7 +55,7 @@ export default class CurrentTarget extends Component {
           </SummaryPanel>
           <SummaryPanel className={styles.summaryPanel}>
             <Label>Filter</Label>
-            <Value>{currentFilter}</Value>
+            <Value>{currentFilter ? currentFilter : 'No data'}</Value>
             <Label>Seq. Duration</Label>
             <Value>{`${currentSequenceDuration} s`}</Value>
             <Label>No of exposures</Label>

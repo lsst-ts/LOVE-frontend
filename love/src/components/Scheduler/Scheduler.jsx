@@ -12,6 +12,7 @@ import SkyMap from './SkyMap/SkyMap';
 import Plots from './Plots/Plots';
 import AccordionSummary from './AccordionSummary/AccordionSummary';
 
+
 export default class Scheduler extends Component {
   static propTypes = {
     /** Function to subscribe to streams to receive */
@@ -194,17 +195,59 @@ export default class Scheduler extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+
+     // dict with predicted targets
+     const targets = [];
+     for (let i = 0; i < this.props?.predTargetsDecl?.length; i++){
+        const obj = {
+          idTarget: i+1,
+          lat:  this.props.predTargetsDecl[i],
+          long: this.props.predTargetsRa[i], 
+        };
+        targets.push(obj);
+     };
+     this.skyMap = <SkyMap
+       targets={targets}
+       rotSkyPos={this.props?.rotSkyPos}
+       predictedTargetsRotSkyPos={this.props?.predictedTargetsRotSkyPos}
+       pointingRa={this.props?.pointingRa}
+       pointingDecl={this.props?.pointingDecl}
+       moonRa={this.props?.moonRa}
+       moonDec={this.props?.moonDec}
+       sunRa={this.props?.sunRa}
+       sunDec={this.props?.sunDec}
+     >
+     </SkyMap>;
+    console.log(targets);
   }
 
   componentDidMount = () => {
     this.props.subscribeToStream();
-    this.skyMap = <SkyMap
-    rotSkyPos={this.props.rotSkyPos}
-    predictedTargetsRa={this.props.predictedTargetsRa}
-    predictedTargetsDecl={this.props.predictedTargetsDecl}
-    predictedTargetsRotSkyPos={this.props.predictedTargetsRotSkyPos}
-    >
-    </SkyMap>;
+    //  // dict with predicted targets
+    // const targets = [];
+    // for (let i = 0; i < this.props.predictedTargetsDecl.length; i++){
+    //   const obj = {
+    //     idTarget: i+1,
+    //     lat:  this.props.predictedTargetsDecl[i],
+    //     long: this.props.predictedTargetsRa[i], 
+    //   };
+    //   targets.push(obj);
+    // };
+    // this.skyMap = <SkyMap
+    //   targets={targets}
+    //   rotSkyPos={this.props?.rotSkyPos}
+    //   // predictedTargetsRa={this.props?.predictedTargetsRa}
+    //   // predictedTargetsDecl={this.props?.predictedTargetsDecl}
+    //   predictedTargetsRotSkyPos={this.props?.predictedTargetsRotSkyPos}
+    //   pointingRa={this.props?.pointingRa}
+    //   pointingDecl={this.props?.pointingDecl}
+    //   moonRa={this.props?.moonRa}
+    //   moonDec={this.props?.moonDec}
+    //   sunRa={this.props?.sunRa}
+    //   sunDec={this.props?.sunDec}
+    // >
+    // </SkyMap>;
+    // // console.log(this.props.predTargetsDecl);
   };
 
   componentWillUnmount = () => {
@@ -300,6 +343,9 @@ export default class Scheduler extends Component {
       blockExecTotal,
       blockHash,
       blockDef } = this.props;
+
+    // console.log('predTargetsDecl', predTargetsDecl); // with data
+    // console.log(predictedTargetsDecl, predictedTargetsDecl); // empty
     return (
       <div className={styles.container}>
         <Headers subState={subState} mode={mode} type={type} moonPhase={moonPhase} isNigth={isNigth} night={night} sunset={sunset} sunrise={sunrise} />
@@ -341,9 +387,9 @@ export default class Scheduler extends Component {
           {/* column 3 */}
           <div className={styles.rigthDiv}>
             <AccordionSummary 
-              predictedTargetsRa={predictedTargetsRa}
-              predictedTargetsDecl={predictedTargetsDecl}
-              predictedTargetsRotSkyPos={predictedTargetsRotSkyPos}
+              predictedTargetsRa={predTargetsRa}
+              predictedTargetsDecl={predTargetsDecl}
+              predictedTargetsRotSkyPos={predTargetsRotSkyPos}
               currentRequestTime={currentRequestTime}
               lastTargetId={lastTargetId}
               lastTargetRa={lastTargetRa}

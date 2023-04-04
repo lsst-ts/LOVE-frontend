@@ -70,7 +70,7 @@ export default class Blocks extends Component {
       listOfBlocks.push(obj);
     }
 
-    console.log(listOfBlocks);
+    // console.log(listOfBlocks);
 
     const predData = [];
     for (let i = 0; i < predTargetsRa.length; i++){
