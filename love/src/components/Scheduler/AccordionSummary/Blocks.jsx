@@ -58,8 +58,8 @@ export default class Blocks extends Component {
       predTargetsDecl,
       predTargetsRotSkyPos } = this.props;
 
-    const listBlocksId = blockInvId?.split(",");
-    const listBlocksStatus = blockInvStatus?.split(",");
+    const listBlocksId = blockInvId ? blockInvId.split(",") : [];
+    const listBlocksStatus = blockInvStatus ? blockInvStatus.split(",") : [];
 
     const listOfBlocks = [];
     for (let i = 0; i < listBlocksId.length; i++){

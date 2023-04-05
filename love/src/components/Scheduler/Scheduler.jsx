@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
 import styles from './Scheduler.module.css';
 import Headers from './Headers/Headers';
 import Filters from './Filters/Filters';
@@ -194,61 +195,77 @@ export default class Scheduler extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    // dict with predicted targets
+    const targets = [];
+    for (let i = 0; i < this.props?.predTargetsDecl?.length; i++){
+      const obj = {
+        id: i+1,
+        lat:  this.props.predTargetsDecl[i],
+        long: this.props.predTargetsRa[i], 
+      };
+      targets.push(obj);
+    };
 
-     // dict with predicted targets
-     const targets = [];
-     for (let i = 0; i < this.props?.predTargetsDecl?.length; i++){
-        const obj = {
-          idTarget: i+1,
-          lat:  this.props.predTargetsDecl[i],
-          long: this.props.predTargetsRa[i], 
-        };
-        targets.push(obj);
-     };
-     this.skyMap = <SkyMap
-       targets={targets}
-       rotSkyPos={this.props?.rotSkyPos}
-       predictedTargetsRotSkyPos={this.props?.predictedTargetsRotSkyPos}
-       pointingRa={this.props?.pointingRa}
-       pointingDecl={this.props?.pointingDecl}
-       moonRa={this.props?.moonRa}
-       moonDec={this.props?.moonDec}
-       sunRa={this.props?.sunRa}
-       sunDec={this.props?.sunDec}
-     >
-     </SkyMap>;
-    console.log(targets);
+    this.state = {
+      predTargets: targets,
+    };
+
+    // console.log(this.state.predTargets);
   }
 
   componentDidMount = () => {
     this.props.subscribeToStream();
-    //  // dict with predicted targets
-    // const targets = [];
-    // for (let i = 0; i < this.props.predictedTargetsDecl.length; i++){
-    //   const obj = {
-    //     idTarget: i+1,
-    //     lat:  this.props.predictedTargetsDecl[i],
-    //     long: this.props.predictedTargetsRa[i], 
-    //   };
-    //   targets.push(obj);
-    // };
-    // this.skyMap = <SkyMap
-    //   targets={targets}
-    //   rotSkyPos={this.props?.rotSkyPos}
-    //   // predictedTargetsRa={this.props?.predictedTargetsRa}
-    //   // predictedTargetsDecl={this.props?.predictedTargetsDecl}
-    //   predictedTargetsRotSkyPos={this.props?.predictedTargetsRotSkyPos}
-    //   pointingRa={this.props?.pointingRa}
-    //   pointingDecl={this.props?.pointingDecl}
-    //   moonRa={this.props?.moonRa}
-    //   moonDec={this.props?.moonDec}
-    //   sunRa={this.props?.sunRa}
-    //   sunDec={this.props?.sunDec}
-    // >
-    // </SkyMap>;
-    // // console.log(this.props.predTargetsDecl);
+
+    this.skyMap = <SkyMap
+      targets={this.state.predTargets}
+      // targets={[{
+      //   "id": 1,
+      //   "lat": 0,
+      //   "long": 0
+      // },
+      //   {
+      //     "id": 2,
+      //     "lat": 50,
+      //     "long": 50
+      // },
+      // {
+      //   "id": 3,
+      //   "lat": 80,
+      //   "long": 80
+      // }
+      // ]}
+      pointingRa={this.props?.pointingRa}
+      pointingDecl={this.props?.pointingDecl}
+    />;
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!isEqual(prevProps.predTargetsDecl, this.props.predTargetsDecl) || !isEqual(prevProps.predTargetsRa, this.props.predTargetsRa)){
+      const targets = [];
+      for (let i = 0; i < this.props?.predTargetsDecl?.length; i++){
+        const obj = {
+          id: i+1,
+          lat:  this.props.predTargetsDecl[i],
+          long: this.props.predTargetsRa[i], 
+        };
+        targets.push(obj);
+      };
+
+      this.setState({
+        predTargets: targets,
+      });
+    }
+
+    if (!isEqual(prevState.predTargets, this.state.predTargets)){
+      this.skyMap = <SkyMap
+        targets={this.state.predTargets}
+        pointingRa={this.props?.pointingRa}
+        pointingDecl={this.props?.pointingDecl}
+      />;
+    };
+
+    // console.log(this.state.predTargets);
+  }
 
   componentWillUnmount = () => {
     this.props.unsubscribeToStream();
@@ -346,6 +363,7 @@ export default class Scheduler extends Component {
 
     // console.log('predTargetsDecl', predTargetsDecl); // with data
     // console.log(predictedTargetsDecl, predictedTargetsDecl); // empty
+
     return (
       <div className={styles.container}>
         <Headers subState={subState} mode={mode} type={type} moonPhase={moonPhase} isNigth={isNigth} night={night} sunset={sunset} sunrise={sunrise} />
@@ -382,6 +400,16 @@ export default class Scheduler extends Component {
               filterToMount={filterToMount}
             />
             {this.skyMap ?? ''}
+            {/* <SkyMap
+              targets={this.state.predTargets}
+              rotSkyPos={this.props?.rotSkyPos}
+              pointingRa={this.props?.pointingRa}
+              pointingDecl={this.props?.pointingDecl}
+              moonRa={this.props?.moonRa}
+              moonDec={this.props?.moonDec}
+              sunRa={this.props?.sunRa}
+              sunDec={this.props?.sunDec}
+            /> */}
             <Plots />
           </div>
           {/* column 3 */}
