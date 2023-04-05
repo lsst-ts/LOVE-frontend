@@ -377,7 +377,7 @@ export default class Exposure extends Component {
             className={styles.select}
           />
           <div className={styles.divExportBtn}>
-            <CSVLink data={csvData} headers={csvHeaders} filename="exposureLogMessages.csv">
+            <CSVLink data={csvData} headers={csvHeaders} filename={`exposures_obsday_${selectedDayExposure.format(ISO_INTEGER_DATE_FORMAT)}.csv`}>
               <Hoverable top={true} left={true} center={true} inside={true}>
                 <span className={styles.infoIcon}>
                   <DownloadIcon className={styles.iconCSV} />
