@@ -1,10 +1,8 @@
-
 import html2canvas from 'html2canvas';
 import { DateTime } from 'luxon';
 import { toast } from 'react-toastify';
 import Moment from 'moment';
 import { WEBSOCKET_SIMULATION } from 'Config.js';
-
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -88,11 +86,10 @@ export const sockette = (url, optsPar) => {
   return $;
 };
 
-
 /**
  * LOVE-manager interface
  * It is used to connect to the implemented endpoints
-*/
+ */
 export default class ManagerInterface {
   constructor() {
     this.callback = null;
@@ -317,23 +314,25 @@ export default class ManagerInterface {
 
   static getEFDStatus(url) {
     if (!url) {
-      return new Promise(function(resolve, _) {
-        resolve({label: "EFD Status URL is not present in LOVE Configuration File", style: "invalid"});
+      return new Promise(function (resolve, _) {
+        resolve({ label: 'EFD Status URL is not present in LOVE Configuration File', style: 'invalid' });
       });
     }
-    return fetchWithTimeout(url, {method: 'GET'}).then(result => {
-      if (result.status == 200) {
-        return {label: "EFD Healthy Status Pass", style: "ok"};
-      }
-      if (result.status === 503) {
-        return {label: "EFD Healthy Status Fail", style: "alert"};
-      }
-      result.json().then((resp) => {
-        return {label: "EFD Healthy Status Unknown", style: "alert", response: resp};
+    return fetchWithTimeout(url, { method: 'GET' })
+      .then((result) => {
+        if (result.status == 200) {
+          return { label: 'EFD Healthy Status Pass', style: 'ok' };
+        }
+        if (result.status === 503) {
+          return { label: 'EFD Healthy Status Fail', style: 'alert' };
+        }
+        result.json().then((resp) => {
+          return { label: 'EFD Healthy Status Unknown', style: 'alert', response: resp };
+        });
+      })
+      .catch((err) => {
+        return { label: 'EFD Healthy Status Fail', style: 'alert', error: err };
       });
-    }).catch(err => {
-      return {label: "EFD Healthy Status Fail", style: "alert", error: err};
-    });
   }
 
   // EFD APIs
@@ -661,7 +660,9 @@ export default class ManagerInterface {
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
-    const url = `${this.getApiBaseUrl()}ole/exposurelog/exposures?instrument=${instrument}&registry=2&order_by=-obs_id&limit=1500${obsDay ? `&min_day_obs=${obsDay}&max_day_obs=${obsDay+1}` : ''}`;
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/exposures?instrument=${instrument}&registry=2&order_by=-obs_id&limit=1500${
+      obsDay ? `&min_day_obs=${obsDay}&max_day_obs=${obsDay + 1}` : ''
+    }`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
@@ -684,7 +685,9 @@ export default class ManagerInterface {
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
-    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/?order_by=-date_added&limit=1000${obsDay ? `&min_day_obs=${obsDay}&max_day_obs=${obsDay+1}` : ''}`;
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/?order_by=-date_added&limit=1000${
+      obsDay ? `&min_day_obs=${obsDay}&max_day_obs=${obsDay + 1}` : ''
+    }`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
@@ -875,12 +878,14 @@ export default class ManagerInterface {
     });
   }
 
-  static getListMessagesNarrativeLogs() {
+  static getListMessagesNarrativeLogs(from, to) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
-    const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/?order_by=-date_added`;
+    const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/?order_by=-date_added&limit=500${
+      from ? `&min_date_added=${from}` : ''
+    }${to ? `&max_date_added=${to}` : ''}`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
@@ -1037,12 +1042,12 @@ export default class ManagerInterface {
  * @param {object} options - Options to be added to the request
  * @param {number} timeout - Timeout of the request
  */
- function fetchWithTimeout(url, options={}, timeout=2000) {
+function fetchWithTimeout(url, options = {}, timeout = 2000) {
   return Promise.race([
     fetch(url, options),
     new Promise((_, reject) => {
-      setTimeout(() => reject(new Error('timeout')), timeout)
-    })
+      setTimeout(() => reject(new Error('timeout')), timeout);
+    }),
   ]);
 }
 
@@ -1112,7 +1117,7 @@ export const getNotificationMessage = (salCommand) => {
     cmd_mute: 'muted',
     cmd_unmute: 'unmuted',
   };
-  
+
   const watcherErrorCmds = {
     cmd_acknowledge: 'acknowledging',
     cmd_mute: 'muting',
@@ -1236,7 +1241,6 @@ export const getStringRegExp = (str) => {
     return new RegExp('');
   }
 };
-
 
 /**
  * Function to take screenshots using html2canvas
@@ -1425,7 +1429,7 @@ export function getUserHost(user, host) {
 export function closestEquivalentAngle(from, to) {
   const delta = ((((to - from) % 360) + 540) % 360) - 180;
   return from + delta;
-};
+}
 
 /**
  * Function used to open new tabs from a url.

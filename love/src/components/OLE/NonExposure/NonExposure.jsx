@@ -3,24 +3,29 @@ import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import { CSVLink } from 'react-csv';
-import { LSST_SYSTEMS, LSST_SUBSYSTEMS, iconLevelOLE } from 'Config';
+import {
+  LSST_SYSTEMS,
+  iconLevelOLE,
+  ISO_INTEGER_DATE_FORMAT,
+  ISO_STIRNG_DATE_TIME_FORMAT,
+  /* LSST_SUBSYSTEMS, */
+  /* LOG_TYPE_OPTIONS, */
+} from 'Config';
 import ManagerInterface, { formatSecondsToDigital, openInNewTab, getLinkJira, getFileURL } from 'Utils';
-// import { LOG_TYPE_OPTIONS } from 'Config';
+
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Input from 'components/GeneralPurpose/Input/Input';
-import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
+import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
-import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import NonExposureDetail from './NonExposureDetail';
 import NonExposureEdit from './NonExposureEdit';
 import styles from './NonExposure.module.css';
-
 
 const moment = extendMoment(Moment);
 
@@ -50,12 +55,11 @@ export default class NonExposure extends Component {
   };
 
   static defaultProps = {
-    selectedDateStart: null,
-    selectedDateEnd: null,
+    selectedDayNarrative: Moment(Date.now() + 37 * 1000),
     selectedCommentType: { value: 'all', label: 'All comment types' },
     selectedSystem: 'all',
     selectedObsTimeLoss: false,
-    handleDateTimeRange: () => {},
+    changeDayNarrative: () => {},
     changeCommentTypeSelect: () => {},
     changeSystemSelect: () => {},
     changeObsTimeLossSelect: () => {},
@@ -68,7 +72,6 @@ export default class NonExposure extends Component {
       modeEdit: false,
       selected: null,
       updatingLogs: false,
-      showDateRangeFilter: false,
       logs: [],
       range: [],
     };
@@ -238,7 +241,10 @@ export default class NonExposure extends Component {
   };
 
   queryNarrativeLogs(callback) {
-    ManagerInterface.getListMessagesNarrativeLogs().then((data) => {
+    const { selectedDayNarrative } = this.props;
+    const dateFrom = selectedDayNarrative.startOf('day').format(ISO_STIRNG_DATE_TIME_FORMAT);
+    const dateTo = moment(selectedDayNarrative).startOf('day').add(1, 'days').format(ISO_STIRNG_DATE_TIME_FORMAT);
+    ManagerInterface.getListMessagesNarrativeLogs(dateFrom, dateTo).then((data) => {
       this.setState({ logs: data });
       if (callback) callback();
     });
@@ -248,30 +254,37 @@ export default class NonExposure extends Component {
     this.queryNarrativeLogs();
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.selectedDayNarrative !== prevProps.selectedDayNarrative) {
+      this.queryNarrativeLogs();
+    }
+  }
+
   render() {
     const {
-      selectedObsTimeLoss, selectedCommentType, selectedSystem, selectedDateStart, selectedDateEnd,
-      handleDateTimeRange, changeCommentTypeSelect, changeSystemSelect, changeObsTimeLossSelect } = this.props;
+      selectedDayNarrative,
+      selectedCommentType,
+      selectedSystem,
+      selectedObsTimeLoss,
+      changeDayNarrative,
+      changeCommentTypeSelect,
+      changeSystemSelect,
+      changeObsTimeLossSelect,
+    } = this.props;
     const { modeView, modeEdit, showDateRangeFilter } = this.state;
     const headers = Object.values(this.getHeaders());
 
     let filteredData = this.state.logs ?? [];
 
-    // Filter by date range
-    if (showDateRangeFilter) {
-      const range = moment.range(selectedDateStart, selectedDateEnd);
-      filteredData = filteredData.filter((log) => range.contains(Moment(log.date_added + 'Z'))); // Need to add Z so moment identifies date as UTC
-    }
-
     // Filter by type
-    filteredData = selectedCommentType.value !== 'all'
+    filteredData =
+      selectedCommentType.value !== 'all'
         ? filteredData.filter((log) => log.level === selectedCommentType.value)
         : filteredData;
 
     // Filter by system
-    filteredData = selectedSystem !== 'all'
-        ? filteredData.filter((log) => log.systems.includes(selectedSystem))
-        : filteredData;
+    filteredData =
+      selectedSystem !== 'all' ? filteredData.filter((log) => log.systems.includes(selectedSystem)) : filteredData;
 
     // Filter by obs time loss
     filteredData = selectedObsTimeLoss ? filteredData.filter((log) => log.time_lost > 0) : filteredData;
@@ -280,11 +293,16 @@ export default class NonExposure extends Component {
 
     // Obtain headers to create csv report
     let csvHeaders = null;
-    let csvData =  "There aren't logs created for the current search...";
+    let csvData = "There aren't logs created for the current search...";
+    let csvTitle = 'narrative_logs.csv';
     if (filteredData.length > 0) {
       const logExampleKeys = Object.keys(filteredData?.[0] ?? {});
       csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
       csvData = filteredData;
+    }
+
+    if (selectedDayNarrative) {
+      csvTitle = `narrative_logs_${Moment(selectedDayNarrative).format(ISO_INTEGER_DATE_FORMAT)}.csv`;
     }
 
     // Uncomment next code block to use several level options
@@ -295,7 +313,6 @@ export default class NonExposure extends Component {
       { label: 'Non urgent', value: 0 },
     ];
     const systemOptions = [{ label: 'All systems', value: 'all' }, ...LSST_SYSTEMS];
-
 
     return modeView && !modeEdit ? (
       <NonExposureDetail
@@ -339,29 +356,17 @@ export default class NonExposure extends Component {
             }}
           >
             Refresh data
-            {this.state.updatingLogs && <SpinnerIcon className={styles.spinnerIcon}/>}
+            {this.state.updatingLogs && <SpinnerIcon className={styles.spinnerIcon} />}
           </Button>
 
-          <Toggle
-            isLive={showDateRangeFilter}
-            setLiveMode={(event) => this.setState({ showDateRangeFilter: event })}
-            labels={['Hide date range filter', 'Show']}
+          <DateTime
+            label="Creation day"
+            value={selectedDayNarrative}
+            onChange={(day) => changeDayNarrative(day)}
+            dateFormat="YYYY/MM/DD"
+            timeFormat={false}
+            closeOnSelect={true}
           />
-
-          {showDateRangeFilter &&
-            <DateTimeRange
-              onChange={(date, type) => handleDateTimeRange(date, type)}
-              label="Date & Time (UTC)"
-              startDate={selectedDateStart}
-              endDate={selectedDateEnd}
-              startDateProps={{
-                maxDate: selectedDateEnd,
-              }}
-              endDateProps={{
-                minDate: selectedDateStart,
-              }}
-            />
-          }
 
           <Select
             options={commentTypeOptions}
@@ -387,7 +392,7 @@ export default class NonExposure extends Component {
           </div>
 
           <div className={styles.divExportBtn}>
-            <CSVLink data={csvData} headers={csvHeaders} filename="narrativeLogs.csv">
+            <CSVLink data={csvData} headers={csvHeaders} filename={csvTitle}>
               <Hoverable top={true} left={true} inside={true}>
                 <span className={styles.infoIcon}>
                   <DownloadIcon className={styles.iconCSV} />
