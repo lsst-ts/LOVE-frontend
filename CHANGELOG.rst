@@ -2,6 +2,12 @@
 Version History
 ===============
 
+v5.17.0
+--------
+
+* Extend some OLE features `<https://github.com/lsst-ts/LOVE-frontend/pull/443>`_
+* Tickets/love 89 Mirror Cover Status in TMA `<https://github.com/lsst-ts/LOVE-frontend/pull/442>`_
+
 v5.16.0
 --------
 

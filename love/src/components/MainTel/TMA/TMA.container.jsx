@@ -53,6 +53,7 @@ const mapDispatchToProps = (dispatch) => {
     'telemetry-MTMount-0-azimuthDrives',
     'telemetry-MTMount-0-elevation',
     'telemetry-MTMount-0-elevationDrives',
+    'telemetry-MTMount-0-mirrorCover',
     'event-MTMount-0-azimuthLimits',
     'event-MTMount-0-azimuthMotionState',
     'event-MTMount-0-azimuthSystemState',

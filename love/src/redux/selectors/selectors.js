@@ -956,10 +956,14 @@ export const getDrivesAzimuthElevationState = (state) => {
  * @param {object} state
  */
 export const getMirrorCoversMotionState = (state) => {
-  const subscriptions = ['event-MTMount-0-mirrorCoversMotionState'];
+  const subscriptions = [
+    'event-MTMount-0-mirrorCoversMotionState',
+    'telemetry-MTMount-0-mirrorCover',
+  ];
   const summaryData = getStreamsData(state, subscriptions);
   return {
-    mirrorCovers: summaryData['event-MTMount-0-mirrorCoversMotionState']?.[0]?.state?.value ?? 0,
+    mirrorCoversState: summaryData['event-MTMount-0-mirrorCoversMotionState']?.[0]?.elementsState?.value ?? [0, 0, 0, 0],
+    mirrorCoversPosition: summaryData['telemetry-MTMount-0-mirrorCover']?.actualPosition?.value ?? [0, 0, 0, 0],
   };
 };
 

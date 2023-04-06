@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { EXPOSURE_FLAG_OPTIONS /* LOG_TYPE_OPTIONS */, exposureFlagStateToStyle, ISO_INTEGER_DATE_FORMAT } from 'Config';
+import ManagerInterface from 'Utils';
+import lodash from 'lodash';
+import Moment from 'moment';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
-import { EXPOSURE_FLAG_OPTIONS /* LOG_TYPE_OPTIONS */ } from 'Config';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
@@ -11,13 +14,10 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
-import ManagerInterface from 'Utils';
-import lodash from 'lodash';
+import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
-import { exposureFlagStateToStyle } from 'Config';
 import styles from './Exposure.module.css';
-import { style } from 'd3';
 
 export default class ExposureAdd extends Component {
   static propTypes = {
@@ -77,6 +77,7 @@ export default class ExposureAdd extends Component {
       imageTags: [],
       selectedTags: [],
       updatingExposures: false,
+      selectedDayExposure: Moment(),
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -108,7 +109,8 @@ export default class ExposureAdd extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     // TODO: only when the filter is shown
-    if (prevState.selectedInstrument !== this.state.selectedInstrument) {
+    if (prevState.selectedInstrument !== this.state.selectedInstrument
+      || prevState.selectedDayExposure !== this.state.selectedDayExposure) {
       this.setState((prevState) => ({
         newMessage: { ...prevState.newMessage, obs_id: [] },
       }));
@@ -117,7 +119,9 @@ export default class ExposureAdd extends Component {
   }
 
   queryExposures(callback) {
-    ManagerInterface.getListExposureLogs(this.state.selectedInstrument).then((data) => {
+    const { selectedDayExposure } = this.state;
+    const obsDayInteger = parseInt(Moment(selectedDayExposure).format(ISO_INTEGER_DATE_FORMAT));
+    ManagerInterface.getListExposureLogs(this.state.selectedInstrument, obsDayInteger).then((data) => {
       const observationIds = data.map((exposure) => exposure.obs_id);
       const dayObs = data.map((exposure) => ({
         obs_id: exposure.obs_id,
@@ -203,10 +207,9 @@ export default class ExposureAdd extends Component {
 
   render() {
     const { isLogCreate, isMenu } = this.props;
+    const { confirmationModalShown, confirmationModalText, selectedDayExposure } = this.state;
     const back = this.props.back;
-    const view = this.props.view ?? ExposureAdd.defaultProps.view;
-
-    const { confirmationModalShown, confirmationModalText } = this.state;
+    const view = this.props.view ?? ExposureAdd.defaultProps.view;    
 
     // Uncomment next code block to use several level options
     // const selectedCommentType = this.state.newMessage?.level
@@ -339,6 +342,18 @@ export default class ExposureAdd extends Component {
                         small
                       />
                     </span> */}
+
+                    <DateTime
+                      label="Observation day"
+                      value={selectedDayExposure}
+                      onChange={(day) => {
+                        console.log(day);
+                        this.setState({ selectedDayExposure: day });
+                      }}
+                      dateFormat="YYYY/MM/DD"
+                      timeFormat={false}
+                      closeOnSelect={true}
+                    />
 
                     <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
                     <span className={styles.value} style={{ flex: 1 }}>

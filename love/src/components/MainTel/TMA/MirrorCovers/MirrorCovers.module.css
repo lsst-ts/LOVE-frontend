@@ -8,7 +8,7 @@
 .container svg {
   vertical-align: top;
   margin: auto;
-  width: 50%;
+  width: 98%;
   height: auto;
   z-index: 1;
 }
@@ -16,15 +16,8 @@
 .windRoseContainer {
   position: absolute;
   left: 0%;
-  top: -20%;
-  width: 20%;
-}
-
-.azContainer {
-  position: absolute;
-  left: -60%;
-  top: -60%;
-  width: 220%;
+  top: 0%;
+  width: 10%;
 }
 
 .cls1 {
@@ -79,7 +72,8 @@
 }
 
 .cls4 {
-  fill: #bcd8e2;
+  fill: #9cabca;
+  stroke: #f2f2f2;
 }
 
 .cls5 {
@@ -92,9 +86,174 @@
 
 .cls7 {
   fill: #27434f;
+  opacity: 0.75;
 }
 
 .cls8 {
   stroke-linecap: round;
   stroke-width: 4px;
+}
+
+.hide {
+  opacity: 0;
+}
+
+.show {
+  opacity: 1;
+}
+
+.alert {
+  fill: var(--status-alert-dimmed-color-2);
+  stroke: var(--status-alert-color);
+}
+
+.ok {
+  fill: var(--status-ok-dimmed-color-2);
+  stroke: var(--status-ok-color);
+}
+
+.warning {
+  fill: var(--status-warning-dimmed-color-2);
+  stroke: var(--status-warning-color);
+}
+
+.currentValue {
+  fill: white;
+  transition: x 0.5s ease;
+}
+
+.originText {
+  fill: var(--secondary-font-color);
+  font-size: 1em;
+  text-anchor: start;
+}
+
+.targetText {
+  fill: var(--base-font-color);
+  font-size: 1em;
+  transition: transform 0.5s linear 0s;
+}
+
+.targetValue {
+  stroke: #c1ced2;
+  fill: transparent;
+  stroke-width: 2px;
+  stroke-dasharray: 4 4;
+  transition: transform ease-out 0.5s;
+}
+.currentValue {
+  stroke: #c1ced2;
+  fill: transparent;
+  stroke-width: 2px;
+  transition: transform ease-out 0.5s;
+}
+
+
+.textQ1 {
+  text-anchor: start;
+}
+.textQ2 {
+  text-anchor: end;
+}
+.textQ3 {
+  alignment-baseline: text-before-edge;
+  text-anchor: end;
+}
+.textQ4 {
+  alignment-baseline: text-before-edge;
+  text-anchor: start;
+}
+
+.cutOut {
+  fill: rgb(17, 31, 39);
+}
+
+.bg {
+  fill: #182e39;
+}
+.bgTarget {
+  fill: transparent;
+  stroke: #3a525f;
+  opacity: 0.5;
+  transition: stroke-dasharray linear 0.5s;
+  transition: transform linear 0.5s;
+}
+
+.bgCurrent {
+  fill: transparent;
+  stroke: var(--secondary-font-color);
+  transition: stroke-dasharray linear 0.5s;
+}
+
+.lightCurrent {
+  fill: transparent;
+  stroke: #3a525f55;
+  transition: stroke-dasharray linear 0.5s;
+}
+
+.gaugeL1 {
+  fill: transparent;
+  stroke: #2e6261;
+  transition: stroke-dasharray linear 0.5s;
+}
+.gaugeL2 {
+  transform-origin: 50% 50%;
+  fill: transparent;
+  stroke: #3f4720;
+  transition: stroke-dasharray linear 0.5s;
+}
+.gaugeL3 {
+  transform-origin: 50% 50%;
+  fill: transparent;
+  stroke: #3c2b20;
+  transition: stroke-dasharray linear 0.5s;
+}
+.fillL1 {
+  fill: transparent;
+  stroke: #00D68F;
+  transition: stroke-dasharray linear 0.5s;
+}
+.fillL2 {
+  fill: transparent;
+  /* stroke: #FFFF33; */
+  stroke: #FFFF66;
+  transition: stroke-dasharray linear 0.5s;
+}
+.fillL3 {
+  fill: transparent;
+  /* stroke: #FE4510; */
+  stroke: #FF1A1A;
+  transition: stroke-dasharray linear 0.5s;
+}
+.targetValue {
+  stroke: #c1ced2;
+  fill: transparent;
+  stroke-width: 0.2em;
+  stroke-dasharray: 0.35em 0.35em;
+  transition: transform linear 0.5s;
+}
+
+.targetValueWarning {
+  stroke: #eee203;
+  fill: transparent;
+  stroke-width: 0.2em;
+  stroke-dasharray: 0.35em 0.35em;
+  transition: transform linear 0.5s;
+}
+
+.targetValueDanger {
+  stroke: #db5826;
+  fill: transparent;
+  stroke-width: 0.2em;
+  stroke-dasharray: 0.35em 0.35em;
+  transition: transform linear 0.5s;
+}
+
+.targetBg {
+  stroke: #182e39;
+  /* stroke:var(--secondary-font-color); */
+  fill: transparent;
+  stroke-width: 0.4em;
+  /* stroke-dasharray: 0.35em 0.35em; */
+  transition: transform linear 0.5s;
 }
