@@ -1,5 +1,5 @@
 import { RECEIVE_IMAGE_SEQUENCE_DATA, RECEIVE_CAMERA_STATE_DATA, RECEIVE_READOUT_DATA } from '../actions/actionTypes';
-import { cameraStates } from '../../Constants';
+import { cameraStates } from 'Config';
 
 const initialState = {
   raftsDetailedState: 'UNKNOWN',
