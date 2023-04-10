@@ -2,7 +2,7 @@
 Version History
 ===============
 
-v5.17.0
+v5.17.1
 --------
 
 * Remove OLE commented code `<https://github.com/lsst-ts/LOVE-frontend/pull/444>`_
