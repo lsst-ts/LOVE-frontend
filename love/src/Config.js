@@ -447,6 +447,40 @@ export const defaultCSCList = [
   { name: 'WeatherStation', salindex: 1 },
 ];
 
+// ATCamera status to styles mappings
+export const cameraStates = {
+  raftsDetailedState: {
+    1: 'NEEDS_CLEAR',
+    2: 'CLEARING',
+    3: 'INTEGRATING',
+    4: 'READING_OUT',
+    5: 'QUIESCENT',
+  },
+  imageReadinessDetailedState: {
+    1: 'READY',
+    2: 'NOT_READY',
+    3: 'GETTING_READY',
+  },
+  calibrationDetailedState: {
+    1: 'DISABLED',
+    2: 'ENABLED',
+    3: 'INTEGRATING',
+  },
+  shutterDetailedState: {
+    1: 'CLOSED',
+    2: 'OPEN',
+    3: 'CLOSING',
+    4: 'OPENING',
+  },
+};
+
+export const imageStates = {
+  INTEGRATING: 'INTEGRATING',
+  READING_OUT: 'READING_OUT',
+  END_READOUT: 'END_READOUT',
+  END_TELEMETRY: 'END_TELEMETRY',
+};
+
 export const getCameraStatusStyle = (status) => {
   if (!status) return '';
   if (status.toLowerCase() === 'integrating') return 'running';

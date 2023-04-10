@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.17.2
+--------
+
+* Fix LATISS and ATCamera state mappingse `<https://github.com/lsst-ts/LOVE-frontend/pull/445>`_
+
 v5.17.1
 --------
 

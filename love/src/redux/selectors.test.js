@@ -13,7 +13,7 @@ import {
 import rootReducer from './reducers';
 import { doReceiveToken } from './actions/auth';
 import { addGroup } from './actions/ws';
-import { cameraStates, imageStates } from '../Constants';
+import { cameraStates, imageStates } from 'Config';
 
 let store;
 let server;

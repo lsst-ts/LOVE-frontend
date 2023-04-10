@@ -1,5 +1,5 @@
 import { RECEIVE_IMAGE_SEQUENCE_DATA, RECEIVE_CAMERA_STATE_DATA, RECEIVE_READOUT_DATA } from './actionTypes';
-import { imageStates } from '../../Constants';
+import { imageStates } from 'Config';
 
 export const receiveImageSequenceData = (data) => {
   let imageState;
