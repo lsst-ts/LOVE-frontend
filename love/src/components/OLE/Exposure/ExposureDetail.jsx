@@ -7,7 +7,6 @@ import { EXPOSURE_FLAG_OPTIONS } from 'Config';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
-import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import MessageDetail from './Message/MessageDetail';
 import MessageEdit from './Message/MessageEdit';
@@ -170,10 +169,6 @@ export default class ExposureDetail extends Component {
     filteredLogMessages =
       selectedUser !== 'All' ? logMessages.filter((log) => log.user_id === selectedUser) : filteredLogMessages;
 
-    // Filter by date range
-    // const range = moment.range(this.state.selectedDateStart, this.state.selectedDateEnd);
-    // filteredLogMessages = filteredLogMessages.filter((log) => range.contains(Moment(log.date_added)));
-
     // Filter by text
     filteredLogMessages = filteredLogMessages.filter((log) => {
       return log.message_text.includes(this.state.textFilter) || log.id.includes(this.state.textFilter);
@@ -181,7 +176,7 @@ export default class ExposureDetail extends Component {
 
     // Obtain headers to create csv report
     let csvHeaders = null;
-    let csvData =  "There aren't logs created for the current search...";
+    let csvData = "There aren't logs created for the current search...";
     if (filteredLogMessages.length > 0) {
       const logExampleKeys = Object.keys(filteredLogMessages?.[0] ?? {});
       csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
@@ -240,14 +235,6 @@ export default class ExposureDetail extends Component {
                 onChange={({ value }) => this.setState({ selectedUser: value })}
                 className={styles.select}
               />
-
-              {/* <DateTimeRange
-                className={styles.dateRange}
-                onChange={(date, type) => this.handleDateTimeRange(date, type)}
-                label="Date & Time"
-                startDate={new Date() - 24 * 60 * 60 * 1000}
-                endDate={new Date(Date.now() + 37 * 1000)}
-              /> */}
 
               <Input
                 type="text"
