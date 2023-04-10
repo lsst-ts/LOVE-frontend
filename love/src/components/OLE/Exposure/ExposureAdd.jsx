@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { EXPOSURE_FLAG_OPTIONS /* LOG_TYPE_OPTIONS */, exposureFlagStateToStyle, ISO_INTEGER_DATE_FORMAT } from 'Config';
+import { EXPOSURE_FLAG_OPTIONS, exposureFlagStateToStyle, ISO_INTEGER_DATE_FORMAT } from 'Config';
 import ManagerInterface from 'Utils';
 import lodash from 'lodash';
 import Moment from 'moment';
@@ -109,8 +109,10 @@ export default class ExposureAdd extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     // TODO: only when the filter is shown
-    if (prevState.selectedInstrument !== this.state.selectedInstrument
-      || prevState.selectedDayExposure !== this.state.selectedDayExposure) {
+    if (
+      prevState.selectedInstrument !== this.state.selectedInstrument ||
+      prevState.selectedDayExposure !== this.state.selectedDayExposure
+    ) {
       this.setState((prevState) => ({
         newMessage: { ...prevState.newMessage, obs_id: [] },
       }));
@@ -127,7 +129,7 @@ export default class ExposureAdd extends Component {
         obs_id: exposure.obs_id,
         day_obs: exposure.day_obs,
       }));
-      
+
       this.setState({
         observationIds,
         dayObs,
@@ -209,12 +211,7 @@ export default class ExposureAdd extends Component {
     const { isLogCreate, isMenu } = this.props;
     const { confirmationModalShown, confirmationModalText, selectedDayExposure } = this.state;
     const back = this.props.back;
-    const view = this.props.view ?? ExposureAdd.defaultProps.view;    
-
-    // Uncomment next code block to use several level options
-    // const selectedCommentType = this.state.newMessage?.level
-    //   ? LOG_TYPE_OPTIONS.find((type) => type.value === this.state.newMessage.level)
-    //   : null;
+    const view = this.props.view ?? ExposureAdd.defaultProps.view;
 
     return (
       <>
@@ -246,21 +243,20 @@ export default class ExposureAdd extends Component {
                     small
                   />
                 </span>
-                {/* Uncomment next code block to use several level options */}
-                {/* <span className={styles.label}>Type of Comment</span>
+
+                <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. day</span>
                 <span className={styles.value}>
-                  <Select
-                    option={selectedCommentType}
-                    onChange={({ value }) =>
-                      this.setState((prevState) => ({
-                        newMessage: { ...prevState.newMessage, level: value },
-                      }))
-                    }
-                    options={LOG_TYPE_OPTIONS}
-                    className={styles.select}
-                    small
+                  <DateTime
+                    value={selectedDayExposure}
+                    onChange={(day) => {
+                      console.log(day);
+                      this.setState({ selectedDayExposure: day });
+                    }}
+                    dateFormat="YYYY/MM/DD"
+                    timeFormat={false}
+                    closeOnSelect={true}
                   />
-                </span> */}
+                </span>
 
                 <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
                 <span className={styles.value}>
@@ -278,19 +274,19 @@ export default class ExposureAdd extends Component {
                 </span>
 
                 <span className={[styles.value, styles.paddingTop].join(' ')}>
-                <Button
-                  className={styles.refreshDataBtn}
-                  disabled={this.state.updatingExposures}
-                  onClick={() => {
-                    this.setState({ updatingExposures: true });
-                    this.queryExposures(() => {
-                      this.setState({ updatingExposures: false });
-                    });
-                  }}
-                >
-                  Refresh exposures
-                  {this.state.updatingExposures && <SpinnerIcon className={styles.spinnerIcon}/>}
-                </Button>
+                  <Button
+                    className={styles.refreshDataBtn}
+                    disabled={this.state.updatingExposures}
+                    onClick={() => {
+                      this.setState({ updatingExposures: true });
+                      this.queryExposures(() => {
+                        this.setState({ updatingExposures: false });
+                      });
+                    }}
+                  >
+                    Refresh exposures
+                    {this.state.updatingExposures && <SpinnerIcon className={styles.spinnerIcon} />}
+                  </Button>
                 </span>
 
                 <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
@@ -327,21 +323,6 @@ export default class ExposureAdd extends Component {
                         small
                       />
                     </span>
-                    {/* Uncomment next code block to use several level options */}
-                    {/* <span className={styles.label}>Type of Comment</span>
-                    <span className={styles.value}>
-                      <Select
-                        option={selectedCommentType}
-                        onChange={({ value }) =>
-                          this.setState((prevState) => ({
-                            newMessage: { ...prevState.newMessage, level: value },
-                          }))
-                        }
-                        options={LOG_TYPE_OPTIONS}
-                        className={styles.select}
-                        small
-                      />
-                    </span> */}
 
                     <DateTime
                       label="Observation day"
@@ -381,7 +362,7 @@ export default class ExposureAdd extends Component {
                       }}
                     >
                       Refresh exposures
-                      {this.state.updatingExposures && <SpinnerIcon className={styles.spinnerIcon}/>}
+                      {this.state.updatingExposures && <SpinnerIcon className={styles.spinnerIcon} />}
                     </Button>
 
                     <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
@@ -537,7 +518,7 @@ export default class ExposureAdd extends Component {
               parentSelector={() => document.querySelector(`#${this.id}`)}
               size={50}
             >
-              <p style={{textAlign: 'center'}}>{confirmationModalText}</p>
+              <p style={{ textAlign: 'center' }}>{confirmationModalText}</p>
               {this.renderModalFooter()}
             </Modal>
           </div>
