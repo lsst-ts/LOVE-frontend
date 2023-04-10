@@ -3,6 +3,7 @@ import styles from './AccordionSummary.module.css';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 import MinusIcon from 'components/icons/MinusIcon/MinusIcon';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
+import { fixedFloat } from 'Utils';
 
 export default class PredictedTarget extends Component {
   
@@ -12,28 +13,28 @@ export default class PredictedTarget extends Component {
       title: 'ID',
       // className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(0)),
+      render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
     },
     {
       field: 'ra',
       title: 'Ra',
       // className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(2)),
+      render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
     },
     {
       field: 'decl',
       title: 'Decl',
       // className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(2)),
+      render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
     },
     {
       field: 'rotSky',
       title: 'RotSkyPos',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(2)),
+      render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
     },
   ];
 
@@ -73,7 +74,9 @@ export default class PredictedTarget extends Component {
           className={isOpen ? [styles.openPanel, styles.panel].join(' ') : [styles.closePanel, styles.panel].join(' ')}
         >
           <div className={styles.predictedTargetsDiv}>
-            <SimpleTable headers={this.HEADERS_PREDTARGETS} data={predData} />
+            {predData.length >= 1 ? 
+              <SimpleTable headers={this.HEADERS_PREDTARGETS} data={predData} /> : 'No data'
+            }
           </div>
         </div>
       </div>

@@ -7,6 +7,7 @@ import AddIcon from 'components/icons/AddIcon/AddIcon';
 import MinusIcon from 'components/icons/MinusIcon/MinusIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
+import { fixedFloat } from 'Utils';
 
 export default class Blocks extends Component {
 
@@ -17,28 +18,28 @@ export default class Blocks extends Component {
       title: 'ID',
       // className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(0)),
+      render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
     },
     {
       field: 'ra',
       title: 'Ra',
       // className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(2)),
+      render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
     },
     {
       field: 'decl',
       title: 'Decl',
       // className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(2)),
+      render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
     },
     {
       field: 'rotSky',
       title: 'RotSkyPos',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(2)),
+      render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
     },
   ];
 

@@ -225,8 +225,8 @@ export default class Scheduler extends Component {
       // },
       //   {
       //     "id": 2,
-      //     "lat": 50,
-      //     "long": 50
+      //     "lat": 236,
+      //     "long": -88
       // },
       // {
       //   "id": 3,

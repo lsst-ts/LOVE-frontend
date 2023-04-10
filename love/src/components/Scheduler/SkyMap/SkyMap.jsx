@@ -189,7 +189,7 @@ export default class SkyMap extends Component {
   };
   // Asterisms canvas style of targets lines
   lineTargetStyle = {
-    stroke: 'green',
+    stroke: 'white',
     fill: 'none',
     width: 3,
   };
