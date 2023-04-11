@@ -636,11 +636,11 @@ class Layout extends Component {
                     simonyiState={'UNKNOWN'}
                     simonyiOperationMode={'UNKNOWN'}
                     simonyiTrackingMode={'UNKNOWN'}
-                    simonyiObsMode={this.props.observatorySummary.simonyiObservingMode}
+                    simonyiObsMode={this.props.observatorySummary?.simonyiObservingMode}
                     simonyiPower={'UNKNOWN'}
                     auxtelState={'UNKNOWN'}
                     auxtelOperationMode={'UNKNOWN'}
-                    auxtelObsMode={this.props.observatorySummary.auxtelObservingMode}
+                    auxtelObsMode={this.props.observatorySummary?.auxtelObservingMode}
                     auxtelPower={'UNKNOWN'}
                   ></ObservatorySummaryMenu>
                 </div>

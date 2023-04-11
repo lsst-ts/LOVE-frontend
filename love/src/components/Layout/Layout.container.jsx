@@ -67,7 +67,14 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  const subscriptions = ['heartbeat-manager-0-stream', 'event-Watcher-0-alarm'];
+  const subscriptions = [
+    'heartbeat-manager-0-stream',
+    'event-Watcher-0-alarm',
+    /* Simonyi observingMode */
+    'event-Scheduler-1-observingMode',
+    /* Auxtel observingMode */
+    'event-Scheduler-2-observingMode',
+  ];
   return {
     subscriptions,
     logout: () => dispatch(logout()),
