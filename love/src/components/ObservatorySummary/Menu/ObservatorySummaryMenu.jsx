@@ -9,12 +9,10 @@ export default function ObservatorySummaryMenu({
   locationIcon,
   menuElementClassName,
   dividerClassName,
-  simonyiState,
   simonyiOperationMode,
   simonyiTrackingMode,
   simonyiObsMode,
   simonyiPower,
-  auxtelState,
   auxtelOperationMode,
   auxtelObsMode,
   auxtelPower,
@@ -56,11 +54,6 @@ export default function ObservatorySummaryMenu({
             />
           </svg>
           <span className={styles.sectionTitle}>Simonyi</span>
-          <span className={styles.state}>
-            <StatusText title={simonyiState} status="invalid">
-              {simonyiState}
-            </StatusText>
-          </span>
         </div>
 
         <span className={styles.label}>Operation Mode</span>
@@ -88,11 +81,6 @@ export default function ObservatorySummaryMenu({
             />
           </svg>
           <span className={styles.sectionTitle}>Auxtel</span>
-          <span className={styles.state}>
-            <StatusText title={auxtelState} status="invalid">
-              {auxtelState}
-            </StatusText>
-          </span>
         </div>
 
         <span className={styles.label}>Operation Mode</span>
@@ -119,9 +107,7 @@ ObservatorySummaryMenu.propTypes = {
   dividerClassName: PropTypes.string,
 
   /** Simonyi Telemetry and Event Data */
-  /** Simonyi Summary State */
-  simonyiState: PropTypes.string,
-  /** Simonyi Opearion Mode */
+  /** Simonyi Operation Mode */
   simonyiOperationMode: PropTypes.string,
   /** Simonyi Tracking Mode */
   simonyiTrackingMode: PropTypes.string,
@@ -130,9 +116,7 @@ ObservatorySummaryMenu.propTypes = {
   /** Simonyi Power Source */
   simonyiPower: PropTypes.string,
 
-  /** Simonyi Summary State */
-  /** Auxiliary Telescope Summary State */
-  auxtelState: PropTypes.string,
+  /** Auxiliary Telescope Telemetry and Event Data */
   /** Auxiliary Telescope Operation Mode */
   auxtelOperationMode: PropTypes.string,
   /** Auxiliary Telescope Observation Mode */
