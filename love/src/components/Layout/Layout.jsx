@@ -380,22 +380,7 @@ class Layout extends Component {
   };
 
   renderHeartbeatsMenu = () => {
-    // const producerHeartbeats = [
-    //   HEARTBEAT_COMPONENTS['LOVE:0'],
-    //   HEARTBEAT_COMPONENTS['ATDome:0'],
-    //   HEARTBEAT_COMPONENTS['ATMCS:0'],
-    //   HEARTBEAT_COMPONENTS['Watcher:0'],
-    //   HEARTBEAT_COMPONENTS['GenericCamera:0'],
-    //   HEARTBEAT_COMPONENTS['ScriptQueue:1'],
-    //   HEARTBEAT_COMPONENTS['WeatherStation:1'],
-    // ].map((source) => this.state.heartbeatStatus[source]);
-    // let producerHeartbeatStatus;
-    // if (!producerHeartbeats.every((hb) => hb === undefined)) {
-    //   producerHeartbeatStatus = producerHeartbeats.includes('alert') ? 'alert' : 'ok';
-    // }
-
     const summaryHeartbeats = [
-      // producerHeartbeatStatus,
       this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.MANAGER],
       this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.COMMANDER],
       this.state.efdStatus.style,
@@ -430,64 +415,7 @@ class Layout extends Component {
             />
             <span>LOVE manager</span>
           </div>
-          {/** Deprecated: used for old producer version */
-          /* <div className={styles.heartbeatMenuElement}>
-            <HeartbeatIcon
-              className={styles.icon}
-             status={producerHeartbeatStatus}
-              title={this.getHeartbeatTitle('')}
-            />
-            <span title={this.getHeartbeatTitle('')}>LOVE producers:</span>
-            <HeartbeatIcon
-              className={styles.miniIcon}
-              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.EVENTS]}
-              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.EVENTS)}
-            />
-            <span title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.EVENTS)} className={styles.heartbeatSubElement}>
-              {HEARTBEAT_COMPONENTS.EVENTS}
-            </span>
-            <HeartbeatIcon
-              className={styles.miniIcon}
-              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.TELEMETRIES]}
-              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.TELEMETRIES)}
-            />
-            <span
-              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.TELEMETRIES)}
-              className={styles.heartbeatSubElement}
-            >
-              {HEARTBEAT_COMPONENTS.TELEMETRIES}
-            </span>
-            <HeartbeatIcon
-              className={styles.miniIcon}
-              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.HEARTBEATS]}
-              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.HEARTBEATS)}
-            />
-            <span
-              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.HEARTBEATS)}
-              className={styles.heartbeatSubElement}
-            >
-              {HEARTBEAT_COMPONENTS.HEARTBEATS}
-            </span>
-            <HeartbeatIcon
-              className={styles.miniIcon}
-              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.LOVE]}
-              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.LOVE)}
-            />
-            <span title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.LOVE)} className={styles.heartbeatSubElement}>
-              {HEARTBEAT_COMPONENTS.LOVE}
-            </span>
-            <HeartbeatIcon
-              className={styles.miniIcon}
-              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.SCRIPTQUEUE]}
-              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.SCRIPTQUEUE)}
-            />
-            <span
-              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.SCRIPTQUEUE)}
-              className={styles.heartbeatSubElement}
-            >
-              {HEARTBEAT_COMPONENTS.SCRIPTQUEUE}
-            </span>
-          </div> */}
+
           <div className={styles.heartbeatMenuElement} title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.COMMANDER)}>
             <HeartbeatIcon
               className={styles.icon}
