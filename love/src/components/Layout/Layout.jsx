@@ -127,6 +127,7 @@ class Layout extends Component {
       salStatus: { label: 'SAL status Unknown', style: 'invalid' },
       isNewNonExposureOpen: false,
       isNewExposureOpen: false,
+      controlLocation: null,
     };
 
     this.requestToastID = null;
@@ -141,9 +142,12 @@ class Layout extends Component {
   componentDidMount = () => {
     this.moveCustomTopbar();
     this.props.subscribeToStreams();
+    this.checkControlLocation();
+
     this.heartbeatInterval = setInterval(() => {
       this.checkHeartbeat();
       this.checkEfdStatus();
+      this.checkControlLocation();
     }, 3000);
   };
 
@@ -272,6 +276,14 @@ class Layout extends Component {
     });
   };
 
+  checkControlLocation = () => {
+    ManagerInterface.getControlLocation().then((results) => {
+      this.setState({
+        controlLocation: results[0],
+      });
+    });
+  };
+
   getHeartbeatTitle = (component) => {
     if (component === '') return '';
     const heartbeatSource = HEARTBEAT_COMPONENTS[component];
@@ -294,18 +306,19 @@ class Layout extends Component {
   /** Returns the corresponding svg based on Observatory Control Location * */
   getObsLocationIcon = (style) => {
     const location = this.getObsLocation();
+    const { controlLocation } = this.state;
 
-    switch (location) {
-      case 'Unknown':
+    switch (controlLocation ? controlLocation.name : 'unknown') {
+      case 'unknown':
         return <UnknownLocationIcon className={style} />;
-      case 'Tucson':
+      case 'tucson':
         return <CactusIcon className={style} />;
-      case 'Base':
+      case 'base':
         return <BeachIcon className={style} />;
-      case 'Summit':
+      case 'summit':
         return <MountainIcon className={style} />;
-      case 'LSST':
-        return <OfficeIcon className={style} />;
+      // case 'LSST':
+      //   return <OfficeIcon className={style} />;
       default:
         return <UnknownLocationIcon className={style} />;
     }
@@ -507,11 +520,16 @@ class Layout extends Component {
   };
 
   render() {
+    const { controlLocation } = this.state;
     const filteredAlarms = this.props.alarms.filter((a) => {
       return (
         isActive(a) && !isAcknowledged(a) && !isMuted(a) && a.severity?.value >= this.state.minSeverityNotification
       );
     });
+
+    const controlLocationName = controlLocation
+      ? controlLocation.name.charAt(0).toUpperCase() + controlLocation.name.slice(1)
+      : 'Unknown';
     return (
       <>
         <AlarmAudioContainer />
@@ -686,7 +704,7 @@ class Layout extends Component {
                   <ObservatorySummaryMenu
                     dividerClassName={styles.divider}
                     locationIcon={this.getObsLocationIcon()}
-                    location={this.getObsLocation()}
+                    location={controlLocationName}
                     simonyiState={'UNKNOWN'}
                     simonyiOperationMode={'UNKNOWN'}
                     simonyiTrackingMode={'UNKNOWN'}
