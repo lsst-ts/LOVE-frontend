@@ -2,6 +2,7 @@ import { RECEIVE_CONTROL_LOCATION } from '../actions/actionTypes';
 
 export const initialState = {
   controlLocation: null,
+  lastUpdated: null,
 };
 
 export default function (state = initialState, action) {
