@@ -633,15 +633,14 @@ class Layout extends Component {
                     dividerClassName={styles.divider}
                     locationIcon={this.getObsLocationIcon()}
                     location={controlLocationName}
-                    simonyiState={'UNKNOWN'}
-                    simonyiOperationMode={'UNKNOWN'}
-                    simonyiTrackingMode={'UNKNOWN'}
+                    simonyiOperationMode={'Unknown'}
+                    simonyiTrackingMode={this.props.observatorySummary?.simonyiTrackingState}
                     simonyiObsMode={this.props.observatorySummary?.simonyiObservingMode}
-                    simonyiPower={'UNKNOWN'}
-                    auxtelState={'UNKNOWN'}
-                    auxtelOperationMode={'UNKNOWN'}
+                    simonyiPower={'Unknown'}
+                    auxtelOperationMode={'Unknown'}
+                    auxtelTrackingMode={this.props.observatorySummary?.auxtelTrackingState}
                     auxtelObsMode={this.props.observatorySummary?.auxtelObservingMode}
-                    auxtelPower={'UNKNOWN'}
+                    auxtelPower={'Unknown'}
                   ></ObservatorySummaryMenu>
                 </div>
               </DropdownMenu>

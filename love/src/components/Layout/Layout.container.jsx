@@ -70,10 +70,12 @@ const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
     'heartbeat-manager-0-stream',
     'event-Watcher-0-alarm',
-    /* Simonyi observingMode */
+    /* Simonyi states */
     'event-Scheduler-1-observingMode',
-    /* Auxtel observingMode */
+    'event-Scheduler-1-observatoryState',
+    /* Auxtel states */
     'event-Scheduler-2-observingMode',
+    'event-Scheduler-2-observatoryState',
   ];
   return {
     subscriptions,

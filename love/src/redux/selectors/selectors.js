@@ -350,10 +350,18 @@ export const getATMCSState = (state) => {
   ];
   const data = getStreamsData(state, subscriptions);
   const [minEl, minAz, minNas1, minNas2, minM3] = data['event-ATMCS-0-positionLimits']?.[0].minimum?.value ?? [
-    5, -270, -165, -165, 0,
+    5,
+    -270,
+    -165,
+    -165,
+    0,
   ];
   const [maxEl, maxAz, maxNas1, maxNas2, maxM3] = data['event-ATMCS-0-positionLimits']?.[0].maximum?.value ?? [
-    90, 270, 165, 165, 180,
+    90,
+    270,
+    165,
+    165,
+    180,
   ];
 
   return {
@@ -956,13 +964,15 @@ export const getDrivesAzimuthElevationState = (state) => {
  * @param {object} state
  */
 export const getMirrorCoversMotionState = (state) => {
-  const subscriptions = [
-    'event-MTMount-0-mirrorCoversMotionState',
-    'telemetry-MTMount-0-mirrorCover',
-  ];
+  const subscriptions = ['event-MTMount-0-mirrorCoversMotionState', 'telemetry-MTMount-0-mirrorCover'];
   const summaryData = getStreamsData(state, subscriptions);
   return {
-    mirrorCoversState: summaryData['event-MTMount-0-mirrorCoversMotionState']?.[0]?.elementsState?.value ?? [0, 0, 0, 0],
+    mirrorCoversState: summaryData['event-MTMount-0-mirrorCoversMotionState']?.[0]?.elementsState?.value ?? [
+      0,
+      0,
+      0,
+      0,
+    ],
     mirrorCoversPosition: summaryData['telemetry-MTMount-0-mirrorCover']?.actualPosition?.value ?? [0, 0, 0, 0],
   };
 };
@@ -974,7 +984,7 @@ export const getRawStatus = (state) => {
   return {
     interlocksStatus: interlocksData['event-GIS-0-rawStatus']
       ? interlocksData['event-GIS-0-rawStatus'][0]?.status?.value
-      : "0".repeat(464),
+      : '0'.repeat(464),
   };
 };
 
@@ -1035,16 +1045,22 @@ export const getObservatoryState = (state) => {
     // Observatory
     // Simonyi
     'event-Scheduler-1-observingMode',
+    'event-Scheduler-1-observatoryState',
     // Auxtel
     'event-Scheduler-2-observingMode',
+    'event-Scheduler-2-observatoryState',
   ];
   const observatoryData = getStreamsData(state, observatorySubscriptions);
   const simonyiObservingMode = observatoryData['event-Scheduler-1-observingMode'];
   const auxtelObservingMode = observatoryData['event-Scheduler-2-observingMode'];
+  const simonyiObservatoryState = observatoryData['event-Scheduler-1-observatoryState'];
+  const auxtelObservatoryState = observatoryData['event-Scheduler-2-observatoryState'];
 
   return {
-    simonyiObservingMode: simonyiObservingMode ? simonyiObservingMode.mode.value : 'Unknown',
-    auxtelObservingMode: auxtelObservingMode ? auxtelObservingMode.mode.value : 'Unknown',
+    simonyiObservingMode: simonyiObservingMode ? simonyiObservingMode[0].mode.value : 'Unknown',
+    auxtelObservingMode: auxtelObservingMode ? auxtelObservingMode[0].mode.value : 'Unknown',
+    simonyiTrackingState: simonyiObservatoryState ? simonyiObservatoryState[0].tracking.value : 'Unknown',
+    auxtelTrackingState: auxtelObservatoryState ? auxtelObservatoryState[0].tracking.value : 'Unknown',
   };
 };
 

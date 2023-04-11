@@ -14,6 +14,7 @@ export default function ObservatorySummaryMenu({
   simonyiObsMode,
   simonyiPower,
   auxtelOperationMode,
+  auxtelTrackingMode,
   auxtelObsMode,
   auxtelPower,
 }) {
@@ -86,6 +87,9 @@ export default function ObservatorySummaryMenu({
         <span className={styles.label}>Operation Mode</span>
         <span>{auxtelOperationMode}</span>
 
+        <span className={styles.label}>Tracking Mode</span>
+        <span>{auxtelTrackingMode}</span>
+
         <span className={styles.label}>Obsv. Mode</span>
         <span>{auxtelObsMode}</span>
 
@@ -119,6 +123,8 @@ ObservatorySummaryMenu.propTypes = {
   /** Auxiliary Telescope Telemetry and Event Data */
   /** Auxiliary Telescope Operation Mode */
   auxtelOperationMode: PropTypes.string,
+  /** Auxiliary Telescope Tracking Mode */
+  auxtelTrackingMode: PropTypes.string,
   /** Auxiliary Telescope Observation Mode */
   auxtelObsMode: PropTypes.string,
   /** Auxiliary Telescope Power Source */
