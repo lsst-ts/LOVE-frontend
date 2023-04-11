@@ -1222,7 +1222,7 @@ export const getFilterSwap = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-needFilterSwap`];
   const filterSwap = getStreamsData(state, subscriptions);
   return {
-    needSwap: filterSwap[`event-Scheduler-${salindex}-needFilterSwap`]?.[0]?.needSwap?.value ?? false,
+    needSwap: filterSwap[`event-Scheduler-${salindex}-needFilterSwap`]?.[0]?.needSwap?.value ?? true,
     filterToMount: filterSwap[`event-Scheduler-${salindex}-needFilterSwap`]?.[0]?.filterToMount?.value ?? '',
     filterToUnmount: filterSwap[`event-Scheduler-${salindex}-needFilterSwap`]?.[0]?.filterToUnmount?.value ?? '',
   }

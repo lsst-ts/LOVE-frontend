@@ -2,7 +2,6 @@
   box-sizing: border-box;
   border: 3px solid var(--second-primary-background-color);
   border-radius: 0.5em;
-  padding: 1.5em 0.5em;
   /* width: calc(50% - var(--content-padding)); */
   width: 100%;
   box-sizing: border-box;
@@ -10,6 +9,52 @@
   align-content: flex-start;
   background-color: var(--second-secondary-background-color);
   margin-bottom: 1.5em;
+  height: 18vh;
+}
+
+.viewSwapNeeded {
+  display: flex;
+  height: auto;
+  background-color: var(--status-warning-dimmed-color-2);
+  color: var(--base-font-color);
+  height: 5vh;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.filterText {
+  font-weight: bold;
+}
+
+.iconWarning {
+  width: 5%;
+}
+
+.iconArrow {
+  width: 5%;
+}
+
+.needSwap {
+  border: 1px solid white;
+  font-weight: bold;
+  background-color: var(--tertiary-background-color);
+}
+
+.swap {
+  display: flex;
+}
+
+.filterToMount {
+  width: 100%;
+  text-align: center;
+  background-color: var(--tertiary-background-color);
+}
+
+.filterToUnmount {
+  width: 100%;
+  text-align: center;
+  font-style: var(--secondary-font-dimmed-color);
+  background-color: var(--second-senary-background-dimmed-color);
 }
 
 .title {
