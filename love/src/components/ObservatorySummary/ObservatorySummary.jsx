@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ManagerInterface from 'Utils';
-import StatusText from '../GeneralPurpose/StatusText/StatusText';
 import styles from './ObservatorySummary.module.css';
 import SummaryPanel from '../GeneralPurpose/SummaryPanel/SummaryPanel';
 import Label from '../GeneralPurpose/SummaryPanel/Label';
@@ -20,6 +18,10 @@ export default class ObservatorySummary extends Component {
     auxtelObservingMode: PropTypes.string,
     /** Auxiliary Telescope Tracking State */
     auxtelTrackingState: PropTypes.string,
+    /** Control Location */
+    controlLocation: PropTypes.object,
+    /** Last Updated Control Location info */
+    lastUpdated: PropTypes.instanceOf(Date),
   };
 
   static defaultProps = {
@@ -27,6 +29,8 @@ export default class ObservatorySummary extends Component {
     simonyiTrackingState: 'Unknown',
     auxtelObservingMode: 'Unknown',
     auxtelTrackingState: 'Unknown',
+    controlLocation: null,
+    lastUpdated: null,
   };
 
   componentDidMount() {
@@ -44,6 +48,7 @@ export default class ObservatorySummary extends Component {
       auxtelObservingMode,
       auxtelTrackingState,
       controlLocation,
+      lastUpdated,
     } = this.props;
 
     const controlLocationName = controlLocation
@@ -67,7 +72,9 @@ export default class ObservatorySummary extends Component {
         <SummaryPanel>
           <Title wide>Vera C. Rubin Observatory</Title>
           <Label>Control</Label>
-          <Value>{controlLocationName}</Value>
+          <Value>
+            <span title={`Last updated: ${lastUpdated?.toUTCString()}`}>{controlLocationName}</span>
+          </Value>
           <Label>Power Source</Label>
           <Value>Unknown</Value>
         </SummaryPanel>

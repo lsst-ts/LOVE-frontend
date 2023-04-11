@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './ObservatorySummaryMenu.module.css';
-import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 
 /** Contents of the ObservatorySummary details Dropdown Menu */
 export default function ObservatorySummaryMenu({
   location,
+  locationLastUpdate,
   locationIcon,
   menuElementClassName,
   dividerClassName,
@@ -26,7 +26,9 @@ export default function ObservatorySummaryMenu({
           <div className={styles.contentContainer}>
             <span>Observatory control </span>
             <div>
-              <span className={styles.highlight}>{location}</span>
+              <span title={`Last updated: ${locationLastUpdate?.toUTCString()}`} className={styles.highlight}>
+                {location}
+              </span>
             </div>
           </div>
         </div>
@@ -101,8 +103,10 @@ export default function ObservatorySummaryMenu({
 }
 
 ObservatorySummaryMenu.propTypes = {
-  /** Locaation from where LOVE is being controlled from */
+  /** Location from where LOVE is being controlled from */
   location: PropTypes.string,
+  /** Location last update */
+  locationLastUpdate: PropTypes.instanceOf(Date),
   /** An svg representing the location generated on Layout.jsx */
   locationIcon: PropTypes.object,
   /** Classname to add ot the menu elements */

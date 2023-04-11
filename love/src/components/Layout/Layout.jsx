@@ -624,6 +624,7 @@ class Layout extends Component {
                     dividerClassName={styles.divider}
                     locationIcon={this.getObsLocationIcon()}
                     location={controlLocationName}
+                    locationLastUpdate={lastUpdated}
                     simonyiOperationMode={'Unknown'}
                     simonyiTrackingMode={this.props.observatorySummary?.simonyiTrackingState}
                     simonyiObsMode={this.props.observatorySummary?.simonyiObservingMode}
