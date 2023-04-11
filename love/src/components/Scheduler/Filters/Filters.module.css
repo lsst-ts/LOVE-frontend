@@ -27,11 +27,11 @@
 }
 
 .iconWarning {
-  width: 5%;
+  width: 7%;
 }
 
 .iconArrow {
-  width: 5%;
+  width: 10%;
 }
 
 .needSwap {
@@ -42,19 +42,29 @@
 
 .swap {
   display: flex;
+  margin-top: 2em;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 .filterToMount {
-  width: 100%;
-  text-align: center;
   background-color: var(--tertiary-background-color);
+  border: 3px solid var(--second-primary-background-color);
+  padding: 0.5em 0.7em;
+  vertical-align: middle;
+  display: inline-block;
+  /* margin-right: 1.5em; */
 }
 
 .filterToUnmount {
-  width: 100%;
-  text-align: center;
-  font-style: var(--secondary-font-dimmed-color);
   background-color: var(--second-senary-background-dimmed-color);
+  border: 3px solid white;
+  padding: 0.5em 0.7em;
+  vertical-align: middle;
+  display: inline-block;
+  color: white;
+  font-weight: bold;
+  /* margin-right: 1.5em; */
 }
 
 .title {

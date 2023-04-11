@@ -15,9 +15,9 @@ export default class Filters extends Component {
               <WarningIcon className={styles.iconWarning}/>
             </div>
             <div className={styles.swap}>
-              <div className={styles.filter}>{filterToUnmount}</div>
+              <div className={styles.filterToUnmount}>{filterToUnmount}</div>
               <div className={styles.iconArrow}><RightArrowIcon /></div>
-              <div className={styles.filter}>{filterToMount}</div>
+              <div className={styles.filterToMount}>{filterToMount}</div>
             </div>
           </div>):
           (<div>
