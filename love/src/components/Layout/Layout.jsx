@@ -127,7 +127,6 @@ class Layout extends Component {
       salStatus: { label: 'SAL status Unknown', style: 'invalid' },
       isNewNonExposureOpen: false,
       isNewExposureOpen: false,
-      controlLocation: null,
     };
 
     this.requestToastID = null;
@@ -142,12 +141,11 @@ class Layout extends Component {
   componentDidMount = () => {
     this.moveCustomTopbar();
     this.props.subscribeToStreams();
-    this.checkControlLocation();
+    this.props.startControlLocationLoop();
 
     this.heartbeatInterval = setInterval(() => {
       this.checkHeartbeat();
       this.checkEfdStatus();
-      this.checkControlLocation();
     }, 3000);
   };
 
@@ -156,6 +154,7 @@ class Layout extends Component {
     window.removeEventListener('resize', this.handleResize);
     window.clearInterval(this.heartbeatInterval);
     this.props.unsubscribeToStreams();
+    this.props.stopControlLocationLoop();
   };
 
   componentDidUpdate = (prevProps, prevState) => {
@@ -276,14 +275,6 @@ class Layout extends Component {
     });
   };
 
-  checkControlLocation = () => {
-    ManagerInterface.getControlLocation().then((results) => {
-      this.setState({
-        controlLocation: results[0],
-      });
-    });
-  };
-
   getHeartbeatTitle = (component) => {
     if (component === '') return '';
     const heartbeatSource = HEARTBEAT_COMPONENTS[component];
@@ -306,13 +297,13 @@ class Layout extends Component {
   /** Returns the corresponding svg based on Observatory Control Location * */
   getObsLocationIcon = (style) => {
     const location = this.getObsLocation();
-    const { controlLocation } = this.state;
+    const { controlLocation } = this.props.controlLocation;
 
     switch (controlLocation ? controlLocation.name : 'unknown') {
       case 'unknown':
         return <UnknownLocationIcon className={style} />;
       case 'tucson':
-        return <CactusIcon className={style} />;
+        return <CactusIcon title="PRUEBA DE TITULO" className={style} />;
       case 'base':
         return <BeachIcon className={style} />;
       case 'summit':
@@ -448,7 +439,7 @@ class Layout extends Component {
   };
 
   render() {
-    const { controlLocation } = this.state;
+    const { controlLocation, lastUpdated } = this.props.controlLocation;
     const filteredAlarms = this.props.alarms.filter((a) => {
       return (
         isActive(a) && !isAcknowledged(a) && !isMuted(a) && a.severity?.value >= this.state.minSeverityNotification

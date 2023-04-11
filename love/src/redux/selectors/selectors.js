@@ -23,6 +23,11 @@ export const getEfdConfig = (state) => getConfig(state)?.content?.efd;
 
 export const getSurveyConfig = (state) => getConfig(state)?.content?.survey;
 
+export const getControlLocation = (state) => ({
+  controlLocation: state.observatoryState.controlLocation,
+  lastUpdated: state.observatoryState.lastUpdated,
+});
+
 export const getAllTime = (state) => ({ ...state.time });
 
 export const getClock = (state) => ({ ...state.time.clock });
@@ -1035,21 +1040,15 @@ export const getObservatorySubscriptions = () => {
     // Observatory
     // Simonyi
     'event-Scheduler-1-observingMode',
-    // Auxtel
-    'event-Scheduler-2-observingMode',
-  ];
-};
-
-export const getObservatoryState = (state) => {
-  const observatorySubscriptions = [
-    // Observatory
-    // Simonyi
-    'event-Scheduler-1-observingMode',
     'event-Scheduler-1-observatoryState',
     // Auxtel
     'event-Scheduler-2-observingMode',
     'event-Scheduler-2-observatoryState',
   ];
+};
+
+export const getObservatoryState = (state) => {
+  const observatorySubscriptions = getObservatorySubscriptions();
   const observatoryData = getStreamsData(state, observatorySubscriptions);
   const simonyiObservingMode = observatoryData['event-Scheduler-1-observingMode'];
   const auxtelObservingMode = observatoryData['event-Scheduler-2-observingMode'];

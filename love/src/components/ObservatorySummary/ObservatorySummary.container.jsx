@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ObservatorySummary from './ObservatorySummary';
-import { getObservatoryState, getObservatorySubscriptions } from '../../redux/selectors';
+import { getControlLocation, getObservatoryState, getObservatorySubscriptions } from '../../redux/selectors';
 import { addGroup, removeGroup } from '../../redux/actions/ws';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
@@ -28,7 +28,8 @@ const ObservatorySummaryContainer = ({ ...props }) => {
 
 const mapStateToProps = (state) => {
   const observatorySummary = getObservatoryState(state);
-  return observatorySummary;
+  const controlLocation = getControlLocation(state);
+  return { ...observatorySummary, ...controlLocation };
 };
 
 const mapDispatchToProps = (dispatch) => {
