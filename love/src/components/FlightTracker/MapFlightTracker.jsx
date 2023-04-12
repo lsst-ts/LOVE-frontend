@@ -138,13 +138,6 @@ export default class MapFlightTracker extends Component {
           });
 
           // first zone : 200 km area.
-          // const long_lat_1 = [-69.72640645677438, -28.671508190008392,];
-          // const coords_1 = projection(long_lat_1)
-          // console.log("rad1:",coords_1)
-          // console.log(Math.sqrt((coords_1[0]-250)**2 + (coords_1[1]-250)**2))
-          //returns [364.65891235520394, 60.57129669433607]
-          // radius_1 = 234.3880562607948 with Euclidian distance.
-
           const mask = svg.append('mask').attr('id', 'Mask');
           mask.append('rect').attr('width', '100%').attr('height', '100%').attr('fill', 'white');
           mask
@@ -162,29 +155,15 @@ export default class MapFlightTracker extends Component {
             .attr('height', '104%');
 
           // second zone : 160 km area.
-          // const long_lat_2 = [-69.80730130824585, -29.056574125505087]
-          // const coords_2 = projection(long_lat_2)
-          // console.log(coords_2) //returns [357.00061695433305, 110.5181751002815], [382.104607855159, 74.27436233534718]
-          // console.log(Math.sqrt((coords_2[0]-250)**2 + (coords_2[1]-250)**2))
-          // // radius2 = 187.11298329859903, 231.0125678417318 with Euclidian distance.
-
           svg
             .append('circle')
             .attr('id', 'middle_circle')
             .attr('cx', '50%')
             .attr('cy', '50%')
             .attr('r', '231.0125678417318')
-            // .attr('stroke', '#bcd8e2')
-            // .attr('stroke-width', '1')
             .attr('fill', 'none');
 
           // third zone : 100 km area.
-          // const long_lat_3 = [ -70.45824123940402, -31.108020979254803 ];
-          // const coords_3 = projection(long_lat_3);
-          // console.log(coords_3); //returns [341.3675737065496, 190.66005738475087], [362.80381215308626, 173.21876315578902], [427.11252749269624, 120.89488046890165]
-          // console.log(Math.sqrt((coords_3[0]-250)**2 + (coords_3[1]-250)**2))
-          // radius3 = 118.72482058439441, 146.57949002919514, 230.1434983635952 with Euclidian distance.
-
           svg
             .append('circle')
             .attr('id', 'intern_circle')
@@ -355,12 +334,6 @@ export default class MapFlightTracker extends Component {
     return (
       <>
         <div className={styles.divMap}>{this.renderMap(zoom)}</div>
-
-        {/* This is for generate the static map */}
-        {/* <div>{this.getRegionSvg()}</div> */}
-        {/* <div id="telescopeDiv">
-          <svg id="Paths" className={styles.CoquimboSvg}></svg>
-        </div> */}
       </>
     );
   }

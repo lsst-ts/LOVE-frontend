@@ -13,11 +13,14 @@ import moment from 'moment';
 import { aircraftTrackerStateToMap, aircraftTrackerStatetoStyle } from 'Config';
 import styles from './FlightTracker.module.css';
 
-const DEFAULT_POLLING_TIMEOUT = 5000;
+const RADIO_ALERT = 100;
+const RADIO_WARNING = 160;
 
 export default class FlightTracker extends Component {
   static propTypes = {
+    /** Number about the status availabled of the Aircraft Tracker CSC */
     status: PropTypes.number,
+    /** Array of all detected aircrafts with their information */
     aircrafts: PropTypes.arrayOf(PropTypes.objectOf({
       id: PropTypes.string,
       latitude: PropTypes.number,
@@ -27,7 +30,6 @@ export default class FlightTracker extends Component {
       distance: PropTypes.number,
       speed: PropTypes.number,
     })),
-
   };
 
   static defaultProps = {
@@ -44,8 +46,6 @@ export default class FlightTracker extends Component {
       zoom: '200',
       aircraftInRadius: 0,
     };
-    this.RADIO1 = 160; // Distance of Warning
-    this.RADIO2 = 100; // Distance of Alert
   }
 
   /**
@@ -111,13 +111,12 @@ export default class FlightTracker extends Component {
    * Function to determine the status of the aircraft, from the distance to the radar
    */
   distanceStatus = (distance) => {
-    if (distance < this.RADIO2) return 'alert';
-    if (distance < this.RADIO1) return 'warning';
+    if (distance < RADIO_ALERT) return 'alert';
+    if (distance < RADIO_WARNING) return 'warning';
     return 'running';
   }
 
   render() {
-    const tableData = [];
     const headers= [
       {
         field: 'id',
@@ -169,9 +168,6 @@ export default class FlightTracker extends Component {
     ];
 
     const { aircrafts, status } = this.props;
-    aircrafts.forEach(element => {
-      tableData.push(element);
-    });
 
     const dateNow = Date.now();
 
@@ -209,7 +205,7 @@ export default class FlightTracker extends Component {
         </div>
         <div className={styles.mapContainer}>
           <MapFlightTracker
-            planes={tableData}
+            planes={aircrafts}
             zoom={this.state.zoom}
             distanceStatus={this.distanceStatus}
           />
@@ -237,7 +233,7 @@ export default class FlightTracker extends Component {
         <br></br>
         <div className={styles.divElement}>
           <div className={styles.table}>
-            <SimpleTable headers={headers} data={tableData}></SimpleTable>
+            <SimpleTable headers={headers} data={aircrafts}></SimpleTable>
           </div>
           <div className={styles.divLastUp}>
             <span>LAST UPDATE: { moment(dateNow).format('HH:mm:ss') }</span>
