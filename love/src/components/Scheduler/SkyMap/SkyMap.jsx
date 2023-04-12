@@ -276,6 +276,7 @@ export default class SkyMap extends Component {
     const changeTransform = (prevState) => {
       let { config } = prevState;
       config.transform = transformUpdated;
+      Celestial.display(config);
       return { config: config };
     };
     this.setState((prevState) => changeTransform(prevState));
@@ -290,7 +291,6 @@ export default class SkyMap extends Component {
   };
 
   componentDidMount = () => {
-    console.log("DidMount");
     const config = this.state.config;
     //Add objects only one time
     this.addObjects(config);
@@ -450,7 +450,6 @@ export default class SkyMap extends Component {
 
         // Load the geoJSON file and transform to correct coordinate system, if necessary
         let jsonTargetsCopy = structuredClone(jsonTargets);
-        console.log(jsonTargets, jsonTargetsCopy);
         var asterism = Celestial.getData(jsonTargetsCopy, config.transform);
 
         // Add to celestial objects container in d3
@@ -496,7 +495,6 @@ export default class SkyMap extends Component {
 
   render() {
     const selectOptions = ['equatorial', 'ecliptic', 'galactic', 'supergalactic'];
-    console.log(this.props);
     return (
       <div className={styles.container}>
         <div className={styles.headerDiv}>
@@ -513,9 +511,7 @@ export default class SkyMap extends Component {
           <div className={styles.selectSystemCoord}>
             <Select
               options={selectOptions}
-              onChange={(e) => {
-                e.value ? this.actConfig(e.value) : true;
-              }}
+              onChange={(e) => this.actConfig(e.value)}
               value={'equatorial'}
             ></Select>
           </div>
