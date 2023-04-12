@@ -1086,6 +1086,100 @@ export default class ManagerInterface {
       });
     });
   }
+
+  /** Methods to access Scripts configurations  */
+  static getScriptConfiguration(scriptPath, scriptType) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    let params = scriptPath || scriptType ? '?' : '';
+    if (scriptPath) params += `&path=${scriptPath}`;
+    if (scriptType) params += `&type=${scriptType}`;
+    const url = `${this.getApiBaseUrl()}scriptconfiguration/${params}`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static updateScriptSchema(id, configSchema) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}scriptconfiguration/${id}/`;
+    return fetch(url, {
+      method: 'PATCH',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        config_schema: configSchema,
+      }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status === 400) {
+        return response.json().then((resp) => {
+          toast.error(resp.ack);
+          return false;
+        });
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static postScriptConfiguration(scriptPath, scriptType, configName, configSchema) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}scriptconfiguration/`;
+    return fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        script_path: scriptPath,
+        script_type: scriptType,
+        config_name: configName,
+        config_schema: configSchema,
+      }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status === 400) {
+        return response.json().then((resp) => {
+          toast.error(resp.ack);
+          return false;
+        });
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
 } // END ManagerInterface
 
 /**

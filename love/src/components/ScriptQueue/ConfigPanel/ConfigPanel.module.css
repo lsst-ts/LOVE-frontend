@@ -198,3 +198,169 @@ a.documentationLink {
   font-weight: 600;
   margin-left: -0.3em;
 }
+
+.configTypeTabs {
+  display: flex;
+  justify-content: space-around;
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--font-size-large);
+  /* padding: 0.5em 0.5em; */
+  box-sizing: border-box;
+  gap: 1em;
+  font-weight: bold;
+}
+
+.configTypeTabs > * {
+  padding: 0.5em 0.5em;
+}
+
+.configTypeTabs > [data-active='true'] {
+  background-color: #01313f;
+}
+
+.configurationControls {
+  display: flex;
+  margin-left: auto;
+}
+
+.saveConfigurationButton svg {
+  width: 1.5em;
+  height: 1.5em;
+  margin-left: 0.5em;
+}
+
+.schemaConfiguration {
+  display: flex;
+  width: 100%;
+}
+
+.scriptForm {
+  max-height: 300px;
+  width: 100%;
+  text-align: left;
+  overflow-y: scroll;
+  background-color: var(--second-quaternary-background-dimmed-color);
+  padding: var(--content-padding);
+  box-sizing: border-box;
+}
+
+/* .saveDivs {
+  height: 2em;
+  width: 2em;
+  border: none;
+  border-radius: 100%;
+  margin: 7px;
+  padding: 4px;
+}
+
+.saveDivs svg {
+  height: 90%;
+  width: 90%;
+}
+
+.saveDivs:hover {
+  background-color: var(--second-quaternary-background-color);
+} */
+
+/* RJSF inputs styles */
+.formTitleModifier {
+  display: none;
+}
+
+.formSchemaTitleModifier {
+  font-weight: bold;
+  font-size: var(--font-size-medium);
+  color: var(--base-font-color);
+  text-align: justify;
+}
+
+.formSchemaDescriptionModifier {
+  font-size: var(--font-size-medium);
+  text-align: left;
+}
+
+.arrayContainer input {
+  margin: 7px;
+}
+
+.deleteItemButtonContainer {
+  display: flex;
+}
+
+.deleteItem {
+  flex-grow: 1;
+}
+
+.deleteItemButton {
+  flex-grow: 1;
+  border-radius: 100%;
+  border: 0;
+  width: 2em;
+  height: 2em;
+  background-color: var(--second-quaternary-background-color);
+  margin: 0.5em 0.6em;
+  cursor: pointer;
+}
+
+.deleteItemButton svg {
+  width: 90%;
+  height: 90%;
+}
+
+.deleteItemButton:hover {
+  background-color: var(--second-quinary-background-color);
+}
+
+.arrayElement {
+  flex-grow: 8;
+  display: flex;
+  align-items: center;
+}
+
+.arrayElement > div {
+  flex-grow: 2;
+  margin: 0 5px;
+}
+
+.availableScriptTypeSeparator {
+  border-bottom: 1px solid var(--second-quaternary-background-color);
+  margin: 1em 0;
+}
+
+.addNewArray button {
+  width: 100%;
+}
+
+.checkboxDescription {
+  margin: 1em 0;
+}
+
+.customButton {
+  font-weight: bold;
+  background-color: var(--tertiary-background-color);
+}
+
+.customButton:hover {
+  background-color: var(--quinary-background-color);
+}
+
+.customSelect {
+  margin-bottom: 7px;
+}
+
+fieldset {
+  border: 0;
+}
+
+fieldset p {
+  text-align: left;
+  font-weight: bold;
+  font-size: var(--font-size-medium);
+  color: var(--base-font-color);
+}
+
+fieldset label {
+  margin: 7px 0;
+  font-weight: bold;
+}

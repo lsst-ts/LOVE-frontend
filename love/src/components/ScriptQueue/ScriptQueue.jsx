@@ -7,7 +7,6 @@ import RecursiveScriptsTree from './RecursiveScriptsTree/RecursiveScriptsTree';
 import WaitingScript from './Scripts/WaitingScript/WaitingScript';
 import ScriptList from './Scripts/ScriptList/ScriptList';
 import CurrentScript from './Scripts/CurrentScript/CurrentScript';
-import AvailableScript from './Scripts/AvailableScript/AvailableScript';
 import FinishedScript from './Scripts/FinishedScript/FinishedScript';
 import DraggableScript from './Scripts/DraggableScript/DraggableScript';
 import styles from './ScriptQueue.module.css';
@@ -17,13 +16,11 @@ import ContextMenu from './Scripts/ContextMenu/ContextMenu';
 import RequeueIcon from '../icons/ScriptQueue/RequeueIcon/RequeueIcon';
 import TerminateIcon from '../icons/ScriptQueue/TerminateIcon/TerminateIcon';
 import MoveToTopIcon from '../icons/ScriptQueue/MoveToTopIcon/MoveToTopIcon';
-import RowExpansionIcon from '../icons/RowExpansionIcon/RowExpansionIcon';
 import MoveToBottomIcon from '../icons/ScriptQueue/MoveToBottomIcon/MoveToBottomIcon';
 import { SALCommandStatus } from '../../redux/actions/ws';
 import Input from '../GeneralPurpose/Input/Input';
 import GlobalState from './GlobalState/GlobalState';
 import ScriptDetails from './Scripts/ScriptDetails';
-
 
 /**
  * Get the hierarchy of scripts and return it in a dictionary.
@@ -32,8 +29,8 @@ import ScriptDetails from './Scripts/ScriptDetails';
  * @example
  * // returns { root: ['script1', 'script2'], folder1: { root: ['script3', 'script4'] } }
  * getScriptHierarchy([{ path: 'script1' }, { path: 'script2' }, { path: 'folder1/script3' }, { path: 'folder1/script4' }])
- * 
-*/
+ *
+ */
 const getScriptHierarchy = (scripts) => {
   const mDict = {};
   for (let i = 0; i < scripts.length; i++) {
@@ -43,8 +40,7 @@ const getScriptHierarchy = (scripts) => {
       if (j === tokens.length - 1) {
         ref['root'] = ref['root'] ?? [];
         ref['root'].push(tokens[j]);
-      }
-      else {
+      } else {
         ref[tokens[j]] = ref[tokens[j]] ?? {};
         ref = ref[tokens[j]];
       }
@@ -746,7 +742,8 @@ export default class ScriptQueue extends Component {
                         category="standard"
                         scriptsTree={this.state.scriptsTree.standard}
                         launchScriptConfig={this.launchScriptConfig}
-                        scriptsBlocked={this.props.commandExecutePermission && !this.state.blockedByAuthlist}/>
+                        scriptsBlocked={this.props.commandExecutePermission && !this.state.blockedByAuthlist}
+                      />
                     </div>
                     <div
                       className={[
@@ -759,7 +756,8 @@ export default class ScriptQueue extends Component {
                         category="external"
                         scriptsTree={this.state.scriptsTree.external}
                         launchScriptConfig={this.launchScriptConfig}
-                        scriptsBlocked={this.props.commandExecutePermission && !this.state.blockedByAuthlist}/>
+                        scriptsBlocked={this.props.commandExecutePermission && !this.state.blockedByAuthlist}
+                      />
                     </div>
                   </div>
                 </ScriptList>

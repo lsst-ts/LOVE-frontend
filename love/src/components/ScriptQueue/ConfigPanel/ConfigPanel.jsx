@@ -3,23 +3,36 @@ import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
 import YAML from 'yaml';
-
-import 'brace/mode/yaml';
-import 'brace/theme/solarized_dark';
+import yaml from 'js-yaml';
+import Form from '@rjsf/core';
+import rjsfValidator from '@rjsf/validator-ajv8';
 import { SCRIPT_DOCUMENTATION_BASE_URL } from 'Config';
 import Select from 'components/GeneralPurpose/Select/Select';
 import styles from './ConfigPanel.module.css';
 import Button from '../../GeneralPurpose/Button/Button';
 import Input from '../../GeneralPurpose/Input/Input';
+import DeleteIcon from '../../icons/DeleteIcon/DeleteIcon';
 import ErrorIcon from '../../icons/ErrorIcon/ErrorIcon';
 import RotateIcon from '../../icons/RotateIcon/RotateIcon';
 import CloseIcon from '../../icons/CloseIcon/CloseIcon';
+import SaveNewIcon from '../../icons/SaveNewIcon/SaveNewIcon';
+import SaveIcon from '../../icons/SaveIcon/SaveIcon';
 import Hoverable from '../../GeneralPurpose/Hoverable/Hoverable';
 import InfoPanel from '../../GeneralPurpose/InfoPanel/InfoPanel';
 import ManagerInterface from '../../../Utils';
+import 'brace/mode/yaml';
+import 'brace/theme/solarized_dark';
 
+// Constants for the config panel
 const NO_SCHEMA_MESSAGE = '# ( waiting for schema . . .)';
+const DEFAULT_CONFIG_NAME = 'last_script';
+const DEFAULT_CONFIG_VALUE = `# Insert your config here:
+# e.g.:
+# wait_time: 3600
+# fail_run: false
+# fail_cleanup: false`;
 
+// Constants for the config validation state machine
 const EMPTY = 'EMPTY';
 const VALIDATING = 'VALIDATING';
 const VALID = 'VALID';
@@ -27,11 +40,36 @@ const ERROR = 'ERROR';
 const SERVER_ERROR = 'SERVER_ERROR';
 const NEED_REVALIDATION = 'NEED_REVALIDATION';
 
+// Mapping between the log levels and their numerical values
 const logLevelMap = {
   Debug: 10,
   Info: 20,
   Warning: 30,
   Error: 40,
+};
+
+/**
+ * Function to get the documentation link for a given script
+ * @param {string} scriptPath
+ * @returns {string}
+ * @example
+ * getDocumentationLink('scripts/auxtel/latiss_acquire_and_take_sequence.py')
+ * // returns 'https://ts-standardscripts.lsst.io/lsst.ts.standardscripts.auxtel.latissAcquireAndTakeSequence.html'
+ */
+const getDocumentationLink = (scriptPath) => {
+  const extensionIndex = scriptPath.lastIndexOf('.');
+  const cleanPath = scriptPath.substring(0, extensionIndex);
+  const dirIndex = cleanPath.lastIndexOf('/');
+  const scriptDirectory = dirIndex > 0 ? cleanPath.substring(0, dirIndex + 1) : '';
+  const scriptName = dirIndex > 0 ? cleanPath.substring(dirIndex + 1) : cleanPath;
+  const cleanScriptName = scriptName
+    .split('_')
+    .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+    .join('');
+  const cleanDirectory = scriptDirectory.split('/').join('.');
+  const camelCasePath = `${cleanDirectory}${cleanScriptName}`;
+  const fullPath = `lsst.ts.standardscripts.${camelCasePath}`;
+  return `${SCRIPT_DOCUMENTATION_BASE_URL}/${fullPath}.html`;
 };
 
 export default class ConfigPanel extends Component {
@@ -52,14 +90,9 @@ export default class ConfigPanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: `# Insert your config here:
-# e.g.:
-# wait_time: 3600
-# fail_run: false
-# fail_cleanup: false
-`,
+      value: DEFAULT_CONFIG_VALUE,
       autoFilledValue: '',
-      width: 500,
+      width: 540,
       height: 500,
       loading: false,
       pauseCheckpoint: '',
@@ -71,8 +104,118 @@ export default class ConfigPanel extends Component {
       configErrorTitle: '',
       validationStatus: EMPTY,
       logLevel: 'Debug',
+      manualConfig: true,
+      showSchema: true,
+      configurationList: [],
+      configurationOptions: [],
+      selectedConfiguration: null,
+      inputConfigurationName: DEFAULT_CONFIG_NAME,
+      formData: {},
     };
   }
+
+  /************************/
+  /* RJSF templates */
+  ObjectFieldTemplate = (props) => {
+    return (
+      <div>
+        {props.title}
+        {props.description}
+        {props.properties.map((element) => (
+          <div className="property-wrapper">{element.content}</div>
+        ))}
+      </div>
+    );
+  };
+
+  CustomTitleField = (props) => {
+    return <div className={styles.formTitleModifier}>{props.title}</div>;
+  };
+
+  CustomDescriptionField = (prop) => {
+    return <div className={styles.formDescriptionModifier}>{this.props.description}</div>;
+  };
+
+  CustomSelect = (props) => {
+    return (
+      <Select
+        className={styles.customSelect}
+        options={props.options.enumOptions}
+        option={props.value}
+        onChange={({ value }) => props.onChange(value)}
+      />
+    );
+  };
+
+  CustomCheckbox = (props) => {
+    return (
+      <>
+        <div>{props.label}</div>
+        <div>{props.schema.description}</div>
+        <input
+          checked={props.value}
+          type="checkbox"
+          onChange={() =>
+            this.setState((state) => ({
+              formData: { ...state.formData, [props.label]: !props.value },
+            }))
+          }
+        ></input>
+      </>
+    );
+  };
+
+  CustomInput = (props) => {
+    return (
+      <Input
+        value={props.value}
+        type={props.schema.type}
+        className={styles.formInput}
+        onChange={(event) => {
+          props.onChange(event.target.value);
+        }}
+      />
+    );
+  };
+
+  ArrayFieldTemplate = (props) => {
+    return (
+      <>
+        <div className={styles.formSchemaTitleModifier}>{props.title}</div>
+        <div className={styles.formSchemaDescriptionModifier}>{props.schema.description}</div>
+        <div className={styles.arrayContainer}>
+          {props.items.map((element) => {
+            return (
+              <>
+                <div className={styles.deleteItemButtonContainer}>
+                  <div className={styles.arrayElement}>{element.children}</div>
+                  <div className={styles.deleteItem}>
+                    <button
+                      type="button"
+                      className={styles.deleteItemButton}
+                      onClick={element.onDropIndexClick(element.index)}
+                    >
+                      <DeleteIcon />
+                    </button>
+                  </div>
+                </div>
+              </>
+            );
+          })}
+          <div className={styles.availableScriptTypeSeparator} />
+
+          <div className={styles.addNewArray}>
+            {props.canAdd && (
+              <Button className={styles.customButton} onClick={props.onAddClick}>
+                + Add new entry
+              </Button>
+            )}
+          </div>
+        </div>
+      </>
+    );
+  };
+  /************************/
 
   validateConfig = (newValue, noRevalidation) => {
     this.setState({ value: newValue });
@@ -120,6 +263,7 @@ export default class ConfigPanel extends Component {
             autoFilledValue: YAML.stringify(r.output),
             configErrors: [],
             configErrorTitle: '',
+            jsonSchema: r.output,
           });
           return;
         }
@@ -164,6 +308,26 @@ export default class ConfigPanel extends Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
+    if (
+      this.props.configPanel?.script?.path &&
+      prevProps.configPanel?.script?.path !== this.props.configPanel?.script?.path
+    ) {
+      ManagerInterface.getScriptConfiguration(
+        this.props.configPanel.script.path,
+        this.props.configPanel.script.type,
+      ).then((data) => {
+        const options = data.map((conf) => ({ label: conf.config_name, value: conf.id }));
+        const configuration = data.find((conf) => conf.config_name === 'last_script');
+        this.setState((state) => ({
+          configurationList: data,
+          configurationOptions: options,
+          selectedConfiguration: configuration ? { label: configuration.config_name, value: configuration.id } : null,
+          value: configuration?.config_schema ?? DEFAULT_CONFIG_VALUE,
+          inputConfigurationName: configuration?.config_name ?? DEFAULT_CONFIG_NAME,
+        }));
+      });
+    }
+
     if (this.state.validationStatus !== prevState.validationStatus) {
       const { validationStatus } = this.state;
 
@@ -196,6 +360,21 @@ export default class ConfigPanel extends Component {
     });
   };
 
+  saveLastUsedConfiguration = () => {
+    const configuration = this.state.configurationList.find((conf) => conf.config_name === DEFAULT_CONFIG_NAME);
+    if (configuration) {
+      const id = configuration.id;
+      const configSchema = this.state.value;
+      // ManagerInterface.updateScriptName(id, configSchema);
+    } else {
+      const scriptPath = this.props.configPanel.script.path;
+      const scriptType = this.props.configPanel.script.type;
+      const configName = DEFAULT_CONFIG_NAME;
+      const configSchema = this.state.value;
+      // ManagerInterface.postScriptConfiguration(scriptPath, scriptType, configName, configSchema);
+    }
+  };
+
   onLaunch = () => {
     this.setState({
       loading: true,
@@ -219,7 +398,7 @@ export default class ConfigPanel extends Component {
   startResizingWithMouse = (ev) => {
     this.setState({ resizingStart: { x: ev.clientX, y: ev.clientY, sizeWeight: this.state.sizeWeight } });
     document.onmousemove = this.onMouseMove;
-    document.onmouseup = ConfigPanel.onMouseUp;
+    document.onmouseup = this.onMouseUp;
   };
 
   onMouseMove = (ev) => {
@@ -239,7 +418,7 @@ export default class ConfigPanel extends Component {
     }
   };
 
-  static onMouseUp = () => {
+  onMouseUp = () => {
     document.onmousemove = null;
     document.onmouseup = null;
   };
@@ -248,27 +427,88 @@ export default class ConfigPanel extends Component {
     this.setState({ logLevel: value });
   };
 
-  static getDocumentationLink = (scriptPath) => {
-    const extensionIndex = scriptPath.lastIndexOf('.');
-    const cleanPath = scriptPath.substring(0, extensionIndex);
-    const dirIndex = cleanPath.lastIndexOf('/');
-    const scriptDirectory = dirIndex > 0 ? cleanPath.substring(0, dirIndex + 1) : '';
-    const scriptName = dirIndex > 0 ? cleanPath.substring(dirIndex + 1) : cleanPath;
-    const cleanScriptName = scriptName
-      .split('_')
-      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
-      .join('');
-    const cleanDirectory = scriptDirectory.split('/').join('.');
-    const camelCasePath = `${cleanDirectory}${cleanScriptName}`;
-    const fullPath = `lsst.ts.standardscripts.${camelCasePath}`;
-    return `${SCRIPT_DOCUMENTATION_BASE_URL}/${fullPath}.html`;
+  renderConfigurationsOptions = () => {
+    const {
+      validationStatus,
+      value,
+      configurationList,
+      configurationOptions,
+      selectedConfiguration,
+      inputConfigurationName,
+    } = this.state;
+    let configurationSchemaChanged = false;
+    let configurationNameChanged = false;
+
+    const configuration = configurationList.find((conf) => conf.id === selectedConfiguration?.value);
+    if (configuration && value !== configuration.config_schema) {
+      configurationSchemaChanged = true;
+    }
+
+    if (configurationList.findIndex((conf) => conf.config_name === inputConfigurationName) !== -1) {
+      configurationNameChanged = true;
+    }
+
+    let controlHtml;
+    if (configurationSchemaChanged || configurationNameChanged) {
+      controlHtml = (
+        <Input
+          value={inputConfigurationName}
+          onChange={(e) => this.setState({ inputConfigurationName: e.target.value })}
+          className={styles.schemaInput}
+        />
+      );
+    }
+
+    if (!configurationSchemaChanged && !configurationNameChanged) {
+      controlHtml = (
+        <Select
+          options={configurationOptions}
+          placeholder="Select an option"
+          value={selectedConfiguration}
+          onChange={(e) => {
+            const configuration = configurationList.find((conf) => conf.id === e.value);
+            this.setState({
+              selectedConfiguration: e,
+              value: configuration?.config_schema ?? '',
+              inputConfigurationName: configuration?.config_name ?? '',
+            });
+          }}
+        />
+      );
+    }
+
+    const buttonHtml = (
+      <Button
+        disabled={
+          [ERROR, VALIDATING, NEED_REVALIDATION].includes(this.state.validationStatus) ||
+          (!configurationSchemaChanged && !configurationNameChanged)
+        }
+        status="transparent"
+        className={styles.saveConfigurationButton}
+        onClick={(e) => {
+          if (configurationNameChanged) console.log('Save new configuration');
+          else console.log('Save configuration');
+        }}
+      >
+        {configurationNameChanged ? <SaveNewIcon /> : <SaveIcon />}
+      </Button>
+    );
+
+    return (
+      <div className={styles.configurationControls}>
+        {controlHtml}
+        {buttonHtml}
+      </div>
+    );
   };
 
   render() {
     const { orientation } = this.state;
-    const scriptName = this.props.configPanel.name ? this.props.configPanel.name : '';
-    const scriptPath = this.props.configPanel.script ? this.props.configPanel.script?.path : '';
-    const isStandard = this.props.configPanel.script ? this.props.configPanel.script?.type === 'standard' : false;
+    const scriptName = this.props.configPanel?.name ?? '';
+    const scriptPath = this.props.configPanel?.script?.path ?? '';
+    const yamlSchema = this.props.configPanel?.script?.configSchema ?? '';
+    const isStandard = this.props.configPanel?.script ? this.props.configPanel.script?.type === 'standard' : false;
+
     const sidePanelSize = {
       stacked: {
         firstWidth: `${this.state.width}px`,
@@ -290,6 +530,17 @@ export default class ConfigPanel extends Component {
     };
 
     const configPanelBarClassName = 'configPanelBar';
+
+    // RJSF variables
+    const rjsfSchema = yamlSchema ? yaml.load(yamlSchema) : {};
+    const rjsfWidgets = {
+      SelectWidget: this.CustomSelect,
+      TextWidget: this.CustomInput,
+      CheckboxWidget: this.CustomCheckbox,
+    };
+    const rjsfFields = {
+      TitleField: this.CustomTitleField,
+    };
 
     return this.props.configPanel.show ? (
       <Rnd
@@ -328,7 +579,7 @@ export default class ConfigPanel extends Component {
                   className={styles.documentationLink}
                   target="_blank"
                   rel="noreferrer"
-                  href={ConfigPanel.getDocumentationLink(scriptPath)}
+                  href={getDocumentationLink(scriptPath)}
                 >
                   Go to documentation
                 </a>
@@ -359,8 +610,6 @@ export default class ConfigPanel extends Component {
 
             <div className={styles.sidePanel}>
               <div className={styles.sidePanelHeaderContainer}>
-                {' '}
-                {/* title={this.state.configErrorTrace */}
                 <Hoverable>
                   <div style={{ display: 'flex' }}>
                     <h3>CONFIG</h3>
@@ -392,19 +641,51 @@ export default class ConfigPanel extends Component {
                   )}
                 </Hoverable>
               </div>
-              <AceEditor
-                mode="yaml"
-                theme="solarized_dark"
-                name="UNIQUE_ID_OF_DIV"
-                onChange={this.validateConfig}
-                width={sidePanelSize[orientation].secondWidth}
-                height={sidePanelSize[orientation].secondHeight}
-                value={this.state.value}
-                editorProps={{ $blockScrolling: true }}
-                fontSize={18}
-                tabSize={2}
-                showPrintMargin={false}
-              />
+              <div className={styles.schemaConfiguration}>
+                <div className={styles.configTypeTabs}>
+                  <div data-active={this.state.manualConfig} onClick={() => this.setState({ manualConfig: true })}>
+                    MANUAL CONFIG
+                  </div>
+                  <div data-active={!this.state.manualConfig} onClick={() => this.setState({ manualConfig: false })}>
+                    FORM CONFIG
+                  </div>
+                </div>
+                {this.renderConfigurationsOptions()}
+              </div>
+              {this.state.manualConfig ? (
+                <AceEditor
+                  mode="yaml"
+                  theme="solarized_dark"
+                  name="UNIQUE_ID_OF_DIV"
+                  onChange={this.validateConfig}
+                  width={sidePanelSize[orientation].secondWidth}
+                  height={sidePanelSize[orientation].secondHeight}
+                  value={this.state.value}
+                  editorProps={{ $blockScrolling: true }}
+                  fontSize={18}
+                  tabSize={2}
+                  showPrintMargin={false}
+                />
+              ) : (
+                <Form
+                  validator={rjsfValidator}
+                  schema={rjsfSchema}
+                  // uiSchema={uiSchema}
+                  widgets={rjsfWidgets}
+                  fields={rjsfFields}
+                  children={true}
+                  className={styles.scriptForm}
+                  formData={this.state.formData}
+                  templates={{ ArrayFieldTemplate: this.ArrayFieldTemplate }}
+                  onChange={(e) => {
+                    console.log(e.formData);
+                    this.setState({
+                      formData: e.formData,
+                      value: yaml.dump(e.formData, { flowLevel: 2 }),
+                    });
+                  }}
+                />
+              )}
             </div>
           </div>
           <div className={[styles.bottomBar, configPanelBarClassName].join(' ')}>
