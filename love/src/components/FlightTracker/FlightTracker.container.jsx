@@ -39,7 +39,7 @@ const FlightTrackerContainer = ({ isRaw, subscriptions, status, aircrafts }) => 
 
 const mapStateToProps = (state) => {
   const data = getAircraftTracker(state);
-  return data;
+  return { ...data };
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
