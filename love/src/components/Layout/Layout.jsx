@@ -303,13 +303,11 @@ class Layout extends Component {
       case 'unknown':
         return <UnknownLocationIcon className={style} />;
       case 'tucson':
-        return <CactusIcon title="PRUEBA DE TITULO" className={style} />;
+        return <CactusIcon className={style} />;
       case 'base':
         return <BeachIcon className={style} />;
       case 'summit':
         return <MountainIcon className={style} />;
-      // case 'LSST':
-      //   return <OfficeIcon className={style} />;
       default:
         return <UnknownLocationIcon className={style} />;
     }
