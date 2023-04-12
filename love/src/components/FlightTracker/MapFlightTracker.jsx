@@ -49,7 +49,7 @@ export default class MapFlightTracker extends Component {
 
   componentDidUpdate = (prevProps) => {
     const { zoom, planes } = this.props;
-    if (!isEqual(zoom, prevProps.zoom) || !isEqual(planes, prevProps.planes)) {
+    if (zoom !== prevProps.zoom || !isEqual(planes, prevProps.planes)) {
       planes.forEach((airCraft) => {
         this.addPlanes(airCraft);
       });
