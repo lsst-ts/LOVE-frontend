@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './FlightTracker.module.css';
+import { isEqual } from 'lodash';
 import * as d3 from 'd3';
 import CoquimboURL from './Maps/Coquimbo.geojson';
 import ValparaisoURL from './Maps/Valparaiso.geojson';
@@ -12,36 +13,47 @@ import { ReactComponent as Map100 } from './Maps/Map100.svg';
 export default class MapFlightTracker extends Component {
   static propTypes = {
     /* Planes data with the distance to the center */
-    planes: PropTypes.object,
+    planes: PropTypes.arrayOf(PropTypes.objectOf({
+      id: PropTypes.string,
+      latitude: PropTypes.number,
+      longitude: PropTypes.number,
+      altitude: PropTypes.number,
+      track: PropTypes.number,
+      distance: PropTypes.number,
+      speed: PropTypes.number,
+    })),
     /* Level of maps zoom*/
     zoom: PropTypes.string,
+    /** Function to determine the status of the aircraft, from the distance to the radar */
+    distanceStatus: PropTypes.func,
+  };
+
+  static defaultProps = {
+    zoom: '200',
+    planes: [],
+    distanceStatus: () => {},
   };
 
   constructor(props) {
     super(props);
+    this.telescopeCoords = [-70.73709442008416, -30.240476801377167];
+    this.long_lat_serena = [-71.25715298618236, -29.89192170340795];
   }
 
   componentDidMount = () => {
-    this.insertTooltip();
-    this.addTooltipSerena();
+    const { planes } = this.props;
+    planes.map((airCraft) => {
+      this.addPlanes(airCraft);
+    });
   };
 
   componentDidUpdate = (prevProps) => {
-    const { zoom } = this.props;
-    if (zoom !== prevProps.zoom) {
-      this.insertTooltip();
-      const { planes } = this.props;
+    const { zoom, planes } = this.props;
+    if (!isEqual(zoom, prevProps.zoom) || !isEqual(planes, prevProps.planes)) {
       planes.map((airCraft) => {
         this.addPlanes(airCraft);
       });
     }
-    if (this.props.planes !== prevProps.planes) {
-      const { planes } = this.props;
-      planes.map((airCraft) => {
-        this.addPlanes(airCraft);
-      });
-    }
-    this.addTooltipSerena();
   };
 
   /**
@@ -50,7 +62,7 @@ export default class MapFlightTracker extends Component {
    * @param {string} zoom: the zoom that represent the actual map rendering
    * @returns the coordinates for the svg of the map according to its latitude and longitude
    */
-  cordsPlaneInMap(latitude, longitude, zoom) {
+  coordsPlaneInMap(latitude, longitude, zoom) {
     const width = 500;
     const height = 500;
     let scale = 13;
@@ -59,11 +71,12 @@ export default class MapFlightTracker extends Component {
 
     let projection = d3
       .geoMercator()
-      .center([-70.73709442008416, -30.240476801377167])
+      .center(this.telescopeCoords)
       .scale(width * scale) // scale; 13 - 200 km,  16.05 -160 km and 25.2 -100 km.
       .translate([width / 2, height / 2]);
 
-    return projection([latitude, longitude]);
+    const position = projection([longitude, latitude]);
+    return position;
   }
 
   /**
@@ -72,11 +85,10 @@ export default class MapFlightTracker extends Component {
   getRegionSvg() {
     const width = 500;
     const height = 500;
-    const telescopeCoords = [-70.73709442008416, -30.240476801377167];
 
     const projection = d3
       .geoMercator()
-      .center(telescopeCoords)
+      .center(this.telescopeCoords)
       .scale(width * 25.2) // scale; 13 - 200 km,  16.05 -160 km and 25.2 -100 km.
       .translate([width / 2, height / 2]);
 
@@ -191,57 +203,6 @@ export default class MapFlightTracker extends Component {
             .attr('r', '230.1434983635952')
             .attr('fill', '#bcd8e2')
             .style('opacity', '10%');
-
-          // telescope icon.
-          const pathTelescope =
-            'm.12,19.45v1.14h.31v1.66s.62.01,1.58.03v20.68h17.78c1.55,3.17,7.66,12.94,9.69,16.18h-.02l.5.87.5.87.5-.87.5-.87h-.02c2.03-3.23,8.14-13.01,9.69-16.18h21.78v-9.33l-18.26-11.01-17.45-.07v-.31c.11,0,.17,0,.17,0v-4.5h1.23l2.2-.32v-2.74l-3.03-10.21-.74-.55-.19-.6-3.06-2.08h-.42l-1.6-1.11h-5.62l-.02.55H7.8l-.78-.55H1.12l.02.46h.55v.55l-1.57.09';
-
-          svg
-            .append('g')
-            .attr('id', 'telescopeIconG')
-            // .attr('transform', `translate(${width / 2}, ${height / 2})  scale(0.5)`)
-            .append('path')
-            .attr('id', 'telescopeIconP')
-            .attr('d', pathTelescope)
-            .style('fill', '#bcd8e2')
-            .style('stroke', '#bcd8e2');
-
-          const sizeSVG = svg.node().getBoundingClientRect().width,
-            scaleToPixels = sizeSVG / 500;
-
-          const sizeTel = svg.select(`#telescopeIconG`).node().getBoundingClientRect(),
-            heightTel = sizeTel.height / scaleToPixels,
-            widthTel = sizeTel.width / scaleToPixels;
-
-          const scale = 0.33;
-          svg
-            .select('#telescopeIconG')
-            .attr(
-              'transform',
-              `translate(${width / 2 - (widthTel * scale) / 2}, ${height / 2 - heightTel * scale})  scale(${scale})`,
-            );
-
-          // La Serena.
-          const long_lat_serena = [-71.25715298618236, -29.89192170340795];
-          const coords_serena = projection(long_lat_serena);
-
-          svg
-            .append('circle')
-            .attr('id', 'circle_serena')
-            .attr('cx', `${coords_serena[0]}`)
-            .attr('cy', `${coords_serena[1]}`)
-            .attr('r', '4')
-            .classed(styles.laSerena, true);
-
-          const coordsTel = projection(telescopeCoords);
-
-          // svg
-          //   .append('circle')
-          //   .attr('id', 'circle_serena')
-          //   .attr('cx', `${coordsTel[0]}`)
-          //   .attr('cy', `${coordsTel[1]}`)
-          //   .attr('r', '5')
-          //   .classed(styles.laSerena, true);
         });
       });
     });
@@ -255,25 +216,26 @@ export default class MapFlightTracker extends Component {
    */
   addPlanes(airCraft) {
     const { zoom } = this.props;
-    const { id, distance, loc } = airCraft;
+    const { id, distance, latitude, longitude, track } = airCraft;
     const scale = 0.75; //The Planes size
 
     /* Planes out of zoom */
-    if (zoom === '160' && distance[0] > 160) return;
-    else if (zoom === '100' && distance[0] > 100) return;
+    if (zoom === '160' && distance > 160) return;
+    else if (zoom === '100' && distance > 100) return;
 
-    const [longitude, latitude] = loc;
-    const [cordx, cordy] = this.cordsPlaneInMap(latitude, longitude, this.props.zoom);
+    const [cordx, cordy] = this.coordsPlaneInMap(latitude, longitude, this.props.zoom);
 
     /* Define plane's color by zone */
     let color = '#bcd8e2',
       opacity = '0.33';
-    const status = distance[1];
+    const status = this.props.distanceStatus(distance);
     if (status !== 'running') {
+      if (status === 'warning') {
+        opacity = '0.66';
+      }
       opacity = status === 'warning' ? '0.66' : '1';
     }
 
-    var rotateRandom = Math.floor(Math.random() * 360);
     /* Path plane */
     const svg = d3.select('#mapTelescope');
     const pathBorderPlane =
@@ -281,10 +243,10 @@ export default class MapFlightTracker extends Component {
     const pointsFillPlane = '.18 20.95 8.59 .33 16.98 20.95 15.54 20.95 8.59 14.74 1.55 20.98 .18 20.95';
 
     /* Color of circles if some plane is inside the radius*/
-    if (distance[0] < 100) {
-      svg.select('#intern_circle').style('stroke', '#df5601');
-    } else if (distance[0] < 160) {
-      svg.select('#middle_circle').style('stroke', '#d9cd03');
+    if (distance < 100) {
+      svg.select('#intern_circle').attr('class', styles.alertStroke);
+    } else if (distance < 160) {
+      svg.select('#middle_circle').attr('class', styles.warningStroke);
     }
 
     /* Remove the g airCraft previous.*/
@@ -302,18 +264,28 @@ export default class MapFlightTracker extends Component {
       .append('polygon')
       .attr('id', `polyggon${id}`)
       .attr('points', pointsFillPlane)
-      .style('fill', color)
-      .style('opacity', opacity)
-      .on('mouseover', function () {
-        return tooltip
-          .style('visibility', 'visible')
-          .attr('transform', `translate(${cordx + 10}, ${cordy})`) //change tootlip position according to the plane
-          .select('#textTool') //change tootlip text according to the plane id
-          .text(`${id}`);
-      })
-      .on('mouseout', function () {
-        return tooltip.style('visibility', 'hidden');
-      });
+      .attr('class', status === 'warning' ? styles.warningFill : (status === 'alert' ? styles.alertFill : styles.runningFill) )
+      .style('opacity', opacity);
+
+    svg
+      .append('rect')
+      .attr('id', `rect-id${id}`)
+      .attr('x', `${cordx + 20}`)
+      .attr('y', `${cordy - 20}`)
+      .attr("width", '60px')
+      .attr("height", '1.25em')
+      .attr('class', styles.rect);
+
+    svg
+      .append('text')
+      .attr('id', `text-id${id}`)
+      .attr('x', `${cordx + 50}`)
+      .attr('y', `${cordy - 10}`)
+      .attr('font-size', '75%')
+      .attr('alignment-baseline', 'middle')
+      .attr('text-anchor', 'middle')
+      .attr('class', styles.textPlane)
+      .text(`${id}`);
 
     /* Add plane in map part 2*/
     svg
@@ -324,7 +296,6 @@ export default class MapFlightTracker extends Component {
       .attr('class', styles.pathPlane)
       .style('fill', color)
       .style('opacity', opacity)
-      .style('opacity', '100%')
       .style('stroke', 'none');
 
     // Get the size in pixels of svg
@@ -364,55 +335,7 @@ export default class MapFlightTracker extends Component {
       .select(`#g${id}`)
       .style('transform-box', 'fill-box')
       .style('transform-origin', `center ${heightTotalPlane / scale - heightPlane / 2}px`)
-      .style('rotate', `${rotateRandom}deg`);
-  }
-
-  /**
-   * Function to insert the tooltip to use by planes
-   */
-  insertTooltip() {
-    const map = d3.select('#mapTelescope');
-    const [width, height] = [4, 3];
-    map
-      .append('g')
-      .attr('id', 'tooltip')
-      .style('visibility', 'hidden')
-      .append('rect')
-      .attr('width', `${width}em`)
-      .attr('height', `${height}%`)
-      .attr('fill', '#bcd8e2');
-
-    map
-      .select('#tooltip')
-      .append('text')
-      .attr('id', 'textTool')
-      .attr('x', `${width / 1.5}em`)
-      .attr('y', `${height / 2}%`)
-      .attr('font-size', '75%')
-      .attr('alignment-baseline', 'middle')
-      .attr('text-anchor', 'middle');
-  }
-
-  /**
-   * Add the tootip to the point associated to La Serena
-   */
-  addTooltipSerena() {
-    const svg = d3.select('#mapTelescope');
-    var tooltip = d3.select('#tooltip');
-    const long_lat_serena = [-71.25715298618236, -29.89192170340795];
-    const coords_serena = this.cordsPlaneInMap(long_lat_serena[0], long_lat_serena[1], this.props.zoom);
-    svg
-      .select('#circle_serena')
-      .on('mouseover', function () {
-        return tooltip
-          .style('visibility', 'visible')
-          .attr('transform', `translate(${coords_serena[0] + 10}, ${coords_serena[1]})`) //change tootlip position according to the plane
-          .select('#textTool') //change tootlip text according to the plane id
-          .text('La Serena');
-      })
-      .on('mouseout', function () {
-        return tooltip.style('visibility', 'hidden');
-      });
+      .style('rotate', `${track}deg`);
   }
 
   /**
