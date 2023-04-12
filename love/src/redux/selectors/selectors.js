@@ -982,17 +982,17 @@ export const getMirrorCoversMotionState = (state) => {
   };
 };
 
-export const getFlightTracker = (state) => {
-  const subscriptions = ['telemetry-FlightTracker-0-data'];
+export const getAircraftTracker = (state) => {
+  const subscriptions = ['telemetry-AircraftTracker-0-data'];
   const data = getStreamsData(state, subscriptions);
 
-  const aircraftId = data['telemetry-FlightTracker-0-data']?.id?.value ?? ['SKU271', 'LAN512', 'LAN020', undefined, undefined, undefined, undefined, undefined, undefined, undefined];
-  const latitude = data['telemetry-FlightTracker-0-data']?.latitude?.value ?? [-29.9604, -29.69192, -31.7404, 0, 0, 0, 0, 0, 0, 0];
-  const longitude = data['telemetry-FlightTracker-0-data']?.longitude?.value ?? [-70.33709, -72.05715, -70.8, 0, 0, 0, 0, 0, 0, 0];
-  const altitude = data['telemetry-FlightTracker-0-data']?.altitude?.value ?? [1013.2, 1020.34, 980.15, 0, 0, 0, 0, 0, 0, 0];
-  const track = data['telemetry-FlightTracker-0-data']?.track?.value ?? [180, 105, 350, 0, 0, 0, 0, 0, 0, 0];
-  const distance = data['telemetry-FlightTracker-0-data']?.distance?.value ?? [98, 146, 188, 0, 0, 0, 0, 0, 0, 0];
-  const speed = data['telemetry-FlightTracker-0-data']?.speed?.value ?? [800, 900, 1100, 0, 0, 0, 0, 0, 0, 0];
+  const aircraftId = data['telemetry-AircraftTracker-0-data']?.id?.value ?? ['SKU271', 'LAN512', 'LAN020', undefined, undefined, undefined, undefined, undefined, undefined, undefined];
+  const latitude = data['telemetry-AircraftTracker-0-data']?.latitude?.value ?? [-29.9604, -29.69192, -31.7404, 0, 0, 0, 0, 0, 0, 0];
+  const longitude = data['telemetry-AircraftTracker-0-data']?.longitude?.value ?? [-70.33709, -72.05715, -70.8, 0, 0, 0, 0, 0, 0, 0];
+  const altitude = data['telemetry-AircraftTracker-0-data']?.altitude?.value ?? [1013.2, 1020.34, 980.15, 0, 0, 0, 0, 0, 0, 0];
+  const track = data['telemetry-AircraftTracker-0-data']?.track?.value ?? [180, 105, 350, 0, 0, 0, 0, 0, 0, 0];
+  const distance = data['telemetry-AircraftTracker-0-data']?.distance?.value ?? [98, 146, 188, 0, 0, 0, 0, 0, 0, 0];
+  const speed = data['telemetry-AircraftTracker-0-data']?.speed?.value ?? [800, 900, 1100, 0, 0, 0, 0, 0, 0, 0];
 
   let aircrafts = aircraftId.map((id, index) => {
     return {
@@ -1007,7 +1007,7 @@ export const getFlightTracker = (state) => {
   });
 
   return {
-    status: data['telemetry-FlightTracker-0-data']?.status?.value ?? 0,
+    status: data['telemetry-AircraftTracker-0-data']?.status?.value ?? 0,
     aircrafts: aircrafts,
   };
 };

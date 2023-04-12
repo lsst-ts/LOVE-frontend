@@ -7,11 +7,10 @@ import StatusText from '../GeneralPurpose/StatusText/StatusText';
 import Button from '../GeneralPurpose/Button/Button';
 import isEqual from 'lodash';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
-import ManagerInterface from 'Utils';
 import ZoomInIcon from 'components/icons/Zoom/ZoomInIcon';
 import ZoomOutIcon from 'components/icons/Zoom/ZoomOutIcon';
 import moment from 'moment';
-import { flightTrackerStateToMap, flightTrackerStatetoStyle } from 'Config';
+import { aircraftTrackerStateToMap, aircraftTrackerStatetoStyle } from 'Config';
 import styles from './FlightTracker.module.css';
 
 const DEFAULT_POLLING_TIMEOUT = 5000;
@@ -189,8 +188,8 @@ export default class FlightTracker extends Component {
                 <Title>Monitoring status</Title>
               </div>
               <div className={styles.statusElement}>
-                <StatusText title={'Monitoring status'} status={flightTrackerStatetoStyle[flightTrackerStateToMap[status]]} small>
-                  {flightTrackerStateToMap[status]}
+                <StatusText title={'Monitoring status'} status={aircraftTrackerStatetoStyle[aircraftTrackerStateToMap[status]]} small>
+                  {aircraftTrackerStateToMap[status]}
                 </StatusText>
               </div>
             </div>

@@ -1119,12 +1119,12 @@ export const mtdomeMotionStateMap = {
   32: 'STOPPING MOTOR COOLING',
 };
 
-export const flightTrackerStateToMap = {
+export const aircraftTrackerStateToMap = {
   0: 'DISCONNECTED',
   1: 'CONNECTED',
 }
 
-export const flightTrackerStatetoStyle = {
+export const aircraftTrackerStatetoStyle = {
   DISCONNECTED: 'warning',
   CONNECTED: 'running',
 };

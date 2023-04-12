@@ -54,7 +54,7 @@ export const observatoryIndex = {
       },
     },
   },
-  FlightTracker: {
+  AircraftTracker: {
     component: require('../FlightTracker/FlightTracker.container').default,
     schema: {
       ...require('../FlightTracker/FlightTracker.container').schema,
