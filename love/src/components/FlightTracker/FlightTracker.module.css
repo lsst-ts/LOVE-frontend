@@ -1,33 +1,139 @@
 .container {
-    display: flex;
-    flex-flow: row wrap;
-    height: fit-content;
-    justify-content: center;
-  }
-  
-  .Div {
-    background-color: var(--secondary-background-color);
-    color: var(--primary-font-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-  }
-  .Svg {
-    position: absolute;
-    left: calc(50% - 130px);
-    top: 7%;
-    width: auto;
-    overflow: visible;
-    border: 1px solid rgb(49, 111, 235);
-  }
-  
-  .pointing {
-    background-color: aliceblue;
-  }
-  
-  .summaryTable {
-    align-self: center;
-  }
-  
+  display: flex;
+  height: fit-content;
+  justify-content: center;
+}
+.ftComponent {
+  padding-top: 2em;
+  padding-inline: 0.25em;
+}
+
+.Div {
+  background-color: var(--secondary-background-color);
+  color: var(--primary-font-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* .divMap > svg {
+  z-index: 2;
+} */
+
+.Svg {
+  border: 1px solid rgb(255, 255, 255);
+}
+
+.pointing {
+  background-color: aliceblue;
+}
+
+.summaryTable {
+  align-self: center;
+}
+
+td.statusColumn {
+  min-width: 8em;
+  text-align: center;
+}
+
+.divLastUp {
+  text-align: left;
+  font-size: 80%;
+  margin-block: 1em;
+}
+
+.mapDiv {
+  align-self: center;
+  width: 100%;
+  height: 425px;
+}
+
+.CoquimboSvg path {
+  opacity: 0.5;
+  border-radius: 50%;
+  fill: #6f6f6f;
+  fill-opacity: 1;
+  fill-rule: evenodd;
+  stroke: #ffffff;
+  stroke-width: 1;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+  stroke-miterlimit: 4;
+  stroke-dasharray: none;
+  stroke-opacity: 1;
+}
+
+.rect {
+  fill: var(--secondary-background-dimmed-color);
+}
+.circle {
+  background-color: '#2E3E47';
+}
+
+.laSerena {
+  fill: #788f9b;
+}
+
+.tooltip {
+  visibility: hidden;
+  position: absolute;
+}
+
+.pathPlane {
+  transform-box: 'fill-box';
+}
+
+.statusDiv {
+  display: flex;
+  width: 95%;
+}
+
+.statusDivElement {
+  display: flex;
+  width: 50%;
+  margin-right: 5%;
+}
+
+.statusElement {
+  width: 50%;
+  height: 100%;
+}
+
+.divElement {
+  width: 100%;
+  display: grid;
+  justify-content: center;
+}
+.mapContainer {
+  width: 80%;
+  display: inline-grid;
+}
+
+.zoomDiv {
+  display: flex;
+  position: relative;
+  margin-top: -4em;
+  width: min-content;
+}
+
+.zoom {
+  box-shadow: 0.5% 1% 2px 1px rgba(100, 112, 115, 0.444);
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.table {
+  overflow-y: scroll;
+  max-height: 10em;
+}
+
+.iconBtn {
+  display: inline;
+  border-radius: 10%;
+  padding: 0.15em;
+  height: 3em;
+  width: 3em;
+}

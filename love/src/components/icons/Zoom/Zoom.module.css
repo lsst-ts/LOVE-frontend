@@ -1,0 +1,42 @@
+.cls1,
+.cls2 {
+  fill: #1a2d37;
+}
+
+.cls1Not,
+.cls2Not {
+  fill: var(--second-primary-background-color);
+}
+
+.cls1,
+.cls1Not,
+.cls2,
+.cls2Not,
+.cls3 {
+  stroke-miterlimit: 10;
+}
+
+.cls1,
+.cls1Not,
+.cls3 {
+  stroke: #788f9b;
+}
+
+.cls2,
+.cls2Not {
+  stroke: #172f3a;
+}
+
+.cls3 {
+  fill: none;
+}
+
+.svg .svgNot {
+  transform: scale(0.9);
+}
+
+.svg {
+  box-shadow: 0.5% 1% 2px 1px rgba(100, 112, 115, 0.444);
+  touch-action: manipulation;
+  cursor: pointer;
+}
