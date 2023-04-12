@@ -43,6 +43,14 @@ td.statusColumn {
   text-align: left;
   font-size: 80%;
   margin-block: 1em;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  /* grid-auto-rows: 50px; */
+  grid-gap: 10px;
+}
+
+.divLastUp span {
+  display: flex;
 }
 
 .mapDiv {
@@ -84,6 +92,10 @@ td.statusColumn {
 
 .pathPlane {
   transform-box: 'fill-box';
+}
+
+.textPlane {
+  fill: var(--secondary-font-color);
 }
 
 .statusDiv {
@@ -136,4 +148,29 @@ td.statusColumn {
   padding: 0.15em;
   height: 3em;
   width: 3em;
+}
+
+
+.runningFill {
+  fill: #bcd8e2;
+}
+
+.runningStroke {
+  stroke: #bcd8e2;
+}
+
+.warningFill {
+  fill: #d9cd03;
+}
+
+.warningStroke {
+  stroke: #d9cd03;
+}
+
+.alertStroke {
+  stroke: #df5601;
+}
+
+.alertFill {
+  fill: #df5601;
 }

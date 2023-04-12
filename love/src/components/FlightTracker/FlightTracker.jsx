@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styles from './FlightTracker.module.css';
+import PropTypes from 'prop-types';
 import MapFlightTracker from './MapFlightTracker';
 import Value from '../GeneralPurpose/SummaryPanel/Value';
 import Title from '../GeneralPurpose/SummaryPanel/Title';
@@ -10,21 +10,43 @@ import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import ManagerInterface from 'Utils';
 import ZoomInIcon from 'components/icons/Zoom/ZoomInIcon';
 import ZoomOutIcon from 'components/icons/Zoom/ZoomOutIcon';
+import moment from 'moment';
+import { flightTrackerStateToMap, flightTrackerStatetoStyle } from 'Config';
+import styles from './FlightTracker.module.css';
 
 const DEFAULT_POLLING_TIMEOUT = 5000;
 
 export default class FlightTracker extends Component {
+  static propTypes = {
+    status: PropTypes.number,
+    aircrafts: PropTypes.arrayOf(PropTypes.objectOf({
+      id: PropTypes.string,
+      latitude: PropTypes.number,
+      longitude: PropTypes.number,
+      altitude: PropTypes.number,
+      track: PropTypes.number,
+      distance: PropTypes.number,
+      speed: PropTypes.number,
+    })),
+
+  };
+
+  static defaultProps = {
+    status: 0,
+    aircrafts: [],
+  };
+
   constructor(props) {
     super(props);
     this.pollingInterval = null;
     this.countPollingIterval = null;
     this.state = {
-      planes: [],
-      planesState: {},
       lastUpdate: 0,
-      planesDistance: {},
       zoom: '200',
+      aircraftInRadius: 0,
     };
+    this.RADIO1 = 160; // Distance of Warning
+    this.RADIO2 = 100; // Distance of Alert
   }
 
   /**
@@ -48,95 +70,24 @@ export default class FlightTracker extends Component {
     return d;
   };
 
-  componentDidUpdate = (prevProps, prevState) => {
-    const RADIO1 = 160;
-    const RADIO2 = 100;
-
-    if (!isEqual(prevState.planes, this.state.planes)) {
-      // const newTimers = prevState.timers;
-      const newPlanesState = prevState.planesState;
-      const newPlanesDistance = {};
-
-      const listIdPlanes = [];
-      this.state.planes.map((value) => {
-        listIdPlanes.push(value.id);
+  componentDidUpdate = (prevProps) => {
+    if(!isEqual(prevProps.aircrafts, this.props.aircrafts)) {
+      const aircraftInRadius = this.props.aircrafts.filter((aircraft) => aircraft.id !== undefined &&
+        aircraft.id !== null && aircraft.id !== '' ).length;
+      this.setState({
+        aircraftInRadius: aircraftInRadius,
+        lastUpdate: Date.now(),
       });
-
-      //Delete the planes that are no longer there from planesState
-      prevState.planes.map((value) => {
-        if (!(value.id in listIdPlanes)) {
-          delete newPlanesState[id];
-        }
-      });
-
-      this.state.planes.map((value) => {
-        const { loc, id } = value;
-
-        const dist = this.planeDistance(loc);
-        newPlanesDistance[id] = dist;
-        //Add the new planes in planeState
-        if (!newPlanesState.hasOwnProperty(id)) newPlanesState[id] = 'running';
-
-        //Plane inside RADIO1
-        if (dist < RADIO1) {
-          //Plane between RADIO1 and RADIO2
-          if (!dist < RADIO2) {
-            if (this.state.planesState[id] != 'warning') newPlanesState[id] = 'warning';
-          }
-          //Plane within RADIO2
-          else {
-            if (this.state.planesState[id] != 'alert') newPlanesState[id] = 'alert';
-          }
-        } else {
-          if (this.state.planesState[id] != 'running') {
-            newPlanesState[id] = 'running';
-          }
-        }
-      });
-
-      //setState with the parameters newPlanesState
-      this.setState({ planesState: newPlanesState, planesDistance: newPlanesDistance });
     }
   };
 
   componentDidMount = () => {
-    //Get Planes's data from API initial
-    ManagerInterface.getDataFlightTracker('(-30.2326, -70.7312)', '200').then((res) => {
-      //Set up initial state planesState
-      const planesStateIN = {};
-      // const timers = {};
-      const planeDistance = {};
-      res.map((value) => {
-        planesStateIN[value.id] = 'running';
-        const distance = this.planeDistance(value.loc);
-        planeDistance[value.id] = distance;
-        if (distance < 160) {
-          if (distance < 100) planesStateIN[value.id] = 'alert';
-          else planesStateIN[value.id] = 'warning';
-        }
-      });
-
-      this.setState({
-        planes: res,
-        lastUpdate: Date.now(),
-        planesState: planesStateIN,
-        planesDistance: planeDistance,
-      });
+    const aircraftInRadius = this.props.aircrafts.filter((aircraft) => aircraft.id !== undefined &&
+      aircraft.id !== null && aircraft.id !== '' ).length;
+    this.setState({
+      aircraftInRadius: aircraftInRadius,
+      lastUpdate: Date.now(),
     });
-
-    //Get Planes's data from API every x seconds.
-    if (this.pollingInterval) clearInterval(this.pollingInterva);
-    this.pollingInterval = setInterval(
-      () => {
-        ManagerInterface.getDataFlightTracker('(-30.2326, -70.7312)', '200').then((res) => {
-          this.setState({
-            planes: res,
-            lastUpdate: Date.now(),
-          });
-        });
-      },
-      this.props.pollingTimeout ? this.props.pollingTimeout * 1000 : DEFAULT_POLLING_TIMEOUT,
-    );
   };
 
   /**
@@ -157,12 +108,25 @@ export default class FlightTracker extends Component {
     else if (zoom === '160') this.setState({ zoom: '200' });
   };
 
+  /**
+   * Function to determine the status of the aircraft, from the distance to the radar
+   */
+  distanceStatus = (distance) => {
+    if (distance < this.RADIO2) return 'alert';
+    if (distance < this.RADIO1) return 'warning';
+    return 'running';
+  }
+
   render() {
-    const headers = [
+    const tableData = [];
+    const headers= [
       {
         field: 'id',
         title: 'AirCraft ID',
         type: 'string',
+        render: (value) => {
+          return value ?? '-';
+        },
       },
       {
         field: 'distance',
@@ -170,61 +134,51 @@ export default class FlightTracker extends Component {
         type: 'array',
         className: styles.statusColumn,
         render: (value) => {
-          return (
-            <StatusText small status={value[1]}>
-              {value[0].toString() + 'km'}
+          if (value) return (
+            <StatusText small status={this.distanceStatus(value)}>
+              {value.toString() + ' km'}
             </StatusText>
           );
+          else return '-';
         },
       },
       {
         field: 'latitude',
         title: 'Latitude',
         render: (value) => {
-          return Math.round(value * 100) / 100;
+          if (value) return Math.round(value * 100) / 100;
+          else return '-';
         },
       },
       {
         field: 'longitude',
         title: 'Longitude',
         render: (value) => {
-          return Math.round(value * 1000) / 1000;
+          if (value) return Math.round(value * 1000) / 1000;
+          else return '-';
         },
       },
-
       {
-        field: 'vel',
-        title: 'Velocity',
+        field: 'speed',
+        title: 'Ground Speed',
         type: 'string',
         render: (value) => {
-          return value + 'mph';
+          if (value) return value + ' mph';
+          else return '-';
         },
       },
     ];
 
-    const { planes } = this.state;
-    const tableData = [];
-    planes.forEach((element) => {
-      const { id } = element;
-      tableData.push({
-        ...element,
-        longitude: element['loc'][0] ?? 'undefined',
-        latitude: element['loc'][1] ?? 'undefined',
-        distance: [Math.round(this.state.planesDistance[id]) ?? 'undefined', this.state.planesState[id] ?? 'undefined'],
-      });
+    const { aircrafts, status } = this.props;
+    aircrafts.forEach(element => {
+      tableData.push(element);
     });
 
     const dateNow = Date.now();
-    let timerLength = 0;
-    for (const [key, value] of Object.entries(this.state.planesState)) {
-      if (value != 'running') {
-        timerLength += 1;
-      }
-    }
 
     let zoomOut = this.state.zoom === '200' ? <ZoomOutIcon block={true}></ZoomOutIcon> : <ZoomOutIcon></ZoomOutIcon>;
     let zoomIn = this.state.zoom === '100' ? <ZoomInIcon block={true}></ZoomInIcon> : <ZoomInIcon></ZoomInIcon>;
-    const inRadius = timerLength > 0 ? 'warning' : 'ok';
+    const inRadius = this.state.aircraftInRadius > 0 ? 'warning' : 'ok';
 
     return (
       <div className={styles.ftComponent}>
@@ -235,8 +189,8 @@ export default class FlightTracker extends Component {
                 <Title>Monitoring status</Title>
               </div>
               <div className={styles.statusElement}>
-                <StatusText title={'Monitoring status'} status={'running'} small>
-                  {'Connected'}
+                <StatusText title={'Monitoring status'} status={flightTrackerStatetoStyle[flightTrackerStateToMap[status]]} small>
+                  {flightTrackerStateToMap[status]}
                 </StatusText>
               </div>
             </div>
@@ -247,7 +201,7 @@ export default class FlightTracker extends Component {
               <div className={styles.statusElement}>
                 <Value>
                   <StatusText title={'Aircraft in Radius'} status={inRadius} small>
-                    {timerLength.toString()}
+                    {this.state.aircraftInRadius}
                   </StatusText>
                 </Value>
               </div>
@@ -255,7 +209,11 @@ export default class FlightTracker extends Component {
           </div>
         </div>
         <div className={styles.mapContainer}>
-          <MapFlightTracker planes={tableData} zoom={this.state.zoom}></MapFlightTracker>
+          <MapFlightTracker
+            planes={tableData}
+            zoom={this.state.zoom}
+            distanceStatus={this.distanceStatus}
+          />
           <div className={styles.zoomDiv}>
             <Button
               className={styles.iconBtn}
@@ -282,7 +240,11 @@ export default class FlightTracker extends Component {
           <div className={styles.table}>
             <SimpleTable headers={headers} data={tableData}></SimpleTable>
           </div>
-          <div className={styles.divLastUp}>LAST UPDATE: {Math.round((dateNow - this.state.lastUpdate) / 1000)}SEC</div>
+          <div className={styles.divLastUp}>
+            <span>LAST UPDATE: { moment(dateNow).format('HH:mm:ss') }</span>
+            <span></span>
+            <span>UPDATE DELAY: {Math.round((dateNow - this.state.lastUpdate) / 1000)} SEC</span>
+          </div>
         </div>
       </div>
     );

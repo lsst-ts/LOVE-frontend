@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getStreamData } from 'redux/selectors';
+import { getFlightTracker } from 'redux/selectors';
 import FlightTracker from './FlightTracker';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
@@ -24,36 +25,46 @@ export const schema = {
   },
 };
 
-const FlightTrackerContainer = ({
-  ...props
-}) => {
-  if (props.isRaw) {
-    return <SubscriptionTableContainer subscriptions={props.subscriptions} />;
+const FlightTrackerContainer = ({ isRaw, subscriptions, status, aircrafts }) => {
+  if (isRaw) {
+    return <SubscriptionTableContainer subscriptions={subscriptions} />;
   }
   return (
-    <FlightTracker/>
+    <FlightTracker
+      status={status}
+      aircrafts={aircrafts}
+    />
   );
 };
 
+const mapStateToProps = (state) => {
+  const data = getFlightTracker(state);
+  return {
+    status: data.status,
+    aircrafts: data.aircrafts,
+  }
+}
+
 const mapDispatchToProps = (dispatch, ownProps) => {
   const subscriptions = [
+    'telemetry-FlightTracker-0-data',
   ];
   return {
     subscriptions,
     subscribeToStreams: () => {
-      subscriptions.forEach((s) => dispatch(addGroup(s)));
+      subscriptions.forEach((stream) => dispatch(addGroup(stream)));
     },
     unsubscribeToStreams: () => {
-      subscriptions.forEach((s) => dispatch(removeGroup(s)));
+      subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
     },
   };
 };
 
-const mapStateToProps = (state) => {
-  //const streams = getStreamsData(state, groupNames);
-  return {
-    //streams,
-  }
-}
+FlightTrackerContainer.propTypes = {
+  /** Wheter the component is in raw mode */
+  isRaw: PropTypes.bool,
+  /** List of the component's subscriptions */
+  subscriptions: PropTypes.array,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(FlightTrackerContainer);
