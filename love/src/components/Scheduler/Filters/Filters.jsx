@@ -4,6 +4,24 @@ import RightArrowIcon from 'components/icons/RightArrowIcon/RightArrowIcon';
 import WarningIcon from 'components/icons/CSCExpanded/WarningIcon/WarningIcon';
 
 export default class Filters extends Component {
+
+  renderingFilters(){
+    const { filterToMount, filterToUnmount } = this.props;
+    const listFilters = ['u', 'g', 'r', 'i', 'z', 'y'];
+    const filterStyle = {}
+    return listFilters.map((f, index) => {
+      if (filterToMount === f) {
+        return <div className={styles.filterToMountStyle}>{f}</div>;
+      }
+      else if (filterToUnmount === f) {
+        return <div className={styles.filterToUnmountStyle}>{f}</div>;
+      }
+      else {
+        return <div className={styles.disabledFilter}>{f}</div>;
+      }
+    });
+  }
+
   render() {
     const { needSwap, filterToMount, filterToUnmount } = this.props;
     return (
@@ -15,21 +33,16 @@ export default class Filters extends Component {
               <WarningIcon className={styles.iconWarning}/>
             </div>
             <div className={styles.swap}>
-              <div className={styles.filterToUnmount}>{filterToUnmount}</div>
+              <div className={styles.filterToUnmountStyle}>{filterToUnmount}</div>
               <div className={styles.iconArrow}><RightArrowIcon /></div>
-              <div className={styles.filterToMount}>{filterToMount}</div>
+              <div className={styles.filterToMountStyle}>{filterToMount}</div>
             </div>
           </div>):
           (<div>
             <h3 className={styles.title}>Filter</h3>
             <div className={styles.separator}></div>
             <div className={styles.filters}>
-              <div className={styles.filter}>u</div>
-              <div className={styles.filter}>g</div>
-              <div className={styles.filter}>r</div>
-              <div className={styles.filter}>i</div>
-              <div className={styles.filter}>z</div>
-              <div className={styles.filter}>y</div>
+              {this.renderingFilters()}
             </div>
           </div>)}
       </div>

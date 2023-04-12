@@ -47,16 +47,16 @@
   align-items: center;
 }
 
-.filterToMount {
+.filterToMountStyle {
   background-color: var(--tertiary-background-color);
-  border: 3px solid var(--second-primary-background-color);
+  border: 3px solid var(--tertiary-background-color);
   padding: 0.5em 0.7em;
   vertical-align: middle;
   display: inline-block;
-  /* margin-right: 1.5em; */
+  margin-right: 1.5em;
 }
 
-.filterToUnmount {
+.filterToUnmountStyle {
   background-color: var(--second-senary-background-dimmed-color);
   border: 3px solid white;
   padding: 0.5em 0.7em;
@@ -64,11 +64,21 @@
   display: inline-block;
   color: white;
   font-weight: bold;
-  /* margin-right: 1.5em; */
+  margin-right: 1.5em;
+}
+
+.disabledFilter {
+  background-color: var(--second-quaternary-background-dimmed-color);
+  color: var(--secondary-font-dimmed-color);
+  padding: 0.5em 0.7em;
+  vertical-align: middle;
+  display: inline-block;
+  margin-right: 1.5em;
 }
 
 .title {
   text-align: left;
+  margin-left: 0.5em;
 }
 
 .filters {
