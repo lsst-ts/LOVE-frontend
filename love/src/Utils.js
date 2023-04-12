@@ -184,24 +184,6 @@ export default class ManagerInterface {
     });
   }
 
-  static getDataFlightTracker(location, radius) {
-    return fetch(`${ManagerInterface.getApiBaseUrl()}data-FlightTracker/?location=${location}&radius=${radius}`, {
-      method: 'GET',
-      headers: ManagerInterface.getHeaders(),
-    }).then((response) => {
-      if (response.status >= 500) {
-        return false;
-      }
-      if (response.status === 401 || response.status === 403) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      return response.json().then((resp) => {
-        return resp;
-      });
-    });
-  }
-
   static getTopicData(categories = null) {
     const token = ManagerInterface.getToken();
     if (token === null) {
