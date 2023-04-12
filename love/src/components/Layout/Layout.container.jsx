@@ -17,9 +17,11 @@ import {
   getConfig,
   getEfdConfig,
   getObservatoryState,
+  getControlLocation,
 } from '../../redux/selectors';
 import { logout, receiveConfig, requireSwapToken, cancelSwapToken } from '../../redux/actions/auth';
 import { addGroup, removeGroup, requestSALCommand, resetSubscriptions } from '../../redux/actions/ws';
+import { fetchControlLocationLoopStart, fetchControlLocationLoopStop } from '../../redux/actions/observatoryState';
 import { clearViewToEdit } from '../../redux/actions/uif';
 import Layout from './Layout';
 
@@ -45,6 +47,7 @@ const mapStateToProps = (state) => {
   const tokenSwapStatus = getTokenSwapStatus(state);
   const efdConfigFile = getEfdConfig(state);
   const observatorySummary = getObservatoryState(state);
+  const controlLocation = getControlLocation(state);
   return {
     user,
     config,
@@ -63,11 +66,21 @@ const mapStateToProps = (state) => {
     tokenSwapStatus,
     efdConfigFile,
     observatorySummary,
+    controlLocation,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  const subscriptions = ['heartbeat-manager-0-stream', 'event-Watcher-0-alarm'];
+  const subscriptions = [
+    'heartbeat-manager-0-stream',
+    'event-Watcher-0-alarm',
+    /* Simonyi states */
+    'event-Scheduler-1-observingMode',
+    'event-Scheduler-1-observatoryState',
+    /* Auxtel states */
+    'event-Scheduler-2-observingMode',
+    'event-Scheduler-2-observatoryState',
+  ];
   return {
     subscriptions,
     logout: () => dispatch(logout()),
@@ -98,6 +111,12 @@ const mapDispatchToProps = (dispatch) => {
       else dispatch(cancelSwapToken);
     },
     setConfig: (config) => dispatch(receiveConfig(config)),
+    startControlLocationLoop: () => {
+      dispatch(fetchControlLocationLoopStart());
+    },
+    stopControlLocationLoop: () => {
+      dispatch(fetchControlLocationLoopStop());
+    },
   };
 };
 

@@ -141,6 +141,8 @@ class Layout extends Component {
   componentDidMount = () => {
     this.moveCustomTopbar();
     this.props.subscribeToStreams();
+    this.props.startControlLocationLoop();
+
     this.heartbeatInterval = setInterval(() => {
       this.checkHeartbeat();
       this.checkEfdStatus();
@@ -152,6 +154,7 @@ class Layout extends Component {
     window.removeEventListener('resize', this.handleResize);
     window.clearInterval(this.heartbeatInterval);
     this.props.unsubscribeToStreams();
+    this.props.stopControlLocationLoop();
   };
 
   componentDidUpdate = (prevProps, prevState) => {
@@ -294,18 +297,17 @@ class Layout extends Component {
   /** Returns the corresponding svg based on Observatory Control Location * */
   getObsLocationIcon = (style) => {
     const location = this.getObsLocation();
+    const { controlLocation } = this.props.controlLocation;
 
-    switch (location) {
-      case 'Unknown':
+    switch (controlLocation ? controlLocation.name : 'unknown') {
+      case 'unknown':
         return <UnknownLocationIcon className={style} />;
-      case 'Tucson':
+      case 'tucson':
         return <CactusIcon className={style} />;
-      case 'Base':
+      case 'base':
         return <BeachIcon className={style} />;
-      case 'Summit':
+      case 'summit':
         return <MountainIcon className={style} />;
-      case 'LSST':
-        return <OfficeIcon className={style} />;
       default:
         return <UnknownLocationIcon className={style} />;
     }
@@ -367,22 +369,7 @@ class Layout extends Component {
   };
 
   renderHeartbeatsMenu = () => {
-    // const producerHeartbeats = [
-    //   HEARTBEAT_COMPONENTS['LOVE:0'],
-    //   HEARTBEAT_COMPONENTS['ATDome:0'],
-    //   HEARTBEAT_COMPONENTS['ATMCS:0'],
-    //   HEARTBEAT_COMPONENTS['Watcher:0'],
-    //   HEARTBEAT_COMPONENTS['GenericCamera:0'],
-    //   HEARTBEAT_COMPONENTS['ScriptQueue:1'],
-    //   HEARTBEAT_COMPONENTS['WeatherStation:1'],
-    // ].map((source) => this.state.heartbeatStatus[source]);
-    // let producerHeartbeatStatus;
-    // if (!producerHeartbeats.every((hb) => hb === undefined)) {
-    //   producerHeartbeatStatus = producerHeartbeats.includes('alert') ? 'alert' : 'ok';
-    // }
-
     const summaryHeartbeats = [
-      // producerHeartbeatStatus,
       this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.MANAGER],
       this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.COMMANDER],
       this.state.efdStatus.style,
@@ -417,64 +404,7 @@ class Layout extends Component {
             />
             <span>LOVE manager</span>
           </div>
-          {/** Deprecated: used for old producer version */
-          /* <div className={styles.heartbeatMenuElement}>
-            <HeartbeatIcon
-              className={styles.icon}
-             status={producerHeartbeatStatus}
-              title={this.getHeartbeatTitle('')}
-            />
-            <span title={this.getHeartbeatTitle('')}>LOVE producers:</span>
-            <HeartbeatIcon
-              className={styles.miniIcon}
-              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.EVENTS]}
-              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.EVENTS)}
-            />
-            <span title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.EVENTS)} className={styles.heartbeatSubElement}>
-              {HEARTBEAT_COMPONENTS.EVENTS}
-            </span>
-            <HeartbeatIcon
-              className={styles.miniIcon}
-              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.TELEMETRIES]}
-              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.TELEMETRIES)}
-            />
-            <span
-              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.TELEMETRIES)}
-              className={styles.heartbeatSubElement}
-            >
-              {HEARTBEAT_COMPONENTS.TELEMETRIES}
-            </span>
-            <HeartbeatIcon
-              className={styles.miniIcon}
-              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.HEARTBEATS]}
-              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.HEARTBEATS)}
-            />
-            <span
-              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.HEARTBEATS)}
-              className={styles.heartbeatSubElement}
-            >
-              {HEARTBEAT_COMPONENTS.HEARTBEATS}
-            </span>
-            <HeartbeatIcon
-              className={styles.miniIcon}
-              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.LOVE]}
-              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.LOVE)}
-            />
-            <span title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.LOVE)} className={styles.heartbeatSubElement}>
-              {HEARTBEAT_COMPONENTS.LOVE}
-            </span>
-            <HeartbeatIcon
-              className={styles.miniIcon}
-              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.SCRIPTQUEUE]}
-              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.SCRIPTQUEUE)}
-            />
-            <span
-              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.SCRIPTQUEUE)}
-              className={styles.heartbeatSubElement}
-            >
-              {HEARTBEAT_COMPONENTS.SCRIPTQUEUE}
-            </span>
-          </div> */}
+
           <div className={styles.heartbeatMenuElement} title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.COMMANDER)}>
             <HeartbeatIcon
               className={styles.icon}
@@ -507,11 +437,16 @@ class Layout extends Component {
   };
 
   render() {
+    const { controlLocation, lastUpdated } = this.props.controlLocation;
     const filteredAlarms = this.props.alarms.filter((a) => {
       return (
         isActive(a) && !isAcknowledged(a) && !isMuted(a) && a.severity?.value >= this.state.minSeverityNotification
       );
     });
+
+    const controlLocationName = controlLocation
+      ? controlLocation.name.charAt(0).toUpperCase() + controlLocation.name.slice(1)
+      : 'Unknown';
     return (
       <>
         <AlarmAudioContainer />
@@ -686,16 +621,16 @@ class Layout extends Component {
                   <ObservatorySummaryMenu
                     dividerClassName={styles.divider}
                     locationIcon={this.getObsLocationIcon()}
-                    location={this.getObsLocation()}
-                    simonyiState={'UNKNOWN'}
-                    simonyiOperationMode={'UNKNOWN'}
-                    simonyiTrackingMode={'UNKNOWN'}
-                    simonyiObsMode={this.props.observatorySummary.simonyiObservingMode}
-                    simonyiPower={'UNKNOWN'}
-                    auxtelState={'UNKNOWN'}
-                    auxtelOperationMode={'UNKNOWN'}
-                    auxtelObsMode={this.props.observatorySummary.auxtelObservingMode}
-                    auxtelPower={'UNKNOWN'}
+                    location={controlLocationName}
+                    locationLastUpdate={lastUpdated}
+                    simonyiOperationMode={'Unknown'}
+                    simonyiTrackingMode={this.props.observatorySummary?.simonyiTrackingState}
+                    simonyiObsMode={this.props.observatorySummary?.simonyiObservingMode}
+                    simonyiPower={'Unknown'}
+                    auxtelOperationMode={'Unknown'}
+                    auxtelTrackingMode={this.props.observatorySummary?.auxtelTrackingState}
+                    auxtelObsMode={this.props.observatorySummary?.auxtelObservingMode}
+                    auxtelPower={'Unknown'}
                   ></ObservatorySummaryMenu>
                 </div>
               </DropdownMenu>

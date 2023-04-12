@@ -5,8 +5,9 @@
   grid-template-rows: fit-content;
   max-width: fit-content;
 }
-.container div {
+.container > div {
   align-content: start;
+  grid-template-columns: 0.8fr minmax(10em, 0.5fr);
 }
 
 .row2 {
