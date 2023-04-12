@@ -171,8 +171,8 @@ export default class FlightTracker extends Component {
 
     const dateNow = Date.now();
 
-    let zoomOut = this.state.zoom === '200' ? <ZoomOutIcon block={true}></ZoomOutIcon> : <ZoomOutIcon></ZoomOutIcon>;
-    let zoomIn = this.state.zoom === '100' ? <ZoomInIcon block={true}></ZoomInIcon> : <ZoomInIcon></ZoomInIcon>;
+    const zoomOut = this.state.zoom === '200' ? <ZoomOutIcon block={true}></ZoomOutIcon> : <ZoomOutIcon></ZoomOutIcon>;
+    const zoomIn = this.state.zoom === '100' ? <ZoomInIcon block={true}></ZoomInIcon> : <ZoomInIcon></ZoomInIcon>;
     const inRadius = this.state.aircraftInRadius > 0 ? 'warning' : 'ok';
 
     return (

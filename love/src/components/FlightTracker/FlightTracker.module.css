@@ -18,10 +18,6 @@
   height: 100%;
 }
 
-/* .divMap > svg {
-  z-index: 2;
-} */
-
 .Svg {
   border: 1px solid rgb(255, 255, 255);
 }
@@ -45,7 +41,6 @@ td.statusColumn {
   margin-block: 1em;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  /* grid-auto-rows: 50px; */
   grid-gap: 10px;
 }
 

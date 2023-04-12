@@ -10,6 +10,8 @@ import { ReactComponent as Map200 } from './Maps/Map200.svg';
 import { ReactComponent as Map160 } from './Maps/Map160.svg';
 import { ReactComponent as Map100 } from './Maps/Map100.svg';
 
+const LON_LAT_TELESCOPE = [-70.73709442008416, -30.240476801377167];
+
 export default class MapFlightTracker extends Component {
   static propTypes = {
     /* Planes data with the distance to the center */
@@ -36,8 +38,6 @@ export default class MapFlightTracker extends Component {
 
   constructor(props) {
     super(props);
-    this.telescopeCoords = [-70.73709442008416, -30.240476801377167];
-    this.long_lat_serena = [-71.25715298618236, -29.89192170340795];
   }
 
   componentDidMount = () => {
@@ -50,7 +50,7 @@ export default class MapFlightTracker extends Component {
   componentDidUpdate = (prevProps) => {
     const { zoom, planes } = this.props;
     if (!isEqual(zoom, prevProps.zoom) || !isEqual(planes, prevProps.planes)) {
-      planes.map((airCraft) => {
+      planes.forEach((airCraft) => {
         this.addPlanes(airCraft);
       });
     }
@@ -71,7 +71,7 @@ export default class MapFlightTracker extends Component {
 
     let projection = d3
       .geoMercator()
-      .center(this.telescopeCoords)
+      .center(LON_LAT_TELESCOPE)
       .scale(width * scale) // scale; 13 - 200 km,  16.05 -160 km and 25.2 -100 km.
       .translate([width / 2, height / 2]);
 
@@ -88,7 +88,7 @@ export default class MapFlightTracker extends Component {
 
     const projection = d3
       .geoMercator()
-      .center(this.telescopeCoords)
+      .center(LON_LAT_TELESCOPE)
       .scale(width * 25.2) // scale; 13 - 200 km,  16.05 -160 km and 25.2 -100 km.
       .translate([width / 2, height / 2]);
 
