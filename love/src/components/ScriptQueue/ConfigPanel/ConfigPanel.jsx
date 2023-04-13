@@ -263,7 +263,7 @@ export default class ConfigPanel extends Component {
             autoFilledValue: YAML.stringify(r.output),
             configErrors: [],
             configErrorTitle: '',
-            jsonSchema: r.output,
+            formData: r.output,
           });
           return;
         }
@@ -427,7 +427,13 @@ export default class ConfigPanel extends Component {
     this.setState({ logLevel: value });
   };
 
+  /**
+   * Render the configuration panel options to select stored configurations
+   * and to create new ones
+   * @returns {JSX.Element}
+   */
   renderConfigurationsOptions = () => {
+    const { configPanel } = this.props;
     const {
       validationStatus,
       value,
@@ -436,20 +442,28 @@ export default class ConfigPanel extends Component {
       selectedConfiguration,
       inputConfigurationName,
     } = this.state;
+
     let configurationSchemaChanged = false;
     let configurationNameChanged = false;
 
     const configuration = configurationList.find((conf) => conf.id === selectedConfiguration?.value);
-    if (configuration && value !== configuration.config_schema) {
+    if (
+      (configuration && value !== configuration.config_schema) ||
+      (!configuration && value !== DEFAULT_CONFIG_VALUE)
+    ) {
       configurationSchemaChanged = true;
     }
 
-    if (configurationList.findIndex((conf) => conf.config_name === inputConfigurationName) !== -1) {
+    if (
+      (configurationList.length > 0 &&
+        configurationList.findIndex((conf) => conf.config_name === inputConfigurationName) === -1) ||
+      (configurationList.length === 0 && inputConfigurationName !== DEFAULT_CONFIG_NAME)
+    ) {
       configurationNameChanged = true;
     }
 
     let controlHtml;
-    if (configurationSchemaChanged || configurationNameChanged) {
+    if (configurationSchemaChanged) {
       controlHtml = (
         <Input
           value={inputConfigurationName}
@@ -471,6 +485,7 @@ export default class ConfigPanel extends Component {
               selectedConfiguration: e,
               value: configuration?.config_schema ?? '',
               inputConfigurationName: configuration?.config_name ?? '',
+              formData: yaml.load(configuration?.config_schema),
             });
           }}
         />
@@ -480,14 +495,23 @@ export default class ConfigPanel extends Component {
     const buttonHtml = (
       <Button
         disabled={
-          [ERROR, VALIDATING, NEED_REVALIDATION].includes(this.state.validationStatus) ||
+          [ERROR, VALIDATING, NEED_REVALIDATION].includes(validationStatus) ||
           (!configurationSchemaChanged && !configurationNameChanged)
         }
         status="transparent"
         className={styles.saveConfigurationButton}
         onClick={(e) => {
-          if (configurationNameChanged) console.log('Save new configuration');
-          else console.log('Save configuration');
+          const scriptPath = configPanel?.script?.path ?? '';
+          const scriptType = configPanel?.script?.type ?? '';
+          const configName = inputConfigurationName;
+          const configSchema = value;
+          if (configurationNameChanged) {
+            ManagerInterface.postScriptConfiguration(scriptPath, scriptType, configName, configSchema);
+          } else if (configurationList.length === 0) {
+            ManagerInterface.postScriptConfiguration(scriptPath, scriptType, configName, configSchema);
+          } else {
+            ManagerInterface.updateScriptSchema(selectedConfiguration.value, configSchema);
+          }
         }}
       >
         {configurationNameChanged ? <SaveNewIcon /> : <SaveIcon />}
@@ -678,7 +702,6 @@ export default class ConfigPanel extends Component {
                   formData={this.state.formData}
                   templates={{ ArrayFieldTemplate: this.ArrayFieldTemplate }}
                   onChange={(e) => {
-                    console.log(e.formData);
                     this.setState({
                       formData: e.formData,
                       value: yaml.dump(e.formData, { flowLevel: 2 }),

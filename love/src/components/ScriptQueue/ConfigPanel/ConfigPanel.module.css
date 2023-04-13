@@ -278,6 +278,7 @@ a.documentationLink {
 .formSchemaDescriptionModifier {
   font-size: var(--font-size-medium);
   text-align: left;
+  margin-bottom: var(--content-padding);
 }
 
 .arrayContainer input {
