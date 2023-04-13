@@ -217,6 +217,11 @@ export default class ConfigPanel extends Component {
   };
   /************************/
 
+  /**
+   * Validate the current configuration
+   * @param {string} newValue, the new value to validate
+   * @param {boolean} noRevalidation, if true, do not revalidate if already validating
+   */
   validateConfig = (newValue, noRevalidation) => {
     this.setState({ value: newValue });
     /** Do nothing if schema is not available
@@ -305,36 +310,6 @@ export default class ConfigPanel extends Component {
           }
         }
       });
-  };
-
-  componentDidUpdate = (prevProps, prevState) => {
-    if (
-      this.props.configPanel?.script?.path &&
-      prevProps.configPanel?.script?.path !== this.props.configPanel?.script?.path
-    ) {
-      ManagerInterface.getScriptConfiguration(
-        this.props.configPanel.script.path,
-        this.props.configPanel.script.type,
-      ).then((data) => {
-        const options = data.map((conf) => ({ label: conf.config_name, value: conf.id }));
-        const configuration = data.find((conf) => conf.config_name === 'last_script');
-        this.setState((state) => ({
-          configurationList: data,
-          configurationOptions: options,
-          selectedConfiguration: configuration ? { label: configuration.config_name, value: configuration.id } : null,
-          value: configuration?.config_schema ?? DEFAULT_CONFIG_VALUE,
-          inputConfigurationName: configuration?.config_name ?? DEFAULT_CONFIG_NAME,
-        }));
-      });
-    }
-
-    if (this.state.validationStatus !== prevState.validationStatus) {
-      const { validationStatus } = this.state;
-
-      if (validationStatus === VALIDATING && prevState.validationStatus === NEED_REVALIDATION) {
-        this.validateConfig(this.state.value, true);
-      }
-    }
   };
 
   onCheckpointChange = (name) => (event) => {
@@ -524,6 +499,41 @@ export default class ConfigPanel extends Component {
         {buttonHtml}
       </div>
     );
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (
+      this.props.configPanel?.script?.path &&
+      prevProps.configPanel?.script?.path !== this.props.configPanel?.script?.path
+    ) {
+      ManagerInterface.getScriptConfiguration(
+        this.props.configPanel.script.path,
+        this.props.configPanel.script.type,
+      ).then((data) => {
+        const options = data.map((conf) => ({ label: conf.config_name, value: conf.id }));
+        const configuration = data.find((conf) => conf.config_name === 'last_script');
+        this.setState((state) => ({
+          configurationList: data,
+          configurationOptions: options,
+          selectedConfiguration: configuration ? { label: configuration.config_name, value: configuration.id } : null,
+          value: configuration?.config_schema ?? DEFAULT_CONFIG_VALUE,
+          inputConfigurationName: configuration?.config_name ?? DEFAULT_CONFIG_NAME,
+          formData: configuration ? yaml.load(configuration.config_schema) : null,
+        }));
+      });
+    }
+
+    if (this.state.value !== prevState.value) {
+      this.validateConfig(this.state.value, true);
+    }
+
+    if (this.state.validationStatus !== prevState.validationStatus) {
+      const { validationStatus } = this.state;
+
+      if (validationStatus === VALIDATING && prevState.validationStatus === NEED_REVALIDATION) {
+        this.validateConfig(this.state.value, true);
+      }
+    }
   };
 
   render() {
