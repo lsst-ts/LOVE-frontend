@@ -1,21 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './ObservatorySummaryMenu.module.css';
-import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 
 /** Contents of the ObservatorySummary details Dropdown Menu */
 export default function ObservatorySummaryMenu({
   location,
+  locationLastUpdate,
   locationIcon,
   menuElementClassName,
   dividerClassName,
-  simonyiState,
   simonyiOperationMode,
   simonyiTrackingMode,
   simonyiObsMode,
   simonyiPower,
-  auxtelState,
   auxtelOperationMode,
+  auxtelTrackingMode,
   auxtelObsMode,
   auxtelPower,
 }) {
@@ -27,7 +26,9 @@ export default function ObservatorySummaryMenu({
           <div className={styles.contentContainer}>
             <span>Observatory control </span>
             <div>
-              <span className={styles.highlight}>{location}</span>
+              <span title={`Last updated: ${locationLastUpdate?.toUTCString()}`} className={styles.highlight}>
+                {location}
+              </span>
             </div>
           </div>
         </div>
@@ -56,11 +57,6 @@ export default function ObservatorySummaryMenu({
             />
           </svg>
           <span className={styles.sectionTitle}>Simonyi</span>
-          <span className={styles.state}>
-            <StatusText title={simonyiState} status="invalid">
-              {simonyiState}
-            </StatusText>
-          </span>
         </div>
 
         <span className={styles.label}>Operation Mode</span>
@@ -88,15 +84,13 @@ export default function ObservatorySummaryMenu({
             />
           </svg>
           <span className={styles.sectionTitle}>Auxtel</span>
-          <span className={styles.state}>
-            <StatusText title={auxtelState} status="invalid">
-              {auxtelState}
-            </StatusText>
-          </span>
         </div>
 
         <span className={styles.label}>Operation Mode</span>
         <span>{auxtelOperationMode}</span>
+
+        <span className={styles.label}>Tracking Mode</span>
+        <span>{auxtelTrackingMode}</span>
 
         <span className={styles.label}>Obsv. Mode</span>
         <span>{auxtelObsMode}</span>
@@ -109,8 +103,10 @@ export default function ObservatorySummaryMenu({
 }
 
 ObservatorySummaryMenu.propTypes = {
-  /** Locaation from where LOVE is being controlled from */
+  /** Location from where LOVE is being controlled from */
   location: PropTypes.string,
+  /** Location last update */
+  locationLastUpdate: PropTypes.instanceOf(Date),
   /** An svg representing the location generated on Layout.jsx */
   locationIcon: PropTypes.object,
   /** Classname to add ot the menu elements */
@@ -119,9 +115,7 @@ ObservatorySummaryMenu.propTypes = {
   dividerClassName: PropTypes.string,
 
   /** Simonyi Telemetry and Event Data */
-  /** Simonyi Summary State */
-  simonyiState: PropTypes.string,
-  /** Simonyi Opearion Mode */
+  /** Simonyi Operation Mode */
   simonyiOperationMode: PropTypes.string,
   /** Simonyi Tracking Mode */
   simonyiTrackingMode: PropTypes.string,
@@ -130,11 +124,11 @@ ObservatorySummaryMenu.propTypes = {
   /** Simonyi Power Source */
   simonyiPower: PropTypes.string,
 
-  /** Simonyi Summary State */
-  /** Auxiliary Telescope Summary State */
-  auxtelState: PropTypes.string,
+  /** Auxiliary Telescope Telemetry and Event Data */
   /** Auxiliary Telescope Operation Mode */
   auxtelOperationMode: PropTypes.string,
+  /** Auxiliary Telescope Tracking Mode */
+  auxtelTrackingMode: PropTypes.string,
   /** Auxiliary Telescope Observation Mode */
   auxtelObsMode: PropTypes.string,
   /** Auxiliary Telescope Power Source */

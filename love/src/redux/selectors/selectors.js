@@ -23,6 +23,11 @@ export const getEfdConfig = (state) => getConfig(state)?.content?.efd;
 
 export const getSurveyConfig = (state) => getConfig(state)?.content?.survey;
 
+export const getControlLocation = (state) => ({
+  controlLocation: state.observatoryState.controlLocation,
+  lastUpdated: state.observatoryState.lastUpdated,
+});
+
 export const getAllTime = (state) => ({ ...state.time });
 
 export const getClock = (state) => ({ ...state.time.clock });
@@ -350,10 +355,18 @@ export const getATMCSState = (state) => {
   ];
   const data = getStreamsData(state, subscriptions);
   const [minEl, minAz, minNas1, minNas2, minM3] = data['event-ATMCS-0-positionLimits']?.[0].minimum?.value ?? [
-    5, -270, -165, -165, 0,
+    5,
+    -270,
+    -165,
+    -165,
+    0,
   ];
   const [maxEl, maxAz, maxNas1, maxNas2, maxM3] = data['event-ATMCS-0-positionLimits']?.[0].maximum?.value ?? [
-    90, 270, 165, 165, 180,
+    90,
+    270,
+    165,
+    165,
+    180,
   ];
 
   return {
@@ -956,14 +969,46 @@ export const getDrivesAzimuthElevationState = (state) => {
  * @param {object} state
  */
 export const getMirrorCoversMotionState = (state) => {
-  const subscriptions = [
-    'event-MTMount-0-mirrorCoversMotionState',
-    'telemetry-MTMount-0-mirrorCover',
-  ];
+  const subscriptions = ['event-MTMount-0-mirrorCoversMotionState', 'telemetry-MTMount-0-mirrorCover'];
   const summaryData = getStreamsData(state, subscriptions);
   return {
-    mirrorCoversState: summaryData['event-MTMount-0-mirrorCoversMotionState']?.[0]?.elementsState?.value ?? [0, 0, 0, 0],
+    mirrorCoversState: summaryData['event-MTMount-0-mirrorCoversMotionState']?.[0]?.elementsState?.value ?? [
+      0,
+      0,
+      0,
+      0,
+    ],
     mirrorCoversPosition: summaryData['telemetry-MTMount-0-mirrorCover']?.actualPosition?.value ?? [0, 0, 0, 0],
+  };
+};
+
+export const getAircraftTracker = (state) => {
+  const subscriptions = ['telemetry-AircraftTracker-0-data'];
+  const data = getStreamsData(state, subscriptions);
+
+  const aircraftId = data['telemetry-AircraftTracker-0-data']?.id?.value ?? ['SKU271', 'LAN512', 'LAN020', undefined, undefined, undefined, undefined, undefined, undefined, undefined];
+  const latitude = data['telemetry-AircraftTracker-0-data']?.latitude?.value ?? [-29.9604, -29.69192, -31.7404, 0, 0, 0, 0, 0, 0, 0];
+  const longitude = data['telemetry-AircraftTracker-0-data']?.longitude?.value ?? [-70.33709, -72.05715, -70.8, 0, 0, 0, 0, 0, 0, 0];
+  const altitude = data['telemetry-AircraftTracker-0-data']?.altitude?.value ?? [1013.2, 1020.34, 980.15, 0, 0, 0, 0, 0, 0, 0];
+  const track = data['telemetry-AircraftTracker-0-data']?.track?.value ?? [180, 105, 350, 0, 0, 0, 0, 0, 0, 0];
+  const distance = data['telemetry-AircraftTracker-0-data']?.distance?.value ?? [98, 146, 188, 0, 0, 0, 0, 0, 0, 0];
+  const speed = data['telemetry-AircraftTracker-0-data']?.speed?.value ?? [800, 900, 1100, 0, 0, 0, 0, 0, 0, 0];
+
+  let aircrafts = aircraftId.map((id, index) => {
+    return {
+      id: id,
+      latitude: latitude[index],
+      longitude: longitude[index],
+      altitude: altitude[index],
+      track: track[index],
+      distance: distance[index],
+      speed: speed[index],
+    };
+  });
+
+  return {
+    status: data['telemetry-AircraftTracker-0-data']?.status?.value ?? 0,
+    aircrafts: aircrafts,
   };
 };
 
@@ -974,7 +1019,7 @@ export const getRawStatus = (state) => {
   return {
     interlocksStatus: interlocksData['event-GIS-0-rawStatus']
       ? interlocksData['event-GIS-0-rawStatus'][0]?.status?.value
-      : "0".repeat(464),
+      : '0'.repeat(464),
   };
 };
 
@@ -1025,26 +1070,26 @@ export const getObservatorySubscriptions = () => {
     // Observatory
     // Simonyi
     'event-Scheduler-1-observingMode',
+    'event-Scheduler-1-observatoryState',
     // Auxtel
     'event-Scheduler-2-observingMode',
+    'event-Scheduler-2-observatoryState',
   ];
 };
 
 export const getObservatoryState = (state) => {
-  const observatorySubscriptions = [
-    // Observatory
-    // Simonyi
-    'event-Scheduler-1-observingMode',
-    // Auxtel
-    'event-Scheduler-2-observingMode',
-  ];
+  const observatorySubscriptions = getObservatorySubscriptions();
   const observatoryData = getStreamsData(state, observatorySubscriptions);
   const simonyiObservingMode = observatoryData['event-Scheduler-1-observingMode'];
   const auxtelObservingMode = observatoryData['event-Scheduler-2-observingMode'];
+  const simonyiObservatoryState = observatoryData['event-Scheduler-1-observatoryState'];
+  const auxtelObservatoryState = observatoryData['event-Scheduler-2-observatoryState'];
 
   return {
-    simonyiObservingMode: simonyiObservingMode ? simonyiObservingMode.mode.value : 'Unknown',
-    auxtelObservingMode: auxtelObservingMode ? auxtelObservingMode.mode.value : 'Unknown',
+    simonyiObservingMode: simonyiObservingMode ? simonyiObservingMode[0].mode.value : 'Unknown',
+    auxtelObservingMode: auxtelObservingMode ? auxtelObservingMode[0].mode.value : 'Unknown',
+    simonyiTrackingState: simonyiObservatoryState ? simonyiObservatoryState[0].tracking.value : 'Unknown',
+    auxtelTrackingState: auxtelObservatoryState ? auxtelObservatoryState[0].tracking.value : 'Unknown',
   };
 };
 
