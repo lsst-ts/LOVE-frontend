@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.18.1
+--------
+
+* Fix ``GIS`` signals - effects mappings `https://github.com/lsst-ts/LOVE-frontend/pull/448`
+
 v5.18.0
 --------
 
