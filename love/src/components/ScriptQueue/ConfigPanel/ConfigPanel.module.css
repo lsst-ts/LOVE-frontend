@@ -361,7 +361,25 @@ fieldset p {
   color: var(--base-font-color);
 }
 
-fieldset label {
+/* fieldset label {
   margin: 7px 0;
   font-weight: bold;
+} */
+
+:global(.field-object) > fieldset {
+  padding: 0;
+}
+
+:global(.field-string),
+:global(.field-number),
+:global(.field-boolean) {
+  margin-bottom: var(--small-padding);
+}
+
+:global(.field) > * {
+  font-weight: bold;
+}
+
+:global(.field) > *:nth-child(2) {
+  margin: 1em 0;
 }
