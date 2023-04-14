@@ -1,7 +1,7 @@
-import React, {useState, useCallback, memo} from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import RowExpansionIcon from 'components/icons/RowExpansionIcon/RowExpansionIcon';
 import AvailableScript from '../Scripts/AvailableScript/AvailableScript';
-import styles from './RecursiveScriptsTree.module.css'; 
+import styles from './RecursiveScriptsTree.module.css';
 
 const RecursiveScriptsTree = ({
   availableScriptList,
@@ -20,36 +20,19 @@ const RecursiveScriptsTree = ({
   const lastCategory = category.split('-').pop();
   return (
     <div className={styles.container}>
-      <h6 onClick={() => setOpenTree({...openTree, [category]: !openTree[category]})}>
-        <div
-          className={styles.collapseIcon}>
-          {openedCategory ? <RowExpansionIcon expanded/> : <RowExpansionIcon/>}
+      <h6 onClick={() => setOpenTree({ ...openTree, [category]: !openTree[category] })}>
+        <div className={styles.collapseIcon}>
+          {openedCategory ? <RowExpansionIcon expanded /> : <RowExpansionIcon />}
         </div>
         {lastCategory.toUpperCase()}
       </h6>
-      <div className={styles.horizontalSeparation}/>
+      <div className={styles.horizontalSeparation} />
       <div
         className={styles.rootContainer}
         style={{
           maxHeight: openedCategory ? '100%' : 0,
         }}
       >
-        {scriptsTree.root &&
-          scriptsTree.root.map((script) => {
-            const fullScriptPath = breadCrumb ? breadCrumb + '/' + script : script;
-            const scriptObject = availableScriptList?.find((s) => s.path === fullScriptPath);
-            return scriptObject && <AvailableScript
-              key={`${scriptObject.type}-${scriptObject.path}`}
-              path={scriptObject.path}
-              isStandard={scriptObject.type ? scriptObject.type.toLowerCase() === 'standard' : true}
-              launchScriptConfig={cachedLaunchScriptConfig}
-              script={scriptObject}
-              commandExecutePermission={scriptsBlocked}
-              isCompact={false}
-              {...scriptObject}/>
-          })
-        }
-        {/* Base Condition and Rendering recursive component from inside itself */}
         {recursiveKeys.length > 0 &&
           recursiveKeys.map((key) => {
             return (
@@ -63,8 +46,27 @@ const RecursiveScriptsTree = ({
                 launchScriptConfig={cachedLaunchScriptConfig}
               />
             );
-          })
-        }
+          })}
+        {scriptsTree.root &&
+          scriptsTree.root.map((script) => {
+            const fullScriptPath = breadCrumb ? breadCrumb + '/' + script : script;
+            const scriptObject = availableScriptList?.find((s) => s.path === fullScriptPath);
+            return (
+              scriptObject && (
+                <AvailableScript
+                  key={`${scriptObject.type}-${scriptObject.path}`}
+                  path={scriptObject.path}
+                  isStandard={scriptObject.type ? scriptObject.type.toLowerCase() === 'standard' : true}
+                  launchScriptConfig={cachedLaunchScriptConfig}
+                  script={scriptObject}
+                  commandExecutePermission={scriptsBlocked}
+                  isCompact={false}
+                  {...scriptObject}
+                />
+              )
+            );
+          })}
+        {/* Base Condition and Rendering recursive component from inside itself */}
       </div>
     </div>
   );
