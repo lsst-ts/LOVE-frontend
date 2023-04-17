@@ -1,0 +1,150 @@
+.container {
+    background-color: #292a38;
+    border-radius: 8px;
+    padding: 20px;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 75px;
+  }
+  
+  .spanMicAvailable {
+    display: table-header-group;
+    font-size: 19px;
+    /* font-family: Sans-Serif; */
+    font-weight: normal;
+    padding-bottom: 1em;
+    text-align-last: start;
+  }
+  
+  .component {
+    grid-area: body;
+    display: flex;
+    padding-bottom: 1em;
+  }
+  
+  .micDetails {
+    width: 70%;
+    overflow-x: hidden;
+    overflow-y: clip;
+    transition: 0.4s;
+    margin: 2px;
+    padding-inline: 0.5em;
+    max-width: 35em;
+  }
+  
+  .mics {
+    width: 100%;
+    /* border-radius: 20px; */
+    transition: 0.4s;
+    margin: 2px;
+    padding-inline: 0.5em;
+  }
+  
+  .collapsedMicDetail {
+    width: 0px;
+    overflow-x: hidden;
+    transition: 0.4s;
+  }
+  
+  .component {
+    display: flex;
+    margin-inline: -0.25em;
+  }
+  
+  .container {
+    max-width: 100%;
+  }
+  
+  .recSVG {
+    height: 2.25em;
+    /* background-color: var(--secondary-font-color); */
+  }
+  
+  .playSVG {
+    height: 4em;
+  }
+
+  .opacity {
+    opacity: 0.35;
+  }
+  
+  .verticalSpace {
+    margin-bottom: 0.5em;
+  }
+  
+  .divTitleSection {
+    height: 7.5%;
+    margin-block: 2px;
+    color: var(--base-font-color);
+    display: grid;
+  }
+  
+  .alarmContainer {
+    width: 700px;
+  }
+  .infoMonserratFontContainer {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .infoMonserratFont {
+    flex-wrap: wrap;
+    margin: 0em;
+    font-weight: 300;
+    font-size: 20px;
+  }
+  
+  .dBLiveValue {
+    color: #f0e400;
+    font-weight: 300;
+    font-size: 20px;
+  }
+  
+  .fontTitle {
+    display: flex;
+    font-weight: 900;
+    font-size: 25px;
+  }
+  
+  .inputMonserratFont {
+    display: flex;
+    width: 400px;
+    font-weight: 300;
+    font-size: 15px;
+  }
+  
+  .inputdBLimit {
+    display: flex;
+    font-weight: 300;
+    font-size: 20px;
+  }
+  
+  .hideInputDiv {
+    width: 20%;
+    height: 20%;
+  }
+  
+  .hideInput {
+    display: none;
+  }
+  
+  .svgEdit {
+    fill: none;
+    stroke: #8c9da6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 0.3px;
+  }
+  
+  .buttondBLimit {
+    display: flex;
+  }
+  
+  .editButtondBLimit {
+    width: 0.7rem;
+    height: 1.2rem;
+  }

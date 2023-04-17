@@ -169,6 +169,16 @@ export const observatoryIndex = {
       },
     },
   },
+  Microphones: {
+    component: require('../Mics/Mics.container').default,
+    schema: {
+      ...require('../Mics/Mics.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../Mics/Mics.container').schema.props,
+      },
+    },
+  },
   WeatherStation: {
     component: require('../WeatherStation/WeatherStation.container').default,
     schema: {

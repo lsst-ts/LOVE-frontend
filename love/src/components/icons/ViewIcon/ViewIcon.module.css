@@ -1,0 +1,13 @@
+
+.clsView1 {
+    fill: #bad3e1;
+  }
+  
+  .clsView1Sel {
+    fill: var(--second-primary-background-color);
+  }
+  
+  .svg {
+    height: 15px;
+  }
+  
