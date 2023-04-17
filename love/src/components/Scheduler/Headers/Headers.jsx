@@ -4,27 +4,41 @@ import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Label from '../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../GeneralPurpose/SummaryPanel/Title';
+import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import GearIcon from 'components/icons/ScriptQueue/GearIcon/GearIcon.jsx';
 import Sun from '../SkyElements/SunCartoon/SunCartoon';
 import Stars from '../SkyElements/Stars/Stars';
 import Moment from 'moment';
 import { formatSecondsToDigital } from 'Utils';
+import { summaryStateMap, summaryStateToStyle, schedulerDetailedStateToMap, schedulerDetailedStateToStyle } from 'Config';
 
 export default class Headers extends Component {
   render() {
-    const { subState, mode, type, isNigth, night, sunset, sunrise } = this.props;
+    const { schedulerState, subState, mode, type, isNigth, night, sunset, sunrise } = this.props;
+    console.log(schedulerState);
     const current_time = Moment();
     const diffSunset = Moment.unix(sunset).diff(current_time, 'seconds');
     const diffSunrise = Moment.unix(sunrise).diff(current_time, 'seconds');
     const diffSunsetDigital = formatSecondsToDigital(diffSunset);
     const diffSunriseDigital = formatSecondsToDigital(diffSunrise);
+
+    //  const domeStatus = CSCDetail.states[this.props.mtdomeSummaryState];
+    // const simonyiTrackingState = schedulerDomeTrackingStateToMap[this.props.simonyiTracking];
+    const schedulerSummaryState = summaryStateMap[schedulerState];
+
     return (
       <div className={styles.container}>
         <div className={styles.leftDivs}>
           <div className={styles.headersLeft}>
             <SummaryPanel className={styles.summaryPanel1}>
               <Title>Summary State</Title>
-              <Value>ENABLED</Value>
+              {/* <Value>ENABLED</Value> */}
+              <Value>
+                <StatusText status={summaryStateToStyle[schedulerSummaryState]}>{schedulerSummaryState}</StatusText>
+              </Value>
+              {/* <Value>
+                <StatusText status={schedulerDomeTrackingStateToStyle[simonyiTrackingState]}>{simonyiTrackingState}</StatusText>
+              </Value> */}
               <GearIcon className={styles.gearIcon} />
               <Value>RUNNING</Value>
             </SummaryPanel>

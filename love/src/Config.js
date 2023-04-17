@@ -85,6 +85,7 @@ export const severityEnum = {
 /******************************TCS configurations*****************************/
 /*****************************************************************************/
 
+// TCS Configurations
 const rotTypes = [
   { label: 'Sky', value: 0 },
   { label: 'SkyAuto', value: 1 },
@@ -806,6 +807,16 @@ export const schedulerDomeTrackingStateToStyle = {
   'TRACKING': 'ok',
 };
 
+// General summaryState
+export const summaryStateToStyle = {
+  'UNKNOWN': 'disabled',
+  'DISABLED': 'disabled',
+  'ENABLED': 'ok',
+  'FAULT': 'alert',
+  'OFFLINE': 'disabled',
+  'STANDBY': 'warning'
+};
+
 /*****************************************************************************/
 /*******************************STATE MAPPINGS********************************/
 /*****************************************************************************/
@@ -1238,9 +1249,37 @@ export const schedulerDomeTrackingStateToMap = {
   true: 'TRACKING'
 };
 
+// General summaryState
+export const summaryStateMap = {
+  0: 'UNKNOWN',
+  1: 'DISABLED',
+  2: 'ENABLED',
+  3: 'FAULT',
+  4: 'OFFLINE',
+  5: 'STANDBY'
+};
+
 /*****************************************************************************/
 /**************************MTM3 actuator and forces***************************/
 /*****************************************************************************/
+
+export const schedulerDetailedStateToMap = {
+  0: 'IDLE',
+  1: 'RUNNING',
+  2: 'WAITING_NEXT_TARGET_TIMER_TASK',
+  3: 'GENERATING_TARGET_QUEUE',
+  4: 'COMPUTING_PREDICTED_SCHEDULE',
+  5: 'QUEUEING_TARGET',
+};
+
+export const schedulerDetailedStateToStyle = {
+  'IDLE': 'disabled',
+  'RUNNING': 'ok',
+  'WAITING_NEXT_TARGET_TIMER_TASK': 'warning',
+  'GENERATING_TARGET_QUEUE': 'warning',
+  'COMPUTING_PREDICTED_SCHEDULE': 'warning',
+  'QUEUEING_TARGET': 'warning'
+};
 
 // Components configurations
 export const M1M3ActuatorForces = {

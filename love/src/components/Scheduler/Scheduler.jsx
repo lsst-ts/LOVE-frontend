@@ -272,7 +272,8 @@ export default class Scheduler extends Component {
   };
 
   render() {
-    const {  
+    const {
+      schedulerState,  
       subState,
       mode,
       type,
@@ -366,7 +367,7 @@ export default class Scheduler extends Component {
 
     return (
       <div className={styles.container}>
-        <Headers subState={subState} mode={mode} type={type} moonPhase={moonPhase} isNigth={isNigth} night={night} sunset={sunset} sunrise={sunrise} />
+        <Headers schedulerState={schedulerState} subState={subState} mode={mode} type={type} moonPhase={moonPhase} isNigth={isNigth} night={night} sunset={sunset} sunrise={sunrise} />
         <div className={styles.allComponentes}>
           {/* column 1 */}
           <div className={styles.leftDiv}>

@@ -1190,6 +1190,14 @@ export const getRawStatus = (state) => {
 };
 
 // Scheduler
+export const getSchedulerSummaryState = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-summaryState`];
+  const schedulerSummaryState = getStreamsData(state, subscriptions);
+  return {
+    schedulerState : schedulerSummaryState[`event-Scheduler-${salindex}-summaryState`]?.[0]?.summaryState?.value ?? 0,
+  };
+};
+
 export const getDetailedState = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-detailedState`];
   const summaryData = getStreamsData(state, subscriptions);
@@ -1223,8 +1231,8 @@ export const getFilterSwap = (state, salindex) => {
   const filterSwap = getStreamsData(state, subscriptions);
   return {
     needSwap: filterSwap[`event-Scheduler-${salindex}-needFilterSwap`]?.[0]?.needSwap?.value ?? false,
-    filterToMount: filterSwap[`event-Scheduler-${salindex}-needFilterSwap`]?.[0]?.filterToMount?.value ?? 'z',
-    filterToUnmount: filterSwap[`event-Scheduler-${salindex}-needFilterSwap`]?.[0]?.filterToUnmount?.value ?? 'r',
+    filterToMount: filterSwap[`event-Scheduler-${salindex}-needFilterSwap`]?.[0]?.filterToMount?.value ?? '',
+    filterToUnmount: filterSwap[`event-Scheduler-${salindex}-needFilterSwap`]?.[0]?.filterToUnmount?.value ?? '',
   }
 };
 

@@ -4,6 +4,7 @@ import Scheduler from './Scheduler';
 import { addGroup, removeGroup } from '../../redux/actions/ws';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import {
+  getSchedulerSummaryState,
   getDetailedState,
   getObservingMode,
   getGeneralInfo,
@@ -40,6 +41,7 @@ export const schema = {
 const SchedulerContainer = ({
   subscribeToStream,
   unsubscribeToStream,
+  schedulerState,
   subState,
   mode,
   type,
@@ -136,6 +138,7 @@ const SchedulerContainer = ({
     <Scheduler
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
+      schedulerState={schedulerState}
       subState={subState}
       mode={mode}
       type={type}
@@ -228,6 +231,7 @@ const SchedulerContainer = ({
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const schedulerSummaryState = getSchedulerSummaryState(state, ownProps?.salindex);
   const schedulerState = getDetailedState(state, ownProps?.salindex);
   const observingMode = getObservingMode(state, ownProps?.salindex);
   const generalInfo = getGeneralInfo(state, ownProps?.salindex);
@@ -241,6 +245,7 @@ const mapStateToProps = (state, ownProps) => {
   const surveys = getSurveysInfo(state, ownProps?.salindex);
   const blocks = getBlocksInfo(state, ownProps?.salindex);
   return {
+    ...schedulerSummaryState,
     ...schedulerState,
     ...observingMode,
     ...generalInfo,
@@ -258,6 +263,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const subscriptions = [
+    `event-Scheduler-${ownProps?.salindex}-summaryState`,
     `event-Scheduler-${ownProps?.salindex}-detailedState`,
     `event-Scheduler-${ownProps?.salindex}-observingMode`,
     `event-Scheduler-${ownProps?.salindex}-generalInfo`,
