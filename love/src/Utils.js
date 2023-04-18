@@ -337,25 +337,26 @@ export default class ManagerInterface {
 
   static getEFDStatus(url) {
     if (!url) {
-      return new Promise(function(resolve, _) {
-        resolve({ label: 'EFD Status URL is not present in LOVE Configuration File', style: 'invalid'});
+      return new Promise(function (resolve, _) {
+        resolve({ label: 'EFD Status URL is not present in LOVE Configuration File', style: 'invalid' });
       });
     }
-    return fetchWithTimeout(url, {method: 'GET'})
-      .then(result => {
+    return fetchWithTimeout(url, { method: 'GET' })
+      .then((result) => {
         if (result.status == 200) {
-          return {label: 'EFD Healthy Status Pass', style: 'ok'};
+          return { label: 'EFD Healthy Status Pass', style: 'ok' };
         }
         if (result.status === 503) {
-          return {label: 'EFD Healthy Status Fail', style: 'alert'};
+          return { label: 'EFD Healthy Status Fail', style: 'alert' };
         }
         result.json().then((resp) => {
-          return {label: 'EFD Healthy Status Unknown', style: 'alert', response: resp};
+          return { label: 'EFD Healthy Status Unknown', style: 'alert', response: resp };
         });
-      }).catch(err => {
-        return {label: 'EFD Healthy Status Fail', style: 'alert', error: err};
+      })
+      .catch((err) => {
+        return { label: 'EFD Healthy Status Fail', style: 'alert', error: err };
       });
-    }
+  }
 
   // EFD APIs
   static getEFDTimeseries(start_date, time_window, cscs, resample, efd_instance) {
@@ -1501,3 +1502,17 @@ export function getFilename(url) {
   }
   return '';
 }
+
+/**
+ * Function to map ATCamera statuses to styles
+ * @param {string} status camera status
+ * @returns {string} style name
+ */
+export const getCameraStatusStyle = (status) => {
+  if (!status) return '';
+  if (status.toLowerCase() === 'integrating') return 'running';
+  if (status.toLowerCase() === 'reading_out') return 'running';
+  if (status.toLowerCase() === 'ready') return 'ok';
+  if (status.toLowerCase() === 'done') return 'ok';
+  return '';
+};

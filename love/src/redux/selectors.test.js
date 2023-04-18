@@ -13,7 +13,8 @@ import {
 import rootReducer from './reducers';
 import { doReceiveToken } from './actions/auth';
 import { addGroup } from './actions/ws';
-import { cameraStates, imageStates } from 'Config';
+import { cameraStates } from 'Config';
+import { IMAGE_STATES } from 'Constants';
 
 let store;
 let server;
@@ -257,10 +258,10 @@ describe('Test image sequence data passes correctly to component', () => {
   ];
 
   [
-    ['startIntegration', imageStates.INTEGRATING],
-    ['startReadout', imageStates.READING_OUT],
-    ['endReadout', imageStates.END_READOUT],
-    ['endOfImageTelemetry', imageStates.END_TELEMETRY],
+    ['startIntegration', IMAGE_STATES.INTEGRATING],
+    ['startReadout', IMAGE_STATES.READING_OUT],
+    ['endReadout', IMAGE_STATES.END_READOUT],
+    ['endOfImageTelemetry', IMAGE_STATES.END_TELEMETRY],
   ].forEach((stagePair) => {
     it(`Should extract ${stagePair[0]} data from image sequence message`, async () => {
       // Arrange
@@ -465,7 +466,7 @@ it('Append readout parameters to image', async () => {
     timeStamp: 1558368052.999,
     imageIndex: 0,
     exposureTime: 5,
-    state: imageStates.INTEGRATING,
+    state: IMAGE_STATES.INTEGRATING,
     imageReadoutParameters: {
       ccdNames: 'a',
       ccdType: 0,
