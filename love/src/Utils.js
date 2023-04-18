@@ -378,7 +378,7 @@ export default class ManagerInterface {
         }
 
         const sameBrokers = expectedKafkaBrokers.every((broker) => res.brokers.includes(broker));
-        if (res.brokers?.length === 0 || !sameBrokers) {
+        if (!Array.isArray(res.brokers) || res.brokers?.length === 0 || !sameBrokers) {
           return { label: 'SAL is not running as expected', style: 'alert' };
         }
 
