@@ -277,7 +277,7 @@ class Layout extends Component {
 
   checkSALStatus = () => {
     const url = this.props.salConfigFile?.urlStatus;
-    const expectedBrokers = [1, 2, 3];
+    const expectedBrokers = this.props.salConfigFile?.expectedBrokerList;
     ManagerInterface.getSALStatus(url, expectedBrokers).then((result) => {
       this.setState({
         salStatus: result,
