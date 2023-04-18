@@ -83,3 +83,7 @@ input[type='range']:focus::-ms-fill-lower {
 input[type='range']:focus::-ms-fill-upper {
   background: #e3e3e3;
 }
+
+.opacity {
+  opacity: 0.35;
+}

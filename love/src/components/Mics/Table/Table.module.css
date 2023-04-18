@@ -5,8 +5,8 @@
   
   .locationMic {
     display: table-header-group;
-    font-size: 19px;
-    font-weight: normal;
+    font-size: 1.12em;
+    font-weight: bold;
     padding-bottom: 1em;
     text-align-last: start;
   }

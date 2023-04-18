@@ -54,7 +54,7 @@ export default class Slider extends Component {
     return (
       <input
         onChange={(event) => (disabled ? this.disabledFunct(event.target) : onChange(event.target.value))}
-        className={[className, styles.input].join(' ')}
+        className={[className, styles.input, disabled ? styles.opacity : ''].join(' ')}
         type="range"
         id="inputRange"
         min={min}

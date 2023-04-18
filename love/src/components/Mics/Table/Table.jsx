@@ -8,7 +8,12 @@ export default class Table extends Component {
     /**
      * Array of dictonary with the mics info
      */
-    mics: PropTypes.array,
+    mics: PropTypes.arrayOf(PropTypes.objectOf({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      location: PropTypes.string,
+      src: PropTypes.string,
+    })),
     /**
      * Function to change the mic's component state of the currentMic and show on mic details
      */

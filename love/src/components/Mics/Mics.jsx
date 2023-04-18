@@ -22,7 +22,12 @@ const RADIOSLINK = {
 export default class Mics extends Component {
   static propTypes = {
     /* Mics's id  */
-    mics: PropTypes.object,
+    mics: PropTypes.arrayOf(PropTypes.objectOf({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      location: PropTypes.string,
+      src: PropTypes.string,
+    })),
   };
 
   constructor(props) {
@@ -157,6 +162,7 @@ export default class Mics extends Component {
   };
 
   render() {
+    // const { mics } = this.props;
     const drawerDetail = this.state.viewInfo ? styles.micDetails : styles.collapsedMicDetail;
     const svgRec = (
       <RecIcon isRecording={this.state.isRecording} className={[styles.recSVG, styles.verticalSpace].join(' ')}/>
@@ -168,7 +174,7 @@ export default class Mics extends Component {
     );
     let { volume } = this.state.currentMic ?? {};
     let textPlay = this.state.play ? 'PAUSE' : 'PLAY';
-    let textRec = this.state.isRecording ? 'STOP REC' : 'START REC';
+    let textRec = this.state.isRecording ? 'STOP' : 'START';
 
     return (
       <div>
