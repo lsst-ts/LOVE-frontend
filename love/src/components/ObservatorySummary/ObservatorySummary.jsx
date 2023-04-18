@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
+import Label from 'components/GeneralPurpose/SummaryPanel/Label';
+import Value from 'components/GeneralPurpose/SummaryPanel/Value';
+import Title from 'components/GeneralPurpose/SummaryPanel/Title';
+import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
+import {
+  telescopeTrackingStateMap,
+  telescopeTrackingModeStateMap,
+  telescopeTrackingStateToStyle,
+  telescopeTrackingModeStateToStyle,
+} from 'Config';
 import styles from './ObservatorySummary.module.css';
-import SummaryPanel from '../GeneralPurpose/SummaryPanel/SummaryPanel';
-import Label from '../GeneralPurpose/SummaryPanel/Label';
-import Value from '../GeneralPurpose/SummaryPanel/Value';
-import Title from '../GeneralPurpose/SummaryPanel/Title';
 
 const POOLING_TIME = 3000;
 
@@ -14,10 +21,14 @@ export default class ObservatorySummary extends Component {
     simonyiObservingMode: PropTypes.string,
     /** Simonyi Telescope Tracking State */
     simonyiTrackingState: PropTypes.string,
+    /** Simonyi Telescope Tracking Mode */
+    simonyiTrackingMode: PropTypes.string,
     /** Auxiliary Telescope Observing Mode */
     auxtelObservingMode: PropTypes.string,
     /** Auxiliary Telescope Tracking State */
     auxtelTrackingState: PropTypes.string,
+    /** Auxiliary Telescope Tracking Mode */
+    auxtelTrackingMode: PropTypes.string,
     /** Control Location */
     controlLocation: PropTypes.object,
     /** Last Updated Control Location info */
@@ -25,10 +36,12 @@ export default class ObservatorySummary extends Component {
   };
 
   static defaultProps = {
-    simonyiObservingMode: 'Unknown',
-    simonyiTrackingState: 'Unknown',
-    auxtelObservingMode: 'Unknown',
-    auxtelTrackingState: 'Unknown',
+    simonyiObservingMode: 'UNKNOWN',
+    simonyiTrackingState: 'UNKNOWN',
+    simonyiTrackingMode: 'UNKNOWN',
+    auxtelObservingMode: 'UNKNOWN',
+    auxtelTrackingState: 'UNKNOWN',
+    auxtelTrackingMode: 'UNKNOWN',
     controlLocation: null,
     lastUpdated: null,
   };
@@ -45,28 +58,41 @@ export default class ObservatorySummary extends Component {
     const {
       simonyiObservingMode,
       simonyiTrackingState,
+      simonyiTrackingMode,
       auxtelObservingMode,
       auxtelTrackingState,
+      auxtelTrackingMode,
       controlLocation,
       lastUpdated,
     } = this.props;
 
     const controlLocationName = controlLocation
       ? controlLocation.name.charAt(0).toUpperCase() + controlLocation.name.slice(1)
-      : 'Unknown';
+      : 'UNKNOWN';
+
+    const simonyiTrackingStateText = telescopeTrackingStateMap[simonyiTrackingState];
+    const simonyiTrackingModeText = telescopeTrackingModeStateMap[simonyiTrackingMode];
+    const auxtelTrackingStateText = telescopeTrackingStateMap[auxtelTrackingState];
+    const auxtelTrackingModeText = telescopeTrackingModeStateMap[auxtelTrackingMode];
 
     return (
       <div className={styles.container}>
         <SummaryPanel className={styles.row2}>
           <Title wide>Simonyi Telescope</Title>
+          <Label>Tracking</Label>
+          <Value>
+            <StatusText status={telescopeTrackingStateToStyle[simonyiTrackingStateText]}>
+              {simonyiTrackingStateText}
+            </StatusText>
+          </Value>
           <Label>Operation Mode</Label>
-          <Value>Unknown</Value>
+          <Value>UNKNOWN</Value>
           <Label>Observation Mode</Label>
           <Value>{simonyiObservingMode}</Value>
           <Label>Tracking Mode</Label>
-          <Value>{simonyiTrackingState}</Value>
+          <Value>{simonyiTrackingModeText}</Value>
           <Label>Power Source</Label>
-          <Value>Unknown</Value>
+          <Value>UNKNOWN</Value>
         </SummaryPanel>
 
         <SummaryPanel>
@@ -76,19 +102,25 @@ export default class ObservatorySummary extends Component {
             <span title={`Last updated: ${lastUpdated?.toUTCString()}`}>{controlLocationName}</span>
           </Value>
           <Label>Power Source</Label>
-          <Value>Unknown</Value>
+          <Value>UNKNOWN</Value>
         </SummaryPanel>
 
         <SummaryPanel>
           <Title wide>Auxiliary Telescope</Title>
+          <Label>Tracking</Label>
+          <Value>
+            <StatusText status={telescopeTrackingStateToStyle[auxtelTrackingStateText]}>
+              {auxtelTrackingStateText}
+            </StatusText>
+          </Value>
           <Label>Operation Mode</Label>
-          <Value>Unknown</Value>
+          <Value>UNKNOWN</Value>
           <Label>Observation Mode</Label>
           <Value>{auxtelObservingMode}</Value>
           <Label>Tracking Mode</Label>
-          <Value>{auxtelTrackingState}</Value>
+          <Value>{auxtelTrackingModeText}</Value>
           <Label>Power Source</Label>
-          <Value>Unknown</Value>
+          <Value>UNKNOWN</Value>
         </SummaryPanel>
       </div>
     );

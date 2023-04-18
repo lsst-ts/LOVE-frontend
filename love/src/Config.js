@@ -750,6 +750,19 @@ export const ataosCorrectionsStateToStyle = {
   UNKNOWN: 'invalid',
 };
 
+//Observatory
+export const telescopeTrackingStateToStyle = {
+  UNKNOWN: 'invalid',
+  'NOT TRACKING': 'warning',
+  TRACKING: 'ok',
+};
+
+export const telescopeTrackingModeStateToStyle = {
+  UNKNOWN: 'invalid',
+  FKS: 'ok',
+  ICRS: 'ok',
+};
+
 /*****************************************************************************/
 /*******************************STATE MAPPINGS********************************/
 /*****************************************************************************/
@@ -1136,6 +1149,19 @@ export const mtdomeElevationEnabledStateToMap = {
   0: 'DISABLED',
   1: 'ENABLED',
   2: 'FAULT',
+};
+
+//Observatory
+export const telescopeTrackingStateMap = {
+  0: 'UNKNOWN',
+  false: 'NOT TRACKING',
+  true: 'TRACKING',
+};
+
+export const telescopeTrackingModeStateMap = {
+  0: 'UNKNOWN',
+  1: 'FKS',
+  2: 'ICRS',
 };
 
 /*****************************************************************************/
