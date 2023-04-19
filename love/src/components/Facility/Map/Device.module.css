@@ -1,79 +1,139 @@
-.device{
-	filter: drop-shadow(0px 0px 1px rgb(0 0 0 / 0.25));
+.device {
+  filter: drop-shadow(0px 0px 1px rgb(0 0 0 / 0.25));
 }
 
-.container{
-	fill:var(--second-quaternary-background-color);
+.container {
+  fill: var(--second-quaternary-background-color);
 }
 
-.titleRow2{
-	fill:var(--second-tertiary-background-color);
+.titleRow2 {
+  fill: var(--second-tertiary-background-color);
 }
 
-.titleBg{
-	fill:var(--second-primary-background-color);
+.titleBg {
+  fill: var(--second-primary-background-color);
 }
 
-.title{
-	fill:var(--base-font-color);
-	font-size:6px;
-	font-weight:bold;
+.alarmBg {
+  animation: alert 0.5s infinite;
+  animation-direction: alternate;
 }
 
-.statusOk{
-	fill:var(--status-ok-color);
+.alarmRow2 {
+  fill: var(--second-tertiary-background-color);
+  animation: alert-stroke 0.5s infinite;
+  animation-direction: alternate;
 }
 
-.statusWarning{
-	fill:var(--status-warning-color);
-}
-.statusAlert{
-	fill:var(--status-alert-color);
-}
-.statusDisabled{
-	fill:var(--status-disabled-color);
-}
-.statusNull{
-	fill:none;
-	stroke:var(--status-disabled-color);
+@keyframes alert-stroke {
+  from {
+    stroke: var(--status-alert-color);
+  }
+  to {
+    stroke: var(--status-alert-dimmed-color-2);
+  }
 }
 
-.param{
-	fill:var(--base-font-color);
-	font-size:4px;
+@keyframes alert {
+  from {
+    fill: var(--status-alert-color);
+    stroke: var(--status-alert-color);
+  }
+  to {
+    fill: var(--status-alert-dimmed-color-2);
+    stroke: var(--status-alert-dimmed-color-2);
+  }
 }
 
-.paramGroup{
-	fill:var(--base-font-color);
-	font-size:4px;
-	font-weight:bold;
+.title {
+  fill: var(--base-font-color);
+  font-size: 6px;
+  font-weight: bold;
 }
 
-.boxParamOk{
-	font-size:4px;
-	fill:var(--satus-ok-dimmed-color-3)
+.statusOk {
+  fill: var(--status-ok-color);
+  font-size: 4px;
 }
 
-.paramVal{
-	fill:var(--base-font-color);
-	font-size:4px;
+.statusWarning {
+  fill: var(--status-warning-color);
+  font-size: 4px;
 }
-.insideContent{
-	transition: all 0.25s;
+.statusAlert {
+  fill: var(--status-alert-color);
+  font-size: 4px;
 }
-.mask{
-	fill:white;
+.statusDisabled {
+  fill: var(--status-disabled-color);
+  font-size: 4px;
 }
-
-.arrowBg{
-	fill:var(--second-tertiary-background-color);
-	cursor:pointer;
-}
-
-.arrow{
-	stroke:var(--base-font-color);
-	fill:none;
-	transition: all 0.25s;
-	cursor:pointer;
+.statusNull {
+  fill: var(--status-disabled-dimmed-color);
+  stroke: none;
+  font-size: 4px;
 }
 
+.bgStatusOk {
+  fill: var(--status-ok-dimmed-color-3);
+  font-size: 4px;
+}
+
+.bgStatusWarning {
+  fill: var(--status-warning-dimmed-color-3);
+  font-size: 4px;
+}
+.bgStatusAlert {
+  fill: var(--status-alert-dimmed-color-3);
+  font-size: 4px;
+}
+.bgStatusDisabled {
+  fill: var(--status-disabled-dimmed-color-3);
+  font-size: 4px;
+}
+.bgStatusNull {
+  fill: var(--status-disabled-dimmed-color-3);
+  font-size: 4px;
+}
+
+.param {
+  fill: var(--base-font-color);
+  font-size: 4px;
+}
+
+.paramGroup {
+  fill: var(--base-font-color);
+  font-size: 4px;
+  font-weight: bold;
+}
+
+.boxParamOk {
+  font-size: 4px;
+  fill: var(--satus-ok-dimmed-color-3);
+}
+
+.paramVal {
+  fill: var(--base-font-color);
+  font-size: 4px;
+}
+.insideContent {
+  transition: all 0.25s;
+}
+.mask {
+  fill: white;
+}
+
+.arrowBg {
+  fill: var(--second-tertiary-background-color);
+  cursor: pointer;
+}
+
+.arrow {
+  stroke: var(--base-font-color);
+  fill: none;
+  transition: all 0.25s;
+  cursor: pointer;
+}
+.alarm {
+  transition: all 0.25s;
+}

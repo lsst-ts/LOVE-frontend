@@ -1109,6 +1109,193 @@ export const getLATISSState = (state) => {
   };
 };
 
+/////////////////////////////////////////
+// F A C I L I T Y - S E L E C T O R S //
+/////////////////////////////////////////
+
+// HVAC Events //
+export const getHVACEvents = (state) => {
+  const subscriptions = [
+    'telemetry-MTM1M3-0-forceActuatorData',
+    'event-MTM1M3-0-forceActuatorInfo',
+    'event-MTM1M3-0-forceActuatorState',
+  ];
+  const m1m3Data = getStreamsData(state, subscriptions);
+  return {
+    forceActuatorData: m1m3Data['telemetry-MTM1M3-0-forceActuatorData'] ?? {},
+    xPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.xPosition?.value ?? [],
+    yPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.yPosition?.value ?? [],
+    zPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.zPosition?.value ?? [],
+    actuatorReferenceId: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.referenceId?.value ?? [],
+    actuatorIlcState: m1m3Data['event-MTM1M3-0-forceActuatorState']?.[0]?.ilcState?.value ?? [],
+  };
+};
+
+export const getHVACSubscription = () => {
+  return [
+    //Level 1//
+    'telemetry-HVAC-0-bombaAguaFriaP01',
+    'telemetry-HVAC-0-chiller01P01',
+    'telemetry-HVAC-0-chiller02P01',
+    'telemetry-HVAC-0-chiller03P01',
+    'telemetry-HVAC-0-generalP01',
+    'telemetry-HVAC-0-valvulaP01',
+    'telemetry-HVAC-0-vea01P01',
+    'telemetry-HVAC-0-vec01P01',
+    'telemetry-HVAC-0-vin01P01',
+
+    //Level 2//
+    'telemetry-HVAC-0-crack01P02',
+    'telemetry-HVAC-0-crack02P02',
+    'telemetry-HVAC-0-fancoil01P02',
+    'telemetry-HVAC-0-fancoil02P02',
+    'telemetry-HVAC-0-fancoil03P02',
+    'telemetry-HVAC-0-fancoil04P02',
+    'telemetry-HVAC-0-fancoil05P02',
+    'telemetry-HVAC-0-fancoil06P02',
+    'telemetry-HVAC-0-fancoil07P02',
+    'telemetry-HVAC-0-fancoil08P02',
+    'telemetry-HVAC-0-fancoil09P02',
+    'telemetry-HVAC-0-fancoil10P02',
+    'telemetry-HVAC-0-fancoil11P02',
+    'telemetry-HVAC-0-fancoil12P02',
+
+    //Level 4//
+    'telemetry-HVAC-0-manejadoraSblancaP04',
+    'telemetry-HVAC-0-manejadoraSlimpiaP04',
+    'telemetry-HVAC-0-vex03LowerP04',
+    'telemetry-HVAC-0-vex04CargaP04',
+
+    //Level 5//
+    'telemetry-HVAC-0-dynaleneP05',
+    'telemetry-HVAC-0-manejadoraLower01P05',
+    'telemetry-HVAC-0-manejadoraLower02P05',
+    'telemetry-HVAC-0-manejadoraLower03P05',
+    'telemetry-HVAC-0-manejadoraLower04P05',
+    'telemetry-HVAC-0-vea01P05',
+    'telemetry-HVAC-0-vea08P05',
+    'telemetry-HVAC-0-vea09P05',
+    'telemetry-HVAC-0-vea10P05',
+    'telemetry-HVAC-0-vea11P05',
+    'telemetry-HVAC-0-vea12P05',
+    'telemetry-HVAC-0-vea13P05',
+    'telemetry-HVAC-0-vea14P05',
+    'telemetry-HVAC-0-vea15P05',
+    'telemetry-HVAC-0-vea16P05',
+    'telemetry-HVAC-0-vea17P05',
+  ];
+};
+
+// HVAC Telemetry //
+export const getHVACTelemetry = (state) => {
+  const subscriptions = [
+    //Level 1//
+    'telemetry-HVAC-0-bombaAguaFriaP01',
+    'telemetry-HVAC-0-chiller01P01',
+    'telemetry-HVAC-0-chiller02P01',
+    'telemetry-HVAC-0-chiller03P01',
+    'telemetry-HVAC-0-generalP01',
+    'telemetry-HVAC-0-valvulaP01',
+    'telemetry-HVAC-0-vea01P01',
+    'telemetry-HVAC-0-vec01P01',
+    'telemetry-HVAC-0-vin01P01',
+
+    //Level 2//
+    'telemetry-HVAC-0-crack01P02',
+    'telemetry-HVAC-0-crack02P02',
+    'telemetry-HVAC-0-fancoil01P02',
+    'telemetry-HVAC-0-fancoil02P02',
+    'telemetry-HVAC-0-fancoil03P02',
+    'telemetry-HVAC-0-fancoil04P02',
+    'telemetry-HVAC-0-fancoil05P02',
+    'telemetry-HVAC-0-fancoil06P02',
+    'telemetry-HVAC-0-fancoil07P02',
+    'telemetry-HVAC-0-fancoil08P02',
+    'telemetry-HVAC-0-fancoil09P02',
+    'telemetry-HVAC-0-fancoil10P02',
+    'telemetry-HVAC-0-fancoil11P02',
+    'telemetry-HVAC-0-fancoil12P02',
+
+    //Level 4//
+    'telemetry-HVAC-0-manejadoraSblancaP04',
+    'telemetry-HVAC-0-manejadoraSlimpiaP04',
+    'telemetry-HVAC-0-vex03LowerP04',
+    'telemetry-HVAC-0-vex04CargaP04',
+
+    //Level 5//
+    'telemetry-HVAC-0-dynaleneP05',
+    'telemetry-HVAC-0-manejadoraLower01P05',
+    'telemetry-HVAC-0-manejadoraLower02P05',
+    'telemetry-HVAC-0-manejadoraLower03P05',
+    'telemetry-HVAC-0-manejadoraLower04P05',
+    'telemetry-HVAC-0-vea01P05',
+    'telemetry-HVAC-0-vea08P05',
+    'telemetry-HVAC-0-vea09P05',
+    'telemetry-HVAC-0-vea10P05',
+    'telemetry-HVAC-0-vea11P05',
+    'telemetry-HVAC-0-vea12P05',
+    'telemetry-HVAC-0-vea13P05',
+    'telemetry-HVAC-0-vea14P05',
+    'telemetry-HVAC-0-vea15P05',
+    'telemetry-HVAC-0-vea16P05',
+    'telemetry-HVAC-0-vea17P05',
+  ];
+
+  const HVACData = getStreamsData(state, subscriptions);
+  return {
+    //Level 1//
+    bombaAguaFriaP01: HVACData['telemetry-HVAC-0-bombaAguaFriaP01'] ?? {},
+    chiller01P01: HVACData['telemetry-HVAC-0-chiller01P01'] ?? {},
+    chiller02P01: HVACData['telemetry-HVAC-0-chiller02P01'] ?? {},
+    chiller03P01: HVACData['telemetry-HVAC-0-chiller03P01'] ?? {},
+    generalP01: HVACData['telemetry-HVAC-0-generalP01'] ?? {},
+    valvulaP01: HVACData['telemetry-HVAC-0-valvulaP01'] ?? {},
+    vea01P01: HVACData['telemetry-HVAC-0-vea01P01'] ?? {},
+    vec01P01: HVACData['telemetry-HVAC-0-vec01P01'] ?? {},
+    vin01P01: HVACData['telemetry-HVAC-0-vin01P01'] ?? {},
+
+    //Level 2//
+    crack01P02: HVACData['telemetry-HVAC-0-crack01P02'] ?? {},
+    crack02P02: HVACData['telemetry-HVAC-0-crack02P02'] ?? {},
+    fancoil01P02: HVACData['telemetry-HVAC-0-fancoil01P02'] ?? {},
+    fancoil02P02: HVACData['telemetry-HVAC-0-fancoil02P02'] ?? {},
+    fancoil03P02: HVACData['telemetry-HVAC-0-fancoil03P02'] ?? {},
+    fancoil04P02: HVACData['telemetry-HVAC-0-fancoil04P02'] ?? {},
+    fancoil05P02: HVACData['telemetry-HVAC-0-fancoil05P02'] ?? {},
+    fancoil06P02: HVACData['telemetry-HVAC-0-fancoil06P02'] ?? {},
+    fancoil07P02: HVACData['telemetry-HVAC-0-fancoil07P02'] ?? {},
+    fancoil08P02: HVACData['telemetry-HVAC-0-fancoil08P02'] ?? {},
+    fancoil09P02: HVACData['telemetry-HVAC-0-fancoil09P02'] ?? {},
+    fancoil10P02: HVACData['telemetry-HVAC-0-fancoil10P02'] ?? {},
+    fancoil11P02: HVACData['telemetry-HVAC-0-fancoil11P02'] ?? {},
+    fancoil12P02: HVACData['telemetry-HVAC-0-fancoil12P02'] ?? {},
+
+    //Level 4//
+    manejadoraSblancaP04: HVACData['telemetry-HVAC-0-manejadoraSblancaP04'] ?? {},
+    manejadoraSlimpiaP04: HVACData['telemetry-HVAC-0-manejadoraSlimpiaP04'] ?? {},
+    vex03LowerP04: HVACData['telemetry-HVAC-0-vex03LowerP04'] ?? {},
+    vex04CargaP04: HVACData['telemetry-HVAC-0-vex04CargaP04'] ?? {},
+
+    //Level 5//
+    dynaleneP05: HVACData['telemetry-HVAC-0-dynaleneP05'] ?? {},
+    manejadoraLower01P05: HVACData['telemetry-HVAC-0-manejadoraLower01P05'] ?? {},
+    manejadoraLower02P05: HVACData['telemetry-HVAC-0-manejadoraLower02P05'] ?? {},
+    manejadoraLower03P05: HVACData['telemetry-HVAC-0-manejadoraLower03P05'] ?? {},
+    manejadoraLower04P05: HVACData['telemetry-HVAC-0-manejadoraLower04P05'] ?? {},
+    vea01P05: HVACData['telemetry-HVAC-0-vea01P05'] ?? {},
+    vea08P05: HVACData['telemetry-HVAC-0-vea08P05'] ?? {},
+    vea09P05: HVACData['telemetry-HVAC-0-vea09P05'] ?? {},
+    vea10P05: HVACData['telemetry-HVAC-0-vea10P05'] ?? {},
+    vea11P05: HVACData['telemetry-HVAC-0-vea11P05'] ?? {},
+    vea12P05: HVACData['telemetry-HVAC-0-vea12P05'] ?? {},
+    vea13P05: HVACData['telemetry-HVAC-0-vea13P05'] ?? {},
+    vea14P05: HVACData['telemetry-HVAC-0-vea14P05'] ?? {},
+    vea15P05: HVACData['telemetry-HVAC-0-vea15P05'] ?? {},
+    vea16P05: HVACData['telemetry-HVAC-0-vea16P05'] ?? {},
+    vea17P05: HVACData['telemetry-HVAC-0-vea17P05'] ?? {},
+  };
+};
+
 export const getObservatorySubscriptions = () => {
   return [
     // Observatory
