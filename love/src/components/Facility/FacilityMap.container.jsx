@@ -7,7 +7,7 @@ import FacilityMap from './FacilityMap';
 
 export const schema = {
   description: 'Vera C. Rubin Summit Facility Map',
-  defaultSize: [61, 32],
+  defaultSize: [70, 50],
   props: {
     title: {
       type: 'string',
