@@ -623,14 +623,16 @@ class Layout extends Component {
                     locationIcon={this.getObsLocationIcon()}
                     location={controlLocationName}
                     locationLastUpdate={lastUpdated}
-                    simonyiOperationMode={'Unknown'}
-                    simonyiTrackingMode={this.props.observatorySummary?.simonyiTrackingState}
+                    simonyiOperationMode={'UNKNOWN'}
+                    simonyiTrackingState={this.props.observatorySummary?.simonyiTrackingState}
+                    simonyiTrackingMode={this.props.observatorySummary?.simonyiTrackingMode}
                     simonyiObsMode={this.props.observatorySummary?.simonyiObservingMode}
-                    simonyiPower={'Unknown'}
-                    auxtelOperationMode={'Unknown'}
-                    auxtelTrackingMode={this.props.observatorySummary?.auxtelTrackingState}
+                    simonyiPower={'UNKNOWN'}
+                    auxtelOperationMode={'UNKNOWN'}
+                    auxtelTrackingState={this.props.observatorySummary?.auxtelTrackingState}
+                    auxtelTrackingMode={this.props.observatorySummary?.auxtelTrackingMode}
                     auxtelObsMode={this.props.observatorySummary?.auxtelObservingMode}
-                    auxtelPower={'Unknown'}
+                    auxtelPower={'UNKNOWN'}
                   ></ObservatorySummaryMenu>
                 </div>
               </DropdownMenu>

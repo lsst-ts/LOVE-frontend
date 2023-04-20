@@ -8,7 +8,6 @@ import {
   m1m3DetailedStateMap,
   m1m3DetailedStateToStyle,
   m1m3HardpointActuatorMotionStateMap,
-  m1mActuatorILCStateMap,
   M1M3HardpointPositions,
 } from 'Config';
 import Select from 'components/GeneralPurpose/Select/Select';
@@ -70,7 +69,7 @@ export default class M1M3 extends Component {
       name: 'OK',
       class: styles.alert_summary,
       fill: styles.fill_alert_summary,
-    }
+    },
   };
 
   static statesMotion = {
@@ -500,7 +499,11 @@ export default class M1M3 extends Component {
 
                 {M1M3HardpointPositions.map((hardpoint) => {
                   return (
-                    <g key={hardpoint.id} className={styles.gHardpoint} onClick={() => this.hardpointSelected(hardpoint.id)}>
+                    <g
+                      key={hardpoint.id}
+                      className={styles.gHardpoint}
+                      onClick={() => this.hardpointSelected(hardpoint.id)}
+                    >
                       <circle
                         className={styles.circleHardpoint + ' ' + this.fillHardpoint(hardpoint.id)}
                         cx={hardpoint.mini.position[0]}

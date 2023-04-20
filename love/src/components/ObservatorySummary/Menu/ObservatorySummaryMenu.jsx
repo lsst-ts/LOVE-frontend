@@ -1,5 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
+import {
+  telescopeTrackingStateMap,
+  telescopeTrackingModeStateMap,
+  telescopeTrackingStateToStyle,
+  telescopeTrackingModeStateToStyle,
+} from 'Config';
 import styles from './ObservatorySummaryMenu.module.css';
 
 /** Contents of the ObservatorySummary details Dropdown Menu */
@@ -10,14 +17,20 @@ export default function ObservatorySummaryMenu({
   menuElementClassName,
   dividerClassName,
   simonyiOperationMode,
+  simonyiTrackingState,
   simonyiTrackingMode,
   simonyiObsMode,
   simonyiPower,
   auxtelOperationMode,
+  auxtelTrackingState,
   auxtelTrackingMode,
   auxtelObsMode,
   auxtelPower,
 }) {
+  const simonyiTrackingStateText = telescopeTrackingStateMap[simonyiTrackingState];
+  const simonyiTrackingModeText = telescopeTrackingModeStateMap[simonyiTrackingMode];
+  const auxtelTrackingStateText = telescopeTrackingStateMap[auxtelTrackingState];
+  const auxtelTrackingModeText = telescopeTrackingModeStateMap[auxtelTrackingMode];
   return (
     <>
       <div className={[menuElementClassName, styles.menuElement].join(' ')}>
@@ -57,16 +70,19 @@ export default function ObservatorySummaryMenu({
             />
           </svg>
           <span className={styles.sectionTitle}>Simonyi</span>
+          <StatusText status={telescopeTrackingStateToStyle[simonyiTrackingStateText]}>
+            {simonyiTrackingStateText}
+          </StatusText>
         </div>
 
         <span className={styles.label}>Operation Mode</span>
         <span>{simonyiOperationMode}</span>
 
-        <span className={styles.label}>Tracking Mode</span>
-        <span>{simonyiTrackingMode}</span>
-
         <span className={styles.label}>Obsv. Mode</span>
         <span>{simonyiObsMode}</span>
+
+        <span className={styles.label}>Tracking Mode</span>
+        <span>{simonyiTrackingModeText}</span>
 
         <span className={styles.label}>Power Source</span>
         <span>{simonyiPower}</span>
@@ -84,13 +100,16 @@ export default function ObservatorySummaryMenu({
             />
           </svg>
           <span className={styles.sectionTitle}>Auxtel</span>
+          <StatusText status={telescopeTrackingStateToStyle[auxtelTrackingStateText]}>
+            {auxtelTrackingStateText}
+          </StatusText>
         </div>
 
         <span className={styles.label}>Operation Mode</span>
         <span>{auxtelOperationMode}</span>
 
         <span className={styles.label}>Tracking Mode</span>
-        <span>{auxtelTrackingMode}</span>
+        <span>{auxtelTrackingModeText}</span>
 
         <span className={styles.label}>Obsv. Mode</span>
         <span>{auxtelObsMode}</span>
@@ -117,6 +136,8 @@ ObservatorySummaryMenu.propTypes = {
   /** Simonyi Telemetry and Event Data */
   /** Simonyi Operation Mode */
   simonyiOperationMode: PropTypes.string,
+  /** Simonyi Tracking State */
+  simonyiTrackingState: PropTypes.string,
   /** Simonyi Tracking Mode */
   simonyiTrackingMode: PropTypes.string,
   /** Simonyi Observation Mode */
@@ -127,6 +148,8 @@ ObservatorySummaryMenu.propTypes = {
   /** Auxiliary Telescope Telemetry and Event Data */
   /** Auxiliary Telescope Operation Mode */
   auxtelOperationMode: PropTypes.string,
+  /** Auxiliary Telescope Tracking State */
+  auxtelTrackingState: PropTypes.string,
   /** Auxiliary Telescope Tracking Mode */
   auxtelTrackingMode: PropTypes.string,
   /** Auxiliary Telescope Observation Mode */

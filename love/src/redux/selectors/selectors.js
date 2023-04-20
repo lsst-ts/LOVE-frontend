@@ -986,10 +986,54 @@ export const getAircraftTracker = (state) => {
   const subscriptions = ['telemetry-AircraftTracker-0-data'];
   const data = getStreamsData(state, subscriptions);
 
-  const aircraftId = data['telemetry-AircraftTracker-0-data']?.id?.value ?? ['SKU271', 'LAN512', 'LAN020', undefined, undefined, undefined, undefined, undefined, undefined, undefined];
-  const latitude = data['telemetry-AircraftTracker-0-data']?.latitude?.value ?? [-29.9604, -29.69192, -31.7404, 0, 0, 0, 0, 0, 0, 0];
-  const longitude = data['telemetry-AircraftTracker-0-data']?.longitude?.value ?? [-70.33709, -72.05715, -70.8, 0, 0, 0, 0, 0, 0, 0];
-  const altitude = data['telemetry-AircraftTracker-0-data']?.altitude?.value ?? [1013.2, 1020.34, 980.15, 0, 0, 0, 0, 0, 0, 0];
+  const aircraftId = data['telemetry-AircraftTracker-0-data']?.id?.value ?? [
+    'SKU271',
+    'LAN512',
+    'LAN020',
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+  ];
+  const latitude = data['telemetry-AircraftTracker-0-data']?.latitude?.value ?? [
+    -29.9604,
+    -29.69192,
+    -31.7404,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+  ];
+  const longitude = data['telemetry-AircraftTracker-0-data']?.longitude?.value ?? [
+    -70.33709,
+    -72.05715,
+    -70.8,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+  ];
+  const altitude = data['telemetry-AircraftTracker-0-data']?.altitude?.value ?? [
+    1013.2,
+    1020.34,
+    980.15,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+  ];
   const track = data['telemetry-AircraftTracker-0-data']?.track?.value ?? [180, 105, 350, 0, 0, 0, 0, 0, 0, 0];
   const distance = data['telemetry-AircraftTracker-0-data']?.distance?.value ?? [98, 146, 188, 0, 0, 0, 0, 0, 0, 0];
   const speed = data['telemetry-AircraftTracker-0-data']?.speed?.value ?? [800, 900, 1100, 0, 0, 0, 0, 0, 0, 0];
@@ -1071,9 +1115,13 @@ export const getObservatorySubscriptions = () => {
     // Simonyi
     'event-Scheduler-1-observingMode',
     'event-Scheduler-1-observatoryState',
+    // MTPtg
+    'event-MTPtg-0-currentTarget',
     // Auxtel
     'event-Scheduler-2-observingMode',
     'event-Scheduler-2-observatoryState',
+    // ATPtg
+    'event-ATPtg-0-currentTarget',
   ];
 };
 
@@ -1084,12 +1132,16 @@ export const getObservatoryState = (state) => {
   const auxtelObservingMode = observatoryData['event-Scheduler-2-observingMode'];
   const simonyiObservatoryState = observatoryData['event-Scheduler-1-observatoryState'];
   const auxtelObservatoryState = observatoryData['event-Scheduler-2-observatoryState'];
+  const mptgCurrentTarget = observatoryData['event-MTPtg-0-currentTarget'];
+  const atptgCurrentTarget = observatoryData['event-ATPtg-0-currentTarget'];
 
   return {
-    simonyiObservingMode: simonyiObservingMode ? simonyiObservingMode[0].mode.value : 'Unknown',
-    auxtelObservingMode: auxtelObservingMode ? auxtelObservingMode[0].mode.value : 'Unknown',
-    simonyiTrackingState: simonyiObservatoryState ? simonyiObservatoryState[0].tracking.value : 'Unknown',
-    auxtelTrackingState: auxtelObservatoryState ? auxtelObservatoryState[0].tracking.value : 'Unknown',
+    simonyiObservingMode: simonyiObservingMode ? simonyiObservingMode[0].mode.value : 'UNKNOWN',
+    auxtelObservingMode: auxtelObservingMode ? auxtelObservingMode[0].mode.value : 'UNKNOWN',
+    simonyiTrackingState: simonyiObservatoryState ? simonyiObservatoryState[0].tracking.value : 0,
+    auxtelTrackingState: auxtelObservatoryState ? auxtelObservatoryState[0].tracking.value : 0,
+    simonyiTrackingMode: mptgCurrentTarget ? mptgCurrentTarget[0].frame.value : 0,
+    auxtelTrackingMode: atptgCurrentTarget ? atptgCurrentTarget[0].frame.value : 0,
   };
 };
 
