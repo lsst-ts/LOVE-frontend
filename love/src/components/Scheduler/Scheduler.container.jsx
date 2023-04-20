@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Scheduler from './Scheduler';
-import { addGroup, removeGroup } from '../../redux/actions/ws';
+import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import {
   getSchedulerSummaryState,
@@ -41,6 +41,7 @@ export const schema = {
 const SchedulerContainer = ({
   subscribeToStream,
   unsubscribeToStream,
+  requestSALCommand,
   schedulerState,
   subState,
   mode,
@@ -138,6 +139,7 @@ const SchedulerContainer = ({
     <Scheduler
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
+      requestSALCommand={requestSALCommand}
       schedulerState={schedulerState}
       subState={subState}
       mode={mode}
@@ -284,6 +286,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     unsubscribeToStream: () => {
       subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
+    },
+    requestSALCommand: (cmd) => {
+      dispatch(
+        requestSALCommand({
+          ...cmd,
+        }),
+      );
     },
   };
 };
