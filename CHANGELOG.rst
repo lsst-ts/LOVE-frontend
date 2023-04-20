@@ -5,10 +5,10 @@ Version History
 v5.19.0
 --------
 
-* Connect SAL status service `https://github.com/lsst-ts/LOVE-frontend/pull/451`_
-* Add ``Facility Map`` component `https://github.com/lsst-ts/LOVE-frontend/pull/450`_
-* Connect Tracking Modes telemetries `https://github.com/lsst-ts/LOVE-frontend/pull/449`_
-* Fix ``GIS`` signals - effects mappings `https://github.com/lsst-ts/LOVE-frontend/pull/448`_
+* Connect SAL status service `<https://github.com/lsst-ts/LOVE-frontend/pull/451>`_
+* Add ``Facility Map`` component `<https://github.com/lsst-ts/LOVE-frontend/pull/450>`_
+* Connect Tracking Modes telemetries `<https://github.com/lsst-ts/LOVE-frontend/pull/449>`_
+* Fix ``GIS`` signals - effects mappings `<https://github.com/lsst-ts/LOVE-frontend/pull/448`_
 
 v5.18.0
 --------
