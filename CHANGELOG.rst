@@ -2,16 +2,17 @@
 Version History
 ===============
 
-v5.18.1
+v5.19.0
 --------
 
-* Connect Tracking Modes telemetries `https://github.com/lsst-ts/LOVE-frontend/pull/449`
-* Fix ``GIS`` signals - effects mappings `https://github.com/lsst-ts/LOVE-frontend/pull/448`
+* Add ``Facility Map`` component `https://github.com/lsst-ts/LOVE-frontend/pull/450`_
+* Connect Tracking Modes telemetries `https://github.com/lsst-ts/LOVE-frontend/pull/449`_
+* Fix ``GIS`` signals - effects mappings `https://github.com/lsst-ts/LOVE-frontend/pull/448`_
 
 v5.18.0
 --------
 
-* Add ``Aircraft Tracker`` component implementation `https://github.com/lsst-ts/LOVE-frontend/pull/447`
+* Add ``Aircraft Tracker`` component implementation `https://github.com/lsst-ts/LOVE-frontend/pull/447`_
 * Add Location Control sources of information `<https://github.com/lsst-ts/LOVE-frontend/pull/446>`_
 * Fix LATISS and ATCamera state mappings `<https://github.com/lsst-ts/LOVE-frontend/pull/445>`_
 

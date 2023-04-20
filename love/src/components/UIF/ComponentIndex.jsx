@@ -174,6 +174,16 @@ export const observatoryIndex = {
       },
     },
   },
+  FacilityMap: {
+    component: require('../Facility/FacilityMap.container').default,
+    schema: {
+      ...require('../Facility/FacilityMap.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../Facility/FacilityMap.container').schema.props,
+      },
+    },
+  },
   TimeDisplay: {
     component: require('../Time/TimeDisplay.container').default,
     schema: require('../Time/TimeDisplay.container').schema,
