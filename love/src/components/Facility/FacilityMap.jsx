@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { defaultNumberFormatter } from 'Utils';
-import { M1M3ActuatorPositions } from 'Config';
+import PropTypes from 'prop-types';
+
 import styles from './FacilityMap.module.css';
 import Badge from '../GeneralPurpose/Badge/Badge';
 import Map from './Map/Map.jsx';
@@ -13,13 +13,132 @@ export default class FacilityMap extends Component {
     super(props);
 
     this.state = {
-      showHVAC: true,
+      showHVAC: false,
       showPower: true,
       showMenu: true,
       arrowDirection: 'right',
-      alarms: [],
     };
   }
+
+  static propTypes = {
+    /** Function to subscribe to streams to receive */
+    subscribeToStreams: PropTypes.func,
+    /** Function to unsubscribe to streams to stop receiving */
+    unsubscribeToStreams: PropTypes.func,
+
+    /** Are HVAC devices showing */
+    showHVAC: PropTypes.bool,
+
+    /** Is Power Information showing */
+    showPower: PropTypes.bool,
+
+    /** Is the LeftMenu showing*/
+    showMenu: PropTypes.bool,
+
+    /** Current direction the left menu arrow is pointing */
+    arrowDirection: PropTypes.string,
+
+    /** HVAC Level 01 telemetry */
+    bombaAguaFriaP01: PropTypes.object,
+    chiller01P01: PropTypes.object,
+    chiller02P01: PropTypes.object,
+    chiller03P01: PropTypes.object,
+    generalP01: PropTypes.object,
+    valvulaP01: PropTypes.object,
+    vea01P01: PropTypes.object,
+    vec01P01: PropTypes.object,
+    vin01P01: PropTypes.object,
+
+    /** HVAC Level 02 telemetry */
+    crack01P02: PropTypes.object,
+    crack02P02: PropTypes.object,
+    fancoil01P02: PropTypes.object,
+    fancoil02P02: PropTypes.object,
+    fancoil03P02: PropTypes.object,
+    fancoil04P02: PropTypes.object,
+    fancoil05P02: PropTypes.object,
+    fancoil06P02: PropTypes.object,
+    fancoil07P02: PropTypes.object,
+    fancoil08P02: PropTypes.object,
+    fancoil09P02: PropTypes.object,
+    fancoil10P02: PropTypes.object,
+    fancoil11P02: PropTypes.object,
+    fancoil12P02: PropTypes.object,
+
+    /** HVAC Level 04 telemetry */
+    manejadoraSblancaP04: PropTypes.object,
+    manejadoraSlimpiaP04: PropTypes.object,
+    vex03LowerP04: PropTypes.object,
+    vex04CargaP04: PropTypes.object,
+
+    /** HVAC Level 05 telemetry */
+    dynaleneP05: PropTypes.object,
+    manejadoraLower01P05: PropTypes.object,
+    manejadoraLower02P05: PropTypes.object,
+    manejadoraLower03P05: PropTypes.object,
+    manejadoraLower04P05: PropTypes.object,
+    vea01P05: PropTypes.object,
+    vea08P05: PropTypes.object,
+    vea09P05: PropTypes.object,
+    vea10P05: PropTypes.object,
+    vea11P05: PropTypes.object,
+    vea12P05: PropTypes.object,
+    vea13P05: PropTypes.object,
+    vea14P05: PropTypes.object,
+    vea15P05: PropTypes.object,
+    vea16P05: PropTypes.object,
+    vea17P05: PropTypes.object,
+  };
+
+  static defaultProps = {
+    showHVAC: true,
+    showPower: true,
+    showMenu: true,
+    arrowDirection: 'right',
+    bombaAguaFriaP01: {},
+    chiller01P01: {},
+    chiller02P01: {},
+    chiller03P01: {},
+    generalP01: {},
+    valvulaP01: {},
+    vea01P01: {},
+    vec01P01: {},
+    vin01P01: {},
+    crack01P02: {},
+    crack02P02: {},
+    fancoil01P02: {},
+    fancoil02P02: {},
+    fancoil03P02: {},
+    fancoil04P02: {},
+    fancoil05P02: {},
+    fancoil06P02: {},
+    fancoil07P02: {},
+    fancoil08P02: {},
+    fancoil09P02: {},
+    fancoil10P02: {},
+    fancoil11P02: {},
+    fancoil12P02: {},
+    manejadoraSblancaP04: {},
+    manejadoraSlimpiaP04: {},
+    vex03LowerP04: {},
+    vex04CargaP04: {},
+    dynaleneP05: {},
+    manejadoraLower01P05: {},
+    manejadoraLower02P05: {},
+    manejadoraLower03P05: {},
+    manejadoraLower04P05: {},
+    vea01P05: {},
+    vea08P05: {},
+    vea09P05: {},
+    vea10P05: {},
+    vea11P05: {},
+    vea12P05: {},
+    vea13P05: {},
+    vea14P05: {},
+    vea15P05: {},
+    vea16P05: {},
+    vea17P05: {},
+  };
 
   componentDidMount = () => {
     this.props.subscribeToStreams();
@@ -56,8 +175,7 @@ export default class FacilityMap extends Component {
   };
 
   render() {
-    const showHVAC = this.state.showHVAC;
-    const showPower = this.state.showPower;
+    const { showHVAC, showPower } = this.state;
 
     const HVACDataLevel1 = {
       bombaAguaFriaP01: this.props.bombaAguaFriaP01,

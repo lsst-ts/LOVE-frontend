@@ -3,12 +3,12 @@ import { fixedFloat } from 'Utils';
 import lodash from 'lodash';
 import PropTypes from 'prop-types';
 import styles from './Device.module.css';
-import * as d3 from 'd3';
 
 export default class Device extends Component {
   constructor(props) {
     super(props);
     this.id = lodash.uniqueId('Mask-');
+    this.id2 = lodash.uniqueId('');
     this.state = {
       hidden: 1,
     };
@@ -16,7 +16,31 @@ export default class Device extends Component {
     this.show = this.show.bind(this);
   }
 
-  static propTypes = {};
+  static propTypes = {
+    /** Device Title */
+    title: PropTypes.string,
+    /** Device Header Temperature if any */
+    temp: PropTypes.node,
+
+    /** Device Height, Width and Scale */
+    height: PropTypes.number,
+    width: PropTypes.number,
+    scale: PropTypes.number,
+
+    /** Device position in X and Y */
+    posX: PropTypes.number,
+    posY: PropTypes.number,
+
+    /** Is device collapsible, does it have detailed information */
+    collapsible: PropTypes.bool,
+
+    /** Device alarms and collapsible parameters */
+    alarms: PropTypes.object,
+    parameters: PropTypes.object,
+
+    /** Device Header states: Command, Working, Unit and Switch */
+    states: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.node, PropTypes.bool])),
+  };
 
   static defaultProps = {
     title: 'Device Name',
@@ -29,7 +53,7 @@ export default class Device extends Component {
     posX: 0,
     posY: 0,
 
-    collapsible: 0,
+    collapsible: false,
 
     alarms: {},
     parameters: {},
@@ -45,8 +69,6 @@ export default class Device extends Component {
   show() {
     this.state.hidden ? (this.state.hidden = 0) : (this.state.hidden = 1);
   }
-
-  componentDidUpdate() {}
 
   renderStates(ctx) {
     switch (this.props.states[ctx]) {
@@ -102,17 +124,13 @@ export default class Device extends Component {
 
   // This function renders the badge style alarm norifications on devices.
   renderAlarms() {
-    const height = this.props.height;
-    const width = this.props.width;
+    const { height, width, alarms } = this.props;
     const hidden = this.state.hidden;
-    const alarms = this.props.alarms;
+
     const alarmsKeys = Object.keys(alarms);
     const rowLength = Math.round(width / 42 - 1);
 
-    let transX;
-    let transY;
-    let currentRow;
-    let currentCol;
+    let transX, transY, currentRow, currentCol;
 
     return alarmsKeys.map((x, k) => {
       if (alarms[x].state) {
@@ -120,19 +138,6 @@ export default class Device extends Component {
         transY = 0;
         currentRow = Math.ceil((k + 1) / rowLength);
         currentCol = (k + 1) % currentRow;
-
-        console.log(
-          alarms[x].name +
-            ' row length:' +
-            rowLength +
-            ' current row:' +
-            currentRow +
-            ' current col:' +
-            currentCol +
-            ' k:' +
-            k,
-        );
-
         transX = 42 * (k + 1 - rowLength * (currentRow - 1)) - 42;
 
         if (hidden) {
@@ -154,23 +159,16 @@ export default class Device extends Component {
   }
 
   //This function renders the Decive parameters. This is the detailed information that is collapsible
-
   renderParams() {
-    const width = this.props.width;
-    const parameters = this.props.parameters;
+    const { width, parameters } = this.props;
     const parametersKeys = Object.keys(parameters);
 
     const gutter = 4;
     const rowHeight = 10;
 
-    let returnContent;
-    let groupBox;
-    let groupData;
-    let length;
-    let transX;
+    let returnContent, groupBox, groupData, length, transX;
 
     //Vars i and j are used to translate parameters down each time a new parameter is rendered.
-
     let i = 0;
     let j = 38;
 
@@ -316,7 +314,6 @@ export default class Device extends Component {
     const isAlarmed = Object.keys(this.props.alarms).some((a) => {
       return this.props.alarms[a].state;
     });
-    var mask = this.id;
 
     return (
       <g
@@ -325,11 +322,11 @@ export default class Device extends Component {
         transform-origin={width / 2 + ' ' + (height / 2 + 20)}
         transform={'translate(' + posX + ' ' + posY + ') scale(' + scale + ')'}
       >
-        <clipPath id={mask + 'Mask'}>
+        <clipPath id={this.id + 'Mask'}>
           <rect width={width} height={height} transform={'translate(0 30)'} />
         </clipPath>
 
-        <g clipPath={'url(#' + mask + 'Mask)'}>
+        <g clipPath={'url(#' + this.id + 'Mask)'}>
           <g className={styles.insideContent} transform={hidden ? 'translate(0 -' + height + ')' : 'translate(0 0)'}>
             <rect className={styles.container} width={width} height={height} transform={'translate(0 30)'} />
 

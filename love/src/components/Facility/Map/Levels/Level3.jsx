@@ -13,10 +13,18 @@ export default class Level3 extends Component {
     this.deviceId = lodash.uniqueId('Devices-');
   }
 
-  static propTypes = {};
+  static propTypes = {
+    /** HVAC Telemetru data*/
+    HVACData: PropTypes.object,
+    /** Function saves current Map Zoom position */
+    savePos: PropTypes.func,
+    /** The Map Zoom position that was saved */
+    transformData: PropTypes.objectOf(PropTypes.number),
+  };
 
   static defaultProps = {
-    params: {},
+    HVACData: {},
+    transformData: { k: 1, x: 0, z: 0 },
   };
 
   componentDidMount() {
@@ -1525,7 +1533,7 @@ export default class Level3 extends Component {
 
         <rect id={this.overlayId} pointerEvents="all" fill="none" width="882.42" height="461.23" />
 
-        <g id={this.deviceId}>{this.props.hideHVAC ? '' : this.getDevices()}</g>
+        <g id={this.deviceId}>{!this.props.hideHVAC && this.getDevices()}</g>
       </React.Fragment>
     );
   }

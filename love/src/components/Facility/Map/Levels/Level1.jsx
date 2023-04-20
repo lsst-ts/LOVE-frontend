@@ -13,10 +13,18 @@ export default class Level1 extends Component {
     this.deviceId = lodash.uniqueId('Devices-');
   }
 
-  static propTypes = {};
+  static propTypes = {
+    /** HVAC Telemetru data*/
+    HVACData: PropTypes.object,
+    /** Function saves current Map Zoom position */
+    savePos: PropTypes.func,
+    /** The Map Zoom position that was saved */
+    transformData: PropTypes.objectOf(PropTypes.number),
+  };
 
   static defaultProps = {
-    params: {},
+    HVACData: {},
+    transformData: { k: 1, x: 0, z: 0 },
   };
 
   componentDidMount() {
@@ -40,21 +48,20 @@ export default class Level1 extends Component {
     d3.select(mapId).attr('transform', transformData);
     d3.select(deviceId).attr('transform', transformData);
     this.props.savePos(transformData);
-    console.log(transformData);
   };
 
-  componentDidUpdate() {}
-
   getDevices() {
-    const bombaAguaFriaP01 = this.props.HVACData['bombaAguaFriaP01'];
-    const chiller01P01 = this.props.HVACData['chiller01P01'];
-    const chiller02P01 = this.props.HVACData['chiller02P01'];
-    const chiller03P01 = this.props.HVACData['chiller03P01'];
-    const generalP01 = this.props.HVACData['generalP01'];
-    const valvulaP01 = this.props.HVACData['valvulaP01'];
-    const vea01P01 = this.props.HVACData['vea01P01'];
-    const vec01P01 = this.props.HVACData['vec01P01'];
-    const vin01P01 = this.props.HVACData['vin01P01'];
+    const {
+      bombaAguaFriaP01,
+      chiller01P01,
+      chiller02P01,
+      chiller03P01,
+      generalP01,
+      valvulaP01,
+      vea01P01,
+      vec01P01,
+      vin01P01,
+    } = this.props.HVACData;
 
     return (
       <React.Fragment>
@@ -65,7 +72,7 @@ export default class Level1 extends Component {
           height={45}
           posX={823}
           posY={148}
-          collapsible={0}
+          collapsible={false}
           states={{
             command: vec01P01.comandoEncendido ? vec01P01.comandoEncendido.value : null,
             working: vec01P01.estadoFuncionamiento ? vec01P01.estadoFuncionamiento.value : null,
@@ -81,7 +88,7 @@ export default class Level1 extends Component {
           height={45}
           posX={690}
           posY={235}
-          collapsible={0}
+          collapsible={false}
           states={{
             command: vea01P01.comandoEncendido ? vea01P01.comandoEncendido.value : null,
             working: vea01P01.estadoFuncionamiento ? vea01P01.estadoFuncionamiento.value : null,
@@ -97,7 +104,7 @@ export default class Level1 extends Component {
           height={45}
           posX={810}
           posY={24}
-          collapsible={0}
+          collapsible={false}
           states={{
             command: vin01P01.comandoEncendido ? vin01P01.comandoEncendido.value : null,
             working: vin01P01.estadoFuncionamiento ? vin01P01.estadoFuncionamiento.value : null,
@@ -113,7 +120,7 @@ export default class Level1 extends Component {
           height={0}
           posX={762}
           posY={237}
-          collapsible={0}
+          collapsible={false}
           states={{
             command: bombaAguaFriaP01.comandoEncendido ? bombaAguaFriaP01.comandoEncendido.value : null,
             working: bombaAguaFriaP01.estadoFuncionamiento ? bombaAguaFriaP01.estadoFuncionamiento.value : null,
@@ -130,7 +137,7 @@ export default class Level1 extends Component {
           height={0}
           posX={685}
           posY={210}
-          collapsible={0}
+          collapsible={false}
           states={{
             command: generalP01.comandoEncendido ? generalP01.comandoEncendido.value : null,
             working: generalP01.estadoFuncionamiento ? generalP01.estadoFuncionamiento.value : null,
@@ -146,7 +153,7 @@ export default class Level1 extends Component {
           height={54}
           posX={762}
           posY={237}
-          collapsible={1}
+          collapsible={true}
           states={{
             command: valvulaP01.comandoEncendido ? valvulaP01.comandoEncendido.value : null,
             working: valvulaP01.estadoFuncionamiento ? valvulaP01.estadoFuncionamiento.value : null,
@@ -193,7 +200,7 @@ export default class Level1 extends Component {
           posX={800}
           posY={20}
           title={'Chiller 01'}
-          collapsible={1}
+          collapsible={true}
           alarms={{
             alarm1: {
               name: 'General',
@@ -348,7 +355,7 @@ export default class Level1 extends Component {
           posX={800}
           posY={86}
           title={'Chiller 02'}
-          collapsible={1}
+          collapsible={true}
           alarms={{
             alarm1: {
               name: 'General',
@@ -503,7 +510,7 @@ export default class Level1 extends Component {
           posX={800}
           posY={162}
           title={'Chiller 03'}
-          collapsible={1}
+          collapsible={true}
           alarms={{
             alarm1: {
               name: 'General',
@@ -1807,7 +1814,7 @@ export default class Level1 extends Component {
 
         <rect id={this.overlayId} pointerEvents="all" fill="none" width="882.42" height="461.23" />
 
-        <g id={this.deviceId}>{this.props.hideHVAC ? '' : this.getDevices()}</g>
+        <g id={this.deviceId}>{!this.props.hideHVAC && this.getDevices()}</g>
       </React.Fragment>
     );
   }

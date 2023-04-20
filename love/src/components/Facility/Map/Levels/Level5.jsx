@@ -13,10 +13,18 @@ export default class Level5 extends Component {
     this.deviceId = lodash.uniqueId('Devices-');
   }
 
-  static propTypes = {};
+  static propTypes = {
+    /** HVAC Telemetru data*/
+    HVACData: PropTypes.object,
+    /** Function saves current Map Zoom position */
+    savePos: PropTypes.func,
+    /** The Map Zoom position that was saved */
+    transformData: PropTypes.objectOf(PropTypes.number),
+  };
 
   static defaultProps = {
-    params: {},
+    HVACData: {},
+    transformData: { k: 1, x: 0, z: 0 },
   };
 
   componentDidMount() {
@@ -44,22 +52,24 @@ export default class Level5 extends Component {
   };
 
   getDevices() {
-    const dynaleneP05 = this.props.HVACData['dynaleneP05'];
-    const manejadoraLower01P05 = this.props.HVACData['manejadoraLower01P05'];
-    const manejadoraLower02P05 = this.props.HVACData['manejadoraLower02P05'];
-    const manejadoraLower03P05 = this.props.HVACData['manejadoraLower03P05'];
-    const manejadoraLower04P05 = this.props.HVACData['manejadoraLower04P05'];
-    const vea01P05 = this.props.HVACData['vea01P05'];
-    const vea08P05 = this.props.HVACData['vea08P05'];
-    const vea09P05 = this.props.HVACData['vea09P05'];
-    const vea10P05 = this.props.HVACData['vea10P05'];
-    const vea11P05 = this.props.HVACData['vea11P05'];
-    const vea12P05 = this.props.HVACData['vea12P05'];
-    const vea13P05 = this.props.HVACData['vea13P05'];
-    const vea14P05 = this.props.HVACData['vea14P05'];
-    const vea15P05 = this.props.HVACData['vea15P05'];
-    const vea16P05 = this.props.HVACData['vea16P05'];
-    const vea17P05 = this.props.HVACData['vea17P05'];
+    const {
+      dynaleneP05,
+      manejadoraLower01P05,
+      manejadoraLower02P05,
+      manejadoraLower03P05,
+      manejadoraLower04P05,
+      vea01P01,
+      vea08P05,
+      vea09P05,
+      vea10P05,
+      vea11P05,
+      vea12P05,
+      vea13P05,
+      vea14P05,
+      vea15P05,
+      vea16P05,
+      vea17P05,
+    } = this.props.HVACData;
 
     return (
       <React.Fragment>
@@ -70,7 +80,7 @@ export default class Level5 extends Component {
           height={130}
           posX={0}
           posY={70}
-          collapsible={1}
+          collapsible={true}
           alarms={{
             alarm1: {
               name: 'General',
@@ -232,7 +242,7 @@ export default class Level5 extends Component {
           height={130}
           posX={190}
           posY={40}
-          collapsible={1}
+          collapsible={true}
           alarms={{
             alarm1: {
               name: 'General',
@@ -394,7 +404,7 @@ export default class Level5 extends Component {
           height={130}
           posX={0}
           posY={200}
-          collapsible={1}
+          collapsible={true}
           alarms={{
             alarm1: {
               name: 'General',
@@ -556,7 +566,7 @@ export default class Level5 extends Component {
           height={130}
           posX={210}
           posY={200}
-          collapsible={1}
+          collapsible={true}
           alarms={{
             alarm1: {
               name: 'General',
@@ -718,7 +728,7 @@ export default class Level5 extends Component {
           height={0}
           posX={280}
           posY={20}
-          collapsible={0}
+          collapsible={false}
           alarms={{
             alarm1: {
               name: 'Thermal Error',
@@ -740,7 +750,7 @@ export default class Level5 extends Component {
           height={45}
           posX={70}
           posY={120}
-          collapsible={0}
+          collapsible={false}
           alarms={{
             alarm1: {
               name: 'Thermal Error',
@@ -762,7 +772,7 @@ export default class Level5 extends Component {
           height={45}
           posX={125}
           posY={88}
-          collapsible={0}
+          collapsible={false}
           alarms={{
             alarm1: {
               name: 'Thermal Error',
@@ -784,7 +794,7 @@ export default class Level5 extends Component {
           height={45}
           posX={176}
           posY={98}
-          collapsible={0}
+          collapsible={false}
           alarms={{
             alarm1: {
               name: 'Thermal Error',
@@ -806,7 +816,7 @@ export default class Level5 extends Component {
           height={45}
           posX={210}
           posY={160}
-          collapsible={0}
+          collapsible={false}
           alarms={{
             alarm1: {
               name: 'Thermal Error',
@@ -828,7 +838,7 @@ export default class Level5 extends Component {
           height={45}
           posX={193}
           posY={212}
-          collapsible={0}
+          collapsible={false}
           alarms={{
             alarm1: {
               name: 'Thermal Error',
@@ -850,7 +860,7 @@ export default class Level5 extends Component {
           height={0}
           posX={133}
           posY={250}
-          collapsible={0}
+          collapsible={false}
           alarms={{
             alarm1: {
               name: 'Thermal Error',
@@ -872,7 +882,7 @@ export default class Level5 extends Component {
           height={45}
           posX={80}
           posY={217}
-          collapsible={0}
+          collapsible={false}
           alarms={{
             alarm1: {
               name: 'Thermal Error',
@@ -894,7 +904,7 @@ export default class Level5 extends Component {
           height={45}
           posX={58}
           posY={170}
-          collapsible={0}
+          collapsible={false}
           alarms={{
             alarm1: {
               name: 'Thermal Error',
@@ -916,7 +926,7 @@ export default class Level5 extends Component {
           height={0}
           posX={305}
           posY={20}
-          collapsible={0}
+          collapsible={false}
           alarms={{
             alarm1: {
               name: 'Thermal Error',
@@ -938,7 +948,7 @@ export default class Level5 extends Component {
           height={0}
           posX={380}
           posY={20}
-          collapsible={0}
+          collapsible={false}
           alarms={{
             alarm1: {
               name: 'Thermal Error',
@@ -1840,7 +1850,7 @@ export default class Level5 extends Component {
 
         <rect id={this.overlayId} pointerEvents="all" fill="none" width="882.42" height="461.23" />
 
-        <g id={this.deviceId}>{this.props.hideHVAC ? '' : this.getDevices()}</g>
+        <g id={this.deviceId}>{!this.props.hideHVAC && this.getDevices()}</g>
       </React.Fragment>
     );
   }

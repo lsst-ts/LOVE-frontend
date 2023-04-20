@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { defaultNumberFormatter } from 'Utils';
-import { M1M3ActuatorPositions } from 'Config';
 import styles from './Map.module.css';
 import Badge from '../../GeneralPurpose/Badge/Badge';
 
@@ -12,8 +10,6 @@ import Level5 from './Levels/Level5.jsx';
 import Level6 from './Levels/Level6.jsx';
 import Level7 from './Levels/Level7.jsx';
 import Level8 from './Levels/Level8.jsx';
-
-import * as d3 from 'd3';
 
 export default class Map extends Component {
   constructor(props) {
@@ -31,21 +27,16 @@ export default class Map extends Component {
     };
   }
 
-  changeTab(tab) {
+  changeTab = (tab) => {
     this.setState({ selectedTab: tab });
-  }
+  };
 
   savePos = (transformData) => {
     this.setState({ transformData: transformData });
   };
 
-  setAlarms = (level_1, level_2, level_4, level_5) => {
-    this.state.alarms = {
-      level_1: level_1,
-      level_2: level_2,
-      level_4: level_4,
-      level_5: level_5,
-    };
+  setAlarms = (level, isAlarm) => {
+    this.setState((prevState) => ({ alarms: { ...prevState.alarms, [level]: isAlarm } }));
   };
 
   floorSelect(tab) {
@@ -109,57 +100,86 @@ export default class Map extends Component {
     }
   }
 
-  componentDidMount() {}
+  componentDidUpdate(prevProps, prevState) {
+    const { chiller01P01, chiller02P01, chiller03P01 } = this.props.HVACDataLevel1;
+    const { crack01P02, crack02P02 } = this.props.HVACDataLevel2;
+    const { manejadoraSblancaP04, manejadoraSlimpiaP04, vex04CargaP04, vex03LowerP04 } = this.props.HVACDataLevel4;
+    const {
+      manejadoraLower01P05,
+      manejadoraLower02P05,
+      manejadoraLower03P05,
+      manejadoraLower04P05,
+    } = this.props.HVACDataLevel5;
+    const {
+      vea01P05,
+      vea08P05,
+      vea09P05,
+      vea10P05,
+      vea11P05,
+      vea12P05,
+      vea13P05,
+      vea14P05,
+      vea15P05,
+      vea16P05,
+      vea17P05,
+    } = this.props.HVACDataLevel5;
 
-  componentDidUpdate() {
-    const chiller01P01 = this.props.HVACDataLevel1['chiller01P01'];
-    const chiller02P01 = this.props.HVACDataLevel1['chiller02P01'];
-    const chiller03P01 = this.props.HVACDataLevel1['chiller03P01'];
-
-    const crack01P02 = this.props.HVACDataLevel2['crack01P02'];
-    const crack02P02 = this.props.HVACDataLevel2['crack02P02'];
-
-    const manejadoraSblancaP04 = this.props.HVACDataLevel4['manejadoraSblancaP04'];
-    const manejadoraSlimpiaP04 = this.props.HVACDataLevel4['manejadoraSlimpiaP04'];
-    const vex04CargaP04 = this.props.HVACDataLevel4['vex04CargaP04'];
-    const vex03LowerP04 = this.props.HVACDataLevel4['vex03LowerP04'];
-
-    const manejadoraLower01P05 = this.props.HVACDataLevel5['manejadoraLower01P05'];
-    const manejadoraLower02P05 = this.props.HVACDataLevel5['manejadoraLower02P05'];
-    const manejadoraLower03P05 = this.props.HVACDataLevel5['manejadoraLower03P05'];
-    const manejadoraLower04P05 = this.props.HVACDataLevel5['manejadoraLower04P05'];
-    const vea01P05 = this.props.HVACDataLevel5['vea01P05'];
-    const vea08P05 = this.props.HVACDataLevel5['vea08P05'];
-    const vea09P05 = this.props.HVACDataLevel5['vea09P05'];
-    const vea10P05 = this.props.HVACDataLevel5['vea10P05'];
-    const vea11P05 = this.props.HVACDataLevel5['vea11P05'];
-    const vea12P05 = this.props.HVACDataLevel5['vea12P05'];
-    const vea13P05 = this.props.HVACDataLevel5['vea13P05'];
-    const vea14P05 = this.props.HVACDataLevel5['vea14P05'];
-    const vea15P05 = this.props.HVACDataLevel5['vea15P05'];
-    const vea16P05 = this.props.HVACDataLevel5['vea16P05'];
-    const vea17P05 = this.props.HVACDataLevel5['vea17P05'];
+    const prevHVACDataLevel1 = prevProps.HVACDataLevel1;
+    const prevHVACDataLevel2 = prevProps.HVACDataLevel2;
+    const prevHVACDataLevel4 = prevProps.HVACDataLevel4;
+    const prevHVACDataLevel5 = prevProps.HVACDataLevel5;
 
     const alarms_1 = [
-      //chiller01P01.alarmaGeneral?chiller01P01.alarmaGeneral.value:'',
       chiller01P01.alarmaGeneral ? chiller01P01.alarmaGeneral.value : null,
       chiller01P01.compresor01Alarmado ? chiller01P01.compresor01Alarmado.value : null,
-      chiller01P01.compresor02Alarmado ? chiller01P01.compresor01Alarmado.value : null,
-      chiller01P01.compresor03Alarmado ? chiller01P01.compresor01Alarmado.value : null,
+      chiller01P01.compresor02Alarmado ? chiller01P01.compresor02Alarmado.value : null,
+      chiller01P01.compresor03Alarmado ? chiller01P01.compresor03Alarmado.value : null,
       chiller02P01.alarmaGeneral ? chiller02P01.alarmaGeneral.value : null,
       chiller02P01.compresor01Alarmado ? chiller02P01.compresor01Alarmado.value : null,
-      chiller02P01.compresor02Alarmado ? chiller02P01.compresor01Alarmado.value : null,
-      chiller02P01.compresor03Alarmado ? chiller02P01.compresor01Alarmado.value : null,
+      chiller02P01.compresor02Alarmado ? chiller02P01.compresor02Alarmado.value : null,
+      chiller02P01.compresor03Alarmado ? chiller02P01.compresor03Alarmado.value : null,
       chiller03P01.alarmaGeneral ? chiller03P01.alarmaGeneral.value : null,
       chiller03P01.compresor01Alarmado ? chiller03P01.compresor01Alarmado.value : null,
-      chiller03P01.compresor02Alarmado ? chiller03P01.compresor01Alarmado.value : null,
-      chiller03P01.compresor03Alarmado ? chiller03P01.compresor01Alarmado.value : null,
+      chiller03P01.compresor02Alarmado ? chiller03P01.compresor02Alarmado.value : null,
+      chiller03P01.compresor03Alarmado ? chiller03P01.compresor03Alarmado.value : null,
     ];
+
+    if (
+      (chiller01P01 || chiller02P01 || chiller03P01) &&
+      (prevHVACDataLevel1.chiller01P01?.alarmaGeneral?.value !== chiller01P01.alarmaGeneral?.value ||
+        prevHVACDataLevel1.chiller01P01?.compresor01Alarmado?.value !== chiller01P01.compresor01Alarmado?.value ||
+        prevHVACDataLevel1.chiller01P01?.compresor02Alarmado?.value !== chiller01P01.compresor02Alarmado?.value ||
+        prevHVACDataLevel1.chiller01P01?.compresor03Alarmado?.value !== chiller01P01.compresor03Alarmado?.value ||
+        prevHVACDataLevel1.chiller02P01?.alarmaGeneral?.value !== chiller02P01.alarmaGeneral?.value ||
+        prevHVACDataLevel1.chiller02P01?.compresor01Alarmado?.value !== chiller02P01.compresor01Alarmado?.value ||
+        prevHVACDataLevel1.chiller02P01?.compresor02Alarmado?.value !== chiller02P01.compresor02Alarmado?.value ||
+        prevHVACDataLevel1.chiller02P01?.compresor03Alarmado?.value !== chiller02P01.compresor03Alarmado?.value ||
+        prevHVACDataLevel1.chiller03P01?.alarmaGeneral?.value !== chiller03P01.alarmaGeneral?.value ||
+        prevHVACDataLevel1.chiller03P01?.compresor01Alarmado?.value !== chiller03P01.compresor01Alarmado?.value ||
+        prevHVACDataLevel1.chiller03P01?.compresor02Alarmado?.value !== chiller03P01.compresor02Alarmado?.value ||
+        prevHVACDataLevel1.chiller03P01?.compresor03Alarmado?.value !== chiller03P01.compresor03Alarmado?.value)
+    ) {
+      const isAlarmed_1 = alarms_1.some((a) => {
+        return a;
+      });
+      this.setAlarms('level_1', isAlarmed_1);
+    }
 
     const alarms_2 = [
       crack01P02.estadoPresenciaAlarma ? crack01P02.estadoPresenciaAlarma.value : null,
       crack02P02.estadoPresenciaAlarma ? crack02P02.estadoPresenciaAlarma.value : null,
     ];
+
+    if (
+      (crack01P02 || crack01P02) &&
+      (prevHVACDataLevel2.crack01P02?.estadoPresenciaAlarma?.value !== crack01P02.estadoPresenciaAlarma?.value ||
+        prevHVACDataLevel2.crack02P02?.estadoPresenciaAlarma?.value !== crack02P02.estadoPresenciaAlarma?.value)
+    ) {
+      const isAlarmed_2 = alarms_2.some((a) => {
+        return a;
+      });
+      this.setAlarms('level_2', isAlarmed_2);
+    }
 
     const alarms_4 = [
       manejadoraSblancaP04.alarmaGeneral ? manejadoraSblancaP04.alarmaGeneral.value : null,
@@ -171,6 +191,23 @@ export default class Map extends Component {
       vex04CargaP04.fallaTermica ? vex04CargaP04.fallaTermica.value : null,
       vex03LowerP04.fallaTermica ? vex03LowerP04.fallaTermica.value : null,
     ];
+
+    if (
+      (manejadoraSblancaP04 || manejadoraSlimpiaP04 || vex03LowerP04 || vex04CargaP04) &&
+      (prevHVACDataLevel4.manejadoraSblancaP04?.alarmaGeneral?.value !== manejadoraSblancaP04.alarmaGeneral?.value ||
+        prevHVACDataLevel4.manejadoraSblancaP04?.alarmaFiltro?.value !== manejadoraSblancaP04.alarmaFiltro?.value ||
+        prevHVACDataLevel4.manejadoraSblancaP04?.resetAlarma?.value !== manejadoraSblancaP04.resetAlarma?.value ||
+        prevHVACDataLevel4.manejadoraSlimpiaP04?.alarmaGeneral?.value !== manejadoraSlimpiaP04.alarmaGeneral?.value ||
+        prevHVACDataLevel4.manejadoraSlimpiaP04?.alarmaFiltro?.value !== manejadoraSlimpiaP04.alarmaFiltro?.value ||
+        prevHVACDataLevel4.manejadoraSlimpiaP04?.resetAlarma?.value !== manejadoraSlimpiaP04.resetAlarma?.value ||
+        prevHVACDataLevel4.vex03LowerP04?.fallaTermica?.value !== vex03LowerP04.fallaTermica?.value ||
+        prevHVACDataLevel4.vex04CargaP04?.fallaTermica?.value !== vex04CargaP04.fallaTermica?.value)
+    ) {
+      const isAlarmed_4 = alarms_4.some((a) => {
+        return a;
+      });
+      this.setAlarms('level_4', isAlarmed_4);
+    }
 
     const alarms_5 = [
       manejadoraLower01P05.alarmaGeneral ? manejadoraLower01P05.alarmaGeneral.value : null,
@@ -198,30 +235,57 @@ export default class Map extends Component {
       vea17P05.fallaTermica ? vea17P05.fallaTermica.value : null,
     ];
 
-    const isAlarmed_1 = alarms_1.some((a) => {
-      return a;
-    });
-    const isAlarmed_2 = alarms_2.some((a) => {
-      return a;
-    });
-    const isAlarmed_4 = alarms_4.some((a) => {
-      return a;
-    });
-    const isAlarmed_5 = alarms_5.some((a) => {
-      return a;
-    });
-
-    this.setAlarms(isAlarmed_1, isAlarmed_2, isAlarmed_4, isAlarmed_5);
+    if (
+      (manejadoraLower01P05 ||
+        manejadoraLower02P05 ||
+        manejadoraLower03P05 ||
+        manejadoraLower04P05 ||
+        vea01P05 ||
+        vea08P05 ||
+        vea09P05 ||
+        vea10P05 ||
+        vea11P05 ||
+        vea12P05 ||
+        vea13P05 ||
+        vea14P05 ||
+        vea15P05 ||
+        vea16P05 ||
+        vea17P05) &&
+      (prevHVACDataLevel5.manejadoraLower01P05?.alarmaGeneral?.value !== manejadoraLower01P05.alarmaGeneral?.value ||
+        prevHVACDataLevel5.manejadoraLower01P05?.alarmaFiltro?.value !== manejadoraLower01P05.alarmaFiltro?.value ||
+        prevHVACDataLevel5.manejadoraLower01P05?.resetAlarma?.value !== manejadoraLower01P05.resetAlarma?.value ||
+        prevHVACDataLevel5.manejadoraLower02P05?.alarmaGeneral?.value !== manejadoraLower02P05.alarmaGeneral?.value ||
+        prevHVACDataLevel5.manejadoraLower02P05?.alarmaFiltro?.value !== manejadoraLower02P05.alarmaFiltro?.value ||
+        prevHVACDataLevel5.manejadoraLower02P05?.resetAlarma?.value !== manejadoraLower02P05.resetAlarma?.value ||
+        prevHVACDataLevel5.manejadoraLower03P05?.alarmaGeneral?.value !== manejadoraLower03P05.alarmaGeneral?.value ||
+        prevHVACDataLevel5.manejadoraLower03P05?.alarmaFiltro?.value !== manejadoraLower03P05.alarmaFiltro?.value ||
+        prevHVACDataLevel5.manejadoraLower03P05?.resetAlarma?.value !== manejadoraLower03P05.resetAlarma?.value ||
+        prevHVACDataLevel5.manejadoraLower04P05?.alarmaGeneral?.value !== manejadoraLower04P05.alarmaGeneral?.value ||
+        prevHVACDataLevel5.manejadoraLower04P05?.alarmaFiltro?.value !== manejadoraLower04P05.alarmaFiltro?.value ||
+        prevHVACDataLevel5.manejadoraLower04P05?.resetAlarma?.value !== manejadoraLower04P05.resetAlarma?.value ||
+        prevHVACDataLevel5.vea01P05?.fallaTermica?.value !== vea01P05.fallaTermica?.value ||
+        prevHVACDataLevel5.vea08P05?.fallaTermica?.value !== vea08P05.fallaTermica?.value ||
+        prevHVACDataLevel5.vea09P05?.fallaTermica?.value !== vea09P05.fallaTermica?.value ||
+        prevHVACDataLevel5.vea10P05?.fallaTermica?.value !== vea10P05.fallaTermica?.value ||
+        prevHVACDataLevel5.vea11P05?.fallaTermica?.value !== vea11P05.fallaTermica?.value ||
+        prevHVACDataLevel5.vea12P05?.fallaTermica?.value !== vea12P05.fallaTermica?.value ||
+        prevHVACDataLevel5.vea13P05?.fallaTermica?.value !== vea13P05.fallaTermica?.value ||
+        prevHVACDataLevel5.vea14P05?.fallaTermica?.value !== vea14P05.fallaTermica?.value ||
+        prevHVACDataLevel5.vea15P05?.fallaTermica?.value !== vea15P05.fallaTermica?.value ||
+        prevHVACDataLevel5.vea16P05?.fallaTermica?.value !== vea16P05.fallaTermica?.value ||
+        prevHVACDataLevel5.vea17P05?.fallaTermica?.value !== vea17P05.fallaTermica?.value)
+    ) {
+      const isAlarmed_5 = alarms_5.some((a) => {
+        return a;
+      });
+      this.setAlarms('level_5', isAlarmed_5);
+    }
   }
 
   render() {
-    const hasAlarm = this.state.hasAlarm;
-
-    const margin = 60;
-
-    const alarms = this.state.alarms;
-
+    const { hasAlarm, alarms } = this.state;
     const isAlarmed = alarms[this.state.selectedTab];
+    const margin = 60;
 
     return (
       <div className={styles.tabsWrapper}>

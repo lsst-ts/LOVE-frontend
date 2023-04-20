@@ -13,10 +13,18 @@ export default class Level4 extends Component {
     this.deviceId = lodash.uniqueId('Devices-');
   }
 
-  static propTypes = {};
+  static propTypes = {
+    /** HVAC Telemetru data*/
+    HVACData: PropTypes.object,
+    /** Function saves current Map Zoom position */
+    savePos: PropTypes.func,
+    /** The Map Zoom position that was saved */
+    transformData: PropTypes.objectOf(PropTypes.number),
+  };
 
   static defaultProps = {
-    params: {},
+    HVACData: {},
+    transformData: { k: 1, x: 0, z: 0 },
   };
 
   componentDidMount() {
@@ -44,10 +52,7 @@ export default class Level4 extends Component {
   };
 
   getDevices() {
-    const manejadoraSblancaP04 = this.props.HVACData['manejadoraSblancaP04'];
-    const manejadoraSlimpiaP04 = this.props.HVACData['manejadoraSlimpiaP04'];
-    const vex03LowerP04 = this.props.HVACData['vex03LowerP04'];
-    const vex04CargaP04 = this.props.HVACData['vex04CargaP04'];
+    const { manejadoraSblancaP04, manejadoraSlimpiaP04, vex03LowerP04, vex04CargaP04 } = this.props.HVACData;
 
     return (
       <React.Fragment>
@@ -58,7 +63,7 @@ export default class Level4 extends Component {
           height={130}
           posX={338}
           posY={20}
-          collapsible={1}
+          collapsible={true}
           alarms={{
             alarm1: {
               name: 'General',
@@ -220,7 +225,7 @@ export default class Level4 extends Component {
           height={130}
           posX={275}
           posY={57}
-          collapsible={1}
+          collapsible={true}
           alarms={{
             alarm1: {
               name: 'General',
@@ -382,7 +387,7 @@ export default class Level4 extends Component {
           height={122}
           posX={800}
           posY={90}
-          collapsible={0}
+          collapsible={false}
           alarms={{
             alarm1: {
               name: 'Thermal Error',
@@ -404,7 +409,7 @@ export default class Level4 extends Component {
           height={122}
           posX={800}
           posY={130}
-          collapsible={0}
+          collapsible={false}
           alarms={{
             alarm1: {
               name: 'Thermal Error',
@@ -1303,7 +1308,7 @@ export default class Level4 extends Component {
         </g>
         <rect id={this.overlayId} pointerEvents="all" fill="none" width="882.42" height="461.23" />
 
-        <g id={this.deviceId}>{this.props.hideHVAC ? '' : this.getDevices()}</g>
+        <g id={this.deviceId}>{!this.props.hideHVAC && this.getDevices()}</g>
       </React.Fragment>
     );
   }

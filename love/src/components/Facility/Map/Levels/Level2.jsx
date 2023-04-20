@@ -13,10 +13,18 @@ export default class Level2 extends Component {
     this.deviceId = lodash.uniqueId('Devices-');
   }
 
-  static propTypes = {};
+  static propTypes = {
+    /** HVAC Telemetru data*/
+    HVACData: PropTypes.object,
+    /** Function saves current Map Zoom position */
+    savePos: PropTypes.func,
+    /** The Map Zoom position that was saved */
+    transformData: PropTypes.objectOf(PropTypes.number),
+  };
 
   static defaultProps = {
-    params: {},
+    HVACData: {},
+    transformData: { k: 1, x: 0, z: 0 },
   };
 
   componentDidMount() {
@@ -44,20 +52,22 @@ export default class Level2 extends Component {
   };
 
   getDevices() {
-    const crack01P02 = this.props.HVACData['crack01P02'];
-    const crack02P02 = this.props.HVACData['crack02P02'];
-    const fancoil01P02 = this.props.HVACData['fancoil01P02'];
-    const fancoil02P02 = this.props.HVACData['fancoil02P02'];
-    const fancoil03P02 = this.props.HVACData['fancoil03P02'];
-    const fancoil04P02 = this.props.HVACData['fancoil04P02'];
-    const fancoil05P02 = this.props.HVACData['fancoil05P02'];
-    const fancoil06P02 = this.props.HVACData['fancoil06P02'];
-    const fancoil07P02 = this.props.HVACData['fancoil07P02'];
-    const fancoil08P02 = this.props.HVACData['fancoil08P02'];
-    const fancoil09P02 = this.props.HVACData['fancoil09P02'];
-    const fancoil10P02 = this.props.HVACData['fancoil10P02'];
-    const fancoil11P02 = this.props.HVACData['fancoil11P02'];
-    const fancoil12P02 = this.props.HVACData['fancoil12P02'];
+    const {
+      crack01P02,
+      crack02P02,
+      fancoil01P02,
+      fancoil02P02,
+      fancoil03P02,
+      fancoil04P02,
+      fancoil05P02,
+      fancoil06P02,
+      fancoil07P02,
+      fancoil08P02,
+      fancoil09P02,
+      fancoil10P02,
+      fancoil11P02,
+      fancoil12P02,
+    } = this.props.HVACData;
 
     return (
       <React.Fragment>
@@ -68,7 +78,7 @@ export default class Level2 extends Component {
           height={112}
           posX={620}
           posY={146}
-          collapsible={1}
+          collapsible={true}
           states={{
             command: fancoil02P02.comandoEncendido ? fancoil02P02.comandoEncendido.value : null,
             working: fancoil02P02.estadoFuncionamiento ? fancoil02P02.estadoFuncionamiento.value : null,
@@ -164,7 +174,7 @@ export default class Level2 extends Component {
           height={112}
           posX={632}
           posY={92}
-          collapsible={1}
+          collapsible={true}
           states={{
             command: fancoil01P02.comandoEncendido ? fancoil01P02.comandoEncendido.value : null,
             working: fancoil01P02.estadoFuncionamiento ? fancoil01P02.estadoFuncionamiento.value : null,
@@ -259,7 +269,7 @@ export default class Level2 extends Component {
           height={130}
           posX={612}
           posY={45}
-          collapsible={1}
+          collapsible={true}
           alarms={{
             alarm1: {
               name: 'State Presense',
@@ -388,7 +398,7 @@ export default class Level2 extends Component {
           height={130}
           posX={612}
           posY={12}
-          collapsible={1}
+          collapsible={true}
           alarms={{
             alarm1: {
               name: 'State Presense',
@@ -519,7 +529,7 @@ export default class Level2 extends Component {
           posX={800}
           posY={165}
           alarm={0}
-          collapsible={1}
+          collapsible={true}
           states={{
             command: fancoil05P02.comandoEncendido ? fancoil05P02.comandoEncendido.value : null,
             working: fancoil05P02.estadoFuncionamiento ? fancoil05P02.estadoFuncionamiento.value : null,
@@ -616,7 +626,7 @@ export default class Level2 extends Component {
           posX={800}
           posY={145}
           alarm={0}
-          collapsible={1}
+          collapsible={true}
           states={{
             command: fancoil08P02.comandoEncendido ? fancoil08P02.comandoEncendido.value : null,
             working: fancoil08P02.estadoFuncionamiento ? fancoil08P02.estadoFuncionamiento.value : null,
@@ -713,7 +723,7 @@ export default class Level2 extends Component {
           posX={800}
           posY={110}
           alarm={0}
-          collapsible={1}
+          collapsible={true}
           states={{
             command: fancoil07P02.comandoEncendido ? fancoil07P02.comandoEncendido.value : null,
             working: fancoil07P02.estadoFuncionamiento ? fancoil07P02.estadoFuncionamiento.value : null,
@@ -810,7 +820,7 @@ export default class Level2 extends Component {
           posX={682}
           posY={165}
           alarm={0}
-          collapsible={1}
+          collapsible={true}
           states={{
             command: fancoil03P02.comandoEncendido ? fancoil03P02.comandoEncendido.value : null,
             working: fancoil03P02.estadoFuncionamiento ? fancoil03P02.estadoFuncionamiento.value : null,
@@ -907,7 +917,7 @@ export default class Level2 extends Component {
           posX={736}
           posY={165}
           alarm={0}
-          collapsible={1}
+          collapsible={true}
           states={{
             command: fancoil04P02.comandoEncendido ? fancoil04P02.comandoEncendido.value : null,
             working: fancoil04P02.estadoFuncionamiento ? fancoil04P02.estadoFuncionamiento.value : null,
@@ -1004,7 +1014,7 @@ export default class Level2 extends Component {
           posX={692}
           posY={71}
           alarm={0}
-          collapsible={1}
+          collapsible={true}
           states={{
             command: fancoil10P02.comandoEncendido ? fancoil10P02.comandoEncendido.value : null,
             working: fancoil10P02.estadoFuncionamiento ? fancoil10P02.estadoFuncionamiento.value : null,
@@ -1101,7 +1111,7 @@ export default class Level2 extends Component {
           posX={742}
           posY={71}
           alarm={0}
-          collapsible={1}
+          collapsible={true}
           states={{
             command: fancoil11P02.comandoEncendido ? fancoil11P02.comandoEncendido.value : null,
             working: fancoil11P02.estadoFuncionamiento ? fancoil11P02.estadoFuncionamiento.value : null,
@@ -1198,7 +1208,7 @@ export default class Level2 extends Component {
           posX={800}
           posY={81}
           alarm={0}
-          collapsible={1}
+          collapsible={true}
           states={{
             command: fancoil06P02.comandoEncendido ? fancoil06P02.comandoEncendido.value : null,
             working: fancoil06P02.estadoFuncionamiento ? fancoil06P02.estadoFuncionamiento.value : null,
@@ -1295,7 +1305,7 @@ export default class Level2 extends Component {
           posX={800}
           posY={45}
           alarm={0}
-          collapsible={1}
+          collapsible={true}
           states={{
             command: fancoil09P02.comandoEncendido ? fancoil09P02.comandoEncendido.value : null,
             working: fancoil09P02.estadoFuncionamiento ? fancoil09P02.estadoFuncionamiento.value : null,
@@ -2432,7 +2442,7 @@ export default class Level2 extends Component {
 
         <rect id={this.overlayId} pointerEvents="all" fill="none" width="882.42" height="461.23" />
 
-        <g id={this.deviceId}>{this.props.hideHVAC ? '' : this.getDevices()}</g>
+        <g id={this.deviceId}>{!this.props.hideHVAC && this.getDevices()}</g>
       </React.Fragment>
     );
   }
