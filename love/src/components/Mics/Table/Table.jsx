@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './Table.module.css';
 import Microphone from './Microphone';
+import styles from './Table.module.css';
 
 export default class Table extends Component {
   static propTypes = {
@@ -28,114 +28,74 @@ export default class Table extends Component {
     setInfoPlot: PropTypes.func,
   };
 
+  static defaultProps = {
+    mics: [],
+    selectMic: () => {},
+    recordPush: () => {},
+    setInfoPlot: () => {},
+  };
+
+  renderHeader(name, id) {
+    return (
+      <tr key={`header-${id}`}>
+        <th colSpan="2" scope="colgroup" className={styles.thLocMic}>
+          <span className={styles.locationMic}>{name.toUpperCase()}</span>
+        </th>
+        <th scope="col">
+          <span className={styles.headers}>MIC STATUS</span>
+        </th>
+        <th scope="col">
+          <span className={styles.headers}>NOTIFICATIONS</span>
+        </th>
+        <th scope="col">
+          <span className={styles.headers}>ALARM</span>
+        </th>
+      </tr>
+    );
+  }
+
+  renderMicrophones(items) {
+    const { selectMic, recordPush, setInfoPlot } = this.props;
+    return items.map((item) => {
+      return (
+        <Microphone
+          source={item.src}
+          id={item.id}
+          name={item.name}
+          selectMic={(mic) => selectMic(mic)}
+          recordPush={(id, currentTime, url, blob) => recordPush(id, currentTime, url, blob)}
+          setInfoPlot={(data) => setInfoPlot(data)}
+        />
+      )
+    })
+  }
+
   render() {
-    const { mics, selectMic, recordPush, setInfoPlot, containerNode } = this.props;
+    const { mics } = this.props;
+    let microphones = {};
+    mics.forEach((mic) => {
+      if (!microphones[mic.location]) {
+        microphones[mic.location] = {};
+      }
+      microphones[mic.location][mic.id] = {
+        id: mic.id,
+        name: mic.name,
+        location: mic.location,
+        src: mic.src,
+      };
+    });
+
     return (
       <table>
-        <colgroup span="2" />
-        <col />
-        <col />
-        <col />
-        <tr>
-          <th colSpan="2" scope="colgroup" className={styles.thLocMic}>
-            <span className={styles.locationMic}>MAIN TELESCOPE</span>
-          </th>
-
-          <th scope="col">
-            <span className={styles.headers}> MIC STATUS </span>
-          </th>
-          <th scope="col">
-            <span className={styles.headers}>NOTIFICATIONS</span>
-          </th>
-          <th scope="col">
-            <span className={styles.headers}>ALARM</span>
-          </th>
-        </tr>
-        {mics.map((m) => {
-          if (m.loc === 'mainTelescope') {
+        { Object.entries(microphones).map((item, i) => {
             return (
               <>
-                <Microphone
-                  source={m.src}
-                  id={m.id}
-                  selectMic={(mic) => selectMic(mic)}
-                  recordPush={(id, currentTime, url, blob) => recordPush(id, currentTime, url, blob)}
-                  setInfoPlot={(data) => setInfoPlot(data)}
-                ></Microphone>
+                { this.renderHeader(item[0], i) }
+                { this.renderMicrophones(Object.values(item[1])) }
               </>
             );
-          }
-        })}
-
-        <br />
-
-        <colgroup span="2" />
-        <col />
-        <col />
-        <col />
-        <tr>
-          <th colSpan="2" scope="colgroup" className={styles.thLocMic}>
-            <span className={styles.locationMic}>AUXILIARY TELESCOPE</span>
-          </th>
-
-          <th scope="col">
-            <span className={styles.headers}> MIC STATUS </span>
-          </th>
-          <th scope="col">
-            <span className={styles.headers}>NOTIFICATIONS</span>
-          </th>
-          <th scope="col">
-            <span className={styles.headers}>ALARM</span>
-          </th>
-        </tr>
-        {mics.map((m) => {
-          if (m.loc === 'auxilaryTelescope') {
-            return (
-              <Microphone
-                source={m.src}
-                id={m.id}
-                selectMic={(mic) => selectMic(mic)}
-                recordPush={(id, currentTime, url, blob) => recordPush(id, currentTime, url, blob)}
-                setInfoPlot={(data) => setInfoPlot(data)}
-              ></Microphone>
-            );
-          }
-        })}
-
-        <br />
-
-        <colgroup span="2" />
-        <col />
-        <col />
-        <col />
-        <tr>
-          <th colSpan="2" scope="colgroup" className={styles.thLocMic}>
-            <span className={styles.locationMic}>SUMMIT FACILITY</span>
-          </th>
-
-          <th scope="col">
-            <span className={styles.headers}> MIC STATUS </span>
-          </th>
-          <th scope="col">
-            <span className={styles.headers}>NOTIFICATIONS</span>
-          </th>
-          <th scope="col">
-            <span className={styles.headers}>ALARM</span>
-          </th>
-        </tr>
-        {mics.map((m) => {
-          if (m.loc === 'summitFacility') {
-            return (
-              <Microphone
-                source={m.src}
-                id={m.id}
-                selectMic={(mic) => selectMic(mic)}
-                recordPush={(id, currentTime, url, blob) => recordPush(id, currentTime, url, blob)}
-                setInfoPlot={(data) => setInfoPlot(data)}
-              ></Microphone>
-            );
-          }
-        })}
+          })
+        }
       </table>
     );
   }

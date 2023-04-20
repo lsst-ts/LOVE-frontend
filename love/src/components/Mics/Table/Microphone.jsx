@@ -27,6 +27,10 @@ export default class Microphone extends Component {
      */
     id: PropTypes.string,
     /**
+     * Name assigned to this mic
+     */
+    name: PropTypes.string,
+    /**
      * Function to add a new record on the mic's record state
      */
     recordPush: PropTypes.func,
@@ -450,9 +454,10 @@ export default class Microphone extends Component {
     let classSelectedMic = this.state.isSelected ? styles.selectedMic : '';
 
     const { isSelected } = this.state;
-    const { id } = this.props;
+    const { id, name } = this.props;
     let mic = {
       id: id,
+      name: name,
       recordFunc: this.record,
       playFunc: this.play,
       volumeFunc: this.changeVolume,
@@ -466,7 +471,7 @@ export default class Microphone extends Component {
           <ViewIcon selected={this.state.isSelected}></ViewIcon>
         </td>
         <td onClick={() => this.props.selectMic(mic)} className={styles.tdIdMic}>
-          <span className={styles.idMic}>{id}</span>
+          <span className={styles.idMic}>{name}</span>
         </td>
         <td>
           <StatusText status="ok" title="MicStatus" small>

@@ -30,8 +30,8 @@ export default class HeatMap extends Component {
       height: undefined,
 
       spec: {
-        width: 200,
-        height: 200,
+        width: 300,
+        height: 180,
         data: { name: 'table' },
         mark: { type: 'rect' },
         encoding: {
@@ -172,7 +172,13 @@ export default class HeatMap extends Component {
       only which will enclose the Vega Lite Plot tag.*/}
         <div className={styles.divVegaLite}>
           {showHeatMap ? (
-            <VegaLite style={{ display: 'flex' }} renderer="svg" spec={this.state.spec} data={data3D} />
+            <VegaLite
+              style={{ display: 'flex' }}
+              renderer="svg"
+              spec={this.state.spec}
+              data={data3D}
+              actions={false}
+            />
           ) : (
             <></>
           )}

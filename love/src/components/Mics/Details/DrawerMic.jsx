@@ -24,6 +24,10 @@ export default class DrawerMic extends Component {
      */
     id: PropTypes.string,
     /**
+     * Name of the current mic selected
+     */
+    name: PropTypes.string,
+    /**
      * Plot's info of the current mic to render
      */
     infoPlot: PropTypes.object,
@@ -96,6 +100,7 @@ export default class DrawerMic extends Component {
   render() {
     const {
       id,
+      name,
       drawerDetailCss,
       play,
       setVolume,
@@ -120,7 +125,7 @@ export default class DrawerMic extends Component {
       <div className={drawerDetailCss}>
         <div className={styles.divDetails}>
           <div className={styles.divTitleSection}>
-            <span className={styles.spanIdDetails}> {id ?? ''}</span>
+            <span className={styles.spanIdDetails}> {name ?? ''}</span>
           </div>
           {/* HEAD HEAT MAP */}
           <div className={styles.infoMonserratFontContainer0}>

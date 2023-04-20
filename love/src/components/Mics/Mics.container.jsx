@@ -70,7 +70,7 @@ export const schema = {
 };
 
 const MicsContainer = (props) => {
-  const mics = props.mics || schema.props.mics;
+  const mics = props.mics || schema.props.mics.default;
   return (
     <Mics 
       mics={mics}
