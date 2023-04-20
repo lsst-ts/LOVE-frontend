@@ -18,6 +18,10 @@ Here is an example file in `json` format:
         "defaultEfdInstance": "summit_efd",
         "urlStatus": "https://summit-lsp.lsst.codes/influxdb/health"
     },
+    "sal": {
+        "urlStatus": "https://summit-lsp.lsst.codes/sasquatch-rest-proxy/brokers",
+        "expectedBrokerList": [1, 2, 3]
+    },
     "survey": {
       "startTime": 1651609492989,
     }
@@ -34,5 +38,8 @@ Here is an example file in `json` format:
 - **efd**:
   - **defaultEfdInstance**: default efd instance to be queried on the VegaTimeSeriesPlot component. Available values: `["summit_efd", "ncsa_teststand_efd", "ldf_stable_efd", "ldf_int_efd", "base_efd", "tucson_teststand_efd", "test_efd"]`.
   - **urlStatus**: this is the URL where the EFD health status will be queried. For example `"https://summit-lsp.lsst.codes/influxdb/health"`.
+- **sal**:
+  - **urlStatus**: this is the URL where the EFD health status will be queried. For example `"https://summit-lsp.lsst.codes/sasquatch-rest-proxy/brokers"`.
+  - **expectedBrokerList**: this is the list of brokers that are expected to be connected to the LOVE system. If any of the brokers is not connected, the LOVE system will report an error. For example: `[1, 2, 3]`.
 - **survey**:
   - **startTime**: this is day/time from official start of the surve. Value must be a timestamp in miliseconds (13-digits number) UTC.

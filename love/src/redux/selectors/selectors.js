@@ -21,6 +21,8 @@ export const getAlarmConfig = (state) => getConfig(state)?.content?.alarms;
 
 export const getEfdConfig = (state) => getConfig(state)?.content?.efd;
 
+export const getSALConfig = (state) => getConfig(state)?.content?.sal;
+
 export const getSurveyConfig = (state) => getConfig(state)?.content?.survey;
 
 export const getControlLocation = (state) => ({

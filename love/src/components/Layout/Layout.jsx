@@ -146,6 +146,7 @@ class Layout extends Component {
     this.heartbeatInterval = setInterval(() => {
       this.checkHeartbeat();
       this.checkEfdStatus();
+      this.checkSALStatus();
     }, 3000);
   };
 
@@ -267,10 +268,19 @@ class Layout extends Component {
 
   checkEfdStatus = () => {
     const url = this.props.efdConfigFile?.urlStatus;
-    const status = ManagerInterface.getEFDStatus(url);
-    status.then((result) => {
+    ManagerInterface.getEFDStatus(url).then((result) => {
       this.setState({
         efdStatus: result,
+      });
+    });
+  };
+
+  checkSALStatus = () => {
+    const url = this.props.salConfigFile?.urlStatus;
+    const expectedBrokers = this.props.salConfigFile?.expectedBrokerList;
+    ManagerInterface.getSALStatus(url, expectedBrokers).then((result) => {
+      this.setState({
+        salStatus: result,
       });
     });
   };

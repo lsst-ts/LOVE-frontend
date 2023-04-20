@@ -2,6 +2,7 @@ import html2canvas from 'html2canvas';
 import { DateTime } from 'luxon';
 import { toast } from 'react-toastify';
 import Moment from 'moment';
+import isEqual from 'lodash/isEqual';
 import { WEBSOCKET_SIMULATION } from 'Config.js';
 
 /* Backwards compatibility of Array.flat */
@@ -356,6 +357,34 @@ export default class ManagerInterface {
       .catch((err) => {
         return { label: 'EFD Healthy Status Fail', style: 'alert', error: err };
       });
+  }
+
+  static getSALStatus(url, expectedKafkaBrokers = []) {
+    if (!url) {
+      return new Promise(function (resolve, _) {
+        resolve({ label: 'SAL Status URL is not present in LOVE Configuration File', style: 'invalid' });
+      });
+    }
+    return fetchWithTimeout(url, { method: 'GET' }).then((result) => {
+      if (result.status >= 500) {
+        return { label: 'Error retrieving SAL status, service not available', style: 'alert' };
+      }
+      if (result.status === 400) {
+        return { label: 'Error retrieving SAL status, service not exist', style: 'alert' };
+      }
+      return result.json().then((res) => {
+        if (!res.brokers) {
+          return { label: 'Error retrieving SAL status, service is not running properly', style: 'alert' };
+        }
+
+        const sameBrokers = expectedKafkaBrokers.every((broker) => res.brokers.includes(broker));
+        if (!Array.isArray(res.brokers) || res.brokers?.length === 0 || !sameBrokers) {
+          return { label: 'SAL is not running as expected', style: 'alert' };
+        }
+
+        return { label: 'SAL Healthy Status Pass', style: 'ok' };
+      });
+    });
   }
 
   // EFD APIs
