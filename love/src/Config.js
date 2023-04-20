@@ -3,10 +3,6 @@ import ErrorIcon from 'components/icons/CSCExpanded/ErrorIcon/ErrorIcon';
 
 // Commands Configurations
 export const hasCommandPrivileges = true;
-const cmdAck = [
-  { label: 'None', value: undefined },
-  { label: 'LabelNameCommand', value: 'CmdAck from the command that started the slew process' },
-];
 
 // LOVE components to monitor heartbeats
 export const HEARTBEAT_COMPONENTS = {
@@ -39,7 +35,10 @@ export const ISO_INTEGER_DATE_FORMAT = 'YYYYMMDD';
 export const TIME_FORMAT = 'HH:mm:ss';
 export const DATE_TIME_FORMAT = 'YYYY/MM/DD, HH:mm:ss';
 
-// Limits Configurations
+/*****************************************************************************/
+/****************************Limits configurations****************************/
+/*****************************************************************************/
+
 export const MTMountLimits = {
   elevation: {
     min: 5,
@@ -51,7 +50,21 @@ export const MTMountLimits = {
   },
 };
 
-// Watcher Configurations
+export const ATPneumaticsLimits = {
+  cellLoad: {
+    min: 3.83,
+    max: 117.8,
+  },
+  pressure: {
+    min: 47160.14,
+    max: 182159.49,
+  },
+};
+
+/*****************************************************************************/
+/****************************Watcher configurations***************************/
+/*****************************************************************************/
+
 export const severityToStatus = {
   0: 'unknown',
   1: 'ok',
@@ -68,7 +81,10 @@ export const severityEnum = {
   critical: 4,
 };
 
-// TCS Configurations
+/*****************************************************************************/
+/******************************TCS configurations*****************************/
+/*****************************************************************************/
+
 const rotTypes = [
   { label: 'Sky', value: 0 },
   { label: 'SkyAuto', value: 1 },
@@ -117,7 +133,6 @@ const Planets = [
  * value contains a 2 item array with its first element being the param type, e.g.
  * 'string', 'angle', 'number', 'boolean', 'time', 'dict'. The second element contains the default
  * value.
- *
  */
 export const TCSCommands = {
   slew_object: {
@@ -297,7 +312,10 @@ export const MTCSCommands = {
   reset_m2_hexapod_position: {},
 };
 
-// OLE Configurations
+/*****************************************************************************/
+/******************************OLE configurations*****************************/
+/*****************************************************************************/
+
 export const LOG_TYPE_OPTIONS = [
   { label: 'debug', value: 10 },
   { label: 'info', value: 20 },
@@ -315,6 +333,7 @@ export const iconLevelOLE = {
   info: <InfoIcon />,
   urgent: <ErrorIcon />,
 };
+
 export const LSST_SYSTEMS = [
   'Auxtel',
   'MT',
@@ -346,7 +365,10 @@ export const LSST_SUBSYSTEMS = [
   'Calibration',
 ];
 
-// LSST Systems and Subsystems
+/*****************************************************************************/
+/**************************CSC Summary configurations*************************/
+/*****************************************************************************/
+
 export const CSCSummaryHierarchy = {
   'Auxiliary Telescope': {
     ATTCS: [
@@ -447,50 +469,10 @@ export const defaultCSCList = [
   { name: 'WeatherStation', salindex: 1 },
 ];
 
-// ATCamera status to styles mappings
-export const cameraStates = {
-  raftsDetailedState: {
-    1: 'NEEDS_CLEAR',
-    2: 'CLEARING',
-    3: 'INTEGRATING',
-    4: 'READING_OUT',
-    5: 'QUIESCENT',
-  },
-  imageReadinessDetailedState: {
-    1: 'READY',
-    2: 'NOT_READY',
-    3: 'GETTING_READY',
-  },
-  calibrationDetailedState: {
-    1: 'DISABLED',
-    2: 'ENABLED',
-    3: 'INTEGRATING',
-  },
-  shutterDetailedState: {
-    1: 'CLOSED',
-    2: 'OPEN',
-    3: 'CLOSING',
-    4: 'OPENING',
-  },
-};
+/*****************************************************************************/
+/***************************STATE TO STYLE MAPPINGS***************************/
+/*****************************************************************************/
 
-export const imageStates = {
-  INTEGRATING: 'INTEGRATING',
-  READING_OUT: 'READING_OUT',
-  END_READOUT: 'END_READOUT',
-  END_TELEMETRY: 'END_TELEMETRY',
-};
-
-export const getCameraStatusStyle = (status) => {
-  if (!status) return '';
-  if (status.toLowerCase() === 'integrating') return 'running';
-  if (status.toLowerCase() === 'reading_out') return 'running';
-  if (status.toLowerCase() === 'ready') return 'ok';
-  if (status.toLowerCase() === 'done') return 'ok';
-  return '';
-};
-
-// State to styles mappings
 export const stateToStyleLATISS = {
   HOMING: 'running',
   MOVING: 'running',
@@ -762,7 +744,57 @@ export const mtdomeElevationEnabledStatetoStyle = {
   FAULT: 'fault',
 };
 
-// State to text mappings
+export const ataosCorrectionsStateToStyle = {
+  DISABLED: 'warning',
+  ENABLED: 'ok',
+  UNKNOWN: 'invalid',
+};
+
+//Observatory
+export const telescopeTrackingStateToStyle = {
+  UNKNOWN: 'invalid',
+  'NOT TRACKING': 'warning',
+  TRACKING: 'ok',
+};
+
+export const telescopeTrackingModeStateToStyle = {
+  UNKNOWN: 'invalid',
+  FKS: 'ok',
+  ICRS: 'ok',
+};
+
+/*****************************************************************************/
+/*******************************STATE MAPPINGS********************************/
+/*****************************************************************************/
+
+// ATCamera
+export const cameraStates = {
+  raftsDetailedState: {
+    1: 'NEEDS_CLEAR',
+    2: 'CLEARING',
+    3: 'INTEGRATING',
+    4: 'READING_OUT',
+    5: 'QUIESCENT',
+  },
+  imageReadinessDetailedState: {
+    1: 'READY',
+    2: 'NOT_READY',
+    3: 'GETTING_READY',
+  },
+  calibrationDetailedState: {
+    1: 'DISABLED',
+    2: 'ENABLED',
+    3: 'INTEGRATING',
+  },
+  shutterDetailedState: {
+    1: 'CLOSED',
+    2: 'OPEN',
+    3: 'CLOSING',
+    4: 'OPENING',
+  },
+};
+
+// M1M3
 export const m1m3DetailedStateMap = {
   1: 'DISABLED STATE',
   2: 'FAULT STATE',
@@ -781,7 +813,7 @@ export const m1m3DetailedStateMap = {
   0: 'UNKNOWN',
 };
 
-export const m1mActuatorILCStateMap = {
+export const m1m3ActuatorILCStateMap = {
   1: 'ON',
   0: 'OFF',
 };
@@ -794,6 +826,7 @@ export const m1m3HardpointActuatorMotionStateMap = {
   0: 'STANDBY',
 };
 
+// MTDome
 export const domeAzimuthStateMap = {
   1: 'NOT MOVING',
   2: 'MOVING CW',
@@ -858,12 +891,6 @@ export const ataosCorrectionsStateMap = {
   undefined: 'UNKNOWN',
 };
 
-export const ataosCorrectionsStateToStyle = {
-  DISABLED: 'warning',
-  ENABLED: 'ok',
-  UNKNOWN: 'invalid',
-};
-
 // ATPneumatics
 export const m1CoverStateStateMap = {
   1: 'DISABLED',
@@ -888,17 +915,6 @@ export const instrumentStateMap = {
   1: 'OPEN',
   2: 'CLOSED',
   0: 'UNKNOWN',
-};
-
-export const ATPneumaticsLimits = {
-  cellLoad: {
-    min: 3.83,
-    max: 117.8,
-  },
-  pressure: {
-    min: 47160.14,
-    max: 182159.49,
-  },
 };
 
 export const m1CoverLimitSwitchesStateMap = {
@@ -1122,7 +1138,7 @@ export const mtdomeMotionStateMap = {
 export const aircraftTrackerStateToMap = {
   0: 'DISCONNECTED',
   1: 'CONNECTED',
-}
+};
 
 export const aircraftTrackerStatetoStyle = {
   DISCONNECTED: 'warning',
@@ -1135,7 +1151,22 @@ export const mtdomeElevationEnabledStateToMap = {
   2: 'FAULT',
 };
 
-// Components configurations
+//Observatory
+export const telescopeTrackingStateMap = {
+  0: 'UNKNOWN',
+  false: 'NOT TRACKING',
+  true: 'TRACKING',
+};
+
+export const telescopeTrackingModeStateMap = {
+  0: 'UNKNOWN',
+  1: 'FKS',
+  2: 'ICRS',
+};
+
+/*****************************************************************************/
+/**************************MTM3 actuator and forces***************************/
+/*****************************************************************************/
 export const M1M3ActuatorForces = {
   appliedAberrationForces: ['zForces'],
   appliedAccelerationForces: ['xForces', 'yForces', 'zForces'],
@@ -1319,6 +1350,10 @@ export const M1M3HardpointPositions = [
   { id: 6, actuator: { position: [5.6794e1, -9.0804e1] }, mini: { position: [80.62, 32.53] } },
 ];
 
+/*****************************************************************************/
+/***************************MTM2 actuator positions***************************/
+/*****************************************************************************/
+
 export const M2ActuatorPositionsAlpha = [
   { id: 1, position: [1.601, 0] },
   { id: 2, position: [1.566014, 0.332867] },
@@ -1413,7 +1448,9 @@ export const M2ActuatorTangentPositions = M2ActuatorTangentPositionsAlpha.map((x
   position: [x.position[0] * 137, x.position[1] * 137, x.position[2] * 137, x.position[3] * 137],
 }));
 
-// Louvers map for MTDome
+/*****************************************************************************/
+/***************************MTDome louvers mappings***************************/
+/*****************************************************************************/
 export const MTDomeLouversMapAF = [
   'A1',
   'A2',
@@ -1454,127 +1491,224 @@ export const MTDomeLouversMapGN = [
   'N2',
 ];
 
-// GIS
+/*****************************************************************************/
+/***********************GIS alerts and signals mappings***********************/
+/*****************************************************************************/
+
 export const signals = {
   fireProtectionSystem: {
-    fireSignal: ['fireIndication'],
+    fireSignal: [
+      /** GIS */
+      'fireIndication',
+    ],
   },
   earthquakeDetectionSystem: {
     catastrophicEarthquakeSignal: [
+      /** TMA IS */
       'dischargeCapacitorBanks',
       'stoOthersDrives',
       'stoElAndAzDrivesAndEngageTheBrakes',
       'stoCCWDrives',
+      /** DOME IS */
+      'stoDrivesShutterDoorsAnsWindscreen',
+      'stoDrivesLouversAndLockingPin',
+      'stoRearDoorsDrives',
+      'stoAzDrivesEngageBrakes',
+      /** M2 IS */
       'stoHexapodsM2',
       'stoActuatorsM2',
-      'stoDrivesShutterDoorsAnsWindscreen',
-      'stoCraneDrives',
-      'stoRearDoorsDrives',
-      'stoDrivesLouversAndLockingPin',
-      'stoAzDrivesEngageBrakes',
+      /** CAMERA IS */
       'stoRotatorCam',
       'stoHexapodsCam',
+      /** PLFOW IS */
       'stoPlatformLift',
+      /** M3 IS */
       'earthquakeStoActuators',
+      /** LASER IS */
       'laserCutOffShutterClosed',
-      'stoFunctionDrives',
     ],
   },
   globalInterlockSystem: {
     internalFailure: [
+      /** TMA IS */
       'stoOthersDrives',
       'stoElAndAzDrivesAndEngageTheBrakes',
       'stoCCWDrives',
+      /** DOME IS */
+      'stoDrivesShutterDoorsAnsWindscreen',
+      'stoDrivesLouversAndLockingPin',
+      'stoRearDoorsDrives',
+      'stoAzDrivesEngageBrakes',
+      /** M2 IS */
       'stoHexapodsM2',
       'stoActuatorsM2',
+      /** CAMERA IS */
+      'stoRotatorCam',
+      'stoHexapodsCam',
+      /** PLFOW IS */
+      'stoLiftAtToTopFloor',
+      /** M3 IS */
+      'emergencyStoActuators',
+      /** LASER IS */
+      'laserCutOffShutterClosed',
+    ],
+    emergencyStop: [
+      /** TMA IS */
+      'stoOthersDrives',
+      'stoElAndAzDrivesAndEngageTheBrakes',
+      'stoCCWDrives',
+      /** DOME IS */
       'stoDrivesShutterDoorsAnsWindscreen',
       'stoCraneDrives',
       'stoRearDoorsDrives',
       'stoDrivesLouversAndLockingPin',
       'stoAzDrivesEngageBrakes',
-      'stoRotatorCam',
-      'stoHexapodsCam',
-      'stoLiftAtToTopFloor',
-      'laserCutOffShutterClosed',
-      'emergencyStoActuators',
-      'stoFunctionDrives',
-    ],
-    emergencyStop: [
-      'stoOthersDrives',
-      'stoElAndAzDrivesAndEngageTheBrakes',
-      'stoCCWDrives',
+      /** M2 IS */
       'stoHexapods',
       'stoActuators',
-      'stoDrivesShutterDoorsAnsWindscreen',
-      'stoRearDoorsDrives',
+      /** CAMERA IS */
+      'stoRotatorCam',
+      'stoHexapodsCam',
+      /** PLFOW IS */
+      'stoLiftAtToTopFloor',
+      /** M3 IS */
+      'emergencyStoActuators',
+      /** LASER IS */
+      'laserCutOffShutterClosed',
+      /** MAN-LIFT IS */
+      'stoFunctionDrives',
     ],
-    ccwSafetyDevice: ['stoRotatorCam'],
-    cameraRotatorPinInserted: ['cameraRotatorPinInserted'],
-    manLiftNotParked: ['stoElAndAzDrivesAndEngageTheBrakes', 'stoCraneDrives'],
+  },
+  accessControlSystem: {
+    unauthorizedPierAccess: [
+      /** TMA IS */
+      'stoElAndAzDrivesAndEngageTheBrakes',
+    ],
+    unauthorizedDomeAccess: [
+      /** TMA IS */
+      'stoElAndAzDrivesAndEngageTheBrakes',
+      /** DOME IS */
+      'stoAzDrivesEngageBrakes',
+      /** LASER IS */
+      'laserCutOffShutterClosed',
+    ],
+  },
+  tmaInterlockSystem: {
+    breaksNotEngaged: [
+      /** DOME IS */
+      'stoCraneDrives',
+      /** MAN-LIFT IS */
+      'stoFunctionDrives',
+    ],
+    ccwSafetyDevice: [
+      /** CAMERA IS */
+      'stoRotatorCam',
+    ],
+    tmaEtpbs: [
+      /** DOME IS */
+      'stoDrivesShutterDoorsAnsWindscreen',
+      'stoCraneDrives',
+      'stoRearDoorsDrives',
+      'stoDrivesLouversAndLockingPin',
+      'stoAzDrivesEngageBrakes',
+      /** M2 IS */
+      'stoHexapods',
+      'stoActuators',
+      /** CAMERA IS */
+      'stoRotatorCam',
+      'stoHexapodsCam',
+      /** PFLOW IS */
+      'stoPlatformLift',
+      /** M1M3 IS */
+      'emergencyStoActuators',
+      /** LASER IS */
+      'laserCutOffShutterClosed',
+      /** MAN-LIFT IS */
+      'stoFunctionDrives',
+    ],
+    failedWatchdogOrLossCommunication: [
+      /** CAMERA IS */
+      'stoRotatorCam',
+      'stoHexapodsCam',
+    ],
   },
   domeInterlockSystem: {
-    loockingPinRetractedOrRearDoorLouversNotClosed: ['stoLiftAtToTopFloor'],
-    rearDoorNotClosed: ['stoPlatformLift'],
+    loockingPinRetractedOrRearDoorLouversNotClosed: [
+      /** PFLOW IS */
+      'stoLiftAtToTopFloor',
+    ],
+    rearDoorNotClosed: [
+      /** PFLOW IS */
+      'stoPlatformLift',
+    ],
     domeEtpbs: [
+      /** TMA IS */
       'stoOthersDrives',
       'stoElAndAzDrivesAndEngageTheBrakes',
       'stoCCWDrives',
+      /** M2 IS */
       'stoHexapodsM2',
       'stoActuatorsM2',
+      /** CAMERA IS */
       'stoRotatorCam',
       'stoHexapodsCam',
-      'stoPlatformLift',
-      'earthquakeStoActuators',
+      /** PFLOW IS */
+      'stoLiftAtToTopFloor',
+      /** M3 IS */
+      'emergencyStoActuators',
+      /** LASER IS */
       'laserCutOffShutterClosed',
+      /** MAN-LIFT IS */
       'stoFunctionDrives',
     ],
-    craneBridgeLimitSwitchisReleasedFromParkedPosition: ['stoElAndAzDrivesAndEngageTheBrakes', 'stoFunctionDrives'],
-  },
-  accessControlSystem: {
-    unauthorizedPierAccess: ['stoElAndAzDrivesAndEngageTheBrakes'],
-    unauthorizedDomeAccess: [
+    craneBridgeLimitSwitchisReleasedFromParkedPosition: [
+      /** TMA IS */
       'stoElAndAzDrivesAndEngageTheBrakes',
-      'stoAzDrivesEngageBrakes',
-      'laserCutOffShutterClosed',
+      /** MAN-LIFT IS */
+      'stoFunctionDrives',
+    ],
+  },
+  camera: {
+    cameraRotatorPinInserted: [
+      /** GIS */
+      'cameraRotatorPinInserted',
     ],
   },
   platformLift: {
-    aboveUtilityFloor: ['stoDrivesLouversAndLockingPin'],
-    notParkedAtTheTelescopeLevel: ['stoRearDoorsDrives'],
-  },
-  tmaInterlockSystem: {
-    breaksNotEngaged: ['stoCraneDrives', 'stoFunctionDrives'],
-    tmaEtpbs: [
-      'stoDrivesShutterDoorsAnsWindscreen',
-      'stoCraneDrives',
-      'stoRearDoorsDrives',
+    aboveUtilityFloor: [
+      /** TMA IS */
       'stoDrivesLouversAndLockingPin',
-      'stoAzDrivesEngageBrakes',
-      'stoCCWDrivesM2',
-      'stoHexapodsM2',
-      'stoPlatformLift',
-      'emergencyStoActuators',
-      'laserCutOffShutterClosed',
-      'stoFunctionDrives',
+    ],
+    notParkedAtTheTelescopeLevel: [
+      /** TMA IS */
+      'stoRearDoorsDrives',
     ],
   },
-  mcs: {
-    failedWatchdogOrLossCommunication: ['stoRotatorCam', 'stoHexapodsCam'],
-  },
   m1m3SupportSystem: {
-    interlock: ['stoElAndAzDrivesAndEngageTheBrakes'],
+    interlock: [
+      /** TMA IS */
+      'stoElAndAzDrivesAndEngageTheBrakes',
+    ],
+  },
+  manLift: {
+    manLiftNotParked: [
+      /** TMA IS */
+      'stoElAndAzDrivesAndEngageTheBrakes',
+      /** DOME IS */
+      'stoCraneDrives',
+    ],
   },
 };
 
 export const effects = {
   globalInterlockSystem: ['fireIndication', 'cameraRotatorPinInserted'],
+  m1m3SupportSystem: ['earthquakeStoActuators', 'emergencyStoActuators'],
   tmaInterlockSystem: [
     'dischargeCapacitorBanks',
     'stoOthersDrives',
     'stoElAndAzDrivesAndEngageTheBrakes',
     'stoCCWDrives',
   ],
-  m2: ['stoHexapodsM2', 'stoActuatorsM2'],
   domeInterlockSystem: [
     'stoDrivesShutterDoorsAnsWindscreen',
     'stoCraneDrives',
@@ -1583,8 +1717,8 @@ export const effects = {
     'stoAzDrivesEngageBrakes',
   ],
   camera: ['stoRotatorCam', 'stoHexapodsCam'],
-  plowController: ['stoPlatformLift', 'stoLiftAtToTopFloor'],
-  m1m3SupportSystem: ['earthquakeStoActuators', 'emergencyStoActuators'],
+  pflowController: ['stoPlatformLift', 'stoLiftAtToTopFloor'],
+  m2: ['stoHexapodsM2', 'stoActuatorsM2'],
   laserController: ['laserCutOffShutterClosed'],
   manLift: ['stoFunctionDrives'],
 };
@@ -1599,6 +1733,7 @@ export const alertSignalIndexes = {
   breaksNotEngaged: [23, 6],
   ccwSafetyDevice: [23, 7],
   tmaEtpbs: [23, 8],
+  failedWatchdogOrLossCommunication: [24, 0],
   loockingPinRetractedOrRearDoorLouversNotClosed: [23, 9],
   rearDoorNotClosed: [23, 10],
   domeEtpbs: [23, 11],
@@ -1606,7 +1741,6 @@ export const alertSignalIndexes = {
   cameraRotatorPinInserted: [23, 13],
   aboveUtilityFloor: [23, 14],
   notParkedAtTheTelescopeLevel: [23, 15],
-  failedWatchdogOrLossCommunication: [24, 0],
   interlock: [24, 1],
   manLiftNotParked: [24, 2],
 };
@@ -1621,6 +1755,7 @@ export const signalBypassIndexes = {
   breaksNotEngaged: [25, 6],
   ccwSafetyDevice: [25, 7],
   tmaEtpbs: [25, 8],
+  failedWatchdogOrLossCommunication: [26, 0],
   loockingPinRetractedOrRearDoorLouversNotClosed: [25, 9],
   rearDoorNotClosed: [25, 10],
   domeEtpbs: [25, 11],
@@ -1628,7 +1763,6 @@ export const signalBypassIndexes = {
   cameraRotatorPinInserted: [25, 13],
   aboveUtilityFloor: [25, 14],
   notParkedAtTheTelescopeLevel: [25, 15],
-  failedWatchdogOrLossCommunication: [26, 0],
   interlock: [26, 1],
   manLiftNotParked: [26, 2],
 };

@@ -1,21 +1,21 @@
 import { RECEIVE_IMAGE_SEQUENCE_DATA, RECEIVE_CAMERA_STATE_DATA, RECEIVE_READOUT_DATA } from './actionTypes';
-import { imageStates } from 'Config';
+import { IMAGE_STATES } from 'Constants';
 
 export const receiveImageSequenceData = (data) => {
   let imageState;
   let imageData;
   if (data.startIntegration) {
     imageData = data.startIntegration;
-    imageState = imageStates.INTEGRATING;
+    imageState = IMAGE_STATES.INTEGRATING;
   } else if (data.startReadout) {
     imageData = data.startReadout;
-    imageState = imageStates.READING_OUT;
+    imageState = IMAGE_STATES.READING_OUT;
   } else if (data.endReadout) {
     imageData = data.endReadout;
-    imageState = imageStates.END_READOUT;
+    imageState = IMAGE_STATES.END_READOUT;
   } else if (data.endOfImageTelemetry) {
     imageData = data.endOfImageTelemetry;
-    imageState = imageStates.END_TELEMETRY;
+    imageState = IMAGE_STATES.END_TELEMETRY;
   }
   return {
     type: RECEIVE_IMAGE_SEQUENCE_DATA,

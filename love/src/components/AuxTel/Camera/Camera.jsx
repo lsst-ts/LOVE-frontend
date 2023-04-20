@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import styles from './Camera.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import GearIcon from '../../icons/GearIcon/GearIcon';
-import { getCameraStatusStyle } from '../../../Config';
 import LoadingBar from '../../GeneralPurpose/LoadingBar/LoadingBar';
 import { stateToStyleCamera } from '../../../Config';
-import { formatTimestamp } from '../../../Utils';
+import { formatTimestamp, getCameraStatusStyle } from '../../../Utils';
 
 export default class Camera extends Component {
   static propTypes = {

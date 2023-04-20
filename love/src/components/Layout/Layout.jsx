@@ -146,6 +146,7 @@ class Layout extends Component {
     this.heartbeatInterval = setInterval(() => {
       this.checkHeartbeat();
       this.checkEfdStatus();
+      this.checkSALStatus();
     }, 3000);
   };
 
@@ -267,10 +268,19 @@ class Layout extends Component {
 
   checkEfdStatus = () => {
     const url = this.props.efdConfigFile?.urlStatus;
-    const status = ManagerInterface.getEFDStatus(url);
-    status.then((result) => {
+    ManagerInterface.getEFDStatus(url).then((result) => {
       this.setState({
         efdStatus: result,
+      });
+    });
+  };
+
+  checkSALStatus = () => {
+    const url = this.props.salConfigFile?.urlStatus;
+    const expectedBrokers = this.props.salConfigFile?.expectedBrokerList;
+    ManagerInterface.getSALStatus(url, expectedBrokers).then((result) => {
+      this.setState({
+        salStatus: result,
       });
     });
   };
@@ -623,14 +633,16 @@ class Layout extends Component {
                     locationIcon={this.getObsLocationIcon()}
                     location={controlLocationName}
                     locationLastUpdate={lastUpdated}
-                    simonyiOperationMode={'Unknown'}
-                    simonyiTrackingMode={this.props.observatorySummary?.simonyiTrackingState}
+                    simonyiOperationMode={'UNKNOWN'}
+                    simonyiTrackingState={this.props.observatorySummary?.simonyiTrackingState}
+                    simonyiTrackingMode={this.props.observatorySummary?.simonyiTrackingMode}
                     simonyiObsMode={this.props.observatorySummary?.simonyiObservingMode}
-                    simonyiPower={'Unknown'}
-                    auxtelOperationMode={'Unknown'}
-                    auxtelTrackingMode={this.props.observatorySummary?.auxtelTrackingState}
+                    simonyiPower={'UNKNOWN'}
+                    auxtelOperationMode={'UNKNOWN'}
+                    auxtelTrackingState={this.props.observatorySummary?.auxtelTrackingState}
+                    auxtelTrackingMode={this.props.observatorySummary?.auxtelTrackingMode}
                     auxtelObsMode={this.props.observatorySummary?.auxtelObservingMode}
-                    auxtelPower={'Unknown'}
+                    auxtelPower={'UNKNOWN'}
                   ></ObservatorySummaryMenu>
                 </div>
               </DropdownMenu>

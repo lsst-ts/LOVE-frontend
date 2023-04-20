@@ -16,6 +16,7 @@ import {
   getTokenSwapStatus,
   getConfig,
   getEfdConfig,
+  getSALConfig,
   getObservatoryState,
   getControlLocation,
 } from '../../redux/selectors';
@@ -46,6 +47,7 @@ const mapStateToProps = (state) => {
   const getExecPermission = () => getPermCmdExec(state);
   const tokenSwapStatus = getTokenSwapStatus(state);
   const efdConfigFile = getEfdConfig(state);
+  const salConfigFile = getSALConfig(state);
   const observatorySummary = getObservatoryState(state);
   const controlLocation = getControlLocation(state);
   return {
@@ -65,6 +67,7 @@ const mapStateToProps = (state) => {
     getExecPermission,
     tokenSwapStatus,
     efdConfigFile,
+    salConfigFile,
     observatorySummary,
     controlLocation,
   };
