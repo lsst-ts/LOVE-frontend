@@ -27,16 +27,14 @@
   }
   
   .micDetails {
-    width: 70%;
+    width: 50%;
     overflow-x: hidden;
     overflow-y: clip;
     transition: 0.4s;
     margin: 2px;
-    padding-inline: 0.5em;
-    max-width: 35em;
   }
   
-  .mics {
+  .tableMics {
     width: 100%;
     /* border-radius: 20px; */
     transition: 0.4s;
@@ -57,19 +55,6 @@
   
   .container {
     max-width: 100%;
-  }
-  
-  .recSVG {
-    height: 2.25em;
-    /* background-color: var(--secondary-font-color); */
-  }
-  
-  .playSVG {
-    height: 4em;
-  }
-
-  .opacity {
-    opacity: 0.35;
   }
   
   .verticalSpace {

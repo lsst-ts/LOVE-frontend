@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DrawerMic from './Details/DrawerMic';
 import Table from './Table/Table';
-import RecIcon from 'components/icons/MicsIcon/Rec/RecIcon';
-import PauseIcon from 'components/icons/MicsIcon/Pause/PauseIcon';
-import PlayIcon from 'components/icons/MicsIcon/Play/PlayIcon';
 import styles from './Mics.module.css';
 
 export default class Mics extends Component {
@@ -29,7 +26,7 @@ export default class Mics extends Component {
       infoPlot: null,
       alarms: {},
       viewInfo: false,
-      play: false,
+      isPlaying: false,
       isRecording: false,
       records: [],
     };
@@ -80,7 +77,7 @@ export default class Mics extends Component {
    */
   closeMicDetails = () => {
     if (this.state.isRecording) this.record();
-    if (this.state.play) this.play();
+    if (this.state.isPlaying) this.play();
     this.state.currentMic.selectMe();
     this.setState({ viewInfo: false, currentMic: null, infoPlot: null });
   };
@@ -117,8 +114,8 @@ export default class Mics extends Component {
    */
   play = () => {
     if (!this.state.currentMic) return;
-    const { play } = this.state;
-    this.setState({ play: !play });
+    const { isPlaying } = this.state;
+    this.setState({ isPlaying: !isPlaying });
     this.state.currentMic.playFunc();
   };
 
@@ -135,23 +132,13 @@ export default class Mics extends Component {
   render() {
     const { mics } = this.props;
     const drawerDetail = this.state.viewInfo ? styles.micDetails : styles.collapsedMicDetail;
-    const svgRec = (
-      <RecIcon isRecording={this.state.isRecording} className={[styles.recSVG, styles.verticalSpace].join(' ')}/>
-    );
-    const svgPLay = this.state.play ? (
-      <PauseIcon className={styles.playSVG}></PauseIcon>
-    ) : (
-      <PlayIcon className={[styles.playSVG, !this.state.play ? styles.opacity : ''].join(' ')}/>
-    );
     let { volume } = this.state.currentMic ?? {};
-    let textPlay = this.state.play ? 'PAUSE' : 'PLAY';
-    let textRec = this.state.isRecording ? 'STOP' : 'START';
 
     return (
       <div>
         <div className={styles.component}>
           {/* Mic Table */}
-          <div className={styles.mics}>
+          <div className={styles.tableMics}>
             <Table
               mics={mics}
               selectMic={this.selectMic}
@@ -164,17 +151,13 @@ export default class Mics extends Component {
             id={`${this.state.currentMic?.id}`}
             name={this.state.currentMic?.name}
             infoPlot={this.state.infoPlot}
-            closeMicDetails={this.closeMicDetails}
             play={this.play}
             setVolume={this.setVolume}
             volume={volume}
-            isPlay={this.state.play}
+            isPlaying={this.state.isPlaying}
+            isRecording={this.state.isRecording}
             record={this.record}
             records={this.state.records}
-            svgPLay={svgPLay}
-            svgRec={svgRec}
-            textPlay={textPlay}
-            textRec={textRec}
           />
         </div>
       </div>

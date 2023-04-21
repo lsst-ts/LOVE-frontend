@@ -5,19 +5,12 @@ import Record from './Record';
 import HeatMap from './HeatMap/HeatMap';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Input from 'components/GeneralPurpose/Input/Input';
+import RecIcon from 'components/icons/MicsIcon/Rec/RecIcon';
+import PauseIcon from 'components/icons/MicsIcon/Pause/PauseIcon';
+import PlayIcon from 'components/icons/MicsIcon/Play/PlayIcon';
 import styles from './DrawerMic.module.css';
 
 export default class DrawerMic extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      showHeatMap: false,
-    };
-
-    this.containerRef = React.createRef();
-  }
-
   static propTypes = {
     /**
      * ID of the current mic selected
@@ -36,14 +29,6 @@ export default class DrawerMic extends Component {
      */
     setContainerNode: PropTypes.func,
     /**
-     * Classname of the styles to decide if show or don't
-     */
-    peelableDetailCss: PropTypes.string,
-    /**
-     * Function to close this component peleable
-     */
-    closeMicDetails: PropTypes.func,
-    /**
      * Function to play or pause the selected mic
      */
     play: PropTypes.func,
@@ -58,7 +43,11 @@ export default class DrawerMic extends Component {
     /**
      * State that say if there is some mic playing
      */
-    isPlay: PropTypes.bool,
+    isPlaying: PropTypes.bool,
+    /**
+     * State that say if there is some mic recording
+     */
+    isRecording: PropTypes.bool,
     /**
      * Function to start or stop record
      */
@@ -67,23 +56,29 @@ export default class DrawerMic extends Component {
      * Array of records made previously
      */
     records: PropTypes.array,
-    /**
-     * Svg of play. This change if the mic is playing
-     */
-    svgPLay: PropTypes.object,
-    /**
-     * Svg of start record. This change if the mic is recording
-     */
-    svgRec: PropTypes.element,
-    /**
-     * Text down of svgPLay
-     */
-    textPlay: PropTypes.string,
-    /**
-     * Text down of svgRec
-     */
-    textRec: PropTypes.string,
   };
+
+  static defaultProps = {
+    id: 0,
+    name: '',
+    infoPlot: {},
+    setContainerNode: () => {},
+    play: () => {},
+    setVolume: () => {},
+    volume: {},
+    isPlaying: false,
+    isRecording: false,
+    record: () => {},
+    records: [],
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      showHeatMap: false,
+    };
+    this.containerRef = React.createRef();
+  }
 
   /**
    * This function allows to show up the Heat Map, after press the show up button,
@@ -105,13 +100,10 @@ export default class DrawerMic extends Component {
       play,
       setVolume,
       volume,
-      isPlay,
+      isPlaying,
+      isRecording,
       record,
       records,
-      svgPLay,
-      svgRec,
-      textPlay,
-      textRec,
       containerNode,
     } = this.props;
 
@@ -121,86 +113,26 @@ export default class DrawerMic extends Component {
 
     const { actualFreq, actualDb, showInput, appearInputdBLimit, setDbLimitState, dbLimit } = this.props.infoPlot;
 
+    let textPlay = isPlaying ? 'PAUSE' : 'PLAY';
+    let textRec = isRecording ? 'STOP' : 'START';
+
     return (
       <div className={drawerDetailCss}>
         <div className={styles.divDetails}>
           <div className={styles.divTitleSection}>
             <span className={styles.spanIdDetails}> {name ?? ''}</span>
           </div>
-          {/* HEAD HEAT MAP */}
-          <div className={styles.infoMonserratFontContainer0}>
-            <div className={styles.infoMonserratFontContainer1}>
-              <div className={styles.infoMonserratFont1}>
-                <div> Live values </div>
-                <div className={styles.dBLiveValue}>
-                  {' '}
-                  {actualDb.toString().substring(0, 5)}dB in {actualFreq} Hz
-                </div>
-              </div>
-
-              <div className={styles.infoMonserratFont2}>
-                <div className={styles.buttondBLimit}>
-                  Limit
-                  <Button
-                    className={styles.editButtondBLimit}
-                    onClick={() => {
-                      appearInputdBLimit();
-                    }}
-                  >
-                    <div className={styles.svgButtonDiv}>
-                      <svg width="20" height="20" viewBox="0 0 10 20" className={styles.svgButton}>
-                        <line className={styles.svgEdit} x1="8.34" y1="2.09" x2="7.58" y2="1.38" />
-                        <line className={styles.svgEdit} x1="8.72" y1="1.73" x2="7.96" y2="1.02" />
-                        <polyline className={styles.svgEdit} points="4.16 1.66 .15 1.66 .15 9.48 7.97 9.48 7.97 5.49" />
-                        <path
-                          fill="white"
-                          d="m8.69.3h0,0m0,0l.68.67-4.79,4.8-.68-.67,4-4,.79-.79m0-.3c-.07,0-.15.03-.21.09l-.8.8-4,4c-.11.11-.11.3,0,.41l.68.68c.06.06.13.09.21.09s.15-.03.21-.09L9.58,1.18c.11-.11.11-.3,0-.41l-.68-.68c-.06-.06-.13-.09-.21-.09h0Z"
-                        />
-                        <polyline className={styles.svgEdit} points="3.63 5.13 2.93 6.74 4.58 6" />
-                      </svg>
-                    </div>
-                  </Button>
-                </div>
-                <div>{showInput ? <Input onChange={(e) => setDbLimitState(e.target.value)} /> : dbLimit}</div>
-              </div>
-            </div>
-
-            <br></br>
-
-            <div className={styles.fontTitle}>
-              ALARM STORY
-              <Button
-                className={styles.editButtonShowHeatMap}
-                onClick={() => {
-                  this.appearHeatMap();
-                }}
-              >
-                {this.state.showHeatMap ? 'Hide Spectrogram' : 'Show Spectrogram'}
-              </Button>
-            </div>
-          </div>
-
-          {/* HEAT MAP */}
-          {!containerNode ? (
-            <div ref={this.containerRef}>
-              {/* It's important to pass the current to allows the dynamic works in HeatMap Did Update */}
-              <HeatMap
-                className={styles.heatMap}
-                infoPlot={this.props.infoPlot}
-                containerNode={this.containerRef.current}
-                showHeatMap={this.state.showHeatMap}
-              />
-            </div>
-          ) : (
-            <></>
-          )}
 
           <div className={styles.audioStream}>
             <span className={[styles.detailsTitle, styles.headers].join(' ')}>AUDIO STREAMING</span>
             <div className={styles.aStreamContent}>
               <span onClick={() => play()} className={styles.recSpan}>
-                {svgPLay}
-                <br />
+                { isPlaying ? (
+                    <PauseIcon className={styles.playSVG}/>
+                  ) : (
+                    <PlayIcon className={[styles.playSVG, styles.opacity].join(' ')}/>
+                  )
+                }
                 <span className={styles.oneLine}>{textPlay}</span>
               </span>
               <div>
@@ -208,23 +140,67 @@ export default class DrawerMic extends Component {
                   onChange={(value) => setVolume(value)}
                   max={2}
                   value={volume?.value}
-                  disabled={!isPlay}
+                  disabled={!isPlaying}
                 ></Slider>
                 <span className={styles.oneLine}>VOLUME</span>
               </div>
               <span
                 className={styles.recSpan}
-                onClick={() => {
-                  record();
-                }}
+                onClick={() => record()}
               >
-                {svgRec}
-                <br />
+                {
+                  <RecIcon isRecording={isRecording} className={[styles.recSVG, styles.verticalSpace].join(' ')}/>
+                }
                 <span className={styles.oneLine}>{textRec}</span>
               </span>
             </div>
-            {/* Aqui iba records */}
           </div>
+
+          <div className={styles.containerAlarmLimit}>
+            <div>
+              <div> Live values </div>
+              <div className={styles.dBLiveValue}>
+                {' '}
+                {actualDb.toString().substring(0, 5)}dB in {actualFreq} Hz
+              </div>
+            </div>
+
+            <div className={styles.width20}>
+              <div className={styles.buttondBLimit}>
+                Alarm Limit
+              </div>
+              <div>
+                <Input
+                  type="number"
+                  step="0.1"
+                  value={dbLimit}
+                  onChange={(e) => setDbLimitState(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+          <div className={styles.fontTitle}>
+            ALARM STORY
+            <Button
+              className={styles.editButtonShowHeatMap}
+              onClick={() => {
+                this.appearHeatMap();
+              }}
+            >
+              {this.state.showHeatMap ? 'Hide Spectrogram' : 'Show Spectrogram'}
+            </Button>
+          </div>
+
+          {/* HEAT MAP */}
+          <div ref={this.containerRef} className={styles.containerHeatMap}>
+            {/* It's important to pass the current to allows the dynamic works in HeatMap Did Update */}
+            <HeatMap
+              infoPlot={this.props.infoPlot}
+              containerNode={this.containerRef.current?.parentNode}
+              showHeatMap={this.state.showHeatMap}
+            />
+          </div>
+
           <span className={[styles.detailsTitle, styles.headers].join(' ')}>RECORDED AUDIOS</span>
           <div id="downloads" className={styles.recordsDiv}>
             {records.map((rec) => {

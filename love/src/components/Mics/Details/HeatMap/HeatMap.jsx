@@ -24,14 +24,15 @@ export default class HeatMap extends Component {
 
     this.state = {
       infoPlot: null,
-
-      width: undefined,
-
-      height: undefined,
-
+      containerWidth: 400,
+      containerHeight: 160,
       spec: {
-        width: 300,
-        height: 180,
+        width: 400,
+        height: 160,
+        autosize: {
+          type: 'fit',
+          contains: 'padding',
+        },
         data: { name: 'table' },
         mark: { type: 'rect' },
         encoding: {
@@ -73,8 +74,8 @@ export default class HeatMap extends Component {
         this.resizeObserver = new ResizeObserver((entries) => {
           const container = entries[0];
           this.setState({
-            height: container.contentRect.height - 60,
-            width: container.contentRect.width - 120,
+            height: container.contentRect.height, // - 60,
+            width: container.contentRect.width, // - 120,
           });
         });
 
@@ -170,7 +171,7 @@ export default class HeatMap extends Component {
         {/* To resize, its really important preserve the structure since it is enunciated the Heat Map tag
       in the div with the container ref until this part. Then, to this work, NOT include anothers div on here,
       only which will enclose the Vega Lite Plot tag.*/}
-        <div className={styles.divVegaLite}>
+        {/* <div className={styles.divVegaLite}> */}
           {showHeatMap ? (
             <VegaLite
               style={{ display: 'flex' }}
@@ -182,7 +183,7 @@ export default class HeatMap extends Component {
           ) : (
             <></>
           )}
-        </div>
+        {/* </div> */}
       </>
     );
   }

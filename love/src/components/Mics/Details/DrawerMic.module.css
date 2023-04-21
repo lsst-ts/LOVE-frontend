@@ -22,6 +22,8 @@
   }
   
   .recSpan {
+    display: flex;
+    flex-flow: column;
     cursor: pointer;
     padding-inline: 1em;
     font-size: xx-small;
@@ -35,7 +37,7 @@
   
   .aStreamContent {
     display: flex;
-    margin-bottom: 1.15em;
+    flex-flow: row;
     align-items: flex-end;
     padding: 0.3em;
   }
@@ -75,9 +77,18 @@
     align-items: center;
     width: 100%;
   }
+
+  .recSVG {
+    height: 2.25em;
+    /* background-color: var(--secondary-font-color); */
+  }
   
   .playSVG {
-    height: 3em;
+    height: 4em;
+  }
+
+  .opacity {
+    opacity: 0.35;
   }
   
   .download {
@@ -126,28 +137,17 @@
     border-radius: 10px;
   }
   
-  .heatMap {
+  /* .heatMap {
     transform: translate(10%);
     transform-origin: center;
-  }
-  
-  /* HEAD BEFORE HEAT MAP  */
-  
-  .infoMonserratFontContainer0 {
-    flex-wrap: wrap-reverse;
-  }
-  
-  .infoMonserratFontContainer1 {
+  } */
+
+  .containerAlarmLimit{
     display: flex;
     justify-content: space-around;
   }
   
-  .infoMonserratFont1 {
-    flex-wrap: wrap-reverse;
-  }
-  
-  .infoMonserratFont2 {
-    flex-wrap: wrap-reverse;
+  .width20 {
     width: 20%;
   }
   
@@ -192,3 +192,8 @@
   .editButtonShowHeatMap {
     transform: translate(7%, 0%);
   }
+
+.containerHeatMap {
+  display: block;
+  width: 100%;
+}
