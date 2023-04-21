@@ -15,16 +15,16 @@ import { summaryStateMap, summaryStateToStyle, schedulerDetailedStateToMap, sche
 export default class Headers extends Component {
   render() {
     const { schedulerState, subState, mode, type, isNigth, night, sunset, sunrise } = this.props;
-    console.log(schedulerState);
+
     const current_time = Moment();
     const diffSunset = Moment.unix(sunset).diff(current_time, 'seconds');
     const diffSunrise = Moment.unix(sunrise).diff(current_time, 'seconds');
     const diffSunsetDigital = formatSecondsToDigital(diffSunset);
     const diffSunriseDigital = formatSecondsToDigital(diffSunrise);
 
-    //  const domeStatus = CSCDetail.states[this.props.mtdomeSummaryState];
-    // const simonyiTrackingState = schedulerDomeTrackingStateToMap[this.props.simonyiTracking];
+    // states on summary state section
     const schedulerSummaryState = summaryStateMap[schedulerState];
+    const schedulerDetailedState = schedulerDetailedStateToMap[subState];
 
     return (
       <div className={styles.container}>
@@ -32,15 +32,13 @@ export default class Headers extends Component {
           <div className={styles.headersLeft}>
             <SummaryPanel className={styles.summaryPanel1}>
               <Title>Summary State</Title>
-              {/* <Value>ENABLED</Value> */}
               <Value>
                 <StatusText status={summaryStateToStyle[schedulerSummaryState]}>{schedulerSummaryState}</StatusText>
               </Value>
-              {/* <Value>
-                <StatusText status={schedulerDomeTrackingStateToStyle[simonyiTrackingState]}>{simonyiTrackingState}</StatusText>
-              </Value> */}
               <GearIcon className={styles.gearIcon} />
-              <Value>RUNNING</Value>
+              <Value>
+                <StatusText status={schedulerDetailedStateToStyle[schedulerDetailedState]}>{schedulerDetailedState}</StatusText>
+              </Value>
             </SummaryPanel>
           </div>
           <div className={styles.headersCenter}>

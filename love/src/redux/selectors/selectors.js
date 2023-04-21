@@ -1202,7 +1202,7 @@ export const getDetailedState = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-detailedState`];
   const summaryData = getStreamsData(state, subscriptions);
   return {
-    subState: summaryData[`event-Scheduler-${salindex}-detailedState`]?.[0]?.subState?.value ?? 0,
+    subState: summaryData[`event-Scheduler-${salindex}-detailedState`]?.[0]?.substate?.value ?? 0,
   }
 };
 
