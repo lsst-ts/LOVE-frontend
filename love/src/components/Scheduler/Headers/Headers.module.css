@@ -47,8 +47,12 @@
 }
 
 .gearIcon {
-  width: 5%;
+  width: 8%;
   padding-left: 1em;
+}
+
+.gearIcon:hover {
+  cursor: pointer;
 }
 
 .nightDiv {

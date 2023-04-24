@@ -6,6 +6,9 @@ import Value from '../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../GeneralPurpose/SummaryPanel/Title';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import GearIcon from 'components/icons/ScriptQueue/GearIcon/GearIcon.jsx';
+import PauseIcon from 'components/icons/ScriptQueue/PauseIcon/PauseIcon';
+import ResumeIcon from 'components/icons/ScriptQueue/ResumeIcon/ResumeIcon'; // play button
+import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon'; //check with Mia
 import Sun from '../SkyElements/SunCartoon/SunCartoon';
 import Stars from '../SkyElements/Stars/Stars';
 import Moment from 'moment';
@@ -13,14 +16,62 @@ import { formatSecondsToDigital } from 'Utils';
 import { summaryStateMap, summaryStateToStyle, schedulerDetailedStateToMap, schedulerDetailedStateToStyle } from 'Config';
 
 export default class Headers extends Component {
+
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      showOptions: false,
+    };
+    this.cmdOptions = [
+      {
+        icon: <ResumeIcon />,
+        text: 'Play',
+        action: () => {
+          requestDetailedStateCommand('resume');
+          setContextMenuIsOpen(false);
+        },
+      },
+      {
+        icon: <PauseIcon />,
+        text: 'Play',
+        action: () => {
+          requestDetailedStateCommand('stop');
+          setContextMenuIsOpen(false);
+        },
+      },
+      {
+        icon: <DownloadIcon />,
+        text: 'Play',
+        action: () => {
+          requestDetailedStateCommand('load');
+          setContextMenuIsOpen(false);
+        },
+      },
+    ];
+  };
+
+  // retrieveCmdOptions() {
+  //   return 
+  // }
+
+  toggleContent() {
+    console.log("toggleContent");
+    this.setState((prevState) => ({ showOptions: !prevState.showOptions }));
+  }
+
+
+
   render() {
     const { schedulerState, subState, mode, type, isNigth, night, sunset, sunrise } = this.props;
-
+    const { showOptions } = this.state;
     const current_time = Moment();
     const diffSunset = Moment.unix(sunset).diff(current_time, 'seconds');
     const diffSunrise = Moment.unix(sunrise).diff(current_time, 'seconds');
     const diffSunsetDigital = formatSecondsToDigital(diffSunset);
     const diffSunriseDigital = formatSecondsToDigital(diffSunrise);
+
+    // const cmdOptions = this.retrieveCmdOptions()
 
     // states on summary state section
     const schedulerSummaryState = summaryStateMap[schedulerState];
@@ -35,7 +86,17 @@ export default class Headers extends Component {
               <Value>
                 <StatusText status={summaryStateToStyle[schedulerSummaryState]}>{schedulerSummaryState}</StatusText>
               </Value>
-              <GearIcon className={styles.gearIcon} />
+              <GearIcon className={styles.gearIcon} onClick={() => this.toggleContent()} />
+              {showOptions && (
+                <div>
+                  {this.cmdOptions.map((option) => (
+                    <button key={option.text} onClick={option.action}>
+                      {option.icon}
+                      <span>{option.text}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
               <Value>
                 <StatusText status={schedulerDetailedStateToStyle[schedulerDetailedState]}>{schedulerDetailedState}</StatusText>
               </Value>
