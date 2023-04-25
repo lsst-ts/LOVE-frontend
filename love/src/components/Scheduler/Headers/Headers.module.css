@@ -47,7 +47,7 @@
 }
 
 .gearIcon {
-  width: 8%;
+  width: 25%;
   padding-left: 1em;
 }
 
@@ -77,4 +77,43 @@
 
 .iconSun {
   width: 15%;
+}
+.cmdOptions{
+  position: relative;
+}
+
+.cmdDiv{
+  width: 10em;
+  background-color: var(--second-quaternary-background-color);
+  display: grid;
+  align-content: stretch;
+  justify-items: flex-start;
+  position: absolute; 
+  top: -3%;
+  left: 6em;
+  padding-left: 1em;
+  transition: height 0.7s ease; /** I don't know if there is a difference using this style or not*/
+}
+
+.cmdDivDetail{
+  margin-top: 0.5em;
+  background-color: var(--second-quaternary-background-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+}
+
+.cmdDivDetail button{
+  background-color: var(--second-quaternary-background-color);
+  margin-right: 5px;
+}
+
+.cmdBtn{
+  width: 80%;
+}
+
+.cmdTxt{
+  margin-left: 0.5em;
 }

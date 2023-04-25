@@ -9,6 +9,7 @@ import GearIcon from 'components/icons/ScriptQueue/GearIcon/GearIcon.jsx';
 import PauseIcon from 'components/icons/ScriptQueue/PauseIcon/PauseIcon';
 import ResumeIcon from 'components/icons/ScriptQueue/ResumeIcon/ResumeIcon'; // play button
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon'; //check with Mia
+import Button from 'components/GeneralPurpose/Button/Button';
 import Sun from '../SkyElements/SunCartoon/SunCartoon';
 import Stars from '../SkyElements/Stars/Stars';
 import Moment from 'moment';
@@ -23,7 +24,36 @@ export default class Headers extends Component {
     this.state = {
       showOptions: false,
     };
-    this.cmdOptions = [
+    // this.cmdOptions = [
+    //   {
+    //     icon: <ResumeIcon />,
+    //     text: 'Play',
+    //     action: () => {
+    //       requestDetailedStateCommand('resume');
+    //       setContextMenuIsOpen(false);
+    //     },
+    //   },
+    //   {
+    //     icon: <PauseIcon />,
+    //     text: 'Play',
+    //     action: () => {
+    //       requestDetailedStateCommand('stop');
+    //       setContextMenuIsOpen(false);
+    //     },
+    //   },
+    //   {
+    //     icon: <DownloadIcon />,
+    //     text: 'Play',
+    //     action: () => {
+    //       requestDetailedStateCommand('load');
+    //       setContextMenuIsOpen(false);
+    //     },
+    //   },
+    // ];
+  };
+
+  retrieveCmdOptions() {
+    return [
       {
         icon: <ResumeIcon />,
         text: 'Play',
@@ -34,7 +64,7 @@ export default class Headers extends Component {
       },
       {
         icon: <PauseIcon />,
-        text: 'Play',
+        text: 'Stop',
         action: () => {
           requestDetailedStateCommand('stop');
           setContextMenuIsOpen(false);
@@ -42,25 +72,19 @@ export default class Headers extends Component {
       },
       {
         icon: <DownloadIcon />,
-        text: 'Play',
+        text: 'Load',
         action: () => {
           requestDetailedStateCommand('load');
           setContextMenuIsOpen(false);
         },
       },
     ];
-  };
-
-  // retrieveCmdOptions() {
-  //   return 
-  // }
+  }
 
   toggleContent() {
     console.log("toggleContent");
     this.setState((prevState) => ({ showOptions: !prevState.showOptions }));
   }
-
-
 
   render() {
     const { schedulerState, subState, mode, type, isNigth, night, sunset, sunrise } = this.props;
@@ -71,7 +95,7 @@ export default class Headers extends Component {
     const diffSunsetDigital = formatSecondsToDigital(diffSunset);
     const diffSunriseDigital = formatSecondsToDigital(diffSunrise);
 
-    // const cmdOptions = this.retrieveCmdOptions()
+    const cmdOptions = this.retrieveCmdOptions()
 
     // states on summary state section
     const schedulerSummaryState = summaryStateMap[schedulerState];
@@ -86,17 +110,21 @@ export default class Headers extends Component {
               <Value>
                 <StatusText status={summaryStateToStyle[schedulerSummaryState]}>{schedulerSummaryState}</StatusText>
               </Value>
-              <GearIcon className={styles.gearIcon} onClick={() => this.toggleContent()} />
-              {showOptions && (
-                <div>
-                  {this.cmdOptions.map((option) => (
-                    <button key={option.text} onClick={option.action}>
-                      {option.icon}
-                      <span>{option.text}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
+              <div className={styles.cmdOptions}>
+                <GearIcon className={styles.gearIcon} onClick={() => this.toggleContent()} />
+                {showOptions && (
+                  <div className={styles.cmdDiv}>
+                    {cmdOptions.map((option) => (
+                      <div className={styles.cmdDivDetail}>
+                        <Button key={option.text} onClick={option.action} className={styles.cmdBtn}>
+                          {option.icon}
+                          <span className={styles.cmdTxt}>{option.text}</span>
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
               <Value>
                 <StatusText status={schedulerDetailedStateToStyle[schedulerDetailedState]}>{schedulerDetailedState}</StatusText>
               </Value>
