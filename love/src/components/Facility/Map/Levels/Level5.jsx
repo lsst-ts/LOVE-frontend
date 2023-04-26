@@ -48,7 +48,6 @@ export default class Level5 extends Component {
     d3.select(mapId).attr('transform', transformData);
     d3.select(deviceId).attr('transform', transformData);
     this.props.savePos(transformData);
-    console.log(transformData);
   };
 
   getDevices() {
@@ -58,7 +57,7 @@ export default class Level5 extends Component {
       manejadoraLower02P05,
       manejadoraLower03P05,
       manejadoraLower04P05,
-      vea01P01,
+      vea01P05,
       vea08P05,
       vea09P05,
       vea10P05,
