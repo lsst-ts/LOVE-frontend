@@ -2,6 +2,12 @@
 Version History
 ===============
 
+v5.19.1
+--------
+
+* Bump yaml from 2.1.1 to 2.2.2 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/453>`_
+* Hotfixes for tag 5.19.0 `<https://github.com/lsst-ts/LOVE-frontend/pull/452>`_
+
 v5.19.0
 --------
 
