@@ -8,7 +8,7 @@ import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import GearIcon from 'components/icons/ScriptQueue/GearIcon/GearIcon.jsx';
 import PauseIcon from 'components/icons/ScriptQueue/PauseIcon/PauseIcon';
 import ResumeIcon from 'components/icons/ScriptQueue/ResumeIcon/ResumeIcon'; // play button
-import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon'; //check with Mia
+import LoadInfoIcon from 'components/icons/LoadInfoIcon/LoadInfoIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Sun from '../SkyElements/SunCartoon/SunCartoon';
 import Stars from '../SkyElements/Stars/Stars';
@@ -23,33 +23,9 @@ export default class Headers extends Component {
     super(props);
     this.state = {
       showOptions: false,
+      summaryStateCommand: null,
+      configurationOverride: '',
     };
-    // this.cmdOptions = [
-    //   {
-    //     icon: <ResumeIcon />,
-    //     text: 'Play',
-    //     action: () => {
-    //       requestDetailedStateCommand('resume');
-    //       setContextMenuIsOpen(false);
-    //     },
-    //   },
-    //   {
-    //     icon: <PauseIcon />,
-    //     text: 'Play',
-    //     action: () => {
-    //       requestDetailedStateCommand('stop');
-    //       setContextMenuIsOpen(false);
-    //     },
-    //   },
-    //   {
-    //     icon: <DownloadIcon />,
-    //     text: 'Play',
-    //     action: () => {
-    //       requestDetailedStateCommand('load');
-    //       setContextMenuIsOpen(false);
-    //     },
-    //   },
-    // ];
   };
 
   retrieveCmdOptions() {
@@ -58,32 +34,50 @@ export default class Headers extends Component {
         icon: <ResumeIcon />,
         text: 'Play',
         action: () => {
-          requestDetailedStateCommand('resume');
-          setContextMenuIsOpen(false);
+          this.sendSummaryStateCommand('resume');
         },
       },
       {
         icon: <PauseIcon />,
         text: 'Stop',
         action: () => {
-          requestDetailedStateCommand('stop');
-          setContextMenuIsOpen(false);
+          this.sendSummaryStateCommand('stop');
         },
       },
       {
-        icon: <DownloadIcon />,
-        text: 'Load',
+        icon: <LoadInfoIcon />,
+        text: 'Load config',
         action: () => {
-          requestDetailedStateCommand('load');
-          setContextMenuIsOpen(false);
+          this.sendSummaryStateCommand('load');
         },
       },
     ];
   }
 
+
   toggleContent() {
-    console.log("toggleContent");
     this.setState((prevState) => ({ showOptions: !prevState.showOptions }));
+  }
+
+  sendSummaryStateCommand(option) {
+    const { summaryStateCommand } = this.state;
+    this.setState({
+      summaryStateCommand: summaryStateCommand,
+      configurationOverride: option,
+    });
+    console.log(option);
+    // this.props.requestSALCommand({
+    //   cmd: `cmd_${this.state.summaryStateCommand}`,
+    //   csc: this.props.name,
+    //   salindex: this.props.salindex,
+    //   params:
+    //     // this.state.summaryStateCommand === 'start'
+    //     //   ? {
+    //         {
+    //           configurationOverride: this.state.configurationOverride,
+    //         }
+    //       // : {},
+    // });
   }
 
   render() {

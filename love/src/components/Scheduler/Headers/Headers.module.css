@@ -114,6 +114,11 @@
   width: 80%;
 }
 
+/* .cmdBtn:hover {
+  background-color: var(--second-senary-background-dimmed-color);
+  width: 100%;
+} */
+
 .cmdTxt{
   margin-left: 0.5em;
 }

@@ -273,6 +273,7 @@ export default class Scheduler extends Component {
 
   render() {
     const {
+      requestSALCommand,
       schedulerState,  
       subState,
       mode,
@@ -364,10 +365,11 @@ export default class Scheduler extends Component {
 
     // console.log('predTargetsDecl', predTargetsDecl); // with data
     // console.log(predictedTargetsDecl, predictedTargetsDecl); // empty
+    console.log(this.props);
 
     return (
       <div className={styles.container}>
-        <Headers schedulerState={schedulerState} subState={subState} mode={mode} type={type} moonPhase={moonPhase} isNigth={isNigth} night={night} sunset={sunset} sunrise={sunrise} />
+        <Headers requestSALCommand={requestSALCommand} schedulerState={schedulerState} subState={subState} mode={mode} type={type} moonPhase={moonPhase} isNigth={isNigth} night={night} sunset={sunset} sunrise={sunrise} />
         <div className={styles.allComponentes}>
           {/* column 1 */}
           <div className={styles.leftDiv}>
@@ -401,16 +403,6 @@ export default class Scheduler extends Component {
               filterToMount={filterToMount}
             />
             {this.skyMap ?? ''}
-            {/* <SkyMap
-              targets={this.state.predTargets}
-              rotSkyPos={this.props?.rotSkyPos}
-              pointingRa={this.props?.pointingRa}
-              pointingDecl={this.props?.pointingDecl}
-              moonRa={this.props?.moonRa}
-              moonDec={this.props?.moonDec}
-              sunRa={this.props?.sunRa}
-              sunDec={this.props?.sunDec}
-            /> */}
             <Plots />
           </div>
           {/* column 3 */}

@@ -8,6 +8,7 @@ import MinusIcon from 'components/icons/MinusIcon/MinusIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import { fixedFloat } from 'Utils';
+import Info from 'components/MainTel/M2/Actuators/Info/Info';
 
 export default class Blocks extends Component {
 
@@ -111,7 +112,7 @@ export default class Blocks extends Component {
             </div>
           </div>
           <div className={styles.divButtonBlocks}>
-            <Button className={styles.buttonBlocks}>Add Block to Scheduler queue</Button>
+            <Button /**className={styles.buttonBlocks}*/ status="info">Add Block to Scheduler queue</Button>
             <span>{blockHash ? blockHash : 'No data'}</span>
           </div>
           <div className={styles.executionsDiv}>
