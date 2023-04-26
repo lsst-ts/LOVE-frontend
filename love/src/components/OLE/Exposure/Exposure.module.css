@@ -310,7 +310,7 @@
   margin-right: 0.5em;
 }
 
-.checkboxText > input:first-of-type{
+.checkboxText > input:first-of-type {
   width: auto;
 }
 
@@ -428,7 +428,6 @@ th.tableHead {
 .spinnerIcon {
   height: var(--font-size-small);
   width: var(--font-size-small);
-  margin-left: var(--small-padding);
 }
 
 .refreshDataBtn {
