@@ -48,7 +48,6 @@ export default class Level4 extends Component {
     d3.select(mapId).attr('transform', transformData);
     d3.select(deviceId).attr('transform', transformData);
     this.props.savePos(transformData);
-    console.log(transformData);
   };
 
   getDevices() {

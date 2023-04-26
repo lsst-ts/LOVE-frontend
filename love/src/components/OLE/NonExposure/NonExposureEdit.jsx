@@ -4,6 +4,7 @@ import lodash from 'lodash';
 import Moment from 'moment';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
+import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -75,6 +76,7 @@ export default class NonExposureEdit extends Component {
       logEdit,
       confirmationModalShown: false,
       confirmationModalText: '',
+      savingLog: false,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -116,6 +118,7 @@ export default class NonExposureEdit extends Component {
   }
 
   renderModalFooter = () => {
+    const { savingLog } = this.state;
     return (
       <div className={styles.modalFooter}>
         <Button
@@ -125,8 +128,8 @@ export default class NonExposureEdit extends Component {
         >
           Go back
         </Button>
-        <Button onClick={() => this.updateOrCreateMessageNarrativeLogs()} status="default">
-          Yes
+        <Button disabled={savingLog} onClick={() => this.updateOrCreateMessageNarrativeLogs()} status="default">
+          {savingLog ? <SpinnerIcon className={styles.spinnerIcon} /> : 'Yes'}
         </Button>
       </div>
     );
@@ -134,13 +137,12 @@ export default class NonExposureEdit extends Component {
 
   updateOrCreateMessageNarrativeLogs() {
     const payload = { ...this.state.logEdit };
-    payload['request_type'] = 'narrative';
 
+    payload['request_type'] = 'narrative';
     const beginDateISO = this.state.logEdit.date_begin?.toISOString();
     const endDateISO = this.state.logEdit.date_end?.toISOString();
     payload['date_begin'] = beginDateISO.substring(0, beginDateISO.length - 1); // remove Zone due to backend standard
     payload['date_end'] = endDateISO.substring(0, endDateISO.length - 1); // remove Zone due to backend standard
-
     payload['tags'] = [...(payload['systems'] ?? []), ...(payload['subsystems'] ?? []), ...(payload['cscs'] ?? [])];
 
     // Clean null and empty values to avoid API errors
@@ -150,15 +152,20 @@ export default class NonExposureEdit extends Component {
       }
     });
 
+    this.setState({ savingLog: true });
     if (this.state.logEdit.id) {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
-        this.setState({ confirmationModalShown: false });
+        this.setState({
+          confirmationModalShown: false,
+          savingLog: false,
+        });
         this.props.save(response);
       });
     } else {
       ManagerInterface.createMessageNarrativeLogs(payload).then((response) => {
         this.setState({
           confirmationModalShown: false,
+          savingLog: false,
         });
         this.props.save(response);
         this.cleanForm();
@@ -526,7 +533,7 @@ export default class NonExposureEdit extends Component {
               parentSelector={() => document.querySelector(`#${this.id}`)}
               size={50}
             >
-              <p style={{textAlign: 'center'}}>{confirmationModalText}</p>
+              <p style={{ textAlign: 'center' }}>{confirmationModalText}</p>
               {this.renderModalFooter()}
             </Modal>
           </div>

@@ -78,6 +78,7 @@ export default class ExposureAdd extends Component {
       selectedTags: [],
       updatingExposures: false,
       selectedDayExposure: Moment(),
+      savingLog: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -108,7 +109,6 @@ export default class ExposureAdd extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // TODO: only when the filter is shown
     if (
       prevState.selectedInstrument !== this.state.selectedInstrument ||
       prevState.selectedDayExposure !== this.state.selectedDayExposure
@@ -146,22 +146,27 @@ export default class ExposureAdd extends Component {
 
   saveMessage() {
     const { isLogCreate, isMenu } = this.props;
+
     const payload = { ...this.state.newMessage };
     payload['request_type'] = 'exposure';
     payload['instrument'] = this.state.selectedInstrument;
-
     if (payload['tags']) {
       payload['tags'] = payload['tags'].map((tag) => tag.id);
     }
 
+    this.setState({ savingLog: true });
     ManagerInterface.createMessageExposureLogs(payload).then((result) => {
-      this.setState({ confirmationModalShown: false });
       if (isLogCreate || isMenu || !this.state.logEdit.obs_id) {
         this.props.back();
       } else {
         this.props.view();
       }
       this.cleanForm();
+
+      this.setState({
+        confirmationModalShown: false,
+        savingLog: false,
+      });
     });
   }
 
@@ -191,6 +196,7 @@ export default class ExposureAdd extends Component {
   }
 
   renderModalFooter() {
+    const { savingLog } = this.state;
     return (
       <div className={styles.modalFooter}>
         <Button
@@ -200,8 +206,8 @@ export default class ExposureAdd extends Component {
         >
           Go back
         </Button>
-        <Button onClick={() => this.saveMessage()} status="default">
-          Yes
+        <Button disabled={savingLog} onClick={() => this.saveMessage()} status="default">
+          {savingLog ? <SpinnerIcon className={styles.spinnerIcon} /> : 'Yes'}
         </Button>
       </div>
     );
@@ -391,7 +397,6 @@ export default class ExposureAdd extends Component {
                         className={styles.iconBtn}
                         title="Delete"
                         onClick={() => {
-                          console.log('click delete');
                           this.deleteMessage();
                         }}
                         status="transparent"

@@ -66,8 +66,10 @@ export default class Camera extends Component {
 
   render() {
     const imageIds = Object.keys(this.props.imageSequence?.images ?? {});
-    const orederedImages = imageIds.sort((a, b) => {
-      return this.props.imageSequence.images[b].timestamp - this.props.imageSequence.images[a].timestamp;
+
+    // Sort images by timestamp
+    imageIds.sort((a, b) => {
+      return this.props.imageSequence.images[b].timeStamp - this.props.imageSequence.images[a].timeStamp;
     });
 
     return (
@@ -111,8 +113,8 @@ export default class Camera extends Component {
                 </tr>
               </thead>
               <tbody>
-                {orederedImages &&
-                  orederedImages.map((imageName) => {
+                {imageIds &&
+                  imageIds.map((imageName) => {
                     const image = this.props.imageSequence.images[imageName];
                     const imageKey = `${this.props.imageSequence.name}-${imageName}`;
                     const isIntegrating = image.state === 'INTEGRATING';
