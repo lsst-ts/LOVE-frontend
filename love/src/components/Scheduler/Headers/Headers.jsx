@@ -57,7 +57,7 @@ export default class Headers extends Component {
   }
 
 
-  toggleContent() {
+  toggleSchedulerCmdOptions() {
     this.setState((prevState) => ({ showOptions: !prevState.showOptions }));
   }
 
@@ -84,7 +84,7 @@ export default class Headers extends Component {
   renderSchedulerConfigs() {
     const { selectedSchedulerConfig } = this.state;
     const options = [1, 2, 3]; // READ from somewhere
-    return <div className={styles.schedulerConfigsDiv}>
+    return (<div>
       <Select
         options={options}
         onChange={(e) => {
@@ -95,7 +95,7 @@ export default class Headers extends Component {
           uri: selectedSchedulerConfig
         });
       }}>Send</Button>
-    </div>
+    </div>)
   }
 
   render() {
@@ -118,25 +118,27 @@ export default class Headers extends Component {
         <div className={styles.leftDivs}>
           <div className={styles.headersLeft}>
             <SummaryPanel className={styles.summaryPanel1}>
-              <Title>Summary State</Title>
+              <Title className={styles.sumState}>Summary State</Title>
               <Value>
                 <StatusText status={summaryStateToStyle[schedulerSummaryState]}>{schedulerSummaryState}</StatusText>
               </Value>
+              <GearIcon className={styles.gearIcon} onClick={() => this.toggleSchedulerCmdOptions()} />
               <div className={styles.cmdOptions}>
-                <GearIcon className={styles.gearIcon} onClick={() => this.toggleContent()} />
-                {showOptions && (
-                  <div className={styles.cmdDiv}>
-                    {cmdOptions.map((option) => (
-                      <div className={styles.cmdDivDetail}>
-                        <Button key={option.text} onClick={option.action} className={styles.cmdBtn}>
-                          {option.icon}
-                          <span className={styles.cmdTxt}>{option.text}</span>
-                        </Button>
-                      </div>
-                    ))}
+                <div className={styles.cmOptionsDiv}>
+                  {showOptions && (
+                    <div className={styles.cmdDiv}>
+                      {cmdOptions.map((option) => (
+                        <div className={styles.cmdDivDetail}>
+                          <Button key={option.text} onClick={option.action} className={styles.cmdBtn}>
+                            {option.icon}
+                            <span className={styles.cmdTxt}>{option.text}</span>
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                   </div>
-                )}
-                {showSchedulerConfigs && this.renderSchedulerConfigs()}
+                  <div className={styles.schedulerConfigsDiv}>{showSchedulerConfigs && this.renderSchedulerConfigs()}</div>
               </div>
               <Value>
                 <StatusText status={schedulerDetailedStateToStyle[schedulerDetailedState]}>{schedulerDetailedState}</StatusText>
