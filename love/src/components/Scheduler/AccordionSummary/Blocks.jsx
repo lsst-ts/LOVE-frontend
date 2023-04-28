@@ -102,9 +102,9 @@ export default class Blocks extends Component {
             <span className={styles.executionsText}>Executions</span>
             <span></span>
             <span className={styles.predTargets}>Succesfull</span>
-            <span>24</span>
+            <span>{blockExecCompl}</span>
             <span className={styles.predTargets}>To be completed</span>
-            <span>10</span>
+            <span>{blockExecTotal}</span>
           </div>
           <div className={styles.blocksTargetsDiv}>
             <div className={styles.predictedTargetsDiv}>

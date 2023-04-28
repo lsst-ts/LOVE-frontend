@@ -365,7 +365,7 @@ export default class Scheduler extends Component {
 
     // console.log('predTargetsDecl', predTargetsDecl); // with data
     // console.log(predictedTargetsDecl, predictedTargetsDecl); // empty
-    console.log(this.props);
+    
 
     return (
       <div className={styles.container}>

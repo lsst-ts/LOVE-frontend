@@ -1221,8 +1221,8 @@ export const getGeneralInfo = (state, salindex) => {
   return {
     isNigth: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.isNigth?.value ?? false, 
     night: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.nigth?.value ?? 0,
-    sunset: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.sunset?.value ?? 1680734220,
-    sunrise: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.sunrise?.value ?? 1680692220,
+    sunset: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.sunset?.value ?? 0,
+    sunrise: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.sunrise?.value ?? 0,
   }
 };
 
@@ -1255,7 +1255,7 @@ export const getObservatoryStatus = (state, salindex) => {
     moonAlt: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonAlt?.value ?? 0.0,
     moonAz: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonAz?.value ?? 0.0,
     moonDistance: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonDistance?.value ?? 0.0,
-    moonPhase: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonPhase?.value ?? 0.32,
+    moonPhase: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonPhase?.value ?? 0.0,
     sunRa: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunRa?.value ?? 0.0,
     sunDec: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunDec?.value ?? 0.0,
     sunAlt: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunAlt?.value ?? 0.0,
@@ -1276,13 +1276,13 @@ export const getCurrentTargetInfo = (state, salindex) => {
     currentSkyAngle: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.skyAngle?.value ?? 0,
     currentFilter: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.filter?.value ?? 'No filter selected',
     currentNumExposures: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.numExposures?.value ?? 0,
-    currentExposureTimes: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.exposureTimes?.value ?? [10, 40, 30, 5, 10, 2, 30, 0, 0, 0],
+    currentExposureTimes: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.exposureTimes?.value ?? [],
     currentSlewTime: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.slewTime?.value ?? 0,
     currentOffsetX: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.offsetX?.value ?? 0,
     currentOffsetY: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.offsetY?.value ?? 0,
     currentNumProposals: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.numProposals?.value ?? 0,
     currentProposalId: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.proposalId?.value ?? 
-      ['0', '1', '2', '3', '4'],
+      [],
     currentSequenceDuration: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.sequenceDuration?.value ?? 0,
     currentSequenceNVisits: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.sequenceNVisits?.value ?? 0,
     currentSequenceVisits: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.sequenceVisits?.value ?? 0,

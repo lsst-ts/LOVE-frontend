@@ -65,21 +65,21 @@ export default class CurrentTarget extends Component {
             <span></span>
             <div className={styles.proposals}>
               <div className={styles.exposures}>
-                {currentExposureTimes.map((exp, i) => (
+                {currentExposureTimes.length > 0 ?currentExposureTimes.map((exp, i) => (
                   <div>
                     <div className={styles.expIndexes}>{i+1}</div>
                     <div className={styles.exposuresDetail}>{fixedFloat(exp,0) == 0 ? `-` : `${fixedFloat(exp,0)}s`}</div>
                   </div>
-                ))}
+                )) : "No data"}
               </div>
             </div>
             <Label>Proposals</Label>
             <span></span>
             <div className={styles.proposals}>
               <div className={styles.generalDiv}>
-                {currentProposalId.map((gp) => (
+                {currentProposalId.length > 0 ? currentProposalId.map((gp) => (
                   <div className={styles.surveysDivs}>{gp}</div>
-                ))}
+                )): "No data"}
               </div>
             </div>
           </SummaryPanel>
