@@ -10,6 +10,7 @@ import PauseIcon from 'components/icons/ScriptQueue/PauseIcon/PauseIcon';
 import ResumeIcon from 'components/icons/ScriptQueue/ResumeIcon/ResumeIcon'; // play button
 import LoadInfoIcon from 'components/icons/LoadInfoIcon/LoadInfoIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
+import Select from 'components/GeneralPurpose/Select/Select';
 import Sun from '../SkyElements/SunCartoon/SunCartoon';
 import Stars from '../SkyElements/Stars/Stars';
 import Moment from 'moment';
@@ -23,8 +24,8 @@ export default class Headers extends Component {
     super(props);
     this.state = {
       showOptions: false,
-      summaryStateCommand: null,
-      configurationOverride: '',
+      showSchedulerConfigs: false,
+      selectedSchedulerConfig: null,
     };
   };
 
@@ -41,14 +42,15 @@ export default class Headers extends Component {
         icon: <PauseIcon />,
         text: 'Stop',
         action: () => {
-          this.sendSummaryStateCommand('stop');
+          const abort = false;
+          this.sendSummaryStateCommand('stop', { abort });
         },
       },
       {
         icon: <LoadInfoIcon />,
         text: 'Load config',
         action: () => {
-          this.sendSummaryStateCommand('load');
+          this.toggleSchedulerConfigs();
         },
       },
     ];
@@ -59,30 +61,46 @@ export default class Headers extends Component {
     this.setState((prevState) => ({ showOptions: !prevState.showOptions }));
   }
 
-  sendSummaryStateCommand(option) {
-    const { summaryStateCommand } = this.state;
-    this.setState({
-      summaryStateCommand: summaryStateCommand,
-      configurationOverride: option,
+  toggleSchedulerConfigs() {
+    this.setState((prevState) => ({ showSchedulerConfigs: !prevState.showSchedulerConfigs }));
+  }
+
+  sendSummaryStateCommand(option, params) {
+    const { requestSALCommand, salindex } = this.props;
+    console.log({
+      cmd: `cmd_${option}`,
+      csc: 'Scheduler',
+      salindex,
+      params,
     });
-    console.log(option);
-    // this.props.requestSALCommand({
-    //   cmd: `cmd_${this.state.summaryStateCommand}`,
-    //   csc: this.props.name,
-    //   salindex: this.props.salindex,
-    //   params:
-    //     // this.state.summaryStateCommand === 'start'
-    //     //   ? {
-    //         {
-    //           configurationOverride: this.state.configurationOverride,
-    //         }
-    //       // : {},
+    // requestSALCommand({
+    //   cmd: `cmd_${option}`,
+    //   csc: 'Scheduler',
+    //   salindex,
+    //   params,
     // });
+  }
+
+  renderSchedulerConfigs() {
+    const { selectedSchedulerConfig } = this.state;
+    const options = [1, 2, 3]; // READ from somewhere
+    return <div className={styles.schedulerConfigsDiv}>
+      <Select
+        options={options}
+        onChange={(e) => {
+          this.setState({ selectedSchedulerConfig: e.value});
+        }}/>
+      <Button onClick={() => {
+        this.sendSummaryStateCommand('load', {
+          uri: selectedSchedulerConfig
+        });
+      }}>Send</Button>
+    </div>
   }
 
   render() {
     const { schedulerState, subState, mode, type, isNigth, night, sunset, sunrise } = this.props;
-    const { showOptions } = this.state;
+    const { showOptions, showSchedulerConfigs } = this.state;
     const current_time = Moment();
     const diffSunset = Moment.unix(sunset).diff(current_time, 'seconds');
     const diffSunrise = Moment.unix(sunrise).diff(current_time, 'seconds');
@@ -118,6 +136,7 @@ export default class Headers extends Component {
                     ))}
                   </div>
                 )}
+                {showSchedulerConfigs && this.renderSchedulerConfigs()}
               </div>
               <Value>
                 <StatusText status={schedulerDetailedStateToStyle[schedulerDetailedState]}>{schedulerDetailedState}</StatusText>

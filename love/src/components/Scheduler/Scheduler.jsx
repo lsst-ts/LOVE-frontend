@@ -361,15 +361,17 @@ export default class Scheduler extends Component {
       blockExecCompl,
       blockExecTotal,
       blockHash,
-      blockDef } = this.props;
+      blockDef,
+      salindex } = this.props;
 
     // console.log('predTargetsDecl', predTargetsDecl); // with data
     // console.log(predictedTargetsDecl, predictedTargetsDecl); // empty
     
 
+
     return (
       <div className={styles.container}>
-        <Headers requestSALCommand={requestSALCommand} schedulerState={schedulerState} subState={subState} mode={mode} type={type} moonPhase={moonPhase} isNigth={isNigth} night={night} sunset={sunset} sunrise={sunrise} />
+        <Headers requestSALCommand={requestSALCommand} salindex={salindex}  schedulerState={schedulerState} subState={subState} mode={mode} type={type} moonPhase={moonPhase} isNigth={isNigth} night={night} sunset={sunset} sunrise={sunrise} />
         <div className={styles.allComponentes}>
           {/* column 1 */}
           <div className={styles.leftDiv}>

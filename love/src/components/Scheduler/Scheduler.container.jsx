@@ -130,6 +130,7 @@ const SchedulerContainer = ({
   blockExecTotal,
   blockHash,
   blockDef,
+  salindex,
   ...props
 }) => {
   if (props.isRaw) {
@@ -228,6 +229,7 @@ const SchedulerContainer = ({
       blockExecTotal={blockExecTotal}
       blockHash={blockHash}
       blockDef={blockDef}
+      salindex={salindex}
     />
   );
 };
