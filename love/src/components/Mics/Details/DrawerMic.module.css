@@ -196,4 +196,30 @@
 .containerHeatMap {
   display: block;
   width: 100%;
+  position: relative;
+  top: -30px;
+}
+
+.spectrogramTitle {
+  display: grid;
+  grid-template-columns: 1fr 1.3em;
+  font-weight: bold;
+  color: var(--base-font-color);
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.buttonShowSpectrogram {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: block;
+  background: var(--second-quaternary-background-dimmed-color);
+  color: white;
+  width: 100%;
+  border: 0;
+  cursor: pointer;
+}
+
+.containerRecorded {
+  padding: 0.5em;
 }

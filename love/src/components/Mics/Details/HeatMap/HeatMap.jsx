@@ -19,20 +19,22 @@ export default class HeatMap extends Component {
     showHeatMap: PropTypes.bool,
   };
 
+  static defaultProps = {
+    infoPlot: {},
+    containerNode: undefined,
+    showHeatMap: false,
+  };
+
   constructor(props) {
     super(props);
-
     this.state = {
       infoPlot: null,
-      containerWidth: 400,
-      containerHeight: 160,
+      containerWidth: undefined,
+      containerHeight: 204,
       spec: {
-        width: 400,
-        height: 160,
-        autosize: {
-          type: 'fit',
-          contains: 'padding',
-        },
+        width: 380,
+        height: 204,
+        autosize: { resize: 'true' },
         data: { name: 'table' },
         mark: { type: 'rect' },
         encoding: {
@@ -47,7 +49,7 @@ export default class HeatMap extends Component {
             type: 'quantitative',
             field: 'amp',
             scale: { scheme: 'spectral' },
-            legend: { labelColor: '#ddd', labelFontSize: 14, titleColor: '#ddd', title: 'dB', gradientLength: 200 },
+            legend: { labelColor: '#ddd', labelFontSize: 14, titleColor: '#ddd', title: 'dB', gradientLength: 215 },
           },
         },
         config: {
@@ -64,21 +66,39 @@ export default class HeatMap extends Component {
         },
       },
     };
-
     this.resizeObserver = undefined;
+  }
+
+  componentDidMount() {
+    if (this.props.containerNode) {
+      this.resizeObserver = new ResizeObserver((entries) => {
+        const container = entries[0];
+        if(container.contentRect.height !== 0 && container.contentRect.width !== 0) {
+          this.setState({
+            containerHeight: container.contentRect.height - 19,
+            containerWidth: container.contentRect.width,
+            resizeObserverListener: true,
+          });
+        }
+      });
+      if (!(this.props.containerNode instanceof Element)) return;
+      this.resizeObserver.observe(this.props.containerNode);
+      return () => {
+        this.resizeObserver.disconnect();
+      };
+    }
   }
 
   componentDidUpdate = (prevProps) => {
     if (prevProps.containerNode !== this.props.containerNode) {
-      if (this.props.containerNode) {
+      if (this.props.containerNode && !this.state.resizeObserverListener) {
         this.resizeObserver = new ResizeObserver((entries) => {
           const container = entries[0];
           this.setState({
-            height: container.contentRect.height, // - 60,
-            width: container.contentRect.width, // - 120,
+            containerHeight: container.contentRect.height - 19,
+            containerWidth: container.contentRect.width,
           });
         });
-
         this.resizeObserver.observe(this.props.containerNode);
       }
     }
@@ -94,7 +114,15 @@ export default class HeatMap extends Component {
         }
       }
     }
-  };
+
+    if (this.props.containerNode) {
+      if (!(this.props.containerNode instanceof Element)) return;
+      this.resizeObserver.observe(this.props.containerNode);
+      return () => {
+        this.resizeObserver.disconnect();
+      };
+    }
+  }
 
   /**
    * Function that update the spec inpu to Vega Lite Heat Map.
@@ -103,15 +131,15 @@ export default class HeatMap extends Component {
    * @param {number} bufferLength, y-axis amount of elements.
    */
   constructSpec = (timeDomain, windowTimePlot, bufferLength) => {
-    const height = this.state.height;
-    const width = this.state.width;
+    const height = this.state.containerHeight;
+    const width = this.state.containerWidth;
     const spec = {
       spec: {
         width: width,
         height: height,
+        autosize: { resize: 'true' },
         data: { name: 'table' },
         mark: { type: 'rect' },
-        autosize: { resize: 'true' },
         encoding: {
           x: {
             field: 't_min',
@@ -134,7 +162,7 @@ export default class HeatMap extends Component {
             type: 'quantitative',
             field: 'amp',
             scale: { scheme: 'spectral' },
-            legend: { labelColor: '#ddd', labelFontSize: 10, titleColor: '#ddd', title: 'dB', gradientLength: height },
+            legend: { labelColor: '#ddd', labelFontSize: 14, titleColor: '#ddd', title: 'dB', gradientLength: height },
           },
         },
         config: {
@@ -172,7 +200,7 @@ export default class HeatMap extends Component {
       in the div with the container ref until this part. Then, to this work, NOT include anothers div on here,
       only which will enclose the Vega Lite Plot tag.*/}
         {/* <div className={styles.divVegaLite}> */}
-          {showHeatMap ? (
+          {
             <VegaLite
               style={{ display: 'flex' }}
               renderer="svg"
@@ -180,9 +208,7 @@ export default class HeatMap extends Component {
               data={data3D}
               actions={false}
             />
-          ) : (
-            <></>
-          )}
+          }
         {/* </div> */}
       </>
     );

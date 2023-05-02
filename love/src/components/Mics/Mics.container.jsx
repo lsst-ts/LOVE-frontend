@@ -11,12 +11,6 @@ export const schema = {
       isPrivate: false,
       default: 'Microphones Component',
     },
-    salindex: {
-      type: 'number',
-      description: 'Salindex of the CSC',
-      isPrivate: false,
-      default: 1,
-    },
     hasRawMode: {
       type: 'boolean',
       description: 'Whether the component has a raw mode version',

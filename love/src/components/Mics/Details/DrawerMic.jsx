@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Slider from 'components/GeneralPurpose/Slider/Slider';
 import Record from './Record';
@@ -8,7 +8,11 @@ import Input from 'components/GeneralPurpose/Input/Input';
 import RecIcon from 'components/icons/MicsIcon/Rec/RecIcon';
 import PauseIcon from 'components/icons/MicsIcon/Pause/PauseIcon';
 import PlayIcon from 'components/icons/MicsIcon/Play/PlayIcon';
+import Collapse from 'components/GeneralPurpose/Collapse/Collapse';
+import RowExpansionIcon from 'components/icons/RowExpansionIcon/RowExpansionIcon';
+
 import styles from './DrawerMic.module.css';
+
 
 export default class DrawerMic extends Component {
   static propTypes = {
@@ -56,6 +60,7 @@ export default class DrawerMic extends Component {
      * Array of records made previously
      */
     records: PropTypes.array,
+    maxHeight: PropTypes.number,
   };
 
   static defaultProps = {
@@ -70,6 +75,7 @@ export default class DrawerMic extends Component {
     isRecording: false,
     record: () => {},
     records: [],
+    maxHeight: 215,
   }
 
   constructor(props) {
@@ -179,34 +185,36 @@ export default class DrawerMic extends Component {
               </div>
             </div>
           </div>
-          <div className={styles.fontTitle}>
-            ALARM STORY
-            <Button
-              className={styles.editButtonShowHeatMap}
-              onClick={() => {
-                this.appearHeatMap();
-              }}
-            >
-              {this.state.showHeatMap ? 'Hide Spectrogram' : 'Show Spectrogram'}
-            </Button>
+
+          <Fragment>
+            <button className={styles.buttonShowSpectrogram} onClick={this.appearHeatMap}>
+              <div className={styles.spectrogramTitle}>
+                <span className={[styles.detailsTitle, styles.headers].join(' ')}>ALARM STORY SPECTROGRAM</span>
+                <span><RowExpansionIcon expanded={this.state.showHeatMap}/></span>
+              </div>
+            </button>
+            <Collapse isOpen={this.state.showHeatMap} childrenHeight={this.props.maxHeight}>
+                <div style={this.props.maxHeight ? {"maxHeight": this.props.maxHeight} : {}}>
+                  <div ref={this.containerRef} className={styles.containerHeatMap}>
+                    <HeatMap
+                      infoPlot={this.props.infoPlot}
+                      containerNode={this.containerRef.current?.parentNode}
+                      showHeatMap={this.state.showHeatMap}
+                    />
+                  </div>
+                </div>
+            </Collapse>
+          </Fragment>
+
+          <div className={styles.containerRecorded}>
+            <span className={[styles.detailsTitle, styles.headers].join(' ')}>RECORDED AUDIOS</span>
+            <div id="downloads" className={styles.recordsDiv}>
+              {records.map((rec) => {
+                return <Record url={rec.url} nameFile={rec.nameFile} blob={rec.blob}></Record>;
+              })}
+            </div>
           </div>
 
-          {/* HEAT MAP */}
-          <div ref={this.containerRef} className={styles.containerHeatMap}>
-            {/* It's important to pass the current to allows the dynamic works in HeatMap Did Update */}
-            <HeatMap
-              infoPlot={this.props.infoPlot}
-              containerNode={this.containerRef.current?.parentNode}
-              showHeatMap={this.state.showHeatMap}
-            />
-          </div>
-
-          <span className={[styles.detailsTitle, styles.headers].join(' ')}>RECORDED AUDIOS</span>
-          <div id="downloads" className={styles.recordsDiv}>
-            {records.map((rec) => {
-              return <Record url={rec.url} nameFile={rec.nameFile} blob={rec.blob}></Record>;
-            })}
-          </div>
         </div>
       </div>
     );
