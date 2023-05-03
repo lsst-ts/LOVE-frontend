@@ -300,7 +300,7 @@ export function saveEditedView(thumbnail) {
     let url = `${ManagerInterface.getUifBaseUrl()}views/`;
     let method = 'POST';
     let expectedCode = 201;
-    const dataToSend = { ...saved, name: current.name, data: current.data, thumbnail };
+    const dataToSend = { ...saved, name: current.name, screen: current.screen, data: current.data, thumbnail };
 
     if (saved !== undefined && saved.id !== undefined) {
       url = `${ManagerInterface.getUifBaseUrl()}views/${saved.id}/`;
