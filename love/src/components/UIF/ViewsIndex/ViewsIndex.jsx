@@ -26,8 +26,13 @@ class ViewsIndex extends Component {
       filter: '',
       hoveredView: null,
       viewToDelete: null,
+      selectedTab: 'desktop',
     };
   }
+
+  changeTab = (tab) => {
+    this.setState({ selectedTab: tab });
+  };
 
   createNewView = () => {
     this.props.history.push('/uif/view-editor');
@@ -90,6 +95,33 @@ class ViewsIndex extends Component {
               placeholder="Type here to filter results"
             />
           </div>
+
+          <div className={styles.tabsWrapper}>
+            <div className={styles.tabsRow}>
+              <div
+                className={[styles.tab, this.state.selectedTab === 'desktop' ? styles.selected : ''].join(' ')}
+                onClick={() => this.changeTab('desktop')}
+              >
+                <div className={styles.tabLabel}>Desktop Views</div>
+              </div>
+
+              <div
+                className={[styles.tab, this.state.selectedTab === '4k' ? styles.selected : ''].join(' ')}
+                onClick={() => this.changeTab('4k')}
+              >
+                <div className={styles.tabLabel}>4k Views</div>
+              </div>
+
+              <div
+                className={[styles.tab, this.state.selectedTab === 'mobile' ? styles.selected : ''].join(' ')}
+                onClick={() => this.changeTab('mobile')}
+              >
+                <div className={styles.tabLabel}>Mobile Views</div>
+              </div>
+
+              <div className={[styles.mapWrapper, this.props.embedded ? styles.embedded : ''].join(' ')}></div>
+            </div>
+          </div>
         </div>
         <div className={styles.availableViewsWrapper}>
           <div title="Create a New View" className={viewLauncherStyles.view} onClick={this.createNewView}>
@@ -101,11 +133,13 @@ class ViewsIndex extends Component {
 
           {this.props.views.length > 0 &&
             this.props.views.map((view, index) => {
+              let tab = this.state.selectedTab;
               let viewName = view.name.replace(/[a-z\s]/g, '').substring(0, 6);
               let imgURL = view.thumbnail ? `${ManagerInterface.getMediaBaseUrl()}${view.thumbnail}` : '';
               if (viewName === '') viewName = view.name.substring(0, 3).toUpperCase();
               return (
-                (this.state.filter === '' || new RegExp(this.state.filter, 'i').test(view.name)) && (
+                (this.state.filter === '' || new RegExp(this.state.filter, 'i').test(view.name)) &&
+                view.screen === tab && (
                   <ViewLauncher
                     key={view.id}
                     imgURL={imgURL}
