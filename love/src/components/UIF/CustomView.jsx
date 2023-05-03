@@ -32,6 +32,16 @@ export const DEVICE_TO_COLS = {
   'Mobile S': 2,
 };
 
+export const DEVICE_TO_SCREEN = {
+  '4K': '4k',
+  'Laptop L': 'desktop',
+  Laptop: 'desktop',
+  Tablet: 'desktop',
+  'Mobile L': 'mobile',
+  'Mobile M': 'mobile',
+  'Mobile S': 'mobile',
+};
+
 const MOBILE_REFERENCE_COLS_THRESHOLD = 2;
 const MOBILE_REFERENCE_LABEL = Object.keys(DEVICE_TO_COLS).find(
   (label) => DEVICE_TO_COLS[label] <= MOBILE_REFERENCE_COLS_THRESHOLD,
