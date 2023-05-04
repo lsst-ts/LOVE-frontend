@@ -4,7 +4,7 @@ import { Howl } from 'howler';
 import isEqual from 'lodash/isEqual';
 
 import { severityEnum } from '../../../Config';
-import { isAcknowledged, isMuted, isMaxCritical } from '../AlarmUtils';
+import { isAcknowledged, isMuted, isMaxCritical, isCritical } from '../AlarmUtils';
 
 import newWarningFile from '../../../sounds/new_warning.mp3';
 import newSeriousFile from '../../../sounds/new_serious.mp3';
@@ -21,8 +21,6 @@ export default class AlarmAudio extends Component {
   static propTypes = {
     /** List of all the alarms that are displayed */
     alarms: PropTypes.array,
-    /** List of new alarms, that si they are either new or have been changed */
-    newAlarms: PropTypes.array,
     /**
      * Contents of the alarms entry of LOVE configuration file.
      * It is expected to have a "minSeveritySound" with a values of either "warning", "serious" or "critical"
@@ -36,7 +34,6 @@ export default class AlarmAudio extends Component {
 
   static defaultProps = {
     alarms: [],
-    newAlarms: [],
     alarmsConfig: null,
     subscribeToStreams: () => {},
     unsubscribeToStreams: () => {},
@@ -165,60 +162,75 @@ export default class AlarmAudio extends Component {
     }
 
     if (
-      this.props.newAlarms &&
-      (!isEqual(this.props.newAlarms, prevProps.newAlarms) ||
-        this.state.minSeveritySound !== prevState.minSeveritySound)
+      this.props.alarms &&
+      (!isEqual(this.props.alarms, prevProps.alarms) || this.state.minSeveritySound !== prevState.minSeveritySound)
     ) {
-      this.checkAndNotifyAlarms(this.props.newAlarms, prevProps.alarms);
+      this.checkAndNotifyAlarms(this.props.alarms, prevProps.alarms);
     }
   };
 
+  /**
+   * Function to check if the alarms have changed and notify the user
+   *
+   * If the alarms have changed, then check if the new alarms are more severe than the old alarms
+   * If they are, then play the appropriate sound
+   * If they are not, then check if the old alarms were acknowledged
+   * If they were, then stop the critical sound
+   * If they were not, then do nothing
+   *
+   * @param {*} newAlarms
+   * @param {*} oldAlarms
+   */
   checkAndNotifyAlarms = (newAlarms, oldAlarms) => {
-    let deltaCriticals = 0;
+    const newHighestAlarm = { severity: severityEnum.ok, type: 'new' };
     newAlarms.forEach((newAlarm) => {
-      if (newAlarm === undefined) return;
       const oldAlarm = oldAlarms.find((oldAlarm) => {
         return oldAlarm.name.value === newAlarm.name.value;
       });
 
+      // If alarm was acknowledged stop the critical sound
+      if (oldAlarm && !isAcknowledged(oldAlarm) && isAcknowledged(newAlarm)) {
+        this.stopCriticals();
+      }
+
       // If they are non-acked and non-muted
       if (!isAcknowledged(newAlarm) && !isMuted(newAlarm)) {
-        // If they are new, play the "new" sound
-        if (!oldAlarm || oldAlarm.maxSeverity.value === severityEnum.ok) {
-          if (isMaxCritical(newAlarm)) deltaCriticals++;
-          this.playSound(newAlarm.maxSeverity.value, 'new');
+        if (newAlarm.severity.value > newHighestAlarm.severity) {
+          newHighestAlarm.severity = newAlarm.severity.value;
+          newHighestAlarm.type = 'new';
         }
-        // If they have increased, play the "increased" sound
-        else if (newAlarm.maxSeverity.value > oldAlarm.maxSeverity.value) {
-          if (newAlarm.maxSeverity.value === severityEnum.critical) deltaCriticals++;
-          this.playSound(newAlarm.maxSeverity.value, 'increased');
+
+        if (oldAlarm) {
+          if (oldAlarm.severity.value < newAlarm.severity.value) {
+            // If they are increased, play the "increased" sound
+            if (newAlarm.severity.value > newHighestAlarm.severity) {
+              newHighestAlarm.severity = newAlarm.severity.value;
+              newHighestAlarm.type = 'increased';
+            }
+          }
+
+          if (!isAcknowledged(newAlarm) && isAcknowledged(oldAlarm)) {
+            // If they are unacknowledged, play the "unacked" sound
+            if (newAlarm.severity.value >= newHighestAlarm.severity) {
+              newHighestAlarm.severity = newAlarm.severity.value;
+              newHighestAlarm.type = 'unacked';
+            }
+          }
+
+          if (!isAcknowledged(newAlarm) && !isAcknowledged(oldAlarm)) {
+            // If they are still critical, play the "still critical" sound
+            if (isCritical(newAlarm) && isCritical(oldAlarm)) {
+              newHighestAlarm.severity = newAlarm.severity.value;
+              newHighestAlarm.type = 'still';
+            }
+          }
         }
-        // If they have been unacked, play the "unacked" sound
-        else if (!isAcknowledged(newAlarm) && isAcknowledged(oldAlarm)) {
-          if (newAlarm.maxSeverity.value === severityEnum.critical) deltaCriticals++;
-          this.playSound(newAlarm.maxSeverity.value, 'unacked');
-        }
-        // Else, they should not emit a new sound!
-      }
-      // If they are critical and cleared, discount them
-      if (
-        oldAlarm &&
-        isMaxCritical(oldAlarm) &&
-        !isAcknowledged(oldAlarm) &&
-        !isMuted(oldAlarm) &&
-        (isAcknowledged(newAlarm) || isMuted(newAlarm) || !isMaxCritical(newAlarm))
-      ) {
-        deltaCriticals--;
       }
     });
-    this.numCriticals += deltaCriticals;
-    // Stop the sound if some critical alarm was cleared
-    if (deltaCriticals < 0) {
+
+    if (newHighestAlarm.severity >= this.state.minSeveritySound) {
       this.stopCriticals();
-      // Play the "still sound" if there are still other critical alarms
-      if (this.numCriticals > 0) {
-        this.stillCriticalSound.play();
-      }
+      this.playSound(newHighestAlarm.severity, newHighestAlarm.type);
     }
   };
 
@@ -263,18 +275,19 @@ export default class AlarmAudio extends Component {
     } else if (severity === severityEnum.critical) {
       switch (type) {
         case 'new': {
-          this.stopCriticals();
           this.newCriticalSound.play();
           break;
         }
         case 'increased': {
-          this.stopCriticals();
           this.increasedCriticalSound.play();
           break;
         }
         case 'unacked': {
-          this.stopCriticals();
           this.unackedCriticalSound.play();
+          break;
+        }
+        case 'still': {
+          this.stillCriticalSound.play();
           break;
         }
         default:
