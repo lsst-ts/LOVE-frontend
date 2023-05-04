@@ -10,7 +10,8 @@ import {
   CHANGE_WS_STATE,
   UPDATE_LAST_SAL_COMMAND,
   UPDATE_LAST_SAL_COMMAND_STATUS,
-  RECEIVE_ALARMS,
+  RECEIVE_ALARM,
+  RECEIVE_ALL_ALARMS,
 } from '../actions/actionTypes';
 import { connectionStates, groupStates, SALCommandStatus } from '../actions/ws';
 
@@ -216,25 +217,25 @@ export default function (state = initialState, action) {
       };
     }
 
-    case RECEIVE_ALARMS: {
-      const latestAlarms = Array.isArray(action.alarms) ? Array.from(action.alarms) : Array.from([action.alarms]);
-      const alarms = Array.from(state.alarms);
-      latestAlarms.forEach((latestAlarm) => {
-        if (latestAlarm === undefined) return;
-        const alarmIndex = alarms.findIndex((stateAlarm) => {
-          return stateAlarm.name.value === latestAlarm.name.value;
-        });
-        if (alarmIndex === -1) {
-          alarms.push(latestAlarm);
-        } else {
-          alarms[alarmIndex] = latestAlarm;
-        }
-      });
+    case RECEIVE_ALARM: {
+      const currentAlarms = [...state.alarms];
+      const alarmIndex = currentAlarms.findIndex((alarm) => alarm.name.value === action.alarm.name.value);
+      if (alarmIndex < 0) {
+        currentAlarms.push(action.alarm);
+      } else {
+        currentAlarms[alarmIndex] = action.alarm;
+      }
+      return {
+        ...state,
+        alarms: currentAlarms,
+      };
+    }
 
+    case RECEIVE_ALL_ALARMS: {
+      const alarms = Object.keys(action.alarmsStream).map((key) => action.alarmsStream[key]);
       return {
         ...state,
         alarms,
-        latestAlarms,
       };
     }
 

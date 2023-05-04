@@ -22,7 +22,7 @@ import {
   receiveHeartbeatInfo,
 } from './heartbeats';
 import { receiveLogMessageData, receiveErrorCodeData } from './summaryData';
-import { receiveAlarms } from './alarms';
+import { receiveAlarm, receiveAllAlarms } from './alarms';
 import { receiveServerTime } from './time';
 import { receiveObservingLog } from './observingLogs';
 import { getConnectionStatus, getTokenStatus, getToken, getSubscriptions, getSubscription } from '../selectors';
@@ -250,7 +250,8 @@ export const openWebsocketConnection = () => {
           }
 
           if (data.data[0].csc === 'Watcher') {
-            dispatch(receiveAlarms(stream.alarm));
+            if (stream.alarm) dispatch(receiveAlarm(stream.alarm[0]));
+            else if (stream.stream) dispatch(receiveAllAlarms(stream.stream[0].alarms));
           }
 
           if (data.data[0].data.logMessage) {
