@@ -341,3 +341,14 @@
 .floatRight {
   float: right;
 }
+
+.footer {
+  padding: 1em;
+}
+
+.logo {
+  height: 2em;
+  padding: 0em 0.5em;
+  fill: var(--base-font-color);
+  vertical-align: sub;
+}

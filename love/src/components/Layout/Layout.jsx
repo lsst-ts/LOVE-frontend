@@ -27,6 +27,7 @@ import NotificationIcon from '../icons/NotificationIcon/NotificationIcon';
 import UserIcon from '../icons/UserIcon/UserIcon';
 import LogoIcon from '../icons/LogoIcon/LogoIcon';
 import MenuIcon from '../icons/MenuIcon/MenuIcon';
+import InriaLogo from '../icons/InriaLogo/InriaLogo';
 import IconBadge from '../icons/IconBadge/IconBadge';
 import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
@@ -40,6 +41,7 @@ import Modal from '../GeneralPurpose/Modal/Modal';
 import XMLTable from './XMLTable/XMLTable';
 import ConfigPanel from './ConfigPanel/ConfigPanel';
 import EmergencyContactsPanel from './EmergencyContactsPanel/EmergencyContactsPanel';
+import AboutPanel from './AboutPanel/AboutPanel';
 import UserDetails from './UserDetails/UserDetails';
 import UserSwapContainer from '../Login/UserSwap.container';
 import styles from './Layout.module.css';
@@ -120,6 +122,7 @@ class Layout extends Component {
       isXMLModalOpen: false,
       isConfigModalOpen: false,
       isEmergencyContactsModalOpen: false,
+      isAboutModalOpen: false,
       tokenSwapRequested: false,
       isTakingScreenshot: false,
       isLightHidden: true,
@@ -688,6 +691,7 @@ class Layout extends Component {
                     onXMLClick={() => this.setState({ isXMLModalOpen: true })}
                     onConfigClick={() => this.setState({ isConfigModalOpen: true })}
                     onEmergencyContactsClick={() => this.setState({ isEmergencyContactsModalOpen: true })}
+                    onAboutClick={() => this.setState({ isAboutModalOpen: true })}
                   ></UserDetails>
                 </div>
               </DropdownMenu>
@@ -730,6 +734,11 @@ class Layout extends Component {
 
         <div className={styles.contentWrapper} id={LAYOUT_CONTAINER_ID}>
           {this.props.children}
+
+          <div className={styles.footer}>
+            Created with love by
+            <InriaLogo className={styles.logo} title="Love" />
+          </div>
         </div>
         <Modal
           isOpen={this.state.isXMLModalOpen}
@@ -771,6 +780,16 @@ class Layout extends Component {
             }}
           />
         </Modal>
+
+        <Modal
+          isOpen={this.state.isAboutModalOpen}
+          onRequestClose={() => this.setState({ isAboutModalOpen: false })}
+          contentLabel="About LOVE modal"
+          size={'0'}
+        >
+          <AboutPanel />
+        </Modal>
+
         <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} hideProgressBar />
       </>
     );
