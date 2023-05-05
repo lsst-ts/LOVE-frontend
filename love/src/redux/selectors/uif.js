@@ -19,21 +19,7 @@ export const getWorkspaces = (state) => {
  */
 export const getViews = (state) => {
   if (state.uif === undefined) return undefined;
-
-  // return state.uif.present.views.map((v) => {
-  //   const randInt = v.id%3;
-  //   let screenSize = '4k';
-  //   if (randInt === 0) screenSize = '4k';
-  //   else if (randInt === 1) screenSize = 'desktop';
-  //   else if (randInt === 2) screenSize = 'mobile';
-  //   return {...v, screen: screenSize};
-  // });
-
-  return state.uif.present.views.map((v) => {
-    let screenSize = 'desktop';
-    v.screen ? (screenSize = v.screen) : '';
-    return { ...v, screen: screenSize };
-  });
+  return state.uif.present.views;
 };
 
 /**
