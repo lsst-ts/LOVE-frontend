@@ -250,8 +250,8 @@ export const openWebsocketConnection = () => {
           }
 
           if (data.data[0].csc === 'Watcher') {
-            if (stream.alarm) dispatch(receiveAlarm(stream.alarm[0]));
-            else if (stream.stream) dispatch(receiveAllAlarms(stream.stream[0].alarms));
+            if (stream.alarm) dispatch(receiveAlarm(stream.alarm));
+            else if (stream.stream) dispatch(receiveAllAlarms(stream.stream.alarms));
           }
 
           if (data.data[0].data.logMessage) {
