@@ -13,16 +13,11 @@ export default class HeatMap extends Component {
      *  Use this instead of props.width and props.height for responsive plots.
      */
     containerNode: PropTypes.object,
-    /**
-     * True, if we want show te heaty map on the plegable bar.
-     */
-    showHeatMap: PropTypes.bool,
   };
 
   static defaultProps = {
     infoPlot: {},
     containerNode: undefined,
-    showHeatMap: false,
   };
 
   constructor(props) {
@@ -48,7 +43,7 @@ export default class HeatMap extends Component {
           color: {
             type: 'quantitative',
             field: 'amp',
-            scale: { scheme: 'spectral' },
+            scale: { scheme: 'spectral', scheme: 'spectral' },
             legend: { labelColor: '#ddd', labelFontSize: 14, titleColor: '#ddd', title: 'dB', gradientLength: 215 },
           },
         },
@@ -161,7 +156,7 @@ export default class HeatMap extends Component {
           color: {
             type: 'quantitative',
             field: 'amp',
-            scale: { scheme: 'spectral' },
+            scale: { scheme: 'spectral', reverse: true },
             legend: { labelColor: '#ddd', labelFontSize: 14, titleColor: '#ddd', title: 'dB', gradientLength: height },
           },
         },
@@ -193,7 +188,6 @@ export default class HeatMap extends Component {
       return <></>;
     }
     const { data3D } = this.props.infoPlot;
-    const { showHeatMap } = this.props;
     return (
       <>
         {/* To resize, its really important preserve the structure since it is enunciated the Heat Map tag

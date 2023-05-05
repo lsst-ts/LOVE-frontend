@@ -110,14 +110,13 @@ export default class DrawerMic extends Component {
       isRecording,
       record,
       records,
-      containerNode,
     } = this.props;
 
     if (!this.props.infoPlot) {
       return <></>;
     }
 
-    const { actualFreq, actualDb, showInput, appearInputdBLimit, setDbLimitState, dbLimit } = this.props.infoPlot;
+    const { actualFreq, actualDb, setDbLimitState, dbLimit } = this.props.infoPlot;
 
     let textPlay = isPlaying ? 'PAUSE' : 'PLAY';
     let textRec = isRecording ? 'STOP' : 'START';
@@ -164,7 +163,7 @@ export default class DrawerMic extends Component {
 
           <div className={styles.containerAlarmLimit}>
             <div>
-              <div> Live values </div>
+              <div> Max Decibel value </div>
               <div className={styles.dBLiveValue}>
                 {' '}
                 {actualDb.toString().substring(0, 5)}dB in {actualFreq} Hz
@@ -199,7 +198,6 @@ export default class DrawerMic extends Component {
                     <HeatMap
                       infoPlot={this.props.infoPlot}
                       containerNode={this.containerRef.current?.parentNode}
-                      showHeatMap={this.state.showHeatMap}
                     />
                   </div>
                 </div>

@@ -42,35 +42,20 @@ export default class Microphone extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       isSelected: false,
-
       notifications: true,
-
       alarm: false,
-
       play: false,
-
       isRecording: false,
-
       actualDb: 0,
-
       actualFreq: 0,
-
       initialTime: '',
-
       timeDomain: [],
-
       dbLimit: 0.1,
-
       ampArray: [],
-
       timeArray: [],
-
       data3D: { table: [] },
-
-      showInput: false,
     };
   }
 
@@ -84,8 +69,6 @@ export default class Microphone extends Component {
       let infoPlot = {
         actualFreq: this.state.actualFreq,
         actualDb: this.state.actualDb,
-        showInput: this.state.showInput,
-        appearInputdBLimit: this.appearInputdBLimit,
         setDbLimitState: this.setDbLimitState,
         dbLimit: this.state.dbLimit,
         windowTimePlot: this.windowTimePlot,
@@ -126,7 +109,7 @@ export default class Microphone extends Component {
     this.analyser.fftSize = 2048; // sampling rate.
     this.bufferLength = this.analyser.frequencyBinCount; // frequency band.
     this.dataArray = new Float32Array(this.bufferLength);
-    this.windowTimePlot = 7;
+    this.windowTimePlot = 11;
     this.frequencyData = Array.from({ length: this.bufferLength }, (_, index) => index);
 
     //To can connect to the source
@@ -234,6 +217,7 @@ export default class Microphone extends Component {
       song.play();
       this.setState({ play: true });
     } else {
+      song.pause();
       masterGain.gain.value = 0;
       this.setState({ play: false });
     }
@@ -242,7 +226,7 @@ export default class Microphone extends Component {
   /* Method to start record o stop record the microphone stream. this function is used by the mics component*/
   record = () => {
     const { audioContext, audioRecorder, buffers } = this;
-    const { id, recordPush } = this.props;
+    const { name, recordPush } = this.props;
 
     //Get the parameter of AudioWorklet
     const parameter = audioRecorder.parameters.get('isRecording');
@@ -261,7 +245,7 @@ export default class Microphone extends Component {
       //Create a url associated to blob
       const url = URL.createObjectURL(blob);
       const timeNow = this.getTimeUTCformat();
-      recordPush(id, timeNow, url, blob);
+      recordPush(name, timeNow, url, blob);
     }
   };
 
@@ -283,8 +267,6 @@ export default class Microphone extends Component {
     let infoPlot = {
       actualFreq: this.state.actualFreq,
       actualDb: this.state.actualDb,
-      appearInputdBLimit: this.appearInputdBLimit,
-      showInput: this.state.showInput,
       setDbLimitState: this.setDbLimitState,
       dbLimit: this.state.dbLimit,
       windowTimePlot: this.windowTimePlot,
@@ -337,13 +319,13 @@ export default class Microphone extends Component {
     let dataCopy = { table: [] };
     dataCopy.table = prevState.data3D.table;
 
-    let mindB = -Infinity;
+    let maxdB = -Infinity;
     let freqMaxdB = 0;
 
     let freqAmpArray = this.frequencyData.map(function (freq, i) {
       let index = Math.round((freq / halfSR) * ampArray.length);
-      if (ampArray[index] > mindB) {
-        mindB = ampArray[index];
+      if (ampArray[index] > maxdB) {
+        maxdB = ampArray[index];
         freqMaxdB = freq;
       }
       return { t_min: actTime, t_max: nextTime, f_min: freq, f_max: freq + 1, amp: ampArray[index] };
@@ -373,7 +355,7 @@ export default class Microphone extends Component {
         timeArray: newTimeArray,
         initialTime: actTime,
         timeDomain: timeDomain,
-        actualDb: mindB,
+        actualDb: maxdB,
         actualFreq: freqMaxdB,
       };
     } else {
@@ -384,21 +366,9 @@ export default class Microphone extends Component {
         timeArray: newTimeArray,
         initialTime: newTimeArray[0],
         timeDomain: timeDomain,
-        actualDb: mindB,
+        actualDb: maxdB,
         actualFreq: freqMaxdB,
       };
-    }
-  };
-
-  /**
-   * This function allows to show up the input to change the Decibel limit input, after press
-   * respective the button to do it, changing the showInput state.
-   */
-  appearInputdBLimit = () => {
-    if (this.state.showInput) {
-      this.setState({ showInput: false });
-    } else {
-      this.setState({ showInput: true });
     }
   };
 
