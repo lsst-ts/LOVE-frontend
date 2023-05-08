@@ -101,7 +101,7 @@ export default class ManagerInterface {
   }
 
   static getMediaBaseUrl() {
-    return `http://${window.location.host}/manager`;
+    return `http://${window.location.host}/manager/media/`;
   }
 
   static getApiBaseUrl() {
