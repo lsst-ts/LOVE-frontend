@@ -83,7 +83,10 @@
   width: 15%;
 }
 .cmdOptions{
-  position: relative;
+  display: inline-flex;
+  z-index: 0;
+  position: fixed;
+  margin-left: 38em;
 }
 
 .cmdDiv{
@@ -92,7 +95,7 @@
   display: grid;
   align-content: stretch;
   justify-items: flex-start;
-  position: absolute; 
+  /* position: absolute;  */
   top: -3%;
   left: 6em;
   padding-left: 1em;
@@ -109,8 +112,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   margin-bottom: 5px;
+  justify-content: space-evenly;
 }
 
 .cmdDivDetail{
@@ -134,4 +137,9 @@
 
 .cmdTxt{
   margin-left: 0.5em;
+}
+
+.loadConfigDiv {
+  display: grid;
+  padding: 1em;
 }

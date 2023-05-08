@@ -84,12 +84,13 @@ export default class Headers extends Component {
   renderSchedulerConfigs() {
     const { selectedSchedulerConfig } = this.state;
     const options = [1, 2, 3]; // READ from somewhere
-    return (<div>
+    return (<div className={styles.loadConfigDiv}>
       <Select
         options={options}
         onChange={(e) => {
           this.setState({ selectedSchedulerConfig: e.value});
         }}/>
+        <br></br>
       <Button onClick={() => {
         this.sendSummaryStateCommand('load', {
           uri: selectedSchedulerConfig
@@ -137,8 +138,8 @@ export default class Headers extends Component {
                       ))}
                     </div>
                   )}
-                  </div>
-                  <div className={styles.schedulerConfigsDiv}>{showSchedulerConfigs && this.renderSchedulerConfigs()}</div>
+                </div>
+                <div className={styles.schedulerConfigsDiv}>{showSchedulerConfigs && this.renderSchedulerConfigs()}</div>
               </div>
               <Value>
                 <StatusText status={schedulerDetailedStateToStyle[schedulerDetailedState]}>{schedulerDetailedState}</StatusText>
