@@ -256,7 +256,7 @@ export default class SkyMap extends Component {
         },
         geometry: {
           type: 'Point',
-          coordinates: [this.props.pointingDecl, this.props.pointingRa]
+          coordinates: [this.props.pointingDecl, this.props.pointingRa],
         },
       },
     ],
@@ -357,7 +357,12 @@ export default class SkyMap extends Component {
 
         // Add to celestial objects container in d3
         if (asterism) {
-          Celestial.container.selectAll('.asterisms').data(asterism.features).enter().append('path').attr('class', 'ast');
+          Celestial.container
+            .selectAll('.asterisms')
+            .data(asterism.features)
+            .enter()
+            .append('path')
+            .attr('class', 'ast');
         }
         // Trigger redraw to display changes
         Celestial.redraw();
@@ -509,11 +514,7 @@ export default class SkyMap extends Component {
           </div>
           <div></div>
           <div className={styles.selectSystemCoord}>
-            <Select
-              options={selectOptions}
-              onChange={(e) => this.actConfig(e.value)}
-              value={'equatorial'}
-            ></Select>
+            <Select options={selectOptions} onChange={(e) => this.actConfig(e.value)} value={'equatorial'}></Select>
           </div>
         </div>
         <div id="map-container">

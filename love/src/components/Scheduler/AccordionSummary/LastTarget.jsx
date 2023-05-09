@@ -9,7 +9,7 @@ import { fixedFloat } from 'Utils';
 
 export default class LastTarget extends Component {
   render() {
-    const { 
+    const {
       isOpen,
       currentRequestTime,
       lastTargetId,
@@ -20,7 +20,7 @@ export default class LastTarget extends Component {
       lastTargetExpTime,
       lastTargetFilter,
       lastTargetNexp,
-      lastTargetMoreInfo
+      lastTargetMoreInfo,
     } = this.props;
     return (
       <div className={styles.container}>

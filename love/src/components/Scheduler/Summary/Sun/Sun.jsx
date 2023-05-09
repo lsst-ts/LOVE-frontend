@@ -37,10 +37,7 @@ export default class Sun extends Component {
           </SummaryPanel>
           <div className={styles.sunCartoon}>
             <Sky />
-            {isNigth ? 
-              (<span>{diffSunriseDigital}</span>):
-              (<span>{diffSunsetDigital}</span>)
-            }
+            {isNigth ? <span>{diffSunriseDigital}</span> : <span>{diffSunsetDigital}</span>}
           </div>
         </div>
       </div>

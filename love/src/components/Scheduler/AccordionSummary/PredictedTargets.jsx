@@ -6,7 +6,6 @@ import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import { fixedFloat } from 'Utils';
 
 export default class PredictedTarget extends Component {
-  
   HEADERS_PREDTARGETS = [
     {
       field: 'id',
@@ -39,7 +38,7 @@ export default class PredictedTarget extends Component {
   ];
 
   render() {
-    const { 
+    const {
       isOpen,
       predTargetsNumTargets,
       predTargetsRa,
@@ -48,12 +47,13 @@ export default class PredictedTarget extends Component {
       predTargetsMjd,
       predTargetsExpTime,
       predTargetsInstrConfig,
-      predTargetsNexp } = this.props;
+      predTargetsNexp,
+    } = this.props;
 
     const predData = [];
-    for (let i = 0; i < predTargetsRa.length; i++){
+    for (let i = 0; i < predTargetsRa.length; i++) {
       const obj = {
-        id: i+1,
+        id: i + 1,
         ra: predTargetsRa[i],
         decl: predTargetsDecl[i],
         rotSky: predTargetsRotSkyPos[i],
@@ -66,7 +66,9 @@ export default class PredictedTarget extends Component {
         <div onClick={this.props.showContent} className={styles.header}>
           <div className={styles.targetsTitle}>
             <h3 className={styles.title}>Predicted Target</h3>
-            <h5>{predTargetsNumTargets} targets predicted. Instruments: {predTargetsInstrConfig}</h5>
+            <h5>
+              {predTargetsNumTargets} targets predicted. Instruments: {predTargetsInstrConfig}
+            </h5>
           </div>
           <div className={styles.icons}>{!isOpen ? <AddIcon /> : <MinusIcon />}</div>
         </div>
@@ -74,9 +76,7 @@ export default class PredictedTarget extends Component {
           className={isOpen ? [styles.openPanel, styles.panel].join(' ') : [styles.closePanel, styles.panel].join(' ')}
         >
           <div className={styles.predictedTargetsDiv}>
-            {predData.length >= 1 ? 
-              <SimpleTable headers={this.HEADERS_PREDTARGETS} data={predData} /> : 'No data'
-            }
+            {predData.length >= 1 ? <SimpleTable headers={this.HEADERS_PREDTARGETS} data={predData} /> : 'No data'}
           </div>
         </div>
       </div>

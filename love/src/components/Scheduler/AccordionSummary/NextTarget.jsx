@@ -9,13 +9,14 @@ import { fixedFloat, isoTimestamp, formatSecondsToDigital } from 'Utils';
 
 export default class NextTarget extends Component {
   render() {
-    const { 
+    const {
       isOpen,
       nextTargetCurrentTime,
       nextTimeWaitTime,
       nextTargetRa,
       nextTargetDecl,
-      nextTargetRotSkyPos } = this.props;
+      nextTargetRotSkyPos,
+    } = this.props;
     return (
       <div className={styles.container}>
         <div onClick={this.props.showContent} className={styles.header}>

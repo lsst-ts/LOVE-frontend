@@ -81,7 +81,7 @@
 .iconSun {
   width: 15%;
 }
-.cmdOptions{
+.cmdOptions {
   display: inline-flex;
   z-index: 0;
   position: fixed;
@@ -92,7 +92,7 @@
   border-radius: 0.5em;
 }
 
-.cmdDiv{
+.cmdDiv {
   width: 10em;
   background-color: var(--second-quaternary-background-color);
   display: grid;
@@ -103,13 +103,13 @@
   border-radius: 0.5em;
 }
 
-.cmOptionsDiv{
+.cmOptionsDiv {
   display: flex;
   height: 100%;
   border-radius: 0.5em;
 }
 
-.cmdDivDetail{
+.cmdDivDetail {
   margin-top: 0.5em;
   background-color: var(--second-quaternary-background-color);
   display: flex;
@@ -120,20 +120,20 @@
   border-radius: 0.5em;
 }
 
-.cmdDivDetail button{
+.cmdDivDetail button {
   background-color: var(--second-quaternary-background-color);
   margin-right: 5px;
 }
 
-.cmdBtn{
+.cmdBtn {
   width: 80%;
 }
 
-.cmdTxt{
+.cmdTxt {
   margin-left: 0.5em;
 }
 
-.schedulerConfigsDiv{
+.schedulerConfigsDiv {
   background-color: var(--second-quaternary-background-color);
   display: flex;
   flex-direction: column;

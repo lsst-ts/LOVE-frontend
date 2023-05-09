@@ -5,15 +5,10 @@ import MinusIcon from 'components/icons/MinusIcon/MinusIcon';
 
 export default class Surveys extends Component {
   render() {
-    const { 
-      isOpen,
-      surveysNumGenProps,
-      surveysGenProps,
-      surveysNumSeqProps,
-      surveysSeqProps } = this.props;
+    const { isOpen, surveysNumGenProps, surveysGenProps, surveysNumSeqProps, surveysSeqProps } = this.props;
 
-    const generalProposals = surveysGenProps?.split(",");
-    const timedProposals = surveysSeqProps?.split(",");
+    const generalProposals = surveysGenProps?.split(',');
+    const timedProposals = surveysSeqProps?.split(',');
 
     return (
       <div className={styles.container}>
@@ -29,24 +24,18 @@ export default class Surveys extends Component {
             <span>{surveysNumGenProps}</span>
           </div>
           <div className={styles.generalDiv}>
-            {surveysNumGenProps ? 
-              (generalProposals.map((gp) => (
-                <div className={styles.surveysDivs}>{gp}</div>
-              ))) :
-              ('No data')
-            }
+            {surveysNumGenProps
+              ? generalProposals.map((gp) => <div className={styles.surveysDivs}>{gp}</div>)
+              : 'No data'}
           </div>
           <div className={styles.surveysTextsDiv}>
             <span className={styles.surveysTexts}>TimedProposals</span>
             <span>{surveysNumSeqProps}</span>
           </div>
           <div className={styles.generalDiv}>
-            {surveysNumSeqProps ? 
-              (timedProposals.map((tp) => (
-                <div className={styles.surveysDivs}>{tp}</div>
-              ))) :
-              ('No data')
-            }
+            {surveysNumSeqProps
+              ? timedProposals.map((tp) => <div className={styles.surveysDivs}>{tp}</div>)
+              : 'No data'}
           </div>
         </div>
       </div>

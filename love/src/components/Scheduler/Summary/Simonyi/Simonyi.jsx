@@ -17,7 +17,9 @@ export default class Simonyi extends Component {
         <SummaryPanel className={styles.summaryPanel}>
           <Title>Simonyi</Title>
           <Value>
-            <StatusText status={schedulerDomeTrackingStateToStyle[simonyiTrackingState]}>{simonyiTrackingState}</StatusText>
+            <StatusText status={schedulerDomeTrackingStateToStyle[simonyiTrackingState]}>
+              {simonyiTrackingState}
+            </StatusText>
           </Value>
         </SummaryPanel>
         <div className={styles.mountDomeDiv}>

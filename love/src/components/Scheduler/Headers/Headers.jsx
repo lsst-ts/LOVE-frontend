@@ -15,11 +15,14 @@ import Sun from '../SkyElements/SunCartoon/SunCartoon';
 import Stars from '../SkyElements/Stars/Stars';
 import Moment from 'moment';
 import { formatSecondsToDigital } from 'Utils';
-import { summaryStateMap, summaryStateToStyle, schedulerDetailedStateToMap, schedulerDetailedStateToStyle } from 'Config';
+import {
+  summaryStateMap,
+  summaryStateToStyle,
+  schedulerDetailedStateToMap,
+  schedulerDetailedStateToStyle,
+} from 'Config';
 
 export default class Headers extends Component {
-
-
   constructor(props) {
     super(props);
     this.state = {
@@ -27,7 +30,7 @@ export default class Headers extends Component {
       showSchedulerConfigs: false,
       selectedSchedulerConfig: null,
     };
-  };
+  }
 
   retrieveCmdOptions() {
     return [
@@ -56,7 +59,6 @@ export default class Headers extends Component {
     ];
   }
 
-
   toggleSchedulerCmdOptions() {
     this.setState((prevState) => ({ showOptions: !prevState.showOptions }));
   }
@@ -67,7 +69,7 @@ export default class Headers extends Component {
 
   sendSummaryStateCommand(option, params) {
     const { requestSALCommand, salindex } = this.props;
-    this.setState({showOptions: false, showSchedulerConfigs: false})
+    this.setState({ showOptions: false, showSchedulerConfigs: false });
     console.log({
       cmd: `cmd_${option}`,
       csc: 'Scheduler',
@@ -85,19 +87,26 @@ export default class Headers extends Component {
   renderSchedulerConfigs() {
     const { selectedSchedulerConfig } = this.state;
     const options = [1, 2, 3]; // READ from somewhere
-    return (<div className={styles.loadConfigDiv}>
-      <Select
-        options={options}
-        onChange={(e) => {
-          this.setState({ selectedSchedulerConfig: e.value});
-        }}/>
+    return (
+      <div className={styles.loadConfigDiv}>
+        <Select
+          options={options}
+          onChange={(e) => {
+            this.setState({ selectedSchedulerConfig: e.value });
+          }}
+        />
         <br></br>
-      <Button onClick={() => {
-        this.sendSummaryStateCommand('load', {
-          uri: selectedSchedulerConfig
-        });
-      }}>Send</Button>
-    </div>)
+        <Button
+          onClick={() => {
+            this.sendSummaryStateCommand('load', {
+              uri: selectedSchedulerConfig,
+            });
+          }}
+        >
+          Send
+        </Button>
+      </div>
+    );
   }
 
   render() {
@@ -109,7 +118,7 @@ export default class Headers extends Component {
     const diffSunsetDigital = formatSecondsToDigital(diffSunset);
     const diffSunriseDigital = formatSecondsToDigital(diffSunrise);
 
-    const cmdOptions = this.retrieveCmdOptions()
+    const cmdOptions = this.retrieveCmdOptions();
 
     // states on summary state section
     const schedulerSummaryState = summaryStateMap[schedulerState];
@@ -140,10 +149,14 @@ export default class Headers extends Component {
                     </div>
                   )}
                 </div>
-                <div className={styles.schedulerConfigsDiv}>{showSchedulerConfigs && this.renderSchedulerConfigs()}</div>
+                <div className={styles.schedulerConfigsDiv}>
+                  {showSchedulerConfigs && this.renderSchedulerConfigs()}
+                </div>
               </div>
               <Value>
-                <StatusText status={schedulerDetailedStateToStyle[schedulerDetailedState]}>{schedulerDetailedState}</StatusText>
+                <StatusText status={schedulerDetailedStateToStyle[schedulerDetailedState]}>
+                  {schedulerDetailedState}
+                </StatusText>
               </Value>
             </SummaryPanel>
           </div>
@@ -162,7 +175,9 @@ export default class Headers extends Component {
               <div className={styles.iconStars}>
                 <Stars />
               </div>
-              <span>Night #{night} - {diffSunriseDigital} till Sunrise</span>
+              <span>
+                Night #{night} - {diffSunriseDigital} till Sunrise
+              </span>
             </div>
           ) : (
             <div className={styles.dayDiv}>

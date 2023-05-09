@@ -8,7 +8,7 @@ import { fixedFloat } from 'Utils';
 
 export default class Pointing extends Component {
   render() {
-    const {  pointingRa, pointingDecl, pointingPosAngle, pointingParallAngle } = this.props;
+    const { pointingRa, pointingDecl, pointingPosAngle, pointingParallAngle } = this.props;
     return (
       <div className={styles.container}>
         <SummaryPanel className={styles.summaryPanel}>

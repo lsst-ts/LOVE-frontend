@@ -7,7 +7,7 @@ import { fixedFloat, formatSecondsToDigital } from 'Utils';
 
 export default class CurrentTarget extends Component {
   render() {
-    const { 
+    const {
       currentTargetId,
       currentRequestTime,
       currentRequestMjd,
@@ -25,15 +25,18 @@ export default class CurrentTarget extends Component {
       currentSequenceDuration,
       currentSequenceNVisits,
       currentSequenceVisits,
-      rotSkyPos} = this.props;
-      
+      rotSkyPos,
+    } = this.props;
+
     const offSet = `(${currentOffsetX}, ${currentOffsetY})`;
 
     return (
       <div className={styles.container}>
         <div className={styles.headers}>
           <h3 className={styles.currentTarget}>CurrentTarget - {currentTargetId}</h3>
-          <span className={styles.spanRigth}>{currentSequenceVisits} of {currentSequenceNVisits} in current sequence</span>
+          <span className={styles.spanRigth}>
+            {currentSequenceVisits} of {currentSequenceNVisits} in current sequence
+          </span>
         </div>
         <div className={styles.separator}></div>
         <div className={styles.currentTargetDiv}>
@@ -65,21 +68,25 @@ export default class CurrentTarget extends Component {
             <span></span>
             <div className={styles.proposals}>
               <div className={styles.exposures}>
-                {currentExposureTimes.length > 0 ?currentExposureTimes.map((exp, i) => (
-                  <div>
-                    <div className={styles.expIndexes}>{i+1}</div>
-                    <div className={styles.exposuresDetail}>{fixedFloat(exp,0) == 0 ? `-` : `${fixedFloat(exp,0)}s`}</div>
-                  </div>
-                )) : "No data"}
+                {currentExposureTimes.length > 0
+                  ? currentExposureTimes.map((exp, i) => (
+                      <div>
+                        <div className={styles.expIndexes}>{i + 1}</div>
+                        <div className={styles.exposuresDetail}>
+                          {fixedFloat(exp, 0) == 0 ? `-` : `${fixedFloat(exp, 0)}s`}
+                        </div>
+                      </div>
+                    ))
+                  : 'No data'}
               </div>
             </div>
             <Label>Proposals</Label>
             <span></span>
             <div className={styles.proposals}>
               <div className={styles.generalDiv}>
-                {currentProposalId.length > 0 ? currentProposalId.map((gp) => (
-                  <div className={styles.surveysDivs}>{gp}</div>
-                )): "No data"}
+                {currentProposalId.length > 0
+                  ? currentProposalId.map((gp) => <div className={styles.surveysDivs}>{gp}</div>)
+                  : 'No data'}
               </div>
             </div>
           </SummaryPanel>

@@ -39,7 +39,7 @@ export default class AccordionSummary extends Component {
   }
 
   render() {
-    const { 
+    const {
       currentRequestTime,
       lastTargetId,
       lastTargetRa,
@@ -75,13 +75,14 @@ export default class AccordionSummary extends Component {
       blockExecCompl,
       blockExecTotal,
       blockHash,
-      blockDef } = this.props;
+      blockDef,
+    } = this.props;
     return (
       <div className={styles.container}>
-        <LastTarget 
-          showContent={() => this.toggleContentLast()} 
+        <LastTarget
+          showContent={() => this.toggleContentLast()}
           isOpen={this.state.isOpenLast}
-          currentRequestTime={currentRequestTime} 
+          currentRequestTime={currentRequestTime}
           lastTargetId={lastTargetId}
           lastTargetRa={lastTargetRa}
           lastTargetDecl={lastTargetDecl}
@@ -92,18 +93,18 @@ export default class AccordionSummary extends Component {
           lastTargetNexp={lastTargetNexp}
           lastTargetMoreInfo={lastTargetMoreInfo}
         />
-        <NextTarget 
-          showContent={() => this.toggleContentNext()} 
-          isOpen={this.state.isOpenNext} 
+        <NextTarget
+          showContent={() => this.toggleContentNext()}
+          isOpen={this.state.isOpenNext}
           nextTargetCurrentTime={nextTargetCurrentTime}
           nextTimeWaitTime={nextTimeWaitTime}
           nextTargetRa={nextTargetRa}
           nextTargetDecl={nextTargetDecl}
           nextTargetRotSkyPos={nextTargetRotSkyPos}
         />
-        <PredictedTarget 
-          showContent={() => this.toggleContentPredicted()} 
-          isOpen={this.state.isOpenPredicted} 
+        <PredictedTarget
+          showContent={() => this.toggleContentPredicted()}
+          isOpen={this.state.isOpenPredicted}
           predTargetsNumTargets={predTargetsNumTargets}
           predTargetsRa={predTargetsRa}
           predTargetsDecl={predTargetsDecl}
@@ -113,17 +114,17 @@ export default class AccordionSummary extends Component {
           predTargetsInstrConfig={predTargetsInstrConfig}
           predTargetsNexp={predTargetsNexp}
         />
-        <Surveys 
-          showContent={() => this.toggleContentSurveys()} 
-          isOpen={this.state.isOpenSurveys} 
+        <Surveys
+          showContent={() => this.toggleContentSurveys()}
+          isOpen={this.state.isOpenSurveys}
           surveysNumGenProps={surveysNumGenProps}
           surveysGenProps={surveysGenProps}
           surveysNumSeqProps={surveysNumSeqProps}
           surveysSeqProps={surveysSeqProps}
         />
-        <Blocks 
-          showContent={() => this.toggleContentBlocks()} 
-          isOpen={this.state.isOpenBlocks} 
+        <Blocks
+          showContent={() => this.toggleContentBlocks()}
+          isOpen={this.state.isOpenBlocks}
           blockInvId={blockInvId}
           blockInvStatus={blockInvStatus}
           blockId={blockId}

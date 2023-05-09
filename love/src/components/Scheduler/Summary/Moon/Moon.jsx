@@ -9,7 +9,7 @@ import { fixedFloat } from 'Utils';
 
 export default class Moon extends Component {
   render() {
-    const { moonRa, moonDec, moonAlt, moonAz, moonDistance, moonPhase, } = this.props;
+    const { moonRa, moonDec, moonAlt, moonAz, moonDistance, moonPhase } = this.props;
     const phase = moonPhase * 100;
     return (
       <div className={styles.container}>
@@ -31,7 +31,7 @@ export default class Moon extends Component {
             <Value>{`${fixedFloat(moonDistance, 2)} °`}</Value>
           </SummaryPanel>
           <div className={styles.divMoonCartoon}>
-            <MoonCartoon ilumination={phase}/>
+            <MoonCartoon ilumination={phase} />
             <span>{`${phase} %`}</span>
           </div>
         </div>

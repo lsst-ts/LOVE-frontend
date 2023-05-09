@@ -71,7 +71,7 @@
   margin-left: 0.5em;
 }
 
-.expIndexes{
+.expIndexes {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
