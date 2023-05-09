@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.19.2
+--------
+
+* Extend thumbnails query `<https://github.com/lsst-ts/LOVE-frontend/pull/455>`_
+
 v5.19.1
 --------
 
