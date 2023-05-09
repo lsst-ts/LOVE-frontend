@@ -93,3 +93,10 @@
   width: 1.4em;
   height: 1.4em;
 }
+
+.confirmSection {
+  margin-top: 1em;
+  display: flex;
+  justify-content: right;
+  gap: var(--small-padding);
+}

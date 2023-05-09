@@ -8,6 +8,7 @@ import styles from './ConfigPanel.module.css';
 import ManagerInterface, { formatTimestamp } from 'Utils';
 // import RequeueIcon from 'components/icons/ScriptQueue/RequeueIcon/RequeueIcon';
 import ScriptIcon from '../../icons/ScriptIcon/ScriptIcon';
+import Button from 'components/GeneralPurpose/Button/Button';
 
 ConfigPanel.propTypes = {
   /** Current LOVE configuration */
@@ -18,6 +19,7 @@ ConfigPanel.propTypes = {
 
 /** Contents of the Config File view Panel, displayed in a modal */
 function ConfigPanel({ config, setConfig }) {
+  const [ownConf, setOwnConf] = useState(config);
   const [configList, setConfigList] = useState([]);
 
   useEffect(() => {
@@ -25,12 +27,23 @@ function ConfigPanel({ config, setConfig }) {
       setConfigList(list);
     });
   }, []);
+
   const onConfigSelection = (selection) => {
     const id = selection.value;
-    ManagerInterface.setSelectedConfigFile(id).then((conf) => {
-      console.log(conf);
-      setConfig(conf);
+    ManagerInterface.getConfigFileContent(id).then((conf) => {
+      setOwnConf(conf);
     });
+  };
+
+  const saveConfigSelection = (persist = false) => {
+    const id = ownConf.id;
+    if (persist) {
+      ManagerInterface.setSelectedConfigFile(id).then((conf) => {
+        setConfig(conf);
+      });
+    } else {
+      setConfig(ownConf);
+    }
   };
 
   const getConfigSelectOption = (conf, index) => {
@@ -51,9 +64,10 @@ function ConfigPanel({ config, setConfig }) {
       ),
     };
   };
-  const configStr = JSON.stringify(config.content, null, 2);
+
+  const configStr = JSON.stringify(ownConf.content, null, 2);
   const options = configList ? configList.map((conf, index) => getConfigSelectOption(conf, index)) : [];
-  const defaultOption = getConfigSelectOption(config, 0);
+  const defaultOption = getConfigSelectOption(ownConf, 0);
   return (
     <div className={styles.container}>
       <div className={styles.title}>LOVE Configuration File</div>
@@ -65,7 +79,7 @@ function ConfigPanel({ config, setConfig }) {
           controlClassName={styles.controlClassName}
           options={options}
           value={defaultOption}
-          onChange={(selection) => onConfigSelection(selection)}
+          onChange={onConfigSelection}
         />
       </div>
       <AceEditor
@@ -79,6 +93,10 @@ function ConfigPanel({ config, setConfig }) {
         editorProps={{ $blockScrolling: true }}
         fontSize={14}
       />
+      <div className={styles.confirmSection}>
+        <Button onClick={() => saveConfigSelection(true)}>Select & Save</Button>
+        <Button onClick={() => saveConfigSelection()}>Select</Button>
+      </div>
     </div>
   );
 }

@@ -2,10 +2,11 @@
 Version History
 ===============
 
-v5.19.2
+v5.20.0
 --------
 
 * Extend thumbnails query `<https://github.com/lsst-ts/LOVE-frontend/pull/455>`_
+* Refactor Watcher alarms handling `<https://github.com/lsst-ts/LOVE-frontend/pull/454>`_
 
 v5.19.1
 --------
