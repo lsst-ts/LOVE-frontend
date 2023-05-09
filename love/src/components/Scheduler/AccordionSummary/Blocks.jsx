@@ -11,8 +11,6 @@ import { fixedFloat } from 'Utils';
 import Info from 'components/MainTel/M2/Actuators/Info/Info';
 
 export default class Blocks extends Component {
-
-
   HEADERS_PREDTARGETS = [
     {
       field: 'id',
@@ -45,7 +43,7 @@ export default class Blocks extends Component {
   ];
 
   render() {
-    const { 
+    const {
       isOpen,
       blockInvId,
       blockInvStatus,
@@ -58,13 +56,14 @@ export default class Blocks extends Component {
       blockDef,
       predTargetsRa,
       predTargetsDecl,
-      predTargetsRotSkyPos } = this.props;
+      predTargetsRotSkyPos,
+    } = this.props;
 
-    const listBlocksId = blockInvId ? blockInvId.split(",") : [];
-    const listBlocksStatus = blockInvStatus ? blockInvStatus.split(",") : [];
+    const listBlocksId = blockInvId ? blockInvId.split(',') : [];
+    const listBlocksStatus = blockInvStatus ? blockInvStatus.split(',') : [];
 
     const listOfBlocks = [];
-    for (let i = 0; i < listBlocksId.length; i++){
+    for (let i = 0; i < listBlocksId.length; i++) {
       const obj = {
         id: listBlocksId[i],
         status: listBlocksStatus[i],
@@ -72,12 +71,10 @@ export default class Blocks extends Component {
       listOfBlocks.push(obj);
     }
 
-    // console.log(listOfBlocks);
-
     const predData = [];
-    for (let i = 0; i < predTargetsRa.length; i++){
+    for (let i = 0; i < predTargetsRa.length; i++) {
       const obj = {
-        id: i+1,
+        id: i + 1,
         ra: predTargetsRa[i],
         decl: predTargetsDecl[i],
         rotSky: predTargetsRotSkyPos[i],
@@ -120,14 +117,14 @@ export default class Blocks extends Component {
             <span></span>
           </div>
           <SummaryPanel className={styles.blocksPanel}>
-            {listOfBlocks.length > 0 ?
-              (listOfBlocks.map((b) => (
-                <div className={styles.predTargets}>
-                  <Label>{b.id}</Label>
-                  <Value>{b.status}</Value>
-                </div>
-              ))) : 'No data'
-            }
+            {listOfBlocks.length > 0
+              ? listOfBlocks.map((b) => (
+                  <div className={styles.predTargets}>
+                    <Label>{b.id}</Label>
+                    <Value>{b.status}</Value>
+                  </div>
+                ))
+              : 'No data'}
           </SummaryPanel>
         </div>
       </div>

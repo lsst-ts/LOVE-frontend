@@ -13,7 +13,6 @@ import SkyMap from './SkyMap/SkyMap';
 import Plots from './Plots/Plots';
 import AccordionSummary from './AccordionSummary/AccordionSummary';
 
-
 export default class Scheduler extends Component {
   static propTypes = {
     /** Function to subscribe to streams to receive */
@@ -169,7 +168,7 @@ export default class Scheduler extends Component {
     /** Comma-separated string with the ids of the general proposals */
     surveysGenProps: PropTypes.string,
     /** Number of time-series proposals */
-    surveysNumSeqProps: PropTypes. number,
+    surveysNumSeqProps: PropTypes.number,
     /** Comma-separated string with the ids of the sequence proposals */
     surveysSeqProps: PropTypes.string,
     /** Comma-separated list of block ids */
@@ -189,7 +188,7 @@ export default class Scheduler extends Component {
     /** A unique identifier for this block */
     blockHash: PropTypes.string,
     /** The full block definition */
-    blockDef: PropTypes.string
+    blockDef: PropTypes.string,
   };
   static defaultProps = {};
 
@@ -197,14 +196,14 @@ export default class Scheduler extends Component {
     super(props);
     // dict with predicted targets
     const targets = [];
-    for (let i = 0; i < this.props?.predTargetsDecl?.length; i++){
+    for (let i = 0; i < this.props?.predTargetsDecl?.length; i++) {
       const obj = {
-        id: i+1,
-        lat:  this.props.predTargetsDecl[i],
-        long: this.props.predTargetsRa[i], 
+        id: i + 1,
+        lat: this.props.predTargetsDecl[i],
+        long: this.props.predTargetsRa[i],
       };
       targets.push(obj);
-    };
+    }
 
     this.state = {
       predTargets: targets,
@@ -216,53 +215,60 @@ export default class Scheduler extends Component {
   componentDidMount = () => {
     this.props.subscribeToStream();
 
-    this.skyMap = <SkyMap
-      targets={this.state.predTargets}
-      // targets={[{
-      //   "id": 1,
-      //   "lat": 0,
-      //   "long": 0
-      // },
-      //   {
-      //     "id": 2,
-      //     "lat": 236,
-      //     "long": -88
-      // },
-      // {
-      //   "id": 3,
-      //   "lat": 80,
-      //   "long": 80
-      // }
-      // ]}
-      pointingRa={this.props?.pointingRa}
-      pointingDecl={this.props?.pointingDecl}
-    />;
+    this.skyMap = (
+      <SkyMap
+        targets={this.state.predTargets}
+        // targets={[{
+        //   "id": 1,
+        //   "lat": 0,
+        //   "long": 0
+        // },
+        //   {
+        //     "id": 2,
+        //     "lat": 236,
+        //     "long": -88
+        // },
+        // {
+        //   "id": 3,
+        //   "lat": 80,
+        //   "long": 80
+        // }
+        // ]}
+        pointingRa={this.props?.pointingRa}
+        pointingDecl={this.props?.pointingDecl}
+      />
+    );
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (!isEqual(prevProps.predTargetsDecl, this.props.predTargetsDecl) || !isEqual(prevProps.predTargetsRa, this.props.predTargetsRa)){
+    if (
+      !isEqual(prevProps.predTargetsDecl, this.props.predTargetsDecl) ||
+      !isEqual(prevProps.predTargetsRa, this.props.predTargetsRa)
+    ) {
       const targets = [];
-      for (let i = 0; i < this.props?.predTargetsDecl?.length; i++){
+      for (let i = 0; i < this.props?.predTargetsDecl?.length; i++) {
         const obj = {
-          id: i+1,
-          lat:  this.props.predTargetsDecl[i],
-          long: this.props.predTargetsRa[i], 
+          id: i + 1,
+          lat: this.props.predTargetsDecl[i],
+          long: this.props.predTargetsRa[i],
         };
         targets.push(obj);
-      };
+      }
 
       this.setState({
         predTargets: targets,
       });
     }
 
-    if (!isEqual(prevState.predTargets, this.state.predTargets)){
-      this.skyMap = <SkyMap
-        targets={this.state.predTargets}
-        pointingRa={this.props?.pointingRa}
-        pointingDecl={this.props?.pointingDecl}
-      />;
-    };
+    if (!isEqual(prevState.predTargets, this.state.predTargets)) {
+      this.skyMap = (
+        <SkyMap
+          targets={this.state.predTargets}
+          pointingRa={this.props?.pointingRa}
+          pointingDecl={this.props?.pointingDecl}
+        />
+      );
+    }
 
     // console.log(this.state.predTargets);
   }
@@ -274,7 +280,7 @@ export default class Scheduler extends Component {
   render() {
     const {
       requestSALCommand,
-      schedulerState,  
+      schedulerState,
       subState,
       mode,
       type,
@@ -362,28 +368,64 @@ export default class Scheduler extends Component {
       blockExecTotal,
       blockHash,
       blockDef,
-      salindex } = this.props;
-
-    // console.log('predTargetsDecl', predTargetsDecl); // with data
-    // console.log(predictedTargetsDecl, predictedTargetsDecl); // empty
-    
-
+      salindex,
+    } = this.props;
 
     return (
       <div className={styles.container}>
-        <Headers requestSALCommand={requestSALCommand} salindex={salindex}  schedulerState={schedulerState} subState={subState} mode={mode} type={type} moonPhase={moonPhase} isNigth={isNigth} night={night} sunset={sunset} sunrise={sunrise} />
+        <Headers
+          requestSALCommand={requestSALCommand}
+          salindex={salindex}
+          schedulerState={schedulerState}
+          subState={subState}
+          mode={mode}
+          type={type}
+          moonPhase={moonPhase}
+          isNigth={isNigth}
+          night={night}
+          sunset={sunset}
+          sunrise={sunrise}
+        />
         <div className={styles.allComponentes}>
           {/* column 1 */}
           <div className={styles.leftDiv}>
             <Filters needSwap={needSwap} filterToMount={filterToMount} filterToUnmount={filterToUnmount} />
-            <Pointing pointingRa={pointingRa} pointingDecl={pointingDecl} pointingPosAngle={pointingPosAngle} pointingParallAngle={pointingParallAngle} />
-            <Simonyi simonyiTracking={simonyiTracking} simonyiAl={simonyiAl} simonyiAz={simonyiAz} simonyiRot={simonyiRot} domeAlt={domeAlt} domeAz={domeAz}/>
-            <Moon moonRa={moonRa} moonDec={moonDec} moonAlt={moonAlt} moonAz={moonAz} moonDistance={moonDistance} moonPhase={moonPhase} />
-            <Sun sunRa={sunRa} sunDec={sunDec} sunset={sunset} sunrise={sunrise} sunAlt={sunAlt} sunAz={sunAz} solarElong={solarElong} isNigth={isNigth} />
+            <Pointing
+              pointingRa={pointingRa}
+              pointingDecl={pointingDecl}
+              pointingPosAngle={pointingPosAngle}
+              pointingParallAngle={pointingParallAngle}
+            />
+            <Simonyi
+              simonyiTracking={simonyiTracking}
+              simonyiAl={simonyiAl}
+              simonyiAz={simonyiAz}
+              simonyiRot={simonyiRot}
+              domeAlt={domeAlt}
+              domeAz={domeAz}
+            />
+            <Moon
+              moonRa={moonRa}
+              moonDec={moonDec}
+              moonAlt={moonAlt}
+              moonAz={moonAz}
+              moonDistance={moonDistance}
+              moonPhase={moonPhase}
+            />
+            <Sun
+              sunRa={sunRa}
+              sunDec={sunDec}
+              sunset={sunset}
+              sunrise={sunrise}
+              sunAlt={sunAlt}
+              sunAz={sunAz}
+              solarElong={solarElong}
+              isNigth={isNigth}
+            />
           </div>
           {/* column 2 */}
           <div className={styles.middleDiv}>
-            <CurrentTarget 
+            <CurrentTarget
               currentTargetId={currentTargetId}
               currentRequestTime={currentRequestTime}
               currentRequestMjd={currentRequestMjd}
@@ -409,7 +451,7 @@ export default class Scheduler extends Component {
           </div>
           {/* column 3 */}
           <div className={styles.rigthDiv}>
-            <AccordionSummary 
+            <AccordionSummary
               predictedTargetsRa={predTargetsRa}
               predictedTargetsDecl={predTargetsDecl}
               predictedTargetsRotSkyPos={predTargetsRotSkyPos}
