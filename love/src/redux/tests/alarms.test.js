@@ -153,7 +153,7 @@ describe('GIVEN we have no alarms in the state', () => {
                 csc: 'Watcher',
                 salindex: 0, // watcher salindex
                 data: {
-                  alarm,
+                  alarm: [alarm],
                 },
               },
             ],
@@ -161,7 +161,7 @@ describe('GIVEN we have no alarms in the state', () => {
 
           // Assert:
           expectedAlarms.push(alarm);
-          const watcherAlarmStream = getStreamData(store.getState(), 'event-Watcher-0-alarm');
+          const watcherAlarmStream = getStreamData(store.getState(), 'event-Watcher-0-alarm')[0];
           const lastAlarm = getLastAlarm(store.getState());
           const allAlarms = getAllAlarms(store.getState());
           expect(watcherAlarmStream).toEqual(alarm);
@@ -221,7 +221,7 @@ describe('GIVEN we have some alarms in the state', () => {
               csc: 'Watcher',
               salindex: 0, // watcher salindex
               data: {
-                alarm: updatedAlarm,
+                alarm: [updatedAlarm],
               },
             },
           ],
@@ -229,7 +229,7 @@ describe('GIVEN we have some alarms in the state', () => {
 
         // Assert:
         const expectedAlarms = [alarms[0], updatedAlarm, alarms[2]];
-        const watcherAlarmStream = getStreamData(store.getState(), 'event-Watcher-0-alarm');
+        const watcherAlarmStream = getStreamData(store.getState(), 'event-Watcher-0-alarm')[0];
         const lastAlarm = getLastAlarm(store.getState());
         const allAlarms = getAllAlarms(store.getState());
         expect(watcherAlarmStream).toEqual(updatedAlarm);
