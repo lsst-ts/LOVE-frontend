@@ -17,6 +17,7 @@ import RotateIcon from '../../icons/RotateIcon/RotateIcon';
 import CloseIcon from '../../icons/CloseIcon/CloseIcon';
 import SaveNewIcon from '../../icons/SaveNewIcon/SaveNewIcon';
 import SaveIcon from '../../icons/SaveIcon/SaveIcon';
+import SpinnerIcon from '../../icons/SpinnerIcon/SpinnerIcon';
 import Hoverable from '../../GeneralPurpose/Hoverable/Hoverable';
 import InfoPanel from '../../GeneralPurpose/InfoPanel/InfoPanel';
 import ManagerInterface from '../../../Utils';
@@ -111,6 +112,7 @@ export default class ConfigPanel extends Component {
       selectedConfiguration: null,
       inputConfigurationName: DEFAULT_CONFIG_NAME,
       formData: {},
+      updatingScriptSchema: false,
     };
   }
 
@@ -340,13 +342,13 @@ export default class ConfigPanel extends Component {
     if (configuration) {
       const id = configuration.id;
       const configSchema = this.state.value;
-      // ManagerInterface.updateScriptName(id, configSchema);
+      this.updateScriptSchema(id, configSchema);
     } else {
       const scriptPath = this.props.configPanel.script.path;
       const scriptType = this.props.configPanel.script.type;
       const configName = DEFAULT_CONFIG_NAME;
       const configSchema = this.state.value;
-      // ManagerInterface.postScriptConfiguration(scriptPath, scriptType, configName, configSchema);
+      this.saveNewScriptSchema(scriptPath, scriptType, configName, configSchema);
     }
   };
 
@@ -416,6 +418,7 @@ export default class ConfigPanel extends Component {
       configurationOptions,
       selectedConfiguration,
       inputConfigurationName,
+      updatingScriptSchema,
     } = this.state;
 
     let configurationSchemaChanged = false;
@@ -481,11 +484,11 @@ export default class ConfigPanel extends Component {
           const configName = inputConfigurationName;
           const configSchema = value;
           if (configurationNameChanged) {
-            ManagerInterface.postScriptConfiguration(scriptPath, scriptType, configName, configSchema);
+            this.saveNewScriptSchema(scriptPath, scriptType, configName, configSchema);
           } else if (configurationList.length === 0) {
-            ManagerInterface.postScriptConfiguration(scriptPath, scriptType, configName, configSchema);
+            this.saveNewScriptSchema(scriptPath, scriptType, configName, configSchema);
           } else {
-            ManagerInterface.updateScriptSchema(selectedConfiguration.value, configSchema);
+            this.updateScriptSchema(selectedConfiguration.value, configSchema);
           }
         }}
       >
@@ -493,12 +496,39 @@ export default class ConfigPanel extends Component {
       </Button>
     );
 
+    const spinnerHtml = (
+      <div className={styles.saveConfigurationButton}>
+        <SpinnerIcon />
+      </div>
+    );
+
     return (
       <div className={styles.configurationControls}>
         {controlHtml}
-        {buttonHtml}
+        {updatingScriptSchema ? spinnerHtml : buttonHtml}
       </div>
     );
+  };
+
+  saveNewScriptSchema = (scriptPath, scriptType, configName, configSchema) => {
+    this.setState({ updatingScriptSchema: true });
+    ManagerInterface.postScriptConfiguration(scriptPath, scriptType, configName, configSchema).then((res) => {
+      this.setState({
+        updatingScriptSchema: false,
+        configurationList: [...configurationList, res],
+      });
+    });
+  };
+
+  updateScriptSchema = (id, configSchema) => {
+    const { configurationList } = this.state;
+    this.setState({ updatingScriptSchema: true });
+    ManagerInterface.updateScriptSchema(id, configSchema).then((res) => {
+      this.setState({
+        updatingScriptSchema: false,
+        configurationList: configurationList.map((conf) => (conf.id === id ? res : conf)),
+      });
+    });
   };
 
   componentDidUpdate = (prevProps, prevState) => {

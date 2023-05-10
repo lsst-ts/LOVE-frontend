@@ -224,6 +224,12 @@ a.documentationLink {
   margin-left: auto;
 }
 
+.saveConfigurationButton {
+  display: flex;
+  align-items: center;
+  padding: 0.5em;
+}
+
 .saveConfigurationButton svg {
   width: 1.5em;
   height: 1.5em;
@@ -287,6 +293,7 @@ a.documentationLink {
 
 .deleteItemButtonContainer {
   display: flex;
+  align-items: center;
 }
 
 .deleteItem {
