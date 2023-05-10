@@ -11,12 +11,39 @@ export default class SchedulerPlots extends Component {
   renderPlots() {
     const plots = [
       {
-        PLOT1: {
-          category: 'telemetry',
-          csc: 'ATDome',
-          salindex: 0,
-          topic: 'position',
-          item: 'azimuthPosition',
+        Brightness: {
+          category: 'event',
+          csc: 'Scheduler',
+          salindex: this.props.salindex,
+          topic: 'target',
+          item: 'skyBrightness',
+          type: 'line',
+          accessor: (x) => x,
+        },
+        Cloud: {
+          category: 'event',
+          csc: 'Scheduler',
+          salindex: this.props.salindex,
+          topic: 'target',
+          item: 'cloud',
+          type: 'line',
+          accessor: (x) => x,
+        },
+        Airmass: {
+          category: 'event',
+          csc: 'Scheduler',
+          salindex: this.props.salindex,
+          topic: 'target',
+          item: 'airmass',
+          type: 'line',
+          accessor: (x) => x,
+        },
+        Seeing: {
+          category: 'event',
+          csc: 'Scheduler',
+          salindex: this.props.salindex,
+          topic: 'target',
+          item: 'seeing',
           type: 'line',
           accessor: (x) => x,
         },

@@ -512,7 +512,7 @@ export default class Scheduler extends Component {
               filterToMount={filterToMount}
             />
             {this.skyMap ?? ''}
-            <Plots />
+            <Plots salindex={salindex} />
           </div>
           {/* column 3 */}
           <div className={styles.rigthDiv}>
