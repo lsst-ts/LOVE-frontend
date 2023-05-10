@@ -19,16 +19,23 @@
 }
 
 .legend {
-  /* float: left; */
-  margin-bottom: 2em;
+  display: flex;
+  align-items: center;
+}
+
+.legend > div {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  margin-right: var(--small-padding);
 }
 
 .circleIcon {
-  width: 5%;
+  width: 2em;
   fill: lightblue !important;
 }
 
 .plusIcon {
+  width: 2em;
   transform: rotate(45deg);
-  width: 5%;
 }

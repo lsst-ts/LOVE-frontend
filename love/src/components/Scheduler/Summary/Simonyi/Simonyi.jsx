@@ -15,7 +15,7 @@ export default class Simonyi extends Component {
     return (
       <div className={styles.container}>
         <SummaryPanel className={styles.summaryPanel}>
-          <Title>Simonyi</Title>
+          <Title>Telescope</Title>
           <Value>
             <StatusText status={schedulerTrackingStateToStyle[simonyiTrackingState]}>{simonyiTrackingState}</StatusText>
           </Value>

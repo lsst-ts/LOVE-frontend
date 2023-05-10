@@ -6,7 +6,7 @@
   align-content: flex-start;
   background-color: var(--second-secondary-background-color);
   height: 100%;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 
 .title {
@@ -34,8 +34,14 @@
 }
 
 .summaryPanel {
-  background-color: #15242d !important;
+  /* background-color: #15242d !important; */
+  max-width: 100%;
 }
+
+.infoPanel {
+  padding: var(--content-padding);
+}
+
 .infoLabel {
   text-align: left;
   font-weight: bold;
@@ -72,21 +78,21 @@
 
 .generalDiv {
   display: grid;
-  grid-template-columns: 0.2fr 0.2fr 0.2fr;
-  justify-content: flex-start;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--small-padding);
+  padding: var(--content-padding);
+  /* justify-content: flex-start;
   justify-items: stretch;
   overflow-x: auto;
   overflow-y: auto;
   height: 25em;
-  width: 35em;
+  width: 35em; */
 }
 
 .surveysDivs {
   background-color: var(--quinary-background-color);
   border: 1px solid var(--tertiary-background-color);
   padding: 0.5em;
-  margin: 0.5em;
-  width: 4em;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
@@ -97,13 +103,13 @@
   margin-left: 0.5em;
   margin-bottom: 0.5em;
   margin-top: 2.5em;
+  align-items: center;
 }
 
 .blocksTargetsDiv {
   margin: 0.5em;
   height: 200px;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
   text-align: justify;
   border: 1px solid var(--tertiary-background-color);
 }
@@ -111,36 +117,36 @@
 .executionsDiv {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  margin-left: 0.5em;
+  padding: var(--content-padding);
 }
 
 .executionsText {
   display: inline-flex;
-  margin-bottom: 2em;
-  margin-top: 2em;
   font-weight: bold;
 }
 
 .divButtonBlocks {
-  display: inline-grid;
-  margin-bottom: 2em;
-  grid-template-rows: 1fr 1fr;
-  float: right;
+  /* display: inline-grid; */
+  margin: 1em 0;
+  /* grid-template-rows: 1fr 1fr; */
+  /* float: right; */
 }
 
 .currentBlock {
-  margin-left: 0.5em;
+  max-width: 100%;
+  margin: 0 0.5em;
   background-color: var(--second-primary-background-color) !important;
 }
 
 .blocksPanel {
-  margin-left: 0.5em;
+  max-width: 100%;
+  margin: 0 0.5em;
   height: 200px;
   overflow-x: hidden;
   overflow-y: auto;
   text-align: justify;
   border: 1px solid var(--tertiary-background-color);
-  display: block;
+  padding: var(--content-padding);
 }
 
 .panel {

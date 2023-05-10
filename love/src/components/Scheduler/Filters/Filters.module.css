@@ -4,12 +4,16 @@
   border-radius: 0.5em;
   /* width: calc(50% - var(--content-padding)); */
   width: 100%;
-  box-sizing: border-box;
   display: inline-grid;
   align-content: flex-start;
   background-color: var(--second-secondary-background-color);
-  margin-bottom: 1.5em;
-  height: 18vh;
+  margin-bottom: var(--small-margin);
+  /* height: 18vh; */
+  padding: var(--small-padding);
+}
+
+.panel {
+  padding: var(--content-padding);
 }
 
 .viewSwapNeeded {
@@ -78,7 +82,8 @@
 
 .title {
   text-align: left;
-  margin-left: 0.5em;
+  margin: 0em;
+  margin-bottom: var(--small-padding);
 }
 
 .filters {

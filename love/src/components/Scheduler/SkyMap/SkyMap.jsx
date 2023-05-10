@@ -467,15 +467,15 @@ export default class SkyMap extends Component {
       <div className={styles.container}>
         <div className={styles.headerDiv}>
           <div className={styles.legend}>
-            <span>
+            <div>
               <CircleIcon className={styles.circleIcon} />
-              Pointing
-            </span>
-            <span>
-              <PlusIcon className={styles.plusIcon} /> Targets
-            </span>
+              <span>Pointing</span>
+            </div>
+            <div>
+              <PlusIcon className={styles.plusIcon} />
+              <span>Targets</span>
+            </div>
           </div>
-          <div></div>
           <div className={styles.selectSystemCoord}>
             <Select options={selectOptions} onChange={(e) => this.actConfig(e.value)} value={'equatorial'}></Select>
           </div>

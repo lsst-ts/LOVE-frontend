@@ -23,6 +23,14 @@
   background: #101f27 !important;
 }
 
+.summaryPanel2 > span {
+  line-height: 2em;
+}
+
+.summaryPanel2 > span:nth-of-type(even) {
+  margin-right: 2em;
+}
+
 .summaryPanel2 {
   display: contents;
   padding: 20px;
@@ -42,7 +50,7 @@
 .headersCenter {
   display: flex;
   justify-content: space-between;
-  align-items: stretch;
+  align-items: center;
 }
 
 .headersRigth {

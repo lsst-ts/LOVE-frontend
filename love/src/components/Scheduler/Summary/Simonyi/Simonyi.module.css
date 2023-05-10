@@ -2,24 +2,29 @@
   box-sizing: border-box;
   border: 3px solid var(--second-primary-background-color);
   border-radius: 0.5em;
-  padding: 1.5em 0.5em;
+  /* padding: 1.5em 0.5em; */
   width: 100%;
-  box-sizing: border-box;
-  display: inline-grid;
-  align-content: flex-start;
+  /* display: inline-grid; */
+  /* align-content: flex-start; */
   background-color: var(--second-secondary-background-color);
-  margin-bottom: 1.5em;
+  margin-bottom: var(--small-margin);
+  padding: var(--small-padding);
 }
 
 .summaryPanel {
+  grid-template-columns: 1fr 2fr;
+  max-width: 100%;
   background-color: var(--second-secondary-background-color) !important;
-  min-width: 10em !important;
-  margin-left: 1.4em;
-  margin-right: 0.4em;
+  justify-content: unset;
+  align-items: unset;
+  align-content: unset;
+  min-width: unset;
+  padding: 1em;
 }
 
 .mountDomeDiv {
-  grid-template-columns: 0.5fr 0.5fr;
+  grid-template-columns: 50% 50%;
+  overflow: hidden;
   display: grid;
   width: 100%;
   justify-items: stretch;

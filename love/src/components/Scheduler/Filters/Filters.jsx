@@ -24,7 +24,7 @@ export default class Filters extends Component {
     return (
       <div className={styles.container}>
         {needSwap ? (
-          <div>
+          <div className={styles.panel}>
             <div className={styles.viewSwapNeeded}>
               <span>
                 <span className={styles.filterText}>Filter</span> Swap Needed
@@ -40,7 +40,7 @@ export default class Filters extends Component {
             </div>
           </div>
         ) : (
-          <div>
+          <div className={styles.panel}>
             <h3 className={styles.title}>Filter</h3>
             <div className={styles.separator}></div>
             <div className={styles.filters}>{this.renderingFilters()}</div>

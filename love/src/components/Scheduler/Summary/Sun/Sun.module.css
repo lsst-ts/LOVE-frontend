@@ -13,8 +13,14 @@
 }
 
 .summaryPanel {
+  grid-template-columns: minmax(0, 1fr) 1fr;
+  max-width: 100%;
   background-color: var(--second-secondary-background-color) !important;
-  min-width: 15em !important;
+  justify-content: unset;
+  align-items: unset;
+  align-content: unset;
+  min-width: unset;
+  padding: 1em;
 }
 
 .titles {
@@ -26,10 +32,10 @@
 
 .divContainer {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  justify-content: space-between;
+  grid-template-columns: 50% 50%;
+  /* justify-content: space-between;
   align-items: center;
-  justify-items: center;
+  justify-items: center; */
 }
 
 .sunCartoon {

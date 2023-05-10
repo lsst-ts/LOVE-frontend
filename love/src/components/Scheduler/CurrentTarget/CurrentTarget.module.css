@@ -2,7 +2,7 @@
   background-color: var(--quaternary-background-color);
   border-radius: 0.5em;
   box-sizing: border-box;
-  width: 100%;
+  /* width: 100%; */
 }
 
 .headers {
@@ -24,29 +24,37 @@
 
 .separator {
   border-top: 2px solid gray;
-  padding: 1em 0;
+  /* padding: 1em 0; */
   overflow: hidden;
 }
 
 .summaryPanel {
+  grid-template-columns: minmax(10em, 1fr) minmax(10em, 1fr);
   background-color: var(--quaternary-background-color);
-  min-width: 14em !important;
+  justify-content: unset;
+  align-items: unset;
+  align-content: unset;
+  /* padding: var(--content-padding); */
+  /* min-width: 14em !important; */
+  max-width: 100%;
 }
 
 .currentTargetDiv {
-  grid-template-columns: 0.5fr 0.5fr !important;
+  grid-template-columns: minmax(340px, 1fr) 1fr !important;
   display: grid !important;
-  width: 100%;
+  overflow: hidden;
+  padding: var(--content-padding);
+  /* width: 100%;
   align-items: start;
-  justify-items: stretch;
+  justify-items: stretch; */
 }
 
 .proposals {
   display: flex;
   grid-column-start: span 2;
   flex-wrap: wrap;
-  justify-content: space-evenly;
-  align-items: stretch;
+  /* justify-content: space-evenly;
+  align-items: stretch; */
 }
 
 .generalDiv {
@@ -68,7 +76,10 @@
 
 .exposures {
   display: flex;
-  margin-left: 0.5em;
+  flex-wrap: wrap;
+  justify-content: stretch;
+  width: 100%;
+  margin-left: 0.4rem;
 }
 
 .expIndexes {
@@ -83,5 +94,6 @@
   border: 2px solid var(--second-senary-background-dimmed-color);
   border-radius: 0.5em;
   margin-right: 0.4em;
-  width: 1.6em;
+  width: 2em;
+  overflow: hidden;
 }

@@ -52,7 +52,7 @@ export default class CurrentTarget extends Component {
             <Label>Sky position angle</Label>
             <Value>{`${fixedFloat(currentSkyAngle, 2)} °`}</Value>
             <Label>Slew time</Label>
-            <Value>{`${currentSlewTime} s`}</Value>
+            <Value>{`${fixedFloat(currentSlewTime, 2)} s`}</Value>
             <Label>Offset arcsec (x,y)</Label>
             <Value>{offSet}</Value>
           </SummaryPanel>

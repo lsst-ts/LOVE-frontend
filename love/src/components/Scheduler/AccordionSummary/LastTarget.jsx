@@ -29,7 +29,7 @@ export default class LastTarget extends Component {
           <div className={styles.icons}>{!isOpen ? <AddIcon /> : <MinusIcon />}</div>
         </div>
         <div className={[styles.panel, isOpen ? styles.openPanel : styles.closePanel].join(' ')}>
-          <SummaryPanel>
+          <SummaryPanel className={styles.summaryPanel}>
             <Label>Time on target</Label>
             <Value>{`${fixedFloat(currentRequestTime, 0)} s`}</Value>
             <Label>MJD</Label>
@@ -41,7 +41,7 @@ export default class LastTarget extends Component {
             <Label>Sky rotation</Label>
             <Value>{`${fixedFloat(lastTargetRotSkyPos, 2)} °`}</Value>
           </SummaryPanel>
-          <SummaryPanel>
+          <SummaryPanel className={styles.summaryPanel}>
             <Label>Filter</Label>
             <Value>{lastTargetFilter}</Value>
             <Label>N° of exposures</Label>
