@@ -28,9 +28,7 @@ export default class LastTarget extends Component {
           <h3 className={styles.title}>Last Target-{lastTargetId}</h3>
           <div className={styles.icons}>{!isOpen ? <AddIcon /> : <MinusIcon />}</div>
         </div>
-        <div
-          className={isOpen ? [styles.openPanel, styles.panel].join(' ') : [styles.closePanel, styles.panel].join(' ')}
-        >
+        <div className={[styles.panel, isOpen ? styles.openPanel : styles.closePanel].join(' ')}>
           <SummaryPanel>
             <Label>Time on target</Label>
             <Value>{`${fixedFloat(currentRequestTime, 0)} s`}</Value>

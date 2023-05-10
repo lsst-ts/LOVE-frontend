@@ -3,7 +3,7 @@ import styles from './Stars.module.css';
 
 function Stars({ className, ...props }) {
   return (
-    <svg id="Isolation_Mode" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64.29 38" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64.29 38" {...props}>
       <g id="star">
         <path
           className={[styles['cls1'], className].join(' ')}

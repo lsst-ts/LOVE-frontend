@@ -24,8 +24,6 @@ export default class SkyMap extends Component {
 
   static defaultProps = {
     subscribeToStreams: (value) => console.log(value),
-    // pointing: [30.7653, 22.7837],
-    // targets: [{ id: 'actualTarget', lat: 37, long: 29 }],
     darkZones: [],
   };
 
@@ -206,41 +204,6 @@ export default class SkyMap extends Component {
     width: 1,
     fill: 'rgba(0, 0, 0, 0.0)',
   };
-
-  // JSON structure of the object to be displayed
-  // Polygons of dark Zones
-  // jsonPolygons = {
-  //   type: 'FeatureCollection',
-  //   // this is an array, add as many objects as you want
-  //   features: [
-  //     {
-  //       type: 'Feature',
-  //       id: 'SummerTriangle',
-  //       properties: {
-  //         // Name
-  //         n: 'DarkZone1',
-  //         // Location of name text on the map
-  //         loc: [-67.5, 52],
-  //       },
-  //       geometry: {
-  //         // the line object as an array of point coordinates
-  //         type: 'MultiLineString',
-  //         coordinates: [
-  //           [
-  //             [-80.7653, 38.7837],
-  //             [-76.7653, 22.7837],
-  //             [-62.3042, 8.8683],
-  //             [-55.3042, 10.8683],
-  //             [-47.642, 25.2803],
-  //             [-49.642, 42.2803],
-  //             [-65.642, 45.2803],
-  //             [-80.7653, 38.7837],
-  //           ],
-  //         ],
-  //       },
-  //     },
-  //   ],
-  // };
 
   //JSON with the pointing position
   jsonPointing = {

@@ -10,21 +10,21 @@ export default class PredictedTarget extends Component {
     {
       field: 'id',
       title: 'ID',
-      // className: styles.columns,
+      className: styles.columns,
       type: 'number',
       render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
     },
     {
       field: 'ra',
       title: 'Ra',
-      // className: styles.columns,
+      className: styles.columns,
       type: 'number',
       render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
     },
     {
       field: 'decl',
       title: 'Decl',
-      // className: styles.columns,
+      className: styles.columns,
       type: 'number',
       render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
     },
@@ -50,16 +50,12 @@ export default class PredictedTarget extends Component {
       predTargetsNexp,
     } = this.props;
 
-    const predData = [];
-    for (let i = 0; i < predTargetsRa.length; i++) {
-      const obj = {
-        id: i + 1,
-        ra: predTargetsRa[i],
-        decl: predTargetsDecl[i],
-        rotSky: predTargetsRotSkyPos[i],
-      };
-      predData.push(obj);
-    }
+    const predData = predTargetsRa.map((id, i) => ({
+      id: i + 1,
+      ra: predTargetsRa[i],
+      decl: predTargetsDecl[i],
+      rotSky: predTargetsRotSkyPos[i],
+    }));
 
     return (
       <div className={styles.container}>
@@ -72,9 +68,7 @@ export default class PredictedTarget extends Component {
           </div>
           <div className={styles.icons}>{!isOpen ? <AddIcon /> : <MinusIcon />}</div>
         </div>
-        <div
-          className={isOpen ? [styles.openPanel, styles.panel].join(' ') : [styles.closePanel, styles.panel].join(' ')}
-        >
+        <div className={[styles.panel, isOpen ? styles.openPanel : styles.closePanel].join(' ')}>
           <div className={styles.predictedTargetsDiv}>
             {predData.length >= 1 ? <SimpleTable headers={this.HEADERS_PREDTARGETS} data={predData} /> : 'No data'}
           </div>

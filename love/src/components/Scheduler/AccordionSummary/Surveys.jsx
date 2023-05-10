@@ -7,8 +7,8 @@ export default class Surveys extends Component {
   render() {
     const { isOpen, surveysNumGenProps, surveysGenProps, surveysNumSeqProps, surveysSeqProps } = this.props;
 
-    const generalProposals = surveysGenProps?.split(',');
-    const timedProposals = surveysSeqProps?.split(',');
+    const generalProposals = surveysGenProps ? surveysGenProps.split(',') : [];
+    const timedProposals = surveysSeqProps ? surveysSeqProps.split(',') : [];
 
     return (
       <div className={styles.container}>
@@ -16,9 +16,7 @@ export default class Surveys extends Component {
           <h3 className={styles.title}>Surveys</h3>
           <div className={styles.icons}>{!isOpen ? <AddIcon /> : <MinusIcon />}</div>
         </div>
-        <div
-          className={isOpen ? [styles.openPanel, styles.panel].join(' ') : [styles.closePanel, styles.panel].join(' ')}
-        >
+        <div className={[styles.panel, isOpen ? styles.openPanel : styles.closePanel].join(' ')}>
           <div className={styles.surveysTextsDiv}>
             <span className={styles.surveysTexts}>General Proposals</span>
             <span>{surveysNumGenProps}</span>

@@ -26,9 +26,7 @@ export default class NextTarget extends Component {
           </div>
           <div className={styles.icons}>{!isOpen ? <AddIcon /> : <MinusIcon />}</div>
         </div>
-        <div
-          className={isOpen ? [styles.openPanel, styles.panel].join(' ') : [styles.closePanel, styles.panel].join(' ')}
-        >
+        <div className={[styles.panel, isOpen ? styles.openPanel : styles.closePanel].join(' ')}>
           <SummaryPanel>
             <Label>Time on target</Label>
             <Value>{`${formatSecondsToDigital(fixedFloat(nextTimeWaitTime, 0))} s`}</Value>

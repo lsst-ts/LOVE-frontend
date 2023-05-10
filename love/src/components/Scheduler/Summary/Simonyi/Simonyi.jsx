@@ -5,21 +5,19 @@ import Label from '../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
 import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
-import { schedulerDomeTrackingStateToMap, schedulerDomeTrackingStateToStyle } from 'Config';
+import { schedulerTrackingStateToMap, schedulerTrackingStateToStyle } from 'Config';
 import { fixedFloat } from 'Utils';
 
 export default class Simonyi extends Component {
   render() {
     const { simonyiAl, simonyiAz, simonyiRot, domeAlt, domeAz } = this.props;
-    const simonyiTrackingState = schedulerDomeTrackingStateToMap[this.props.simonyiTracking];
+    const simonyiTrackingState = schedulerTrackingStateToMap[this.props.simonyiTracking];
     return (
       <div className={styles.container}>
         <SummaryPanel className={styles.summaryPanel}>
           <Title>Simonyi</Title>
           <Value>
-            <StatusText status={schedulerDomeTrackingStateToStyle[simonyiTrackingState]}>
-              {simonyiTrackingState}
-            </StatusText>
+            <StatusText status={schedulerTrackingStateToStyle[simonyiTrackingState]}>{simonyiTrackingState}</StatusText>
           </Value>
         </SummaryPanel>
         <div className={styles.mountDomeDiv}>

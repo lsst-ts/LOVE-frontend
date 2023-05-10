@@ -802,19 +802,29 @@ export const aircraftTrackerStatetoStyle = {
 };
 
 // Scheduler
-export const schedulerDomeTrackingStateToStyle = {
+export const schedulerTrackingStateToStyle = {
   'NO TRACKING': 'undefined',
-  'TRACKING': 'ok',
+  TRACKING: 'ok',
 };
 
 // General summaryState
 export const summaryStateToStyle = {
-  'UNKNOWN': 'disabled',
-  'DISABLED': 'disabled',
-  'ENABLED': 'ok',
-  'FAULT': 'alert',
-  'OFFLINE': 'disabled',
-  'STANDBY': 'warning'
+  UNKNOWN: 'undefined',
+  DISABLED: 'invalid',
+  ENABLED: 'ok',
+  FAULT: 'alert',
+  OFFLINE: 'invalid',
+  STANDBY: 'warning',
+};
+
+// Scheduler
+export const schedulerDetailedStateToStyle = {
+  IDLE: 'invalid',
+  RUNNING: 'ok',
+  WAITING_NEXT_TARGET_TIMER_TASK: 'running',
+  GENERATING_TARGET_QUEUE: 'runnin',
+  COMPUTING_PREDICTED_SCHEDULE: 'running',
+  QUEUEING_TARGET: 'running',
 };
 
 /*****************************************************************************/
@@ -1244,9 +1254,9 @@ export const mtm1m3HeaterDisabledStateMap = {
 };
 
 // Scheduler
-export const schedulerDomeTrackingStateToMap = {
+export const schedulerTrackingStateToMap = {
   false: 'NO TRACKING',
-  true: 'TRACKING'
+  true: 'TRACKING',
 };
 
 // General summaryState
@@ -1256,13 +1266,10 @@ export const summaryStateMap = {
   2: 'ENABLED',
   3: 'FAULT',
   4: 'OFFLINE',
-  5: 'STANDBY'
+  5: 'STANDBY',
 };
 
-/*****************************************************************************/
-/**************************MTM3 actuator and forces***************************/
-/*****************************************************************************/
-
+// Scheduler
 export const schedulerDetailedStateToMap = {
   0: 'IDLE',
   1: 'RUNNING',
@@ -1272,14 +1279,9 @@ export const schedulerDetailedStateToMap = {
   5: 'QUEUEING_TARGET',
 };
 
-export const schedulerDetailedStateToStyle = {
-  'IDLE': 'disabled',
-  'RUNNING': 'ok',
-  'WAITING_NEXT_TARGET_TIMER_TASK': 'warning',
-  'GENERATING_TARGET_QUEUE': 'warning',
-  'COMPUTING_PREDICTED_SCHEDULE': 'warning',
-  'QUEUEING_TARGET': 'warning'
-};
+/*****************************************************************************/
+/**************************MTM3 actuator and forces***************************/
+/*****************************************************************************/
 
 // Components configurations
 export const M1M3ActuatorForces = {

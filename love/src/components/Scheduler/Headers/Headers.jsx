@@ -70,18 +70,12 @@ export default class Headers extends Component {
   sendSummaryStateCommand(option, params) {
     const { requestSALCommand, salindex } = this.props;
     this.setState({ showOptions: false, showSchedulerConfigs: false });
-    console.log({
+    requestSALCommand({
       cmd: `cmd_${option}`,
       csc: 'Scheduler',
       salindex,
       params,
     });
-    // requestSALCommand({
-    //   cmd: `cmd_${option}`,
-    //   csc: 'Scheduler',
-    //   salindex,
-    //   params,
-    // });
   }
 
   renderSchedulerConfigs() {

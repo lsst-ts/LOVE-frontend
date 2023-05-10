@@ -19,6 +19,10 @@ export default class Scheduler extends Component {
     subscribeToStreams: PropTypes.func,
     /** Function to unsubscribe to streams to stop receiving */
     unsubscribeToStreams: PropTypes.func,
+    /** Function to send commands */
+    requestSALCommand: PropTypes.func,
+    /** High level state machine state identifier */
+    schedulerState: PropTypes.number,
     /** The substate or extra states of the CSC */
     subState: PropTypes.number,
     /** Current observing mode as a human-readable string */
@@ -190,26 +194,109 @@ export default class Scheduler extends Component {
     /** The full block definition */
     blockDef: PropTypes.string,
   };
-  static defaultProps = {};
+  static defaultProps = {
+    schedulerState: 0.0,
+    subState: 0.0,
+    mode: 'No obs. mode',
+    type: 'No type obs.',
+    isNigth: false,
+    night: 0.0,
+    sunset: 0.0,
+    sunrise: 0.0,
+    needSwap: false,
+    filterToMount: '',
+    filterToUnmount: '',
+    pointingRa: 0.0,
+    pointingDecl: 0.0,
+    pointingPosAngle: 0.0,
+    pointingParallAngle: 0.0,
+    simonyiTracking: false,
+    simonyiAl: 0.0,
+    simonyiAz: 0.0,
+    simonyiRot: 0.0,
+    domeAlt: 0.0,
+    domeAz: 0.0,
+    moonRa: 0.0,
+    moonDec: 0.0,
+    moonAlt: 0.0,
+    moonAz: 0.0,
+    moonDistance: 0.0,
+    moonPhase: 0.0,
+    sunRa: 0.0,
+    sunDec: 0.0,
+    sunAlt: 0.0,
+    sunAz: 0.0,
+    solarElong: 0.0,
+    currentTargetId: 0.0,
+    currentRequestTime: 0.0,
+    currentRequestMjd: 0.0,
+    currentRa: 0.0,
+    currentDecl: 0.0,
+    currentSkyAngle: 0.0,
+    currentFilter: 'No filter selected',
+    currentNumExposures: 0.0,
+    currentExposureTimes: [],
+    currentSlewTime: 0.0,
+    currentOffsetX: 0.0,
+    currentOffsetY: 0.0,
+    currentNumProposals: 0.0,
+    currentProposalId: [],
+    currentSequenceDuration: 0.0,
+    currentSequenceNVisits: 0.0,
+    currentSequenceVisits: 0.0,
+    rotSkyPos: 0.0,
+    predictedTargetsRa: [],
+    predictedTargetsDecl: [],
+    predictedTargetsRotSkyPos: [],
+    lastTargetId: 0,
+    lastTargetRa: 0.0,
+    lastTargetDecl: 0.0,
+    lastTargetRotSkyPos: 0.0,
+    lastTargetMjd: 0.0,
+    lastTargetExpTime: 0.0,
+    lastTargetFilter: 'No filter selected',
+    lastTargetNexp: 0,
+    lastTargetMoreInfo: 'Without information',
+    nextTargetCurrentTime: 0.0,
+    nextTimeWaitTime: 0.0,
+    nextTargetRa: 0.0,
+    nextTargetDecl: 0.0,
+    nextTargetRotSkyPos: 0.0,
+    predTargetsNumTargets: 0,
+    predTargetsRa: [],
+    predTargetsDecl: [],
+    predTargetsRotSkyPos: [],
+    predTargetsMjd: [],
+    predTargetsExpTime: [],
+    predTargetsInstrConfig: 'No instrument conf.',
+    predTargetsNexp: [],
+    surveysNumGenProps: 0,
+    surveysGenProps: '',
+    surveysNumSeqProps: 0,
+    surveysSeqProps: '',
+    blockInvId: '',
+    blockInvStatus: '',
+    blockId: '',
+    blockStatusId: 0,
+    blockStatus: '',
+    blockExecCompl: 0,
+    blockExecTotal: 0,
+    blockHash: '',
+    blockDef: '',
+  };
 
   constructor(props) {
     super(props);
     // dict with predicted targets
-    const targets = [];
-    for (let i = 0; i < this.props?.predTargetsDecl?.length; i++) {
-      const obj = {
-        id: i + 1,
-        lat: this.props.predTargetsDecl[i],
-        long: this.props.predTargetsRa[i],
-      };
-      targets.push(obj);
-    }
+    const targets = this.props?.predTargetsDecl.map((id, i) => ({
+      id: i + 1,
+      lat: this.props.predTargetsDecl[i],
+      long: this.props.predTargetsRa[i],
+    }));
 
     this.state = {
       predTargets: targets,
     };
-
-    // console.log(this.state.predTargets);
   }
 
   componentDidMount = () => {
@@ -218,22 +305,6 @@ export default class Scheduler extends Component {
     this.skyMap = (
       <SkyMap
         targets={this.state.predTargets}
-        // targets={[{
-        //   "id": 1,
-        //   "lat": 0,
-        //   "long": 0
-        // },
-        //   {
-        //     "id": 2,
-        //     "lat": 236,
-        //     "long": -88
-        // },
-        // {
-        //   "id": 3,
-        //   "lat": 80,
-        //   "long": 80
-        // }
-        // ]}
         pointingRa={this.props?.pointingRa}
         pointingDecl={this.props?.pointingDecl}
       />
@@ -245,15 +316,11 @@ export default class Scheduler extends Component {
       !isEqual(prevProps.predTargetsDecl, this.props.predTargetsDecl) ||
       !isEqual(prevProps.predTargetsRa, this.props.predTargetsRa)
     ) {
-      const targets = [];
-      for (let i = 0; i < this.props?.predTargetsDecl?.length; i++) {
-        const obj = {
-          id: i + 1,
-          lat: this.props.predTargetsDecl[i],
-          long: this.props.predTargetsRa[i],
-        };
-        targets.push(obj);
-      }
+      const targets = this.props?.predTargetsDecl.map((id, i) => ({
+        id: i + 1,
+        lat: this.props.predTargetsDecl[i],
+        long: this.props.predTargetsRa[i],
+      }));
 
       this.setState({
         predTargets: targets,
@@ -269,8 +336,6 @@ export default class Scheduler extends Component {
         />
       );
     }
-
-    // console.log(this.state.predTargets);
   }
 
   componentWillUnmount = () => {

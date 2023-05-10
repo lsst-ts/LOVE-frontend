@@ -15,21 +15,21 @@ export default class Blocks extends Component {
     {
       field: 'id',
       title: 'ID',
-      // className: styles.columns,
+      className: styles.columns,
       type: 'number',
       render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
     },
     {
       field: 'ra',
       title: 'Ra',
-      // className: styles.columns,
+      className: styles.columns,
       type: 'number',
       render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
     },
     {
       field: 'decl',
       title: 'Decl',
-      // className: styles.columns,
+      className: styles.columns,
       type: 'number',
       render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
     },
@@ -62,25 +62,13 @@ export default class Blocks extends Component {
     const listBlocksId = blockInvId ? blockInvId.split(',') : [];
     const listBlocksStatus = blockInvStatus ? blockInvStatus.split(',') : [];
 
-    const listOfBlocks = [];
-    for (let i = 0; i < listBlocksId.length; i++) {
-      const obj = {
-        id: listBlocksId[i],
-        status: listBlocksStatus[i],
-      };
-      listOfBlocks.push(obj);
-    }
-
-    const predData = [];
-    for (let i = 0; i < predTargetsRa.length; i++) {
-      const obj = {
-        id: i + 1,
-        ra: predTargetsRa[i],
-        decl: predTargetsDecl[i],
-        rotSky: predTargetsRotSkyPos[i],
-      };
-      predData.push(obj);
-    }
+    const listOfBlocks = listBlocksId.map((id, i) => ({ id: id, status: listBlocksStatus[i] }));
+    const predData = predTargetsRa.map((id, i) => ({
+      id: id,
+      ra: predTargetsRa[i],
+      decl: predTargetsDecl[i],
+      rotSky: predTargetsRotSkyPos[i],
+    }));
 
     return (
       <div className={styles.container}>
@@ -88,9 +76,7 @@ export default class Blocks extends Component {
           <h3 className={styles.title}>Blocks</h3>
           <div className={styles.icons}>{!isOpen ? <AddIcon /> : <MinusIcon />}</div>
         </div>
-        <div
-          className={isOpen ? [styles.openPanel, styles.panel].join(' ') : [styles.closePanel, styles.panel].join(' ')}
-        >
+        <div className={[styles.panel, isOpen ? styles.openPanel : styles.closePanel].join(' ')}>
           <SummaryPanel className={styles.currentBlock}>
             <Label>{blockId ? blockId : 'No data'}</Label>
             <Value>{blockStatus ? blockStatus : 'No data'}</Value>
@@ -109,7 +95,7 @@ export default class Blocks extends Component {
             </div>
           </div>
           <div className={styles.divButtonBlocks}>
-            <Button /**className={styles.buttonBlocks}*/ status="info">Add Block to Scheduler queue</Button>
+            <Button status="info">Add Block to Scheduler queue</Button>
             <span>{blockHash ? blockHash : 'No data'}</span>
           </div>
           <div className={styles.executionsDiv}>

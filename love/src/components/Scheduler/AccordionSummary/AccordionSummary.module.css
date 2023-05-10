@@ -128,13 +128,6 @@
   float: right;
 }
 
-.buttonBlocks {
-  background-color: var(--status-running-color);
-  color: white;
-  cursor: pointer;
-  float: right;
-}
-
 .currentBlock {
   margin-left: 0.5em;
   background-color: var(--second-primary-background-color) !important;
@@ -166,4 +159,8 @@
 .targetsTitle {
   display: inline;
   height: fit-content;
+}
+
+.columns {
+  text-align: center !important;
 }

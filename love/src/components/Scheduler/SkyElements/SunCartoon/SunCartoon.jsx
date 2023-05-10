@@ -3,7 +3,7 @@ import styles from './SunCartoon.module.css';
 
 function Sun({ className, ...props }) {
   return (
-    <svg id="Isolation_Mode" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64.29 76" {...props}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64.29 76" {...props}>
       <g style={{ scale: '2', transformOrigin: 'center' }}>
         <circle className={[styles['cls1'], className].join(' ')} cx="32.14" cy="38.11" r="5" />
         <g>
