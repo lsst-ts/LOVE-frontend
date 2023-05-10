@@ -10,7 +10,7 @@ import PauseIcon from 'components/icons/ScriptQueue/PauseIcon/PauseIcon';
 import ResumeIcon from 'components/icons/ScriptQueue/ResumeIcon/ResumeIcon'; // play button
 import LoadInfoIcon from 'components/icons/LoadInfoIcon/LoadInfoIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
-import Select from 'components/GeneralPurpose/Select/Select';
+import Input from 'components/GeneralPurpose/Input/Input';
 import Sun from '../SkyElements/SunCartoon/SunCartoon';
 import Stars from '../SkyElements/Stars/Stars';
 import Moment from 'moment';
@@ -29,6 +29,8 @@ export default class Headers extends Component {
       showOptions: false,
       showSchedulerConfigs: false,
       selectedSchedulerConfig: null,
+      inputSchedulerConfigError: false,
+      isValidUri: false,
     };
   }
 
@@ -70,31 +72,56 @@ export default class Headers extends Component {
   sendSummaryStateCommand(option, params) {
     const { requestSALCommand, salindex } = this.props;
     this.setState({ showOptions: false, showSchedulerConfigs: false });
-    requestSALCommand({
+    console.log({
       cmd: `cmd_${option}`,
       csc: 'Scheduler',
       salindex,
       params,
     });
+    // requestSALCommand({
+    //   cmd: `cmd_${option}`,
+    //   csc: 'Scheduler',
+    //   salindex,
+    //   params,
+    // });
   }
 
+  validateUri = (uri) => {
+    const regex = /^https?:\/\/[^\s/$.?#].[^\s]*$/i;
+    return regex.test(uri);
+  };
+
   renderSchedulerConfigs() {
-    const { selectedSchedulerConfig } = this.state;
-    const options = [1, 2, 3]; // READ from somewhere
+    const { selectedSchedulerConfig, inputSchedulerConfigError, isValidUri } = this.state;
     return (
       <div className={styles.loadConfigDiv}>
-        <Select
-          options={options}
+        <Input
+          className={inputSchedulerConfigError ? styles.inputError : ''}
+          placeholder="Insert Uri"
           onChange={(e) => {
-            this.setState({ selectedSchedulerConfig: e.value });
+            const isValid = this.validateUri(e.target.value);
+            this.setState({
+              selectedSchedulerConfig: e.target.value,
+              inputSchedulerConfigError: false,
+            });
           }}
         />
         <br></br>
         <Button
           onClick={() => {
-            this.sendSummaryStateCommand('load', {
-              uri: selectedSchedulerConfig,
-            });
+            if (selectedSchedulerConfig === null || selectedSchedulerConfig === '' || !isValidUri) {
+              this.setState({ inputSchedulerConfigError: true });
+            }
+            // TODO: regex match for URI
+            else {
+              this.sendSummaryStateCommand('load', {
+                uri: selectedSchedulerConfig,
+              });
+              this.setState({
+                inputSchedulerConfigError: false,
+                selectedSchedulerConfig: null,
+              });
+            }
           }}
         >
           Send
@@ -106,6 +133,7 @@ export default class Headers extends Component {
   render() {
     const { schedulerState, subState, mode, type, isNigth, night, sunset, sunrise } = this.props;
     const { showOptions, showSchedulerConfigs } = this.state;
+    // console.log(showOptions, showSchedulerConfigs);
     const current_time = Moment();
     const diffSunset = Moment.unix(sunset).diff(current_time, 'seconds');
     const diffSunrise = Moment.unix(sunrise).diff(current_time, 'seconds');
@@ -143,9 +171,9 @@ export default class Headers extends Component {
                     </div>
                   )}
                 </div>
-                <div className={styles.schedulerConfigsDiv}>
-                  {showSchedulerConfigs && this.renderSchedulerConfigs()}
-                </div>
+                {showSchedulerConfigs && (
+                  <div className={styles.schedulerConfigsDiv}>{this.renderSchedulerConfigs()}</div>
+                )}
               </div>
               <Value>
                 <StatusText status={schedulerDetailedStateToStyle[schedulerDetailedState]}>
