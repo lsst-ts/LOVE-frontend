@@ -21,6 +21,9 @@ export const hasMuteConfig = (alarm) => alarm.mutedSeverity?.value > severityEnu
 /** Auxiliary function to define wether an alarms maxSeverity is Critical */
 export const isMaxCritical = (alarm) => alarm.maxSeverity?.value === severityEnum.critical;
 
+/** Auxiliary function to define wether an alarms severity is Critical */
+export const isCritical = (alarm) => alarm.severity?.value === severityEnum.critical;
+
 /** Auxiliary function to define wether an alarm is active or not */
 export const isActive = (alarm) => alarm.severity?.value > severityEnum.ok;
 

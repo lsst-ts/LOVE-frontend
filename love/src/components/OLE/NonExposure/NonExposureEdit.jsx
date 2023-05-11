@@ -32,8 +32,8 @@ export default class NonExposureEdit extends Component {
     logEdit: {
       id: undefined,
       level: 0,
-      date_begin: undefined,
-      date_end: undefined,
+      date_begin: Moment().subtract(1, 'day'),
+      date_end: Moment(),
       systems: [],
       subsystems: [],
       cscs: [],
@@ -94,9 +94,11 @@ export default class NonExposureEdit extends Component {
   }
 
   cleanForm() {
+    // Reset multiselects values
     this.multiselectRefs.systems.current.resetSelectedValues();
     this.multiselectRefs.subsystems.current.resetSelectedValues();
     this.multiselectRefs.cscs.current.resetSelectedValues();
+
     this.setState({ logEdit: NonExposureEdit.defaultProps.logEdit });
   }
 
@@ -186,20 +188,25 @@ export default class NonExposureEdit extends Component {
     }
   }
 
+  handleTimeLost() {
+    const { date_begin, date_end } = this.state.logEdit;
+    const start = Moment(date_begin);
+    const end = Moment(date_end);
+    const duration_hr = end.diff(start, 'hours', true);
+    this.setState((prevState) => ({
+      logEdit: {
+        ...prevState.logEdit,
+        time_lost: duration_hr.toFixed(2),
+      },
+    }));
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (
       prevState.logEdit?.date_begin !== this.state.logEdit?.date_begin ||
       prevState.logEdit?.date_end !== this.state.logEdit?.date_end
     ) {
-      const start = Moment(this.state.logEdit.date_begin);
-      const end = Moment(this.state.logEdit.date_end);
-      const duration_hr = end.diff(start, 'hours', true);
-      this.setState((prevState) => ({
-        logEdit: {
-          ...prevState.logEdit,
-          time_lost: duration_hr.toFixed(2),
-        },
-      }));
+      this.handleTimeLost();
     }
   }
 

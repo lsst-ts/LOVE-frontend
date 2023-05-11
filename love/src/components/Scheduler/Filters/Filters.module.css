@@ -1,0 +1,106 @@
+.container {
+  box-sizing: border-box;
+  border: 3px solid var(--second-primary-background-color);
+  border-radius: 0.5em;
+  /* width: calc(50% - var(--content-padding)); */
+  width: 100%;
+  display: inline-grid;
+  align-content: flex-start;
+  background-color: var(--second-secondary-background-color);
+  margin-bottom: var(--small-margin);
+  /* height: 18vh; */
+  padding: var(--small-padding);
+}
+
+.panel {
+  padding: var(--content-padding);
+}
+
+.viewSwapNeeded {
+  display: flex;
+  height: auto;
+  background-color: var(--status-warning-dimmed-color-2);
+  color: var(--base-font-color);
+  height: 5vh;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.filterText {
+  font-weight: bold;
+}
+
+.iconWarning {
+  width: 7%;
+}
+
+.iconArrow {
+  width: 10%;
+}
+
+.needSwap {
+  border: 1px solid white;
+  font-weight: bold;
+  background-color: var(--tertiary-background-color);
+}
+
+.swap {
+  display: flex;
+  margin-top: 2em;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.filterToMountStyle {
+  background-color: var(--tertiary-background-color);
+  border: 3px solid var(--tertiary-background-color);
+  padding: 0.5em 0.7em;
+  vertical-align: middle;
+  display: inline-block;
+  margin-right: 1.5em;
+}
+
+.filterToUnmountStyle {
+  background-color: var(--second-senary-background-dimmed-color);
+  border: 3px solid white;
+  padding: 0.5em 0.7em;
+  vertical-align: middle;
+  display: inline-block;
+  color: white;
+  font-weight: bold;
+  margin-right: 1.5em;
+}
+
+.disabledFilter {
+  background-color: var(--second-quaternary-background-dimmed-color);
+  color: var(--secondary-font-dimmed-color);
+  padding: 0.5em 0.7em;
+  vertical-align: middle;
+  display: inline-block;
+  margin-right: 1.5em;
+}
+
+.title {
+  text-align: left;
+  margin: 0em;
+  margin-bottom: var(--small-padding);
+}
+
+.filters {
+  width: 100%;
+  text-align: center;
+}
+
+.filter {
+  border: 3px solid var(--second-primary-background-color);
+  padding: 0.5em 0.7em;
+  vertical-align: middle;
+  display: inline-block;
+  margin-right: 1.5em;
+}
+
+.separator {
+  border-top: 2px solid gray;
+  padding: 1em 0;
+  overflow: hidden;
+}

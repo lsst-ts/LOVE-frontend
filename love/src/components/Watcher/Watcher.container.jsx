@@ -47,8 +47,6 @@ const WatcherContainer = ({ alarms, user, subscribeToStream, unsubscribeToStream
 };
 
 const mapStateToProps = (state) => {
-  // const alarms = mockAlarms;
-  // const alarms = getAllAlarms(state).concat(mockAlarms);
   const alarms = getAllAlarms(state);
   const user = getUsername(state);
   const taiToUtc = getTaiToUtc(state);
@@ -57,7 +55,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  const subscriptions = ['event-Watcher-0-alarm'];
+  const subscriptions = ['event-Watcher-0-stream', 'event-Watcher-0-alarm'];
   return {
     subscriptions,
     subscribeToStreams: () => {

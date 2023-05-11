@@ -2,6 +2,16 @@
 Version History
 ===============
 
+v5.20.0
+--------
+
+* MTM1M3TS implementation `<https://github.com/lsst-ts/LOVE-frontend/pull/459>`_
+* Scheduler implementation `<https://github.com/lsst-ts/LOVE-frontend/pull/458>`_
+* Fix scrolling behavior when content overflows on CSCGroup `<https://github.com/lsst-ts/LOVE-frontend/pull/457>`_
+* Fix initial data to avoid errors after creating 1 narrative log `<https://github.com/lsst-ts/LOVE-frontend/pull/456>`_
+* Extend thumbnails query `<https://github.com/lsst-ts/LOVE-frontend/pull/455>`_
+* Refactor Watcher alarms handling `<https://github.com/lsst-ts/LOVE-frontend/pull/454>`_
+
 v5.19.1
 --------
 

@@ -10,17 +10,15 @@ const AlarmAudioContainer = ({ ...props }) => {
 
 const mapStateToProps = (state) => {
   const alarms = getAllAlarms(state);
-  const newAlarms = getLastestAlarms(state);
   const alarmsConfig = getAlarmConfig(state);
   return {
     alarms,
-    newAlarms,
     alarmsConfig,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  const subscriptions = ['event-Watcher-0-alarm'];
+  const subscriptions = ['event-Watcher-0-stream', 'event-Watcher-0-alarm'];
   return {
     subscriptions,
     subscribeToStreams: () => {

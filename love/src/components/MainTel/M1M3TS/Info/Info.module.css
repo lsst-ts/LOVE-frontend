@@ -1,0 +1,38 @@
+.info {
+  min-height: 210px;
+  max-width: 100%;
+}
+
+.noSensor {
+  grid-column: 1 / span 2;
+}
+
+.warningContainer {
+  display: grid;
+  row-gap: 8px;
+}
+
+.warningText {
+  text-align: left;
+  padding-left: 0.4rem;
+  line-height: 1.3em;
+}
+
+.warningIcon {
+  padding: 0.5em;
+  text-align: right;
+  user-select: none;
+  vertical-align: top;
+  padding-top: 1em;
+  padding-right: 0.2em;
+}
+
+.warningIcon svg {
+  vertical-align: middle;
+  width: 20px;
+}
+
+.separator {
+  grid-column: 1 / span 2;
+  border-bottom: 1px solid var(--second-tertiary-background-color);
+}

@@ -1,0 +1,26 @@
+.cls1 {
+  fill: #a6bac6;
+}
+.cls2 {
+  stroke: #a6bac6;
+  stroke-linecap: round;
+  stroke-width: 2px;
+}
+.cls2,
+.cls3 {
+  fill: none;
+  stroke-miterlimit: 10;
+}
+.cls3 {
+  stroke: #788f9b;
+}
+.cls4 {
+  opacity: 0;
+}
+.cls4,
+.cls5 {
+  fill: #1a2d37;
+}
+.cls5 {
+  opacity: 0.9;
+}

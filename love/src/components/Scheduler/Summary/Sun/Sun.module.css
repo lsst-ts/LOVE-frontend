@@ -1,0 +1,43 @@
+.container {
+  box-sizing: border-box;
+  border: 3px solid var(--second-primary-background-color);
+  border-radius: 0.5em;
+  padding: 1.5em 0.5em;
+  /* width: calc(50% - var(--content-padding)); */
+  width: 100%;
+  box-sizing: border-box;
+  display: inline-grid;
+  align-content: flex-start;
+  background-color: var(--second-secondary-background-color);
+  margin-bottom: 1.5em;
+}
+
+.summaryPanel {
+  grid-template-columns: minmax(0, 1fr) 1fr;
+  max-width: 100%;
+  background-color: var(--second-secondary-background-color) !important;
+  justify-content: unset;
+  align-items: unset;
+  align-content: unset;
+  min-width: unset;
+  padding: 1em;
+}
+
+.titles {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  margin-bottom: 2em;
+}
+
+.divContainer {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  /* justify-content: space-between;
+  align-items: center;
+  justify-items: center; */
+}
+
+.sunCartoon {
+  width: 40%;
+}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { fixedFloat } from 'Utils';
+import { defaultNumberFormatter } from 'Utils';
 import { inclinationTelemetrySourceStateMap } from 'Config';
 import styles from './Inclinometer.module.css';
 

@@ -1,0 +1,42 @@
+import React, { Component } from 'react';
+import styles from './AccordionSummary.module.css';
+import AddIcon from 'components/icons/AddIcon/AddIcon';
+import MinusIcon from 'components/icons/MinusIcon/MinusIcon';
+
+export default class Surveys extends Component {
+  render() {
+    const { isOpen, surveysNumGenProps, surveysGenProps, surveysNumSeqProps, surveysSeqProps } = this.props;
+
+    const generalProposals = surveysGenProps ? surveysGenProps.split(',') : [];
+    const timedProposals = surveysSeqProps ? surveysSeqProps.split(',') : [];
+
+    return (
+      <div className={styles.container}>
+        <div onClick={this.props.showContent} className={styles.header}>
+          <h3 className={styles.title}>Surveys</h3>
+          <div className={styles.icons}>{!isOpen ? <AddIcon /> : <MinusIcon />}</div>
+        </div>
+        <div className={[styles.panel, isOpen ? styles.openPanel : styles.closePanel].join(' ')}>
+          <div className={styles.surveysTextsDiv}>
+            <span className={styles.surveysTexts}>General Proposals</span>
+            <span>{surveysNumGenProps}</span>
+          </div>
+          <div className={styles.generalDiv}>
+            {surveysNumGenProps
+              ? generalProposals.map((gp) => <div className={styles.surveysDivs}>{gp}</div>)
+              : 'No data'}
+          </div>
+          <div className={styles.surveysTextsDiv}>
+            <span className={styles.surveysTexts}>TimedProposals</span>
+            <span>{surveysNumSeqProps}</span>
+          </div>
+          <div className={styles.generalDiv}>
+            {surveysNumSeqProps
+              ? timedProposals.map((tp) => <div className={styles.surveysDivs}>{tp}</div>)
+              : 'No data'}
+          </div>
+        </div>
+      </div>
+    );
+  }
+}

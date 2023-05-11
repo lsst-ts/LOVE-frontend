@@ -1,4 +1,9 @@
 /* eslint-disable global-require */
+/**
+ * Important!!
+ * 
+ * Two or more instances with the same name cannot exist. For example, there cannot be two M1M3
+ */
 
 const defaultSchemaProps = {
   titleBar: {
@@ -321,6 +326,16 @@ export const mainIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../MainTel/M1M3/M1M3Table.container').schema.props,
+      },
+    },
+  },
+  M1M3TS: {
+    component: require('../MainTel/M1M3TS/M1M3TS.container').default,
+    schema: {
+      ...require('../MainTel/M1M3TS/M1M3TS.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/M1M3TS/M1M3TS.container').schema.props,
       },
     },
   },
