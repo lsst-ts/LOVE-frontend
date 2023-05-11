@@ -72,22 +72,19 @@ export default class Headers extends Component {
   sendSummaryStateCommand(option, params) {
     const { requestSALCommand, salindex } = this.props;
     this.setState({ showOptions: false, showSchedulerConfigs: false });
-    console.log({
+    requestSALCommand({
       cmd: `cmd_${option}`,
       csc: 'Scheduler',
       salindex,
       params,
     });
-    // requestSALCommand({
-    //   cmd: `cmd_${option}`,
-    //   csc: 'Scheduler',
-    //   salindex,
-    //   params,
-    // });
   }
 
   validateUri = (uri) => {
-    const regex = /^https?:\/\/[^\s/$.?#].[^\s]*$/i;
+    const regex = /^(?!localhost)(ftp|http|https):\/\/[^\s]+$/;
+    if (regex.test(uri)) {
+      this.setState({ isValidUri: true });
+    }
     return regex.test(uri);
   };
 
@@ -111,9 +108,7 @@ export default class Headers extends Component {
           onClick={() => {
             if (selectedSchedulerConfig === null || selectedSchedulerConfig === '' || !isValidUri) {
               this.setState({ inputSchedulerConfigError: true });
-            }
-            // TODO: regex match for URI
-            else {
+            } else {
               this.sendSummaryStateCommand('load', {
                 uri: selectedSchedulerConfig,
               });
@@ -133,7 +128,6 @@ export default class Headers extends Component {
   render() {
     const { schedulerState, subState, mode, type, isNigth, night, sunset, sunrise } = this.props;
     const { showOptions, showSchedulerConfigs } = this.state;
-    // console.log(showOptions, showSchedulerConfigs);
     const current_time = Moment();
     const diffSunset = Moment.unix(sunset).diff(current_time, 'seconds');
     const diffSunrise = Moment.unix(sunrise).diff(current_time, 'seconds');
