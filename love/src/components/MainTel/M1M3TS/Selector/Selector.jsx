@@ -185,7 +185,6 @@ export default class Selector extends Component {
     xMax -= margin;
     yMin -= margin;
     yMax += margin;
-    // console.log(xMin, xMax, yMin, yMax, maxRadius);
 
     this.setState({
       sensors: M1M3TSFanCoilPositions,
@@ -322,16 +321,6 @@ export default class Selector extends Component {
           key={'background'}
           r={this.state.width / 2}
         />
-
-        {/* <circle
-          id="mirror-hole"
-          cx={this.state.width / 2}
-          cy={this.state.width / 2}
-          r={this.state.width / 6}
-          stroke="gray"
-          strokeWidth="3"
-          fill="#111F27"
-        /> */}
 
         <circle
           id="circle-overlay"
