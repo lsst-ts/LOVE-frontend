@@ -56,21 +56,26 @@ const mapStateToProps = (state) => {
   const m1m3TSMixingState = getM1M3TSMixingState(state);
   const thermalWarnings = getM1M3TSWarningState(state);
 
-  return { ...m1m3TSState, ...m1m3TSThermalState, ...m1m3TSTemperatureState,
-    ...m1m3TSMixingState, thermalWarnings: thermalWarnings };
+  return {
+    ...m1m3TSState,
+    ...m1m3TSThermalState,
+    ...m1m3TSTemperatureState,
+    ...m1m3TSMixingState,
+    thermalWarnings,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
     'event-MTM1M3TS-0-summaryState',
-    // 'event-MTM1M3TS-0-enabledILC',
+    'event-MTM1M3TS-0-enabledILC',
     'event-MTM1M3TS-0-powerStatus',
-    'event-MTM1M3TS-0-thermalData',
+    'event-MTM1M3TS-0-thermalInfo',
     'event-MTM1M3TS-0-thermalSettings',
     'event-MTM1M3TS-0-appliedSetpoint',
-    'event-MTM1M3TS-0-mixingValve',
-    'event-MTM1M3TS-0-appliedSetpoint',
     'event-MTM1M3TS-0-thermalWarning',
+    'telemetry-MTM1M3TS-0-mixingValve',
+    'telemetry-MTM1M3TS-0-thermalData',
   ];
   return {
     subscriptions,

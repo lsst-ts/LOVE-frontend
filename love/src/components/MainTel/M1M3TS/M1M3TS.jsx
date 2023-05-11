@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Summary from'./Summary/Summary';
-import Menu from'./Menu/Menu';
-import Selector from'./Selector/Selector';
-import Mixing from'./Mixing/Mixing';
-import TemperatureGradiant from'./Temperature/TemperatureGradiant';
-import Info from'./Info/Info';
+import Summary from './Summary/Summary';
+import Menu from './Menu/Menu';
+import Selector from './Selector/Selector';
+import Mixing from './Mixing/Mixing';
+import TemperatureGradiant from './Temperature/TemperatureGradiant';
+import Info from './Info/Info';
 import styles from './M1M3TS.module.css';
 
-
 export default class M1M3TS extends Component {
-
   static propTypes = {
     /** Function to subscribe to streams to receive */
     subscribeToStreams: PropTypes.func,
@@ -25,7 +23,9 @@ export default class M1M3TS extends Component {
     /** Applied setpoint. */
     setpoint: PropTypes.number,
     /** True if this fan unit is enabled. */
-    enabled: PropTypes.arrayOf(PropTypes.bool),
+    ilcFCU: PropTypes.arrayOf(PropTypes.bool),
+    /** True if this fan unit is enabled. */
+    // enabledFCU: PropTypes.arrayOf(PropTypes.bool),
     /** Thermal status response data. Absolute temperature. */
     absoluteTemperature: PropTypes.arrayOf(PropTypes.number),
     /** Thermal status response data.  Differential temperature. */
@@ -40,14 +40,15 @@ export default class M1M3TS extends Component {
     minTemperatureLimit: PropTypes.number,
     /** Number of the maximum temerature limit, used for the gradiant color */
     maxTemperatureLimit: PropTypes.number,
-  }
+  };
 
   static defaultProps = {
     summaryState: 1,
     fanHeaters: false,
     coolantPump: false,
     setpoint: 0,
-    enabled: [],
+    ilcFCU: [],
+    // enabledFCU: [],
     absoluteTemperature: [],
     differentialTemperature: [],
     fanRPM: [],
@@ -55,7 +56,7 @@ export default class M1M3TS extends Component {
     valvePosition: 0,
     minTemperatureLimit: 0,
     maxTemperatureLimit: 1000,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -63,7 +64,7 @@ export default class M1M3TS extends Component {
       showFcuIDs: true,
       showDifferentialTemp: true,
       showWarnings: true,
-      selectedSensor: undefined,
+      selectedSensor: null,
     };
   }
 
@@ -83,49 +84,34 @@ export default class M1M3TS extends Component {
     return array;
   };
 
-
-
   render() {
-    const sensorReferenceId = this.arrayReferenceId();
-
     // Summary
-    const {
-      summaryState,
-      fanHeaters,
-      coolantPump,
-    } = this.props;
+    const { summaryState, fanHeaters, coolantPump } = this.props;
 
     // Temperature
-    const {
-      setpoint,
-      minTemperatureLimit,
-      maxTemperatureLimit,
-    } = this.props;
+    const { setpoint, minTemperatureLimit, maxTemperatureLimit } = this.props;
 
     // Info
     const {
-      enabled,
+      referenceId,
+      ilcFCU,
+      // enabledFCU,
       absoluteTemperature,
       differentialTemperature,
       fanRPM,
+      fanBreaker,
+      heaterDisabled,
     } = this.props;
 
-    const thermalWarnings = this.props.thermalWarnings;
+    const { thermalWarnings } = this.props;
 
     // Mixing
-    const {
-      valvePosition,
-    } = this.props;
+    const { valvePosition } = this.props;
 
     return (
       <div className={styles.container}>
-        
         <div className={styles.summaryContainer}>
-          <Summary 
-            summaryState={summaryState}
-            fanHeaters={fanHeaters}
-            coolantPump={coolantPump}
-          />
+          <Summary summaryState={summaryState} fanHeaters={fanHeaters} coolantPump={coolantPump} />
         </div>
 
         <div className={styles.separatorContainer}>
@@ -133,25 +119,27 @@ export default class M1M3TS extends Component {
         </div>
 
         <div className={styles.menuContainer}>
-          <Menu 
+          <Menu
             showFcuIDs={this.state.showFcuIDs}
             showDifferentialTemp={this.state.showDifferentialTemp}
             showWarnings={this.state.showWarnings}
-            toggleFcuIDs={(show) => this.setState({showFcuIDs: show})}
-            toggleTemperature={(show) => this.setState({showDifferentialTemp: show})}
-            toggleWarnings={(show) => this.setState({showWarnings: show})}
+            toggleFcuIDs={(show) => this.setState({ showFcuIDs: show })}
+            toggleTemperature={(show) => this.setState({ showDifferentialTemp: show })}
+            toggleWarnings={(show) => this.setState({ showWarnings: show })}
           />
         </div>
 
         <div className={styles.selectorContainer}>
           <Selector
-            sensorReferenceId={sensorReferenceId}
-            enabled={enabled}
+            sensorReferenceId={referenceId}
+            // enabled={enabledFCU}
             showFcuIDs={this.state.showFcuIDs}
             showDifferentialTemp={this.state.showDifferentialTemp}
             showWarnings={this.state.showWarnings}
             selectedSensor={this.state.selectedSensor}
-            sensorSelect={(sensor) => { this.setState({selectedSensor: sensor})}}
+            sensorSelect={(sensor) => {
+              this.setState({ selectedSensor: sensor });
+            }}
             absoluteTemperature={absoluteTemperature}
             differentialTemperature={differentialTemperature}
             minTemperatureLimit={minTemperatureLimit}
@@ -161,36 +149,36 @@ export default class M1M3TS extends Component {
         </div>
 
         <div className={styles.mixingContainer}>
-          <Mixing 
-            value={valvePosition}
-          />
+          <Mixing value={valvePosition} />
         </div>
 
         <div className={styles.temperatureContainer}>
-          <TemperatureGradiant 
+          <TemperatureGradiant
             setpoint={setpoint}
             minTemperatureLimit={minTemperatureLimit}
             maxTemperatureLimit={maxTemperatureLimit}
             absoluteTemperature={absoluteTemperature}
             differentialTemperature={differentialTemperature}
-            sensorReferenceId={sensorReferenceId}
+            sensorReferenceId={referenceId}
             selectedId={this.state.selectedSensor}
             showDifferentialTemp={this.state.showDifferentialTemp}
           />
         </div>
 
         <div className={styles.infoContainer}>
-          <Info 
-            sensorReferenceId={sensorReferenceId}
-            enabled={enabled}
+          <Info
+            sensorReferenceId={referenceId}
+            ilcFCU={ilcFCU}
+            // enabled={enabledFCU}
             absoluteTemperature={absoluteTemperature}
             differentialTemperature={differentialTemperature}
             fanRPM={fanRPM}
+            fanBreaker={fanBreaker}
+            heaterDisabled={heaterDisabled}
             selectedSensor={this.state.selectedSensor}
             thermalWarnings={thermalWarnings}
           />
         </div>
-
       </div>
     );
   }

@@ -552,6 +552,7 @@ export const stateToStyleLightpath = {
   'UNKNOWN POSITION': 'invalid',
 };
 
+//  MTM1M3
 export const m1m3DetailedStateToStyle = {
   'DISABLED STATE': 'warning',
   'FAULT STATE': 'warning',
@@ -574,6 +575,7 @@ export const m1m3ILCStateToStyle = {
   OFF: 'warning',
 };
 
+// MTM1M2
 export const m2ActuatorILCStateToStyle = {
   OPERATIVE: 'ok',
   FAULT: 'warning',
@@ -763,6 +765,35 @@ export const telescopeTrackingModeStateToStyle = {
   ICRS: 'ok',
 };
 
+// MTM1M3TS
+export const m1m3tsEnabledStateToStyle = {
+  ENABLED: 'ok',
+  DISABLED: 'warning',
+};
+
+export const m1m3tsSummaryStateToStyle = {
+  DISABLED: 'warning',
+  ENABLED: 'ok',
+  FAULT: 'warning',
+  OFFLINE: 'warning',
+  STANDBY: 'warning',
+};
+
+export const m1m3tsILCStateToStyle = {
+  ON: 'ok',
+  OFF: 'warning',
+};
+
+export const mtm1m3tsFanBreakerStateToStyle = {
+  ON: 'ok',
+  OFF: 'warning',
+};
+
+export const mtm1m3tsHeaterDisabledStateToStyle = {
+  ON: 'ok',
+  OFF: 'warning',
+};
+
 /*****************************************************************************/
 /*******************************STATE MAPPINGS********************************/
 /*****************************************************************************/
@@ -816,6 +847,11 @@ export const m1m3DetailedStateMap = {
 export const m1m3ActuatorILCStateMap = {
   1: 'ON',
   0: 'OFF',
+};
+
+export const m1m3tsActuatorILCStateMap = {
+  true: 'ON',
+  false: 'OFF',
 };
 
 export const m1m3HardpointActuatorMotionStateMap = {
@@ -1162,6 +1198,30 @@ export const telescopeTrackingModeStateMap = {
   0: 'UNKNOWN',
   1: 'FKS',
   2: 'ICRS',
+};
+
+//MTM1M3TS
+export const m1m3tsEnabledStateMap = {
+  true: 'ENABLED',
+  false: 'DISABLED',
+};
+
+export const m1m3tsSummaryStates = {
+  1: 'DISABLED',
+  2: 'ENABLED',
+  3: 'FAULT',
+  4: 'OFFLINE',
+  5: 'STANDBY',
+};
+
+export const mtm1m3tsFanBreakerStateMap = {
+  false: 'OFF',
+  true: 'ON',
+};
+
+export const mtm1m3HeaterDisabledStateMap = {
+  false: 'OFF',
+  true: 'ON',
 };
 
 /*****************************************************************************/
@@ -1765,4 +1825,131 @@ export const signalBypassIndexes = {
   notParkedAtTheTelescopeLevel: [25, 15],
   interlock: [26, 1],
   manLiftNotParked: [26, 2],
+};
+
+/*****************************************************************************/
+/***************************** M1M3 Thermal System ***************************/
+/*****************************************************************************/
+
+export const M1M3TSFanCoilPositions = [
+  { id: 'F1', position: [32.127, 153.134] },
+  { id: 'F4', position: [-32.127, 153.134] },
+  { id: 'F31', position: [67.781, 41.744] },
+  { id: 'F32', position: [43.573, 37.789] },
+  { id: 'F35', position: [-43.574, 37.789] },
+  { id: 'F36', position: [-67.781, 41.744] },
+  { id: 'F58', position: [56.568, -30.23] },
+  { id: 'F63', position: [-56.568, -30.23] },
+  { id: 'F67', position: [122.212, -53.015] },
+  { id: 'F69', position: [43.688, -52.969] },
+  { id: 'F70', position: [-43.688, -52.969] },
+  { id: 'F72', position: [-122.212, -53.015] },
+  { id: 'F75', position: [56.795, -75.661] },
+  { id: 'F79', position: [-56.795, -75.661] },
+  { id: 'F83', position: [43.574, -98.417] },
+  { id: 'F86', position: [-43.574, -98.417] },
+  { id: 'F9', position: [30.582, 105.947] },
+  { id: 'F11', position: [-30.582, 105.947] },
+  { id: 'F12', position: [95.999, 83.191] },
+  { id: 'F14', position: [17.361, 83.191] },
+  { id: 'F15', position: [-17.361, 83.191] },
+  { id: 'F17', position: [-95.999, 83.191] },
+  { id: 'F18', position: [135.433, 60.545] },
+  { id: 'F19', position: [109.22, 60.545] },
+  { id: 'F20', position: [83.007, 60.545] },
+  { id: 'F23', position: [2.256, 64.281] },
+  { id: 'F26', position: [-83.007, 60.545] },
+  { id: 'F27', position: [-109.22, 60.545] },
+  { id: 'F28', position: [-135.433, 60.545] },
+  { id: 'F30', position: [95.999, 37.789] },
+  { id: 'F33', position: [17.361, 37.789] },
+  { id: 'F34', position: [-17.361, 37.789] },
+  { id: 'F37', position: [-95.999, 37.789] },
+  { id: 'F40', position: [109.22, 15.143] },
+  { id: 'F41', position: [-83.007, 15.143] },
+  { id: 'F44', position: [-83.007, 15.143] },
+  { id: 'F45', position: [-109.22, 15.143] },
+  { id: 'F49', position: [95.999, -7.613] },
+  { id: 'F50', position: [69.787, -7.613] },
+  { id: 'F51', position: [-69.787, -7.613] },
+  { id: 'F52', position: [-95.999, -7.613] },
+  { id: 'F55', position: [135.433, -30.259] },
+  { id: 'F56', position: [109.22, -30.259] },
+  { id: 'F57', position: [83.007, -30.259] },
+  { id: 'F59', position: [30.582, -30.259] },
+  { id: 'F62', position: [-30.582, -30.259] },
+  { id: 'F64', position: [-83.007, -30.259] },
+  { id: 'F65', position: [-109.22, -30.259] },
+  { id: 'F66', position: [-135.433, -30.259] },
+  { id: 'F68', position: [69.787, -53.015] },
+  { id: 'F71', position: [-69.787, -53.015] },
+  { id: 'F74', position: [83.007, -75.661] },
+  { id: 'F77', position: [-2.142, -71.747] },
+  { id: 'F80', position: [-83.007, -75.661] },
+  { id: 'F82', position: [95.999, -98.417] },
+  { id: 'F84', position: [17.361, -98.417] },
+  { id: 'F85', position: [-17.361, -98.417] },
+  { id: 'F87', position: [-95.999, -98.417] },
+  { id: 'F91', position: [-30.572, -113.475] },
+  { id: 'F5', position: [43.574, 128.593] },
+  { id: 'F6', position: [17.361, 128.593] },
+  { id: 'F7', position: [-17.361, 128.593] },
+  { id: 'F8', position: [-43.574, 128.593] },
+  { id: 'F21', position: [61.133, 60.527] },
+  { id: 'F22', position: [35.013, 60.603] },
+  { id: 'F24', position: [-35.013, 60.603] },
+  { id: 'F25', position: [-61.133, 60.527] },
+  { id: 'F29', position: [122.407, 45.27] },
+  { id: 'F38', position: [-122.407, 45.27] },
+  { id: 'F39', position: [148.061, 11.244] },
+  { id: 'F42', position: [35.08, 15.221] },
+  { id: 'F43', position: [-35.08, 15.221] },
+  { id: 'F46', position: [-148.061, 11.244] },
+  { id: 'F48', position: [148.063, -11.318] },
+  { id: 'F53', position: [-147.988, -11.351] },
+  { id: 'F60', position: [15.481, -34.351] },
+  { id: 'F61', position: [-15.481, -34.351] },
+  { id: 'F73', position: [137.048, -75.565] },
+  { id: 'F76', position: [29.098, -78.299] },
+  { id: 'F78', position: [-29.098, -78.299] },
+  { id: 'F81', position: [-137.048, -75.565] },
+  { id: 'F92', position: [71.398, -138.476] },
+  { id: 'F94', position: [17.5, -143.444] },
+  { id: 'F95', position: [-17.5, -143.444] },
+  { id: 'F96', position: [-71.398, -138.476] },
+  { id: 'F2', position: [15.197, 148.083] },
+  { id: 'F3', position: [-15.197, 148.083] },
+  { id: 'F10', position: [-2.114, 102.079] },
+  { id: 'F13', position: [69.787, 83.191] },
+  { id: 'F16', position: [-69.787, 83.191] },
+  { id: 'F47', position: [162.09, -11.03] },
+  { id: 'F54', position: [-162.09, -11.03] },
+  { id: 'F88', position: [30.572, -113.475] },
+  { id: 'F89', position: [8.76, -121.101] },
+  { id: 'F90', position: [-8.76, -121.101] },
+  { id: 'F93', position: [43.574, -143.819] },
+].map((unit) => ({ ...unit, position: [unit.position[0] * -1, unit.position[1] * -1] }));
+
+export const MessagesWarningM1M3ThermalSystem = {
+  majorFault: 'Thermal fan unit warning major Fault.',
+  minorFault: 'Thermal fan unit warning minor Fault.',
+  faultOverride: 'Thermal fan unit warning fault Override.',
+  refResistorError: 'Thermal fan unit Ref Resistor Error.',
+  rtdError: 'Thermal fan unit RTD Error.',
+  breakerHeater1Error: 'Thermal fan unit Breaker Heater 1 Error.',
+  breakerFan2Error: 'Thermal fan unit Breaker Fan 2 Error.',
+  uniqueIdCRCError: 'Thermal fan unit warning unique Id CRC Error.',
+  applicationTypeMismatch: 'Thermal fan unit warning application Type Mismatch.',
+  applicationMissing: 'Thermal fan unit warning application Missing.',
+  applicationCRCMismatch: 'Thermal fan unit warning application CRC Mismatch.',
+  oneWireMissing: 'Thermal fan unit warning oneWire Missing.',
+  oneWire1Mismatch: 'Thermal fan unit warning oneWire1 Mismatch.',
+  oneWire2Mismatch: 'Thermal fan unit warning oneWire2 Mismatch.',
+  watchdogReset: 'Thermal fan unit warning watchdog Reset.',
+  brownOut: 'Thermal fan unit warning brownout.',
+  eventTrapReset: 'Thermal fan unit warning event Trap Reset.',
+  ssrPowerFault: 'Thermal fan unit warning SSR Power Fault.',
+  auxPowerFault: 'Thermal fan unit warning aux Power Fault.',
+  ilcFault: 'Force actuator warning ILC Fault.',
+  broadcastWarning: 'Force actuator warning broadcast counter Warning.',
 };

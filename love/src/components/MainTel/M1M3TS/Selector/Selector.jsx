@@ -33,7 +33,9 @@ export default class Selector extends Component {
   static defaultProps = {
     sensorReferenceId: [],
     selectedSensor: undefined,
-    sensorSelect: () => { console.log('Selector.defaultProps.sensorSelect()')},
+    sensorSelect: () => {
+      console.log('Selector.defaultProps.sensorSelect()');
+    },
     showFcuIDs: true,
     showDifferentialTemp: true,
     showWarnings: true,
@@ -89,33 +91,31 @@ export default class Selector extends Component {
 
   getGradiantColorX = (value) => {
     const { minTemperatureLimit, maxTemperatureLimit } = this.props;
-    const colorInterpolate = d3.scaleLinear().domain(d3.extent([minTemperatureLimit, maxTemperatureLimit])).range([0, 1]);
+    const colorInterpolate = d3
+      .scaleLinear()
+      .domain(d3.extent([minTemperatureLimit, maxTemperatureLimit]))
+      .range([0, 1]);
     return TemperatureGradiant.COLOR_SCALE(1 - colorInterpolate(value));
-  }
+  };
 
   getThermalWarnings = (sensorIndex) => {
-    const {
-      thermalWarnings={},
-    } = this.props;
+    const { thermalWarnings } = this.props;
 
-    const warnings = Object.keys(thermalWarnings).map((key, _) => {
-      const result = {
+    const warnings = Object.keys(thermalWarnings)
+      .map((key, _) => ({
         name: key,
         value: thermalWarnings[key][sensorIndex],
-      };
-      return result;
-    }).some((warning) => warning.value === true);
+      }))
+      .some((warning) => warning.value === true);
 
     return warnings;
-  }
+  };
 
   getWarningIcon(id) {
     return (
       <>
         <title>{id}</title>
-        <g transform-origin={`1.4% -1.4%`}
-            transform={`scale(0.035) rotate(180)`}
-        >
+        <g transform-origin={`1.4% -1.4%`} transform={`scale(0.035) rotate(180)`}>
           <path
             transform-origin={`40% -45%`}
             transform={`scale(1.25)`}
@@ -148,11 +148,7 @@ export default class Selector extends Component {
         colorAbsoluteTemperature: '#FFF',
       };
     }
-    const {
-      sensorReferenceId,
-      differentialTemperature,
-      absoluteTemperature,
-    } = this.props;
+    const { sensorReferenceId, differentialTemperature, absoluteTemperature } = this.props;
 
     const sensorIndex = sensorReferenceId.indexOf(id) >= 0 ? sensorReferenceId.indexOf(id) : undefined;
     const warning = this.getThermalWarnings(sensorIndex);
@@ -166,7 +162,7 @@ export default class Selector extends Component {
       warning,
     };
     return sensor;
-  }
+  };
 
   componentDidMount() {
     let yMax = -Infinity;
@@ -183,7 +179,7 @@ export default class Selector extends Component {
         maxRadius = Math.floor(Math.sqrt(act.position[0] * act.position[0] + act.position[1] * act.position[1]));
       }
     });
-    
+
     const margin = 6;
     xMin += margin;
     xMax -= margin;
@@ -228,48 +224,45 @@ export default class Selector extends Component {
   };
 
   render() {
-    const { showFcuIDs, showDifferentialTemp, showWarnings,
-      sensorSelect, selectedSensor,
-    } = this.props;
+    const { showFcuIDs, showDifferentialTemp, showWarnings, sensorSelect, selectedSensor } = this.props;
 
     const { zoomLevel } = this.state;
 
     return (
       <div className={styles.container}>
-        {this.getSvg(showFcuIDs, showDifferentialTemp, showWarnings,
-      sensorSelect, selectedSensor, zoomLevel)}
+        {this.getSvg(showFcuIDs, showDifferentialTemp, showWarnings, sensorSelect, selectedSensor, zoomLevel)}
       </div>
     );
   }
 
-  getSvg(showFcuIDs, showDifferentialTemp, showWarning,
-    sensorSelect, selectedSensor, zoomLevel) {
-
+  getSvg(showFcuIDs, showDifferentialTemp, showWarning, sensorSelect, selectedSensor, zoomLevel) {
     const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
     const margin = 60;
 
     return (
-        <svg
-          className={styles.svgContainer}
-          viewBox={`0 0 ${this.state.width} ${this.state.width}`}
-          onMouseEnter={this.disableScroll}
-          onMouseLeave={this.enableScroll}
-        >
-          {this.getBackground()}
-          {this.getScatter(scale, margin, zoomLevel,
-            showFcuIDs, showDifferentialTemp, showWarning,
-            sensorSelect, selectedSensor)}
-          {this.getAxis(margin, sensorSelect)}
-        </svg>
+      <svg
+        className={styles.svgContainer}
+        viewBox={`0 0 ${this.state.width} ${this.state.width}`}
+        onMouseEnter={this.disableScroll}
+        onMouseLeave={this.enableScroll}
+      >
+        {this.getBackground()}
+        {this.getScatter(
+          scale,
+          margin,
+          zoomLevel,
+          showFcuIDs,
+          showDifferentialTemp,
+          showWarning,
+          sensorSelect,
+          selectedSensor,
+        )}
+        {this.getAxis(margin, sensorSelect)}
+      </svg>
     );
   }
 
-  getScatter(
-    scale, margin, zoomLevel,
-    showFcuIDs, showDifferentialTemp, showWarning,
-    sensorSelect, selectedSensor,
-  ) {
-
+  getScatter(scale, margin, zoomLevel, showFcuIDs, showDifferentialTemp, showWarning, sensorSelect, selectedSensor) {
     return (
       <g id="scatter" className={styles.scatter}>
         {this.state.sensors.map((act) => {
@@ -281,17 +274,11 @@ export default class Selector extends Component {
                 key={act.id}
                 fill={
                   showDifferentialTemp
-                    ? ( this.getSensor(act.id)?.colorDifferentialTemperature ?? 'gray' )
-                    : ( this.getSensor(act.id)?.colorAbsoluteTemperature ?? 'gray' )
+                    ? this.getSensor(act.id)?.colorDifferentialTemperature ?? 'gray'
+                    : this.getSensor(act.id)?.colorAbsoluteTemperature ?? 'gray'
                 }
-                stroke={
-                  selectedSensor === act.id
-                    ? this.strokeSensorSelected(act.id)
-                    : 'none'
-                }
-                strokeWidth={
-                  act.id === selectedSensor ? 6 : 4
-                }
+                stroke={selectedSensor === act.id ? this.strokeSensorSelected(act.id) : 'none'}
+                strokeWidth={act.id === selectedSensor ? 6 : 4}
                 r={(this.state.maxRadius * scale) / 16}
                 pointerEvents="all"
               />
@@ -303,17 +290,20 @@ export default class Selector extends Component {
                 className={selectedSensor === act.id || (zoomLevel > 1 && showFcuIDs) ? '' : styles.hidden}
                 pointerEvents="none"
               >
-                { act.id }
+                {act.id}
               </text>
-              { showWarning && this.getSensor(act.id)?.warning  ?
-                  <g
-                    transform-origin={`0% 0%`}
-                    transform={`translate(${(act.position[0] + this.state.xRadius) * scale + margin} ${(act.position[1] + this.state.yRadius) * scale + margin})`}
-                  >
-                    {this.getWarningIcon(act.id)}
-                  </g>
-                : <></>
-              }
+              {showWarning && this.getSensor(act.id)?.warning ? (
+                <g
+                  transform-origin={`0% 0%`}
+                  transform={`translate(${(act.position[0] + this.state.xRadius) * scale + margin} ${
+                    (act.position[1] + this.state.yRadius) * scale + margin
+                  })`}
+                >
+                  {this.getWarningIcon(act.id)}
+                </g>
+              ) : (
+                <></>
+              )}
             </g>
           );
         })}
@@ -420,6 +410,4 @@ export default class Selector extends Component {
       </>
     );
   }
-
-
 }

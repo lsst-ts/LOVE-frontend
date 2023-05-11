@@ -9,8 +9,18 @@ import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
 import styles from './Info.module.css';
-import { m1m3tsEnabledStateMap, m1m3tsEnabledStateToStyle, MessagesWarningM1M3ThermalSystem } from 'Config';
-
+import {
+  m1m3tsActuatorILCStateMap,
+  m1m3tsEnabledStateMap,
+  mtm1m3tsFanBreakerStateMap,
+  mtm1m3HeaterDisabledStateMap,
+  m1m3tsEnabledStateToStyle,
+  m1m3tsILCStateToStyle,
+  mtm1m3tsFanBreakerStateToStyle,
+  mtm1m3tsHeaterDisabledStateToStyle,
+  M1M3TSFanCoilPositions,
+  MessagesWarningM1M3ThermalSystem,
+} from 'Config';
 
 export default class Info extends Component {
   static propTypes = {
@@ -19,7 +29,7 @@ export default class Info extends Component {
     /** Id of sensor selected */
     selectedSensor: PropTypes.number,
     /** True if this fan unit is enabled. */
-    enabled: PropTypes.arrayOf(PropTypes.bool),
+    // enabled: PropTypes.arrayOf(PropTypes.bool),
     /** Thermal status response data. Absolute temperature. */
     absoluteTemperature: PropTypes.arrayOf(PropTypes.number),
     /** Thermal status response data.  Differential temperature. */
@@ -33,7 +43,7 @@ export default class Info extends Component {
   static defaultProps = {
     sensorReferenceId: [],
     selectedSensor: undefined,
-    enabled: [],
+    // enabled: [],
     absoluteTemperature: [],
     differentialTemperature: [],
     fanRPM: [],
@@ -41,55 +51,81 @@ export default class Info extends Component {
   };
 
   getThermalWarnings = (sensorIndex) => {
-    const {
-      thermalWarnings={},
-    } = this.props;
+    const { thermalWarnings } = this.props;
 
-    const warnings = Object.keys(thermalWarnings).map((key, _) => {
-      const result = {
+    const warnings = Object.keys(thermalWarnings)
+      .map((key, _) => ({
         name: key,
         value: thermalWarnings[key][sensorIndex],
         msg: MessagesWarningM1M3ThermalSystem[key],
-      };
-      return result;
-    }).filter((warning) => warning.value === true);
+      }))
+      .filter((warning) => warning.value === true);
+
     return warnings;
-  }
+  };
 
   getSensor = (id) => {
-    if (id === 0 || id === undefined) return { id: 'None', value: 'None', state: CSCDetail.states[0] };
+    if (id === undefined) return { id: 'None', value: 'None', state: CSCDetail.states[0] };
 
     const {
       sensorReferenceId,
-      enabled,
+      ilcFCU,
+      // enabled,
       absoluteTemperature,
       differentialTemperature,
       fanRPM,
+      fanBreaker,
+      heaterDisabled,
     } = this.props;
 
-    const sensorIndex = sensorReferenceId.indexOf(id);
-    const enabledData = enabled[sensorIndex] ? 1 : 0;
-    const enabledState = m1m3tsEnabledStateMap[enabledData];
-    
+    const fcuIndex = M1M3TSFanCoilPositions.findIndex((fcu) => fcu.id === id);
+    const sensorIndex = sensorReferenceId.indexOf(fcuIndex);
+
+    // const enabledData = enabled[sensorIndex];
+    // const enabledState = m1m3tsEnabledStateMap[enabledData];
+
+    const ilcData = ilcFCU[sensorIndex];
+    const ilcState = m1m3tsActuatorILCStateMap[ilcData];
+
+    const fanBreakerData = fanBreaker[sensorIndex];
+    const fanBreakerState = mtm1m3tsFanBreakerStateMap[fanBreakerData];
+
+    const heaterDisabledData = heaterDisabled[sensorIndex];
+    const heaterDisabledState = mtm1m3HeaterDisabledStateMap[heaterDisabledData];
+
     const warnings = this.getThermalWarnings(sensorIndex);
 
     const sensor = {
-      id: `FCU${String(id).padStart(2, '0')}`,
+      index: sensorIndex,
+      name: `FCU${String(id).padStart(2, '0')}`,
       absoluteTemperature: absoluteTemperature[sensorIndex] ?? 0,
       differentialTemperature: differentialTemperature[sensorIndex] ?? 0,
       fanRPM: fanRPM[sensorIndex] ?? 0,
+      fanBreaker: fanBreaker[sensorIndex] ?? false,
+      heaterDisabled: heaterDisabled[sensorIndex] ?? false,
+      state: {
+        ilc: {
+          name: ilcState,
+          status: m1m3tsILCStateToStyle[ilcState],
+        },
+        // enabled: {
+        //   name: enabledState,
+        //   status: m1m3tsEnabledStateToStyle[enabledState],
+        // },
+        fanBreaker: {
+          name: fanBreakerState,
+          status: mtm1m3tsFanBreakerStateToStyle[fanBreakerState],
+        },
+        heaterDisabled: {
+          name: heaterDisabledState,
+          status: mtm1m3tsHeaterDisabledStateToStyle[heaterDisabledState],
+        },
+      },
       warnings,
     };
 
-    sensor.state = {
-      enabled: {
-        name: enabledState,
-        status: m1m3tsEnabledStateToStyle[enabledState ?? 0],
-      }
-    };
-  
     return sensor;
-  }
+  };
 
   render() {
     const selectedSensorID = this.props.selectedSensor ?? Info.defaultProps.selectedSensor;
@@ -99,10 +135,22 @@ export default class Info extends Component {
       <SummaryPanel className={styles.info}>
         {selectedSensorID ? (
           <>
-            <Title>{selectedSensorData.id}</Title>
+            <Title>{selectedSensorData.name}</Title>
             <Value>
-              <StatusText status={selectedSensorData.state.enabled.status}>
-                {selectedSensorData.state.enabled.name}
+              <StatusText status={selectedSensorData.state.ilc.status}>{selectedSensorData.state.ilc.name}</StatusText>
+            </Value>
+
+            <Title>Fan Breaker</Title>
+            <Value>
+              <StatusText status={selectedSensorData.state.fanBreaker.status}>
+                {selectedSensorData.state.fanBreaker.name}
+              </StatusText>
+            </Value>
+
+            <Title>Heater Disabled</Title>
+            <Value>
+              <StatusText status={selectedSensorData.state.heaterDisabled.status}>
+                {selectedSensorData.state.heaterDisabled.name}
               </StatusText>
             </Value>
 
@@ -115,7 +163,7 @@ export default class Info extends Component {
             <Label>Fan</Label>
             <Value>{`${defaultNumberFormatter(selectedSensorData.fanRPM)} RPM`}</Value>
 
-            {selectedSensorData.warnings.length > 0 && 
+            {selectedSensorData.warnings.length > 0 && (
               <>
                 <div className={styles.separator}></div>
                 <Title>Warnings</Title>
@@ -124,22 +172,21 @@ export default class Info extends Component {
                 </span>
 
                 <div className={styles.warningContainer}>
-                { selectedSensorData.warnings.map((warning) => {
+                  {selectedSensorData.warnings.map((warning) => {
                     return (
                       <span key={warning.name} className={styles.warningText}>
                         {warning.msg}
                       </span>
                     );
-                  })
-                }
+                  })}
                 </div>
               </>
-            }
+            )}
           </>
         ) : (
           <div className={styles.noSensor}>No FCU selected</div>
         )}
       </SummaryPanel>
-    )
+    );
   }
 }
