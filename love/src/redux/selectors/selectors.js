@@ -1,5 +1,5 @@
 import { createCachedSelector } from 're-reselect';
-import { flatMap } from '../../Utils';
+import { flatMap, arrayRandomBoolean } from '../../Utils';
 
 export const getToken = (state) => state.auth.token;
 
@@ -225,6 +225,126 @@ export const getM1M3ActuatorForces = (state) => {
     appliedActiveOpticForces: m1m3Data['event-MTM1M3-0-appliedActiveOpticForces']?.[0] ?? {},
     appliedOffsetForces: m1m3Data['event-MTM1M3-0-appliedOffsetForces']?.[0] ?? {},
     appliedStaticForces: m1m3Data['event-MTM1M3-0-appliedStaticForces']?.[0] ?? {},
+  };
+};
+
+export const getM1M3TSMixingState = (state) => {
+  const subscriptions = ['telemetry-MTM1M3TS-0-mixingValve'];
+  const m1m3tsData = getStreamsData(state, subscriptions);
+  return {
+    valvePosition: m1m3tsData['telemetry-MTM1M3TS-0-mixingValve']?.valvePosition?.value ?? 0,
+  };
+};
+
+export const getM1M3TSWarningState = (state) => {
+  const subscriptions = ['event-MTM1M3TS-0-thermalWarning'];
+  const m1m3tsData = getStreamsData(state, subscriptions);
+  return {
+    majorFault: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].majorFault?.value ?? arrayRandomBoolean(96),
+    minorFault:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].minorFault?.value ?? Array.from({ length: 96 }, () => false),
+    faultOverride:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].faultOverride?.value ??
+      Array.from({ length: 96 }, () => false),
+    refResistorError:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].refResistorError?.value ??
+      Array.from({ length: 96 }, () => false),
+    rtdError:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].rtdError?.value ?? Array.from({ length: 96 }, () => false),
+    breakerHeater1Error:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].breakerHeater1Error?.value ??
+      Array.from({ length: 96 }, () => false),
+    breakerFan2Error:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].breakerFan2Error?.value ??
+      Array.from({ length: 96 }, () => false),
+    uniqueIdCRCError:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].uniqueIdCRCError?.value ??
+      Array.from({ length: 96 }, () => false),
+    applicationTypeMismatch:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].applicationTypeMismatch?.value ??
+      Array.from({ length: 96 }, () => false),
+    applicationMissing:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].applicationMissing?.value ??
+      Array.from({ length: 96 }, () => false),
+    applicationCRCMismatch:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].applicationCRCMismatch?.value ??
+      Array.from({ length: 96 }, () => false),
+    oneWireMissing:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].oneWireMissing?.value ??
+      Array.from({ length: 96 }, () => false),
+    oneWire1Mismatch:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].oneWire1Mismatch?.value ??
+      Array.from({ length: 96 }, () => false),
+    oneWire2Mismatch:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].oneWire2Mismatch?.value ??
+      Array.from({ length: 96 }, () => false),
+    watchdogReset:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].watchdogReset?.value ??
+      Array.from({ length: 96 }, () => false),
+    brownOut:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].brownOut?.value ?? Array.from({ length: 96 }, () => false),
+    eventTrapReset:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].eventTrapReset?.value ??
+      Array.from({ length: 96 }, () => false),
+    ssrPowerFault:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].ssrPowerFault?.value ??
+      Array.from({ length: 96 }, () => false),
+    auxPowerFault:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].auxPowerFault?.value ??
+      Array.from({ length: 96 }, () => false),
+    ilcFault:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].ilcFault?.value ?? Array.from({ length: 96 }, () => false),
+    broadcastWarning:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].broadcastCounterWarning?.value ??
+      Array.from({ length: 96 }, () => false),
+  };
+};
+
+// M1M3TS Selector
+export const getM1M3TSState = (state) => {
+  const subscriptions = ['event-MTM1M3TS-0-summaryState', 'event-MTM1M3TS-0-powerStatus'];
+  const m1m3tsData = getStreamsData(state, subscriptions);
+  return {
+    summaryState: m1m3tsData['event-MTM1M3TS-0-summaryState']?.[0].summaryState?.value ?? 0,
+    fanHeaters: m1m3tsData['event-MTM1M3TS-0-powerStatus']?.[0].fanCoilsHeatersOn?.value ?? false,
+    coolantPump: m1m3tsData['event-MTM1M3TS-0-powerStatus']?.[0].coolantPumpOn?.value ?? false,
+    // fanHeatersCommanded: m1m3tsData['event-MTM1M3TS-0-powerStatus']?.[0].fanCoilsHeatersCommandedOn?.value ?? false,
+    // coolantPumpCommanded: m1m3tsData['event-MTM1M3TS-0-powerStatus']?.[0].coolantPumpCommandedOn?.value ?? false,
+  };
+};
+
+export const getM1M3TSThermalState = (state) => {
+  const subscriptions = [
+    'event-MTM1M3TS-0-enabledILC',
+    'event-MTM1M3TS-0-thermalInfo',
+    'event-MTM1M3TS-0-thermalSettings',
+    'telemetry-MTM1M3TS-0-thermalData',
+  ];
+  const m1m3tsData = getStreamsData(state, subscriptions);
+  return {
+    ilcFCU: m1m3tsData['event-MTM1M3TS-0-enabledILC']?.[0].enabledFCU?.value ?? Array.from({ length: 96 }, () => false),
+    // enabledFCU: m1m3tsData['event-MTM1M3TS-0-thermalSettings']?.[0].enabledFCU?.value ?? Array.from({length: 96}, () => false),
+    referenceId:
+      m1m3tsData['event-MTM1M3TS-0-thermalInfo']?.[0].referenceId?.value ?? Array.from({ length: 96 }).map((v, i) => i),
+    absoluteTemperature:
+      m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.absoluteTemperature?.value ??
+      Array.from({ length: 96 }, (i) => 0),
+    differentialTemperature:
+      m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.differentialTemperature?.value ??
+      Array.from({ length: 96 }, (i) => 0),
+    fanRPM: m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.fanRPM?.value ?? Array.from({ length: 96 }, (i) => 0),
+    fanBreaker:
+      m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.fanBreaker?.value ?? Array.from({ length: 96 }, () => false),
+    heaterDisabled:
+      m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.heaterDisabled?.value ?? Array.from({ length: 96 }, () => false),
+  };
+};
+
+export const getM1M3TSTemperatureState = (state) => {
+  const subscriptions = ['event-MTM1M3TS-0-appliedSetpoint'];
+  const m1m3tsData = getStreamsData(state, subscriptions);
+  return {
+    setpoint: m1m3tsData['event-MTM1M3TS-0-appliedSetpoint']?.[0].setpoint?.value ?? 0,
   };
 };
 

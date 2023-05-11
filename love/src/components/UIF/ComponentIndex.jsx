@@ -324,6 +324,16 @@ export const mainIndex = {
       },
     },
   },
+  M1M3TS: {
+    component: require('../MainTel/M1M3TS/M1M3TS.container').default,
+    schema: {
+      ...require('../MainTel/M1M3TS/M1M3TS.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/M1M3TS/M1M3TS.container').schema.props,
+      },
+    },
+  },
   M2: {
     component: require('../MainTel/M2/M2.container').default,
     schema: {

@@ -1226,9 +1226,9 @@ export const parseTimestamp = (timestamp) => {
  * @param {number} value, number to convert
  * @returns {number|string} integer value or fixed float string of value
  */
-export const defaultNumberFormatter = (value) => {
+export const defaultNumberFormatter = (value, precision=4) => {
   if (Number.isNaN(value)) return value;
-  return Number.isInteger(value) ? value : Number.parseFloat(value).toFixed(4);
+  return Number.isInteger(value) ? value : Number.parseFloat(value).toFixed(precision);
 };
 
 /**
@@ -1545,3 +1545,17 @@ export const getCameraStatusStyle = (status) => {
   if (status.toLowerCase() === 'done') return 'ok';
   return '';
 };
+
+let booleanArray = undefined;
+export function arrayRandomBoolean(len, probability=0.1) {
+  if (!booleanArray) {
+    let arr = Array.from({length: len}, i => false);
+    arr = arr.map((v) => {
+      const rnd = Math.floor(Math.random() * 100);
+      if (rnd < probability * 100) return true;
+      return false;
+    });
+    booleanArray = arr;
+  }
+  return booleanArray;
+}
