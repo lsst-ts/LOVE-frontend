@@ -35,6 +35,9 @@ export const ISO_INTEGER_DATE_FORMAT = 'YYYYMMDD';
 export const TIME_FORMAT = 'HH:mm:ss';
 export const DATE_TIME_FORMAT = 'YYYY/MM/DD, HH:mm:ss';
 
+// Regex
+export const URL_REGEX = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
+
 /*****************************************************************************/
 /****************************Limits configurations****************************/
 /*****************************************************************************/
@@ -85,6 +88,7 @@ export const severityEnum = {
 /******************************TCS configurations*****************************/
 /*****************************************************************************/
 
+// TCS Configurations
 const rotTypes = [
   { label: 'Sky', value: 0 },
   { label: 'SkyAuto', value: 1 },
@@ -794,6 +798,38 @@ export const mtm1m3tsHeaterDisabledStateToStyle = {
   OFF: 'warning',
 };
 
+// Aircraft tracker
+export const aircraftTrackerStatetoStyle = {
+  DISCONNECTED: 'warning',
+  CONNECTED: 'running',
+};
+
+// Scheduler
+export const schedulerTrackingStateToStyle = {
+  'NO TRACKING': 'undefined',
+  TRACKING: 'ok',
+};
+
+// General summaryState
+export const summaryStateToStyle = {
+  UNKNOWN: 'undefined',
+  DISABLED: 'invalid',
+  ENABLED: 'ok',
+  FAULT: 'alert',
+  OFFLINE: 'invalid',
+  STANDBY: 'warning',
+};
+
+// Scheduler
+export const schedulerDetailedStateToStyle = {
+  IDLE: 'invalid',
+  RUNNING: 'ok',
+  WAITING_NEXT_TARGET_TIMER_TASK: 'running',
+  GENERATING_TARGET_QUEUE: 'runnin',
+  COMPUTING_PREDICTED_SCHEDULE: 'running',
+  QUEUEING_TARGET: 'running',
+};
+
 /*****************************************************************************/
 /*******************************STATE MAPPINGS********************************/
 /*****************************************************************************/
@@ -1171,14 +1207,10 @@ export const mtdomeMotionStateMap = {
   32: 'STOPPING MOTOR COOLING',
 };
 
+// Aircraft Tracker
 export const aircraftTrackerStateToMap = {
   0: 'DISCONNECTED',
   1: 'CONNECTED',
-};
-
-export const aircraftTrackerStatetoStyle = {
-  DISCONNECTED: 'warning',
-  CONNECTED: 'running',
 };
 
 export const mtdomeElevationEnabledStateToMap = {
@@ -1224,9 +1256,37 @@ export const mtm1m3HeaterDisabledStateMap = {
   true: 'ON',
 };
 
+// Scheduler
+export const schedulerTrackingStateToMap = {
+  false: 'NO TRACKING',
+  true: 'TRACKING',
+};
+
+// General summaryState
+export const summaryStateMap = {
+  0: 'UNKNOWN',
+  1: 'DISABLED',
+  2: 'ENABLED',
+  3: 'FAULT',
+  4: 'OFFLINE',
+  5: 'STANDBY',
+};
+
+// Scheduler
+export const schedulerDetailedStateToMap = {
+  0: 'IDLE',
+  1: 'RUNNING',
+  2: 'WAITING_NEXT_TARGET_TIMER_TASK',
+  3: 'GENERATING_TARGET_QUEUE',
+  4: 'COMPUTING_PREDICTED_SCHEDULE',
+  5: 'QUEUEING_TARGET',
+};
+
 /*****************************************************************************/
 /**************************MTM3 actuator and forces***************************/
 /*****************************************************************************/
+
+// Components configurations
 export const M1M3ActuatorForces = {
   appliedAberrationForces: ['zForces'],
   appliedAccelerationForces: ['xForces', 'yForces', 'zForces'],

@@ -1,0 +1,41 @@
+.container {
+  border-radius: 0.5em;
+  box-sizing: border-box;
+  width: 100%;
+  margin-bottom: 2em;
+  margin-top: 1em;
+}
+
+.headerDiv {
+  display: flex;
+  margin-bottom: 1em;
+  justify-content: space-between;
+}
+
+.selectSystemCoord {
+  display: flex;
+  /* transform: translate(80%);
+    margin-left: -15em; */
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+}
+
+.legend > div {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  margin-right: var(--small-padding);
+}
+
+.circleIcon {
+  width: 2em;
+  fill: lightblue !important;
+}
+
+.plusIcon {
+  width: 2em;
+  transform: rotate(45deg);
+}

@@ -1,4 +1,9 @@
 /* eslint-disable global-require */
+/**
+ * Important!!
+ * 
+ * Two or more instances with the same name cannot exist. For example, there cannot be two M1M3
+ */
 
 const defaultSchemaProps = {
   titleBar: {

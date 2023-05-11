@@ -1,0 +1,165 @@
+.container {
+  border-radius: 0.5em;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 1em;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.leftDivs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summaryPanel1 {
+  display: flex;
+  padding: 20px;
+  width: 100%;
+  background: #101f27 !important;
+}
+
+.summaryPanel2 > span {
+  line-height: 2em;
+}
+
+.summaryPanel2 > span:nth-of-type(even) {
+  margin-right: 2em;
+}
+
+.summaryPanel2 {
+  display: contents;
+  padding: 20px;
+  width: 100%;
+  background-color: var(--second-secondary-background-color) !important;
+  /* background: var(--second-quaternary-background-dimmed-color) !important; */
+}
+
+.summaryTable .title {
+  white-space: nowrap !important;
+}
+
+.headersLeft {
+  margin-left: -1em;
+}
+
+.headersCenter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headersRigth {
+  display: contents;
+}
+
+.gearIcon {
+  width: 10%;
+  padding-left: 1em;
+}
+
+.gearIcon:hover {
+  cursor: pointer;
+}
+
+.nightDiv {
+  display: flex;
+  width: 20%;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.dayDiv {
+  display: flex;
+  width: 15%;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconStars {
+  width: 25%;
+}
+
+.iconSun {
+  width: 15%;
+}
+.cmdOptions {
+  display: flex;
+  border-radius: 0.5em;
+  position: absolute;
+  left: 315px;
+  height: 100%;
+  border-radius: 0.5em;
+  background-color: var(--second-quaternary-background-color);
+  padding: var(--small-padding);
+}
+
+.cmdDiv > div {
+  width: 100%;
+}
+
+.cmOptionsDiv {
+  display: flex;
+  min-width: 110px;
+}
+
+.cmdDivDetail {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.cmdDivDetail:not(:last-child) {
+  margin-bottom: 0.5em;
+}
+
+.cmdDivDetail:hover {
+  cursor: pointer;
+  color: var(--commandable-font-color-hover);
+  background-color: var(--commandable-background-hover);
+}
+
+.cmdDivDetail button {
+  background-color: var(--second-quaternary-background-color);
+  margin-right: 5px;
+}
+
+.cmdBtn {
+  width: 80%;
+}
+
+.cmdIcon svg {
+  width: 2em;
+  height: 2em;
+}
+
+.cmdTxt {
+  margin-left: 0.5em;
+}
+
+.schedulerConfigsDiv {
+  background-color: var(--second-quaternary-background-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 5px;
+  justify-content: space-evenly;
+  height: 100%;
+  border-radius: 0.5em;
+}
+
+.loadConfigDiv {
+  display: grid;
+  padding: 1em;
+}
+
+.inputError {
+  border: 1px solid red;
+}

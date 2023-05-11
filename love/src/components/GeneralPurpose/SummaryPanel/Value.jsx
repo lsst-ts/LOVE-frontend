@@ -49,6 +49,7 @@ const Value = ({ children, raw = false }) => {
     );
   }
   /** Display strings and numbers. Truncate to 4 decimal places in the case of numbers */
+  // TODO: implement cases depending of specific units. For example, if units===degrees then units == '°'
   return (
     <span className={styles.value}>
       {parsedChild?.toFixed ? fixedFloat(parsedChild, 2) : parsedChild}
