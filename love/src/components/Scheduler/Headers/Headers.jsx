@@ -20,6 +20,7 @@ import {
   summaryStateToStyle,
   schedulerDetailedStateToMap,
   schedulerDetailedStateToStyle,
+  URL_REGEX,
 } from 'Config';
 
 export default class Headers extends Component {
@@ -81,11 +82,8 @@ export default class Headers extends Component {
   }
 
   validateUri = (uri) => {
-    const regex = /^(?!localhost)(ftp|http|https):\/\/[^\s]+$/;
-    if (regex.test(uri)) {
-      this.setState({ isValidUri: true });
-    }
-    return regex.test(uri);
+    const valid = URL_REGEX.test(uri);
+    this.setState({ isValidUri: valid });
   };
 
   renderSchedulerConfigs() {
@@ -96,7 +94,7 @@ export default class Headers extends Component {
           className={inputSchedulerConfigError ? styles.inputError : ''}
           placeholder="Insert Uri"
           onChange={(e) => {
-            const isValid = this.validateUri(e.target.value);
+            this.validateUri(e.target.value);
             this.setState({
               selectedSchedulerConfig: e.target.value,
               inputSchedulerConfigError: false,
@@ -150,25 +148,25 @@ export default class Headers extends Component {
                 <StatusText status={summaryStateToStyle[schedulerSummaryState]}>{schedulerSummaryState}</StatusText>
               </Value>
               <GearIcon className={styles.gearIcon} onClick={() => this.toggleSchedulerCmdOptions()} />
-              <div className={styles.cmdOptions}>
-                <div className={styles.cmOptionsDiv}>
-                  {showOptions && (
+              {showOptions && (
+                <div className={styles.cmdOptions}>
+                  <div className={styles.cmOptionsDiv}>
                     <div className={styles.cmdDiv}>
                       {cmdOptions.map((option) => (
-                        <div className={styles.cmdDivDetail}>
-                          <Button key={option.text} onClick={option.action} className={styles.cmdBtn}>
+                        <div onClick={option.action} className={styles.cmdDivDetail}>
+                          <div key={option.text} className={styles.cmdIcon}>
                             {option.icon}
-                            <span className={styles.cmdTxt}>{option.text}</span>
-                          </Button>
+                          </div>
+                          <span className={styles.cmdTxt}>{option.text}</span>
                         </div>
                       ))}
                     </div>
+                  </div>
+                  {showSchedulerConfigs && (
+                    <div className={styles.schedulerConfigsDiv}>{this.renderSchedulerConfigs()}</div>
                   )}
                 </div>
-                {showSchedulerConfigs && (
-                  <div className={styles.schedulerConfigsDiv}>{this.renderSchedulerConfigs()}</div>
-                )}
-              </div>
+              )}
               <Value>
                 <StatusText status={schedulerDetailedStateToStyle[schedulerDetailedState]}>
                   {schedulerDetailedState}

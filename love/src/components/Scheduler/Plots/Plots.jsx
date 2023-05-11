@@ -58,7 +58,7 @@ export default class SchedulerPlots extends Component {
               containerNode={this.refs[i]}
               xAxisTitle="Time"
               yAxisTitle="Value"
-              legendPosition="bottom"
+              legendPosition="right"
             />
             <div>Plot</div>
           </div>

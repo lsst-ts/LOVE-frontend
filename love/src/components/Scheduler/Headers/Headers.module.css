@@ -8,6 +8,7 @@
   flex-wrap: nowrap;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .leftDivs {
@@ -90,42 +91,39 @@
   width: 15%;
 }
 .cmdOptions {
-  display: inline-flex;
-  z-index: 0;
-  position: fixed;
-  margin-left: 38em;
-  align-items: stretch;
-  justify-content: space-evenly;
-  height: 10em;
+  display: flex;
   border-radius: 0.5em;
+  position: absolute;
+  left: 315px;
+  height: 100%;
+  border-radius: 0.5em;
+  background-color: var(--second-quaternary-background-color);
+  padding: var(--small-padding);
 }
 
-.cmdDiv {
-  width: 10em;
-  background-color: var(--second-quaternary-background-color);
-  display: grid;
-  align-content: stretch;
-  justify-items: flex-start;
-  padding-left: 1em;
-  transition: height 0.7s ease; /** I don't know if there is a difference using this style or not*/
-  border-radius: 0.5em;
+.cmdDiv > div {
+  width: 100%;
 }
 
 .cmOptionsDiv {
   display: flex;
-  height: 100%;
-  border-radius: 0.5em;
+  min-width: 110px;
 }
 
 .cmdDivDetail {
-  margin-top: 0.5em;
-  background-color: var(--second-quaternary-background-color);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 5px;
-  border-radius: 0.5em;
+  justify-content: flex-start;
+}
+
+.cmdDivDetail:not(:last-child) {
+  margin-bottom: 0.5em;
+}
+
+.cmdDivDetail:hover {
+  cursor: pointer;
+  color: var(--commandable-font-color-hover);
+  background-color: var(--commandable-background-hover);
 }
 
 .cmdDivDetail button {
@@ -135,6 +133,11 @@
 
 .cmdBtn {
   width: 80%;
+}
+
+.cmdIcon svg {
+  width: 2em;
+  height: 2em;
 }
 
 .cmdTxt {
@@ -150,7 +153,6 @@
   justify-content: space-evenly;
   height: 100%;
   border-radius: 0.5em;
-  width: 14em;
 }
 
 .loadConfigDiv {
