@@ -114,7 +114,7 @@
   margin: 0;
   padding: var(--content-padding);
   overflow: auto;
-  height: calc(100vh - 5em);
+  min-height: calc(100vh - 10em);
   will-change: transform;
 }
 

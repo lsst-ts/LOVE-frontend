@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import ManagerInterface from '../../../Utils';
-import SimpleTable from '../../GeneralPurpose/SimpleTable/SimpleTable';
 import LogoIcon from '../../icons/LogoIcon/LogoIcon';
 import InriaLogo from '../../icons/InriaLogo/InriaLogo';
 import styles from './AboutPanel.module.css';
+
+import packageJson from '../../../../package.json';
+
 export default class AboutPanel extends Component {
   constructor(props) {
     super(props);
@@ -20,12 +20,15 @@ export default class AboutPanel extends Component {
         <div className={styles.textWrapper}>
           <div>
             <span>You are currently running on</span>
-            <span className={styles.version}>LOVE version 27.2.0.1</span>
+            <span className={styles.version}>LOVE frontend version {packageJson.version}</span>
           </div>
           <div>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam turpis dolor, pellentesque at orci in, porta
-            porttitor felis. Aliquam nulla erat, pulvinar ac laoreet sed, laoreet non lectus. Cras id accumsan quam.
-            Suspendisse in augue non sapien egestas lobortis. Proin facilisis tempus fringilla.
+            <span>
+              L.O.V.E, the LSST Operators Visualization Environment, is a cutting-edge GUI, Graphic User Interface,
+              which with it's intuitive interface and powerful tools enables observing specialist, scientists, and
+              anywone with access, to monitor to efficiently navigate, monitor, and explore the current status of the
+              observatory's state-of-the-art instruments.
+            </span>
           </div>
           <div className={styles.version}>Created with love by Inria.</div>
         </div>

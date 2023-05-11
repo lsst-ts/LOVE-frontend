@@ -1,6 +1,6 @@
 {
   "name": "love",
-  "version": "0.1.0",
+  "version": "5.19.1",
   "private": true,
   "dependencies": {
     "@emotion/core": "^10.3.1",

@@ -734,12 +734,13 @@ class Layout extends Component {
 
         <div className={styles.contentWrapper} id={LAYOUT_CONTAINER_ID}>
           {this.props.children}
-
-          <div className={styles.footer}>
-            Created with love by
-            <InriaLogo className={styles.logo} title="Love" />
-          </div>
         </div>
+
+        <div className={styles.footer}>
+          Created with love by
+          <InriaLogo className={styles.logo} title="Love" />
+        </div>
+
         <Modal
           isOpen={this.state.isXMLModalOpen}
           onRequestClose={() => this.setState({ isXMLModalOpen: false })}
