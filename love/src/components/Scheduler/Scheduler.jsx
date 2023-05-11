@@ -102,7 +102,7 @@ export default class Scheduler extends Component {
     /** Number of exposures */
     currentNumExposures: PropTypes.number,
     /** Exposure time */
-    currentExposureTimes: PropTypes.number,
+    currentExposureTimes: PropTypes.array,
     /** Expected slew time */
     currentSlewTime: PropTypes.number,
     /** Offset in X direction (sensor) */
@@ -114,7 +114,7 @@ export default class Scheduler extends Component {
     /** Id of the proposals this target is part of */
     currentProposalId: PropTypes.array,
     /** Is this target part of a sequence of observations for the same target? */
-    currentSequenceDuration: PropTypes.bool,
+    currentSequenceDuration: PropTypes.number,
     /** The rotation angle of the camera relative to the sky E of N (degrees) */
     rotSkyPos: PropTypes.number,
     /** List of Right Ascension for the targets */
@@ -122,7 +122,7 @@ export default class Scheduler extends Component {
     /** List of Declination for the targets */
     predictedTargetsDecl: PropTypes.array,
     /** List of rotation angle of the camera relative to the sky E of N (degrees) */
-    predictedTargetsRotSkyPos: PropTypes.number,
+    predictedTargetsRotSkyPos: PropTypes.array,
     /** Unique target id */
     lastTargetId: PropTypes.number,
     /** Right Ascension of the target */

@@ -8,13 +8,25 @@ export default class Filters extends Component {
     const { filterToMount, filterToUnmount } = this.props;
     const listFilters = ['u', 'g', 'r', 'i', 'z', 'y'];
     const filterStyle = {};
-    return listFilters.map((f, index) => {
+    return listFilters.map((f, i) => {
       if (filterToMount === f) {
-        return <div className={styles.filterToMountStyle}>{f}</div>;
+        return (
+          <div key={i} className={styles.filterToMountStyle}>
+            {f}
+          </div>
+        );
       } else if (filterToUnmount === f) {
-        return <div className={styles.filterToUnmountStyle}>{f}</div>;
+        return (
+          <div key={i} className={styles.filterToUnmountStyle}>
+            {f}
+          </div>
+        );
       } else {
-        return <div className={styles.disabledFilter}>{f}</div>;
+        return (
+          <div key={i} className={styles.disabledFilter}>
+            {f}
+          </div>
+        );
       }
     });
   }
