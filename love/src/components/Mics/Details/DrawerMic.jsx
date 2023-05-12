@@ -1,13 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import Slider from 'components/GeneralPurpose/Slider/Slider';
 import Record from './Record';
 import HeatMap from './HeatMap/HeatMap';
-import Button from 'components/GeneralPurpose/Button/Button';
-import Input from 'components/GeneralPurpose/Input/Input';
-import RecIcon from 'components/icons/MicsIcon/Rec/RecIcon';
-import PauseIcon from 'components/icons/MicsIcon/Pause/PauseIcon';
-import PlayIcon from 'components/icons/MicsIcon/Play/PlayIcon';
+import Player from './Player';
 import Collapse from 'components/GeneralPurpose/Collapse/Collapse';
 import RowExpansionIcon from 'components/icons/RowExpansionIcon/RowExpansionIcon';
 
@@ -116,10 +111,14 @@ export default class DrawerMic extends Component {
       return <></>;
     }
 
-    const { actualFreq, actualDb, setDbLimitState, dbLimit } = this.props.infoPlot;
-
-    let textPlay = isPlaying ? 'PAUSE' : 'PLAY';
-    let textRec = isRecording ? 'STOP' : 'START';
+    const {
+      actualMaxFreq,
+      actualMaxDb,
+      actualMinFreq,
+      actualMinDb,
+      setDbLimitState,
+      dbLimit
+    } = this.props.infoPlot;
 
     return (
       <div className={drawerDetailCss}>
@@ -130,65 +129,26 @@ export default class DrawerMic extends Component {
 
           <div className={styles.audioStream}>
             <span className={[styles.detailsTitle, styles.headers].join(' ')}>AUDIO STREAMING</span>
-            <div className={styles.aStreamContent}>
-              <span onClick={() => play()} className={styles.recSpan}>
-                { isPlaying ? (
-                    <PauseIcon className={styles.playSVG}/>
-                  ) : (
-                    <PlayIcon className={[styles.playSVG, styles.opacity].join(' ')}/>
-                  )
-                }
-                <span className={styles.oneLine}>{textPlay}</span>
-              </span>
-              <div>
-                <Slider
-                  onChange={(value) => setVolume(value)}
-                  max={2}
-                  value={volume?.value}
-                  disabled={!isPlaying}
-                ></Slider>
-                <span className={styles.oneLine}>VOLUME</span>
-              </div>
-              <span
-                className={styles.recSpan}
-                onClick={() => record()}
-              >
-                {
-                  <RecIcon isRecording={isRecording} className={[styles.recSVG, styles.verticalSpace].join(' ')}/>
-                }
-                <span className={styles.oneLine}>{textRec}</span>
-              </span>
-            </div>
-          </div>
-
-          <div className={styles.containerAlarmLimit}>
-            <div>
-              <div> Max Decibel value </div>
-              <div className={styles.dBLiveValue}>
-                {' '}
-                {actualDb.toString().substring(0, 5)}dB in {actualFreq} Hz
-              </div>
-            </div>
-
-            <div className={styles.width20}>
-              <div className={styles.buttondBLimit}>
-                Alarm Limit
-              </div>
-              <div>
-                <Input
-                  type="number"
-                  step="0.1"
-                  value={dbLimit}
-                  onChange={(e) => setDbLimitState(e.target.value)}
-                />
-              </div>
-            </div>
+            <Player
+              isPlaying={isPlaying}
+              isRecording={isRecording}
+              volume={volume}
+              actualMaxFreq={actualMaxFreq}
+              actualMaxDb={actualMaxDb}
+              actualMinFreq={actualMinFreq}
+              actualMinDb={actualMinDb}
+              dbLimit={dbLimit}
+              setVolume={setVolume}
+              setDbLimit={setDbLimitState}
+              play={play}
+              record={record}
+            />
           </div>
 
           <Fragment>
             <button className={styles.buttonShowSpectrogram} onClick={this.appearHeatMap}>
               <div className={styles.spectrogramTitle}>
-                <span className={[styles.detailsTitle, styles.headers].join(' ')}>ALARM STORY SPECTROGRAM</span>
+                <span className={[styles.detailsTitle, styles.headers].join(' ')}>SPECTROGRAM</span>
                 <span><RowExpansionIcon expanded={this.state.showHeatMap}/></span>
               </div>
             </button>

@@ -12,7 +12,7 @@ import NotificationSoundOffIcon from 'components/icons/NotificationSoundIcon/Not
 import NotificationSoundOnIcon from 'components/icons/NotificationSoundIcon/NotificationSoundOnIcon';
 
 
-export default class Microphone extends Component {
+export default class Row extends Component {
   static propTypes = {
     /**
      * Function to change the mic's component state of the currentMic and select this to show on the mic details
@@ -38,7 +38,19 @@ export default class Microphone extends Component {
      * Function to set the infoPlot state of the mic component to render.
      */
     setInfoPlot: PropTypes.func,
+    minDecibels: PropTypes.number,
+    maxDecibels: PropTypes.number,
   };
+  static defaultProps = {
+    selectMic: () => {},
+    source: '',
+    id: undefined,
+    name: '',
+    recordPush: () => {},
+    setInfoPlot: () => {},
+    minDecibels: -80,
+    maxDecibels: 80,
+  }
 
   constructor(props) {
     super(props);
@@ -48,11 +60,13 @@ export default class Microphone extends Component {
       alarm: false,
       play: false,
       isRecording: false,
-      actualDb: 0,
-      actualFreq: 0,
+      actualMaxDb: -Infinity,
+      actualMaxFreq: 0,
+      actualMinDb: Infinity,
+      actualMinFreq: 0,
       initialTime: '',
       timeDomain: [],
-      dbLimit: 0.1,
+      dbLimit: -20,
       ampArray: [],
       timeArray: [],
       data3D: { table: [] },
@@ -67,16 +81,23 @@ export default class Microphone extends Component {
     this.countPollingIterval = setInterval(() => {
       this.setState((prevState) => this.getdbFrequencyData(prevState, this.getTimeUTCformat()));
       let infoPlot = {
-        actualFreq: this.state.actualFreq,
-        actualDb: this.state.actualDb,
+        actualMaxFreq: this.state.actualMaxFreq,
+        actualMaxDb: this.state.actualMaxDb,
+        actualMinFreq: this.state.actualMinFreq,
+        actualMinDb: this.state.actualMinDb,
         setDbLimitState: this.setDbLimitState,
         dbLimit: this.state.dbLimit,
         windowTimePlot: this.windowTimePlot,
         bufferLength: this.bufferLength,
         timeDomain: this.state.timeDomain,
         data3D: this.state.data3D,
+        minDecibels: this.props.minDecibels,
+        maxDecibels: this.props.maxDecibels,
       };
       if (this.state.isSelected) this.props.setInfoPlot(infoPlot);
+      if (!this.state.alarm && this.state.actualMaxDb > this.state.dbLimit) {
+        this.setState({alarm: true});
+      }
     }, 1000);
   };
 
@@ -105,11 +126,13 @@ export default class Microphone extends Component {
     this.analyser = this.audioContext.createAnalyser();
 
     //Variables to analize the sound
-    this.analyser.smoothingTimeConstant = 0.9;
-    this.analyser.fftSize = 2048; // sampling rate.
+    this.analyser.smoothingTimeConstant = 0.0; // 0.75; // 0.9;
+    this.analyser.minDecibels = this.props.minDecibels;
+    this.analyser.maxDecibels = this.props.maxDecibels;
+    this.analyser.fftSize = 2048; //4096; // sampling rate.
     this.bufferLength = this.analyser.frequencyBinCount; // frequency band.
     this.dataArray = new Float32Array(this.bufferLength);
-    this.windowTimePlot = 11;
+    this.windowTimePlot = 21;
     this.frequencyData = Array.from({ length: this.bufferLength }, (_, index) => index);
 
     //To can connect to the source
@@ -213,7 +236,7 @@ export default class Microphone extends Component {
     if (!this.state.play) {
       //It's necessary to the first time
       audioContext.resume();
-      masterGain.gain.value = 0.5;
+      masterGain.gain.value = 0.4;
       song.play();
       this.setState({ play: true });
     } else {
@@ -265,14 +288,15 @@ export default class Microphone extends Component {
     }
     this.setState({ isSelected: !isSelected });
     let infoPlot = {
-      actualFreq: this.state.actualFreq,
-      actualDb: this.state.actualDb,
+      actualMaxFreq: this.state.actualMaxFreq,
+      actualMaxDb: this.state.actualMaxDb,
+      actualMinFreq: this.state.actualMinFreq,
+      actualMinDb: this.state.actualMinDb,
       setDbLimitState: this.setDbLimitState,
       dbLimit: this.state.dbLimit,
       windowTimePlot: this.windowTimePlot,
       bufferLength: this.bufferLength,
       timeDomain: this.state.timeDomain,
-      // spec3D: this.state.spec3D,
       data3D: this.state.data3D,
     };
     this.props.setInfoPlot(infoPlot);
@@ -321,6 +345,8 @@ export default class Microphone extends Component {
 
     let maxdB = -Infinity;
     let freqMaxdB = 0;
+    let mindB = 0;
+    let freqMindB = 0;
 
     let freqAmpArray = this.frequencyData.map(function (freq, i) {
       let index = Math.round((freq / halfSR) * ampArray.length);
@@ -328,6 +354,11 @@ export default class Microphone extends Component {
         maxdB = ampArray[index];
         freqMaxdB = freq;
       }
+      if (ampArray[index] < mindB) {
+        mindB = ampArray[index];
+        freqMindB = freq;
+      }
+
       return { t_min: actTime, t_max: nextTime, f_min: freq, f_max: freq + 1, amp: ampArray[index] };
     });
 
@@ -355,8 +386,10 @@ export default class Microphone extends Component {
         timeArray: newTimeArray,
         initialTime: actTime,
         timeDomain: timeDomain,
-        actualDb: maxdB,
-        actualFreq: freqMaxdB,
+        actualMaxDb: maxdB,
+        actualMaxFreq: freqMaxdB,
+        actualMinDb: mindB,
+        actualMinFreq: freqMindB,
       };
     } else {
       newInitialTime = newTimeArray[0];
@@ -366,11 +399,25 @@ export default class Microphone extends Component {
         timeArray: newTimeArray,
         initialTime: newTimeArray[0],
         timeDomain: timeDomain,
-        actualDb: maxdB,
-        actualFreq: freqMaxdB,
+        actualMaxDb: maxdB,
+        actualMaxFreq: freqMaxdB,
+        actualMinDb: mindB,
+        actualMinFreq: freqMindB,
       };
     }
   };
+
+  getBinFrequency(index) {
+    const halfSR = this.audioContext.sampleRate / 2;
+    const freq = index / this.dataArray.length * halfSR
+    return freq;
+  }
+
+  getFrequencyValue(freq) {
+    const halfSR = this.audioContext.sampleRate / 2;
+    const index = Math.round((freq / halfSR) * this.dataArray.length);
+    return this.dataArray[index];
+  }
 
   /**
    * Function with which we can obtain the actual time string in UTC

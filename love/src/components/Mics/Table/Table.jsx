@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Microphone from './Microphone';
+import Row from './Row';
 import styles from './Table.module.css';
 
 export default class Table extends Component {
@@ -58,7 +58,7 @@ export default class Table extends Component {
     const { selectMic, recordPush, setInfoPlot } = this.props;
     return items.map((item) => {
       return (
-        <Microphone
+        <Row
           source={item.src}
           id={item.id}
           name={item.name}

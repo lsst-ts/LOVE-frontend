@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import PlayIcon from 'components/icons/MicsIcon/Play/PlayIcon';
 import DownloadIcon from 'components/icons/MicsIcon/Download/DownloadIcon';
 import PauseIcon from 'components/icons/MicsIcon/Pause/PauseIcon';
-import styles from './DrawerMic.module.css';
+import styles from './Record.module.css';
 
 export default class Record extends Component {
   static propTypes = {
@@ -67,7 +67,7 @@ export default class Record extends Component {
 
     return (
       <div className={styles.records}>
-        <span onClick={() => this.play()} className={[styles.recSpan, styles.marginBlock].join(' ')}>
+        <span onClick={() => this.play()} className={[styles.spanButton, styles.marginBlock].join(' ')}>
           {svgPLay}
         </span>
         <span className={styles.spanNameFiles}>{nameFile}</span>

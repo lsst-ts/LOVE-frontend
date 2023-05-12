@@ -43,7 +43,7 @@ export default class HeatMap extends Component {
           color: {
             type: 'quantitative',
             field: 'amp',
-            scale: { scheme: 'spectral', scheme: 'spectral' },
+            scale: { scheme: 'spectral', reverse: true, domain: [-200, 0] },
             legend: { labelColor: '#ddd', labelFontSize: 14, titleColor: '#ddd', title: 'dB', gradientLength: 215 },
           },
         },
@@ -128,6 +128,8 @@ export default class HeatMap extends Component {
   constructSpec = (timeDomain, windowTimePlot, bufferLength) => {
     const height = this.state.containerHeight;
     const width = this.state.containerWidth;
+    console.log('infoplot', this.props.infoPlot);
+    const { minDecibels, maxDecibels } = this.props.infoPlot;
     const spec = {
       spec: {
         width: width,
@@ -156,7 +158,7 @@ export default class HeatMap extends Component {
           color: {
             type: 'quantitative',
             field: 'amp',
-            scale: { scheme: 'spectral', reverse: true },
+            scale: { scheme: 'spectral', reverse: true, domain: [minDecibels, maxDecibels] },
             legend: { labelColor: '#ddd', labelFontSize: 14, titleColor: '#ddd', title: 'dB', gradientLength: height },
           },
         },
