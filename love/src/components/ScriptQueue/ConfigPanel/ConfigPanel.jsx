@@ -360,6 +360,9 @@ export default class ConfigPanel extends Component {
     const isStandard = script.type === 'standard';
     const logLevel = logLevelMap[this.state.logLevel] ?? 20;
     const config = this.state.value.replace(/^#.*\n?/gm, '');
+
+    this.saveLastUsedConfiguration();
+
     this.props.launchScript(
       isStandard,
       script.path,
