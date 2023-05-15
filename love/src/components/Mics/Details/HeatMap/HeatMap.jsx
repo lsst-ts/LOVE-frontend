@@ -128,7 +128,6 @@ export default class HeatMap extends Component {
   constructSpec = (timeDomain, windowTimePlot, bufferLength) => {
     const height = this.state.containerHeight;
     const width = this.state.containerWidth;
-    console.log('infoplot', this.props.infoPlot);
     const { minDecibels, maxDecibels } = this.props.infoPlot;
     const spec = {
       spec: {
@@ -158,7 +157,11 @@ export default class HeatMap extends Component {
           color: {
             type: 'quantitative',
             field: 'amp',
-            scale: { scheme: 'spectral', reverse: true, domain: [minDecibels, maxDecibels] },
+            scale: {
+              scheme: 'spectral',
+              reverse: true,
+              domain: (minDecibels && maxDecibels) ? [minDecibels, maxDecibels] : undefined,
+            },
             legend: { labelColor: '#ddd', labelFontSize: 14, titleColor: '#ddd', title: 'dB', gradientLength: height },
           },
         },

@@ -48,8 +48,8 @@ export default class Row extends Component {
     name: '',
     recordPush: () => {},
     setInfoPlot: () => {},
-    minDecibels: -80,
-    maxDecibels: 80,
+    minDecibels: undefined,
+    maxDecibels: undefined,
   }
 
   constructor(props) {
@@ -58,7 +58,7 @@ export default class Row extends Component {
       isSelected: false,
       notifications: true,
       alarm: false,
-      play: false,
+      isPlaying: false,
       isRecording: false,
       actualMaxDb: -Infinity,
       actualMaxFreq: 0,
@@ -95,7 +95,9 @@ export default class Row extends Component {
         maxDecibels: this.props.maxDecibels,
       };
       if (this.state.isSelected) this.props.setInfoPlot(infoPlot);
-      if (!this.state.alarm && this.state.actualMaxDb > this.state.dbLimit) {
+      if (this.state.notifications && 
+          (!this.state.alarm && this.state.actualMaxDb > this.state.dbLimit)
+      ) {
         this.setState({alarm: true});
       }
     }, 1000);
@@ -127,8 +129,8 @@ export default class Row extends Component {
 
     //Variables to analize the sound
     this.analyser.smoothingTimeConstant = 0.0; // 0.75; // 0.9;
-    this.analyser.minDecibels = this.props.minDecibels;
-    this.analyser.maxDecibels = this.props.maxDecibels;
+    if (this.props.minDecibels) this.analyser.minDecibels = this.props.minDecibels;
+    if (this.props.maxDecibels) this.analyser.maxDecibels = this.props.maxDecibels;
     this.analyser.fftSize = 2048; //4096; // sampling rate.
     this.bufferLength = this.analyser.frequencyBinCount; // frequency band.
     this.dataArray = new Float32Array(this.bufferLength);
@@ -233,16 +235,18 @@ export default class Row extends Component {
   /* Method to play o pause the microphone stream. this function is used by the mics component*/
   play = () => {
     const { audioContext, song, masterGain } = this;
-    if (!this.state.play) {
-      //It's necessary to the first time
-      audioContext.resume();
-      masterGain.gain.value = 0.4;
-      song.play();
-      this.setState({ play: true });
+    if (!this.state.isPlaying) {
+      this.setState({ isPlaying: true }, () => {
+        //It's necessary to the first time
+        audioContext.resume();
+        masterGain.gain.value = 0.4;
+        song.play();
+      });
     } else {
-      song.pause();
-      masterGain.gain.value = 0;
-      this.setState({ play: false });
+      this.setState({ isPlaying: false }, () => {
+        song.pause();
+        masterGain.gain.value = 0;
+      });
     }
   };
 
@@ -254,21 +258,23 @@ export default class Row extends Component {
     //Get the parameter of AudioWorklet
     const parameter = audioRecorder.parameters.get('isRecording');
     if (!this.state.isRecording) {
-      //Set the value at 1, so the processor start to push the buffer
-      parameter.setValueAtTime(1, audioContext.currentTime);
-      //Reomves the elements of the buffers to start to record again
-      buffers.splice(0, buffers.length);
-      this.setState({ isRecording: true });
+      this.setState({ isRecording: true }, () => {
+        //Set the value at 1, so the processor start to push the buffer
+        parameter.setValueAtTime(1, audioContext.currentTime);
+        //Reomves the elements of the buffers to start to record again
+        buffers.splice(0, buffers.length);
+      });
     } else {
-      //Set the value at 0, so the processor end to push the buffer
-      parameter.setValueAtTime(0, audioContext.currentTime);
-      this.setState({ isRecording: false });
-      //Encode the buffers's audio to save in a blob object
-      const blob = this.encodeAudio(buffers);
-      //Create a url associated to blob
-      const url = URL.createObjectURL(blob);
-      const timeNow = this.getTimeUTCformat();
-      recordPush(name, timeNow, url, blob);
+      this.setState({ isRecording: false }, () => {
+        //Set the value at 0, so the processor end to push the buffer
+        parameter.setValueAtTime(0, audioContext.currentTime);
+        //Encode the buffers's audio to save in a blob object
+        const blob = this.encodeAudio(buffers);
+        //Create a url associated to blob
+        const url = URL.createObjectURL(blob);
+        const timeNow = this.getTimeUTCformat();
+        recordPush(name, timeNow, url, blob);
+      });
     }
   };
 
@@ -282,12 +288,14 @@ export default class Row extends Component {
 
   /* Method to change the isSelected state, by the mics component*/
   selectMe = () => {
-    let { isSelected } = this.state;
+    const { isSelected } = this.state;
     if (!isSelected) {
       this.setState({ isSelected: true, alarm: false });
+    } else {
+      this.setState({ isSelected: !isSelected });
     }
-    this.setState({ isSelected: !isSelected });
-    let infoPlot = {
+    
+    const infoPlot = {
       actualMaxFreq: this.state.actualMaxFreq,
       actualMaxDb: this.state.actualMaxDb,
       actualMinFreq: this.state.actualMinFreq,
@@ -317,6 +325,7 @@ export default class Row extends Component {
    */
   setDbLimitState = (dbLimit) => {
     this.setState({ dbLimit: dbLimit });
+    // console.log(dbLimit)
   };
 
   /**
@@ -476,10 +485,13 @@ export default class Row extends Component {
       id: id,
       name: name,
       recordFunc: this.record,
+      isPlaying: this.state.isPlaying,
+      isRecording: this.state.isRecording,
       playFunc: this.play,
       volumeFunc: this.changeVolume,
       selectMe: this.selectMe,
       volume: this.masterGain?.gain,
+
     };
 
     return (
@@ -495,7 +507,7 @@ export default class Row extends Component {
             Enabled
           </StatusText>
         </td>
-        <td onClick={() => this.turnNotifications()}>
+        <td onClick={() => {this.turnNotifications(); }}>
           {this.state.notifications ? (
             <NotificationSoundOnIcon selected={isSelected} className={[styles.svgTable, styles.pointer].join(' ')}/>
           ) : (

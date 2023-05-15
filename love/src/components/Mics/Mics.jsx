@@ -26,8 +26,6 @@ export default class Mics extends Component {
       infoPlot: null,
       alarms: {},
       viewInfo: false,
-      isPlaying: false,
-      isRecording: false,
       records: [],
     };
   }
@@ -51,8 +49,7 @@ export default class Mics extends Component {
       this.closeMicDetails();
       if (id === mic.id) return;
     }
-    this.setState({ currentMic: mic, viewInfo: true });
-    mic.selectMe();
+    this.setState({ currentMic: mic, viewInfo: true }, () => mic.selectMe());
   };
 
   /**
@@ -88,9 +85,11 @@ export default class Mics extends Component {
    */
   record = () => {
     if (!this.state.currentMic) return;
-    const { isRecording } = this.state;
-    this.setState({ isRecording: !isRecording });
-    this.state.currentMic?.recordFunc();
+    const { isRecording } = this.state.currentMic;
+    const newCurrentMic = { ...this.state.currentMic, isRecording: !isRecording};
+    this.setState({ currentMic: newCurrentMic}, () => this.state.currentMic?.recordFunc());
+    ;
+    ;
   };
 
   /**
@@ -114,9 +113,9 @@ export default class Mics extends Component {
    */
   play = () => {
     if (!this.state.currentMic) return;
-    const { isPlaying } = this.state;
-    this.setState({ isPlaying: !isPlaying });
-    this.state.currentMic.playFunc();
+    const { isPlaying } = this.state.currentMic;
+    const newCurrentMic = { ...this.state.currentMic, isPlaying: !isPlaying};
+    this.setState({ currentMic: newCurrentMic}, () => this.state.currentMic.playFunc());
   };
 
   /**
@@ -153,9 +152,9 @@ export default class Mics extends Component {
             infoPlot={this.state.infoPlot}
             play={this.play}
             setVolume={this.setVolume}
-            volume={volume}
-            isPlaying={this.state.isPlaying}
-            isRecording={this.state.isRecording}
+            volume={this.state.currentMic?.volume}
+            isPlaying={this.state.currentMic?.isPlaying}
+            isRecording={this.state.currentMic?.isRecording}
             record={this.record}
             records={this.state.records}
           />
