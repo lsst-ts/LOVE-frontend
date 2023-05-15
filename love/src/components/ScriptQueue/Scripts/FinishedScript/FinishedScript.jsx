@@ -1,5 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import LogMessageDisplay from 'components/GeneralPurpose/LogMessageDisplay/LogMessageDisplay';
+import Button from 'components/GeneralPurpose/Button/Button';
+import ManagerInterface, { parseToSALFormat } from 'Utils';
 import styles from './FinishedScript.module.css';
 import scriptStyles from '../Scripts.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
@@ -44,12 +47,41 @@ export default class FinishedScript extends PureComponent {
     super(props);
     this.state = {
       expanded: false,
+      showLogs: false,
+      logs: [],
     };
   }
 
   onClick = () => {
     this.setState((state) => ({ expanded: !state.expanded }));
     this.props.onClick();
+  };
+
+  toggleLogs = () => {
+    this.setState((state) => ({ showLogs: !state.showLogs }));
+  };
+
+  queryLogs = (scriptIndex, start, end) => {
+    const cscs = {
+      Script: {
+        [scriptIndex]: {
+          logevent_logMessage: ['private_rcvStamp', 'level', 'message', 'traceback'],
+        },
+      },
+    };
+    const startDateIso = new Date(start).toISOString();
+    const endDateIso = new Date(end).toISOString();
+    ManagerInterface.getEFDLogs(startDateIso, endDateIso, cscs, 'summit_efd').then((res) => {
+      this.setState({
+        logs: res[`Script-${scriptIndex}-logevent_logMessage`].map(parseToSALFormat),
+      });
+    });
+  };
+
+  clearLogs = () => {
+    this.setState({
+      logs: [],
+    });
   };
 
   render() {
@@ -134,7 +166,22 @@ export default class FinishedScript extends PureComponent {
             className={[scriptStyles.expandedSectionWrapper, this.state.expanded ? '' : scriptStyles.hidden].join(' ')}
           >
             <ScriptDetails {...this.props} />
+            <Button
+              onClick={() => {
+                if (!this.state.showLogs) {
+                  this.queryLogs(this.props.index, this.props.timestampProcessStart, this.props.timestampProcessEnd);
+                }
+                this.toggleLogs();
+              }}
+            >
+              Toggle logs
+            </Button>
           </div>
+          {this.state.showLogs && (
+            <div>
+              <LogMessageDisplay logMessageData={this.state.logs} clearCSCLogMessages={this.clearLogs} />
+            </div>
+          )}
         </div>
         {this.props.commandExecutePermission && (
           <div className={scriptStyles.mainScriptButton} onClick={(e) => this.props.requeueScript(this.props.index)}>

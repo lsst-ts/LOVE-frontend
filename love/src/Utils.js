@@ -1677,3 +1677,29 @@ export function arrayRandomBoolean(len, probability = 0.1) {
   }
   return booleanArray;
 }
+
+/**
+ * Function to parse any dictionary to a SAL format
+ * Example:
+ * {
+ *  "param1": <value>,
+ *  "param2": <value>,
+ * }
+ * to:
+ * {
+ * "param1": {
+ *  "value": <value>,
+ *  },
+ * "param2": {
+ *  "value": <value>,
+ *  },
+ * }
+ * @param {*} data, the dictionary to be parsed
+ */
+export function parseToSALFormat(data) {
+  const newData = {};
+  Object.keys(data).forEach((key) => {
+    newData[key] = { value: data[key] };
+  });
+  return newData;
+}
