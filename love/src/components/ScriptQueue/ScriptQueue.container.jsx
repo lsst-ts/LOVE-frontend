@@ -9,6 +9,7 @@ import {
   getLastSALCommand,
   getUsername,
   getAuthlistState,
+  getEfdConfig,
 } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import ScriptQueue from './ScriptQueue';
@@ -47,6 +48,7 @@ const ScriptQueueContainer = ({
   fit,
   embedded,
   authlist,
+  efdConfig,
   ...props
 }) => {
   if (props.isRaw) {
@@ -72,6 +74,7 @@ const ScriptQueueContainer = ({
       embedded={embedded}
       running={queueState.running}
       authlist={authlist}
+      efdConfig={efdConfig}
     />
   );
 };
@@ -84,6 +87,7 @@ const mapStateToProps = (state, ownProps) => {
   const lastSALCommand = getLastSALCommand(state);
   const username = getUsername(state);
   const authlist = getAuthlistState(state, [`event-ScriptQueue-${ownProps.salindex}-authList`]);
+  const efdConfig = getEfdConfig(state);
   return {
     queueState,
     scriptHeartbeats,
@@ -92,6 +96,7 @@ const mapStateToProps = (state, ownProps) => {
     lastSALCommand,
     username,
     authlist,
+    efdConfig,
   };
 };
 

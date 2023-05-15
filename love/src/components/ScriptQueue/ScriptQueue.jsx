@@ -882,6 +882,7 @@ export default class ScriptQueue extends Component {
                               this.props.commandExecutePermission && !this.state.blockedByAuthlist
                             }
                             onClick={() => this.onShowScriptDetails(script)}
+                            efdConfig={this.props.efdConfig}
                           />
                         </div>
                       </DraggableScript>

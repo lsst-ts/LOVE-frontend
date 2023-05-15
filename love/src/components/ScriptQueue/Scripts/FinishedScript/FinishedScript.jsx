@@ -62,6 +62,7 @@ export default class FinishedScript extends PureComponent {
   };
 
   queryLogs = (scriptIndex, start, end) => {
+    const efdInstance = this.props.efdConfig?.defaultEfdInstance ?? 'summit_efd';
     const cscs = {
       Script: {
         [scriptIndex]: {
@@ -69,9 +70,9 @@ export default class FinishedScript extends PureComponent {
         },
       },
     };
-    const startDateIso = new Date(start).toISOString();
-    const endDateIso = new Date(end).toISOString();
-    ManagerInterface.getEFDLogs(startDateIso, endDateIso, cscs, 'summit_efd').then((res) => {
+    const startDateIso = new Date(start * 1000).toISOString();
+    const endDateIso = new Date(end * 1000).toISOString();
+    ManagerInterface.getEFDLogs(startDateIso, endDateIso, cscs, efdInstance).then((res) => {
       this.setState({
         logs: res[`Script-${scriptIndex}-logevent_logMessage`].map(parseToSALFormat),
       });
