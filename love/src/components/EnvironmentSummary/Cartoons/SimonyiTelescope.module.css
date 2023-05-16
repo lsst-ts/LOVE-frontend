@@ -1,0 +1,70 @@
+.cls-1 {
+  fill: #111f27;
+}
+
+.cls-1,
+.cls-2,
+.cls-3,
+.cls-4,
+.cls-5,
+.cls-6,
+.cls-7 {
+  stroke-miterlimit: 10;
+}
+
+.cls-1,
+.cls-2,
+.cls-3,
+.cls-4,
+.cls-5,
+.cls-6,
+.cls-8 {
+  stroke-width: 2px;
+}
+
+.cls-1,
+.cls-6 {
+  stroke: #59717c;
+}
+
+.cls-2,
+.cls-8 {
+  fill: #15242d;
+  stroke: #182e39;
+}
+
+.cls-3 {
+  fill: #182e39;
+}
+
+.cls-3,
+.cls-4,
+.cls-5,
+.cls-7 {
+  stroke: #27434f;
+}
+
+.cls-4,
+.cls-9 {
+  fill: #27434f;
+}
+
+.cls-5,
+.cls-6,
+.cls-7 {
+  fill: none;
+}
+
+.cls-10 {
+  opacity: 0.5;
+}
+
+.cls-8 {
+  stroke-linejoin: round;
+}
+
+.cls-9 {
+  font-family: Montserrat-Bold, Montserrat;
+  font-size: 20px;
+  font-weight: 700;
+}

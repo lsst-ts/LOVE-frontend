@@ -10,8 +10,8 @@ export default class Skymap extends Component {
   // };
 
   render() {
-    const width = 500;
-    const height = 500;
+    const width = 350;
+    const height = 350;
     const currentPointing = {
       az: 0,
       el: 20,
@@ -27,7 +27,6 @@ export default class Skymap extends Component {
     const isProjected = false;
     return (
       <div className={styles.skymapContainer}>
-        <h2>Skymap</h2>
         <div className={styles.skymapGridContainer}>
           <Pointing
             width={width}

@@ -1,0 +1,7 @@
+.telescopes {
+  display: flex;
+}
+
+.simonyi {
+  z-index: -1;
+}

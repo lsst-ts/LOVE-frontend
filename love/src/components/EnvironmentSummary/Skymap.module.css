@@ -3,6 +3,8 @@
   flex-wrap: wrap;
   position: relative;
   width: fit-content;
+  left: 25em;
+  top: 2em;
 }
 
 .skymapGridContainer {

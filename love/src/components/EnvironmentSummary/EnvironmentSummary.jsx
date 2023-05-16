@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
-import Panel from '../GeneralPurpose/Panel/Panel';
-import Skymap from './Skymap/Skymap';
+import Skymap from './Skymap';
+import styles from './EnvironmentSummary.module.css';
+import SimonyiTelescope from './Cartoons/SimonyiTelescope';
+import AuxTelescope from './Cartoons/AuxTelescope';
 
 export default class EnvironmentSummary extends Component {
   render() {
     return (
-      <Panel title="Environment Summary" className={styles.panel} fit>
-        <>
-          <div className={styles.skymapContainer}>
-            <Skymap />
-          </div>
-        </>
-      </Panel>
+      <div>
+        <div>
+          <Skymap />
+        </div>
+        <div className={styles.telescopes}>
+          <SimonyiTelescope className={styles.simonyi} />
+          <AuxTelescope />
+        </div>
+      </div>
     );
   }
 }
