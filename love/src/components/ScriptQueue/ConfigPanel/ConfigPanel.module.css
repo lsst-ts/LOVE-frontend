@@ -118,12 +118,37 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  flex-basis: 50%;
+}
+
+.showSchemaIcon {
+  float: right;
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: var(--small-padding);
 }
 
 .sidePanel > h3,
 .sidePanelHeaderContainer {
   margin-left: 1rem;
   margin-bottom: 0.25rem;
+  align-self: stretch;
+}
+
+.sideBySide.hideSchema > .sidePanel {
+  flex-basis: auto;
+}
+
+.sideBySide.hideSchema > .sidePanelSchema {
+  flex-grow: 0;
+}
+
+.sideBySide.hideSchema > .sidePanel > h3 {
+  margin: 0;
+  writing-mode: vertical-lr;
+  flex-grow: 1;
+  margin-top: 2em;
+  margin-left: var(--small-padding);
 }
 
 a.documentationLink {
@@ -368,11 +393,6 @@ fieldset p {
   color: var(--base-font-color);
 }
 
-/* fieldset label {
-  margin: 7px 0;
-  font-weight: bold;
-} */
-
 :global(.field-object) > fieldset {
   padding: 0;
 }
@@ -389,4 +409,8 @@ fieldset p {
 
 :global(.field) > *:nth-child(2) {
   margin: 1em 0;
+}
+
+:global(.ace_editor) {
+  width: 100% !important;
 }

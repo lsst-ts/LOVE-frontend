@@ -18,6 +18,7 @@ import CloseIcon from '../../icons/CloseIcon/CloseIcon';
 import SaveNewIcon from '../../icons/SaveNewIcon/SaveNewIcon';
 import SaveIcon from '../../icons/SaveIcon/SaveIcon';
 import SpinnerIcon from '../../icons/SpinnerIcon/SpinnerIcon';
+import RowExpansionIcon from '../../icons/RowExpansionIcon/RowExpansionIcon';
 import Hoverable from '../../GeneralPurpose/Hoverable/Hoverable';
 import InfoPanel from '../../GeneralPurpose/InfoPanel/InfoPanel';
 import ManagerInterface from '../../../Utils';
@@ -337,6 +338,12 @@ export default class ConfigPanel extends Component {
     });
   };
 
+  toggleScriptSchema = () => {
+    this.setState((prevState) => ({
+      showSchema: !prevState.showSchema,
+    }));
+  };
+
   saveLastUsedConfiguration = () => {
     const configuration = this.state.configurationList.find((conf) => conf.config_name === DEFAULT_CONFIG_NAME);
     if (configuration) {
@@ -570,7 +577,7 @@ export default class ConfigPanel extends Component {
   };
 
   render() {
-    const { orientation } = this.state;
+    const { orientation, showSchema } = this.state;
     const scriptName = this.props.configPanel?.name ?? '';
     const scriptPath = this.props.configPanel?.script?.path ?? '';
     const yamlSchema = this.props.configPanel?.script?.configSchema ?? '';
@@ -609,6 +616,8 @@ export default class ConfigPanel extends Component {
       TitleField: this.CustomTitleField,
     };
 
+    const isBeside = orientation === 'beside';
+
     return this.props.configPanel.show ? (
       <Rnd
         default={{
@@ -636,12 +645,17 @@ export default class ConfigPanel extends Component {
               </span>
             </div>
           </div>
-          <div className={[styles.body, orientation === 'beside' ? styles.sideBySide : ''].join(' ')}>
-            <div className={styles.sidePanel}>
-              <h3>
+          <div
+            className={[styles.body, isBeside ? styles.sideBySide : '', !showSchema ? styles.hideSchema : ''].join(' ')}
+          >
+            <div className={[styles.sidePanel, styles.sidePanelSchema].join(' ')}>
+              <h3 onClick={this.toggleScriptSchema}>
                 SCHEMA <span className={styles.readOnly}>(Read only)</span>
+                <div className={styles.showSchemaIcon}>
+                  <RowExpansionIcon expanded={showSchema} />
+                </div>
               </h3>
-              {isStandard && (
+              {isStandard && showSchema && (
                 <a
                   className={styles.documentationLink}
                   target="_blank"
@@ -652,20 +666,22 @@ export default class ConfigPanel extends Component {
                 </a>
               )}
 
-              <AceEditor
-                mode="yaml"
-                theme="solarized_dark"
-                name="UNIQUE_ID_OF_DIV"
-                width={sidePanelSize[orientation].firstWidth}
-                height={sidePanelSize[orientation].firstHeight}
-                value={
-                  this.props.configPanel.configSchema === '' ? NO_SCHEMA_MESSAGE : this.props.configPanel.configSchema
-                }
-                editorProps={{ $blockScrolling: true }}
-                fontSize={18}
-                readOnly
-                showPrintMargin={false}
-              />
+              {showSchema && (
+                <AceEditor
+                  mode="yaml"
+                  theme="solarized_dark"
+                  name="UNIQUE_ID_OF_DIV"
+                  // width={sidePanelSize[orientation].firstWidth}
+                  height={sidePanelSize[orientation].firstHeight}
+                  value={
+                    this.props.configPanel.configSchema === '' ? NO_SCHEMA_MESSAGE : this.props.configPanel.configSchema
+                  }
+                  editorProps={{ $blockScrolling: true }}
+                  fontSize={18}
+                  readOnly
+                  showPrintMargin={false}
+                />
+              )}
             </div>
 
             <div
