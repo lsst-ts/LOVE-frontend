@@ -11,8 +11,9 @@ export default class GIS extends Component {
     subscribeToStreams: PropTypes.func,
     /** Function to unsubscribe to streams to stop receiving */
     unsubscribeToStreams: PropTypes.func,
-    /** The raw status of the interlock */
-    interlocksStatus: PropTypes.array,
+    /** The raw status of the interlock
+     * It is a string of bit arrays of length 8 separated by spaces. There are 29 bit arrays in total. */
+    interlocksStatus: PropTypes.string,
   };
 
   static defaultProps = {
@@ -39,7 +40,7 @@ export default class GIS extends Component {
   updateInterlockStatuses = () => {
     const { interlocksStatus } = this.props;
     const systemsSignals = Object.entries(signals);
-    const rawStatus = interlocksStatus.match(/.{1,16}/g);
+    const rawStatus = interlocksStatus.replace(/\s/g, '').match(/.{1,16}/g);
     const alertEffects = [];
     const alertSignals = [];
     systemsSignals.forEach(([system, systemSignals]) => {
