@@ -60,7 +60,7 @@ const RecursiveScriptsTree = ({
                   launchScriptConfig={cachedLaunchScriptConfig}
                   script={scriptObject}
                   commandExecutePermission={scriptsBlocked}
-                  isCompact={false}
+                  isCompact={true}
                   {...scriptObject}
                 />
               )
