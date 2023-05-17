@@ -1,15 +1,18 @@
 import React from 'react';
 import styles from './Input.module.css';
 
-export default function Input({
+const Input = ({
   defaultValue,
   value,
   onChange = () => {},
   onClick = () => {},
   className = '',
   type = 'text',
+  min,
+  max,
   ...props
-}) {
+}) => {
+  console.log('input', 'type', type);
   return (
     <input
       type={type}
@@ -18,7 +21,15 @@ export default function Input({
       value={value}
       onChange={onChange}
       onClick={onClick}
+      min={min}
+      max={max}
       {...props}
     />
   );
-}
+};
+
+const comparator = (prevProps, nextProps) => {
+  return nextProps.value === prevProps.value && nextProps.defaultValue === prevProps.defaultValue;
+};
+
+export default React.memo(Input, comparator);

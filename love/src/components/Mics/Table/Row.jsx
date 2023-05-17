@@ -66,7 +66,7 @@ export default class Row extends Component {
       actualMinFreq: 0,
       initialTime: '',
       timeDomain: [],
-      dbLimit: -20,
+      dbLimit: 20,
       ampArray: [],
       timeArray: [],
       data3D: { table: [] },
@@ -96,7 +96,7 @@ export default class Row extends Component {
       };
       if (this.state.isSelected) this.props.setInfoPlot(infoPlot);
       if (this.state.notifications && 
-          (!this.state.alarm && this.state.actualMaxDb > this.state.dbLimit)
+          (!this.state.alarm && this.state.actualMaxDb > (-1) * this.state.dbLimit)
       ) {
         this.setState({alarm: true});
       }
