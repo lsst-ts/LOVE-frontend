@@ -362,6 +362,7 @@
 .gridWindowM1M3 {
   grid-area: plot;
   max-height: 630px;
+  position: relative;
 }
 
 .gridGroupGradiantInfo {
@@ -369,4 +370,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.zoomOut {
+  position: absolute;
+  top: 1em;
+  right: 1em;
 }
