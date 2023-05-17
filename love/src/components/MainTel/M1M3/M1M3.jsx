@@ -10,6 +10,7 @@ import {
   m1m3HardpointActuatorMotionStateMap,
   M1M3HardpointPositions,
 } from 'Config';
+import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
@@ -42,6 +43,8 @@ export default class M1M3 extends Component {
     this.uniqueScatter = uniqueId('m1m3-scatter-');
     this.uniqueCircleOverlay = uniqueId('m1m3-circle-overlay-');
     this.uniqueForceGradient = uniqueId('m1m3-force-gradient');
+
+    this.zoom = null;
   }
 
   static statesIlc = {
@@ -303,6 +306,10 @@ export default class M1M3 extends Component {
     this.setState({ showHardpoints: show });
   };
 
+  zoomOut = () => {
+    d3.select(`#${this.uniqueCircleOverlay}`).call(this.zoom.transform, d3.zoomIdentity.scale(1)).call(this.zoom);
+  };
+
   componentDidMount() {
     this.props.subscribeToStreams();
 
@@ -334,7 +341,8 @@ export default class M1M3 extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    d3.select(`#${this.uniqueCircleOverlay}`).call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
+    this.zoom = d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed);
+    d3.select(`#${this.uniqueCircleOverlay}`).call(this.zoom);
 
     if (
       this.state.selectedForceParameter !== prevState.selectedForceParameter ||
@@ -414,12 +422,19 @@ export default class M1M3 extends Component {
   };
 
   render() {
-    const { zoomLevel, showActuatorsID, showHardpoints, forceParameters } = this.state;
+    const {
+      actuatorsForce,
+      zoomLevel,
+      showActuatorsID,
+      showHardpoints,
+      forceParameters,
+      selectedActuatorId,
+      selectedHardpointId,
+    } = this.state;
+    const { forceActuatorData } = this.props;
+
     const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
     const margin = 60;
-
-    const { forceActuatorData } = this.props;
-    const { actuatorsForce } = this.state;
 
     const summaryState = CSCDetail.states[this.props.summaryState];
     const detailedStateValue = {
@@ -430,8 +445,8 @@ export default class M1M3 extends Component {
     const maxForce = defaultNumberFormatter(Math.max(...actuatorsForce));
     const minForce = defaultNumberFormatter(Math.min(...actuatorsForce));
 
-    const selectedActuator = this.getActuator(this.state.selectedActuatorId);
-    const selectedHardpoint = this.getHardpoint(this.state.selectedHardpointId);
+    const selectedActuator = this.getActuator(selectedActuatorId);
+    const selectedHardpoint = this.getHardpoint(selectedHardpointId);
     const forceInputs = Object.keys(M1M3ActuatorForces);
 
     return (
@@ -473,7 +488,7 @@ export default class M1M3 extends Component {
               <span>Show actuators ID:</span>
               <div className={styles.toggleContainer}>
                 <Toggle
-                  labels={['Yes', 'No']}
+                  labels={['No', 'Yes']}
                   isLive={this.state.showActuatorsID}
                   setLiveMode={this.toggleActuatorsID}
                 />
@@ -482,7 +497,7 @@ export default class M1M3 extends Component {
             <div className={styles.control}>
               <span>Show hardpoints:</span>
               <div className={styles.toggleContainer}>
-                <Toggle labels={['Yes', 'No']} isLive={this.state.showHardpoints} setLiveMode={this.toggleHardpoints} />
+                <Toggle labels={['No', 'Yes']} isLive={this.state.showHardpoints} setLiveMode={this.toggleHardpoints} />
               </div>
             </div>
           </div>
@@ -534,6 +549,11 @@ export default class M1M3 extends Component {
           </div>
 
           <div className={styles.gridWindowM1M3}>
+            {zoomLevel > 1 && (
+              <div className={styles.zoomOut}>
+                <Button onClick={this.zoomOut}>Zoom out</Button>
+              </div>
+            )}
             <svg
               className={styles.svgContainer}
               viewBox={`0 0 ${this.state.width} ${this.state.width}`}
@@ -686,51 +706,63 @@ export default class M1M3 extends Component {
 
             <div className={styles.gridActuatorInfo}>
               <SummaryPanel className={styles.actuatorInfo}>
-                <div className={styles.actuatorValue}>
-                  <Title>Actuator {selectedActuator.id}</Title>
-                </div>
-                <div className={styles.actuatorValue}>
-                  <span>Actuator status:</span>
-                  <span className={[selectedActuator.state.class, styles.summaryState].join(' ')}>
-                    {selectedActuator.state.name}
-                  </span>
-                </div>
-                <div className={styles.actuatorValue}>
-                  <span>Applied force:</span>
-                  <span>{defaultNumberFormatter(selectedActuator.value)}</span>
-                </div>
+                {selectedActuatorId !== 0 ? (
+                  <>
+                    <div className={styles.actuatorValue}>
+                      <Title>Actuator {selectedActuator.id}</Title>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Actuator status:</span>
+                      <span className={[selectedActuator.state.class, styles.summaryState].join(' ')}>
+                        {selectedActuator.state.name}
+                      </span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Applied force:</span>
+                      <span>{defaultNumberFormatter(selectedActuator.value)}</span>
+                    </div>
+                  </>
+                ) : (
+                  <div>No Actuator has been selected</div>
+                )}
               </SummaryPanel>
             </div>
 
             <div className={styles.gridHardpointInfo}>
               <SummaryPanel className={styles.actuatorInfo}>
-                <div className={styles.actuatorValue}>
-                  <Title>Hardpoint {selectedHardpoint.id}</Title>
-                </div>
-                <div className={styles.actuatorValue}>
-                  <span>ILC status:</span>
-                  <span className={[selectedHardpoint.ilcStatus.class, styles.summaryState].join(' ')}>
-                    {selectedHardpoint.ilcStatus.name}
-                  </span>
-                </div>
-                <div className={styles.actuatorValue}>
-                  <span>Motion status:</span>
-                  <span className={[selectedHardpoint.motionStatus.class, styles.detailState].join(' ')}>
-                    {selectedHardpoint.motionStatus.name}
-                  </span>
-                </div>
-                <div className={styles.actuatorValue}>
-                  <span>Breakaway LVDT:</span>
-                  <span>{defaultNumberFormatter(selectedHardpoint.breakawayLVDT.value)}</span>
-                </div>
-                <div className={styles.actuatorValue}>
-                  <span>Displacement LVDT:</span>
-                  <span>{defaultNumberFormatter(selectedHardpoint.displacementLVDT.value)}</span>
-                </div>
-                <div className={styles.actuatorValue}>
-                  <span>Breakaway Pressure:</span>
-                  <span>{defaultNumberFormatter(selectedHardpoint.breakawayPressure.value)}</span>
-                </div>
+                {selectedHardpointId !== 0 ? (
+                  <>
+                    <div className={styles.actuatorValue}>
+                      <Title>Hardpoint {selectedHardpoint.id}</Title>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>ILC status:</span>
+                      <span className={[selectedHardpoint.ilcStatus.class, styles.summaryState].join(' ')}>
+                        {selectedHardpoint.ilcStatus.name}
+                      </span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Motion status:</span>
+                      <span className={[selectedHardpoint.motionStatus.class, styles.detailState].join(' ')}>
+                        {selectedHardpoint.motionStatus.name}
+                      </span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Breakaway LVDT:</span>
+                      <span>{defaultNumberFormatter(selectedHardpoint.breakawayLVDT.value)}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Displacement LVDT:</span>
+                      <span>{defaultNumberFormatter(selectedHardpoint.displacementLVDT.value)}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Breakaway Pressure:</span>
+                      <span>{defaultNumberFormatter(selectedHardpoint.breakawayPressure.value)}</span>
+                    </div>
+                  </>
+                ) : (
+                  <div>No Hardpoint has been selected</div>
+                )}
               </SummaryPanel>
             </div>
           </div>
