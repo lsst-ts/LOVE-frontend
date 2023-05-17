@@ -7,7 +7,7 @@ import { getRawStatus } from 'redux/selectors';
 
 export const schema = {
   description: 'Summary view of Environment Summary.',
-  defaultSize: [74, 47],
+  defaultSize: [74, 32],
   props: {
     title: {
       type: 'string',

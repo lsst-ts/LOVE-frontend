@@ -1,0 +1,12 @@
+.cls1 {
+  fill: #36d0e7;
+  font-family: Montserrat-Bold, Montserrat;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cls2 {
+  fill: rgba(54, 208, 231, 0.25);
+  stroke: #36d0e7;
+  stroke-miterlimit: 10;
+}

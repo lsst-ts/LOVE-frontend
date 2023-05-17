@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import GearIcon from 'components/icons/GearIcon/GearIcon';
 import styles from './Skymap.module.css';
+import AuxTelPointing from './Pointings/AuxTelPointing';
 
 export default class Pointing extends Component {
   static propTypes = {
@@ -62,7 +62,7 @@ export default class Pointing extends Component {
         />
         {/* <circle r={8} stroke="white" strokeWidth={2} cx={currentPixels.x} cy={currentPixels.y} fill="#132631" /> */}
         <foreignObject x={currentPixels.x - 20} y={currentPixels.y - 20} width="40" height="40">
-          <GearIcon />
+          <AuxTelPointing />
         </foreignObject>
         {/* <circle r={4} cx={targetPixels.x} cy={targetPixels.y} fill="gray" /> */}
       </svg>

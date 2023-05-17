@@ -1,36 +1,36 @@
-.cls-1 {
+.cls1 {
   fill: #15242d;
   stroke: #182e39;
 }
 
-.cls-1,
-.cls-2,
-.cls-3,
-.cls-4,
-.cls-5 {
+.cls1,
+.cls2,
+.cls3,
+.cls4,
+.cls5 {
   stroke-miterlimit: 10;
   stroke-width: 2px;
 }
 
-.cls-2 {
+.cls2 {
   fill: #182e39;
 }
 
-.cls-2,
-.cls-3,
-.cls-4 {
+.cls2,
+.cls3,
+.cls4 {
   stroke: #27434f;
 }
 
-.cls-3 {
+.cls3 {
   fill: #27434f;
 }
 
-.cls-4,
-.cls-5 {
+.cls4,
+.cls5 {
   fill: none;
 }
 
-.cls-5 {
+.cls5 {
   stroke: #59717c;
 }
