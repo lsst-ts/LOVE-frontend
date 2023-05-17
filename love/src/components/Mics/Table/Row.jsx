@@ -80,13 +80,36 @@ export default class Row extends Component {
     if (this.countPollingIterval) clearInterval(this.countPollingIterval);
     this.countPollingIterval = setInterval(() => {
       this.setState((prevState) => this.getdbFrequencyData(prevState, this.getTimeUTCformat()));
-      let infoPlot = {
+    }, 1000);
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevState.dbLimit !== this.state.dbLimit) {
+      this.props.setInfoPlot({dbLimit: this.state.dbLimit});
+    }
+
+    if (this.state.notifications &&
+      !this.state.alarm &&
+      prevState.actualMaxDb !== this.state.actualMaxDb &&
+      this.state.actualMaxDb > (-1) * this.state.dbLimit) {
+        this.setState({alarm: true});
+    }
+
+    if (this.state.isSelected && (
+      prevState.actualMaxFreq !== this.state.actualMaxFreq ||
+      prevState.actualMaxDb !== this.state.actualMaxDb ||
+      prevState.actualMinFreq !== this.state.actualMinFreq ||
+      prevState.actualMinDb !== this.state.actualMinDb ||
+      prevState.windowTimePlot !== this.state.windowTimePlot ||
+      prevState.bufferLength !== this.state.bufferLength  ||
+      prevState.timeDomain !== this.state.timeDomain ||
+      prevState.data3D !== this.state.data3D
+    )) {
+      const infoPlot = {
         actualMaxFreq: this.state.actualMaxFreq,
         actualMaxDb: this.state.actualMaxDb,
         actualMinFreq: this.state.actualMinFreq,
         actualMinDb: this.state.actualMinDb,
-        setDbLimitState: this.setDbLimitState,
-        dbLimit: this.state.dbLimit,
         windowTimePlot: this.windowTimePlot,
         bufferLength: this.bufferLength,
         timeDomain: this.state.timeDomain,
@@ -94,14 +117,9 @@ export default class Row extends Component {
         minDecibels: this.props.minDecibels,
         maxDecibels: this.props.maxDecibels,
       };
-      if (this.state.isSelected) this.props.setInfoPlot(infoPlot);
-      if (this.state.notifications && 
-          (!this.state.alarm && this.state.actualMaxDb > (-1) * this.state.dbLimit)
-      ) {
-        this.setState({alarm: true});
-      }
-    }, 1000);
-  };
+      this.props.setInfoPlot(infoPlot);
+    }
+  }
 
   componentWillUnmount = () => {
     this.countPollingIterval = null;
@@ -325,7 +343,6 @@ export default class Row extends Component {
    */
   setDbLimitState = (dbLimit) => {
     this.setState({ dbLimit: dbLimit });
-    // console.log(dbLimit)
   };
 
   /**
@@ -335,12 +352,12 @@ export default class Row extends Component {
    * @returns data state updated to send to the plot.
    */
   getdbFrequencyData = (prevState, actTimeUTC) => {
-    let actTime = actTimeUTC.toISOString().substring(0, 19);
-    let nextTime = this.obtainNextTimeInSeconds(actTimeUTC);
+    const actTime = actTimeUTC.toISOString().substring(0, 19);
+    const nextTime = this.obtainNextTimeInSeconds(actTimeUTC);
 
     this.analyser.getFloatFrequencyData(this.dataArray);
 
-    let ampArray = this.dataArray;
+    const ampArray = this.dataArray;
 
     if (!prevState.data3D.table || ampArray[0] === -Infinity) {
       return {};
@@ -357,7 +374,7 @@ export default class Row extends Component {
     let mindB = 0;
     let freqMindB = 0;
 
-    let freqAmpArray = this.frequencyData.map(function (freq, i) {
+    const freqAmpArray = this.frequencyData.map(function (freq, i) {
       let index = Math.round((freq / halfSR) * ampArray.length);
       if (ampArray[index] > maxdB) {
         maxdB = ampArray[index];
@@ -415,18 +432,6 @@ export default class Row extends Component {
       };
     }
   };
-
-  getBinFrequency(index) {
-    const halfSR = this.audioContext.sampleRate / 2;
-    const freq = index / this.dataArray.length * halfSR
-    return freq;
-  }
-
-  getFrequencyValue(freq) {
-    const halfSR = this.audioContext.sampleRate / 2;
-    const index = Math.round((freq / halfSR) * this.dataArray.length);
-    return this.dataArray[index];
-  }
 
   /**
    * Function with which we can obtain the actual time string in UTC
@@ -491,7 +496,6 @@ export default class Row extends Component {
       volumeFunc: this.changeVolume,
       selectMe: this.selectMe,
       volume: this.masterGain?.gain,
-
     };
 
     return (

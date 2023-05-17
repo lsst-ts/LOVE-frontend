@@ -24,8 +24,6 @@ function Player(props) {
   const textPlay = isPlaying ? 'PAUSE' : 'PLAY';
   const textRec = isRecording ? 'STOP' : 'START';
 
-  console.log('player.render');
-
   return (
     <>
       <div className={styles.containerPlayer}>

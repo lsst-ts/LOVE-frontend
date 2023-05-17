@@ -57,7 +57,7 @@ export default class Mics extends Component {
    * @param {*} data, info to plot
    */
   setInfoPlot = (data) => {
-    this.setState({ infoPlot: data });
+    this.setState({ infoPlot: {...this.state.infoPlot, ...data} });
   };
 
   /**
@@ -152,7 +152,7 @@ export default class Mics extends Component {
             infoPlot={this.state.infoPlot}
             play={this.play}
             setVolume={this.setVolume}
-            volume={this.state.currentMic?.volume}
+            volume={this.state.currentMic?.volume ?? {}}
             isPlaying={this.state.currentMic?.isPlaying}
             isRecording={this.state.currentMic?.isRecording}
             record={this.record}

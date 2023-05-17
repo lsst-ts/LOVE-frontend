@@ -129,8 +129,9 @@ export default class HeatMap extends Component {
     const height = this.state.containerHeight;
     const width = this.state.containerWidth;
     const { minDecibels, maxDecibels } = this.props.infoPlot;
+    const domain = (minDecibels !== undefined && maxDecibels !== undefined) ? [minDecibels, maxDecibels] : undefined;
+
     const spec = {
-      spec: {
         width: width,
         height: height,
         autosize: { resize: 'true' },
@@ -160,7 +161,7 @@ export default class HeatMap extends Component {
             scale: {
               scheme: 'spectral',
               reverse: true,
-              domain: (minDecibels && maxDecibels) ? [minDecibels, maxDecibels] : undefined,
+              domain: domain,
             },
             legend: { labelColor: '#ddd', labelFontSize: 14, titleColor: '#ddd', title: 'dB', gradientLength: height },
           },
@@ -177,9 +178,8 @@ export default class HeatMap extends Component {
             titlePadding: 16,
           },
         },
-      },
     };
-    this.setState({ spec: spec.spec });
+    this.setState({ spec: spec });
   };
 
   componentWillUnmount = () => {
