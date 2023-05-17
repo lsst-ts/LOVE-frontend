@@ -822,6 +822,7 @@ export const summaryStateToStyle = {
 
 // Scheduler
 export const schedulerDetailedStateToStyle = {
+  UNKNOWN: 'undefined',
   IDLE: 'invalid',
   RUNNING: 'ok',
   WAITING_NEXT_TARGET_TIMER_TASK: 'running',
@@ -1274,12 +1275,13 @@ export const summaryStateMap = {
 
 // Scheduler
 export const schedulerDetailedStateToMap = {
-  0: 'IDLE',
-  1: 'RUNNING',
-  2: 'WAITING_NEXT_TARGET_TIMER_TASK',
-  3: 'GENERATING_TARGET_QUEUE',
-  4: 'COMPUTING_PREDICTED_SCHEDULE',
-  5: 'QUEUEING_TARGET',
+  0: 'UNKNOWN',
+  1: 'IDLE',
+  2: 'RUNNING',
+  3: 'WAITING_NEXT_TARGET_TIMER_TASK',
+  4: 'GENERATING_TARGET_QUEUE',
+  5: 'COMPUTING_PREDICTED_SCHEDULE',
+  6: 'QUEUEING_TARGET',
 };
 
 /*****************************************************************************/
