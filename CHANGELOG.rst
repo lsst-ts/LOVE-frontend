@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.20.1
+--------
+
+* Adjust GIS to comply with the latest GIS_logevent_rawStatus format `<https://github.com/lsst-ts/LOVE-frontend/pull/460>`_
+
 v5.20.0
 --------
 
