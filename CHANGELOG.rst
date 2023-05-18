@@ -7,6 +7,7 @@ v5.20.2
 
 * Fix M1M3 actuators mappings for different force parameters `<https://github.com/lsst-ts/LOVE-frontend/pull/467>`_
 * Add error fedback to the user when a date input is not valid for OLE component `<https://github.com/lsst-ts/LOVE-frontend/pull/465>`_
+* Add Inria Logo and an About `<https://github.com/lsst-ts/LOVE-frontend/pull/464>`_
 
 v5.20.1
 --------
