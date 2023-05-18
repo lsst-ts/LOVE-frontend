@@ -4,7 +4,6 @@ import { Redirect } from 'react-router-dom';
 import Button from '../GeneralPurpose/Button/Button';
 import Input from '../GeneralPurpose/Input/Input';
 import LogoIcon from '../icons/LogoIcon/LogoIcon';
-import InriaLogo from '../icons/InriaLogo/InriaLogo';
 import LSSTLogos from '../icons/LSSTLogos/LSSTLogos';
 import styles from './Login.module.css';
 import { tokenStates } from '../../redux/reducers/auth';
@@ -151,9 +150,6 @@ export default class Login extends Component {
         </div>
         <div className={styles.LSSTContainer}>
           <LSSTLogos className={styles.LSSTlogo} />
-        </div>
-        <div className={styles.inriaContainer}>
-          <InriaLogo className={styles.inriaLogo} />
         </div>
       </div>
     );
