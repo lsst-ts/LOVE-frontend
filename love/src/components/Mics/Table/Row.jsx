@@ -11,7 +11,6 @@ import AlarmOffIcon from 'components/icons/MicsIcon/AlarmOff/AlarmOffIcon';
 import NotificationSoundOffIcon from 'components/icons/NotificationSoundIcon/NotificationSoundOffIcon';
 import NotificationSoundOnIcon from 'components/icons/NotificationSoundIcon/NotificationSoundOnIcon';
 
-
 export default class Row extends Component {
   static propTypes = {
     /**
@@ -41,6 +40,7 @@ export default class Row extends Component {
     minDecibels: PropTypes.number,
     maxDecibels: PropTypes.number,
   };
+
   static defaultProps = {
     selectMic: () => {},
     source: '',
@@ -50,7 +50,7 @@ export default class Row extends Component {
     setInfoPlot: () => {},
     minDecibels: undefined,
     maxDecibels: undefined,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -254,17 +254,18 @@ export default class Row extends Component {
   play = () => {
     const { audioContext, song, masterGain } = this;
     if (!this.state.isPlaying) {
-      this.setState({ isPlaying: true }, () => {
-        //It's necessary to the first time
-        audioContext.resume();
-        masterGain.gain.value = 0.4;
+      masterGain.gain.value = 0.4;
+      audioContext.resume().then(() => {
         song.play();
+        song.addEventListener('ended', () => {
+          this.setState({ isPlaying: false });
+        });
+        this.setState({ isPlaying: true });
       });
     } else {
-      this.setState({ isPlaying: false }, () => {
-        song.pause();
-        masterGain.gain.value = 0;
-      });
+      song.pause();
+      audioContext.suspend();
+      this.setState({ isPlaying: false });
     }
   };
 
@@ -498,6 +499,9 @@ export default class Row extends Component {
       volume: this.masterGain?.gain,
     };
 
+    const statusMic = (this.state.isPlaying) ? 'ok' : 'warning';
+    const textMic = (this.state.isPlaying) ? 'LISTENING' : 'NOT LISTENING';
+
     return (
       <tr className={classSelectedMic}>
         <td onClick={() => this.props.selectMic(mic)} className={styles.tdView}>
@@ -506,9 +510,9 @@ export default class Row extends Component {
         <td onClick={() => this.props.selectMic(mic)} className={styles.tdIdMic}>
           <span className={styles.idMic}>{name}</span>
         </td>
-        <td>
-          <StatusText status="ok" title="MicStatus" small>
-            Enabled
+        <td onClick={() => this.props.selectMic(mic)} className={styles.pointer}>
+          <StatusText status={statusMic} title="MicStatus" small>
+            {textMic}
           </StatusText>
         </td>
         <td onClick={() => {this.turnNotifications(); }}>

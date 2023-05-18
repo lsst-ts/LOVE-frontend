@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import PlayIcon from 'components/icons/MicsIcon/Play/PlayIcon';
 import DownloadIcon from 'components/icons/MicsIcon/Download/DownloadIcon';
 import PauseIcon from 'components/icons/MicsIcon/Pause/PauseIcon';
+import StopIcon from 'components/icons/MicsIcon/Stop/StopIcon';
 import styles from './Record.module.css';
 
 export default class Record extends Component {
@@ -33,7 +34,7 @@ export default class Record extends Component {
     this.source = new Audio(this.props.url);
     this.songSource = this.aCtx.createMediaElementSource(this.source);
     this.masterGain = this.aCtx.createGain();
-    this.masterGain.gain.value = 1;
+    this.masterGain.gain.value = 0.6;
     this.songSource.connect(this.masterGain);
     this.masterGain.connect(this.aCtx.destination);
   };
@@ -49,10 +50,15 @@ export default class Record extends Component {
     let { aCtx, source } = this;
     if (this.state.play) {
       source.pause();
+      source.currentTime = 0;
+      aCtx.suspend();
       this.setState({ play: false });
     } else {
       aCtx.resume();
       source.play();
+      source.addEventListener('ended', () => {
+        this.setState({ play: false });
+      });
       this.setState({ play: true });
     }
   };
@@ -60,9 +66,9 @@ export default class Record extends Component {
   render() {
     const { url, nameFile, blob } = this.props;
     const svgPLay = this.state.play ? (
-      <PauseIcon className={styles.playSVG}/>
+      <StopIcon className={styles.playSVG}/>
     ) : (
-      <PlayIcon className={styles.playSVG}/>
+      <PlayIcon className={[styles.playSVG, styles.opacity].join(' ')}/>
     );
 
     return (
