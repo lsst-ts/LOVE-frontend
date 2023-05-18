@@ -9,6 +9,10 @@ import {
   m1m3DetailedStateToStyle,
   m1m3HardpointActuatorMotionStateMap,
   M1M3HardpointPositions,
+  M1M3XActuatorsMapping,
+  M1M3YActuatorsMapping,
+  M1M3ZActuatorsMapping,
+  M1M3SActuatorsMapping,
 } from 'Config';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
@@ -221,15 +225,31 @@ export default class M1M3 extends Component {
     return 'black';
   };
 
+  getActuatorForceByParameter(forceParameter, index) {
+    const { actuatorsForce } = this.state;
+    if (forceParameter === 'xForces') {
+      return actuatorsForce[M1M3XActuatorsMapping[index]];
+    }
+    if (forceParameter === 'yForces') {
+      return actuatorsForce[M1M3YActuatorsMapping[index]];
+    }
+    if (forceParameter === 'zForces' || forceParameter === 'primaryCylinderForces') {
+      return actuatorsForce[M1M3ZActuatorsMapping[index]];
+    }
+    if (forceParameter === 'secondaryCylinderForces') {
+      return actuatorsForce[M1M3SActuatorsMapping[index]];
+    }
+  }
+
   getActuator = (id) => {
     if (id === 0) return { id: 'None', value: 'None', state: CSCDetail.states[0] };
     const { actuatorIlcState, actuatorReferenceId } = this.props;
-    const { actuatorsForce } = this.state;
+    const { selectedForceParameter } = this.state;
     const actuatorIndex = actuatorReferenceId.indexOf(id);
     const actuator = {
       id,
       state: actuatorIlcState[actuatorIndex] ?? 'None',
-      value: actuatorsForce[actuatorIndex] ?? 'None',
+      value: this.getActuatorForceByParameter(selectedForceParameter, actuatorIndex) ?? 'None',
     };
 
     actuator.state = CSCDetail.states[actuator.state];
@@ -428,10 +448,10 @@ export default class M1M3 extends Component {
       showActuatorsID,
       showHardpoints,
       forceParameters,
+      selectedForceParameter,
       selectedActuatorId,
       selectedHardpointId,
     } = this.state;
-    const { forceActuatorData } = this.props;
 
     const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
     const margin = 60;
@@ -599,7 +619,9 @@ export default class M1M3 extends Component {
                         //   Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)) / this.state.maxRadius,
                         // )}
                         fill={
-                          actuatorsForce.length > 0 ? this.state.colormap(actuatorsForce[i]) : this.state.colormap(0)
+                          actuatorsForce.length > 0
+                            ? this.state.colormap(this.getActuatorForceByParameter(selectedForceParameter, i))
+                            : this.state.colormap(0)
                         }
                         stroke={this.strokeActuatorSelected(act.id)}
                         r={(this.state.maxRadius * scale) / 21}
