@@ -33,14 +33,26 @@ export default class OLE extends Component {
       selectedInstrument: null,
       selectedDayExposure: Moment(),
       selectedExposureType: 'all',
+      registryMap: {},
     };
   }
 
   componentDidMount() {
     this.props.subscribeToStreams();
     ManagerInterface.getListExposureInstruments().then((data) => {
+      const registryMap = {};
+      Object.entries(data).forEach(([key, value]) => {
+        value.forEach((instrument) => {
+          registryMap[instrument] = key;
+        });
+      });
       const instrumentsArray = Object.values(data).map((arr) => arr[0]);
-      this.setState({ instruments: instrumentsArray, selectedInstrument: instrumentsArray[0] });
+
+      this.setState({
+        instruments: instrumentsArray,
+        selectedInstrument: instrumentsArray[0],
+        registryMap: registryMap,
+      });
     });
   }
 
@@ -66,6 +78,8 @@ export default class OLE extends Component {
   }
 
   changeInstrumentSelect(value) {
+    const { instruments } = this.state;
+    const index = instruments.indexOf(value);
     this.setState({ selectedInstrument: value });
   }
 
@@ -116,6 +130,7 @@ export default class OLE extends Component {
             changeExposureTypeSelect={(value) => this.changeExposureTypeSelect(value)}
             selectedDayExposure={this.state.selectedDayExposure}
             changeDayExposure={(day) => this.changeDayExposure(day)}
+            registryMap={this.state.registryMap}
           />
         );
       }

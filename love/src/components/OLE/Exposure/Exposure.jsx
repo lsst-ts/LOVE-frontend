@@ -45,8 +45,8 @@ export default class Exposure extends Component {
     changeExposureTypeSelect: PropTypes.func,
     /** Function to handle instrument filter*/
     changeInstrumentSelect: PropTypes.func,
-    /** Function to handle date time range filter*/
-    handleDateTimeRange: PropTypes.func,
+    /** Mappings of instruments to exposures registries */
+    registryMap: PropTypes.object,
   };
 
   static defaultProps = {
@@ -61,7 +61,6 @@ export default class Exposure extends Component {
     changeDayExposure: () => {},
     changeExposureTypeSelect: () => {},
     changeInstrumentSelect: () => {},
-    handleDateTimeRange: () => {},
   };
 
   constructor(props) {
@@ -219,9 +218,10 @@ export default class Exposure extends Component {
   };
 
   queryExposures(callback) {
-    const { selectedInstrument, selectedDayExposure } = this.props;
+    const { selectedInstrument, selectedDayExposure, registryMap } = this.props;
     const obsDayInteger = parseInt(moment(selectedDayExposure).format(ISO_INTEGER_DATE_FORMAT));
-    ManagerInterface.getListExposureLogs(selectedInstrument, obsDayInteger).then((data) => {
+    const registry = registryMap[selectedInstrument].split('_')[2];
+    ManagerInterface.getListExposureLogs(selectedInstrument, obsDayInteger, registry).then((data) => {
       const exposureTypes = new Set();
       const exposures = data.map((exposure) => {
         exposureTypes.add(exposure.observation_type);
@@ -241,7 +241,7 @@ export default class Exposure extends Component {
           }
         });
 
-        this.setState({ exposureFlags, messages});
+        this.setState({ exposureFlags, messages });
       });
 
       this.setState({ exposurelogs: exposures, exposureTypes: Array.from(exposureTypes) });
@@ -256,7 +256,10 @@ export default class Exposure extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.selectedInstrument !== this.props.selectedInstrument || prevProps.selectedDayExposure !== this.props.selectedDayExposure) {
+    if (
+      prevProps.selectedInstrument !== this.props.selectedInstrument ||
+      prevProps.selectedDayExposure !== this.props.selectedDayExposure
+    ) {
       this.queryExposures();
     }
 
@@ -270,14 +273,19 @@ export default class Exposure extends Component {
 
   render() {
     const {
-      instruments:instrumentsOptions, selectedInstrument, selectedDayOrRange, selectedDayExposure,
-      selectedExposureType, changeDayExposure, changeExposureTypeSelect, changeInstrumentSelect,
-      handleDateTimeRange,
+      instruments: instrumentsOptions,
+      selectedInstrument,
+      selectedDayOrRange,
+      selectedDayExposure,
+      selectedExposureType,
+      changeDayExposure,
+      changeExposureTypeSelect,
+      changeInstrumentSelect,
     } = this.props;
-    const { exposurelogs:tableData, modeView, modeAdd, range } = this.state;
+    const { exposurelogs: tableData, modeView, modeAdd, range } = this.state;
 
     const headers = this.getHeaders();
-    
+
     const exposureTypeOptions = [
       { label: 'All observation types', value: 'all' },
       ...this.state.exposureTypes.map((type) => ({ label: type, value: type })),
@@ -307,11 +315,10 @@ export default class Exposure extends Component {
         ? filteredData.filter((exp) => exp.observation_type === selectedExposureType)
         : filteredData;
 
-    
     // Obtain headers to create csv report
     let csvHeaders = null;
-    let csvData =  "There aren't exposures created for the current search...";
-    let csvTitle = 'exposure.csv'
+    let csvData = "There aren't exposures created for the current search...";
+    let csvTitle = 'exposure.csv';
     if (filteredData.length > 0) {
       const logExampleKeys = Object.keys(filteredData[0] ?? {});
       csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
@@ -357,7 +364,7 @@ export default class Exposure extends Component {
             }}
           >
             Refresh data
-            {this.state.updatingLogs && <SpinnerIcon className={styles.spinnerIcon}/>}
+            {this.state.updatingLogs && <SpinnerIcon className={styles.spinnerIcon} />}
           </Button>
           <Select
             options={instrumentsOptions}
