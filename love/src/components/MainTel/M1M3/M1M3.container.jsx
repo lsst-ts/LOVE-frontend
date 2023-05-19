@@ -59,6 +59,7 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTM1M3-0-forceActuatorState',
     'event-MTM1M3-0-forceActuatorInfo',
     'event-MTM1M3-0-hardpointActuatorState',
+    'event-MTM1M3-0-hardpointActuatorInfo',
     'event-MTM1M3-0-appliedActiveOpticForces',
     'event-MTM1M3-0-appliedOffsetForces',
     'event-MTM1M3-0-appliedStaticForces',

@@ -249,13 +249,14 @@ export default class M1M3 extends Component {
 
   getActuator = (id) => {
     if (id === 0) return { id: 'None', value: 'None', state: CSCDetail.states[0] };
-    const { actuatorIlcState, actuatorReferenceId } = this.props;
+    const { actuatorIlcState, actuatorReferenceId, actuatorIlcUniqueId } = this.props;
     const { selectedForceParameter } = this.state;
     const actuatorIndex = actuatorReferenceId.indexOf(id);
     const actuator = {
       id,
       state: actuatorIlcState[actuatorIndex] ?? 'None',
       value: this.getActuatorForceByParameter(selectedForceParameter, actuatorIndex) ?? 'None',
+      ilcUniqueId: actuatorIlcUniqueId[actuatorIndex] ?? 'None',
     };
 
     actuator.state = CSCDetail.states[actuator.state];
@@ -274,6 +275,7 @@ export default class M1M3 extends Component {
       };
     const {
       hardpointIlcState,
+      hardpointIlcUniqueId,
       hardpointMotionState,
       hardpointReferenceId,
       hardpointsBreakawayLVDT,
@@ -285,6 +287,7 @@ export default class M1M3 extends Component {
     const hardpoint = {
       id,
       ilcStatus: hardpointIlcState[hardpointIndex] ?? 'None',
+      ilcUniqueId: hardpointIlcUniqueId[hardpointIndex] ?? 'None',
       motionStatus: hardpointMotionState[hardpointIndex] ?? 'None',
       breakawayLVDT: { value: hardpointsBreakawayLVDT[hardpointIndex] ?? 'None' },
       displacementLVDT: { value: hardpointsDisplacementLVDT[hardpointIndex] ?? 'None' },
@@ -745,6 +748,10 @@ export default class M1M3 extends Component {
                       <span>Applied force:</span>
                       <span>{defaultNumberFormatter(selectedActuator.value)}</span>
                     </div>
+                    <div className={styles.actuatorValue}>
+                      <span>ILC unique id:</span>
+                      <span>{selectedActuator.ilcUniqueId}</span>
+                    </div>
                   </>
                 ) : (
                   <div>No Actuator has been selected</div>
@@ -764,6 +771,10 @@ export default class M1M3 extends Component {
                       <span className={[selectedHardpoint.ilcStatus.class, styles.summaryState].join(' ')}>
                         {selectedHardpoint.ilcStatus.name}
                       </span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>ILC unique id:</span>
+                      <span>{selectedHardpoint.ilcUniqueId}</span>
                     </div>
                     <div className={styles.actuatorValue}>
                       <span>Motion status:</span>
