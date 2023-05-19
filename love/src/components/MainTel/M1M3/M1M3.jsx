@@ -125,7 +125,7 @@ export default class M1M3 extends Component {
     // const positionsArray = M1M3.zip([xPosition, yPosition, zPosition]);
     const positionsArray = M1M3.zip([
       xPosition.map((x) => x * 39),
-      yPosition.map((x) => x * 39),
+      yPosition.map((x) => x * -39),
       zPosition.map((x) => x * 39),
     ]);
     return positionsArray.map((position, i) => ({ id: ids[i], position }));
