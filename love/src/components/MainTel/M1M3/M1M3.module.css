@@ -372,3 +372,17 @@
   top: 1em;
   right: 1em;
 }
+
+.doors text {
+  fill: white;
+}
+
+.doors rect {
+  fill: var(--second-primary-background-color);
+  stroke: gray;
+}
+
+.doors .arrowIcon {
+  margin-top: 2px;
+  height: 18px;
+}

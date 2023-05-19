@@ -14,6 +14,7 @@ import {
   M1M3ZActuatorsMapping,
   M1M3SActuatorsMapping,
 } from 'Config';
+import ArrowIcon from 'components/icons/ArrowIcon/ArrowIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
@@ -675,11 +676,19 @@ export default class M1M3 extends Component {
                 r={this.state.width * 0.7}
               />
 
+              <g id="doors" className={styles.doors}>
+                <title>M1M3 Entrance</title>
+                <rect x={this.state.width / 2 - 15} y={margin / 2 - 8} width={30} height={20} />
+                <foreignObject x={this.state.width / 2 - 15} y={margin / 2 - 8} width={30} height={20}>
+                  <ArrowIcon style={styles.arrowIcon} active={true} />
+                </foreignObject>
+              </g>
+
               <g id="plot-axis">
                 <text
                   className={styles.axisLabel}
                   x={this.state.width / 2 - 5}
-                  y={margin / 2 - 12}
+                  y={margin / 2 - 15}
                   textAnchor="middle"
                   alignmentBaseline="middle"
                 >
