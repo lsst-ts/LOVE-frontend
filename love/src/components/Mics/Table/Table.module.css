@@ -1,89 +1,89 @@
 .selectedMic {
-    background-color: var(--default-background-color);
-    color: var(--second-primary-background-color);
-  }
-  
-  .locationMic {
-    display: table-header-group;
-    font-size: 1.12em;
-    font-weight: bold;
-    padding-bottom: 1em;
-    text-align-last: start;
-  }
-  
-  .thLocMic {
-    padding-bottom: 0.5em;
-  }
-  
-  .headers {
-    vertical-align: sub;
-    font-size: small;
-    color: var(--base-font-color);
-  }
-  
-  td {
-    border: 1px solid var(--base-background-color);
-    border-radius: 3px;
-  }
-  
-  .tdIdMic {
-    padding-left: 0;
-    cursor: pointer;
-  }
-  
-  .idMic {
-    display: table-cell;
-    font-weight: normal;
-    vertical-align: sub;
-    font-size: medium;
-    padding-left: 0.5em;
-  }
-  
-  .svgTable {
-    height: 1.5em;
-    padding-top: 0.2em;
-  }
-  
-  .svgView {
-    height: 1em;
-  }
-  
-  .tdView {
-    width: 1em;
-    height: 1.75em;
-    padding-top: 0.3em;
-    padding-left: 0.75em;
-    padding-right: 0.75em;
-    cursor: pointer;
-  }
-  
-  table {
-    width: 100%;
-    background-color: var(--second-quaternary-background-dimmed-color);
-    border-radius: 6px;
-    color: var(--base-font-color);
-    padding: 0.75em;
-    border-spacing: 0px 2px;
-    border-style: solid;
-    border-color: hsl(205deg 40% 8% / 65%);
-  }
-  
-  .headTable {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    background-color: var(--second-quaternary-background-dimmed-color);
-  }
-  
-  th {
-    background-color: var(--second-quaternary-background-dimmed-color);
-    vertical-align: bottom;
-  }
-  
-  tr {
-    background-color: var(--second-primary-background-color);
-    border-radius: 4px;
-  }
-  
-  .pointer {
-    cursor: pointer;
-  }
+  background-color: var(--default-background-color);
+  color: var(--second-primary-background-color);
+}
+
+.locationMic {
+  display: table-header-group;
+  font-size: 1.12em;
+  font-weight: bold;
+  padding-bottom: 1em;
+  text-align-last: start;
+}
+
+.thLocMic {
+  padding-bottom: 0.5em;
+}
+
+.headers {
+  vertical-align: sub;
+  font-size: small;
+  color: var(--base-font-color);
+}
+
+td {
+  border: 1px solid var(--base-background-color);
+  border-radius: 3px;
+}
+
+.tdIdMic {
+  padding-left: 0;
+  cursor: pointer;
+}
+
+.idMic {
+  display: table-cell;
+  font-weight: normal;
+  vertical-align: sub;
+  font-size: medium;
+  padding-left: 0.5em;
+}
+
+.svgTable {
+  height: 1.5em;
+  padding-top: 0.2em;
+}
+
+.svgView {
+  height: 1em;
+}
+
+.tdView {
+  width: 1em;
+  height: 1.75em;
+  padding-top: 0.3em;
+  padding-left: 0.75em;
+  padding-right: 0.75em;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  background-color: var(--second-quaternary-background-dimmed-color);
+  border-radius: 6px;
+  color: var(--base-font-color);
+  padding: 0.75em;
+  border-spacing: 0px 2px;
+  border-style: solid;
+  border-color: hsl(205deg 40% 8% / 65%);
+}
+
+.headTable {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: var(--second-quaternary-background-dimmed-color);
+}
+
+th {
+  background-color: var(--second-quaternary-background-dimmed-color);
+  vertical-align: bottom;
+}
+
+tr {
+  background-color: var(--second-primary-background-color);
+  border-radius: 4px;
+}
+
+.pointer {
+  cursor: pointer;
+}

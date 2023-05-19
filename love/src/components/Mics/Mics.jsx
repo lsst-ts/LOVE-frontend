@@ -12,6 +12,7 @@ export default class Mics extends Component {
       name: PropTypes.string,
       location: PropTypes.string,
       src: PropTypes.string,
+      dbLimit: PropTypes.number,
     })),
     initialPlaying: PropTypes.bool,
   };
@@ -157,6 +158,7 @@ export default class Mics extends Component {
             volume={this.state.currentMic?.volume ?? {}}
             isPlaying={this.state.currentMic?.isPlaying}
             isRecording={this.state.currentMic?.isRecording}
+            dbLimit={`${this.state.currentMic?.dbLimit}`}
             record={this.record}
             records={this.state.records}
           />

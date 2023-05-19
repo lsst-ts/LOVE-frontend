@@ -13,6 +13,7 @@ export default class Table extends Component {
       name: PropTypes.string,
       location: PropTypes.string,
       src: PropTypes.string,
+      dbLimit: PropTypes.number,
     })),
     /**
      * Function to change the mic's component state of the currentMic and show on mic details
@@ -46,6 +47,7 @@ export default class Table extends Component {
         <th scope="col">
           <span className={styles.headers}>MIC STATUS</span>
         </th>
+        <th></th>
         <th scope="col">
           <span className={styles.headers}>NOTIFICATIONS</span>
         </th>
@@ -68,6 +70,7 @@ export default class Table extends Component {
           recordPush={(id, currentTime, url, blob) => recordPush(id, currentTime, url, blob)}
           setInfoPlot={(data) => setInfoPlot(data)}
           initialPlaying={initialPlaying}
+          dbLimit={item.dbLimit}
         />
       )
     })
@@ -85,6 +88,7 @@ export default class Table extends Component {
         name: mic.name,
         location: mic.location,
         src: mic.src,
+        dbLimit: mic.dbLimit,
       };
     });
 

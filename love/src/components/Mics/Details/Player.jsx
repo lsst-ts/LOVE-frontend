@@ -43,6 +43,7 @@ function Player(props) {
             max={2}
             value={volume?.value}
             disabled={!isPlaying}
+            step={0.2}
           />
           <span className={styles.oneLine}>VOLUME</span>
         </div>

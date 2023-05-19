@@ -2,8 +2,8 @@ import React from 'react';
 import Mics from './Mics';
 
 export const schema = {
-  description: 'Component that displays the data coming from a weather station',
-  defaultSize: [57, 35],
+  description: 'Component that displays the microphones',
+  defaultSize: [75, 38],
   props: {
     title: {
       type: 'string',
@@ -27,36 +27,42 @@ export const schema = {
           name: 'Radio Bio-bio',
           location: 'Main Telescope',
           src: 'https://redirector.dps.live/biobiosantiago/mp3/icecast.audio',
+          dbLimit: 40,
         },
         {
           id: 2,
           name: 'Radio Carolina',
           location: 'Main Telescope',
           src: 'https://jireh-1-hls-audio-us-isp.dps.live/hls-audio/716888c72e2079612211a7130f67a27d/carolina/playlist/manifest/gotardisz/audio/now/livestream1.m3u8?dpssid=b2191543965963287cd50987a&sid=ba5t1l1xb287782483663287cd509878',
+          dbLimit: 20,
         },
         {
           id: 3,
           name: 'Radio Futuro',
           location: 'Auxiliary Telescope',
           src: 'https://playerservices.streamtheworld.com/api/livestream-redirect/FUTUROAAC_SC',
+          dbLimit: 20,
         },
         {
           id: 4,
           name: 'Radio Futuro',
           location: 'Auxiliary Telescope',
           src: 'https://playerservices.streamtheworld.com/api/livestream-redirect/FUTUROAAC_SC',
+          dbLimit: 20,
         },
         {
           id: 5,
           name: 'Radio ADN',
           location: 'Summit Facility',
           src: 'https://24383.live.streamtheworld.com/ADN_SC?DIST=TuneIn&TGT=TuneIn&maxServers=2&gdpr=0&us_privacy=1YNY&partnertok=eyJhbGciOiJIUzI1NiIsImtpZCI6InR1bmVpbiIsInR5cCI6IkpXVCJ9.eyJ0cnVzdGVkX3BhcnRuZXIiOnRydWUsImlhdCI6MTYzMzM5MjExNiwiaXNzIjoidGlzcnYifQ.apBDljw5PC4GQwEls0GoHYCMKg91TAZrYLziiqLdh1U',
+          dbLimit: 20,
         },
         {
           id: 6,
           name: '1KHz',
           location: 'Summit Facility',
           src: 'http://localhost/media/1KHz.mp3',
+          dbLimit: 20,
         },
       ]
     }

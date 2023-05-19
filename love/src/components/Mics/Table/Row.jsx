@@ -10,6 +10,7 @@ import AlarmOnIcon from 'components/icons/MicsIcon/AlarmOn/AlarmOnIcon';
 import AlarmOffIcon from 'components/icons/MicsIcon/AlarmOff/AlarmOffIcon';
 import NotificationSoundOffIcon from 'components/icons/NotificationSoundIcon/NotificationSoundOffIcon';
 import NotificationSoundOnIcon from 'components/icons/NotificationSoundIcon/NotificationSoundOnIcon';
+import VolumeIcon from 'components/icons/MicsIcon/Volume/VolumeIcon';
 
 export default class Row extends Component {
   static propTypes = {
@@ -32,6 +33,7 @@ export default class Row extends Component {
     /**
      * Function to add a new record on the mic's record state
      */
+    dbLimit: PropTypes.number,
     recordPush: PropTypes.func,
     /**
      * Function to set the infoPlot state of the mic component to render.
@@ -47,6 +49,7 @@ export default class Row extends Component {
     source: '',
     id: undefined,
     name: '',
+    dbLimit: 20,
     recordPush: () => {},
     setInfoPlot: () => {},
     minDecibels: undefined,
@@ -68,7 +71,7 @@ export default class Row extends Component {
       actualMinFreq: 0,
       initialTime: '',
       timeDomain: [],
-      dbLimit: 20,
+      dbLimit: this.props.dbLimit,
       ampArray: [],
       timeArray: [],
       data3D: { table: [] },
@@ -266,13 +269,14 @@ export default class Row extends Component {
   play = (initialPlaying = false) => {
     const { audioContext, song, masterGain } = this;
     if (!this.state.isPlaying) {
-      masterGain.gain.value = initialPlaying ? 0 : 0.4;
+      masterGain.gain.value = initialPlaying ? 0 : 0.5;
       audioContext.resume().then(() => {
         song.play();
         this.setState({ isPlaying: true });
       });
     } else {
       song.pause();
+      // masterGain.gain.value = 0;
       audioContext.suspend();
       this.setState({ isPlaying: false });
     }
@@ -524,6 +528,12 @@ export default class Row extends Component {
             {textMic}
           </StatusText>
         </td>
+        <td onClick={() => this.props.selectMic(mic)} className={styles.pointer}>
+          <VolumeIcon className={styles.svgTable}
+            isOpacity={mic.volume?.value == 0 || !this.state.isPlaying}
+            volumeValue={!this.state.isPlaying ? 0 : mic.volume?.value}
+          />
+        </td>
         <td onClick={() => {this.turnNotifications(); }}>
           {this.state.notifications ? (
             <NotificationSoundOnIcon selected={isSelected} className={[styles.svgTable, styles.pointer].join(' ')}/>
@@ -533,9 +543,9 @@ export default class Row extends Component {
         </td>
         <td>
           {this.state.alarm ? (
-            <AlarmOnIcon className={styles.svgTable}></AlarmOnIcon>
+            <AlarmOnIcon className={styles.svgTable}/>
           ) : (
-            <AlarmOffIcon className={styles.svgTable}></AlarmOffIcon>
+            <AlarmOffIcon className={styles.svgTable}/>
           )}
         </td>
       </tr>

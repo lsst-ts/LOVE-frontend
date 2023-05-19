@@ -2,8 +2,8 @@
 input[type='range'] {
   height: 1em;
   appearance: none;
-  scale: 0.5;
-  width: 100%;
+  scale: 0.6;
+  width: 80%;
   background: inherit;
 }
 input[type='range']:focus {

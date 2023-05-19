@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { VegaLite } from 'react-vega';
-import styles from './HeatMap.module.css';
 
 export default class HeatMap extends Component {
   static propTypes = {
@@ -37,7 +36,7 @@ export default class HeatMap extends Component {
           y: {
             field: 'f',
             type: 'quantitative',
-            axis: { title: 'FREQUENCY [Hz]', grid: true },
+            axis: { title: 'FREQUENCY [Hz]', grid: true, labels: true },
             scale: { domain: [0, this.bufferLength + 1] },
           },
           color: {
