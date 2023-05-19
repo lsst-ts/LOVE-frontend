@@ -54,12 +54,13 @@ export default class Record extends Component {
       aCtx.suspend();
       this.setState({ play: false });
     } else {
-      aCtx.resume();
-      source.play();
-      source.addEventListener('ended', () => {
-        this.setState({ play: false });
+      aCtx.resume().then(() => {
+        source.play();
+        source.addEventListener('ended', () => {
+          this.setState({ play: false });
+        });
+        this.setState({ play: true });
       });
-      this.setState({ play: true });
     }
   };
 

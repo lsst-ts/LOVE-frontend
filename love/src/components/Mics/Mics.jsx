@@ -13,10 +13,12 @@ export default class Mics extends Component {
       location: PropTypes.string,
       src: PropTypes.string,
     })),
+    initialPlaying: PropTypes.bool,
   };
 
   static defaultProps = {
     mics: [],
+    initialPlaying: true,
   }
 
   constructor(props) {
@@ -129,9 +131,8 @@ export default class Mics extends Component {
   };
 
   render() {
-    const { mics } = this.props;
+    const { mics, initialPlaying } = this.props;
     const drawerDetail = this.state.viewInfo ? styles.micDetails : styles.collapsedMicDetail;
-    let { volume } = this.state.currentMic ?? {};
 
     return (
       <div>
@@ -143,6 +144,7 @@ export default class Mics extends Component {
               selectMic={this.selectMic}
               recordPush={this.recordPush}
               setInfoPlot={this.setInfoPlot}
+              initialPlaying={initialPlaying}
             />
           </div>
           <DrawerMic

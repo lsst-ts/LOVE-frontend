@@ -8,7 +8,7 @@ export default class Table extends Component {
     /**
      * Array of dictonary with the mics info
      */
-    mics: PropTypes.arrayOf(PropTypes.objectOf({
+    mics: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number,
       name: PropTypes.string,
       location: PropTypes.string,
@@ -26,6 +26,7 @@ export default class Table extends Component {
      * Function to set the infoPlot state of the mic component to render
      */
     setInfoPlot: PropTypes.func,
+    initialPlaying: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -33,11 +34,12 @@ export default class Table extends Component {
     selectMic: () => {},
     recordPush: () => {},
     setInfoPlot: () => {},
+    initialPlaying: false,
   };
 
   renderHeader(name, id) {
     return (
-      <tr key={`header-${id}`}>
+      <tr key={`mics-header-${id}`}>
         <th colSpan="2" scope="colgroup" className={styles.thLocMic}>
           <span className={styles.locationMic}>{name.toUpperCase()}</span>
         </th>
@@ -55,7 +57,7 @@ export default class Table extends Component {
   }
 
   renderMicrophones(items) {
-    const { selectMic, recordPush, setInfoPlot } = this.props;
+    const { selectMic, recordPush, setInfoPlot, initialPlaying } = this.props;
     return items.map((item) => {
       return (
         <Row
@@ -65,6 +67,7 @@ export default class Table extends Component {
           selectMic={(mic) => selectMic(mic)}
           recordPush={(id, currentTime, url, blob) => recordPush(id, currentTime, url, blob)}
           setInfoPlot={(data) => setInfoPlot(data)}
+          initialPlaying={initialPlaying}
         />
       )
     })

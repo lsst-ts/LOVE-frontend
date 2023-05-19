@@ -39,6 +39,7 @@ export default class Row extends Component {
     setInfoPlot: PropTypes.func,
     minDecibels: PropTypes.number,
     maxDecibels: PropTypes.number,
+    initialPlaying: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -50,6 +51,7 @@ export default class Row extends Component {
     setInfoPlot: () => {},
     minDecibels: undefined,
     maxDecibels: undefined,
+    initialPlaying: false,
   };
 
   constructor(props) {
@@ -77,11 +79,21 @@ export default class Row extends Component {
     //Init audio variables
     this.initAudio();
 
-    if (this.countPollingIterval) clearInterval(this.countPollingIterval);
-    this.countPollingIterval = setInterval(() => {
+    if (this.countPollingInterval) clearInterval(this.countPollingInterval);
+    this.countPollingInterval = setInterval(() => {
       this.setState((prevState) => this.getdbFrequencyData(prevState, this.getTimeUTCformat()));
     }, 1000);
-  };
+
+    if (this.props.initialPlaying) {
+      let playAttempt = setInterval(() => {
+        if (!this.state.isPlaying){
+          this.play(this.props.initialPlaying);
+        } else {
+          clearInterval(playAttempt);
+        }
+      }, 2000 + Number(this.props.id) * 1000)
+    }
+  }
 
   componentDidUpdate = (prevProps, prevState) => {
     if (prevState.dbLimit !== this.state.dbLimit) {
@@ -122,7 +134,7 @@ export default class Row extends Component {
   }
 
   componentWillUnmount = () => {
-    this.countPollingIterval = null;
+    this.countPollingInterval = null;
     this.audioContext?.close();
   };
 
@@ -157,7 +169,7 @@ export default class Row extends Component {
 
     //To can connect to the source
     this.song.crossOrigin = 'anonymous';
-    this.masterGain.gain.value = 0.4;
+    this.masterGain.gain.value = 0;
 
     //Connect the nodes
     this.songSource.connect(this.analyser);
@@ -251,15 +263,12 @@ export default class Row extends Component {
   }
 
   /* Method to play o pause the microphone stream. this function is used by the mics component*/
-  play = () => {
+  play = (initialPlaying = false) => {
     const { audioContext, song, masterGain } = this;
     if (!this.state.isPlaying) {
-      masterGain.gain.value = 0.4;
+      masterGain.gain.value = initialPlaying ? 0 : 0.4;
       audioContext.resume().then(() => {
         song.play();
-        song.addEventListener('ended', () => {
-          this.setState({ isPlaying: false });
-        });
         this.setState({ isPlaying: true });
       });
     } else {
@@ -503,7 +512,7 @@ export default class Row extends Component {
     const textMic = (this.state.isPlaying) ? 'LISTENING' : 'NOT LISTENING';
 
     return (
-      <tr className={classSelectedMic}>
+      <tr key={`mics-row-${id}`}className={classSelectedMic}>
         <td onClick={() => this.props.selectMic(mic)} className={styles.tdView}>
           <ViewIcon selected={this.state.isSelected}></ViewIcon>
         </td>
