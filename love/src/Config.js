@@ -477,6 +477,16 @@ export const defaultCSCList = [
 /***************************STATE TO STYLE MAPPINGS***************************/
 /*****************************************************************************/
 
+// Generic
+export const summaryStateToStyle = {
+  UNKNOWN: 'undefined',
+  DISABLED: 'invalid',
+  ENABLED: 'ok',
+  FAULT: 'alert',
+  OFFLINE: 'invalid',
+  STANDBY: 'warning',
+};
+
 export const stateToStyleLATISS = {
   HOMING: 'running',
   MOVING: 'running',
@@ -559,7 +569,7 @@ export const stateToStyleLightpath = {
 //  MTM1M3
 export const m1m3DetailedStateToStyle = {
   'DISABLED STATE': 'warning',
-  'FAULT STATE': 'warning',
+  'FAULT STATE': 'alert',
   'OFFLINE STATE': 'warning',
   'STANDBY STATE': 'warning',
   'PARKED STATE': 'ok',
@@ -810,16 +820,6 @@ export const schedulerTrackingStateToStyle = {
   TRACKING: 'ok',
 };
 
-// General summaryState
-export const summaryStateToStyle = {
-  UNKNOWN: 'undefined',
-  DISABLED: 'invalid',
-  ENABLED: 'ok',
-  FAULT: 'alert',
-  OFFLINE: 'invalid',
-  STANDBY: 'warning',
-};
-
 // Scheduler
 export const schedulerDetailedStateToStyle = {
   UNKNOWN: 'undefined',
@@ -834,6 +834,16 @@ export const schedulerDetailedStateToStyle = {
 /*****************************************************************************/
 /*******************************STATE MAPPINGS********************************/
 /*****************************************************************************/
+
+// Generic
+export const summaryStateMap = {
+  0: 'UNKNOWN',
+  1: 'DISABLED',
+  2: 'ENABLED',
+  3: 'FAULT',
+  4: 'OFFLINE',
+  5: 'STANDBY',
+};
 
 // ATCamera
 export const cameraStates = {
@@ -1261,16 +1271,6 @@ export const mtm1m3HeaterDisabledStateMap = {
 export const schedulerTrackingStateToMap = {
   false: 'NO TRACKING',
   true: 'TRACKING',
-};
-
-// General summaryState
-export const summaryStateMap = {
-  0: 'UNKNOWN',
-  1: 'DISABLED',
-  2: 'ENABLED',
-  3: 'FAULT',
-  4: 'OFFLINE',
-  5: 'STANDBY',
 };
 
 // Scheduler

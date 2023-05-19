@@ -3,6 +3,8 @@ import * as d3 from 'd3';
 import { uniqueId, isEqual } from 'lodash';
 import { defaultNumberFormatter } from 'Utils';
 import {
+  summaryStateMap,
+  summaryStateToStyle,
   M1M3ActuatorPositions,
   M1M3ActuatorForces,
   m1m3DetailedStateMap,
@@ -15,6 +17,7 @@ import {
   M1M3SActuatorsMapping,
 } from 'Config';
 import ArrowIcon from 'components/icons/ArrowIcon/ArrowIcon';
+import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
@@ -459,11 +462,11 @@ export default class M1M3 extends Component {
     const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
     const margin = 60;
 
-    const summaryState = CSCDetail.states[this.props.summaryState];
-    const detailedStateValue = {
-      name: m1m3DetailedStateMap[this.props.detailedState],
-      class: CSCDetailStyles[m1m3DetailedStateToStyle[m1m3DetailedStateMap[this.props.detailedState]]],
-    };
+    const summaryStateName = summaryStateMap[this.props.summaryState];
+    const summaryStateStatus = summaryStateToStyle[summaryStateName];
+
+    const detailedStateName = m1m3DetailedStateMap[this.props.detailedState];
+    const detailedStateStatus = m1m3DetailedStateToStyle[detailedStateName];
 
     const maxForce = defaultNumberFormatter(Math.max(...actuatorsForce));
     const minForce = defaultNumberFormatter(Math.min(...actuatorsForce));
@@ -477,11 +480,11 @@ export default class M1M3 extends Component {
         <SummaryPanel className={styles.summaryPanelStates}>
           <div className={styles.state}>
             <Title>STATE</Title>
-            <span className={[summaryState.class, styles.summaryState].join(' ')}>{summaryState.name}</span>
+            <StatusText status={summaryStateStatus}>{summaryStateName}</StatusText>
           </div>
           <div className={styles.state}>
             <Title>DETAILED STATE</Title>
-            <span className={[detailedStateValue.class, styles.summaryState].join(' ')}>{detailedStateValue.name}</span>
+            <StatusText status={detailedStateStatus}>{detailedStateName}</StatusText>
           </div>
         </SummaryPanel>
 
@@ -527,8 +530,6 @@ export default class M1M3 extends Component {
         </SummaryPanel>
 
         <div className={styles.plotSection}>
-          {/* <svg className={styles.svgContainer} width={this.state.width} height={this.state.width}> */}
-
           <div className={styles.gridHardpoint}>
             <div className={styles.hardpoints}>
               <span>Hardpoints</span>
@@ -583,11 +584,6 @@ export default class M1M3 extends Component {
               onMouseEnter={this.disableScroll}
               onMouseLeave={this.enableScroll}
             >
-              {/* <svg className={styles.svgContainer} viewBox={`0 0 ${this.state.xRadius * scale * 2} ${this.state.yRadius * scale * 2}`}> */}
-              {/* <text x='0' y="10">-X</text>
-              <text x="20" y="10">+X</text>
-              <text x="10" y="20">+Y</text> */}
-
               <circle
                 id="background-circle"
                 className={this.state.actuators.length > 0 ? styles.circleOverlay : styles.circleOverlayDisabled}
@@ -618,9 +614,6 @@ export default class M1M3 extends Component {
                         cx={(act.position[0] + this.state.xRadius) * scale + margin}
                         cy={(act.position[1] + this.state.yRadius) * scale + margin}
                         key={act.id}
-                        // fill={this.state.colormap(
-                        //   Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)) / this.state.maxRadius,
-                        // )}
                         fill={
                           actuatorsForce.length > 0
                             ? this.state.colormap(this.getActuatorForceByParameter(selectedForceParameter, i))
