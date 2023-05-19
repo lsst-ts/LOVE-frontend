@@ -23,6 +23,8 @@ import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import CSCDetailStyles from './CSCDetail.module.css';
 import styles from './M1M3.module.css';
 
+const FORCE_GRADIENT_WIDTH = 250;
+const FORCE_GRADIENT_HEIGHT = 40;
 export default class M1M3 extends Component {
   constructor(props) {
     super(props);
@@ -150,8 +152,6 @@ export default class M1M3 extends Component {
   };
 
   createColorScale = (values) => {
-    const height = 300;
-    const width = 10;
     const colours = ['#2c7bb6', '#00a6ca', '#00ccbc', '#90eb9d', '#ffff8c', '#f9d057', '#f29e2e', '#e76818', '#d7191c'];
     const colourRange = d3.range(0, 1, 1.0 / (colours.length - 1));
     colourRange.push(1);
@@ -165,14 +165,18 @@ export default class M1M3 extends Component {
     });
 
     //Create the gradient
-    const svg = d3.select(`#${this.uniqueGradient} svg`).attr('width', width).attr('height', height);
+    const svg = d3
+      .select(`#${this.uniqueGradient} svg`)
+      .attr('width', FORCE_GRADIENT_WIDTH)
+      .attr('height', FORCE_GRADIENT_HEIGHT)
+      .html('');
     svg
       .append('defs')
       .append('linearGradient')
       .attr('id', this.uniqueForceGradient)
       .attr('x1', '0%')
-      .attr('y1', '100%')
-      .attr('x2', '0%')
+      .attr('y1', '0%')
+      .attr('x2', '100%')
       .attr('y2', '0%')
       .selectAll('stop')
       .data(colours)
@@ -185,10 +189,8 @@ export default class M1M3 extends Component {
       .append('rect')
       .attr('x', 0)
       .attr('y', 0)
-      .attr('rx', 5)
-      .attr('ry', 5)
-      .attr('width', 10)
-      .attr('height', '100%')
+      .attr('width', '100%')
+      .attr('height', '40')
       .style('fill', `url(#${this.uniqueForceGradient})`);
   };
 
@@ -718,11 +720,9 @@ export default class M1M3 extends Component {
             <div className={styles.forceGradientWrapper}>
               <span>Force</span>
               <div id={this.uniqueGradient} className={styles.forceGradient}>
-                <svg viewBox={`0 0 10 350`}></svg>
-                <div className={styles.forceGradientLabels}>
-                  <span>{maxForce} [N]</span>
-                  <span>{minForce} [N]</span>
-                </div>
+                <span>{maxForce} [N]</span>
+                <svg viewBox={`0 0 ${FORCE_GRADIENT_WIDTH} ${FORCE_GRADIENT_HEIGHT}`}></svg>
+                <span>{minForce} [N]</span>
               </div>
             </div>
 
