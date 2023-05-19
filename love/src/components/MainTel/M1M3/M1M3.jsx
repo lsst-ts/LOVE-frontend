@@ -249,7 +249,13 @@ export default class M1M3 extends Component {
 
   getActuator = (id) => {
     if (id === 0) return { id: 'None', value: 'None', state: CSCDetail.states[0] };
-    const { actuatorIlcState, actuatorReferenceId, actuatorIlcUniqueId } = this.props;
+    const {
+      actuatorIlcState,
+      actuatorReferenceId,
+      actuatorIlcUniqueId,
+      actuatorMinorRevision,
+      actuatorMayorRevision,
+    } = this.props;
     const { selectedForceParameter } = this.state;
     const actuatorIndex = actuatorReferenceId.indexOf(id);
     const actuator = {
@@ -257,6 +263,8 @@ export default class M1M3 extends Component {
       state: actuatorIlcState[actuatorIndex] ?? 'None',
       value: this.getActuatorForceByParameter(selectedForceParameter, actuatorIndex) ?? 'None',
       ilcUniqueId: actuatorIlcUniqueId[actuatorIndex] ?? 'None',
+      minorRevision: actuatorMinorRevision[actuatorIndex] ?? 'None',
+      majorRevision: actuatorMayorRevision[actuatorIndex] ?? 'None',
     };
 
     actuator.state = CSCDetail.states[actuator.state];
@@ -281,6 +289,8 @@ export default class M1M3 extends Component {
       hardpointsBreakawayLVDT,
       hardpointsDisplacementLVDT,
       hardpointsBreakawayPressure,
+      hardpointMinorRevision,
+      hardpointMayorRevision,
     } = this.props;
     const hardpointIndex = hardpointReferenceId.indexOf(id);
 
@@ -292,6 +302,8 @@ export default class M1M3 extends Component {
       breakawayLVDT: { value: hardpointsBreakawayLVDT[hardpointIndex] ?? 'None' },
       displacementLVDT: { value: hardpointsDisplacementLVDT[hardpointIndex] ?? 'None' },
       breakawayPressure: { value: hardpointsBreakawayPressure[hardpointIndex] ?? 'None' },
+      minorRevision: hardpointMinorRevision[hardpointIndex] ?? 'None',
+      majorRevision: hardpointMayorRevision[hardpointIndex] ?? 'None',
     };
 
     hardpoint.ilcStatus = {
@@ -752,6 +764,14 @@ export default class M1M3 extends Component {
                       <span>ILC unique id:</span>
                       <span>{selectedActuator.ilcUniqueId}</span>
                     </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Minor revision:</span>
+                      <span>{selectedActuator.minorRevision}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Major revision:</span>
+                      <span>{selectedActuator.majorRevision}</span>
+                    </div>
                   </>
                 ) : (
                   <div>No Actuator has been selected</div>
@@ -793,6 +813,14 @@ export default class M1M3 extends Component {
                     <div className={styles.actuatorValue}>
                       <span>Breakaway Pressure:</span>
                       <span>{defaultNumberFormatter(selectedHardpoint.breakawayPressure.value)}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Minor revision:</span>
+                      <span>{selectedHardpoint.minorRevision}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Major revision:</span>
+                      <span>{selectedHardpoint.majorRevision}</span>
                     </div>
                   </>
                 ) : (
