@@ -95,6 +95,7 @@ export const getM1M3ActuatorsState = (state) => {
     'telemetry-MTM1M3-0-forceActuatorData',
     'event-MTM1M3-0-forceActuatorInfo',
     'event-MTM1M3-0-forceActuatorState',
+    'event-MTM1M3-0-enabledForceActuators',
   ];
   const m1m3Data = getStreamsData(state, subscriptions);
   return {
@@ -107,6 +108,7 @@ export const getM1M3ActuatorsState = (state) => {
     actuatorIlcState: m1m3Data['event-MTM1M3-0-forceActuatorState']?.[0]?.ilcState?.value ?? [],
     actuatorMinorRevision: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.minorRevision?.value ?? [],
     actuatorMayorRevision: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.majorRevision?.value ?? [],
+    actuatorEnabled: m1m3Data['event-MTM1M3-0-enabledForceActuators']?.[0]?.forceActuatorEnabled?.value ?? [],
   };
 };
 

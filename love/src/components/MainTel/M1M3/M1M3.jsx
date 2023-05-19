@@ -317,6 +317,16 @@ export default class M1M3 extends Component {
     return hardpoint;
   };
 
+  fillActuator = (id) => {
+    const { actuatorEnabled } = this.props;
+    const { actuatorsForce, selectedForceParameter } = this.state;
+
+    if (!actuatorEnabled[id]) return 'black';
+    return actuatorsForce.length > 0
+      ? this.state.colormap(this.getActuatorForceByParameter(selectedForceParameter, id))
+      : this.state.colormap(0);
+  };
+
   fillHardpoint = (id) => {
     const { hardpointIlcState, hardpointReferenceId } = this.props;
     const hardpointIndex = hardpointReferenceId.indexOf(id);
@@ -629,11 +639,7 @@ export default class M1M3 extends Component {
                         cx={(act.position[0] + this.state.xRadius) * scale + margin}
                         cy={(act.position[1] + this.state.yRadius) * scale + margin}
                         key={act.id}
-                        fill={
-                          actuatorsForce.length > 0
-                            ? this.state.colormap(this.getActuatorForceByParameter(selectedForceParameter, i))
-                            : this.state.colormap(0)
-                        }
+                        fill={this.fillActuator(i)}
                         stroke={this.strokeActuatorSelected(act.id)}
                         r={(this.state.maxRadius * scale) / 21}
                         pointerEvents="all"
