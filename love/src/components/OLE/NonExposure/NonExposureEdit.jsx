@@ -77,6 +77,7 @@ export default class NonExposureEdit extends Component {
       confirmationModalShown: false,
       confirmationModalText: '',
       savingLog: false,
+      datesAreValid: true,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -206,13 +207,24 @@ export default class NonExposureEdit extends Component {
       prevState.logEdit?.date_begin !== this.state.logEdit?.date_begin ||
       prevState.logEdit?.date_end !== this.state.logEdit?.date_end
     ) {
-      this.handleTimeLost();
+      try {
+        this.state.logEdit.date_begin.toISOString();
+        this.state.logEdit.date_end.toISOString();
+        this.setState({
+          datesAreValid: true,
+        });
+        this.handleTimeLost();
+      } catch (error) {
+        this.setState({
+          datesAreValid: false,
+        });
+      }
     }
   }
 
   render() {
     const { back, isLogCreate, isMenu } = this.props;
-    const { confirmationModalShown, confirmationModalText } = this.state;
+    const { confirmationModalShown, confirmationModalText, datesAreValid } = this.state;
 
     const view = this.props.view ?? NonExposureEdit.defaultProps.view;
     const systemOptions = LSST_SYSTEMS;
@@ -380,6 +392,9 @@ export default class NonExposureEdit extends Component {
                         className={styles.dateTimeRangeStyle}
                         onChange={(date, type) => this.handleTimeOfIncident(date, type)}
                       />
+                      {!datesAreValid && (
+                        <div className={styles.inputError}>Error: dates must be input in valid ISO format</div>
+                      )}
                     </span>
                     <span className={styles.label}>Obs. Time Loss (hours)</span>
                     <span className={styles.value}>
@@ -415,6 +430,9 @@ export default class NonExposureEdit extends Component {
                           className={styles.dateTimeRangeStyle}
                           onChange={(date, type) => this.handleTimeOfIncident(date, type)}
                         />
+                        {!datesAreValid && (
+                          <div className={styles.inputError}>Error: dates must be input in valid ISO format</div>
+                        )}
                       </span>
                       <span className={styles.label}>Obs. Time Loss (hours)</span>
                       <span className={styles.value}>
@@ -528,7 +546,7 @@ export default class NonExposureEdit extends Component {
                 ) : (
                   <></>
                 )}
-                <Button type="submit">
+                <Button disabled={!datesAreValid} type="submit">
                   <span className={styles.title}>Upload Log</span>
                 </Button>
               </span>
