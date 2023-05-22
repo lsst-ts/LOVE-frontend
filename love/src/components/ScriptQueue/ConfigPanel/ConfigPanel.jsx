@@ -414,6 +414,17 @@ export default class ConfigPanel extends Component {
     this.setState({ logLevel: value });
   };
 
+  selectConfiguration = (event) => {
+    const { configurationList } = this.state;
+    const configuration = configurationList.find((conf) => conf.id === event.value);
+    this.setState({
+      selectedConfiguration: event,
+      value: configuration?.config_schema ?? '',
+      inputConfigurationName: configuration?.config_name ?? '',
+      formData: yaml.load(configuration?.config_schema),
+    });
+  };
+
   /**
    * Render the configuration panel options to select stored configurations
    * and to create new ones
@@ -467,15 +478,7 @@ export default class ConfigPanel extends Component {
           options={configurationOptions}
           placeholder="Select an option"
           value={selectedConfiguration}
-          onChange={(e) => {
-            const configuration = configurationList.find((conf) => conf.id === e.value);
-            this.setState({
-              selectedConfiguration: e,
-              value: configuration?.config_schema ?? '',
-              inputConfigurationName: configuration?.config_name ?? '',
-              formData: yaml.load(configuration?.config_schema),
-            });
-          }}
+          onChange={this.selectConfiguration}
         />
       );
     }
@@ -521,11 +524,20 @@ export default class ConfigPanel extends Component {
   };
 
   saveNewScriptSchema = (scriptPath, scriptType, configName, configSchema) => {
+    const { configurationList } = this.state;
     this.setState({ updatingScriptSchema: true });
     ManagerInterface.postScriptConfiguration(scriptPath, scriptType, configName, configSchema).then((res) => {
+      const newConfigurationList = [res, ...configurationList];
+      const options = newConfigurationList.map((conf) => ({ label: conf.config_name, value: conf.id }));
+      const newSelectedConfiguration = { label: res.config_name, value: res.id };
       this.setState({
         updatingScriptSchema: false,
-        configurationList: [...configurationList, res],
+        configurationList: newConfigurationList,
+        configurationOptions: options,
+        selectedConfiguration: newSelectedConfiguration,
+        value: res?.config_schema ?? '',
+        inputConfigurationName: res?.config_name ?? '',
+        formData: yaml.load(res?.config_schema),
       });
     });
   };
@@ -534,8 +546,10 @@ export default class ConfigPanel extends Component {
     const { configurationList } = this.state;
     this.setState({ updatingScriptSchema: true });
     ManagerInterface.updateScriptSchema(id, configSchema).then((res) => {
+      const newSelectedConfiguration = { label: res.config_name, value: res.id };
       this.setState({
         updatingScriptSchema: false,
+        selectedConfiguration: newSelectedConfiguration,
         configurationList: configurationList.map((conf) => (conf.id === id ? res : conf)),
       });
     });

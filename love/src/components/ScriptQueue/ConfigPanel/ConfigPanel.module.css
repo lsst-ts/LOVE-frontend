@@ -379,7 +379,7 @@ fieldset p {
   margin-bottom: var(--small-padding);
 }
 
-:global(.field) > * {
+:global(#root__title) {
   font-weight: bold;
 }
 
