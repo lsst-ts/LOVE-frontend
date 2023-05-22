@@ -3,13 +3,21 @@ import * as d3 from 'd3';
 import { uniqueId, isEqual } from 'lodash';
 import { defaultNumberFormatter } from 'Utils';
 import {
+  summaryStateMap,
+  summaryStateToStyle,
   M1M3ActuatorPositions,
   M1M3ActuatorForces,
   m1m3DetailedStateMap,
   m1m3DetailedStateToStyle,
   m1m3HardpointActuatorMotionStateMap,
   M1M3HardpointPositions,
+  M1M3XActuatorsMapping,
+  M1M3YActuatorsMapping,
+  M1M3ZActuatorsMapping,
+  M1M3SActuatorsMapping,
 } from 'Config';
+import ArrowIcon from 'components/icons/ArrowIcon/ArrowIcon';
+import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
@@ -19,6 +27,8 @@ import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import CSCDetailStyles from './CSCDetail.module.css';
 import styles from './M1M3.module.css';
 
+const FORCE_GRADIENT_WIDTH = 250;
+const FORCE_GRADIENT_HEIGHT = 40;
 export default class M1M3 extends Component {
   constructor(props) {
     super(props);
@@ -121,7 +131,7 @@ export default class M1M3 extends Component {
     // const positionsArray = M1M3.zip([xPosition, yPosition, zPosition]);
     const positionsArray = M1M3.zip([
       xPosition.map((x) => x * 39),
-      yPosition.map((x) => x * 39),
+      yPosition.map((x) => x * -39),
       zPosition.map((x) => x * 39),
     ]);
     return positionsArray.map((position, i) => ({ id: ids[i], position }));
@@ -146,8 +156,6 @@ export default class M1M3 extends Component {
   };
 
   createColorScale = (values) => {
-    const height = 300;
-    const width = 10;
     const colours = ['#2c7bb6', '#00a6ca', '#00ccbc', '#90eb9d', '#ffff8c', '#f9d057', '#f29e2e', '#e76818', '#d7191c'];
     const colourRange = d3.range(0, 1, 1.0 / (colours.length - 1));
     colourRange.push(1);
@@ -161,14 +169,18 @@ export default class M1M3 extends Component {
     });
 
     //Create the gradient
-    const svg = d3.select(`#${this.uniqueGradient} svg`).attr('width', width).attr('height', height);
+    const svg = d3
+      .select(`#${this.uniqueGradient} svg`)
+      .attr('width', FORCE_GRADIENT_WIDTH)
+      .attr('height', FORCE_GRADIENT_HEIGHT)
+      .html('');
     svg
       .append('defs')
       .append('linearGradient')
       .attr('id', this.uniqueForceGradient)
       .attr('x1', '0%')
-      .attr('y1', '100%')
-      .attr('x2', '0%')
+      .attr('y1', '0%')
+      .attr('x2', '100%')
       .attr('y2', '0%')
       .selectAll('stop')
       .data(colours)
@@ -181,10 +193,8 @@ export default class M1M3 extends Component {
       .append('rect')
       .attr('x', 0)
       .attr('y', 0)
-      .attr('rx', 5)
-      .attr('ry', 5)
-      .attr('width', 10)
-      .attr('height', '100%')
+      .attr('width', '100%')
+      .attr('height', '40')
       .style('fill', `url(#${this.uniqueForceGradient})`);
   };
 
@@ -221,15 +231,40 @@ export default class M1M3 extends Component {
     return 'black';
   };
 
+  getActuatorForceByParameter(forceParameter, index) {
+    const { actuatorsForce } = this.state;
+    if (forceParameter === 'xForces') {
+      return actuatorsForce[M1M3XActuatorsMapping[index]];
+    }
+    if (forceParameter === 'yForces') {
+      return actuatorsForce[M1M3YActuatorsMapping[index]];
+    }
+    if (forceParameter === 'zForces' || forceParameter === 'primaryCylinderForces') {
+      return actuatorsForce[M1M3ZActuatorsMapping[index]];
+    }
+    if (forceParameter === 'secondaryCylinderForces') {
+      return actuatorsForce[M1M3SActuatorsMapping[index]];
+    }
+  }
+
   getActuator = (id) => {
     if (id === 0) return { id: 'None', value: 'None', state: CSCDetail.states[0] };
-    const { actuatorIlcState, actuatorReferenceId } = this.props;
-    const { actuatorsForce } = this.state;
+    const {
+      actuatorIlcState,
+      actuatorReferenceId,
+      actuatorIlcUniqueId,
+      actuatorMinorRevision,
+      actuatorMayorRevision,
+    } = this.props;
+    const { selectedForceParameter } = this.state;
     const actuatorIndex = actuatorReferenceId.indexOf(id);
     const actuator = {
       id,
       state: actuatorIlcState[actuatorIndex] ?? 'None',
-      value: actuatorsForce[actuatorIndex] ?? 'None',
+      value: this.getActuatorForceByParameter(selectedForceParameter, actuatorIndex) ?? 'None',
+      ilcUniqueId: actuatorIlcUniqueId[actuatorIndex] ?? 'None',
+      minorRevision: actuatorMinorRevision[actuatorIndex] ?? 'None',
+      majorRevision: actuatorMayorRevision[actuatorIndex] ?? 'None',
     };
 
     actuator.state = CSCDetail.states[actuator.state];
@@ -248,21 +283,27 @@ export default class M1M3 extends Component {
       };
     const {
       hardpointIlcState,
+      hardpointIlcUniqueId,
       hardpointMotionState,
       hardpointReferenceId,
       hardpointsBreakawayLVDT,
       hardpointsDisplacementLVDT,
       hardpointsBreakawayPressure,
+      hardpointMinorRevision,
+      hardpointMayorRevision,
     } = this.props;
     const hardpointIndex = hardpointReferenceId.indexOf(id);
 
     const hardpoint = {
       id,
       ilcStatus: hardpointIlcState[hardpointIndex] ?? 'None',
+      ilcUniqueId: hardpointIlcUniqueId[hardpointIndex] ?? 'None',
       motionStatus: hardpointMotionState[hardpointIndex] ?? 'None',
       breakawayLVDT: { value: hardpointsBreakawayLVDT[hardpointIndex] ?? 'None' },
       displacementLVDT: { value: hardpointsDisplacementLVDT[hardpointIndex] ?? 'None' },
       breakawayPressure: { value: hardpointsBreakawayPressure[hardpointIndex] ?? 'None' },
+      minorRevision: hardpointMinorRevision[hardpointIndex] ?? 'None',
+      majorRevision: hardpointMayorRevision[hardpointIndex] ?? 'None',
     };
 
     hardpoint.ilcStatus = {
@@ -274,6 +315,16 @@ export default class M1M3 extends Component {
       class: M1M3.statesMotion[hardpoint.motionStatus].class,
     };
     return hardpoint;
+  };
+
+  fillActuator = (id) => {
+    const { actuatorEnabled } = this.props;
+    const { actuatorsForce, selectedForceParameter } = this.state;
+
+    if (!actuatorEnabled[id]) return 'black';
+    return actuatorsForce.length > 0
+      ? this.state.colormap(this.getActuatorForceByParameter(selectedForceParameter, id))
+      : this.state.colormap(0);
   };
 
   fillHardpoint = (id) => {
@@ -428,19 +479,19 @@ export default class M1M3 extends Component {
       showActuatorsID,
       showHardpoints,
       forceParameters,
+      selectedForceParameter,
       selectedActuatorId,
       selectedHardpointId,
     } = this.state;
-    const { forceActuatorData } = this.props;
 
     const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
     const margin = 60;
 
-    const summaryState = CSCDetail.states[this.props.summaryState];
-    const detailedStateValue = {
-      name: m1m3DetailedStateMap[this.props.detailedState],
-      class: CSCDetailStyles[m1m3DetailedStateToStyle[m1m3DetailedStateMap[this.props.detailedState]]],
-    };
+    const summaryStateName = summaryStateMap[this.props.summaryState];
+    const summaryStateStatus = summaryStateToStyle[summaryStateName];
+
+    const detailedStateName = m1m3DetailedStateMap[this.props.detailedState];
+    const detailedStateStatus = m1m3DetailedStateToStyle[detailedStateName];
 
     const maxForce = defaultNumberFormatter(Math.max(...actuatorsForce));
     const minForce = defaultNumberFormatter(Math.min(...actuatorsForce));
@@ -454,11 +505,11 @@ export default class M1M3 extends Component {
         <SummaryPanel className={styles.summaryPanelStates}>
           <div className={styles.state}>
             <Title>STATE</Title>
-            <span className={[summaryState.class, styles.summaryState].join(' ')}>{summaryState.name}</span>
+            <StatusText status={summaryStateStatus}>{summaryStateName}</StatusText>
           </div>
           <div className={styles.state}>
             <Title>DETAILED STATE</Title>
-            <span className={[detailedStateValue.class, styles.summaryState].join(' ')}>{detailedStateValue.name}</span>
+            <StatusText status={detailedStateStatus}>{detailedStateName}</StatusText>
           </div>
         </SummaryPanel>
 
@@ -504,8 +555,6 @@ export default class M1M3 extends Component {
         </SummaryPanel>
 
         <div className={styles.plotSection}>
-          {/* <svg className={styles.svgContainer} width={this.state.width} height={this.state.width}> */}
-
           <div className={styles.gridHardpoint}>
             <div className={styles.hardpoints}>
               <span>Hardpoints</span>
@@ -560,11 +609,6 @@ export default class M1M3 extends Component {
               onMouseEnter={this.disableScroll}
               onMouseLeave={this.enableScroll}
             >
-              {/* <svg className={styles.svgContainer} viewBox={`0 0 ${this.state.xRadius * scale * 2} ${this.state.yRadius * scale * 2}`}> */}
-              {/* <text x='0' y="10">-X</text>
-              <text x="20" y="10">+X</text>
-              <text x="10" y="20">+Y</text> */}
-
               <circle
                 id="background-circle"
                 className={this.state.actuators.length > 0 ? styles.circleOverlay : styles.circleOverlayDisabled}
@@ -595,12 +639,7 @@ export default class M1M3 extends Component {
                         cx={(act.position[0] + this.state.xRadius) * scale + margin}
                         cy={(act.position[1] + this.state.yRadius) * scale + margin}
                         key={act.id}
-                        // fill={this.state.colormap(
-                        //   Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)) / this.state.maxRadius,
-                        // )}
-                        fill={
-                          actuatorsForce.length > 0 ? this.state.colormap(actuatorsForce[i]) : this.state.colormap(0)
-                        }
+                        fill={this.fillActuator(i)}
                         stroke={this.strokeActuatorSelected(act.id)}
                         r={(this.state.maxRadius * scale) / 21}
                         pointerEvents="all"
@@ -651,11 +690,19 @@ export default class M1M3 extends Component {
                 r={this.state.width * 0.7}
               />
 
+              <g id="doors" className={styles.doors}>
+                <title>M1M3 Entrance</title>
+                <rect x={this.state.width / 2 - 15} y={margin / 2 - 8} width={30} height={20} />
+                <foreignObject x={this.state.width / 2 - 15} y={margin / 2 - 8} width={30} height={20}>
+                  <ArrowIcon style={styles.arrowIcon} active={true} />
+                </foreignObject>
+              </g>
+
               <g id="plot-axis">
                 <text
                   className={styles.axisLabel}
                   x={this.state.width / 2 - 5}
-                  y={margin / 2 - 12}
+                  y={margin / 2 - 15}
                   textAnchor="middle"
                   alignmentBaseline="middle"
                 >
@@ -696,11 +743,9 @@ export default class M1M3 extends Component {
             <div className={styles.forceGradientWrapper}>
               <span>Force</span>
               <div id={this.uniqueGradient} className={styles.forceGradient}>
-                <svg viewBox={`0 0 10 350`}></svg>
-                <div className={styles.forceGradientLabels}>
-                  <span>{maxForce} [N]</span>
-                  <span>{minForce} [N]</span>
-                </div>
+                <span>{maxForce} [N]</span>
+                <svg viewBox={`0 0 ${FORCE_GRADIENT_WIDTH} ${FORCE_GRADIENT_HEIGHT}`}></svg>
+                <span>{minForce} [N]</span>
               </div>
             </div>
 
@@ -720,6 +765,18 @@ export default class M1M3 extends Component {
                     <div className={styles.actuatorValue}>
                       <span>Applied force:</span>
                       <span>{defaultNumberFormatter(selectedActuator.value)}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>ILC unique id:</span>
+                      <span>{selectedActuator.ilcUniqueId}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Minor revision:</span>
+                      <span>{selectedActuator.minorRevision}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Major revision:</span>
+                      <span>{selectedActuator.majorRevision}</span>
                     </div>
                   </>
                 ) : (
@@ -742,6 +799,10 @@ export default class M1M3 extends Component {
                       </span>
                     </div>
                     <div className={styles.actuatorValue}>
+                      <span>ILC unique id:</span>
+                      <span>{selectedHardpoint.ilcUniqueId}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
                       <span>Motion status:</span>
                       <span className={[selectedHardpoint.motionStatus.class, styles.detailState].join(' ')}>
                         {selectedHardpoint.motionStatus.name}
@@ -758,6 +819,14 @@ export default class M1M3 extends Component {
                     <div className={styles.actuatorValue}>
                       <span>Breakaway Pressure:</span>
                       <span>{defaultNumberFormatter(selectedHardpoint.breakawayPressure.value)}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Minor revision:</span>
+                      <span>{selectedHardpoint.minorRevision}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Major revision:</span>
+                      <span>{selectedHardpoint.majorRevision}</span>
                     </div>
                   </>
                 ) : (
