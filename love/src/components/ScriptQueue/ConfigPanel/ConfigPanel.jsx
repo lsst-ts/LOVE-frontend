@@ -692,38 +692,6 @@ export default class ConfigPanel extends Component {
             ></div>
 
             <div className={styles.sidePanel}>
-              <div className={styles.sidePanelHeaderContainer}>
-                <Hoverable>
-                  <div style={{ display: 'flex' }}>
-                    <h3>CONFIG</h3>
-                    {this.state.configErrors.length > 0 && (
-                      <h3 className={styles.schemaErrorIcon}>
-                        <ErrorIcon svgProps={{ style: { height: '1em' } }} />
-                      </h3>
-                    )}
-                  </div>
-                  {this.state.configErrors.length > 0 && (
-                    <InfoPanel className={styles.infoPanel}>
-                      <div className={styles.infoPanelBody}>
-                        <div className={styles.infoPanelFirstLine}>{this.state.configErrorTitle}</div>
-                        <ul>
-                          {this.state.configErrors.map((error, index) => {
-                            if (!error.name) {
-                              return <span key={`noname-${index}`}>{error.message}</span>;
-                            }
-                            return (
-                              <li key={`${error.name}-${index}`}>
-                                <span className={styles.errorName}>{error.name}:</span>
-                                <span> {error.message}</span>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
-                    </InfoPanel>
-                  )}
-                </Hoverable>
-              </div>
               <div className={styles.schemaConfiguration}>
                 <div className={styles.configTypeTabs}>
                   <div data-active={this.state.manualConfig} onClick={() => this.setState({ manualConfig: true })}>
@@ -732,6 +700,31 @@ export default class ConfigPanel extends Component {
                   <div data-active={!this.state.manualConfig} onClick={() => this.setState({ manualConfig: false })}>
                     FORM CONFIG
                   </div>
+                </div>
+                <div className={styles.scriptConfigError}>
+                  <Hoverable>
+                    <div className={styles.errorIcon}>{this.state.configErrors.length > 0 && <ErrorIcon />}</div>
+                    {this.state.configErrors.length > 0 && (
+                      <InfoPanel className={styles.infoPanel}>
+                        <div className={styles.infoPanelBody}>
+                          <div className={styles.infoPanelFirstLine}>{this.state.configErrorTitle}</div>
+                          <ul>
+                            {this.state.configErrors.map((error, index) => {
+                              if (!error.name) {
+                                return <span key={`noname-${index}`}>{error.message}</span>;
+                              }
+                              return (
+                                <li key={`${error.name}-${index}`}>
+                                  <span className={styles.errorName}>{error.name}:</span>
+                                  <span> {error.message}</span>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                      </InfoPanel>
+                    )}
+                  </Hoverable>
                 </div>
                 {this.renderConfigurationsOptions()}
               </div>
