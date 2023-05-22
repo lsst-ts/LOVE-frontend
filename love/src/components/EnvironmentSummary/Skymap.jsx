@@ -3,6 +3,9 @@ import React, { Component } from 'react';
 import styles from './Skymap.module.css';
 import SkymapGrid from './SkymapGrid';
 import Pointing from './Pointing';
+import AuxTelPointing from './Pointings/AuxTelPointing';
+import SimonyiPointing from './Pointings/SimonyiPointing';
+import SunPointing from './Pointings/SunPointing';
 
 export default class Skymap extends Component {
   // static propTypes = {
@@ -51,6 +54,10 @@ export default class Skymap extends Component {
       az: 160,
       el: 80,
     };
+    const currentPointing3 = {
+      az: 270,
+      el: 70,
+    };
     const targetPointing = {
       az: 270,
       el: 20,
@@ -66,6 +73,7 @@ export default class Skymap extends Component {
             // targetPointing={targetPointing}
             targetPointing={currentPointing}
             isProjected={isProjected}
+            cartoon={<SimonyiPointing />}
           />
           <Pointing
             width={width}
@@ -74,6 +82,16 @@ export default class Skymap extends Component {
             // targetPointing={targetPointing}
             targetPointing={currentPointing2}
             isProjected={isProjected}
+            cartoon={<AuxTelPointing />}
+          />
+          <Pointing
+            width={width}
+            height={height}
+            currentPointing={currentPointing3}
+            // targetPointing={targetPointing}
+            targetPointing={currentPointing3}
+            isProjected={isProjected}
+            cartoon={<SunPointing />}
           />
           <SkymapGrid width={width} height={height} isProjected={isProjected} />
         </div>

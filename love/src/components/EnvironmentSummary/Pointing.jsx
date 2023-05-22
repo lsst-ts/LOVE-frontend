@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Skymap.module.css';
-import AuxTelPointing from './Pointings/AuxTelPointing';
+// import AuxTelPointing from './Pointings/AuxTelPointing';
+// import SimonyiPointing from './Pointings/SimonyiPointing';
+// import SunPointing from './Pointings/SunPointing';
 
 export default class Pointing extends Component {
   static propTypes = {
@@ -46,7 +48,7 @@ export default class Pointing extends Component {
   };
 
   render() {
-    const { width, height } = this.props;
+    const { width, height, cartoon } = this.props;
     const currentPixels = this.azelToPixel(this.props.currentPointing, this.props.isProjected);
     const targetPixels = this.azelToPixel(this.props.targetPointing, this.props.isProjected);
 
@@ -62,7 +64,8 @@ export default class Pointing extends Component {
         />
         {/* <circle r={8} stroke="white" strokeWidth={2} cx={currentPixels.x} cy={currentPixels.y} fill="#132631" /> */}
         <foreignObject x={currentPixels.x - 20} y={currentPixels.y - 20} width="40" height="40">
-          <AuxTelPointing />
+          {/* <AuxTelPointing /> */}
+          {cartoon}
         </foreignObject>
         {/* <circle r={4} cx={targetPixels.x} cy={targetPixels.y} fill="gray" /> */}
       </svg>

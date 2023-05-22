@@ -1,3 +1,10 @@
+.windRoseContainer {
+  position: absolute;
+  left: 3%;
+  top: 7%;
+  width: 4%;
+}
+
 .telescopes {
   position: relative;
 }
@@ -5,6 +12,7 @@
 .skymap {
   position: absolute;
   top: 0;
+  left: 40%;
 }
 
 .simonyi {
