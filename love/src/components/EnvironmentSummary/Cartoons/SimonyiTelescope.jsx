@@ -5,8 +5,18 @@ function SimonyiTelescope({ className, ...props }) {
   // const { className } = props;
   return (
     <svg viewBox="0 0 726.72 436.7" className={className} {...props}>
+      <foreignObject x={260} y={10} width="60" height="40">
+        <div>
+          <span>10.12 °C</span>
+        </div>
+      </foreignObject>
       <g id="Simonyi">
         <g id="TMA">
+          <foreignObject x={190} y={30} width="60" height="40">
+            <div>
+              <span>18.36 °C</span>
+            </div>
+          </foreignObject>
           <g>
             <g>
               <rect className={styles.cls4} x="153.4" y="44.72" width="16.11" height="54.37" />

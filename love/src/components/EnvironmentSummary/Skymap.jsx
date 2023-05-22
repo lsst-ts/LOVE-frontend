@@ -70,7 +70,6 @@ export default class Skymap extends Component {
             width={width}
             height={height}
             currentPointing={currentPointing}
-            // targetPointing={targetPointing}
             targetPointing={currentPointing}
             isProjected={isProjected}
             cartoon={<SimonyiPointing />}
@@ -79,7 +78,6 @@ export default class Skymap extends Component {
             width={width}
             height={height}
             currentPointing={currentPointing2}
-            // targetPointing={targetPointing}
             targetPointing={currentPointing2}
             isProjected={isProjected}
             cartoon={<AuxTelPointing />}
@@ -88,7 +86,6 @@ export default class Skymap extends Component {
             width={width}
             height={height}
             currentPointing={currentPointing3}
-            // targetPointing={targetPointing}
             targetPointing={currentPointing3}
             isProjected={isProjected}
             cartoon={<SunPointing />}

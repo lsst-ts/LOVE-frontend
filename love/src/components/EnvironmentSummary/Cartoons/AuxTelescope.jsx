@@ -5,7 +5,17 @@ function AuxTelescope({ className, ...props }) {
   // const { className } = this.props;
   return (
     <svg viewBox="0 0 444.43 436.59" className={className} {...props}>
+      <foreignObject x={135} y={10} width="60" height="40">
+        <div>
+          <span>10.84 °C</span>
+        </div>
+      </foreignObject>
       <g id="AuxTel">
+        <foreignObject x={180} y={40} width="60" height="40">
+          <div>
+            <span>10.36 °C</span>
+          </div>
+        </foreignObject>
         <g id="ATMount">
           <rect className={styles.cls1} x="242.87" y="117.66" width="30" height="8" />
           <g>
