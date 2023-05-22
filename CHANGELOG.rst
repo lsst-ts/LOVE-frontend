@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.20.2
+--------
+
+* Add error fedback to the user when a date input is not valid for OLE component `<https://github.com/lsst-ts/LOVE-frontend/pull/465>`_
+
 v5.20.1
 --------
 
