@@ -190,7 +190,6 @@ export default class Device extends Component {
               ry={5}
               transform={'translate(' + (width - (30 + gutter)) + ' ' + -5 + ')'}
             />
-            >
             <text
               className={this.statusTextToStyle(String(parameters[x].value))}
               transform={'translate(' + (width - 19) + ' 0)'}

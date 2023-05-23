@@ -808,6 +808,14 @@ export const mtm1m3tsHeaterDisabledStateToStyle = {
   OFF: 'warning',
 };
 
+//MTM1M3TS Glycol Loop
+export const stateToStylePumpReady = {
+  0: 'undefined',
+  UNKNOWN: 'invalid',
+  'NOT TRACKING': 'warning',
+  TRACKING: 'ok',
+};
+
 // Aircraft tracker
 export const aircraftTrackerStatetoStyle = {
   DISCONNECTED: 'warning',
