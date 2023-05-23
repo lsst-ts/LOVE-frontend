@@ -1,6 +1,5 @@
 import { createCachedSelector } from 're-reselect';
 import { flatMap, arrayRandomBoolean } from '../../Utils';
-import Moment from 'moment';
 
 export const getToken = (state) => state.auth.token;
 
