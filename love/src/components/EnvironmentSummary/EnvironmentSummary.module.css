@@ -5,6 +5,28 @@
   width: 4%;
 }
 
+.iconLeft {
+  position: absolute;
+  left: 17%;
+  top: 22%;
+  width: 4%;
+}
+
+.iconCenter {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 4%;
+  margin-top: 335px;
+}
+
+.iconRight {
+  position: absolute;
+  right: 17%;
+  top: 18%;
+  width: 3%;
+}
+
 .telescopes {
   position: relative;
 }
@@ -21,7 +43,7 @@
   left: 0;
   width: 66%;
   z-index: 2;
-  margin-top: 100px;
+  margin-top: 200px;
 }
 
 .auxTel {
@@ -30,5 +52,5 @@
   right: 0;
   width: 40%;
   z-index: 1;
-  margin-top: 100px;
+  margin-top: 200px;
 }

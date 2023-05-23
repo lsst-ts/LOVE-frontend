@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import styles from './Skymap.module.css';
 import SkymapGrid from './SkymapGrid';
 import Pointing from './Pointing';
-import AuxTelPointing from './Pointings/AuxTelPointing';
-import SimonyiPointing from './Pointings/SimonyiPointing';
-import SunPointing from './Pointings/SunPointing';
+import AuxTelPointing from '../Pointings/AuxTelPointing';
+import SimonyiPointing from '../Pointings/SimonyiPointing';
+import SunPointing from '../Pointings/SunPointing';
 
 export default class Skymap extends Component {
   // static propTypes = {
