@@ -1,11 +1,11 @@
 .CSCGroupContainer {
+  overflow-y: scroll;
   display: flex;
   width: 100%;
   flex-grow: 1;
   flex-direction: column;
   padding: 1em 0em;
   background: var(--second-secondary-background-color);
-  overflow: auto;
 }
 
 .CSCExpandedContainer {
@@ -49,7 +49,7 @@
   align-items: center;
 }
 
-.stateContainer>div {
+.stateContainer > div {
   padding-right: 0.5em;
 }
 
@@ -69,11 +69,12 @@
   width: 1.6em;
 }
 
-.heartbeatIconWrapper>svg {
+.heartbeatIconWrapper > svg {
   vertical-align: top;
 }
 
-.logContainerWrapper {}
+.logContainerWrapper {
+}
 
 .logContainerTopBar {
   display: flex;
@@ -148,9 +149,11 @@
   user-select: none;
 }
 
-.errorReport {}
+.errorReport {
+}
 
-.errorTraceback {}
+.errorTraceback {
+}
 
 .filtersContainer {
   display: flex;

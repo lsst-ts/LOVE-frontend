@@ -1,0 +1,51 @@
+.container {
+  display: grid;
+  grid-template-areas:
+    "sum sum sum sum"
+    "sep sep sep sep"
+    "men men men men"
+    "sel sel sel mix"
+    "sel sel sel tem"
+    "sel sel sel inf";
+  column-gap: 25px;
+}
+
+.summaryContainer {
+  grid-area: sum;
+}
+
+.menuContainer {
+  grid-area: men;
+  
+}
+
+.selectorContainer {
+  grid-area: sel;
+}
+
+.mixingContainer {
+  grid-area: mix;
+  padding-top: 15px;
+}
+
+.temperatureContainer {
+  grid-area: tem;
+  padding-top: 15px;
+}
+
+.infoContainer {
+  grid-area: inf;
+  padding-top: 15px;
+}
+
+.separatorContainer {
+  grid-area: sep;
+  background: var(--second-quaternary-background-dimmed-color);
+}
+
+.separator {
+  border-bottom: 1px solid var(--second-tertiary-background-color);
+  width: 99%;
+  margin: 0 auto;
+}
+

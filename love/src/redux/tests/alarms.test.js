@@ -4,7 +4,7 @@ import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 import { addGroup } from '../actions/ws';
 import { doReceiveToken } from '../actions/auth';
-import { receiveAlarms } from '../actions/alarms';
+import { receiveAlarm, receiveAllAlarms } from '../actions/alarms';
 import { getStreamData, getLastAlarm, getAllAlarms } from '../selectors';
 
 let store;
@@ -153,20 +153,19 @@ describe('GIVEN we have no alarms in the state', () => {
                 csc: 'Watcher',
                 salindex: 0, // watcher salindex
                 data: {
-                  alarm,
+                  alarm: [alarm],
                 },
               },
             ],
           });
 
           // Assert:
-          const expectedAlarm = alarms[index];
-          expectedAlarms.push(alarms[index]);
-          const watcherAlarmStream = getStreamData(store.getState(), 'event-Watcher-0-alarm');
+          expectedAlarms.push(alarm);
+          const watcherAlarmStream = getStreamData(store.getState(), 'event-Watcher-0-alarm')[0];
           const lastAlarm = getLastAlarm(store.getState());
           const allAlarms = getAllAlarms(store.getState());
           expect(watcherAlarmStream).toEqual(alarm);
-          expect(lastAlarm).toEqual(expectedAlarm);
+          expect(lastAlarm).toEqual(alarm);
           expect(allAlarms).toEqual(expectedAlarms);
         });
       },
@@ -222,7 +221,7 @@ describe('GIVEN we have some alarms in the state', () => {
               csc: 'Watcher',
               salindex: 0, // watcher salindex
               data: {
-                alarm: updatedAlarm,
+                alarm: [updatedAlarm],
               },
             },
           ],
@@ -230,7 +229,7 @@ describe('GIVEN we have some alarms in the state', () => {
 
         // Assert:
         const expectedAlarms = [alarms[0], updatedAlarm, alarms[2]];
-        const watcherAlarmStream = getStreamData(store.getState(), 'event-Watcher-0-alarm');
+        const watcherAlarmStream = getStreamData(store.getState(), 'event-Watcher-0-alarm')[0];
         const lastAlarm = getLastAlarm(store.getState());
         const allAlarms = getAllAlarms(store.getState());
         expect(watcherAlarmStream).toEqual(updatedAlarm);
@@ -269,7 +268,7 @@ describe('GIVEN we have no alarms in the state', () => {
   describe('WHEN we dispatch a receiveAlarms event with 1 alarm', () => {
     it('THEN the alarm is stored in the watcher state accordingly ', async () => {
       // Act:
-      await store.dispatch(receiveAlarms(alarms[0]));
+      await store.dispatch(receiveAlarm(alarms[0]));
       // Assert:
       const allAlarms = getAllAlarms(store.getState());
       expect(allAlarms).toEqual([alarms[0]]);
@@ -279,7 +278,7 @@ describe('GIVEN we have no alarms in the state', () => {
   describe('WHEN we dispatch a receiveAlarms event with multiple alarms', () => {
     it('THEN all the alarms are stored in the watcher state accordingly ', async () => {
       // Act:
-      await store.dispatch(receiveAlarms(alarms));
+      await store.dispatch(receiveAllAlarms(alarms));
       // Assert:
       const allAlarms = getAllAlarms(store.getState());
       expect(allAlarms).toEqual(alarms);

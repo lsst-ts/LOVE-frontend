@@ -101,7 +101,7 @@ export default class ManagerInterface {
   }
 
   static getMediaBaseUrl() {
-    return `http://${window.location.host}/manager`;
+    return `http://${window.location.host}/manager/`;
   }
 
   static getApiBaseUrl() {
@@ -1226,9 +1226,9 @@ export const parseTimestamp = (timestamp) => {
  * @param {number} value, number to convert
  * @returns {number|string} integer value or fixed float string of value
  */
-export const defaultNumberFormatter = (value) => {
+export const defaultNumberFormatter = (value, precision=4) => {
   if (Number.isNaN(value)) return value;
-  return Number.isInteger(value) ? value : Number.parseFloat(value).toFixed(4);
+  return Number.isInteger(value) ? value : Number.parseFloat(value).toFixed(precision);
 };
 
 /**
@@ -1280,6 +1280,30 @@ export const formatSecondsToDigital = (time) => {
   hours = hours.toString().length === 1 ? `0${hours}` : hours;
   return `${hours}:${minutes}:${seconds}`;
 };
+
+/**
+ * Function to converts digital format '00:00:00' to seconds
+ * @param {string} time in digital format 
+ * @returns {number} digital time in seconds
+ */
+export const formatDigitalToSeconds = (time) => {
+  const tokens = time.split(':');
+  return parseInt(tokens[0], 10) * 3600 + parseInt(tokens[1], 10) * 60 + parseInt(tokens[2], 10);
+};
+
+/**
+ * Function to calculate the difference between two dates in hours, using moment.js
+ * @param {string} hour1 in format '00:00:00'
+ * @param {string} hour2 in format '00:00:00'
+ * @param {string} unit to calculate the difference
+ * @returns {string} result diff in unit format
+ */
+export const diffHours = (hour1, hour2, unit) => {
+  const date1 = Moment().add(formatDigitalToSeconds(hour1), 'seconds');
+  const date2 = Moment().add(formatDigitalToSeconds(hour2), 'seconds');
+  let diff = Moment(date1).diff(Moment(date2), unit);
+  return diff;
+}
 
 /**
  * Function to transform a string to a regex expression
@@ -1438,7 +1462,7 @@ export function fixedFloat(x, points = 3) {
  * If difference is negative the return value is 0
  * @param {moment} startDate the initial date
  * @param {number} shift the shift added to the startDate in seconds
- * @returns {number} left duration from startDate + shift to current time
+ * @returns {number} left duration in seconds from startDate + shift to current time
  */
 export function calculateTimeoutToNow(startDate, shift = 0) {
   const diff = Moment.duration(Moment().diff(startDate));
@@ -1545,3 +1569,17 @@ export const getCameraStatusStyle = (status) => {
   if (status.toLowerCase() === 'done') return 'ok';
   return '';
 };
+
+let booleanArray = undefined;
+export function arrayRandomBoolean(len, probability=0.1) {
+  if (!booleanArray) {
+    let arr = Array.from({length: len}, i => false);
+    arr = arr.map((v) => {
+      const rnd = Math.floor(Math.random() * 100);
+      if (rnd < probability * 100) return true;
+      return false;
+    });
+    booleanArray = arr;
+  }
+  return booleanArray;
+}

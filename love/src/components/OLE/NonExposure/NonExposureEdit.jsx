@@ -32,8 +32,8 @@ export default class NonExposureEdit extends Component {
     logEdit: {
       id: undefined,
       level: 0,
-      date_begin: undefined,
-      date_end: undefined,
+      date_begin: Moment().subtract(1, 'day'),
+      date_end: Moment(),
       systems: [],
       subsystems: [],
       cscs: [],
@@ -77,6 +77,7 @@ export default class NonExposureEdit extends Component {
       confirmationModalShown: false,
       confirmationModalText: '',
       savingLog: false,
+      datesAreValid: true,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -94,9 +95,11 @@ export default class NonExposureEdit extends Component {
   }
 
   cleanForm() {
+    // Reset multiselects values
     this.multiselectRefs.systems.current.resetSelectedValues();
     this.multiselectRefs.subsystems.current.resetSelectedValues();
     this.multiselectRefs.cscs.current.resetSelectedValues();
+
     this.setState({ logEdit: NonExposureEdit.defaultProps.logEdit });
   }
 
@@ -186,26 +189,42 @@ export default class NonExposureEdit extends Component {
     }
   }
 
+  handleTimeLost() {
+    const { date_begin, date_end } = this.state.logEdit;
+    const start = Moment(date_begin);
+    const end = Moment(date_end);
+    const duration_hr = end.diff(start, 'hours', true);
+    this.setState((prevState) => ({
+      logEdit: {
+        ...prevState.logEdit,
+        time_lost: duration_hr.toFixed(2),
+      },
+    }));
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (
       prevState.logEdit?.date_begin !== this.state.logEdit?.date_begin ||
       prevState.logEdit?.date_end !== this.state.logEdit?.date_end
     ) {
-      const start = Moment(this.state.logEdit.date_begin);
-      const end = Moment(this.state.logEdit.date_end);
-      const duration_hr = end.diff(start, 'hours', true);
-      this.setState((prevState) => ({
-        logEdit: {
-          ...prevState.logEdit,
-          time_lost: duration_hr.toFixed(2),
-        },
-      }));
+      try {
+        this.state.logEdit.date_begin.toISOString();
+        this.state.logEdit.date_end.toISOString();
+        this.setState({
+          datesAreValid: true,
+        });
+        this.handleTimeLost();
+      } catch (error) {
+        this.setState({
+          datesAreValid: false,
+        });
+      }
     }
   }
 
   render() {
     const { back, isLogCreate, isMenu } = this.props;
-    const { confirmationModalShown, confirmationModalText } = this.state;
+    const { confirmationModalShown, confirmationModalText, datesAreValid } = this.state;
 
     const view = this.props.view ?? NonExposureEdit.defaultProps.view;
     const systemOptions = LSST_SYSTEMS;
@@ -373,6 +392,9 @@ export default class NonExposureEdit extends Component {
                         className={styles.dateTimeRangeStyle}
                         onChange={(date, type) => this.handleTimeOfIncident(date, type)}
                       />
+                      {!datesAreValid && (
+                        <div className={styles.inputError}>Error: dates must be input in valid ISO format</div>
+                      )}
                     </span>
                     <span className={styles.label}>Obs. Time Loss (hours)</span>
                     <span className={styles.value}>
@@ -408,6 +430,9 @@ export default class NonExposureEdit extends Component {
                           className={styles.dateTimeRangeStyle}
                           onChange={(date, type) => this.handleTimeOfIncident(date, type)}
                         />
+                        {!datesAreValid && (
+                          <div className={styles.inputError}>Error: dates must be input in valid ISO format</div>
+                        )}
                       </span>
                       <span className={styles.label}>Obs. Time Loss (hours)</span>
                       <span className={styles.value}>
@@ -521,7 +546,7 @@ export default class NonExposureEdit extends Component {
                 ) : (
                   <></>
                 )}
-                <Button type="submit">
+                <Button disabled={!datesAreValid} type="submit">
                   <span className={styles.title}>Upload Log</span>
                 </Button>
               </span>

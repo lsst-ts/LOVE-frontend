@@ -27,6 +27,8 @@ UserDetails.propTypes = {
   requireUserSwap: PropTypes.func,
   /** Callback to execute when clicking on the take screenshot menu element */
   takeScreenshot: PropTypes.func,
+  /** Callback to execute when clicking on the About menu element */
+  onAboutClick: PropTypes.func,
 };
 
 /** Contents of the User details Dropdown Menu */
@@ -41,6 +43,7 @@ export default function UserDetails({
   logout,
   requireUserSwap,
   takeScreenshot,
+  onAboutClick,
 }) {
   return (
     <>
@@ -91,6 +94,9 @@ export default function UserDetails({
       </div>
       <div className={[menuElementClassName, styles.menuElement].join(' ')} title="Logout" onClick={logout}>
         Logout
+      </div>
+      <div className={[menuElementClassName, styles.menuElement].join(' ')} title="About" onClick={onAboutClick}>
+        About
       </div>
     </>
   );

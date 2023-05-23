@@ -2,6 +2,31 @@
 Version History
 ===============
 
+v5.20.2
+--------
+
+* Fix M1M3 actuators mappings for different force parameters `<https://github.com/lsst-ts/LOVE-frontend/pull/467>`_
+* Add error fedback to the user when a date input is not valid for OLE component `<https://github.com/lsst-ts/LOVE-frontend/pull/465>`_
+* Add Inria Logo and an About `<https://github.com/lsst-ts/LOVE-frontend/pull/464>`_
+
+v5.20.1
+--------
+
+* Hotfix/v5.20.0 `<https://github.com/lsst-ts/LOVE-frontend/pull/463>`_
+* Fix error with not defined method on MTM2 component `<https://github.com/lsst-ts/LOVE-frontend/pull/462>`_
+* UI/UX improvements for MTM1M3 component `<https://github.com/lsst-ts/LOVE-frontend/pull/461>`_
+* Adjust GIS to comply with the latest GIS_logevent_rawStatus format `<https://github.com/lsst-ts/LOVE-frontend/pull/460>`_
+
+v5.20.0
+--------
+
+* MTM1M3TS implementation `<https://github.com/lsst-ts/LOVE-frontend/pull/459>`_
+* Scheduler implementation `<https://github.com/lsst-ts/LOVE-frontend/pull/458>`_
+* Fix scrolling behavior when content overflows on CSCGroup `<https://github.com/lsst-ts/LOVE-frontend/pull/457>`_
+* Fix initial data to avoid errors after creating 1 narrative log `<https://github.com/lsst-ts/LOVE-frontend/pull/456>`_
+* Extend thumbnails query `<https://github.com/lsst-ts/LOVE-frontend/pull/455>`_
+* Refactor Watcher alarms handling `<https://github.com/lsst-ts/LOVE-frontend/pull/454>`_
+
 v5.19.1
 --------
 

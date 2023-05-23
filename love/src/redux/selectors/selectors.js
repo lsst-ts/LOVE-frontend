@@ -1,5 +1,5 @@
 import { createCachedSelector } from 're-reselect';
-import { flatMap } from '../../Utils';
+import { flatMap, arrayRandomBoolean } from '../../Utils';
 
 export const getToken = (state) => state.auth.token;
 
@@ -95,6 +95,7 @@ export const getM1M3ActuatorsState = (state) => {
     'telemetry-MTM1M3-0-forceActuatorData',
     'event-MTM1M3-0-forceActuatorInfo',
     'event-MTM1M3-0-forceActuatorState',
+    'event-MTM1M3-0-enabledForceActuators',
   ];
   const m1m3Data = getStreamsData(state, subscriptions);
   return {
@@ -103,7 +104,11 @@ export const getM1M3ActuatorsState = (state) => {
     yPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.yPosition?.value ?? [],
     zPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.zPosition?.value ?? [],
     actuatorReferenceId: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.referenceId?.value ?? [],
+    actuatorIlcUniqueId: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.ilcUniqueId?.value ?? [],
     actuatorIlcState: m1m3Data['event-MTM1M3-0-forceActuatorState']?.[0]?.ilcState?.value ?? [],
+    actuatorMinorRevision: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.minorRevision?.value ?? [],
+    actuatorMayorRevision: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.majorRevision?.value ?? [],
+    actuatorEnabled: m1m3Data['event-MTM1M3-0-enabledForceActuators']?.[0]?.forceActuatorEnabled?.value ?? [],
   };
 };
 
@@ -142,12 +147,15 @@ export const getM1M3HardpointActuatorData = (state) => {
 };
 
 export const getM1M3HardpointActuatorState = (state) => {
-  const subscriptions = ['event-MTM1M3-0-hardpointActuatorState'];
+  const subscriptions = ['event-MTM1M3-0-hardpointActuatorState', 'event-MTM1M3-0-hardpointActuatorInfo'];
   const m1m3Data = getStreamsData(state, subscriptions);
   return {
     hardpointIlcState: m1m3Data['event-MTM1M3-0-hardpointActuatorState']?.[0]?.ilcState?.value ?? [],
     hardpointMotionState: m1m3Data['event-MTM1M3-0-hardpointActuatorState']?.[0]?.motionState?.value ?? [],
+    hardpointIlcUniqueId: m1m3Data['event-MTM1M3-0-hardpointActuatorInfo']?.[0]?.ilcUniqueId?.value ?? [],
     hardpointReferenceId: [1, 2, 3, 4, 5, 6],
+    hardpointMinorRevision: m1m3Data['event-MTM1M3-0-hardpointActuatorInfo']?.[0]?.minorRevision?.value ?? [],
+    hardpointMayorRevision: m1m3Data['event-MTM1M3-0-hardpointActuatorInfo']?.[0]?.majorRevision?.value ?? [],
   };
 };
 
@@ -225,6 +233,126 @@ export const getM1M3ActuatorForces = (state) => {
     appliedActiveOpticForces: m1m3Data['event-MTM1M3-0-appliedActiveOpticForces']?.[0] ?? {},
     appliedOffsetForces: m1m3Data['event-MTM1M3-0-appliedOffsetForces']?.[0] ?? {},
     appliedStaticForces: m1m3Data['event-MTM1M3-0-appliedStaticForces']?.[0] ?? {},
+  };
+};
+
+export const getM1M3TSMixingState = (state) => {
+  const subscriptions = ['telemetry-MTM1M3TS-0-mixingValve'];
+  const m1m3tsData = getStreamsData(state, subscriptions);
+  return {
+    valvePosition: m1m3tsData['telemetry-MTM1M3TS-0-mixingValve']?.valvePosition?.value ?? 0,
+  };
+};
+
+export const getM1M3TSWarningState = (state) => {
+  const subscriptions = ['event-MTM1M3TS-0-thermalWarning'];
+  const m1m3tsData = getStreamsData(state, subscriptions);
+  return {
+    majorFault: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].majorFault?.value ?? arrayRandomBoolean(96),
+    minorFault:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].minorFault?.value ?? Array.from({ length: 96 }, () => false),
+    faultOverride:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].faultOverride?.value ??
+      Array.from({ length: 96 }, () => false),
+    refResistorError:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].refResistorError?.value ??
+      Array.from({ length: 96 }, () => false),
+    rtdError:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].rtdError?.value ?? Array.from({ length: 96 }, () => false),
+    breakerHeater1Error:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].breakerHeater1Error?.value ??
+      Array.from({ length: 96 }, () => false),
+    breakerFan2Error:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].breakerFan2Error?.value ??
+      Array.from({ length: 96 }, () => false),
+    uniqueIdCRCError:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].uniqueIdCRCError?.value ??
+      Array.from({ length: 96 }, () => false),
+    applicationTypeMismatch:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].applicationTypeMismatch?.value ??
+      Array.from({ length: 96 }, () => false),
+    applicationMissing:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].applicationMissing?.value ??
+      Array.from({ length: 96 }, () => false),
+    applicationCRCMismatch:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].applicationCRCMismatch?.value ??
+      Array.from({ length: 96 }, () => false),
+    oneWireMissing:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].oneWireMissing?.value ??
+      Array.from({ length: 96 }, () => false),
+    oneWire1Mismatch:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].oneWire1Mismatch?.value ??
+      Array.from({ length: 96 }, () => false),
+    oneWire2Mismatch:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].oneWire2Mismatch?.value ??
+      Array.from({ length: 96 }, () => false),
+    watchdogReset:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].watchdogReset?.value ??
+      Array.from({ length: 96 }, () => false),
+    brownOut:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].brownOut?.value ?? Array.from({ length: 96 }, () => false),
+    eventTrapReset:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].eventTrapReset?.value ??
+      Array.from({ length: 96 }, () => false),
+    ssrPowerFault:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].ssrPowerFault?.value ??
+      Array.from({ length: 96 }, () => false),
+    auxPowerFault:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].auxPowerFault?.value ??
+      Array.from({ length: 96 }, () => false),
+    ilcFault:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].ilcFault?.value ?? Array.from({ length: 96 }, () => false),
+    broadcastWarning:
+      m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].broadcastCounterWarning?.value ??
+      Array.from({ length: 96 }, () => false),
+  };
+};
+
+// M1M3TS Selector
+export const getM1M3TSState = (state) => {
+  const subscriptions = ['event-MTM1M3TS-0-summaryState', 'event-MTM1M3TS-0-powerStatus'];
+  const m1m3tsData = getStreamsData(state, subscriptions);
+  return {
+    summaryState: m1m3tsData['event-MTM1M3TS-0-summaryState']?.[0].summaryState?.value ?? 0,
+    fanHeaters: m1m3tsData['event-MTM1M3TS-0-powerStatus']?.[0].fanCoilsHeatersOn?.value ?? false,
+    coolantPump: m1m3tsData['event-MTM1M3TS-0-powerStatus']?.[0].coolantPumpOn?.value ?? false,
+    // fanHeatersCommanded: m1m3tsData['event-MTM1M3TS-0-powerStatus']?.[0].fanCoilsHeatersCommandedOn?.value ?? false,
+    // coolantPumpCommanded: m1m3tsData['event-MTM1M3TS-0-powerStatus']?.[0].coolantPumpCommandedOn?.value ?? false,
+  };
+};
+
+export const getM1M3TSThermalState = (state) => {
+  const subscriptions = [
+    'event-MTM1M3TS-0-enabledILC',
+    'event-MTM1M3TS-0-thermalInfo',
+    'event-MTM1M3TS-0-thermalSettings',
+    'telemetry-MTM1M3TS-0-thermalData',
+  ];
+  const m1m3tsData = getStreamsData(state, subscriptions);
+  return {
+    ilcFCU: m1m3tsData['event-MTM1M3TS-0-enabledILC']?.[0].enabledFCU?.value ?? Array.from({ length: 96 }, () => false),
+    // enabledFCU: m1m3tsData['event-MTM1M3TS-0-thermalSettings']?.[0].enabledFCU?.value ?? Array.from({length: 96}, () => false),
+    referenceId:
+      m1m3tsData['event-MTM1M3TS-0-thermalInfo']?.[0].referenceId?.value ?? Array.from({ length: 96 }).map((v, i) => i),
+    absoluteTemperature:
+      m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.absoluteTemperature?.value ??
+      Array.from({ length: 96 }, (i) => 0),
+    differentialTemperature:
+      m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.differentialTemperature?.value ??
+      Array.from({ length: 96 }, (i) => 0),
+    fanRPM: m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.fanRPM?.value ?? Array.from({ length: 96 }, (i) => 0),
+    fanBreaker:
+      m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.fanBreaker?.value ?? Array.from({ length: 96 }, () => false),
+    heaterDisabled:
+      m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.heaterDisabled?.value ?? Array.from({ length: 96 }, () => false),
+  };
+};
+
+export const getM1M3TSTemperatureState = (state) => {
+  const subscriptions = ['event-MTM1M3TS-0-appliedSetpoint'];
+  const m1m3tsData = getStreamsData(state, subscriptions);
+  return {
+    setpoint: m1m3tsData['event-MTM1M3TS-0-appliedSetpoint']?.[0].setpoint?.value ?? 0,
   };
 };
 
@@ -1069,6 +1197,196 @@ export const getRawStatus = (state) => {
   };
 };
 
+// Scheduler
+export const getSchedulerSummaryState = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-summaryState`];
+  const schedulerSummaryState = getStreamsData(state, subscriptions);
+  return {
+    schedulerState: schedulerSummaryState[`event-Scheduler-${salindex}-summaryState`]?.[0]?.summaryState?.value ?? 0,
+  };
+};
+
+export const getDetailedState = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-detailedState`];
+  const summaryData = getStreamsData(state, subscriptions);
+  return {
+    subState: summaryData[`event-Scheduler-${salindex}-detailedState`]?.[0]?.substate?.value ?? 0,
+  };
+};
+
+export const getObservingMode = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-observingMode`];
+  const observingMode = getStreamsData(state, subscriptions);
+  return {
+    mode: observingMode[`event-Scheduler-${salindex}-observingMode`]?.[0]?.mode?.value ?? 'No obs. mode',
+    type: observingMode[`event-Scheduler-${salindex}-observingMode`]?.[0]?.type?.value ?? 'No type obs.',
+  };
+};
+
+export const getGeneralInfo = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-generalInfo`];
+  const generalInfo = getStreamsData(state, subscriptions);
+  return {
+    isNigth: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.isNigth?.value ?? false,
+    night: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.nigth?.value ?? 0,
+    sunset: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.sunset?.value ?? 0,
+    sunrise: generalInfo[`event-Scheduler-${salindex}-generalInfo`]?.[0]?.sunrise?.value ?? 0,
+  };
+};
+
+export const getFilterSwap = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-needFilterSwap`];
+  const filterSwap = getStreamsData(state, subscriptions);
+  return {
+    needSwap: filterSwap[`event-Scheduler-${salindex}-needFilterSwap`]?.[0]?.needSwap?.value ?? false,
+    filterToMount: filterSwap[`event-Scheduler-${salindex}-needFilterSwap`]?.[0]?.filterToMount?.value ?? '',
+    filterToUnmount: filterSwap[`event-Scheduler-${salindex}-needFilterSwap`]?.[0]?.filterToUnmount?.value ?? '',
+  };
+};
+
+export const getObservatoryStatus = (state, salindex) => {
+  const subscriptions = [`telemetry-Scheduler-${salindex}-observatoryState`, `event-Scheduler-${salindex}-target`];
+  const observatoryStatus = getStreamsData(state, subscriptions);
+  return {
+    pointingRa: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.ra?.value ?? 0.0,
+    pointingDecl: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.declination?.value ?? 0.0,
+    pointingPosAngle:
+      observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.positionAngle?.value ?? 0.0,
+    pointingParallAngle:
+      observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.parallacticAngle?.value ?? 0.0,
+    simonyiTracking: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.tacking?.value ?? false,
+    simonyiAl: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.telescopeAltitude?.value ?? 0.0,
+    simonyiAz: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.telescopeAzimuth?.value ?? 0.0,
+    simonyiRot: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.telescopeRotator?.value ?? 0.0,
+    domeAlt: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.domeAltitude?.value ?? 0.0,
+    domeAz: observatoryStatus[`telemetry-Scheduler-${salindex}-observatoryState`]?.domeAzimuth?.value ?? 0,
+    moonRa: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonRa?.value ?? 0.0,
+    moonDec: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonDec?.value ?? 0.0,
+    moonAlt: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonAlt?.value ?? 0.0,
+    moonAz: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonAz?.value ?? 0.0,
+    moonDistance: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonDistance?.value ?? 0.0,
+    moonPhase: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.moonPhase?.value ?? 0.0,
+    sunRa: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunRa?.value ?? 0.0,
+    sunDec: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunDec?.value ?? 0.0,
+    sunAlt: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunAlt?.value ?? 0.0,
+    sunAz: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.sunAz?.value ?? 0.0,
+    solarElong: observatoryStatus[`event-Scheduler-${salindex}-target`]?.[0]?.solarElong?.value ?? 0.0,
+  };
+};
+
+export const getCurrentTargetInfo = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-target`];
+  const currentTarget = getStreamsData(state, subscriptions);
+  return {
+    currentTargetId: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.targetId?.value ?? 0.0,
+    currentRequestTime: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.requestTime?.value ?? 0.0,
+    currentRequestMjd: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.requestMjd?.value ?? 0.0,
+    currentRa: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.ra?.value ?? 0.0,
+    currentDecl: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.decl?.value ?? 0.0,
+    currentSkyAngle: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.skyAngle?.value ?? 0.0,
+    currentFilter: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.filter?.value ?? 'No filter selected',
+    currentNumExposures: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.numExposures?.value ?? 0.0,
+    currentExposureTimes: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.exposureTimes?.value ?? [],
+    currentSlewTime: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.slewTime?.value ?? 0.0,
+    currentOffsetX: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.offsetX?.value ?? 0.0,
+    currentOffsetY: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.offsetY?.value ?? 0.0,
+    currentNumProposals: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.numProposals?.value ?? 0.0,
+    currentProposalId: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.proposalId?.value ?? [],
+    currentSequenceDuration: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.sequenceDuration?.value ?? 0.0,
+    currentSequenceNVisits: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.sequenceNVisits?.value ?? 0.0,
+    currentSequenceVisits: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.sequenceVisits?.value ?? 0.0,
+  };
+};
+
+export const getSkyMapInfo = (state, salindex) => {
+  const subscriptions = [
+    [`event-Scheduler-${salindex}-observation`],
+    [`event-Scheduler-${salindex}-predictedSchedule`],
+  ];
+  const skyMapInfo = getStreamsData(state, subscriptions);
+  return {
+    rotSkyPos: skyMapInfo[`event-Scheduler-${salindex}-observation`]?.[0]?.rotSkyPos?.value ?? 0,
+    predictedTargetsRa: skyMapInfo[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.ra?.value ?? [],
+    predictedTargetsDecl: skyMapInfo[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.decl?.value ?? [],
+    predictedTargetsRotSkyPos: skyMapInfo[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.rotSkyPos?.value ?? [],
+  };
+};
+
+export const lastTargetInfo = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-observation`];
+  const lastTarget = getStreamsData(state, subscriptions);
+  return {
+    lastTargetId: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.targetId?.value ?? 0,
+    lastTargetRa: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.ra?.value ?? 0.0,
+    lastTargetDecl: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.decl?.value ?? 0.0,
+    lastTargetRotSkyPos: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.rotSkyPos?.value ?? 0.0,
+    lastTargetMjd: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.mjd?.value ?? 0.0,
+    lastTargetExpTime: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.exptime?.value ?? 0.0,
+    lastTargetFilter: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.filter?.value ?? 'No filter selected',
+    lastTargetNexp: lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.nexp?.value ?? 0,
+    lastTargetMoreInfo:
+      lastTarget[`event-Scheduler-${salindex}-observation`]?.[0]?.additionalInformation?.value ?? 'Without information',
+  };
+};
+
+export const nextTargetInfo = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-timeToNextTarget`];
+  const nextTarget = getStreamsData(state, subscriptions);
+  return {
+    nextTargetCurrentTime: nextTarget[`event-Scheduler-${salindex}-timeToNextTarget`]?.[0]?.currentTime?.value ?? 0.0,
+    nextTimeWaitTime: nextTarget[`event-Scheduler-${salindex}-timeToNextTarget`]?.[0]?.waitTime?.value ?? 0.0,
+    nextTargetRa: nextTarget[`event-Scheduler-${salindex}-timeToNextTarget`]?.[0]?.ra?.value ?? 0.0,
+    nextTargetDecl: nextTarget[`event-Scheduler-${salindex}-timeToNextTarget`]?.[0]?.decl?.value ?? 0.0,
+    nextTargetRotSkyPos: nextTarget[`event-Scheduler-${salindex}-timeToNextTarget`]?.[0]?.rotSkyPos?.value ?? 0.0,
+  };
+};
+
+export const predictedTargetsInfo = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-predictedSchedule`];
+  const predictedTargets = getStreamsData(state, subscriptions);
+  return {
+    predTargetsNumTargets:
+      predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.numberOfTargets?.value ?? 0,
+    predTargetsRa: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.ra?.value ?? [],
+    predTargetsDecl: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.decl?.value ?? [],
+    predTargetsRotSkyPos:
+      predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.rotSkyPos?.value ?? [],
+    predTargetsMjd: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.mjd?.value ?? [],
+    predTargetsExpTime: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.exptime?.value ?? [],
+    predTargetsInstrConfig:
+      predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.instrumentConfiguration?.value ??
+      'No instrument conf.',
+    predTargetsNexp: predictedTargets[`event-Scheduler-${salindex}-predictedSchedule`]?.[0]?.nexp?.value ?? [],
+  };
+};
+
+export const getSurveysInfo = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-surveyTopology`];
+  const surveys = getStreamsData(state, subscriptions);
+  return {
+    surveysNumGenProps: surveys[`event-Scheduler-${salindex}-surveyTopology`]?.[0]?.numGeneralProps?.value ?? 0,
+    surveysGenProps: surveys[`event-Scheduler-${salindex}-surveyTopology`]?.[0]?.generalPropos?.value ?? '',
+    surveysNumSeqProps: surveys[`event-Scheduler-${salindex}-surveyTopology`]?.[0]?.numSeqProps?.value ?? 0,
+    surveysSeqProps: surveys[`event-Scheduler-${salindex}-surveyTopology`]?.[0]?.sequencePropos?.value ?? '',
+  };
+};
+
+export const getBlocksInfo = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-blockInventory`, `event-Scheduler-${salindex}-blockStatus`];
+  const blocks = getStreamsData(state, subscriptions);
+  return {
+    blockInvId: blocks[`event-Scheduler-${salindex}-blockInventory`]?.[0]?.ids?.vallue ?? '',
+    blockInvStatus: blocks[`event-Scheduler-${salindex}-blockInventory`]?.[0]?.status?.value ?? '',
+    blockId: blocks[`event-Scheduler-${salindex}-blockStatus`]?.[0]?.id?.value ?? '',
+    blockStatusId: blocks[`event-Scheduler-${salindex}-blockStatus`]?.[0]?.statusId?.value ?? 0,
+    blockStatus: blocks[`event-Scheduler-${salindex}-blockStatus`]?.[0]?.status?.value ?? '',
+    blockExecCompl: blocks[`event-Scheduler-${salindex}-blockStatus`]?.[0]?.executionsCompleted?.value ?? 0,
+    blockExecTotal: blocks[`event-Scheduler-${salindex}-blockStatus`]?.[0]?.executionsTotal?.value ?? 0,
+    blockHash: blocks[`event-Scheduler-${salindex}-blockStatus`]?.[0]?.hash?.value ?? '',
+    blockDef: blocks[`event-Scheduler-${salindex}-blockStatus`]?.[0]?.definition?.value ?? '',
+  };
+};
+
 /**
  * Returns events related to the LATISS instrument in the state.
  *
@@ -1564,7 +1882,7 @@ export const getLastestAlarms = (state) => {
 
 export const getLastAlarm = (state) => {
   if (state.ws === undefined) return undefined;
-  return getStreamData(state, 'event-Watcher-0-alarm');
+  return getStreamData(state, 'event-Watcher-0-alarm')[0];
 };
 
 export const getObservingLogs = (state) => {

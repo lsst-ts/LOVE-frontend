@@ -4,7 +4,7 @@ import styles from './GearIcon.module.css';
 export default function GearIcon(props) {
   const className = [styles.gearIcon, props.className].join(' ');
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38.16 38.16" className={className}>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38.16 38.16" className={className} {...props}>
       <path
         className={styles['cls-1']}
         d="M19.21,15.23a3.93,3.93,0,1,0,3.93,3.93A3.93,3.93,0,0,0,19.21,15.23Z"

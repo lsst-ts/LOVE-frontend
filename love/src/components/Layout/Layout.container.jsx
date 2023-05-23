@@ -76,13 +76,17 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
     'heartbeat-manager-0-stream',
+    /* Watcher states */
     'event-Watcher-0-alarm',
+    'event-Watcher-0-stream',
     /* Simonyi states */
     'event-Scheduler-1-observingMode',
     'event-Scheduler-1-observatoryState',
+    'event-MTPtg-0-currentTarget',
     /* Auxtel states */
     'event-Scheduler-2-observingMode',
     'event-Scheduler-2-observatoryState',
+    'event-ATPtg-0-currentTarget',
   ];
   return {
     subscriptions,

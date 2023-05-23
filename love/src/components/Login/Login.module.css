@@ -1,5 +1,6 @@
 .login {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 70vh;
@@ -38,8 +39,6 @@
 }
 
 .panelBody {
-  border-top-left-radius: 8px;
-  border-top: 2px solid var(--secondary-font-color);
   padding: 10px 15px 20px 15px;
   margin: 0px 8px;
   color: var(--secondary-font-color);
@@ -88,4 +87,26 @@
   border: 1px solid var(--secondary-font-color);
   margin-left: 1em;
   min-width: 10em;
+}
+
+.logo {
+  height: 4em;
+  padding: 1.4em 0em;
+  fill: var(--base-font-color);
+  vertical-align: sub;
+}
+
+.inriaLogo {
+  height: 4em;
+  fill: var(--base-font-color);
+  vertical-align: sub;
+}
+
+.LSSTContainer {
+  width: 50em;
+  padding-top: 1em;
+}
+
+.LSSTlogo {
+  width: 100%;
 }

@@ -1,0 +1,41 @@
+.parentDiv {
+  display: flex;
+}
+
+.containerStyles {
+  width: 100%;
+  background-color: #455a64;
+  margin-bottom: 5px;
+  float: right;
+  position: relative;
+  padding: 4px;
+}
+
+.fillerStyles {
+  height: 100%;
+  /* width: `${completed}%`; */
+  background-color: var(--second-tertiary-background-color);
+  text-align: right;
+}
+
+.labelStyles {
+  padding: 5px;
+  color: white;
+  font-weight: bold;
+}
+
+.targetValueLine {
+  stroke: white;
+  stroke-width: 2px;
+  stroke-dasharray: 4px;
+  stroke-opacity: 0.5px;
+}
+
+.progressCommandedLine {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  bottom: 4px;
+  left: 4px;
+  overflow: visible;
+}

@@ -371,3 +371,8 @@ th.tableHead {
 .divExportBtn {
   margin-left: auto;
 }
+
+.inputError {
+  margin-top: var(--small-padding);
+  color: var(--status-alert-color);
+}

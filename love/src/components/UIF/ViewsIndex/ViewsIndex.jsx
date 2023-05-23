@@ -135,7 +135,16 @@ class ViewsIndex extends Component {
             this.props.views.map((view, index) => {
               let tab = this.state.selectedTab;
               let viewName = view.name.replace(/[a-z\s]/g, '').substring(0, 6);
-              let imgURL = view.thumbnail ? `${ManagerInterface.getMediaBaseUrl()}${view.thumbnail}` : '';
+
+              let imgURL = '';
+              if (view.thumbnail) {
+                if (view.thumbnail.startsWith('http')) {
+                  imgURL = view.thumbnail;
+                } else {
+                  imgURL = `${ManagerInterface.getMediaBaseUrl()}${view.thumbnail}`;
+                }
+              }
+
               if (viewName === '') viewName = view.name.substring(0, 3).toUpperCase();
               return (
                 (this.state.filter === '' || new RegExp(this.state.filter, 'i').test(view.name)) &&

@@ -14,7 +14,7 @@ const DateTimeRange = ({
   label = '',
   onChange = () => {},
 }) => {
-  const [dateStart, setDateStart] = useState(startDate ?? new Date(Date.now() - 24 * 60 * 60 * 1000));
+  const [dateStart, setDateStart] = useState(startDate ?? new Date(Date.now() - 24 * 60 * 60 * 1000 + 37 * 1000)); // Add 37 seconds to comply with TAI
   const [dateEnd, setDateEnd] = useState(endDate ?? new Date(Date.now() + 37 * 1000)); // Add 37 seconds to comply with TAI
 
   // Effect used to update startDate and endDate
@@ -66,15 +66,9 @@ DateTimeRange.propTypes = {
   /** Classname of the component */
   className: PropTypes.string,
   /** Date for the datetime range start */
-  startDate: PropTypes.oneOfType([
-    PropTypes.instanceOf(Date),
-    PropTypes.instanceOf(Moment),
-  ]),
+  startDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.instanceOf(Moment)]),
   /** Date for the datetime range end */
-  endtDate: PropTypes.oneOfType([
-    PropTypes.instanceOf(Date),
-    PropTypes.instanceOf(Moment),
-  ]),
+  endtDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.instanceOf(Moment)]),
   /** Properties to add to the start DateTime component */
   startDateProps: PropTypes.object,
   /** Properties to add to the end DateTime component */
@@ -86,11 +80,13 @@ DateTimeRange.propTypes = {
 };
 
 const checkChangeProps = (prevProps, nextProps) => {
-  return prevProps.className === nextProps.className
-    && prevProps.startDate === nextProps.startDate
-    && prevProps.endDate === nextProps.endDate
-    && lodash.isEqual(prevProps.startDateProps, nextProps.startDateProps)
-    && lodash.isEqual(prevProps.endDateProps, nextProps.endDateProps)
-    && prevProps.label === nextProps.label;
+  return (
+    prevProps.className === nextProps.className &&
+    prevProps.startDate === nextProps.startDate &&
+    prevProps.endDate === nextProps.endDate &&
+    lodash.isEqual(prevProps.startDateProps, nextProps.startDateProps) &&
+    lodash.isEqual(prevProps.endDateProps, nextProps.endDateProps) &&
+    prevProps.label === nextProps.label
+  );
 };
 export default memo(DateTimeRange, checkChangeProps);

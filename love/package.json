@@ -1,6 +1,6 @@
 {
   "name": "love",
-  "version": "0.1.0",
+  "version": "5.20.2",
   "private": true,
   "dependencies": {
     "@emotion/core": "^10.3.1",
@@ -12,6 +12,7 @@
     "closest": "^0.0.1",
     "d3": "^5.16.0",
     "d3-geo-voronoi": "^1.6.0",
+    "d3-celestial": "0.7.35",
     "dagre": "^0.8.5",
     "file-saver": "^2.0.1",
     "howler": "^2.1.3",

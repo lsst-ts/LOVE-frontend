@@ -1,0 +1,65 @@
+.title {
+  text-align: left;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+  color: var(--base-font-color);
+}
+
+.temperatureGradientWrapper {
+  margin-bottom: 50px;
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.temperatureGradient {
+  display: flex;
+}
+
+.temperatureGradient > svg {
+  /* border-radius: 6em; */
+}
+
+.temperatureGradientLabels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.temperatureGradientLabels > span {
+  margin-left: 1em;
+}
+
+.colorScaleSvg {
+  overflow: visible;
+/*   width: 100%; */
+}
+
+.label {
+  font-size: var(--font-size-medium);
+  color: var(--secondary-font-color);
+  text-align: left;
+  white-space: pre;
+}
+
+.value {
+  color: var(--base-font-color);
+  text-align: right;
+}
+
+.container {
+  position: relative;
+  display: grid;
+  justify-content: flex-start;
+  margin-bottom: 1em;
+  grid-template-columns: 1fr 1.2fr;
+}
+
+.setpointLine {
+  stroke: white;
+  stroke-width: 2px;
+  stroke-dasharray: 4px;
+  stroke-opacity: 0.5px;
+}

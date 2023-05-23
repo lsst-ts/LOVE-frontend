@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { fixedFloat } from 'Utils';
+import { defaultNumberFormatter } from 'Utils';
 import { inclinationTelemetrySourceStateMap } from 'Config';
 import styles from './Inclinometer.module.css';
 
@@ -57,7 +57,7 @@ export default class Inclinometer extends Component {
         </svg>
         <div className={styles.inclinometerValues}>
           <span>Inclination</span>
-          <span className={styles.value}>{fixedFloat(zenithAngleMeasured, 2)}°</span>
+          <span className={styles.value}>{defaultNumberFormatter(zenithAngleMeasured, 2)}°</span>
           <span>Source</span>
           <span className={styles.value}>{inclinationTelemetrySourceValue}</span>
         </div>

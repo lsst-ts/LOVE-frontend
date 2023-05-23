@@ -1,0 +1,99 @@
+.container {
+  background-color: var(--quaternary-background-color);
+  border-radius: 0.5em;
+  box-sizing: border-box;
+  /* width: 100%; */
+}
+
+.headers {
+  display: flex;
+  justify-content: space-between;
+  align-content: stretch;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+}
+
+.currentTarget {
+  margin-left: 1em;
+}
+
+.spanRigth {
+  margin-right: 1em;
+}
+
+.separator {
+  border-top: 2px solid gray;
+  /* padding: 1em 0; */
+  overflow: hidden;
+}
+
+.summaryPanel {
+  grid-template-columns: minmax(10em, 1fr) minmax(10em, 1fr);
+  background-color: var(--quaternary-background-color);
+  justify-content: unset;
+  align-items: unset;
+  align-content: unset;
+  /* padding: var(--content-padding); */
+  /* min-width: 14em !important; */
+  max-width: 100%;
+}
+
+.currentTargetDiv {
+  grid-template-columns: minmax(340px, 1fr) 1fr !important;
+  display: grid !important;
+  overflow: hidden;
+  padding: var(--content-padding);
+  /* width: 100%;
+  align-items: start;
+  justify-items: stretch; */
+}
+
+.proposals {
+  display: flex;
+  grid-column-start: span 2;
+  flex-wrap: wrap;
+  /* justify-content: space-evenly;
+  align-items: stretch; */
+}
+
+.generalDiv {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.surveysDivs {
+  background-color: var(--quinary-background-color);
+  border: 1px solid var(--tertiary-background-color);
+  padding: 1em;
+  margin: 0.5em;
+  width: 20%;
+  height: 8%;
+}
+
+.exposures {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: stretch;
+  width: 100%;
+  margin-left: 0.4rem;
+}
+
+.expIndexes {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+}
+
+.exposuresDetail {
+  color: white;
+  border: 2px solid var(--second-senary-background-dimmed-color);
+  border-radius: 0.5em;
+  margin-right: 0.4em;
+  width: 2em;
+  overflow: hidden;
+}
