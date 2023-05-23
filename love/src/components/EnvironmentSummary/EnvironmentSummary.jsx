@@ -14,10 +14,12 @@ export default class EnvironmentSummary extends Component {
     this.containerRef = React.createRef();
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.setState({ test: 1 });
+  }
 
   render() {
-    // console.log(this.containerRef);
+    console.log(this.containerRef);
     return (
       <div>
         <div className={styles.windRoseContainer}>
@@ -27,7 +29,7 @@ export default class EnvironmentSummary extends Component {
           <BeachIcon />
         </div>
         <div ref={this.containerRef} className={styles.telescopes}>
-          <Skymap containerNode={this.containerRef?.current} width={300} height={300} className={styles.skymap} />
+          <Skymap containerNode={this.containerRef?.current} className={styles.skymap} />
           <SimonyiTelescope className={styles.simonyi} />
           <div className={styles.iconCenter}>
             <MountainIcon />

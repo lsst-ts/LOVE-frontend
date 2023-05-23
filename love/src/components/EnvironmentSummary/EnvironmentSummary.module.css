@@ -29,6 +29,7 @@
 
 .telescopes {
   position: relative;
+  padding: 20px;
 }
 
 .skymap {

@@ -15,37 +15,47 @@ export default class Skymap extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      height: 0,
-      width: 0,
+      height: 350,
+      width: 350,
     };
   }
 
+  setResizeObserver = () => {
+    const { containerNode } = this.props;
+    if (containerNode) {
+      const resizeObserver = new ResizeObserver((entries) => {
+        const container = entries[0];
+        // const containerHeight = container.contentRect.height;
+        const containerWidth = container.contentRect.width;
+        console.log(container);
+        console.log(containerWidth);
+        // this.setState({
+        //   height: containerWidth*0.5,
+        //   width: containerWidth*0.5,
+        // });
+      });
+      if (!(containerNode instanceof Element)) return;
+      resizeObserver.observe(containerNode);
+      return () => {
+        resizeObserver.disconnect();
+      };
+    }
+  };
+
   componentDidUpdate() {
-    // const { containerNode } = this.props;
-    // console.log(containerNode);
-    // if (containerNode) {
-    //   const resizeObserver = new ResizeObserver((entries) => {
-    //     const container = entries[0];
-    //     // const containerHeight = container.contentRect.height;
-    //     const containerWidth = container.contentRect.width;
-    //     this.setState({
-    //       height: containerWidth*0.5,
-    //       width: containerWidth*0.5,
-    //     });
-    //   });
-    //   if (!(containerNode instanceof Element)) return;
-    //   resizeObserver.observe(containerNode);
-    //   return () => {
-    //     resizeObserver.disconnect();
-    //   };
-    // }
+    console.log('DidUpdate');
+    const { containerNode } = this.props;
+    this.setResizeObserver();
+  }
+
+  componentDidMount() {
+    console.log('didMount');
   }
 
   render() {
-    const { className, containerNode } = this.props;
-    console.log(this.state.height);
-    const width = this.props.width ?? 350;
-    const height = this.props.height ?? 350;
+    const { className } = this.props;
+    const width = this.state.width ?? 350;
+    const height = this.state.height ?? 350;
     const currentPointing = {
       az: 0,
       el: 20,

@@ -2,9 +2,9 @@
   /* display: flex; */
   flex-wrap: wrap;
   position: relative;
-  width: fit-content;
   left: 25em;
   top: 2em;
+  max-width: 100px;
 }
 
 .skymapGridContainer {
