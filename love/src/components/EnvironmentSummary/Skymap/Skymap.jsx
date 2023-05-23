@@ -25,14 +25,11 @@ export default class Skymap extends Component {
     if (containerNode) {
       const resizeObserver = new ResizeObserver((entries) => {
         const container = entries[0];
-        // const containerHeight = container.contentRect.height;
         const containerWidth = container.contentRect.width;
-        console.log(container);
-        console.log(containerWidth);
-        // this.setState({
-        //   height: containerWidth*0.5,
-        //   width: containerWidth*0.5,
-        // });
+        this.setState({
+          height: containerWidth * 0.3,
+          width: containerWidth * 0.3,
+        });
       });
       if (!(containerNode instanceof Element)) return;
       resizeObserver.observe(containerNode);
@@ -42,14 +39,18 @@ export default class Skymap extends Component {
     }
   };
 
-  componentDidUpdate() {
-    console.log('DidUpdate');
+  componentDidUpdate(prevProps) {
     const { containerNode } = this.props;
-    this.setResizeObserver();
+    if (prevProps.containerNode !== containerNode) {
+      this.setResizeObserver();
+    }
   }
 
   componentDidMount() {
-    console.log('didMount');
+    const { containerNode } = this.props;
+    if (containerNode) {
+      this.setResizeObserver();
+    }
   }
 
   render() {
