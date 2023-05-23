@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
-import { defaultNumberFormatter } from 'Utils';
+import { defaultNumberFormatterm, fixedFloat } from 'Utils';
 import styles from './TemperatureGradient.module.css';
 
 export default class TemperatureGradient extends Component {
@@ -88,7 +88,7 @@ export default class TemperatureGradient extends Component {
 
   createColorScale = () => {
     console.log('cratingScale');
-    const height = 40;
+    const height = 44;
     const width = this.state.width;
 
     // Create the gradient
@@ -144,11 +144,13 @@ export default class TemperatureGradient extends Component {
 
         <div className={styles.temperatureGradientWrapper}>
           <div id="color-scale" className={styles.temperatureGradient}>
-            <span style={{ position: 'absolute', bottom: '-2em', left: 0 }}>{minTemperatureLimit} [°C]</span>
-            <span style={{ position: 'absolute', top: '-2em', left: 0 }}>{minTemperatureLimit} [°C]</span>
+            <span style={{ position: 'absolute', bottom: '-2em', left: 0 }}>
+              {fixedFloat(minTemperatureLimit, 2)} [°C]
+            </span>
             <svg className={styles.colorScaleSvg} viewBox={`0 0 ${this.state.width} 40`}></svg>
-            <span style={{ position: 'absolute', bottom: '-2em', right: 0 }}>{maxTemperatureLimit} [°C]</span>
-            <span style={{ position: 'absolute', top: '-2em', right: 0 }}>{maxTemperatureLimit} [°C]</span>
+            <span style={{ position: 'absolute', bottom: '-2em', right: 0 }}>
+              {fixedFloat(maxTemperatureLimit, 2)} [°C]
+            </span>
           </div>
         </div>
       </div>

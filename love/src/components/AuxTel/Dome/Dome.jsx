@@ -235,6 +235,8 @@ export default class Dome extends Component {
       historicalData: this.state.historicalData,
     };
 
+    console.log(this.props);
+
     return (
       <div className={styles.domeContainer}>
         <div className={styles.topRow}>
@@ -267,13 +269,13 @@ export default class Dome extends Component {
               targetValue={azimuthCommanded}
             />
             {/*<DomeTopView width={width} height={height} />*/}
-            <MountTopView 
+            <MountTopView
               currentPointing={{
                 az: currentPointingAz,
                 el: currentPointingEl,
                 nasmyth1: currentPointingNasmyth1,
                 nasmyth2: currentPointingNasmyth2,
-              }} 
+              }}
             />
             <DomeShutter
               width={width}

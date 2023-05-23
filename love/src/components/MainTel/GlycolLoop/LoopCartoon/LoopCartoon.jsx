@@ -41,6 +41,8 @@ export default class LoopCartoon extends Component {
     minTemperatureLimit: -15,
     maxTemperatureLimit: 15,
     colours: [],
+    width: 100,
+    height: 100,
   };
 
   constructor(props) {
@@ -108,7 +110,7 @@ export default class LoopCartoon extends Component {
     return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
   };
 
-  tempsToGradient = (value1, value2, colours, reverse) => {
+  tempsToGradient = (value1, value2, colours, reverse, startWeight) => {
     let renderColours = '';
     let newColours = '';
     const stops = Math.abs(value1 - value2) - 1;
@@ -126,7 +128,7 @@ export default class LoopCartoon extends Component {
         newColours = newColours.reverse();
       }
       renderColours = newColours.map((element, index) => (
-        <stop offset={(1 / (stops + 1)) * (index + 1)} stop-color={element} />
+        <stop offset={((1 - startWeight) / (stops + 1)) * (index + 1) + startWeight} stop-color={element} />
       ));
     }
 
@@ -147,7 +149,7 @@ export default class LoopCartoon extends Component {
 
     return (
       <>
-        <svg className={styles.svgContainer} cviewBox="0 0 425.25 851.69">
+        <svg className={styles.svgContainer} viewBox="0 0 425.25 851.69">
           <defs>
             <linearGradient
               id="gradChillTs5"
@@ -171,7 +173,7 @@ export default class LoopCartoon extends Component {
               gradientUnits="userSpaceOnUse"
             >
               <stop offset="0" stop-color={ts5Hex} />
-              {this.tempsToGradient(ts5Stop, ts7Stop, colours)}
+              {this.tempsToGradient(ts5Stop, ts7Stop, colours, true, 0)}
               <stop offset="1" stop-color={ts7Hex} />
             </linearGradient>
             <linearGradient
@@ -184,7 +186,7 @@ export default class LoopCartoon extends Component {
               gradientUnits="userSpaceOnUse"
             >
               <stop offset="0" stop-color={ts2Hex} />
-              {this.tempsToGradient(ts2Stop, ts7Stop, colours)}
+              {this.tempsToGradient(ts2Stop, ts7Stop, colours, false, 0)}
               <stop offset="1" stop-color={ts7Hex} />
             </linearGradient>
             <linearGradient
@@ -197,7 +199,7 @@ export default class LoopCartoon extends Component {
               gradientUnits="userSpaceOnUse"
             >
               <stop offset=".20" stop-color={ts3Hex} />
-              {this.tempsToGradient(ts2Stop, ts3Stop, colours, true)}
+              {this.tempsToGradient(ts2Stop, ts3Stop, colours, true, 0.2)}
               <stop offset="1" stop-color={ts2Hex} />
             </linearGradient>
             <linearGradient
@@ -210,7 +212,7 @@ export default class LoopCartoon extends Component {
               gradientUnits="userSpaceOnUse"
             >
               <stop offset=".20" stop-color={ts3Hex} />
-              {this.tempsToGradient(ts3Stop, ts4Stop, colours, false)}
+              {this.tempsToGradient(ts3Stop, ts4Stop, colours, true, 0.2)}
               <stop offset="1" stop-color={ts4Hex} />
             </linearGradient>
             <linearGradient
@@ -223,7 +225,7 @@ export default class LoopCartoon extends Component {
               gradientUnits="userSpaceOnUse"
             >
               <stop offset="0" stop-color={ts4Hex} />
-              {this.tempsToGradient(ts4Stop, ts8Stop, colours)}
+              {this.tempsToGradient(ts4Stop, ts8Stop, colours, false, 0)}
               <stop offset="1" stop-color={ts8Hex} />
             </linearGradient>
             <linearGradient
@@ -236,7 +238,7 @@ export default class LoopCartoon extends Component {
               gradientUnits="userSpaceOnUse"
             >
               <stop offset="0" stop-color={ts6Hex} />
-              {this.tempsToGradient(ts6Stop, ts8Stop, colours, true)}
+              {this.tempsToGradient(ts6Stop, ts8Stop, colours, true, 0)}
               <stop offset="1" stop-color={ts8Hex} />
             </linearGradient>
             <linearGradient
