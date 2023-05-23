@@ -114,7 +114,7 @@
   margin: 0;
   padding: var(--content-padding);
   overflow: auto;
-  height: calc(100vh - 5em);
+  min-height: calc(100vh - 10em);
   will-change: transform;
 }
 
@@ -340,4 +340,16 @@
 
 .floatRight {
   float: right;
+}
+
+.footer {
+  padding: 1em;
+  padding-top: 2em;
+}
+
+.logo {
+  height: 2em;
+  padding: 0em 0.5em;
+  fill: var(--base-font-color);
+  vertical-align: sub;
 }

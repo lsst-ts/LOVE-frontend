@@ -1,0 +1,29 @@
+.wrapper {
+  padding: 1em;
+  text-align: center;
+}
+
+.textWrapper {
+  text-align: left;
+  width: 30em;
+  padding: 1.5em 0em;
+}
+
+.textWrapper div {
+  padding: 0.5em 0em;
+}
+
+.version {
+  font-weight: bolder;
+  display: block;
+}
+
+.logo {
+  height: 3em;
+  fill: var(--base-font-color);
+  vertical-align: sub;
+}
+
+.inriaLogo {
+  text-align: right;
+}

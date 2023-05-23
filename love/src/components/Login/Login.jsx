@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import Button from '../GeneralPurpose/Button/Button';
 import Input from '../GeneralPurpose/Input/Input';
+import LogoIcon from '../icons/LogoIcon/LogoIcon';
+import LSSTLogos from '../icons/LSSTLogos/LSSTLogos';
 import styles from './Login.module.css';
 import { tokenStates } from '../../redux/reducers/auth';
 
@@ -67,10 +69,8 @@ export default class Login extends Component {
     return (
       <div className={styles.login}>
         <div className={styles.panel}>
-          <div className={styles.panelHeading}>
-            <h3 className={styles.panelTitle}>Login</h3>
-          </div>
           <div className={styles.panelBody}>
+            <LogoIcon className={styles.logo} title="Love" />
             <form onSubmit={this.handleSubmit}>
               {this.props.tokenStatus === tokenStates.REQUESTED ? (
                 <div className={styles.incorrectCredentialsDiv}>
@@ -147,6 +147,9 @@ export default class Login extends Component {
               {this.props.token !== null ? this.redirect() : ''}
             </form>
           </div>
+        </div>
+        <div className={styles.LSSTContainer}>
+          <LSSTLogos className={styles.LSSTlogo} />
         </div>
       </div>
     );

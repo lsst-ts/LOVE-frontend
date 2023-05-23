@@ -24,6 +24,10 @@
   max-width: 50%;
 }
 
+.modal-0 {
+  min-width: 0% !important;
+}
+
 .overlay {
   background-color: var(--overlay-background-color);
   position: fixed;
