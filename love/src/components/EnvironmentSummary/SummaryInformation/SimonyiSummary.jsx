@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styles from './Simonyi.module.css';
+import styles from './SummaryInformation.module.css';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Label from '../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../GeneralPurpose/SummaryPanel/Value';
