@@ -19,9 +19,6 @@ import Label from '../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
 import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
-import CurrentTargetValue from '../../../GeneralPurpose/CurrentTargetValue/CurrentTargetValue';
-import Row from '../../../GeneralPurpose/SummaryPanel/Row';
-import Limits from '../../../GeneralPurpose/Limits/Limits';
 
 export default class Summary extends Component {
   static propTypes = {
@@ -69,7 +66,7 @@ export default class Summary extends Component {
     } else if (ready) {
       return 'READY';
     } else {
-      return 'FALSE';
+      return 'NOT READY';
     }
   };
 
@@ -94,6 +91,7 @@ export default class Summary extends Component {
       operationCommandControlled,
       parametersLocked,
       errorCode,
+      errorReport,
     } = this.props;
 
     console.log(this.props);
@@ -113,13 +111,14 @@ export default class Summary extends Component {
         <SummaryPanel>
           <Title>Glycol Pump</Title>
           <Value>
-            <StatusText title={ready} status={'ok'} small>
+            <StatusText title={ready} status={running ? 'ok' : ready ? 'ok' : 'invalid'} small>
               {this.glycolPumpBooltoState(ready, running)}
             </StatusText>
           </Value>
+          <Label wide>{faulted ? 'Error ' + errorCode + ': ' + errorReport : 'No Errors detected'}</Label>
         </SummaryPanel>
 
-        <SummaryPanel className={[styles.summaryPanel, styles.pt].join(' ')}>
+        <SummaryPanel className={styles.summaryPanel}>
           <Label>Command</Label>
           <Value>
             <StatusText
@@ -138,7 +137,7 @@ export default class Summary extends Component {
           </Value>
         </SummaryPanel>
 
-        <SummaryPanel className={[styles.summaryPanel, styles.pt].join(' ')}>
+        <SummaryPanel className={styles.summaryPanel}>
           <Label>Main Freq</Label>
           <Value>
             <StatusText
@@ -161,7 +160,7 @@ export default class Summary extends Component {
           </Value>
         </SummaryPanel>
 
-        <SummaryPanel className={[styles.summaryPanel, styles.pt].join(' ')}>
+        <SummaryPanel className={styles.summaryPanel}>
           <Label>Parameters</Label>
           <Value>
             <StatusText title={parametersLocked} status={this.StatusToStyle(parametersLocked, ['ok', 'warning'])} small>

@@ -250,8 +250,6 @@ export default class GlycolLoop extends Component {
       historicalData: this.state.historicalData,
     };
 
-    console.log(this.props);
-
     return (
       <>
         <div className={styles.summaryContainer}>
@@ -283,6 +281,9 @@ export default class GlycolLoop extends Component {
               minTemperatureLimit={minTemp}
               maxTemperatureLimit={maxTemp}
               colours={COLOURS}
+              height={'54em'}
+              rotation={forwardRotating}
+              direction={forwardCommanded}
             />
           </div>
           <div>

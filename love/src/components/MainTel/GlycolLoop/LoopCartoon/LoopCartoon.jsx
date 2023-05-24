@@ -43,6 +43,8 @@ export default class LoopCartoon extends Component {
     colours: [],
     width: 100,
     height: 100,
+    rotation: true,
+    direction: true,
   };
 
   constructor(props) {
@@ -110,7 +112,7 @@ export default class LoopCartoon extends Component {
     return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
   };
 
-  tempsToGradient = (value1, value2, colours, reverse, startWeight) => {
+  tempsToGradient = (value1, value2, colours, startWeight) => {
     let renderColours = '';
     let newColours = '';
     const stops = Math.abs(value1 - value2) - 1;
@@ -124,7 +126,7 @@ export default class LoopCartoon extends Component {
 
     if (stops > 0) {
       newColours = colours.slice(minStop + 1, maxStop);
-      if (!reverse) {
+      if (value1 > value2) {
         newColours = newColours.reverse();
       }
       renderColours = newColours.map((element, index) => (
@@ -136,7 +138,22 @@ export default class LoopCartoon extends Component {
   };
 
   getSvg = () => {
-    const { ts1, ts2, ts3, ts4, ts5, ts6, ts7, ts8, minTemperatureLimit, maxTemperatureLimit, colours } = this.props;
+    const {
+      ts1,
+      ts2,
+      ts3,
+      ts4,
+      ts5,
+      ts6,
+      ts7,
+      ts8,
+      minTemperatureLimit,
+      maxTemperatureLimit,
+      colours,
+      height,
+      rotation,
+      direction,
+    } = this.props;
 
     const [ts1Hex, ts1Stop] = this.tempToHex(ts1, minTemperatureLimit, maxTemperatureLimit, colours);
     const [ts2Hex, ts2Stop] = this.tempToHex(ts2, minTemperatureLimit, maxTemperatureLimit, colours);
@@ -146,10 +163,16 @@ export default class LoopCartoon extends Component {
     const [ts6Hex, ts6Stop] = this.tempToHex(ts6, minTemperatureLimit, maxTemperatureLimit, colours);
     const [ts7Hex, ts7Stop] = this.tempToHex(ts7, minTemperatureLimit, maxTemperatureLimit, colours);
     const [ts8Hex, ts8Stop] = this.tempToHex(ts8, minTemperatureLimit, maxTemperatureLimit, colours);
-
+    console.log('ts2Stop: ' + ts2Stop);
+    console.log('ts3Stop: ' + ts3Stop);
+    console.log('ts4Stop: ' + ts4Stop);
+    console.log('ts5Stop: ' + ts5Stop);
+    console.log('ts62Stop: ' + ts6Stop);
+    console.log('ts7Stop: ' + ts7Stop);
+    console.log('ts8Stop: ' + ts8Stop);
     return (
       <>
-        <svg className={styles.svgContainer} viewBox="0 0 425.25 851.69">
+        <svg className={styles.svgContainer} viewBox="0 0 425.25 851.69" height={height}>
           <defs>
             <linearGradient
               id="gradChillTs5"
@@ -173,7 +196,7 @@ export default class LoopCartoon extends Component {
               gradientUnits="userSpaceOnUse"
             >
               <stop offset="0" stop-color={ts5Hex} />
-              {this.tempsToGradient(ts5Stop, ts7Stop, colours, true, 0)}
+              {this.tempsToGradient(ts5Stop, ts7Stop, colours, 0)}
               <stop offset="1" stop-color={ts7Hex} />
             </linearGradient>
             <linearGradient
@@ -186,7 +209,7 @@ export default class LoopCartoon extends Component {
               gradientUnits="userSpaceOnUse"
             >
               <stop offset="0" stop-color={ts2Hex} />
-              {this.tempsToGradient(ts2Stop, ts7Stop, colours, false, 0)}
+              {this.tempsToGradient(ts2Stop, ts7Stop, colours, 0)}
               <stop offset="1" stop-color={ts7Hex} />
             </linearGradient>
             <linearGradient
@@ -199,7 +222,7 @@ export default class LoopCartoon extends Component {
               gradientUnits="userSpaceOnUse"
             >
               <stop offset=".20" stop-color={ts3Hex} />
-              {this.tempsToGradient(ts2Stop, ts3Stop, colours, true, 0.2)}
+              {this.tempsToGradient(ts3Stop, ts2Stop, colours, 0.2)}
               <stop offset="1" stop-color={ts2Hex} />
             </linearGradient>
             <linearGradient
@@ -212,7 +235,7 @@ export default class LoopCartoon extends Component {
               gradientUnits="userSpaceOnUse"
             >
               <stop offset=".20" stop-color={ts3Hex} />
-              {this.tempsToGradient(ts3Stop, ts4Stop, colours, true, 0.2)}
+              {this.tempsToGradient(ts3Stop, ts4Stop, colours, 0.2)}
               <stop offset="1" stop-color={ts4Hex} />
             </linearGradient>
             <linearGradient
@@ -225,7 +248,7 @@ export default class LoopCartoon extends Component {
               gradientUnits="userSpaceOnUse"
             >
               <stop offset="0" stop-color={ts4Hex} />
-              {this.tempsToGradient(ts4Stop, ts8Stop, colours, false, 0)}
+              {this.tempsToGradient(ts4Stop, ts8Stop, colours, 0)}
               <stop offset="1" stop-color={ts8Hex} />
             </linearGradient>
             <linearGradient
@@ -238,7 +261,7 @@ export default class LoopCartoon extends Component {
               gradientUnits="userSpaceOnUse"
             >
               <stop offset="0" stop-color={ts6Hex} />
-              {this.tempsToGradient(ts6Stop, ts8Stop, colours, true, 0)}
+              {this.tempsToGradient(ts6Stop, ts8Stop, colours, 0)}
               <stop offset="1" stop-color={ts8Hex} />
             </linearGradient>
             <linearGradient
@@ -399,15 +422,41 @@ export default class LoopCartoon extends Component {
             />
             <text className={styles.cls1} transform="translate(186.78 752.65)">
               <tspan x="0" y="0">
-                Chille
-              </tspan>
-              <tspan class="cls-34" x="39.6" y="0">
-                r
-              </tspan>
-              <tspan x="45.2" y="0">
-                s
+                Chillers
               </tspan>
             </text>
+          </g>
+          <g>
+            <text className={styles.cls1} transform="translate(56.48 780.37)">
+              <tspan x="0" y="0">
+                Rotation
+              </tspan>
+            </text>
+            <text className={styles.cls1} transform="translate(306.05 780.37)">
+              <tspan x="0" y="0">
+                Direction
+              </tspan>
+            </text>
+            <g>
+              <path
+                className={rotation ? styles.cls37 : styles.cls1}
+                d="m106.42,740.5v-.05c0-10.75-8.75-19.5-19.5-19.5v9c5.79,0,10.5,4.71,10.5,10.5v.05h-5.92l10,17.32,10-17.32h-5.08Z"
+              />
+              <path
+                className={rotation ? styles.cls1 : styles.cls37}
+                d="m76.44,740.79h5.58l-10-17.32-10,17.32h5.42c.19,10.59,8.85,19.16,19.48,19.16v-9c-5.67,0-10.3-4.53-10.48-10.16Z"
+              />
+            </g>
+            <g>
+              <polygon
+                className={styles.cls1}
+                points={
+                  direction
+                    ? '334 738.26 334 760.82 343 760.82 343 738.26 348.5 738.26 338.5 720.94 328.5 738.26 334 738.26'
+                    : '343 743.5 343 720.94 334 720.94 334 743.5 328.5 743.5 338.5 760.82 348.5 743.5 343 743.5'
+                }
+              />
+            </g>
           </g>
         </svg>
       </>

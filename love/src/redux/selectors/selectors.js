@@ -374,6 +374,7 @@ export const getGlycolPumpStatus = (state) => {
       glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].operationCommandControlled?.value ?? 0,
     parametersLocked: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].parametersLocked?.value ?? 0,
     errorCode: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].errorCode?.value ?? 0,
+    errorReport: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].errorReport?.value ?? 0,
   };
 };
 

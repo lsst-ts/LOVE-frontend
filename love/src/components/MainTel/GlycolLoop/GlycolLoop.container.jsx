@@ -8,7 +8,7 @@ import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/S
 
 export const schema = {
   description: 'Glycol Loop',
-  defaultSize: [90, 53],
+  defaultSize: [57, 48],
   props: {
     title: {
       type: 'string',
