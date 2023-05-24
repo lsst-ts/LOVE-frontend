@@ -194,7 +194,12 @@ export default class Plot extends Component {
           const container = entries[0];
           const diffControl = this.timeSeriesControlRef && this.timeSeriesControlRef.current ? this.timeSeriesControlRef.current.offsetHeight + 19 : 0;
           const diffLegend = this.props.legendPosition === 'bottom' && this.legendRef.current ? this.legendRef.current.offsetHeight : 0;
-          if(container.contentRect.height !== 0 && container.contentRect.width !== 0) {
+          const newHeight = container.contentRect.height - diffControl - diffLegend;
+          const newWidth = container.contentRect.width;
+          if (container.contentRect.height !== 0 && container.contentRect.width !== 0 &&
+            ((this.state.containerHeight === undefined ||  Math.abs(this.state.containerHeight - newHeight) > 1) ||
+            (this.state.containerWidth === undefined || Math.abs(this.state.containerWidth - newWidth) > 1))
+          ) {
             this.setState({
               containerHeight: container.contentRect.height - diffControl - diffLegend,
               containerWidth: container.contentRect.width,
