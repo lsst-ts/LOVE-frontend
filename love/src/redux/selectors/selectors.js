@@ -1711,12 +1711,12 @@ export const getObservatorySubscriptions = () => {
     // Observatory
     // Simonyi
     'event-Scheduler-1-observingMode',
-    'event-Scheduler-1-observatoryState',
+    'telemetry-Scheduler-1-observatoryState',
     // MTPtg
     'event-MTPtg-0-currentTarget',
     // Auxtel
     'event-Scheduler-2-observingMode',
-    'event-Scheduler-2-observatoryState',
+    'telemetry-Scheduler-2-observatoryState',
     // ATPtg
     'event-ATPtg-0-currentTarget',
   ];
@@ -1726,17 +1726,32 @@ export const getObservatoryState = (state) => {
   const observatorySubscriptions = getObservatorySubscriptions();
   const observatoryData = getStreamsData(state, observatorySubscriptions);
   const simonyiObservingMode = observatoryData['event-Scheduler-1-observingMode'];
+  const simonyiTarget = observatoryData[`event-Scheduler-1-target`];
   const auxtelObservingMode = observatoryData['event-Scheduler-2-observingMode'];
-  const simonyiObservatoryState = observatoryData['event-Scheduler-1-observatoryState'];
-  const auxtelObservatoryState = observatoryData['event-Scheduler-2-observatoryState'];
+  const simonyiObservatoryState = observatoryData['telemetry-Scheduler-1-observatoryState'];
+  const auxtelObservatoryState = observatoryData['telemetry-Scheduler-2-observatoryState'];
   const mptgCurrentTarget = observatoryData['event-MTPtg-0-currentTarget'];
   const atptgCurrentTarget = observatoryData['event-ATPtg-0-currentTarget'];
 
   return {
     simonyiObservingMode: simonyiObservingMode ? simonyiObservingMode[0].mode.value : 'UNKNOWN',
     auxtelObservingMode: auxtelObservingMode ? auxtelObservingMode[0].mode.value : 'UNKNOWN',
-    simonyiTrackingState: simonyiObservatoryState ? simonyiObservatoryState[0].tracking.value : 0,
-    auxtelTrackingState: auxtelObservatoryState ? auxtelObservatoryState[0].tracking.value : 0,
+    simonyiTrackingState: simonyiObservatoryState ? simonyiObservatoryState.tracking?.value : false,
+    simonyiAltitude: simonyiObservatoryState ? simonyiObservatoryState.telescopeAltitude?.value : 0.0,
+    simonyiAzimuth: simonyiObservatoryState ? simonyiObservatoryState.telescopeAzimuth?.value : 0.0,
+    simonyiRotator: simonyiObservatoryState ? simonyiObservatoryState.telescopeRotator?.value : 0.0,
+    simonyiDomeAlt: simonyiObservatoryState ? simonyiObservatoryState.domeAltitude?.value : 0.0,
+    simonyiDomeAz: simonyiObservatoryState ? simonyiObservatoryState.domeAzimuth?.value : 0.0,
+    simonyiMoonRa: simonyiTarget ? simonyiTarget.moonRa?.value : 0.0,
+    simonyiMoonDec: simonyiTarget ? simonyiTarget.moonDec?.value : 0.0,
+    simonyiSunRa: simonyiTarget ? simonyiTarget.sunRa?.value : 0.0,
+    simonyiSunDec: simonyiTarget ? simonyiTarget.sunDec?.value : 0.0,
+    auxtelTrackingState: auxtelObservatoryState ? auxtelObservatoryState.tracking?.value : false,
+    auxtelAltitude: auxtelObservatoryState ? auxtelObservatoryState.telescopeAltitude?.value : 0.0,
+    auxtelAzimuth: auxtelObservatoryState ? auxtelObservatoryState.telescopeAzimuth?.value : 0.0,
+    auxtelRotator: auxtelObservatoryState ? auxtelObservatoryState.telescopeRotator?.value : 0.0,
+    auxtelDomeAlt: auxtelObservatoryState ? auxtelObservatoryState.domeAltitude?.value : 0.0,
+    auxtelDomeAz: auxtelObservatoryState ? auxtelObservatoryState.domeAzimuth?.value : 0.0,
     simonyiTrackingMode: mptgCurrentTarget ? mptgCurrentTarget[0].frame.value : 0,
     auxtelTrackingMode: atptgCurrentTarget ? atptgCurrentTarget[0].frame.value : 0,
   };

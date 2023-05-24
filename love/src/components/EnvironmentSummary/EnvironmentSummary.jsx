@@ -19,7 +19,24 @@ export default class EnvironmentSummary extends Component {
   }
 
   render() {
-    console.log(this.containerRef);
+    const {
+      simonyiTrackingState,
+      simonyiAltitude,
+      simonyiAzimuth,
+      simonyiRotator,
+      simonyiDomeAlt,
+      simonyiDomeAz,
+      simonyiMoonRa,
+      simonyiMoonDec,
+      simonyiSunRa,
+      simonyiSunDec,
+      auxtelTrackingState,
+      auxtelAltitude,
+      auxtelAzimuth,
+      auxtelRotator,
+      auxtelDomeAlt,
+      auxtelDomeAz,
+    } = this.props;
     return (
       <div>
         <div className={styles.windRoseContainer}>
@@ -30,11 +47,27 @@ export default class EnvironmentSummary extends Component {
         </div>
         <div ref={this.containerRef} className={styles.telescopes}>
           <Skymap containerNode={this.containerRef?.current} className={styles.skymap} />
-          <SimonyiTelescope className={styles.simonyi} />
+          <SimonyiTelescope
+            className={styles.simonyi}
+            simonyiTrackingState={simonyiTrackingState}
+            simonyiAltitude={simonyiAltitude}
+            simonyiAzimuth={simonyiAzimuth}
+            simonyiRotator={simonyiRotator}
+            simonyiDomeAlt={simonyiDomeAlt}
+            simonyiDomeAz={simonyiDomeAz}
+          />
           <div className={styles.iconCenter}>
             <MountainIcon />
           </div>
-          <AuxTelescope className={styles.auxTel} />
+          <AuxTelescope
+            className={styles.auxTel}
+            auxtelTrackingState={auxtelTrackingState}
+            auxtelAltitude={auxtelAltitude}
+            auxtelAzimuth={auxtelAzimuth}
+            auxtelRotator={auxtelRotator}
+            auxtelDomeAlt={auxtelDomeAlt}
+            auxtelDomeAz={auxtelDomeAz}
+          />
         </div>
         <div className={styles.iconRight}>
           <TemperatureIcon />
