@@ -707,12 +707,12 @@ export default class ManagerInterface {
   }
 
   // OLE APIs
-  static getListExposureLogs(instrument, obsDay) {
+  static getListExposureLogs(instrument, obsDay, registry = 1) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
-    const url = `${this.getApiBaseUrl()}ole/exposurelog/exposures?instrument=${instrument}&registry=2&order_by=-obs_id&limit=1500${
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/exposures?instrument=${instrument}&registry=${registry}&order_by=-obs_id&limit=1500${
       obsDay ? `&min_day_obs=${obsDay}&max_day_obs=${obsDay + 1}` : ''
     }`;
     return fetch(url, {
@@ -1226,7 +1226,7 @@ export const parseTimestamp = (timestamp) => {
  * @param {number} value, number to convert
  * @returns {number|string} integer value or fixed float string of value
  */
-export const defaultNumberFormatter = (value, precision=4) => {
+export const defaultNumberFormatter = (value, precision = 4) => {
   if (Number.isNaN(value)) return value;
   return Number.isInteger(value) ? value : Number.parseFloat(value).toFixed(precision);
 };
@@ -1283,7 +1283,7 @@ export const formatSecondsToDigital = (time) => {
 
 /**
  * Function to converts digital format '00:00:00' to seconds
- * @param {string} time in digital format 
+ * @param {string} time in digital format
  * @returns {number} digital time in seconds
  */
 export const formatDigitalToSeconds = (time) => {
@@ -1303,7 +1303,7 @@ export const diffHours = (hour1, hour2, unit) => {
   const date2 = Moment().add(formatDigitalToSeconds(hour2), 'seconds');
   let diff = Moment(date1).diff(Moment(date2), unit);
   return diff;
-}
+};
 
 /**
  * Function to transform a string to a regex expression
@@ -1571,9 +1571,9 @@ export const getCameraStatusStyle = (status) => {
 };
 
 let booleanArray = undefined;
-export function arrayRandomBoolean(len, probability=0.1) {
+export function arrayRandomBoolean(len, probability = 0.1) {
   if (!booleanArray) {
-    let arr = Array.from({length: len}, i => false);
+    let arr = Array.from({ length: len }, (i) => false);
     arr = arr.map((v) => {
       const rnd = Math.floor(Math.random() * 100);
       if (rnd < probability * 100) return true;

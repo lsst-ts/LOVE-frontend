@@ -21,13 +21,22 @@ import styles from './Exposure.module.css';
 
 export default class ExposureAdd extends Component {
   static propTypes = {
+    /** Function to go back */
     back: PropTypes.func,
+    /** Log to edit object */
     logEdit: PropTypes.object,
+    /** New message object */
     newMessage: PropTypes.object,
+    /** Flag to show the creation components */
     isLogCreate: PropTypes.bool,
+    /** Flag to show the menu components */
     isMenu: PropTypes.bool,
+    /** Array of observation ids */
     observationIds: PropTypes.arrayOf(PropTypes.string),
+    /** Function to view a log */
     view: PropTypes.func,
+    /** Mappings of instruments to exposures registries */
+    registryMap: PropTypes.object,
   };
 
   static defaultProps = {
@@ -94,10 +103,21 @@ export default class ExposureAdd extends Component {
   componentDidMount() {
     // TODO: only when the filter is shown
     ManagerInterface.getListExposureInstruments().then((data) => {
-      const instrumentsArray = Object.values(data).map((arr) => arr[0]);
+      const registryMap = {};
+      Object.entries(data).forEach(([key, value]) => {
+        value.forEach((instrument) => {
+          if (!instrument) return;
+          registryMap[instrument] = key;
+        });
+      });
+      const instrumentsArray = Object.values(data)
+        .map((arr) => arr[0])
+        .filter((instrument) => instrument);
+
       this.setState({
         instruments: instrumentsArray,
         selectedInstrument: instrumentsArray[0],
+        registryMap: registryMap,
       });
     });
 
@@ -121,9 +141,10 @@ export default class ExposureAdd extends Component {
   }
 
   queryExposures(callback) {
-    const { selectedDayExposure } = this.state;
+    const { selectedInstrument, selectedDayExposure, registryMap } = this.state;
     const obsDayInteger = parseInt(Moment(selectedDayExposure).format(ISO_INTEGER_DATE_FORMAT));
-    ManagerInterface.getListExposureLogs(this.state.selectedInstrument, obsDayInteger).then((data) => {
+    const registry = registryMap[selectedInstrument].split('_')[2];
+    ManagerInterface.getListExposureLogs(selectedInstrument, obsDayInteger, registry).then((data) => {
       const observationIds = data.map((exposure) => exposure.obs_id);
       const dayObs = data.map((exposure) => ({
         obs_id: exposure.obs_id,
@@ -255,7 +276,6 @@ export default class ExposureAdd extends Component {
                   <DateTime
                     value={selectedDayExposure}
                     onChange={(day) => {
-                      console.log(day);
                       this.setState({ selectedDayExposure: day });
                     }}
                     dateFormat="YYYY/MM/DD"
@@ -303,7 +323,6 @@ export default class ExposureAdd extends Component {
                     isObject={true}
                     displayValue="name"
                     onSelect={(selectedOptions) => {
-                      console.log(selectedOptions);
                       this.setState((prevState) => ({
                         newMessage: { ...prevState.newMessage, tags: selectedOptions },
                       }));
@@ -334,7 +353,6 @@ export default class ExposureAdd extends Component {
                       label="Observation day"
                       value={selectedDayExposure}
                       onChange={(day) => {
-                        console.log(day);
                         this.setState({ selectedDayExposure: day });
                       }}
                       dateFormat="YYYY/MM/DD"
