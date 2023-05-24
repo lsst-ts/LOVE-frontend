@@ -95,6 +95,7 @@ export const getM1M3ActuatorsState = (state) => {
     'telemetry-MTM1M3-0-forceActuatorData',
     'event-MTM1M3-0-forceActuatorInfo',
     'event-MTM1M3-0-forceActuatorState',
+    'event-MTM1M3-0-enabledForceActuators',
   ];
   const m1m3Data = getStreamsData(state, subscriptions);
   return {
@@ -103,7 +104,11 @@ export const getM1M3ActuatorsState = (state) => {
     yPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.yPosition?.value ?? [],
     zPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.zPosition?.value ?? [],
     actuatorReferenceId: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.referenceId?.value ?? [],
+    actuatorIlcUniqueId: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.ilcUniqueId?.value ?? [],
     actuatorIlcState: m1m3Data['event-MTM1M3-0-forceActuatorState']?.[0]?.ilcState?.value ?? [],
+    actuatorMinorRevision: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.minorRevision?.value ?? [],
+    actuatorMayorRevision: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.majorRevision?.value ?? [],
+    actuatorEnabled: m1m3Data['event-MTM1M3-0-enabledForceActuators']?.[0]?.forceActuatorEnabled?.value ?? [],
   };
 };
 
@@ -142,12 +147,15 @@ export const getM1M3HardpointActuatorData = (state) => {
 };
 
 export const getM1M3HardpointActuatorState = (state) => {
-  const subscriptions = ['event-MTM1M3-0-hardpointActuatorState'];
+  const subscriptions = ['event-MTM1M3-0-hardpointActuatorState', 'event-MTM1M3-0-hardpointActuatorInfo'];
   const m1m3Data = getStreamsData(state, subscriptions);
   return {
     hardpointIlcState: m1m3Data['event-MTM1M3-0-hardpointActuatorState']?.[0]?.ilcState?.value ?? [],
     hardpointMotionState: m1m3Data['event-MTM1M3-0-hardpointActuatorState']?.[0]?.motionState?.value ?? [],
+    hardpointIlcUniqueId: m1m3Data['event-MTM1M3-0-hardpointActuatorInfo']?.[0]?.ilcUniqueId?.value ?? [],
     hardpointReferenceId: [1, 2, 3, 4, 5, 6],
+    hardpointMinorRevision: m1m3Data['event-MTM1M3-0-hardpointActuatorInfo']?.[0]?.minorRevision?.value ?? [],
+    hardpointMayorRevision: m1m3Data['event-MTM1M3-0-hardpointActuatorInfo']?.[0]?.majorRevision?.value ?? [],
   };
 };
 
