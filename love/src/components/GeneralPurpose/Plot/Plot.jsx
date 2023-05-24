@@ -265,6 +265,7 @@ export default class Plot extends Component {
             inputData.push(newValue);
           }
         } else {
+          inputData = [];
           Object.entries(newValue.values).forEach((entry) => {
             let input = Object.assign({}, entry[1]);
             input['units'] = newValue.units;
