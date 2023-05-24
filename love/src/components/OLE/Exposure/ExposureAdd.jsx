@@ -106,10 +106,13 @@ export default class ExposureAdd extends Component {
       const registryMap = {};
       Object.entries(data).forEach(([key, value]) => {
         value.forEach((instrument) => {
+          if (!instrument) return;
           registryMap[instrument] = key;
         });
       });
-      const instrumentsArray = Object.values(data).map((arr) => arr[0]);
+      const instrumentsArray = Object.values(data)
+        .map((arr) => arr[0])
+        .filter((instrument) => instrument);
 
       this.setState({
         instruments: instrumentsArray,
