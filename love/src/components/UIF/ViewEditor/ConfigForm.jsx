@@ -14,7 +14,6 @@ import 'brace/theme/solarized_dark';
 
 const externalStepComponents = {
   HealthStatusConfig: require('../../../components/HealthStatusSummary/HealthStatusConfig/HealthStatusConfig').default,
-  // TimeSeriesConfig: require('../../../components/GeneralPurpose/Plot/TimeSeriesConfig/TimeSeriesConfig').default,
   TimeSeriesConfigure: require('../../../components/GeneralPurpose/Plot/TimeSeriesConfigure/TimeSeriesConfigure').default,
   PolarPlotConfig: require('../../../components/GeneralPurpose/Plot/PolarPlotConfig/PolarPlotConfig').default,
 };

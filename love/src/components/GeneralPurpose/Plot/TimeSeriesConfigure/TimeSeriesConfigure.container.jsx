@@ -22,9 +22,6 @@ export const schema = {
 };
 
 const TimeSeriesConfigureContainer = ({
-  //allTelemetries,
-  //subscribeToStream,
-  //unsubscribeToStream,
   subscriptions,
   subscribeToStreams,
   unsubscribeToStreams,
@@ -33,22 +30,15 @@ const TimeSeriesConfigureContainer = ({
   ...props
 }) => {
   const [telemetries, setTelemetries] = React.useState({});
-
-  /* if (allTelemetries && Object.keys(allTelemetries).length > 4 && Object.keys(telemetries).length === 0) {
-    setTelemetries(allTelemetries);
-  } */
   if (subscriptions && Object.keys(subscriptions).length > 4 && Object.keys(telemetries).length === 0) {
     setTelemetries(subscriptions);
   }
   return (
     <TimeSeriesConfigure
-      // allTelemetries={telemetries}
       subscriptions={subscriptions}
       getStreamData={getStreamData}
       subscribeToStreams={subscribeToStreams}
       unsubscribeToStreams={unsubscribeToStreams}
-      // subscribeToStream={subscribeToStream}
-      // unsubscribeToStream={unsubscribeToStream}
       onCancel={onCancel}
       onSetSelection={onSave}
       {...props}
@@ -56,23 +46,6 @@ const TimeSeriesConfigureContainer = ({
   );
 };
 
-/* const mapStateToProps = (state) => {
-  const allTelemetries = getAllTelemetries(state);
-  return { allTelemetries };
-}; */
-
-/* const mapDispatchToProps = (dispatch) => {
-  return {
-    subscribeToStream: () => {
-      //All telemetriesdsa
-      dispatch(addGroup('telemetry-all-all-all'));
-    },
-    unsubscribeToStream: () => {
-      //All telemetriesdsa
-      dispatch(removeGroup('telemetry-all-all-all'));
-    },
-  };
-}; */
 
 const mapStateToProps = (state, ownProps) => {
   const getStreamDataProp = (groupName) => getStreamData(state, groupName);

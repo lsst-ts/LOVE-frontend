@@ -43,7 +43,6 @@ export const schema = {
       default: 'Time series plot',
     },
     inputs: {
-      // externalStep: 'TimeSeriesConfig',
       externalStep: 'TimeSeriesConfigure',
       type: 'object',
       description: 'list of inputs',
