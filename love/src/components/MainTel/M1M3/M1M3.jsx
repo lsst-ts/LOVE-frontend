@@ -743,9 +743,9 @@ export default class M1M3 extends Component {
             <div className={styles.forceGradientWrapper}>
               <span>Force</span>
               <div id={this.uniqueGradient} className={styles.forceGradient}>
-                <span>{maxForce} [N]</span>
-                <svg viewBox={`0 0 ${FORCE_GRADIENT_WIDTH} ${FORCE_GRADIENT_HEIGHT}`}></svg>
                 <span>{minForce} [N]</span>
+                <svg viewBox={`0 0 ${FORCE_GRADIENT_WIDTH} ${FORCE_GRADIENT_HEIGHT}`}></svg>
+                <span>{maxForce} [N]</span>
               </div>
             </div>
 
