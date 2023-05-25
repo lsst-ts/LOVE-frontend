@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Howl } from 'howler';
 import isEqual from 'lodash/isEqual';
+import { throttle } from 'lodash';
 
 import { severityEnum } from '../../../Config';
 import { isAcknowledged, isMuted, isMaxCritical, isCritical } from '../AlarmUtils';
@@ -165,7 +166,7 @@ export default class AlarmAudio extends Component {
       this.props.alarms &&
       (!isEqual(this.props.alarms, prevProps.alarms) || this.state.minSeveritySound !== prevState.minSeveritySound)
     ) {
-      this.checkAndNotifyAlarms(this.props.alarms, prevProps.alarms);
+      this.throtCheckAndNotifyAlarms(this.props.alarms, prevProps.alarms);
     }
   };
 
@@ -233,6 +234,11 @@ export default class AlarmAudio extends Component {
       this.playSound(newHighestAlarm.severity, newHighestAlarm.type);
     }
   };
+
+  /**
+   * Throtle checkAndNotifyAlarms
+   */
+  throtCheckAndNotifyAlarms = throttle(this.checkAndNotifyAlarms, 3000);
 
   playSound = (severity, type) => {
     if (severity < this.state.minSeveritySound) {
