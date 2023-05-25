@@ -46,7 +46,14 @@ export default class EnvironmentSummary extends Component {
           <BeachIcon />
         </div>
         <div ref={this.containerRef} className={styles.telescopes}>
-          <Skymap containerNode={this.containerRef?.current} className={styles.skymap} />
+          <Skymap
+            containerNode={this.containerRef?.current}
+            className={styles.skymap}
+            simonyiMoonRa={simonyiMoonRa}
+            simonyiMoonDec={simonyiMoonDec}
+            simonyiSunRa={simonyiSunRa}
+            simonyiSunDec={simonyiSunDec}
+          />
           <SimonyiTelescope
             className={styles.simonyi}
             simonyiTrackingState={simonyiTrackingState}
