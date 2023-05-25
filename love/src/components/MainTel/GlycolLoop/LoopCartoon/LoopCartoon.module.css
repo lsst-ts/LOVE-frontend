@@ -1,8 +1,3 @@
-.svgContainer {
-  /*height: 100vh;
-  width: 100%;*/
-}
-
 .cls1 {
   fill: #788f9b;
 }
@@ -10,7 +5,7 @@
 .cls1,
 .cls2 {
   font-family: Montserrat-Regular, Montserrat;
-  font-size: 14.11px;
+  font-size: 1em;
 }
 
 .cls3 {

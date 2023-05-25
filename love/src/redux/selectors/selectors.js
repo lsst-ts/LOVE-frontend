@@ -361,20 +361,20 @@ export const getGlycolPumpStatus = (state) => {
   const subscriptions = ['event-MTM1M3TS-0-glycolPumpStatus'];
   const glycolPumpData = getStreamsData(state, subscriptions);
   return {
-    ready: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].ready?.value ?? 0,
-    running: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].running?.value ?? 0,
-    forwardCommanded: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].forwardCommanded?.value ?? 0,
-    forwardRotating: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].forwardRotating?.value ?? 0,
-    accelerating: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].accelerating?.value ?? 0,
-    decelerating: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].decelerating?.value ?? 0,
-    faulted: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].faulted?.value ?? 0,
+    ready: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].ready?.value ?? undefined,
+    running: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].running?.value ?? undefined,
+    forwardCommanded: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].forwardCommanded?.value ?? undefined,
+    forwardRotating: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].forwardRotating?.value ?? undefined,
+    accelerating: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].accelerating?.value ?? undefined,
+    decelerating: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].decelerating?.value ?? undefined,
+    faulted: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].faulted?.value ?? undefined,
     mainFrequencyControlled:
-      glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].mainFrequencyControlled?.value ?? 0,
+      glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].mainFrequencyControlled?.value ?? undefined,
     operationCommandControlled:
-      glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].operationCommandControlled?.value ?? 0,
-    parametersLocked: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].parametersLocked?.value ?? 0,
-    errorCode: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].errorCode?.value ?? 0,
-    errorReport: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].errorReport?.value ?? 0,
+      glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].operationCommandControlled?.value ?? undefined,
+    parametersLocked: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].parametersLocked?.value ?? undefined,
+    errorCode: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].errorCode?.value ?? undefined,
+    errorReport: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].errorReport?.value ?? undefined,
   };
 };
 

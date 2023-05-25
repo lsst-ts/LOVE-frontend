@@ -218,6 +218,7 @@ export default class GlycolLoop extends Component {
       operationCommandControlled,
       parametersLocked,
       errorCode,
+      errorReport,
       aboveMirrorTemperature,
       insideCellTemperature1,
       insideCellTemperature2,
@@ -254,17 +255,18 @@ export default class GlycolLoop extends Component {
       <>
         <div className={styles.summaryContainer}>
           <Summary
+            faulted={faulted}
             ready={ready}
             running={running}
             forwardCommanded={forwardCommanded}
             forwardRotating={forwardRotating}
             accelerating={accelerating}
             decelerating={decelerating}
-            faulted={faulted}
             mainFrequencyControlled={mainFrequencyControlled}
             operationCommandControlled={operationCommandControlled}
             parametersLocked={parametersLocked}
             errorCode={errorCode}
+            errorReport={errorReport}
           />
         </div>
         <div className={styles.contentWrapper}>

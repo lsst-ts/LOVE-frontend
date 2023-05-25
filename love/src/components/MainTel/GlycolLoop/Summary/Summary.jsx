@@ -2,16 +2,22 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Summary.module.css';
 import {
-  stateToStylePumpReady,
-  stateToStyleMTMountCommander,
-  mtMountCommanderStateMap,
-  mtMountConnectedStateMap,
-  mtMountPowerStateMap,
-  mtMountAxisMotionStateMap,
-  stateToStyleMTMountConnected,
-  stateToStyleMTMountAxisMotionState,
-  stateToStyleMTMountPowerState,
-  MTMountLimits,
+  glycolLoopFaultStateMap,
+  glycolLoopRunningStateMap,
+  glycolLoopReadyStateMap,
+  glycolLoopCommandStateMap,
+  glycolLoopMainFreqStateMap,
+  glycolLoopParametersStateMap,
+  glycolLoopDirectionStateMap,
+  glycolLoopAcceleratingStateMap,
+  glycolLoopDeceleratingStateMap,
+  stateToStyleGlycolLoopPumpStateMap,
+  stateToStyleGlycolLoopCommandStateMap,
+  stateToStyleGlycolLoopMainFreqStateMap,
+  stateToStyleGlycolLoopParametersStateMap,
+  stateToStyleGlycolLoopDirectionStateMap,
+  stateToStyleGlycolLoopRotationStateMap,
+  stateToStyleGlycolLoopSpeedStateMap,
 } from '../../../../Config';
 
 import SummaryPanel from '../../../GeneralPurpose/SummaryPanel/SummaryPanel';
@@ -44,78 +50,53 @@ export default class Summary extends Component {
     parametersLocked: PropTypes.bool,
     /** Motor controller error code. Please see VFD documentation for details. */
     errorCode: PropTypes.number,
+    /** Motor controller error report. */
+    errorReport: PropTypes.string,
   };
 
   static defaultProps = {
-    ready: false,
-    running: false,
-    forwardCommanded: false,
-    forwardRotating: false,
-    accelerating: false,
-    decelerating: false,
-    faulted: false,
-    mainFrequencyControlled: false,
-    operationCommandControlled: false,
-    parametersLocked: false,
-    errorCode: 0,
-  };
-
-  glycolPumpBooltoState = (ready, running) => {
-    if (running) {
-      return 'RUNNING';
-    } else if (ready) {
-      return 'READY';
-    } else {
-      return 'NOT READY';
-    }
-  };
-
-  StatusToStyle = (bool, statusArray) => {
-    if (bool) {
-      return statusArray[0];
-    } else {
-      return statusArray[1];
-    }
+    ready: undefined,
+    running: undefined,
+    forwardCommanded: undefined,
+    forwardRotating: undefined,
+    accelerating: undefined,
+    decelerating: undefined,
+    faulted: undefined,
+    mainFrequencyControlled: undefined,
+    operationCommandControlled: undefined,
+    parametersLocked: undefined,
+    errorCode: '',
+    errorReport: 'No data is being recieved',
   };
 
   render() {
-    const {
-      ready,
-      running,
-      forwardCommanded,
-      forwardRotating,
-      accelerating,
-      decelerating,
-      faulted,
-      mainFrequencyControlled,
-      operationCommandControlled,
-      parametersLocked,
-      errorCode,
-      errorReport,
-    } = this.props;
+    const faulted = glycolLoopFaultStateMap[this.props.faulted];
+    const ready = glycolLoopReadyStateMap[this.props.ready];
+    const running = glycolLoopRunningStateMap[this.props.running];
+    const pump = faulted ? 'FAULT' : running ? 'RUNNING' : ready;
+    const operationCommandControlled = glycolLoopCommandStateMap[this.props.operationCommandControlled];
+    const mainFrequencyControlled = glycolLoopMainFreqStateMap[this.props.mainFrequencyControlled];
+    const parametersLocked = glycolLoopParametersStateMap[this.props.parametersLocked];
 
-    console.log(this.props);
+    const forwardCommanded = glycolLoopDirectionStateMap[this.props.forwardCommanded];
+    const forwardRotating = glycolLoopDirectionStateMap[this.props.forwardRotating];
+    const accelerating = glycolLoopAcceleratingStateMap[this.props.accelerating];
+    const decelerating = glycolLoopDeceleratingStateMap[this.props.decelerating];
 
-    //const commanderValue = mtMountCommanderStateMap[this.props.commander];
+    const speed = accelerating ? 'ACCELERATING' : decelerating ? 'DECELERATING' : 'UNKNOWN';
 
-    // AzimuthLimit
-    //const { min: minAzimuthPosition, max: maxAzimuthPosition } = MTMountLimits.azimuth;
-    //const timeToAzimuthLimit = 0;
-
-    // ElevationLimit
-    //const { min: minElevationPosition, max: maxElevationPosition } = MTMountLimits.elevation;
-    //const timeToElevationLimit = 0;
+    const { errorCode, errorReport } = this.props;
 
     return (
       <div className={styles.container}>
         <SummaryPanel>
           <Title>Glycol Pump</Title>
           <Value>
-            <StatusText title={ready} status={running ? 'ok' : ready ? 'ok' : 'invalid'} small>
-              {this.glycolPumpBooltoState(ready, running)}
+            <StatusText title={ready} status={stateToStyleGlycolLoopPumpStateMap[pump]} small>
+              {pump}
             </StatusText>
           </Value>
-          <Label wide>{faulted ? 'Error ' + errorCode + ': ' + errorReport : 'No Errors detected'}</Label>
+          <Label wide>{this.props.faulted ? 'Error ' + errorCode + ': ' + errorReport : 'No Errors detected'}</Label>
         </SummaryPanel>
 
         <SummaryPanel className={styles.summaryPanel}>
@@ -123,16 +104,20 @@ export default class Summary extends Component {
           <Value>
             <StatusText
               title={operationCommandControlled}
-              status={this.StatusToStyle(operationCommandControlled, ['ok', 'warning'])}
+              status={stateToStyleGlycolLoopCommandStateMap[operationCommandControlled]}
               small
             >
-              {operationCommandControlled ? 'Controlled' : 'Disabled'}
+              {operationCommandControlled}
             </StatusText>
           </Value>
           <Label>Direction</Label>
           <Value>
-            <StatusText title={forwardCommanded} status="ok" small>
-              {forwardCommanded ? 'Forward' : 'Backward'}
+            <StatusText
+              title={forwardCommanded}
+              status={stateToStyleGlycolLoopDirectionStateMap[forwardCommanded]}
+              small
+            >
+              {forwardCommanded}
             </StatusText>
           </Value>
         </SummaryPanel>
@@ -142,20 +127,16 @@ export default class Summary extends Component {
           <Value>
             <StatusText
               title={mainFrequencyControlled}
-              status={this.StatusToStyle(mainFrequencyControlled, ['ok', 'invalid'])}
+              status={stateToStyleGlycolLoopMainFreqStateMap[mainFrequencyControlled]}
               small
             >
-              {mainFrequencyControlled ? 'Controlled' : 'Not Controlled'}
+              {mainFrequencyControlled}
             </StatusText>
           </Value>
           <Label>Rotation</Label>
           <Value>
-            <StatusText
-              title={mainFrequencyControlled}
-              status={this.StatusToStyle(mainFrequencyControlled, ['ok', 'ok'])}
-              small
-            >
-              {forwardRotating ? 'Forward' : 'Rotation'}
+            <StatusText title={forwardRotating} status={stateToStyleGlycolLoopRotationStateMap[forwardRotating]} small>
+              {forwardRotating}
             </StatusText>
           </Value>
         </SummaryPanel>
@@ -163,14 +144,18 @@ export default class Summary extends Component {
         <SummaryPanel className={styles.summaryPanel}>
           <Label>Parameters</Label>
           <Value>
-            <StatusText title={parametersLocked} status={this.StatusToStyle(parametersLocked, ['ok', 'warning'])} small>
-              {parametersLocked ? 'Locked' : 'Unlocked'}
+            <StatusText
+              title={parametersLocked}
+              status={stateToStyleGlycolLoopParametersStateMap[parametersLocked]}
+              small
+            >
+              {parametersLocked}
             </StatusText>
           </Value>
           <Label>Speed</Label>
           <Value>
-            <StatusText title={accelerating} status={this.StatusToStyle(mainFrequencyControlled, ['ok', 'ok'])} small>
-              {accelerating ? 'Accelerating' : 'Decelerating'}
+            <StatusText title={accelerating} status={stateToStyleGlycolLoopSpeedStateMap[speed]} small>
+              {speed}
             </StatusText>
           </Value>
         </SummaryPanel>
