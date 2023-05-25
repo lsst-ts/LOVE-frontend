@@ -166,6 +166,11 @@ export default class AlarmAudio extends Component {
       this.props.alarms &&
       (!isEqual(this.props.alarms, prevProps.alarms) || this.state.minSeveritySound !== prevState.minSeveritySound)
     ) {
+      const difference = this.props.alarms.filter((x) => prevProps.alarms.findIndex((y) => x.name === y.name) === -1);
+      // Don't play sound for new OK alarm
+      if (difference.length === 1 && difference[0].severity.value === 1) {
+        return;
+      }
       this.throtCheckAndNotifyAlarms(this.props.alarms, prevProps.alarms);
     }
   };
