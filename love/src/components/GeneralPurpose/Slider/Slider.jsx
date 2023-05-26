@@ -1,22 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import debounce from 'lodash.debounce';
 import styles from './Slider.module.css';
+
+const WAITTIME = 500;
+
 /**
  * Generic slider input implemented on top of the `<Slider>` tag
  */
 function Slider(props) {
   const { min, max, value, step, className, onChange, disabled } = props;
+
+  const sendOnchange = (value) => {
+    onChange(value);
+  };
+
+  const debouncedSendOnChange = debounce(sendOnchange, WAITTIME);
+
+  const [input, setInput] = useState(value);
+
+  const onChangeSlider = (e) => {
+    if (disabled) this.disabledFunct(e.target)
+    const value = e.target.value;
+    setInput(value);
+    debouncedSendOnChange(value);
+  }
+
   return (
-    <input
-      onChange={(event) => (disabled ? this.disabledFunct(event.target) : onChange(event.target.value))}
-      className={[className, styles.input, disabled ? styles.opacity : ''].join(' ')}
-      type="range"
-      id="inputRange"
-      min={min}
-      max={max}
-      step={step}
-      value={disabled ? min : value}
-    />
+    <>
+      <input
+        onChange={onChangeSlider}
+        className={[className, styles.input, disabled ? styles.opacity : ''].join(' ')}
+        type="range"
+        id="inputRange"
+        min={min}
+        max={max}
+        step={step}
+        value={input}
+      />
+    </>
   );
 }
 
@@ -62,6 +84,7 @@ Slider.propTypes = {
 };
 
 Slider.defaultProps = {
+  value: 0,
   onChange: (value) => {},
   className: '',
   disabled: false,
