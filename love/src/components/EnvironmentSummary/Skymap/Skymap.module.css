@@ -23,7 +23,7 @@
 }
 
 .infoIcon {
-  position: relative;
+  position: initial;
 }
 
 .svgOverlay {
@@ -31,4 +31,9 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+
+.cartoonContainer {
+  position: relative;
+  overflow: visible;
 }

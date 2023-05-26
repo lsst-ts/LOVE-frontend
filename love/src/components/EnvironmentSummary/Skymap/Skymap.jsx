@@ -102,11 +102,9 @@ export default class Skymap extends Component {
             targetPointing={currentPointing3}
             isProjected={isProjected}
             cartoon={<SunPointing />}
-          />
-          <Hoverable top={true} left={true} center={true} inside={true}>
-            <span className={styles.infoIcon}></span>
-            <SunSummary simonyiSunRa={simonyiSunRa} simonyiSunDec={simonyiSunDec} />
-          </Hoverable>
+          >
+            <SunSummary className={styles.sunHover} simonyiSunRa={simonyiSunRa} simonyiSunDec={simonyiSunDec} />
+          </Pointing>
           <SkymapGrid width={width} height={height} isProjected={isProjected} />
         </div>
       </div>

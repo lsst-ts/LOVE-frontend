@@ -10,7 +10,7 @@ export default class Sun extends Component {
   render() {
     const { simonyiSunRa, simonyiSunDec } = this.props;
     return (
-      <div className={styles.container}>
+      <div className={[styles.container, styles.sunContainer].join(' ')}>
         <SummaryPanel className={styles.summaryPanel}>
           <Title>Sun</Title>
           <span></span>

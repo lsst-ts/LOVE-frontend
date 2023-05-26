@@ -2,10 +2,7 @@
   box-sizing: border-box;
   border: 3px solid var(--second-primary-background-color);
   border-radius: 0.5em;
-  /* padding: 1.5em 0.5em; */
   width: 100%;
-  /* display: inline-grid; */
-  /* align-content: flex-start; */
   background-color: var(--second-secondary-background-color);
   margin-bottom: var(--small-margin);
   padding: var(--small-padding);
@@ -29,4 +26,13 @@
   width: 100%;
   justify-items: stretch;
   align-items: start;
+}
+
+.sunContainer {
+  box-sizing: border-box;
+  font-size: var(--font-size-larger);
+  width: auto;
+  position: absolute;
+  top: calc(-100%);
+  left: calc(40px + var(--small-padding));
 }

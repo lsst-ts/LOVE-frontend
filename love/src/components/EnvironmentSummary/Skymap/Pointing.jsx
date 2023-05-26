@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
+import SunSummary from '../SummaryInformation/SunSummary';
 import styles from './Skymap.module.css';
 
 export default class Pointing extends Component {
@@ -45,7 +47,7 @@ export default class Pointing extends Component {
   };
 
   render() {
-    const { width, height, cartoon } = this.props;
+    const { width, height, cartoon, children } = this.props;
     const currentPixels = this.azelToPixel(this.props.currentPointing, this.props.isProjected);
     const targetPixels = this.azelToPixel(this.props.targetPointing, this.props.isProjected);
 
@@ -59,8 +61,21 @@ export default class Pointing extends Component {
           stroke="white"
           strokeDasharray="5"
         />
-        <foreignObject x={currentPixels.x - 20} y={currentPixels.y - 20} width="40" height="40">
-          {cartoon}
+        <foreignObject
+          className={styles.cartoonContainer}
+          x={currentPixels.x - 20}
+          y={currentPixels.y - 20}
+          width="40"
+          height="40"
+        >
+          {children ? (
+            <Hoverable left={true} bottom={true} inside={false}>
+              {cartoon}
+              {children}
+            </Hoverable>
+          ) : (
+            cartoon
+          )}
         </foreignObject>
       </svg>
     );
