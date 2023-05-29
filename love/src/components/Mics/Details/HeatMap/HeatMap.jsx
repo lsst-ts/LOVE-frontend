@@ -21,13 +21,19 @@ export default class HeatMap extends Component {
 
   constructor(props) {
     super(props);
+
+    const initialContainerHeight = 206;
+    const initialContainerWidth = 390;
+
+    const domain = (props.minDecibels !== undefined && props.maxDecibels !== undefined) ? [props.minDecibels, props.maxDecibels] : [-100, 0];
+
     this.state = {
       infoPlot: null,
-      containerWidth: undefined,
-      containerHeight: 204,
+      containerWidth: initialContainerWidth,
+      containerHeight: initialContainerHeight,
       spec: {
-        width: 380,
-        height: 204,
+        width: initialContainerWidth,
+        height: initialContainerHeight,
         autosize: { resize: 'true' },
         data: { name: 'table' },
         mark: { type: 'rect' },
@@ -42,8 +48,18 @@ export default class HeatMap extends Component {
           color: {
             type: 'quantitative',
             field: 'amp',
-            scale: { scheme: 'spectral', reverse: true, domain: [-200, 0] },
-            legend: { labelColor: '#ddd', labelFontSize: 14, titleColor: '#ddd', title: 'dB', gradientLength: 215 },
+            scale: {
+              scheme: 'spectral',
+              reverse: true,
+              domain: domain
+            },
+            legend: {
+              labelColor: '#ddd',
+              labelFontSize: 14,
+              titleColor: '#ddd',
+              title: 'dB',
+              gradientLength: initialContainerHeight
+            },
           },
         },
         config: {
@@ -60,6 +76,7 @@ export default class HeatMap extends Component {
         },
       },
     };
+
     this.resizeObserver = undefined;
   }
 
@@ -162,7 +179,13 @@ export default class HeatMap extends Component {
               reverse: true,
               domain: domain,
             },
-            legend: { labelColor: '#ddd', labelFontSize: 14, titleColor: '#ddd', title: 'dB', gradientLength: height },
+            legend: {
+              labelColor: '#ddd',
+              labelFontSize: 14,
+              titleColor: '#ddd',
+              title: 'dB',
+              gradientLength: height
+            },
           },
         },
         config: {

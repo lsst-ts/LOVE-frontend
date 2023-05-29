@@ -14,6 +14,8 @@ export default class Table extends Component {
       location: PropTypes.string,
       src: PropTypes.string,
       dbLimit: PropTypes.number,
+      minDecibels: PropTypes.number,
+      maxDecibels: PropTypes.number,
     })),
     /**
      * Function to change the mic's component state of the currentMic and show on mic details
@@ -71,6 +73,8 @@ export default class Table extends Component {
           setInfoPlot={(data) => setInfoPlot(data)}
           initialPlaying={initialPlaying}
           dbLimit={item.dbLimit}
+          minDecibels={item.minDecibels}
+          maxDecibels={item.maxDecibels}
         />
       )
     })
@@ -89,6 +93,8 @@ export default class Table extends Component {
         location: mic.location,
         src: mic.src,
         dbLimit: mic.dbLimit,
+        minDecibels: mic.minDecibels,
+        maxDecibels: mic.maxDecibels,
       };
     });
 

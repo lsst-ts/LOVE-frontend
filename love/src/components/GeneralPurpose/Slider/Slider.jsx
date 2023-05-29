@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 import styles from './Slider.module.css';
 
-const WAITTIME = 500;
+const WAITTIME = 300;
 
 /**
  * Generic slider input implemented on top of the `<Slider>` tag
  */
 function Slider(props) {
-  const { min, max, value, step, className, onChange, disabled } = props;
+  const { min, max, step, className, onChange, disabled } = props;
 
   const sendOnchange = (value) => {
     onChange(value);
@@ -17,7 +17,7 @@ function Slider(props) {
 
   const debouncedSendOnChange = debounce(sendOnchange, WAITTIME);
 
-  const [input, setInput] = useState(value);
+  const [input, setInput] = useState(props.value);
 
   const onChangeSlider = (e) => {
     if (disabled) this.disabledFunct(e.target)

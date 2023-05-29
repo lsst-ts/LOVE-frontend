@@ -269,7 +269,7 @@ export default class Row extends Component {
   play = (initialPlaying = false) => {
     const { audioContext, song, masterGain } = this;
     if (!this.state.isPlaying) {
-      masterGain.gain.value = initialPlaying ? 0 : 0.5;
+      if (initialPlaying) masterGain.gain.value = 0;
       audioContext.resume().then(() => {
         song.play();
         this.setState({ isPlaying: true });

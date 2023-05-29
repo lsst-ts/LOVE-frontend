@@ -13,6 +13,8 @@ export default class Mics extends Component {
       location: PropTypes.string,
       src: PropTypes.string,
       dbLimit: PropTypes.number,
+      minDecibels: PropTypes.number,
+      maxDecibels: PropTypes.number,
     })),
     initialPlaying: PropTypes.bool,
   };

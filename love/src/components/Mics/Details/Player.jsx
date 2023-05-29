@@ -21,10 +21,8 @@ function Player(props) {
     record = () => {},
   } = props;
 
-
   const textPlay = isPlaying ? 'PAUSE' : 'PLAY';
   const textRec = isRecording ? 'STOP' : 'START';
-
 
   return (
     <>
