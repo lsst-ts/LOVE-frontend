@@ -35,4 +35,5 @@
   position: absolute;
   top: calc(-100%);
   left: calc(40px + var(--small-padding));
+  overflow: visible;
 }

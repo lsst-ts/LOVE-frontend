@@ -6,8 +6,9 @@ import Pointing from './Pointing';
 import AuxTelPointing from '../Pointings/AuxTelPointing';
 import SimonyiPointing from '../Pointings/SimonyiPointing';
 import SunPointing from '../Pointings/SunPointing';
-import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
+import MoonPointing from '../Pointings/MoonPointing';
 import SunSummary from '../SummaryInformation/SunSummary';
+import MoonSummary from '../SummaryInformation/MoonSummary';
 
 export default class Skymap extends Component {
   // static propTypes = {
@@ -71,9 +72,9 @@ export default class Skymap extends Component {
       az: 270,
       el: 70,
     };
-    const targetPointing = {
-      az: 270,
-      el: 20,
+    const currentPointing4 = {
+      az: 120,
+      el: 50,
     };
     const isProjected = false;
     return (
@@ -103,7 +104,17 @@ export default class Skymap extends Component {
             isProjected={isProjected}
             cartoon={<SunPointing />}
           >
-            <SunSummary className={styles.sunHover} simonyiSunRa={simonyiSunRa} simonyiSunDec={simonyiSunDec} />
+            <SunSummary simonyiSunRa={simonyiSunRa} simonyiSunDec={simonyiSunDec} />
+          </Pointing>
+          <Pointing
+            width={width}
+            height={height}
+            currentPointing={currentPointing4}
+            targetPointing={currentPointing4}
+            isProjected={isProjected}
+            cartoon={<MoonPointing />}
+          >
+            <MoonSummary simonyiMoonRa={simonyiMoonRa} simonyiMoonDec={simonyiMoonDec} />
           </Pointing>
           <SkymapGrid width={width} height={height} isProjected={isProjected} />
         </div>
