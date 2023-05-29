@@ -3,7 +3,7 @@ import styles from './SunPointing.module.css';
 
 function SunPointing({ className, ...props }) {
   return (
-    <svg viewBox="0 0 23.7 23.7" className={className} {...props}>
+    <svg viewBox="0 0 23.7 23.7" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
       <polygon
         id="Sun"
         className={styles.cls1}

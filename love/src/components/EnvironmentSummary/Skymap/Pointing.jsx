@@ -51,6 +51,7 @@ export default class Pointing extends Component {
     const currentPixels = this.azelToPixel(this.props.currentPointing, this.props.isProjected);
     const targetPixels = this.azelToPixel(this.props.targetPointing, this.props.isProjected);
 
+    console.log(cartoon, children, Boolean(children));
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596">
         <line

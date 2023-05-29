@@ -23,6 +23,7 @@
 }
 
 .svgOverlay {
+  pointer-events: none;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -30,6 +31,7 @@
 }
 
 .cartoonContainer {
+  pointer-events: all;
   position: relative;
   overflow: visible;
 }
