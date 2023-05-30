@@ -76,3 +76,13 @@
   left: 0 !important;
   transform: none !important;
 }
+
+.temperature {
+  fill: var(--secondary-font-color);
+}
+
+.simonyiSummary {
+  position: absolute;
+  top: 40px;
+  left: 280px;
+}

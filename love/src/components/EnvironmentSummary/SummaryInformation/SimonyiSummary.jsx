@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import styles from './SummaryInformation.module.css';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
-import Label from '../../../GeneralPurpose/SummaryPanel/Label';
-import Value from '../../../GeneralPurpose/SummaryPanel/Value';
-import Title from '../../../GeneralPurpose/SummaryPanel/Title';
-import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
+import Label from '../../GeneralPurpose/SummaryPanel/Label';
+import Value from '../../GeneralPurpose/SummaryPanel/Value';
+import Title from '../../GeneralPurpose/SummaryPanel/Title';
+import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import { schedulerTrackingStateToMap, schedulerTrackingStateToStyle } from 'Config';
 import { fixedFloat } from 'Utils';
 

@@ -1,24 +1,21 @@
 import React, { Component } from 'react';
 import styles from './SimonyiTelescope.module.css';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
+import SimonyiSummary from '../SummaryInformation/SimonyiSummary';
 
 function SimonyiTelescope({ className, ...props }) {
   // const { className } = props;
   return (
     <svg viewBox="0 0 726.72 436.7" className={className} {...props}>
-      <foreignObject x={260} y={10} width="60" height="40">
-        <div>
-          <span>10.12 °C</span>
-        </div>
-      </foreignObject>
+      <text x={260} y={10} width="60" height="40" className={styles.temperature}>
+        10.12°
+      </text>
       <Hoverable left={true} bottom={true} inside={false}>
         <g id="Simonyi">
           <g id="TMA">
-            <foreignObject x={190} y={30} width="60" height="40">
-              <div>
-                <span>18.36 °C</span>
-              </div>
-            </foreignObject>
+            <text x={190} y={30} width="60" height="40" className={styles.temperature}>
+              18.36 °C
+            </text>
             <g>
               <g>
                 <rect className={styles.cls4} x="153.4" y="44.72" width="16.11" height="54.37" />
@@ -85,7 +82,9 @@ function SimonyiTelescope({ className, ...props }) {
           />
         </g>
         <foreignObject className={styles.simonyiHover}>
-          <div style={{ stroke: 'red', position: 'absolute', top: '40px', left: '280px' }}>Holii</div>
+          <div className={styles.simonyiSummary}>
+            <SimonyiSummary />
+          </div>
         </foreignObject>
       </Hoverable>
       <g id="LiftSchute">
