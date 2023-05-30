@@ -153,24 +153,24 @@ export default class InfoHeader extends Component {
         <Table>
           <Tr key={'row[0]'}>
             <Td key={'row[0]_col[]'} className={styles.paddingInfoHeader}>
-              {this.props.frecuency === this.frecuencyOptions[0] ? 'Day' : 'Hour'}
+              <span className={styles.text}>{this.props.frecuency === this.frecuencyOptions[0] ? 'Day' : 'Hour'}</span>
             </Td>
             {data.map((row, i) => {
               return (
                 <Td key={'row[0]_col[' + i + ']'} className={styles.paddingInfoHeader}>
                   {row.dayHour.split(',').map((d) => (
-                    <div>{d}</div>
+                    <span className={styles.text}>{d}</span>
                   ))}
                 </Td>
               );
             })}
             <Td key={'row[0]_col[' + data.length + ']'} className={styles.paddingInfoHeader}>
-              {this.props.frecuency === this.frecuencyOptions[0] ? 'Day' : 'Hour'}
+              <span className={styles.text}>{this.props.frecuency === this.frecuencyOptions[0] ? 'Day' : 'Hour'}</span>
             </Td>
           </Tr>
           <Tr key={'row[1]'}>
             <Td ey={'row[1]_col[]'} className={styles.paddingInfoHeader}>
-              Pictocode
+              <span className={styles.text}>Pictocode</span>
             </Td>
             {data.map((row, i) => {
               return (
@@ -180,49 +180,49 @@ export default class InfoHeader extends Component {
               );
             })}
             <Td key={'row[1]_col[' + data.length + ']'} className={styles.paddingInfoHeader}>
-              Pictocode
+            <span className={styles.text}>Pictocode</span>
             </Td>
           </Tr>
           {this.props.frecuency === this.frecuencyOptions[0] ? (
             <>
               <Tr key={'row[2]'}>
                 <Td key={'row[2]_col[]'} className={styles.paddingInfoHeader}>
-                  High °C
+                <span className={styles.text}>High °C</span>
                 </Td>
                 {data.map((row, i) => {
                   return (
                     <Td
                       key={'row[2]_col[' + i + ']'}
-                      className={[styles.temperatureMax, styles.paddingInfoHeader].join(' ')}
+                      className={styles.paddingInfoHeader}
                     >
-                      {row.temperatureMax}
+                      <span className={styles.temperatureMax}>{row.temperatureMax}</span>
                     </Td>
                   );
                 })}
                 <Td key={'row[2]_col[' + data.length + ']'} className={styles.paddingInfoHeader}>
-                  High °C
+                <span className={styles.text}>High °C</span>
                 </Td>
               </Tr>
               <Tr key={'row[3]'}>
                 <Td key={'row[3]_col[]'} className={styles.paddingInfoHeader}>
-                  Low °C
+                <span className={styles.text}>Low °C</span>
                 </Td>
                 {data.map((row, i) => {
                   return (
                     <Td key={'row[3]_col[' + i + ']'} className={styles.paddingInfoHeader}>
-                      {row.temperatureMin}
+                      <span className={styles.text}>{row.temperatureMin}</span>
                     </Td>
                   );
                 })}
                 <Td key={'row[3]_col[' + data.length + ']'} className={styles.paddingInfoHeader}>
-                  Low °C
+                <span className={styles.text}>Low °C</span>
                 </Td>
               </Tr>
             </>
           ) : (
             <Tr key={'row[4]'}>
               <Td key={'row[4]_col[]'} className={styles.paddingInfoHeader}>
-                Temp. °C
+                <span className={styles.text}>Temp. °C</span>
               </Td>
               {data.map((row, i) => {
                 return (
@@ -230,20 +230,20 @@ export default class InfoHeader extends Component {
                     <span className={styles.temperatureMax}>{row.temperature}</span>
                     <span className={styles.spread}>
                       <PlusMinusIcon className={styles.littleIcon} />
-                      <span>{row.temperatureSpread}</span>
+                      <span className={styles.text}>{row.temperatureSpread}</span>
                     </span>
                   </Td>
                 );
               })}
               <Td key={'row[4]_col[' + data.length + ']'} className={styles.paddingInfoHeader}>
-                Temp. °C
+                <span className={styles.text}>Temp. °C</span>
               </Td>
             </Tr>
           )}
           {this.props.frecuency === this.frecuencyOptions[0] && (
             <Tr key={'row[5]'}>
               <Td key={'row[5]_col[]'} className={styles.paddingInfoHeader}>
-                Predictability
+              <span className={styles.text}>Predictability</span>
               </Td>
               {data.map((row, i) => {
                 return (
@@ -276,7 +276,7 @@ export default class InfoHeader extends Component {
                 );
               })}
               <Td key={'row[5]_col[' + data.length + ']'} className={styles.paddingInfoHeader}>
-                Predictability
+                <span className={styles.text}>Predictability</span>
               </Td>
             </Tr>
           )}
