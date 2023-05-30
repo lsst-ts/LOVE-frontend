@@ -113,7 +113,6 @@ export default class Skymap extends Component {
             targetPointing={currentPointing4}
             isProjected={isProjected}
             cartoon={<MoonPointing />}
-            // cartoon={<div>333</div>}
           >
             <MoonSummary simonyiMoonRa={simonyiMoonRa} simonyiMoonDec={simonyiMoonDec} />
           </Pointing>

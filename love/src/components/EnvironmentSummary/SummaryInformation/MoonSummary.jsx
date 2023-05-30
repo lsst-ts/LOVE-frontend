@@ -10,7 +10,7 @@ export default class Moon extends Component {
   render() {
     const { simonyiMoonRa, simonyiMoonDec } = this.props;
     return (
-      <div className={styles.container}>
+      <div className={[styles.container, styles.sunContainer].join(' ')}>
         <SummaryPanel className={styles.summaryPanel}>
           <Title>Moon</Title>
           <span></span>
