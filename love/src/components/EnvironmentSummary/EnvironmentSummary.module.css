@@ -39,6 +39,7 @@
 }
 
 .simonyi {
+  display: block;
   position: absolute;
   top: 0;
   left: 0;
@@ -48,8 +49,9 @@
 }
 
 .auxTel {
+  display: block;
   position: absolute;
-  top: 10;
+  top: 0;
   right: 0;
   width: 40%;
   z-index: 1;

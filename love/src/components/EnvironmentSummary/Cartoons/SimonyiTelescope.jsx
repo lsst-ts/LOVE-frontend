@@ -84,8 +84,8 @@ function SimonyiTelescope({ className, ...props }) {
             points="275.31 175.1 275.31 49.4 202.98 1.11 74.29 45.61 20.96 129.31 20.96 176.07 275.31 175.1"
           />
         </g>
-        <foreignObject>
-          <div style={{ border: 'red' }}>Holii</div>
+        <foreignObject className={styles.simonyiHover}>
+          <div style={{ stroke: 'red', position: 'absolute', top: '40px', left: '280px' }}>Holii</div>
         </foreignObject>
       </Hoverable>
       <g id="LiftSchute">
