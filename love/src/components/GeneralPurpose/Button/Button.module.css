@@ -2,9 +2,9 @@
   border: none;
   font-weight: 400;
   text-shadow: none;
-  border-radius: 4px;
-  padding-top: 2px;
-  padding-bottom: 2px;
+  border-radius: 0.29em;
+  padding-top: 0.14em;
+  padding-bottom: 0.14em;
   /* boostrap inherited */
   display: inline-block;
   margin-bottom: 0;
@@ -15,11 +15,11 @@
   cursor: pointer;
   user-select: none;
 
-  padding-left: 12px;
-  padding-right: 12px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  font-size: 14px;
+  padding-left: 0.86em;
+  padding-right: 0.86em;
+  padding-top: 0.14em;
+  padding-bottom: 0.14em;
+  font-size: 1em;
   line-height: 1.42857143;
 }
 
@@ -40,7 +40,7 @@
 }
 
 .btnWrapper:focus > .btn {
-  box-shadow: 0 0 2px 2px var(--highlighted-font-color);
+  box-shadow: 0 0 0.14em 0.14em var(--highlighted-font-color);
 }
 
 .btn.disabled {
@@ -50,22 +50,22 @@
 
 /* ------------SIZES-------*/
 .btnLG {
-  padding: 2px 16px;
-  font-size: 18px;
+  padding: 0.14em 1.14em;
+  font-size: 1.29em;
   line-height: 1.3333333;
 }
 
 .btnSM {
-  padding-left: 10px;
-  padding-right: 10px;
-  font-size: 12px;
+  padding-left: 0.71em;
+  padding-right: 0.71em;
+  font-size: 0.86em;
   line-height: 1.5;
 }
 
 .btnXS {
-  padding-left: 5px;
-  padding-right: 5px;
-  font-size: 12px;
+  padding-left: 0.36em;
+  padding-right: 0.36em;
+  font-size: 0.86em;
   line-height: 1.2;
 }
 
@@ -107,8 +107,7 @@
   background-image: none;
   background-color: var(--primary-background-color);
   color: var(--primary-font-color);
-  /* border: solid 1px #273b46; */
-  box-shadow: 1px 2px 4px 0px var(--primary-shadow-color);
+  box-shadow: 0.07em 0.86em 0.29em 0em var(--primary-shadow-color);
 }
 .btnPrimary:hover,
 .btnPrimary:active:hover {
@@ -160,7 +159,7 @@
   background-color: var(--info-background-color);
   color: var(--info-font-color);
   font-weight: 500;
-  box-shadow: 1px 2px 4px 0px var(--info-shadow-color);
+  box-shadow: 0.07em 0.14em 0.29em 0em var(--info-shadow-color);
 }
 .btnInfo:hover,
 .btnInfo:active:hover {

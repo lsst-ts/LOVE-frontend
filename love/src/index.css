@@ -141,6 +141,7 @@ body {
 }
 
 :root {
+  font-size: 14px;
   backface-visibility: hidden;
   --topbar-height: 2em;
   --content-padding: 1em;
@@ -263,6 +264,12 @@ body {
   --commandable-font-color-hover: hsl(201, 26%, 23%);
 }
 
+@media (min-width: 3800px) {
+  :root {
+    font-size: 24px;
+  }
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: var(--scrollbar-width);
@@ -289,7 +296,7 @@ body {
 .Toastify__toast.Toastify__toast--success {
   background: var(--status-ok-dimmed-color-3);
   color: var(--status-ok-color);
-  border-radius: 4px;
+  border-radius: 0.29rem;
 }
 
 .Toastify__close-button.Toastify__close-button--success {
@@ -303,7 +310,7 @@ body {
 .Toastify__toast.Toastify__toast--info {
   background: var(--status-running-dimmed-color-3);
   color: var(--status-running-color);
-  border-radius: 4px;
+  border-radius: 0.29rem;
 }
 
 .Toastify__close-button.Toastify__close-button--info {
@@ -317,7 +324,7 @@ body {
 .Toastify__toast.Toastify__toast--warning {
   background: var(--status-warning-dimmed-color-3);
   color: var(--status-warning-color);
-  border-radius: 4px;
+  border-radius: 0.29rem;
 }
 
 .Toastify__close-button.Toastify__close-button--warning {
@@ -331,7 +338,7 @@ body {
 .Toastify__toast.Toastify__toast--error {
   background: var(--status-alert-dimmed-color-3);
   color: var(--status-alert-color);
-  border-radius: 4px;
+  border-radius: 0.29rem;
 }
 
 .Toastify__close-button.Toastify__close-button--error {

@@ -1,12 +1,6 @@
 .App {
   text-align: center;
-  font-size: 14px;
-}
-
-@media (min-width: 1240px) {
-  .App {
-    font-size: 20px;
-  }
+  font-size: 1rem;
 }
 
 .App-logo {
