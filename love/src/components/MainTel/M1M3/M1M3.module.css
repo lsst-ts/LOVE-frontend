@@ -193,7 +193,26 @@
 }
 
 .forceGradient {
+  display: grid;
+  grid-template-columns: 7em 1fr 7em;
+}
+
+.forceGradient svg {
+  margin: 0 var(--small-padding);
+}
+
+.forceGradient :first-child {
+  justify-content: end;
+}
+
+.forceGradient :last-child {
+  justify-content: start;
+}
+
+.forceGradient :first-child,
+.forceGradient :last-child {
   display: flex;
+  align-items: center;
 }
 
 .gridActuatorInfo,
