@@ -348,6 +348,33 @@ class VegaTimeseriesPlot extends Component {
       );
     });
 
+    if (layers.length === 0) {
+      const colors = names.map((name) => ({name, color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color}));
+      const namesUnits = units.map((u) => u.name + (u.units?.y ? ' [' + u.units?.y + ']' : ''));
+
+      layers = [
+        {
+          mark: {
+            type: 'line',
+            clip: true,
+          },
+          encoding: {
+            y: {
+              field: 'y',
+              type: 'quantitative',
+              axis: {
+                title: namesUnits,
+                titleColor: colors[0]?.color,
+                orient: 'right',
+              },
+            },
+            color: styleEncoding.color,
+            strokeDash: styleEncoding.strokeDash,
+          },
+        },
+      ]
+    }
+
     return {
       data: { name: dataName }, // note: vega-lite data attribute is a plain object instead of an array
       layer: [
@@ -1302,8 +1329,6 @@ class VegaTimeseriesPlot extends Component {
       layer.push(this.makeLineLayer('lines'));
     }
 
-    console.log('updateSpec this.state.containerHeight', this.state.containerHeight, 'this.props.height', this.props.height);
-
     this.setState({
       spec: {
         width:
@@ -1311,7 +1336,7 @@ class VegaTimeseriesPlot extends Component {
             ? this.props.width
             : this.state.containerWidth,
         height:
-          this.props.height !== undefined && this.props.height !== null && this.state.containerHeight < this.props.height
+          this.props.height !== undefined && this.props.height !== null // && this.state.containerHeight < this.props.height
             ? this.props.height
             : this.state.containerHeight,
         autosize: {

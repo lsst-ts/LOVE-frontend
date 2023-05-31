@@ -468,7 +468,7 @@ export default class Plot extends Component {
         ...(inputs[input].dash !== undefined ? { dash: inputs[input].dash } : {}),
         ...(inputs[input].shape !== undefined ? { shape: inputs[input].shape } : {}),
         ...(inputs[input].filled !== undefined ? { filled: inputs[input].filled } : {}),
-        ...(inputs[input].orient !== undefined ? { orient: inputs[input].orient } : {}),
+        ...(inputs[input].orient !== undefined ? { orient: inputs[input].orient } : {orient: 'right'}),
       };
     });
 
