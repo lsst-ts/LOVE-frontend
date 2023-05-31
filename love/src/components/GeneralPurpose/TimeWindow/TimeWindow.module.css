@@ -1,21 +1,22 @@
 .time-window-selection-span {
   font-weight: bold;
-  width: 5em;
+  width: 5rem;
   display: inline-block;
   text-align: center;
   cursor: pointer;
 }
 
 .time-window-selection-input:checked + span {
-  border-bottom: 0.4em solid #fff;
-  padding-bottom: 0px;
+  border-bottom: 0.4rem solid #fff;
+  padding-bottom: 0rem;
   color: #fff;
   cursor: pointer;
 }
 
 .time-window-selection-span {
-  padding-bottom: 2px;
-  border-bottom: 2px solid #96a3b3;
+  font-size: 1rem;
+  padding-bottom: 0.14rem;
+  border-bottom: 0.14rem solid #96a3b3;
   cursor: pointer;
 }
 
@@ -24,9 +25,9 @@ input.time-window-selection-input {
 }
 
 .time-window-selection-label {
-  height: 40px;
+  height: 2.86rem;
   cursor: pointer;
-  margin-bottom: 0px;
-  border-radius: 5px;
+  margin-bottom: 0rem;
+  border-radius: 0.36rem;
   font-size: small;
 }
