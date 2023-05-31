@@ -282,7 +282,7 @@ export default class WeatherStation extends Component {
 
     const currentTemperature = this.props.weather?.ambient_temp?.value;
     const currentHumidity = this.props.weather?.humidity?.value;
-    const currentPressure = this.props.weather?.pressure?.value; // Math.round(this.props.weather?.pressure?.value * 100) / 100;
+    const currentPressure = this.props.weather?.pressure?.value;
     const currentWindSpeed = this.props.windSpeed?.value?.value;
     const currentWindSpeedUnits = this.props.windSpeed?.value?.units;
 
