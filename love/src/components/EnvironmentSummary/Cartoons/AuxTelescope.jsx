@@ -1,22 +1,24 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import styles from './AuxTelescope.module.css';
+import AuxtelSummary from '../SummaryInformation/AuxtelSummary';
 
 function AuxTelescope({ className, ...props }) {
-  // const { className } = this.props;
+  const [showAuxtelSummary, setShowAuxtelSummary] = useState(false);
+
   return (
     <svg viewBox="0 0 444.43 436.59" className={className} {...props}>
-      <foreignObject x={135} y={10} width="60" height="40">
-        <div>
-          <span>10.84 °C</span>
-        </div>
-      </foreignObject>
+      <text x={135} y={10} width="60" height="40" className={styles.temperature}>
+        10.84 °C
+      </text>
       <g id="AuxTel">
-        <foreignObject x={180} y={40} width="60" height="40">
-          <div>
-            <span>10.36 °C</span>
-          </div>
-        </foreignObject>
-        <g id="ATMount">
+        <text x={187} y={50} width="60" height="40" className={styles.temperature}>
+          10.36 °C
+        </text>
+        <g
+          id="ATMount"
+          onMouseEnter={() => setShowAuxtelSummary(true)}
+          onMouseLeave={() => setShowAuxtelSummary(false)}
+        >
           <rect className={styles.cls1} x="242.87" y="117.66" width="30" height="8" />
           <g>
             <rect className={styles.cls1} x="237.08" y="124.52" width="41.58" height="6.14" />
@@ -52,6 +54,13 @@ function AuxTelescope({ className, ...props }) {
           />
         </g>
       </g>
+      {showAuxtelSummary && (
+        <foreignObject className={styles.auxtelHover}>
+          <div className={styles.auxtelSummary}>
+            <AuxtelSummary />
+          </div>
+        </foreignObject>
+      )}
     </svg>
   );
 }

@@ -8,12 +8,12 @@ function SimonyiTelescope({ className, ...props }) {
 
   return (
     <svg viewBox="0 0 726.72 436.7" className={className} {...props}>
-      <text x={260} y={10} width="60" height="40" className={styles.temperature}>
+      <text x={245} y={10} width="60" height="40" className={styles.temperature}>
         10.12°
       </text>
       <g id="Simonyi">
         <g id="TMA" onMouseEnter={() => setShowSimonyiSummary(true)} onMouseLeave={() => setShowSimonyiSummary(false)}>
-          <text x={190} y={30} width="60" height="40" className={styles.temperature}>
+          <text x={185} y={40} width="60" height="40" className={styles.temperature}>
             18.36 °C
           </text>
           <g>

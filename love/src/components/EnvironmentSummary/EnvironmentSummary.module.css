@@ -8,7 +8,7 @@
 .iconLeft {
   position: absolute;
   left: 17%;
-  top: 22%;
+  top: 17%;
   width: 4%;
 }
 
@@ -17,25 +17,26 @@
   left: 50%;
   top: 0;
   width: 4%;
-  margin-top: 335px;
+  margin-top: 358px;
 }
 
 .iconRight {
   position: absolute;
   right: 17%;
-  top: 18%;
+  top: 15%;
   width: 3%;
 }
 
 .telescopes {
   position: relative;
   padding: 20px;
+  top: 43px;
 }
 
 .skymap {
   position: absolute;
   top: 0;
-  left: 40%;
+  left: 35%;
 }
 
 .simonyi {

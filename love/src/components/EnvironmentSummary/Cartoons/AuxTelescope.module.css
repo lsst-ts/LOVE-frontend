@@ -34,3 +34,22 @@
 .cls5 {
   stroke: #59717c;
 }
+
+.temperature {
+  fill: var(--secondary-font-color);
+}
+
+.auxtelHover {
+  position: relative !important;
+  overflow: visible !important;
+  top: 0 !important;
+  left: 0 !important;
+  transform: none !important;
+}
+
+.auxtelSummary {
+  position: absolute;
+  top: 40px;
+  left: 280px;
+  width: 325px;
+}
