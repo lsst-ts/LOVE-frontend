@@ -105,7 +105,6 @@ class VegaLegendMiniPlot extends React.PureComponent {
       mark: {
         type: 'bar',
         color: this.props.color,
-        /* clip: true, */
       },
       encoding: {
         x: {
@@ -476,7 +475,6 @@ class VegaLegendMiniPlot extends React.PureComponent {
           mark: {
             type: 'bar',
             color: this.props.color,
-            /* clip: true, */
           },
           encoding: {
             x: {
@@ -524,7 +522,6 @@ class VegaLegendMiniPlot extends React.PureComponent {
           mark: {
             type: 'bar',
             color: this.props.color,
-            /* clip: true, */
           },
           encoding: {
             x: {
@@ -572,7 +569,6 @@ class VegaLegendMiniPlot extends React.PureComponent {
           mark: {
             type: 'bar',
             color: this.props.color,
-            /* clip: true, */
           },
           encoding: {
             x: {
@@ -640,7 +636,6 @@ class VegaLegendMiniPlot extends React.PureComponent {
         strokeWidth: 1,
         stroke: this.props.color,
         fill: this.props.color,
-        /* clip: true, */
       },
       encoding: {
         x: {
@@ -685,10 +680,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
         background: null,
         axis: {
           orient: "right"
-        },
-        /* bar: {
-          continuousBandSize: 5,
-        }, */
+        }
       },
     };
   };
