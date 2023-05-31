@@ -74,18 +74,21 @@ export default class Plot extends Component {
       color: '#ff7bb5',
       shape: 'circle',
       filled: false,
+      orient: 'left',
       dash: [4, 0],
     },
     {
       color: '#00b7ff',
       shape: 'square',
       filled: true,
+      orient: 'left',
       dash: [4, 0],
     },
     {
       color: '#97e54f',
       shape: 'diamond',
       filled: true,
+      orient: 'right',
       dash: [4, 0],
     },
   ];
@@ -352,13 +355,14 @@ export default class Plot extends Component {
       if (this.props.containerNode && !this.state.resizeObserverListener) {
         this.resizeObserver = new ResizeObserver((entries) => {
           const container = entries[0];
-          const diffControl =
-            this.timeSeriesControlRef && this.timeSeriesControlRef.current
-              ? this.timeSeriesControlRef.current.offsetHeight + 19
-              : 0;
-          const diffLegend =
-            this.props.legendPosition === 'bottom' && this.legendRef.current ? this.legendRef.current.offsetHeight : 0;
-          if (container.contentRect.height !== 0 && container.contentRect.width !== 0) {
+          const diffControl = this.timeSeriesControlRef && this.timeSeriesControlRef.current ? this.timeSeriesControlRef.current.offsetHeight + 19 : 0;
+          const diffLegend = this.props.legendPosition === 'bottom' && this.legendRef.current ? this.legendRef.current.offsetHeight : 0;
+          const newHeight = container.contentRect.height - diffControl - diffLegend;
+          const newWidth = container.contentRect.width;
+          if (container.contentRect.height !== 0 && container.contentRect.width !== 0 &&
+            ((this.state.containerHeight === undefined ||  Math.abs(this.state.containerHeight - newHeight) > 1) ||
+            (this.state.containerWidth === undefined || Math.abs(this.state.containerWidth - newWidth) > 1))
+          ) {
             this.setState({
               containerHeight: container.contentRect.height - diffControl - diffLegend,
               containerWidth: container.contentRect.width,
@@ -464,6 +468,7 @@ export default class Plot extends Component {
         ...(inputs[input].dash !== undefined ? { dash: inputs[input].dash } : {}),
         ...(inputs[input].shape !== undefined ? { shape: inputs[input].shape } : {}),
         ...(inputs[input].filled !== undefined ? { filled: inputs[input].filled } : {}),
+        ...(inputs[input].orient !== undefined ? { orient: inputs[input].orient } : {}),
       };
     });
 

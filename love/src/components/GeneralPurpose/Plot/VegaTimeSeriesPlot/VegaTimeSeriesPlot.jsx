@@ -133,6 +133,8 @@ class VegaTimeseriesPlot extends Component {
         shape: PropTypes.string,
         /** (Only `pointLines`) layer. Whether to draw a filled point or only its border. */
         filled: PropTypes.bool,
+        /** (Only `lines`) layer. About of the orientation legend (left or right) */
+        orient: PropTypes.string,
       }),
     ).isRequired,
 
@@ -307,32 +309,22 @@ class VegaTimeseriesPlot extends Component {
     const arr = Object.values(this.props.layers[dataName] ?? {});
     const names = [...new Set(arr.map((layer) => layer.name))];
     const units = names.map((name) => ({name: name, units: arr.filter((l) => l.name === name)[0].units}));
-    const colors = names.map((name) => ({name, color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color}));
 
-    const namesUnits = units.map((u) => u.name + (u.units?.y ? ' [' + u.units?.y + ']' : ''));
-
-    const paramColor = {};
-    colors.forEach((c) => {
-      paramColor[c.name] = c.color;
-    });
-    const paramUnit = {};
-    units.forEach((u) => {
-      paramUnit[u.name] = u.units;
+    const mapNameUnits = units.map((u) => {
+      return {
+        name: u.name,
+        unit: units.filter((f) => f.name === u.name).map((u) => u.name + (u.units?.y ? ' [' + u.units?.y + ']' : ''))
+      };
     });
 
-    return {
-      data: { name: dataName }, // note: vega-lite data attribute is a plain object instead of an array
-      transform: [
-        {
-          calculate: 'datum.name + " [" + datum.units.y + "]"',
-          as: 'labelY'
-        },
-        // {
-        //   calculate: 'datum.colors[datum.name]',
-        //   as: 'color'
-        // }
-      ],
-      layer: [
+    const titles = names.map((name) => ({
+      name: mapNameUnits.filter((l) => l.name === name)[0].unit,
+      color: markStyle.filter((l) => l.name === name)[0].color,
+      orient: markStyle.filter((l) => l.name === name)[0].orient
+    }));
+
+    let layers = titles.map((t) => {
+      return (
         {
           mark: {
             type: 'line',
@@ -343,48 +335,24 @@ class VegaTimeseriesPlot extends Component {
               field: 'y',
               type: 'quantitative',
               axis: {
-                title: namesUnits,
-                orient: 'right',
-                titleColor: colors.map((c) => c.color)[0],
+                title: t.name,
+                titleColor: t.color,
+                orient: t.orient
               },
               scale: this.props.scaleDomain,
             },
             color: styleEncoding.color,
             strokeDash: styleEncoding.strokeDash,
           },
-        },
-        {
-          mark: 'rule',
-          params: [{
-            name: 'hover',
-            select: {type: 'point', on: 'mouseover'}
-          }],
-          encoding: {
-            color: {
-              condition: {
-                param: 'hover',
-                empty: false,
-                value: 'white',
-              },
-              value: "transparent",
-            },
-            size: {value: 4},
-            tooltip: [
-              {
-                field: 'labelY', title: 'name'
-              },
-              {
-                field: 'x',
-                type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
-              },
-              {
-                field: 'y', labelExpr: 'datum.labelY', format: ".2f",
-              }
-            ]
-          }
         }
-      ]
+      );
+    });
+
+    return {
+      data: { name: dataName }, // note: vega-lite data attribute is a plain object instead of an array
+      layer: [
+        ...layers,
+      ],
     };
   };
 
@@ -431,8 +399,8 @@ class VegaTimeseriesPlot extends Component {
         },
         {
           mark: {
-          type: 'line',
-          clip: true,
+            type: 'line',
+            clip: true,
           },
           encoding: {
             y: {
@@ -1334,6 +1302,8 @@ class VegaTimeseriesPlot extends Component {
       layer.push(this.makeLineLayer('lines'));
     }
 
+    console.log('updateSpec this.state.containerHeight', this.state.containerHeight, 'this.props.height', this.props.height);
+
     this.setState({
       spec: {
         width:
@@ -1341,7 +1311,7 @@ class VegaTimeseriesPlot extends Component {
             ? this.props.width
             : this.state.containerWidth,
         height:
-          this.props.height !== undefined && this.props.height !== null
+          this.props.height !== undefined && this.props.height !== null && this.state.containerHeight < this.props.height
             ? this.props.height
             : this.state.containerHeight,
         autosize: {

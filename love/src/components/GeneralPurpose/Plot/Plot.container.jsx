@@ -10,18 +10,21 @@ export const defaultStyles = [
     color: '#ff7bb5',
     shape: 'circle',
     filled: false,
+    orient: 'left',
     dash: [4, 0],
   },
   {
     color: '#00b7ff',
     shape: 'square',
     filled: true,
+    orient: 'right',
     dash: [4, 0],
   },
   {
     color: '#97e54f',
     shape: 'diamond',
     filled: true,
+    orient: 'left',
     dash: [4, 0],
   },
 ];
@@ -74,6 +77,7 @@ export const schema = {
         },
         'ATMCS Azimuth': {
           type: 'arrow',
+          ...defaultStyles[1],
           values: [
             {
               variable: 'y',
@@ -94,7 +98,6 @@ export const schema = {
               accessor: '(x) => x[0] + 90',
             }
           ],
-          ...defaultStyles[1],
         },
       },
     },

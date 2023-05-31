@@ -56,6 +56,7 @@ export default class Dome extends Component {
     'Mount elevation': {
       type: 'line',
       color: 'hsl(201, 70%, 40%)',
+      orient: 'left',
       values: [
         {
           variable: 'y',
@@ -72,6 +73,7 @@ export default class Dome extends Component {
       type: 'line',
       color: 'white',
       dash: [4, 1],
+      orient: 'right',
       values: [
         {
           variable: 'y',
@@ -90,6 +92,8 @@ export default class Dome extends Component {
     'Dome Azimuth': {
       type: 'line',
       color: 'hsl(201, 70%, 40%)',
+      dash: [4, 0],
+      orient: 'left',
       values: [
         {
           variable: 'y',
@@ -106,6 +110,7 @@ export default class Dome extends Component {
       type: 'line',
       color: 'hsl(201, 70%, 40%)',
       dash: [4, 1],
+      orient: 'left',
       values: [
         {
           variable: 'y',
@@ -121,6 +126,8 @@ export default class Dome extends Component {
     'Mount Azimuth': {
       type: 'line',
       color: 'hsl(160, 70%, 40%)',
+      dash: [4, 0],
+      orient: 'right',
       values: [
         {
           variable: 'y',
@@ -136,6 +143,7 @@ export default class Dome extends Component {
     'Mount Target': {
       type: 'line',
       color: 'hsl(160, 70%, 40%)',
+      orient: 'right',
       dash: [4, 1],
       values: [
         {
