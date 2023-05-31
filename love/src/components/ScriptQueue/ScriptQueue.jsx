@@ -22,6 +22,8 @@ import Input from '../GeneralPurpose/Input/Input';
 import GlobalState from './GlobalState/GlobalState';
 import ScriptDetails from './Scripts/ScriptDetails';
 
+const CONFIG_PANEL_INITIAL_WIDTH = 590;
+
 /**
  * Get the hierarchy of scripts and return it in a dictionary.
  * @param {Array} scripts - List of scripts.
@@ -86,6 +88,7 @@ export default class ScriptQueue extends Component {
     };
 
     this.observer = null;
+    this.scriptQueueContainer = React.createRef();
     this.currentScriptDetailsContainer = React.createRef();
   }
 
@@ -387,7 +390,11 @@ export default class ScriptQueue extends Component {
   };
 
   launchScriptConfig = (e, script) => {
-    const { x } = e.target.getBoundingClientRect();
+    let { x } = e.target.getBoundingClientRect();
+    const scriptQueueContainer = this.scriptQueueContainer.current;
+    if (scriptQueueContainer) {
+      x = scriptQueueContainer.getBoundingClientRect().width / 2 - CONFIG_PANEL_INITIAL_WIDTH / 2;
+    }
     this.setState({
       configPanel: {
         script,
@@ -607,6 +614,7 @@ export default class ScriptQueue extends Component {
     return (
       <div
         id="container"
+        ref={this.scriptQueueContainer}
         onClick={(e) => {
           this.setState({ isContextMenuOpen: false });
         }}

@@ -26,6 +26,7 @@ import 'brace/mode/yaml';
 import 'brace/theme/solarized_dark';
 
 // Constants for the config panel
+const CONFIG_PANEL_INITIAL_WIDTH = 590;
 const NO_SCHEMA_MESSAGE = '# ( waiting for schema . . .)';
 const DEFAULT_CONFIG_NAME = 'last_script';
 const DEFAULT_CONFIG_VALUE = `# Insert your config here:
@@ -94,7 +95,7 @@ export default class ConfigPanel extends Component {
     this.state = {
       value: DEFAULT_CONFIG_VALUE,
       autoFilledValue: '',
-      width: 540,
+      width: 580,
       height: 500,
       loading: false,
       pauseCheckpoint: '',
@@ -322,8 +323,9 @@ export default class ConfigPanel extends Component {
   };
 
   onResize = (event, direction, element) => {
+    const width = parseInt(element.style.width.replace(/px/g, ''), 10);
     this.setState({
-      width: parseInt(element.style.width.replace(/px/g, ''), 10),
+      width: width > CONFIG_PANEL_INITIAL_WIDTH ? width : CONFIG_PANEL_INITIAL_WIDTH,
       height: parseInt(element.style.height.replace(/px/g, ''), 10),
     });
   };
@@ -517,7 +519,7 @@ export default class ConfigPanel extends Component {
 
     return (
       <div className={styles.configurationControls}>
-        {controlHtml}
+        <div>{controlHtml}</div>
         {updatingScriptSchema ? spinnerHtml : buttonHtml}
       </div>
     );
@@ -640,6 +642,7 @@ export default class ConfigPanel extends Component {
           width: `${this.state.width}px`,
           height: `calc(${this.state.height}px)`,
         }}
+        minWidth={CONFIG_PANEL_INITIAL_WIDTH}
         style={{ zIndex: 1000, position: 'fixed' }}
         bounds={'window'}
         enableUserSelectHack={false}
@@ -685,7 +688,7 @@ export default class ConfigPanel extends Component {
                   mode="yaml"
                   theme="solarized_dark"
                   name="UNIQUE_ID_OF_DIV"
-                  // width={sidePanelSize[orientation].firstWidth}
+                  width={sidePanelSize[orientation].firstWidth}
                   height={sidePanelSize[orientation].firstHeight}
                   value={
                     this.props.configPanel.configSchema === '' ? NO_SCHEMA_MESSAGE : this.props.configPanel.configSchema
