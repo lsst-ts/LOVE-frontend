@@ -1,4 +1,4 @@
-import React, { Component }  from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
@@ -9,7 +9,6 @@ import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData }
 import _ from 'lodash';
 import styles from './Plot.module.css';
 const moment = extendMoment(Moment);
-
 
 export default class Plot extends Component {
   static propTypes = {
@@ -54,7 +53,7 @@ export default class Plot extends Component {
     scaleDomain: PropTypes.shape({
       domainMax: PropTypes.number,
       domainMin: PropTypes.number,
-    })
+    }),
   };
 
   static defaultProps = {
@@ -113,7 +112,6 @@ export default class Plot extends Component {
     const { inputs } = this.props;
     const { selectedEfdClient } = this.state;
     const cscs = parsePlotInputs(inputs);
-    // const cscs = this.getParsePlot(inputs);
     const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
     ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min', selectedEfdClient).then((data) => {
       if (!data) return;
@@ -152,8 +150,8 @@ export default class Plot extends Component {
       const joinedData = parsedHistoricalData.concat(data);
       filteredData = joinedData.filter((val) => {
         const currentSeconds = new Date().getTime() / 1000;
-        const timemillis = (val.x && val.x.ts) ? val.x.ts : val.x;
-        const dataSeconds = timemillis/ 1000 + this.props.taiToUtc;
+        const timemillis = val.x && val.x.ts ? val.x.ts : val.x;
+        const dataSeconds = timemillis / 1000 + this.props.taiToUtc;
         if (currentSeconds - timeWindow * 60 <= dataSeconds) return true;
         return false;
       });
@@ -164,10 +162,10 @@ export default class Plot extends Component {
   getForecastData = (inputName, data) => {
     let result = [];
     data.forEach((d) => {
-      result.push({name: inputName, ...d});
+      result.push({ name: inputName, ...d });
     });
     return result;
-  }
+  };
 
   componentDidMount() {
     this.props.subscribeToStreams();
@@ -192,13 +190,21 @@ export default class Plot extends Component {
       if (this.props.containerNode) {
         this.resizeObserver = new ResizeObserver((entries) => {
           const container = entries[0];
-          const diffControl = this.timeSeriesControlRef && this.timeSeriesControlRef.current ? this.timeSeriesControlRef.current.offsetHeight + 19 : 0;
-          const diffLegend = this.props.legendPosition === 'bottom' && this.legendRef.current ? this.legendRef.current.offsetHeight : 0;
+          const diffControl =
+            this.timeSeriesControlRef && this.timeSeriesControlRef.current
+              ? this.timeSeriesControlRef.current.offsetHeight + 19
+              : 0;
+          const diffLegend =
+            this.props.legendPosition === 'bottom' && this.legendRef.current ? this.legendRef.current.offsetHeight : 0;
           const newHeight = container.contentRect.height - diffControl - diffLegend;
           const newWidth = container.contentRect.width;
-          if (container.contentRect.height !== 0 && container.contentRect.width !== 0 &&
-            ((this.state.containerHeight === undefined ||  Math.abs(this.state.containerHeight - newHeight) > 1) ||
-            (this.state.containerWidth === undefined || Math.abs(this.state.containerWidth - newWidth) > 1))
+          if (
+            container.contentRect.height !== 0 &&
+            container.contentRect.width !== 0 &&
+            (this.state.containerHeight === undefined ||
+              Math.abs(this.state.containerHeight - newHeight) > 1 ||
+              this.state.containerWidth === undefined ||
+              Math.abs(this.state.containerWidth - newWidth) > 1)
           ) {
             this.setState({
               containerHeight: container.contentRect.height - diffControl - diffLegend,
@@ -228,7 +234,7 @@ export default class Plot extends Component {
         let newValue = {
           name: inputName,
           values: {},
-          units: {}
+          units: {},
         };
 
         for (const value of Object.values(inputConfig.values)) {
@@ -287,43 +293,42 @@ export default class Plot extends Component {
           }
         }
         newData[inputName] = inputData;
-
       } else {
-        const { category, csc, salindex, topic, item, accessor} = inputConfig;
-          /* eslint no-eval: 0 */
-          const accessorFunc = eval(accessor);
-          let inputData = data[inputName] || [];
-          const lastValue = inputData[inputData.length - 1];
-          const streamName = `${category}-${csc}-${salindex}-${topic}`;
-          if (!streams[streamName] || !streams[streamName]?.[item]) {
-            continue;
-          }
-          const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
-          const newValue = {
-            name: inputName,
-            x: parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
-            y: accessorFunc(streamValue[item]?.value),
-            units: {y: streamValue[item]?.units},
-          };
+        const { category, csc, salindex, topic, item, accessor } = inputConfig;
+        /* eslint no-eval: 0 */
+        const accessorFunc = eval(accessor);
+        let inputData = data[inputName] || [];
+        const lastValue = inputData[inputData.length - 1];
+        const streamName = `${category}-${csc}-${salindex}-${topic}`;
+        if (!streams[streamName] || !streams[streamName]?.[item]) {
+          continue;
+        }
+        const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
+        const newValue = {
+          name: inputName,
+          x: parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
+          y: accessorFunc(streamValue[item]?.value),
+          units: { y: streamValue[item]?.units },
+        };
 
-          // TODO: use reselect to never get repeated timestamps
-          if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
-            inputData.push(newValue);
-          }
+        // TODO: use reselect to never get repeated timestamps
+        if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
+          inputData.push(newValue);
+        }
 
-          // Slice inputData array if it has more than sliceSize datapoints (corresponding to one hour if telemetry is received every two seconds)
-          if (inputData.length > sliceSize) {
-            if (this.props.sliceInvert) {
-              if (inputData.length > sizeLimit) {
-                inputData = inputData.slice(-1 * sizeLimit).slice(0, sliceSize);
-              } else {
-                inputData = inputData.slice(0, sliceSize);
-              }
+        // Slice inputData array if it has more than sliceSize datapoints (corresponding to one hour if telemetry is received every two seconds)
+        if (inputData.length > sliceSize) {
+          if (this.props.sliceInvert) {
+            if (inputData.length > sizeLimit) {
+              inputData = inputData.slice(-1 * sizeLimit).slice(0, sliceSize);
             } else {
-              inputData = inputData.slice(-1 * sliceSize);
+              inputData = inputData.slice(0, sliceSize);
             }
+          } else {
+            inputData = inputData.slice(-1 * sliceSize);
           }
-          newData[inputName] = inputData;
+        }
+        newData[inputName] = inputData;
       }
     }
     if (!_.isEqual(data, newData)) {
@@ -347,8 +352,12 @@ export default class Plot extends Component {
       if (this.props.containerNode && !this.state.resizeObserverListener) {
         this.resizeObserver = new ResizeObserver((entries) => {
           const container = entries[0];
-          const diffControl = this.timeSeriesControlRef && this.timeSeriesControlRef.current ? this.timeSeriesControlRef.current.offsetHeight + 19 : 0;
-          const diffLegend = this.props.legendPosition === 'bottom' && this.legendRef.current ? this.legendRef.current.offsetHeight : 0;
+          const diffControl =
+            this.timeSeriesControlRef && this.timeSeriesControlRef.current
+              ? this.timeSeriesControlRef.current.offsetHeight + 19
+              : 0;
+          const diffLegend =
+            this.props.legendPosition === 'bottom' && this.legendRef.current ? this.legendRef.current.offsetHeight : 0;
           if (container.contentRect.height !== 0 && container.contentRect.width !== 0) {
             this.setState({
               containerHeight: container.contentRect.height - diffControl - diffLegend,
@@ -365,8 +374,9 @@ export default class Plot extends Component {
     }
 
     if (
-      ( this.props.width !== undefined && this.props.height !== undefined ) &&
-      ( this.props.width !== prevProps.width || this.props.height !== prevProps.height )
+      this.props.width !== undefined &&
+      this.props.height !== undefined &&
+      (this.props.width !== prevProps.width || this.props.height !== prevProps.height)
     ) {
       this.setState({
         containerHeight: this.props.height,
@@ -375,7 +385,7 @@ export default class Plot extends Component {
     }
 
     if (!_.isEqual(prevProps.inputs, inputs)) {
-      const {unsubscribeToStreams, subscribeToStreams} = this.props;
+      const { unsubscribeToStreams, subscribeToStreams } = this.props;
       unsubscribeToStreams();
       subscribeToStreams();
       const _data = {};
@@ -400,24 +410,25 @@ export default class Plot extends Component {
     const { isLive, timeWindow, historicalData } = timeSeriesControlsProps ?? this.state;
     const { streams, temporalXAxisFormat, scaleIndependent, scaleDomain } = this.props;
 
-
-    const streamsItems = Object.entries(inputs).map(([name, inputConfig]) => {
-      const {type} = inputConfig;
-      if (inputConfig.values) {
-        let newStreams = [];
-        for (const value of Object.values(inputConfig.values)) {
-          const { variable, category, csc, salindex, topic, item } = value;
+    const streamsItems = Object.entries(inputs)
+      .map(([name, inputConfig]) => {
+        const { type } = inputConfig;
+        if (inputConfig.values) {
+          let newStreams = [];
+          for (const value of Object.values(inputConfig.values)) {
+            const { variable, category, csc, salindex, topic, item } = value;
+            const streamName = `${category}-${csc}-${salindex}-${topic}`;
+            const stream = { name: name, variable: variable, type: type + 's', value: streams[streamName]?.[item] };
+            newStreams.push(stream);
+          }
+          return newStreams;
+        } else {
+          const { category, csc, salindex, topic, item } = inputConfig;
           const streamName = `${category}-${csc}-${salindex}-${topic}`;
-          const stream = {name: name, variable: variable, type: type + 's', value: streams[streamName]?.[item]}
-          newStreams.push(stream);
+          return streams[streamName]?.[item];
         }
-        return newStreams;
-      } else {
-        const { category, csc, salindex, topic, item } = inputConfig;
-        const streamName = `${category}-${csc}-${salindex}-${topic}`;
-        return streams[streamName]?.[item];
-      }
-    }).flat();
+      })
+      .flat();
 
     const layerTypes = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads', 'bigotes', 'rects', 'heatmaps'];
     const layers = {};
@@ -431,7 +442,9 @@ export default class Plot extends Component {
       if (isLive && !data[inputName]) continue;
 
       let rangedInputData;
-      rangedInputData = this.props.isForecast ? this.getForecastData(inputName, data[inputName]) : this.getRangedData(data[inputName], timeWindow, historicalData, isLive, inputs);
+      rangedInputData = this.props.isForecast
+        ? this.getForecastData(inputName, data[inputName])
+        : this.getRangedData(data[inputName], timeWindow, historicalData, isLive, inputs);
       layers[typeStr] = (layers[typeStr] ?? []).concat(rangedInputData);
     }
 
@@ -456,76 +469,79 @@ export default class Plot extends Component {
 
     /** Fill marksStyles to satisfy the VegaTimeseriesPlot and VegaLegend APIs */
     const completedMarksStyles = legend.map(({ name, markType }, index) => {
-        const style = marksStyles?.find((style) => style.name === name);
-        if (!style) {
-          return {
-            ...Plot.defaultStyles[index % Plot.defaultStyles.length],
-            ...(markType !== undefined ? { markType } : {}),
-            name,
-          };
-        }
+      const style = marksStyles?.find((style) => style.name === name);
+      if (!style) {
         return {
-          ...style,
+          ...Plot.defaultStyles[index % Plot.defaultStyles.length],
           ...(markType !== undefined ? { markType } : {}),
+          name,
         };
-      });
+      }
+      return {
+        ...style,
+        ...(markType !== undefined ? { markType } : {}),
+      };
+    });
 
     return (
       <>
-      {controls && (
-        <div ref={this.timeSeriesControlRef}>
-          <TimeSeriesControls
-            // ref={this.timeSeriesControlRef}
-            setTimeWindow={(timeWindow) => this.setState({ timeWindow })}
-            timeWindow={this.state.timeWindow}
-            setLiveMode={(isLive) => this.setState({ isLive })}
-            isLive={this.state.isLive}
-            setHistoricalData={this.setHistoricalData}
-            efdClients={efdClients}
-            selectedEfdClient={this.state.selectedEfdClient}
-            setEfdClient={(client) => this.setState({ selectedEfdClient: client })}
-          />
-        </div>
-      )}
-      { legendPosition === 'right' ? (
-        <div className={[styles.containerFlexRow].join(' ')}>
-          <VegaTimeseriesPlot
-            layers={layers}
-            xAxisTitle={xAxisTitle}
-            yAxisTitle={yAxisTitle}
-            marksStyles={completedMarksStyles}
-            temporalXAxis
-            width={containerWidth - 160} // from the .autogrid grid-template-columns
-            height={containerHeight}
-            className={styles.plot}
-            temporalXAxisFormat={temporalXAxisFormat}
-            scaleIndependent={scaleIndependent}
-            scaleDomain={scaleDomain}
-          />
-          <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
-        </div>
-      ) : (
-        <div className={[styles.containerFlexCol].join(' ')} style={this.props.maxHeight ? {"maxHeight": this.props.maxHeight} : {}}>
-          <div>
+        {controls && (
+          <div ref={this.timeSeriesControlRef}>
+            <TimeSeriesControls
+              // ref={this.timeSeriesControlRef}
+              setTimeWindow={(timeWindow) => this.setState({ timeWindow })}
+              timeWindow={this.state.timeWindow}
+              setLiveMode={(isLive) => this.setState({ isLive })}
+              isLive={this.state.isLive}
+              setHistoricalData={this.setHistoricalData}
+              efdClients={efdClients}
+              selectedEfdClient={this.state.selectedEfdClient}
+              setEfdClient={(client) => this.setState({ selectedEfdClient: client })}
+            />
+          </div>
+        )}
+        {legendPosition === 'right' ? (
+          <div className={[styles.containerFlexRow].join(' ')}>
             <VegaTimeseriesPlot
               layers={layers}
               xAxisTitle={xAxisTitle}
               yAxisTitle={yAxisTitle}
               marksStyles={completedMarksStyles}
               temporalXAxis
-              width={containerWidth - 30} // from the .autogrid grid-template-columns
+              width={containerWidth - 160} // from the .autogrid grid-template-columns
               height={containerHeight}
               className={styles.plot}
               temporalXAxisFormat={temporalXAxisFormat}
               scaleIndependent={scaleIndependent}
               scaleDomain={scaleDomain}
             />
-          </div>
-          <div ref={this.legendRef} className={styles.marginLegend}>
             <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
           </div>
-        </div>
-      )}
+        ) : (
+          <div
+            className={[styles.containerFlexCol].join(' ')}
+            style={this.props.maxHeight ? { maxHeight: this.props.maxHeight } : {}}
+          >
+            <div>
+              <VegaTimeseriesPlot
+                layers={layers}
+                xAxisTitle={xAxisTitle}
+                yAxisTitle={yAxisTitle}
+                marksStyles={completedMarksStyles}
+                temporalXAxis
+                width={containerWidth - 30} // from the .autogrid grid-template-columns
+                height={containerHeight}
+                className={styles.plot}
+                temporalXAxisFormat={temporalXAxisFormat}
+                scaleIndependent={scaleIndependent}
+                scaleDomain={scaleDomain}
+              />
+            </div>
+            <div ref={this.legendRef} className={styles.marginLegend}>
+              <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
+            </div>
+          </div>
+        )}
       </>
     );
   }

@@ -1455,9 +1455,9 @@ export const parsePlotInputs = (inputs) => {
   const cscs = {};
   Object.values(inputs).forEach((input) => {
     if (!input.values) {
-      const cscDict = cscs?.[input.csc];
-      const indexDict = cscs?.[input.csc]?.[input.salindex];
-      const topicDict = cscs?.[input.csc]?.[input.salindex]?.[input.topic];
+      const cscDict = cscs[input.csc];
+      const indexDict = cscs[input.csc]?.[input.salindex];
+      const topicDict = cscs[input.csc]?.[input.salindex]?.[input.topic];
       let newTopicDict = topicDict ?? [];
       let newIndexDict = indexDict ?? {};
       const newCSCDict = cscDict ?? {};
@@ -1488,36 +1488,44 @@ export const parsePlotInputs = (inputs) => {
       }
     } else {
       Object.values(input.values).forEach((value) => {
-        const cscDict = cscs?.[value.csc];
-        const indexDict = cscs?.[value.csc]?.[value.salindex];
-        const topicDict = cscs?.[value.csc]?.[value.salindex]?.[value.topic];
-        let newTopicDict = topicDict ?? [];
-        let newIndexDict = indexDict ?? {};
+        const cscDict = cscs[value.csc];
+        const indexDict = cscs[value.csc]?.[value.salindex];
+        const topicDict = cscs[value.csc]?.[value.salindex]?.[value.topic];
+
         const newCSCDict = cscDict ?? {};
+        let newIndexDict = indexDict ?? {};
+        let newTopicDict = topicDict ?? [];
+
+        // If topicDict array exists, push the new item
         if (topicDict) {
-          newIndexDict[value.topic].push(value.item);
+          //  Array index is used for queries to the EFD (influx)
+          topicDict.push(`${value.item}${value.arrayIndex ?? ''}`);
           return;
         }
-        // Next line was added to support EFD Querying for Array type items (influx)
-        newIndexDict[value.topic] = [`${value.item}${value.arrayIndex ?? ''}`];
-        // newIndexDict[value.topic] = [value.item]; // Original line
 
+        //  Array index is used for queries to the EFD (influx)
+        newIndexDict[value.topic] = [`${value.item}${value.arrayIndex ?? ''}`];
         newTopicDict = newIndexDict[value.topic];
+
+        //  If indexDict exists, add the new topicDict
         if (indexDict) {
-          newCSCDict[value.salindex][value.topic] = newTopicDict;
-          newIndexDict = newCSCDict[value.salindex];
+          indexDict[value.topic] = newTopicDict;
+          // newIndexDict = newCSCDict[value.salindex];
         } else {
-          newIndexDict = {
-            [value.topic]: newTopicDict,
-          };
+          // newIndexDict = {
+          //   [value.topic]: newTopicDict,
+          // };
           newCSCDict[value.salindex] = newIndexDict;
         }
+
+        //  If cscDict exists, add the new indexDict
         if (cscDict) {
-          cscs[value.csc][value.salindex] = newIndexDict;
+          cscDict[value.salindex] = newIndexDict;
         } else {
-          cscs[value.csc] = {
-            [value.salindex]: newIndexDict,
-          };
+          // cscs[value.csc] = {
+          //   [value.salindex]: newIndexDict,
+          // };
+          cscs[value.csc] = newCSCDict;
         }
       });
     }
@@ -1550,7 +1558,11 @@ export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y') => {
       const formattedPropertyKey = propertyKey.replace(/[\d\.]+$/, '');
       newTopicData[formattedPropertyKey] = propertyDataArray.map((dataPoint) => {
         const tsString = dataPoint?.ts.split(' ').join('T');
-        return { [tsLabel]: parseTimestamp(tsString), [valueLabel]: dataPoint?.value };
+        return {
+          units: { y: dataPoint?.units },
+          [tsLabel]: parseTimestamp(tsString),
+          [valueLabel]: dataPoint?.value,
+        };
       });
     });
     newData[topicKey] = newTopicData;
