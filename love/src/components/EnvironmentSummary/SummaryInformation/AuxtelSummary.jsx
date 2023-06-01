@@ -22,7 +22,7 @@ export default class Simonyi extends Component {
     return (
       <div className={styles.container}>
         <SummaryPanel className={styles.summaryPanel}>
-          <Title>Telescope</Title>
+          <Title>Auxiliary Telescope</Title>
           <Value>
             <StatusText status={schedulerTrackingStateToStyle[auxtelTracking]}>{auxtelTracking}</StatusText>
           </Value>

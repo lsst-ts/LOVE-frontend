@@ -1,5 +1,4 @@
 .skymapContainer {
-  /* display: flex; */
   flex-wrap: wrap;
   position: relative;
   left: 25em;
@@ -8,7 +7,6 @@
 }
 
 .skymapGridContainer {
-  /* display: flex; */
   flex-wrap: wrap;
   position: relative;
   width: fit-content;

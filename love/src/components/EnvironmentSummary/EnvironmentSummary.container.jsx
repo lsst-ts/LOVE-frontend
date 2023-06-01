@@ -62,20 +62,19 @@ const EnvironmentSummaryContainer = ({
       auxtelRotator={auxtelRotator}
       auxtelDomeAlt={auxtelDomeAlt}
       auxtelDomeAz={auxtelDomeAz}
-      {...props}
     />
   );
 };
 
 const mapStateToProps = (state) => {
   const environmentSummary = getObservatoryState(state);
-  return {
-    ...environmentSummary,
-  };
+  return environmentSummary;
 };
 
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
+    'event-Scheduler-1-observingMode',
+    'event-Scheduler-2-observingMode',
     `telemetry-Scheduler-1-observatoryState`,
     `telemetry-Scheduler-2-observatoryState`,
     `event-Scheduler-1-target`,
