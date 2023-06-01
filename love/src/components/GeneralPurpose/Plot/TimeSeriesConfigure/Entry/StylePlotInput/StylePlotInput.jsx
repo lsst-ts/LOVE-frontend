@@ -6,7 +6,7 @@ import styles from './StylePlotInput.module.css';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Select from 'components/GeneralPurpose/Select/Select';
-import { COLORS, DASHES, SHAPES } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.jsx';
+import { COLORS, DASHES, SHAPES, ORIENT } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.jsx';
 
 /**
  * Component to configure the Health Status Summary
@@ -28,6 +28,8 @@ export default class StylePlotInput extends PureComponent {
       shape: PropTypes.string.isRequired,
       /** (optional) Whether to plot a filled or empty (contour only) point. Used in point and pointLine marks.*/
       filled: PropTypes.bool.isRequired,
+      /** (optional) Axis-y orient for the line plot. (left or right)*/
+      orient: PropTypes.string,
     }),
 
     /**
@@ -61,6 +63,7 @@ export default class StylePlotInput extends PureComponent {
       dash: this.props.config.dash,
       shape: this.props.config.shape,
       filled: this.props.config.filled,
+      orient: this.props.config.orient,
       [styleName]: style.value,
     });
   };
@@ -212,6 +215,21 @@ export default class StylePlotInput extends PureComponent {
               />
             </div>
           )}
+
+          {['line'].includes(this.props.type) && (
+            <>
+              <span>Orient</span>
+              <Select
+                className={styles.select}
+                options={ORIENT}
+                option={input?.orient}
+                placeholder="Select a orient"
+                onChange={(selection) => this.onStyleChange('orient', selection)}
+              />
+            </>
+          )}
+
+
         </div>
       </div>
     );

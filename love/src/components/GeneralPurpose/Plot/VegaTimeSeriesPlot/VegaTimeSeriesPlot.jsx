@@ -36,6 +36,11 @@ export const DASHES = [
   [8, 1],
 ];
 
+export const ORIENT = [
+  'left',
+  'right',
+];
+
 /**
  * Generates plots using different marks (lines, points, bars, etc) on different layers
  * on a canvas that is auto-sized to match its parent node size.
