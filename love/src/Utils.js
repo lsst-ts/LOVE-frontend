@@ -1703,3 +1703,13 @@ export function parseToSALFormat(data) {
   });
   return newData;
 }
+
+/**
+ * Function to copy to clipboard
+ * @param {string} text text to be copied
+ * @param {func} effect effect to be applied
+ */
+export function copyToClipboard(text, effect) {
+  navigator.clipboard.writeText(text);
+  if (effect) effect();
+}
