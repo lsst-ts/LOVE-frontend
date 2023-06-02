@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { VegaLite } from 'react-vega';
 
+
 export default class HeatMap extends Component {
   static propTypes = {
     /**
@@ -18,6 +19,8 @@ export default class HeatMap extends Component {
     infoPlot: {},
     containerNode: undefined,
   };
+
+  static COLOURS = ['#2c7bb6', '#00a6ca', '#00ccbc', '#90eb9d', '#ffff8c', '#f9d057', '#f29e2e', '#e76818', '#d7191c'];
 
   constructor(props) {
     super(props);
@@ -49,8 +52,7 @@ export default class HeatMap extends Component {
             type: 'quantitative',
             field: 'amp',
             scale: {
-              scheme: 'spectral',
-              reverse: true,
+              range: [...HeatMap.COLOURS],
               domain: domain
             },
             legend: {
@@ -175,8 +177,7 @@ export default class HeatMap extends Component {
             type: 'quantitative',
             field: 'amp',
             scale: {
-              scheme: 'spectral',
-              reverse: true,
+              range: [...HeatMap.COLOURS],
               domain: domain,
             },
             legend: {
