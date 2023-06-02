@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /** 
 This file is part of LOVE-frontend.
 
@@ -16,13 +17,17 @@ This program is distributed in the hope that it will be useful,but WITHOUT ANY
 You should have received a copy of the GNU General Public License along with 
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
+=======
+.paginatedTable {
+  display: table;
+  width: 100%;
+}
+>>>>>>> 4ab712673 (initial propose)
 
 .paginationContainer {
   display: flex;
-  justify-content: flex-end;
-  margin-right: 1rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  height: 2em;
+  font-size: 0.9em; /*var(--font-size-small);*/
 }
 .adjacentPageControl {
   margin-left: 1rem;
@@ -30,8 +35,12 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 }
 
 .contentRange {
-  margin-left: 1rem;
-  margin-right: 1rem;
+  justify-self: left;
+  display: grid;
+  align-items: center;
+  width: 50%;
+  padding-left: 0.1em;
+  justify-content: left;
 }
 
 .iconBtn {
@@ -44,4 +53,127 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .select {
   background: none;
+  display: inline-flex;
+  height: 100%;
+  padding-block: 0.5em;
+}
+
+.inputPage {
+  width: 25%;
+  height: 80%;
+  align-self: center;
+}
+
+.selectPage {
+  display: inline-flex;
+  width: 50%;
+  justify-content: end;
+  height: 100%;
+}
+
+.pagination {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  gap: 0.35em;
+  padding-right: 0.25em;
+  height: 100%;
+}
+
+.pagination .pageNumber {
+  border-radius: 10%;
+  cursor: pointer;
+  transition: all 0.5s ease;
+}
+
+.pageNumber {
+  height: 100%;
+  display: grid;
+  align-items: center;
+  align-content: center;
+}
+
+.pagination .pageNumber:hover {
+  color: #fff;
+  background-color: var(--tertiary-background-color);
+  opacity: 0.75;
+}
+
+.pagination .active {
+  color: #fff;
+  background-color: var(--tertiary-background-color);
+  opacity: 0.75;
+}
+
+.arrow {
+  font-size: 1.5em;
+}
+
+.input {
+  height: 100%;
+  width: 7.5em;
+  display: inline-flex;
+}
+
+.DTlfRight {
+  display: inline-flex;
+  align-content: center;
+  align-items: center;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.DTlfLeft {
+  font-size: larger;
+  font-weight: bold;
+  width: 50%;
+  text-align: left;
+  padding: 0.5em;
+}
+
+.DTperPage {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 0.25em;
+}
+
+.DTsearch {
+  display: inline-flex;
+  width: 30%;
+}
+
+.tableHeader {
+  display: inline-flex;
+  width: 100%;
+}
+
+.tableHeaderBox {
+  display: inline-flex;
+  width: 100%;
+  align-items: center;
+  background: var(--second-quaternary-background-dimmed-color);
+  padding-block: 0.15em;
+  border-top-left-radius: 0.25em;
+  border: 1.5px solid black;
+  border-top-right-radius: 0.25em;
+}
+
+.spanLabel {
+  align-self: center;
+}
+
+.selectDiv {
+  height: 2.25em;
+  margin-inline: 0.25em;
+}
+
+.simpleTable {
+  margin-top: -0.05em;
+}
+
+.simpleTable > * {
+  border: 2px solid var(--base-background-color);
+  background-color: aqua;
 }
