@@ -172,7 +172,7 @@ export default class ConfigPanel extends Component {
   CustomInput = (props) => {
     return (
       <Input
-        value={props.value}
+        value={props.value ?? ''}
         type={props.schema.type}
         className={styles.formInput}
         onChange={(event) => {
@@ -190,20 +190,18 @@ export default class ConfigPanel extends Component {
         <div className={styles.arrayContainer}>
           {props.items.map((element) => {
             return (
-              <>
-                <div className={styles.deleteItemButtonContainer}>
-                  <div className={styles.arrayElement}>{element.children}</div>
-                  <div className={styles.deleteItem}>
-                    <button
-                      type="button"
-                      className={styles.deleteItemButton}
-                      onClick={element.onDropIndexClick(element.index)}
-                    >
-                      <DeleteIcon />
-                    </button>
-                  </div>
+              <div key={element.key} className={styles.deleteItemButtonContainer}>
+                <div className={styles.arrayElement}>{element.children}</div>
+                <div className={styles.deleteItem}>
+                  <button
+                    type="button"
+                    className={styles.deleteItemButton}
+                    onClick={element.onDropIndexClick(element.index)}
+                  >
+                    <DeleteIcon />
+                  </button>
                 </div>
-              </>
+              </div>
             );
           })}
           <div className={styles.availableScriptTypeSeparator} />
