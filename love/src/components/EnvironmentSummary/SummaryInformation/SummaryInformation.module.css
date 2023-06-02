@@ -31,7 +31,7 @@
 .sunContainer {
   box-sizing: border-box;
   font-size: var(--font-size-larger);
-  width: auto;
+  width: 280px;
   position: absolute;
   top: calc(-100%);
   left: calc(40px + var(--small-padding));
