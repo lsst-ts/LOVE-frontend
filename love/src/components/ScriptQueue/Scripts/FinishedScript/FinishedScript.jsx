@@ -57,6 +57,9 @@ export default class FinishedScript extends PureComponent {
   }
 
   onClick = () => {
+    const { index, timestampProcessStart: startTime, timestampProcessEnd: endTime } = this.props;
+    this.queryLogs(index, startTime, endTime);
+    this.queryConfiguration(index, startTime, endTime);
     this.setState((state) => ({ expanded: !state.expanded }));
     this.props.onClick();
   };
@@ -116,12 +119,6 @@ export default class FinishedScript extends PureComponent {
       logs: [],
     });
   };
-
-  componentDidMount() {
-    const { index, timestampProcessStart: startTime, timestampProcessEnd: endTime } = this.props;
-    this.queryLogs(index, startTime, endTime);
-    this.queryConfiguration(index, startTime, endTime);
-  }
 
   render() {
     const { path } = this.props;
@@ -232,7 +229,7 @@ export default class FinishedScript extends PureComponent {
               <Button onClick={this.toggleLogs}>Toggle logs</Button>
             </div>
           </div>
-          {this.state.showLogs && (
+          {this.state.showLogs && this.state.expanded && (
             <div>
               <LogMessageDisplay logMessageData={this.state.logs} clearCSCLogMessages={this.clearLogs} />
             </div>
