@@ -12,7 +12,6 @@ const Input = ({
   max,
   ...props
 }) => {
-  console.log('input', 'type', type);
   return (
     <input
       type={type}
