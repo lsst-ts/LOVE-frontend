@@ -33,10 +33,18 @@
   top: 43px;
 }
 
+.windDirection {
+  width: 8em;
+  position: absolute;
+  top: 5%;
+  right: 3%;
+}
+
 .skymap {
   position: absolute;
   top: 0;
   left: 35%;
+  z-index: 3;
 }
 
 .simonyi {

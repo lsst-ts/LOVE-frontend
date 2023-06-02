@@ -7,6 +7,7 @@ import AuxTelescope from './Cartoons/AuxTelescope';
 import BeachIcon from 'components/icons/BeachIcon/BeachIcon';
 import MountainIcon from 'components/icons/MountainIcon/MountainIcon';
 import TemperatureIcon from 'components/icons/TemperatureIcon/TemperatureIcon';
+import WindDirection from './Cartoons/WindDirection';
 
 export default class EnvironmentSummary extends Component {
   constructor(props) {
@@ -39,6 +40,10 @@ export default class EnvironmentSummary extends Component {
     } = this.props;
     return (
       <div>
+        <div className={styles.windDirection}>
+          <WindDirection></WindDirection>
+          <div>flecha</div>
+        </div>
         <div className={styles.windRoseContainer}>
           <WindRose />
         </div>
