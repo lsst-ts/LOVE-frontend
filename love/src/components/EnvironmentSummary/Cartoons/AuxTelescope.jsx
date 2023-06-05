@@ -4,7 +4,8 @@ import AuxtelSummary from '../SummaryInformation/AuxtelSummary';
 
 function AuxTelescope({ className, ...props }) {
   const [showAuxtelSummary, setShowAuxtelSummary] = useState(false);
-
+  const { auxtelTrackingState, auxtelAltitude, auxtelAzimuth, auxtelRotator, auxtelDomeAlt, auxtelDomeAz } =
+    props || {};
   return (
     <svg viewBox="0 0 444.43 436.59" className={className} {...props}>
       <text x={135} y={10} width="60" height="40" className={styles.temperature}>
@@ -57,7 +58,14 @@ function AuxTelescope({ className, ...props }) {
       {showAuxtelSummary && (
         <foreignObject className={styles.auxtelHover}>
           <div className={styles.auxtelSummary}>
-            <AuxtelSummary />
+            <AuxtelSummary
+              auxtelTrackingState={auxtelTrackingState}
+              auxtelAltitude={auxtelAltitude}
+              auxtelAzimuth={auxtelAzimuth}
+              auxtelRotator={auxtelRotator}
+              auxtelDomeAlt={auxtelDomeAlt}
+              auxtelDomeAz={auxtelDomeAz}
+            />
           </div>
         </foreignObject>
       )}

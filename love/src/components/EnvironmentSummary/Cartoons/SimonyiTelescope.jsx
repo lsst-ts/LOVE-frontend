@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import styles from './SimonyiTelescope.module.css';
 import SimonyiSummary from '../SummaryInformation/SimonyiSummary';
 
-function SimonyiTelescope({ className }) {
+function SimonyiTelescope({ className, ...props }) {
   const [showSimonyiSummary, setShowSimonyiSummary] = useState(false);
-
+  const { simonyiTrackingState, simonyiAltitude, simonyiAzimuth, simonyiRotator, simonyiDomeAlt, simonyiDomeAz } =
+    props || {};
   return (
-    <svg viewBox="0 0 726.72 436.7" className={className}>
+    <svg viewBox="0 0 726.72 436.7" className={className} {...props}>
       <text x={245} y={10} width="60" height="40" className={styles.temperature}>
         10.12°
       </text>
@@ -131,7 +132,14 @@ function SimonyiTelescope({ className }) {
       {showSimonyiSummary && (
         <foreignObject className={styles.simonyiHover}>
           <div className={styles.simonyiSummary}>
-            <SimonyiSummary />
+            <SimonyiSummary
+              simonyiTrackingState={simonyiTrackingState}
+              simonyiAltitude={simonyiAltitude}
+              simonyiAzimuth={simonyiAzimuth}
+              simonyiRotator={simonyiRotator}
+              simonyiDomeAlt={simonyiDomeAlt}
+              simonyiDomeAz={simonyiDomeAz}
+            />
           </div>
         </foreignObject>
       )}

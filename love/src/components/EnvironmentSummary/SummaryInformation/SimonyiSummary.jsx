@@ -19,6 +19,7 @@ export default class Simonyi extends Component {
       simonyiDomeAz,
     } = this.props;
     const simonyiTracking = schedulerTrackingStateToMap[simonyiTrackingState];
+
     return (
       <div className={styles.container}>
         <SummaryPanel className={styles.summaryPanel}>
