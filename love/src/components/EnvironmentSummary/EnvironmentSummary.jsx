@@ -29,6 +29,7 @@ export default class EnvironmentSummary extends Component {
       simonyiDomeAz,
       simonyiMoonRa,
       simonyiMoonDec,
+      simonyiMoonPhase,
       simonyiSunRa,
       simonyiSunDec,
       auxtelTrackingState,
@@ -58,6 +59,7 @@ export default class EnvironmentSummary extends Component {
             simonyiMoonDec={simonyiMoonDec}
             simonyiSunRa={simonyiSunRa}
             simonyiSunDec={simonyiSunDec}
+            simonyiMoonPhase={simonyiMoonPhase}
           />
           <SimonyiTelescope
             className={styles.simonyi}

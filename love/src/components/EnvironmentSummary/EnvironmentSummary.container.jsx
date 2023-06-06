@@ -29,6 +29,7 @@ const EnvironmentSummaryContainer = ({
   simonyiDomeAz,
   simonyiMoonRa,
   simonyiMoonDec,
+  simonyiMoonPhase,
   simonyiSunRa,
   simonyiSunDec,
   auxtelTrackingState,
@@ -54,6 +55,7 @@ const EnvironmentSummaryContainer = ({
       simonyiDomeAz={simonyiDomeAz}
       simonyiMoonRa={simonyiMoonRa}
       simonyiMoonDec={simonyiMoonDec}
+      simonyiMoonPhase={simonyiMoonPhase}
       simonyiSunRa={simonyiSunRa}
       simonyiSunDec={simonyiSunDec}
       auxtelTrackingState={auxtelTrackingState}

@@ -57,7 +57,7 @@ export default class Skymap extends Component {
   }
 
   render() {
-    const { className, simonyiMoonRa, simonyiMoonDec, simonyiSunRa, simonyiSunDec } = this.props;
+    const { className, simonyiMoonRa, simonyiMoonDec, simonyiSunRa, simonyiSunDec, simonyiMoonPhase } = this.props;
     const width = this.state.width ?? 350;
     const height = this.state.height ?? 350;
     const currentPointing = {
@@ -112,7 +112,7 @@ export default class Skymap extends Component {
             currentPointing={currentPointing4}
             targetPointing={currentPointing4}
             isProjected={isProjected}
-            cartoon={<MoonPointing />}
+            cartoon={<MoonPointing ilumination={simonyiMoonPhase} />}
           >
             <MoonSummary simonyiMoonRa={simonyiMoonRa} simonyiMoonDec={simonyiMoonDec} />
           </Pointing>

@@ -2,8 +2,8 @@ import React from 'react';
 import styles from './MoonPointing.module.css';
 
 function Moon({ className, ...props }) {
-  const ilumination = 45;
-
+  let { ilumination } = props;
+  ilumination = ilumination * 100 ?? 0;
   const fill = ilumination < 50 ? '#0c171e' : '#a6bac6';
   const rx = ilumination < 50 ? (50 - ilumination).toString() : (-50 + ilumination).toString();
 

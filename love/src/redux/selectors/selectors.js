@@ -1744,6 +1744,7 @@ export const getObservatoryState = (state) => {
     simonyiDomeAz: simonyiObservatoryState ? simonyiObservatoryState.domeAzimuth?.value : 0.0,
     simonyiMoonRa: simonyiTarget ? simonyiTarget[0].moonRa?.value : 0.0,
     simonyiMoonDec: simonyiTarget ? simonyiTarget[0].moonDec?.value : 0.0,
+    simonyiMoonPhase: simonyiTarget ? simonyiTarget[0].moonPhase?.value : 0.45,
     simonyiSunRa: simonyiTarget ? simonyiTarget[0].sunRa?.value : 0.0,
     simonyiSunDec: simonyiTarget ? simonyiTarget[0].sunDec?.value : 0.0,
     auxtelTrackingState: auxtelObservatoryState ? auxtelObservatoryState.tracking?.value : false,
