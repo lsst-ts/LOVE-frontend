@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.20.3
+--------
+
+* Add throtle to alarm notification checking to avoid annoying sound alarms `<https://github.com/lsst-ts/LOVE-frontend/pull/469>`_
+
 v5.20.2
 --------
 

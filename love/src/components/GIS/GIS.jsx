@@ -26,6 +26,7 @@ export default class GIS extends Component {
       activeEffects: [],
       alertEffects: [],
       alertSignals: [],
+      bypassedAlerts: [],
     };
   }
 
@@ -43,6 +44,7 @@ export default class GIS extends Component {
     const rawStatus = interlocksStatus.replace(/\s/g, '').match(/.{1,16}/g);
     const alertEffects = [];
     const alertSignals = [];
+    const bypassedAlerts = [];
     systemsSignals.forEach(([system, systemSignals]) => {
       const sSignals = Object.keys(systemSignals);
       sSignals.forEach((signal) => {
@@ -53,8 +55,12 @@ export default class GIS extends Component {
         const activeAlert = bitArray[bitIndex] === '1';
 
         const [bypassSystemIndex, bypassBitIndex] = signalBypassIndexes[signal];
-        const bypassBitArray = rawStatus[bypassSystemIndex].toString(2).padEnd(16, '0');
+        const bypassBitArray = rawStatus[bypassSystemIndex].padEnd(16, '0');
         const bypassedAlert = bypassBitArray[bypassBitIndex] === '1';
+
+        if (bypassedAlert) {
+          bypassedAlerts.push(signal);
+        }
 
         if (activeAlert && !bypassedAlert) {
           alertEffects.push(...effects);
@@ -63,7 +69,7 @@ export default class GIS extends Component {
       });
     });
 
-    this.setState({ alertEffects, alertSignals });
+    this.setState({ alertEffects, alertSignals, bypassedAlerts });
   };
 
   componentDidUpdate = (prevProps, prevState) => {
@@ -81,15 +87,18 @@ export default class GIS extends Component {
   };
 
   render() {
-    const { activeEffects, alertEffects, alertSignals } = this.state;
+    const { activeEffects, alertEffects, alertSignals, bypassedAlerts } = this.state;
     const flattenedSignals = Object.entries(signals);
     const effectsArray = Object.entries(effects);
+
+    console.log(bypassedAlerts);
 
     return (
       <div className={styles.div}>
         <GISContainerSignals
           signals={flattenedSignals}
           alertSignals={alertSignals}
+          bypassedAlerts={bypassedAlerts}
           onHoverIn={(effects) => this.signalOnEnter(effects)}
           onHoverOut={() => this.signalOnLeave()}
         />
