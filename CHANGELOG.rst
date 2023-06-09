@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.21.0
+--------
+
+* ScriptQueue Upgrade implementation `<https://github.com/lsst-ts/LOVE-frontend/pull/470>`_
+
 v5.20.3
 --------
 

@@ -3,23 +3,39 @@ import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
 import YAML from 'yaml';
-
-import 'brace/mode/yaml';
-import 'brace/theme/solarized_dark';
+import yaml from 'js-yaml';
+import Form from '@rjsf/core';
+import rjsfValidator from '@rjsf/validator-ajv8';
 import { SCRIPT_DOCUMENTATION_BASE_URL } from 'Config';
 import Select from 'components/GeneralPurpose/Select/Select';
 import styles from './ConfigPanel.module.css';
 import Button from '../../GeneralPurpose/Button/Button';
 import Input from '../../GeneralPurpose/Input/Input';
+import DeleteIcon from '../../icons/DeleteIcon/DeleteIcon';
 import ErrorIcon from '../../icons/ErrorIcon/ErrorIcon';
 import RotateIcon from '../../icons/RotateIcon/RotateIcon';
 import CloseIcon from '../../icons/CloseIcon/CloseIcon';
+import SaveNewIcon from '../../icons/SaveNewIcon/SaveNewIcon';
+import SaveIcon from '../../icons/SaveIcon/SaveIcon';
+import SpinnerIcon from '../../icons/SpinnerIcon/SpinnerIcon';
+import RowExpansionIcon from '../../icons/RowExpansionIcon/RowExpansionIcon';
 import Hoverable from '../../GeneralPurpose/Hoverable/Hoverable';
 import InfoPanel from '../../GeneralPurpose/InfoPanel/InfoPanel';
 import ManagerInterface from '../../../Utils';
+import 'brace/mode/yaml';
+import 'brace/theme/solarized_dark';
 
+// Constants for the config panel
+const CONFIG_PANEL_INITIAL_WIDTH = 590;
 const NO_SCHEMA_MESSAGE = '# ( waiting for schema . . .)';
+const DEFAULT_CONFIG_NAME = 'last_script';
+const DEFAULT_CONFIG_VALUE = `# Insert your config here:
+# e.g.:
+# wait_time: 3600
+# fail_run: false
+# fail_cleanup: false`;
 
+// Constants for the config validation state machine
 const EMPTY = 'EMPTY';
 const VALIDATING = 'VALIDATING';
 const VALID = 'VALID';
@@ -27,11 +43,36 @@ const ERROR = 'ERROR';
 const SERVER_ERROR = 'SERVER_ERROR';
 const NEED_REVALIDATION = 'NEED_REVALIDATION';
 
+// Mapping between the log levels and their numerical values
 const logLevelMap = {
   Debug: 10,
   Info: 20,
   Warning: 30,
   Error: 40,
+};
+
+/**
+ * Function to get the documentation link for a given script
+ * @param {string} scriptPath
+ * @returns {string}
+ * @example
+ * getDocumentationLink('scripts/auxtel/latiss_acquire_and_take_sequence.py')
+ * // returns 'https://ts-standardscripts.lsst.io/lsst.ts.standardscripts.auxtel.latissAcquireAndTakeSequence.html'
+ */
+const getDocumentationLink = (scriptPath) => {
+  const extensionIndex = scriptPath.lastIndexOf('.');
+  const cleanPath = scriptPath.substring(0, extensionIndex);
+  const dirIndex = cleanPath.lastIndexOf('/');
+  const scriptDirectory = dirIndex > 0 ? cleanPath.substring(0, dirIndex + 1) : '';
+  const scriptName = dirIndex > 0 ? cleanPath.substring(dirIndex + 1) : cleanPath;
+  const cleanScriptName = scriptName
+    .split('_')
+    .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+    .join('');
+  const cleanDirectory = scriptDirectory.split('/').join('.');
+  const camelCasePath = `${cleanDirectory}${cleanScriptName}`;
+  const fullPath = `lsst.ts.standardscripts.${camelCasePath}`;
+  return `${SCRIPT_DOCUMENTATION_BASE_URL}/${fullPath}.html`;
 };
 
 export default class ConfigPanel extends Component {
@@ -52,14 +93,9 @@ export default class ConfigPanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: `# Insert your config here:
-# e.g.:
-# wait_time: 3600
-# fail_run: false
-# fail_cleanup: false
-`,
+      value: DEFAULT_CONFIG_VALUE,
       autoFilledValue: '',
-      width: 500,
+      width: 580,
       height: 500,
       loading: false,
       pauseCheckpoint: '',
@@ -71,9 +107,123 @@ export default class ConfigPanel extends Component {
       configErrorTitle: '',
       validationStatus: EMPTY,
       logLevel: 'Debug',
+      manualConfig: true,
+      showSchema: true,
+      configurationList: [],
+      configurationOptions: [],
+      selectedConfiguration: null,
+      inputConfigurationName: DEFAULT_CONFIG_NAME,
+      formData: {},
+      updatingScriptSchema: false,
     };
   }
 
+  /************************/
+  /* RJSF templates */
+  ObjectFieldTemplate = (props) => {
+    return (
+      <div>
+        {props.title}
+        {props.description}
+        {props.properties.map((element) => (
+          <div className="property-wrapper">{element.content}</div>
+        ))}
+      </div>
+    );
+  };
+
+  CustomTitleField = (props) => {
+    return <div className={styles.formTitleModifier}>{props.title}</div>;
+  };
+
+  CustomDescriptionField = (prop) => {
+    return <div className={styles.formDescriptionModifier}>{this.props.description}</div>;
+  };
+
+  CustomSelect = (props) => {
+    return (
+      <Select
+        className={styles.customSelect}
+        options={props.options.enumOptions}
+        option={props.value}
+        onChange={({ value }) => props.onChange(value)}
+      />
+    );
+  };
+
+  CustomCheckbox = (props) => {
+    return (
+      <>
+        <div>{props.label}</div>
+        <div>{props.schema.description}</div>
+        <input
+          checked={props.value}
+          type="checkbox"
+          onChange={() =>
+            this.setState((state) => ({
+              formData: { ...state.formData, [props.label]: !props.value },
+            }))
+          }
+        ></input>
+      </>
+    );
+  };
+
+  CustomInput = (props) => {
+    return (
+      <Input
+        value={props.value ?? ''}
+        type={props.schema.type}
+        className={styles.formInput}
+        onChange={(event) => {
+          props.onChange(event.target.value);
+        }}
+      />
+    );
+  };
+
+  ArrayFieldTemplate = (props) => {
+    return (
+      <>
+        <div className={styles.formSchemaTitleModifier}>{props.title}</div>
+        <div className={styles.formSchemaDescriptionModifier}>{props.schema.description}</div>
+        <div className={styles.arrayContainer}>
+          {props.items.map((element) => {
+            return (
+              <div key={element.key} className={styles.deleteItemButtonContainer}>
+                <div className={styles.arrayElement}>{element.children}</div>
+                <div className={styles.deleteItem}>
+                  <button
+                    type="button"
+                    className={styles.deleteItemButton}
+                    onClick={element.onDropIndexClick(element.index)}
+                  >
+                    <DeleteIcon />
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+          <div className={styles.availableScriptTypeSeparator} />
+
+          <div className={styles.addNewArray}>
+            {props.canAdd && (
+              <Button className={styles.customButton} onClick={props.onAddClick}>
+                + Add new entry
+              </Button>
+            )}
+          </div>
+        </div>
+      </>
+    );
+  };
+  /************************/
+
+  /**
+   * Validate the current configuration
+   * @param {string} newValue, the new value to validate
+   * @param {boolean} noRevalidation, if true, do not revalidate if already validating
+   */
   validateConfig = (newValue, noRevalidation) => {
     this.setState({ value: newValue });
     /** Do nothing if schema is not available
@@ -120,6 +270,7 @@ export default class ConfigPanel extends Component {
             autoFilledValue: YAML.stringify(r.output),
             configErrors: [],
             configErrorTitle: '',
+            formData: r.output,
           });
           return;
         }
@@ -163,16 +314,6 @@ export default class ConfigPanel extends Component {
       });
   };
 
-  componentDidUpdate = (prevProps, prevState) => {
-    if (this.state.validationStatus !== prevState.validationStatus) {
-      const { validationStatus } = this.state;
-
-      if (validationStatus === VALIDATING && prevState.validationStatus === NEED_REVALIDATION) {
-        this.validateConfig(this.state.value, true);
-      }
-    }
-  };
-
   onCheckpointChange = (name) => (event) => {
     this.setState({
       [name]: event.target.value,
@@ -180,8 +321,9 @@ export default class ConfigPanel extends Component {
   };
 
   onResize = (event, direction, element) => {
+    const width = parseInt(element.style.width.replace(/px/g, ''), 10);
     this.setState({
-      width: parseInt(element.style.width.replace(/px/g, ''), 10),
+      width: width > CONFIG_PANEL_INITIAL_WIDTH ? width : CONFIG_PANEL_INITIAL_WIDTH,
       height: parseInt(element.style.height.replace(/px/g, ''), 10),
     });
   };
@@ -196,6 +338,27 @@ export default class ConfigPanel extends Component {
     });
   };
 
+  toggleScriptSchema = () => {
+    this.setState((prevState) => ({
+      showSchema: !prevState.showSchema,
+    }));
+  };
+
+  saveLastUsedConfiguration = () => {
+    const configuration = this.state.configurationList.find((conf) => conf.config_name === DEFAULT_CONFIG_NAME);
+    if (configuration) {
+      const id = configuration.id;
+      const configSchema = this.state.value;
+      this.updateScriptSchema(id, configSchema);
+    } else {
+      const scriptPath = this.props.configPanel.script.path;
+      const scriptType = this.props.configPanel.script.type;
+      const configName = DEFAULT_CONFIG_NAME;
+      const configSchema = this.state.value;
+      this.saveNewScriptSchema(scriptPath, scriptType, configName, configSchema);
+    }
+  };
+
   onLaunch = () => {
     this.setState({
       loading: true,
@@ -204,6 +367,9 @@ export default class ConfigPanel extends Component {
     const isStandard = script.type === 'standard';
     const logLevel = logLevelMap[this.state.logLevel] ?? 20;
     const config = this.state.value.replace(/^#.*\n?/gm, '');
+
+    this.saveLastUsedConfiguration();
+
     this.props.launchScript(
       isStandard,
       script.path,
@@ -219,7 +385,7 @@ export default class ConfigPanel extends Component {
   startResizingWithMouse = (ev) => {
     this.setState({ resizingStart: { x: ev.clientX, y: ev.clientY, sizeWeight: this.state.sizeWeight } });
     document.onmousemove = this.onMouseMove;
-    document.onmouseup = ConfigPanel.onMouseUp;
+    document.onmouseup = this.onMouseUp;
   };
 
   onMouseMove = (ev) => {
@@ -239,7 +405,7 @@ export default class ConfigPanel extends Component {
     }
   };
 
-  static onMouseUp = () => {
+  onMouseUp = () => {
     document.onmousemove = null;
     document.onmouseup = null;
   };
@@ -248,27 +414,189 @@ export default class ConfigPanel extends Component {
     this.setState({ logLevel: value });
   };
 
-  static getDocumentationLink = (scriptPath) => {
-    const extensionIndex = scriptPath.lastIndexOf('.');
-    const cleanPath = scriptPath.substring(0, extensionIndex);
-    const dirIndex = cleanPath.lastIndexOf('/');
-    const scriptDirectory = dirIndex > 0 ? cleanPath.substring(0, dirIndex + 1) : '';
-    const scriptName = dirIndex > 0 ? cleanPath.substring(dirIndex + 1) : cleanPath;
-    const cleanScriptName = scriptName
-      .split('_')
-      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
-      .join('');
-    const cleanDirectory = scriptDirectory.split('/').join('.');
-    const camelCasePath = `${cleanDirectory}${cleanScriptName}`;
-    const fullPath = `lsst.ts.standardscripts.${camelCasePath}`;
-    return `${SCRIPT_DOCUMENTATION_BASE_URL}/${fullPath}.html`;
+  selectConfiguration = (event) => {
+    const { configurationList } = this.state;
+    const configuration = configurationList.find((conf) => conf.id === event.value);
+    this.setState({
+      selectedConfiguration: event,
+      value: configuration?.config_schema ?? '',
+      inputConfigurationName: configuration?.config_name ?? '',
+      formData: yaml.load(configuration?.config_schema),
+    });
+  };
+
+  /**
+   * Render the configuration panel options to select stored configurations
+   * and to create new ones
+   * @returns {JSX.Element}
+   */
+  renderConfigurationsOptions = () => {
+    const { configPanel } = this.props;
+    const {
+      validationStatus,
+      value,
+      configurationList,
+      configurationOptions,
+      selectedConfiguration,
+      inputConfigurationName,
+      updatingScriptSchema,
+    } = this.state;
+
+    let configurationSchemaChanged = false;
+    let configurationNameChanged = false;
+
+    const configuration = configurationList.find((conf) => conf.id === selectedConfiguration?.value);
+    if (
+      (configuration && value !== configuration.config_schema) ||
+      (!configuration && value !== DEFAULT_CONFIG_VALUE)
+    ) {
+      configurationSchemaChanged = true;
+    }
+
+    if (
+      (configurationList.length > 0 &&
+        configurationList.findIndex((conf) => conf.config_name === inputConfigurationName) === -1) ||
+      (configurationList.length === 0 && inputConfigurationName !== DEFAULT_CONFIG_NAME)
+    ) {
+      configurationNameChanged = true;
+    }
+
+    let controlHtml;
+    if (configurationSchemaChanged) {
+      controlHtml = (
+        <Input
+          value={inputConfigurationName}
+          onChange={(e) => this.setState({ inputConfigurationName: e.target.value })}
+          className={styles.schemaInput}
+        />
+      );
+    }
+
+    if (!configurationSchemaChanged && !configurationNameChanged) {
+      controlHtml = (
+        <Select
+          options={configurationOptions}
+          placeholder="Select an option"
+          value={selectedConfiguration}
+          onChange={this.selectConfiguration}
+        />
+      );
+    }
+
+    const buttonHtml = (
+      <Button
+        disabled={
+          [ERROR, VALIDATING, NEED_REVALIDATION].includes(validationStatus) ||
+          (!configurationSchemaChanged && !configurationNameChanged)
+        }
+        status="transparent"
+        className={styles.saveConfigurationButton}
+        onClick={(e) => {
+          const scriptPath = configPanel?.script?.path ?? '';
+          const scriptType = configPanel?.script?.type ?? '';
+          const configName = inputConfigurationName;
+          const configSchema = value;
+          if (configurationNameChanged) {
+            this.saveNewScriptSchema(scriptPath, scriptType, configName, configSchema);
+          } else if (configurationList.length === 0) {
+            this.saveNewScriptSchema(scriptPath, scriptType, configName, configSchema);
+          } else {
+            this.updateScriptSchema(selectedConfiguration.value, configSchema);
+          }
+        }}
+      >
+        {configurationNameChanged ? <SaveNewIcon /> : <SaveIcon />}
+      </Button>
+    );
+
+    const spinnerHtml = (
+      <div className={styles.saveConfigurationButton}>
+        <SpinnerIcon />
+      </div>
+    );
+
+    return (
+      <div className={styles.configurationControls}>
+        <div>{controlHtml}</div>
+        {updatingScriptSchema ? spinnerHtml : buttonHtml}
+      </div>
+    );
+  };
+
+  saveNewScriptSchema = (scriptPath, scriptType, configName, configSchema) => {
+    const { configurationList } = this.state;
+    this.setState({ updatingScriptSchema: true });
+    ManagerInterface.postScriptConfiguration(scriptPath, scriptType, configName, configSchema).then((res) => {
+      const newConfigurationList = [res, ...configurationList];
+      const options = newConfigurationList.map((conf) => ({ label: conf.config_name, value: conf.id }));
+      const newSelectedConfiguration = { label: res.config_name, value: res.id };
+      this.setState({
+        updatingScriptSchema: false,
+        configurationList: newConfigurationList,
+        configurationOptions: options,
+        selectedConfiguration: newSelectedConfiguration,
+        value: res?.config_schema ?? '',
+        inputConfigurationName: res?.config_name ?? '',
+        formData: yaml.load(res?.config_schema),
+      });
+    });
+  };
+
+  updateScriptSchema = (id, configSchema) => {
+    const { configurationList } = this.state;
+    this.setState({ updatingScriptSchema: true });
+    ManagerInterface.updateScriptSchema(id, configSchema).then((res) => {
+      const newSelectedConfiguration = { label: res.config_name, value: res.id };
+      this.setState({
+        updatingScriptSchema: false,
+        selectedConfiguration: newSelectedConfiguration,
+        configurationList: configurationList.map((conf) => (conf.id === id ? res : conf)),
+      });
+    });
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (
+      this.props.configPanel?.script?.path &&
+      prevProps.configPanel?.script?.path !== this.props.configPanel?.script?.path
+    ) {
+      ManagerInterface.getScriptConfiguration(
+        this.props.configPanel.script.path,
+        this.props.configPanel.script.type,
+      ).then((data) => {
+        const options = data.map((conf) => ({ label: conf.config_name, value: conf.id }));
+        const configuration = data.find((conf) => conf.config_name === 'last_script');
+        this.setState((state) => ({
+          configurationList: data,
+          configurationOptions: options,
+          selectedConfiguration: configuration ? { label: configuration.config_name, value: configuration.id } : null,
+          value: configuration?.config_schema ?? DEFAULT_CONFIG_VALUE,
+          inputConfigurationName: configuration?.config_name ?? DEFAULT_CONFIG_NAME,
+          formData: configuration ? yaml.load(configuration.config_schema) : null,
+        }));
+      });
+    }
+
+    if (this.state.value !== prevState.value) {
+      this.validateConfig(this.state.value, true);
+    }
+
+    if (this.state.validationStatus !== prevState.validationStatus) {
+      const { validationStatus } = this.state;
+
+      if (validationStatus === VALIDATING && prevState.validationStatus === NEED_REVALIDATION) {
+        this.validateConfig(this.state.value, true);
+      }
+    }
   };
 
   render() {
-    const { orientation } = this.state;
-    const scriptName = this.props.configPanel.name ? this.props.configPanel.name : '';
-    const scriptPath = this.props.configPanel.script ? this.props.configPanel.script?.path : '';
-    const isStandard = this.props.configPanel.script ? this.props.configPanel.script?.type === 'standard' : false;
+    const { orientation, showSchema } = this.state;
+    const scriptName = this.props.configPanel?.name ?? '';
+    const scriptPath = this.props.configPanel?.script?.path ?? '';
+    const yamlSchema = this.props.configPanel?.script?.configSchema ?? '';
+    const isStandard = this.props.configPanel?.script ? this.props.configPanel.script?.type === 'standard' : false;
+
     const sidePanelSize = {
       stacked: {
         firstWidth: `${this.state.width}px`,
@@ -291,6 +619,19 @@ export default class ConfigPanel extends Component {
 
     const configPanelBarClassName = 'configPanelBar';
 
+    // RJSF variables
+    const rjsfSchema = yamlSchema ? yaml.load(yamlSchema) : {};
+    const rjsfWidgets = {
+      SelectWidget: this.CustomSelect,
+      TextWidget: this.CustomInput,
+      CheckboxWidget: this.CustomCheckbox,
+    };
+    const rjsfFields = {
+      TitleField: this.CustomTitleField,
+    };
+
+    const isBeside = orientation === 'beside';
+
     return this.props.configPanel.show ? (
       <Rnd
         default={{
@@ -299,6 +640,7 @@ export default class ConfigPanel extends Component {
           width: `${this.state.width}px`,
           height: `calc(${this.state.height}px)`,
         }}
+        minWidth={CONFIG_PANEL_INITIAL_WIDTH}
         style={{ zIndex: 1000, position: 'fixed' }}
         bounds={'window'}
         enableUserSelectHack={false}
@@ -318,36 +660,43 @@ export default class ConfigPanel extends Component {
               </span>
             </div>
           </div>
-          <div className={[styles.body, orientation === 'beside' ? styles.sideBySide : ''].join(' ')}>
-            <div className={styles.sidePanel}>
-              <h3>
+          <div
+            className={[styles.body, isBeside ? styles.sideBySide : '', !showSchema ? styles.hideSchema : ''].join(' ')}
+          >
+            <div className={[styles.sidePanel, styles.sidePanelSchema].join(' ')}>
+              <h3 onClick={this.toggleScriptSchema}>
                 SCHEMA <span className={styles.readOnly}>(Read only)</span>
+                <div className={styles.showSchemaIcon}>
+                  <RowExpansionIcon expanded={showSchema} />
+                </div>
               </h3>
-              {isStandard && (
+              {isStandard && showSchema && (
                 <a
                   className={styles.documentationLink}
                   target="_blank"
                   rel="noreferrer"
-                  href={ConfigPanel.getDocumentationLink(scriptPath)}
+                  href={getDocumentationLink(scriptPath)}
                 >
                   Go to documentation
                 </a>
               )}
 
-              <AceEditor
-                mode="yaml"
-                theme="solarized_dark"
-                name="UNIQUE_ID_OF_DIV"
-                width={sidePanelSize[orientation].firstWidth}
-                height={sidePanelSize[orientation].firstHeight}
-                value={
-                  this.props.configPanel.configSchema === '' ? NO_SCHEMA_MESSAGE : this.props.configPanel.configSchema
-                }
-                editorProps={{ $blockScrolling: true }}
-                fontSize={18}
-                readOnly
-                showPrintMargin={false}
-              />
+              {showSchema && (
+                <AceEditor
+                  mode="yaml"
+                  theme="solarized_dark"
+                  name="UNIQUE_ID_OF_DIV"
+                  width={sidePanelSize[orientation].firstWidth}
+                  height={sidePanelSize[orientation].firstHeight}
+                  value={
+                    this.props.configPanel.configSchema === '' ? NO_SCHEMA_MESSAGE : this.props.configPanel.configSchema
+                  }
+                  editorProps={{ $blockScrolling: true }}
+                  fontSize={18}
+                  readOnly
+                  showPrintMargin={false}
+                />
+              )}
             </div>
 
             <div
@@ -358,53 +707,75 @@ export default class ConfigPanel extends Component {
             ></div>
 
             <div className={styles.sidePanel}>
-              <div className={styles.sidePanelHeaderContainer}>
-                {' '}
-                {/* title={this.state.configErrorTrace */}
-                <Hoverable>
-                  <div style={{ display: 'flex' }}>
-                    <h3>CONFIG</h3>
-                    {this.state.configErrors.length > 0 && (
-                      <h3 className={styles.schemaErrorIcon}>
-                        <ErrorIcon svgProps={{ style: { height: '1em' } }} />
-                      </h3>
-                    )}
+              <div className={styles.schemaConfiguration}>
+                <div className={styles.configTypeTabs}>
+                  <div data-active={this.state.manualConfig} onClick={() => this.setState({ manualConfig: true })}>
+                    MANUAL CONFIG
                   </div>
-                  {this.state.configErrors.length > 0 && (
-                    <InfoPanel className={styles.infoPanel}>
-                      <div className={styles.infoPanelBody}>
-                        <div className={styles.infoPanelFirstLine}>{this.state.configErrorTitle}</div>
-                        <ul>
-                          {this.state.configErrors.map((error, index) => {
-                            if (!error.name) {
-                              return <span key={`noname-${index}`}>{error.message}</span>;
-                            }
-                            return (
-                              <li key={`${error.name}-${index}`}>
-                                <span className={styles.errorName}>{error.name}:</span>
-                                <span> {error.message}</span>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
-                    </InfoPanel>
-                  )}
-                </Hoverable>
+                  <div data-active={!this.state.manualConfig} onClick={() => this.setState({ manualConfig: false })}>
+                    FORM CONFIG
+                  </div>
+                </div>
+                <div className={styles.scriptConfigError}>
+                  <Hoverable>
+                    <div className={styles.errorIcon}>{this.state.configErrors.length > 0 && <ErrorIcon />}</div>
+                    {this.state.configErrors.length > 0 && (
+                      <InfoPanel className={styles.infoPanel}>
+                        <div className={styles.infoPanelBody}>
+                          <div className={styles.infoPanelFirstLine}>{this.state.configErrorTitle}</div>
+                          <ul>
+                            {this.state.configErrors.map((error, index) => {
+                              if (!error.name) {
+                                return <span key={`noname-${index}`}>{error.message}</span>;
+                              }
+                              return (
+                                <li key={`${error.name}-${index}`}>
+                                  <span className={styles.errorName}>{error.name}:</span>
+                                  <span> {error.message}</span>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                      </InfoPanel>
+                    )}
+                  </Hoverable>
+                </div>
+                {this.renderConfigurationsOptions()}
               </div>
-              <AceEditor
-                mode="yaml"
-                theme="solarized_dark"
-                name="UNIQUE_ID_OF_DIV"
-                onChange={this.validateConfig}
-                width={sidePanelSize[orientation].secondWidth}
-                height={sidePanelSize[orientation].secondHeight}
-                value={this.state.value}
-                editorProps={{ $blockScrolling: true }}
-                fontSize={18}
-                tabSize={2}
-                showPrintMargin={false}
-              />
+              {this.state.manualConfig ? (
+                <AceEditor
+                  mode="yaml"
+                  theme="solarized_dark"
+                  name="UNIQUE_ID_OF_DIV"
+                  onChange={this.validateConfig}
+                  width={sidePanelSize[orientation].secondWidth}
+                  height={sidePanelSize[orientation].secondHeight}
+                  value={this.state.value}
+                  editorProps={{ $blockScrolling: true }}
+                  fontSize={18}
+                  tabSize={2}
+                  showPrintMargin={false}
+                />
+              ) : (
+                <Form
+                  validator={rjsfValidator}
+                  schema={rjsfSchema}
+                  // uiSchema={uiSchema}
+                  widgets={rjsfWidgets}
+                  fields={rjsfFields}
+                  children={true}
+                  className={styles.scriptForm}
+                  formData={this.state.formData}
+                  templates={{ ArrayFieldTemplate: this.ArrayFieldTemplate }}
+                  onChange={(e) => {
+                    this.setState({
+                      formData: e.formData,
+                      value: yaml.dump(e.formData, { flowLevel: 2 }),
+                    });
+                  }}
+                />
+              )}
             </div>
           </div>
           <div className={[styles.bottomBar, configPanelBarClassName].join(' ')}>

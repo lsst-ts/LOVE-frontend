@@ -57,9 +57,6 @@
   padding: 0.5em 0.5em;
 }
 
-.bar {
-}
-
 .body {
   display: flex;
   flex-direction: column;
@@ -68,7 +65,6 @@
 
 .sideBySide {
   flex-direction: row;
-  justify-content: space-around;
 }
 
 .checkpointsRegexpContainer {
@@ -117,13 +113,44 @@
 .sidePanel {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  text-align: left;
+  flex-grow: 1;
+  /* flex-basis: 50%; */
 }
 
-.sidePanel > h3,
-.sidePanelHeaderContainer {
+.showSchemaIcon {
+  float: right;
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: var(--small-padding);
+  cursor: pointer;
+}
+
+.sidePanel > h3 {
   margin-left: 1rem;
   margin-bottom: 0.25rem;
+  align-self: stretch;
+}
+
+.sideBySide.hideSchema > .sidePanel {
+  flex-basis: auto;
+}
+
+.sideBySide.hideSchema > .sidePanelSchema {
+  flex-grow: 0;
+}
+
+.sidePanelSchema > h3 {
+  margin: 0;
+  margin-left: var(--content-padding);
+}
+
+.sideBySide.hideSchema > .sidePanel > h3 {
+  margin: 0;
+  writing-mode: vertical-lr;
+  flex-grow: 1;
+  margin-top: 2em;
+  margin-left: var(--small-padding);
 }
 
 a.documentationLink {
@@ -131,17 +158,6 @@ a.documentationLink {
   text-decoration: underline;
   color: var(--base-font-color);
   margin-bottom: 0.5rem;
-}
-
-.schemaErrorIcon {
-  width: 1em;
-  min-width: 1em;
-  padding-left: 0.5em;
-  text-align: center;
-  user-select: none;
-  display: flex;
-  align-items: center;
-  transform: translateY(-0.2em);
 }
 
 .horizontalDivider {
@@ -160,15 +176,23 @@ a.documentationLink {
   color: var(--secondary-font-color);
 }
 
-.sidePanelHeaderContainer {
-  /* display: flex; */
+.scriptConfigError {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--small-padding);
+}
+
+.scriptConfigError .errorIcon {
+  height: 1.5em;
+  width: 1.5em;
 }
 
 .infoPanel {
   position: absolute;
   top: 0em;
-  left: 7em;
+  left: 2.5em;
   z-index: 2000;
 }
 
@@ -197,4 +221,181 @@ a.documentationLink {
 .errorName {
   font-weight: 600;
   margin-left: -0.3em;
+}
+
+.configTypeTabs {
+  display: flex;
+  justify-content: space-around;
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--font-size-large);
+  box-sizing: border-box;
+  gap: 1em;
+  font-weight: bold;
+}
+
+.configTypeTabs > * {
+  padding: 0.5em 0.5em;
+}
+
+.configTypeTabs > [data-active='true'] {
+  background-color: #01313f;
+}
+
+.configurationControls {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.configurationControls > :first-child {
+  min-width: 10em;
+}
+
+.saveConfigurationButton {
+  display: flex;
+  align-items: center;
+  padding: 0.5em;
+}
+
+.saveConfigurationButton svg {
+  width: 1.5em;
+  height: 1.5em;
+  margin-left: 0.5em;
+}
+
+.schemaConfiguration {
+  display: flex;
+  width: 100%;
+}
+
+.scriptForm {
+  max-height: 480px;
+  width: 100%;
+  text-align: left;
+  overflow-y: scroll;
+  background-color: var(--second-quaternary-background-dimmed-color);
+  padding: var(--content-padding);
+  box-sizing: border-box;
+}
+
+/* RJSF inputs styles */
+.formTitleModifier {
+  display: none;
+}
+
+.formSchemaTitleModifier {
+  font-weight: bold;
+  font-size: var(--font-size-medium);
+  color: var(--base-font-color);
+  text-align: justify;
+}
+
+.formSchemaDescriptionModifier {
+  font-size: var(--font-size-medium);
+  text-align: left;
+  margin-bottom: var(--content-padding);
+}
+
+.arrayContainer input {
+  margin: 7px;
+}
+
+.deleteItemButtonContainer {
+  display: flex;
+  align-items: center;
+}
+
+.deleteItem {
+  flex-grow: 1;
+}
+
+.deleteItemButton {
+  flex-grow: 1;
+  border-radius: 100%;
+  border: 0;
+  width: 2em;
+  height: 2em;
+  background-color: var(--second-quaternary-background-color);
+  margin: 0.5em 0.6em;
+  cursor: pointer;
+}
+
+.deleteItemButton svg {
+  width: 90%;
+  height: 90%;
+}
+
+.deleteItemButton:hover {
+  background-color: var(--second-quinary-background-color);
+}
+
+.arrayElement {
+  flex-grow: 8;
+  display: flex;
+  align-items: center;
+}
+
+.arrayElement > div {
+  flex-grow: 2;
+  margin: 0 5px;
+}
+
+.availableScriptTypeSeparator {
+  border-bottom: 1px solid var(--second-quaternary-background-color);
+  margin: 1em 0;
+}
+
+.addNewArray button {
+  width: 100%;
+}
+
+.checkboxDescription {
+  margin: 1em 0;
+}
+
+.customButton {
+  font-weight: bold;
+  background-color: var(--tertiary-background-color);
+}
+
+.customButton:hover {
+  background-color: var(--quinary-background-color);
+}
+
+.customSelect {
+  margin-bottom: 7px;
+}
+
+fieldset {
+  border: 0;
+}
+
+fieldset p {
+  text-align: left;
+  font-weight: bold;
+  font-size: var(--font-size-medium);
+  color: var(--base-font-color);
+}
+
+:global(.field-object) > fieldset {
+  padding: 0;
+}
+
+:global(.field-string),
+:global(.field-number),
+:global(.field-boolean) {
+  margin-bottom: var(--small-padding);
+}
+
+:global(#root__title) {
+  font-weight: bold;
+}
+
+:global(.field) > *:nth-child(2) {
+  margin: 1em 0;
+}
+
+:global(.ace_editor) {
+  width: 100% !important;
 }
