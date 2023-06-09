@@ -516,7 +516,7 @@ export default class Row extends Component {
     const textMic = (this.state.isPlaying) ? 'LISTENING' : 'NOT LISTENING';
 
     return (
-      <tr key={`mics-row-${id}`}className={classSelectedMic}>
+      <tr key={`mics-row-${id}`} className={classSelectedMic}>
         <td onClick={() => this.props.selectMic(mic)} className={styles.tdView}>
           <ViewIcon selected={this.state.isSelected}></ViewIcon>
         </td>
