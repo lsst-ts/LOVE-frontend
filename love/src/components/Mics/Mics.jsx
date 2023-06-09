@@ -84,11 +84,7 @@ export default class Mics extends Component {
    */
   record = () => {
     if (!this.state.currentMic) return;
-    const { isRecording } = this.state.currentMic;
-    const newCurrentMic = { ...this.state.currentMic, isRecording: !isRecording};
-    this.setState({ currentMic: newCurrentMic}, () => this.state.currentMic?.recordFunc());
-    ;
-    ;
+    this.setState((prevState) => ({ currentMic: { ...prevState.currentMic, isRecording: !prevState.currentMic.isRecording }}), () => this.state.currentMic?.recordFunc());
   };
 
   /**
