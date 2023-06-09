@@ -55,7 +55,6 @@ export default class DrawerMic extends Component {
      * Array of records made previously
      */
     records: PropTypes.array,
-    maxHeight: PropTypes.number,
   };
 
   static defaultProps = {
@@ -70,8 +69,9 @@ export default class DrawerMic extends Component {
     isRecording: false,
     record: () => {},
     records: [],
-    maxHeight: 215,
   }
+
+  static MAXHEIGHTPLOT = 215;
 
   constructor(props) {
     super(props);
@@ -152,8 +152,8 @@ export default class DrawerMic extends Component {
                 <span><RowExpansionIcon expanded={this.state.showHeatMap}/></span>
               </div>
             </button>
-            <Collapse isOpen={this.state.showHeatMap} childrenMaxHeight={this.props.maxHeight}>
-                <div style={this.props.maxHeight ? {"maxHeight": this.props.maxHeight} : {}}>
+            <Collapse isOpen={this.state.showHeatMap} childrenMaxHeight={DrawerMic.MAXHEIGHTPLOT}>
+                <div style={{"maxHeight": DrawerMic.MAXHEIGHTPLOT}}>
                   <div ref={this.containerRef} className={styles.containerHeatMap}>
                     <HeatMap
                       infoPlot={this.props.infoPlot}
