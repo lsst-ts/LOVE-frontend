@@ -4,6 +4,11 @@
   transform-box: fill-box;
 }
 
-.arrowIcon {
-  /* height: 100px; */
+.cardinalPoints {
+  font: bold 56px sans-serif;
+  fill: white;
+}
+
+.svgContainer {
+  overflow: visible;
 }
