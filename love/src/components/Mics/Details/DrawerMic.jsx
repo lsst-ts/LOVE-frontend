@@ -152,7 +152,7 @@ export default class DrawerMic extends Component {
                 <span><RowExpansionIcon expanded={this.state.showHeatMap}/></span>
               </div>
             </button>
-            <Collapse isOpen={this.state.showHeatMap} childrenHeight={this.props.maxHeight}>
+            <Collapse isOpen={this.state.showHeatMap} childrenMaxHeight={this.props.maxHeight}>
                 <div style={this.props.maxHeight ? {"maxHeight": this.props.maxHeight} : {}}>
                   <div ref={this.containerRef} className={styles.containerHeatMap}>
                     <HeatMap

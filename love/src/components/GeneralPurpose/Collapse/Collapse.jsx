@@ -4,13 +4,21 @@ import styles from './Collapse.module.css';
 
 export default class Collapse extends Component {
   static propTypes = {
-    isOpen: PropTypes.bool,
-    childrenHeight: PropTypes.number,
+    /** Props for the state variable used for the change between open and closed of the collapsed div */
+    isOpen: PropTypes.bool.isRequired,
+    /** Max Height size of the children component */
+    childrenMaxHeight: PropTypes.number.isRequired,
+    /** Content of the inner the collapse div */
+    children: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.node),
+      PropTypes.node
+    ]).isRequired,
   };
 
   static defaultProps = {
     isOpen: false,
-    childrenHeight: undefined,
+    childrenMaxHeight: undefined,
+    children: <></>,
   };
 
   constructor(props) {
@@ -23,7 +31,7 @@ export default class Collapse extends Component {
   componentDidMount() {
     const childHeightRaw = this.content.clientHeight;
     const childHeight = `${childHeightRaw / 16}rem`;
-    this.setState({ childHeight: this.props.childrenHeight ?? childHeight});
+    this.setState({ childHeight: this.props.childrenMaxHeight ?? childHeight});
   }
 
   render() {
