@@ -10,7 +10,7 @@ export class WindDirection extends Component {
     // TODO: calcular con escala
     const minSpeed = 0;
     const maxSpeed = 100;
-    const currentSpeed = 20;
+    const currentSpeed = 50;
     const maxArrowHeight = 500;
     const arrowHeight = (currentSpeed / maxSpeed) * maxArrowHeight;
 

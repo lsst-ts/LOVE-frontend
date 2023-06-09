@@ -82,7 +82,7 @@ export default class EnvironmentSummary extends Component {
       auxtelDomeAz,
     } = this.props;
     return (
-      <div>
+      <div className={styles.container}>
         <div className={styles.windDirection}>
           <WindDirection></WindDirection>
           <div>flecha</div>
@@ -92,6 +92,9 @@ export default class EnvironmentSummary extends Component {
         </div>
         <div className={styles.iconLeft}>
           <BeachIcon />
+        </div>
+        <div className={styles.iconCenter}>
+          <MountainIcon />
         </div>
         <div ref={this.containerRef} className={styles.telescopes}>
           <Skymap
@@ -112,9 +115,6 @@ export default class EnvironmentSummary extends Component {
             simonyiDomeAlt={simonyiDomeAlt}
             simonyiDomeAz={simonyiDomeAz}
           />
-          <div className={styles.iconCenter}>
-            <MountainIcon />
-          </div>
           <AuxTelescope
             className={styles.auxTel}
             auxtelTrackingState={auxtelTrackingState}

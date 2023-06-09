@@ -1,14 +1,27 @@
+.container {
+  position: relative;
+  min-width: 780px;
+  height: 100%;
+}
+
 .windRoseContainer {
   position: absolute;
   left: 3%;
-  top: 7%;
+  top: 1em;
   width: 4%;
+}
+
+.windDirection {
+  width: 12%;
+  position: absolute;
+  top: 1em;
+  right: 3%;
 }
 
 .iconLeft {
   position: absolute;
   left: 17%;
-  top: 17%;
+  top: 100px;
   width: 4%;
 }
 
@@ -17,13 +30,13 @@
   left: 50%;
   top: 0;
   width: 4%;
-  margin-top: 358px;
+  /* margin-top: 358px; */
 }
 
 .iconRight {
   position: absolute;
   right: 17%;
-  top: 15%;
+  top: 100px;
   width: 3%;
 }
 
@@ -31,13 +44,6 @@
   position: relative;
   padding: 20px;
   top: 43px;
-}
-
-.windDirection {
-  width: 8em;
-  position: absolute;
-  top: 5%;
-  right: 3%;
 }
 
 .skymap {
