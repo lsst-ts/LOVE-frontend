@@ -28,7 +28,13 @@ const Input = ({
 };
 
 const comparator = (prevProps, nextProps) => {
-  return nextProps.value === prevProps.value && nextProps.defaultValue === prevProps.defaultValue;
+  return (
+      nextProps.value === prevProps.value && 
+      nextProps.defaultValue === prevProps.defaultValue &&
+      nextProps.min === prevProps.min && 
+      nextProps.max === prevProps.max && 
+      nextProps.className === prevProps.className
+    );
 };
 
 export default React.memo(Input, comparator);
