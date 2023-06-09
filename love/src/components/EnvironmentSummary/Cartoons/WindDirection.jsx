@@ -1,10 +1,21 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import ArrowIcon from 'components/icons/ArrowIcon/ArrowIcon';
+import styles from './WindDirection.module.css';
 
 export class WindDirection extends Component {
   static propTypes = {};
 
   render() {
+    // TODO: calcular con escala
+    const minSpeed = 0;
+    const maxSpeed = 100;
+    const currentSpeed = 20;
+    const maxArrowHeight = 500;
+    const arrowHeight = (currentSpeed / maxSpeed) * maxArrowHeight;
+
+    // Desde telemetria
+    const windDirection = 145;
     return (
       <svg xmlns="http://www.w3.org/2000/svg" className="PolarPlot_grid__kdi8E" viewBox="-40 -40 676 676">
         <defs>
@@ -4051,6 +4062,14 @@ export class WindDirection extends Component {
         <circle cx={593} cy={298} r={5} fill="rgb(NaN,255,NaN)" />
         <path stroke="rgb(NaN,255,NaN)" d="M593 298" />
         <circle cx={593} cy={298} r={5} fill="rgb(NaN,255,NaN)" />
+        <foreignObject
+          height={arrowHeight}
+          width={arrowHeight}
+          className={styles.arrowIconContainer}
+          transform={`translate(${298 - arrowHeight / 2}, ${298 - arrowHeight / 2}) rotate(${windDirection})`}
+        >
+          <ArrowIcon up={true} style={styles.arrowIcon} />
+        </foreignObject>
       </svg>
     );
   }

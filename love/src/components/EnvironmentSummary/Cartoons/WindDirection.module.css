@@ -1,0 +1,9 @@
+.arrowIconContainer {
+  overflow: visible !important;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.arrowIcon {
+  /* height: 100px; */
+}
