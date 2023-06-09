@@ -9,15 +9,25 @@ import styles from './Player.module.css';
 
 function Player(props) {
   const {
+    /** status of reproduction */
     isPlaying = false,
+    /** status of recording */
     isRecording = false,
+    /** level of the volume of the microphone reproduced for the speaker */
     volume = 0,
+    /** value of the maximum frequency listened from the microphone, in this moment  */
     actualMaxFreq = 0,
+    /** value of the maximum decibel listened from the microphone, in this moment  */
     actualMaxDb = 0,
+    /** dB limit for the alarm */
     dbLimit = 20,
+    /** function for the change of the volume */
     setVolume = () => {},
+    /** function for the change of the db limit for the alarm */
     setDbLimit = () => {},
+    /** function for the playing of the microphone and analyze for the alarm */
     play = () => {},
+    /** function for the recording of the microphone */
     record = () => {},
   } = props;
 
@@ -65,10 +75,6 @@ function Player(props) {
           <div className={styles.dBLiveValue}>
             {actualMaxDb.toString().substring(0, 5)}dB in {actualMaxFreq} Hz
           </div>
-          {/* <div> Min Decibel value </div>
-          <div className={styles.dBLiveValue}>
-            {actualMinDb.toString().substring(0, 5)}dB in {actualMinFreq} Hz
-          </div> */}
         </div>
 
         <div className={styles.width30}>
