@@ -6,16 +6,24 @@ import styles from './Mics.module.css';
 
 export default class Mics extends Component {
   static propTypes = {
-    /* Mics's id  */
+    /* Array of Mics */
     mics: PropTypes.arrayOf(PropTypes.objectOf({
+      /** Id unique for the reference to the mic */
       id: PropTypes.number,
+      /** Name for the text in table and the title in the player component */
       name: PropTypes.string,
+      /** Name of location for the grouping the microphones */
       location: PropTypes.string,
+      /** String of the source url of the microphone */
       src: PropTypes.string,
+      /** number in positive about the limit decibels for the alarm alert */
       dbLimit: PropTypes.number,
+      /** minimum number for the range of spectrogram plot */
       minDecibels: PropTypes.number,
+      /** maximum number for the range of spectrogram plot */
       maxDecibels: PropTypes.number,
     })),
+    /** boolean value for the initial reproduce to all microphones */
     initialPlaying: PropTypes.bool,
   };
 
@@ -34,11 +42,6 @@ export default class Mics extends Component {
       records: [],
     };
   }
-
-  //Functions to microphone. /////
-
-  componentDidMount = () => {
-  };
 
   componentWillUnmount = () => {
     this.closeMicDetails();
@@ -62,16 +65,7 @@ export default class Mics extends Component {
    * @param {*} data, info to plot
    */
   setInfoPlot = (data) => {
-    this.setState({ infoPlot: {...this.state.infoPlot, ...data} });
-  };
-
-  /**
-   * Function to change the state viewInfo and open the peleeable component mic details
-   */
-  openFinishedList = () => {
-    this.setState({
-      viewInfo: true,
-    });
+    this.setState((prevState) => ({ infoPlot: {...prevState.infoPlot, ...data}}));
   };
 
   /**
