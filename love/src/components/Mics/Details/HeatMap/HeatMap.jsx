@@ -128,7 +128,7 @@ export default class HeatMap extends Component {
       }
     }
 
-    if (this.props.containerNode) {
+    if (this.props.containerNode && prevProps.containerNode !== this.props.containerNode) {
       if (!(this.props.containerNode instanceof Element)) return;
       this.resizeObserver.observe(this.props.containerNode);
       return () => {
@@ -218,20 +218,15 @@ export default class HeatMap extends Component {
     const { data3D } = this.props.infoPlot;
     return (
       <>
-        {/* To resize, its really important preserve the structure since it is enunciated the Heat Map tag
-      in the div with the container ref until this part. Then, to this work, NOT include anothers div on here,
-      only which will enclose the Vega Lite Plot tag.*/}
-        {/* <div className={styles.divVegaLite}> */}
-          {
-            <VegaLite
-              style={{ display: 'flex' }}
-              renderer="svg"
-              spec={this.state.spec}
-              data={data3D}
-              actions={false}
-            />
-          }
-        {/* </div> */}
+        {
+          <VegaLite
+            style={{ display: 'flex' }}
+            renderer="svg"
+            spec={this.state.spec}
+            data={data3D}
+            actions={false}
+          />
+        }
       </>
     );
   }

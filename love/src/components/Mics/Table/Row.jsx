@@ -137,7 +137,7 @@ export default class Row extends Component {
   }
 
   componentWillUnmount = () => {
-    this.countPollingInterval = null;
+    if (this.countPollingInterval) clearInterval(this.countPollingInterval);
     this.audioContext?.close();
   };
 
