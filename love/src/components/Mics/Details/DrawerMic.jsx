@@ -81,18 +81,6 @@ export default class DrawerMic extends Component {
     this.containerRef = React.createRef();
   }
 
-  /**
-   * This function allows to show up the Heat Map, after press the show up button,
-   * changing the correspondient state.
-   */
-  appearHeatMap = () => {
-    if (this.state.showHeatMap) {
-      this.setState({ showHeatMap: false });
-    } else {
-      this.setState({ showHeatMap: true });
-    }
-  };
-
   render() {
     const {
       id,
@@ -146,7 +134,7 @@ export default class DrawerMic extends Component {
           </div>
 
           <Fragment>
-            <button className={styles.buttonShowSpectrogram} onClick={this.appearHeatMap}>
+            <button className={styles.buttonShowSpectrogram} onClick={() => this.setState((prevState) => ({ showHeatMap: !prevState.showHeatMap }))}>
               <div className={styles.spectrogramTitle}>
                 <span className={[styles.detailsTitle, styles.headers].join(' ')}>SPECTROGRAM</span>
                 <span><RowExpansionIcon expanded={this.state.showHeatMap}/></span>
