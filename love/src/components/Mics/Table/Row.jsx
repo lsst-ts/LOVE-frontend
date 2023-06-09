@@ -31,16 +31,22 @@ export default class Row extends Component {
      */
     name: PropTypes.string,
     /**
-     * Function to add a new record on the mic's record state
+     * Number for the decibels limit alarm
      */
     dbLimit: PropTypes.number,
+    /**
+     * Function to add a new record on the mic's record state
+     */
     recordPush: PropTypes.func,
     /**
      * Function to set the infoPlot state of the mic component to render.
      */
     setInfoPlot: PropTypes.func,
+    /** Number of the minimum value in range of the decibels for the spectogram plot */
     minDecibels: PropTypes.number,
+    /** Number of the maximum value in range of the decibels for the spectogram plot */
     maxDecibels: PropTypes.number,
+    /** boolean value for the initial reproduce to all microphones */
     initialPlaying: PropTypes.bool,
   };
 
@@ -276,7 +282,6 @@ export default class Row extends Component {
       });
     } else {
       song.pause();
-      // masterGain.gain.value = 0;
       audioContext.suspend();
       this.setState({ isPlaying: false });
     }
@@ -320,12 +325,14 @@ export default class Row extends Component {
 
   /* Method to change the isSelected state, by the mics component*/
   selectMe = () => {
-    const { isSelected } = this.state;
-    if (!isSelected) {
-      this.setState({ isSelected: true, alarm: false });
-    } else {
-      this.setState({ isSelected: !isSelected });
-    }
+    this.setState((prevState) => {
+      if (!prevState.isSelected) {
+        return { isSelected: true, alarm: false };
+      }
+      else {
+        return { isSelected: false };
+      }
+    });
     
     const infoPlot = {
       actualMaxFreq: this.state.actualMaxFreq,
@@ -346,9 +353,14 @@ export default class Row extends Component {
    * Chnage the notification's state
    */
   turnNotifications = () => {
-    const { notifications } = this.state;
-    if (notifications) this.setState({ notifications: false, alarm: false });
-    else this.setState({ notifications: true });
+    this.setState((prevState) => {
+      if (prevState.notifications) {
+        return { notifications: false, alarm: false };
+      }
+      else {
+        return { notifications: true };
+      }
+    });
   };
 
   /**

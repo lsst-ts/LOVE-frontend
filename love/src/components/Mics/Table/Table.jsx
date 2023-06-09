@@ -9,12 +9,19 @@ export default class Table extends Component {
      * Array of dictonary with the mics info
      */
     mics: PropTypes.arrayOf(PropTypes.shape({
+      /** Id unique for the reference to the mic */
       id: PropTypes.number,
+      /** Name for the text in table and the title in the player component */
       name: PropTypes.string,
+      /** Name of location for the grouping the microphones */
       location: PropTypes.string,
+      /** String of the source url of the microphone */
       src: PropTypes.string,
+      /** number in positive about the limit decibels for the alarm alert */
       dbLimit: PropTypes.number,
+      /** minimum number for the range of spectrogram plot */
       minDecibels: PropTypes.number,
+      /** maximum number for the range of spectrogram plot */
       maxDecibels: PropTypes.number,
     })),
     /**
@@ -29,6 +36,7 @@ export default class Table extends Component {
      * Function to set the infoPlot state of the mic component to render
      */
     setInfoPlot: PropTypes.func,
+    /** boolean value for the initial reproduce to all microphones */
     initialPlaying: PropTypes.bool,
   };
 
