@@ -1730,6 +1730,8 @@ export const getObservatoryState = (state) => {
   const auxtelObservingMode = observatoryData['event-Scheduler-2-observingMode'];
   const simonyiObservatoryState = observatoryData['telemetry-Scheduler-1-observatoryState'];
   const auxtelObservatoryState = observatoryData['telemetry-Scheduler-2-observatoryState'];
+  const environmentVariables = observatoryData['event-ESS-301-precipitation'];
+  const essTemperatures = observatoryData['telemetry-ESS-301-temperature'];
   const mptgCurrentTarget = observatoryData['event-MTPtg-0-currentTarget'];
   const atptgCurrentTarget = observatoryData['event-ATPtg-0-currentTarget'];
 
@@ -1755,6 +1757,13 @@ export const getObservatoryState = (state) => {
     auxtelDomeAz: auxtelObservatoryState ? auxtelObservatoryState.domeAzimuth?.value : 0.0,
     simonyiTrackingMode: mptgCurrentTarget ? mptgCurrentTarget[0].frame.value : 0,
     auxtelTrackingMode: atptgCurrentTarget ? atptgCurrentTarget[0].frame.value : 0,
+    isRaining: environmentVariables ? environmentVariables[0].raining.value : false,
+    isSnowing: environmentVariables ? environmentVariables[0].snowing.value : false,
+    numChannels: essTemperatures ? essTemperatures.numChannels.value : 4,
+    temperature: essTemperatures
+      ? essTemperatures.temperature.value
+      : [18.3, 20.5, 19.7, 18.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    location: essTemperatures ? essTemperatures.location.value : 'mountain, dining room, parking, 1st floor',
   };
 };
 

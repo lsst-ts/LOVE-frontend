@@ -8,7 +8,9 @@ import AuxTelescope from './Cartoons/AuxTelescope';
 import BeachIcon from 'components/icons/BeachIcon/BeachIcon';
 import MountainIcon from 'components/icons/MountainIcon/MountainIcon';
 import TemperatureIcon from 'components/icons/TemperatureIcon/TemperatureIcon';
+import CactusIcon from 'components/icons/CactusIcon/CactusIcon';
 import WindDirection from './Cartoons/WindDirection';
+import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 
 export default class EnvironmentSummary extends Component {
   static propTypes = {
@@ -17,39 +19,43 @@ export default class EnvironmentSummary extends Component {
     /** Function to unsubscribe to streams to stop receiving */
     unsubscribeToStreams: PropTypes.func,
     /** Is the simonyi telescope tracking? */
-    // simonyiTrackingState,
-    // /** Simonyi telescope altitude */
-    // simonyiAltitude,
-    // /** Simonyi telescope azimuth */
-    // simonyiAzimuth,
-    // /** Simonyi telescope rotator position */
-    // simonyiRotator,
-    // /** Simonyi dome altitude position */
-    // simonyiDomeAlt,
-    // /** Simonyi dome azimuth position */
-    // simonyiDomeAz,
-    // /** Expected RA of the moon */
-    // simonyiMoonRa,
-    // /** Expected Dec of the moon */
-    // simonyiMoonDec,
-    // /** Expected moon phase/illumination (0-1) */
-    // simonyiMoonPhase,
-    // /** Expected sun RA */
-    // simonyiSunRa,
-    // /** Expected sun dec. */
-    // simonyiSunDec,
-    // /** Is the auxiliary telescope tracking? */
-    // auxtelTrackingState,
-    // /** Auxiliary telescope altitude */
-    // auxtelAltitude,
-    // /** Auxiliary telescope azimuth */
-    // auxtelAzimuth,
-    // /** Auxiliary telescope rotator position */
-    // auxtelRotator,
-    // /** Auxiliary dome altitude position */
-    // auxtelDomeAlt,
-    // /** Auxiliary dome azimuth position */
-    // auxtelDomeAz,
+    simonyiTrackingState: PropTypes.bool,
+    /** Simonyi telescope altitude */
+    simonyiAltitude: PropTypes.number,
+    /** Simonyi telescope azimuth */
+    simonyiAzimuth: PropTypes.number,
+    /** Simonyi telescope rotator position */
+    simonyiRotator: PropTypes.number,
+    /** Simonyi dome altitude position */
+    simonyiDomeAlt: PropTypes.number,
+    /** Simonyi dome azimuth position */
+    simonyiDomeAz: PropTypes.number,
+    /** Expected RA of the moon */
+    simonyiMoonRa: PropTypes.number,
+    /** Expected Dec of the moon */
+    simonyiMoonDec: PropTypes.number,
+    /** Expected moon phase/illumination (0-1) */
+    simonyiMoonPhase: PropTypes.number,
+    /** Expected sun RA */
+    simonyiSunRa: PropTypes.number,
+    /** Expected sun dec. */
+    simonyiSunDec: PropTypes.number,
+    /** Is the auxiliary telescope tracking? */
+    auxtelTrackingState: PropTypes.bool,
+    /** Auxiliary telescope altitude */
+    auxtelAltitude: PropTypes.number,
+    /** Auxiliary telescope azimuth */
+    auxtelAzimuth: PropTypes.number,
+    /** Auxiliary telescope rotator position */
+    auxtelRotator: PropTypes.number,
+    /** Auxiliary dome altitude position */
+    auxtelDomeAlt: PropTypes.number,
+    /** Auxiliary dome azimuth position */
+    auxtelDomeAz: PropTypes.number,
+    /** Is it raining? */
+    isRaining: PropTypes.bool,
+    /** Is it snowing? */
+    isSnowing: PropTypes.bool,
   };
 
   constructor(props) {
@@ -80,7 +86,13 @@ export default class EnvironmentSummary extends Component {
       auxtelRotator,
       auxtelDomeAlt,
       auxtelDomeAz,
+      isRaining,
+      isSnowing,
+      numChannels,
+      temperature,
+      location,
     } = this.props;
+
     return (
       <div className={styles.container}>
         <div className={styles.windDirection}>
@@ -90,11 +102,12 @@ export default class EnvironmentSummary extends Component {
         <div className={styles.windRoseContainer}>
           <WindRose />
         </div>
-        <div className={styles.iconLeft}>
+        {/** Here goes Lightning strike icon */}
+        {/* <div className={styles.iconLeft}>
           <BeachIcon />
-        </div>
+        </div> */}
         <div className={styles.iconCenter}>
-          <MountainIcon />
+          <MountainIcon active={isRaining} />
         </div>
         <div ref={this.containerRef} className={styles.telescopes}>
           <Skymap
@@ -115,6 +128,14 @@ export default class EnvironmentSummary extends Component {
             simonyiDomeAlt={simonyiDomeAlt}
             simonyiDomeAz={simonyiDomeAz}
           />
+          <div className={styles.iconTemperature}>
+            <Hoverable>
+              <TemperatureIcon />
+              <div>
+                <span>Holii</span>
+              </div>
+            </Hoverable>
+          </div>
           <AuxTelescope
             className={styles.auxTel}
             auxtelTrackingState={auxtelTrackingState}
@@ -126,7 +147,7 @@ export default class EnvironmentSummary extends Component {
           />
         </div>
         <div className={styles.iconRight}>
-          <TemperatureIcon />
+          <CactusIcon active={isSnowing} />
         </div>
       </div>
     );

@@ -38,6 +38,11 @@ const EnvironmentSummaryContainer = ({
   auxtelRotator,
   auxtelDomeAlt,
   auxtelDomeAz,
+  isRaining,
+  isSnowing,
+  numChannels,
+  temperature,
+  location,
   ...props
 }) => {
   if (props.isRaw) {
@@ -64,6 +69,11 @@ const EnvironmentSummaryContainer = ({
       auxtelRotator={auxtelRotator}
       auxtelDomeAlt={auxtelDomeAlt}
       auxtelDomeAz={auxtelDomeAz}
+      isRaining={isRaining}
+      isSnowing={isSnowing}
+      numChannels={numChannels}
+      temperature={temperature}
+      location={location}
     />
   );
 };
@@ -80,6 +90,8 @@ const mapDispatchToProps = (dispatch) => {
     `telemetry-Scheduler-1-observatoryState`,
     `telemetry-Scheduler-2-observatoryState`,
     `event-Scheduler-1-target`,
+    'event-ESS-301-precipitation',
+    'telemetry-ESS-301-temperature',
   ];
   return {
     subscriptions,

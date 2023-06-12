@@ -8,14 +8,14 @@ function SimonyiTelescope({ className, ...props }) {
     props || {};
   return (
     <svg viewBox="0 0 726.72 436.7" className={className} {...props}>
-      <text x={245} y={10} width="60" height="40" className={styles.temperature}>
+      {/* <text x={245} y={10} width="60" height="40" className={styles.temperature}>
         10.12°
-      </text>
+      </text> */}
       <g id="Simonyi">
         <g id="TMA" onMouseEnter={() => setShowSimonyiSummary(true)} onMouseLeave={() => setShowSimonyiSummary(false)}>
-          <text x={185} y={40} width="60" height="40" className={styles.temperature}>
+          {/* <text x={185} y={40} width="60" height="40" className={styles.temperature}>
             18.36 °C
-          </text>
+          </text> */}
           <g>
             <g>
               <rect className={styles.cls4} x="153.4" y="44.72" width="16.11" height="54.37" />

@@ -40,6 +40,15 @@
   width: 3%;
 }
 
+.iconTemperature {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 4%;
+  margin-top: 420px;
+  z-index: 3;
+}
+
 .telescopes {
   position: relative;
   padding: 20px;

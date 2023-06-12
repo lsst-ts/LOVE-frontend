@@ -8,13 +8,13 @@ function AuxTelescope({ className, ...props }) {
     props || {};
   return (
     <svg viewBox="0 0 444.43 436.59" className={className} {...props}>
-      <text x={135} y={10} width="60" height="40" className={styles.temperature}>
+      {/* <text x={135} y={10} width="60" height="40" className={styles.temperature}>
         10.84 °C
-      </text>
+      </text> */}
       <g id="AuxTel">
-        <text x={187} y={50} width="60" height="40" className={styles.temperature}>
+        {/* <text x={187} y={50} width="60" height="40" className={styles.temperature}>
           10.36 °C
-        </text>
+        </text> */}
         <g
           id="ATMount"
           onMouseEnter={() => setShowAuxtelSummary(true)}
