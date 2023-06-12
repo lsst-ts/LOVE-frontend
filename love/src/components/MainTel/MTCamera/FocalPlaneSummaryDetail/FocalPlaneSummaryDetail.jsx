@@ -9,8 +9,8 @@ import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
 import styles from './FocalPlaneSummaryDetail.module.css';
 import {
-  summaryStateStateMap,
-  summaryStateStateToStyle,
+  summaryStateMap,
+  summaryStateToStyle,
   mtcameraRaftTempControlState,
   mtcameraRaftTempControlStateToStyle,
 } from 'Config';
@@ -62,78 +62,42 @@ class FocalPlaneSummaryDetail extends Component {
       },
       {
         field: 'GD',
-        title: (
-          <Button
-            onClick={() => this.changeCCDsPlotsVariable('gDV')}
-          >
-            GD 0 [V]
-          </Button>
-        ),
+        title: <Button onClick={() => this.changeCCDsPlotsVariable('gDV')}>GD 0 [V]</Button>,
         type: 'number',
         className: selectedCCDVar === 'gDV' ? styles.columnsHighlighted : styles.columns,
         render: (value) => defaultNumberFormatter(value),
       },
       {
         field: 'ODm',
-        title: (
-          <Button
-            onClick={() => this.changeCCDsPlotsVariable('oDI')}
-          >
-            OD 0 [mA]
-          </Button>
-        ),
+        title: <Button onClick={() => this.changeCCDsPlotsVariable('oDI')}>OD 0 [mA]</Button>,
         type: 'number',
         className: selectedCCDVar === 'oDI' ? styles.columnsHighlighted : styles.columns,
         render: (value) => defaultNumberFormatter(value),
       },
       {
         field: 'ODv',
-        title: (
-          <Button
-            onClick={() => this.changeCCDsPlotsVariable('oDV')}
-          >
-            OD 0 [V]
-          </Button>
-        ),
+        title: <Button onClick={() => this.changeCCDsPlotsVariable('oDV')}>OD 0 [V]</Button>,
         type: 'number',
         className: selectedCCDVar === 'oDV' ? styles.columnsHighlighted : styles.columns,
         render: (value) => defaultNumberFormatter(value),
       },
       {
         field: 'GV',
-        title: (
-          <Button
-            onClick={() => this.changeCCDsPlotsVariable('oGV')}
-          >
-            GV 0 [V]
-          </Button>
-        ),
+        title: <Button onClick={() => this.changeCCDsPlotsVariable('oGV')}>GV 0 [V]</Button>,
         type: 'number',
         className: selectedCCDVar === 'oGV' ? styles.columnsHighlighted : styles.columns,
         render: (value) => defaultNumberFormatter(value),
       },
       {
         field: 'RD',
-        title: (
-          <Button
-            onClick={() => this.changeCCDsPlotsVariable('rDV')}
-          >
-            RD 0 [V]
-          </Button>
-        ),
+        title: <Button onClick={() => this.changeCCDsPlotsVariable('rDV')}>RD 0 [V]</Button>,
         type: 'number',
         className: selectedCCDVar === 'rDV' ? styles.columnsHighlighted : styles.columns,
         render: (value) => defaultNumberFormatter(value),
       },
       {
         field: 'SW',
-        title: (
-          <Button
-            onClick={() => this.changeCCDsPlotsVariable('temp')}
-          >
-            SW 0 [C°]
-          </Button>
-        ),
+        title: <Button onClick={() => this.changeCCDsPlotsVariable('temp')}>SW 0 [C°]</Button>,
         type: 'number',
         className: selectedCCDVar === 'temp' ? styles.columnsHighlighted : styles.columns,
         render: (value) => defaultNumberFormatter(value),
@@ -227,8 +191,8 @@ class FocalPlaneSummaryDetail extends Component {
           <SummaryPanel className={styles.summaryPanel}>
             <Title>Raft {selectedRaft.id}</Title>
             <Value>
-              <StatusText status={summaryStateStateToStyle[summaryStateStateMap[raftSummaryState]]}>
-                {summaryStateStateMap[raftSummaryState]}
+              <StatusText status={summaryStateToStyle[summaryStateMap[raftSummaryState]]}>
+                {summaryStateMap[raftSummaryState]}
               </StatusText>
             </Value>
             <Label>Temp Control</Label>

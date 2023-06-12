@@ -18,3 +18,7 @@
   height: 0;
   padding-bottom: 100%;
 }
+
+.unusedCCD {
+  border: none;
+}

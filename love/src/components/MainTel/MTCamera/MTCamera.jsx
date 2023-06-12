@@ -10,20 +10,42 @@ import { mtcameraRaftsNeighborsMapping } from 'Config';
 import RebDetail from './RebDetail/RebDetail';
 
 const rafts = [];
-const secondaryCCDs = [
-  0, 1, 2, 3, 4, /* 5, */ 6, /* 7, */ /* 8, */
-  36, 37, 38, /* 39, */ 40, 41, /* 42, */ /* 43, */ 44,
-  180, /* 181, */ /* 182, */ 183, 184, /* 185, */ 186, 187, 188,
-  /* 216, */ /* 217, */ 218, /* 219, */ 220, 221, 222, 223, 224,
+const unusedCCDs = [
+  0,
+  1,
+  2,
+  3,
+  4,
+  /* 5, */ 6 /* 7, */ /* 8, */,
+  36,
+  37,
+  38,
+  /* 39, */ 40,
+  41,
+  /* 42, */ /* 43, */ 44,
+  180,
+  /* 181, */ /* 182, */ 183,
+  184,
+  /* 185, */ 186,
+  187,
+  188,
+  /* 216, */ /* 217, */ 218,
+  /* 219, */ 220,
+  221,
+  222,
+  223,
+  224,
 ];
 for (let i = 0; i < 25; i++) {
   const ccds = [];
   const rebs = [];
   for (let j = 0; j < 9; j++) {
     const ccdId = i * 9 + (j + 1);
+    const isUnused = unusedCCDs.includes(ccdId - 1);
     ccds.push({
       id: ccdId,
-      status: !secondaryCCDs.includes(ccdId-1) ? Math.ceil(Math.random() * 3) : 0,
+      status: !isUnused ? Math.ceil(Math.random() * 3) : 0,
+      unused: isUnused,
     });
   }
   for (let j = 0; j < 3; j++) {
@@ -125,6 +147,7 @@ class MTCamera extends Component {
   // componentDidMount() {}
 
   componentDidUpdate() {
+    // d3.select('#test-overlay').call(d3.zoom().scaleExtent([0.5, 5]).on('zoom', this.zoomed));
     d3.select('#focalplane').call(d3.zoom().scaleExtent([0.5, 5]).on('zoom', this.zoomed));
     d3.select('#raftdetail').call(d3.zoom().scaleExtent([0.5, 5]).on('zoom', this.zoomed));
     d3.select('#ccdrebdetail').call(d3.zoom().scaleExtent([0.5, 5]).on('zoom', this.zoomed));
@@ -138,7 +161,7 @@ class MTCamera extends Component {
    * @param {Object} d3.event - d3 event object
    */
   zoomed = () => {
-    const { zoomLevel, activeViewId:targetId, prevActiveViewId:prevTargetId, selectedCCDVar } = this.state;
+    const { zoomLevel, activeViewId: targetId, prevActiveViewId: prevTargetId, selectedCCDVar } = this.state;
 
     let baseK = 0;
     if (targetId == null) return;
@@ -196,11 +219,19 @@ class MTCamera extends Component {
   }
 
   getComponent() {
-    const { selectedRaft, selectedCCD, selectedReb, selectedCCDVar, selectedRebVar, zoomLevel, activeViewId } = this.state;
+    const {
+      selectedRaft,
+      selectedCCD,
+      selectedReb,
+      selectedCCDVar,
+      selectedRebVar,
+      zoomLevel,
+      activeViewId,
+    } = this.state;
     const { tempControlActive, hVBiasSwitch, anaV, power, gDV, oDI, oDV, oGV, rDV, temp } = this.props;
     return (
       <div className={styles.container}>
-        <div className={styles.focalPlanceContainer}>
+        <div id="test-overlay" className={styles.focalPlanceContainer}>
           {zoomLevel > 2.5 && zoomLevel <= 3.5 && selectedCCD && this.getCCDdetail()}
           {zoomLevel > 2.5 && zoomLevel <= 3.5 && selectedReb && this.getRebDetail()}
           {zoomLevel > 1.5 && zoomLevel <= 2.5 && this.getRaftdetail()}
@@ -302,11 +333,7 @@ class MTCamera extends Component {
     const { selectedCCD } = this.state;
     return (
       <div id="ccdrebdetail">
-        <CCDDetail
-          ccd={selectedCCD}
-          showNeighbors={true}
-          selectNeighborCCD={this.selectNeighborCCD}
-        />
+        <CCDDetail ccd={selectedCCD} showNeighbors={true} selectNeighborCCD={this.selectNeighborCCD} />
       </div>
     );
   }
@@ -315,9 +342,7 @@ class MTCamera extends Component {
     const { selectedReb } = this.state;
     return (
       <div id="ccdrebdetail">
-        <RebDetail
-          reb={selectedReb}
-        />
+        <RebDetail reb={selectedReb} />
       </div>
     );
   }

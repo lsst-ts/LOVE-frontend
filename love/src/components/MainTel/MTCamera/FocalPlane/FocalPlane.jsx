@@ -27,9 +27,15 @@ class FocalPlane extends Component {
   }
 
   renderCCD(ccd) {
-    const { id, status } = ccd;
+    const { id, status, unused } = ccd;
     const bgColor = this.getColors(mtCameraRaftDetailedStateToStyle[mtCameraRaftDetailedStateMap[status]]);
-    return <div key={`CCD-${id}`} style={{ backgroundColor: bgColor }} className={styles.ccdContainer} />;
+    return (
+      <div
+        key={`CCD-${id}`}
+        style={{ backgroundColor: bgColor }}
+        className={[styles.ccdContainer, unused ? styles.unusedCCD : ''].join(' ')}
+      />
+    );
   }
 
   getColors(type) {

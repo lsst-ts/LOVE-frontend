@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { getCameraStatusStyle } from 'Utils';
 import styles from './MTCameraSummaryDetail.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import GearIcon from '../../icons/GearIcon/GearIcon';
-import { getCameraStatusStyle } from '../../../Config';
 import LoadingBar from '../../GeneralPurpose/LoadingBar/LoadingBar';
 import Title from '../../GeneralPurpose/SummaryPanel/Title';
 import Value from '../../GeneralPurpose/SummaryPanel/Value';
