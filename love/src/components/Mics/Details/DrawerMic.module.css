@@ -1,0 +1,131 @@
+.divDetails {
+  background-color: var(--second-quaternary-background-dimmed-color);
+  border-radius: 5px;
+  padding-inline: 0.5em;
+  padding-block: 0.75em;
+  border-style: solid;
+  border-color: hsl(205deg 40% 8% / 65%);
+  padding-bottom: 1.75em;
+}
+  
+.headers {
+  vertical-align: sub;
+  font-size: small;
+  color: var(--base-font-color);
+}
+  
+.divTitleSection {
+  height: 7.5%;
+  margin-block: 2px;
+  color: var(--base-font-color);
+  display: grid;
+}
+  
+.audioStream {
+  display: grid;
+  justify-items: center;
+}
+  
+.detailsTitle {
+  display: flex;
+  margin: 0.5em;
+  font-weight: bold;
+  width: 95%;
+}
+  
+.recordsDiv {
+  background-color: #2b3f4a;
+  border-radius: 7.5px;
+  width: 95%;
+  margin-top: 1em;
+  max-height: 7.5em;
+  overflow-y: scroll;
+  margin-bottom: 1.75em;
+  display: inline-grid;
+  justify-items: center;
+}
+  
+.spanIdDetails {
+  display: flex;
+  font-weight: bold;
+  align-self: end;
+  font-size: 1.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.2em;
+  margin-left: 0.3em;
+}
+
+/* Scroll bar */
+.recordsDiv::-webkit-scrollbar-thumb {
+  background: var(--base-font-color);
+  border-radius: 10px;
+}
+
+.recordsDiv::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+.recordsDiv::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px var(--base-background-color);
+  background-color: var(--base-background-color);
+  border-radius: 10px;
+}
+  
+.svgButtonDiv {
+  position: relative;
+  transform: translate(-10%, 0%);
+}
+
+.svgButton {
+  transform: translate(-45%, 0%);
+}
+
+.svgEdit {
+  fill: none;
+  stroke: #8c9da6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 0.3px;
+}
+  
+.fontTitle {
+  display: flex;
+  font-weight: bold;
+  color: var(--base-font-color);
+  margin: 0.5em;
+}
+
+.editButtonShowHeatMap {
+  transform: translate(7%, 0%);
+}
+
+.containerHeatMap {
+  display: block;
+  width: 100%;
+  position: relative;
+  top: -30px;
+}
+
+.spectrogramTitle {
+  display: grid;
+  grid-template-columns: 1fr 1.3em;
+  font-weight: bold;
+  color: var(--base-font-color);
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.buttonShowSpectrogram {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: block;
+  background: var(--second-quaternary-background-dimmed-color);
+  color: white;
+  width: 100%;
+  border: 0;
+  cursor: pointer;
+}
+
+.containerRecorded {
+  padding: 0.5em;
+}

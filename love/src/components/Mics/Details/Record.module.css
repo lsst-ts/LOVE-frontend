@@ -1,0 +1,49 @@
+.playSVG {
+  height: 4em;
+}
+
+.records {
+  display: inline-flex;
+  justify-items: center;
+  align-items: center;
+  width: 100%;
+}
+
+.download {
+  width: 25%;
+}
+  
+.downloadSvg {
+  height: 1.25em;
+}
+
+.spanButton {
+  display: flex;
+  flex-flow: column;
+  cursor: pointer;
+  padding-inline: 1em;
+  font-size: xx-small;
+  width: 22%;
+}
+
+.marginBlock {
+  margin-block: 1.25em;
+}
+
+.spanNameFiles {
+  width: 60%;
+  overflow-x: hidden;
+  text-align: left;
+  padding-inline: 0.3em;
+  padding-block: 0.5em;
+  line-height: 1em;
+  color: var(--base-font-color);
+}
+
+.PlayIcon {
+  fill: #788e9a;
+}
+
+.opacity {
+  opacity: 0.35;
+}
