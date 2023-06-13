@@ -11,6 +11,7 @@ import TemperatureIcon from 'components/icons/TemperatureIcon/TemperatureIcon';
 import CactusIcon from 'components/icons/CactusIcon/CactusIcon';
 import WindDirection from './Cartoons/WindDirection';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
+import TemperaturesSummary from './SummaryInformation/TemperaturesSummary';
 
 export default class EnvironmentSummary extends Component {
   static propTypes = {
@@ -129,10 +130,10 @@ export default class EnvironmentSummary extends Component {
             simonyiDomeAz={simonyiDomeAz}
           />
           <div className={styles.iconTemperature}>
-            <Hoverable>
+            <Hoverable className={styles.temperaturesHover}>
               <TemperatureIcon />
-              <div>
-                <span>Holii</span>
+              <div className={styles.temperaturesSummary}>
+                <TemperaturesSummary numChannels={numChannels} temperature={temperature} location={location} />
               </div>
             </Hoverable>
           </div>

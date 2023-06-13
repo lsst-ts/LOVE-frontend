@@ -81,3 +81,19 @@
   z-index: 1;
   margin-top: 200px;
 }
+
+.temperaturesHover {
+  position: relative !important;
+  overflow: visible !important;
+  top: 0 !important;
+  left: 0 !important;
+  transform: none !important;
+}
+
+.temperaturesSummary {
+  position: absolute;
+  top: 0 !important;
+  left: 40px !important;
+  bottom: 40px !important;
+  width: 325px;
+}

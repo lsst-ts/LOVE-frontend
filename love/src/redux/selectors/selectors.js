@@ -1763,7 +1763,7 @@ export const getObservatoryState = (state) => {
     temperature: essTemperatures
       ? essTemperatures.temperature.value
       : [18.3, 20.5, 19.7, 18.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    location: essTemperatures ? essTemperatures.location.value : 'mountain, dining room, parking, 1st floor',
+    location: essTemperatures ? essTemperatures.location.value : 'control room, machine room, 2nd floor, 1st floor',
   };
 };
 

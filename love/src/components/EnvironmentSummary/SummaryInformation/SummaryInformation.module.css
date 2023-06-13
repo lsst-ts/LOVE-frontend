@@ -37,3 +37,11 @@
   left: calc(40px + var(--small-padding));
   overflow: visible;
 }
+
+.summaryPanelDetail {
+  overflow: hidden;
+  display: grid;
+  width: 100%;
+  justify-items: stretch;
+  align-items: start;
+}
