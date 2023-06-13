@@ -13,10 +13,9 @@
 .ccdContainer {
   box-sizing: border-box;
   border: 0.1px solid rgba(100, 100, 100, 0.9);
-  /* height: 24px; */
+  aspect-ratio: 1 / 1;
+  height: auto;
   width: 100%;
-  height: 0;
-  padding-bottom: 100%;
 }
 
 .unusedCCD {
