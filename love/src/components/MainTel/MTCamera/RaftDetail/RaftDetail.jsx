@@ -125,7 +125,6 @@ class RaftDetail extends Component {
             onMouseOver={() => {
               setHoveredReb(raft.rebs[i]);
               setHoveredCCD(null);
-              
             }}
           >
             <PlotContainer
@@ -152,14 +151,14 @@ class RaftDetail extends Component {
       left: raft.neighbors.left ? COLOR_MAPPING[raft.neighbors.left.status] : 'transparent',
     };
     return showNeighbors ? (
-      <div style={{ height: '100%' }}>
+      <div className={styles.container}>
         <Neighbors edgesColors={edgesColors} selectNeighbor={selectNeighborRaft}>
           {this.renderCCDsPlots()}
           {this.renderRebsPlots()}
         </Neighbors>
       </div>
     ) : (
-      <div style={{ height: '100%' }}>
+      <div className={styles.container}>
         {this.renderCCDsPlots()}
         {this.renderRebsPlots()}
       </div>

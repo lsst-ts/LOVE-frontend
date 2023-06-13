@@ -74,10 +74,10 @@ class MTCamera extends Component {
       hoveredRaft: null,
       hoveredCCD: null,
       hoveredReb: null,
-      // selectedCCDVar: 'gDV',
-      selectedCCDVar: null,
+      selectedCCDVar: 'gDV',
       selectedRebVar: 'anaI',
     };
+    this.zoom = null;
   }
 
   setSelectedRaft = (raft) => {
@@ -144,13 +144,17 @@ class MTCamera extends Component {
     this.setSelectedCCD(nextCCD);
   };
 
-  // componentDidMount() {}
+  componentDidMount() {
+    this.zoom = d3.zoom().scaleExtent([1, 2]).on('zoom', this.zoomed);
+    d3.select('#zoom-overlay').call(this.zoom);
+  }
 
-  componentDidUpdate() {
-    // d3.select('#test-overlay').call(d3.zoom().scaleExtent([0.5, 5]).on('zoom', this.zoomed));
-    d3.select('#focalplane').call(d3.zoom().scaleExtent([0.5, 5]).on('zoom', this.zoomed));
-    d3.select('#raftdetail').call(d3.zoom().scaleExtent([0.5, 5]).on('zoom', this.zoomed));
-    d3.select('#ccdrebdetail').call(d3.zoom().scaleExtent([0.5, 5]).on('zoom', this.zoomed));
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.activeViewId !== this.state.activeViewId) {
+      // Reset zoom level when switching views
+      // a value of 1.01 is used to prevent the zoom level from being set to 1
+      d3.select('#zoom-overlay').call(this.zoom.transform, d3.zoomIdentity.scale(1.01));
+    }
   }
 
   /**
@@ -158,33 +162,52 @@ class MTCamera extends Component {
    * It defines a baseK value that is added to the zoom level to determine which view to show
    * Makes transformations to the shown view based on the zoom level
    * Set the activeViewId and prevActiveViewId state variables and selectedRaft, selectedCCD, and selectedRebS
-   * @param {Object} d3.event - d3 event object
    */
   zoomed = () => {
-    const { zoomLevel, activeViewId: targetId, prevActiveViewId: prevTargetId, selectedCCDVar } = this.state;
+    const {
+      zoomLevel,
+      activeViewId: targetId,
+      prevActiveViewId: prevTargetId,
+      hoveredRaft,
+      hoveredCCD,
+      hoveredReb,
+      selectedCCDVar,
+    } = this.state;
 
-    let baseK = 0;
-    if (targetId == null) return;
-    if (targetId === 'focalplane') baseK = 0;
-    else if (targetId === 'raftdetail') baseK = 1;
-    else if (targetId === 'ccdrebdetail') baseK = 2;
+    let newActiveViewId, newSelectedRaft, newSelectedCCD, newSelectedReb, newSelectedCCDVar;
+    const k = d3.event.transform.k;
 
-    const k = d3.event.transform.k + baseK;
-    console.log(targetId, d3.event.transform.k, baseK);
-    let newActiveViewId, newPrevActiveId, newSelectedRaft, newSelectedCCD, newSelectedReb, newSelectedCCDVar;
-    if (k >= 0 && k <= 1.5) {
-      newActiveViewId = 'focalplane';
-      newSelectedCCDVar = null;
+    const zoomReset = k === 1;
+    if (zoomReset) {
+      // From raft detail to focal plane
+      if (targetId === 'raftdetail') {
+        newActiveViewId = 'focalplane';
+        newSelectedCCDVar = null;
+      }
+
+      // From ccdreb detail to raft detail
+      if (targetId === 'ccdrebdetail') {
+        newActiveViewId = 'raftdetail';
+        newSelectedCCD = hoveredCCD;
+        newSelectedReb = hoveredReb;
+      }
     }
-    if (k > 1.5 && k <= 2.5) {
-      newActiveViewId = 'raftdetail';
-      newSelectedRaft = this.state.hoveredRaft;
-      newSelectedCCDVar = selectedCCDVar ?? 'gDV';
-    }
-    if (k > 2.5 && k <= 3.5) {
-      newActiveViewId = 'ccdrebdetail';
-      if (this.state.hoveredCCD) newSelectedCCD = this.state.hoveredCCD;
-      else if (this.state.hoveredReb) newSelectedReb = this.state.hoveredReb;
+
+    const zoomIn = k > zoomLevel;
+    if (zoomIn && k > 1.5) {
+      // From focal plane to raft detail
+      if (targetId === 'focalplane') {
+        newActiveViewId = 'raftdetail';
+        newSelectedRaft = hoveredRaft;
+        newSelectedCCDVar = selectedCCDVar ?? 'gDV';
+      }
+
+      // From raft detail to ccdreb detail
+      if (targetId === 'raftdetail') {
+        newActiveViewId = 'ccdrebdetail';
+        newSelectedCCD = hoveredCCD;
+        newSelectedReb = hoveredReb;
+      }
     }
 
     function d3TransformToString(transform) {
@@ -203,10 +226,10 @@ class MTCamera extends Component {
     }
 
     this.setState((prevState) => ({
-      activeViewId: newActiveViewId,
+      activeViewId: newActiveViewId ?? prevState.activeViewId,
       selectedRaft: newSelectedRaft ?? prevState.selectedRaft,
-      selectedCCD: newSelectedCCD,
-      selectedReb: newSelectedReb,
+      selectedCCD: newSelectedCCD ?? prevState.selectedCCD,
+      selectedReb: newSelectedReb ?? prevState.selectedReb,
       selectedCCDVar: newActiveViewId === 'focalplane' ? null : newSelectedCCDVar,
       zoomLevel: k,
     }));
@@ -214,7 +237,6 @@ class MTCamera extends Component {
 
   render() {
     const { selectedCCD, hoveredRaft, selectedRaft, hoveredCCD, hoveredReb } = this.state;
-    // console.log(hoveredCCD, hoveredReb);
     return this.getComponent();
   }
 
@@ -231,11 +253,15 @@ class MTCamera extends Component {
     const { tempControlActive, hVBiasSwitch, anaV, power, gDV, oDI, oDV, oGV, rDV, temp } = this.props;
     return (
       <div className={styles.container}>
-        <div id="test-overlay" className={styles.focalPlanceContainer}>
-          {zoomLevel > 2.5 && zoomLevel <= 3.5 && selectedCCD && this.getCCDdetail()}
-          {zoomLevel > 2.5 && zoomLevel <= 3.5 && selectedReb && this.getRebDetail()}
-          {zoomLevel > 1.5 && zoomLevel <= 2.5 && this.getRaftdetail()}
-          {zoomLevel >= 0 && zoomLevel <= 1.5 && this.getMTCamera()}
+        <div id="zoom-overlay" className={styles.focalPlanceContainer}>
+          <div style={{ display: activeViewId === 'ccdrebdetail' ? 'block' : 'none' }}>
+            {selectedCCD && this.getCCDdetail()}
+            {selectedReb && this.getRebDetail()}
+          </div>
+          <div style={{ display: activeViewId === 'raftdetail' ? 'block' : 'none' }}>
+            {selectedRaft && this.getRaftdetail()}
+          </div>
+          <div style={{ display: activeViewId === 'focalplane' ? 'block' : 'none' }}>{this.getMTCamera()}</div>
         </div>
         <div className={styles.summaryDetailContainer}>
           {selectedRaft ? (
