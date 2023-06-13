@@ -5,6 +5,7 @@ Version History
 v5.21.0
 --------
 
+* Add changelog checker github action `<https://github.com/lsst-ts/LOVE-frontend/pull/473>`_
 * ScriptQueue Upgrade implementation `<https://github.com/lsst-ts/LOVE-frontend/pull/470>`_
 
 v5.20.3
