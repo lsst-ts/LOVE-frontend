@@ -157,21 +157,34 @@ export default class SkymapGrid extends Component {
         <rect className={styles.backgroundRect} width="100%" height="100%" fill="none" />
         <circle className={styles.backgroundCircle} cx={w / 2} cy={h / 2} r={w / 2 - margin} />
         {/* <circle className={styles.domeCircle} cx={w / 2} cy={h / 2} r={w / 2 + viewboxMargin - 5} /> */}
-        <path className={styles.domeCircle} d={this.describeArc(w / 2, h / 2, w / 2 + viewboxMargin - 5, -260, 80)}>
-          <title>Dome</title>
-        </path>
+        <path
+          className={styles.domeCircle}
+          d={this.describeArc(w / 2, h / 2, w / 2 + viewboxMargin - 5, -260, 80)}
+        ></path>
         <g>
           <text className={styles.text} y={-10} x={w / 2}>
             N
           </text>
+          <text className={styles.text} y={75} x={65}>
+            315º
+          </text>
           <text className={styles.text} y={h + 15} x={w / 2}>
             S
+          </text>
+          <text className={styles.text} y={470} x={25}>
+            225º
           </text>
           <text className={styles.text} y={h / 2} x={-15}>
             E
           </text>
+          <text className={styles.text} y={70} x={512}>
+            45º
+          </text>
           <text className={styles.text} y={h / 2} x={w + 15}>
             W
+          </text>
+          <text className={styles.text} y={520} x={512}>
+            -90º
           </text>
         </g>
         <g className={styles.currentLayer}>

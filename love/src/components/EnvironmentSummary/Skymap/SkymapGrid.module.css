@@ -38,4 +38,6 @@
   text-anchor: middle;
   alignment-baseline: middle;
   dominant-baseline: central;
+  font-size: var(--font-size-larger);
+  fill: var(--base-font-color);
 }
