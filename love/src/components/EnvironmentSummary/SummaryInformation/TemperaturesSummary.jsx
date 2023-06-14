@@ -18,20 +18,10 @@ export default class TemperaturesSummary extends Component {
           <Title>Temperatures summmary</Title>
         </SummaryPanel>
         <div className={styles.summaryPanelDetail}>
-          {/* <SummaryPanel className={styles.summaryPanel}>
-            {temperatures.map((t, i) => (
-                <div className={styles.summaryPanelDetail}>
-                    <Label>{locations[i]}</Label>
-                    <Value>{`${fixedFloat(t, 2)} °`}</Value>
-                </div>
-            ))}
-          </SummaryPanel> */}
           {temperatures.map((t, i) => (
             <SummaryPanel className={styles.summaryPanel}>
-              {/* <div className={styles.summaryPanelDetail}> */}
               <Label>{locations[i]}</Label>
               <Value>{`${fixedFloat(t, 2)} °`}</Value>
-              {/* </div> */}
             </SummaryPanel>
           ))}
         </div>
