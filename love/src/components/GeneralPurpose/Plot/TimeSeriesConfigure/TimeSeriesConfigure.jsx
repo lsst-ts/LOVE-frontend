@@ -6,7 +6,7 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import ManagerInterface from 'Utils';
 import { defaultStyles } from 'components/GeneralPurpose/Plot/Plot.container';
 import VegaTimeseriesPlot from '../VegaTimeSeriesPlot/VegaTimeSeriesPlot';
-import {COLORS} from '../VegaTimeSeriesPlot/VegaTimeSeriesPlot';
+import { COLORS } from '../VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 /**
  * Component to configure the Health Status Summary
@@ -52,7 +52,7 @@ export default class TimeSeriesConfigure extends PureComponent {
     dash: defaultStyles[0].dash,
     shape: defaultStyles[0].shape,
     filled: defaultStyles[0].filled,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -71,7 +71,7 @@ export default class TimeSeriesConfigure extends PureComponent {
       return input;
     });
 
-    const refs = this.state.entries.map(item => React.createRef());
+    const refs = this.state.entries.map((item) => React.createRef());
     this.setState({ entries, refs });
   };
 
@@ -100,15 +100,7 @@ export default class TimeSeriesConfigure extends PureComponent {
         <div className={styles.content}>
           <div className={styles.list}>
             {this.state.entries.map((entry, index) => {
-              const {
-                name,
-                values,
-                type,
-                color,
-                dash,
-                shape,
-                filled,
-              } = entry;
+              const { name, values, type, color, dash, shape, filled } = entry;
               return (
                 <Entry
                   key={index}
@@ -117,22 +109,21 @@ export default class TimeSeriesConfigure extends PureComponent {
                   name={name}
                   values={values}
                   type={type}
-                  config={
-                    {
-                      color: color ?? defaultStyles[index % (defaultStyles.length - 1)].color,
-                      dash: dash ?? defaultStyles[index % (defaultStyles.length - 1)].dash,
-                      shape: shape ?? defaultStyles[index % (defaultStyles.length - 1)].shape,
-                      filled: filled ?? defaultStyles[index % (defaultStyles.length - 1)].filled,
-                    }
-                  }
+                  config={{
+                    color: color ?? defaultStyles[index % (defaultStyles.length - 1)].color,
+                    dash: dash ?? defaultStyles[index % (defaultStyles.length - 1)].dash,
+                    shape: shape ?? defaultStyles[index % (defaultStyles.length - 1)].shape,
+                    filled: filled ?? defaultStyles[index % (defaultStyles.length - 1)].filled,
+                  }}
                   onRemove={() => this.onEntryRemove(index)}
                 />
               );
             })}
-            <Button status="default"
+            <Button
+              status="default"
               onClick={() => {
                 const newEntries = [...this.state.entries, TimeSeriesConfigure.defaultEntry];
-                this.setState({entries: newEntries});
+                this.setState({ entries: newEntries });
               }}
               className={styles.button}
             >

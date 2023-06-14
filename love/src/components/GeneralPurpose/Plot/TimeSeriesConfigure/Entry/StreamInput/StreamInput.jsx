@@ -32,6 +32,8 @@ export default class StreamInput extends Component {
     salindex: PropTypes.number,
     topic: PropTypes.string,
     item: PropTypes.string,
+    isArray: PropTypes.bool,
+    arrayIndex: PropTypes.number,
     accessor: PropTypes.string,
   };
 
@@ -52,6 +54,8 @@ export default class StreamInput extends Component {
       salindex: props.salindex ?? null,
       topic: props.topic ?? null,
       item: props.item ?? null,
+      isArray: props.isArray ?? false,
+      arrayIndex: props.arrayIndex ?? 0,
       accessor: props.accessor ?? props.category === 'telemetry' ? '(x) => x[0]' : '(x) => x',
       optionsTree: [],
     };
@@ -67,7 +71,7 @@ export default class StreamInput extends Component {
         cscOptions: data ? Object.keys(data) : [],
         topicOptions,
         itemOptions,
-       });
+      });
     });
 
     if (this.state.accessor !== this.props.accessor && this.props.accessor) {
@@ -90,7 +94,7 @@ export default class StreamInput extends Component {
       });
     }
 
-    if (prevState.topic !== this.state.topic ) {
+    if (prevState.topic !== this.state.topic) {
       const { optionsTree } = this.state;
       const { category, csc, topic } = this.state;
       const itemOptions = category && csc && topic ? Object.keys(optionsTree[csc][`${category}_data`][topic]) : [];
@@ -102,7 +106,7 @@ export default class StreamInput extends Component {
 
     if (prevProps.accessor !== this.props.accessor && this.props.accessor) {
       this.setState({
-        accessor: this.props.accessor
+        accessor: this.props.accessor,
       });
     }
   }
@@ -121,84 +125,83 @@ export default class StreamInput extends Component {
     };
   }
 
-
   render() {
-    const {categoryOptions, cscOptions, topicOptions, itemOptions} = this.state;
-    const {category, csc, salindex, topic, item, isArray, arrayIndex, accessor} = this.state;
-    const {streamInputId, variable} = this.props;
+    const { categoryOptions, cscOptions, topicOptions, itemOptions } = this.state;
+    const { category, csc, salindex, topic, item, isArray, arrayIndex, accessor } = this.state;
+    const { streamInputId, variable } = this.props;
 
     return (
       <>
-      <div className={styles.container}>
-        <span className={styles.title}>{variable} :</span>
-        <Select
-          className={[styles.select, styles.category].join(' ')}
-          options={categoryOptions}
-          option={category}
-          placeholder="Select category"
-          onChange={(selection) => this.setState({category: selection.value})}
-        />
-        <Select
-          className={styles.select}
-          options={cscOptions}
-          option={csc}
-          placeholder="Select a CSC"
-          onChange={(selection) => this.setState({csc: selection.value})}
-        />
-        <Input
-          className={styles.input}
-          type="number"
-          min={0}
-          value={salindex}
-          placeholder="salindex"
-          onChange={(ev) => this.setState({salindex: parseInt(ev.target.value)})}
-        />
-        <Select
-          className={styles.select}
-          options={topicOptions}
-          option={topic}
-          placeholder="Select a topic"
-          onChange={(selection) => this.setState({topic: selection.value})}
-        />
-        <Select
-          className={styles.select}
-          options={itemOptions}
-          option={item}
-          placeholder="Select an item"
-          onChange={(selection) => this.setState({item: selection.value})}
-        />
-        <div>
-          Is Array?
-          <Input
-            className={styles.checkboxInput}
-            type="checkbox"
-            checked={isArray}
-            onChange={(ev) => this.setState({isArray: ev.target.checked})}
+        <div className={styles.container}>
+          <span className={styles.title}>{variable} :</span>
+          <Select
+            className={[styles.select, styles.category].join(' ')}
+            options={categoryOptions}
+            option={category}
+            placeholder="Select category"
+            onChange={(selection) => this.setState({ category: selection.value })}
           />
-          {isArray && (
-            <>
-              Index &nbsp;&nbsp;
-              <Input
-                className={styles.input}
-                type="number"
-                min={0}
-                value={arrayIndex}
-                placeholder="Array index"
-                onChange={(ev) => this.setState({arrayIndex: parseInt(ev.target.value)})}
-              />
-            </>
-          )}
+          <Select
+            className={styles.select}
+            options={cscOptions}
+            option={csc}
+            placeholder="Select a CSC"
+            onChange={(selection) => this.setState({ csc: selection.value })}
+          />
+          <Input
+            className={styles.input}
+            type="number"
+            min={0}
+            value={salindex}
+            placeholder="salindex"
+            onChange={(ev) => this.setState({ salindex: parseInt(ev.target.value) })}
+          />
+          <Select
+            className={styles.select}
+            options={topicOptions}
+            option={topic}
+            placeholder="Select a topic"
+            onChange={(selection) => this.setState({ topic: selection.value })}
+          />
+          <Select
+            className={styles.select}
+            options={itemOptions}
+            option={item}
+            placeholder="Select an item"
+            onChange={(selection) => this.setState({ item: selection.value })}
+          />
+          <div>
+            Is Array?
+            <Input
+              className={styles.checkboxInput}
+              type="checkbox"
+              checked={isArray}
+              onChange={(ev) => this.setState({ isArray: ev.target.checked })}
+            />
+            {isArray && (
+              <>
+                Index &nbsp;&nbsp;
+                <Input
+                  className={styles.input}
+                  type="number"
+                  min={0}
+                  value={arrayIndex}
+                  placeholder="Array index"
+                  onChange={(ev) => this.setState({ arrayIndex: parseInt(ev.target.value) })}
+                />
+              </>
+            )}
+          </div>
         </div>
-      </div>
-      <div className={styles.container}>
-        <div>Accessor: </div>
+        <div className={styles.container}>
+          <div>Accessor: </div>
           <AceEditor
             mode="javascript"
             className={styles.editor}
             theme="solarized_dark"
             name={`ace-editor-${streamInputId}`}
             onChange={(ev) => {
-              this.setState({accessor: ev})
+              this.setState({ accessor: ev });
             }}
             debounceChangePeriod={100}
             width={'100%'}

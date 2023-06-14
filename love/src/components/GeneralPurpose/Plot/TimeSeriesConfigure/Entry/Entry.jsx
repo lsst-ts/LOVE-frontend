@@ -4,7 +4,6 @@ import styles from './Entry.module.css';
 import StylePlotInput from './StylePlotInput/StylePlotInput';
 import StreamInput from './StreamInput/StreamInput';
 
-
 export default class Entry extends Component {
   static propTypes = {
     /**
@@ -26,11 +25,11 @@ export default class Entry extends Component {
         topic: PropTypes.string,
         /** String describing the body a function */
         accessor: PropTypes.string,
-      })
+      }),
     ),
     /**
      * String describing the type of mark, can be either "line", "bar" or "pointLine"
-    */
+     */
     type: PropTypes.string,
     config: PropTypes.shape({
       /** (optional) Color of the mark to be used */
@@ -66,7 +65,9 @@ export default class Entry extends Component {
       type: props.type ?? Entry.defaultProps.type,
       config: props.config ?? Entry.defaultProps.config,
       values: props.values ?? Entry.defaultProps.values,
-      inputsRef: props.values ? props.values.map(item => React.createRef()) : Entry.defaultProps.values.map(item => React.createRef()),
+      inputsRef: props.values
+        ? props.values.map((item) => React.createRef())
+        : Entry.defaultProps.values.map((item) => React.createRef()),
     };
   }
 
@@ -74,10 +75,12 @@ export default class Entry extends Component {
     let name;
     const values = [...this.state.inputsRef.map((ref) => ref.current.getInfo())];
     if (this.state.name === undefined || this.state.name === null) {
-      name = values.map((value) => {
-        const {category, csc, salindex, topic, item} = value;
-        return `${category}-${csc}-${salindex}-${topic}-${item}`;
-      }).join('_');
+      name = values
+        .map((value) => {
+          const { category, csc, salindex, topic, item } = value;
+          return `${category}-${csc}-${salindex}-${topic}-${item}`;
+        })
+        .join('_');
     } else {
       name = this.state.name;
     }
@@ -92,46 +95,48 @@ export default class Entry extends Component {
   }
 
   getStreamInput(values) {
-    const {inputsRef} = this.state;
+    const { inputsRef } = this.state;
     return values.map((value, index) => {
       return (
-          <StreamInput
-            key={index}
-            streamInputId={`${this.props.entryId}_${index}`}
-            ref={inputsRef[index]}
-            variable={value?.variable}
-            category={value?.category}
-            csc={value?.csc}
-            salindex={parseInt(value?.salindex)}
-            topic={value?.topic}
-            item={value?.item}
-            accessor={value?.accessor}
-          />
+        <StreamInput
+          key={index}
+          streamInputId={`${this.props.entryId}_${index}`}
+          ref={inputsRef[index]}
+          variable={value?.variable}
+          category={value?.category}
+          csc={value?.csc}
+          salindex={parseInt(value?.salindex)}
+          topic={value?.topic}
+          item={value?.item}
+          isArray={value?.isArray}
+          arrayIndex={value?.arrayIndex}
+          accessor={value?.accessor}
+        />
       );
     });
   }
 
   onChangeStylePlot(name, type, config) {
-    this.setState({name, type, config});
-    const {values} = this.state;
+    this.setState({ name, type, config });
+    const { values } = this.state;
     let newValues = [];
     if (type === 'area') {
-      newValues = [{...values[0], variable: 'y'}, {variable: 'y2'}];
+      newValues = [{ ...values[0], variable: 'y' }, { variable: 'y2' }];
     } else if (type === 'arrow') {
-      newValues = [{...values[0], variable: 'y'}, {variable: 'angle'}];
+      newValues = [{ ...values[0], variable: 'y' }, { variable: 'angle' }];
     } else {
-      newValues = [{...values[0], variable: 'y'}];
+      newValues = [{ ...values[0], variable: 'y' }];
     }
 
     if (type === 'area' || type === 'arrow') {
-      this.setState({values: newValues, inputsRef: [this.state.inputsRef[0], React.createRef()]});
+      this.setState({ values: newValues, inputsRef: [this.state.inputsRef[0], React.createRef()] });
     } else {
-      this.setState({values: newValues, inputsRef: [this.state.inputsRef[0]]});
+      this.setState({ values: newValues, inputsRef: [this.state.inputsRef[0]] });
     }
   }
 
   render() {
-    const {values} = this.state;
+    const { values } = this.state;
     return (
       <div className={styles.container}>
         <StylePlotInput
@@ -141,11 +146,7 @@ export default class Entry extends Component {
           onChange={(name, type, config) => this.onChangeStylePlot(name, type, config)}
           onRemove={() => this.props.onRemove()}
         />
-        <div className={styles.container}>
-          {
-            values ? this.getStreamInput(values) : <></>
-          }
-        </div>
+        <div className={styles.container}>{values ? this.getStreamInput(values) : <></>}</div>
       </div>
     );
   }
