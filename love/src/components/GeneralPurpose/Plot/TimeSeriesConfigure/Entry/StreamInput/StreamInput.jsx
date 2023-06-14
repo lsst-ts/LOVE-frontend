@@ -175,8 +175,10 @@ export default class StreamInput extends Component {
             <Input
               className={styles.checkboxInput}
               type="checkbox"
-              checked={isArray}
-              onChange={(ev) => this.setState({ isArray: ev.target.checked })}
+              defaultChecked={isArray}
+              onChange={(ev) => {
+                this.setState((prevState) => ({ isArray: !prevState.isArray }));
+              }}
             />
             {isArray && (
               <>
