@@ -228,20 +228,6 @@ export default class WeatherForecast extends Component {
             </div>
           </div>
         )}
-
-        {/* <div className={styles.section}>
-          <div className={styles.sectionTitle}>Wind</div>
-          <div ref={this.humidityPlotRef} className={styles.plot}>
-            <PlotContainer
-              timeSeriesControlsProps={timeSeriesControlsProps}
-              inputs={this.humidityPlot}
-              containerNode={this.humidityPlotRef}
-              xAxisTitle="Time"
-              yAxisTitle="Relative humidity"
-              legendPosition="right"
-            />
-          </div>
-        </div> */}
       </div>
     );
   }

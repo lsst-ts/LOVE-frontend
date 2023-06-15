@@ -79,7 +79,6 @@ const mapDispatchToProps = (dispatch) => {
     'event-WeatherForecast-0-summaryState',
     'telemetry-WeatherForecast-0-dailyTrend',
     'telemetry-WeatherForecast-0-hourlyTrend',
-    // 'telemetry-ATMCS-0-mount_AzEl_Encoders',
   ];
   return {
     subscriptions,
