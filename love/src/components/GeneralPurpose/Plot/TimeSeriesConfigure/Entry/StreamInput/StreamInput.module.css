@@ -34,3 +34,10 @@
   margin-bottom: 0.5em;
   height: 2.5em;
 }
+
+.title {
+  color: white;
+  font-size: 14px;
+  text-transform: capitalize;
+  margin-right: 5px;
+}

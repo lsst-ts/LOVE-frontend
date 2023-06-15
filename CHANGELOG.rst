@@ -5,6 +5,7 @@ Version History
 v5.21.0
 --------
 
+* Implementation WeatherForecast `<https://github.com/lsst-ts/LOVE-frontend/pull/468>``
 * Add changelog checker github action `<https://github.com/lsst-ts/LOVE-frontend/pull/473>`_
 * Microphones Component implementation `<https://github.com/lsst-ts/LOVE-frontend/pull/471>`_
 * ScriptQueue Upgrade implementation `<https://github.com/lsst-ts/LOVE-frontend/pull/470>`_

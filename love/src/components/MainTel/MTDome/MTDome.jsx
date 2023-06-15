@@ -55,71 +55,110 @@ const defaultValuesGN = {
 
 const azimuthPlotInputs = {
   'Dome Azimuth': {
-    category: 'telemetry',
-    csc: 'MTDome',
-    salindex: 0,
-    topic: 'azimuth',
-    item: 'positionActual',
     type: 'line',
-    accessor: (x) => x,
     color: 'hsl(201, 70%, 40%)',
+    dash: [4, 0],
+    orient: 'left',
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'MTDome',
+        salindex: '0',
+        topic: 'azimuth',
+        item: 'positionActual',
+        accessor: '(x) => x',
+      }
+    ]
   },
   'Dome Target Az': {
-    category: 'telemetry',
-    csc: 'MTDome',
-    salindex: 0,
-    topic: 'azimuth',
-    item: 'positionCommanded',
     type: 'line',
-    accessor: (x) => x,
     color: 'hsl(201, 70%, 40%)',
     dash: [4, 1],
+    orient: 'left',
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'MTDome',
+        salindex: '0',
+        topic: 'azimuth',
+        item: 'positionCommanded',
+        accessor: '(x) => x',
+      }
+    ]
   },
   'Mount Azimuth': {
-    category: 'telemetry',
-    csc: 'MTMount',
-    salindex: 0,
-    topic: 'azimuth',
-    item: 'actualPosition',
     type: 'line',
-    accessor: (x) => x,
     color: 'hsl(160, 70%, 40%)',
+    dash: [4, 0],
+    orient: 'right',
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'MTMount',
+        salindex: 0,
+        topic: 'azimuth',
+        item: 'actualPosition',
+        accessor: '(x) => x',
+      }
+    ]
   },
   'Mount Target': {
-    category: 'telemetry',
-    csc: 'MTMount',
-    salindex: 0,
-    topic: 'azimuth',
-    item: 'demandPosition',
     type: 'line',
-    accessor: (x) => x,
     color: 'hsl(160, 70%, 40%)',
     dash: [4, 1],
+    orient: 'right',
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'MTMount',
+        salindex: 0,
+        topic: 'azimuth',
+        item: 'demandPosition',
+        accessor: '(x) => x',
+      }
+    ]
   },
 };
 
 const elevationPlotInputs = {
   'Mount elevation': {
-    category: 'telemetry',
-    csc: 'MTMount',
-    salindex: '0',
-    topic: 'elevation',
-    item: 'actualPosition',
     type: 'line',
-    accessor: (x) => x,
     color: 'hsl(201, 70%, 40%)',
+    dash: [4, 0],
+    orient: 'left',
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'MTMount',
+        salindex: '0',
+        topic: 'elevation',
+        item: 'actualPosition',
+        accessor: '(x) => x',
+      }
+    ]
   },
   'Mount target': {
-    category: 'telemetry',
-    csc: 'MTMount',
-    salindex: '0',
-    topic: 'elevation',
-    item: 'demandPosition',
     type: 'line',
-    accessor: (x) => x,
     color: 'white',
     dash: [4, 1],
-  },
+    orient: 'right',
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'MTMount',
+        salindex: '0',
+        topic: 'elevation',
+        item: 'demandPosition',
+        accessor: '(x) => x',
+      }
+    ]
+  }
 };
 
 export default class MTDome extends Component {
@@ -618,6 +657,7 @@ export default class MTDome extends Component {
                 containerNode={this.azimuthPlotRef?.current}
                 xAxisTitle="Time"
                 yAxisTitle="Azimuth"
+                maxHeight={250}
               />
             </div>
           </div>
@@ -629,6 +669,7 @@ export default class MTDome extends Component {
                 containerNode={this.elevationPlotRef?.current}
                 xAxisTitle="Time"
                 yAxisTitle="Elevation"
+                maxHeight={250}
               />
             </div>
           </div>

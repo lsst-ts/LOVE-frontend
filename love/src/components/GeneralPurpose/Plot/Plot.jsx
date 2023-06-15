@@ -1,62 +1,483 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import VegaLegend from './VegaTimeSeriesPlot/VegaLegend';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData } from 'Utils';
+import _ from 'lodash';
 import styles from './Plot.module.css';
+const moment = extendMoment(Moment);
 
-const defaultStyles = [
-  {
-    color: '#ff7bb5',
-    shape: 'circle',
-    filled: false,
-    dash: [4, 0],
-  },
-  {
-    color: '#00b7ff',
-    shape: 'square',
-    filled: true,
-    dash: [4, 0],
-  },
+export default class Plot extends Component {
+  static propTypes = {
+    /** Function to subscribe to streams to receive */
+    subscribeToStreams: PropTypes.func,
+    /** Function to unsubscribe to streams to stop receiving */
+    unsubscribeToStreams: PropTypes.func,
+    /** Title of the x axis */
+    xAxisTitle: PropTypes.string,
+    /** Title of the y axis */
+    yAxisTitle: PropTypes.string,
+    /** If true, x axis labels will be rendered as timestamps */
+    temporalXAxis: PropTypes.bool,
+    legendPosition: PropTypes.string,
+    controls: PropTypes.bool,
+    inputs: PropTypes.object,
+    /** Width of the plot in pixels */
+    width: PropTypes.number,
+    /** Height of the plot in pixels */
+    height: PropTypes.number,
+    /** Node to be used to track width and height.
+     *  Use this instead of props.width and props.height for responsive plots.
+     *  Will be ignored if both props.width and props.height are provided */
+    containerNode: PropTypes.instanceOf(Element),
+    timeSeriesControlsProps: PropTypes.object,
+    efdConfigFile: PropTypes.object,
+    maxHeight: PropTypes.number,
+    /** Size of the slice array, when receive more the historical data that the window time for the visualization */
+    sliceSize: PropTypes.number,
+    /** In the weatherforecast telemetries is received data in one array with time and value.
+     * In other telemetries, the data is received one to one */
+    isForecast: PropTypes.bool,
+    /** In weatherforecast for the hourly telemetry, receive 14 days to the future, but It's necessary the firts 48 hours.
+     * Used for the correctly operation of array between daily and hourly telemetry */
+    sliceInvert: PropTypes.bool,
+    /** Size array of telemetry of the weatherforecast, It's needed for the correctly slice */
+    sizeLimit: PropTypes.number,
+    temporalXAxisFormat: PropTypes.string,
+    /** Used for the multi axis when the scale of data is difference, for example the units data is percent and milimeters */
+    scaleIndependent: PropTypes.bool,
+    /** Used for the set limit range of the plot */
+    scaleDomain: PropTypes.shape({
+      domainMax: PropTypes.number,
+      domainMin: PropTypes.number,
+    }),
+  };
 
-  {
-    color: '#97e54f',
-    shape: 'diamond',
-    filled: true,
-    dash: [4, 0],
-  },
-];
+  static defaultProps = {
+    maxHeight: 240,
+    inputs: {},
+    sliceSize: 1800,
+    sliceInvert: false,
+    sizeLimit: 1800,
+    temporalXAxisFormat: '%H:%M',
+    isForecast: false,
+    scaleIndependent: false,
+    scaleDomain: {},
+    legendPosition: 'right',
+  };
 
-const Plot = ({
-  layers,
-  legend,
-  width,
-  height,
-  containerNode,
-  xAxisTitle,
-  yAxisTitle,
-  units,
-  marksStyles,
-  legendPosition = 'right',
-  isLive,
-  setIsLive,
-  timeWindow,
-  setTimeWindow,
-  setHistoricalData,
-  controls,
-  efdClients,
-  selectedEfdClient,
-  setEfdClient,
-}) => {
-  const timeSeriesControlRef = React.useRef(undefined);
+  static defaultStyles = [
+    {
+      color: '#ff7bb5',
+      shape: 'circle',
+      filled: false,
+      orient: 'left',
+      dash: [4, 0],
+    },
+    {
+      color: '#00b7ff',
+      shape: 'square',
+      filled: true,
+      orient: 'left',
+      dash: [4, 0],
+    },
+    {
+      color: '#97e54f',
+      shape: 'diamond',
+      filled: true,
+      orient: 'right',
+      dash: [4, 0],
+    },
+  ];
 
-  /** Fill marksStyles to satisfy the VegaTimeseriesPlot and VegaLegend APIs */
-  const completedMarksStyles = React.useMemo(() => {
-    return legend.map(({ name, markType }, index) => {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: {},
+      isLive: true,
+      timeWindow: 60,
+      historicalData: [],
+      efdClients: [],
+      selectedEfdClient: null,
+      containerWidth: undefined,
+      containerHeight: undefined,
+      resizeObserverListener: false,
+    };
+    this.timeSeriesControlRef = React.createRef();
+    this.legendRef = React.createRef();
+    this.resizeObserver = undefined;
+  }
+
+  setHistoricalData = (startDate, timeWindow) => {
+    const { inputs } = this.props;
+    const { selectedEfdClient } = this.state;
+    const cscs = parsePlotInputs(inputs);
+    const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
+    ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min', selectedEfdClient).then((data) => {
+      if (!data) return;
+      const parsedData = parseCommanderData(data);
+      this.setState({ historicalData: parsedData });
+    });
+  };
+
+  // Get pairs containing topic and item names of the form
+  // [csc-index-topic, item], based on the inputs
+  getTopicItemPair = (inputs) => {
+    const topics = {};
+    Object.keys(inputs).forEach((inputKey) => {
+      const input = inputs[inputKey];
+      if (!input.values) {
+        topics[inputKey] = [`${input.csc}-${input.salindex}-${input.topic}`, input.item];
+      } else {
+        Object.values(input.values).forEach((value) => {
+          topics[inputKey] = [`${value.csc}-${value.salindex}-${value.topic}`, value.item];
+        });
+      }
+    });
+    return topics;
+  };
+
+  getRangedData = (data, timeWindow, historicalData, isLive, inputs) => {
+    let filteredData;
+    const topics = this.getTopicItemPair(inputs);
+    const parsedHistoricalData = Object.keys(topics).flatMap((key) => {
+      const [topicName, property] = topics[key];
+      return (historicalData[topicName]?.[property] ?? []).map((dp) => ({ name: key, ...dp }));
+    });
+    if (!isLive) {
+      filteredData = parsedHistoricalData;
+    } else {
+      const joinedData = parsedHistoricalData.concat(data);
+      filteredData = joinedData.filter((val) => {
+        const currentSeconds = new Date().getTime() / 1000;
+        const timemillis = val.x && val.x.ts ? val.x.ts : val.x;
+        const dataSeconds = timemillis / 1000 + this.props.taiToUtc;
+        if (currentSeconds - timeWindow * 60 <= dataSeconds) return true;
+        return false;
+      });
+    }
+    return filteredData;
+  };
+
+  getForecastData = (inputName, data) => {
+    let result = [];
+    data.forEach((d) => {
+      result.push({ name: inputName, ...d });
+    });
+    return result;
+  };
+
+  componentDidMount() {
+    this.props.subscribeToStreams();
+    ManagerInterface.getEFDClients().then(({ instances }) => this.setState({ efdClients: instances }));
+    const { defaultEfdInstance } = this.props.efdConfigFile ?? {};
+    if (defaultEfdInstance) {
+      this.setState({ selectedEfdClient: defaultEfdInstance }, () => {
+        this.setHistoricalData(Moment().subtract(3600, 'seconds'), 60);
+      });
+    }
+    if (this.props.height !== undefined || this.props.width !== undefined) {
+      this.setState({
+        containerHeight: this.props.height,
+        containerWidth: this.props.width,
+      });
+    }
+
+    if (
+      this.props.width === undefined && // width/height have more priority
+      this.props.height === undefined
+    ) {
+      if (this.props.containerNode) {
+        this.resizeObserver = new ResizeObserver((entries) => {
+          const container = entries[0];
+          const diffControl =
+            this.timeSeriesControlRef && this.timeSeriesControlRef.current
+              ? this.timeSeriesControlRef.current.offsetHeight + 19
+              : 0;
+          const diffLegend =
+            this.props.legendPosition === 'bottom' && this.legendRef.current ? this.legendRef.current.offsetHeight : 0;
+          const newHeight = container.contentRect.height - diffControl - diffLegend;
+          const newWidth = container.contentRect.width;
+          if (
+            container.contentRect.height !== 0 &&
+            container.contentRect.width !== 0 &&
+            (this.state.containerHeight === undefined ||
+              Math.abs(this.state.containerHeight - newHeight) > 1 ||
+              this.state.containerWidth === undefined ||
+              Math.abs(this.state.containerWidth - newWidth) > 1)
+          ) {
+            this.setState({
+              containerHeight: container.contentRect.height - diffControl - diffLegend,
+              containerWidth: container.contentRect.width,
+              resizeObserverListener: true,
+            });
+          }
+        });
+        if (!(this.props.containerNode instanceof Element)) return;
+        this.resizeObserver.observe(this.props.containerNode);
+        return () => {
+          this.resizeObserver.disconnect();
+        };
+      }
+    }
+  }
+
+  parseInputStream(inputs, streams) {
+    const { sliceSize, sizeLimit } = this.props;
+    const { data } = this.state;
+    const newData = {};
+
+    for (const [inputName, inputConfig] of Object.entries(inputs)) {
+      if (inputConfig.values) {
+        let inputData = data[inputName] || [];
+        const lastValue = inputData[inputData.length - 1];
+        let newValue = {
+          name: inputName,
+          values: {},
+          units: {},
+        };
+
+        for (const value of Object.values(inputConfig.values)) {
+          const { category, csc, salindex, topic, item, accessor, variable = 'y' } = value;
+          /* eslint no-eval: 0 */
+          const accessorFunc = eval(accessor);
+
+          const streamName = `${category}-${csc}-${salindex}-${topic}`;
+          if (!streams[streamName] || !streams[streamName]?.[item]) {
+            continue;
+          }
+          const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
+          newValue['x'] = parseTimestamp(streamValue.private_rcvStamp?.value * 1000);
+
+          const val = accessorFunc(streamValue[item]?.value);
+          const units = streamValue[item]?.units;
+
+          if (Array.isArray(val)) {
+            newValue[variable] = val;
+            newValue['units'][variable] = units;
+            for (let i = 0; i < val.length; i++) {
+              if (newValue.values[i] === undefined) newValue.values[i] = {};
+              newValue.values[i][variable] = val[i];
+            }
+          } else {
+            newValue[variable] = val;
+            newValue['units'][variable] = units;
+          }
+        }
+
+        if (!this.props.isForecast) {
+          // TODO: use reselect to never get repeated timestamps
+          if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
+            inputData.push(newValue);
+          }
+        } else {
+          inputData = [];
+          Object.entries(newValue.values).forEach((entry) => {
+            let input = Object.assign({}, entry[1]);
+            input['units'] = newValue.units;
+            input['x'] = parseTimestamp(entry[1]['x'] * 1000);
+            inputData.push(input);
+          });
+        }
+
+        // Slice inputData array if it has more than sliceSize datapoints (corresponding to one hour if telemetry is received every two seconds)
+        if (inputData.length > sliceSize) {
+          if (this.props.sliceInvert) {
+            if (inputData.length > sizeLimit) {
+              inputData = inputData.slice(-1 * sizeLimit).slice(0, sliceSize);
+            } else {
+              inputData = inputData.slice(0, sliceSize);
+            }
+          } else {
+            inputData = inputData.slice(-1 * sliceSize);
+          }
+        }
+        newData[inputName] = inputData;
+      } else {
+        const { category, csc, salindex, topic, item, accessor } = inputConfig;
+        /* eslint no-eval: 0 */
+        const accessorFunc = eval(accessor);
+        let inputData = data[inputName] || [];
+        const lastValue = inputData[inputData.length - 1];
+        const streamName = `${category}-${csc}-${salindex}-${topic}`;
+        if (!streams[streamName] || !streams[streamName]?.[item]) {
+          continue;
+        }
+        const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
+        const newValue = {
+          name: inputName,
+          x: parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
+          y: accessorFunc(streamValue[item]?.value),
+          units: { y: streamValue[item]?.units },
+        };
+
+        // TODO: use reselect to never get repeated timestamps
+        if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
+          inputData.push(newValue);
+        }
+
+        // Slice inputData array if it has more than sliceSize datapoints (corresponding to one hour if telemetry is received every two seconds)
+        if (inputData.length > sliceSize) {
+          if (this.props.sliceInvert) {
+            if (inputData.length > sizeLimit) {
+              inputData = inputData.slice(-1 * sizeLimit).slice(0, sliceSize);
+            } else {
+              inputData = inputData.slice(0, sliceSize);
+            }
+          } else {
+            inputData = inputData.slice(-1 * sliceSize);
+          }
+        }
+        newData[inputName] = inputData;
+      }
+    }
+    if (!_.isEqual(data, newData)) {
+      this.setState({ data: newData });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { timeSeriesControlsProps, inputs, streams } = this.props;
+
+    if (prevProps.timeSeriesControlsProps !== timeSeriesControlsProps) {
+      this.setState({ ...timeSeriesControlsProps });
+    }
+
+    if (
+      !_.isEqual(prevProps.containerNode, this.props.containerNode) &&
+      // this.resizeObserver === undefined &&
+      this.props.width === undefined && // width/height have more priority
+      this.props.height === undefined
+    ) {
+      if (this.props.containerNode && !this.state.resizeObserverListener) {
+        this.resizeObserver = new ResizeObserver((entries) => {
+          const container = entries[0];
+          const diffControl = this.timeSeriesControlRef && this.timeSeriesControlRef.current ? this.timeSeriesControlRef.current.offsetHeight + 19 : 0;
+          const diffLegend = this.props.legendPosition === 'bottom' && this.legendRef.current ? this.legendRef.current.offsetHeight : 0;
+          const newHeight = container.contentRect.height - diffControl - diffLegend;
+          const newWidth = container.contentRect.width;
+          if (container.contentRect.height !== 0 && container.contentRect.width !== 0 &&
+            ((this.state.containerHeight === undefined ||  Math.abs(this.state.containerHeight - newHeight) > 1) ||
+            (this.state.containerWidth === undefined || Math.abs(this.state.containerWidth - newWidth) > 1))
+          ) {
+            this.setState({
+              containerHeight: container.contentRect.height - diffControl - diffLegend,
+              containerWidth: container.contentRect.width,
+            });
+          }
+        });
+        if (!(this.props.containerNode instanceof Element)) return;
+        this.resizeObserver.observe(this.props.containerNode);
+        return () => {
+          this.resizeObserver.disconnect();
+        };
+      }
+    }
+
+    if (
+      this.props.width !== undefined &&
+      this.props.height !== undefined &&
+      (this.props.width !== prevProps.width || this.props.height !== prevProps.height)
+    ) {
+      this.setState({
+        containerHeight: this.props.height,
+        containerWidth: this.props.width,
+      });
+    }
+
+    if (!_.isEqual(prevProps.inputs, inputs)) {
+      const { unsubscribeToStreams, subscribeToStreams } = this.props;
+      unsubscribeToStreams();
+      subscribeToStreams();
+      const _data = {};
+      for (const key of Object.keys(inputs)) {
+        _data[key] = [];
+      }
+      this.setState({ data: _data });
+    }
+
+    if (!_.isEqual(prevProps.inputs, inputs) || !_.isEqual(prevProps.streams, streams)) {
+      this.parseInputStream(inputs, streams);
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.unsubscribeToStreams();
+  }
+
+  render() {
+    const { data, efdClients, containerWidth, containerHeight } = this.state;
+    const { controls, xAxisTitle, yAxisTitle, inputs, legendPosition, timeSeriesControlsProps } = this.props;
+    const { isLive, timeWindow, historicalData } = timeSeriesControlsProps ?? this.state;
+    const { streams, temporalXAxisFormat, scaleIndependent, scaleDomain } = this.props;
+
+    const streamsItems = Object.entries(inputs)
+      .map(([name, inputConfig]) => {
+        const { type } = inputConfig;
+        if (inputConfig.values) {
+          let newStreams = [];
+          for (const value of Object.values(inputConfig.values)) {
+            const { variable, category, csc, salindex, topic, item } = value;
+            const streamName = `${category}-${csc}-${salindex}-${topic}`;
+            const stream = { name: name, variable: variable, type: type + 's', value: streams[streamName]?.[item] };
+            newStreams.push(stream);
+          }
+          return newStreams;
+        } else {
+          const { category, csc, salindex, topic, item } = inputConfig;
+          const streamName = `${category}-${csc}-${salindex}-${topic}`;
+          return streams[streamName]?.[item];
+        }
+      })
+      .flat();
+
+    const layerTypes = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads', 'bigotes', 'rects', 'heatmaps'];
+    const layers = {};
+    for (const [inputName, inputConfig] of Object.entries(inputs)) {
+      const { type } = inputConfig;
+      const typeStr = type + 's';
+      if (!layerTypes.includes(typeStr)) {
+        continue;
+      }
+
+      if (isLive && !data[inputName]) continue;
+
+      let rangedInputData;
+      rangedInputData = this.props.isForecast
+        ? this.getForecastData(inputName, data[inputName])
+        : this.getRangedData(data[inputName], timeWindow, historicalData, isLive, inputs);
+      layers[typeStr] = (layers[typeStr] ?? []).concat(rangedInputData);
+    }
+
+    const legend = Object.keys(inputs).map((inputName, index) => {
+      return {
+        label: inputName,
+        name: inputName,
+        markType: inputs[inputName].type,
+      };
+    });
+
+    const marksStyles = Object.keys(inputs).map((input, index) => {
+      return {
+        name: input,
+        ...Plot.defaultStyles[index % Plot.defaultStyles.length],
+        ...(inputs[input].color !== undefined ? { color: inputs[input].color } : {}),
+        ...(inputs[input].dash !== undefined ? { dash: inputs[input].dash } : {}),
+        ...(inputs[input].shape !== undefined ? { shape: inputs[input].shape } : {}),
+        ...(inputs[input].filled !== undefined ? { filled: inputs[input].filled } : {}),
+        ...(inputs[input].orient !== undefined ? { orient: inputs[input].orient } : {orient: 'right'}),
+      };
+    });
+
+    /** Fill marksStyles to satisfy the VegaTimeseriesPlot and VegaLegend APIs */
+    const completedMarksStyles = legend.map(({ name, markType }, index) => {
       const style = marksStyles?.find((style) => style.name === name);
       if (!style) {
         return {
-          ...defaultStyles[index % defaultStyles.length],
+          ...Plot.defaultStyles[index % Plot.defaultStyles.length],
           ...(markType !== undefined ? { markType } : {}),
           name,
         };
@@ -66,114 +487,67 @@ const Plot = ({
         ...(markType !== undefined ? { markType } : {}),
       };
     });
-  }, [legend, marksStyles]);
 
-  const [containerSize, setContainerSize] = React.useState({});
-
-  /** Auto resize features */
-  React.useEffect(() => {
-    if (width !== undefined && height !== undefined) {
-      setContainerSize({
-        width,
-        height,
-      });
-      return;
-    }
-
-    if (containerNode !== undefined) {
-      const resizeObserver = new ResizeObserver((entries) => {
-        const container = entries[0];
-
-        const containerHeight =
-          controls && timeSeriesControlRef?.current?.containerRef?.current?.clientHeight
-            ? container.contentRect.height - timeSeriesControlRef.current.containerRef.current.clientHeight
-            : container.contentRect.height;
-
-        setContainerSize({
-          width: container.contentRect.width,
-          height: containerHeight,
-        });
-      });
-
-      if (!(containerNode instanceof Element)) return;
-      resizeObserver.observe(containerNode);
-      return () => {
-        resizeObserver.disconnect();
-      };
-    }
-  }, [containerNode, width, height]);
-
-  return (
-    <div>
-      {controls && (
-        <TimeSeriesControls
-          ref={timeSeriesControlRef}
-          setTimeWindow={setTimeWindow}
-          timeWindow={timeWindow}
-          setLiveMode={setIsLive}
-          isLive={isLive}
-          setHistoricalData={setHistoricalData}
-          efdClients={efdClients}
-          selectedEfdClient={selectedEfdClient}
-          setEfdClient={setEfdClient}
-        />
-      )}
-      <div className={[styles.container, legendPosition === 'bottom' ? styles.bottomLegend : ''].join(' ')}>
-        <VegaTimeseriesPlot
-          layers={layers}
-          xAxisTitle={xAxisTitle}
-          yAxisTitle={yAxisTitle}
-          units={units}
-          marksStyles={completedMarksStyles}
-          temporalXAxis
-          width={legendPosition === 'right' ? containerSize.width - 150 : containerSize.width} // from the .autogrid grid-template-columns
-          height={legendPosition === 'bottom' ? containerSize.height - 25 : containerSize.height}
-          className={styles.plot}
-        />
-        <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
-      </div>
-    </div>
-  );
-};
-
-Plot.propTypes = {
-  /** Data to be used to build a legend */
-  legend: PropTypes.arrayOf(
-    PropTypes.shape({
-      /** Name of the mark that is being plotted */
-      name: PropTypes.string.isRequired,
-
-      /** Node or text to be displayed in the legend for this mark */
-      label: PropTypes.node,
-
-      /** Which mark to use to plot this data */
-      markType: PropTypes.oneOf(['line', 'pointLine', 'bar']),
-    }),
-  ),
-  /**
-   * (optional) defines the styles of each mark to be plotted.
-   * Defaults to values from a styles-loop.
-   */
-  marksStyles: PropTypes.arrayOf(
-    PropTypes.shape({
-      /** (All layers) `name` attribute of the data to apply these styles.
-       * Rows of data with no name-matching markStyle will not be rendered.
-       */
-      name: PropTypes.string,
-      /** (All layers) hex color */
-      color: PropTypes.string,
-      /** (Only `lines` layer). Dash pattern for segmented lines passed to the strokeDash channel. E.g, [2, 1] draws
-       * a line with a pattern of 2 "filled" pixels and 1 "empty" pixel.
-       */
-      dash: PropTypes.arrayOf(PropTypes.number),
-      /** (Only `pointLines` layer). Shape of the points to be drawn https://vega.github.io/vega-lite/docs/point.html*/
-      shape: PropTypes.string,
-      /** (Only `pointLines`) layer. Whether to draw a filled point or only its border. */
-      filled: PropTypes.bool,
-    }),
-  ),
-  /** Legend position: right or bottom */
-  legendPosition: PropTypes.oneOf(['right', 'bottom']),
-};
-
-export default Plot;
+    return (
+      <>
+        {controls && (
+          <div ref={this.timeSeriesControlRef}>
+            <TimeSeriesControls
+              // ref={this.timeSeriesControlRef}
+              setTimeWindow={(timeWindow) => this.setState({ timeWindow })}
+              timeWindow={this.state.timeWindow}
+              setLiveMode={(isLive) => this.setState({ isLive })}
+              isLive={this.state.isLive}
+              setHistoricalData={this.setHistoricalData}
+              efdClients={efdClients}
+              selectedEfdClient={this.state.selectedEfdClient}
+              setEfdClient={(client) => this.setState({ selectedEfdClient: client })}
+            />
+          </div>
+        )}
+        {legendPosition === 'right' ? (
+          <div className={[styles.containerFlexRow].join(' ')}>
+            <VegaTimeseriesPlot
+              layers={layers}
+              xAxisTitle={xAxisTitle}
+              yAxisTitle={yAxisTitle}
+              marksStyles={completedMarksStyles}
+              temporalXAxis
+              width={containerWidth - 160} // from the .autogrid grid-template-columns
+              height={containerHeight}
+              className={styles.plot}
+              temporalXAxisFormat={temporalXAxisFormat}
+              scaleIndependent={scaleIndependent}
+              scaleDomain={scaleDomain}
+            />
+            <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
+          </div>
+        ) : (
+          <div
+            className={[styles.containerFlexCol].join(' ')}
+            style={this.props.maxHeight ? { maxHeight: this.props.maxHeight } : {}}
+          >
+            <div>
+              <VegaTimeseriesPlot
+                layers={layers}
+                xAxisTitle={xAxisTitle}
+                yAxisTitle={yAxisTitle}
+                marksStyles={completedMarksStyles}
+                temporalXAxis
+                width={containerWidth - 30} // from the .autogrid grid-template-columns
+                height={containerHeight}
+                className={styles.plot}
+                temporalXAxisFormat={temporalXAxisFormat}
+                scaleIndependent={scaleIndependent}
+                scaleDomain={scaleDomain}
+              />
+            </div>
+            <div ref={this.legendRef} className={styles.marginLegend}>
+              <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
+}

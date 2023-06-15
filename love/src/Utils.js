@@ -1454,36 +1454,72 @@ export const takeScreenshot = (callback) => {
 export const parsePlotInputs = (inputs) => {
   const cscs = {};
   Object.values(inputs).forEach((input) => {
-    const cscDict = cscs?.[input.csc];
-    const indexDict = cscs?.[input.csc]?.[input.salindex];
-    const topicDict = cscs?.[input.csc]?.[input.salindex]?.[input.topic];
-    let newTopicDict = topicDict ?? [];
-    let newIndexDict = indexDict ?? {};
-    const newCSCDict = cscDict ?? {};
-    if (topicDict) {
-      newIndexDict[input.topic].push(input.item);
-      return;
-    }
-    // Next line was added to support EFD Querying for Array type items (influx)
-    newIndexDict[input.topic] = [`${input.item}${input.arrayIndex ?? ''}`];
-    // newIndexDict[input.topic] = [input.item]; // Original line
+    if (!input.values) {
+      const cscDict = cscs[input.csc];
+      const indexDict = cscs[input.csc]?.[input.salindex];
+      const topicDict = cscs[input.csc]?.[input.salindex]?.[input.topic];
+      let newTopicDict = topicDict ?? [];
+      let newIndexDict = indexDict ?? {};
+      const newCSCDict = cscDict ?? {};
+      if (topicDict) {
+        newIndexDict[input.topic].push(input.item);
+        return;
+      }
+      // Next line was added to support EFD Querying for Array type items (influx)
+      newIndexDict[input.topic] = [`${input.item}${input.arrayIndex ?? ''}`];
 
-    newTopicDict = newIndexDict[input.topic];
-    if (indexDict) {
-      newCSCDict[input.salindex][input.topic] = newTopicDict;
-      newIndexDict = newCSCDict[input.salindex];
+      newTopicDict = newIndexDict[input.topic];
+      if (indexDict) {
+        newCSCDict[input.salindex][input.topic] = newTopicDict;
+        newIndexDict = newCSCDict[input.salindex];
+      } else {
+        newIndexDict = {
+          [input.topic]: newTopicDict,
+        };
+        newCSCDict[input.salindex] = newIndexDict;
+      }
+      if (cscDict) {
+        cscs[input.csc][input.salindex] = newIndexDict;
+      } else {
+        cscs[input.csc] = {
+          [input.salindex]: newIndexDict,
+        };
+      }
     } else {
-      newIndexDict = {
-        [input.topic]: newTopicDict,
-      };
-      newCSCDict[input.salindex] = newIndexDict;
-    }
-    if (cscDict) {
-      cscs[input.csc][input.salindex] = newIndexDict;
-    } else {
-      cscs[input.csc] = {
-        [input.salindex]: newIndexDict,
-      };
+      Object.values(input.values).forEach((value) => {
+        const cscDict = cscs[value.csc];
+        const indexDict = cscs[value.csc]?.[value.salindex];
+        const topicDict = cscs[value.csc]?.[value.salindex]?.[value.topic];
+
+        const newCSCDict = cscDict ?? {};
+        let newIndexDict = indexDict ?? {};
+        let newTopicDict = topicDict ?? [];
+
+        // If topicDict array exists, push the new item
+        if (topicDict) {
+          //  Array index is used for queries to the EFD (influx)
+          topicDict.push(`${value.item}${value.arrayIndex ?? ''}`);
+          return;
+        }
+
+        //  Array index is used for queries to the EFD (influx)
+        newIndexDict[value.topic] = [`${value.item}${value.arrayIndex ?? ''}`];
+        newTopicDict = newIndexDict[value.topic];
+
+        //  If indexDict exists, add the new topicDict
+        if (indexDict) {
+          indexDict[value.topic] = newTopicDict;
+        } else {
+          newCSCDict[value.salindex] = newIndexDict;
+        }
+
+        //  If cscDict exists, add the new indexDict
+        if (cscDict) {
+          cscDict[value.salindex] = newIndexDict;
+        } else {
+          cscs[value.csc] = newCSCDict;
+        }
+      });
     }
   });
   return cscs;
@@ -1514,7 +1550,11 @@ export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y') => {
       const formattedPropertyKey = propertyKey.replace(/[\d\.]+$/, '');
       newTopicData[formattedPropertyKey] = propertyDataArray.map((dataPoint) => {
         const tsString = dataPoint?.ts.split(' ').join('T');
-        return { [tsLabel]: parseTimestamp(tsString), [valueLabel]: dataPoint?.value };
+        return {
+          units: { y: dataPoint?.units },
+          [tsLabel]: parseTimestamp(tsString),
+          [valueLabel]: dataPoint?.value,
+        };
       });
     });
     newData[topicKey] = newTopicData;

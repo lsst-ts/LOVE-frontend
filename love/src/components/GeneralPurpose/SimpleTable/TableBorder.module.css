@@ -29,19 +29,9 @@ td {
 }
 
 .table th {
-  border: 1px solid var(--base-background-color);
-  background: var(--tertiary-background-color);
+  border: 1px solid var(--second-tertiary-background-color);
   padding: 0.2em 0.5em;
   text-align: left;
-}
-
-.table tr:hover.dataRow {
-  background: var(--tertiary-background-color);
-}
-
-.table tr:hover td {
-  border-bottom: 1px solid var(--secondary-background-color);
-  border-top: 1px solid var(--secondary-background-color);
 }
 
 .table tr:nth-child(even) {
@@ -63,18 +53,30 @@ td {
 .table td {
   color: var(--secondary-font-color);
   padding: 0.4em 1em;
-  border-top: 1px solid transparent;
-  border-bottom: 1px solid transparent;
-  border-left: 1px solid var(--base-background-color);
-  border-right: 1px solid var(--base-background-color);
+  border-left: 1px solid var(--second-tertiary-background-color);
+  border-right: 1px solid var(--second-tertiary-background-color);
 }
 
-.string {
-  text-align: left;
+.table tr:first-child td {
+  border-bottom: 1px solid var(--second-tertiary-background-color);
+  border-top: 1px solid var(--second-tertiary-background-color);
 }
 
-.number {
+.table tr:last-child td {
+  border-bottom: 1px solid var(--second-tertiary-background-color);
+  border-top: 1px solid var(--second-tertiary-background-color);
+}
+
+.table th:last-child {
   text-align: right;
+}
+
+.table td:last-child {
+  text-align: right;
+}
+
+.table td:first-child {
+  text-align: left;
 }
 
 .table tr:last-of-type td:first-of-type {

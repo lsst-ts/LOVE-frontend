@@ -6,12 +6,7 @@ import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import PolarPlotContainer from 'components/GeneralPurpose/Plot/PolarPlot/PolarPlot.container';
 import { COLORS } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import TimeSeriesControls from 'components/GeneralPurpose/Plot/TimeSeriesControls/TimeSeriesControls';
-
-import TemperatureIcon from '../icons/TemperatureIcon/TemperatureIcon';
-import HumidityIcon from '../icons/HumidityIcon/HumidityIcon';
-import PressureIcon from '../icons/PressureIcon/PressureIcon';
-import WindIcon from '../icons/WindIcon/WindIcon';
-
+import CurrentValues from './CurrentValues/CurrentValues';
 import styles from './WeatherStation.module.css';
 
 export default class WeatherStation extends Component {
@@ -24,99 +19,139 @@ export default class WeatherStation extends Component {
 
   temperaturePlot = {
     'Air temperature': {
-      category: 'telemetry',
-      csc: 'WeatherStation',
-      salindex: this.props.salindex,
-      topic: 'airTemperature',
-      item: 'avg1M',
       type: 'line',
-      accessor: (x) => x,
       color: COLORS[0],
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'WeatherStation',
+          salindex: this.props.salindex,
+          topic: 'airTemperature',
+          item: 'avg1M',
+          accessor: '(x) => x',
+        }
+      ]
     },
     'Soil temperature': {
-      category: 'telemetry',
-      csc: 'WeatherStation',
-      salindex: this.props.salindex,
-      topic: 'soilTemperature',
-      item: 'avg1M',
       type: 'line',
-      accessor: (x) => x,
       color: COLORS[1],
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'WeatherStation',
+          salindex: this.props.salindex,
+          topic: 'soilTemperature',
+          item: 'avg1M',
+          accessor: '(x) => x',
+        }
+      ],
     },
     'Dew point': {
-      category: 'telemetry',
-      csc: 'WeatherStation',
-      salindex: this.props.salindex,
-      topic: 'dewPoint',
-      item: 'avg1M',
       type: 'line',
-      accessor: (x) => x,
       color: COLORS[2],
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'WeatherStation',
+          salindex: this.props.salindex,
+          topic: 'dewPoint',
+          item: 'avg1M',
+          accessor: '(x) => x',
+        }
+      ]
     },
   };
 
   humidityPlot = {
     Humidity: {
-      category: 'telemetry',
-      csc: 'WeatherStation',
-      salindex: this.props.salindex,
-      topic: 'relativeHumidity',
-      item: 'avg1M',
       type: 'line',
-      accessor: (x) => x,
       color: COLORS[0],
-    },
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'WeatherStation',
+          salindex: this.props.salindex,
+          topic: 'relativeHumidity',
+          item: 'avg1M',
+          accessor: '(x) => x',
+        },
+      ]
+    }
   };
 
   pressurePlot = {
     'Air pressure': {
-      category: 'telemetry',
-      csc: 'WeatherStation',
-      salindex: this.props.salindex,
-      topic: 'airPressure',
-      item: 'paAvg1M',
       type: 'line',
-      accessor: (x) => x,
       color: COLORS[0],
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'WeatherStation',
+          salindex: this.props.salindex,
+          topic: 'airPressure',
+          item: 'paAvg1M',
+          accessor: '(x) => x',
+        }
+      ]
     },
   };
 
   solarPlot = {
     'Solar radiation': {
-      category: 'telemetry',
-      csc: 'WeatherStation',
-      salindex: this.props.salindex,
-      topic: 'solarNetRadiation',
-      item: 'avg1M',
       type: 'line',
-      accessor: (x) => x,
       color: COLORS[0],
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'WeatherStation',
+          salindex: this.props.salindex,
+          topic: 'solarNetRadiation',
+          item: 'avg1M',
+          accessor: '(x) => x',
+        }
+      ]
     },
   };
 
   precipitationPlot = {
     Precipitation: {
-      category: 'telemetry',
-      csc: 'WeatherStation',
-      salindex: this.props.salindex,
-      topic: 'precipitation',
-      item: 'prSum1M',
       type: 'line',
-      accessor: (x) => x,
       color: COLORS[0],
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'WeatherStation',
+          salindex: this.props.salindex,
+          topic: 'precipitation',
+          item: 'prSum1M',
+          accessor: '(x) => x',
+        }
+      ]
     },
   };
 
   snowDepthPlot = {
     'Snow depth': {
-      category: 'telemetry',
-      csc: 'WeatherStation',
-      salindex: this.props.salindex,
-      topic: 'snowDepth',
-      item: 'avg1M',
       type: 'line',
-      accessor: (x) => x,
       color: COLORS[0],
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'WeatherStation',
+          salindex: this.props.salindex,
+          topic: 'snowDepth',
+          item: 'avg1M',
+          accessor: '(x) => x',
+        }
+      ]
     },
   };
 
@@ -244,9 +279,10 @@ export default class WeatherStation extends Component {
   };
 
   render() {
+
     const currentTemperature = this.props.weather?.ambient_temp?.value;
     const currentHumidity = this.props.weather?.humidity?.value;
-    const currentPressure = Math.round(this.props.weather?.pressure?.value * 100) / 100;
+    const currentPressure = this.props.weather?.pressure?.value;
     const currentWindSpeed = this.props.windSpeed?.value?.value;
     const currentWindSpeedUnits = this.props.windSpeed?.value?.units;
 
@@ -256,47 +292,17 @@ export default class WeatherStation extends Component {
       historicalData: this.state.historicalData,
     };
 
+    const maxHeightPlot = 220;
+
     return (
       <div className={styles.container}>
-        <div className={styles.fullSection}>
-          <div className={styles.sectionTitle}>Current values</div>
-          <div className={styles.summary}>
-            <div className={styles.summaryVariable}>
-              <div className={styles.summaryLabel}>Temperature</div>
-              <div className={styles.iconWrapper}>
-                <TemperatureIcon className={styles.icon}/>
-              </div>
-              <div className={styles.summaryValue}>
-                {currentTemperature !== undefined ? `${currentTemperature}ºC` : '-'}
-              </div>
-            </div>
-            <div className={styles.summaryVariable}>
-              <div className={styles.summaryLabel}>Humidity</div>
-              <div className={styles.iconWrapper}>
-                <HumidityIcon className={styles.icon}/>
-              </div>
-              <div className={styles.summaryValue}>{currentHumidity !== undefined ? `${currentHumidity}%` : '-'}</div>
-            </div>
-            <div className={styles.summaryVariable}>
-              <div className={styles.summaryLabel}>Pressure</div>
-              <div className={styles.iconWrapper}>
-                <PressureIcon className={styles.icon}/>
-              </div>
-              <div className={styles.summaryValue}>{currentPressure ? `${currentPressure} pa` : '-'}</div>
-            </div>
-            <div className={styles.summaryVariable}>
-              <div className={styles.summaryLabel}>Wind speed</div>
-              <div className={styles.iconWrapper}>
-                <WindIcon className={styles.icon}/>
-              </div>
-              <div className={styles.summaryValue}>
-                {currentWindSpeed !== undefined
-                  ? `${currentWindSpeed} ${currentWindSpeedUnits !== 'unitless' ? currentWindSpeedUnits : ''}`
-                  : '-'}
-              </div>
-            </div>
-          </div>
-        </div>
+        <CurrentValues 
+          currentTemperature={currentTemperature}
+          currentHumidity={currentHumidity}
+          currentPressure={currentPressure}
+          currentWindSpeed={currentWindSpeed}
+          currentWindSpeedUnits={currentWindSpeedUnits}
+        />
 
         {this.props.controls && (
           <div className={styles.fullSection}>
@@ -335,7 +341,7 @@ export default class WeatherStation extends Component {
             <div className={styles.windPlotFullWidth}>
               <PolarPlotContainer
                 timeSeriesControlsProps={timeSeriesControlsProps}
-                containerNode={this.windDirectionPlotRef}
+                containerNode={this.windDirectionPlotRef.current}
                 {...this.windPlot}
               />
             </div>
@@ -348,10 +354,11 @@ export default class WeatherStation extends Component {
             <PlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.temperaturePlot}
-              containerNode={this.temperaturePlotRef}
+              containerNode={this.temperaturePlotRef.current}
               xAxisTitle="Time"
               yAxisTitle="Temperature"
               legendPosition="bottom"
+              maxHeight={maxHeightPlot}
             />
           </div>
         </div>
@@ -361,10 +368,11 @@ export default class WeatherStation extends Component {
             <PlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.humidityPlot}
-              containerNode={this.humidityPlotRef}
+              containerNode={this.humidityPlotRef.current}
               xAxisTitle="Time"
               yAxisTitle="Relative humidity"
               legendPosition="bottom"
+              maxHeight={maxHeightPlot}
             />
           </div>
         </div>
@@ -375,10 +383,11 @@ export default class WeatherStation extends Component {
             <PlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.precipitationPlot}
-              containerNode={this.precipitationPlotRef}
+              containerNode={this.precipitationPlotRef.current}
               xAxisTitle="Time"
               yAxisTitle="Precipitation"
               legendPosition="bottom"
+              maxHeight={maxHeightPlot}
             />
           </div>
         </div>
@@ -389,10 +398,11 @@ export default class WeatherStation extends Component {
             <PlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.snowDepthPlot}
-              containerNode={this.snowDepthPlotRef}
+              containerNode={this.snowDepthPlotRef.current}
               xAxisTitle="Time"
               yAxisTitle="Snow depth"
               legendPosition="bottom"
+              maxHeight={maxHeightPlot}
             />
           </div>
         </div>
@@ -403,10 +413,11 @@ export default class WeatherStation extends Component {
             <PlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.solarPlot}
-              containerNode={this.solarPlotRef}
+              containerNode={this.solarPlotRef.current}
               xAxisTitle="Time"
               yAxisTitle="Solar radiation"
               legendPosition="bottom"
+              maxHeight={maxHeightPlot}
             />
           </div>
         </div>
@@ -417,10 +428,11 @@ export default class WeatherStation extends Component {
             <PlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.pressurePlot}
-              containerNode={this.pressurePlotRef}
+              containerNode={this.pressurePlotRef.current}
               xAxisTitle="Time"
               yAxisTitle="Air pressure"
               legendPosition="bottom"
+              maxHeight={maxHeightPlot}
             />
           </div>
         </div>

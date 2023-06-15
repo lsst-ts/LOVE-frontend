@@ -4,10 +4,25 @@
   overflow: hidden;
 }
 
+.containerFlexRow {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.containerFlexCol{
+  display: flex;
+  flex-direction: column;
+}
+
 .bottomLegend {
   flex-direction: column;
 }
 
 .plot {
   margin-right: 1rem;
+}
+
+.marginLegend {
+  margin-left: 4rem;
 }
