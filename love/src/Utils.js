@@ -1467,7 +1467,6 @@ export const parsePlotInputs = (inputs) => {
       }
       // Next line was added to support EFD Querying for Array type items (influx)
       newIndexDict[input.topic] = [`${input.item}${input.arrayIndex ?? ''}`];
-      // newIndexDict[input.topic] = [input.item]; // Original line
 
       newTopicDict = newIndexDict[input.topic];
       if (indexDict) {
@@ -1510,11 +1509,7 @@ export const parsePlotInputs = (inputs) => {
         //  If indexDict exists, add the new topicDict
         if (indexDict) {
           indexDict[value.topic] = newTopicDict;
-          // newIndexDict = newCSCDict[value.salindex];
         } else {
-          // newIndexDict = {
-          //   [value.topic]: newTopicDict,
-          // };
           newCSCDict[value.salindex] = newIndexDict;
         }
 
@@ -1522,9 +1517,6 @@ export const parsePlotInputs = (inputs) => {
         if (cscDict) {
           cscDict[value.salindex] = newIndexDict;
         } else {
-          // cscs[value.csc] = {
-          //   [value.salindex]: newIndexDict,
-          // };
           cscs[value.csc] = newCSCDict;
         }
       });
