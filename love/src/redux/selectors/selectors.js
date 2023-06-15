@@ -1388,6 +1388,50 @@ export const getBlocksInfo = (state, salindex) => {
 };
 
 /**
+ * Selects the Weather Forecast State for Weather Forecat view
+ * @param {object} state
+ */
+export const getWeatherForecastState = (state) => {
+  const subscriptions = ['event-WeatherForecast-0-summaryState'];
+  const summaryData = getStreamsData(state, subscriptions);
+  return {
+    weatherForecastState: summaryData['event-WeatherForecast-0-summaryState']?.[0]?.summaryState.value ?? 0,
+  };
+}
+
+/**
+ * Selects the Weather Forecast Daily Trend
+ * @param {object} state
+ */
+export const getInfoHeaderDailyTrend = (state) => {
+  const subscriptions = ['telemetry-WeatherForecast-0-dailyTrend'];
+  const dailyTrendData = getStreamsData(state, subscriptions);
+  return {
+    timestamp: dailyTrendData['telemetry-WeatherForecast-0-dailyTrend']?.timestamp.value ?? [],
+    pictocode: dailyTrendData['telemetry-WeatherForecast-0-dailyTrend']?.pictocode.value ?? [],
+    temperatureMax: dailyTrendData['telemetry-WeatherForecast-0-dailyTrend']?.temperatureMax.value ?? [],
+    temperatureMin: dailyTrendData['telemetry-WeatherForecast-0-dailyTrend']?.temperatureMin.value ?? [],
+    predictability: dailyTrendData['telemetry-WeatherForecast-0-dailyTrend']?.predictability.value ?? [],
+    predictabilityClass: dailyTrendData['telemetry-WeatherForecast-0-dailyTrend']?.predictabilityClass.value ?? [],
+  };
+};
+
+/**
+ * Selects the Weather Forecast sHourly Trend
+ * @param {object} state
+ */
+export const getInfoHeaderHourlyTrend = (state) => {
+  const subscriptions = ['telemetry-WeatherForecast-0-hourlyTrend'];
+  const hourlyTrendData = getStreamsData(state, subscriptions);
+  return {
+    timestamp: hourlyTrendData['telemetry-WeatherForecast-0-hourlyTrend']?.timestamp.value ?? [],
+    pictocode: hourlyTrendData['telemetry-WeatherForecast-0-hourlyTrend']?.pictocode.value ?? [],
+    temperature: hourlyTrendData['telemetry-WeatherForecast-0-hourlyTrend']?.temperature.value ?? [],
+    temperatureSpread: hourlyTrendData['telemetry-WeatherForecast-0-hourlyTrend']?.temperatureSpread.value ?? [],
+  };
+};
+
+/**
  * Returns events related to the LATISS instrument in the state.
  *
  * @param {obj} state

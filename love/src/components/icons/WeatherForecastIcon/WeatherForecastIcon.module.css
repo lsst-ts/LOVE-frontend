@@ -1,0 +1,26 @@
+
+.path{
+ fill: var(--secondary-font-color);
+}
+
+.hazy{
+  fill: none;
+  stroke: var(--secondary-font-color);
+  stroke-miterlimit: 10;
+  stroke-width: .25px;
+}
+
+.black{
+  fill: #132028;
+}
+
+.thunderstorm {
+  fill: var(--secondary-font-color);
+  stroke: #132028;
+  stroke-linecap: round;
+  stroke-miterlimit: 10;
+}
+
+.icon {
+  width: 3.57rem;
+}

@@ -44,6 +44,29 @@ class VegaCustomPlot extends Component {
       spec: {
         mark: this.props.schema.mark,
         encoding: this.props.schema.encoding,
+        config: this.props.schema.config ?? {
+          background: null,
+          title: { color: '#ddd' },
+          style: {
+            'guide-label': {
+              fill: '#ddd',
+            },
+            'guide-title': {
+              fill: '#ddd',
+            },
+          },
+          axis: {
+            domainColor: '#626262',
+            gridColor: '#424242',
+            tickColor: null,
+          },
+          axisX: {
+            titlePadding: 16,
+            titleFontWeight: 750,
+            labelFontWeight: 750,
+            tickCount: 5,
+          },
+        },
         data: { name: 'values' },
         autosize: {
           type: 'fit',

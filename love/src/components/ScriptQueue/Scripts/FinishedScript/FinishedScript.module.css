@@ -4,12 +4,6 @@
   user-select: none;
 }
 
-.estimatedTimeLabel {
-}
-
-.estimatedTimeValue {
-}
-
 .timeContainer {
   display: flex;
   justify-content: space-between;
@@ -31,4 +25,63 @@
 .topContainer {
   display: flex;
   justify-content: space-between;
+}
+
+.configurationContainer,
+.logsContainer {
+  padding: var(--content-padding);
+}
+
+.configurationContainer > :first-child,
+.logsContainer > :first-child {
+  color: var(--highlighted-font-color);
+  font-size: var(--font-size-large);
+  margin-bottom: var(--small-padding);
+}
+
+.configurationContainer > :first-child {
+  display: flex;
+  position: relative;
+}
+
+/* .configurationContainer :global(.ace_scrollbar-v) {
+  overflow-y: hidden;
+} */
+
+.copyToClipboardIcon {
+  cursor: pointer;
+  user-select: none;
+  margin-left: auto;
+  width: 1em;
+}
+
+.fadeElement {
+  justify-self: end;
+  font-size: var(--font-size-small);
+  flex-grow: 1;
+  animation: fade 1.5s ease-out forwards;
+  -webkit-animation: fade 1.5s ease-out forwards;
+  opacity: 0;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  position: absolute;
+  top: calc(50% - 1em);
+  right: 2em;
+  border-radius: 1em;
+  padding: 0.25em;
+  background-color: var(--quaternary-background-color);
+}
+
+@-webkit-keyframes fade {
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade {
+  50% {
+    opacity: 1;
+  }
 }

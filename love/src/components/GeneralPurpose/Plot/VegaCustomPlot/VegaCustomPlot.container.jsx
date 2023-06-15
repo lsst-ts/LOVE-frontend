@@ -32,6 +32,29 @@ export const schema = {
       isPrivate: false,
       default: {
         description: 'A simple bar chart with embedded data.',
+        config: {
+          background: null,
+          title: { color: '#ddd' },
+          style: {
+            'guide-label': {
+              fill: '#ddd',
+            },
+            'guide-title': {
+              fill: '#ddd',
+            },
+          },
+          axis: {
+            domainColor: '#626262',
+            gridColor: '#424242',
+            tickColor: null,
+          },
+          axisX: {
+            titlePadding: 16,
+            titleFontWeight: 750,
+            labelFontWeight: 750,
+            tickCount: 5,
+          },
+        },
         data: {
           values: [
             { a: 'A', b: 28 },

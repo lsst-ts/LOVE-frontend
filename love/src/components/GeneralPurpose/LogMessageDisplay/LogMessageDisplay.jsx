@@ -86,7 +86,9 @@ function arePropsEqual(prevProps, nextProps) {
 }
 
 LogMessageDisplay.propTypes = {
+  /** Array of logMessages */
   logMessageData: PropTypes.array,
+  /** Function to clear the log messages */
   clearCSCLogMessages: PropTypes.func,
 };
 

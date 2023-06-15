@@ -1,0 +1,25 @@
+.container:not(:last-child) {
+  padding-left: 1em;
+  overflow: auto;
+  height: 100%;
+}
+
+.container h6 {
+  cursor: pointer;
+}
+
+.collapseIcon {
+  display: inline-block;
+  height: 1em;
+  width: 1em;
+  margin-right: 0.5em;
+}
+
+.rootContainer {
+  overflow: hidden;
+}
+
+.horizontalSeparation:not(:last-child) {
+  border-bottom: 1px solid var(--second-tertiary-background-color);
+  margin-bottom: 1em;
+}

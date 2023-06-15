@@ -1,12 +1,12 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.2.0
+    rev: v4.4.0
     hooks:
       - id: check-yaml
         exclude: conda/meta.yaml
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v2.2.1
+    rev: v3.0.0-alpha.6
     hooks:
       - id: prettier
         files: \.[j]sx?|\.css$  # *.js, *.jsx and css
@@ -14,7 +14,7 @@ repos:
         exclude: docs/
 
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.15.0
+    rev: v8.36.0
     hooks:
       - id: eslint
         files: \.[j]sx?$  # *.js and *.jsx

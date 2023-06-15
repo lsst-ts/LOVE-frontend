@@ -1,10 +1,11 @@
 import React from 'react';
+import styles from './DeleteIcon.module.css';
 
-const DeleteIcon = ({ className }) => (
-  <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="-2 0 12 12">
-    <path d="M.97,2.78H7.43v7.55c0,.37-.3,.67-.67,.67H1.64c-.37,0-.67-.3-.67-.67V2.78H.97Z" />
-    <path d="M7.96,.82h-2.43V.44c0-.24-.2-.44-.44-.44h-1.77c-.24,0-.44,.2-.44,.44v.37H.44c-.24,0-.44,.2-.44,.44v.6c0,.24,.2,.44,.44,.44H7.96c.24,0,.44-.2,.44-.44v-.6c0-.24-.2-.44-.44-.44Z" />
-  </svg>
-);
-
-export default DeleteIcon;
+export default function DeleteIcon(props){
+  const className = [styles.deleteIcon, props.className].join(" ");
+    return (
+      <svg viewBox="0 0 43.55 54.44" className={className} >
+        <path d="M43.64,7.05V9.77a1.36,1.36,0,0,1-1.36,1.36H1.45A1.36,1.36,0,0,1,.09,9.77V7.05A1.36,1.36,0,0,1,1.45,5.69H13.7V3A2.72,2.72,0,0,1,16.42.25H27.31A2.72,2.72,0,0,1,30,3V5.69H42.28A1.36,1.36,0,0,1,43.64,7.05ZM5.18,49.62a5.45,5.45,0,0,0,5.45,5.07H33.16a5.45,5.45,0,0,0,5.45-5.07l2.31-33H2.81Z" transform="translate(-0.09 -0.25)" />
+      </svg>
+    );
+}

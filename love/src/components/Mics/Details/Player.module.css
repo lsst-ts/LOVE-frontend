@@ -1,0 +1,70 @@
+.containerPlayer {
+  display: flex;
+  flex-flow: row;
+  align-items: flex-end;
+  padding: 0.3em;
+}
+
+.playSVG {
+  height: 4em;
+}
+
+.recSVG {
+  height: 2.25em;
+}
+
+.spanButton {
+  display: flex;
+  flex-flow: column;
+  cursor: pointer;
+  padding-inline: 1em;
+  font-size: xx-small;
+  width: 22%;
+}
+
+.opacity {
+  opacity: 0.35;
+}
+
+.oneLine {
+  padding-top: 0.3em;
+  white-space: pre;
+  overflow: hidden;
+  color: var(--base-font-color);
+  font-size: x-small;
+}
+
+.fontSmall {
+  font-size: small;
+}
+
+.verticalSpace {
+  margin-bottom: 0.5em;
+}
+
+.containerAlarmLimit{
+  display: flex;
+  justify-content: space-around;
+}
+
+.dBLiveValue {
+  color: #f0e400;
+  margin-top: 5px;
+}
+
+.width30 {
+  width: 30%;
+}
+
+.width60 {
+  width: 60%;
+}
+
+.buttondBLimit {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.PlayIcon {
+  fill: #788e9a;
+}

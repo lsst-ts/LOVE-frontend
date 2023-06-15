@@ -10,19 +10,16 @@
 }
 
 .table thead {
-  /* display: table; */
   width: 100%;
   word-wrap: break-word;
 }
 .table tbody {
-  /* display: block; */
   height: inherit;
   width: 100%;
   overflow-y: hidden;
   overflow-x: hidden;
 }
 .table tbody tr {
-  /* display: table; */
   width: 100%;
 }
 .table th,

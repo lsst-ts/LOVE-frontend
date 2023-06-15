@@ -3,10 +3,10 @@ import debounce from 'lodash.debounce';
 import isEqual from 'lodash/isEqual';
 import CSCExpandedContainer from 'components/CSCSummary/CSCExpanded/CSCExpanded.container';
 import { checkAuthlist } from 'Utils';
+import RecursiveScriptsTree from './RecursiveScriptsTree/RecursiveScriptsTree';
 import WaitingScript from './Scripts/WaitingScript/WaitingScript';
 import ScriptList from './Scripts/ScriptList/ScriptList';
 import CurrentScript from './Scripts/CurrentScript/CurrentScript';
-import AvailableScript from './Scripts/AvailableScript/AvailableScript';
 import FinishedScript from './Scripts/FinishedScript/FinishedScript';
 import DraggableScript from './Scripts/DraggableScript/DraggableScript';
 import styles from './ScriptQueue.module.css';
@@ -16,12 +16,40 @@ import ContextMenu from './Scripts/ContextMenu/ContextMenu';
 import RequeueIcon from '../icons/ScriptQueue/RequeueIcon/RequeueIcon';
 import TerminateIcon from '../icons/ScriptQueue/TerminateIcon/TerminateIcon';
 import MoveToTopIcon from '../icons/ScriptQueue/MoveToTopIcon/MoveToTopIcon';
-import RowExpansionIcon from '../icons/RowExpansionIcon/RowExpansionIcon';
 import MoveToBottomIcon from '../icons/ScriptQueue/MoveToBottomIcon/MoveToBottomIcon';
 import { SALCommandStatus } from '../../redux/actions/ws';
 import Input from '../GeneralPurpose/Input/Input';
 import GlobalState from './GlobalState/GlobalState';
 import ScriptDetails from './Scripts/ScriptDetails';
+
+const CONFIG_PANEL_INITIAL_WIDTH = 590;
+
+/**
+ * Get the hierarchy of scripts and return it in a dictionary.
+ * @param {Array} scripts - List of scripts.
+ * @returns {Object} - Dictionary with the hierarchy of scripts.
+ * @example
+ * // returns { root: ['script1', 'script2'], folder1: { root: ['script3', 'script4'] } }
+ * getScriptHierarchy([{ path: 'script1' }, { path: 'script2' }, { path: 'folder1/script3' }, { path: 'folder1/script4' }])
+ *
+ */
+const getScriptHierarchy = (scripts) => {
+  const mDict = {};
+  for (let i = 0; i < scripts.length; i++) {
+    const tokens = scripts[i].path.split('/');
+    let ref = mDict;
+    for (let j = 0; j < tokens.length; j++) {
+      if (j === tokens.length - 1) {
+        ref['root'] = ref['root'] ?? [];
+        ref['root'].push(tokens[j]);
+      } else {
+        ref[tokens[j]] = ref[tokens[j]] ?? {};
+        ref = ref[tokens[j]];
+      }
+    }
+  }
+  return mDict;
+};
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -56,9 +84,11 @@ export default class ScriptQueue extends Component {
       },
       resetButton: <span>Hide details &#9650;</span>,
       blockedByAuthlist: false,
+      scriptsTree: {},
     };
 
     this.observer = null;
+    this.scriptQueueContainer = React.createRef();
     this.currentScriptDetailsContainer = React.createRef();
   }
 
@@ -116,11 +146,25 @@ export default class ScriptQueue extends Component {
       }
     }
 
-    if (this.props.availableScriptList && this.props.availableScriptList !== prevProps.availableScriptList) {
+    if (this.props.availableScriptList && !isEqual(this.props.availableScriptList, prevProps.availableScriptList)) {
       this.props.availableScriptList.sort((a, b) => {
         return a.path.localeCompare(b.path, 'en', { sensitivity: 'base' });
       });
+
+      const filteredScripts = this.props.availableScriptList.filter((script) => {
+        if (script.path.toLowerCase().includes(this.state.availableScriptsFilter.toLowerCase())) {
+          return true;
+        }
+        return false;
+      });
+      const standard = filteredScripts.filter((script) => script.type === 'standard');
+      const external = filteredScripts.filter((script) => script.type === 'external');
+      const externalTree = getScriptHierarchy(external);
+      const standardTree = getScriptHierarchy(standard);
+      const scriptsTree = { standard: standardTree, external: externalTree };
+      this.setState({ scriptsTree });
     }
+
     if (this.props.heartbeats !== prevProps.heartbeats) {
       this.setState({
         indexedHeartbeats: this.props.heartbeats.reduce((map, heartbeat) => {
@@ -346,7 +390,11 @@ export default class ScriptQueue extends Component {
   };
 
   launchScriptConfig = (e, script) => {
-    const { x } = e.target.getBoundingClientRect();
+    let { x } = e.target.getBoundingClientRect();
+    const scriptQueueContainer = this.scriptQueueContainer.current;
+    if (scriptQueueContainer) {
+      x = scriptQueueContainer.getBoundingClientRect().width / 2 - CONFIG_PANEL_INITIAL_WIDTH / 2;
+    }
     this.setState({
       configPanel: {
         script,
@@ -510,32 +558,6 @@ export default class ScriptQueue extends Component {
     this.setState({ isContextMenuOpen: false });
   };
 
-  renderAvailableScript = (script) => {
-    if (!script) return null;
-    return (
-      <DraggableScript
-        key={`dragging-available-${script.type}-${script.path}`}
-        {...script}
-        dragSourceList="available"
-        onDragStart={(e, id) => this.onDragStart(e, id, 'available')}
-        onDragEnd={(e, id) => this.onDragEnd(e, id, 'available')}
-        draggingScriptInstance={this.state.draggingScriptInstance}
-        disabled={true}
-      >
-        <AvailableScript
-          key={`${script.type}-${script.path}`}
-          path={script.path}
-          isStandard={script.type ? script.type.toLowerCase() === 'standard' : true}
-          launchScriptConfig={this.launchScriptConfig}
-          script={script}
-          commandExecutePermission={this.props.commandExecutePermission && !this.state.blockedByAuthlist}
-          {...script}
-          isCompact={this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible}
-        />
-      </DraggableScript>
-    );
-  };
-
   toggleAvailableScriptsExpanded = (scriptType) => {
     if (scriptType === 'standard') {
       this.setState({
@@ -559,12 +581,6 @@ export default class ScriptQueue extends Component {
     const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
     const availableScriptListClass = this.state.isAvailableScriptListVisible ? '' : styles.collapsedScriptList;
     const current = this.props.current === 'None' ? {} : { ...this.props.current };
-    // const now = new Date();
-    // Fix time zones for next line
-    // const currentScriptElapsedTime =
-    //   this.props.current === 'None' || current.timestampRunStart === undefined
-    //     ? 0
-    //     : now.getTime() / 1000.0 - current.timestampRunStart;
     const waitingList = this.state.useLocalWaitingList ? this.state.waitingScriptList : this.props.waitingScriptList;
 
     const totalWaitingSeconds = waitingList.reduce((previousSum, currentElement) => {
@@ -589,9 +605,16 @@ export default class ScriptQueue extends Component {
     ];
 
     const contextMenuOption = this.state.currentMenuSelected ? currentContextMenu : waitingContextMenu;
+
+    const filteredAvailableScripts = this.props.availableScriptList.filter((script) => {
+      if (!this.state.availableScriptsFilter) return true;
+      return script.path.toLowerCase().includes(this.state.availableScriptsFilter.toLowerCase());
+    });
+
     return (
       <div
         id="container"
+        ref={this.scriptQueueContainer}
         onClick={(e) => {
           this.setState({ isContextMenuOpen: false });
         }}
@@ -717,36 +740,18 @@ export default class ScriptQueue extends Component {
                 <ScriptList noOverflow={true}>
                   <div className={styles.standardExternalContainer}>
                     <div
-                      className={styles.availableScriptTypeTitle}
-                      onClick={() => this.toggleAvailableScriptsExpanded('standard')}
-                    >
-                      <span>Standard scripts</span>
-                      <span>
-                        <RowExpansionIcon expanded={this.state.availableScriptsStandardExpanded} />
-                      </span>
-                    </div>
-                    <div
                       className={[
                         styles.standardScriptsContainer,
                         this.state.availableScriptsStandardExpanded ? '' : styles.availableListCollapsed,
                       ].join(' ')}
                     >
-                      {this.props.availableScriptList.map((script) => {
-                        if (script.type && script.type.toLowerCase() !== 'standard') return null;
-                        if (!script.path.toLowerCase().includes(this.state.availableScriptsFilter.toLowerCase()))
-                          return null;
-                        return this.renderAvailableScript(script);
-                      })}
-                    </div>
-                    <div className={styles.availableScriptTypeSeparator}></div>
-                    <div
-                      className={styles.availableScriptTypeTitle}
-                      onClick={() => this.toggleAvailableScriptsExpanded('external')}
-                    >
-                      <span>External scripts</span>
-                      <span>
-                        <RowExpansionIcon expanded={this.state.availableScriptsExternalExpanded} />
-                      </span>
+                      <RecursiveScriptsTree
+                        availableScriptList={filteredAvailableScripts}
+                        category="standard"
+                        scriptsTree={this.state.scriptsTree.standard}
+                        launchScriptConfig={this.launchScriptConfig}
+                        scriptsBlocked={this.props.commandExecutePermission && !this.state.blockedByAuthlist}
+                      />
                     </div>
                     <div
                       className={[
@@ -754,13 +759,13 @@ export default class ScriptQueue extends Component {
                         this.state.availableScriptsExternalExpanded ? '' : styles.availableListCollapsed,
                       ].join(' ')}
                     >
-                      {this.props.availableScriptList.map((script) => {
-                        if (script.type && script.type.toLowerCase() !== 'external') return null;
-                        if (!script.path.toLowerCase().includes(this.state.availableScriptsFilter.toLowerCase())) {
-                          return null;
-                        }
-                        return this.renderAvailableScript(script);
-                      })}
+                      <RecursiveScriptsTree
+                        availableScriptList={filteredAvailableScripts}
+                        category="external"
+                        scriptsTree={this.state.scriptsTree.external}
+                        launchScriptConfig={this.launchScriptConfig}
+                        scriptsBlocked={this.props.commandExecutePermission && !this.state.blockedByAuthlist}
+                      />
                     </div>
                   </div>
                 </ScriptList>
@@ -885,6 +890,7 @@ export default class ScriptQueue extends Component {
                               this.props.commandExecutePermission && !this.state.blockedByAuthlist
                             }
                             onClick={() => this.onShowScriptDetails(script)}
+                            efdConfig={this.props.efdConfig}
                           />
                         </div>
                       </DraggableScript>

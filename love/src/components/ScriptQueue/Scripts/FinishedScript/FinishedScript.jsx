@@ -1,10 +1,15 @@
 import React, { PureComponent } from 'react';
+import AceEditor from 'react-ace';
 import PropTypes from 'prop-types';
+import LogMessageDisplay from 'components/GeneralPurpose/LogMessageDisplay/LogMessageDisplay';
+import Button from 'components/GeneralPurpose/Button/Button';
+import ManagerInterface, { parseToSALFormat, copyToClipboard } from 'Utils';
 import styles from './FinishedScript.module.css';
 import scriptStyles from '../Scripts.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
 import RequeueIcon from '../../../icons/ScriptQueue/RequeueIcon/RequeueIcon';
+import CopyIcon from '../../../icons/CopyIcon/CopyIcon';
 import ScriptDetails from '../ScriptDetails';
 
 export default class FinishedScript extends PureComponent {
@@ -44,12 +49,75 @@ export default class FinishedScript extends PureComponent {
     super(props);
     this.state = {
       expanded: false,
+      showLogs: false,
+      logs: [],
+      appliedConfiguration: null,
+      coppiedToClipboard: false,
     };
   }
 
   onClick = () => {
+    const { index, timestampProcessStart: startTime, timestampProcessEnd: endTime } = this.props;
+    this.queryLogs(index, startTime, endTime);
+    this.queryConfiguration(index, startTime, endTime);
     this.setState((state) => ({ expanded: !state.expanded }));
     this.props.onClick();
+  };
+
+  toggleLogs = () => {
+    this.setState((state) => ({ showLogs: !state.showLogs }));
+  };
+
+  queryLogs = (scriptIndex, start, end) => {
+    const efdInstance = this.props.efdConfig?.defaultEfdInstance ?? 'summit_efd';
+    const cscs = {
+      Script: {
+        [scriptIndex]: {
+          logevent_logMessage: ['private_rcvStamp', 'level', 'message', 'traceback'],
+        },
+      },
+    };
+    const startDateIso = new Date(start * 1000).toISOString();
+    const endDateIso = new Date(end * 1000).toISOString();
+    ManagerInterface.getEFDLogs(startDateIso, endDateIso, cscs, efdInstance).then((res) => {
+      this.setState({
+        logs: res[`Script-${scriptIndex}-logevent_logMessage`].map(parseToSALFormat),
+      });
+    });
+  };
+
+  queryConfiguration = (scriptIndex, start, end) => {
+    const efdInstance = this.props.efdConfig?.defaultEfdInstance ?? 'summit_efd';
+    const cscs = {
+      Script: {
+        [scriptIndex]: {
+          command_configure: ['private_rcvStamp', 'config'],
+        },
+      },
+    };
+    const startDateIso = new Date(start * 1000).toISOString();
+    const endDateIso = new Date(end * 1000).toISOString();
+    ManagerInterface.getEFDLogs(startDateIso, endDateIso, cscs, efdInstance).then((res) => {
+      this.setState({
+        appliedConfiguration: res[`Script-${scriptIndex}-command_configure`][0]?.config,
+      });
+    });
+  };
+
+  copyConfigToClipboard = (e) => {
+    const { appliedConfiguration } = this.state;
+    copyToClipboard(appliedConfiguration, () => {
+      this.setState({ coppiedToClipboard: true });
+      setTimeout(() => {
+        this.setState({ coppiedToClipboard: false });
+      }, 1500);
+    });
+  };
+
+  clearLogs = () => {
+    this.setState({
+      logs: [],
+    });
   };
 
   render() {
@@ -134,7 +202,38 @@ export default class FinishedScript extends PureComponent {
             className={[scriptStyles.expandedSectionWrapper, this.state.expanded ? '' : scriptStyles.hidden].join(' ')}
           >
             <ScriptDetails {...this.props} />
+            <div className={styles.configurationContainer}>
+              <div>
+                APPLIED CONFIGURATION
+                {this.state.coppiedToClipboard && <div className={styles.fadeElement}>Coppied to clipboard</div>}
+                {/* <div className={styles.fadeElement}>Coppied to clipboard</div> */}
+                <div className={styles.copyToClipboardIcon} onClick={this.copyConfigToClipboard}>
+                  <CopyIcon title="Copy to clipboard" />
+                </div>
+              </div>
+              <AceEditor
+                mode="yaml"
+                theme="solarized_dark"
+                name="UNIQUE_ID_OF_DIV"
+                width={'26em'}
+                height={'150px'}
+                value={this.state.appliedConfiguration}
+                // editorProps={{ $blockScrolling: true }}
+                fontSize={18}
+                readOnly
+                showPrintMargin={false}
+              />
+            </div>
+            <div className={styles.logsContainer}>
+              <div>LOGS</div>
+              <Button onClick={this.toggleLogs}>Toggle logs</Button>
+            </div>
           </div>
+          {this.state.showLogs && this.state.expanded && (
+            <div>
+              <LogMessageDisplay logMessageData={this.state.logs} clearCSCLogMessages={this.clearLogs} />
+            </div>
+          )}
         </div>
         {this.props.commandExecutePermission && (
           <div className={scriptStyles.mainScriptButton} onClick={(e) => this.props.requeueScript(this.props.index)}>

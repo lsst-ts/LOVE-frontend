@@ -1086,6 +1086,100 @@ export default class ManagerInterface {
       });
     });
   }
+
+  /** Methods to access Scripts configurations  */
+  static getScriptConfiguration(scriptPath, scriptType) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    let params = scriptPath || scriptType ? '?' : '';
+    if (scriptPath) params += `&path=${scriptPath}`;
+    if (scriptType) params += `&type=${scriptType}`;
+    const url = `${this.getApiBaseUrl()}scriptconfiguration/${params}`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static updateScriptSchema(id, configSchema) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}scriptconfiguration/${id}/`;
+    return fetch(url, {
+      method: 'PATCH',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        config_schema: configSchema,
+      }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status === 400) {
+        return response.json().then((resp) => {
+          toast.error(resp.ack);
+          return false;
+        });
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static postScriptConfiguration(scriptPath, scriptType, configName, configSchema) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}scriptconfiguration/`;
+    return fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        script_path: scriptPath,
+        script_type: scriptType,
+        config_name: configName,
+        config_schema: configSchema,
+      }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status === 400) {
+        return response.json().then((resp) => {
+          toast.error(resp.ack);
+          return false;
+        });
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
 } // END ManagerInterface
 
 /**
@@ -1360,36 +1454,72 @@ export const takeScreenshot = (callback) => {
 export const parsePlotInputs = (inputs) => {
   const cscs = {};
   Object.values(inputs).forEach((input) => {
-    const cscDict = cscs?.[input.csc];
-    const indexDict = cscs?.[input.csc]?.[input.salindex];
-    const topicDict = cscs?.[input.csc]?.[input.salindex]?.[input.topic];
-    let newTopicDict = topicDict ?? [];
-    let newIndexDict = indexDict ?? {};
-    const newCSCDict = cscDict ?? {};
-    if (topicDict) {
-      newIndexDict[input.topic].push(input.item);
-      return;
-    }
-    // Next line was added to support EFD Querying for Array type items (influx)
-    newIndexDict[input.topic] = [`${input.item}${input.arrayIndex ?? ''}`];
-    // newIndexDict[input.topic] = [input.item]; // Original line
+    if (!input.values) {
+      const cscDict = cscs[input.csc];
+      const indexDict = cscs[input.csc]?.[input.salindex];
+      const topicDict = cscs[input.csc]?.[input.salindex]?.[input.topic];
+      let newTopicDict = topicDict ?? [];
+      let newIndexDict = indexDict ?? {};
+      const newCSCDict = cscDict ?? {};
+      if (topicDict) {
+        newIndexDict[input.topic].push(input.item);
+        return;
+      }
+      // Next line was added to support EFD Querying for Array type items (influx)
+      newIndexDict[input.topic] = [`${input.item}${input.arrayIndex ?? ''}`];
 
-    newTopicDict = newIndexDict[input.topic];
-    if (indexDict) {
-      newCSCDict[input.salindex][input.topic] = newTopicDict;
-      newIndexDict = newCSCDict[input.salindex];
+      newTopicDict = newIndexDict[input.topic];
+      if (indexDict) {
+        newCSCDict[input.salindex][input.topic] = newTopicDict;
+        newIndexDict = newCSCDict[input.salindex];
+      } else {
+        newIndexDict = {
+          [input.topic]: newTopicDict,
+        };
+        newCSCDict[input.salindex] = newIndexDict;
+      }
+      if (cscDict) {
+        cscs[input.csc][input.salindex] = newIndexDict;
+      } else {
+        cscs[input.csc] = {
+          [input.salindex]: newIndexDict,
+        };
+      }
     } else {
-      newIndexDict = {
-        [input.topic]: newTopicDict,
-      };
-      newCSCDict[input.salindex] = newIndexDict;
-    }
-    if (cscDict) {
-      cscs[input.csc][input.salindex] = newIndexDict;
-    } else {
-      cscs[input.csc] = {
-        [input.salindex]: newIndexDict,
-      };
+      Object.values(input.values).forEach((value) => {
+        const cscDict = cscs[value.csc];
+        const indexDict = cscs[value.csc]?.[value.salindex];
+        const topicDict = cscs[value.csc]?.[value.salindex]?.[value.topic];
+
+        const newCSCDict = cscDict ?? {};
+        let newIndexDict = indexDict ?? {};
+        let newTopicDict = topicDict ?? [];
+
+        // If topicDict array exists, push the new item
+        if (topicDict) {
+          //  Array index is used for queries to the EFD (influx)
+          topicDict.push(`${value.item}${value.arrayIndex ?? ''}`);
+          return;
+        }
+
+        //  Array index is used for queries to the EFD (influx)
+        newIndexDict[value.topic] = [`${value.item}${value.arrayIndex ?? ''}`];
+        newTopicDict = newIndexDict[value.topic];
+
+        //  If indexDict exists, add the new topicDict
+        if (indexDict) {
+          indexDict[value.topic] = newTopicDict;
+        } else {
+          newCSCDict[value.salindex] = newIndexDict;
+        }
+
+        //  If cscDict exists, add the new indexDict
+        if (cscDict) {
+          cscDict[value.salindex] = newIndexDict;
+        } else {
+          cscs[value.csc] = newCSCDict;
+        }
+      });
     }
   });
   return cscs;
@@ -1420,7 +1550,11 @@ export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y') => {
       const formattedPropertyKey = propertyKey.replace(/[\d\.]+$/, '');
       newTopicData[formattedPropertyKey] = propertyDataArray.map((dataPoint) => {
         const tsString = dataPoint?.ts.split(' ').join('T');
-        return { [tsLabel]: parseTimestamp(tsString), [valueLabel]: dataPoint?.value };
+        return {
+          units: { y: dataPoint?.units },
+          [tsLabel]: parseTimestamp(tsString),
+          [valueLabel]: dataPoint?.value,
+        };
       });
     });
     newData[topicKey] = newTopicData;
@@ -1582,4 +1716,40 @@ export function arrayRandomBoolean(len, probability = 0.1) {
     booleanArray = arr;
   }
   return booleanArray;
+}
+
+/**
+ * Function to parse any dictionary to a SAL format
+ * Example:
+ * {
+ *  "param1": <value>,
+ *  "param2": <value>,
+ * }
+ * to:
+ * {
+ * "param1": {
+ *  "value": <value>,
+ *  },
+ * "param2": {
+ *  "value": <value>,
+ *  },
+ * }
+ * @param {*} data, the dictionary to be parsed
+ */
+export function parseToSALFormat(data) {
+  const newData = {};
+  Object.keys(data).forEach((key) => {
+    newData[key] = { value: data[key] };
+  });
+  return newData;
+}
+
+/**
+ * Function to copy to clipboard
+ * @param {string} text text to be copied
+ * @param {func} effect effect to be applied
+ */
+export function copyToClipboard(text, effect) {
+  navigator.clipboard.writeText(text);
+  if (effect) effect();
 }

@@ -14,7 +14,8 @@ import 'brace/theme/solarized_dark';
 
 const externalStepComponents = {
   HealthStatusConfig: require('../../../components/HealthStatusSummary/HealthStatusConfig/HealthStatusConfig').default,
-  TimeSeriesConfig: require('../../../components/GeneralPurpose/Plot/TimeSeriesConfig/TimeSeriesConfig').default,
+  TimeSeriesConfigure: require('../../../components/GeneralPurpose/Plot/TimeSeriesConfigure/TimeSeriesConfigure')
+    .default,
   PolarPlotConfig: require('../../../components/GeneralPurpose/Plot/PolarPlotConfig/PolarPlotConfig').default,
 };
 function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, onCancel, onSaveConfig }) {
@@ -47,8 +48,6 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
   };
 
   const onExtraStepSave = (propKey, newData) => {
-    console.log('propKey: ', propKey);
-    console.log('newData: ', newData);
     updateConfig(propKey, newData);
     setExternalStep({
       show: false,

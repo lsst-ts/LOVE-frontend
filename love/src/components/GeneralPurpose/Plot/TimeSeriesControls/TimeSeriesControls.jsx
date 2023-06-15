@@ -4,6 +4,7 @@ import moment from 'moment';
 import Select from 'components/GeneralPurpose/Select/Select';
 import DateSelection from './DateSelection/DateSelection';
 import TimeWindow from './TimeWindow/TimeWindow';
+import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import styles from './TimeSeriesControls.module.css';
 
 export default class TimeSeriesControls extends Component {
@@ -23,7 +24,7 @@ export default class TimeSeriesControls extends Component {
   };
 
   static defaultProps = {
-    liveMode: false,
+    liveMode: true,
   };
 
   constructor(props) {
@@ -47,29 +48,12 @@ export default class TimeSeriesControls extends Component {
     return (
       <div ref={this.containerRef} className={styles.timeseriesControlsContainer}>
         <div className={styles.switchContainer}>
-          <span
-            className={[styles.modeSelection, this.props.isLive ? styles.highlightText : ''].join(' ')}
-            onClick={() => this.props.setLiveMode(true)}
-          >
-            Live
-          </span>
-          <label className={styles.switch}>
-            <input
-              type="checkbox"
-              alt="Live/query mode toggle"
-              checked={!this.props.isLive}
-              onChange={this.handleChangeChk}
-            />
-            <span className={[styles.slider, styles.round].join(' ')} />
-          </label>
-          <span
-            className={[styles.modeSelection, !this.props.isLive ? styles.highlightText : ''].join(' ')}
-            onClick={() => this.props.setLiveMode(false)}
-          >
-            Query
-          </span>
+          <Toggle
+            labels={['Live', 'Query']}
+            isLive={!this.props.isLive}
+            setLiveMode={(show) => this.props.setLiveMode(!show)}
+          />
         </div>
-
         {this.props.isLive ? (
           <TimeWindow setTimeWindow={this.props.setTimeWindow} timeWindow={this.props.timeWindow} />
         ) : (

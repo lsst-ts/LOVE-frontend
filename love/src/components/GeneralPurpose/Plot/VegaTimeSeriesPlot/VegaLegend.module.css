@@ -10,7 +10,7 @@
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   grid-auto-rows: min-content;
   line-height: 0px;
-  font-size: 8pt;
+  font-size: 0.76rem;
   column-gap: 0.5em;
   justify-content: start;
   align-content: start;

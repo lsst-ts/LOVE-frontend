@@ -169,6 +169,16 @@ export const observatoryIndex = {
       },
     },
   },
+  Microphones: {
+    component: require('../Mics/Mics.container').default,
+    schema: {
+      ...require('../Mics/Mics.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../Mics/Mics.container').schema.props,
+      },
+    },
+  },
   WeatherStation: {
     component: require('../WeatherStation/WeatherStation.container').default,
     schema: {
@@ -186,6 +196,66 @@ export const observatoryIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../Facility/FacilityMap.container').schema.props,
+      },
+    },
+  },
+  WeatherForecast: {
+    component: require('../WeatherForecast/WeatherForecast.container').default,
+    schema: {
+      ...require('../WeatherForecast/WeatherForecast.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../WeatherForecast/WeatherForecast.container').schema.props,
+      },
+    },
+  },
+  WindPlotForecast: {
+    component: require('../WeatherForecast/PlotsContainer/WindPlot.container').default,
+    schema: {
+      ...require('../WeatherForecast/PlotsContainer/WindPlot.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../WeatherForecast/PlotsContainer/WindPlot.container').schema.props,
+      },
+    },
+  },
+  TemperaturePlotForecast: {
+    component: require('../WeatherForecast/PlotsContainer/TemperaturePlot.container').default,
+    schema: {
+      ...require('../WeatherForecast/PlotsContainer/TemperaturePlot.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../WeatherForecast/PlotsContainer/TemperaturePlot.container').schema.props,
+      },
+    },
+  },
+  RainPlotForecast: {
+    component: require('../WeatherForecast/PlotsContainer/RainPlot.container').default,
+    schema: {
+      ...require('../WeatherForecast/PlotsContainer/RainPlot.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../WeatherForecast/PlotsContainer/RainPlot.container').schema.props,
+      },
+    },
+  },
+  CloudPlotForecast: {
+    component: require('../WeatherForecast/PlotsContainer/CloudPlot.container').default,
+    schema: {
+      ...require('../WeatherForecast/PlotsContainer/CloudPlot.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../WeatherForecast/PlotsContainer/CloudPlot.container').schema.props,
+      },
+    },
+  },
+  InfoHeaderForecast: {
+    component: require('../WeatherForecast/InfoHeader/InfoHeader.container').default,
+    schema: {
+      ...require('../WeatherForecast/InfoHeader/InfoHeader.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../WeatherForecast/InfoHeader/InfoHeader.container').schema.props,
       },
     },
   },
@@ -477,8 +547,8 @@ export const utilitiesIndex = {
     schema: require('../GeneralPurpose/Plot/VegaCustomPlot/VegaCustomPlot.container').schema,
   },
   VegaTimeSeriesPlot: {
-    component: require('../GeneralPurpose/Plot/Plot.container').default,
-    schema: require('../GeneralPurpose/Plot/Plot.container').schema,
+    component: require('../GeneralPurpose/Plot/Plot.container.jsx').default,
+    schema: require('../GeneralPurpose/Plot/Plot.container.jsx').schema,
   },
   PolarPlot: {
     component: require('../GeneralPurpose/Plot/PolarPlot/PolarPlot.container').default,
