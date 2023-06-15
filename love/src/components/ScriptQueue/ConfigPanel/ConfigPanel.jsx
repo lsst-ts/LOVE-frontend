@@ -594,8 +594,8 @@ export default class ConfigPanel extends Component {
     const { orientation, showSchema } = this.state;
     const scriptName = this.props.configPanel?.name ?? '';
     const scriptPath = this.props.configPanel?.script?.path ?? '';
-    const yamlSchema = this.props.configPanel?.script?.configSchema ?? '';
     const isStandard = this.props.configPanel?.script ? this.props.configPanel.script?.type === 'standard' : false;
+    const yamlSchema = this.props.configPanel?.configSchema ?? '';
 
     const sidePanelSize = {
       stacked: {
