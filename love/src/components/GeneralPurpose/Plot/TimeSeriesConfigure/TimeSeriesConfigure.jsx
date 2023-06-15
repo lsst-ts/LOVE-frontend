@@ -58,7 +58,6 @@ export default class TimeSeriesConfigure extends PureComponent {
     super(props);
     this.state = {
       currentConfig: [],
-      //optionsTree: null,
       changed: false,
       entries: [],
     };
@@ -74,9 +73,6 @@ export default class TimeSeriesConfigure extends PureComponent {
 
     const refs = this.state.entries.map(item => React.createRef());
     this.setState({ entries, refs });
-    /* ManagerInterface.getTopicData('event-telemetry').then((data) => {
-      this.setState({ optionsTree: data });
-    }); */
   };
 
   onEntryRemove = (index) => {
@@ -92,16 +88,7 @@ export default class TimeSeriesConfigure extends PureComponent {
       delete entry.name;
       inputs[name] = entry;
     });
-    /* if (this.state.changed) { */
-      /* const inputs = {};
-      this.state.entries.forEach((entry) => {
-        console.log('entry:', entry);
-        const name = entry.name;
-        delete entry.name;
-        inputs[name] = entry;
-      }); */
-      this.props.onSave(inputs);
-    /* } */
+    this.props.onSave(inputs);
   };
 
   render() {
@@ -161,7 +148,6 @@ export default class TimeSeriesConfigure extends PureComponent {
             status="primary"
             onClick={() => this.onApply(refs)}
             className={styles.button}
-            // disabled={!this.state.changed}
           >
             Apply
           </Button>
