@@ -15,7 +15,6 @@ export const schema = {
       isPrivate: false,
       default: [
         'telemetry-all-all-all',
-        // 'telemetry-ATDome-0-azimuthPosition',
       ],
     },
   }
