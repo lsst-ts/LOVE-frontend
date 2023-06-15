@@ -86,6 +86,7 @@ export default class FinishedScript extends PureComponent {
     const startDateIso = new Date(start * 1000).toISOString();
     const endDateIso = new Date(end * 1000).toISOString();
     ManagerInterface.getEFDLogs(startDateIso, endDateIso, cscs, efdInstance).then((res) => {
+      if (!res) return;
       this.setState({
         logs: res[`Script-${scriptIndex}-logevent_logMessage`].map(parseToSALFormat),
         appliedConfiguration: res[`Script-${scriptIndex}-command_configure`][0]?.config,
