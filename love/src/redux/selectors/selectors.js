@@ -1732,6 +1732,7 @@ export const getObservatoryState = (state) => {
   const auxtelObservatoryState = observatoryData['telemetry-Scheduler-2-observatoryState'];
   const environmentVariables = observatoryData['event-ESS-301-precipitation'];
   const essTemperatures = observatoryData['telemetry-ESS-301-temperature'];
+  const essAirFlow = observatoryData['telemetry-ESS-301-airFlow'];
   const mptgCurrentTarget = observatoryData['event-MTPtg-0-currentTarget'];
   const atptgCurrentTarget = observatoryData['event-ATPtg-0-currentTarget'];
 
@@ -1764,6 +1765,8 @@ export const getObservatoryState = (state) => {
       ? essTemperatures.temperature.value
       : [18.3, 20.5, 19.7, 18.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     location: essTemperatures ? essTemperatures.location.value : 'control room, machine room, 2nd floor, 1st floor',
+    windDirection: essAirFlow ? essAirFlow.direction.value : 0.0,
+    windSpeed: essAirFlow ? essAirFlow.speed : 0.0,
   };
 };
 

@@ -18,6 +18,10 @@
   right: 3%;
 }
 
+.windDirectionDetail {
+  display: grid;
+}
+
 .iconLeft {
   position: absolute;
   left: 17%;

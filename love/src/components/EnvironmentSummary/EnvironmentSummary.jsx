@@ -57,6 +57,10 @@ export default class EnvironmentSummary extends Component {
     isRaining: PropTypes.bool,
     /** Is it snowing? */
     isSnowing: PropTypes.bool,
+    /** Circular mean wind direction: 0 = north, 90 = east */
+    windDirection: PropTypes.number,
+    /** Median (mean for some sensors) wind speed */
+    windSpeed: PropTypes.number,
   };
 
   constructor(props) {
@@ -92,13 +96,18 @@ export default class EnvironmentSummary extends Component {
       numChannels,
       temperature,
       location,
+      windDirection,
+      windSpeed,
     } = this.props;
 
     return (
       <div className={styles.container}>
         <div className={styles.windDirection}>
           <WindDirection></WindDirection>
-          <div>flecha</div>
+          <div className={styles.windDirectionDetail}>
+            <span>Direction: {windDirection}</span>
+            <span>Speed: {windSpeed}</span>
+          </div>
         </div>
         <div className={styles.windRoseContainer}>
           <WindRose />

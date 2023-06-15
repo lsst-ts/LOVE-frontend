@@ -43,6 +43,8 @@ const EnvironmentSummaryContainer = ({
   numChannels,
   temperature,
   location,
+  windDirection,
+  windSpeed,
   ...props
 }) => {
   if (props.isRaw) {
@@ -74,6 +76,8 @@ const EnvironmentSummaryContainer = ({
       numChannels={numChannels}
       temperature={temperature}
       location={location}
+      windDirection={windDirection}
+      windSpeed={windSpeed}
     />
   );
 };
@@ -92,6 +96,7 @@ const mapDispatchToProps = (dispatch) => {
     `event-Scheduler-1-target`,
     'event-ESS-301-precipitation',
     'telemetry-ESS-301-temperature',
+    'telemetry-ESS-301-airFlow',
   ];
   return {
     subscriptions,
