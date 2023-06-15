@@ -53,3 +53,9 @@
   left: 100px;
   width: 335px;
 }
+
+.hover {
+  fill: var(--tertiary-background-color);
+  stroke: var(--base-font-color);
+  opacity: 0.5;
+}

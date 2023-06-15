@@ -11,6 +11,13 @@ function AuxTelescope({ className, ...props }) {
       {/* <text x={135} y={10} width="60" height="40" className={styles.temperature}>
         10.84 °C
       </text> */}
+      <g id="ATDome">
+        <rect className={styles.cls2} x="169.41" y="132.63" width="176.93" height="45" />
+        <path
+          className={showAuxtelSummary ? styles.hover : styles.cls5}
+          d="m257.87,1h0c48.83,0,88.46,39.64,88.46,88.46v43.17h-176.93v-43.17c0-48.83,39.64-88.46,88.46-88.46Z"
+        />
+      </g>
       <g id="AuxTel">
         {/* <text x={187} y={50} width="60" height="40" className={styles.temperature}>
           10.36 °C
@@ -45,13 +52,6 @@ function AuxTelescope({ className, ...props }) {
           <polygon
             className={styles.cls1}
             points="394.04 177.63 359.94 177.63 15.77 290.12 1.11 435.59 443.43 435.59 443.43 219.08 394.04 177.63"
-          />
-        </g>
-        <g id="ATDome">
-          <rect className={styles.cls2} x="169.41" y="132.63" width="176.93" height="45" />
-          <path
-            className={styles.cls5}
-            d="m257.87,1h0c48.83,0,88.46,39.64,88.46,88.46v43.17h-176.93v-43.17c0-48.83,39.64-88.46,88.46-88.46Z"
           />
         </g>
       </g>

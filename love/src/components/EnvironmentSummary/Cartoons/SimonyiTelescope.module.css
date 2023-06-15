@@ -87,3 +87,8 @@
   left: 130px;
   width: 325px;
 }
+
+.hover {
+  fill: var(--tertiary-background-color);
+  stroke: var(--base-font-color);
+}

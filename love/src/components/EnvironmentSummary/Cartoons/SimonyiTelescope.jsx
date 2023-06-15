@@ -12,6 +12,11 @@ function SimonyiTelescope({ className, ...props }) {
         10.12°
       </text> */}
       <g id="Simonyi">
+        <polygon
+          id="SimonyiDome"
+          className={showSimonyiSummary ? styles.hover : styles.cls6}
+          points="275.31 175.1 275.31 49.4 202.98 1.11 74.29 45.61 20.96 129.31 20.96 176.07 275.31 175.1"
+        />
         <g id="TMA" onMouseEnter={() => setShowSimonyiSummary(true)} onMouseLeave={() => setShowSimonyiSummary(false)}>
           {/* <text x={185} y={40} width="60" height="40" className={styles.temperature}>
             18.36 °C
@@ -74,11 +79,6 @@ function SimonyiTelescope({ className, ...props }) {
           id="Facility"
           className={styles.cls3}
           points="33.94 176.07 274.72 176.07 274.72 200.89 385.54 200.89 396.18 230.26 581.34 230.28 701.87 309.3 692.77 309.14 692.8 314.24 694.51 314.24 720.11 346.48 712.52 346.83 712.52 351.39 714.5 351.53 725.27 380.34 712.97 380.34 712.97 385.81 716.87 385.81 714.51 430.74 712.97 430.74 712.97 435.7 1.05 435.7 1 300.02 41.16 300.02 41.32 209.26 33.94 208.77 33.94 176.07"
-        />
-        <polygon
-          id="SimonyiDome"
-          className={styles.cls6}
-          points="275.31 175.1 275.31 49.4 202.98 1.11 74.29 45.61 20.96 129.31 20.96 176.07 275.31 175.1"
         />
       </g>
       <g id="LiftSchute">
