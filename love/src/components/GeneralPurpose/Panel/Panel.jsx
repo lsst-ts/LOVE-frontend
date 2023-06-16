@@ -34,12 +34,19 @@ export default class Panel extends Component {
     super();
     this.state = {
       isRaw: false,
+      hasEUI: false,
     };
   }
 
   toggleRaw = () => {
     this.setState({
       isRaw: !this.state.isRaw,
+    });
+  };
+
+  toggleEUI = () => {
+    this.setState({
+      hasEUI: !this.state.hasEUI,
     });
   };
 
@@ -55,6 +62,7 @@ export default class Panel extends Component {
       return React.cloneElement(child, {
         index,
         isRaw: this.state.isRaw,
+        hasEUI: this.state.hasEUI,
       });
     });
     const hasLink = this.props.link && this.props.link !== '';
@@ -72,6 +80,16 @@ export default class Panel extends Component {
                   size={'small'}
                 >
                   {this.state.isRaw ? <span> &#5176; &nbsp; back</span> : <span>raw data</span>}
+                </Button>
+              )}
+              {this.props.hasEUI && (
+                <Button
+                  title={this.state.hasEUI ? this.props.hasEUI.link : ''}
+                  onClick={() => this.toggleEUI()}
+                  className={styles.panelButton}
+                  size={'small'}
+                >
+                  {this.state.hasEUI ? <span> &#5176; &nbsp; back</span> : <span>EUI</span>}
                 </Button>
               )}
               {hasLink && (

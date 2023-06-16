@@ -21,11 +21,17 @@ export const schema = {
       isPrivate: false,
       default: 'M1M3',
     },
+    hasEUI: {
+      type: 'boolean',
+      title: 'ls.st/m1m3-dev',
+      isPrivate: false,
+      default: true,
+    },
   },
 };
 
 const M1M3Container = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
-  if (props.isRaw) {
+  if (props.isRaw && props.hasEUI) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
   return <M1M3 subscribeToStreams={subscribeToStreams} unsubscribeToStreams={unsubscribeToStreams} {...props} />;

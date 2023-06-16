@@ -147,6 +147,7 @@ class CustomView extends Component {
     const { config } = component;
     const parsedConfig = this.parseConfig(config);
     comp = <LoveComp {...parsedConfig} />;
+    console.log(parsedConfig);
     return (
       <div
         key={component.properties.i.toString()}
