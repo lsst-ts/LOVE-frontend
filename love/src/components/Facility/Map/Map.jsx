@@ -105,6 +105,7 @@ export default class Map extends Component {
     const { crack01P02, crack02P02 } = this.props.HVACDataLevel2;
     const { manejadoraSblancaP04, manejadoraSlimpiaP04, vex04CargaP04, vex03LowerP04 } = this.props.HVACDataLevel4;
     const {
+      dynaleneP05Events,
       manejadoraLower01P05,
       manejadoraLower02P05,
       manejadoraLower03P05,
@@ -210,6 +211,12 @@ export default class Map extends Component {
     }
 
     const alarms_5 = [
+      dynaleneP05Events.dynMainGridAlarm ? dynaleneP05Events.dynMainGridAlarm.value : null,
+      dynaleneP05Events.dynMainGridFailureFlag ? dynaleneP05Events.dynMainGridFailureFlag.value : null,
+      dynaleneP05Events.dynSafetyResetFlag ? dynaleneP05Events.dynSafetyResetFlag.value : null,
+      dynaleneP05Events.dynTAalarm ? dynaleneP05Events.dynTAalarm.value : null,
+      dynaleneP05Events.dynTMAalarm ? dynaleneP05Events.dynTMAalarm.value : null,
+      dynaleneP05Events.dynaleneTankLevel ? (!dynaleneP05Events.dynaleneTankLevel.value === 0 ? true : false) : null,
       manejadoraLower01P05.alarmaGeneral ? manejadoraLower01P05.alarmaGeneral.value : null,
       manejadoraLower01P05.alarmaFiltro ? manejadoraLower01P05.alarmaFiltro.value : null,
       manejadoraLower01P05.resetAlarma ? manejadoraLower01P05.resetAlarma.value : null,
@@ -236,7 +243,8 @@ export default class Map extends Component {
     ];
 
     if (
-      (manejadoraLower01P05 ||
+      (dynaleneP05Events ||
+        manejadoraLower01P05 ||
         manejadoraLower02P05 ||
         manejadoraLower03P05 ||
         manejadoraLower04P05 ||
@@ -251,7 +259,18 @@ export default class Map extends Component {
         vea15P05 ||
         vea16P05 ||
         vea17P05) &&
-      (prevHVACDataLevel5.manejadoraLower01P05?.alarmaGeneral?.value !== manejadoraLower01P05.alarmaGeneral?.value ||
+      (prevHVACDataLevel5.dynaleneP05Events?.dynMainGridAlarm?.value !== dynaleneP05Events?.dynMainGridAlarm?.value ||
+        prevHVACDataLevel5.dynaleneP05Events?.dynMainGridFailureFlag?.value !==
+          dynaleneP05Events?.dynMainGridFailureFlag?.value ||
+        prevHVACDataLevel5.dynaleneP05Events?.dynSafetyResetFlag?.value !==
+          dynaleneP05Events?.dynSafetyResetFlag?.value ||
+        prevHVACDataLevel5.dynaleneP05Events?.dynTAalarm?.value !== dynaleneP05Events?.dynTAalarm?.value ||
+        prevHVACDataLevel5.dynaleneP05Events?.dynTMAalarm?.value !== dynaleneP05Events?.dynTMAalarm?.value ||
+        prevHVACDataLevel5.dynaleneP05Events?.dynaleneTankLevel?.value !==
+          dynaleneP05Events?.dynaleneTankLevel?.value ||
+        prevHVACDataLevel5.dynaleneP05Events?.dynMainGridAlarm?.value !== dynaleneP05Events?.dynMainGridAlarm?.value ||
+        prevHVACDataLevel5.dynaleneP05Events?.dynMainGridAlarm?.value !== dynaleneP05Events?.dynMainGridAlarm?.value ||
+        prevHVACDataLevel5.manejadoraLower01P05?.alarmaGeneral?.value !== manejadoraLower01P05.alarmaGeneral?.value ||
         prevHVACDataLevel5.manejadoraLower01P05?.alarmaFiltro?.value !== manejadoraLower01P05.alarmaFiltro?.value ||
         prevHVACDataLevel5.manejadoraLower01P05?.resetAlarma?.value !== manejadoraLower01P05.resetAlarma?.value ||
         prevHVACDataLevel5.manejadoraLower02P05?.alarmaGeneral?.value !== manejadoraLower02P05.alarmaGeneral?.value ||

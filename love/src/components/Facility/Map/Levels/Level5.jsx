@@ -50,8 +50,34 @@ export default class Level5 extends Component {
     this.props.savePos(transformData);
   };
 
+  dynaleneStatetoText(ctx) {
+    switch (ctx) {
+      case 0:
+        return `${'Initialized'}`;
+      case 1:
+        return `${'Shutting Down'}`;
+      case 2:
+        return `${'Powering On'}`;
+      case 3:
+        return `${'Powered On'}`;
+      case 4:
+        return `${'Powering Off'}`;
+      case 5:
+        return `${'Powered Off'}`;
+      case 6:
+        return `${'Warning'}`;
+      case 7:
+        return `${'Alarm'}`;
+      case 8:
+        return `${'Shut Off'}`;
+      default:
+        return `${'Undefined'}`;
+    }
+  }
+
   getDevices() {
     const {
+      dynaleneP05Events,
       dynaleneP05,
       manejadoraLower01P05,
       manejadoraLower02P05,
@@ -961,6 +987,264 @@ export default class Level5 extends Component {
             switch: vea17P05.estadoSelector ? vea17P05.estadoSelector.value : null,
           }}
         />
+
+        <Device
+          title={'Dynalene'}
+          id={4}
+          width={108}
+          height={220}
+          posX={75}
+          posY={130}
+          collapsible={true}
+          alarms={{
+            alarm1: {
+              name: 'Main Grid Alarm',
+              state: dynaleneP05Events.dynMainGridAlarm ? dynaleneP05Events.dynMainGridAlarm.value : null,
+            },
+            alarm2: {
+              name: 'Main Grid Failure',
+              state: dynaleneP05Events.dynMainGridFailureFlag ? dynaleneP05Events.dynMainGridFailureFlag.value : null,
+            },
+            alarm3: {
+              name: 'Safety Reset Flag',
+              state: dynaleneP05Events.dynSafetyResetFlag ? dynaleneP05Events.dynSafetyResetFlag.value : null,
+            },
+            alarm4: {
+              name: 'Test Area Alarm',
+              state: dynaleneP05Events.dynTAalarm ? dynaleneP05Events.dynTAalarm.value : null,
+            },
+            alarm5: {
+              name: 'TMA Alarm',
+              state: dynaleneP05Events.dynTMAalarm ? dynaleneP05Events.dynTMAalarm.value : null,
+            },
+            alarm6: {
+              name: 'Tank Level',
+              state: dynaleneP05Events.dynaleneTankLevel
+                ? !dynaleneP05Events.dynaleneTankLevel.value === 0
+                  ? true
+                  : false
+                : null,
+            },
+          }}
+          states={{
+            command: false,
+            working: dynaleneP05Events.dynaleneState
+              ? dynaleneP05Events.dynaleneState.value === 0 || dynaleneP05Events.dynaleneState.value === 3
+                ? true
+                : false
+              : null,
+            unit: null,
+            switch: null,
+          }}
+          parameters={{
+            dynaleneState: {
+              type: 'status',
+              name: 'Dynalene State',
+              unit: null,
+              value: dynaleneP05Events.dynaleneState
+                ? this.dynaleneStatetoText(dynaleneP05Events.dynaleneState.value)
+                : null,
+            },
+            chiller01: {
+              type: 'group',
+              name: 'Chiller 01 Supply',
+              unit: dynaleneP05.dynCH01LS01 ? ' % Tank Level' : null,
+              value: dynaleneP05.dynCH01LS01 ? dynaleneP05.dynCH01LS01.value : null,
+              params: {
+                dynCH01supFS01: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Flowrate',
+                  state: null,
+                  unit: dynaleneP05.dynCH01supFS01 ? ' ' + dynaleneP05.dynCH01supFS01.units : null,
+                  value: dynaleneP05.dynCH01supFS01 ? dynaleneP05.dynCH01supFS01.value : null,
+                },
+                dynCH01supPS11: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Pressure',
+                  state: null,
+                  unit: dynaleneP05.dynCH01supPS11 ? ' ' + dynaleneP05.dynCH01supPS11.units : null,
+                  value: dynaleneP05.dynCH01supPS11 ? dynaleneP05.dynCH01supPS11.value : null,
+                },
+                dynCH01supTS05: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Temperature',
+                  state: null,
+                  unit: dynaleneP05.dynCH01supTS05 ? ' ºC' : null,
+                  value: dynaleneP05.dynCH01supTS05 ? dynaleneP05.dynCH01supTS05.value : null,
+                },
+              },
+            },
+            chiller02: {
+              type: 'group',
+              name: 'Chiller 02 Supply',
+              unit: dynaleneP05.dynCH02LS02 ? ' % Tank Level' : null,
+              value: dynaleneP05.dynCH02LS02 ? dynaleneP05.dynCH02LS02.value : null,
+              params: {
+                dynCH02supFS02: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Flowrate',
+                  state: null,
+                  unit: dynaleneP05.dynCH02supFS02 ? ' ' + dynaleneP05.dynCH02supFS02.units : null,
+                  value: dynaleneP05.dynCH02supFS02 ? dynaleneP05.dynCH02supFS02.value : null,
+                },
+                dynCH02supPS13: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Pressure',
+                  state: null,
+                  unit: dynaleneP05.dynCH02supPS13 ? ' ' + dynaleneP05.dynCH02supPS13.units : null,
+                  value: dynaleneP05.dynCH02supPS13 ? dynaleneP05.dynCH02supPS13.value : null,
+                },
+                dynCH02supTS07: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Temperature',
+                  state: null,
+                  unit: dynaleneP05.dynCH02supTS07 ? ' ºC' : null,
+                  value: dynaleneP05.dynCH02supTS07 ? dynaleneP05.dynCH02supTS07.value : null,
+                },
+              },
+            },
+            testArea: {
+              type: 'title',
+              name: 'TestArea',
+              unit: null,
+              value: null,
+              params: null,
+            },
+            dynTAsupFS04: {
+              type: 'single',
+              name: 'Flow Rate',
+              unit: dynaleneP05.dynTAsupFS04 ? ' ' + dynaleneP05.dynTAsupFS04.units : null,
+              value: dynaleneP05.dynTAsupFS04 ? dynaleneP05.dynTAsupFS04.value : null,
+            },
+            dynTAtpd: {
+              type: 'single',
+              name: 'Thermal Power Dissipation',
+              unit: dynaleneP05.dynTAtpd ? ' ' + dynaleneP05.dynTAtpd.units : null,
+              value: dynaleneP05.dynTAtpd ? dynaleneP05.dynTAtpd.value : null,
+            },
+            testAreaPressure: {
+              type: 'group',
+              name: 'Test Area Pressure',
+              unit: null,
+              value: null,
+              params: {
+                testAreaDynaleneSupplyPressure: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Supply',
+                  state: null,
+                  unit: dynaleneP05.dynTAsupPS03 ? ' ' + dynaleneP05.dynTAretPS04.units : null,
+                  value: dynaleneP05.dynTAsupPS03 ? dynaleneP05.dynTAsupPS03.value : null,
+                },
+                testAreaDynaleneReturnPressure: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Return',
+                  state: null,
+                  unit: dynaleneP05.dynTAretPS04 ? ' ' + dynaleneP05.dynTAretPS04.units : null,
+                  value: dynaleneP05.dynTAretPS04 ? dynaleneP05.dynTAretPS04.value : null,
+                },
+              },
+            },
+            testAreaTemperatura: {
+              type: 'group',
+              name: 'Test Area Temperature',
+              unit: null,
+              value: null,
+              params: {
+                testAreaDynaleneSupplyTemp: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Supply',
+                  state: null,
+                  unit: dynaleneP05.dynTAsupTS03 ? 'ºC' : null,
+                  value: dynaleneP05.dynTAsupTS03 ? dynaleneP05.dynTAsupTS03.value : null,
+                },
+                testAreaDynaleneReturnTemp: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Return',
+                  state: null,
+                  unit: dynaleneP05.dynTAretTS04 ? 'ºC' : null,
+                  value: dynaleneP05.dynTAretTS04 ? dynaleneP05.dynTAretTS04.value : null,
+                },
+              },
+            },
+            TMA: {
+              type: 'title',
+              name: 'TMA',
+              unit: null,
+              value: null,
+              params: null,
+            },
+            dynTMAsupFS03: {
+              type: 'single',
+              name: 'Flow Rate to L6',
+              unit: dynaleneP05.dynTMAsupFS03 ? ' ' + dynaleneP05.dynTMAsupFS03.units : null,
+              value: dynaleneP05.dynTMAsupFS03 ? dynaleneP05.dynTMAsupFS03.value : null,
+            },
+            dynTMAtpd: {
+              type: 'single',
+              name: 'Thermal Power Dissipation',
+              unit: dynaleneP05.dynTMAtpd ? ' ' + dynaleneP05.dynTMAtpd.units : null,
+              value: dynaleneP05.dynTMAtpd ? dynaleneP05.dynTMAtpd.value : null,
+            },
+            testAreaPressure: {
+              type: 'group',
+              name: 'Test Area Pressure',
+              unit: null,
+              value: null,
+              params: {
+                TMASupplyPressure: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Supply',
+                  state: null,
+                  unit: dynaleneP05.dynTMAsupPS01 ? ' ' + dynaleneP05.dynTMAsupPS01.units : null,
+                  value: dynaleneP05.dynTMAsupPS01 ? dynaleneP05.dynTMAsupPS01.value : null,
+                },
+                TMAReturnPressure: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Return',
+                  state: null,
+                  unit: dynaleneP05.dynTMAretPS02 ? ' ' + dynaleneP05.dynTMAretPS02.units : null,
+                  value: dynaleneP05.dynTMAretPS02 ? dynaleneP05.dynTMAretPS02.value : null,
+                },
+              },
+            },
+            TMATemperature: {
+              type: 'group',
+              name: 'Test Area Temperature',
+              unit: null,
+              value: null,
+              params: {
+                TMASupplyTemp: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Supply',
+                  state: null,
+                  unit: dynaleneP05.dynTMAsupTS01 ? 'ºC' : null,
+                  value: dynaleneP05.dynTMAsupTS01 ? dynaleneP05.dynTMAsupTS01.value : null,
+                },
+                TMAReturnTemp: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Return',
+                  state: null,
+                  unit: dynaleneP05.dynTMAretTS02 ? 'ºC' : null,
+                  value: dynaleneP05.dynTMAretTS02 ? dynaleneP05.dynTMAretTS02.value : null,
+                },
+              },
+            },
+          }}
+        />
       </React.Fragment>
     );
   }
@@ -1253,57 +1537,10 @@ export default class Level5 extends Component {
               <g className={styles.cls32}>
                 <text className={styles.cls16} transform="translate(395.02 107.49)">
                   <tspan x="0" y="0">
-                    Ge
-                  </tspan>
-                  <tspan className={styles.cls25} x="8.26" y="0">
-                    n
-                  </tspan>
-                  <tspan x="12.34" y="0">
-                    e
-                  </tspan>
-                  <tspan className={styles.cls21} x="15.96" y="0">
-                    r
-                  </tspan>
-                  <tspan x="18.31" y="0">
-                    al
+                    General
                   </tspan>
                   <tspan x="2.9" y="7.2">
-                    Utili
-                  </tspan>
-                  <tspan className={styles.cls1} x="14.93" y="7.2">
-                    t
-                  </tspan>
-                  <tspan x="17.31" y="7.2">
-                    y
-                  </tspan>
-                  <tspan x="2.62" y="14.4">
-                    Room
-                  </tspan>
-                </text>
-                <text className={styles.cls16} transform="translate(395.02 107.49)">
-                  <tspan x="0" y="0">
-                    Ge
-                  </tspan>
-                  <tspan className={styles.cls25} x="8.26" y="0">
-                    n
-                  </tspan>
-                  <tspan x="12.34" y="0">
-                    e
-                  </tspan>
-                  <tspan className={styles.cls21} x="15.96" y="0">
-                    r
-                  </tspan>
-                  <tspan x="18.31" y="0">
-                    al
-                  </tspan>
-                  <tspan x="2.9" y="7.2">
-                    Utili
-                  </tspan>
-                  <tspan className={styles.cls1} x="14.93" y="7.2">
-                    t
-                  </tspan>
-                  <tspan x="17.31" y="7.2">
-                    y
+                    Utility
                   </tspan>
                   <tspan x="2.62" y="14.4">
                     Room
@@ -1313,45 +1550,7 @@ export default class Level5 extends Component {
               <g className={styles.cls32}>
                 <text className={styles.cls16} transform="translate(320.5 114.33)">
                   <tspan x="0" y="0">
-                    Optics Main
-                  </tspan>
-                  <tspan className={styles.cls3} x="35.98" y="0">
-                    t
-                  </tspan>
-                  <tspan className={styles.cls24} x="38.3" y="0">
-                    ena
-                  </tspan>
-                  <tspan className={styles.cls33} x="49.53" y="0">
-                    n
-                  </tspan>
-                  <tspan className={styles.cls18} x="53.6" y="0">
-                    c
-                  </tspan>
-                  <tspan x="56.93" y="0">
-                    e
-                  </tspan>
-                  <tspan x="21.16" y="7.2">
-                    Room
-                  </tspan>
-                </text>
-                <text className={styles.cls16} transform="translate(320.5 114.33)">
-                  <tspan x="0" y="0">
-                    Optics Main
-                  </tspan>
-                  <tspan className={styles.cls3} x="35.98" y="0">
-                    t
-                  </tspan>
-                  <tspan className={styles.cls24} x="38.3" y="0">
-                    ena
-                  </tspan>
-                  <tspan className={styles.cls33} x="49.53" y="0">
-                    n
-                  </tspan>
-                  <tspan className={styles.cls18} x="53.6" y="0">
-                    c
-                  </tspan>
-                  <tspan x="56.93" y="0">
-                    e
+                    Optics Maintenance
                   </tspan>
                   <tspan x="21.16" y="7.2">
                     Room
@@ -1361,258 +1560,40 @@ export default class Level5 extends Component {
               <g className={styles.cls32}>
                 <text className={styles.cls16} transform="translate(366.07 197.01)">
                   <tspan x="0" y="0">
-                    8
-                  </tspan>
-                  <tspan className={styles.cls31} x="3.83" y="0">
-                    0
-                  </tspan>
-                  <tspan className={styles.cls34} x="7.85" y="0">
-                    -
-                  </tspan>
-                  <tspan className={styles.cls23} x="9.95" y="0">
-                    T
-                  </tspan>
-                  <tspan x="13.06" y="0">
-                    on
+                    80-Ton
                   </tspan>
                   <tspan x="-8.33" y="7.2">
-                    Plat
-                  </tspan>
-                  <tspan className={styles.cls21} x="3.56" y="7.2">
-                    f
-                  </tspan>
-                  <tspan className={styles.cls24} x="5.54" y="7.2">
-                    o
-                  </tspan>
-                  <tspan className={styles.cls26} x="9.31" y="7.2">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls22} x="11.66" y="7.2">
-                    m Lift
-                  </tspan>
-                </text>
-                <text className={styles.cls16} transform="translate(366.07 197.01)">
-                  <tspan x="0" y="0">
-                    8
-                  </tspan>
-                  <tspan className={styles.cls31} x="3.83" y="0">
-                    0
-                  </tspan>
-                  <tspan className={styles.cls34} x="7.85" y="0">
-                    -
-                  </tspan>
-                  <tspan className={styles.cls23} x="9.95" y="0">
-                    T
-                  </tspan>
-                  <tspan x="13.06" y="0">
-                    on
-                  </tspan>
-                  <tspan x="-8.33" y="7.2">
-                    Plat
-                  </tspan>
-                  <tspan className={styles.cls21} x="3.56" y="7.2">
-                    f
-                  </tspan>
-                  <tspan className={styles.cls24} x="5.54" y="7.2">
-                    o
-                  </tspan>
-                  <tspan className={styles.cls26} x="9.31" y="7.2">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls22} x="11.66" y="7.2">
-                    m Lift
+                    Platform Lift
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls32}>
                 <text className={styles.cls16} transform="translate(243.52 175.26)">
                   <tspan className={styles.cls26} x="0" y="0">
-                    L
-                  </tspan>
-                  <tspan className={styles.cls29} x="3.49" y="0">
-                    ow
-                  </tspan>
-                  <tspan x="12.34" y="0">
-                    er E
-                  </tspan>
-                  <tspan className={styles.cls25} x="23.96" y="0">
-                    n
-                  </tspan>
-                  <tspan className={styles.cls26} x="28.03" y="0">
-                    c
-                  </tspan>
-                  <tspan x="31.36" y="0">
-                    losu
-                  </tspan>
-                  <tspan className={styles.cls36} x="43.71" y="0">
-                    r
-                  </tspan>
-                  <tspan x="46.04" y="0">
-                    e
+                    Lower Enclosure
                   </tspan>
                   <tspan x="4.92" y="7.2">
-                    G
-                  </tspan>
-                  <tspan className={styles.cls35} x="9.56" y="7.2">
-                    r
-                  </tspan>
-                  <tspan x="11.89" y="7.2">
-                    ou
-                  </tspan>
-                  <tspan className={styles.cls33} x="19.69" y="7.2">
-                    n
-                  </tspan>
-                  <tspan x="23.76" y="7.2">
-                    d Floor
-                  </tspan>
-                </text>
-                <text className={styles.cls16} transform="translate(243.52 175.26)">
-                  <tspan className={styles.cls26} x="0" y="0">
-                    L
-                  </tspan>
-                  <tspan className={styles.cls29} x="3.49" y="0">
-                    ow
-                  </tspan>
-                  <tspan x="12.34" y="0">
-                    er E
-                  </tspan>
-                  <tspan className={styles.cls25} x="23.96" y="0">
-                    n
-                  </tspan>
-                  <tspan className={styles.cls26} x="28.03" y="0">
-                    c
-                  </tspan>
-                  <tspan x="31.36" y="0">
-                    losu
-                  </tspan>
-                  <tspan className={styles.cls36} x="43.71" y="0">
-                    r
-                  </tspan>
-                  <tspan x="46.04" y="0">
-                    e
-                  </tspan>
-                  <tspan x="4.92" y="7.2">
-                    G
-                  </tspan>
-                  <tspan className={styles.cls35} x="9.56" y="7.2">
-                    r
-                  </tspan>
-                  <tspan x="11.89" y="7.2">
-                    ou
-                  </tspan>
-                  <tspan className={styles.cls33} x="19.69" y="7.2">
-                    n
-                  </tspan>
-                  <tspan x="23.76" y="7.2">
-                    d Floor
+                    Ground Floor
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls32}>
                 <text className={styles.cls16} transform="translate(170.45 221.96)">
                   <tspan className={styles.cls4} x="0" y="0">
-                    P
-                  </tspan>
-                  <tspan x="4.17" y="0">
-                    ier
+                    Pier
                   </tspan>
                   <tspan x="-14" y="7.2">
-                    G
-                  </tspan>
-                  <tspan className={styles.cls35} x="-9.37" y="7.2">
-                    r
-                  </tspan>
-                  <tspan x="-7.04" y="7.2">
-                    ou
-                  </tspan>
-                  <tspan className={styles.cls33} x=".76" y="7.2">
-                    n
-                  </tspan>
-                  <tspan x="4.84" y="7.2">
-                    d Floor
-                  </tspan>
-                </text>
-                <text className={styles.cls16} transform="translate(170.45 221.96)">
-                  <tspan className={styles.cls4} x="0" y="0">
-                    P
-                  </tspan>
-                  <tspan x="4.17" y="0">
-                    ier
-                  </tspan>
-                  <tspan x="-14" y="7.2">
-                    G
-                  </tspan>
-                  <tspan className={styles.cls35} x="-9.37" y="7.2">
-                    r
-                  </tspan>
-                  <tspan x="-7.04" y="7.2">
-                    ou
-                  </tspan>
-                  <tspan className={styles.cls33} x=".76" y="7.2">
-                    n
-                  </tspan>
-                  <tspan x="4.84" y="7.2">
-                    d Floor
+                    Ground Floor
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls32}>
                 <text className={styles.cls16} transform="translate(36.14 177.61)">
                   <tspan x="0" y="0">
-                    M
-                  </tspan>
-                  <tspan className={styles.cls33} x="5.73" y="0">
-                    a
-                  </tspan>
-                  <tspan className={styles.cls26} x="9.28" y="0">
-                    c
-                  </tspan>
-                  <tspan x="12.61" y="0">
-                    hi
-                  </tspan>
-                  <tspan className={styles.cls25} x="18.29" y="0">
-                    n
-                  </tspan>
-                  <tspan x="22.36" y="0">
-                    e
+                    Machine
                   </tspan>
                   <tspan x="5.2" y="7.2">
-                    S
-                  </tspan>
-                  <tspan className={styles.cls33} x="8.89" y="7.2">
-                    h
-                  </tspan>
-                  <tspan x="12.96" y="7.2">
-                    op
-                  </tspan>
-                </text>
-                <text className={styles.cls16} transform="translate(36.14 177.61)">
-                  <tspan x="0" y="0">
-                    M
-                  </tspan>
-                  <tspan className={styles.cls33} x="5.73" y="0">
-                    a
-                  </tspan>
-                  <tspan className={styles.cls26} x="9.28" y="0">
-                    c
-                  </tspan>
-                  <tspan x="12.61" y="0">
-                    hi
-                  </tspan>
-                  <tspan className={styles.cls25} x="18.29" y="0">
-                    n
-                  </tspan>
-                  <tspan x="22.36" y="0">
-                    e
-                  </tspan>
-                  <tspan x="5.2" y="7.2">
-                    S
-                  </tspan>
-                  <tspan className={styles.cls33} x="8.89" y="7.2">
-                    h
-                  </tspan>
-                  <tspan x="12.96" y="7.2">
-                    op
+                    Shop
                   </tspan>
                 </text>
               </g>
@@ -1621,30 +1602,7 @@ export default class Level5 extends Component {
               <g className={styles.cls32}>
                 <text className={styles.cls17} transform="translate(279.43 50.65)">
                   <tspan x="0" y="0">
-                    El
-                  </tspan>
-                  <tspan className={styles.cls1} x="3.75" y="0">
-                    e
-                  </tspan>
-                  <tspan className={styles.cls19} x="6.13" y="0">
-                    v
-                  </tspan>
-                  <tspan className={styles.cls27} x="8.16" y="0">
-                    . 2
-                  </tspan>
-                </text>
-                <text className={styles.cls17} transform="translate(279.43 50.65)">
-                  <tspan x="0" y="0">
-                    El
-                  </tspan>
-                  <tspan className={styles.cls1} x="3.75" y="0">
-                    e
-                  </tspan>
-                  <tspan className={styles.cls19} x="6.13" y="0">
-                    v
-                  </tspan>
-                  <tspan className={styles.cls27} x="8.16" y="0">
-                    . 2
+                    Elev. 2
                   </tspan>
                 </text>
               </g>
@@ -1653,30 +1611,7 @@ export default class Level5 extends Component {
               <g className={styles.cls32}>
                 <text className={styles.cls17} transform="translate(206.67 84.73)">
                   <tspan x="0" y="0">
-                    El
-                  </tspan>
-                  <tspan className={styles.cls1} x="3.75" y="0">
-                    e
-                  </tspan>
-                  <tspan className={styles.cls5} x="6.13" y="0">
-                    v
-                  </tspan>
-                  <tspan x="8.16" y="0">
-                    . 3
-                  </tspan>
-                </text>
-                <text className={styles.cls17} transform="translate(206.67 84.73)">
-                  <tspan x="0" y="0">
-                    El
-                  </tspan>
-                  <tspan className={styles.cls1} x="3.75" y="0">
-                    e
-                  </tspan>
-                  <tspan className={styles.cls5} x="6.13" y="0">
-                    v
-                  </tspan>
-                  <tspan x="8.16" y="0">
-                    . 3
+                    Elev. 3
                   </tspan>
                 </text>
               </g>
@@ -1684,30 +1619,7 @@ export default class Level5 extends Component {
             <g className={styles.cls32}>
               <text className={styles.cls17} transform="translate(300.74 111.41)">
                 <tspan x="0" y="0">
-                  Ha
-                </tspan>
-                <tspan className={styles.cls2} x="5.61" y="0">
-                  t
-                </tspan>
-                <tspan className={styles.cls30} x="7.16" y="0">
-                  c
-                </tspan>
-                <tspan x="9.38" y="0">
-                  h
-                </tspan>
-              </text>
-              <text className={styles.cls17} transform="translate(300.74 111.41)">
-                <tspan x="0" y="0">
-                  Ha
-                </tspan>
-                <tspan className={styles.cls2} x="5.61" y="0">
-                  t
-                </tspan>
-                <tspan className={styles.cls30} x="7.16" y="0">
-                  c
-                </tspan>
-                <tspan x="9.38" y="0">
-                  h
+                  Hatch
                 </tspan>
               </text>
             </g>
