@@ -1831,6 +1831,28 @@ export const getLATISSState = (state) => {
   };
 };
 
+export const getAuxTelESSState = (state) => {
+  const subscriptions = [];
+  const essData = getStreamsData(state, subscriptions);
+  return {
+    temperature: [],
+    xPosition: [],
+    yPosition: [],
+    zPosition: [],
+  };
+};
+
+export const getMainTelESSState = (state) => {
+  const subscriptions = [];
+  const essData = getStreamsData(state, subscriptions);
+  return {
+    temperature: [],
+    xPosition: [],
+    yPosition: [],
+    zPosition: [],
+  };
+};
+
 /////////////////////////////////////////
 // F A C I L I T Y - S E L E C T O R S //
 /////////////////////////////////////////

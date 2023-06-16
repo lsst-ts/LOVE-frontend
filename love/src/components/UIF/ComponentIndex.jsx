@@ -396,6 +396,16 @@ export const auxtelIndex = {
       },
     },
   },
+  EAS: {
+    component: require('../EAS/AuxTel/AuxTelESS.container').default,
+    schema: {
+      ...require('../EAS/AuxTel/AuxTelESS.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../EAS/AuxTel/AuxTelESS.container').schema.props,
+      },
+    },
+  },
 };
 
 export const mainIndex = {
@@ -566,6 +576,16 @@ export const mainIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../MainTel/CCCameraSummaryDetail/CCCameraSummaryDetail.container').schema.props,
+      },
+    },
+  },
+  EAS: {
+    component: require('../EAS/MainTel/MainTelESS.container').default,
+    schema: {
+      ...require('../EAS/MainTel/MainTelESS.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../EAS/MainTel/MainTelESS.container').schema.props,
       },
     },
   },
