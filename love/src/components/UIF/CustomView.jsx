@@ -177,7 +177,13 @@ class CustomView extends Component {
 
         <ErrorBoundary>
           {parsedConfig.titleBar ? (
-            <Panel title={parsedConfig.title} fit={false} hasRawMode={parsedConfig.hasRawMode} link={parsedConfig.link}>
+            <Panel
+              title={parsedConfig.title}
+              fit={false}
+              hasRawMode={parsedConfig.hasRawMode}
+              link={parsedConfig.link}
+              EUI={parsedConfig.EUI}
+            >
               {comp}
             </Panel>
           ) : (

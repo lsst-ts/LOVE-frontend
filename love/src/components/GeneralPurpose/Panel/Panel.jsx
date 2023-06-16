@@ -34,7 +34,7 @@ export default class Panel extends Component {
     super();
     this.state = {
       isRaw: false,
-      hasEUI: false,
+      // hasEUI: false,
     };
   }
 
@@ -44,11 +44,13 @@ export default class Panel extends Component {
     });
   };
 
-  toggleEUI = () => {
-    this.setState({
-      hasEUI: !this.state.hasEUI,
-    });
-  };
+  // toggleEUI = () => {
+  //   this.setState({
+  //     hasEUI: !this.state.hasEUI,
+  //   });
+  //   // window.open(this.props.hasEUI, '_blank')
+  //   console.log(this.props);
+  // };
 
   render() {
     const classNames = [
@@ -62,16 +64,28 @@ export default class Panel extends Component {
       return React.cloneElement(child, {
         index,
         isRaw: this.state.isRaw,
-        hasEUI: this.state.hasEUI,
+        // hasEUI: this.state.hasEUI,
       });
     });
     const hasLink = this.props.link && this.props.link !== '';
+    const hasEUI = this.props.EUI && this.props.EUI !== '';
     return (
       <div className={classNames}>
         {this.props.title !== undefined && (
           <div className={styles.panelHeading}>
             <h3 className={styles.panelTitle}>{this.props.title}</h3>
             <div className={[styles.panelButtonWrapper, hasLink ? styles.panelTwoButtonsWrapper : null].join(' ')}>
+              {hasEUI && (
+                <Button
+                  title={`External link: ${this.props.hasEUI}`}
+                  onClick={() => window.open(this.props.EUI, '_blank')}
+                  className={styles.panelButton}
+                  size={'small'}
+                >
+                  {/* {this.state.hasEUI ? <span> &#5176; &nbsp; back</span> : <span>EUI</span>} */}
+                  <span>EUI</span>
+                </Button>
+              )}
               {this.props.hasRawMode && (
                 <Button
                   title={this.state.isRaw ? 'Regular view' : 'Raw telemetry data'}
@@ -80,16 +94,6 @@ export default class Panel extends Component {
                   size={'small'}
                 >
                   {this.state.isRaw ? <span> &#5176; &nbsp; back</span> : <span>raw data</span>}
-                </Button>
-              )}
-              {this.props.hasEUI && (
-                <Button
-                  title={this.state.hasEUI ? this.props.hasEUI.link : ''}
-                  onClick={() => this.toggleEUI()}
-                  className={styles.panelButton}
-                  size={'small'}
-                >
-                  {this.state.hasEUI ? <span> &#5176; &nbsp; back</span> : <span>EUI</span>}
                 </Button>
               )}
               {hasLink && (
