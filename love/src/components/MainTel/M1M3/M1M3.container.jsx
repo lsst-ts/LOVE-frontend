@@ -10,7 +10,7 @@ import {
 } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import M1M3 from './M1M3';
-import { M1M3_URL } from 'Config';
+import { EUIs } from 'Config';
 
 export const schema = {
   description: 'View of M1M3 actuators',
@@ -26,7 +26,7 @@ export const schema = {
       type: 'boolean',
       description: 'Whether the component has a EUI link',
       isPrivate: false,
-      default: M1M3_URL.url,
+      default: EUIs.M1M3,
     },
   },
 };

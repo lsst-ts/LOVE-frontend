@@ -26,9 +26,14 @@ export const CLOUD_MAP_SERVICE = {
     'https://www.meteoblue.com/en/weather/maps/-30.245N-70.749E2605_America%2FSantiago?utm_source=weather_widget&utm_medium=linkus&utm_content=map&utm_campaign=Weather%2BWidget',
 };
 
-// URL for EUIs
-export const M1M3_URL = {
-  url: 'https://ls.st/m1m3-dev',
+// URLs for Component EUIs
+export const EUIs = {
+  M1M3: 'https://ls.st/m1m3-dev',
+  M2: 'https://ls.st/hexrot-vm01',
+  ROTATOR: 'https://ls.st/hexrot-vm01',
+  HEXAPOD: 'https://ls.st/hexrot-vm01',
+  TMA: 'https://confluence.lsstcorp.org/pages/viewpage.action?pageId=214147380',
+  ATDOME: 'https://atmcs-dev.cp.lsst.org',
 };
 
 // Moment formats

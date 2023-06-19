@@ -21,6 +21,8 @@ export default class Panel extends Component {
     hasRawMode: PropTypes.bool,
     /** If a valid url, displayed as a link button in the title bar*/
     link: PropTypes.string,
+    /** If the component have a EUI, displayed as a link button in the tittle bar */
+    EUI: PropTypes.string,
   };
 
   static defaultProps = {
@@ -34,7 +36,6 @@ export default class Panel extends Component {
     super();
     this.state = {
       isRaw: false,
-      // hasEUI: false,
     };
   }
 
@@ -43,14 +44,6 @@ export default class Panel extends Component {
       isRaw: !this.state.isRaw,
     });
   };
-
-  // toggleEUI = () => {
-  //   this.setState({
-  //     hasEUI: !this.state.hasEUI,
-  //   });
-  //   // window.open(this.props.hasEUI, '_blank')
-  //   console.log(this.props);
-  // };
 
   render() {
     const classNames = [
@@ -64,7 +57,6 @@ export default class Panel extends Component {
       return React.cloneElement(child, {
         index,
         isRaw: this.state.isRaw,
-        // hasEUI: this.state.hasEUI,
       });
     });
     const hasLink = this.props.link && this.props.link !== '';
@@ -82,7 +74,6 @@ export default class Panel extends Component {
                   className={styles.panelButton}
                   size={'small'}
                 >
-                  {/* {this.state.hasEUI ? <span> &#5176; &nbsp; back</span> : <span>EUI</span>} */}
                   <span>EUI</span>
                 </Button>
               )}
