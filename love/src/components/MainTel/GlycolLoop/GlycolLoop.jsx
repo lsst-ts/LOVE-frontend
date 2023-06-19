@@ -7,7 +7,6 @@ import LoopCartoon from './LoopCartoon/LoopCartoon';
 import Mixing from './Mixing/Mixing';
 import TemperatureGradient from './TemperatureGradient/TemperatureGradient';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
-import TimeSeriesControls from 'components/GeneralPurpose/Plot/TimeSeriesControls/TimeSeriesControls';
 
 export default class GlycolLoop extends Component {
   static propTypes = {
@@ -105,14 +104,20 @@ export default class GlycolLoop extends Component {
 
   tsmcPlotInputs = {
     'TS2-MC': {
-      category: 'telemetry',
-      csc: 'MTM1M3TS',
-      salindex: '0',
-      topic: 'glycolLoopTemperature',
-      item: 'insideCellTemperature1',
       type: 'line',
-      accessor: (x) => x,
       color: '#ff7bb5',
+      orient: 'left',
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'MTM1M3TS',
+          salindex: '0',
+          topic: 'glycolLoopTemperature',
+          item: 'insideCellTemperature1',
+          accessor: '(x) => x',
+        },
+      ],
     },
     'TS3-MC': {
       category: 'telemetry',
@@ -140,25 +145,37 @@ export default class GlycolLoop extends Component {
 
   tsgPlotInputs = {
     'TS5-G': {
-      category: 'telemetry',
-      csc: 'MTM1M3TS',
-      salindex: 0,
-      topic: 'glycolLoopTemperature',
-      item: 'telescopeCoolantSupplyTemperature',
       type: 'line',
-      accessor: (x) => x,
       color: '#ff7bb5',
+      orient: 'left',
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'MTM1M3TS',
+          salindex: '0',
+          topic: 'glycolLoopTemperature',
+          item: 'telescopeCoolantSupplyTemperature',
+          accessor: '(x) => x',
+        },
+      ],
     },
     'TS6-G': {
-      category: 'event',
-      csc: 'MTM1M3TS',
-      salindex: 0,
-      topic: 'glycolLoopTemperature',
-      item: 'telescopeCoolantReturnTemperature',
       type: 'line',
-      accessor: (x) => x,
       color: '#97e54f',
+      orient: 'left',
       dash: [4, 1],
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'MTM1M3TS',
+          salindex: '0',
+          topic: 'glycolLoopTemperature',
+          item: 'telescopeCoolantReturnTemperature',
+          accessor: '(x) => x',
+        },
+      ],
     },
     'TS7-G': {
       category: 'telemetry',
@@ -298,17 +315,6 @@ export default class GlycolLoop extends Component {
               </div>
             </div>
             <div className={styles.plotContainer}>
-              {this.props.controls && (
-                <div>
-                  <TimeSeriesControls
-                    setTimeWindow={(timeWindow) => this.setState({ timeWindow })}
-                    timeWindow={this.state.timeWindow}
-                    setLiveMode={(isLive) => this.setState({ isLive })}
-                    isLive={this.state.isLive}
-                    setHistoricalData={this.setHistoricalData}
-                  />
-                </div>
-              )}
               <div className={styles.telemetryTable}>
                 <div className={styles.tsmcSection}>
                   <h2>Inside Mirror Temperatures</h2>
@@ -319,7 +325,8 @@ export default class GlycolLoop extends Component {
                         containerNode={this.tsmcPlotRef?.current}
                         xAxisTitle="Time"
                         yAxisTitle="Temperature"
-                        timeSeriesControlsProps={timeSeriesControlsProps}
+                        maxHeight={250}
+                        scaleDomain={{ domainMin: minTemp, domainMax: maxTemp }}
                       />
                     </div>
                   </div>
@@ -333,7 +340,8 @@ export default class GlycolLoop extends Component {
                         containerNode={this.tsgPlotRef?.current}
                         xAxisTitle="Time"
                         yAxisTitle="Temperature"
-                        timeSeriesControlsProps={timeSeriesControlsProps}
+                        maxHeight={250}
+                        scaleDomain={{ domainMin: minTemp, domainMax: maxTemp }}
                       />
                     </div>
                   </div>

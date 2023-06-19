@@ -16,12 +16,6 @@ export const schema = {
       isPrivate: false,
       default: 'Glycol Loop',
     },
-    controls: {
-      type: 'boolean',
-      description: "Whether to display controls to configure periods of time'",
-      default: true,
-      isPrivate: false,
-    },
   },
 };
 
