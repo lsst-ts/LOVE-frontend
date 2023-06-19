@@ -272,10 +272,7 @@ export default class Device extends Component {
               ry={5}
               transform={'translate(' + (width - (30 + gutter)) + ' ' + -5 + ')'}
             />
-<<<<<<< HEAD
-=======
 
->>>>>>> 411d41a8 (Include Dynalene System and MTAirCompressor)
             <text
               className={this.statusTextToStyle(String(parameters[x].value))}
               transform={'translate(' + (width - 19) + ' 0)'}
