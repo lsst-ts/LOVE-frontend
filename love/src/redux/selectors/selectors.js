@@ -531,18 +531,10 @@ export const getATMCSState = (state) => {
   ];
   const data = getStreamsData(state, subscriptions);
   const [minEl, minAz, minNas1, minNas2, minM3] = data['event-ATMCS-0-positionLimits']?.[0].minimum?.value ?? [
-    5,
-    -270,
-    -165,
-    -165,
-    0,
+    5, -270, -165, -165, 0,
   ];
   const [maxEl, maxAz, maxNas1, maxNas2, maxM3] = data['event-ATMCS-0-positionLimits']?.[0].maximum?.value ?? [
-    90,
-    270,
-    165,
-    165,
-    180,
+    90, 270, 165, 165, 180,
   ];
 
   return {
@@ -1149,10 +1141,7 @@ export const getMirrorCoversMotionState = (state) => {
   const summaryData = getStreamsData(state, subscriptions);
   return {
     mirrorCoversState: summaryData['event-MTMount-0-mirrorCoversMotionState']?.[0]?.elementsState?.value ?? [
-      0,
-      0,
-      0,
-      0,
+      0, 0, 0, 0,
     ],
     mirrorCoversPosition: summaryData['telemetry-MTMount-0-mirrorCover']?.actualPosition?.value ?? [0, 0, 0, 0],
   };
@@ -1175,40 +1164,13 @@ export const getAircraftTracker = (state) => {
     undefined,
   ];
   const latitude = data['telemetry-AircraftTracker-0-data']?.latitude?.value ?? [
-    -29.9604,
-    -29.69192,
-    -31.7404,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
+    -29.9604, -29.69192, -31.7404, 0, 0, 0, 0, 0, 0, 0,
   ];
   const longitude = data['telemetry-AircraftTracker-0-data']?.longitude?.value ?? [
-    -70.33709,
-    -72.05715,
-    -70.8,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
+    -70.33709, -72.05715, -70.8, 0, 0, 0, 0, 0, 0, 0,
   ];
   const altitude = data['telemetry-AircraftTracker-0-data']?.altitude?.value ?? [
-    1013.2,
-    1020.34,
-    980.15,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
+    1013.2, 1020.34, 980.15, 0, 0, 0, 0, 0, 0, 0,
   ];
   const track = data['telemetry-AircraftTracker-0-data']?.track?.value ?? [180, 105, 350, 0, 0, 0, 0, 0, 0, 0];
   const distance = data['telemetry-AircraftTracker-0-data']?.distance?.value ?? [98, 146, 188, 0, 0, 0, 0, 0, 0, 0];
@@ -1443,7 +1405,7 @@ export const getWeatherForecastState = (state) => {
   return {
     weatherForecastState: summaryData['event-WeatherForecast-0-summaryState']?.[0]?.summaryState.value ?? 0,
   };
-}
+};
 
 /**
  * Selects the Weather Forecast Daily Trend
@@ -1747,7 +1709,7 @@ export const getObservatoryState = (state) => {
     simonyiDomeAz: simonyiObservatoryState ? simonyiObservatoryState.domeAzimuth?.value : 0.0,
     simonyiMoonRa: simonyiTarget ? simonyiTarget[0].moonRa?.value : 0.0,
     simonyiMoonDec: simonyiTarget ? simonyiTarget[0].moonDec?.value : 0.0,
-    simonyiMoonPhase: simonyiTarget ? simonyiTarget[0].moonPhase?.value : 0.45,
+    simonyiMoonPhase: simonyiTarget ? simonyiTarget[0].moonPhase?.value : 0.0,
     simonyiSunRa: simonyiTarget ? simonyiTarget[0].sunRa?.value : 0.0,
     simonyiSunDec: simonyiTarget ? simonyiTarget[0].sunDec?.value : 0.0,
     auxtelTrackingState: auxtelObservatoryState ? auxtelObservatoryState.tracking?.value : false,
@@ -1760,11 +1722,9 @@ export const getObservatoryState = (state) => {
     auxtelTrackingMode: atptgCurrentTarget ? atptgCurrentTarget[0].frame.value : 0,
     isRaining: environmentVariables ? environmentVariables[0].raining.value : false,
     isSnowing: environmentVariables ? environmentVariables[0].snowing.value : false,
-    numChannels: essTemperatures ? essTemperatures.numChannels.value : 4,
-    temperature: essTemperatures
-      ? essTemperatures.temperature.value
-      : [18.3, 20.5, 19.7, 18.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    location: essTemperatures ? essTemperatures.location.value : 'control room, machine room, 2nd floor, 1st floor',
+    numChannels: essTemperatures ? essTemperatures.numChannels.value : 0,
+    temperature: essTemperatures ? essTemperatures.temperature.value : [],
+    location: essTemperatures ? essTemperatures.location.value : '',
     windDirection: essAirFlow ? essAirFlow.direction.value : 0.0,
     windSpeed: essAirFlow ? essAirFlow.speed : 0.0,
   };

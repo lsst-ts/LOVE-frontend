@@ -5,13 +5,11 @@ import styles from './EnvironmentSummary.module.css';
 import WindRose from 'components/icons/WindRose/WindRose';
 import SimonyiTelescope from './Cartoons/SimonyiTelescope';
 import AuxTelescope from './Cartoons/AuxTelescope';
-import BeachIcon from 'components/icons/BeachIcon/BeachIcon';
-import MountainIcon from 'components/icons/MountainIcon/MountainIcon';
 import TemperatureIcon from 'components/icons/TemperatureIcon/TemperatureIcon';
-import CactusIcon from 'components/icons/CactusIcon/CactusIcon';
 import WindDirection from './Cartoons/WindDirection';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import TemperaturesSummary from './SummaryInformation/TemperaturesSummary';
+import WeatherForecastIcon from 'components/icons/WeatherForecastIcon/WeatherForecastIcon';
 
 export default class EnvironmentSummary extends Component {
   static propTypes = {
@@ -112,12 +110,8 @@ export default class EnvironmentSummary extends Component {
         <div className={styles.windRoseContainer}>
           <WindRose />
         </div>
-        {/** Here goes Lightning strike icon */}
-        {/* <div className={styles.iconLeft}>
-          <BeachIcon />
-        </div> */}
-        <div className={styles.iconCenter}>
-          <MountainIcon active={isRaining} />
+        <div className={styles.iconLeft}>
+          <WeatherForecastIcon pictocode={isRaining ? 23 : 0} />
         </div>
         <div ref={this.containerRef} className={styles.telescopes}>
           <Skymap
@@ -157,7 +151,7 @@ export default class EnvironmentSummary extends Component {
           />
         </div>
         <div className={styles.iconRight}>
-          <CactusIcon active={isSnowing} />
+          <WeatherForecastIcon pictocode={isSnowing ? 24 : 0} />
         </div>
       </div>
     );

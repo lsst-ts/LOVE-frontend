@@ -34,12 +34,11 @@
   left: 50%;
   top: 0;
   width: 4%;
-  /* margin-top: 358px; */
 }
 
 .iconRight {
   position: absolute;
-  right: 17%;
+  right: 22%;
   top: 100px;
   width: 3%;
 }
