@@ -1,0 +1,13 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  background: var(--second-quaternary-background-dimmed-color);
+}
+
+.highlight {
+  color: var(--base-font-color);
+}
+
+.errorCell {
+  grid-column: 1/3;
+}

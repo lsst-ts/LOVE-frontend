@@ -356,6 +356,52 @@ export const getM1M3TSTemperatureState = (state) => {
   };
 };
 
+// M1M3 Glycol Loop Events
+export const getGlycolPumpStatus = (state) => {
+  const subscriptions = ['event-MTM1M3TS-0-glycolPumpStatus'];
+  const glycolPumpData = getStreamsData(state, subscriptions);
+  return {
+    ready: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].ready?.value ?? undefined,
+    running: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].running?.value ?? undefined,
+    forwardCommanded: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].forwardCommanded?.value ?? undefined,
+    forwardRotating: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].forwardRotating?.value ?? undefined,
+    accelerating: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].accelerating?.value ?? undefined,
+    decelerating: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].decelerating?.value ?? undefined,
+    faulted: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].faulted?.value ?? undefined,
+    mainFrequencyControlled:
+      glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].mainFrequencyControlled?.value ?? undefined,
+    operationCommandControlled:
+      glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].operationCommandControlled?.value ?? undefined,
+    parametersLocked: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].parametersLocked?.value ?? undefined,
+    errorCode: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].errorCode?.value ?? undefined,
+    errorReport: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].errorReport?.value ?? undefined,
+  };
+};
+
+// M1M3 Glycol Loop Telemetry
+export const getGlycolTemps = (state) => {
+  const subscriptions = ['telemetry-MTM1M3TS-0-glycolLoopTemperature'];
+  const glycolTempData = getStreamsData(state, subscriptions);
+  return {
+    aboveMirrorTemperature:
+      glycolTempData['telemetry-MTM1M3TS-0-glycolLoopTemperature']?.aboveMirrorTemperature?.value ?? 0,
+    insideCellTemperature1:
+      glycolTempData['telemetry-MTM1M3TS-0-glycolLoopTemperature']?.insideCellTemperature1?.value ?? 0,
+    insideCellTemperature2:
+      glycolTempData['telemetry-MTM1M3TS-0-glycolLoopTemperature']?.insideCellTemperature2?.value ?? 0,
+    insideCellTemperature3:
+      glycolTempData['telemetry-MTM1M3TS-0-glycolLoopTemperature']?.insideCellTemperature3?.value ?? 0,
+    telescopeCoolantSupplyTemperature:
+      glycolTempData['telemetry-MTM1M3TS-0-glycolLoopTemperature']?.telescopeCoolantSupplyTemperature?.value ?? 0,
+    telescopeCoolantReturnTemperature:
+      glycolTempData['telemetry-MTM1M3TS-0-glycolLoopTemperature']?.telescopeCoolantReturnTemperature?.value ?? 0,
+    mirrorCoolantSupplyTemperature:
+      glycolTempData['telemetry-MTM1M3TS-0-glycolLoopTemperature']?.mirrorCoolantSupplyTemperature?.value ?? 0,
+    mirrorCoolantReturnTemperature:
+      glycolTempData['telemetry-MTM1M3TS-0-glycolLoopTemperature']?.mirrorCoolantReturnTemperature?.value ?? 0,
+  };
+};
+
 // MTM2 selectors
 export const getM2State = (state) => {
   const subscriptions = [

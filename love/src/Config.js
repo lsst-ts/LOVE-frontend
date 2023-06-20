@@ -808,6 +808,52 @@ export const mtm1m3tsHeaterDisabledStateToStyle = {
   OFF: 'warning',
 };
 
+//MTM1M3TS Glycol Loop
+
+export const stateToStyleGlycolLoopPumpStateMap = {
+  UNKNOWN: 'invalid',
+  FAULT: 'fault',
+  RUNNING: 'ok',
+  READY: 'ok',
+  'NOT READY': 'invalid',
+};
+
+export const stateToStyleGlycolLoopCommandStateMap = {
+  UNKNOWN: 'invalid',
+  CONTROLLED: 'ok',
+  DISABLED: 'invalid',
+};
+
+export const stateToStyleGlycolLoopMainFreqStateMap = {
+  UNKNOWN: 'invalid',
+  CONTROLLED: 'ok',
+  'NOT CONTROLLED': 'invalid',
+};
+
+export const stateToStyleGlycolLoopParametersStateMap = {
+  UNKNOWN: 'invalid',
+  LOCKED: 'ok',
+  UNLOCKED: 'warning',
+};
+
+export const stateToStyleGlycolLoopDirectionStateMap = {
+  UNKNOWN: 'invalid',
+  FORWARD: 'ok',
+  BACKWARD: 'ok',
+};
+
+export const stateToStyleGlycolLoopRotationStateMap = {
+  UNKNOWN: 'invalid',
+  FORWARD: 'ok',
+  BACKWARD: 'ok',
+};
+
+export const stateToStyleGlycolLoopSpeedStateMap = {
+  UNKNOWN: 'invalid',
+  ACCELERATING: 'ok',
+  DECELERATING: 'ok',
+};
+
 // Aircraft tracker
 export const aircraftTrackerStatetoStyle = {
   DISCONNECTED: 'warning',
@@ -1282,6 +1328,61 @@ export const schedulerDetailedStateToMap = {
   4: 'GENERATING_TARGET_QUEUE',
   5: 'COMPUTING_PREDICTED_SCHEDULE',
   6: 'QUEUEING_TARGET',
+};
+
+//MTM1M3TS Glycol Loop
+export const glycolLoopFaultStateMap = {
+  undefined: false,
+  true: true,
+  false: false,
+};
+
+export const glycolLoopRunningStateMap = {
+  undefined: false,
+  true: true,
+  false: false,
+};
+
+export const glycolLoopReadyStateMap = {
+  undefined: 'UNKNOWN',
+  true: 'READY',
+  false: 'NOT READY',
+};
+
+export const glycolLoopCommandStateMap = {
+  undefined: 'UNKNOWN',
+  true: 'CONTROLLED',
+  false: 'DISABLED',
+};
+
+export const glycolLoopMainFreqStateMap = {
+  undefined: 'UNKNOWN',
+  true: 'CONTROLLED',
+  false: 'NOT CONTROLLED',
+};
+
+export const glycolLoopParametersStateMap = {
+  undefined: 'UNKNOWN',
+  true: 'LOCKED',
+  false: 'UNLOCKED',
+};
+
+export const glycolLoopDirectionStateMap = {
+  undefined: 'UNKNOWN',
+  true: 'FORWARD',
+  false: 'BACKWARD',
+};
+
+export const glycolLoopAcceleratingStateMap = {
+  undefined: false,
+  true: 'ACCELERATING',
+  false: false,
+};
+
+export const glycolLoopDeceleratingStateMap = {
+  undefined: false,
+  true: 'DECELERATING',
+  false: false,
 };
 
 /*****************************************************************************/
