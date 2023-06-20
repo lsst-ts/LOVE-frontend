@@ -60,10 +60,8 @@ export default class Level1 extends Component {
 
   getAirCompressorStarted = (obj) => {
     for (let key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        if (obj[key] === true) {
-          return key;
-        }
+      if (obj[key] === true) {
+        return key;
       }
     }
 
@@ -100,21 +98,21 @@ export default class Level1 extends Component {
     } = this.props.HVACData;
 
     const data01 = {
-      Remote: status1.startByRemote ? status1.startByRemote.value : false,
-      TimeControl: status1.startWithTimerControl ? status1.startWithTimerControl.value : false,
-      PressureRequirement: status1.startWithPressureRequirement ? status1.startWithPressureRequirement.value : false,
-      DePressurise: status1.startAfterDePressurise ? status1.startAfterDePressurise.value : false,
-      PowerLoss: status1.startAfterPowerLoss ? status1.startAfterPowerLoss.value : false,
-      DryerPreRun: status1.startAfterDryerPreRun ? status1.startAfterDryerPreRun.value : false,
+      Remote: status1?.startByRemote?.value ?? false,
+      TimeControl: status1?.startWithTimerControl?.value ?? false,
+      PressureRequirement: status1?.startWithPressureRequirement?.value ?? false,
+      DePressurise: status1?.startAfterDePressurise?.value ?? false,
+      PowerLoss: status1?.startAfterPowerLoss?.value ?? false,
+      DryerPreRun: status1?.startAfterDryerPreRun?.value ?? false,
     };
 
     const data02 = {
-      Remote: status2.startByRemote ? status2.startByRemote.value : false,
-      TimeControl: status2.startWithTimerControl ? status2.startWithTimerControl.value : false,
-      PressureRequirement: status2.startWithPressureRequirement ? status2.startWithPressureRequirement.value : false,
-      DePressurise: status2.startAfterDePressurise ? status2.startAfterDePressurise.value : false,
-      PowerLoss: status2.startAfterPowerLoss ? status2.startAfterPowerLoss.value : false,
-      DryerPreRun: status2.startAfterDryerPreRun ? status2.startAfterDryerPreRun.value : false,
+      Remote: status2?.startByRemote?.value ?? false,
+      TimeControl: status2?.startWithTimerControl?.value ?? false,
+      PressureRequirement: status2?.startWithPressureRequirement?.value ?? false,
+      DePressurise: status2?.startAfterDePressurise?.value ?? false,
+      PowerLoss: status2?.startAfterPowerLoss?.value ?? false,
+      DryerPreRun: status2?.startAfterDryerPreRun?.value ?? false,
     };
 
     const startedBy01 = this.getAirCompressorStarted(data01);
@@ -729,216 +727,212 @@ export default class Level1 extends Component {
           alarms={{
             alarm1: {
               name: 'Service Required',
-              state: status1.serviceRequired ? status1.serviceRequired.value : null,
+              state: status2?.serviceRequired?.value,
             },
             alarm400: {
               name: 'E400',
-              state: errors1.powerSupplyFailureE400 ? errors1.powerSupplyFailureE400.value : null,
+              state: errors2?.powerSupplyFailureE400?.value,
             },
             alarm401: {
               name: 'E401',
-              state: errors1.emergencyStopActivatedE401 ? errors1.emergencyStopActivatedE401.value : null,
+              state: errors2?.emergencyStopActivatedE401?.value,
             },
             alarm402: {
               name: 'E402',
-              state: errors1.highMotorTemperatureM1E402 ? errors1.highMotorTemperatureM1E402.value : null,
+              state: errors2?.highMotorTemperatureM1E402?.value,
             },
             alarm403: {
               name: 'E403',
-              state: errors1.compressorDischargeTemperatureE403
-                ? errors1.compressorDischargeTemperatureE403.value
-                : null,
+              state: errors2?.compressorDischargeTemperatureE403?.value,
             },
             alarm404: {
               name: 'E404',
-              state: errors1.startTemperatureLowE404 ? errors1.startTemperatureLowE404.value : null,
+              state: errors2?.startTemperatureLowE404?.value,
             },
             alarm405: {
               name: 'E405',
-              state: errors1.dischargeOverPressureE405 ? errors1.dischargeOverPressureE405.value : null,
+              state: errors2?.dischargeOverPressureE405?.value,
             },
             alarm406: {
               name: 'E406',
-              state: errors1.linePressureSensorB1E406 ? errors1.linePressureSensorB1E406.value : null,
+              state: errors2?.linePressureSensorB1E406?.value,
             },
             alarm407: {
               name: 'E407',
-              state: errors1.dischargePressureSensorB2E407 ? errors1.dischargePressureSensorB2E407.value : null,
+              state: errors2?.dischargePressureSensorB2E407?.value,
             },
             alarm408: {
               name: 'E408',
-              state: errors1.dischargeTemperatureSensorR2E408 ? errors1.dischargeTemperatureSensorR2E408.value : null,
+              state: errors2?.dischargeTemperatureSensorR2E408?.value,
             },
             alarm409: {
               name: 'E409',
-              state: errors1.controllerHardwareE409 ? errors1.controllerHardwareE409.value : null,
+              state: errors2?.controllerHardwareE409?.value,
             },
             alarm410: {
               name: 'E410',
-              state: errors1.coolingE410 ? errors1.coolingE410.value : null,
+              state: errors2?.coolingE410?.value,
             },
             alarm411: {
               name: 'E411',
-              state: errors1.oilPressureLowE411 ? errors1.oilPressureLowE411.value : null,
+              state: errors2?.oilPressureLowE411?.value,
             },
             alarm412: {
               name: 'E412',
-              state: errors1.externalFaultE412 ? errors1.externalFaultE412.value : null,
+              state: errors2?.externalFaultE412?.value,
             },
             alarm413: {
               name: 'E413',
-              state: errors1.dryerE413 ? errors1.dryerE413.value : null,
+              state: errors2?.dryerE413?.value,
             },
             alarm414: {
               name: 'E414',
-              state: errors1.condensateDrainE414 ? errors1.condensateDrainE414.value : null,
+              state: errors2?.condensateDrainE414?.value,
             },
             alarm415: {
               name: 'E415',
-              state: errors1.noPressureBuildUpE415 ? errors1.noPressureBuildUpE415.value : null,
+              state: errors2?.noPressureBuildUpE415?.value,
             },
             alarm416: {
               name: 'E416',
-              state: errors1.heavyStartupE416 ? errors1.heavyStartupE416.value : null,
+              state: errors2?.heavyStartupE416?.value,
             },
             alarm500: {
               name: 'E4500',
-              state: errors1.preAdjustmentVSDE500 ? errors1.preAdjustmentVSDE500.value : null,
+              state: errors2?.preAdjustmentVSDE500?.value,
             },
             alarm501: {
               name: 'E501',
-              state: errors1.preAdjustmentE501 ? errors1.preAdjustmentE501.value : null,
+              state: errors2?.preAdjustmentE501?.value,
             },
             alarm502: {
               name: 'E502',
-              state: errors1.lockedVSDE502 ? errors1.lockedVSDE502.value : null,
+              state: errors2?.lockedVSDE502?.value,
             },
             alarm503: {
               name: 'E503',
-              state: errors1.writeFaultVSDE503 ? errors1.writeFaultVSDE503.value : null,
+              state: errors2?.writeFaultVSDE503?.value,
             },
             alarm504: {
               name: 'E504',
-              state: errors1.communicationVSDE504 ? errors1.communicationVSDE504.value : null,
+              state: errors2?.communicationVSDE504?.value,
             },
             alarm505: {
               name: 'E505',
-              state: errors1.stopPressedVSDE505 ? errors1.stopPressedVSDE505.value : null,
+              state: errors2?.stopPressedVSDE505?.value,
             },
             alarm506: {
               name: 'E506',
-              state: errors1.stopInputEMVSDE506 ? errors1.stopInputEMVSDE506.value : null,
+              state: errors2?.stopInputEMVSDE506?.value,
             },
             alarm507: {
               name: 'E507',
-              state: errors1.readFaultVSDE507 ? errors1.readFaultVSDE507.value : null,
+              state: errors2?.readFaultVSDE507?.value,
             },
             alarm508: {
               name: 'E508',
-              state: errors1.stopInputVSDEME508 ? errors1.stopInputVSDEME508.value : null,
+              state: errors2?.stopInputVSDEME508?.value,
             },
             alarm509: {
               name: 'E509',
-              state: errors1.seeVSDDisplayE509 ? errors1.seeVSDDisplayE509.value : null,
+              state: errors2?.seeVSDDisplayE509?.value,
             },
             alarm510: {
               name: 'E510',
-              state: errors1.speedBelowMinLimitE510 ? errors1.speedBelowMinLimitE510.value : null,
+              state: errors2?.speedBelowMinLimitE510?.value,
             },
             alarm600: {
               name: 'E600',
-              state: warnings1.serviceDueA600 ? warnings1.serviceDueA600.value : null,
+              state: warnings2?.serviceDueA600?.value,
             },
             alarm601: {
               name: 'E601',
-              state: warnings1.dischargeOverPressureA601 ? warnings1.dischargeOverPressureA601.value : null,
+              state: warnings2?.dischargeOverPressureA601?.value,
             },
             alarm602: {
               name: 'E602',
-              state: warnings1.compressorDischargeTemperatureA602
-                ? warnings1.compressorDischargeTemperatureA602.value
-                : null,
+              state: warnings2?.compressorDischargeTemperatureA602?.value,
             },
             alarm606: {
               name: 'E606',
-              state: warnings1.linePressureHighA606 ? warnings1.linePressureHighA606.value : null,
+              state: warnings2?.linePressureHighA606?.value,
             },
             alarm607: {
               name: 'E607',
-              state: warnings1.controllerBatteryEmptyA607 ? warnings1.controllerBatteryEmptyA607.value : null,
+              state: warnings2?.controllerBatteryEmptyA607?.value,
             },
             alarm608: {
               name: 'E5608',
-              state: warnings1.dryerA608 ? warnings1.dryerA608.value : null,
+              state: warnings2?.dryerA608?.value,
             },
             alarm609: {
               name: 'E609',
-              state: warnings1.condensateDrainA609 ? warnings1.condensateDrainA609.value : null,
+              state: warnings2?.condensateDrainA609?.value,
             },
             alarm610: {
               name: 'E610',
-              state: warnings1.fineSeparatorA610 ? warnings1.fineSeparatorA610.value : null,
+              state: warnings2?.fineSeparatorA610?.value,
             },
             alarm611: {
               name: 'E611',
-              state: warnings1.airFilterA611 ? warnings1.airFilterA611.value : null,
+              state: warnings2?.airFilterA611?.value,
             },
             alarm612: {
               name: 'E612',
-              state: warnings1.oilFilterA612 ? warnings1.oilFilterA612.value : null,
+              state: warnings2?.oilFilterA612?.value,
             },
             alarm615: {
               name: 'E615',
-              state: warnings1.oilLevelLowA613 ? warnings1.oilLevelLowA613.value : null,
+              state: warnings2?.oilLevelLowA613?.value,
             },
             alarm614: {
               name: 'E614',
-              state: warnings1.oilTemperatureHighA614 ? warnings1.oilTemperatureHighA614.value : null,
+              state: warnings2?.oilTemperatureHighA614?.value,
             },
             alarm616: {
               name: 'E616',
-              state: warnings1.externalWarningA615 ? warnings1.externalWarningA615.value : null,
+              state: warnings2?.externalWarningA615?.value,
             },
             alarm616: {
               name: 'E616',
-              state: warnings1.motorLuricationSystemA616 ? warnings1.motorLuricationSystemA616.value : null,
+              state: warnings2?.motorLuricationSystemA616?.value,
             },
             alarm617: {
               name: 'E617',
-              state: warnings1.input1A617 ? warnings1.input1A617.value : null,
+              state: warnings2?.input1A617?.value,
             },
             alarm618: {
               name: 'E618',
-              state: warnings1.input2A618 ? warnings1.input2A618.value : null,
+              state: warnings2?.input2A618?.value,
             },
             alarm619: {
               name: 'E619',
-              state: warnings1.input3A619 ? warnings1.input3A619.value : null,
+              state: warnings2?.input3A619?.value,
             },
             alarm620: {
               name: 'E620',
-              state: warnings1.input4A620 ? warnings1.input4A620.value : null,
+              state: warnings2?.input4A620?.value,
             },
             alarm621: {
               name: 'E621',
-              state: warnings1.input5A621 ? warnings1.input5A621.value : null,
+              state: warnings2?.input5A621?.value,
             },
             alarm622: {
               name: 'E622',
-              state: warnings1.input6A622 ? warnings1.input6A622.value : null,
+              state: warnings2?.input6A622?.value,
             },
             alarm623: {
               name: 'E623',
-              state: warnings1.fullSDCardA623 ? warnings1.fullSDCardA623.value : null,
+              state: warnings2?.fullSDCardA623?.value,
             },
             alarm700: {
               name: 'E700',
-              state: warnings1.temperatureHighVSDA700 ? warnings1.temperatureHighVSDA700.value : null,
+              state: warnings2?.temperatureHighVSDA700?.value,
             },
           }}
           states={{
-            command: status2.readyToStart ? status2.readyToStart.value : null,
-            working: status2.operating ? status2.operating.value : null,
+            command: status2?.readyToStart?.value,
+            working: status2?.operating?.value,
             command: null,
             working: null,
             unit: null,
@@ -1140,216 +1134,212 @@ export default class Level1 extends Component {
           alarms={{
             alarm1: {
               name: 'Service Required',
-              state: status1.serviceRequired ? status1.serviceRequired.value : null,
+              state: status1?.serviceRequired?.value,
             },
             alarm400: {
               name: 'E400',
-              state: errors1.powerSupplyFailureE400 ? errors1.powerSupplyFailureE400.value : null,
+              state: errors1?.powerSupplyFailureE400?.value,
             },
             alarm401: {
               name: 'E401',
-              state: errors1.emergencyStopActivatedE401 ? errors1.emergencyStopActivatedE401.value : null,
+              state: errors1?.emergencyStopActivatedE401?.value,
             },
             alarm402: {
               name: 'E402',
-              state: errors1.highMotorTemperatureM1E402 ? errors1.highMotorTemperatureM1E402.value : null,
+              state: errors1?.highMotorTemperatureM1E402?.value,
             },
             alarm403: {
               name: 'E403',
-              state: errors1.compressorDischargeTemperatureE403
-                ? errors1.compressorDischargeTemperatureE403.value
-                : null,
+              state: errors1?.compressorDischargeTemperatureE403?.value,
             },
             alarm404: {
               name: 'E404',
-              state: errors1.startTemperatureLowE404 ? errors1.startTemperatureLowE404.value : null,
+              state: errors1?.startTemperatureLowE404?.value,
             },
             alarm405: {
               name: 'E405',
-              state: errors1.dischargeOverPressureE405 ? errors1.dischargeOverPressureE405.value : null,
+              state: errors1?.dischargeOverPressureE405?.value,
             },
             alarm406: {
               name: 'E406',
-              state: errors1.linePressureSensorB1E406 ? errors1.linePressureSensorB1E406.value : null,
+              state: errors1?.linePressureSensorB1E406?.value,
             },
             alarm407: {
               name: 'E407',
-              state: errors1.dischargePressureSensorB2E407 ? errors1.dischargePressureSensorB2E407.value : null,
+              state: errors1?.dischargePressureSensorB2E407?.value,
             },
             alarm408: {
               name: 'E408',
-              state: errors1.dischargeTemperatureSensorR2E408 ? errors1.dischargeTemperatureSensorR2E408.value : null,
+              state: errors1?.dischargeTemperatureSensorR2E408?.value,
             },
             alarm409: {
               name: 'E409',
-              state: errors1.controllerHardwareE409 ? errors1.controllerHardwareE409.value : null,
+              state: errors1?.controllerHardwareE409?.value,
             },
             alarm410: {
               name: 'E410',
-              state: errors1.coolingE410 ? errors1.coolingE410.value : null,
+              state: errors1?.coolingE410?.value,
             },
             alarm411: {
               name: 'E411',
-              state: errors1.oilPressureLowE411 ? errors1.oilPressureLowE411.value : null,
+              state: errors1?.oilPressureLowE411?.value,
             },
             alarm412: {
               name: 'E412',
-              state: errors1.externalFaultE412 ? errors1.externalFaultE412.value : null,
+              state: errors1?.externalFaultE412?.value,
             },
             alarm413: {
               name: 'E413',
-              state: errors1.dryerE413 ? errors1.dryerE413.value : null,
+              state: errors1?.dryerE413?.value,
             },
             alarm414: {
               name: 'E414',
-              state: errors1.condensateDrainE414 ? errors1.condensateDrainE414.value : null,
+              state: errors1?.condensateDrainE414?.value,
             },
             alarm415: {
               name: 'E415',
-              state: errors1.noPressureBuildUpE415 ? errors1.noPressureBuildUpE415.value : null,
+              state: errors1?.noPressureBuildUpE415?.value,
             },
             alarm416: {
               name: 'E416',
-              state: errors1.heavyStartupE416 ? errors1.heavyStartupE416.value : null,
+              state: errors1?.heavyStartupE416?.value,
             },
             alarm500: {
               name: 'E4500',
-              state: errors1.preAdjustmentVSDE500 ? errors1.preAdjustmentVSDE500.value : null,
+              state: errors1?.preAdjustmentVSDE500?.value,
             },
             alarm501: {
               name: 'E501',
-              state: errors1.preAdjustmentE501 ? errors1.preAdjustmentE501.value : null,
+              state: errors1?.preAdjustmentE501?.value,
             },
             alarm502: {
               name: 'E502',
-              state: errors1.lockedVSDE502 ? errors1.lockedVSDE502.value : null,
+              state: errors1?.lockedVSDE502?.value,
             },
             alarm503: {
               name: 'E503',
-              state: errors1.writeFaultVSDE503 ? errors1.writeFaultVSDE503.value : null,
+              state: errors1?.writeFaultVSDE503?.value,
             },
             alarm504: {
               name: 'E504',
-              state: errors1.communicationVSDE504 ? errors1.communicationVSDE504.value : null,
+              state: errors1?.communicationVSDE504?.value,
             },
             alarm505: {
               name: 'E505',
-              state: errors1.stopPressedVSDE505 ? errors1.stopPressedVSDE505.value : null,
+              state: errors1?.stopPressedVSDE505?.value,
             },
             alarm506: {
               name: 'E506',
-              state: errors1.stopInputEMVSDE506 ? errors1.stopInputEMVSDE506.value : null,
+              state: errors1?.stopInputEMVSDE506?.value,
             },
             alarm507: {
               name: 'E507',
-              state: errors1.readFaultVSDE507 ? errors1.readFaultVSDE507.value : null,
+              state: errors1?.readFaultVSDE507?.value,
             },
             alarm508: {
               name: 'E508',
-              state: errors1.stopInputVSDEME508 ? errors1.stopInputVSDEME508.value : null,
+              state: errors1?.stopInputVSDEME508?.value,
             },
             alarm509: {
               name: 'E509',
-              state: errors1.seeVSDDisplayE509 ? errors1.seeVSDDisplayE509.value : null,
+              state: errors1?.seeVSDDisplayE509?.value,
             },
             alarm510: {
               name: 'E510',
-              state: errors1.speedBelowMinLimitE510 ? errors1.speedBelowMinLimitE510.value : null,
+              state: errors1?.speedBelowMinLimitE510?.value,
             },
             alarm600: {
               name: 'E600',
-              state: warnings1.serviceDueA600 ? warnings1.serviceDueA600.value : null,
+              state: warnings1?.serviceDueA600?.value,
             },
             alarm601: {
               name: 'E601',
-              state: warnings1.dischargeOverPressureA601 ? warnings1.dischargeOverPressureA601.value : null,
+              state: warnings1?.dischargeOverPressureA601?.value,
             },
             alarm602: {
               name: 'E602',
-              state: warnings1.compressorDischargeTemperatureA602
-                ? warnings1.compressorDischargeTemperatureA602.value
-                : null,
+              state: warnings1?.compressorDischargeTemperatureA602?.value,
             },
             alarm606: {
               name: 'E606',
-              state: warnings1.linePressureHighA606 ? warnings1.linePressureHighA606.value : null,
+              state: warnings1?.linePressureHighA606?.value,
             },
             alarm607: {
               name: 'E607',
-              state: warnings1.controllerBatteryEmptyA607 ? warnings1.controllerBatteryEmptyA607.value : null,
+              state: warnings1?.controllerBatteryEmptyA607?.value,
             },
             alarm608: {
               name: 'E5608',
-              state: warnings1.dryerA608 ? warnings1.dryerA608.value : null,
+              state: warnings1?.dryerA608?.value,
             },
             alarm609: {
               name: 'E609',
-              state: warnings1.condensateDrainA609 ? warnings1.condensateDrainA609.value : null,
+              state: warnings1?.condensateDrainA609?.value,
             },
             alarm610: {
               name: 'E610',
-              state: warnings1.fineSeparatorA610 ? warnings1.fineSeparatorA610.value : null,
+              state: warnings1?.fineSeparatorA610?.value,
             },
             alarm611: {
               name: 'E611',
-              state: warnings1.airFilterA611 ? warnings1.airFilterA611.value : null,
+              state: warnings1?.airFilterA611?.value,
             },
             alarm612: {
               name: 'E612',
-              state: warnings1.oilFilterA612 ? warnings1.oilFilterA612.value : null,
+              state: warnings1?.oilFilterA612?.value,
             },
             alarm615: {
               name: 'E615',
-              state: warnings1.oilLevelLowA613 ? warnings1.oilLevelLowA613.value : null,
+              state: warnings1?.oilLevelLowA613?.value,
             },
             alarm614: {
               name: 'E614',
-              state: warnings1.oilTemperatureHighA614 ? warnings1.oilTemperatureHighA614.value : null,
+              state: warnings1?.oilTemperatureHighA614?.value,
             },
             alarm616: {
               name: 'E616',
-              state: warnings1.externalWarningA615 ? warnings1.externalWarningA615.value : null,
+              state: warnings1?.externalWarningA615?.value,
             },
             alarm616: {
               name: 'E616',
-              state: warnings1.motorLuricationSystemA616 ? warnings1.motorLuricationSystemA616.value : null,
+              state: warnings1?.motorLuricationSystemA616?.value,
             },
             alarm617: {
               name: 'E617',
-              state: warnings1.input1A617 ? warnings1.input1A617.value : null,
+              state: warnings1?.input1A617?.value,
             },
             alarm618: {
               name: 'E618',
-              state: warnings1.input2A618 ? warnings1.input2A618.value : null,
+              state: warnings1?.input2A618?.value,
             },
             alarm619: {
               name: 'E619',
-              state: warnings1.input3A619 ? warnings1.input3A619.value : null,
+              state: warnings1?.input3A619?.value,
             },
             alarm620: {
               name: 'E620',
-              state: warnings1.input4A620 ? warnings1.input4A620.value : null,
+              state: warnings1?.input4A620?.value,
             },
             alarm621: {
               name: 'E621',
-              state: warnings1.input5A621 ? warnings1.input5A621.value : null,
+              state: warnings1?.input5A621?.value,
             },
             alarm622: {
               name: 'E622',
-              state: warnings1.input6A622 ? warnings1.input6A622.value : null,
+              state: warnings1?.input6A622?.value,
             },
             alarm623: {
               name: 'E623',
-              state: warnings1.fullSDCardA623 ? warnings1.fullSDCardA623.value : null,
+              state: warnings1?.fullSDCardA623?.value,
             },
             alarm700: {
               name: 'E700',
-              state: warnings1.temperatureHighVSDA700 ? warnings1.temperatureHighVSDA700.value : null,
+              state: warnings1?.temperatureHighVSDA700?.value,
             },
           }}
           states={{
-            command: status1.readyToStart ? status1.readyToStart.value : null,
-            working: status1.operating ? status1.operating.value : null,
+            command: status1?.readyToStart?.value,
+            working: status1?.operating?.value,
             command: null,
             working: null,
             unit: null,

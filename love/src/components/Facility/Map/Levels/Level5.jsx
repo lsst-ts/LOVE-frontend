@@ -999,23 +999,23 @@ export default class Level5 extends Component {
           alarms={{
             alarm1: {
               name: 'Main Grid Alarm',
-              state: dynaleneP05Events.dynMainGridAlarm ? dynaleneP05Events.dynMainGridAlarm.value : null,
+              state: dynaleneP05Events?.dynMainGridAlarm?.value,
             },
             alarm2: {
               name: 'Main Grid Failure',
-              state: dynaleneP05Events.dynMainGridFailureFlag ? dynaleneP05Events.dynMainGridFailureFlag.value : null,
+              state: dynaleneP05Events?.dynMainGridFailureFlag?.value,
             },
             alarm3: {
               name: 'Safety Reset Flag',
-              state: dynaleneP05Events.dynSafetyResetFlag ? dynaleneP05Events.dynSafetyResetFlag.value : null,
+              state: dynaleneP05Events?.dynSafetyResetFlag?.value,
             },
             alarm4: {
               name: 'Test Area Alarm',
-              state: dynaleneP05Events.dynTAalarm ? dynaleneP05Events.dynTAalarm.value : null,
+              state: dynaleneP05Events?.dynTAalarm?.value,
             },
             alarm5: {
               name: 'TMA Alarm',
-              state: dynaleneP05Events.dynTMAalarm ? dynaleneP05Events.dynTMAalarm.value : null,
+              state: dynaleneP05Events?.dynTMAalarm?.value,
             },
             alarm6: {
               name: 'Tank Level',
