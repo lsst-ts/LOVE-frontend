@@ -66,8 +66,8 @@ export default class Dome extends Component {
           topic: 'mount_AzEl_Encoders',
           item: 'elevationCalculatedAngle',
           accessor: '(x) => x[0]',
-        }
-      ]
+        },
+      ],
     },
     'Mount target': {
       type: 'line',
@@ -83,8 +83,8 @@ export default class Dome extends Component {
           topic: 'target',
           item: 'elevation',
           accessor: '(x) => x',
-        }
-      ]
+        },
+      ],
     },
   };
 
@@ -103,8 +103,8 @@ export default class Dome extends Component {
           topic: 'position',
           item: 'azimuthPosition',
           accessor: '(x) => x',
-        }
-      ]
+        },
+      ],
     },
     'Dome Target Az': {
       type: 'line',
@@ -120,8 +120,8 @@ export default class Dome extends Component {
           topic: 'azimuthCommandedState',
           item: 'azimuth',
           accessor: '(x) => x',
-        }
-      ]
+        },
+      ],
     },
     'Mount Azimuth': {
       type: 'line',
@@ -137,8 +137,8 @@ export default class Dome extends Component {
           topic: 'mount_AzEl_Encoders',
           item: 'azimuthCalculatedAngle',
           accessor: '(x) => (x[0] < 0 ? x[0] + 360 : x[0])',
-        }
-      ]
+        },
+      ],
     },
     'Mount Target': {
       type: 'line',
@@ -154,8 +154,8 @@ export default class Dome extends Component {
           topic: 'target',
           item: 'azimuth',
           accessor: '(x) => x',
-        }
-      ]
+        },
+      ],
     },
   };
 
@@ -235,8 +235,6 @@ export default class Dome extends Component {
       historicalData: this.state.historicalData,
     };
 
-    console.log(this.props);
-
     return (
       <div className={styles.domeContainer}>
         <div className={styles.topRow}>
@@ -268,7 +266,6 @@ export default class Dome extends Component {
               currentValue={azimuthPosition}
               targetValue={azimuthCommanded}
             />
-            {/*<DomeTopView width={width} height={height} />*/}
             <MountTopView
               currentPointing={{
                 az: currentPointingAz,
