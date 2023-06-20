@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import { VegaLite } from 'react-vega';
 import isEqual from 'lodash/isEqual';
 import styles from './VegaTimeSeriesPlot.module.css';
-import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
 import { field } from 'vega';
-
 
 export const SHAPES = [
   'circle',
@@ -37,10 +35,7 @@ export const DASHES = [
   [8, 1],
 ];
 
-export const ORIENT = [
-  'left',
-  'right',
-];
+export const ORIENT = ['left', 'right'];
 
 /**
  * Generates plots using different marks (lines, points, bars, etc) on different layers
@@ -182,14 +177,8 @@ class VegaTimeseriesPlot extends Component {
       containerWidth: props.width ?? 400,
       containerHeight: props.height ?? 240,
       spec: {
-        width:
-          props.width !== undefined && props.height !== undefined
-            ? props.width
-            : 500,
-        height:
-          this.props.width !== undefined && this.props.height !== undefined
-            ? props.height
-            : 240,
+        width: props.width !== undefined && props.height !== undefined ? props.width : 500,
+        height: this.props.width !== undefined && this.props.height !== undefined ? props.height : 240,
         autosize: {
           type: 'fit',
           contains: 'padding',
@@ -220,11 +209,11 @@ class VegaTimeseriesPlot extends Component {
             labelFontWeight: 750,
             tickCount: 5,
           },
-          axisY: {minExtent: 30},
+          axisY: { minExtent: 30 },
           view: {
             strokeWidth: 1,
-            step: 23
-          }
+            step: 23,
+          },
         },
         encoding: {
           x: {
@@ -238,8 +227,7 @@ class VegaTimeseriesPlot extends Component {
             scale: props.xDomain ? { domain: props.xDomain } : { type: 'utc' },
           },
         },
-        layer: [
-        ]
+        layer: [],
       },
     };
   }
@@ -314,48 +302,49 @@ class VegaTimeseriesPlot extends Component {
 
     const arr = Object.values(this.props.layers[dataName] ?? {});
     const names = [...new Set(arr.map((layer) => layer.name))];
-    const units = names.map((name) => ({name: name, units: arr.filter((l) => l.name === name)[0].units}));
+    const units = names.map((name) => ({ name: name, units: arr.filter((l) => l.name === name)[0].units }));
 
     const mapNameUnits = units.map((u) => {
       return {
         name: u.name,
-        unit: units.filter((f) => f.name === u.name).map((u) => u.name + (u.units?.y ? ' [' + u.units?.y + ']' : ''))
+        unit: units.filter((f) => f.name === u.name).map((u) => u.name + (u.units?.y ? ' [' + u.units?.y + ']' : '')),
       };
     });
 
     const titles = names.map((name) => ({
       name: mapNameUnits.filter((l) => l.name === name)[0].unit,
       color: markStyle.filter((l) => l.name === name)[0].color,
-      orient: markStyle.filter((l) => l.name === name)[0].orient
+      orient: markStyle.filter((l) => l.name === name)[0].orient,
     }));
 
     let layers = titles.map((t) => {
-      return (
-        {
-          mark: {
-            type: 'line',
-            clip: true,
-          },
-          encoding: {
-            y: {
-              field: 'y',
-              type: 'quantitative',
-              axis: {
-                title: t.name,
-                titleColor: t.color,
-                orient: t.orient
-              },
-              scale: this.props.scaleDomain,
+      return {
+        mark: {
+          type: 'line',
+          clip: true,
+        },
+        encoding: {
+          y: {
+            field: 'y',
+            type: 'quantitative',
+            axis: {
+              title: t.name,
+              titleColor: t.color,
+              orient: t.orient,
             },
-            color: styleEncoding.color,
-            strokeDash: styleEncoding.strokeDash,
+            scale: this.props.scaleDomain,
           },
-        }
-      );
+          color: styleEncoding.color,
+          strokeDash: styleEncoding.strokeDash,
+        },
+      };
     });
 
     if (layers.length === 0) {
-      const colors = names.map((name) => ({name, color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color}));
+      const colors = names.map((name) => ({
+        name,
+        color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color,
+      }));
       const namesUnits = units.map((u) => u.name + (u.units?.y ? ' [' + u.units?.y + ']' : ''));
 
       layers = [
@@ -378,14 +367,12 @@ class VegaTimeseriesPlot extends Component {
             strokeDash: styleEncoding.strokeDash,
           },
         },
-      ]
+      ];
     }
 
     return {
       data: { name: dataName }, // note: vega-lite data attribute is a plain object instead of an array
-      layer: [
-        ...layers,
-      ],
+      layer: [...layers],
     };
   };
 
@@ -395,8 +382,11 @@ class VegaTimeseriesPlot extends Component {
     const arr = Object.values(this.props.layers[dataName] ?? {});
 
     const names = [...new Set(arr.map((layer) => layer.name))];
-    const units = names.map((name) => ({name: name, units: arr.filter((l) => l.name === name)[0].units}));
-    const colors = names.map((name) => ({name, color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color}));
+    const units = names.map((name) => ({ name: name, units: arr.filter((l) => l.name === name)[0].units }));
+    const colors = names.map((name) => ({
+      name,
+      color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color,
+    }));
 
     const namesUnits = units.map((u) => u.name + (u.units?.y ? ' [' + u.units?.y + ']' : ''));
 
@@ -405,8 +395,8 @@ class VegaTimeseriesPlot extends Component {
       transform: [
         {
           calculate: 'datum.name + " [" + datum.units.y + "]"',
-          as: 'labelY'
-        }
+          as: 'labelY',
+        },
       ],
       layer: [
         {
@@ -450,10 +440,12 @@ class VegaTimeseriesPlot extends Component {
         },
         {
           mark: 'rule',
-          params: [{
-            name: 'hover',
-            select: {type: 'point', on: 'mouseover'}
-          }],
+          params: [
+            {
+              name: 'hover',
+              select: { type: 'point', on: 'mouseover' },
+            },
+          ],
           encoding: {
             color: {
               condition: {
@@ -461,25 +453,27 @@ class VegaTimeseriesPlot extends Component {
                 empty: false,
                 value: 'white',
               },
-              value: "transparent",
+              value: 'transparent',
             },
-            size: {value: 4},
+            size: { value: 4 },
             tooltip: [
               {
-                field: 'labelY', title: 'name'
+                field: 'labelY',
+                title: 'name',
               },
               {
                 field: 'x',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
+                format: this.props.temporalXAxisFormat,
               },
               {
-                field: 'y', format: ".2f",
+                field: 'y',
+                format: '.2f',
               },
-            ]
-          }
-        }
-      ]
+            ],
+          },
+        },
+      ],
     };
   };
 
@@ -488,8 +482,11 @@ class VegaTimeseriesPlot extends Component {
     const markType = dataName.slice(0, -1);
     const arr = Object.values(this.props.layers[dataName] ?? {});
     const names = [...new Set(arr.map((layer) => layer.name))];
-    const units = names.map((name) => ({name: name, units: arr.filter((l) => l.name === name)[0].units}));
-    const colors = names.map((name) => ({name, color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color}));
+    const units = names.map((name) => ({ name: name, units: arr.filter((l) => l.name === name)[0].units }));
+    const colors = names.map((name) => ({
+      name,
+      color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color,
+    }));
 
     const namesUnits = units.map((u) => u.name + (u.units?.y ? ' [' + u.units?.y + ']' : ''));
 
@@ -498,14 +495,14 @@ class VegaTimeseriesPlot extends Component {
       transform: [
         {
           calculate: 'datum.name + " [" + datum.units.y + "]"',
-          as: 'labelY'
-        }
+          as: 'labelY',
+        },
       ],
       layer: [
         {
           mark: {
             type: 'bar',
-            size: 25
+            size: 25,
           },
           encoding: {
             y: {
@@ -520,19 +517,21 @@ class VegaTimeseriesPlot extends Component {
             color: styleEncoding.color,
             tooltip: [
               {
-                title: 'name', field: 'labelY'
+                title: 'name',
+                field: 'labelY',
               },
               {
                 field: 'x',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
+                format: this.props.temporalXAxisFormat,
               },
               {
-                field: 'y', format: ".2f",
+                field: 'y',
+                format: '.2f',
               },
-            ]
+            ],
           },
-        }
+        },
       ],
     };
   };
@@ -542,8 +541,11 @@ class VegaTimeseriesPlot extends Component {
     const markType = dataName.slice(0, -1);
     const arr = Object.values(this.props.layers[dataName] ?? {});
     const names = [...new Set(arr.map((layer) => layer.name))];
-    const units = names.map((name) => ({name: name, units: arr.filter((l) => l.name === name)[0].units}));
-    const colors = names.map((name) => ({name, color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color}));
+    const units = names.map((name) => ({ name: name, units: arr.filter((l) => l.name === name)[0].units }));
+    const colors = names.map((name) => ({
+      name,
+      color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color,
+    }));
 
     const namesUnits = units.map((u) => u.name + (u.units?.angle ? ' [' + u.units?.angle + ']' : ''));
 
@@ -552,8 +554,8 @@ class VegaTimeseriesPlot extends Component {
       transform: [
         {
           calculate: 'datum.name + " [" + datum.units.angle + "]"',
-          as: 'labelY'
-        }
+          as: 'labelY',
+        },
       ],
       layer: [
         {
@@ -575,17 +577,19 @@ class VegaTimeseriesPlot extends Component {
             strokeDash: styleEncoding.strokeDash,
             tooltip: [
               {
-                title: 'name', field: 'labelY'
+                title: 'name',
+                field: 'labelY',
               },
               {
                 field: 'x',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
+                format: this.props.temporalXAxisFormat,
               },
               {
-                field: 'y', format: ".2f",
+                field: 'y',
+                format: '.2f',
               },
-            ]
+            ],
           },
         },
         {
@@ -593,11 +597,11 @@ class VegaTimeseriesPlot extends Component {
             type: 'text',
             dx: 0,
             fontSize: 24,
-            color: "#d3e1eb"
+            color: '#d3e1eb',
           },
           encoding: {
             text: {
-              value: '➟'
+              value: '➟',
             },
             y: {
               field: 'y',
@@ -606,27 +610,30 @@ class VegaTimeseriesPlot extends Component {
             angle: {
               field: 'angle',
               type: 'quantitative',
-              scale: {domain: [360, 0]}
+              scale: { domain: [360, 0] },
             },
             tooltip: [
               {
-                title: 'name', field: 'labelY'
+                title: 'name',
+                field: 'labelY',
               },
               {
                 field: 'x',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
+                format: this.props.temporalXAxisFormat,
               },
               {
-                field: 'y', format: '.2f'
+                field: 'y',
+                format: '.2f',
               },
               {
-                field: 'angle', format: '.2f'
+                field: 'angle',
+                format: '.2f',
               },
-            ]
+            ],
           },
         },
-      ]
+      ],
     };
   };
 
@@ -636,8 +643,11 @@ class VegaTimeseriesPlot extends Component {
 
     const arr = Object.values(this.props.layers[dataName] ?? {});
     const names = [...new Set(arr.map((layer) => layer.name))];
-    const units = names.map((name) => ({name: name, units: arr.filter((l) => l.name === name)[0].units}));
-    const colors = names.map((name) => ({name, color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color}));
+    const units = names.map((name) => ({ name: name, units: arr.filter((l) => l.name === name)[0].units }));
+    const colors = names.map((name) => ({
+      name,
+      color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color,
+    }));
 
     const namesUnits = units.map((u) => u.name + (u.units?.y ? ' [' + u.units?.y + ']' : ''));
 
@@ -646,8 +656,8 @@ class VegaTimeseriesPlot extends Component {
       transform: [
         {
           calculate: 'datum.name + " [" + datum.units.y + "]"',
-          as: 'labelY'
-        }
+          as: 'labelY',
+        },
       ],
       layer: [
         {
@@ -670,17 +680,19 @@ class VegaTimeseriesPlot extends Component {
             strokeDash: styleEncoding.strokeDash,
             tooltip: [
               {
-                title: 'name', field :'labelY',
+                title: 'name',
+                field: 'labelY',
               },
               {
                 field: 'x',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
+                format: this.props.temporalXAxisFormat,
               },
               {
-                field: 'y', format: '.2f',
+                field: 'y',
+                format: '.2f',
               },
-            ]
+            ],
           },
         },
         {
@@ -697,17 +709,19 @@ class VegaTimeseriesPlot extends Component {
             strokeDash: styleEncoding.strokeDash,
             tooltip: [
               {
-                title: 'name', field: 'labelY',
+                title: 'name',
+                field: 'labelY',
               },
               {
                 field: 'x',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
+                format: this.props.temporalXAxisFormat,
               },
               {
-                field: 'y', format: '.2f',
+                field: 'y',
+                format: '.2f',
               },
-            ]
+            ],
           },
         },
         {
@@ -722,7 +736,7 @@ class VegaTimeseriesPlot extends Component {
               type: 'quantitative',
               axis: {
                 title: '',
-              }
+              },
             },
             y2: {
               field: 'y2',
@@ -734,27 +748,30 @@ class VegaTimeseriesPlot extends Component {
             },
             color: styleEncoding.color,
             opacity: {
-              value: 0.3
+              value: 0.3,
             },
             tooltip: [
               {
-                title: 'name', field: 'labelY'
+                title: 'name',
+                field: 'labelY',
               },
               {
                 field: 'x',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
+                format: this.props.temporalXAxisFormat,
               },
               {
-                field: 'y', format: '.2f',
+                field: 'y',
+                format: '.2f',
               },
               {
-                field: 'y2', format: '.2f',
+                field: 'y2',
+                format: '.2f',
               },
-            ]
-          }
-        }
-      ]
+            ],
+          },
+        },
+      ],
     };
   };
 
@@ -765,16 +782,16 @@ class VegaTimeseriesPlot extends Component {
       transform: [
         {
           calculate: '(datum.base + datum.delta)',
-          as: 'y2'
+          as: 'y2',
         },
         {
           calculate: '(datum.base - datum.delta)',
-          as: 'y'
+          as: 'y',
         },
         {
           calculate: 'datum.name + " [" + datum.units.base + "]"',
-          as: 'labelY'
-        }
+          as: 'labelY',
+        },
       ],
       layer: [
         {
@@ -798,7 +815,7 @@ class VegaTimeseriesPlot extends Component {
         {
           mark: {
             type: 'area',
-            clip: true
+            clip: true,
           },
           encoding: {
             y: {
@@ -807,7 +824,7 @@ class VegaTimeseriesPlot extends Component {
               type: 'quantitative',
               axis: {
                 title: '',
-              }
+              },
             },
             y2: {
               field: 'y2',
@@ -819,27 +836,30 @@ class VegaTimeseriesPlot extends Component {
             },
             color: styleEncoding.color,
             opacity: {
-              value: 0.4
+              value: 0.4,
             },
             tooltip: [
               {
-                title: 'name', field: 'labelY'
+                title: 'name',
+                field: 'labelY',
               },
               {
                 field: 'x',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
+                format: this.props.temporalXAxisFormat,
               },
               {
-                field: 'base', format: '.2f',
+                field: 'base',
+                format: '.2f',
               },
               {
-                field: 'delta', format: '.2f'
+                field: 'delta',
+                format: '.2f',
               },
-            ]
-          }
-        }
-      ]
+            ],
+          },
+        },
+      ],
     };
   };
 
@@ -850,8 +870,11 @@ class VegaTimeseriesPlot extends Component {
 
     const arr = Object.values(this.props.layers[dataName] ?? {});
     const names = [...new Set(arr.map((layer) => layer.name))];
-    const units = names.map((name) => ({name: name, units: arr.filter((l) => l.name === name)[0].units}));
-    const colors = names.map((name) => ({name, color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color}));
+    const units = names.map((name) => ({ name: name, units: arr.filter((l) => l.name === name)[0].units }));
+    const colors = names.map((name) => ({
+      name,
+      color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color,
+    }));
 
     const namesUnits = units.map((u) => u.name + (u.units?.y ? ' [' + u.units?.y + ']' : ''));
 
@@ -861,30 +884,33 @@ class VegaTimeseriesPlot extends Component {
       transform: [
         {
           calculate: '(datum.base + datum.delta)',
-          as: 'plus'
+          as: 'plus',
         },
         {
-          calculate: '(datum.base !== 0 || datum.delta !== 0) && (datum.base - datum.delta) > 0 ? datum.base - datum.delta : 0',
-          as: 'minus'
+          calculate:
+            '(datum.base !== 0 || datum.delta !== 0) && (datum.base - datum.delta) > 0 ? datum.base - datum.delta : 0',
+          as: 'minus',
         },
         {
-          calculate: '(datum.base !== 0 || datum.delta !== 0) && (datum.base + datum.delta) - (datum.plus) * 0.05 > 0 ? (datum.base + datum.delta) - (datum.plus) * 0.05 : 0',
-          as: 'plus_limit'
+          calculate:
+            '(datum.base !== 0 || datum.delta !== 0) && (datum.base + datum.delta) - (datum.plus) * 0.05 > 0 ? (datum.base + datum.delta) - (datum.plus) * 0.05 : 0',
+          as: 'plus_limit',
         },
         {
-          calculate: '(datum.base !== 0 || datum.delta !== 0) && (datum.base - datum.delta) + (datum.plus) * 0.05 > 0 ? (datum.base - datum.delta) + (datum.plus) * 0.05 : 0',
-          as: 'minus_limit'
+          calculate:
+            '(datum.base !== 0 || datum.delta !== 0) && (datum.base - datum.delta) + (datum.plus) * 0.05 > 0 ? (datum.base - datum.delta) + (datum.plus) * 0.05 : 0',
+          as: 'minus_limit',
         },
         {
           calculate: 'datum.name + " [" + datum.units.base + "]"',
-          as: 'labelY'
-        }
+          as: 'labelY',
+        },
       ],
       layer: [
         {
           mark: {
             type: 'bar',
-            size: 25
+            size: 25,
           },
           encoding: {
             y: {
@@ -898,17 +924,19 @@ class VegaTimeseriesPlot extends Component {
             color: styleEncoding.color,
             tooltip: [
               {
-                title: 'name', field: 'labelY'
+                title: 'name',
+                field: 'labelY',
               },
               {
                 field: 'x',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
+                format: this.props.temporalXAxisFormat,
               },
               {
-                field: 'base', format: '.2f'
+                field: 'base',
+                format: '.2f',
               },
-            ]
+            ],
           },
         },
         {
@@ -932,21 +960,24 @@ class VegaTimeseriesPlot extends Component {
             },
             tooltip: [
               {
-                title: 'name', field: 'labelY'
+                title: 'name',
+                field: 'labelY',
               },
               {
                 field: 'x',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
+                format: this.props.temporalXAxisFormat,
               },
               {
-                field: 'base', format: '.2f'
+                field: 'base',
+                format: '.2f',
               },
               {
-                field: 'delta', format: '.2f'
+                field: 'delta',
+                format: '.2f',
               },
-            ]
-          }
+            ],
+          },
         },
         {
           mark: {
@@ -968,21 +999,24 @@ class VegaTimeseriesPlot extends Component {
             },
             tooltip: [
               {
-                title: 'name', field: 'labelY',
+                title: 'name',
+                field: 'labelY',
               },
               {
                 field: 'x',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
+                format: this.props.temporalXAxisFormat,
               },
               {
-                field: 'base', format: '.2f'
+                field: 'base',
+                format: '.2f',
               },
               {
-                field: 'delta', format: '.2f'
+                field: 'delta',
+                format: '.2f',
               },
-            ]
-          }
+            ],
+          },
         },
         {
           mark: {
@@ -1005,25 +1039,28 @@ class VegaTimeseriesPlot extends Component {
             },
             tooltip: [
               {
-                title: 'name', field: 'labelY',
+                title: 'name',
+                field: 'labelY',
               },
               {
                 field: 'x',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
+                format: this.props.temporalXAxisFormat,
               },
               {
-                field: 'base', format: '.2f'
+                field: 'base',
+                format: '.2f',
               },
               {
-                field: 'delta', format: '.2f'
+                field: 'delta',
+                format: '.2f',
               },
-            ]
-          }
-        }
+            ],
+          },
+        },
       ],
     };
-  }
+  };
 
   makeRectLayer = (dataName) => {
     const styleEncoding = this.makeStyleEncoding();
@@ -1031,8 +1068,11 @@ class VegaTimeseriesPlot extends Component {
 
     const arr = Object.values(this.props.layers[dataName] ?? {});
     const names = [...new Set(arr.map((layer) => layer.name))];
-    const units = names.map((name) => ({name: name, units: arr.filter((l) => l.name === name)[0].units}));
-    const colors = names.map((name) => ({name, color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color}));
+    const units = names.map((name) => ({ name: name, units: arr.filter((l) => l.name === name)[0].units }));
+    const colors = names.map((name) => ({
+      name,
+      color: this.props.marksStyles.filter((l) => l.markType === markType && l.name === name)[0].color,
+    }));
 
     const namesUnits = units.map((u) => u.name + (u.units?.y ? ' [' + u.units?.y + ']' : ''));
 
@@ -1041,22 +1081,22 @@ class VegaTimeseriesPlot extends Component {
       transform: [
         {
           calculate: 'datum.name + " [" + datum.units.y + "]"',
-          as: 'labelY'
-        }
+          as: 'labelY',
+        },
       ],
       layer: [
         {
           mark: {
             type: 'rect',
             clip: true,
-            strokeWidth: 3
+            strokeWidth: 3,
           },
           encoding: {
-             x2: {
+            x2: {
               field: 'x2',
               type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
               axis: {
-                title: this.makeAxisTitle(this.props.xAxisTitle, ''),//this.props.units[dataName]?.x),
+                title: this.makeAxisTitle(this.props.xAxisTitle, ''), //this.props.units[dataName]?.x),
                 format: this.props.temporalXAxisFormat,
               },
               scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
@@ -1073,7 +1113,7 @@ class VegaTimeseriesPlot extends Component {
               scale: {
                 // domain: [-1, 10],
                 // rangeMin: 0,
-              }
+              },
             },
             y2: {
               field: 'y2',
@@ -1081,53 +1121,55 @@ class VegaTimeseriesPlot extends Component {
               scale: {
                 // domain: [-1, 10],
                 // rangeMin: 0,
-              }
+              },
             },
             fill: styleEncoding.color,
             fillOpacity: {
-              value: 0.5
+              value: 0.5,
             },
             stroke: styleEncoding.color,
             tooltip: [
               {
-                name: 'name', field: 'labelY',
+                name: 'name',
+                field: 'labelY',
               },
               {
                 field: 'x',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
+                format: this.props.temporalXAxisFormat,
               },
               {
                 field: 'x2',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
+                format: this.props.temporalXAxisFormat,
               },
               {
-                field: 'y', format: '.2f'
-              }
-            ]
-          }
-        }
-      ]
+                field: 'y',
+                format: '.2f',
+              },
+            ],
+          },
+        },
+      ],
     };
   };
 
   makeHeatmapLayer = (dataName) => {
     const markType = dataName.slice(0, -1);
     const markStyle = this.props.marksStyles.filter((l) => l.markType === markType);
-    const color = markStyle[0].color.slice(0,7);
+    const color = markStyle[0].color.slice(0, 7);
 
     const arr = Object.values(this.props.layers[dataName] ?? {});
     const names = [...new Set(arr.map((layer) => layer.name))];
-    const units = names.map((name) => ({name: name, units: arr.filter((l) => l.name === name)[0].units}));
+    const units = names.map((name) => ({ name: name, units: arr.filter((l) => l.name === name)[0].units }));
 
     const namesUnits = units.map((u) => u.name + (u.units?.low ? ' [' + u.units?.low + ']' : ''));
 
     const scale = {
-      type:  "quantize",
+      type: 'quantize',
       domain: [0, 100],
       zero: true,
-      scheme: [color + '00', color + '10', color + '88' , color + 'bb', color + 'ff'],
+      scheme: [color + '00', color + '10', color + '88', color + 'bb', color + 'ff'],
     };
 
     return {
@@ -1135,19 +1177,19 @@ class VegaTimeseriesPlot extends Component {
       transform: [
         {
           calculate: '0',
-          as: 'y0'
+          as: 'y0',
         },
         {
           calculate: '1',
-          as: 'y1'
+          as: 'y1',
         },
         {
           calculate: '2',
-          as: 'y2'
+          as: 'y2',
         },
         {
           calculate: '3',
-          as: 'y3'
+          as: 'y3',
         },
       ],
       layer: [
@@ -1171,7 +1213,7 @@ class VegaTimeseriesPlot extends Component {
               axis: {
                 grid: false,
                 labels: false,
-              }
+              },
             },
             y2: {
               field: 'y1',
@@ -1180,7 +1222,7 @@ class VegaTimeseriesPlot extends Component {
               axis: {
                 grid: false,
                 labels: false,
-              }
+              },
             },
             color: {
               scale: scale,
@@ -1190,20 +1232,21 @@ class VegaTimeseriesPlot extends Component {
             },
             tooltip: [
               {
-                title: 'Lowclouds', field: 'low'
+                title: 'Lowclouds',
+                field: 'low',
               },
               {
                 field: 'x',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
+                format: this.props.temporalXAxisFormat,
               },
               {
                 field: 'x2',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
-              }
-            ]
-          }
+                format: this.props.temporalXAxisFormat,
+              },
+            ],
+          },
         },
         {
           mark: {
@@ -1226,7 +1269,7 @@ class VegaTimeseriesPlot extends Component {
               axis: {
                 grid: false,
                 labels: false,
-              }
+              },
             },
             y2: {
               field: 'y2',
@@ -1235,7 +1278,7 @@ class VegaTimeseriesPlot extends Component {
               axis: {
                 grid: false,
                 labels: false,
-              }
+              },
             },
             color: {
               scale: scale,
@@ -1245,20 +1288,21 @@ class VegaTimeseriesPlot extends Component {
             },
             tooltip: [
               {
-                title: 'Midclouds', field: 'mid'
+                title: 'Midclouds',
+                field: 'mid',
               },
               {
                 field: 'x',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
+                format: this.props.temporalXAxisFormat,
               },
               {
                 field: 'x2',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
-              }
-            ]
-          }
+                format: this.props.temporalXAxisFormat,
+              },
+            ],
+          },
         },
         {
           mark: {
@@ -1281,7 +1325,7 @@ class VegaTimeseriesPlot extends Component {
               axis: {
                 grid: false,
                 labels: false,
-              }
+              },
             },
             y2: {
               field: 'y3',
@@ -1290,7 +1334,7 @@ class VegaTimeseriesPlot extends Component {
               axis: {
                 grid: false,
                 labels: false,
-              }
+              },
             },
             color: {
               scale: scale,
@@ -1300,24 +1344,25 @@ class VegaTimeseriesPlot extends Component {
             },
             tooltip: [
               {
-                title: 'Hiclouds', field: 'hi'
+                title: 'Hiclouds',
+                field: 'hi',
               },
               {
                 field: 'x',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
+                format: this.props.temporalXAxisFormat,
               },
               {
                 field: 'x2',
                 type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-                format: this.props.temporalXAxisFormat
-              }
-            ]
-          }
-        }
-      ]
+                format: this.props.temporalXAxisFormat,
+              },
+            ],
+          },
+        },
+      ],
     };
-  }
+  };
 
   updateSpec = () => {
     const layer = [];
@@ -1338,9 +1383,7 @@ class VegaTimeseriesPlot extends Component {
     this.setState({
       spec: {
         width:
-          this.props.width !== undefined && this.props.width !== null
-            ? this.props.width
-            : this.state.containerWidth,
+          this.props.width !== undefined && this.props.width !== null ? this.props.width : this.state.containerWidth,
         height:
           this.props.height !== undefined && this.props.height !== null // && this.state.containerHeight < this.props.height
             ? this.props.height
@@ -1371,7 +1414,7 @@ class VegaTimeseriesPlot extends Component {
             labelFontWeight: 750,
             tickCount: 5,
           },
-          legend : {
+          legend: {
             gradientLength: this.props.height - 45,
             gradientHorizontalMaxLength: this.props.height - 45,
             gradientVerticalMaxLength: this.props.height - 45,
@@ -1380,8 +1423,8 @@ class VegaTimeseriesPlot extends Component {
         transform: [
           {
             calculate: 'datetime(datum.x)',
-            as: 'convertedDatetime'
-          }
+            as: 'convertedDatetime',
+          },
         ],
         encoding: {
           x: {
@@ -1394,12 +1437,10 @@ class VegaTimeseriesPlot extends Component {
             scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
           },
         },
-        layer: [
-          ...layer,
-        ],
+        layer: [...layer],
         resolve: {
-          scale: this.props.scaleIndependent ? { y: 'independent' } : {}
-        }
+          scale: this.props.scaleIndependent ? { y: 'independent' } : {},
+        },
       },
     });
   };
@@ -1446,7 +1487,7 @@ class VegaTimeseriesPlot extends Component {
       if (this.props.containerNode) {
         this.resizeObserver = new ResizeObserver((entries) => {
           const container = entries[0];
-          
+
           this.setState({
             containerHeight: container.contentRect.height,
             containerWidth: container.contentRect.width,
@@ -1469,7 +1510,7 @@ class VegaTimeseriesPlot extends Component {
       updateSpec = true;
     }
 
-    if (!isEqual(prevProps.layers, this.props.layers) ) {
+    if (!isEqual(prevProps.layers, this.props.layers)) {
       updateSpec = true;
     }
 
@@ -1494,9 +1535,9 @@ class VegaTimeseriesPlot extends Component {
     return (
       <VegaLite
         style={{
-          display: 'flex'
+          display: 'flex',
         }}
-        renderer='svg'
+        renderer="svg"
         spec={this.state.spec}
         data={layers}
         className={[styles.plotContainer, this.props.className].join(' ')}
