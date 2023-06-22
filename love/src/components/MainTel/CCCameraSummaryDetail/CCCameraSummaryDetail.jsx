@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { getCameraStatusStyle } from 'Utils';
+import isEqual from 'lodash/isEqual';
+import { formatTimestamp, getCameraStatusStyle } from 'Utils';
+import { IMAGE_STATES } from 'Constants';
 import styles from './CCCameraSummaryDetail.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import GearIcon from '../../icons/GearIcon/GearIcon';
 import LoadingBar from '../../GeneralPurpose/LoadingBar/LoadingBar';
 import Title from '../../GeneralPurpose/SummaryPanel/Title';
 import Value from '../../GeneralPurpose/SummaryPanel/Value';
-import { stateToStyleCamera } from '../../../Config';
-import { formatTimestamp } from '../../../Utils';
 import {
   cccameraSummaryStateToStyle,
   cccameraCcsCommandStateMap,
@@ -27,6 +27,7 @@ import {
   ccCameraRaftsDetailedStateToSTyle,
 } from 'Config';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
+
 export default class CCCamera extends Component {
   static propTypes = {
     subscribeToStreams: PropTypes.func,
@@ -37,6 +38,7 @@ export default class CCCamera extends Component {
     super(props);
     this.state = {
       timers: {},
+      imageSequence: {},
     };
   }
 
@@ -78,6 +80,54 @@ export default class CCCamera extends Component {
     });
   };
 
+  /**
+   * Function to produce the imagesInSequence dict
+   * The dict contains the images in sequence for the input stream
+   * Possible streams:
+   * - startIntegration
+   * - startReadout
+   * - endReadout
+   * - endOfImageTelemetry
+   * @param {Object} stream
+   * @returns {Object} imagesInSequence
+   *
+   */
+  reduceImagesInSequence = (cameraState, stream) => {
+    const { imageSequence } = this.state;
+    if (imageSequence.images === undefined) {
+      imageSequence.images = {};
+    }
+
+    imageSequence.name = 'test';
+    imageSequence.imagesInSequence = stream.imagesInSequence.value;
+    imageSequence.images[stream.imageName.value] = {
+      timeStamp: stream.timestampAcquisitionStart.value,
+      imageIndex: stream.imageIndex.value,
+      exposureTime: stream.exposureTime.value ?? 0,
+      state: cameraState,
+      darkTime: stream.darkTime.value ?? '-',
+      emulatedImage: stream.emulatedImage.value ?? '-',
+      shutterOpenTime: stream.shutterOpenTime.value ?? '-',
+    };
+
+    this.setState({ imageSequence });
+  };
+
+  componentDidUpdate = (prevProps) => {
+    if (!isEqual(this.props.startIntegration && prevProps.startIntegration !== this.props.startIntegration)) {
+      this.reduceImagesInSequence(IMAGE_STATES.INTEGRATING, this.props.startIntegration);
+    }
+    if (!isEqual(this.props.startReadout && prevProps.startReadout !== this.props.startReadout)) {
+      this.reduceImagesInSequence(IMAGE_STATES.READING_OUT, this.props.startReadout);
+    }
+    if (!isEqual(this.props.endReadout && this.props.endReadout && prevProps.endReadout !== this.props.endReadout)) {
+      this.reduceImagesInSequence(IMAGE_STATES.END_READOUT, this.props.endReadout);
+    }
+    if (!isEqual(this.props.endOfImageTelemetry && prevProps.endOfImageTelemetry !== this.props.endOfImageTelemetry)) {
+      this.reduceImagesInSequence(IMAGE_STATES.END_TELEMETRY, this.props.endOfImageTelemetry);
+    }
+  };
+
   render() {
     const ccCameraStatus = CSCDetail.states[this.props.cccameraSummaryState];
     const commandState = cccameraCcsCommandStateMap[this.props?.cccameraCcsCmdState];
@@ -87,54 +137,54 @@ export default class CCCamera extends Component {
     const shutterState = cccameraShutterDetailedStateMap[this.props.ccCameraShutterDetailedState];
     const filterChangerStatus = cccameraFilterChangerDetailedStateMap[this.props.ccCameraFilterChangerDetailedState];
     const raftsStatus = ccCameraRaftsDetailedStateMap[this.props.ccCameraRaftsDetailedState];
-    const {
-      imagesInSequenceInt,
-      imageNameInt,
-      imageIndexInt,
-      imageSourceInt,
-      imageControllerInt,
-      imageDateInt,
-      imageNumberInt,
-      timestampAcquisitionStartInt,
-      exposureTimeInt,
-      modeInt,
-      timeoutInt,
-      imagesInSequenceSReadout,
-      imageNameSReadout,
-      imageIndexSReadout,
-      imageSourceSReadout,
-      imageControllerSReadout,
-      imageDateSReadout,
-      imageNumberSReadout,
-      timestampAcquisitionStartSReadout,
-      exposureTimeSReadout,
-      timestampStartOfReadoutSReadout,
-      imagesInSequenceEReadout,
-      imageNameEReadout,
-      imageIndexEReadout,
-      imageSourceEReadout,
-      imageControllerEReadout,
-      imageDateEReadout,
-      imageNumberEReadout,
-      timestampAcquisitionStartEReadout,
-      requestedExposureTimeEReadout,
-      timestampEndOfReadoutEReadout,
-      imagesInSequenceTelemetry,
-      imageNameTelemetry,
-      imageIndexTelemetry,
-      imageSourceTelemetry,
-      imageControllerTelemetry,
-      imageDateTelemetry,
-      imageNumberTelemetry,
-      timestampAcquisitionStartTelemetry,
-      exposureTimeTelemetry,
-      imageTagTelemetry,
-      timestampDateObsTelemetry,
-      timestampDateEndTelemetry,
-      measuredShutterOpenTimeTelemetry,
-      darkTimeTelemetry,
-      emulatedImageTelemetry,
-    } = this.props;
+    // const {
+    //   imagesInSequenceInt,
+    //   imageNameInt,
+    //   imageIndexInt,
+    //   imageSourceInt,
+    //   imageControllerInt,
+    //   imageDateInt,
+    //   imageNumberInt,
+    //   timestampAcquisitionStartInt,
+    //   exposureTimeInt,
+    //   modeInt,
+    //   timeoutInt,
+    //   imagesInSequenceSReadout,
+    //   imageNameSReadout,
+    //   imageIndexSReadout,
+    //   imageSourceSReadout,
+    //   imageControllerSReadout,
+    //   imageDateSReadout,
+    //   imageNumberSReadout,
+    //   timestampAcquisitionStartSReadout,
+    //   exposureTimeSReadout,
+    //   timestampStartOfReadoutSReadout,
+    //   imagesInSequenceEReadout,
+    //   imageNameEReadout,
+    //   imageIndexEReadout,
+    //   imageSourceEReadout,
+    //   imageControllerEReadout,
+    //   imageDateEReadout,
+    //   imageNumberEReadout,
+    //   timestampAcquisitionStartEReadout,
+    //   requestedExposureTimeEReadout,
+    //   timestampEndOfReadoutEReadout,
+    //   imagesInSequenceTelemetry,
+    //   imageNameTelemetry,
+    //   imageIndexTelemetry,
+    //   imageSourceTelemetry,
+    //   imageControllerTelemetry,
+    //   imageDateTelemetry,
+    //   imageNumberTelemetry,
+    //   timestampAcquisitionStartTelemetry,
+    //   exposureTimeTelemetry,
+    //   imageTagTelemetry,
+    //   timestampDateObsTelemetry,
+    //   timestampDateEndTelemetry,
+    //   measuredShutterOpenTimeTelemetry,
+    //   darkTimeTelemetry,
+    //   emulatedImageTelemetry,
+    // } = this.props;
     return (
       <div className={styles.cameraContainer}>
         <div className={styles.statesContainer}>
@@ -180,7 +230,7 @@ export default class CCCamera extends Component {
           </div>
         </div>
         <div>
-          <div className={styles.imageSequenceName}>{this.props.imageSequence?.name}</div>
+          <div className={styles.imageSequenceName}>{this.state.imageSequence?.name}</div>
           <div className={styles.imageTableWrapper}>
             <table className={styles.imageTable}>
               <thead>
@@ -195,10 +245,10 @@ export default class CCCamera extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.props.imageSequence?.images &&
-                  Object.keys(this.props.imageSequence?.images).map((imageName) => {
-                    const image = this.props.imageSequence?.images[imageName];
-                    const imageKey = `${this.props.imageSequence?.name}-${imageName}`;
+                {this.state.imageSequence?.images &&
+                  Object.keys(this.state.imageSequence?.images).map((imageName) => {
+                    const image = this.state.imageSequence?.images[imageName];
+                    const imageKey = `${this.state.imageSequence?.name}-${imageName}`;
                     const isIntegrating = image.state === 'INTEGRATING';
                     let currentExposureTime =
                       this.state.timers[imageKey] !== undefined

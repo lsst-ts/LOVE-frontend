@@ -106,52 +106,6 @@ const CCCameraSummaryDetailContainer = ({
       ccCameraShutterDetailedState={ccCameraShutterDetailedState}
       ccCameraFilterChangerDetailedState={ccCameraFilterChangerDetailedState}
       ccCameraRaftsDetailedState={ccCameraRaftsDetailedState}
-      imagesInSequenceInt={imagesInSequenceInt}
-      imageNameInt={imageNameInt}
-      imageIndexInt={imageIndexInt}
-      imageSourceInt={imageSourceInt}
-      imageControllerInt={imageControllerInt}
-      imageDateInt={imageDateInt}
-      imageNumberInt={imageNumberInt}
-      timestampAcquisitionStartInt={timestampAcquisitionStartInt}
-      exposureTimeInt={exposureTimeInt}
-      modeInt={modeInt}
-      timeoutInt={timeoutInt}
-      imagesInSequenceSReadout={imagesInSequenceSReadout}
-      imageNameSReadout={imageNameSReadout}
-      imageIndexSReadout={imageIndexSReadout}
-      imageSourceSReadout={imageSourceSReadout}
-      imageControllerSReadout={imageControllerSReadout}
-      imageDateSReadout={imageDateSReadout}
-      imageNumberSReadout={imageNumberSReadout}
-      timestampAcquisitionStartSReadout={timestampAcquisitionStartSReadout}
-      exposureTimeSReadout={exposureTimeSReadout}
-      timestampStartOfReadoutSReadout={timestampStartOfReadoutSReadout}
-      imagesInSequenceEReadout={imagesInSequenceEReadout}
-      imageNameEReadout={imageNameEReadout}
-      imageIndexEReadout={imageIndexEReadout}
-      imageSourceEReadout={imageSourceEReadout}
-      imageControllerEReadout={imageControllerEReadout}
-      imageDateEReadout={imageDateEReadout}
-      imageNumberEReadout={imageNumberEReadout}
-      timestampAcquisitionStartEReadout={timestampAcquisitionStartEReadout}
-      requestedExposureTimeEReadout={requestedExposureTimeEReadout}
-      timestampEndOfReadoutEReadout={timestampEndOfReadoutEReadout}
-      imagesInSequenceTelemetry={imagesInSequenceTelemetry}
-      imageNameTelemetry={imageNameTelemetry}
-      imageIndexTelemetry={imageIndexTelemetry}
-      imageSourceTelemetry={imageSourceTelemetry}
-      imageControllerTelemetry={imageControllerTelemetry}
-      imageDateTelemetry={imageDateTelemetry}
-      imageNumberTelemetry={imageNumberTelemetry}
-      timestampAcquisitionStartTelemetry={timestampAcquisitionStartTelemetry}
-      exposureTimeTelemetry={exposureTimeTelemetry}
-      imageTagTelemetry={imageTagTelemetry}
-      timestampDateObsTelemetry={timestampDateObsTelemetry}
-      timestampDateEndTelemetry={timestampDateEndTelemetry}
-      measuredShutterOpenTimeTelemetry={measuredShutterOpenTimeTelemetry}
-      darkTimeTelemetry={darkTimeTelemetry}
-      emulatedImageTelemetry={emulatedImageTelemetry}
       {...props}
     />
   );
@@ -165,10 +119,10 @@ const mapStateToProps = (state) => {
   const endOfImageTelemetry = getCCEndOfImageTelemetry(state);
   return {
     ...summaryStatus,
-    ...startIntegration,
-    ...startReadout,
-    ...endReadout,
-    ...endOfImageTelemetry,
+    startIntegration,
+    startReadout,
+    endReadout,
+    endOfImageTelemetry,
   };
 };
 
