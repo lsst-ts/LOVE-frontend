@@ -4,6 +4,7 @@ import Dome from './Dome';
 import { getDomeState, getATMCSState } from '../../../redux/selectors';
 import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+import { EUIs } from 'Config';
 
 export const schema = {
   description: 'Summary view of the ATDome. Contains general information about the dome and mount state',
@@ -20,6 +21,12 @@ export const schema = {
       description: "Whether to display controls to configure periods of time'",
       default: true,
       isPrivate: false,
+    },
+    EUI: {
+      type: 'boolean',
+      description: 'Whether the component has a EUI link',
+      isPrivate: false,
+      default: EUIs.ATDOME,
     },
   },
 };
@@ -103,7 +110,7 @@ const DomeContainer = ({
 const mapStateToProps = (state) => {
   const domeState = getDomeState(state);
   const mountState = getATMCSState(state);
-  return {...domeState, ...mountState};
+  return { ...domeState, ...mountState };
 };
 
 const mapDispatchToProps = (dispatch) => {

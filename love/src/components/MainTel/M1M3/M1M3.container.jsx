@@ -10,6 +10,7 @@ import {
 } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import M1M3 from './M1M3';
+import { EUIs } from 'Config';
 
 export const schema = {
   description: 'View of M1M3 actuators',
@@ -21,11 +22,17 @@ export const schema = {
       isPrivate: false,
       default: 'M1M3',
     },
+    EUI: {
+      type: 'boolean',
+      description: 'Whether the component has a EUI link',
+      isPrivate: false,
+      default: EUIs.M1M3,
+    },
   },
 };
 
 const M1M3Container = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
-  if (props.isRaw) {
+  if (props.isRaw && props.hasEUI) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
   return <M1M3 subscribeToStreams={subscribeToStreams} unsubscribeToStreams={unsubscribeToStreams} {...props} />;
