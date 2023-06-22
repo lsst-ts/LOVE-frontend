@@ -69,7 +69,7 @@ export default class Panel extends Component {
             <div className={[styles.panelButtonWrapper, hasLink ? styles.panelTwoButtonsWrapper : null].join(' ')}>
               {hasEUI && (
                 <Button
-                  title={`External link: ${this.props.hasEUI}`}
+                  title={`External link: ${this.props.EUI}`}
                   onClick={() => window.open(this.props.EUI, '_blank')}
                   className={styles.panelButton}
                   size={'small'}
