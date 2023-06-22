@@ -101,13 +101,18 @@ export default class CCCamera extends Component {
     imageSequence.name = 'test';
     imageSequence.imagesInSequence = stream.imagesInSequence.value;
     imageSequence.images[stream.imageName.value] = {
-      timeStamp: stream.timestampAcquisitionStart.value,
-      imageIndex: stream.imageIndex.value,
-      exposureTime: stream.exposureTime.value ?? 0,
       state: cameraState,
+      imageIndex: stream.imageIndex.value,
+      source: stream.imageSource.value,
+      controller: stream.imageController.value,
+      timeStamp: stream.timestampAcquisitionStart.value,
+      exposureTime: stream.exposureTime.value ?? 0,
+      tag: stream.imageTag.value ?? '-',
+      obsDate: stream.timestampDateObs ?? '-',
+      endObsDate: stream.timestampDateEnd ?? '-',
       darkTime: stream.darkTime.value ?? '-',
       emulatedImage: stream.emulatedImage.value ?? '-',
-      shutterOpenTime: stream.shutterOpenTime.value ?? '-',
+      shutterOpenTime: stream.measuredShutterOpenTime.value ?? '-',
     };
 
     this.setState({ imageSequence });
@@ -189,7 +194,7 @@ export default class CCCamera extends Component {
       <div className={styles.cameraContainer}>
         <div className={styles.statesContainer}>
           <div className={styles.stateContainer}>
-            <Title>MTCamera</Title>
+            <Title>CCCamera</Title>
             <Value>
               <span className={[ccCameraStatus.class, styles.summaryState].join(' ')}>{ccCameraStatus.name}</span>
             </Value>
