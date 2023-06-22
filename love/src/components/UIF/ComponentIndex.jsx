@@ -549,6 +549,16 @@ export const mainIndex = {
       },
     },
   },
+  CCCameraSummaryDetail: {
+    component: require('../MainTel/CCCameraSummaryDetail/CCCameraSummaryDetail.container').default,
+    schema: {
+      ...require('../MainTel/CCCameraSummaryDetail/CCCameraSummaryDetail.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/CCCameraSummaryDetail/CCCameraSummaryDetail.container').schema.props,
+      },
+    },
+  },
 };
 
 const environmentIndex = {
