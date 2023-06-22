@@ -5,6 +5,7 @@ Version History
 v5.22.0
 --------
 
+* Avoid session logout when receiving 403 forbidden response `<https://github.com/lsst-ts/LOVE-frontend/pull/477>`_
 * Glycol Loop Implementation `<https://github.com/lsst-ts/LOVE-frontend/pull/475>`_
 * Include Dynalene System and MTAirCompressor devices to Facility Map `<https://github.com/lsst-ts/LOVE-frontend/pull/474>`_
 * Subsystem EUIs Implementation `<https://github.com/lsst-ts/LOVE-frontend/pull/476>`_
