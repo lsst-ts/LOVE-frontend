@@ -175,7 +175,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -208,7 +208,7 @@ export default class ManagerInterface {
         // console.error('Error communicating with the server.);
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -231,7 +231,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -254,7 +254,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -277,7 +277,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -303,7 +303,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -326,7 +326,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -408,7 +408,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -444,7 +444,7 @@ export default class ManagerInterface {
         toast.error('Server error.');
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -473,7 +473,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -502,8 +502,7 @@ export default class ManagerInterface {
         toast.error('Error communicating with the server.');
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
-        toast.error('Session expired. Logging out.');
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -532,7 +531,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -560,8 +559,7 @@ export default class ManagerInterface {
         toast.error('Error communicating with the server.');
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
-        toast.error('Session expired. Logging out.');
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -590,7 +588,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -614,7 +612,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -655,9 +653,8 @@ export default class ManagerInterface {
         toast.error('Error communicating with the server.');
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
-        toast.error('Session expired. Logging out.');
         return false;
       }
       if (response.status >= 400 && response.status < 500) {
@@ -690,8 +687,7 @@ export default class ManagerInterface {
         toast.error('Error communicating with the server.');
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
-        toast.error('Session expired. Logging out.');
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -722,7 +718,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -747,7 +743,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -770,7 +766,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -793,7 +789,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -824,7 +820,7 @@ export default class ManagerInterface {
         toast.error('Error communicating with the server.');
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -861,8 +857,7 @@ export default class ManagerInterface {
         toast.error('Error communicating with the server.');
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
-        toast.error('Session expired. Logging out.');
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -891,8 +886,7 @@ export default class ManagerInterface {
         toast.error('Error communicating with the server.');
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
-        toast.error('Session expired. Logging out.');
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -920,7 +914,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -945,7 +939,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -976,7 +970,7 @@ export default class ManagerInterface {
         toast.error('Error communicating with the server.');
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -1018,8 +1012,7 @@ export default class ManagerInterface {
         toast.error('Error communicating with the server.');
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
-        toast.error('Session expired. Logging out.');
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -1048,8 +1041,7 @@ export default class ManagerInterface {
         toast.error('Error communicating with the server.');
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
-        toast.error('Session expired. Logging out.');
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -1077,7 +1069,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -1104,7 +1096,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -1130,7 +1122,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -1165,7 +1157,7 @@ export default class ManagerInterface {
       if (response.status >= 500) {
         return false;
       }
-      if (response.status === 401 || response.status === 403) {
+      if (response.status === 401) {
         ManagerInterface.removeToken();
         return false;
       }
