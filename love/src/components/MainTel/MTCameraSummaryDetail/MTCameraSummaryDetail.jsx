@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
 import { getCameraStatusStyle } from 'Utils';
+import { IMAGE_STATES } from 'Constants';
 import styles from './MTCameraSummaryDetail.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import GearIcon from '../../icons/GearIcon/GearIcon';
 import LoadingBar from '../../GeneralPurpose/LoadingBar/LoadingBar';
 import Title from '../../GeneralPurpose/SummaryPanel/Title';
 import Value from '../../GeneralPurpose/SummaryPanel/Value';
-import { stateToStyleCamera } from '../../../Config';
 import { formatTimestamp } from '../../../Utils';
 import {
   mtcameraSummaryStateToStyle,
@@ -27,6 +28,7 @@ import {
   mtCameraRaftsDetailedStateToSTyle,
 } from 'Config';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
+
 export default class Camera extends Component {
   static propTypes = {
     subscribeToStreams: PropTypes.func,
@@ -37,6 +39,7 @@ export default class Camera extends Component {
     super(props);
     this.state = {
       timers: {},
+      imageSequence: {},
     };
   }
 
@@ -78,6 +81,59 @@ export default class Camera extends Component {
     });
   };
 
+  /**
+   * Function to produce the imagesInSequence dict
+   * The dict contains the images in sequence for the input stream
+   * Possible streams:
+   * - startIntegration
+   * - startReadout
+   * - endReadout
+   * - endOfImageTelemetry
+   * @param {Object} stream
+   * @returns {Object} imagesInSequence
+   *
+   */
+  reduceImagesInSequence = (cameraState, stream) => {
+    const { imageSequence } = this.state;
+    if (imageSequence.images === undefined) {
+      imageSequence.images = {};
+    }
+
+    imageSequence.name = 'test';
+    imageSequence.imagesInSequence = stream.imagesInSequence.value;
+    imageSequence.images[stream.imageName.value] = {
+      state: cameraState,
+      imageIndex: stream.imageIndex.value,
+      source: stream.imageSource.value,
+      controller: stream.imageController.value,
+      timeStamp: stream.timestampAcquisitionStart.value,
+      exposureTime: stream.exposureTime.value ?? 0,
+      tag: stream.imageTag.value ?? '-',
+      obsDate: stream.timestampDateObs ?? '-',
+      endObsDate: stream.timestampDateEnd ?? '-',
+      darkTime: stream.darkTime.value ?? '-',
+      emulatedImage: stream.emulatedImage.value ?? '-',
+      shutterOpenTime: stream.measuredShutterOpenTime.value ?? '-',
+    };
+
+    this.setState({ imageSequence });
+  };
+
+  componentDidUpdate = (prevProps) => {
+    if (!isEqual(this.props.startIntegration && prevProps.startIntegration !== this.props.startIntegration)) {
+      this.reduceImagesInSequence(IMAGE_STATES.INTEGRATING, this.props.startIntegration);
+    }
+    if (!isEqual(this.props.startReadout && prevProps.startReadout !== this.props.startReadout)) {
+      this.reduceImagesInSequence(IMAGE_STATES.READING_OUT, this.props.startReadout);
+    }
+    if (!isEqual(this.props.endReadout && this.props.endReadout && prevProps.endReadout !== this.props.endReadout)) {
+      this.reduceImagesInSequence(IMAGE_STATES.END_READOUT, this.props.endReadout);
+    }
+    if (!isEqual(this.props.endOfImageTelemetry && prevProps.endOfImageTelemetry !== this.props.endOfImageTelemetry)) {
+      this.reduceImagesInSequence(IMAGE_STATES.END_TELEMETRY, this.props.endOfImageTelemetry);
+    }
+  };
+
   render() {
     const mtCameraStatus = CSCDetail.states[this.props.mtcameraSummaryState];
     const commandState = mtcameraCcsCommandStateMap[this.props?.mtcameraCcsCmdState];
@@ -87,54 +143,54 @@ export default class Camera extends Component {
     const shutterState = mtcameraShutterDetailedStateMap[this.props.mtCameraShutterDetailedState];
     const filterChangerStatus = mtcameraFilterChangerDetailedStateMap[this.props.mtCameraFilterChangerDetailedState];
     const raftsStatus = mtCameraRaftsDetailedStateMap[this.props.mtCameraRaftsDetailedState];
-    const {
-      imagesInSequenceInt,
-      imageNameInt,
-      imageIndexInt,
-      imageSourceInt,
-      imageControllerInt,
-      imageDateInt,
-      imageNumberInt,
-      timestampAcquisitionStartInt,
-      exposureTimeInt,
-      modeInt,
-      timeoutInt,
-      imagesInSequenceSReadout,
-      imageNameSReadout,
-      imageIndexSReadout,
-      imageSourceSReadout,
-      imageControllerSReadout,
-      imageDateSReadout,
-      imageNumberSReadout,
-      timestampAcquisitionStartSReadout,
-      exposureTimeSReadout,
-      timestampStartOfReadoutSReadout,
-      imagesInSequenceEReadout,
-      imageNameEReadout,
-      imageIndexEReadout,
-      imageSourceEReadout,
-      imageControllerEReadout,
-      imageDateEReadout,
-      imageNumberEReadout,
-      timestampAcquisitionStartEReadout,
-      requestedExposureTimeEReadout,
-      timestampEndOfReadoutEReadout,
-      imagesInSequenceTelemetry,
-      imageNameTelemetry,
-      imageIndexTelemetry,
-      imageSourceTelemetry,
-      imageControllerTelemetry,
-      imageDateTelemetry,
-      imageNumberTelemetry,
-      timestampAcquisitionStartTelemetry,
-      exposureTimeTelemetry,
-      imageTagTelemetry,
-      timestampDateObsTelemetry,
-      timestampDateEndTelemetry,
-      measuredShutterOpenTimeTelemetry,
-      darkTimeTelemetry,
-      emulatedImageTelemetry,
-    } = this.props;
+    // const {
+    //   imagesInSequenceInt,
+    //   imageNameInt,
+    //   imageIndexInt,
+    //   imageSourceInt,
+    //   imageControllerInt,
+    //   imageDateInt,
+    //   imageNumberInt,
+    //   timestampAcquisitionStartInt,
+    //   exposureTimeInt,
+    //   modeInt,
+    //   timeoutInt,
+    //   imagesInSequenceSReadout,
+    //   imageNameSReadout,
+    //   imageIndexSReadout,
+    //   imageSourceSReadout,
+    //   imageControllerSReadout,
+    //   imageDateSReadout,
+    //   imageNumberSReadout,
+    //   timestampAcquisitionStartSReadout,
+    //   exposureTimeSReadout,
+    //   timestampStartOfReadoutSReadout,
+    //   imagesInSequenceEReadout,
+    //   imageNameEReadout,
+    //   imageIndexEReadout,
+    //   imageSourceEReadout,
+    //   imageControllerEReadout,
+    //   imageDateEReadout,
+    //   imageNumberEReadout,
+    //   timestampAcquisitionStartEReadout,
+    //   requestedExposureTimeEReadout,
+    //   timestampEndOfReadoutEReadout,
+    //   imagesInSequenceTelemetry,
+    //   imageNameTelemetry,
+    //   imageIndexTelemetry,
+    //   imageSourceTelemetry,
+    //   imageControllerTelemetry,
+    //   imageDateTelemetry,
+    //   imageNumberTelemetry,
+    //   timestampAcquisitionStartTelemetry,
+    //   exposureTimeTelemetry,
+    //   imageTagTelemetry,
+    //   timestampDateObsTelemetry,
+    //   timestampDateEndTelemetry,
+    //   measuredShutterOpenTimeTelemetry,
+    //   darkTimeTelemetry,
+    //   emulatedImageTelemetry,
+    // } = this.props;
     return (
       <div className={styles.cameraContainer}>
         <div className={styles.statesContainer}>
