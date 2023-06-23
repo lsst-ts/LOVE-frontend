@@ -26,7 +26,7 @@ export default class AboutPanel extends Component {
             <span>
               L.O.V.E, the LSST Operators Visualization Environment, is a cutting-edge GUI, Graphic User Interface,
               which with it's intuitive interface and powerful tools enables observing specialist, scientists, and
-              anyone with access, to efficiently navigate, monitor, and explore the current status of the observatory's
+              anyone with access, to efficiently navigate, monitor and explore the current status of the observatory's
               state-of-the-art instruments.
             </span>
           </div>
