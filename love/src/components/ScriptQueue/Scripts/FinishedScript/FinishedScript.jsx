@@ -197,7 +197,6 @@ export default class FinishedScript extends PureComponent {
                 <div>
                   APPLIED CONFIGURATION
                   {this.state.coppiedToClipboard && <div className={styles.fadeElement}>Coppied to clipboard</div>}
-                  {/* <div className={styles.fadeElement}>Coppied to clipboard</div> */}
                   <div className={styles.copyToClipboardIcon} onClick={this.copyConfigToClipboard}>
                     <CopyIcon title="Copy to clipboard" />
                   </div>
@@ -209,7 +208,6 @@ export default class FinishedScript extends PureComponent {
                   width={'26em'}
                   height={'150px'}
                   value={this.state.appliedConfiguration}
-                  // editorProps={{ $blockScrolling: true }}
                   fontSize={18}
                   readOnly
                   showPrintMargin={false}
