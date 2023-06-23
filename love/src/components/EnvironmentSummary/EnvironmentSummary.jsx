@@ -128,6 +128,8 @@ export default class EnvironmentSummary extends Component {
             simonyiSunRa={simonyiSunRa}
             simonyiSunDec={simonyiSunDec}
             simonyiMoonPhase={simonyiMoonPhase}
+            auxtelRa={auxtelRa}
+            auxtelDec={auxtelDec}
           />
           <SimonyiTelescope
             className={styles.simonyi}
