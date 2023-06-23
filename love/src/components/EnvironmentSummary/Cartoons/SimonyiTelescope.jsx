@@ -4,8 +4,27 @@ import SimonyiSummary from '../SummaryInformation/SimonyiSummary';
 
 function SimonyiTelescope({ className, ...props }) {
   const [showSimonyiSummary, setShowSimonyiSummary] = useState(false);
-  const { simonyiTrackingState, simonyiAltitude, simonyiAzimuth, simonyiRotator, simonyiDomeAlt, simonyiDomeAz } =
-    props || {};
+  const {
+    simonyiTrackingState,
+    simonyiAltitude,
+    simonyiAzimuth,
+    simonyiRotator,
+    simonyiDomeAlt,
+    simonyiDomeAz,
+    hideIconTemperature,
+    showIconTemperature,
+  } = props;
+
+  const simonyiOnMouseEnter = () => {
+    setShowSimonyiSummary(true);
+    hideIconTemperature();
+  };
+
+  const simonyiOnMouseLeave = () => {
+    setShowSimonyiSummary(false);
+    showIconTemperature();
+  };
+
   return (
     <svg viewBox="0 0 726.72 436.7" className={className} {...props}>
       {/* <text x={245} y={10} width="60" height="40" className={styles.temperature}>
@@ -17,7 +36,7 @@ function SimonyiTelescope({ className, ...props }) {
           className={showSimonyiSummary ? styles.hover : styles.cls6}
           points="275.31 175.1 275.31 49.4 202.98 1.11 74.29 45.61 20.96 129.31 20.96 176.07 275.31 175.1"
         />
-        <g id="TMA" onMouseEnter={() => setShowSimonyiSummary(true)} onMouseLeave={() => setShowSimonyiSummary(false)}>
+        <g id="TMA" className={styles.hoverable} onMouseEnter={simonyiOnMouseEnter} onMouseLeave={simonyiOnMouseLeave}>
           {/* <text x={185} y={40} width="60" height="40" className={styles.temperature}>
             18.36 °C
           </text> */}
@@ -147,4 +166,4 @@ function SimonyiTelescope({ className, ...props }) {
   );
 }
 
-export default SimonyiTelescope;
+export default React.memo(SimonyiTelescope);

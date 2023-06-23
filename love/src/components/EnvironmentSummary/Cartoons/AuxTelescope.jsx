@@ -4,8 +4,27 @@ import AuxtelSummary from '../SummaryInformation/AuxtelSummary';
 
 function AuxTelescope({ className, ...props }) {
   const [showAuxtelSummary, setShowAuxtelSummary] = useState(false);
-  const { auxtelTrackingState, auxtelAltitude, auxtelAzimuth, auxtelRotator, auxtelDomeAlt, auxtelDomeAz } =
-    props || {};
+  const {
+    auxtelTrackingState,
+    auxtelAltitude,
+    auxtelAzimuth,
+    auxtelRotator,
+    auxtelDomeAlt,
+    auxtelDomeAz,
+    hideIconTemperature,
+    showIconTemperature,
+  } = props;
+
+  const auxtelMouseEnter = () => {
+    setShowAuxtelSummary(true);
+    hideIconTemperature();
+  };
+
+  const auxtelMouseLeave = () => {
+    setShowAuxtelSummary(false);
+    showIconTemperature();
+  };
+
   return (
     <svg viewBox="0 0 444.43 436.59" className={className} {...props}>
       {/* <text x={135} y={10} width="60" height="40" className={styles.temperature}>
@@ -22,11 +41,7 @@ function AuxTelescope({ className, ...props }) {
         {/* <text x={187} y={50} width="60" height="40" className={styles.temperature}>
           10.36 °C
         </text> */}
-        <g
-          id="ATMount"
-          onMouseEnter={() => setShowAuxtelSummary(true)}
-          onMouseLeave={() => setShowAuxtelSummary(false)}
-        >
+        <g id="ATMount" className={styles.hoverable} onMouseEnter={auxtelMouseEnter} onMouseLeave={auxtelMouseLeave}>
           <rect className={styles.cls1} x="242.87" y="117.66" width="30" height="8" />
           <g>
             <rect className={styles.cls1} x="237.08" y="124.52" width="41.58" height="6.14" />

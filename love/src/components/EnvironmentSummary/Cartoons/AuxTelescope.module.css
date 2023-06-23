@@ -40,17 +40,20 @@
 }
 
 .auxtelHover {
+  height: 100%;
+  width: 100%;
   position: relative !important;
   overflow: visible !important;
   top: 0 !important;
   left: 0 !important;
   transform: none !important;
+  pointer-events: none;
 }
 
 .auxtelSummary {
   position: absolute;
-  top: 90px;
-  left: 100px;
+  top: 0;
+  right: 64%;
   width: 335px;
 }
 
@@ -58,4 +61,9 @@
   fill: var(--tertiary-background-color);
   stroke: var(--base-font-color);
   opacity: 0.5;
+}
+
+.hoverable {
+  cursor: pointer;
+  pointer-events: all;
 }

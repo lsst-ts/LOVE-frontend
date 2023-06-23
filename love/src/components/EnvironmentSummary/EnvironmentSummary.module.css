@@ -48,8 +48,8 @@
   left: 50%;
   top: 0;
   width: 4%;
-  margin-top: 420px;
-  z-index: 3;
+  margin-top: 315px;
+  z-index: 4;
 }
 
 .telescopes {
@@ -62,7 +62,7 @@
   position: absolute;
   top: 0;
   left: 35%;
-  z-index: 3;
+  z-index: 1;
 }
 
 .simonyi {
@@ -71,8 +71,9 @@
   top: 0;
   left: 0;
   width: 66%;
-  z-index: 2;
+  z-index: 3;
   margin-top: 200px;
+  pointer-events: none;
 }
 
 .auxTel {
@@ -81,8 +82,9 @@
   top: 0;
   right: 0;
   width: 40%;
-  z-index: 1;
+  z-index: 2;
   margin-top: 200px;
+  overflow: visible;
 }
 
 .temperaturesHover {

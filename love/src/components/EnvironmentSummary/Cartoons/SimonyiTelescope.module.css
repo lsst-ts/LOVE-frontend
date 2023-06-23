@@ -70,11 +70,14 @@
 }
 
 .simonyiHover {
+  height: 100%;
+  width: 100%;
   position: relative !important;
   overflow: visible !important;
   top: 0 !important;
   left: 0 !important;
   transform: none !important;
+  pointer-events: none;
 }
 
 .temperature {
@@ -83,12 +86,17 @@
 
 .simonyiSummary {
   position: absolute;
-  top: 80px;
-  left: 130px;
+  top: 0%;
+  left: 40%;
   width: 325px;
 }
 
 .hover {
   fill: var(--tertiary-background-color);
   stroke: var(--base-font-color);
+}
+
+.hoverable {
+  cursor: pointer;
+  pointer-events: all;
 }

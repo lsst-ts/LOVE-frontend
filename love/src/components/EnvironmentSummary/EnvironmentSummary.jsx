@@ -64,6 +64,17 @@ export default class EnvironmentSummary extends Component {
   constructor(props) {
     super(props);
     this.containerRef = React.createRef();
+    this.state = {
+      hideIconTemperature: false,
+    };
+  }
+
+  hideIconTemperature() {
+    this.setState({ hideIconTemperature: true });
+  }
+
+  showIconTemperature() {
+    this.setState({ hideIconTemperature: false });
   }
 
   componentDidMount() {
@@ -101,6 +112,7 @@ export default class EnvironmentSummary extends Component {
       windDirection,
       windSpeed,
     } = this.props;
+    const { hideIconTemperature } = this.state;
 
     return (
       <div className={styles.container}>
@@ -141,15 +153,9 @@ export default class EnvironmentSummary extends Component {
             simonyiDomeAz={simonyiDomeAz}
             auxtelRa={auxtelRa}
             auxtelDec0={auxtelDec}
+            hideIconTemperature={() => this.hideIconTemperature()}
+            showIconTemperature={() => this.showIconTemperature()}
           />
-          <div className={styles.iconTemperature}>
-            <Hoverable className={styles.temperaturesHover}>
-              <TemperatureIcon />
-              <div className={styles.temperaturesSummary}>
-                <TemperaturesSummary numChannels={numChannels} temperature={temperature} location={location} />
-              </div>
-            </Hoverable>
-          </div>
           <AuxTelescope
             className={styles.auxTel}
             auxtelTrackingState={auxtelTrackingState}
@@ -158,7 +164,19 @@ export default class EnvironmentSummary extends Component {
             auxtelRotator={auxtelRotator}
             auxtelDomeAlt={auxtelDomeAlt}
             auxtelDomeAz={auxtelDomeAz}
+            hideIconTemperature={() => this.hideIconTemperature()}
+            showIconTemperature={() => this.showIconTemperature()}
           />
+          {!hideIconTemperature && (
+            <div className={styles.iconTemperature}>
+              <Hoverable className={styles.temperaturesHover}>
+                <TemperatureIcon />
+                <div className={styles.temperaturesSummary}>
+                  <TemperaturesSummary numChannels={numChannels} temperature={temperature} location={location} />
+                </div>
+              </Hoverable>
+            </div>
+          )}
         </div>
         <div className={styles.iconRight}>
           <WeatherForecastIcon pictocode={isSnowing ? 24 : 0} />
