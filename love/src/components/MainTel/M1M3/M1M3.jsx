@@ -27,7 +27,7 @@ import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import CSCDetailStyles from './CSCDetail.module.css';
 import styles from './M1M3.module.css';
 
-const FORCE_GRADIENT_WIDTH = 250;
+const FORCE_GRADIENT_WIDTH = 200;
 const FORCE_GRADIENT_HEIGHT = 40;
 export default class M1M3 extends Component {
   constructor(props) {
@@ -743,9 +743,9 @@ export default class M1M3 extends Component {
             <div className={styles.forceGradientWrapper}>
               <span>Force</span>
               <div id={this.uniqueGradient} className={styles.forceGradient}>
-                <span>{maxForce} [N]</span>
+                <div>{minForce} [N]</div>
                 <svg viewBox={`0 0 ${FORCE_GRADIENT_WIDTH} ${FORCE_GRADIENT_HEIGHT}`}></svg>
-                <span>{minForce} [N]</span>
+                <div>{maxForce} [N]</div>
               </div>
             </div>
 
