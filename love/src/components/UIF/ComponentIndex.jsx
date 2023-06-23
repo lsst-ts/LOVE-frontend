@@ -159,6 +159,16 @@ export const observatoryIndex = {
       },
     },
   },
+  EnvironmentSummary: {
+    component: require('../EnvironmentSummary/EnvironmentSummary.container').default,
+    schema: {
+      ...require('../EnvironmentSummary/EnvironmentSummary.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../EnvironmentSummary/EnvironmentSummary.container').schema.props,
+      },
+    },
+  },
   Network: {
     component: require('../Network/Network.container').default,
     schema: {

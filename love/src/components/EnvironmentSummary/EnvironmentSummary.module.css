@@ -1,0 +1,104 @@
+.container {
+  position: relative;
+  min-width: 780px;
+  height: 100%;
+}
+
+.windRoseContainer {
+  position: absolute;
+  left: 3%;
+  top: 1em;
+  width: 4%;
+}
+
+.windDirection {
+  width: 12%;
+  position: absolute;
+  top: 1em;
+  right: 3%;
+}
+
+.windDirectionDetail {
+  display: grid;
+}
+
+.iconLeft {
+  position: absolute;
+  left: 17%;
+  top: 100px;
+  width: 4%;
+}
+
+.iconCenter {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 4%;
+}
+
+.iconRight {
+  position: absolute;
+  right: 22%;
+  top: 100px;
+  width: 3%;
+}
+
+.iconTemperature {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 4%;
+  margin-top: 315px;
+  z-index: 4;
+}
+
+.telescopes {
+  position: relative;
+  padding: 20px;
+  top: 43px;
+}
+
+.skymap {
+  position: absolute;
+  top: 0;
+  left: 35%;
+  z-index: 1;
+}
+
+.simonyi {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 66%;
+  z-index: 3;
+  margin-top: 200px;
+  pointer-events: none;
+}
+
+.auxTel {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40%;
+  z-index: 2;
+  margin-top: 200px;
+  overflow: visible;
+}
+
+.temperaturesHover {
+  position: relative !important;
+  overflow: visible !important;
+  top: 0 !important;
+  left: 0 !important;
+  transform: none !important;
+}
+
+.temperaturesSummary {
+  position: absolute;
+  top: 0 !important;
+  left: 40px !important;
+  bottom: 40px !important;
+  width: 325px;
+}
