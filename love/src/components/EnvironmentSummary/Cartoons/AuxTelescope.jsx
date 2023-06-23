@@ -27,9 +27,6 @@ function AuxTelescope({ className, ...props }) {
 
   return (
     <svg viewBox="0 0 444.43 436.59" className={className} {...props}>
-      {/* <text x={135} y={10} width="60" height="40" className={styles.temperature}>
-        10.84 °C
-      </text> */}
       <g id="ATDome">
         <rect className={styles.cls2} x="169.41" y="132.63" width="176.93" height="45" />
         <path
@@ -38,9 +35,6 @@ function AuxTelescope({ className, ...props }) {
         />
       </g>
       <g id="AuxTel">
-        {/* <text x={187} y={50} width="60" height="40" className={styles.temperature}>
-          10.36 °C
-        </text> */}
         <g id="ATMount" className={styles.hoverable} onMouseEnter={auxtelMouseEnter} onMouseLeave={auxtelMouseLeave}>
           <rect className={styles.cls1} x="242.87" y="117.66" width="30" height="8" />
           <g>

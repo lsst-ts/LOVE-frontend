@@ -156,7 +156,6 @@ export default class SkymapGrid extends Component {
       >
         <rect className={styles.backgroundRect} width="100%" height="100%" fill="none" />
         <circle className={styles.backgroundCircle} cx={w / 2} cy={h / 2} r={w / 2 - margin} />
-        {/* <circle className={styles.domeCircle} cx={w / 2} cy={h / 2} r={w / 2 + viewboxMargin - 5} /> */}
         <path
           className={styles.domeCircle}
           d={this.describeArc(w / 2, h / 2, w / 2 + viewboxMargin - 5, -260, 80)}

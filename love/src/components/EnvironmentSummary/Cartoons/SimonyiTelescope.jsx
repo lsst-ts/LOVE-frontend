@@ -27,9 +27,6 @@ function SimonyiTelescope({ className, ...props }) {
 
   return (
     <svg viewBox="0 0 726.72 436.7" className={className} {...props}>
-      {/* <text x={245} y={10} width="60" height="40" className={styles.temperature}>
-        10.12°
-      </text> */}
       <g id="Simonyi">
         <polygon
           id="SimonyiDome"
@@ -37,9 +34,6 @@ function SimonyiTelescope({ className, ...props }) {
           points="275.31 175.1 275.31 49.4 202.98 1.11 74.29 45.61 20.96 129.31 20.96 176.07 275.31 175.1"
         />
         <g id="TMA" className={styles.hoverable} onMouseEnter={simonyiOnMouseEnter} onMouseLeave={simonyiOnMouseLeave}>
-          {/* <text x={185} y={40} width="60" height="40" className={styles.temperature}>
-            18.36 °C
-          </text> */}
           <g>
             <g>
               <rect className={styles.cls4} x="153.4" y="44.72" width="16.11" height="54.37" />

@@ -1,21 +1,16 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ArrowIcon from 'components/icons/ArrowIcon/ArrowIcon';
 import styles from './WindDirection.module.css';
 
 export class WindDirection extends Component {
-  static propTypes = {};
-
   render() {
-    // TODO: calcular con escala
+    const { windSpeed, windDirection } = this.props;
     const minSpeed = 0;
     const maxSpeed = 100;
-    const currentSpeed = 50;
+    const currentSpeed = windSpeed;
     const maxArrowHeight = 500;
     const arrowHeight = (currentSpeed / maxSpeed) * maxArrowHeight;
 
-    // Desde telemetria
-    const windDirection = 145;
     return (
       <svg xmlns="http://www.w3.org/2000/svg" className={styles.svgContainer} viewBox="-40 -40 676 676">
         <defs>

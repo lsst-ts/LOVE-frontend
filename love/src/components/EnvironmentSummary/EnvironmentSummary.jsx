@@ -117,7 +117,7 @@ export default class EnvironmentSummary extends Component {
     return (
       <div className={styles.container}>
         <div className={styles.windDirection}>
-          <WindDirection></WindDirection>
+          <WindDirection windDirection={windDirection} windSpeed={windSpeed}></WindDirection>
           <div className={styles.windDirectionDetail}>
             <span>Direction: {windDirection}</span>
             <span>Speed: {windSpeed}</span>
