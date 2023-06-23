@@ -11,29 +11,8 @@ import RebDetail from './RebDetail/RebDetail';
 
 const rafts = [];
 const unusedCCDs = [
-  0,
-  1,
-  2,
-  3,
-  4,
-  /* 5, */ 6 /* 7, */ /* 8, */,
-  36,
-  37,
-  38,
-  /* 39, */ 40,
-  41,
-  /* 42, */ /* 43, */ 44,
-  180,
-  /* 181, */ /* 182, */ 183,
-  184,
-  /* 185, */ 186,
-  187,
-  188,
-  /* 216, */ /* 217, */ 218,
-  /* 219, */ 220,
-  221,
-  222,
-  223,
+  0, 1, 2, 3, 4, /* 5, */ 6 /* 7, */ /* 8, */, 36, 37, 38, /* 39, */ 40, 41, /* 42, */ /* 43, */ 44, 180,
+  /* 181, */ /* 182, */ 183, 184, /* 185, */ 186, 187, 188, /* 216, */ /* 217, */ 218, /* 219, */ 220, 221, 222, 223,
   224,
 ];
 for (let i = 0; i < 25; i++) {
@@ -44,7 +23,8 @@ for (let i = 0; i < 25; i++) {
     const isUnused = unusedCCDs.includes(ccdId - 1);
     ccds.push({
       id: ccdId,
-      status: !isUnused ? Math.ceil(Math.random() * 3) : 0,
+      // status: !isUnused ? Math.ceil(Math.random() * 3) : 0,
+      status: !isUnused ? 1 : 0,
       unused: isUnused,
     });
   }
@@ -241,15 +221,8 @@ class MTCamera extends Component {
   }
 
   getComponent() {
-    const {
-      selectedRaft,
-      selectedCCD,
-      selectedReb,
-      selectedCCDVar,
-      selectedRebVar,
-      zoomLevel,
-      activeViewId,
-    } = this.state;
+    const { selectedRaft, selectedCCD, selectedReb, selectedCCDVar, selectedRebVar, zoomLevel, activeViewId } =
+      this.state;
     const { tempControlActive, hVBiasSwitch, anaV, power, gDV, oDI, oDV, oGV, rDV, temp } = this.props;
     return (
       <div className={styles.container}>

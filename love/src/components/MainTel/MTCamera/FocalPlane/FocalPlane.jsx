@@ -16,7 +16,8 @@ class FocalPlane extends Component {
     return (
       <div
         key={`Raft-${id}`}
-        style={{ border: selectedRaft?.id === id ? '2px solid white' : `2px solid ${borderColor}` }}
+        // style={{ border: selectedRaft?.id === id ? '1px solid white' : `2px solid ${borderColor}` }}
+        style={{ border: selectedRaft?.id === id ? '1px solid white' : `none` }}
         className={styles.raftContainer}
         onClick={() => setSelectedRaft(raft)}
         onMouseOver={() => setHoveredRaft(raft)}

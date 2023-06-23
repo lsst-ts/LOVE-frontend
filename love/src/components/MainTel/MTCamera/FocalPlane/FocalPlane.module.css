@@ -12,7 +12,7 @@
 
 .ccdContainer {
   box-sizing: border-box;
-  border: 0.1px solid rgba(100, 100, 100, 0.9);
+  border: 1px solid rgba(100, 100, 100, 0.9);
   aspect-ratio: 1 / 1;
   height: auto;
   width: 100%;

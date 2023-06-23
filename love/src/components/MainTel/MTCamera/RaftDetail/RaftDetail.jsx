@@ -61,7 +61,7 @@ class RaftDetail extends Component {
           <div
             key={`c${i}`}
             ref={this.CCDsrefs[i]}
-            style={{ border: `4px solid ${COLOR_MAPPING[raft.ccds[i].status]}` }}
+            // style={{ border: `4px solid ${COLOR_MAPPING[raft.ccds[i].status]}` }}
             className={styles.plot}
             onClick={() => {
               setSelectedCCD(raft.ccds[i]);
@@ -73,11 +73,13 @@ class RaftDetail extends Component {
           >
             <PlotContainer
               memorySize={50}
+              height={100}
+              width={300}
               inputs={p}
-              containerNode={this.CCDsrefs[i]?.current}
+              // containerNode={this.CCDsrefs[i]?.current}
               xAxisTitle="Time"
               yAxisTitle={`${selectedCCDVar} - ${raft.ccds[i].id}`}
-              legendPosition="bottom"
+              legendPosition="right"
             />
           </div>
         ))}
@@ -129,11 +131,13 @@ class RaftDetail extends Component {
           >
             <PlotContainer
               memorySize={50}
+              height={100}
+              width={300}
               inputs={p}
-              containerNode={this.rebsRefs[i]?.current}
+              // containerNode={this.rebsRefs[i]?.current}
               xAxisTitle="Time"
               yAxisTitle={`Value-${i}`}
-              legendPosition="bottom"
+              legendPosition="right"
             />
           </div>
         ))}
@@ -145,10 +149,14 @@ class RaftDetail extends Component {
     const { raft, showNeighbors, selectedReb, selectNeighborRaft } = this.props;
 
     const edgesColors = {
-      top: raft.neighbors.top ? COLOR_MAPPING[raft.neighbors.top.status] : 'transparent',
-      right: raft.neighbors.right ? COLOR_MAPPING[raft.neighbors.right.status] : 'transparent',
-      bottom: raft.neighbors.bottom ? COLOR_MAPPING[raft.neighbors.bottom.status] : 'transparent',
-      left: raft.neighbors.left ? COLOR_MAPPING[raft.neighbors.left.status] : 'transparent',
+      // top: raft.neighbors.top ? COLOR_MAPPING[raft.neighbors.top.status] : 'transparent',
+      top: 'transparent',
+      // right: raft.neighbors.right ? COLOR_MAPPING[raft.neighbors.right.status] : 'transparent',
+      right: 'transparent',
+      // bottom: raft.neighbors.bottom ? COLOR_MAPPING[raft.neighbors.bottom.status] : 'transparent',
+      bottom: 'transparent',
+      // left: raft.neighbors.left ? COLOR_MAPPING[raft.neighbors.left.status] : 'transparent',
+      left: 'transparent',
     };
     return showNeighbors ? (
       <div className={styles.container}>
