@@ -62,6 +62,7 @@ class RaftDetail extends Component {
             key={`c${i}`}
             ref={this.CCDsrefs[i]}
             // style={{ border: `4px solid ${COLOR_MAPPING[raft.ccds[i].status]}` }}
+            style={{ border: selectedCCD?.id === raft.ccds[i].id ? '1px solid white' : `none` }}
             className={styles.plot}
             onClick={() => {
               setSelectedCCD(raft.ccds[i]);

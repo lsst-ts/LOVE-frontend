@@ -152,9 +152,13 @@ class MTCamera extends Component {
       hoveredCCD,
       hoveredReb,
       selectedCCDVar,
+      selectedCCD,
+      selectedReb,
     } = this.state;
 
     let newActiveViewId, newSelectedRaft, newSelectedCCD, newSelectedReb, newSelectedCCDVar;
+    newSelectedCCD = selectedCCD;
+    newSelectedReb = selectedReb;
     const k = d3.event.transform.k;
 
     const zoomReset = k === 1;
@@ -162,6 +166,7 @@ class MTCamera extends Component {
       // From raft detail to focal plane
       if (targetId === 'raftdetail') {
         newActiveViewId = 'focalplane';
+        newSelectedCCD = null;
         newSelectedCCDVar = null;
       }
 
@@ -208,8 +213,8 @@ class MTCamera extends Component {
     this.setState((prevState) => ({
       activeViewId: newActiveViewId ?? prevState.activeViewId,
       selectedRaft: newSelectedRaft ?? prevState.selectedRaft,
-      selectedCCD: newSelectedCCD ?? prevState.selectedCCD,
-      selectedReb: newSelectedReb ?? prevState.selectedReb,
+      selectedCCD: newSelectedCCD,
+      selectedReb: newSelectedReb,
       selectedCCDVar: newActiveViewId === 'focalplane' ? null : newSelectedCCDVar,
       zoomLevel: k,
     }));

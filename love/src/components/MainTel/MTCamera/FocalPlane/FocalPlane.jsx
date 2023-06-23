@@ -4,8 +4,8 @@ import { mtCameraRaftDetailedStateMap, mtCameraRaftDetailedStateToStyle } from '
 import styles from './FocalPlane.module.css';
 
 class FocalPlane extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {};
   }
 

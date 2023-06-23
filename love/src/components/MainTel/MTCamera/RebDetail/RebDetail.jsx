@@ -570,8 +570,8 @@ const plotsRebs = [
 ];
 
 class RebDetail extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.refs = [
       React.createRef(),
       React.createRef(),

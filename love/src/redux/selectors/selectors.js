@@ -1615,8 +1615,10 @@ export const getTempControlStatus = (state) => {
   const subscriptions = ['event-MTCamera-0-focal_plane_Raft_RaftTempControlStatusConfiguration'];
   const tempControlData = getStreamsData(state, subscriptions);
   return {
-    // tempControlData['event-MTCamera-0-focal_plane_Raft_RaftTempControlStatusConfiguration']?.[0]?.tempcontrol_active.value ?? [],
-    tempControlActive: new Array(25).fill(null).map((x) => (Math.random() > 0.5 ? true : false)),
+    tempControlActive:
+      tempControlData['event-MTCamera-0-focal_plane_Raft_RaftTempControlStatusConfiguration']?.[0]?.tempcontrol_active
+        .value ?? [],
+    // tempControlActive: new Array(25).fill(null).map((x) => (Math.random() > 0.5 ? true : false)),
   };
 };
 

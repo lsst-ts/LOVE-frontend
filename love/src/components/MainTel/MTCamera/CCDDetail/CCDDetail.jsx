@@ -5,8 +5,8 @@ import Neighbors from 'components/GeneralPurpose/Neighbors/Neighbors';
 import styles from './CCDDetail.module.css';
 
 class CCDDetail extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.refs = [
       React.createRef(),
       React.createRef(),
@@ -107,7 +107,6 @@ class CCDDetail extends Component {
 
   render() {
     const { ccd, showNeighbors, selectNeighborCCD } = this.props;
-    console.log(ccd);
     return showNeighbors ? (
       <Neighbors selectNeighbor={selectNeighborCCD}>{this.renderPlots()}</Neighbors>
     ) : (

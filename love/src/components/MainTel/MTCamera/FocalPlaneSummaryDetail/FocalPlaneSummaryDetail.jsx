@@ -17,8 +17,8 @@ import {
 import { defaultNumberFormatter } from 'Utils';
 
 class FocalPlaneSummaryDetail extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       raftSummaryState: 0,
       raftTempControlState: 0,
@@ -173,9 +173,9 @@ class FocalPlaneSummaryDetail extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (
-      (this.props.selectedRaft && this.props.selectedRaft.id !== prevProps.selectedRaft?.id) ||
-      (this.props.selectedReb && this.props.selectedReb.id !== prevProps.selectedReb?.id) ||
-      (this.props.selectedCCD && this.props.selectedCCD.id !== prevProps.selectedCCD?.id)
+      this.props.selectedRaft?.id !== prevProps.selectedRaft?.id ||
+      this.props.selectedReb?.id !== prevProps.selectedReb?.id ||
+      this.props.selectedCCD?.id !== prevProps.selectedCCD?.id
     ) {
       this.getSummaryDetailData();
     }
