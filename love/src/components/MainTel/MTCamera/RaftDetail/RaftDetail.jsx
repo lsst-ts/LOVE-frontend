@@ -33,25 +33,17 @@ class RaftDetail extends Component {
     const { raft, selectedCCD, selectedCCDVar, setSelectedCCD, setHoveredCCD, setHoveredReb } = this.props;
     const plots = [];
     raft.ccds.forEach((c) => {
+      const ccdIndex = c.id - 1;
       plots.push({
         [`CCD${c.id}`]: {
           category: 'telemetry',
-          csc: 'ATDome',
+          csc: 'MTCamera',
           salindex: 0,
-          topic: 'position',
-          item: 'azimuthPosition',
+          topic: 'focal_plane_Ccd',
+          item: selectedCCDVar,
           type: 'line',
-          accessor: (x) => x,
+          accessor: (x) => x[ccdIndex],
         },
-        // [`CCD${c.id}`]: {
-        //   category: 'telemetry',
-        //   csc: 'MTCamera',
-        //   salindex: 0,
-        //   topic: 'focal_plane_Ccd',
-        //   item: selectedCCDVar,
-        //   type: 'line',
-        //   accessor: (x) => x[c.id],
-        // },
       });
     });
 
@@ -80,7 +72,7 @@ class RaftDetail extends Component {
               // containerNode={this.CCDsrefs[i]?.current}
               xAxisTitle="Time"
               yAxisTitle={`${selectedCCDVar} - ${raft.ccds[i].id}`}
-              legendPosition="right"
+              legendPosition="bottom"
             />
           </div>
         ))}
@@ -92,25 +84,17 @@ class RaftDetail extends Component {
     const { raft, selectedReb, selectedRebVar, setSelectedReb, setHoveredCCD, setHoveredReb } = this.props;
     const plots = [];
     raft.rebs.forEach((r) => {
+      const rebIndex = r.id - 1;
       plots.push({
         [`REB${r.id}`]: {
           category: 'telemetry',
-          csc: 'ATDome',
+          csc: 'MTCamera',
           salindex: 0,
-          topic: 'position',
-          item: 'azimuthPosition',
+          topic: 'focal_plane_Reb',
+          item: selectedRebVar,
           type: 'line',
-          accessor: (x) => x,
+          accessor: (x) => x[rebIndex],
         },
-        // [`REB${r.id}`]: {
-        //   category: 'telemetry',
-        //   csc: 'MTCamera',
-        //   salindex: 0,
-        //   topic: 'focal_plane_Reb',
-        //   item: selectedRebVar,
-        //   type: 'line',
-        //   accessor: (x) => x[r.id],
-        // },
       });
     });
 
@@ -138,7 +122,7 @@ class RaftDetail extends Component {
               // containerNode={this.rebsRefs[i]?.current}
               xAxisTitle="Time"
               yAxisTitle={`Value-${i}`}
-              legendPosition="right"
+              legendPosition="bottom"
             />
           </div>
         ))}

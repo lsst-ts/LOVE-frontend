@@ -157,6 +157,7 @@ class MTCamera extends Component {
     } = this.state;
 
     let newActiveViewId, newSelectedRaft, newSelectedCCD, newSelectedReb, newSelectedCCDVar;
+    newSelectedCCDVar = selectedCCDVar;
     newSelectedCCD = selectedCCD;
     newSelectedReb = selectedReb;
     const k = d3.event.transform.k;
