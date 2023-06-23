@@ -73,6 +73,8 @@ export default class EnvironmentSummary extends Component {
   render() {
     const {
       simonyiTrackingState,
+      simonyiRa,
+      simonyiDec,
       simonyiAltitude,
       simonyiAzimuth,
       simonyiRotator,
@@ -84,6 +86,8 @@ export default class EnvironmentSummary extends Component {
       simonyiSunRa,
       simonyiSunDec,
       auxtelTrackingState,
+      auxtelRa,
+      auxtelDec,
       auxtelAltitude,
       auxtelAzimuth,
       auxtelRotator,
@@ -117,6 +121,8 @@ export default class EnvironmentSummary extends Component {
           <Skymap
             containerNode={this.containerRef?.current}
             className={styles.skymap}
+            simonyiRa={simonyiRa}
+            simonyiDec={simonyiDec}
             simonyiMoonRa={simonyiMoonRa}
             simonyiMoonDec={simonyiMoonDec}
             simonyiSunRa={simonyiSunRa}
@@ -131,6 +137,8 @@ export default class EnvironmentSummary extends Component {
             simonyiRotator={simonyiRotator}
             simonyiDomeAlt={simonyiDomeAlt}
             simonyiDomeAz={simonyiDomeAz}
+            auxtelRa={auxtelRa}
+            auxtelDec0={auxtelDec}
           />
           <div className={styles.iconTemperature}>
             <Hoverable className={styles.temperaturesHover}>

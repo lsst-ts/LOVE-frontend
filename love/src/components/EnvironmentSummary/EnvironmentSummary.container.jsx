@@ -22,6 +22,8 @@ const EnvironmentSummaryContainer = ({
   subscribeToStream,
   unsubscribeToStream,
   simonyiTrackingState,
+  simonyiRa,
+  simonyiDec,
   simonyiAltitude,
   simonyiAzimuth,
   simonyiRotator,
@@ -33,6 +35,8 @@ const EnvironmentSummaryContainer = ({
   simonyiSunRa,
   simonyiSunDec,
   auxtelTrackingState,
+  auxtelRa,
+  auxtelDec,
   auxtelAltitude,
   auxtelAzimuth,
   auxtelRotator,
@@ -55,6 +59,8 @@ const EnvironmentSummaryContainer = ({
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
       simonyiTrackingState={simonyiTrackingState}
+      simonyiRa={simonyiRa}
+      simonyiDec={simonyiDec}
       simonyiAltitude={simonyiAltitude}
       simonyiAzimuth={simonyiAzimuth}
       simonyiRotator={simonyiRotator}
@@ -66,6 +72,8 @@ const EnvironmentSummaryContainer = ({
       simonyiSunRa={simonyiSunRa}
       simonyiSunDec={simonyiSunDec}
       auxtelTrackingState={auxtelTrackingState}
+      auxtelRa={auxtelRa}
+      auxtelDec={auxtelDec}
       auxtelAltitude={auxtelAltitude}
       auxtelAzimuth={auxtelAzimuth}
       auxtelRotator={auxtelRotator}

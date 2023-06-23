@@ -57,24 +57,35 @@ export default class Skymap extends Component {
   }
 
   render() {
-    const { className, simonyiMoonRa, simonyiMoonDec, simonyiSunRa, simonyiSunDec, simonyiMoonPhase } = this.props;
+    const {
+      className,
+      simonyiRa,
+      simonyiDec,
+      simonyiMoonRa,
+      simonyiMoonDec,
+      simonyiSunRa,
+      simonyiSunDec,
+      simonyiMoonPhase,
+      auxtelRa,
+      auxtelDec,
+    } = this.props;
     const width = this.state.width ?? 350;
     const height = this.state.height ?? 350;
-    const currentPointing = {
-      az: 0,
-      el: 20,
+    const simonyiPointing = {
+      az: simonyiRa,
+      el: simonyiDec,
     };
-    const currentPointing2 = {
-      az: 160,
-      el: 80,
+    const auxtelPointing = {
+      az: auxtelRa,
+      el: auxtelDec,
     };
-    const currentPointing3 = {
-      az: 270,
-      el: 70,
+    const sunPointing = {
+      az: simonyiSunRa,
+      el: simonyiSunDec,
     };
-    const currentPointing4 = {
-      az: 120,
-      el: 50,
+    const moonPointing = {
+      az: simonyiMoonRa,
+      el: simonyiMoonDec,
     };
     const isProjected = false;
     return (
@@ -83,24 +94,24 @@ export default class Skymap extends Component {
           <Pointing
             width={width}
             height={height}
-            currentPointing={currentPointing}
-            targetPointing={currentPointing}
+            currentPointing={simonyiPointing}
+            targetPointing={simonyiPointing}
             isProjected={isProjected}
             cartoon={<SimonyiPointing />}
           />
           <Pointing
             width={width}
             height={height}
-            currentPointing={currentPointing2}
-            targetPointing={currentPointing2}
+            currentPointing={auxtelPointing}
+            targetPointing={auxtelPointing}
             isProjected={isProjected}
             cartoon={<AuxTelPointing />}
           />
           <Pointing
             width={width}
             height={height}
-            currentPointing={currentPointing3}
-            targetPointing={currentPointing3}
+            currentPointing={sunPointing}
+            targetPointing={sunPointing}
             isProjected={isProjected}
             cartoon={<SunPointing />}
           >
@@ -109,8 +120,8 @@ export default class Skymap extends Component {
           <Pointing
             width={width}
             height={height}
-            currentPointing={currentPointing4}
-            targetPointing={currentPointing4}
+            currentPointing={moonPointing}
+            targetPointing={moonPointing}
             isProjected={isProjected}
             cartoon={<MoonPointing ilumination={simonyiMoonPhase} />}
           >
