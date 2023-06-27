@@ -87,6 +87,32 @@ export default class Device extends Component {
         return `${styles.bgStatusOk}`;
       case 'false':
         return `${styles.bgStatusAlert}`;
+      case 'null':
+        return `${styles.bgStatusNull}`;
+      case 'Initialized':
+        return `${styles.bgStatusOk}`;
+      case 'Shutting Down':
+        return `${styles.bgStatusWarning}`;
+      case 'Powering On':
+        return `${styles.bgStatusWarning}`;
+      case 'Powered On':
+        return `${styles.bgStatusOk}`;
+      case 'Powering Off':
+        return `${styles.bgStatusWarning}`;
+      case 'Powered Off':
+        return `${styles.bgStatusAlert}`;
+      case 'Warning':
+        return `${styles.bgStatusWarning}`;
+      case 'Alarm':
+        return `${styles.bgStatusAlert}`;
+      case 'Shut Off':
+        return `${styles.bgStatusDisabled}`;
+      case 'Max Speed':
+        return `${styles.bgStatusWarning}`;
+      case 'Min Speed':
+        return `${styles.bgStatusWarning}`;
+      case 'Nominal':
+        return `${styles.bgStatusOk}`;
       default:
         return `${styles.bgStatusNull}`;
     }
@@ -98,8 +124,32 @@ export default class Device extends Component {
         return `${styles.statusOk}`;
       case 'false':
         return `${styles.statusAlert}`;
-      default:
+      case 'Initialized':
+        return `${styles.statusOk}`;
+      case 'Shutting Down':
+        return `${styles.statusWarning}`;
+      case 'Powering On':
+        return `${styles.statusWarning}`;
+      case 'Powered On':
+        return `${styles.statusOk}`;
+      case 'Powering Off':
+        return `${styles.statusWarning}`;
+      case 'Powered Off':
+        return `${styles.statusAlert}`;
+      case 'Warning':
+        return `${styles.statusWarning}`;
+      case 'Alarm':
+        return `${styles.statusAlert}`;
+      case 'Shut Off':
         return `${styles.statusDisabled}`;
+      case 'Max Speed':
+        return `${styles.statusWarning}`;
+      case 'Min Speed':
+        return `${styles.statusWarning}`;
+      case 'Nominal':
+        return `${styles.statusOk}`;
+      default:
+        return `${styles.statusNull}`;
     }
   }
 
@@ -130,15 +180,17 @@ export default class Device extends Component {
     const alarmsKeys = Object.keys(alarms);
     const rowLength = Math.round(width / 42 - 1);
 
-    let transX, transY, currentRow, currentCol;
+    let transX, transY, currentRow, currentCol, currentAlarm;
+    transX = 0;
+    transY = 0;
+    currentAlarm = 0;
 
     return alarmsKeys.map((x, k) => {
       if (alarms[x].state) {
-        transX = 0;
-        transY = 0;
-        currentRow = Math.ceil((k + 1) / rowLength);
-        currentCol = (k + 1) % currentRow;
-        transX = 42 * (k + 1 - rowLength * (currentRow - 1)) - 42;
+        currentAlarm++;
+        currentRow = Math.ceil(currentAlarm / rowLength);
+        currentCol = currentAlarm % currentRow;
+        transX = 42 * (currentAlarm - rowLength * (currentRow - 1)) - 42;
 
         if (hidden) {
           transY = 12 * (currentRow - 1);
@@ -172,9 +224,39 @@ export default class Device extends Component {
     let i = 0;
     let j = 38;
 
+    //////////////////////////////////////////////////////////////////////////////
+    //
+    //  *** Devices Parameter Types ***
+    //
+    //  title  = Displays a row text with no data
+    //  status = Styles as Summary States
+    //  single = Displayed as a single row.
+    //           They have a name and a value which may have a unit.
+    //           Value must be a number!
+    //  test   = Like single but its text and has no unit.
+    //  group  = if it's none of the above, and has parameters it's a group.
+    //           Parameters inside a group are listed horizontally, not vertically
+    //  badge  = styled inside a badge
+    //  box    = styled inside a box that might have a status color
+    //  noBox  = styles like box, but without the box
+    //
+    //////////////////////////////////////////////////////////////////////////////
+
     return parametersKeys.map((x) => {
+      //Title Parameters just serve as a title for following single or status parameters
+      if (parameters[x].type === 'title') {
+        i = j;
+        j = j + rowHeight;
+        return (
+          <g transform={'translate(0 ' + i + ')'}>
+            <text className={styles.paramGroup} transform={'translate(' + gutter + ' 0)'} textAnchor="start">
+              <tspan>{parameters[x].name}</tspan>
+            </text>
+          </g>
+        );
+      }
       //Status Parameters are styled as Summary States.
-      if (parameters[x].type === 'status') {
+      else if (parameters[x].type === 'status') {
         i = j;
         j = j + rowHeight;
         return (
@@ -190,6 +272,7 @@ export default class Device extends Component {
               ry={5}
               transform={'translate(' + (width - (30 + gutter)) + ' ' + -5 + ')'}
             />
+
             <text
               className={this.statusTextToStyle(String(parameters[x].value))}
               transform={'translate(' + (width - 19) + ' 0)'}
@@ -215,9 +298,23 @@ export default class Device extends Component {
             </text>
           </g>
         );
+      } else if (parameters[x].type === 'text') {
+        i = j;
+        j = j + rowHeight;
+        return (
+          <g transform={'translate(0 ' + i + ')'}>
+            <text className={styles.param} transform={'translate(4 0)'} textAnchor="start">
+              <tspan>{parameters[x].name}</tspan>
+            </text>
+            <text className={styles.paramVal} transform={'translate(' + (width - 19) + ' 0)'} textAnchor="middle">
+              <tspan>{parameters[x].value}</tspan>
+            </text>
+          </g>
+        );
       }
 
-      //Group Parameters are those that are grouped under a specific Title. This title might have a value and units as well.
+      //Group Parameters are those that are grouped under a specific Title.
+      //This title might have a value and units as well.
       else {
         i = j;
         j = j + rowHeight * 3;

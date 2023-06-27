@@ -65,7 +65,7 @@
   font-size: 4px;
 }
 .statusDisabled {
-  fill: var(--status-disabled-color);
+  fill: var(--secondary-font-color);
   font-size: 4px;
 }
 .statusNull {
@@ -88,11 +88,11 @@
   font-size: 4px;
 }
 .bgStatusDisabled {
-  fill: var(--status-disabled-dimmed-color-3);
+  fill: var(--second-tertiary-background-color);
   font-size: 4px;
 }
 .bgStatusNull {
-  fill: var(--status-disabled-dimmed-color-3);
+  fill: var(--second-tertiary-background-color);
   font-size: 4px;
 }
 
