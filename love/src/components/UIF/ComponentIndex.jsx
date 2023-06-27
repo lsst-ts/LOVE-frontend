@@ -549,6 +549,16 @@ export const mainIndex = {
       },
     },
   },
+  CCCamera: {
+    component: require('../MainTel/CCCamera/CCCamera.container').default,
+    schema: {
+      ...require('../MainTel/CCCamera/CCCamera.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/CCCamera/CCCamera.container').schema.props,
+      },
+    },
+  },
   CCCameraSummaryDetail: {
     component: require('../MainTel/CCCameraSummaryDetail/CCCameraSummaryDetail.container').default,
     schema: {

@@ -1497,6 +1497,49 @@ export const getCCEndOfImageTelemetry = (state) => {
   return endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0];
 };
 
+export const getCCTempControlStatus = (state) => {
+  const subscriptions = ['event-CCCamera-0-focal_plane_Raft_RaftTempControlStatusConfiguration'];
+  const tempControlData = getStreamsData(state, subscriptions);
+  return {
+    tempControlActive:
+      tempControlData['event-CCCamera-0-focal_plane_Raft_RaftTempControlStatusConfiguration']?.[0]?.tempcontrol_active
+        .value ?? [],
+    // tempControlActive: new Array(25).fill(null).map((x) => (Math.random() > 0.5 ? true : false)),
+  };
+};
+
+export const getCCFocalPlaneReb = (state) => {
+  const subscriptions = ['telemetry-CCCamera-0-focal_plane_Reb'];
+  const focalPlaneReb = getStreamsData(state, subscriptions);
+  return {
+    hVBiasSwitch: focalPlaneReb['telemetry-CCCamera-0-focal_plane_Reb']?.hVBiasSwitch.value ?? [],
+    anaV: focalPlaneReb['telemetry-CCCamera-0-focal_plane_Reb']?.anaV.value ?? [],
+    power: focalPlaneReb['telemetry-CCCamera-0-focal_plane_Reb']?.power.value ?? [],
+    // hVBiasSwitch: new Array(71).fill(null).map((x) => Math.random() * 1000),
+    // anaV: new Array(71).fill(null).map((x) => Math.random() * 1000 + 1000),
+    // power: new Array(71).fill(null).map((x) => Math.random() * 1000 + 2000),
+  };
+};
+
+export const getCCFocalPlaneCCD = (state) => {
+  const subscriptions = ['telemetry-CCCamera-0-focal_plane_Ccd'];
+  const focalPlaneCCD = getStreamsData(state, subscriptions);
+  return {
+    gDV: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.gDV.value ?? [],
+    oDI: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.oDI.value ?? [],
+    oDV: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.oDV.value ?? [],
+    oGV: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.oGV.value ?? [],
+    rDV: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.rDV.value ?? [],
+    temp: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.temp.value ?? [],
+    // gDV: new Array(201).fill(null).map((x) => Math.random() * 1000),
+    // oDI: new Array(201).fill(null).map((x) => Math.random() * 1000),
+    // oDV: new Array(201).fill(null).map((x) => Math.random() * 1000),
+    // oGV: new Array(201).fill(null).map((x) => Math.random() * 1000),
+    // rDV: new Array(201).fill(null).map((x) => Math.random() * 1000),
+    // temp: new Array(201).fill(null).map((x) => Math.random() * 1000),
+  };
+};
+
 //MTCamera
 export const getMTCameraSummary = (state) => {
   const subscriptions = [
