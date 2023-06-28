@@ -10,29 +10,30 @@ import { cccameraRaftsNeighborsMapping } from 'Config';
 import RebDetail from './RebDetail/RebDetail';
 
 const rafts = [];
-const unusedCCDs = [];
+// const unusedCCDs = [];
 
-for (let w = 0; w < 108; w++) {
-  unusedCCDs.push(w);
-}
+// for (let w = 0; w < 108; w++) {
+//   unusedCCDs.push(w);
+// }
 
-for (let k = 117; k < 225; k++) {
-  unusedCCDs.push(k);
-}
+// for (let k = 117; k < 225; k++) {
+//   unusedCCDs.push(k);
+// }
 
-console.log(unusedCCDs);
+// console.log(unusedCCDs);
 
-for (let i = 0; i < 25; i++) {
+for (let i = 0; i < 1; i++) {
   const ccds = [];
   const rebs = [];
   for (let j = 0; j < 9; j++) {
     const ccdId = i * 9 + (j + 1);
-    const isUnused = unusedCCDs.includes(ccdId - 1);
+    // const isUnused = unusedCCDs.includes(ccdId - 1);
     ccds.push({
       id: ccdId,
       // status: !isUnused ? Math.ceil(Math.random() * 3) : 0,
-      status: !isUnused ? 1 : 0,
-      unused: isUnused,
+      // status: !isUnused ? 1 : 0,
+      status: 1,
+      // unused: isUnused,
     });
   }
   for (let j = 0; j < 3; j++) {
@@ -41,8 +42,9 @@ for (let i = 0; i < 25; i++) {
     });
   }
 
-  const neighborsIds = cccameraRaftsNeighborsMapping[i + 1];
-  rafts.push({ id: i + 1, status: 1, ccds, rebs, neighborsIds });
+  // const neighborsIds = cccameraRaftsNeighborsMapping[i + 1];
+  // rafts.push({ id: i + 1, status: 1, ccds, rebs, neighborsIds });
+  rafts.push({ id: 1, status: 1, ccds, rebs });
 }
 class CCCamera extends Component {
   constructor(props) {
@@ -310,20 +312,25 @@ class CCCamera extends Component {
     const { selectedRaft, selectedCCD, selectedCCDVar, selectedReb } = this.state;
     const { hVBiasSwitch, anaV, power } = this.props;
 
-    const raftWithNeighbors = {
+    // const raftWithNeighbors = {
+    //   ...selectedRaft,
+    //   neighbors: {
+    //     top: rafts.find((r) => r.id === selectedRaft.neighborsIds.top),
+    //     right: rafts.find((r) => r.id === selectedRaft.neighborsIds.right),
+    //     bottom: rafts.find((r) => r.id === selectedRaft.neighborsIds.bottom),
+    //     left: rafts.find((r) => r.id === selectedRaft.neighborsIds.left),
+    //   },
+    // };
+
+    const raftWithoutNeighbors = {
       ...selectedRaft,
-      neighbors: {
-        top: rafts.find((r) => r.id === selectedRaft.neighborsIds.top),
-        right: rafts.find((r) => r.id === selectedRaft.neighborsIds.right),
-        bottom: rafts.find((r) => r.id === selectedRaft.neighborsIds.bottom),
-        left: rafts.find((r) => r.id === selectedRaft.neighborsIds.left),
-      },
     };
+
     return (
       <div id="raftdetail">
         <RaftDetail
-          raft={raftWithNeighbors}
-          showNeighbors={true}
+          raft={raftWithoutNeighbors}
+          showNeighbors={false}
           selectedCCD={selectedCCD}
           selectedReb={selectedReb}
           selectedCCDVar={selectedCCDVar}
@@ -332,7 +339,7 @@ class CCCamera extends Component {
           setSelectedCCDVar={this.setSelectedCCDVar}
           setHoveredCCD={this.setHoveredCCD}
           setHoveredReb={this.setHoveredReb}
-          selectNeighborRaft={this.selectNeighborRaft}
+          // selectNeighborRaft={this.selectNeighborRaft}
           hVBiasSwitch={hVBiasSwitch}
           anaV={anaV}
           power={power}

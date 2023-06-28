@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { mtCameraRaftDetailedStateMap, mtCameraRaftDetailedStateToStyle } from 'Config';
+import { ccCameraRaftDetailedStateMap, ccCameraRaftDetailedStateToStyle } from 'Config';
 import styles from './FocalPlane.module.css';
 
 class FocalPlane extends Component {
@@ -12,7 +12,7 @@ class FocalPlane extends Component {
   renderRaft(raft) {
     const { selectedRaft, setHoveredRaft, setSelectedRaft } = this.props;
     const { id, status, ccds } = raft;
-    const borderColor = this.getColors(mtCameraRaftDetailedStateToStyle[mtCameraRaftDetailedStateMap[status]]);
+    const borderColor = this.getColors(ccCameraRaftDetailedStateToStyle[ccCameraRaftDetailedStateMap[status]]);
     return (
       <div
         key={`Raft-${id}`}
@@ -29,7 +29,7 @@ class FocalPlane extends Component {
 
   renderCCD(ccd) {
     const { id, status, unused } = ccd;
-    const bgColor = this.getColors(mtCameraRaftDetailedStateToStyle[mtCameraRaftDetailedStateMap[status]]);
+    const bgColor = this.getColors(ccCameraRaftDetailedStateToStyle[ccCameraRaftDetailedStateMap[status]]);
     return (
       <div
         key={`CCD-${id}`}
@@ -55,6 +55,7 @@ class FocalPlane extends Component {
   render() {
     const { rafts } = this.props;
     return <div className={styles.raftsContainer}>{rafts.map((raft) => this.renderRaft(raft))}</div>;
+    // return <div className={styles.raftsContainer}>{this.renderRaft(raft)}</div>;
   }
 }
 
