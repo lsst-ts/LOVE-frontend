@@ -396,7 +396,7 @@ export const auxtelIndex = {
       },
     },
   },
-  EAS: {
+  AuxTelEAS: {
     component: require('../EAS/AuxTel/AuxTelESS.container').default,
     schema: {
       ...require('../EAS/AuxTel/AuxTelESS.container').schema,
@@ -579,7 +579,7 @@ export const mainIndex = {
       },
     },
   },
-  EAS: {
+  MainTelEAS: {
     component: require('../EAS/MainTel/MainTelESS.container').default,
     schema: {
       ...require('../EAS/MainTel/MainTelESS.container').schema,

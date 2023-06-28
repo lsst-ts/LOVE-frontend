@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getAuxTelESSState } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
-import EAS from './AuxTelESS';
+import AuxTelESS from './AuxTelESS';
 
 export const schema = {
   description: 'View of Auxiliary Telescope Environmental Awareness System',

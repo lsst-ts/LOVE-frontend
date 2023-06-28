@@ -22,7 +22,9 @@ export default class AuxTelESS extends Component {
 
   render() {
     return (
-      <></>
+      <>
+        <div>AuxTel</div>
+      </>
     );
   }
 }
