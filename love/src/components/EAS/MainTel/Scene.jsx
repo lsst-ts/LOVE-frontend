@@ -10,7 +10,7 @@ function CameraController() {
      () => {
         const controls = new OrbitControls(camera, gl.domElement);
         controls.minDistance = 3;
-        controls.maxDistance = 20;
+        controls.maxDistance = 30;
         return () => {
           controls.dispose();
         };
@@ -28,7 +28,7 @@ const Scene = (props) => {
     <>
     <Canvas
       camera={{
-        position: [8, 9, 6],
+        position: [15, 15, 17],
       }}
     >
       <Suspense fallback={<div>loading</div>}>
@@ -43,11 +43,6 @@ const Scene = (props) => {
       <Sensors />
 
       <Dome />
-
-      <mesh ref={meshRef}>
-        <boxGeometry args={[10, 10, 10]} />
-        <meshBasicMaterial wireframe />
-      </mesh>
 
       </Suspense>
 

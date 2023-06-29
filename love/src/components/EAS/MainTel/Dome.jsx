@@ -1,20 +1,34 @@
+import PropTypes from 'prop-types';
 import * as THREE from "three";
 
-export function Dome () {
-
-  const clippingPlanes = [new THREE.Plane(new THREE.Vector3(0, -1, 0), 0)];
+export function Dome (props) {
 
   return (
     <>
-    <mesh position={[0, -1, 0]}>
-      <planeGeometry args={[10, 10]} />
-      <meshBasicMaterial color="lightblue" transparent opacity={0.3} side={THREE.DoubleSide} />
-    </mesh>
-
-    <mesh position={[0, 1, 0]}>
-      <sphereGeometry args={[5, 32, 32]} />
-      <meshBasicMaterial wireframe color="red" clippingPlanes={clippingPlanes} clipIntersection={false} />
+    <mesh position={[0, props.displaceY, 0]}>
+      <cylinderGeometry
+        args={[
+          props.radius,
+          props.radius,
+          props.height,
+          Math.floor(2 * Math.PI * props.radius),
+          props.height,
+        ]}
+      />
+      <meshBasicMaterial color="0xffff00" transparent opacity={0.1} wireframe />
     </mesh>
     </>
   );
 }
+
+Dome.propTypes = {
+  radius: PropTypes.number,
+  height: PropTypes.number,
+  displaceY: PropTypes.number,
+};
+
+Dome.defaultProps = {
+  radius: 15,
+  height: 27,
+  displaceY: 0,
+};
