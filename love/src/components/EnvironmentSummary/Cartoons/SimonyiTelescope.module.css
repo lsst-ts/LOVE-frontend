@@ -1,0 +1,102 @@
+.cls1 {
+  fill: #111f27;
+}
+
+.cls1,
+.cls2,
+.cls3,
+.cls4,
+.cls5,
+.cls6,
+.cls7 {
+  stroke-miterlimit: 10;
+}
+
+.cls1,
+.cls2,
+.cls3,
+.cls4,
+.cls5,
+.cls6,
+.cls8 {
+  stroke-width: 2px;
+}
+
+.cls1,
+.cls6 {
+  stroke: #59717c;
+}
+
+.cls2,
+.cls8 {
+  fill: #15242d;
+  stroke: #182e39;
+}
+
+.cls3 {
+  fill: #182e39;
+}
+
+.cls3,
+.cls4,
+.cls5,
+.cls7 {
+  stroke: #27434f;
+}
+
+.cls4,
+.cls9 {
+  fill: #27434f;
+}
+
+.cls5,
+.cls6,
+.cls7 {
+  fill: none;
+}
+
+.cls10 {
+  opacity: 0.5;
+}
+
+.cls8 {
+  stroke-linejoin: round;
+}
+
+.cls9 {
+  font-family: Montserrat-Bold, Montserrat;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.simonyiHover {
+  height: 100%;
+  width: 100%;
+  position: relative !important;
+  overflow: visible !important;
+  top: 0 !important;
+  left: 0 !important;
+  transform: none !important;
+  pointer-events: none;
+}
+
+.temperature {
+  fill: var(--secondary-font-color);
+}
+
+.simonyiSummary {
+  position: absolute;
+  top: 0%;
+  left: 40%;
+  width: 325px;
+}
+
+.hover {
+  fill: var(--tertiary-background-color);
+  stroke: var(--base-font-color);
+}
+
+.hoverable {
+  cursor: pointer;
+  pointer-events: all;
+}

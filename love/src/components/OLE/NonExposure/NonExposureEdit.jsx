@@ -146,7 +146,11 @@ export default class NonExposureEdit extends Component {
     const endDateISO = this.state.logEdit.date_end?.toISOString();
     payload['date_begin'] = beginDateISO.substring(0, beginDateISO.length - 1); // remove Zone due to backend standard
     payload['date_end'] = endDateISO.substring(0, endDateISO.length - 1); // remove Zone due to backend standard
-    payload['tags'] = [...(payload['systems'] ?? []), ...(payload['subsystems'] ?? []), ...(payload['cscs'] ?? [])];
+    payload['tags'] = [
+      ...(payload['systems'] ?? []),
+      ...(payload['subsystems'] ?? []),
+      ...(payload['cscs'].map((c) => c.replace(':', '_')) ?? []),
+    ];
 
     // Clean null and empty values to avoid API errors
     Object.keys(payload).forEach((key) => {

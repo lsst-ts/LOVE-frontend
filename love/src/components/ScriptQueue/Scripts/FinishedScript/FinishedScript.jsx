@@ -57,10 +57,15 @@ export default class FinishedScript extends PureComponent {
   }
 
   onClick = () => {
-    const { index, timestampProcessStart: startTime, timestampProcessEnd: endTime } = this.props;
-    this.queryLogs(index, startTime, endTime);
-    this.queryConfiguration(index, startTime, endTime);
-    this.setState((state) => ({ expanded: !state.expanded }));
+    this.setState(
+      (state) => ({ expanded: !state.expanded }),
+      () => {
+        if (this.state.expanded) {
+          const { index, timestampProcessStart: startTime, timestampProcessEnd: endTime } = this.props;
+          this.queryAll(index, startTime, endTime);
+        }
+      },
+    );
     this.props.onClick();
   };
 
@@ -68,29 +73,12 @@ export default class FinishedScript extends PureComponent {
     this.setState((state) => ({ showLogs: !state.showLogs }));
   };
 
-  queryLogs = (scriptIndex, start, end) => {
+  queryAll = (scriptIndex, start, end) => {
     const efdInstance = this.props.efdConfig?.defaultEfdInstance ?? 'summit_efd';
     const cscs = {
       Script: {
         [scriptIndex]: {
           logevent_logMessage: ['private_rcvStamp', 'level', 'message', 'traceback'],
-        },
-      },
-    };
-    const startDateIso = new Date(start * 1000).toISOString();
-    const endDateIso = new Date(end * 1000).toISOString();
-    ManagerInterface.getEFDLogs(startDateIso, endDateIso, cscs, efdInstance).then((res) => {
-      this.setState({
-        logs: res[`Script-${scriptIndex}-logevent_logMessage`].map(parseToSALFormat),
-      });
-    });
-  };
-
-  queryConfiguration = (scriptIndex, start, end) => {
-    const efdInstance = this.props.efdConfig?.defaultEfdInstance ?? 'summit_efd';
-    const cscs = {
-      Script: {
-        [scriptIndex]: {
           command_configure: ['private_rcvStamp', 'config'],
         },
       },
@@ -98,7 +86,9 @@ export default class FinishedScript extends PureComponent {
     const startDateIso = new Date(start * 1000).toISOString();
     const endDateIso = new Date(end * 1000).toISOString();
     ManagerInterface.getEFDLogs(startDateIso, endDateIso, cscs, efdInstance).then((res) => {
+      if (!res) return;
       this.setState({
+        logs: res[`Script-${scriptIndex}-logevent_logMessage`].map(parseToSALFormat),
         appliedConfiguration: res[`Script-${scriptIndex}-command_configure`][0]?.config,
       });
     });
@@ -202,32 +192,34 @@ export default class FinishedScript extends PureComponent {
             className={[scriptStyles.expandedSectionWrapper, this.state.expanded ? '' : scriptStyles.hidden].join(' ')}
           >
             <ScriptDetails {...this.props} />
-            <div className={styles.configurationContainer}>
-              <div>
-                APPLIED CONFIGURATION
-                {this.state.coppiedToClipboard && <div className={styles.fadeElement}>Coppied to clipboard</div>}
-                {/* <div className={styles.fadeElement}>Coppied to clipboard</div> */}
-                <div className={styles.copyToClipboardIcon} onClick={this.copyConfigToClipboard}>
-                  <CopyIcon title="Copy to clipboard" />
+            {this.state.appliedConfiguration && (
+              <div className={styles.configurationContainer}>
+                <div>
+                  APPLIED CONFIGURATION
+                  {this.state.coppiedToClipboard && <div className={styles.fadeElement}>Coppied to clipboard</div>}
+                  <div className={styles.copyToClipboardIcon} onClick={this.copyConfigToClipboard}>
+                    <CopyIcon title="Copy to clipboard" />
+                  </div>
                 </div>
+                <AceEditor
+                  mode="yaml"
+                  theme="solarized_dark"
+                  name="UNIQUE_ID_OF_DIV"
+                  width={'26em'}
+                  height={'150px'}
+                  value={this.state.appliedConfiguration}
+                  fontSize={18}
+                  readOnly
+                  showPrintMargin={false}
+                />
               </div>
-              <AceEditor
-                mode="yaml"
-                theme="solarized_dark"
-                name="UNIQUE_ID_OF_DIV"
-                width={'26em'}
-                height={'150px'}
-                value={this.state.appliedConfiguration}
-                // editorProps={{ $blockScrolling: true }}
-                fontSize={18}
-                readOnly
-                showPrintMargin={false}
-              />
-            </div>
-            <div className={styles.logsContainer}>
-              <div>LOGS</div>
-              <Button onClick={this.toggleLogs}>Toggle logs</Button>
-            </div>
+            )}
+            {this.state.logs.length > 0 && (
+              <div className={styles.logsContainer}>
+                <div>LOGS</div>
+                <Button onClick={this.toggleLogs}>Toggle logs</Button>
+              </div>
+            )}
           </div>
           {this.state.showLogs && this.state.expanded && (
             <div>

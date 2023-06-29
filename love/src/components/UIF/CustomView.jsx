@@ -147,6 +147,7 @@ class CustomView extends Component {
     const { config } = component;
     const parsedConfig = this.parseConfig(config);
     comp = <LoveComp {...parsedConfig} />;
+
     return (
       <div
         key={component.properties.i.toString()}
@@ -176,7 +177,13 @@ class CustomView extends Component {
 
         <ErrorBoundary>
           {parsedConfig.titleBar ? (
-            <Panel title={parsedConfig.title} fit={false} hasRawMode={parsedConfig.hasRawMode} link={parsedConfig.link}>
+            <Panel
+              title={parsedConfig.title}
+              fit={false}
+              hasRawMode={parsedConfig.hasRawMode}
+              link={parsedConfig.link}
+              EUI={parsedConfig.EUI}
+            >
               {comp}
             </Panel>
           ) : (

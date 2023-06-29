@@ -7,6 +7,7 @@ import Map from './Map/Map.jsx';
 import Device from './Map/Device.jsx';
 import EyeIcon from '../icons/EyeIcon/EyeIcon';
 import SimpleArrowIcon from '../icons/SimpleArrowIcon/SimpleArrowIcon';
+import { thresholdScott } from 'd3';
 
 export default class FacilityMap extends Component {
   constructor(props) {
@@ -176,8 +177,23 @@ export default class FacilityMap extends Component {
 
   render() {
     const { showHVAC, showPower } = this.state;
-
     const HVACDataLevel1 = {
+      compressorInfo1: this.props.compressorInfo1,
+      connectionStatus1: this.props.connectionStatus1,
+      errors1: this.props.errors1,
+      status1: this.props.status1,
+      timerInfo1: this.props.timerInfo1,
+      warnings1: this.props.warnings1,
+      analogData1: this.props.analogData1,
+
+      compressorInfo2: this.props.compressorInfo2,
+      connectionStatus2: this.props.connectionStatus2,
+      errors2: this.props.errors2,
+      status2: this.props.status2,
+      timerInfo2: this.props.timerInfo2,
+      warnings2: this.props.warnings2,
+      analogData2: this.props.analogData2,
+
       bombaAguaFriaP01: this.props.bombaAguaFriaP01,
       chiller01P01: this.props.chiller01P01,
       chiller02P01: this.props.chiller02P01,
@@ -214,6 +230,15 @@ export default class FacilityMap extends Component {
     };
 
     const HVACDataLevel5 = {
+      dynaleneP05Events: {
+        dynMainGridAlarm: this.props.dynMainGridAlarm,
+        dynMainGridFailureFlag: this.props.dynMainGridFailureFlag,
+        dynSafetyResetFlag: this.props.dynSafetyResetFlag,
+        dynTAalarm: this.props.dynTAalarm,
+        dynTMAalarm: this.props.dynTMAalarm,
+        dynaleneState: this.props.dynaleneState,
+        dynaleneTankLevel: this.props.dynaleneTankLevel,
+      },
       dynaleneP05: this.props.dynaleneP05,
       manejadoraLower01P05: this.props.manejadoraLower01P05,
       manejadoraLower02P05: this.props.manejadoraLower02P05,
@@ -238,10 +263,10 @@ export default class FacilityMap extends Component {
         <div className={this.state.showMenu ? styles.leftMenu : [styles.leftMenu, styles.hideLeftMenu].join(' ')}>
           {/** CSC Section **/}
           <div className={styles.cscMenu}>
-            <div className={styles.title}>CSC</div>
+            <div className={styles.title}>Devices</div>
 
             <div className={styles.section}>
-              <div>HVAC</div>
+              <div>SHOW</div>
               <div className={styles.iconWrapper} onClick={() => this.hideHVAC()}>
                 {this.getEyeIcon(showHVAC)}
               </div>

@@ -356,6 +356,52 @@ export const getM1M3TSTemperatureState = (state) => {
   };
 };
 
+// M1M3 Glycol Loop Events
+export const getGlycolPumpStatus = (state) => {
+  const subscriptions = ['event-MTM1M3TS-0-glycolPumpStatus'];
+  const glycolPumpData = getStreamsData(state, subscriptions);
+  return {
+    ready: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].ready?.value ?? undefined,
+    running: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].running?.value ?? undefined,
+    forwardCommanded: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].forwardCommanded?.value ?? undefined,
+    forwardRotating: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].forwardRotating?.value ?? undefined,
+    accelerating: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].accelerating?.value ?? undefined,
+    decelerating: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].decelerating?.value ?? undefined,
+    faulted: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].faulted?.value ?? undefined,
+    mainFrequencyControlled:
+      glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].mainFrequencyControlled?.value ?? undefined,
+    operationCommandControlled:
+      glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].operationCommandControlled?.value ?? undefined,
+    parametersLocked: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].parametersLocked?.value ?? undefined,
+    errorCode: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].errorCode?.value ?? undefined,
+    errorReport: glycolPumpData['event-MTM1M3TS-0-glycolPumpStatus']?.[0].errorReport?.value ?? undefined,
+  };
+};
+
+// M1M3 Glycol Loop Telemetry
+export const getGlycolTemps = (state) => {
+  const subscriptions = ['telemetry-MTM1M3TS-0-glycolLoopTemperature'];
+  const glycolTempData = getStreamsData(state, subscriptions);
+  return {
+    aboveMirrorTemperature:
+      glycolTempData['telemetry-MTM1M3TS-0-glycolLoopTemperature']?.aboveMirrorTemperature?.value ?? 0,
+    insideCellTemperature1:
+      glycolTempData['telemetry-MTM1M3TS-0-glycolLoopTemperature']?.insideCellTemperature1?.value ?? 0,
+    insideCellTemperature2:
+      glycolTempData['telemetry-MTM1M3TS-0-glycolLoopTemperature']?.insideCellTemperature2?.value ?? 0,
+    insideCellTemperature3:
+      glycolTempData['telemetry-MTM1M3TS-0-glycolLoopTemperature']?.insideCellTemperature3?.value ?? 0,
+    telescopeCoolantSupplyTemperature:
+      glycolTempData['telemetry-MTM1M3TS-0-glycolLoopTemperature']?.telescopeCoolantSupplyTemperature?.value ?? 0,
+    telescopeCoolantReturnTemperature:
+      glycolTempData['telemetry-MTM1M3TS-0-glycolLoopTemperature']?.telescopeCoolantReturnTemperature?.value ?? 0,
+    mirrorCoolantSupplyTemperature:
+      glycolTempData['telemetry-MTM1M3TS-0-glycolLoopTemperature']?.mirrorCoolantSupplyTemperature?.value ?? 0,
+    mirrorCoolantReturnTemperature:
+      glycolTempData['telemetry-MTM1M3TS-0-glycolLoopTemperature']?.mirrorCoolantReturnTemperature?.value ?? 0,
+  };
+};
+
 // MTM2 selectors
 export const getM2State = (state) => {
   const subscriptions = [
@@ -485,18 +531,10 @@ export const getATMCSState = (state) => {
   ];
   const data = getStreamsData(state, subscriptions);
   const [minEl, minAz, minNas1, minNas2, minM3] = data['event-ATMCS-0-positionLimits']?.[0].minimum?.value ?? [
-    5,
-    -270,
-    -165,
-    -165,
-    0,
+    5, -270, -165, -165, 0,
   ];
   const [maxEl, maxAz, maxNas1, maxNas2, maxM3] = data['event-ATMCS-0-positionLimits']?.[0].maximum?.value ?? [
-    90,
-    270,
-    165,
-    165,
-    180,
+    90, 270, 165, 165, 180,
   ];
 
   return {
@@ -1103,10 +1141,7 @@ export const getMirrorCoversMotionState = (state) => {
   const summaryData = getStreamsData(state, subscriptions);
   return {
     mirrorCoversState: summaryData['event-MTMount-0-mirrorCoversMotionState']?.[0]?.elementsState?.value ?? [
-      0,
-      0,
-      0,
-      0,
+      0, 0, 0, 0,
     ],
     mirrorCoversPosition: summaryData['telemetry-MTMount-0-mirrorCover']?.actualPosition?.value ?? [0, 0, 0, 0],
   };
@@ -1129,40 +1164,13 @@ export const getAircraftTracker = (state) => {
     undefined,
   ];
   const latitude = data['telemetry-AircraftTracker-0-data']?.latitude?.value ?? [
-    -29.9604,
-    -29.69192,
-    -31.7404,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
+    -29.9604, -29.69192, -31.7404, 0, 0, 0, 0, 0, 0, 0,
   ];
   const longitude = data['telemetry-AircraftTracker-0-data']?.longitude?.value ?? [
-    -70.33709,
-    -72.05715,
-    -70.8,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
+    -70.33709, -72.05715, -70.8, 0, 0, 0, 0, 0, 0, 0,
   ];
   const altitude = data['telemetry-AircraftTracker-0-data']?.altitude?.value ?? [
-    1013.2,
-    1020.34,
-    980.15,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
+    1013.2, 1020.34, 980.15, 0, 0, 0, 0, 0, 0, 0,
   ];
   const track = data['telemetry-AircraftTracker-0-data']?.track?.value ?? [180, 105, 350, 0, 0, 0, 0, 0, 0, 0];
   const distance = data['telemetry-AircraftTracker-0-data']?.distance?.value ?? [98, 146, 188, 0, 0, 0, 0, 0, 0, 0];
@@ -1397,7 +1405,7 @@ export const getWeatherForecastState = (state) => {
   return {
     weatherForecastState: summaryData['event-WeatherForecast-0-summaryState']?.[0]?.summaryState.value ?? 0,
   };
-}
+};
 
 /**
  * Selects the Weather Forecast Daily Trend
@@ -1498,6 +1506,20 @@ export const getHVACEvents = (state) => {
 export const getHVACSubscription = () => {
   return [
     //Level 1//
+    'event-MTAirCompressor-1-compressorInfo',
+    'event-MTAirCompressor-1-connectionStatus',
+    'event-MTAirCompressor-1-errors',
+    'event-MTAirCompressor-1-status',
+    'event-MTAirCompressor-1-timerInfo',
+    'event-MTAirCompressor-1-warnings',
+    'telemetry-MTAirCompressor-1-analogData',
+    'event-MTAirCompressor-2-compressorInfo',
+    'event-MTAirCompressor-2-connectionStatus',
+    'event-MTAirCompressor-2-errors',
+    'event-MTAirCompressor-2-status',
+    'event-MTAirCompressor-2-timerInfo',
+    'event-MTAirCompressor-2-warnings',
+    'telemetry-MTAirCompressor-2-analogData',
     'telemetry-HVAC-0-bombaAguaFriaP01',
     'telemetry-HVAC-0-chiller01P01',
     'telemetry-HVAC-0-chiller02P01',
@@ -1531,6 +1553,19 @@ export const getHVACSubscription = () => {
     'telemetry-HVAC-0-vex04CargaP04',
 
     //Level 5//
+    'event-HVAC-0-dynMainGridAlarm',
+    'event-HVAC-0-dynMainGridAlarmCMD',
+    'event-HVAC-0-dynMainGridFailureFlag',
+    'event-HVAC-0-dynSafetyResetFlag',
+    'event-HVAC-0-dynTAalarm',
+    'event-HVAC-0-dynTAalarmCMD',
+    'event-HVAC-0-dynTAalarmMonitor',
+    'event-HVAC-0-dynTMAalarm',
+    'event-HVAC-0-dynTMAalarmCMD',
+    'event-HVAC-0-dynTMAalarmMonitor',
+    'event-HVAC-0-dynTankLevelAlarmCMD',
+    'event-HVAC-0-dynaleneState',
+    'event-HVAC-0-dynaleneTankLevel',
     'telemetry-HVAC-0-dynaleneP05',
     'telemetry-HVAC-0-manejadoraLower01P05',
     'telemetry-HVAC-0-manejadoraLower02P05',
@@ -1554,6 +1589,20 @@ export const getHVACSubscription = () => {
 export const getHVACTelemetry = (state) => {
   const subscriptions = [
     //Level 1//
+    'event-MTAirCompressor-1-compressorInfo',
+    'event-MTAirCompressor-1-connectionStatus',
+    'event-MTAirCompressor-1-errors',
+    'event-MTAirCompressor-1-status',
+    'event-MTAirCompressor-1-timerInfo',
+    'event-MTAirCompressor-1-warnings',
+    'telemetry-MTAirCompressor-1-analogData',
+    'event-MTAirCompressor-2-compressorInfo',
+    'event-MTAirCompressor-2-connectionStatus',
+    'event-MTAirCompressor-2-errors',
+    'event-MTAirCompressor-2-status',
+    'event-MTAirCompressor-2-timerInfo',
+    'event-MTAirCompressor-2-warnings',
+    'telemetry-MTAirCompressor-2-analogData',
     'telemetry-HVAC-0-bombaAguaFriaP01',
     'telemetry-HVAC-0-chiller01P01',
     'telemetry-HVAC-0-chiller02P01',
@@ -1587,6 +1636,19 @@ export const getHVACTelemetry = (state) => {
     'telemetry-HVAC-0-vex04CargaP04',
 
     //Level 5//
+    'event-HVAC-0-dynMainGridAlarm',
+    'event-HVAC-0-dynMainGridAlarmCMD',
+    'event-HVAC-0-dynMainGridFailureFlag',
+    'event-HVAC-0-dynSafetyResetFlag',
+    'event-HVAC-0-dynTAalarm',
+    'event-HVAC-0-dynTAalarmCMD',
+    'event-HVAC-0-dynTAalarmMonitor',
+    'event-HVAC-0-dynTMAalarm',
+    'event-HVAC-0-dynTMAalarmCMD',
+    'event-HVAC-0-dynTMAalarmMonitor',
+    'event-HVAC-0-dynTankLevelAlarmCMD',
+    'event-HVAC-0-dynaleneState',
+    'event-HVAC-0-dynaleneTankLevel',
     'telemetry-HVAC-0-dynaleneP05',
     'telemetry-HVAC-0-manejadoraLower01P05',
     'telemetry-HVAC-0-manejadoraLower02P05',
@@ -1608,6 +1670,22 @@ export const getHVACTelemetry = (state) => {
   const HVACData = getStreamsData(state, subscriptions);
   return {
     //Level 1//
+    compressorInfo1: HVACData['event-MTAirCompressor-1-compressorInfo'] ?? {},
+    connectionStatus1: HVACData['event-MTAirCompressor-1-connectionStatus'] ?? {},
+    errors1: HVACData['event-MTAirCompressor-1-errors'] ?? {},
+    status1: HVACData['event-MTAirCompressor-1-status'] ?? {},
+    timerInfo1: HVACData['event-MTAirCompressor-1-timerInfo'] ?? {},
+    warnings1: HVACData['event-MTAirCompressor-1-warnings'] ?? {},
+    analogData1: HVACData['telemetry-MTAirCompressor-1-analogData'] ?? {},
+
+    compressorInfo2: HVACData['event-MTAirCompressor-2-compressorInfo'] ?? {},
+    connectionStatus2: HVACData['event-MTAirCompressor-2-connectionStatus'] ?? {},
+    errors2: HVACData['event-MTAirCompressor-2-errors'] ?? {},
+    status2: HVACData['event-MTAirCompressor-2-status'] ?? {},
+    timerInfo2: HVACData['event-MTAirCompressor-2-timerInfo'] ?? {},
+    warnings2: HVACData['event-MTAirCompressor-2-warnings'] ?? {},
+    analogData2: HVACData['telemetry-MTAirCompressor-2-analogData'] ?? {},
+
     bombaAguaFriaP01: HVACData['telemetry-HVAC-0-bombaAguaFriaP01'] ?? {},
     chiller01P01: HVACData['telemetry-HVAC-0-chiller01P01'] ?? {},
     chiller02P01: HVACData['telemetry-HVAC-0-chiller02P01'] ?? {},
@@ -1641,6 +1719,19 @@ export const getHVACTelemetry = (state) => {
     vex04CargaP04: HVACData['telemetry-HVAC-0-vex04CargaP04'] ?? {},
 
     //Level 5//
+    dynMainGridAlarm: HVACData['event-HVAC-0-dynMainGridAlarm']?.[0]?.state?.value ?? undefined,
+    dynMainGridAlarmCMD: HVACData['event-HVAC-0-dynMainGridAlarmCMD']?.[0]?.state?.value ?? undefined,
+    dynMainGridFailureFlag: HVACData['event-HVAC-0-dynMainGridFailureFlag']?.[0]?.state?.value ?? undefined,
+    dynSafetyResetFlag: HVACData['event-HVAC-0-dynSafetyResetFlag']?.[0]?.state?.value ?? undefined,
+    dynTAalarm: HVACData['event-HVAC-0-dynTAalarm']?.[0]?.state?.value ?? undefined,
+    dynTAalarmCMD: HVACData['event-HVAC-0-dynTAalarmCMD']?.[0]?.state?.value ?? undefined,
+    dynTAalarmMonitor: HVACData['event-HVAC-0-dynTAalarmMonitor']?.[0]?.state?.value ?? undefined,
+    dynTMAalarm: HVACData['event-HVAC-0-dynTMAalarm']?.[0]?.state?.value ?? undefined,
+    dynTMAalarmCMD: HVACData['event-HVAC-0-dynTMAalarmCMD']?.[0]?.state?.value ?? undefined,
+    dynTMAalarmMonitor: HVACData['event-HVAC-0-dynTMAalarmMonitor']?.[0]?.state?.value ?? undefined,
+    dynTankLevelAlarmCMD: HVACData['event-HVAC-0-dynTankLevelAlarmCMD']?.[0]?.state?.value ?? undefined,
+    dynaleneState: HVACData['event-HVAC-0-dynaleneState']?.[0]?.state ?? undefined,
+    dynaleneTankLevel: HVACData['event-HVAC-0-dynaleneTankLevel']?.[0]?.state?.value ?? undefined,
     dynaleneP05: HVACData['telemetry-HVAC-0-dynaleneP05'] ?? {},
     manejadoraLower01P05: HVACData['telemetry-HVAC-0-manejadoraLower01P05'] ?? {},
     manejadoraLower02P05: HVACData['telemetry-HVAC-0-manejadoraLower02P05'] ?? {},
@@ -1665,12 +1756,12 @@ export const getObservatorySubscriptions = () => {
     // Observatory
     // Simonyi
     'event-Scheduler-1-observingMode',
-    'event-Scheduler-1-observatoryState',
+    'telemetry-Scheduler-1-observatoryState',
     // MTPtg
     'event-MTPtg-0-currentTarget',
     // Auxtel
     'event-Scheduler-2-observingMode',
-    'event-Scheduler-2-observatoryState',
+    'telemetry-Scheduler-2-observatoryState',
     // ATPtg
     'event-ATPtg-0-currentTarget',
   ];
@@ -1680,19 +1771,49 @@ export const getObservatoryState = (state) => {
   const observatorySubscriptions = getObservatorySubscriptions();
   const observatoryData = getStreamsData(state, observatorySubscriptions);
   const simonyiObservingMode = observatoryData['event-Scheduler-1-observingMode'];
+  const simonyiTarget = observatoryData[`event-Scheduler-1-target`];
   const auxtelObservingMode = observatoryData['event-Scheduler-2-observingMode'];
-  const simonyiObservatoryState = observatoryData['event-Scheduler-1-observatoryState'];
-  const auxtelObservatoryState = observatoryData['event-Scheduler-2-observatoryState'];
+  const simonyiObservatoryState = observatoryData['telemetry-Scheduler-1-observatoryState'];
+  const auxtelObservatoryState = observatoryData['telemetry-Scheduler-2-observatoryState'];
+  const environmentVariables = observatoryData['event-ESS-301-precipitation'];
+  const essTemperatures = observatoryData['telemetry-ESS-301-temperature'];
+  const essAirFlow = observatoryData['telemetry-ESS-301-airFlow'];
   const mptgCurrentTarget = observatoryData['event-MTPtg-0-currentTarget'];
   const atptgCurrentTarget = observatoryData['event-ATPtg-0-currentTarget'];
 
   return {
     simonyiObservingMode: simonyiObservingMode ? simonyiObservingMode[0].mode.value : 'UNKNOWN',
     auxtelObservingMode: auxtelObservingMode ? auxtelObservingMode[0].mode.value : 'UNKNOWN',
-    simonyiTrackingState: simonyiObservatoryState ? simonyiObservatoryState[0].tracking.value : 0,
-    auxtelTrackingState: auxtelObservatoryState ? auxtelObservatoryState[0].tracking.value : 0,
+    simonyiTrackingState: simonyiObservatoryState ? simonyiObservatoryState.tracking?.value : false,
+    simonyiRa: simonyiObservatoryState ? simonyiObservatoryState.ra?.value : 0.0,
+    simonyiDec: simonyiObservatoryState ? simonyiObservatoryState.declination?.value : 0.0,
+    simonyiAltitude: simonyiObservatoryState ? simonyiObservatoryState.telescopeAltitude?.value : 0.0,
+    simonyiAzimuth: simonyiObservatoryState ? simonyiObservatoryState.telescopeAzimuth?.value : 0.0,
+    simonyiRotator: simonyiObservatoryState ? simonyiObservatoryState.telescopeRotator?.value : 0.0,
+    simonyiDomeAlt: simonyiObservatoryState ? simonyiObservatoryState.domeAltitude?.value : 0.0,
+    simonyiDomeAz: simonyiObservatoryState ? simonyiObservatoryState.domeAzimuth?.value : 0.0,
+    simonyiMoonRa: simonyiTarget ? simonyiTarget[0].moonRa?.value : 0.0,
+    simonyiMoonDec: simonyiTarget ? simonyiTarget[0].moonDec?.value : 0.0,
+    simonyiMoonPhase: simonyiTarget ? simonyiTarget[0].moonPhase?.value : 0.0,
+    simonyiSunRa: simonyiTarget ? simonyiTarget[0].sunRa?.value : 0.0,
+    simonyiSunDec: simonyiTarget ? simonyiTarget[0].sunDec?.value : 0.0,
+    auxtelTrackingState: auxtelObservatoryState ? auxtelObservatoryState.tracking?.value : false,
+    auxtelRa: auxtelObservatoryState ? auxtelObservatoryState.ra?.value : 0.0,
+    auxtelDec: auxtelObservatoryState ? auxtelObservatoryState.declination?.value : 0.0,
+    auxtelAltitude: auxtelObservatoryState ? auxtelObservatoryState.telescopeAltitude?.value : 0.0,
+    auxtelAzimuth: auxtelObservatoryState ? auxtelObservatoryState.telescopeAzimuth?.value : 0.0,
+    auxtelRotator: auxtelObservatoryState ? auxtelObservatoryState.telescopeRotator?.value : 0.0,
+    auxtelDomeAlt: auxtelObservatoryState ? auxtelObservatoryState.domeAltitude?.value : 0.0,
+    auxtelDomeAz: auxtelObservatoryState ? auxtelObservatoryState.domeAzimuth?.value : 0.0,
     simonyiTrackingMode: mptgCurrentTarget ? mptgCurrentTarget[0].frame.value : 0,
     auxtelTrackingMode: atptgCurrentTarget ? atptgCurrentTarget[0].frame.value : 0,
+    isRaining: environmentVariables ? environmentVariables[0].raining.value : false,
+    isSnowing: environmentVariables ? environmentVariables[0].snowing.value : false,
+    numChannels: essTemperatures ? essTemperatures.numChannels.value : 0,
+    temperature: essTemperatures ? essTemperatures.temperature.value : [],
+    location: essTemperatures ? essTemperatures.location.value : '',
+    windDirection: essAirFlow ? essAirFlow.direction.value : 0.0,
+    windSpeed: essAirFlow ? essAirFlow.speed : 0.0,
   };
 };
 

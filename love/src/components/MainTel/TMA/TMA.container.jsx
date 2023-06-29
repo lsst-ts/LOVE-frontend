@@ -11,6 +11,7 @@ import {
   getMirrorCoversMotionState,
 } from 'redux/selectors';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+import { EUIs } from 'Config';
 
 export const schema = {
   description: 'View of Simonyi Telescope Mount Assembly',
@@ -21,6 +22,12 @@ export const schema = {
       description: 'Name diplayed in the title bar (if visible)',
       isPrivate: false,
       default: 'Simonyi Telescope Mount Assembly',
+    },
+    EUI: {
+      type: 'boolean',
+      description: 'Whether the component has a EUI link',
+      isPrivate: false,
+      default: EUIs.TMA,
     },
   },
 };

@@ -4,6 +4,7 @@ import CameraHexapod from './CameraHexapod';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getHexapodStatus, getHexapodTables } from 'redux/selectors';
+import { EUIs } from 'Config';
 
 export const schema = {
   description: 'View of Camera Hexapod',
@@ -20,6 +21,12 @@ export const schema = {
       description: 'Salindex of Simonyi Hexapod. 1 for Camera Hexapod and 2 for M2 Hexapod',
       isPrivate: false,
       default: 1,
+    },
+    EUI: {
+      type: 'boolean',
+      description: 'Whether the component has a EUI link',
+      isPrivate: false,
+      default: EUIs.HEXAPOD,
     },
   },
 };

@@ -1,0 +1,35 @@
+.skymapContainer {
+  flex-wrap: wrap;
+  position: relative;
+  left: 25em;
+  top: 2em;
+  max-width: 100px;
+}
+
+.skymapGridContainer {
+  flex-wrap: wrap;
+  position: relative;
+  width: fit-content;
+}
+
+.skymapGridContainer svg {
+  vertical-align: top;
+}
+
+.skymapContainer h2 {
+  text-align: left;
+}
+
+.svgOverlay {
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.cartoonContainer {
+  pointer-events: all;
+  position: relative;
+  overflow: visible;
+}

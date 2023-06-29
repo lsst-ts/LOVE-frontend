@@ -4,6 +4,7 @@ import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getM2State, getM2Inclinometer, getM2Actuator, getM2ActuatorForce } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import M2 from './M2';
+import { EUIs } from 'Config';
 
 export const schema = {
   description: 'View of M2 actuators',
@@ -32,6 +33,12 @@ export const schema = {
       description: 'Whether the component has a raw mode version',
       isPrivate: false,
       default: false,
+    },
+    EUI: {
+      type: 'boolean',
+      description: 'Whether the component has a EUI link',
+      isPrivate: false,
+      default: EUIs.M2,
     },
   },
 };

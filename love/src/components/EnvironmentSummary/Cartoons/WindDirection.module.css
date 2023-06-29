@@ -1,0 +1,14 @@
+.arrowIconContainer {
+  overflow: visible !important;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.cardinalPoints {
+  font: bold 56px sans-serif;
+  fill: white;
+}
+
+.svgContainer {
+  overflow: visible;
+}

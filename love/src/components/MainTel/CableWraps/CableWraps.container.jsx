@@ -10,6 +10,7 @@ import {
 import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import CableWraps from './CableWraps';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+import { EUIs } from 'Config';
 
 export const schema = {
   description: 'View of both Simonyi azimuth and Camera cable wraps',
@@ -20,6 +21,12 @@ export const schema = {
       description: 'Name displayed in the title bar (if visible)',
       isPrivate: false,
       default: 'CableWraps',
+    },
+    EUI: {
+      type: 'boolean',
+      description: 'Whether the component has a EUI link',
+      isPrivate: false,
+      default: EUIs.ROTATOR,
     },
   },
 };

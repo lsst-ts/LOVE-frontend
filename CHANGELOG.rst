@@ -2,6 +2,16 @@
 Version History
 ===============
 
+v5.22.0
+--------
+
+* Hotfix/v5.21.0 `<https://github.com/lsst-ts/LOVE-frontend/pull/479>`_
+* Environment Summary implementation `<https://github.com/lsst-ts/LOVE-frontend/pull/478>`_
+* Avoid session logout when receiving 403 forbidden response `<https://github.com/lsst-ts/LOVE-frontend/pull/477>`_
+* Glycol Loop Implementation `<https://github.com/lsst-ts/LOVE-frontend/pull/475>`_
+* Include Dynalene System and MTAirCompressor devices to Facility Map `<https://github.com/lsst-ts/LOVE-frontend/pull/474>`_
+* Subsystem EUIs Implementation `<https://github.com/lsst-ts/LOVE-frontend/pull/476>`_
+
 v5.21.0
 --------
 

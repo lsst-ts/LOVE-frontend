@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import lodash from 'lodash';
+import lodash, { isArray } from 'lodash';
 import PropTypes from 'prop-types';
 import styles from './Level1.module.css';
 import Device from '../Device.jsx';
@@ -50,7 +50,41 @@ export default class Level1 extends Component {
     this.props.savePos(transformData);
   };
 
+  checkArray(ctx) {
+    if (isArray(ctx)) {
+      return ctx[0];
+    } else {
+      return ctx;
+    }
+  }
+
+  getAirCompressorStarted = (obj) => {
+    for (let key in obj) {
+      if (obj[key] === true) {
+        return key;
+      }
+    }
+
+    return 'Unknown';
+  };
+
   getDevices() {
+    const compressorInfo1 = this.checkArray(this.props.HVACData.compressorInfo1);
+    const connectionStatus1 = this.checkArray(this.props.HVACData.connectionStatus1);
+    const errors1 = this.checkArray(this.props.HVACData.errors1);
+    const status1 = this.checkArray(this.props.HVACData.status1);
+    const warnings1 = this.checkArray(this.props.HVACData.warnings1);
+    const timerInfo1 = this.checkArray(this.props.HVACData.timerInfo1);
+    const analogData1 = this.checkArray(this.props.HVACData.analogData1);
+
+    const compressorInfo2 = this.checkArray(this.props.HVACData.compressorInfo2);
+    const connectionStatus2 = this.checkArray(this.props.HVACData.connectionStatus2);
+    const errors2 = this.checkArray(this.props.HVACData.errors2);
+    const status2 = this.checkArray(this.props.HVACData.status2);
+    const warnings2 = this.checkArray(this.props.HVACData.warnings2);
+    const timerInfo2 = this.checkArray(this.props.HVACData.timerInfo2);
+    const analogData2 = this.checkArray(this.props.HVACData.analogData2);
+
     const {
       bombaAguaFriaP01,
       chiller01P01,
@@ -62,6 +96,27 @@ export default class Level1 extends Component {
       vec01P01,
       vin01P01,
     } = this.props.HVACData;
+
+    const data01 = {
+      Remote: status1?.startByRemote?.value ?? false,
+      TimeControl: status1?.startWithTimerControl?.value ?? false,
+      PressureRequirement: status1?.startWithPressureRequirement?.value ?? false,
+      DePressurise: status1?.startAfterDePressurise?.value ?? false,
+      PowerLoss: status1?.startAfterPowerLoss?.value ?? false,
+      DryerPreRun: status1?.startAfterDryerPreRun?.value ?? false,
+    };
+
+    const data02 = {
+      Remote: status2?.startByRemote?.value ?? false,
+      TimeControl: status2?.startWithTimerControl?.value ?? false,
+      PressureRequirement: status2?.startWithPressureRequirement?.value ?? false,
+      DePressurise: status2?.startAfterDePressurise?.value ?? false,
+      PowerLoss: status2?.startAfterPowerLoss?.value ?? false,
+      DryerPreRun: status2?.startAfterDryerPreRun?.value ?? false,
+    };
+
+    const startedBy01 = this.getAirCompressorStarted(data01);
+    const startedBy02 = this.getAirCompressorStarted(data02);
 
     return (
       <React.Fragment>
@@ -195,11 +250,12 @@ export default class Level1 extends Component {
         />
 
         <Device
+          title={'Chiller 01'}
+          id={101}
           width={108}
           height={133}
           posX={800}
           posY={20}
-          title={'Chiller 01'}
           collapsible={true}
           alarms={{
             alarm1: {
@@ -350,11 +406,12 @@ export default class Level1 extends Component {
         />
 
         <Device
+          title={'Chiller 02'}
+          id={102}
           width={108}
           height={133}
           posX={800}
           posY={86}
-          title={'Chiller 02'}
           collapsible={true}
           alarms={{
             alarm1: {
@@ -505,11 +562,12 @@ export default class Level1 extends Component {
         />
 
         <Device
+          title={'Chiller 03'}
+          id={103}
           width={108}
           height={133}
           posX={800}
           posY={162}
-          title={'Chiller 03'}
           collapsible={true}
           alarms={{
             alarm1: {
@@ -655,6 +713,820 @@ export default class Level1 extends Component {
                   value: chiller03P01.horasCompresor04 ? chiller03P01.horasCompresor04.value : null,
                 },
               },
+            },
+          }}
+        />
+
+        <Device
+          title={'Air Compressor 02'}
+          width={108}
+          height={244}
+          posX={755}
+          posY={125}
+          collapsible={true}
+          alarms={{
+            alarm1: {
+              name: 'Service Required',
+              state: status2?.serviceRequired?.value,
+            },
+            alarm400: {
+              name: 'E400',
+              state: errors2?.powerSupplyFailureE400?.value,
+            },
+            alarm401: {
+              name: 'E401',
+              state: errors2?.emergencyStopActivatedE401?.value,
+            },
+            alarm402: {
+              name: 'E402',
+              state: errors2?.highMotorTemperatureM1E402?.value,
+            },
+            alarm403: {
+              name: 'E403',
+              state: errors2?.compressorDischargeTemperatureE403?.value,
+            },
+            alarm404: {
+              name: 'E404',
+              state: errors2?.startTemperatureLowE404?.value,
+            },
+            alarm405: {
+              name: 'E405',
+              state: errors2?.dischargeOverPressureE405?.value,
+            },
+            alarm406: {
+              name: 'E406',
+              state: errors2?.linePressureSensorB1E406?.value,
+            },
+            alarm407: {
+              name: 'E407',
+              state: errors2?.dischargePressureSensorB2E407?.value,
+            },
+            alarm408: {
+              name: 'E408',
+              state: errors2?.dischargeTemperatureSensorR2E408?.value,
+            },
+            alarm409: {
+              name: 'E409',
+              state: errors2?.controllerHardwareE409?.value,
+            },
+            alarm410: {
+              name: 'E410',
+              state: errors2?.coolingE410?.value,
+            },
+            alarm411: {
+              name: 'E411',
+              state: errors2?.oilPressureLowE411?.value,
+            },
+            alarm412: {
+              name: 'E412',
+              state: errors2?.externalFaultE412?.value,
+            },
+            alarm413: {
+              name: 'E413',
+              state: errors2?.dryerE413?.value,
+            },
+            alarm414: {
+              name: 'E414',
+              state: errors2?.condensateDrainE414?.value,
+            },
+            alarm415: {
+              name: 'E415',
+              state: errors2?.noPressureBuildUpE415?.value,
+            },
+            alarm416: {
+              name: 'E416',
+              state: errors2?.heavyStartupE416?.value,
+            },
+            alarm500: {
+              name: 'E4500',
+              state: errors2?.preAdjustmentVSDE500?.value,
+            },
+            alarm501: {
+              name: 'E501',
+              state: errors2?.preAdjustmentE501?.value,
+            },
+            alarm502: {
+              name: 'E502',
+              state: errors2?.lockedVSDE502?.value,
+            },
+            alarm503: {
+              name: 'E503',
+              state: errors2?.writeFaultVSDE503?.value,
+            },
+            alarm504: {
+              name: 'E504',
+              state: errors2?.communicationVSDE504?.value,
+            },
+            alarm505: {
+              name: 'E505',
+              state: errors2?.stopPressedVSDE505?.value,
+            },
+            alarm506: {
+              name: 'E506',
+              state: errors2?.stopInputEMVSDE506?.value,
+            },
+            alarm507: {
+              name: 'E507',
+              state: errors2?.readFaultVSDE507?.value,
+            },
+            alarm508: {
+              name: 'E508',
+              state: errors2?.stopInputVSDEME508?.value,
+            },
+            alarm509: {
+              name: 'E509',
+              state: errors2?.seeVSDDisplayE509?.value,
+            },
+            alarm510: {
+              name: 'E510',
+              state: errors2?.speedBelowMinLimitE510?.value,
+            },
+            alarm600: {
+              name: 'E600',
+              state: warnings2?.serviceDueA600?.value,
+            },
+            alarm601: {
+              name: 'E601',
+              state: warnings2?.dischargeOverPressureA601?.value,
+            },
+            alarm602: {
+              name: 'E602',
+              state: warnings2?.compressorDischargeTemperatureA602?.value,
+            },
+            alarm606: {
+              name: 'E606',
+              state: warnings2?.linePressureHighA606?.value,
+            },
+            alarm607: {
+              name: 'E607',
+              state: warnings2?.controllerBatteryEmptyA607?.value,
+            },
+            alarm608: {
+              name: 'E5608',
+              state: warnings2?.dryerA608?.value,
+            },
+            alarm609: {
+              name: 'E609',
+              state: warnings2?.condensateDrainA609?.value,
+            },
+            alarm610: {
+              name: 'E610',
+              state: warnings2?.fineSeparatorA610?.value,
+            },
+            alarm611: {
+              name: 'E611',
+              state: warnings2?.airFilterA611?.value,
+            },
+            alarm612: {
+              name: 'E612',
+              state: warnings2?.oilFilterA612?.value,
+            },
+            alarm615: {
+              name: 'E615',
+              state: warnings2?.oilLevelLowA613?.value,
+            },
+            alarm614: {
+              name: 'E614',
+              state: warnings2?.oilTemperatureHighA614?.value,
+            },
+            alarm616: {
+              name: 'E616',
+              state: warnings2?.externalWarningA615?.value,
+            },
+            alarm616: {
+              name: 'E616',
+              state: warnings2?.motorLuricationSystemA616?.value,
+            },
+            alarm617: {
+              name: 'E617',
+              state: warnings2?.input1A617?.value,
+            },
+            alarm618: {
+              name: 'E618',
+              state: warnings2?.input2A618?.value,
+            },
+            alarm619: {
+              name: 'E619',
+              state: warnings2?.input3A619?.value,
+            },
+            alarm620: {
+              name: 'E620',
+              state: warnings2?.input4A620?.value,
+            },
+            alarm621: {
+              name: 'E621',
+              state: warnings2?.input5A621?.value,
+            },
+            alarm622: {
+              name: 'E622',
+              state: warnings2?.input6A622?.value,
+            },
+            alarm623: {
+              name: 'E623',
+              state: warnings2?.fullSDCardA623?.value,
+            },
+            alarm700: {
+              name: 'E700',
+              state: warnings2?.temperatureHighVSDA700?.value,
+            },
+          }}
+          states={{
+            command: status2?.readyToStart?.value,
+            working: status2?.operating?.value,
+            command: null,
+            working: null,
+            unit: null,
+            switch: null,
+          }}
+          parameters={{
+            startedBy: {
+              type: 'text',
+              name: 'Started By',
+              unit: null,
+              value: startedBy02,
+            },
+            runOnTimerBool: {
+              type: 'status',
+              name: 'Power managed by Timer',
+              unit: null,
+              value: status2.runOnTimer ? (status2.runOnTimer.value ? true : false) : null,
+            },
+            waterLevel: {
+              type: 'single',
+              name: 'Water Level',
+              unit: analogData2.waterLevel ? ' ' + analogData2.waterLevel.units : null,
+              value: analogData2.waterLevel ? analogData2.waterLevel.value : null,
+            },
+            speedStatus: {
+              type: 'status',
+              name: 'Speed Status',
+              unit: null,
+              value: status2.minAllowedSpeedAchieved
+                ? 'Max Speed'
+                : status2.minAllowedSpeedAchieved
+                ? 'Min Speed'
+                : 'Nominal',
+            },
+            limitSpeed: {
+              type: 'single',
+              name: 'Speed Target',
+              unit: analogData2.targetSpeed ? ' min-1' : null,
+              value: analogData2.targetSpeed ? analogData2.targetSpeed.value : null,
+            },
+            MotorSpeed1: {
+              type: 'group',
+              name: 'Motor Speed',
+              unit: null,
+              value: null,
+              params: {
+                motorCurrent1: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Current',
+                  state: null,
+                  unit: analogData2.motorCurrent ? ' ' + analogData2.motorCurrent.units : null,
+                  value: analogData2.motorCurrent ? analogData2.motorCurrent.value : null,
+                },
+                motorInput1: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Input',
+                  state: null,
+                  unit: analogData2.motorInput ? ' ' + analogData2.motorInput.units : null,
+                  value: analogData2.motorInput ? analogData2.motorInput.value : null,
+                },
+              },
+            },
+            MotorPower1: {
+              type: 'group',
+              name: 'Motor Power',
+              unit: null,
+              value: null,
+              params: {
+                motorSpeedPercentage1: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Speed %',
+                  state: null,
+                  unit: analogData2.motorSpeedPercentage ? ' ' + analogData2.motorSpeedPercentage.units : null,
+                  value: analogData2.motorSpeedPercentage ? analogData2.motorSpeedPercentage.value : null,
+                },
+                motorSpeedRPM1: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Speed RPM',
+                  state: null,
+                  unit: analogData2.motorSpeedRPM ? ' ' + analogData2.motorSpeedRPM.units : null,
+                  value: analogData2.motorSpeedRPM ? analogData2.motorSpeedRPM.value : null,
+                },
+              },
+            },
+            Volume1: {
+              type: 'group',
+              name: 'Volume',
+              unit: null,
+              value: null,
+              params: {
+                compressorVolumePercentage: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Compressor',
+                  state: null,
+                  unit: analogData2.compressorVolumePercentage
+                    ? ' ' + analogData2.compressorVolumePercentage.units
+                    : null,
+                  value: analogData2.compressorVolumePercentage ? analogData2.compressorVolumePercentage.value : null,
+                },
+                compressorVolume: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Compressor',
+                  state: null,
+                  unit: analogData2.compressorVolume ? ' ' + analogData2.compressorVolume.units : null,
+                  value: analogData2.compressorVolume ? analogData2.compressorVolume.value : null,
+                },
+                groupVolume: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Group',
+                  state: null,
+                  unit: analogData2.groupVolume ? ' ' + analogData2.groupVolume.units : null,
+                  value: analogData2.groupVolume ? analogData2.groupVolume.value : null,
+                },
+              },
+            },
+            Stage11: {
+              type: 'group',
+              name: 'Stage 01',
+              unit: null,
+              value: null,
+              params: {
+                stage1OutputPressure: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Compressor',
+                  state: null,
+                  unit: analogData2.stage1OutputPressure ? ' ' + analogData2.stage1OutputPressure.units : null,
+                  value: analogData2.stage1OutputPressure ? analogData2.stage1OutputPressure.value : null,
+                },
+                compressorVolume: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Compressor',
+                  state: null,
+                  unit: analogData2.stage1OutputTemperature ? ' ºC' : null,
+                  value: analogData2.stage1OutputTemperature ? analogData2.stage1OutputTemperature.value : null,
+                },
+              },
+            },
+            linePressure: {
+              type: 'single',
+              name: 'Line Pressure',
+              unit: analogData2.linePressure ? ' ' + analogData2.linePressure.units : null,
+              value: analogData2.linePressure ? analogData2.linePressure.value : null,
+            },
+            heatsinkTemperature: {
+              type: 'single',
+              name: 'Heatsink Temperature',
+              unit: analogData2.heatsinkTemperature ? ' ºC' : null,
+              value: analogData2.heatsinkTemperature ? analogData2.heatsinkTemperature.value : null,
+            },
+            dclinkVoltage: {
+              type: 'single',
+              name: 'DC Link Voltage',
+              unit: analogData2.dclinkVoltage ? ' ' + analogData2.dclinkVoltage.units : null,
+              value: analogData2.dclinkVoltage ? analogData2.dclinkVoltage.value : null,
+            },
+            runningHours: {
+              type: 'single',
+              name: 'Time Running',
+              unit: timerInfo2.runningHours ? ' ' + timerInfo2.runningHours.units : null,
+              value: timerInfo2.runningHours ? timerInfo2.runningHours.value : null,
+            },
+            loadedHours: {
+              type: 'single',
+              name: 'Time Loaded',
+              unit: timerInfo2.loadedHours ? ' ' + timerInfo2.loadedHours.units : null,
+              value: timerInfo2.loadedHours ? timerInfo2.loadedHours.value : null,
+            },
+            lowestServiceCounter: {
+              type: 'single',
+              name: 'Lowes service counter',
+              unit: timerInfo2.lowestServiceCounter ? ' ' + timerInfo2.lowestServiceCounter.units : null,
+              value: timerInfo2.lowestServiceCounter ? timerInfo2.lowestServiceCounter.value : null,
+            },
+            runOnTimer: {
+              type: 'single',
+              name: 'Run-on timer',
+              unit: timerInfo2.runOnTimer ? ' ' + timerInfo2.runOnTimer.units : null,
+              value: timerInfo2.runOnTimer ? timerInfo2.runOnTimer.value : null,
+            },
+          }}
+        />
+
+        <Device
+          title={'Air Compressor 01'}
+          width={108}
+          height={244}
+          posX={755}
+          posY={104}
+          collapsible={true}
+          alarms={{
+            alarm1: {
+              name: 'Service Required',
+              state: status1?.serviceRequired?.value,
+            },
+            alarm400: {
+              name: 'E400',
+              state: errors1?.powerSupplyFailureE400?.value,
+            },
+            alarm401: {
+              name: 'E401',
+              state: errors1?.emergencyStopActivatedE401?.value,
+            },
+            alarm402: {
+              name: 'E402',
+              state: errors1?.highMotorTemperatureM1E402?.value,
+            },
+            alarm403: {
+              name: 'E403',
+              state: errors1?.compressorDischargeTemperatureE403?.value,
+            },
+            alarm404: {
+              name: 'E404',
+              state: errors1?.startTemperatureLowE404?.value,
+            },
+            alarm405: {
+              name: 'E405',
+              state: errors1?.dischargeOverPressureE405?.value,
+            },
+            alarm406: {
+              name: 'E406',
+              state: errors1?.linePressureSensorB1E406?.value,
+            },
+            alarm407: {
+              name: 'E407',
+              state: errors1?.dischargePressureSensorB2E407?.value,
+            },
+            alarm408: {
+              name: 'E408',
+              state: errors1?.dischargeTemperatureSensorR2E408?.value,
+            },
+            alarm409: {
+              name: 'E409',
+              state: errors1?.controllerHardwareE409?.value,
+            },
+            alarm410: {
+              name: 'E410',
+              state: errors1?.coolingE410?.value,
+            },
+            alarm411: {
+              name: 'E411',
+              state: errors1?.oilPressureLowE411?.value,
+            },
+            alarm412: {
+              name: 'E412',
+              state: errors1?.externalFaultE412?.value,
+            },
+            alarm413: {
+              name: 'E413',
+              state: errors1?.dryerE413?.value,
+            },
+            alarm414: {
+              name: 'E414',
+              state: errors1?.condensateDrainE414?.value,
+            },
+            alarm415: {
+              name: 'E415',
+              state: errors1?.noPressureBuildUpE415?.value,
+            },
+            alarm416: {
+              name: 'E416',
+              state: errors1?.heavyStartupE416?.value,
+            },
+            alarm500: {
+              name: 'E4500',
+              state: errors1?.preAdjustmentVSDE500?.value,
+            },
+            alarm501: {
+              name: 'E501',
+              state: errors1?.preAdjustmentE501?.value,
+            },
+            alarm502: {
+              name: 'E502',
+              state: errors1?.lockedVSDE502?.value,
+            },
+            alarm503: {
+              name: 'E503',
+              state: errors1?.writeFaultVSDE503?.value,
+            },
+            alarm504: {
+              name: 'E504',
+              state: errors1?.communicationVSDE504?.value,
+            },
+            alarm505: {
+              name: 'E505',
+              state: errors1?.stopPressedVSDE505?.value,
+            },
+            alarm506: {
+              name: 'E506',
+              state: errors1?.stopInputEMVSDE506?.value,
+            },
+            alarm507: {
+              name: 'E507',
+              state: errors1?.readFaultVSDE507?.value,
+            },
+            alarm508: {
+              name: 'E508',
+              state: errors1?.stopInputVSDEME508?.value,
+            },
+            alarm509: {
+              name: 'E509',
+              state: errors1?.seeVSDDisplayE509?.value,
+            },
+            alarm510: {
+              name: 'E510',
+              state: errors1?.speedBelowMinLimitE510?.value,
+            },
+            alarm600: {
+              name: 'E600',
+              state: warnings1?.serviceDueA600?.value,
+            },
+            alarm601: {
+              name: 'E601',
+              state: warnings1?.dischargeOverPressureA601?.value,
+            },
+            alarm602: {
+              name: 'E602',
+              state: warnings1?.compressorDischargeTemperatureA602?.value,
+            },
+            alarm606: {
+              name: 'E606',
+              state: warnings1?.linePressureHighA606?.value,
+            },
+            alarm607: {
+              name: 'E607',
+              state: warnings1?.controllerBatteryEmptyA607?.value,
+            },
+            alarm608: {
+              name: 'E5608',
+              state: warnings1?.dryerA608?.value,
+            },
+            alarm609: {
+              name: 'E609',
+              state: warnings1?.condensateDrainA609?.value,
+            },
+            alarm610: {
+              name: 'E610',
+              state: warnings1?.fineSeparatorA610?.value,
+            },
+            alarm611: {
+              name: 'E611',
+              state: warnings1?.airFilterA611?.value,
+            },
+            alarm612: {
+              name: 'E612',
+              state: warnings1?.oilFilterA612?.value,
+            },
+            alarm615: {
+              name: 'E615',
+              state: warnings1?.oilLevelLowA613?.value,
+            },
+            alarm614: {
+              name: 'E614',
+              state: warnings1?.oilTemperatureHighA614?.value,
+            },
+            alarm616: {
+              name: 'E616',
+              state: warnings1?.externalWarningA615?.value,
+            },
+            alarm616: {
+              name: 'E616',
+              state: warnings1?.motorLuricationSystemA616?.value,
+            },
+            alarm617: {
+              name: 'E617',
+              state: warnings1?.input1A617?.value,
+            },
+            alarm618: {
+              name: 'E618',
+              state: warnings1?.input2A618?.value,
+            },
+            alarm619: {
+              name: 'E619',
+              state: warnings1?.input3A619?.value,
+            },
+            alarm620: {
+              name: 'E620',
+              state: warnings1?.input4A620?.value,
+            },
+            alarm621: {
+              name: 'E621',
+              state: warnings1?.input5A621?.value,
+            },
+            alarm622: {
+              name: 'E622',
+              state: warnings1?.input6A622?.value,
+            },
+            alarm623: {
+              name: 'E623',
+              state: warnings1?.fullSDCardA623?.value,
+            },
+            alarm700: {
+              name: 'E700',
+              state: warnings1?.temperatureHighVSDA700?.value,
+            },
+          }}
+          states={{
+            command: status1?.readyToStart?.value,
+            working: status1?.operating?.value,
+            command: null,
+            working: null,
+            unit: null,
+            switch: null,
+          }}
+          parameters={{
+            startedBy: {
+              type: 'text',
+              name: 'Started By',
+              unit: null,
+              value: startedBy01,
+            },
+            runOnTimerBool: {
+              type: 'status',
+              name: 'Power managed by Timer',
+              unit: null,
+              value: status1.runOnTimer ? (status1.runOnTimer.value ? true : false) : null,
+            },
+            waterLevel: {
+              type: 'single',
+              name: 'Water Level',
+              unit: analogData1.waterLevel ? ' ' + analogData1.waterLevel.units : null,
+              value: analogData1.waterLevel ? analogData1.waterLevel.value : null,
+            },
+            speedStatus: {
+              type: 'status',
+              name: 'Speed Status',
+              unit: null,
+              value: status1.minAllowedSpeedAchieved
+                ? 'Max Speed'
+                : status1.minAllowedSpeedAchieved
+                ? 'Min Speed'
+                : 'Nominal',
+            },
+            limitSpeed: {
+              type: 'single',
+              name: 'Speed Target',
+              unit: analogData1.targetSpeed ? ' min-1' : null,
+              value: analogData1.targetSpeed ? analogData1.targetSpeed.value : null,
+            },
+            MotorSpeed1: {
+              type: 'group',
+              name: 'Motor Speed',
+              unit: null,
+              value: null,
+              params: {
+                motorCurrent1: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Current',
+                  state: null,
+                  unit: analogData1.motorCurrent ? ' ' + analogData1.motorCurrent.units : null,
+                  value: analogData1.motorCurrent ? analogData1.motorCurrent.value : null,
+                },
+                motorInput1: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Input',
+                  state: null,
+                  unit: analogData1.motorInput ? ' ' + analogData1.motorInput.units : null,
+                  value: analogData1.motorInput ? analogData1.motorInput.value : null,
+                },
+              },
+            },
+            MotorPower1: {
+              type: 'group',
+              name: 'Motor Power',
+              unit: null,
+              value: null,
+              params: {
+                motorSpeedPercentage1: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Speed %',
+                  state: null,
+                  unit: analogData1.motorSpeedPercentage ? ' ' + analogData1.motorSpeedPercentage.units : null,
+                  value: analogData1.motorSpeedPercentage ? analogData1.motorSpeedPercentage.value : null,
+                },
+                motorSpeedRPM1: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Speed RPM',
+                  state: null,
+                  unit: analogData1.motorSpeedRPM ? ' ' + analogData1.motorSpeedRPM.units : null,
+                  value: analogData1.motorSpeedRPM ? analogData1.motorSpeedRPM.value : null,
+                },
+              },
+            },
+            Volume1: {
+              type: 'group',
+              name: 'Volume',
+              unit: null,
+              value: null,
+              params: {
+                compressorVolumePercentage: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Compressor',
+                  state: null,
+                  unit: analogData1.compressorVolumePercentage
+                    ? ' ' + analogData1.compressorVolumePercentage.units
+                    : null,
+                  value: analogData1.compressorVolumePercentage ? analogData1.compressorVolumePercentage.value : null,
+                },
+                compressorVolume: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Compressor',
+                  state: null,
+                  unit: analogData1.compressorVolume ? ' ' + analogData1.compressorVolume.units : null,
+                  value: analogData1.compressorVolume ? analogData1.compressorVolume.value : null,
+                },
+                groupVolume: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Group',
+                  state: null,
+                  unit: analogData1.groupVolume ? ' ' + analogData1.groupVolume.units : null,
+                  value: analogData1.groupVolume ? analogData1.groupVolume.value : null,
+                },
+              },
+            },
+            Stage11: {
+              type: 'group',
+              name: 'Stage 01',
+              unit: null,
+              value: null,
+              params: {
+                stage1OutputPressure: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Compressor',
+                  state: null,
+                  unit: analogData1.stage1OutputPressure ? ' ' + analogData1.stage1OutputPressure.units : null,
+                  value: analogData1.stage1OutputPressure ? analogData1.stage1OutputPressure.value : null,
+                },
+                compressorVolume: {
+                  type: 'noBox',
+                  alarm: null,
+                  name: 'Compressor',
+                  state: null,
+                  unit: analogData1.stage1OutputTemperature ? ' ºC' : null,
+                  value: analogData1.stage1OutputTemperature ? analogData1.stage1OutputTemperature.value : null,
+                },
+              },
+            },
+            linePressure: {
+              type: 'single',
+              name: 'Line Pressure',
+              unit: analogData1.linePressure ? ' ' + analogData1.linePressure.units : null,
+              value: analogData1.linePressure ? analogData1.linePressure.value : null,
+            },
+            heatsinkTemperature: {
+              type: 'single',
+              name: 'Heatsink Temperature',
+              unit: analogData1.heatsinkTemperature ? ' ºC' : null,
+              value: analogData1.heatsinkTemperature ? analogData1.heatsinkTemperature.value : null,
+            },
+            dclinkVoltage: {
+              type: 'single',
+              name: 'DC Link Voltage',
+              unit: analogData1.dclinkVoltage ? ' ' + analogData1.dclinkVoltage.units : null,
+              value: analogData1.dclinkVoltage ? analogData1.dclinkVoltage.value : null,
+            },
+            runningHours: {
+              type: 'single',
+              name: 'Time Running',
+              unit: timerInfo1.runningHours ? ' ' + timerInfo1.runningHours.units : null,
+              value: timerInfo1.runningHours ? timerInfo1.runningHours.value : null,
+            },
+            loadedHours: {
+              type: 'single',
+              name: 'Time Loaded',
+              unit: timerInfo1.loadedHours ? ' ' + timerInfo1.loadedHours.units : null,
+              value: timerInfo1.loadedHours ? timerInfo1.loadedHours.value : null,
+            },
+            lowestServiceCounter: {
+              type: 'single',
+              name: 'Lowes service counter',
+              unit: timerInfo1.lowestServiceCounter ? ' ' + timerInfo1.lowestServiceCounter.units : null,
+              value: timerInfo1.lowestServiceCounter ? timerInfo1.lowestServiceCounter.value : null,
+            },
+            runOnTimer: {
+              type: 'single',
+              name: 'Run-on timer',
+              unit: timerInfo1.runOnTimer ? ' ' + timerInfo1.runOnTimer.units : null,
+              value: timerInfo1.runOnTimer ? timerInfo1.runOnTimer.value : null,
             },
           }}
         />
@@ -957,141 +1829,16 @@ export default class Level1 extends Component {
               <g className={styles.cls47}>
                 <text className={styles.cls20} transform="translate(655.89 60.51)">
                   <tspan className={styles.cls42} x="0" y="0">
-                    C
-                  </tspan>
-                  <tspan x="4.27" y="0">
-                    a
-                  </tspan>
-                  <tspan className={styles.cls36} x="7.81" y="0">
-                    m
-                  </tspan>
-                  <tspan className={styles.cls34} x="14.18" y="0">
-                    e
-                  </tspan>
-                  <tspan className={styles.cls22} x="17.81" y="0">
-                    r
-                  </tspan>
-                  <tspan x="20.16" y="0">
-                    a
+                    Camera
                   </tspan>
                   <tspan x="-7.91" y="7.2">
-                    Main
-                  </tspan>
-                  <tspan className={styles.cls48} x="7.04" y="7.2">
-                    t
-                  </tspan>
-                  <tspan x="9.36" y="7.2">
-                    ena
-                  </tspan>
-                  <tspan className={styles.cls50} x="20.59" y="7.2">
-                    n
-                  </tspan>
-                  <tspan className={styles.cls22} x="24.66" y="7.2">
-                    c
-                  </tspan>
-                  <tspan x="27.98" y="7.2">
-                    e
+                    Maintenance
                   </tspan>
                   <tspan x="-8.13" y="14.4">
-                    Re
-                  </tspan>
-                  <tspan className={styles.cls27} x="-.16" y="14.4">
-                    f
-                  </tspan>
-                  <tspan className={styles.cls42} x="2.35" y="14.4">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls32} x="4.71" y="14.4">
-                    ige
-                  </tspan>
-                  <tspan className={styles.cls22} x="14.06" y="14.4">
-                    r
-                  </tspan>
-                  <tspan x="16.41" y="14.4">
-                    ation
+                    Refrigeration
                   </tspan>
                   <tspan className={styles.cls16} x="-6.33" y="21.6">
-                    C
-                  </tspan>
-                  <tspan x="-2.15" y="21.6">
-                    omp
-                  </tspan>
-                  <tspan className={styles.cls51} x="12.04" y="21.6">
-                    r
-                  </tspan>
-                  <tspan x="14.37" y="21.6">
-                    essor
-                  </tspan>
-                  <tspan x="2.74" y="28.8">
-                    Room
-                  </tspan>
-                </text>
-                <text className={styles.cls20} transform="translate(655.89 60.51)">
-                  <tspan className={styles.cls42} x="0" y="0">
-                    C
-                  </tspan>
-                  <tspan x="4.27" y="0">
-                    a
-                  </tspan>
-                  <tspan className={styles.cls36} x="7.81" y="0">
-                    m
-                  </tspan>
-                  <tspan className={styles.cls34} x="14.18" y="0">
-                    e
-                  </tspan>
-                  <tspan className={styles.cls22} x="17.81" y="0">
-                    r
-                  </tspan>
-                  <tspan x="20.16" y="0">
-                    a
-                  </tspan>
-                  <tspan x="-7.91" y="7.2">
-                    Main
-                  </tspan>
-                  <tspan className={styles.cls48} x="7.04" y="7.2">
-                    t
-                  </tspan>
-                  <tspan x="9.36" y="7.2">
-                    ena
-                  </tspan>
-                  <tspan className={styles.cls50} x="20.59" y="7.2">
-                    n
-                  </tspan>
-                  <tspan className={styles.cls22} x="24.66" y="7.2">
-                    c
-                  </tspan>
-                  <tspan x="27.98" y="7.2">
-                    e
-                  </tspan>
-                  <tspan x="-8.13" y="14.4">
-                    Re
-                  </tspan>
-                  <tspan className={styles.cls27} x="-.16" y="14.4">
-                    f
-                  </tspan>
-                  <tspan className={styles.cls42} x="2.35" y="14.4">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls32} x="4.71" y="14.4">
-                    ige
-                  </tspan>
-                  <tspan className={styles.cls22} x="14.06" y="14.4">
-                    r
-                  </tspan>
-                  <tspan x="16.41" y="14.4">
-                    ation
-                  </tspan>
-                  <tspan className={styles.cls16} x="-6.33" y="21.6">
-                    C
-                  </tspan>
-                  <tspan x="-2.15" y="21.6">
-                    omp
-                  </tspan>
-                  <tspan className={styles.cls51} x="12.04" y="21.6">
-                    r
-                  </tspan>
-                  <tspan x="14.37" y="21.6">
-                    essor
+                    Compressor
                   </tspan>
                   <tspan x="2.74" y="28.8">
                     Room
@@ -1101,438 +1848,76 @@ export default class Level1 extends Component {
               <g className={styles.cls47}>
                 <text className={styles.cls20} transform="translate(751.25 193.67)">
                   <tspan x="0" y="0">
-                    Me
-                  </tspan>
-                  <tspan className={styles.cls46} x="9.35" y="0">
-                    c
-                  </tspan>
-                  <tspan x="12.68" y="0">
-                    hanical
+                    Mechanical
                   </tspan>
                   <tspan className={styles.cls46} x=".12" y="7.2">
-                    E
-                  </tspan>
-                  <tspan className={styles.cls32} x="4.09" y="7.2">
-                    quip
-                  </tspan>
-                  <tspan className={styles.cls36} x="17.87" y="7.2">
-                    m
-                  </tspan>
-                  <tspan x="24.25" y="7.2">
-                    ent
+                    Equipment
                   </tspan>
                   <tspan x="10.39" y="14.4">
-                    A
-                  </tspan>
-                  <tspan className={styles.cls52} x="14.7" y="14.4">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls24} x="17.02" y="14.4">
-                    e
-                  </tspan>
-                  <tspan x="20.56" y="14.4">
-                    a
-                  </tspan>
-                </text>
-                <text className={styles.cls20} transform="translate(751.25 193.67)">
-                  <tspan x="0" y="0">
-                    Me
-                  </tspan>
-                  <tspan className={styles.cls46} x="9.35" y="0">
-                    c
-                  </tspan>
-                  <tspan x="12.68" y="0">
-                    hanical
-                  </tspan>
-                  <tspan className={styles.cls46} x=".12" y="7.2">
-                    E
-                  </tspan>
-                  <tspan className={styles.cls32} x="4.09" y="7.2">
-                    quip
-                  </tspan>
-                  <tspan className={styles.cls36} x="17.87" y="7.2">
-                    m
-                  </tspan>
-                  <tspan x="24.25" y="7.2">
-                    ent
-                  </tspan>
-                  <tspan x="10.39" y="14.4">
-                    A
-                  </tspan>
-                  <tspan className={styles.cls52} x="14.7" y="14.4">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls24} x="17.02" y="14.4">
-                    e
-                  </tspan>
-                  <tspan x="20.56" y="14.4">
-                    a
+                    Area
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls47}>
                 <text className={styles.cls20} transform="translate(721.67 68.98)">
                   <tspan x="0" y="0">
-                    Ent
-                  </tspan>
-                  <tspan className={styles.cls39} x="10.51" y="0">
-                    r
-                  </tspan>
-                  <tspan x="13.01" y="0">
-                    y
+                    Entry
                   </tspan>
                   <tspan x="1.28" y="7.2">
-                    A
-                  </tspan>
-                  <tspan className={styles.cls52} x="5.58" y="7.2">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls24} x="7.91" y="7.2">
-                    e
-                  </tspan>
-                  <tspan x="11.44" y="7.2">
-                    a
-                  </tspan>
-                </text>
-                <text className={styles.cls20} transform="translate(721.67 68.98)">
-                  <tspan x="0" y="0">
-                    Ent
-                  </tspan>
-                  <tspan className={styles.cls39} x="10.51" y="0">
-                    r
-                  </tspan>
-                  <tspan x="13.01" y="0">
-                    y
-                  </tspan>
-                  <tspan x="1.28" y="7.2">
-                    A
-                  </tspan>
-                  <tspan className={styles.cls52} x="5.58" y="7.2">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls24} x="7.91" y="7.2">
-                    e
-                  </tspan>
-                  <tspan x="11.44" y="7.2">
-                    a
+                    Area
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls47}>
                 <text className={styles.cls20} transform="translate(658.91 128.19)">
                   <tspan x="0" y="0">
-                    Utili
-                  </tspan>
-                  <tspan className={styles.cls15} x="12.03" y="0">
-                    t
-                  </tspan>
-                  <tspan x="14.41" y="0">
-                    y
+                    Utility
                   </tspan>
                   <tspan x="1.03" y="7.2">
-                    S
-                  </tspan>
-                  <tspan className={styles.cls50} x="4.72" y="7.2">
-                    h
-                  </tspan>
-                  <tspan x="8.8" y="7.2">
-                    op
-                  </tspan>
-                </text>
-                <text className={styles.cls20} transform="translate(658.91 128.19)">
-                  <tspan x="0" y="0">
-                    Utili
-                  </tspan>
-                  <tspan className={styles.cls15} x="12.03" y="0">
-                    t
-                  </tspan>
-                  <tspan x="14.41" y="0">
-                    y
-                  </tspan>
-                  <tspan x="1.03" y="7.2">
-                    S
-                  </tspan>
-                  <tspan className={styles.cls50} x="4.72" y="7.2">
-                    h
-                  </tspan>
-                  <tspan x="8.8" y="7.2">
-                    op
+                    Shop
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls47}>
                 <text className={styles.cls20} transform="translate(655.67 223.64)">
                   <tspan x="0" y="0">
-                    Ele
-                  </tspan>
-                  <tspan className={styles.cls31} x="9.25" y="0">
-                    c
-                  </tspan>
-                  <tspan className={styles.cls34} x="12.67" y="0">
-                    t
-                  </tspan>
-                  <tspan className={styles.cls42} x="15.1" y="0">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls32} x="17.46" y="0">
-                    ical
+                    Electrical
                   </tspan>
                   <tspan className={styles.cls46} x="-3.32" y="7.2">
-                    E
-                  </tspan>
-                  <tspan className={styles.cls32} x=".64" y="7.2">
-                    quip
-                  </tspan>
-                  <tspan className={styles.cls36} x="14.43" y="7.2">
-                    m
-                  </tspan>
-                  <tspan x="20.81" y="7.2">
-                    ent
+                    Equipment
                   </tspan>
                   <tspan x="6.95" y="14.4">
-                    A
-                  </tspan>
-                  <tspan className={styles.cls52} x="11.25" y="14.4">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls24} x="13.58" y="14.4">
-                    e
-                  </tspan>
-                  <tspan x="17.11" y="14.4">
-                    a
-                  </tspan>
-                </text>
-                <text className={styles.cls20} transform="translate(655.67 223.64)">
-                  <tspan x="0" y="0">
-                    Ele
-                  </tspan>
-                  <tspan className={styles.cls31} x="9.25" y="0">
-                    c
-                  </tspan>
-                  <tspan className={styles.cls34} x="12.67" y="0">
-                    t
-                  </tspan>
-                  <tspan className={styles.cls42} x="15.1" y="0">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls32} x="17.46" y="0">
-                    ical
-                  </tspan>
-                  <tspan className={styles.cls46} x="-3.32" y="7.2">
-                    E
-                  </tspan>
-                  <tspan className={styles.cls32} x=".64" y="7.2">
-                    quip
-                  </tspan>
-                  <tspan className={styles.cls36} x="14.43" y="7.2">
-                    m
-                  </tspan>
-                  <tspan x="20.81" y="7.2">
-                    ent
-                  </tspan>
-                  <tspan x="6.95" y="14.4">
-                    A
-                  </tspan>
-                  <tspan className={styles.cls52} x="11.25" y="14.4">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls24} x="13.58" y="14.4">
-                    e
-                  </tspan>
-                  <tspan x="17.11" y="14.4">
-                    a
+                    Area
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls47}>
                 <text className={styles.cls20} transform="translate(647.23 296.73)">
                   <tspan className={styles.cls38} x="0" y="0">
-                    T
-                  </tspan>
-                  <tspan className={styles.cls22} x="3.36" y="0">
-                    r
-                  </tspan>
-                  <tspan x="5.71" y="0">
-                    ans
-                  </tspan>
-                  <tspan className={styles.cls30} x="16.25" y="0">
-                    f
-                  </tspan>
-                  <tspan className={styles.cls34} x="18.23" y="0">
-                    o
-                  </tspan>
-                  <tspan className={styles.cls42} x="21.99" y="0">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls36} x="24.35" y="0">
-                    m
-                  </tspan>
-                  <tspan x="30.73" y="0">
-                    er
+                    Transformer
                   </tspan>
                   <tspan x="3.52" y="7.2">
-                    E
-                  </tspan>
-                  <tspan className={styles.cls50} x="7.53" y="7.2">
-                    n
-                  </tspan>
-                  <tspan className={styles.cls42} x="11.61" y="7.2">
-                    c
-                  </tspan>
-                  <tspan x="14.94" y="7.2">
-                    losu
-                  </tspan>
-                  <tspan className={styles.cls52} x="27.28" y="7.2">
-                    r
-                  </tspan>
-                  <tspan x="29.61" y="7.2">
-                    e
-                  </tspan>
-                </text>
-                <text className={styles.cls20} transform="translate(647.23 296.73)">
-                  <tspan className={styles.cls38} x="0" y="0">
-                    T
-                  </tspan>
-                  <tspan className={styles.cls22} x="3.36" y="0">
-                    r
-                  </tspan>
-                  <tspan x="5.71" y="0">
-                    ans
-                  </tspan>
-                  <tspan className={styles.cls30} x="16.25" y="0">
-                    f
-                  </tspan>
-                  <tspan className={styles.cls34} x="18.23" y="0">
-                    o
-                  </tspan>
-                  <tspan className={styles.cls42} x="21.99" y="0">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls36} x="24.35" y="0">
-                    m
-                  </tspan>
-                  <tspan x="30.73" y="0">
-                    er
-                  </tspan>
-                  <tspan x="3.52" y="7.2">
-                    E
-                  </tspan>
-                  <tspan className={styles.cls50} x="7.53" y="7.2">
-                    n
-                  </tspan>
-                  <tspan className={styles.cls42} x="11.61" y="7.2">
-                    c
-                  </tspan>
-                  <tspan x="14.94" y="7.2">
-                    losu
-                  </tspan>
-                  <tspan className={styles.cls52} x="27.28" y="7.2">
-                    r
-                  </tspan>
-                  <tspan x="29.61" y="7.2">
-                    e
+                    Enclosure
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls47}>
                 <text className={styles.cls20} transform="translate(632.94 373.41)">
                   <tspan className={styles.cls16} x="0" y="0">
-                    C
-                  </tspan>
-                  <tspan className={styles.cls29} x="4.18" y="0">
-                    o
-                  </tspan>
-                  <tspan x="7.92" y="0">
-                    ati
-                  </tspan>
-                  <tspan className={styles.cls36} x="15.51" y="0">
-                    n
-                  </tspan>
-                  <tspan x="19.58" y="0">
-                    g
+                    Coatingg
                   </tspan>
                   <tspan className={styles.cls46} x="-5.28" y="7.2">
-                    E
-                  </tspan>
-                  <tspan className={styles.cls32} x="-1.31" y="7.2">
-                    quip
-                  </tspan>
-                  <tspan className={styles.cls36} x="12.48" y="7.2">
-                    m
-                  </tspan>
-                  <tspan x="18.85" y="7.2">
-                    ent
+                    Equipment
                   </tspan>
                   <tspan className={styles.cls49} x="5.17" y="14.4">
-                    Y
-                  </tspan>
-                  <tspan x="8.59" y="14.4">
-                    a
-                  </tspan>
-                  <tspan className={styles.cls52} x="12.13" y="14.4">
-                    r
-                  </tspan>
-                  <tspan x="14.46" y="14.4">
-                    d
-                  </tspan>
-                </text>
-                <text className={styles.cls20} transform="translate(632.94 373.41)">
-                  <tspan className={styles.cls16} x="0" y="0">
-                    C
-                  </tspan>
-                  <tspan className={styles.cls29} x="4.18" y="0">
-                    o
-                  </tspan>
-                  <tspan x="7.92" y="0">
-                    ati
-                  </tspan>
-                  <tspan className={styles.cls36} x="15.51" y="0">
-                    n
-                  </tspan>
-                  <tspan x="19.58" y="0">
-                    g
-                  </tspan>
-                  <tspan className={styles.cls46} x="-5.28" y="7.2">
-                    E
-                  </tspan>
-                  <tspan className={styles.cls32} x="-1.31" y="7.2">
-                    quip
-                  </tspan>
-                  <tspan className={styles.cls36} x="12.48" y="7.2">
-                    m
-                  </tspan>
-                  <tspan x="18.85" y="7.2">
-                    ent
-                  </tspan>
-                  <tspan className={styles.cls49} x="5.17" y="14.4">
-                    Y
-                  </tspan>
-                  <tspan x="8.59" y="14.4">
-                    a
-                  </tspan>
-                  <tspan className={styles.cls52} x="12.13" y="14.4">
-                    r
-                  </tspan>
-                  <tspan x="14.46" y="14.4">
-                    d
+                    Yard
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls47}>
                 <text className={styles.cls20} transform="translate(722.96 28.63)">
                   <tspan className={styles.cls33} x="0" y="0">
-                    V
-                  </tspan>
-                  <tspan x="3.86" y="0">
-                    estibule
-                  </tspan>
-                </text>
-                <text className={styles.cls20} transform="translate(722.96 28.63)">
-                  <tspan className={styles.cls33} x="0" y="0">
-                    V
-                  </tspan>
-                  <tspan x="3.86" y="0">
-                    estibule
+                    Vestibule
                   </tspan>
                 </text>
               </g>
@@ -1553,114 +1938,24 @@ export default class Level1 extends Component {
               <g className={styles.cls47}>
                 <text className={styles.cls21} transform="translate(792.82 211.19)">
                   <tspan className={styles.cls16} x="0" y="0">
-                    P
-                  </tspan>
-                  <tspan className={styles.cls52} x="2.78" y="0">
-                    r
-                  </tspan>
-                  <tspan x="4.33" y="0">
-                    o
-                  </tspan>
-                  <tspan className={styles.cls25} x="6.84" y="0">
-                    c
-                  </tspan>
-                  <tspan x="9.06" y="0">
-                    ess Air
+                    Process Air
                   </tspan>
                   <tspan className={styles.cls26} x="-2.1" y="4.8">
-                    C
-                  </tspan>
-                  <tspan x=".68" y="4.8">
-                    omp
-                  </tspan>
-                  <tspan className={styles.cls35} x="10.15" y="4.8">
-                    r
-                  </tspan>
-                  <tspan x="11.7" y="4.8">
-                    esso
-                  </tspan>
-                  <tspan className={styles.cls37} x="20.54" y="4.8">
-                    r
-                  </tspan>
-                  <tspan x="22.12" y="4.8">
-                    s
-                  </tspan>
-                </text>
-                <text className={styles.cls21} transform="translate(792.82 211.19)">
-                  <tspan className={styles.cls16} x="0" y="0">
-                    P
-                  </tspan>
-                  <tspan className={styles.cls52} x="2.78" y="0">
-                    r
-                  </tspan>
-                  <tspan x="4.33" y="0">
-                    o
-                  </tspan>
-                  <tspan className={styles.cls25} x="6.84" y="0">
-                    c
-                  </tspan>
-                  <tspan x="9.06" y="0">
-                    ess Air
-                  </tspan>
-                  <tspan className={styles.cls26} x="-2.1" y="4.8">
-                    C
-                  </tspan>
-                  <tspan x=".68" y="4.8">
-                    omp
-                  </tspan>
-                  <tspan className={styles.cls35} x="10.15" y="4.8">
-                    r
-                  </tspan>
-                  <tspan x="11.7" y="4.8">
-                    esso
-                  </tspan>
-                  <tspan className={styles.cls37} x="20.54" y="4.8">
-                    r
-                  </tspan>
-                  <tspan x="22.12" y="4.8">
-                    s
+                    Compressors
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls47}>
                 <text className={styles.cls21} transform="translate(774.92 59.94)">
                   <tspan className={styles.cls28} x="0" y="0">
-                    W
-                  </tspan>
-                  <tspan x="4.22" y="0">
-                    et Shaft
-                  </tspan>
-                </text>
-                <text className={styles.cls21} transform="translate(774.92 59.94)">
-                  <tspan className={styles.cls28} x="0" y="0">
-                    W
-                  </tspan>
-                  <tspan x="4.22" y="0">
-                    et Shaft
+                    Wet Shaft
                   </tspan>
                 </text>
               </g>
               <g>
                 <text className={styles.cls21} transform="translate(771.05 162.47)">
                   <tspan x="0" y="0">
-                    OSS{' '}
-                  </tspan>
-                  <tspan className={styles.cls43} x="9.32" y="0">
-                    E
-                  </tspan>
-                  <tspan x="11.97" y="0">
-                    quip
-                  </tspan>
-                </text>
-                <text className={styles.cls21} transform="translate(771.05 162.47)">
-                  <tspan x="0" y="0">
-                    OSS{' '}
-                  </tspan>
-                  <tspan className={styles.cls43} x="9.32" y="0">
-                    E
-                  </tspan>
-                  <tspan x="11.97" y="0">
-                    quip
+                    OSS Equip
                   </tspan>
                 </text>
               </g>
@@ -1679,27 +1974,7 @@ export default class Level1 extends Component {
               <g className={styles.cls47}>
                 <text className={styles.cls21} transform="translate(802.06 92.28)">
                   <tspan x="0" y="0">
-                    D
-                  </tspan>
-                  <tspan className={styles.cls40} x="3.3" y="0">
-                    r
-                  </tspan>
-                  <tspan x="4.97" y="0">
-                    y
-                  </tspan>
-                  <tspan x="-1.69" y="4.8">
-                    Shaft
-                  </tspan>
-                </text>
-                <text className={styles.cls21} transform="translate(802.06 92.28)">
-                  <tspan x="0" y="0">
-                    D
-                  </tspan>
-                  <tspan className={styles.cls40} x="3.3" y="0">
-                    r
-                  </tspan>
-                  <tspan x="4.97" y="0">
-                    y
+                    Dry
                   </tspan>
                   <tspan x="-1.69" y="4.8">
                     Shaft
@@ -1709,90 +1984,17 @@ export default class Level1 extends Component {
               <g className={styles.cls47}>
                 <text className={styles.cls21} transform="translate(774.48 87.54)">
                   <tspan x="0" y="0">
-                    El
-                  </tspan>
-                  <tspan className={styles.cls15} x="3.75" y="0">
-                    e
-                  </tspan>
-                  <tspan className={styles.cls23} x="6.13" y="0">
-                    v
-                  </tspan>
-                  <tspan className={styles.cls44} x="8.16" y="0">
-                    . 1
-                  </tspan>
-                </text>
-                <text className={styles.cls21} transform="translate(774.48 87.54)">
-                  <tspan x="0" y="0">
-                    El
-                  </tspan>
-                  <tspan className={styles.cls15} x="3.75" y="0">
-                    e
-                  </tspan>
-                  <tspan className={styles.cls23} x="6.13" y="0">
-                    v
-                  </tspan>
-                  <tspan className={styles.cls44} x="8.16" y="0">
-                    . 1
+                    Elev. 1
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls47}>
                 <text className={styles.cls21} transform="translate(711.54 176.07) rotate(-90)">
                   <tspan x="0" y="0">
-                    Se
-                  </tspan>
-                  <tspan className={styles.cls41} x="4.88" y="0">
-                    r
-                  </tspan>
-                  <tspan x="6.54" y="0">
-                    vi
-                  </tspan>
-                  <tspan className={styles.cls25} x="9.78" y="0">
-                    c
-                  </tspan>
-                  <tspan x="12" y="0">
-                    e Air
+                    Service Air
                   </tspan>
                   <tspan className={styles.cls26} x="-1.61" y="4.8">
-                    C
-                  </tspan>
-                  <tspan x="1.17" y="4.8">
-                    omp
-                  </tspan>
-                  <tspan className={styles.cls35} x="10.63" y="4.8">
-                    r
-                  </tspan>
-                  <tspan x="12.19" y="4.8">
-                    essor
-                  </tspan>
-                </text>
-                <text className={styles.cls21} transform="translate(711.54 176.07) rotate(-90)">
-                  <tspan x="0" y="0">
-                    Se
-                  </tspan>
-                  <tspan className={styles.cls41} x="4.88" y="0">
-                    r
-                  </tspan>
-                  <tspan x="6.54" y="0">
-                    vi
-                  </tspan>
-                  <tspan className={styles.cls25} x="9.78" y="0">
-                    c
-                  </tspan>
-                  <tspan x="12" y="0">
-                    e Air
-                  </tspan>
-                  <tspan className={styles.cls26} x="-1.61" y="4.8">
-                    C
-                  </tspan>
-                  <tspan x="1.17" y="4.8">
-                    omp
-                  </tspan>
-                  <tspan className={styles.cls35} x="10.63" y="4.8">
-                    r
-                  </tspan>
-                  <tspan x="12.19" y="4.8">
-                    essor
+                    Compressor
                   </tspan>
                 </text>
               </g>

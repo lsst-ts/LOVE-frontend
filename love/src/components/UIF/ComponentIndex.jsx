@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 /**
  * Important!!
- * 
+ *
  * Two or more instances with the same name cannot exist. For example, there cannot be two M1M3
  */
 
@@ -156,6 +156,16 @@ export const observatoryIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../Scheduler/Scheduler.container').schema.props,
+      },
+    },
+  },
+  EnvironmentSummary: {
+    component: require('../EnvironmentSummary/EnvironmentSummary.container').default,
+    schema: {
+      ...require('../EnvironmentSummary/EnvironmentSummary.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../EnvironmentSummary/EnvironmentSummary.container').schema.props,
       },
     },
   },
@@ -406,6 +416,16 @@ export const mainIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../MainTel/M1M3TS/M1M3TS.container').schema.props,
+      },
+    },
+  },
+  GlycolLoop: {
+    component: require('../MainTel/GlycolLoop/GlycolLoop.container').default,
+    schema: {
+      ...require('../MainTel/GlycolLoop/GlycolLoop.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/GlycolLoop/GlycolLoop.container').schema.props,
       },
     },
   },

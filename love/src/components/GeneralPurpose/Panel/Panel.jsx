@@ -21,6 +21,8 @@ export default class Panel extends Component {
     hasRawMode: PropTypes.bool,
     /** If a valid url, displayed as a link button in the title bar*/
     link: PropTypes.string,
+    /** If the component have a EUI, displayed as a link button in the tittle bar */
+    EUI: PropTypes.string,
   };
 
   static defaultProps = {
@@ -58,12 +60,23 @@ export default class Panel extends Component {
       });
     });
     const hasLink = this.props.link && this.props.link !== '';
+    const hasEUI = this.props.EUI && this.props.EUI !== '';
     return (
       <div className={classNames}>
         {this.props.title !== undefined && (
           <div className={styles.panelHeading}>
             <h3 className={styles.panelTitle}>{this.props.title}</h3>
             <div className={[styles.panelButtonWrapper, hasLink ? styles.panelTwoButtonsWrapper : null].join(' ')}>
+              {hasEUI && (
+                <Button
+                  title={`External link: ${this.props.EUI}`}
+                  onClick={() => window.open(this.props.EUI, '_blank')}
+                  className={styles.panelButton}
+                  size={'small'}
+                >
+                  <span>EUI</span>
+                </Button>
+              )}
               {this.props.hasRawMode && (
                 <Button
                   title={this.state.isRaw ? 'Regular view' : 'Raw telemetry data'}

@@ -1,0 +1,39 @@
+.summaryContainer {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  padding: 1em;
+  border-radius: 5px;
+  background: var(--second-secondary-background-color);
+  margin-bottom: 1em;
+}
+
+.contentWrapper {
+  display: grid;
+  justify-content: flex-start;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  gap: 1em;
+}
+
+.mirrorCoversContainer {
+  align-self: center;
+}
+
+.cartoonContainer {
+  height: 700px;
+}
+
+.drivesContainer {
+  padding: 1em;
+  border-radius: 5px;
+  background: var(--second-secondary-background-color);
+}
+
+.rightRow {
+  display: grid;
+  justify-content: flex-start;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  gap: 1em;
+}
