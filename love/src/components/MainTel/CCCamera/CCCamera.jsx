@@ -10,30 +10,15 @@ import { cccameraRaftsNeighborsMapping } from 'Config';
 import RebDetail from './RebDetail/RebDetail';
 
 const rafts = [];
-// const unusedCCDs = [];
-
-// for (let w = 0; w < 108; w++) {
-//   unusedCCDs.push(w);
-// }
-
-// for (let k = 117; k < 225; k++) {
-//   unusedCCDs.push(k);
-// }
-
-// console.log(unusedCCDs);
 
 for (let i = 0; i < 1; i++) {
   const ccds = [];
   const rebs = [];
   for (let j = 0; j < 9; j++) {
     const ccdId = i * 9 + (j + 1);
-    // const isUnused = unusedCCDs.includes(ccdId - 1);
     ccds.push({
       id: ccdId,
-      // status: !isUnused ? Math.ceil(Math.random() * 3) : 0,
-      // status: !isUnused ? 1 : 0,
       status: 1,
-      // unused: isUnused,
     });
   }
   for (let j = 0; j < 3; j++) {
@@ -42,8 +27,6 @@ for (let i = 0; i < 1; i++) {
     });
   }
 
-  // const neighborsIds = cccameraRaftsNeighborsMapping[i + 1];
-  // rafts.push({ id: i + 1, status: 1, ccds, rebs, neighborsIds });
   rafts.push({ id: 1, status: 1, ccds, rebs });
 }
 class CCCamera extends Component {
