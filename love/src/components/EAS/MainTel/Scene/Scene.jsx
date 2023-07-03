@@ -22,8 +22,6 @@ function CameraController() {
 
 const Scene = (props) => {
 
-  const meshRef = useRef();
-
   return (
     <>
     <Canvas
@@ -32,20 +30,16 @@ const Scene = (props) => {
       }}
     >
       <Suspense fallback={<div>loading</div>}>
-
       <CameraController />
-      
       <ambientLight intensity={0.8} />
       <directionalLight position={[0, 5, 5]} intensity={1} />
-
-      <axesHelper size={3} />
-
-      <Sensors />
+      <axesHelper args={[15]} />
+      <gridHelper />
 
       <Dome />
+      <Sensors />
 
       </Suspense>
-
     </Canvas>
     </>
   );

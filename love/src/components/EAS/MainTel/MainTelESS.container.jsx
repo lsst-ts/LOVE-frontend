@@ -32,12 +32,13 @@ const MainTelESSContainer = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  const easState = getMainTelESSState(state);
-  return {...easState};
+  const essState = getMainTelESSState(state);
+  return {...essState};
 };
 
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
+    'telemetry-ESS-1-temperature',
   ];
   return {
     subscriptions,

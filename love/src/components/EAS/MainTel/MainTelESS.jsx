@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Scene from './Scene.jsx';
+import Scene from './Scene/Scene';
+import Info from './Info/Info';
 import styles from './MainTelESS.module.css';
 
 export default class MainTelESS extends Component {
@@ -23,9 +24,23 @@ export default class MainTelESS extends Component {
 
   render() {
     return (
-      <>
-        <Scene />
-      </>
+      <div className={styles.sceneAndInfoPlots}>
+
+        <div className={styles.scene}>
+          <Scene />
+        </div>
+
+        <div className={styles.infoAndPlots}>
+          <div className={styles.info}>
+            <Info />
+          </div>
+          <div className={styles.plots}>
+            
+          </div>
+        </div>
+
+      </div>
+
     );
   } 
 }

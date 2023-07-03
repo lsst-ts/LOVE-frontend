@@ -1,0 +1,29 @@
+.sceneAndInfoPlots{
+  display: grid;
+  grid-template-columns: 9fr 3fr;
+  grid-auto-rows: auto;
+  gap: 10px;
+  width: 98%;
+  height: 98%;
+  margin: 15px;
+}
+
+.scene {
+  width: 95%;
+  height: 95%;
+}
+
+.infoAndPlots {
+  display: grid;
+  grid-gap: 2em;
+  grid-auto-columns: auto;
+}
+
+.info {
+
+}
+
+.plots {
+
+}
+

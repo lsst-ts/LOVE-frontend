@@ -15,7 +15,7 @@ export function Dome (props) {
           props.height,
         ]}
       />
-      <meshBasicMaterial color="0xffff00" transparent opacity={0.1} wireframe />
+      <meshBasicMaterial color={0xffff00} transparent opacity={0.1} wireframe />
     </mesh>
     </>
   );
