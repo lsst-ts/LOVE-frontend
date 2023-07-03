@@ -1843,10 +1843,15 @@ export const getAuxTelESSState = (state) => {
 };
 
 export const getMainTelESSState = (state) => {
-  const subscriptions = [];
+  const subscriptions = [
+    'telemetry-ESS-1-temperature',
+  ];
   const essData = getStreamsData(state, subscriptions);
   return {
-    temperature: [],
+    name: essData['telemetry-ESS-1-temperature']?.sensorName.value ?? [],
+    temperature: essData['telemetry-ESS-1-temperature']?.temperature.value ?? [],
+    location: essData['telemetry-ESS-1-temperature']?.temperature.value.split(',') ?? [],
+    numChannels:  essData['telemetry-ESS-1-temperature']?.numChannels.value ?? [],
     xPosition: [],
     yPosition: [],
     zPosition: [],
