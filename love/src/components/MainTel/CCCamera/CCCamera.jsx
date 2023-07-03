@@ -37,7 +37,7 @@ class CCCamera extends Component {
       yRadius: 0,
       maxRadius: 0,
       colormap: () => '#fff',
-      width: 480,
+      width: 380,
       zoomLevel: 1,
       activeViewId: 'focalplane',
       selectedRaft: null,
@@ -335,7 +335,7 @@ class CCCamera extends Component {
     const { selectedCCD } = this.state;
     return (
       <div id="ccdrebdetail">
-        <CCDDetail ccd={selectedCCD} showNeighbors={true} selectNeighborCCD={this.selectNeighborCCD} />
+        <CCDDetail ccd={selectedCCD} showNeighbors={false} selectNeighborCCD={this.selectNeighborCCD} />
       </div>
     );
   }

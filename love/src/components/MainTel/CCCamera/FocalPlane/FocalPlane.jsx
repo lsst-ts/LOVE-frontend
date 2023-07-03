@@ -55,7 +55,6 @@ class FocalPlane extends Component {
   render() {
     const { rafts } = this.props;
     return <div className={styles.raftsContainer}>{rafts.map((raft) => this.renderRaft(raft))}</div>;
-    // return <div className={styles.raftsContainer}>{this.renderRaft(raft)}</div>;
   }
 }
 

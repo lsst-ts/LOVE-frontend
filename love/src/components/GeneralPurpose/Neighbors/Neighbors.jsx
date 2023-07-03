@@ -20,7 +20,7 @@ class Neighbors extends Component {
             right: 0,
             height: 20,
             backgroundColor: edgesColors.top,
-            transform: 'translate(0, -100%)',
+            transform: 'translate(0, -20%)',
             cursor: 'pointer',
           }}
           onClick={() => selectNeighbor('top')}
@@ -36,7 +36,7 @@ class Neighbors extends Component {
             height: 20,
             backgroundColor: edgesColors.right,
             transformOrigin: 'left',
-            transform: 'translate(calc(100% + 12px), -8px) rotate(90deg)',
+            transform: 'translate(calc(97% + 12px), -8px) rotate(90deg)',
             cursor: 'pointer',
           }}
           onClick={() => selectNeighbor('right')}
@@ -51,7 +51,7 @@ class Neighbors extends Component {
             right: 0,
             height: 20,
             backgroundColor: edgesColors.bottom,
-            transform: 'translate(0, calc(100% + 3px))',
+            transform: 'translate(0, calc(60% + 3px))',
             cursor: 'pointer',
           }}
           onClick={() => selectNeighbor('bottom')}
@@ -67,7 +67,7 @@ class Neighbors extends Component {
             height: 20,
             backgroundColor: edgesColors.left,
             transformOrigin: 'left',
-            transform: 'translate(-10px, -8px) rotate(90deg)',
+            transform: 'translate(-5px, -8px) rotate(90deg)',
             cursor: 'pointer',
           }}
           onClick={() => selectNeighbor('left')}
