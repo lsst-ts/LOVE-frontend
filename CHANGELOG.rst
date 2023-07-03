@@ -1,6 +1,10 @@
 ===============
 Version History
 ===============
+v5.22.1
+--------
+
+* Move Authlist components to Observatory index `<https://github.com/lsst-ts/LOVE-frontend/pull/480>`_
 
 v5.22.0
 --------
