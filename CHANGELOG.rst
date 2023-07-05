@@ -1,9 +1,9 @@
 ===============
 Version History
 ===============
-v5.22.1
+v5.23.0
 --------
-
+* Implement MT Light Path `<https://github.com/lsst-ts/LOVE-frontend/pull/481>`_
 * Move Authlist components to Observatory index `<https://github.com/lsst-ts/LOVE-frontend/pull/480>`_
 
 v5.22.0
