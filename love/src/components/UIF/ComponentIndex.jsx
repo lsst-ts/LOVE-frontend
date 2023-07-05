@@ -499,6 +499,16 @@ export const mainIndex = {
       },
     },
   },
+  SimonyiLightPath: {
+    component: require('../MainTel/LightPath/SimonyiLightPath.container').default,
+    schema: {
+      ...require('../MainTel/LightPath/SimonyiLightPath.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/LightPath/SimonyiLightPath.container').schema.props,
+      },
+    },
+  },
   TMA: {
     component: require('../MainTel/TMA/TMA.container').default,
     schema: {

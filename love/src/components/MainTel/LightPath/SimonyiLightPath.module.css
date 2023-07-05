@@ -10,6 +10,27 @@
   width: 100%;
 }
 
+.solid1 {
+  fill: hsl(201, 40%, 16%);
+  stroke: hsl(197, 34%, 23%);
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+}
+
+.solid2 {
+  fill: hsl(197, 34%, 23%);
+  stroke: hsl(197, 34%, 23%);
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+}
+
+.solid3 {
+  fill: #15242d;
+  stroke: #182e39;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+}
+
 .st1,
 .st2 {
   fill: hsl(201, 40%, 16%);
@@ -57,6 +78,11 @@
   stroke: var(--status-warning-color);
 }
 
+.alert {
+  fill: var(--status-alert-color);
+  stroke: var(--status-alert-color);
+}
+
 .summaryPanel {
   margin-left: 0;
   background: none;
@@ -78,4 +104,8 @@
   stroke-width: 0.1;
   fill-opacity: 0.15;
   transition: transform 1.5s linear;
+}
+
+.hide {
+  display: none;
 }
