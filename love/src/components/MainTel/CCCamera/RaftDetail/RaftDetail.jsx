@@ -4,7 +4,6 @@ import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import Neighbors from 'components/GeneralPurpose/Neighbors/Neighbors';
 import CCDDetail from '../CCDDetail/CCDDetail';
 import styles from './RaftDetail.module.css';
-import { mtcameraRaftsNeighborsMapping } from 'Config';
 
 const COLOR_MAPPING = {
   1: 'var(--status-ok-dimmed-color-3)',
@@ -37,7 +36,7 @@ class RaftDetail extends Component {
       plots.push({
         [`CCD${c.id}`]: {
           category: 'telemetry',
-          csc: 'MTCamera',
+          csc: 'CCCamera',
           salindex: 0,
           topic: 'focal_plane_Ccd',
           item: selectedCCDVar,
@@ -88,7 +87,7 @@ class RaftDetail extends Component {
       plots.push({
         [`REB${r.id}`]: {
           category: 'telemetry',
-          csc: 'MTCamera',
+          csc: 'CCCamera',
           salindex: 0,
           topic: 'focal_plane_Reb',
           item: selectedRebVar,

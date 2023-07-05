@@ -11,8 +11,8 @@ import styles from './FocalPlaneSummaryDetail.module.css';
 import {
   /* summaryStateMap,
   summaryStateToStyle, */
-  mtcameraRaftTempControlState,
-  mtcameraRaftTempControlStateToStyle,
+  cccameraRaftTempControlState,
+  cccameraRaftTempControlStateToStyle,
 } from 'Config';
 import { defaultNumberFormatter } from 'Utils';
 
@@ -198,9 +198,9 @@ class FocalPlaneSummaryDetail extends Component {
             <Label>Temp Control</Label>
             <Value>
               <StatusText
-                status={mtcameraRaftTempControlStateToStyle[mtcameraRaftTempControlState[raftTempControlState]]}
+                status={cccameraRaftTempControlStateToStyle[cccameraRaftTempControlState[raftTempControlState]]}
               >
-                {mtcameraRaftTempControlState[raftTempControlState]}
+                {cccameraRaftTempControlState[raftTempControlState]}
               </StatusText>
             </Value>
           </SummaryPanel>

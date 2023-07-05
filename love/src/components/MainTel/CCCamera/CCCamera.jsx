@@ -37,7 +37,7 @@ class CCCamera extends Component {
       yRadius: 0,
       maxRadius: 0,
       colormap: () => '#fff',
-      width: 380,
+      width: 480,
       zoomLevel: 1,
       activeViewId: 'focalplane',
       selectedRaft: null,

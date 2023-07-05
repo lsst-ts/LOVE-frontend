@@ -43,6 +43,10 @@
 .focalPlanceContainer {
   overflow: hidden;
   aspect-ratio: 1 / 1;
+  width: 42em;
+  margin: auto;
+  border: 1px solid var(--secondary-font-dimmed-color);
+  border-radius: 0.5em;
 }
 
 .focalPlanceContainer > * {

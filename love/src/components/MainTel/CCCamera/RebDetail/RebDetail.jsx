@@ -9,7 +9,7 @@ const plotsRebs = [
   {
     anal: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'anal',
@@ -20,7 +20,7 @@ const plotsRebs = [
   {
     anaV: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'anaV',
@@ -31,7 +31,7 @@ const plotsRebs = [
   {
     aspicl_Temp0: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'aspicl_Temp0',
@@ -42,7 +42,7 @@ const plotsRebs = [
   {
     aspicl_Temp1: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'aspicl_Temp1',
@@ -53,7 +53,7 @@ const plotsRebs = [
   {
     aspicl_Temp2: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'aspicl_Temp2',
@@ -64,7 +64,7 @@ const plotsRebs = [
   {
     aspicu_Temp0: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'aspicu_Temp0',
@@ -75,7 +75,7 @@ const plotsRebs = [
   {
     aspicu_Temp1: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'aspicu_Temp1',
@@ -86,7 +86,7 @@ const plotsRebs = [
   {
     aspicu_Temp2: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'aspicu_Temp2',
@@ -97,7 +97,7 @@ const plotsRebs = [
   {
     clkHI: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'clkHI',
@@ -108,7 +108,7 @@ const plotsRebs = [
   {
     clkHV: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'clkHV',
@@ -119,7 +119,7 @@ const plotsRebs = [
   {
     clkLI: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'clkLI',
@@ -130,7 +130,7 @@ const plotsRebs = [
   {
     clkLV: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'clkLV',
@@ -141,7 +141,7 @@ const plotsRebs = [
   {
     digI: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'digI',
@@ -152,7 +152,7 @@ const plotsRebs = [
   {
     digV: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'digV',
@@ -163,7 +163,7 @@ const plotsRebs = [
   {
     hVBiasSwitch: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'hVBiasSwitch',
@@ -174,7 +174,7 @@ const plotsRebs = [
   {
     htrPI: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'htrPI',
@@ -185,7 +185,7 @@ const plotsRebs = [
   {
     htrPV: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'htrPV',
@@ -196,7 +196,7 @@ const plotsRebs = [
   {
     htrV: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'htrV',
@@ -207,7 +207,7 @@ const plotsRebs = [
   {
     htrW: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'htrW',
@@ -218,7 +218,7 @@ const plotsRebs = [
   {
     oDI: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'oDI',
@@ -229,7 +229,7 @@ const plotsRebs = [
   {
     oDV: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'oDV',
@@ -240,7 +240,7 @@ const plotsRebs = [
   {
     pClk0: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'pClk0',
@@ -251,7 +251,7 @@ const plotsRebs = [
   {
     pClk1: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'pClk1',
@@ -262,7 +262,7 @@ const plotsRebs = [
   {
     pClkL: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'pClkL',
@@ -273,7 +273,7 @@ const plotsRebs = [
   {
     pClkU: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'pClkU',
@@ -284,7 +284,7 @@ const plotsRebs = [
   {
     power: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'power',
@@ -295,7 +295,7 @@ const plotsRebs = [
   {
     rG0: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'rG0',
@@ -306,7 +306,7 @@ const plotsRebs = [
   {
     rG1: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'rG1',
@@ -317,7 +317,7 @@ const plotsRebs = [
   {
     rGL: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'rGL',
@@ -328,7 +328,7 @@ const plotsRebs = [
   {
     rGU: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'rGU',
@@ -339,7 +339,7 @@ const plotsRebs = [
   {
     rTDTemp: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'rTDTemp',
@@ -350,7 +350,7 @@ const plotsRebs = [
   {
     ref05V: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'ref05V',
@@ -361,7 +361,7 @@ const plotsRebs = [
   {
     ref125V: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'ref125V',
@@ -372,7 +372,7 @@ const plotsRebs = [
   {
     ref15V: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'ref15V',
@@ -383,7 +383,7 @@ const plotsRebs = [
   {
     ref25V: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'ref25V',
@@ -394,7 +394,7 @@ const plotsRebs = [
   {
     refN12: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'refN12',
@@ -405,7 +405,7 @@ const plotsRebs = [
   {
     refP12: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'refP12',
@@ -416,7 +416,7 @@ const plotsRebs = [
   {
     sClk0: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'sClk0',
@@ -427,7 +427,7 @@ const plotsRebs = [
   {
     sClk1: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'sClk1',
@@ -438,7 +438,7 @@ const plotsRebs = [
   {
     sClkL: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'sClkL',
@@ -449,7 +449,7 @@ const plotsRebs = [
   {
     sClkU: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'sClkU',
@@ -460,7 +460,7 @@ const plotsRebs = [
   {
     temp1: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'temp1',
@@ -471,7 +471,7 @@ const plotsRebs = [
   {
     temp10: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'temp10',
@@ -482,7 +482,7 @@ const plotsRebs = [
   {
     temp2: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'temp2',
@@ -493,7 +493,7 @@ const plotsRebs = [
   {
     temp3: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'temp3',
@@ -504,7 +504,7 @@ const plotsRebs = [
   {
     temp4: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'temp4',
@@ -515,7 +515,7 @@ const plotsRebs = [
   {
     temp5: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'temp5',
@@ -526,7 +526,7 @@ const plotsRebs = [
   {
     temp6: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'temp6',
@@ -537,7 +537,7 @@ const plotsRebs = [
   {
     temp7: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'temp7',
@@ -548,7 +548,7 @@ const plotsRebs = [
   {
     temp8: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'temp8',
@@ -559,7 +559,7 @@ const plotsRebs = [
   {
     temp9: {
       category: 'telemetry',
-      csc: 'MTCamera',
+      csc: 'CCCamera',
       salindex: 0,
       topic: 'focal_plane_Reb',
       item: 'temp9',

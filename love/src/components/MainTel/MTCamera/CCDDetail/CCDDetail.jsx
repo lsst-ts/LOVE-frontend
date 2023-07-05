@@ -22,10 +22,10 @@ class CCDDetail extends Component {
       {
         PLOT1: {
           category: 'telemetry',
-          csc: 'ATDome',
+          csc: 'MTCamera',
           salindex: 0,
-          topic: 'position',
-          item: 'azimuthPosition',
+          topic: 'focal_plane_Ccd',
+          item: 'gDV',
           type: 'line',
           accessor: (x) => x,
         },
@@ -33,10 +33,10 @@ class CCDDetail extends Component {
       {
         PLOT2: {
           category: 'telemetry',
-          csc: 'ATDome',
+          csc: 'MTCamera',
           salindex: 0,
-          topic: 'position',
-          item: 'azimuthPosition',
+          topic: 'focal_plane_Ccd',
+          item: 'oDI',
           type: 'line',
           accessor: (x) => x,
         },
@@ -44,10 +44,10 @@ class CCDDetail extends Component {
       {
         PLOT3: {
           category: 'telemetry',
-          csc: 'ATDome',
+          csc: 'MTCamera',
           salindex: 0,
-          topic: 'position',
-          item: 'azimuthPosition',
+          topic: 'focal_plane_Ccd',
+          item: 'oDV',
           type: 'line',
           accessor: (x) => x,
         },
@@ -55,10 +55,10 @@ class CCDDetail extends Component {
       {
         PLOT4: {
           category: 'telemetry',
-          csc: 'ATDome',
+          csc: 'MTCamera',
           salindex: 0,
-          topic: 'position',
-          item: 'azimuthPosition',
+          topic: 'focal_plane_Ccd',
+          item: 'oGV',
           type: 'line',
           accessor: (x) => x,
         },
@@ -66,10 +66,10 @@ class CCDDetail extends Component {
       {
         PLOT5: {
           category: 'telemetry',
-          csc: 'ATDome',
+          csc: 'MTCamera',
           salindex: 0,
-          topic: 'position',
-          item: 'azimuthPosition',
+          topic: 'focal_plane_Ccd',
+          item: 'rDV',
           type: 'line',
           accessor: (x) => x,
         },
@@ -77,10 +77,10 @@ class CCDDetail extends Component {
       {
         PLOT6: {
           category: 'telemetry',
-          csc: 'ATDome',
+          csc: 'MTCamera',
           salindex: 0,
-          topic: 'position',
-          item: 'azimuthPosition',
+          topic: 'focal_plane_Ccd',
+          item: 'temp',
           type: 'line',
           accessor: (x) => x,
         },
