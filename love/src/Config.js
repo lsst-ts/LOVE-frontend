@@ -576,6 +576,31 @@ export const stateToStyleLightpath = {
   'UNKNOWN POSITION': 'invalid',
 };
 
+// CCCAmera
+export const ccCameraImageReadinessDetailedStateToStyle = {
+  READY: 'ok',
+  'NOT READY': 'warning',
+  'GETTING READY': 'warning',
+  UNKNOWN: 'invalid',
+};
+
+export const ccCameraShutterDetailedStateToStyle = {
+  CLOSED: 'ok',
+  OPEN: 'ok',
+  CLOSING: 'warning',
+  OPENING: 'warning',
+  UNKNOWN: 'invalid',
+};
+
+export const ccCameraFilterChangerDetailedStateToStyle = {
+  UNLOADING: 'warning',
+  LOADING: 'warning',
+  LOADED: 'ok',
+  UNLOADED: 'warning',
+  ROTATING: 'warning',
+  UNKNOWN: 'invalid',
+};
+
 //  MTM1M3
 export const m1m3DetailedStateToStyle = {
   'DISABLED STATE': 'warning',
@@ -926,6 +951,31 @@ export const cameraStates = {
     3: 'CLOSING',
     4: 'OPENING',
   },
+};
+
+// CCCAmera
+export const ccCameraImageReadinessDetailedStateMap = {
+  1: 'READY',
+  2: 'NOT READY',
+  3: 'GETTING READY',
+  0: 'UNKNOWN',
+};
+
+export const ccCameraShutterDetailedStateMap = {
+  1: 'CLOSED',
+  2: 'OPEN',
+  3: 'CLOSING',
+  4: 'OPENING',
+  0: 'UNKNOWN',
+};
+
+export const ccCameraFilterChangerDetailedStateMap = {
+  1: 'UNLOADING',
+  2: 'LOADING',
+  3: 'LOADED',
+  4: 'UNLOADED',
+  5: 'ROTATING',
+  0: 'UNKNOWN',
 };
 
 // M1M3

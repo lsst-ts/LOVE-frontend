@@ -845,6 +845,56 @@ export const getCCWFollowingError = (state) => {
   };
 };
 
+////////////////////////
+// Simonyi LightPath //
+//////////////////////
+
+export const getMTLightPathStatus = (state) => {
+  const subscriptions = [
+    //M2
+    `event-M2-0-m2AssemblyInPosition`,
+    `telemetry-M2-0-position`,
+    //M1M3
+    `event-MTM1M3-0-detailedState`,
+    //MirrorCovers
+    `event-MTMount-0-mirrorCoversMotionState`,
+    //ComCamera
+    `event-CCCamera-0-imageReadinessDetailedState`,
+    `event-CCCamera-0-shutterDetailedState`,
+    `event-CCCamera-0-filterChangerDetailedState`,
+    `event-CCCamera-0-endSetFilter`,
+    //MTCamera
+    `event-MTCamera-0-imageReadinessDetailedState`,
+    `event-MTCamera-0-shutterDetailedState`,
+    `event-MTCamera-0-filterChangerDetailedState`,
+    `event-MTCamera-0-endSetFilter`,
+  ];
+  const mTLightPathStatusData = getStreamsData(state, subscriptions);
+  return {
+    //M2
+    m2AssemblyInPosition: mTLightPathStatusData['event-MTM2-0-m2AssemblyInPosition']?.[0].state?.value ?? false,
+    m2PositionX: mTLightPathStatusData['telemetry-MTM2-0-position']?.x?.value ?? 0,
+    m2PositionY: mTLightPathStatusData['telemetry-MTM2-0-position']?.y?.value ?? 0,
+    m2PositionZ: mTLightPathStatusData['telemetry-MTM2-0-position']?.z?.value ?? 0,
+    m2PositionXRot: mTLightPathStatusData['telemetry-MTM2-0-position']?.xRot?.value ?? 0,
+    m2PositionYRot: mTLightPathStatusData['telemetry-MTM2-0-position']?.yRot?.value ?? 0,
+    m2PositionZRot: mTLightPathStatusData['telemetry-MTM2-0-position']?.zRot?.value ?? 0,
+    //M1M3
+    m1m3DetailedState: mTLightPathStatusData['event-MTM1M3-0-detailedState']?.[0].detailedState?.value ?? 0,
+    //MirrorCovers
+    mirrorCoversState: mTLightPathStatusData['event-MTMount-0-mirrorCoversMotionState']?.[0]?.elementsState?.value ?? [
+      0, 0, 0, 0,
+    ],
+    //ComCamera
+    cCameraImageState: mTLightPathStatusData['event-CCCamera-0-imageReadinessDetailedState']?.[0].substate?.value ?? 0,
+    cCameraShutterState: mTLightPathStatusData['event-CCCamera-0-shutterDetailedState']?.[0].substate?.value ?? 0,
+    cCameraFilterState: mTLightPathStatusData['event-CCCamera-0-filterChangerDetailedState']?.[0].substate?.value ?? 0,
+    cCameraFilter: mTLightPathStatusData['event-CCCamera-0-endSetFilter']?.[0].filterName?.value ?? 'Unknown',
+
+    //MTCamera
+  };
+};
+
 // MTHexapod
 export const getHexapodStatus = (state, salindex) => {
   const subscriptions = [
