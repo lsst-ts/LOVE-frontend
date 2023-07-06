@@ -20,7 +20,7 @@ class CCDDetail extends Component {
   renderPlots() {
     const plots = [
       {
-        PLOT1: {
+        gDV: {
           category: 'telemetry',
           csc: 'CCCamera',
           salindex: 0,
@@ -31,7 +31,7 @@ class CCDDetail extends Component {
         },
       },
       {
-        PLOT2: {
+        oDI: {
           category: 'telemetry',
           csc: 'CCCamera',
           salindex: 0,
@@ -42,7 +42,7 @@ class CCDDetail extends Component {
         },
       },
       {
-        PLOT3: {
+        oDV: {
           category: 'telemetry',
           csc: 'CCCamera',
           salindex: 0,
@@ -53,7 +53,7 @@ class CCDDetail extends Component {
         },
       },
       {
-        PLOT4: {
+        oGV: {
           category: 'telemetry',
           csc: 'CCCamera',
           salindex: 0,
@@ -64,7 +64,7 @@ class CCDDetail extends Component {
         },
       },
       {
-        PLOT5: {
+        rDV: {
           category: 'telemetry',
           csc: 'CCCamera',
           salindex: 0,
@@ -75,7 +75,7 @@ class CCDDetail extends Component {
         },
       },
       {
-        PLOT6: {
+        temp: {
           category: 'telemetry',
           csc: 'CCCamera',
           salindex: 0,
