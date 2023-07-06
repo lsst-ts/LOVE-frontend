@@ -149,6 +149,26 @@ export const observatoryIndex = {
       },
     },
   },
+  SummaryAuthList: {
+    component: require('../AuthList/SummaryAuthList/SummaryAuthList.container').default,
+    schema: {
+      ...require('../AuthList/SummaryAuthList/SummaryAuthList.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../AuthList/SummaryAuthList/SummaryAuthList.container').schema.props,
+      },
+    },
+  },
+  AdminAuthList: {
+    component: require('../AuthList/AdminAuthList/AdminAuthList.container').default,
+    schema: {
+      ...require('../AuthList/AdminAuthList/AdminAuthList.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../AuthList/AdminAuthList/AdminAuthList.container').schema.props,
+      },
+    },
+  },
   Scheduler: {
     component: require('../Scheduler/Scheduler.container').default,
     schema: {
@@ -479,6 +499,16 @@ export const mainIndex = {
       },
     },
   },
+  SimonyiLightPath: {
+    component: require('../MainTel/LightPath/SimonyiLightPath.container').default,
+    schema: {
+      ...require('../MainTel/LightPath/SimonyiLightPath.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/LightPath/SimonyiLightPath.container').schema.props,
+      },
+    },
+  },
   TMA: {
     component: require('../MainTel/TMA/TMA.container').default,
     schema: {
@@ -509,29 +539,6 @@ const environmentIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../EmbeddedView/custom/CloudMapView.container').schema.props,
-      },
-    },
-  },
-};
-
-export const authlistIndex = {
-  SummaryAuthList: {
-    component: require('../AuthList/SummaryAuthList/SummaryAuthList.container').default,
-    schema: {
-      ...require('../AuthList/SummaryAuthList/SummaryAuthList.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../AuthList/SummaryAuthList/SummaryAuthList.container').schema.props,
-      },
-    },
-  },
-  AdminAuthList: {
-    component: require('../AuthList/AdminAuthList/AdminAuthList.container').default,
-    schema: {
-      ...require('../AuthList/AdminAuthList/AdminAuthList.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../AuthList/AdminAuthList/AdminAuthList.container').schema.props,
       },
     },
   },
@@ -671,10 +678,6 @@ export const indexes = [
     index: environmentIndex,
   },
   {
-    name: 'Authlist',
-    index: authlistIndex,
-  },
-  {
     name: 'Utilities',
     index: utilitiesIndex,
   },
@@ -689,7 +692,6 @@ export default {
   ...auxtelIndex,
   ...mainIndex,
   ...environmentIndex,
-  ...authlistIndex,
   ...utilitiesIndex,
   ...internalIndex,
 };

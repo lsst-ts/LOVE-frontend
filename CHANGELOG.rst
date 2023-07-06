@@ -1,6 +1,12 @@
 ===============
 Version History
 ===============
+v5.23.0
+--------
+
+* Hotfix Scheduler plots `<https://github.com/lsst-ts/LOVE-frontend/pull/482>`_
+* Implement MT Light Path `<https://github.com/lsst-ts/LOVE-frontend/pull/481>`_
+* Move Authlist components to Observatory index `<https://github.com/lsst-ts/LOVE-frontend/pull/480>`_
 
 v5.22.0
 --------
