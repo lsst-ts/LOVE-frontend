@@ -3,12 +3,8 @@ import styles from './Plots.module.css';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 
 export default class SchedulerPlots extends Component {
-  constructor() {
-    super();
-    this.refs = [React.createRef()];
-    this.state = {};
-  }
-  renderPlots() {
+  constructor(props) {
+    super(props);
     const plots = [
       {
         Brightness: {
@@ -49,9 +45,18 @@ export default class SchedulerPlots extends Component {
         },
       },
     ];
+    this.refs = plots.map((plot) => {
+      return React.createRef();
+    });
+    this.state = {
+      plots: plots,
+    };
+  }
+
+  renderPlots() {
     return (
       <div className={styles.plotsContainer}>
-        {plots.map((p, i) => (
+        {this.state.plots.map((p, i) => (
           <div key={p} ref={this.refs[i]} className={styles.plot}>
             <PlotContainer
               inputs={p}
