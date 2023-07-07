@@ -235,7 +235,7 @@ class MTCamera extends Component {
         <div id="zoom-overlay" className={styles.focalPlanceContainer}>
           <div style={{ display: activeViewId === 'ccdrebdetail' ? 'block' : 'none' }}>
             {selectedCCD && this.getCCDdetail()}
-            {selectedReb && this.getRebDetail()}
+            {/* {selectedReb && this.getRebDetail()} */}
           </div>
           <div style={{ display: activeViewId === 'raftdetail' ? 'block' : 'none' }}>
             {selectedRaft && this.getRaftdetail()}

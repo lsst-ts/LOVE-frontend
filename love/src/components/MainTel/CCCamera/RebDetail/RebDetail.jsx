@@ -583,7 +583,6 @@ class RebDetail extends Component {
   }
 
   renderPlots() {
-    console.log(this.state.plots);
     return (
       <div className={styles.plotsContainer}>
         {this.state.plots.map((p, i) => (

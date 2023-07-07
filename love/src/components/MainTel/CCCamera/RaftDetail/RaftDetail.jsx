@@ -81,6 +81,7 @@ class RaftDetail extends Component {
 
   renderRebsPlots() {
     const { raft, selectedReb, selectedRebVar, setSelectedReb, setHoveredCCD, setHoveredReb } = this.props;
+    const rebsItems = ['hVBiasSwitch', 'anaV', 'power'];
     const plots = [];
     raft.rebs.forEach((r) => {
       const rebIndex = r.id - 1;
@@ -90,7 +91,7 @@ class RaftDetail extends Component {
           csc: 'CCCamera',
           salindex: 0,
           topic: 'focal_plane_Reb',
-          item: selectedRebVar,
+          item: rebsItems[r],
           type: 'line',
           accessor: (x) => x[rebIndex],
         },
@@ -118,7 +119,7 @@ class RaftDetail extends Component {
               height={100}
               width={300}
               inputs={p}
-              // containerNode={this.rebsRefs[i]?.current}
+              containerNode={this.rebsRefs[i]}
               xAxisTitle="Time"
               yAxisTitle={`Value-${i}`}
               legendPosition="bottom"
