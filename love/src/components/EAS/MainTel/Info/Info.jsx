@@ -19,46 +19,48 @@ function Info(props) {
 
 
   return (
-    <SummaryPanel className={styles.essInfo}>
-      <>
-        <Title>Sensor {String(sensor.sensorId).padStart(3, '0')}</Title>
-        <div></div>
+    <>
+      <SummaryPanel className={styles.essInfo}>
+        <>
+          <Title>Sensor { sensor.sensorId ? String(sensor.sensorId).padStart(3, '0') : ''}</Title>
+          <div></div>
 
-        <Label>Name</Label>
-        <Value>
-          {sensor.sensorName}
-        </Value>
+          <Label>Name</Label>
+          <Value>
+            {sensor.sensorName}
+          </Value>
 
-        <Label>Location</Label>
-        <Value>
-          {sensor.location}
-        </Value>
+          <Label>Location</Label>
+          <Value>
+            {sensor.location}
+          </Value>
 
-        <Label>Position X</Label>
-        <Value>
-          {sensor.position?.x}
-        </Value>
+          <Label>Position X</Label>
+          <Value>
+            {sensor.position?.x}
+          </Value>
 
-        <Label>Position Y</Label>
-        <Value>
-          {sensor.position?.y}
-        </Value>
+          <Label>Position Y</Label>
+          <Value>
+            {sensor.position?.y}
+          </Value>
 
-        <Label>Position Z</Label>
-        <Value>
-          {sensor.position?.z}
-        </Value>
+          <Label>Position Z</Label>
+          <Value>
+            {sensor.position?.z}
+          </Value>
 
-        <Label>Temperature</Label>
-        <Value>
-          { sensor.temperature ? 
-            `${fixedFloat(sensor.temperature, 2)} °C`
-            : '--'
-          }
-        </Value>
+          <Label>Temperature</Label>
+          <Value>
+            { sensor.temperature ?
+              `${fixedFloat(sensor.temperature, 2)} °C`
+              : '--'
+            }
+          </Value>
 
-      </>
-    </SummaryPanel>
+        </>
+      </SummaryPanel>
+    </>
   );
 };
 

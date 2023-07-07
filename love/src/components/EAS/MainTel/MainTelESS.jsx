@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import Scene from './Scene/Scene';
 import Info from './Info/Info';
+import TemperatureGradiant from 'components/MainTel/M1M3TS/Temperature/TemperatureGradiant';
 import styles from './MainTelESS.module.css';
+
 
 export default class MainTelESS extends Component {
   static propTypes = {
@@ -95,6 +97,8 @@ export default class MainTelESS extends Component {
   render() {
 
     const { selectedSensor, selectedSensorData, positions } = this.state;
+    const { numChannels } = this.props;
+    const referenceId = Array.from({length: numChannels}).fill(0).map((_, index) => index);
 
     return (
       <div className={styles.sceneAndInfoPlots}>
@@ -111,7 +115,7 @@ export default class MainTelESS extends Component {
           <div className={styles.info}>
             <Info 
               sensor={selectedSensorData}
-            />
+            /> 
           </div>
           <div className={styles.plots}>
 
