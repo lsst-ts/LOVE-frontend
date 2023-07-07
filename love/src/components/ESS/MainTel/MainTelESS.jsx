@@ -101,9 +101,9 @@ export default class MainTelESS extends Component {
     const referenceId = Array.from({length: numChannels}).fill(0).map((_, index) => index);
 
     return (
-      <div className={styles.sceneAndInfoPlots}>
+      <div className={styles.sceneAndInfoPlotsContainer}>
 
-        <div className={styles.scene}>
+        <div className={styles.sceneContainer}>
           <Scene
             positions={positions}
             selectedSensor={selectedSensor}
@@ -111,13 +111,18 @@ export default class MainTelESS extends Component {
           />
         </div>
 
-        <div className={styles.infoAndPlots}>
-          <div className={styles.info}>
+        <div className={styles.infoAndPlotsContainer}>
+          <div className={styles.infoContainer}>
             <Info 
               sensor={selectedSensorData}
             /> 
           </div>
-          <div className={styles.plots}>
+
+          <div className={styles.tempContainer}>
+
+          </div>
+
+          <div className={styles.plotsContainer}>
 
           </div>
         </div>

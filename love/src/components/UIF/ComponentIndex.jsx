@@ -396,13 +396,13 @@ export const auxtelIndex = {
       },
     },
   },
-  AuxTelEAS: {
-    component: require('../EAS/AuxTel/AuxTelESS.container').default,
+  AuxTelESS: {
+    component: require('../ESS/AuxTel/AuxTelESS.container').default,
     schema: {
-      ...require('../EAS/AuxTel/AuxTelESS.container').schema,
+      ...require('../ESS/AuxTel/AuxTelESS.container').schema,
       props: {
         ...defaultSchemaProps,
-        ...require('../EAS/AuxTel/AuxTelESS.container').schema.props,
+        ...require('../ESS/AuxTel/AuxTelESS.container').schema.props,
       },
     },
   },
@@ -579,13 +579,13 @@ export const mainIndex = {
       },
     },
   },
-  MainTelEAS: {
-    component: require('../EAS/MainTel/MainTelESS.container').default,
+  MainTelESS: {
+    component: require('../ESS/MainTel/MainTelESS.container').default,
     schema: {
-      ...require('../EAS/MainTel/MainTelESS.container').schema,
+      ...require('../ESS/MainTel/MainTelESS.container').schema,
       props: {
         ...defaultSchemaProps,
-        ...require('../EAS/MainTel/MainTelESS.container').schema.props,
+        ...require('../ESS/MainTel/MainTelESS.container').schema.props,
       },
     },
   },
