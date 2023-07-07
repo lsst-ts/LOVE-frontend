@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
+import * as d3 from 'd3';
 import Scene from './Scene/Scene';
 import Info from './Info/Info';
-import TemperatureGradiant from 'components/MainTel/M1M3TS/Temperature/TemperatureGradiant';
+import TemperatureGradiant from './Temperature/TemperatureGradiant';
 import styles from './MainTelESS.module.css';
 
 
@@ -20,6 +21,8 @@ export default class MainTelESS extends Component {
     xPositions: PropTypes.arrayOf(PropTypes.number),
     yPositions: PropTypes.arrayOf(PropTypes.number),
     zPositions: PropTypes.arrayOf(PropTypes.number),
+    minTemperatureLimit: PropTypes.number,
+    maxTemperatureLimit: PropTypes.number,
   };
 
   static defaultProps = {
@@ -29,6 +32,8 @@ export default class MainTelESS extends Component {
     xPositions: [],
     yPositions: [],
     zPositions: [],
+    minTemperatureLimit: -20,
+    maxTemperatureLimit: 40,
   };
 
   constructor(props) {
@@ -37,6 +42,7 @@ export default class MainTelESS extends Component {
       selectedSensor: 0,
       selectedSensorData: {},
       positions: [],
+      referenceId: Array.from({length: props.numChannels}).fill(0).map((_, index) => index + 1),
     };
   }
 
@@ -76,16 +82,27 @@ export default class MainTelESS extends Component {
     this.props.unsubscribeToStreams();
   }
 
+  getGradiantColorX = (value) => {
+    const { minTemperatureLimit, maxTemperatureLimit } = this.props;
+    const colorInterpolate = d3
+      .scaleLinear()
+      .domain(d3.extent([minTemperatureLimit, maxTemperatureLimit]))
+      .range([0, 1]);
+    return TemperatureGradiant.COLOR_SCALE(1 - colorInterpolate(value));
+  };
+
   setSensor( sensorId ) {
+    const {referenceId} = this.state;
+    const index = referenceId.indexOf(sensorId);
     const selectedSensorData = {
       sensorId: sensorId,
       sensorName: this.props.sensorName,
-      temperature: this.props.temperatures[sensorId],
-      location: this.props.locations[sensorId],
+      temperature: this.props.temperatures[index],
+      location: this.props.locations[index],
       position: {
-        x: this.props.xPositions[sensorId],
-        y: this.props.yPositions[sensorId],
-        z: this.props.zPositions[sensorId],
+        x: this.props.xPositions[index],
+        y: this.props.yPositions[index],
+        z: this.props.zPositions[index],
       },
     };
     this.setState({
@@ -96,9 +113,8 @@ export default class MainTelESS extends Component {
 
   render() {
 
-    const { selectedSensor, selectedSensorData, positions } = this.state;
-    const { numChannels } = this.props;
-    const referenceId = Array.from({length: numChannels}).fill(0).map((_, index) => index);
+    const { selectedSensor, selectedSensorData, positions, referenceId } = this.state;
+    const { temperatures, minTemperatureLimit, maxTemperatureLimit } = this.props;
 
     return (
       <div className={styles.sceneAndInfoPlotsContainer}>
@@ -107,7 +123,10 @@ export default class MainTelESS extends Component {
           <Scene
             positions={positions}
             selectedSensor={selectedSensor}
+            sensorReferenceId={referenceId}
             setSensor={(id) => this.setSensor(id)}
+            temperatures={temperatures}
+            getGradiantColorX={this.getGradiantColorX}
           />
         </div>
 
@@ -119,7 +138,14 @@ export default class MainTelESS extends Component {
           </div>
 
           <div className={styles.tempContainer}>
-
+            <TemperatureGradiant
+              sensorReferenceId={referenceId}
+              selectedId={selectedSensor}
+              setpoint={selectedSensorData?.temperature}
+              absoluteTemperature={temperatures}
+              minTemperatureLimit={minTemperatureLimit}
+              maxTemperatureLimit={maxTemperatureLimit}
+            />
           </div>
 
           <div className={styles.plotsContainer}>

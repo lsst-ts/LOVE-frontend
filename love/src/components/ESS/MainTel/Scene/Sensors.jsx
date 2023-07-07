@@ -73,14 +73,17 @@ React.memo(Sensor, comparatorSensor);
 export function Sensors(props) {
 
   const {
-    positions = [],
-    sensorName,
+    selectedSensor,
     setSensor,
-    selectedSensor
+    positions,
+    temperatures,
+    getGradiantColorX,
   } = props;
   
   const sensors = positions.map((position, index) => {
-    return { name: sensorName, position: position, id: index, color: 0xffff00};
+    const temperature = temperatures[index];
+    const color = getGradiantColorX ? getGradiantColorX(temperature) : 0xffff00;
+    return { position: position, id: index + 1, color: color };
   });
 
   return (
@@ -109,10 +112,14 @@ Sensors.propTypes = {
   })),
   setSensor: PropTypes.func,
   selectedSensor: PropTypes.number,
+  temperatures: PropTypes.arrayOf(PropTypes.number),
+  getGradiantColorX: PropTypes.func,
 };
 
 Sensors.defaultProps = {
   positions: [],
   setSensor: () => {console.log('Sensors default setSensor')},
   selectedSensor: undefined,
+  temperatures: [],
+  getGradiantColorX: () => {0xffff00},
 };

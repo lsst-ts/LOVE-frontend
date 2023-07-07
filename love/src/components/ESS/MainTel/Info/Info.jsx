@@ -49,15 +49,6 @@ function Info(props) {
           <Value>
             {sensor.position?.z}
           </Value>
-
-          <Label>Temperature</Label>
-          <Value>
-            { sensor.temperature ?
-              `${fixedFloat(sensor.temperature, 2)} °C`
-              : '--'
-            }
-          </Value>
-
         </>
       </SummaryPanel>
     </>

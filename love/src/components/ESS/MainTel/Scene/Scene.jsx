@@ -25,9 +25,12 @@ function CameraController() {
 const Scene = (props) => {
 
   const {
-    selectedSensor,
-    setSensor,
     positions,
+    selectedSensor,
+    sensorReferenceId,
+    setSensor,
+    temperatures,
+    getGradiantColorX,
   } = props;
 
   return (
@@ -49,6 +52,8 @@ const Scene = (props) => {
         selectedSensor={selectedSensor}
         setSensor={setSensor}
         positions={positions}
+        temperatures={temperatures}
+        getGradiantColorX={getGradiantColorX}
       />
 
       </Suspense>

@@ -21,6 +21,18 @@ export const schema = {
       isPrivate: false,
       default: false,
     },
+    minTemperatureLimit: {
+      type: 'number',
+      description: 'Minimum temperature limit for the limit of gradiant',
+      isPrivate: false,
+      default: -20,
+    },
+    maxTemperatureLimit: {
+      type: 'number',
+      description: 'Maximum temperature limit for the limit of gradiant',
+      isPrivate: false,
+      default: 40,
+    },
   },
 };
 
