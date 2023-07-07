@@ -1,8 +1,10 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { Sensors } from './Sensors';
 import { Dome } from './Dome';
+import { isEqual } from 'lodash';
 
 function CameraController() {
   const { camera, gl } = useThree();
@@ -22,6 +24,12 @@ function CameraController() {
 
 const Scene = (props) => {
 
+  const {
+    selectedSensor,
+    setSensor,
+    positions,
+  } = props;
+
   return (
     <>
     <Canvas
@@ -37,7 +45,11 @@ const Scene = (props) => {
       <gridHelper />
 
       <Dome />
-      <Sensors />
+      <Sensors 
+        selectedSensor={selectedSensor}
+        setSensor={setSensor}
+        positions={positions}
+      />
 
       </Suspense>
     </Canvas>
@@ -45,4 +57,27 @@ const Scene = (props) => {
   );
 }
 
-export default Scene;
+Scene.propTypes = {
+  selectedSensor: PropTypes.number,
+  positions: PropTypes.arrayOf(PropTypes.shape({
+    x: PropTypes.number,
+    y: PropTypes.number,
+    z: PropTypes.number,
+  })),
+  setSensor: PropTypes.func,
+};
+
+Scene.defaultProps = {
+  selectedSensor: 0,
+  positions: [],
+  setSensor: () => {console.log('scene default setSensor')},
+}
+
+const comparator = (prevProps, nextProps) => {
+  return (
+    prevProps.selectedSensor === nextProps.selectedSensor &&
+    isEqual(prevProps.positions, nextProps.positions )
+  )
+}
+
+export default React.memo(Scene, comparator);

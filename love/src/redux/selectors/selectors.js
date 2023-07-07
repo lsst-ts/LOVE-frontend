@@ -1847,14 +1847,16 @@ export const getMainTelESSState = (state) => {
     'telemetry-ESS-1-temperature',
   ];
   const essData = getStreamsData(state, subscriptions);
+  const len = essData['telemetry-ESS-1-temperature']?.numChannels.value ?? 16;
+
   return {
-    name: essData['telemetry-ESS-1-temperature']?.sensorName.value ?? [],
-    temperature: essData['telemetry-ESS-1-temperature']?.temperature.value ?? [],
-    location: essData['telemetry-ESS-1-temperature']?.temperature.value.split(',') ?? [],
-    numChannels:  essData['telemetry-ESS-1-temperature']?.numChannels.value ?? [],
-    xPosition: [],
-    yPosition: [],
-    zPosition: [],
+    sensorName: essData['telemetry-ESS-1-temperature']?.sensorName.value ?? '',
+    temperatures: essData['telemetry-ESS-1-temperature']?.temperature.value?.slice(0, len) ?? [],
+    locations: essData['telemetry-ESS-1-temperature']?.location.value.split(',')?.slice(0, len) ?? [],
+    numChannels:  essData['telemetry-ESS-1-temperature']?.numChannels.value ?? len,
+    xPositions: [-2, 2, 0, 0, 0, 0, 2, -4.8, -4.8, 4.5, -4.8, -4.5, 7, 5, -7, -5].slice(0, len),
+    yPositions: [0, 0, -2, 2, 0, 0, 2, -4.8, 0, 0, 4, 5, 2, -4, -5, 4].slice(0, len),
+    zPositions: [0, 0, 0, 0, -2, 2, 2, -2, 0, -1, -1, 2, -4, 2, 4, -2].slice(0, len),
   };
 };
 

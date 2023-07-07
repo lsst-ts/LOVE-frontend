@@ -1,23 +1,42 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import { isEqual } from 'lodash';
+import * as THREE from "three";
 
-function Sensor(props) {
+const Sensor = (props) => {
   const mesh = useRef();
   const [hovered, setHover] = useState(false);
-
+  const isSelected = props.selectedSensor === props.sensorId;
   return (
-    <mesh
-      {...props}
-      ref={mesh}
-      scale={hovered ? [1.2, 1.2, 1.2]: [1, 1, 1]}
-      onPointerOver={(e) => setHover(true)}
-      onPointerOut={(e) => setHover(false)}
-      onClick={(e) => props.click(props.sensorId)}
-      position={[props.position.x, props.position.y, props.position.z]}
-    >
-      <sphereGeometry args={[0.1, 32, 32]} />
-      <meshBasicMaterial color={hovered ? "white" : props.color}/>
-    </mesh>
+    <>
+      { (isSelected || hovered) && (<mesh
+        {...props}
+        ref={mesh}
+        scale={hovered ? [2.1, 2.1, 2.1]: [1.2, 1.2, 1.2]}
+        onPointerEnter={(e) => setHover(true)}
+        onPointerLeave={(e) => setHover(false)}
+        onClick={(e) => {
+          props.setSensor(props.sensorId);
+          setHover(true);
+        }}
+        position={[props.position.x, props.position.y, props.position.z]}
+      >
+        <sphereGeometry args={[0.15, 64, 64]} />
+        <meshBasicMaterial color={hovered ? props.color : "white"} side={THREE.BackSide}/>
+      </mesh>)}
+      <mesh
+        {...props}
+        ref={mesh}
+        scale={hovered ? [2, 2, 2]: [1, 1, 1]}
+        onPointerOver={(e) => setHover(true)}
+        onPointerOut={(e) => setHover(false)}
+        onClick={(e) => props.setSensor(props.sensorId)}
+        position={[props.position.x, props.position.y, props.position.z]}
+      >
+        <sphereGeometry args={[0.15, 32, 32]} />
+        <meshBasicMaterial color={hovered ? "white" : props.color}/>
+      </mesh>
+    </>
   ); 
 }
 
@@ -29,146 +48,40 @@ Sensor.propTypes = {
     z: PropTypes.number,
   }),
   color: PropTypes.number,
-  name: PropTypes.string,
-  click: PropTypes.func,
+  setSensor: PropTypes.func,
 };
 
 Sensor.defaultProps = {
   sensorId: 0,
   position: {x: 0, y: 0, z: 0},
-  name: '',
   color: 0xffff00,
-  click: () => {},
+  setSensor: (id) => {console.log('Sensor default setSensor(', id, ')')},
 }
+
+const comparatorSensor = (prevProps, nextProps) => {
+  console.log('comparatorSensor');
+  return (
+      nextProps.sensorId === prevProps.sensorId && 
+      isEqual(nextProps.position, prevProps.position) &&
+      nextProps.color === prevProps.color && 
+      nextProps.setSensor === prevProps.setSensor
+    );
+};
+
+React.memo(Sensor, comparatorSensor);
 
 export function Sensors(props) {
 
-  const sensors = [
-    {
-      id: 1,
-      name: 'sensor1',
-      position: {
-        x: -2,
-        y: 0,
-        z: 0,
-      },
-      color: 0xff0000,
-    },
-    {
-      id: 2,
-      name: 'sensor2',
-      position: {
-        x: 2,
-        y: 0,
-        z: 0,
-      },
-      color: 0x00ff00,
-    },
-    {
-      id: 3,
-      name: 'sensor3',
-      position: {
-        x: 0,
-        y: -2,
-        z: 0,
-      },
-      color: 0xff0000,
-    },
-    {
-      id: 4,
-      name: 'sensor4',
-      position: {
-        x: 0,
-        y: 2,
-        z: 0,
-      },
-      color: 0x00ff00,
-    },
-    {
-      id: 5,
-      name: 'sensor5',
-      position: {
-        x: 0,
-        y: 0,
-        z: -2,
-      },
-      color: 0xff0000,
-    },
-    {
-      id: 6,
-      name: 'sensor6',
-      position: {
-        x: 0,
-        y: 0,
-        z: 2,
-      },
-      color: 0x00ff00,
-    },
-    {
-      id: 7,
-      name: 'sensor7',
-      position: {
-        x: 2,
-        y: 2,
-        z: 2,
-      },
-      color: 0xffff00,
-    },
-    {
-      id: 8,
-      name: 'sensor8',
-      position: {
-        x: -4.8,
-        y: -4.8,
-        z: -2,
-      },
-      color: 0xffff00,
-    },
-    {
-      id: 9,
-      name: 'sensor9',
-      position: {
-        x: -4.8,
-        y: 0,
-        z: 0,
-      },
-      color: 0xff1100,
-    },
-    {
-      id: 10,
-      name: 'sensor10',
-      position: {
-        x: 4.5,
-        y: 0,
-        z: -1,
-      },
-      color: 0x00ff00,
-    },
-    {
-      id: 11,
-      name: 'senso11',
-      position: {
-        x: -4.8,
-        y: 4,
-        z: -1,
-      },
-      color: 0xff0000,
-    },
-    {
-      id: 12,
-      name: 'sensor12',
-      position: {
-        x: -4.5,
-        y: 4,
-        z: 2,
-      },
-      color: 0x00ff00,
-    },
-  ]
-
-  const click = (sensorId) => {
-    console.log('click(id): ', sensorId);
-  }
+  const {
+    positions = [],
+    sensorName,
+    setSensor,
+    selectedSensor
+  } = props;
+  
+  const sensors = positions.map((position, index) => {
+    return { name: sensorName, position: position, id: index, color: 0xffff00};
+  });
 
   return (
     <>
@@ -178,12 +91,28 @@ export function Sensors(props) {
             key={`sensor-${sensor.id}`}
             sensorId={sensor.id}
             position={sensor.position}
-            name={sensor.name}
             color={sensor.color}
-            click={click}
+            setSensor={() => setSensor(sensor.id)}
+            selectedSensor={selectedSensor}
           />
         );
       })}
     </>
   );
 }
+
+Sensors.propTypes = {
+  positions: PropTypes.arrayOf(PropTypes.shape({
+    x: PropTypes.number,
+    y: PropTypes.number,
+    z: PropTypes.number,
+  })),
+  setSensor: PropTypes.func,
+  selectedSensor: PropTypes.number,
+};
+
+Sensors.defaultProps = {
+  positions: [],
+  setSensor: () => {console.log('Sensors default setSensor')},
+  selectedSensor: undefined,
+};
