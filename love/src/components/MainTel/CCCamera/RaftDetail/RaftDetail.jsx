@@ -14,6 +14,100 @@ const COLOR_MAPPING = {
 class RaftDetail extends Component {
   constructor(props) {
     super(props);
+    const rebIndex = [0, 1, 2];
+    const plotsRebs0 = [
+      {
+        hVBiasSwitch: {
+          category: 'telemetry',
+          csc: 'CCCamera',
+          salindex: 0,
+          topic: 'focal_plane_Reb',
+          item: 'hVBiasSwitch',
+          type: 'line',
+          accessor: (x) => x[0],
+        },
+        anaV: {
+          category: 'telemetry',
+          csc: 'CCCamera',
+          salindex: 0,
+          topic: 'focal_plane_Reb',
+          item: 'anaV',
+          type: 'line',
+          accessor: (x) => x[0],
+        },
+        power: {
+          category: 'telemetry',
+          csc: 'CCCamera',
+          salindex: 0,
+          topic: 'focal_plane_Reb',
+          item: 'power',
+          type: 'line',
+          accessor: (x) => x[0],
+        },
+      },
+    ];
+    const plotsRebs1 = [
+      {
+        hVBiasSwitch: {
+          category: 'telemetry',
+          csc: 'CCCamera',
+          salindex: 0,
+          topic: 'focal_plane_Reb',
+          item: 'hVBiasSwitch',
+          type: 'line',
+          accessor: (x) => x[1],
+        },
+        anaV: {
+          category: 'telemetry',
+          csc: 'CCCamera',
+          salindex: 0,
+          topic: 'focal_plane_Reb',
+          item: 'anaV',
+          type: 'line',
+          accessor: (x) => x[1],
+        },
+        power: {
+          category: 'telemetry',
+          csc: 'CCCamera',
+          salindex: 0,
+          topic: 'focal_plane_Reb',
+          item: 'power',
+          type: 'line',
+          accessor: (x) => x[1],
+        },
+      },
+    ];
+    const plotsRebs2 = [
+      {
+        hVBiasSwitch: {
+          category: 'telemetry',
+          csc: 'CCCamera',
+          salindex: 0,
+          topic: 'focal_plane_Reb',
+          item: 'hVBiasSwitch',
+          type: 'line',
+          accessor: (x) => x[2],
+        },
+        anaV: {
+          category: 'telemetry',
+          csc: 'CCCamera',
+          salindex: 0,
+          topic: 'focal_plane_Reb',
+          item: 'anaV',
+          type: 'line',
+          accessor: (x) => x[2],
+        },
+        power: {
+          category: 'telemetry',
+          csc: 'CCCamera',
+          salindex: 0,
+          topic: 'focal_plane_Reb',
+          item: 'power',
+          type: 'line',
+          accessor: (x) => x[2],
+        },
+      },
+    ];
     this.CCDsrefs = [
       React.createRef(),
       React.createRef(),
@@ -25,7 +119,22 @@ class RaftDetail extends Component {
       React.createRef(),
       React.createRef(),
     ];
-    this.rebsRefs = [React.createRef(), React.createRef(), React.createRef()];
+    this.rebsRefs = [
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      // React.createRef(),
+      // React.createRef(),
+      // React.createRef(),
+      // React.createRef(),
+      // React.createRef(),
+      // React.createRef(),
+    ];
+    this.state = {
+      plotsRebs0: plotsRebs0,
+      plotsRebs1: plotsRebs1,
+      plotsRebs2: plotsRebs2,
+    };
   }
 
   renderCCDsPlots() {
@@ -80,55 +189,98 @@ class RaftDetail extends Component {
   }
 
   renderRebsPlots() {
-    const { raft, selectedReb, selectedRebVar, setSelectedReb, setHoveredCCD, setHoveredReb } = this.props;
-    const rebsItems = ['hVBiasSwitch', 'anaV', 'power'];
-    const plots = [];
-    raft.rebs.forEach((r) => {
-      const rebIndex = r.id - 1;
-      plots.push({
-        [`REB${r.id}`]: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: rebsItems[r],
-          type: 'line',
-          accessor: (x) => x[rebIndex],
-        },
-      });
-    });
-
     return (
-      <div className={styles.rebsContainer}>
-        {plots.map((p, i) => (
-          <div
-            key={`r${i}`}
-            ref={this.rebsRefs[i]}
-            style={{ border: selectedReb?.id === raft.rebs[i].id ? '2px solid white' : `` }}
-            className={styles.plot}
-            onClick={() => {
-              setSelectedReb(raft.rebs[i]);
-            }}
-            onMouseOver={() => {
-              setHoveredReb(raft.rebs[i]);
-              setHoveredCCD(null);
-            }}
-          >
-            <PlotContainer
-              memorySize={50}
-              height={100}
-              width={300}
-              inputs={p}
-              containerNode={this.rebsRefs[i]}
-              xAxisTitle="Time"
-              yAxisTitle={`Value-${i}`}
-              legendPosition="bottom"
-            />
-          </div>
-        ))}
-      </div>
+      <>
+        <div className={styles.plotsContainer}>
+          {this.state.plotsRebs0.map((p, i) => (
+            <div key={p} ref={this.rebsRefs[i]} className={styles.plot}>
+              <PlotContainer
+                inputs={p}
+                containerNode={this.rebsRefs[i]}
+                xAxisTitle="Time"
+                yAxisTitle="Value"
+                legendPosition="right"
+              />
+            </div>
+          ))}
+        </div>
+        <div className={styles.plotsContainer}>
+          {this.state.plotsRebs1.map((p, i) => (
+            <div key={p} ref={this.rebsRefs[i]} className={styles.plot}>
+              <PlotContainer
+                inputs={p}
+                containerNode={this.rebsRefs[i]}
+                xAxisTitle="Time"
+                yAxisTitle="Value"
+                legendPosition="right"
+              />
+            </div>
+          ))}
+        </div>
+        <div className={styles.plotsContainer}>
+          {this.state.plotsRebs2.map((p, i) => (
+            <div key={p} ref={this.rebsRefs[i]} className={styles.plot}>
+              <PlotContainer
+                inputs={p}
+                containerNode={this.rebsRefs[i]}
+                xAxisTitle="Time"
+                yAxisTitle="Value"
+                legendPosition="right"
+              />
+            </div>
+          ))}
+        </div>
+      </>
     );
   }
+  // const { raft, selectedReb, selectedRebVar, setSelectedReb, setHoveredCCD, setHoveredReb } = this.props;
+  // const rebsItems = ['hVBiasSwitch', 'anaV', 'power'];
+  // const plots = [];
+  // raft.rebs.forEach((r) => {
+  //   const rebIndex = r.id - 1;
+  //   plots.push({
+  //     [`REB${r.id}`]: {
+  //       category: 'telemetry',
+  //       csc: 'CCCamera',
+  //       salindex: 0,
+  //       topic: 'focal_plane_Reb',
+  //       item: rebsItems[r],
+  //       type: 'line',
+  //       accessor: (x) => x[rebIndex],
+  //     },
+  //   });
+  // });
+  // return (
+  //   <div className={styles.rebsContainer}>
+  //     {plots.map((p, i) => (
+  //       <div
+  //         key={`r${i}`}
+  //         ref={this.rebsRefs[i]}
+  //         style={{ border: selectedReb?.id === raft.rebs[i].id ? '2px solid white' : `` }}
+  //         className={styles.plot}
+  //         // onClick={() => {
+  //         //   setSelectedReb(raft.rebs[i]);
+  //         // }}
+  //         // onMouseOver={() => {
+  //         //   setHoveredReb(raft.rebs[i]);
+  //         //   setHoveredCCD(null);
+  //         // }}
+  //       >
+  //         <PlotContainer
+  //           memorySize={50}
+  //           height={100}
+  //           width={300}
+  //           inputs={p}
+  //           containerNode={this.rebsRefs[i]}
+  //           xAxisTitle="Time"
+  //           yAxisTitle={`Value-${i}`}
+  //           legendPosition="bottom"
+  //         />
+  //       </div>
+  //     ))}
+  //   </div>
+  // );
+  // }
 
   render() {
     const { raft, showNeighbors, selectedReb, selectNeighborRaft } = this.props;
