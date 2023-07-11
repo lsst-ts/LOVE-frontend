@@ -1,6 +1,13 @@
 ===============
 Version History
 ===============
+
+v5.23.1
+--------
+
+* Extend getEFDLogs method to specify the timestamps scale `<https://github.com/lsst-ts/LOVE-frontend/pull/484>`_
+
+
 v5.23.0
 --------
 
