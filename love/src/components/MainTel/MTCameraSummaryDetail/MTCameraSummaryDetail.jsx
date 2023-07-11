@@ -40,6 +40,7 @@ export default class Camera extends Component {
     this.state = {
       timers: {},
       imageSequence: {},
+      expandedRows: {},
     };
   }
 
@@ -107,29 +108,29 @@ export default class Camera extends Component {
       source: stream.imageSource.value,
       controller: stream.imageController.value,
       timeStamp: stream.timestampAcquisitionStart.value,
-      exposureTime: stream.exposureTime.value ?? 0,
-      tag: stream.imageTag.value ?? '-',
-      obsDate: stream.timestampDateObs ?? '-',
-      endObsDate: stream.timestampDateEnd ?? '-',
-      darkTime: stream.darkTime.value ?? '-',
-      emulatedImage: stream.emulatedImage.value ?? '-',
-      shutterOpenTime: stream.measuredShutterOpenTime.value ?? '-',
+      exposureTime: stream.exposureTime?.value ?? 0,
+      tag: stream.imageTag?.value ?? '-',
+      obsDate: stream.timestampDateObs?.value ?? '-',
+      endObsDate: stream.timestampDateEnd?.value ?? '-',
+      darkTime: stream.darkTime?.value ?? '-',
+      emulatedImage: stream.emulatedImage?.value ?? '-',
+      shutterOpenTime: stream.measuredShutterOpenTime?.value ?? '-',
     };
 
     this.setState({ imageSequence });
   };
 
   componentDidUpdate = (prevProps) => {
-    if (!isEqual(this.props.startIntegration && prevProps.startIntegration !== this.props.startIntegration)) {
+    if (this.props.startIntegration && !isEqual(prevProps.startIntegration, this.props.startIntegration)) {
       this.reduceImagesInSequence(IMAGE_STATES.INTEGRATING, this.props.startIntegration);
     }
-    if (!isEqual(this.props.startReadout && prevProps.startReadout !== this.props.startReadout)) {
+    if (this.props.startReadout && !isEqual(prevProps.startReadout, this.props.startReadout)) {
       this.reduceImagesInSequence(IMAGE_STATES.READING_OUT, this.props.startReadout);
     }
-    if (!isEqual(this.props.endReadout && this.props.endReadout && prevProps.endReadout !== this.props.endReadout)) {
+    if (this.props.endReadout && !isEqual(prevProps.endReadout, this.props.endReadout)) {
       this.reduceImagesInSequence(IMAGE_STATES.END_READOUT, this.props.endReadout);
     }
-    if (!isEqual(this.props.endOfImageTelemetry && prevProps.endOfImageTelemetry !== this.props.endOfImageTelemetry)) {
+    if (this.props.endOfImageTelemetry && !isEqual(prevProps.endOfImageTelemetry, this.props.endOfImageTelemetry)) {
       this.reduceImagesInSequence(IMAGE_STATES.END_TELEMETRY, this.props.endOfImageTelemetry);
     }
   };
@@ -236,7 +237,7 @@ export default class Camera extends Component {
           </div>
         </div>
         <div>
-          <div className={styles.imageSequenceName}>{this.props.imageSequence?.name}</div>
+          {/* <div className={styles.imageSequenceName}>{this.props.imageSequence?.name}</div> */}
           <div className={styles.imageTableWrapper}>
             <table className={styles.imageTable}>
               <thead>
