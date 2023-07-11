@@ -424,7 +424,7 @@ export default class ManagerInterface {
     });
   }
 
-  static getEFDLogs(start_date, end_date, cscs, efd_instance) {
+  static getEFDLogs(start_date, end_date, cscs, efd_instance, scale = 'utc') {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
@@ -438,6 +438,8 @@ export default class ManagerInterface {
         end_date,
         cscs,
         efd_instance,
+        /* If using timestamps from SAL topics the scale must be "tai", otherwise "utc" */
+        scale,
       }),
     }).then((response) => {
       if (response.status >= 500) {
