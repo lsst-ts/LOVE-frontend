@@ -10,7 +10,8 @@ import LoadingBar from '../../GeneralPurpose/LoadingBar/LoadingBar';
 import Title from '../../GeneralPurpose/SummaryPanel/Title';
 import Value from '../../GeneralPurpose/SummaryPanel/Value';
 import {
-  cccameraSummaryStateToStyle,
+  summaryStateMap,
+  summaryStateToStyle,
   cccameraCcsCommandStateMap,
   cccameaCcsCommandStateToStyle,
   cccameraCalibrationDetailedStateMap,
@@ -26,7 +27,6 @@ import {
   ccCameraRaftsDetailedStateMap,
   ccCameraRaftsDetailedStateToSTyle,
 } from 'Config';
-import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 
 export default class CCCamera extends Component {
   static propTypes = {
@@ -135,7 +135,7 @@ export default class CCCamera extends Component {
   };
 
   render() {
-    const ccCameraStatus = CSCDetail.states[this.props.cccameraSummaryState];
+    const ccCameraStatus = summaryStateMap[this.props.cccameraSummaryState];
     const commandState = cccameraCcsCommandStateMap[this.props?.cccameraCcsCmdState];
     const calibrationState = cccameraCalibrationDetailedStateMap[this.props.cccameraCalibrationDetailedStatus];
     const offlineState = cccameraOffLineDetailedStateMap[this.props.cccameraOffLineDetailedState];
@@ -197,7 +197,7 @@ export default class CCCamera extends Component {
           <div className={styles.stateContainer}>
             <Title>CCCamera</Title>
             <Value>
-              <span className={[ccCameraStatus.class, styles.summaryState].join(' ')}>{ccCameraStatus.name}</span>
+              <StatusText status={summaryStateToStyle[ccCameraStatus]}>{ccCameraStatus}</StatusText>
             </Value>
           </div>
           <div className={styles.stateContainer}>

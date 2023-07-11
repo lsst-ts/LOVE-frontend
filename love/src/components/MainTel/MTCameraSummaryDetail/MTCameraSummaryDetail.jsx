@@ -11,7 +11,8 @@ import Title from '../../GeneralPurpose/SummaryPanel/Title';
 import Value from '../../GeneralPurpose/SummaryPanel/Value';
 import { formatTimestamp } from '../../../Utils';
 import {
-  mtcameraSummaryStateToStyle,
+  summaryStateMap,
+  summaryStateToStyle,
   mtcameraCcsCommandStateMap,
   mtcameaCcsCommandStateToStyle,
   mtcameraCalibrationDetailedStateMap,
@@ -27,7 +28,6 @@ import {
   mtCameraRaftsDetailedStateMap,
   mtCameraRaftsDetailedStateToSTyle,
 } from 'Config';
-import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 
 export default class Camera extends Component {
   static propTypes = {
@@ -136,7 +136,7 @@ export default class Camera extends Component {
   };
 
   render() {
-    const mtCameraStatus = CSCDetail.states[this.props.mtcameraSummaryState];
+    const mtCameraStatus = summaryStateMap[this.props.mtcameraSummaryState];
     const commandState = mtcameraCcsCommandStateMap[this.props?.mtcameraCcsCmdState];
     const calibrationState = mtcameraCalibrationDetailedStateMap[this.props.mtcameraCalibrationDetailedStatus];
     const offlineState = mtcameraOffLineDetailedStateMap[this.props.mtcameraOffLineDetailedState];
@@ -198,7 +198,7 @@ export default class Camera extends Component {
           <div className={styles.stateContainer}>
             <Title>MTCamera</Title>
             <Value>
-              <span className={[mtCameraStatus.class, styles.summaryState].join(' ')}>{mtCameraStatus.name}</span>
+              <StatusText status={summaryStateToStyle[mtCameraStatus]}>{mtCameraStatus}</StatusText>
             </Value>
           </div>
           <div className={styles.stateContainer}>
