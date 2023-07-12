@@ -86,7 +86,7 @@ const CCCameraSummaryDetailContainer = ({
   anaV,
   power,
   gDV,
-  oDI,
+  // oDI,
   oDV,
   oGV,
   rDV,
@@ -140,6 +140,8 @@ const mapDispatchToProps = (dispatch) => {
     'event-CCCamera-0-startReadout',
     'event-CCCamera-0-endReadout',
     'event-CCCamera-0-endOfImageTelemetry',
+    'telemetry-CCCamera-0-focal_plane_Reb',
+    'telemetry-CCCamera-0-focal_plane_Ccd',
   ];
   return {
     subscriptions,

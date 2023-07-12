@@ -1526,7 +1526,7 @@ export const getCCFocalPlaneCCD = (state) => {
   const focalPlaneCCD = getStreamsData(state, subscriptions);
   return {
     gDV: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.gDV.value ?? [],
-    oDI: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.oDI.value ?? [],
+    // oDI: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.oDI.value ?? [],
     oDV: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.oDV.value ?? [],
     oGV: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.oGV.value ?? [],
     rDV: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.rDV.value ?? [],

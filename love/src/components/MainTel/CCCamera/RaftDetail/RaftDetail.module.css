@@ -18,6 +18,11 @@
   max-height: 25%;
 }
 
+.divContainerRebsPlot {
+  display: grid;
+  margin-left: 12em;
+}
+
 .plot {
   /* width: 100%;
   overflow: hidden; */
@@ -27,8 +32,8 @@
 
 .plotsContainerRebs {
   display: grid;
-  grid-template-columns: repeat(2, minmax(300px, 1fr));
-  grid-template-rows: repeat(3, 200px);
+  /* grid-template-columns: repeat(2, minmax(300px, 1fr));
+  grid-template-rows: repeat(3, 200px); */
   gap: 1em;
   overflow: hidden;
 }

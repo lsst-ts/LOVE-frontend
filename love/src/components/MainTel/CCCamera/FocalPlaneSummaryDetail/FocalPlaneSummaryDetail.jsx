@@ -128,7 +128,7 @@ class FocalPlaneSummaryDetail extends Component {
       anaV,
       power,
       gDV,
-      oDI,
+      // oDI,
       oDV,
       oGV,
       rDV,
@@ -144,7 +144,7 @@ class FocalPlaneSummaryDetail extends Component {
       ccdsData.push({
         identifier: `CCD ${c.id}`,
         gDV: gDV[this.getCCDIndex(c.id)],
-        oDI: oDI[this.getCCDIndex(c.id)],
+        // oDI: oDI[this.getCCDIndex(c.id)],
         oDV: oDV[this.getCCDIndex(c.id)],
         oGV: oGV[this.getCCDIndex(c.id)],
         rDV: rDV[this.getCCDIndex(c.id)],
@@ -184,7 +184,7 @@ class FocalPlaneSummaryDetail extends Component {
   render() {
     const { selectedRaft } = this.props;
     const { /* raftSummaryState, */ raftTempControlState, ccdsData, rebsData } = this.state;
-
+    console.log(ccdsData);
     return (
       <div>
         <div className={styles.container}>

@@ -190,7 +190,7 @@ class RaftDetail extends Component {
 
   renderRebsPlots() {
     return (
-      <>
+      <div className={styles.divContainerRebsPlot}>
         <div className={styles.plotsContainer}>
           {this.state.plotsRebs0.map((p, i) => (
             <div key={p} ref={this.rebsRefs[i]} className={styles.plot}>
@@ -204,7 +204,7 @@ class RaftDetail extends Component {
             </div>
           ))}
         </div>
-        <div className={styles.plotsContainer}>
+        <div className={styles.plotsContainerRebs}>
           {this.state.plotsRebs1.map((p, i) => (
             <div key={p} ref={this.rebsRefs[i]} className={styles.plot}>
               <PlotContainer
@@ -230,7 +230,7 @@ class RaftDetail extends Component {
             </div>
           ))}
         </div>
-      </>
+      </div>
     );
   }
   // const { raft, selectedReb, selectedRebVar, setSelectedReb, setHoveredCCD, setHoveredReb } = this.props;

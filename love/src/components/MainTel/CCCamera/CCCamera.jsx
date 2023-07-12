@@ -30,6 +30,30 @@ for (let i = 0; i < 1; i++) {
   rafts.push({ id: 1, status: 1, ccds, rebs });
 }
 class CCCamera extends Component {
+  static propsTypes = {
+    /** Function to subscribe to streams to receive */
+    subscribeToStream: PropTypes.func,
+    /** Function to unsubscribe to streams to stop receiving */
+    unsubscribeToStream: PropTypes.func,
+    /** True if loop is active */
+    tempControlActive: PropTypes.bool,
+    /** HV bias switch */
+    hVBiasSwitch: PropTypes.number,
+    /** Analog PS voltage */
+    anaV: PropTypes.number,
+    /** Total power */
+    power: PropTypes.number,
+    /** GD 0 voltage */
+    gDV: PropTypes.number,
+    /**  */
+    // oDI,
+    /** OD 0 voltage */
+    oDV: PropTypes.number,
+    oGV: PropTypes.number,
+    rDV: PropTypes.number,
+    temp: PropTypes.number,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -117,6 +141,7 @@ class CCCamera extends Component {
   };
 
   componentDidMount() {
+    this.props.subscribeToStream();
     this.zoom = d3.zoom().scaleExtent([1, 2]).on('zoom', this.zoomed);
     d3.select('#zoom-overlay').call(this.zoom);
   }
@@ -128,6 +153,10 @@ class CCCamera extends Component {
       d3.select('#zoom-overlay').call(this.zoom.transform, d3.zoomIdentity.scale(1.01));
     }
   }
+
+  componentWillUnmount = () => {
+    this.props.unsubscribeToStream();
+  };
 
   /**
    * Function to handle zooming in/out of the focalplane, raftdetail, and ccdrebdetail views
@@ -222,6 +251,7 @@ class CCCamera extends Component {
     const { selectedRaft, selectedCCD, selectedReb, selectedCCDVar, selectedRebVar, zoomLevel, activeViewId } =
       this.state;
     const { tempControlActive, hVBiasSwitch, anaV, power, gDV, oDI, oDV, oGV, rDV, temp } = this.props;
+    console.log(this.props);
     return (
       <div className={styles.container}>
         <div id="zoom-overlay" className={styles.focalPlanceContainer}>
@@ -251,7 +281,7 @@ class CCCamera extends Component {
                 anaV={anaV}
                 power={power}
                 gDV={gDV}
-                oDI={oDI}
+                // oDI={oDI}
                 oDV={oDV}
                 oGV={oGV}
                 rDV={rDV}
@@ -281,7 +311,7 @@ class CCCamera extends Component {
           anaV={anaV}
           power={power}
           gDV={gDV}
-          oDI={oDI}
+          // oDI={oDI}
           oDV={oDV}
           oGV={oGV}
           rDV={rDV}

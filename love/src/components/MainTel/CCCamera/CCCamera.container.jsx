@@ -25,14 +25,14 @@ export const schema = {
 };
 
 const CCCameraContainer = ({
-  subscribeToStreams,
-  unsubscribeToStreams,
+  subscribeToStream,
+  unsubscribeToStream,
   tempControlActive,
   hVBiasSwitch,
   anaV,
   power,
   gDV,
-  oDI,
+  // oDI,
   oDV,
   oGV,
   rDV,
@@ -44,19 +44,18 @@ const CCCameraContainer = ({
   }
   return (
     <CCCamera
-      subscribeToStreams={subscribeToStreams}
-      unsubscribeToStreams={unsubscribeToStreams}
+      subscribeToStream={subscribeToStream}
+      unsubscribeToStream={unsubscribeToStream}
       tempControlActive={tempControlActive}
       hVBiasSwitch={hVBiasSwitch}
       anaV={anaV}
       power={power}
       gDV={gDV}
-      oDI={oDI}
+      // oDI={oDI}
       oDV={oDV}
       oGV={oGV}
       rDV={rDV}
       temp={temp}
-      {...props}
     />
   );
 };
@@ -73,8 +72,24 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
+  const subscriptions = [
+    'event-CCCamera-0-summaryState',
+    'event-CCCamera-0-ccsCommandState',
+    'event-CCCamera-0-calibrationDetailedState',
+    'event-CCCamera-0-offlineDetailedState',
+    'event-CCCamera-0-imageReadinessDetailedState',
+    'event-CCCamera-0-shutterDetailedState',
+    'event-CCCamera-0-filterChangerDetailedState',
+    'event-CCCamera-0-raftsDetailedState',
+    'event-CCCamera-0-startIntegration',
+    'event-CCCamera-0-startReadout',
+    'event-CCCamera-0-endReadout',
+    'event-CCCamera-0-endOfImageTelemetry',
+    'telemetry-CCCamera-0-focal_plane_Reb',
+    'telemetry-CCCamera-0-focal_plane_Ccd',
+  ];
   return {
-    // subscriptions,
+    subscriptions,
     subscribeToStream: () => {
       subscriptions.forEach((stream) => dispatch(addGroup(stream)));
     },
