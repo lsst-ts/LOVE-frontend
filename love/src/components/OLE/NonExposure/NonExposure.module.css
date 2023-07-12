@@ -182,6 +182,7 @@
 .filters .select {
   white-space: nowrap;
   flex: 0 0 300px;
+  border: 1px solid var(--secondary-font-dimmed-color);
 }
 
 .floatRight {
@@ -279,6 +280,7 @@
   background-color: var(--second-secondary-background-color);
   color: var(--base-font-color);
   text-align: left;
+  border-radius: 0.2em;
 }
 
 .is-open {

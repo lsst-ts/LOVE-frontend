@@ -21,7 +21,7 @@
   align-items: baseline;
   padding: 0.5em 2em;
   margin-left: 0.2em;
-  margin-right: 0.2em;
+  margin-right: 2em;
   border: 1px solid transparent;
   background-color: var(--second-secondary-background-color);
   border-top-left-radius: 7px;
@@ -29,10 +29,11 @@
   margin-bottom: -1px;
   cursor: pointer;
   width: 18em;
+  border: 1px solid var(--secondary-font-dimmed-color);
 }
 
 .selected {
-  border: 1px solid hsl(199, 43%, 16%);
+  border: 1px solid var(--second-senary-background-dimmed-color);
   border-bottom: 1px solid var(--second-secondary-background-color);
   z-index: 1;
   color: var(--base-font-color);
@@ -40,7 +41,7 @@
 
 .tableWrapper {
   background-color: var(--second-secondary-background-color);
-  border: 1px solid hsl(199, 43%, 16%);
+  border: 1px solid var(--second-senary-background-dimmed-color);
   border-radius: 7px;
   display: block;
   width: 100%;
