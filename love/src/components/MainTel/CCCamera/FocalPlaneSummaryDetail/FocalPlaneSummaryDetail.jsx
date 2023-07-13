@@ -68,13 +68,6 @@ class FocalPlaneSummaryDetail extends Component {
         render: (value) => defaultNumberFormatter(value),
       },
       {
-        field: 'oDI',
-        title: <Button onClick={() => this.changeCCDsPlotsVariable('oDI')}>ODI [mA]</Button>,
-        type: 'number',
-        className: selectedCCDVar === 'oDI' ? styles.columnsHighlighted : styles.columns,
-        render: (value) => defaultNumberFormatter(value),
-      },
-      {
         field: 'oDV',
         title: <Button onClick={() => this.changeCCDsPlotsVariable('oDV')}>ODV [V]</Button>,
         type: 'number',
@@ -128,7 +121,6 @@ class FocalPlaneSummaryDetail extends Component {
       anaV,
       power,
       gDV,
-      // oDI,
       oDV,
       oGV,
       rDV,
@@ -144,7 +136,6 @@ class FocalPlaneSummaryDetail extends Component {
       ccdsData.push({
         identifier: `CCD ${c.id}`,
         gDV: gDV[this.getCCDIndex(c.id)],
-        // oDI: oDI[this.getCCDIndex(c.id)],
         oDV: oDV[this.getCCDIndex(c.id)],
         oGV: oGV[this.getCCDIndex(c.id)],
         rDV: rDV[this.getCCDIndex(c.id)],
@@ -184,7 +175,7 @@ class FocalPlaneSummaryDetail extends Component {
   render() {
     const { selectedRaft } = this.props;
     const { /* raftSummaryState, */ raftTempControlState, ccdsData, rebsData } = this.state;
-    console.log(ccdsData);
+    console.log(this.state);
     return (
       <div>
         <div className={styles.container}>

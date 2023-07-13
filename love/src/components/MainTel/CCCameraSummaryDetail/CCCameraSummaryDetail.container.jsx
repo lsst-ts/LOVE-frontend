@@ -25,8 +25,8 @@ export const schema = {
 };
 
 const CCCameraSummaryDetailContainer = ({
-  subscribeToStream,
-  unsubscribeToStream,
+  subscribeToStreams,
+  unsubscribeToStreams,
   cccameraSummaryState,
   cccameraCcsCmdState,
   cccameraCalibrationDetailedStatus,
@@ -98,6 +98,8 @@ const CCCameraSummaryDetailContainer = ({
   }
   return (
     <CCCameraSummaryDetail
+      subscribeToStreams={subscribeToStreams}
+      unsubscribeToStreams={unsubscribeToStreams}
       cccameraSummaryState={cccameraSummaryState}
       cccameraCcsCmdState={cccameraCcsCmdState}
       cccameraCalibrationDetailedStatus={cccameraCalibrationDetailedStatus}
@@ -119,10 +121,10 @@ const mapStateToProps = (state) => {
   const endOfImageTelemetry = getCCEndOfImageTelemetry(state);
   return {
     ...summaryStatus,
-    startIntegration,
-    startReadout,
-    endReadout,
-    endOfImageTelemetry,
+    ...startIntegration,
+    ...startReadout,
+    ...endReadout,
+    ...endOfImageTelemetry,
   };
 };
 
@@ -146,10 +148,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     subscriptions,
     subscribeToStreams: () => {
-      subscriptions.forEach((stream) => dispatch(addGroup(stream)));
+      subscriptions.forEach((s) => dispatch(addGroup(s)));
     },
     unsubscribeToStreams: () => {
-      subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
+      subscriptions.forEach((s) => dispatch(removeGroup(s)));
     },
   };
 };

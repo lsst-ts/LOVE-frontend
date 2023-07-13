@@ -25,8 +25,8 @@ export const schema = {
 };
 
 const CCCameraContainer = ({
-  subscribeToStream,
-  unsubscribeToStream,
+  subscribeToStreams,
+  unsubscribeToStreams,
   tempControlActive,
   hVBiasSwitch,
   anaV,
@@ -44,8 +44,8 @@ const CCCameraContainer = ({
   }
   return (
     <CCCamera
-      subscribeToStream={subscribeToStream}
-      unsubscribeToStream={unsubscribeToStream}
+      subscribeToStreams={subscribeToStreams}
+      unsubscribeToStreams={unsubscribeToStreams}
       tempControlActive={tempControlActive}
       hVBiasSwitch={hVBiasSwitch}
       anaV={anaV}
@@ -90,11 +90,11 @@ const mapDispatchToProps = (dispatch) => {
   ];
   return {
     subscriptions,
-    subscribeToStream: () => {
-      subscriptions.forEach((stream) => dispatch(addGroup(stream)));
+    subscribeToStreams: () => {
+      subscriptions.forEach((s) => dispatch(addGroup(s)));
     },
-    unsubscribeToStream: () => {
-      subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
+    unsubscribeToStreams: () => {
+      subscriptions.forEach((s) => dispatch(removeGroup(s)));
     },
   };
 };

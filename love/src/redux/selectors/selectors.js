@@ -1473,28 +1473,91 @@ export const getCCCameraSummary = (state) => {
   };
 };
 
+// CCCamera
 export const getCCStartIntegration = (state) => {
   const subscriptions = ['event-CCCamera-0-startIntegration'];
   const startIntegrationData = getStreamsData(state, subscriptions);
-  return startIntegrationData['event-CCCamera-0-startIntegration']?.[0];
+  return {
+    imagesInSequenceInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imagesInSequence.value ?? 0,
+    imageNameInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageName.value ?? '',
+    imageIndexInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageIndex.value ?? 0,
+    imageSourceInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageSource.value ?? '',
+    imageControllerInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageController.value ?? '',
+    imageDateInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageDate.value ?? '',
+    imageNumberInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStartInt:
+      startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.timestampAcquisitionStart.value ?? 0,
+    exposureTimeInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.exposureTime.value ?? '',
+    modeInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.mode.value ?? '',
+    timeoutInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.timeout.value ?? 0,
+  };
 };
 
 export const getCCStartReadout = (state) => {
   const subscriptions = ['event-CCCamera-0-startReadout'];
   const startReadOutData = getStreamsData(state, subscriptions);
-  return startReadOutData['event-CCCamera-0-startReadout']?.[0];
+  return {
+    imagesInSequenceSReadout: startReadOutData['event-CCCamera-0-startReadout']?.[0]?.imagesInSequence.value ?? 0,
+    imageNameSReadout: startReadOutData['event-CCCamera-0-startReadout']?.[0]?.imageName.value ?? '',
+    imageIndexSReadout: startReadOutData['event-CCCamera-0-startReadout']?.[0]?.imageIndex.value ?? 0,
+    imageSourceSReadout: startReadOutData['event-CCCamera-0-startReadout']?.[0]?.imageSource.value ?? '',
+    imageControllerSReadout: startReadOutData['event-CCCamera-0-startReadout']?.[0]?.imageController.value ?? '',
+    imageDateSReadout: startReadOutData['event-CCCamera-0-startReadout']?.[0]?.imageDate.value ?? '',
+    imageNumberSReadout: startReadOutData['event-CCCamera-0-startReadout']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStartSReadout:
+      startReadOutData['event-CCCamera-0-startReadout']?.[0]?.timestampAcquisitionStart.value ?? 0,
+    exposureTimeSReadout: startReadOutData['event-CCCamera-0-startReadout']?.[0]?.exposureTime.value ?? 0,
+    timestampStartOfReadoutSReadout:
+      startReadOutData['event-CCCamera-0-startReadout']?.[0]?.timestampStartOfReadout.value ?? 0,
+  };
 };
 
 export const getCCEndReadout = (state) => {
   const subscriptions = ['event-CCCamera-0-endReadout'];
   const endReadOutData = getStreamsData(state, subscriptions);
-  return endReadOutData['event-CCCamera-0-endReadout']?.[0];
+  return {
+    imagesInSequenceEReadout: endReadOutData['event-CCCamera-0-endReadout']?.[0]?.imagesInSequence.value ?? 0,
+    imageNameEReadout: endReadOutData['event-CCCamera-0-endReadout']?.[0]?.imageName.value ?? '',
+    imageIndexEReadout: endReadOutData['event-CCCamera-0-endReadout']?.[0]?.imageIndex.value ?? 0,
+    imageSourceEReadout: endReadOutData['event-CCCamera-0-endReadout']?.[0]?.imageSource.value ?? '',
+    imageControllerEReadout: endReadOutData['event-CCCamera-0-endReadout']?.[0]?.imageController.value ?? '',
+    imageDateEReadout: endReadOutData['event-CCCamera-0-endReadout']?.[0]?.imageDate.value ?? '',
+    imageNumberEReadout: endReadOutData['event-CCCamera-0-endReadout']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStartEReadout:
+      endReadOutData['event-CCCamera-0-endReadout']?.[0]?.timestampAcquisitionStart.value ?? 0,
+    requestedExposureTimeEReadout: endReadOutData['event-CCCamera-0-endReadout']?.[0]?.requestedExposureTime.value ?? 0,
+    timestampEndOfReadoutEReadout: endReadOutData['event-CCCamera-0-endReadout']?.[0]?.timestampEndOfReadout.value ?? 0,
+  };
 };
 
 export const getCCEndOfImageTelemetry = (state) => {
   const subscriptions = ['event-CCCamera-0-endOfImageTelemetry'];
   const endOfImageTelemetryData = getStreamsData(state, subscriptions);
-  return endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0];
+  return {
+    imagesInSequenceTelemetry:
+      endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.imagesInSequence.value ?? 0,
+    imageNameTelemetry: endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.imageName.value ?? '',
+    imageIndexTelemetry: endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.imageIndex.value ?? 0,
+    imageSourceTelemetry: endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.imageSource.value ?? '',
+    imageControllerTelemetry:
+      endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.imageController.value ?? '',
+    imageDateTelemetry: endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.imageDate.value ?? '',
+    imageNumberTelemetry: endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStartTelemetry:
+      endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.timestampAcquisitionStart.value ?? 0,
+    exposureTimeTelemetry:
+      endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.exposureTime.value ?? 0,
+    imageTagTelemetry: endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.imageTag.value ?? '',
+    timestampDateObsTelemetry:
+      endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.timestampDateObs.value ?? 0,
+    timestampDateEndTelemetry:
+      endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.timestampDateEnd.value ?? 0,
+    measuredShutterOpenTimeTelemetry:
+      endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.measuredShutterOpenTime.value ?? 0,
+    darkTimeTelemetry: endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.darkTime.value ?? 0,
+    emulatedImageTelemetry:
+      endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.emulatedImage.value ?? '',
+  };
 };
 
 export const getCCTempControlStatus = (state) => {
@@ -1504,7 +1567,6 @@ export const getCCTempControlStatus = (state) => {
     tempControlActive:
       tempControlData['event-CCCamera-0-focal_plane_Raft_RaftTempControlStatusConfiguration']?.[0]?.tempcontrol_active
         .value ?? [],
-    // tempControlActive: new Array(25).fill(null).map((x) => (Math.random() > 0.5 ? true : false)),
   };
 };
 
@@ -1515,9 +1577,6 @@ export const getCCFocalPlaneReb = (state) => {
     hVBiasSwitch: focalPlaneReb['telemetry-CCCamera-0-focal_plane_Reb']?.hVBiasSwitch.value ?? [],
     anaV: focalPlaneReb['telemetry-CCCamera-0-focal_plane_Reb']?.anaV.value ?? [],
     power: focalPlaneReb['telemetry-CCCamera-0-focal_plane_Reb']?.power.value ?? [],
-    // hVBiasSwitch: new Array(71).fill(null).map((x) => Math.random() * 1000),
-    // anaV: new Array(71).fill(null).map((x) => Math.random() * 1000 + 1000),
-    // power: new Array(71).fill(null).map((x) => Math.random() * 1000 + 2000),
   };
 };
 
@@ -1526,17 +1585,10 @@ export const getCCFocalPlaneCCD = (state) => {
   const focalPlaneCCD = getStreamsData(state, subscriptions);
   return {
     gDV: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.gDV.value ?? [],
-    // oDI: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.oDI.value ?? [],
     oDV: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.oDV.value ?? [],
     oGV: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.oGV.value ?? [],
     rDV: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.rDV.value ?? [],
     temp: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.temp.value ?? [],
-    // gDV: new Array(201).fill(null).map((x) => Math.random() * 1000),
-    // oDI: new Array(201).fill(null).map((x) => Math.random() * 1000),
-    // oDV: new Array(201).fill(null).map((x) => Math.random() * 1000),
-    // oGV: new Array(201).fill(null).map((x) => Math.random() * 1000),
-    // rDV: new Array(201).fill(null).map((x) => Math.random() * 1000),
-    // temp: new Array(201).fill(null).map((x) => Math.random() * 1000),
   };
 };
 
@@ -1661,7 +1713,6 @@ export const getTempControlStatus = (state) => {
     tempControlActive:
       tempControlData['event-MTCamera-0-focal_plane_Raft_RaftTempControlStatusConfiguration']?.[0]?.tempcontrol_active
         .value ?? [],
-    // tempControlActive: new Array(25).fill(null).map((x) => (Math.random() > 0.5 ? true : false)),
   };
 };
 
@@ -1672,9 +1723,6 @@ export const getFocalPlaneReb = (state) => {
     hVBiasSwitch: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.hVBiasSwitch.value ?? [],
     anaV: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.anaV.value ?? [],
     power: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.power.value ?? [],
-    // hVBiasSwitch: new Array(71).fill(null).map((x) => Math.random() * 1000),
-    // anaV: new Array(71).fill(null).map((x) => Math.random() * 1000 + 1000),
-    // power: new Array(71).fill(null).map((x) => Math.random() * 1000 + 2000),
   };
 };
 
@@ -1688,12 +1736,6 @@ export const getFocalPlaneCCD = (state) => {
     oGV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.oGV.value ?? [],
     rDV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.rDV.value ?? [],
     temp: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.temp.value ?? [],
-    // gDV: new Array(201).fill(null).map((x) => Math.random() * 1000),
-    // oDI: new Array(201).fill(null).map((x) => Math.random() * 1000),
-    // oDV: new Array(201).fill(null).map((x) => Math.random() * 1000),
-    // oGV: new Array(201).fill(null).map((x) => Math.random() * 1000),
-    // rDV: new Array(201).fill(null).map((x) => Math.random() * 1000),
-    // temp: new Array(201).fill(null).map((x) => Math.random() * 1000),
   };
 };
 

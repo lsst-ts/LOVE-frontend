@@ -32,9 +32,9 @@ for (let i = 0; i < 1; i++) {
 class CCCamera extends Component {
   static propsTypes = {
     /** Function to subscribe to streams to receive */
-    subscribeToStream: PropTypes.func,
+    subscribeToStreams: PropTypes.func,
     /** Function to unsubscribe to streams to stop receiving */
-    unsubscribeToStream: PropTypes.func,
+    unsubscribeToStreams: PropTypes.func,
     /** True if loop is active */
     tempControlActive: PropTypes.bool,
     /** HV bias switch */
@@ -141,7 +141,7 @@ class CCCamera extends Component {
   };
 
   componentDidMount() {
-    this.props.subscribeToStream();
+    this.props.subscribeToStreams();
     this.zoom = d3.zoom().scaleExtent([1, 2]).on('zoom', this.zoomed);
     d3.select('#zoom-overlay').call(this.zoom);
   }
@@ -155,7 +155,7 @@ class CCCamera extends Component {
   }
 
   componentWillUnmount = () => {
-    this.props.unsubscribeToStream();
+    this.props.unsubscribeToStreams();
   };
 
   /**

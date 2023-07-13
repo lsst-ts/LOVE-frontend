@@ -198,7 +198,7 @@ class RaftDetail extends Component {
                 inputs={p}
                 containerNode={this.rebsRefs[i]}
                 xAxisTitle="Time"
-                yAxisTitle="Value"
+                // yAxisTitle="Value"
                 legendPosition="right"
               />
             </div>
@@ -211,7 +211,7 @@ class RaftDetail extends Component {
                 inputs={p}
                 containerNode={this.rebsRefs[i]}
                 xAxisTitle="Time"
-                yAxisTitle="Value"
+                // yAxisTitle="Value"
                 legendPosition="right"
               />
             </div>
@@ -224,7 +224,7 @@ class RaftDetail extends Component {
                 inputs={p}
                 containerNode={this.rebsRefs[i]}
                 xAxisTitle="Time"
-                yAxisTitle="Value"
+                // yAxisTitle="Value"
                 legendPosition="right"
               />
             </div>
