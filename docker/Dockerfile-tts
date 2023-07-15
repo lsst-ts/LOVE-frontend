@@ -10,8 +10,8 @@ RUN yarn install
 # Copy source code
 COPY love .
 
-# Copy environment variables for build
-COPY love/.env.tts .env
+# Set environment variables for build
+RUN echo "PUBLIC_URL=/love" > .env
 
 # Build static files
 RUN yarn build
