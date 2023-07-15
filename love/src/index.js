@@ -1,16 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import './index.css';
 import { Provider } from 'react-redux';
 import Simulator from 'websocket-playback';
-import { WEBSOCKET_SIMULATION, WEBSOCKET_SIMULATION_FILE } from 'Config.js';
+import { WEBSOCKET_SIMULATION, WEBSOCKET_SIMULATION_FILE, SUBPATH } from 'Config.js';
 import AppContainer from './App.container';
 import ConfirmationModal from './components/GeneralPurpose/ConfirmationModal/ConfirmationModal';
 import * as serviceWorker from './serviceWorker';
 import { doGetTokenFromStorage } from './redux/actions/auth';
 import store from './redux/store';
 import { getWebSocket } from './redux/selectors';
+import './index.css';
 
 store.dispatch(doGetTokenFromStorage());
 
@@ -58,7 +58,7 @@ if (WEBSOCKET_SIMULATION) {
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter getUserConfirmation={getUserConfirmation}>
+    <BrowserRouter basename={SUBPATH} getUserConfirmation={getUserConfirmation}>
       <AppContainer />
     </BrowserRouter>
   </Provider>,

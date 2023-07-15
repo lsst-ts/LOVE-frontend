@@ -1,6 +1,9 @@
 import InfoIcon from 'components/icons/CSCExpanded/InfoIcon/InfoIcon';
 import ErrorIcon from 'components/icons/CSCExpanded/ErrorIcon/ErrorIcon';
 
+// Subpath
+export const SUBPATH = process.env.PUBLIC_URL ?? '';
+
 // Commands Configurations
 export const hasCommandPrivileges = true;
 
