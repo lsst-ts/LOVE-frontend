@@ -3,7 +3,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Initialize Environment variables
 
 We use environment variables to configure the application at build (for production) and run time (for local development).
-This variables are defined in the `.env` file. This file is not committed to the repository, but a template is provided in `.env.example`.
+These variables are defined in the `.env` file. This file is not committed to the repository, but a template is provided in `.env.example`.
 To initialize the environment variables, copy the template file to `.env` and edit the values as needed.
 The available variables are:
 

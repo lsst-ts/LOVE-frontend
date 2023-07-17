@@ -101,7 +101,7 @@ export default class ManagerInterface {
   }
 
   static httpProtocol = window.location.protocol;
-  static wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  static wsProtocol = ManagerInterface.httpProtocol === 'https:' ? 'wss:' : 'ws:';
   static httpLocation = `${ManagerInterface.httpProtocol}//${window.location.host}${SUBPATH}`;
   static wsLocation = `${ManagerInterface.wsProtocol}//${window.location.host}${SUBPATH}`;
 
