@@ -20,7 +20,7 @@
 
 .divContainerRebsPlot {
   display: grid;
-  margin-left: 12em;
+  margin-left: 4em;
 }
 
 .plot {
@@ -39,6 +39,8 @@
 }
 
 .plotRebs {
+  border: 1px solid transparent;
   width: 100%;
   overflow: hidden;
+  max-height: 1000px;
 }

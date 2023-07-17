@@ -14,6 +14,28 @@ const COLOR_MAPPING = {
 class RaftDetail extends Component {
   constructor(props) {
     super(props);
+    // const rebsplots = {
+    //   'rebs': {
+    //     'type': 'line',
+    //     'dash': [
+    //       4,
+    //       0
+    //   ],
+    //     'values': [
+    //       {
+    //         'variable': 'x',
+    //         category: 'telemetry',
+    //         csc: 'CCCamera',
+    //         salindex: 0,
+    //         topic: 'focal_plane_Reb',
+    //         item: 'hVBiasSwitch',
+    //         type: 'line',
+    //         accessor: (x) => x[0],
+
+    //       },
+    //     ]
+    //   }
+    // };
     const rebIndex = [0, 1, 2];
     const plotsRebs0 = [
       {
@@ -119,22 +141,15 @@ class RaftDetail extends Component {
       React.createRef(),
       React.createRef(),
     ];
-    this.rebsRefs = [
-      React.createRef(),
-      React.createRef(),
-      React.createRef(),
-      // React.createRef(),
-      // React.createRef(),
-      // React.createRef(),
-      // React.createRef(),
-      // React.createRef(),
-      // React.createRef(),
-    ];
+    this.rebsRefs = [React.createRef(), React.createRef(), React.createRef()];
     this.state = {
       plotsRebs0: plotsRebs0,
       plotsRebs1: plotsRebs1,
       plotsRebs2: plotsRebs2,
     };
+    // this.reb1ref = React.createRef();
+    // this.reb2ref = React.createRef();
+    // this.reb3ref = React.createRef();
   }
 
   renderCCDsPlots() {
@@ -191,44 +206,62 @@ class RaftDetail extends Component {
   renderRebsPlots() {
     return (
       <div className={styles.divContainerRebsPlot}>
-        <div className={styles.plotsContainer}>
+        <div className={styles.plotsContainerRebs}>
           {this.state.plotsRebs0.map((p, i) => (
-            <div key={p} ref={this.rebsRefs[i]} className={styles.plot}>
+            <div key={p} ref={this.rebsRefs[i]} className={styles.plotRebs}>
               <PlotContainer
+                memorySize={50}
+                height={350}
+                width={500}
                 inputs={p}
-                containerNode={this.rebsRefs[i]}
+                // containerNode={this.rebsRefs[i]}
+                containerNode={this.rebsRefs?.current}
                 xAxisTitle="Time"
-                // yAxisTitle="Value"
+                yAxisTitle=""
                 legendPosition="right"
+                // legendPosition="bottom"
               />
             </div>
           ))}
+          <div>REB1</div>
         </div>
         <div className={styles.plotsContainerRebs}>
           {this.state.plotsRebs1.map((p, i) => (
-            <div key={p} ref={this.rebsRefs[i]} className={styles.plot}>
+            <div key={p} ref={this.rebsRefs[i]} className={styles.plotRebs}>
               <PlotContainer
+                memorySize={50}
+                height={350}
+                width={500}
                 inputs={p}
-                containerNode={this.rebsRefs[i]}
+                // containerNode={this.rebsRefs[i]}
+                containerNode={this.rebsRefs?.current}
                 xAxisTitle="Time"
-                // yAxisTitle="Value"
+                yAxisTitle=""
                 legendPosition="right"
+                // legendPosition="bottom"
               />
             </div>
           ))}
+          <div>REB2</div>
         </div>
-        <div className={styles.plotsContainer}>
+        <div className={styles.plotsContainerRebs}>
           {this.state.plotsRebs2.map((p, i) => (
-            <div key={p} ref={this.rebsRefs[i]} className={styles.plot}>
+            <div key={p} ref={this.rebsRefs[i]} className={styles.plotRebs}>
               <PlotContainer
+                memorySize={50}
+                height={350}
+                width={500}
                 inputs={p}
-                containerNode={this.rebsRefs[i]}
+                // containerNode={this.rebsRefs[i]}
+                containerNode={this.rebsRefs?.current}
                 xAxisTitle="Time"
-                // yAxisTitle="Value"
+                yAxisTitle=""
                 legendPosition="right"
+                // legendPosition="bottom"
               />
             </div>
           ))}
+          <div>REB3</div>
         </div>
       </div>
     );

@@ -251,7 +251,7 @@ class CCCamera extends Component {
     const { selectedRaft, selectedCCD, selectedReb, selectedCCDVar, selectedRebVar, zoomLevel, activeViewId } =
       this.state;
     const { tempControlActive, hVBiasSwitch, anaV, power, gDV, oDI, oDV, oGV, rDV, temp } = this.props;
-    console.log(this.props);
+
     return (
       <div className={styles.container}>
         <div id="zoom-overlay" className={styles.focalPlanceContainer}>

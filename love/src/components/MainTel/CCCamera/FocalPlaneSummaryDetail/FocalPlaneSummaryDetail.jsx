@@ -175,7 +175,6 @@ class FocalPlaneSummaryDetail extends Component {
   render() {
     const { selectedRaft } = this.props;
     const { /* raftSummaryState, */ raftTempControlState, ccdsData, rebsData } = this.state;
-    console.log(this.state);
     return (
       <div>
         <div className={styles.container}>
