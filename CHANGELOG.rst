@@ -2,9 +2,10 @@
 Version History
 ===============
 
-v5.23.1
+v5.24.0
 --------
 
+* Extend LOVE frontend routing system to add SSL and subpath serving `<https://github.com/lsst-ts/LOVE-frontend/pull/485>`_
 * Extend getEFDLogs method to specify the timestamps scale `<https://github.com/lsst-ts/LOVE-frontend/pull/484>`_
 
 

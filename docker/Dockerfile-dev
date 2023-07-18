@@ -1,5 +1,6 @@
 FROM node:16.13.2-alpine as builder
 
+# Set working directory
 WORKDIR /usr/src/love
 
 # Install and cache app dependencies
@@ -7,8 +8,8 @@ COPY love/package.json .
 COPY love/yarn.lock .
 RUN yarn install
 
-RUN chown -R node:node node_modules
-RUN chmod -R 777 node_modules
+# Change ownership of node_modules folder to avoid permission errors
+RUN chown -R node:node /usr/src/love/node_modules
 
 # Expose port
 EXPOSE 3000
