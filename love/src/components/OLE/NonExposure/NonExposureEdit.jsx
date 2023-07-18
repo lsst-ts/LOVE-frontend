@@ -11,7 +11,6 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
-import Modal from 'components/GeneralPurpose/Modal/Modal';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import { defaultCSCList, LSST_SYSTEMS, LSST_SUBSYSTEMS, iconLevelOLE } from 'Config';
 import ManagerInterface, { getLinkJira, getFileURL, getFilename } from 'Utils';
@@ -19,16 +18,21 @@ import styles from './NonExposure.module.css';
 
 export default class NonExposureEdit extends Component {
   static propTypes = {
-    back: PropTypes.func,
+    /** Log to edit object */
     logEdit: PropTypes.object,
+    /** Flag to show the creation components */
     isLogCreate: PropTypes.bool,
+    /** Flag to show the menu components */
     isMenu: PropTypes.bool,
+    /** Function to go back */
+    back: PropTypes.func,
+    /** Function to save a log */
     save: PropTypes.func,
-    tagsIds: PropTypes.arrayOf(PropTypes.string),
+    /** Function to view a log */
+    view: PropTypes.func,
   };
 
   static defaultProps = {
-    back: () => {},
     logEdit: {
       id: undefined,
       level: 0,
@@ -51,9 +55,9 @@ export default class NonExposureEdit extends Component {
     },
     isLogCreate: false,
     isMenu: false,
-    view: () => {},
+    back: () => {},
     save: () => {},
-    tagsIds: [],
+    view: () => {},
   };
 
   constructor(props) {
@@ -74,8 +78,6 @@ export default class NonExposureEdit extends Component {
 
     this.state = {
       logEdit,
-      confirmationModalShown: false,
-      confirmationModalText: '',
       savingLog: false,
       datesAreValid: true,
     };
@@ -103,11 +105,6 @@ export default class NonExposureEdit extends Component {
     this.setState({ logEdit: NonExposureEdit.defaultProps.logEdit });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    this.updateOrCreateMessageNarrativeLogs();
-  }
-
   updateOrCreateMessageNarrativeLogs() {
     const payload = { ...this.state.logEdit };
 
@@ -133,7 +130,6 @@ export default class NonExposureEdit extends Component {
     if (this.state.logEdit.id) {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
         this.setState({
-          confirmationModalShown: false,
           savingLog: false,
         });
         this.props.save(response);
@@ -141,7 +137,6 @@ export default class NonExposureEdit extends Component {
     } else {
       ManagerInterface.createMessageNarrativeLogs(payload).then((response) => {
         this.setState({
-          confirmationModalShown: false,
           savingLog: false,
         });
         this.props.save(response);
@@ -149,6 +144,11 @@ export default class NonExposureEdit extends Component {
         this.props.back();
       });
     }
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.updateOrCreateMessageNarrativeLogs();
   }
 
   handleTimeOfIncident(date, type) {
@@ -198,7 +198,7 @@ export default class NonExposureEdit extends Component {
 
   render() {
     const { back, isLogCreate, isMenu } = this.props;
-    const { confirmationModalShown, confirmationModalText, datesAreValid, savingLog } = this.state;
+    const { datesAreValid, savingLog } = this.state;
 
     const view = this.props.view ?? NonExposureEdit.defaultProps.view;
     const systemOptions = LSST_SYSTEMS;

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { EXPOSURE_FLAG_OPTIONS, exposureFlagStateToStyle, ISO_INTEGER_DATE_FORMAT } from 'Config';
-import ManagerInterface from 'Utils';
 import lodash from 'lodash';
 import Moment from 'moment';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
@@ -17,12 +15,12 @@ import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
 import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
+import { EXPOSURE_FLAG_OPTIONS, exposureFlagStateToStyle, ISO_INTEGER_DATE_FORMAT } from 'Config';
+import ManagerInterface from 'Utils';
 import styles from './Exposure.module.css';
 
 export default class ExposureAdd extends Component {
   static propTypes = {
-    /** Function to go back */
-    back: PropTypes.func,
     /** Log to edit object */
     logEdit: PropTypes.object,
     /** New message object */
@@ -33,14 +31,15 @@ export default class ExposureAdd extends Component {
     isMenu: PropTypes.bool,
     /** Array of observation ids */
     observationIds: PropTypes.arrayOf(PropTypes.string),
-    /** Function to view a log */
-    view: PropTypes.func,
     /** Mappings of instruments to exposures registries */
     registryMap: PropTypes.object,
+    /** Function to go back */
+    back: PropTypes.func,
+    /** Function to view a log */
+    view: PropTypes.func,
   };
 
   static defaultProps = {
-    back: () => {},
     logEdit: {
       obs_id: undefined,
       instrument: undefined,
@@ -65,6 +64,7 @@ export default class ExposureAdd extends Component {
     isLogCreate: false,
     isMenu: false,
     observationIds: [],
+    back: () => {},
     view: () => {},
   };
 
@@ -100,46 +100,6 @@ export default class ExposureAdd extends Component {
     this.setState({ newMessage: ExposureAdd.defaultProps.newMessage });
   }
 
-  componentDidMount() {
-    // TODO: only when the filter is shown
-    ManagerInterface.getListExposureInstruments().then((data) => {
-      const registryMap = {};
-      Object.entries(data).forEach(([key, value]) => {
-        value.forEach((instrument) => {
-          if (!instrument) return;
-          registryMap[instrument] = key;
-        });
-      });
-      const instrumentsArray = Object.values(data)
-        .map((arr) => arr[0])
-        .filter((instrument) => instrument);
-
-      this.setState({
-        instruments: instrumentsArray,
-        selectedInstrument: instrumentsArray[0],
-        registryMap: registryMap,
-      });
-    });
-
-    ManagerInterface.getListImageTags().then((data) => {
-      this.setState({
-        imageTags: data.map((tag) => ({ name: tag.label, id: tag.key })),
-      });
-    });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      prevState.selectedInstrument !== this.state.selectedInstrument ||
-      prevState.selectedDayExposure !== this.state.selectedDayExposure
-    ) {
-      this.setState((prevState) => ({
-        newMessage: { ...prevState.newMessage, obs_id: [] },
-      }));
-      this.queryExposures();
-    }
-  }
-
   queryExposures(callback) {
     const { selectedInstrument, selectedDayExposure, registryMap } = this.state;
     const obsDayInteger = parseInt(Moment(selectedDayExposure).format(ISO_INTEGER_DATE_FORMAT));
@@ -160,21 +120,14 @@ export default class ExposureAdd extends Component {
     });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    this.saveMessage();
-  }
-
   saveMessage() {
     const { isLogCreate, isMenu } = this.props;
-
     const payload = { ...this.state.newMessage };
     payload['request_type'] = 'exposure';
     payload['instrument'] = this.state.selectedInstrument;
     if (payload['tags']) {
       payload['tags'] = payload['tags'].map((tag) => tag.id);
     }
-
     this.setState({ savingLog: true });
     ManagerInterface.createMessageExposureLogs(payload).then((result) => {
       if (isLogCreate || isMenu || !this.state.logEdit.obs_id) {
@@ -206,7 +159,6 @@ export default class ExposureAdd extends Component {
         Are you sure?
       </span>
     );
-
     this.setState({
       confirmationModalShown: true,
       confirmationModalText: modalText,
@@ -228,6 +180,49 @@ export default class ExposureAdd extends Component {
         </Button>
       </div>
     );
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.saveMessage();
+  }
+
+  componentDidMount() {
+    // TODO: only when the filter is shown
+    ManagerInterface.getListExposureInstruments().then((data) => {
+      const registryMap = {};
+      Object.entries(data).forEach(([key, value]) => {
+        value.forEach((instrument) => {
+          if (!instrument) return;
+          registryMap[instrument] = key;
+        });
+      });
+      const instrumentsArray = Object.values(data)
+        .map((arr) => arr[0])
+        .filter((instrument) => instrument);
+      this.setState({
+        instruments: instrumentsArray,
+        selectedInstrument: instrumentsArray[0],
+        registryMap: registryMap,
+      });
+    });
+    ManagerInterface.getListImageTags().then((data) => {
+      this.setState({
+        imageTags: data.map((tag) => ({ name: tag.label, id: tag.key })),
+      });
+    });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.selectedInstrument !== this.state.selectedInstrument ||
+      prevState.selectedDayExposure !== this.state.selectedDayExposure
+    ) {
+      this.setState((prevState) => ({
+        newMessage: { ...prevState.newMessage, obs_id: [] },
+      }));
+      this.queryExposures();
+    }
   }
 
   render() {

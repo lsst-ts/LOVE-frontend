@@ -2,33 +2,36 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
-import ManagerInterface from 'Utils';
-import { EXPOSURE_FLAG_OPTIONS } from 'Config';
+import lodash from 'lodash';
+import { CSVLink } from 'react-csv';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
-import MessageDetail from './Message/MessageDetail';
-import MessageEdit from './Message/MessageEdit';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
-import { CSVLink } from 'react-csv';
-import lodash from 'lodash';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
+import ManagerInterface from 'Utils';
+import { EXPOSURE_FLAG_OPTIONS } from 'Config';
 import styles from './Exposure.module.css';
+import MessageDetail from './Message/MessageDetail';
+import MessageEdit from './Message/MessageEdit';
 
 const moment = extendMoment(Moment);
 
 export default class ExposureDetail extends Component {
   static propTypes = {
-    back: PropTypes.func,
+    /** Log to edit object */
     logDetail: PropTypes.object,
+    /** List of messages to display */
     logMessages: PropTypes.arrayOf(PropTypes.object),
+    /** Function to go back */
+    back: PropTypes.func,
+    /** Function to edit a log */
     edit: PropTypes.func,
   };
 
   static defaultProps = {
-    back: () => {},
     logDetail: {
       obs_id: 'string',
       instrument: 'LATISS',
@@ -37,16 +40,9 @@ export default class ExposureDetail extends Component {
       observation_day: undefined,
     },
     logMessages: [],
+    back: () => {},
     edit: () => {},
   };
-
-  saveMessage(message) {
-    ManagerInterface.updateMessageExposureLogs(message.id, message);
-  }
-
-  deleteMessage(message) {
-    ManagerInterface.deleteMessageExposureLogs(message.id);
-  }
 
   constructor(props) {
     super(props);
