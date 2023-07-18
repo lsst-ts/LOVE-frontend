@@ -332,6 +332,11 @@ export const MTCSCommands = {
 /*****************************************************************************/
 /******************************OLE configurations*****************************/
 /*****************************************************************************/
+export const OLE_COMMENT_TYPE_OPTIONS = [
+  { label: 'Priority', value: 'all' },
+  { label: 'Urgent', value: 100 },
+  { label: 'Non urgent', value: 0 },
+];
 export const EXPOSURE_FLAG_OPTIONS = ['none', 'junk', 'questionable'];
 export const exposureFlagStateToStyle = {
   none: 'ok',

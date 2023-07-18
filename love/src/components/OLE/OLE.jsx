@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Moment from 'moment';
 import PropTypes from 'prop-types';
-import ManagerInterface from 'Utils';
 import Button from 'components/GeneralPurpose/Button/Button';
+import { OLE_COMMENT_TYPE_OPTIONS } from 'Config';
+import ManagerInterface from 'Utils';
 import Exposure from './Exposure/Exposure';
 import NonExposure from './NonExposure/NonExposure';
 import ExposureAdd from './Exposure/ExposureAdd';
@@ -25,7 +26,7 @@ export default class OLE extends Component {
       clickNewLog: false,
       // Non Exposure filters
       selectedDayNarrative: Moment(Date.now() + 37 * 1000),
-      selectedCommentType: { value: 'all', label: 'All comment types' },
+      selectedCommentType: OLE_COMMENT_TYPE_OPTIONS[0],
       selectedSystem: 'all',
       selectedObsTimeLoss: false,
       // Exposure filters

@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import { CSVLink } from 'react-csv';
-import { LSST_SYSTEMS, iconLevelOLE, ISO_INTEGER_DATE_FORMAT, ISO_STIRNG_DATE_TIME_FORMAT } from 'Config';
+import {
+  OLE_COMMENT_TYPE_OPTIONS,
+  LSST_SYSTEMS,
+  iconLevelOLE,
+  ISO_INTEGER_DATE_FORMAT,
+  ISO_STIRNG_DATE_TIME_FORMAT,
+} from 'Config';
 import ManagerInterface, { formatSecondsToDigital, openInNewTab, getLinkJira, getFileURL } from 'Utils';
 
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
@@ -49,7 +55,7 @@ export default class NonExposure extends Component {
 
   static defaultProps = {
     selectedDayNarrative: Moment(Date.now() + 37 * 1000),
-    selectedCommentType: { value: 'all', label: 'All comment types' },
+    selectedCommentType: OLE_COMMENT_TYPE_OPTIONS[0],
     selectedSystem: 'all',
     selectedObsTimeLoss: false,
     changeDayNarrative: () => {},
@@ -267,6 +273,8 @@ export default class NonExposure extends Component {
     const { modeView, modeEdit, showDateRangeFilter } = this.state;
     const headers = Object.values(this.getHeaders());
 
+    const systemOptions = [{ label: 'System', value: 'all' }, ...LSST_SYSTEMS];
+
     let filteredData = this.state.logs ?? [];
 
     // Filter by type
@@ -310,13 +318,6 @@ export default class NonExposure extends Component {
     if (selectedDayNarrative) {
       csvTitle = `narrative_logs_${Moment(selectedDayNarrative).format(ISO_INTEGER_DATE_FORMAT)}.csv`;
     }
-
-    const commentTypeOptions = [
-      { label: 'All comment types', value: 'all' },
-      { label: 'Urgent', value: 100 },
-      { label: 'Non urgent', value: 0 },
-    ];
-    const systemOptions = [{ label: 'All systems', value: 'all' }, ...LSST_SYSTEMS];
 
     return modeView && !modeEdit ? (
       <NonExposureDetail
@@ -373,7 +374,7 @@ export default class NonExposure extends Component {
           />
 
           <Select
-            options={commentTypeOptions}
+            options={OLE_COMMENT_TYPE_OPTIONS}
             option={selectedCommentType}
             onChange={(value) => changeCommentTypeSelect(value)}
             className={styles.select}
