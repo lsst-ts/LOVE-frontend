@@ -114,23 +114,18 @@ export default class NonExposure extends Component {
   getHeaders = () => {
     return [
       {
-        field: 'date_added',
-        title: 'Timestamp (UTC)',
-        type: 'timestamp',
-        className: styles.tableHead,
-        render: (value) => value.split('.')[0],
-      },
-      {
-        field: 'user_id',
-        title: 'User Id',
+        field: 'systems',
+        title: 'Systems',
         type: 'string',
         className: styles.tableHead,
+        render: (value) => value.join(', '),
       },
       {
-        field: 'user_agent',
-        title: 'Agent',
+        field: 'level',
+        title: 'Level',
         type: 'string',
         className: styles.tableHead,
+        render: (value) => this.getLevel(value),
       },
       {
         field: null,
@@ -147,18 +142,11 @@ export default class NonExposure extends Component {
         render: (value) => formatSecondsToDigital(value * 3600),
       },
       {
-        field: 'level',
-        title: 'Level',
+        field: 'message_text',
+        title: 'Message',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => this.getLevel(value),
-      },
-      {
-        field: 'systems',
-        title: 'Systems',
-        type: 'string',
-        className: styles.tableHead,
-        render: (value) => value.join(', '),
+        render: (value) => value,
       },
       {
         field: 'urls',
@@ -183,14 +171,17 @@ export default class NonExposure extends Component {
         title: 'Jira',
         type: 'link',
         className: styles.tableHead,
-        render: (value) =>
-          getLinkJira(value) ? (
-            <Button status="link" title={getLinkJira(value)} onClick={() => openInNewTab(getLinkJira(value))}>
-              view Jira ticket
-            </Button>
-          ) : (
-            <></>
-          ),
+        render: (value) => {
+          const link = getLinkJira(value);
+          if (link) {
+            const ticket = link.split('/').pop();
+            return (
+              <a target="_blank" href={link}>
+                {ticket}
+              </a>
+            );
+          }
+        },
       },
       {
         field: 'action',
