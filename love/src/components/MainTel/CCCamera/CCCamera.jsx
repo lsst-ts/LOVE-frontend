@@ -45,12 +45,13 @@ class CCCamera extends Component {
     power: PropTypes.number,
     /** GD 0 voltage */
     gDV: PropTypes.number,
-    /**  */
-    // oDI,
     /** OD 0 voltage */
     oDV: PropTypes.number,
+    /** OG 0 voltage */
     oGV: PropTypes.number,
+    /** RD 0 voltage */
     rDV: PropTypes.number,
+    /** S00/Temp temperature */
     temp: PropTypes.number,
   };
 
@@ -281,7 +282,6 @@ class CCCamera extends Component {
                 anaV={anaV}
                 power={power}
                 gDV={gDV}
-                // oDI={oDI}
                 oDV={oDV}
                 oGV={oGV}
                 rDV={rDV}
@@ -311,7 +311,6 @@ class CCCamera extends Component {
           anaV={anaV}
           power={power}
           gDV={gDV}
-          // oDI={oDI}
           oDV={oDV}
           oGV={oGV}
           rDV={rDV}
@@ -324,17 +323,6 @@ class CCCamera extends Component {
   getRaftdetail() {
     const { selectedRaft, selectedCCD, selectedCCDVar, selectedReb } = this.state;
     const { hVBiasSwitch, anaV, power } = this.props;
-
-    // const raftWithNeighbors = {
-    //   ...selectedRaft,
-    //   neighbors: {
-    //     top: rafts.find((r) => r.id === selectedRaft.neighborsIds.top),
-    //     right: rafts.find((r) => r.id === selectedRaft.neighborsIds.right),
-    //     bottom: rafts.find((r) => r.id === selectedRaft.neighborsIds.bottom),
-    //     left: rafts.find((r) => r.id === selectedRaft.neighborsIds.left),
-    //   },
-    // };
-
     const raftWithoutNeighbors = {
       ...selectedRaft,
     };
@@ -352,7 +340,6 @@ class CCCamera extends Component {
           setSelectedCCDVar={this.setSelectedCCDVar}
           setHoveredCCD={this.setHoveredCCD}
           setHoveredReb={this.setHoveredReb}
-          // selectNeighborRaft={this.selectNeighborRaft}
           hVBiasSwitch={hVBiasSwitch}
           anaV={anaV}
           power={power}

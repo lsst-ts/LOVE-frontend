@@ -23,7 +23,6 @@ for (let i = 0; i < 25; i++) {
     const isUnused = unusedCCDs.includes(ccdId - 1);
     ccds.push({
       id: ccdId,
-      // status: !isUnused ? Math.ceil(Math.random() * 3) : 0,
       status: !isUnused ? 1 : 0,
       unused: isUnused,
     });
@@ -38,6 +37,33 @@ for (let i = 0; i < 25; i++) {
   rafts.push({ id: i + 1, status: 1, ccds, rebs, neighborsIds });
 }
 class MTCamera extends Component {
+  static propsTypes = {
+    /** Function to subscribe to streams to receive */
+    subscribeToStreams: PropTypes.func,
+    /** Function to unsubscribe to streams to stop receiving */
+    unsubscribeToStreams: PropTypes.func,
+    /** True if loop is active */
+    tempControlActive: PropTypes.bool,
+    /** HV bias switch */
+    hVBiasSwitch: PropTypes.number,
+    /** Analog PS voltage */
+    anaV: PropTypes.number,
+    /** Total power */
+    power: PropTypes.number,
+    /** GD 0 voltage */
+    gDV: PropTypes.number,
+    /** OD 0 current */
+    oDI: PropTypes.number,
+    /** OD 0 voltage */
+    oDV: PropTypes.number,
+    /** OG 0 voltage */
+    oGV: PropTypes.number,
+    /** RD 0 voltage */
+    rDV: PropTypes.number,
+    /** S00/Temp temperature */
+    temp: PropTypes.number,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -125,6 +151,7 @@ class MTCamera extends Component {
   };
 
   componentDidMount() {
+    this.props.subscribeToStreams();
     this.zoom = d3.zoom().scaleExtent([1, 2]).on('zoom', this.zoomed);
     d3.select('#zoom-overlay').call(this.zoom);
   }
@@ -136,6 +163,10 @@ class MTCamera extends Component {
       d3.select('#zoom-overlay').call(this.zoom.transform, d3.zoomIdentity.scale(1.01));
     }
   }
+
+  componentWillUnmount = () => {
+    this.props.unsubscribeToStreams();
+  };
 
   /**
    * Function to handle zooming in/out of the focalplane, raftdetail, and ccdrebdetail views
