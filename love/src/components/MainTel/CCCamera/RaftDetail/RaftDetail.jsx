@@ -14,28 +14,6 @@ const COLOR_MAPPING = {
 class RaftDetail extends Component {
   constructor(props) {
     super(props);
-    // const rebsplots = {
-    //   'rebs': {
-    //     'type': 'line',
-    //     'dash': [
-    //       4,
-    //       0
-    //   ],
-    //     'values': [
-    //       {
-    //         'variable': 'x',
-    //         category: 'telemetry',
-    //         csc: 'CCCamera',
-    //         salindex: 0,
-    //         topic: 'focal_plane_Reb',
-    //         item: 'hVBiasSwitch',
-    //         type: 'line',
-    //         accessor: (x) => x[0],
-
-    //       },
-    //     ]
-    //   }
-    // };
     const rebIndex = [0, 1, 2];
     const plotsRebs0 = [
       {
@@ -147,9 +125,6 @@ class RaftDetail extends Component {
       plotsRebs1: plotsRebs1,
       plotsRebs2: plotsRebs2,
     };
-    // this.reb1ref = React.createRef();
-    // this.reb2ref = React.createRef();
-    // this.reb3ref = React.createRef();
   }
 
   renderCCDsPlots() {
@@ -214,12 +189,10 @@ class RaftDetail extends Component {
                 height={350}
                 width={500}
                 inputs={p}
-                // containerNode={this.rebsRefs[i]}
                 containerNode={this.rebsRefs?.current}
                 xAxisTitle="Time"
                 yAxisTitle=""
                 legendPosition="right"
-                // legendPosition="bottom"
               />
             </div>
           ))}
@@ -233,12 +206,10 @@ class RaftDetail extends Component {
                 height={350}
                 width={500}
                 inputs={p}
-                // containerNode={this.rebsRefs[i]}
                 containerNode={this.rebsRefs?.current}
                 xAxisTitle="Time"
                 yAxisTitle=""
                 legendPosition="right"
-                // legendPosition="bottom"
               />
             </div>
           ))}
@@ -252,12 +223,10 @@ class RaftDetail extends Component {
                 height={350}
                 width={500}
                 inputs={p}
-                // containerNode={this.rebsRefs[i]}
                 containerNode={this.rebsRefs?.current}
                 xAxisTitle="Time"
                 yAxisTitle=""
                 legendPosition="right"
-                // legendPosition="bottom"
               />
             </div>
           ))}
@@ -266,54 +235,6 @@ class RaftDetail extends Component {
       </div>
     );
   }
-  // const { raft, selectedReb, selectedRebVar, setSelectedReb, setHoveredCCD, setHoveredReb } = this.props;
-  // const rebsItems = ['hVBiasSwitch', 'anaV', 'power'];
-  // const plots = [];
-  // raft.rebs.forEach((r) => {
-  //   const rebIndex = r.id - 1;
-  //   plots.push({
-  //     [`REB${r.id}`]: {
-  //       category: 'telemetry',
-  //       csc: 'CCCamera',
-  //       salindex: 0,
-  //       topic: 'focal_plane_Reb',
-  //       item: rebsItems[r],
-  //       type: 'line',
-  //       accessor: (x) => x[rebIndex],
-  //     },
-  //   });
-  // });
-  // return (
-  //   <div className={styles.rebsContainer}>
-  //     {plots.map((p, i) => (
-  //       <div
-  //         key={`r${i}`}
-  //         ref={this.rebsRefs[i]}
-  //         style={{ border: selectedReb?.id === raft.rebs[i].id ? '2px solid white' : `` }}
-  //         className={styles.plot}
-  //         // onClick={() => {
-  //         //   setSelectedReb(raft.rebs[i]);
-  //         // }}
-  //         // onMouseOver={() => {
-  //         //   setHoveredReb(raft.rebs[i]);
-  //         //   setHoveredCCD(null);
-  //         // }}
-  //       >
-  //         <PlotContainer
-  //           memorySize={50}
-  //           height={100}
-  //           width={300}
-  //           inputs={p}
-  //           containerNode={this.rebsRefs[i]}
-  //           xAxisTitle="Time"
-  //           yAxisTitle={`Value-${i}`}
-  //           legendPosition="bottom"
-  //         />
-  //       </div>
-  //     ))}
-  //   </div>
-  // );
-  // }
 
   render() {
     const { raft, showNeighbors, selectedReb, selectNeighborRaft } = this.props;

@@ -5,7 +5,6 @@
 
 .ccdsContainer {
   display: grid;
-  /* grid-template-columns: 1fr 1fr 1fr; BUG, reference: https://css-tricks.com/preventing-a-grid-blowout/  */
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
   grid-template-rows: repeat(3, minmax(33%, 200px));
   max-height: 75%;
@@ -24,16 +23,12 @@
 }
 
 .plot {
-  /* width: 100%;
-  overflow: hidden; */
   border: 1px solid transparent;
   overflow: hidden;
 }
 
 .plotsContainerRebs {
   display: grid;
-  /* grid-template-columns: repeat(2, minmax(300px, 1fr));
-  grid-template-rows: repeat(3, 200px); */
   gap: 1em;
   overflow: hidden;
 }

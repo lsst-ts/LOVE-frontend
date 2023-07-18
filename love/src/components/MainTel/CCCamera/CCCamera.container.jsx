@@ -32,7 +32,6 @@ const CCCameraContainer = ({
   anaV,
   power,
   gDV,
-  // oDI,
   oDV,
   oGV,
   rDV,
@@ -51,7 +50,6 @@ const CCCameraContainer = ({
       anaV={anaV}
       power={power}
       gDV={gDV}
-      // oDI={oDI}
       oDV={oDV}
       oGV={oGV}
       rDV={rDV}

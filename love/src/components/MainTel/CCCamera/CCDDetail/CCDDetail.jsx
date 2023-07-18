@@ -7,14 +7,7 @@ import styles from './CCDDetail.module.css';
 class CCDDetail extends Component {
   constructor(props) {
     super(props);
-    this.refs = [
-      React.createRef(),
-      React.createRef(),
-      React.createRef(),
-      React.createRef(),
-      React.createRef(),
-      React.createRef(),
-    ];
+    this.refs = [React.createRef(), React.createRef(), React.createRef(), React.createRef(), React.createRef()];
     this.state = {};
   }
   renderPlots() {
@@ -26,17 +19,6 @@ class CCDDetail extends Component {
           salindex: 0,
           topic: 'focal_plane_Ccd',
           item: 'gDV',
-          type: 'line',
-          accessor: (x) => x,
-        },
-      },
-      {
-        oDI: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Ccd',
-          item: 'oDI',
           type: 'line',
           accessor: (x) => x,
         },
