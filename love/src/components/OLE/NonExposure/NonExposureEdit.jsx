@@ -204,10 +204,6 @@ export default class NonExposureEdit extends Component {
     const systemOptions = LSST_SYSTEMS;
     const subsystemOptions = LSST_SUBSYSTEMS;
     const cscOptions = defaultCSCList.map((csc) => `${csc.name}:${csc.salindex}`);
-    // Uncomment next code block to use several level options
-    // const selectedCommentType = this.state.logEdit?.level
-    //   ? LOG_TYPE_OPTIONS.find((type) => type.value === this.state.logEdit.level)
-    //   : null;
 
     return (
       <>
@@ -257,25 +253,6 @@ export default class NonExposureEdit extends Component {
               <div className={styles.contentLeft}>
                 <span className={styles.label}>Urgent?</span>
                 <span className={[styles.value].join(' ')}>
-                  {/* Uncomment next code block to use several level options */}
-                  {/* <Select
-                    option={selectedCommentType}
-                    onChange={({ value }) =>
-                      this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, level: value },
-                      }))
-                    }
-                    options={LOG_TYPE_OPTIONS}
-                    className={styles.select}
-                    small
-                  />
-                  <span className={styles.levelIcon}>
-                    {selectedCommentType && selectedCommentType.label ? (
-                      this.getIconLevel(selectedCommentType.label)
-                    ) : (
-                      <></>
-                    )}
-                  </span>*/}
                   <div style={{ display: 'inline-block', marginRight: '0.5em' }}>
                     <Toggle
                       labels={['No', 'Yes']}
@@ -336,27 +313,6 @@ export default class NonExposureEdit extends Component {
                     placeholder="Select zero or several CSCs"
                   />
                 </span>
-
-                {/* Uncomment next code block to use several level options */}
-                {/* <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
-                <span className={styles.value}>
-                  <Multiselect
-                    options={this.state.imageTags}
-                    selectedValues={this.state.logEdit.tags}
-                    isObject={true}
-                    displayValue="name"
-                    onSelect={(selectedOptions) => {
-                      this.setState((prevState) => ({
-                        logEdit: {
-                          ...prevState.logEdit,
-                          tags: selectedOptions,
-                        },
-                      }));
-                    }}
-                    placeholder="Select zero or several tags"
-                    selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
-                  />
-                </span> */}
 
                 {isMenu ? (
                   <>

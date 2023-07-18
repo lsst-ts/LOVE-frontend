@@ -3,14 +3,7 @@ import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import { CSVLink } from 'react-csv';
-import {
-  LSST_SYSTEMS,
-  iconLevelOLE,
-  ISO_INTEGER_DATE_FORMAT,
-  ISO_STIRNG_DATE_TIME_FORMAT,
-  /* LSST_SUBSYSTEMS, */
-  /* LOG_TYPE_OPTIONS, */
-} from 'Config';
+import { LSST_SYSTEMS, iconLevelOLE, ISO_INTEGER_DATE_FORMAT, ISO_STIRNG_DATE_TIME_FORMAT } from 'Config';
 import ManagerInterface, { formatSecondsToDigital, openInNewTab, getLinkJira, getFileURL } from 'Utils';
 
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
@@ -96,8 +89,6 @@ export default class NonExposure extends Component {
   }
 
   getLevel(value) {
-    // Uncomment next code line to use several level options
-    // const label = LOG_TYPE_OPTIONS.find((type) => type.value === value)?.label;
     const label = value >= 100 ? 'urgent' : 'info';
     const icon = iconLevelOLE[label] ?? undefined;
     return (
@@ -329,8 +320,6 @@ export default class NonExposure extends Component {
       csvTitle = `narrative_logs_${Moment(selectedDayNarrative).format(ISO_INTEGER_DATE_FORMAT)}.csv`;
     }
 
-    // Uncomment next code block to use several level options
-    // const commentTypeOptions = [{ label: 'All comment types', value: 'all' }, ...LOG_TYPE_OPTIONS];
     const commentTypeOptions = [
       { label: 'All comment types', value: 'all' },
       { label: 'Urgent', value: 100 },
