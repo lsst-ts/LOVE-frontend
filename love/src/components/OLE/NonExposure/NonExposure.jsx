@@ -250,6 +250,17 @@ export default class NonExposure extends Component {
     });
   }
 
+  parseCsvData(data) {
+    const csvData = data.map((row) => {
+      const escapedMessageText = row.message_text.replace(/"/g, '""');
+      return {
+        ...row,
+        message_text: escapedMessageText,
+      };
+    });
+    return csvData;
+  }
+
   componentDidMount() {
     this.queryNarrativeLogs();
   }
@@ -296,9 +307,22 @@ export default class NonExposure extends Component {
     let csvData = "There aren't logs created for the current search...";
     let csvTitle = 'narrative_logs.csv';
     if (filteredData.length > 0) {
-      const logExampleKeys = Object.keys(filteredData?.[0] ?? {});
-      csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
-      csvData = filteredData;
+      const exportedParams = [
+        'date_added',
+        'message_text',
+        'level',
+        'tags',
+        'urls',
+        'date_begin',
+        'date_end',
+        'time_lost',
+        'systems',
+        'subsystems',
+        'cscs',
+        'user_id',
+      ];
+      csvHeaders = exportedParams.map((key) => ({ label: key, key }));
+      csvData = this.parseCsvData(filteredData);
     }
 
     if (selectedDayNarrative) {
