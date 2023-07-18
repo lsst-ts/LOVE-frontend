@@ -332,14 +332,6 @@ export const MTCSCommands = {
 /*****************************************************************************/
 /******************************OLE configurations*****************************/
 /*****************************************************************************/
-
-export const LOG_TYPE_OPTIONS = [
-  { label: 'debug', value: 10 },
-  { label: 'info', value: 20 },
-  { label: 'warning', value: 30 },
-  { label: 'error', value: 40 },
-  { label: 'fatal', value: 50 },
-];
 export const EXPOSURE_FLAG_OPTIONS = ['none', 'junk', 'questionable'];
 export const exposureFlagStateToStyle = {
   none: 'ok',
