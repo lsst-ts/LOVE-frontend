@@ -162,7 +162,7 @@ export default class ExposureAdd extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.confirmSave();
+    this.saveMessage();
   }
 
   saveMessage() {
@@ -183,17 +183,14 @@ export default class ExposureAdd extends Component {
         this.props.view();
       }
       this.cleanForm();
-
-      this.setState({
-        confirmationModalShown: false,
-        savingLog: false,
-      });
+      this.setState({ savingLog: false });
     });
   }
 
   deleteMessage() {
-    if (this.state.newMessage.id) {
-      ManagerInterface.deleteMessageExposureLogs(this.state.newMessage.id).then((response) => {
+    const { newMessage } = this.state;
+    if (newMessage?.id) {
+      ManagerInterface.deleteMessageExposureLogs(newMessage.id).then((response) => {
         this.setState({ confirmationModalShown: false });
       });
     } else {
@@ -201,10 +198,10 @@ export default class ExposureAdd extends Component {
     }
   }
 
-  confirmSave() {
+  confirmDelete() {
     const modalText = (
       <span>
-        You are about to <b>save</b> this message of Exposure Logs
+        You are about to <b>delete</b> this message of Exposure Logs
         <br />
         Are you sure?
       </span>
@@ -217,7 +214,6 @@ export default class ExposureAdd extends Component {
   }
 
   renderModalFooter() {
-    const { savingLog } = this.state;
     return (
       <div className={styles.modalFooter}>
         <Button
@@ -227,8 +223,8 @@ export default class ExposureAdd extends Component {
         >
           Go back
         </Button>
-        <Button disabled={savingLog} onClick={() => this.saveMessage()} status="default">
-          {savingLog ? <SpinnerIcon className={styles.spinnerIcon} /> : 'Yes'}
+        <Button onClick={() => this.deleteMessage()} status="default">
+          Yes
         </Button>
       </div>
     );
@@ -236,7 +232,7 @@ export default class ExposureAdd extends Component {
 
   render() {
     const { isLogCreate, isMenu } = this.props;
-    const { confirmationModalShown, confirmationModalText, selectedDayExposure } = this.state;
+    const { confirmationModalShown, confirmationModalText, selectedDayExposure, savingLog } = this.state;
     const back = this.props.back;
     const view = this.props.view ?? ExposureAdd.defaultProps.view;
 
@@ -415,7 +411,7 @@ export default class ExposureAdd extends Component {
                         className={styles.iconBtn}
                         title="Delete"
                         onClick={() => {
-                          this.deleteMessage();
+                          this.confirmDelete();
                         }}
                         status="transparent"
                       >
@@ -530,7 +526,11 @@ export default class ExposureAdd extends Component {
                 </span>
 
                 <Button type="submit">
-                  <span className={styles.title}>Upload Log</span>
+                  {savingLog ? (
+                    <SpinnerIcon className={styles.spinnerIcon} />
+                  ) : (
+                    <span className={styles.title}>Upload Log</span>
+                  )}
                 </Button>
               </span>
             </div>

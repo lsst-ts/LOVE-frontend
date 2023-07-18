@@ -105,38 +105,8 @@ export default class NonExposureEdit extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-
-    const modalText = (
-      <span>
-        You are about to <b>save</b> changes in this message of Narrative Logs
-        <br />
-        Are you sure ?
-      </span>
-    );
-
-    this.setState({
-      confirmationModalShown: true,
-      confirmationModalText: modalText,
-    });
+    this.updateOrCreateMessageNarrativeLogs();
   }
-
-  renderModalFooter = () => {
-    const { savingLog } = this.state;
-    return (
-      <div className={styles.modalFooter}>
-        <Button
-          className={styles.borderedButton}
-          onClick={() => this.setState({ confirmationModalShown: false })}
-          status="transparent"
-        >
-          Go back
-        </Button>
-        <Button disabled={savingLog} onClick={() => this.updateOrCreateMessageNarrativeLogs()} status="default">
-          {savingLog ? <SpinnerIcon className={styles.spinnerIcon} /> : 'Yes'}
-        </Button>
-      </div>
-    );
-  };
 
   updateOrCreateMessageNarrativeLogs() {
     const payload = { ...this.state.logEdit };
@@ -149,7 +119,7 @@ export default class NonExposureEdit extends Component {
     payload['tags'] = [
       ...(payload['systems'] ?? []),
       ...(payload['subsystems'] ?? []),
-      ...(payload['cscs'].map((c) => c.replace(':', '_')) ?? []),
+      ...(payload['cscs'] ?? []).map((c) => c.replace(':', '_')),
     ];
 
     // Clean null and empty values to avoid API errors
@@ -228,7 +198,7 @@ export default class NonExposureEdit extends Component {
 
   render() {
     const { back, isLogCreate, isMenu } = this.props;
-    const { confirmationModalShown, confirmationModalText, datesAreValid } = this.state;
+    const { confirmationModalShown, confirmationModalText, datesAreValid, savingLog } = this.state;
 
     const view = this.props.view ?? NonExposureEdit.defaultProps.view;
     const systemOptions = LSST_SYSTEMS;
@@ -551,20 +521,14 @@ export default class NonExposureEdit extends Component {
                   <></>
                 )}
                 <Button disabled={!datesAreValid} type="submit">
-                  <span className={styles.title}>Upload Log</span>
+                  {savingLog ? (
+                    <SpinnerIcon className={styles.spinnerIcon} />
+                  ) : (
+                    <span className={styles.title}>Upload Log</span>
+                  )}
                 </Button>
               </span>
             </div>
-            <Modal
-              displayTopBar={false}
-              isOpen={!!confirmationModalShown}
-              onRequestClose={() => this.setState({ confirmationModalShown: false })}
-              parentSelector={() => document.querySelector(`#${this.id}`)}
-              size={50}
-            >
-              <p style={{ textAlign: 'center' }}>{confirmationModalText}</p>
-              {this.renderModalFooter()}
-            </Modal>
           </div>
         </form>
       </>
