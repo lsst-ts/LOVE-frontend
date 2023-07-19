@@ -81,7 +81,16 @@ class RaftDetail extends Component {
   }
 
   renderRebsPlots() {
-    const { raft, selectedReb, selectedRebVar, setSelectedReb, setHoveredCCD, setHoveredReb } = this.props;
+    const {
+      raft,
+      selectedReb,
+      selectedRebVar,
+      selectedCCD,
+      selectedCCDVar,
+      setSelectedCCD,
+      setHoveredCCD,
+      setHoveredReb,
+    } = this.props;
     const plots = [];
     raft.rebs.forEach((r) => {
       const rebIndex = r.id - 1;
@@ -108,10 +117,6 @@ class RaftDetail extends Component {
             className={styles.plot}
             onClick={() => {
               setSelectedCCD(raft.ccds[i]);
-            }}
-            onMouseOver={() => {
-              setHoveredCCD(raft.ccds[i]);
-              setHoveredReb(null);
             }}
           >
             <PlotContainer
