@@ -1,5 +1,5 @@
 import InfoIcon from 'components/icons/CSCExpanded/InfoIcon/InfoIcon';
-import ErrorIcon from 'components/icons/CSCExpanded/ErrorIcon/ErrorIcon';
+import WarningIcon from 'components/icons/CSCExpanded/WarningIcon/WarningIcon';
 
 // Subpath
 export const SUBPATH = process.env.PUBLIC_URL ?? '';
@@ -345,7 +345,7 @@ export const exposureFlagStateToStyle = {
 };
 export const iconLevelOLE = {
   info: <InfoIcon />,
-  urgent: <ErrorIcon />,
+  urgent: <WarningIcon />,
 };
 
 export const LSST_SYSTEMS = [
