@@ -575,8 +575,6 @@ class RebDetail extends Component {
       return React.createRef();
     });
 
-    // this.refs = React.useRef([]);
-    // console.log(this.refs);
     this.state = {
       plots: plotsRebs,
     };

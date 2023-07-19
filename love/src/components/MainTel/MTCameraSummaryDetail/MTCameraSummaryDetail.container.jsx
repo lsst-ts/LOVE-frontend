@@ -35,62 +35,6 @@ const MTCameraSummaryDetailContainer = ({
   mtCameraShutterDetailedState,
   mtCameraFilterChangerDetailedState,
   mtCameraRaftsDetailedState,
-  imagesInSequenceInt,
-  imageNameInt,
-  imageIndexInt,
-  imageSourceInt,
-  imageControllerInt,
-  imageDateInt,
-  imageNumberInt,
-  timestampAcquisitionStartInt,
-  exposureTimeInt,
-  modeInt,
-  timeoutInt,
-  imagesInSequenceSReadout,
-  imageNameSReadout,
-  imageIndexSReadout,
-  imageSourceSReadout,
-  imageControllerSReadout,
-  imageDateSReadout,
-  imageNumberSReadout,
-  timestampAcquisitionStartSReadout,
-  exposureTimeSReadout,
-  timestampStartOfReadoutSReadout,
-  imagesInSequenceEReadout,
-  imageNameEReadout,
-  imageIndexEReadout,
-  imageSourceEReadout,
-  imageControllerEReadout,
-  imageDateEReadout,
-  imageNumberEReadout,
-  timestampAcquisitionStartEReadout,
-  requestedExposureTimeEReadout,
-  timestampEndOfReadoutEReadout,
-  imagesInSequenceTelemetry,
-  imageNameTelemetry,
-  imageIndexTelemetry,
-  imageSourceTelemetry,
-  imageControllerTelemetry,
-  imageDateTelemetry,
-  imageNumberTelemetry,
-  timestampAcquisitionStartTelemetry,
-  exposureTimeTelemetry,
-  imageTagTelemetry,
-  timestampDateObsTelemetry,
-  timestampDateEndTelemetry,
-  measuredShutterOpenTimeTelemetry,
-  darkTimeTelemetry,
-  emulatedImageTelemetry,
-  tempControlActive,
-  hVBiasSwitch,
-  anaV,
-  power,
-  gDV,
-  oDI,
-  oDV,
-  oGV,
-  rDV,
-  temp,
   ...props
 }) => {
   if (props.isRaw) {
@@ -106,52 +50,6 @@ const MTCameraSummaryDetailContainer = ({
       mtCameraShutterDetailedState={mtCameraShutterDetailedState}
       mtCameraFilterChangerDetailedState={mtCameraFilterChangerDetailedState}
       mtCameraRaftsDetailedState={mtCameraRaftsDetailedState}
-      imagesInSequenceInt={imagesInSequenceInt}
-      imageNameInt={imageNameInt}
-      imageIndexInt={imageIndexInt}
-      imageSourceInt={imageSourceInt}
-      imageControllerInt={imageControllerInt}
-      imageDateInt={imageDateInt}
-      imageNumberInt={imageNumberInt}
-      timestampAcquisitionStartInt={timestampAcquisitionStartInt}
-      exposureTimeInt={exposureTimeInt}
-      modeInt={modeInt}
-      timeoutInt={timeoutInt}
-      imagesInSequenceSReadout={imagesInSequenceSReadout}
-      imageNameSReadout={imageNameSReadout}
-      imageIndexSReadout={imageIndexSReadout}
-      imageSourceSReadout={imageSourceSReadout}
-      imageControllerSReadout={imageControllerSReadout}
-      imageDateSReadout={imageDateSReadout}
-      imageNumberSReadout={imageNumberSReadout}
-      timestampAcquisitionStartSReadout={timestampAcquisitionStartSReadout}
-      exposureTimeSReadout={exposureTimeSReadout}
-      timestampStartOfReadoutSReadout={timestampStartOfReadoutSReadout}
-      imagesInSequenceEReadout={imagesInSequenceEReadout}
-      imageNameEReadout={imageNameEReadout}
-      imageIndexEReadout={imageIndexEReadout}
-      imageSourceEReadout={imageSourceEReadout}
-      imageControllerEReadout={imageControllerEReadout}
-      imageDateEReadout={imageDateEReadout}
-      imageNumberEReadout={imageNumberEReadout}
-      timestampAcquisitionStartEReadout={timestampAcquisitionStartEReadout}
-      requestedExposureTimeEReadout={requestedExposureTimeEReadout}
-      timestampEndOfReadoutEReadout={timestampEndOfReadoutEReadout}
-      imagesInSequenceTelemetry={imagesInSequenceTelemetry}
-      imageNameTelemetry={imageNameTelemetry}
-      imageIndexTelemetry={imageIndexTelemetry}
-      imageSourceTelemetry={imageSourceTelemetry}
-      imageControllerTelemetry={imageControllerTelemetry}
-      imageDateTelemetry={imageDateTelemetry}
-      imageNumberTelemetry={imageNumberTelemetry}
-      timestampAcquisitionStartTelemetry={timestampAcquisitionStartTelemetry}
-      exposureTimeTelemetry={exposureTimeTelemetry}
-      imageTagTelemetry={imageTagTelemetry}
-      timestampDateObsTelemetry={timestampDateObsTelemetry}
-      timestampDateEndTelemetry={timestampDateEndTelemetry}
-      measuredShutterOpenTimeTelemetry={measuredShutterOpenTimeTelemetry}
-      darkTimeTelemetry={darkTimeTelemetry}
-      emulatedImageTelemetry={emulatedImageTelemetry}
       {...props}
     />
   );

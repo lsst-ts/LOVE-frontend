@@ -575,7 +575,6 @@ class RebDetail extends Component {
     plotsRebs.map((plot) => {
       this.refs.push(React.createRef());
     });
-    console.log(this.refs);
     this.state = {
       plots: plotsRebs,
     };

@@ -71,18 +71,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
-    'event-CCCamera-0-summaryState',
-    'event-CCCamera-0-ccsCommandState',
-    'event-CCCamera-0-calibrationDetailedState',
-    'event-CCCamera-0-offlineDetailedState',
-    'event-CCCamera-0-imageReadinessDetailedState',
-    'event-CCCamera-0-shutterDetailedState',
-    'event-CCCamera-0-filterChangerDetailedState',
-    'event-CCCamera-0-raftsDetailedState',
-    'event-CCCamera-0-startIntegration',
-    'event-CCCamera-0-startReadout',
-    'event-CCCamera-0-endReadout',
-    'event-CCCamera-0-endOfImageTelemetry',
+    'event-CCCamera-0-focal_plane_Raft_RaftTempControlStatusConfiguration',
     'telemetry-CCCamera-0-focal_plane_Reb',
     'telemetry-CCCamera-0-focal_plane_Ccd',
   ];

@@ -74,18 +74,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
-    'event-MTCamera-0-summaryState',
-    'event-MTCamera-0-ccsCommandState',
-    'event-MTCamera-0-calibrationDetailedState',
-    'event-MTCamera-0-offlineDetailedState',
-    'event-MTCamera-0-imageReadinessDetailedState',
-    'event-MTCamera-0-shutterDetailedState',
-    'event-MTCamera-0-filterChangerDetailedState',
-    'event-MTCamera-0-raftsDetailedState',
-    'event-MTCamera-0-startIntegration',
-    'event-MTCamera-0-startReadout',
-    'event-MTCamera-0-endReadout',
-    'event-MTCamera-0-endOfImageTelemetry',
+    'event-MTCamera-0-focal_plane_Raft_RaftTempControlStatusConfiguration',
     'telemetry-MTCamera-0-focal_plane_Reb',
     'telemetry-MTCamera-0-focal_plane_Ccd',
   ];

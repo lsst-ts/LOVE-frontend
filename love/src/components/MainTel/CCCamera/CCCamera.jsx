@@ -38,21 +38,33 @@ class CCCamera extends Component {
     /** True if loop is active */
     tempControlActive: PropTypes.bool,
     /** HV bias switch */
-    hVBiasSwitch: PropTypes.number,
+    hVBiasSwitch: PropTypes.array,
     /** Analog PS voltage */
-    anaV: PropTypes.number,
+    anaV: PropTypes.array,
     /** Total power */
-    power: PropTypes.number,
+    power: PropTypes.array,
     /** GD 0 voltage */
-    gDV: PropTypes.number,
+    gDV: PropTypes.array,
     /** OD 0 voltage */
-    oDV: PropTypes.number,
+    oDV: PropTypes.array,
     /** OG 0 voltage */
-    oGV: PropTypes.number,
+    oGV: PropTypes.array,
     /** RD 0 voltage */
-    rDV: PropTypes.number,
+    rDV: PropTypes.array,
     /** S00/Temp temperature */
-    temp: PropTypes.number,
+    temp: PropTypes.array,
+  };
+
+  static defaultProps = {
+    tempControlActive: false,
+    hVBiasSwitch: [],
+    anaV: [],
+    power: [],
+    gDV: [],
+    oDV: [],
+    oGV: [],
+    rDV: [],
+    temp: [],
   };
 
   constructor(props) {

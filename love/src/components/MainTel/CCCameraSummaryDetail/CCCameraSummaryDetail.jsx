@@ -30,8 +30,37 @@ import {
 
 export default class CCCamera extends Component {
   static propTypes = {
+    /** Function to subscribe to streams to receive */
     subscribeToStreams: PropTypes.func,
+    /** Function to unsubscribe to streams to stop receiving */
     unsubscribeToStreams: PropTypes.func,
+    /** High level state machine state identifier */
+    cccameraSummaryState: PropTypes.number,
+    /** Substate of the CCS command */
+    cccameraCcsCmdState: PropTypes.number,
+    /** Enumeration of valid substates */
+    cccameraCalibrationDetailedStatus: PropTypes.number,
+    /** Enumeration of valid substates */
+    cccameraOffLineDetailedState: PropTypes.number,
+    /** Enumeration of valid substates */
+    cccameraImageReadinessDetailedState: PropTypes.number,
+    /** Enumeration of valid substates  */
+    ccCameraShutterDetailedState: PropTypes.number,
+    /** The filter changer state */
+    ccCameraFilterChangerDetailedState: PropTypes.number,
+    /** Enumeration of valid substates */
+    ccCameraRaftsDetailedState: PropTypes.number,
+  };
+
+  static defaultProps = {
+    cccameraSummaryState: 0,
+    cccameraCcsCmdState: 0,
+    cccameraCalibrationDetailedStatus: 0,
+    cccameraOffLineDetailedState: 0,
+    cccameraImageReadinessDetailedState: 0,
+    ccCameraShutterDetailedState: 0,
+    ccCameraFilterChangerDetailedState: 0,
+    ccCameraRaftsDetailedState: 0,
   };
 
   constructor(props) {

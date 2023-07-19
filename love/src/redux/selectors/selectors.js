@@ -1459,7 +1459,7 @@ export const getCCCameraSummary = (state) => {
   ];
   const summaryData = getStreamsData(state, subscriptions);
   return {
-    cccameraSummaryState: summaryData['event-CCCamera-0-summaryStatus']?.[0]?.summaryState.value ?? 0,
+    cccameraSummaryState: summaryData['event-CCCamera-0-summaryState']?.[0]?.summaryState.value ?? 0,
     cccameraCcsCmdState: summaryData['event-CCCamera-0-ccsCommandState']?.[0]?.substate.value ?? 0,
     cccameraCalibrationDetailedStatus:
       summaryData['event-CCCamera-0-calibrationDetailedState']?.[0]?.substate.value ?? 0,
@@ -1606,7 +1606,7 @@ export const getMTCameraSummary = (state) => {
   ];
   const summaryData = getStreamsData(state, subscriptions);
   return {
-    mtcameraSummaryState: summaryData['event-MTCamera-0-summaryStatus']?.[0]?.summaryState.value ?? 0,
+    mtcameraSummaryState: summaryData['event-MTCamera-0-summaryState']?.[0]?.summaryState.value ?? 0,
     mtcameraCcsCmdState: summaryData['event-MTCamera-0-ccsCommandState']?.[0]?.substate.value ?? 0,
     mtcameraCalibrationDetailedStatus:
       summaryData['event-MTCamera-0-calibrationDetailedState']?.[0]?.substate.value ?? 0,
