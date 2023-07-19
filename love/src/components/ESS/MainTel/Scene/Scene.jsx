@@ -29,7 +29,7 @@ const Scene = (props) => {
     selectedSensor,
     sensorReferenceId,
     setSensor,
-    temperatures,
+    values,
     getGradiantColorX,
   } = props;
 
@@ -52,7 +52,7 @@ const Scene = (props) => {
         selectedSensor={selectedSensor}
         setSensor={setSensor}
         positions={positions}
-        temperatures={temperatures}
+        values={values}
         getGradiantColorX={getGradiantColorX}
       />
 

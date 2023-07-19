@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getAuxTelESSState } from 'redux/selectors';
+import { getStreamsData } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import AuxTelESS from './AuxTelESS';
 
@@ -32,7 +32,8 @@ const AuxTelESSContainer = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  const easState = getAuxTelESSState(state);
+  const groupNames = ['telemetry-ESS-201-temperature'];
+  const easState = getStreamsData(state, groupNames);
   return {...easState};
 };
 

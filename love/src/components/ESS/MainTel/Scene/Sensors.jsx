@@ -12,7 +12,7 @@ const Sensor = (props) => {
       { (isSelected || hovered) && (<mesh
         {...props}
         ref={mesh}
-        scale={hovered ? [2.1, 2.1, 2.1]: [1.2, 1.2, 1.2]}
+        scale={hovered ? [2.3, 2.3, 2.3]: [1.3, 1.3, 1.3]}
         onPointerEnter={(e) => setHover(true)}
         onPointerLeave={(e) => setHover(false)}
         onClick={(e) => {
@@ -22,7 +22,7 @@ const Sensor = (props) => {
         position={[props.position.x, props.position.y, props.position.z]}
       >
         <sphereGeometry args={[0.15, 64, 64]} />
-        <meshBasicMaterial color={hovered ? props.color : "white"} side={THREE.BackSide}/>
+        <meshBasicMaterial color={hovered ? props.color : 0xffffff} side={THREE.BackSide}/>
       </mesh>)}
       <mesh
         {...props}
@@ -34,7 +34,7 @@ const Sensor = (props) => {
         position={[props.position.x, props.position.y, props.position.z]}
       >
         <sphereGeometry args={[0.15, 32, 32]} />
-        <meshBasicMaterial color={hovered ? "white" : props.color}/>
+        <meshBasicMaterial color={hovered ? 0xffffff : props.color}/>
       </mesh>
     </>
   ); 
@@ -47,7 +47,7 @@ Sensor.propTypes = {
     y: PropTypes.number,
     z: PropTypes.number,
   }),
-  color: PropTypes.number,
+  color: PropTypes.string,
   setSensor: PropTypes.func,
 };
 
@@ -58,17 +58,17 @@ Sensor.defaultProps = {
   setSensor: (id) => {console.log('Sensor default setSensor(', id, ')')},
 }
 
-const comparatorSensor = (prevProps, nextProps) => {
-  console.log('comparatorSensor');
-  return (
-      nextProps.sensorId === prevProps.sensorId && 
-      isEqual(nextProps.position, prevProps.position) &&
-      nextProps.color === prevProps.color && 
-      nextProps.setSensor === prevProps.setSensor
-    );
-};
+// const comparatorSensor = (prevProps, nextProps) => {
+//   console.log('comparatorSensor');
+//   return (
+//       nextProps.sensorId === prevProps.sensorId && 
+//       isEqual(nextProps.position, prevProps.position) &&
+//       nextProps.color === prevProps.color && 
+//       nextProps.setSensor === prevProps.setSensor
+//     );
+// };
 
-React.memo(Sensor, comparatorSensor);
+// React.memo(Sensor, comparatorSensor);
 
 export function Sensors(props) {
 
@@ -76,14 +76,35 @@ export function Sensors(props) {
     selectedSensor,
     setSensor,
     positions,
-    temperatures,
+    values,
     getGradiantColorX,
   } = props;
+
+  const RGBToHex = (rgb) => {
+    // Choose correct separator
+    let sep = rgb.indexOf(",") > -1 ? "," : " ";
+    // Turn "rgb(r,g,b)" into [r,g,b]
+    rgb = rgb.substr(4).split(")")[0].split(sep);
+
+    let r = (+rgb[0]).toString(16),
+        g = (+rgb[1]).toString(16),
+        b = (+rgb[2]).toString(16);
+
+    if (r.length == 1)
+      r = "0" + r;
+    if (g.length == 1)
+      g = "0" + g;
+    if (b.length == 1)
+      b = "0" + b;
+
+    const num = parseInt("0x" + r + g + b, 16);
+    return num;
+  };
   
   const sensors = positions.map((position, index) => {
-    const temperature = temperatures[index];
-    const color = getGradiantColorX ? getGradiantColorX(temperature) : 0xffff00;
-    return { position: position, id: index + 1, color: color };
+    const temperature = values[index];
+    const rgb = (getGradiantColorX  && temperature) ? getGradiantColorX(temperature) : 'rgb(255, 255, 0)';
+    return { position: position, id: index + 1, color: rgb };
   });
 
   return (
@@ -112,7 +133,7 @@ Sensors.propTypes = {
   })),
   setSensor: PropTypes.func,
   selectedSensor: PropTypes.number,
-  temperatures: PropTypes.arrayOf(PropTypes.number),
+  values: PropTypes.arrayOf(PropTypes.number),
   getGradiantColorX: PropTypes.func,
 };
 
@@ -120,6 +141,6 @@ Sensors.defaultProps = {
   positions: [],
   setSensor: () => {console.log('Sensors default setSensor')},
   selectedSensor: undefined,
-  temperatures: [],
+  values: [],
   getGradiantColorX: () => {0xffff00},
 };

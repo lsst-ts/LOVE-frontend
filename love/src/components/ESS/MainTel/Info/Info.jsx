@@ -49,6 +49,25 @@ function Info(props) {
           <Value>
             {sensor.position?.z}
           </Value>
+
+          { sensor.numChannels ? (
+            <>
+              <Label>NumChannels</Label>
+              <Value>
+                {sensor.numChannels}
+              </Value>
+            </>
+          ) : <></> }
+
+          { sensor.indexArr !== undefined ? (
+            <>
+              <Label>Index</Label>
+              <Value>
+                {sensor.indexArr}
+              </Value>
+            </>
+          ) : <></> }
+          
         </>
       </SummaryPanel>
     </>
@@ -67,6 +86,7 @@ Info.PropTypes = {
     sensorName: PropTypes.string,
     temperature: PropTypes.number,
     location: PropTypes.string,
+    numChannels: PropTypes.number,
   }),
 };
 
@@ -76,6 +96,7 @@ Info.defaultProps = {
     sensorName: '',
     temperature: 0,
     location: '',
+    numChannels: 0,
   }
 };
 

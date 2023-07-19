@@ -4,9 +4,10 @@ import isEqual from 'lodash/isEqual';
 import * as d3 from 'd3';
 import Scene from './Scene/Scene';
 import Info from './Info/Info';
-import TemperatureGradiant from './Temperature/TemperatureGradiant';
-import styles from './MainTelESS.module.css';
+import Gradiant from './Gradiant/Gradiant';
 
+import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
+import styles from './MainTelESS.module.css';
 
 export default class MainTelESS extends Component {
   static propTypes = {
@@ -14,26 +15,49 @@ export default class MainTelESS extends Component {
     subscribeToStreams: PropTypes.func,
     /** Function to unsubscribe to streams to stop receiving */
     unsubscribeToStreams: PropTypes.func,
-    sensorName: PropTypes.string,
-    temperatures: PropTypes.arrayOf(PropTypes.number),
-    locations: PropTypes.arrayOf(PropTypes.string),
-    numChannels: PropTypes.number,
-    xPositions: PropTypes.arrayOf(PropTypes.number),
-    yPositions: PropTypes.arrayOf(PropTypes.number),
-    zPositions: PropTypes.arrayOf(PropTypes.number),
-    minTemperatureLimit: PropTypes.number,
-    maxTemperatureLimit: PropTypes.number,
+    temperature: PropTypes.arrayOf(PropTypes.shape({
+      sensorName: PropTypes.string,
+      value: PropTypes.number,
+      indexArr: PropTypes.number,
+      location: PropTypes.string,
+      numChannels: PropTypes.number,
+      xPosition: PropTypes.number,
+      yPosition: PropTypes.number,
+      zPosition: PropTypes.number,
+    })),
+    relativeHumidity: PropTypes.arrayOf(PropTypes.shape({
+      sensorName: PropTypes.string,
+      value: PropTypes.number,
+      location: PropTypes.string,
+      xPosition: PropTypes.number,
+      yPosition: PropTypes.number,
+      zPosition: PropTypes.number,
+    })),
+    minGradiantLimit: PropTypes.number,
+    maxGradiantLimit: PropTypes.number,
+    option: PropTypes.oneOf(['temperature', 'relativeHumidity', 'airflow']),
   };
 
   static defaultProps = {
-    sensorName: '',
-    temperatures: [],
-    numChannels: 0,
-    xPositions: [],
-    yPositions: [],
-    zPositions: [],
-    minTemperatureLimit: -20,
-    maxTemperatureLimit: 40,
+    temperature: [{
+      sensorName: '',
+      value: 0,
+      indexArr: 0,
+      numChannels: 0,
+      xPosition: 0,
+      yPosition: 0,
+      zPosition: 0,
+    }],
+    relativeHumidity: [{
+      sensorName: '',
+      value: 0,
+      xPosition: 0,
+      yPosition: 0,
+      zPosition: 0,
+    }],
+    minGradiantLimit: -20,
+    maxGradiantLimit: 40,
+    option: 'temperature',
   };
 
   constructor(props) {
@@ -42,39 +66,97 @@ export default class MainTelESS extends Component {
       selectedSensor: 0,
       selectedSensorData: {},
       positions: [],
-      referenceId: Array.from({length: props.numChannels}).fill(0).map((_, index) => index + 1),
+      referenceIds: [],
+      plot: this.getBasePlot('temperarure', 1, 0),
     };
+    this.plotRef = React.createRef();
+  }
+
+  getBasePlot(topic, salindex, indexArr=undefined) {
+    const config = {};
+    const accessor = indexArr !== undefined ? `(x) => x[${indexArr}]` : '(x) => x';
+    config[`${topic}`] = {
+      'type': 'line',
+      // 'color': '#ff7f0e',
+      'dash': [
+        4,
+        0
+      ],
+      'values': [
+        {
+          'variable': 'x',
+          'category': 'telemetry',
+          'csc': 'ESS',
+          'salindex': salindex,
+          'topic': topic,
+          'item': 'timestamp',
+          'accessor': accessor,
+        },
+        {
+          'variable': 'y',
+          'category': 'telemetry',
+          'csc': 'ESS',
+          'salindex': salindex,
+          'topic': topic,
+          'item': topic,
+          'accessor': accessor,
+        }
+      ]
+    };
+    return config;
   }
 
   componentDidMount() {
     this.props.subscribeToStreams();
     const positions = [];
-      for(let i = 0; i < this.props.numChannels; i++) {
-        positions.push({
-          x: this.props.xPositions[i],
-          y: this.props.yPositions[i],
-          z: this.props.zPositions[i],
-        });
-      }
-    this.setState({positions: positions});
+    const option =  this.props.option ?? 'temperature';
+    for(let i = 0; i < this.props[option].length; i++) {
+      positions.push({
+        x: this.props[option][i].xPosition,
+        y: this.props[option][i].yPosition,
+        z: this.props[option][i].zPosition,
+      });
+    }
+
+    const referenceIds = Array.from({length: this.props[option].length}).fill(0).map((_, index) => index + 1);
+
+    this.setState({
+      positions: positions,
+      referenceIds: referenceIds,
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const option =  this.props.option ?? 'temperature';
+
     if (
-      prevProps.numChannels !== this.props.numChannels ||
-      !isEqual(prevProps.xPositions, this.props.xPositions) ||
-      !isEqual(prevProps.yPositions, this.props.yPositions) ||
-      !isEqual(prevProps.zPositions, this.props.zPositions)
+      !isEqual(prevProps[option], this.props[option])
     ) {
       const positions = [];
-      for(let i = 0; i < this.props.numChannels; i++) {
+      for(let i = 0; i < this.props[option].length; i++) {
         positions.push({
-          x: this.props.xPositions[i],
-          y: this.props.yPositions[i],
-          z: this.props.zPositions[i],
+          x: this.props[option][i].xPosition,
+          y: this.props[option][i].yPosition,
+          z: this.props[option][i].zPosition,
         });
       }
-      this.setState({positions: positions});
+      const referenceIds = Array.from({length: this.props[option].length}).fill(0).map((_, index) => index + 1);
+
+      this.setState({
+        positions: positions,
+        referenceIds: referenceIds,
+      });
+    }
+
+    if (prevState.selectedSensor !== this.state.selectedSensor ||
+        prevProps.option !== this.props.option
+    ) {
+      const telemetry = this.state.selectedSensorData?.telemetry ?? 'telemetry-ESS-1-temperature';
+      const indexArr = this.state.selectedSensorData?.indexArr !== undefined ? this.state.selectedSensorData?.indexArr : undefined;
+      const [category, csc, salindex, topic] = telemetry.split('-');
+
+      const option = this.props.option;
+      this.setState({plot: this.getBasePlot(option, salindex, indexArr)});
     }
   }
 
@@ -83,26 +165,30 @@ export default class MainTelESS extends Component {
   }
 
   getGradiantColorX = (value) => {
-    const { minTemperatureLimit, maxTemperatureLimit } = this.props;
+    const { minGradiantLimit, maxGradiantLimit } = this.props;
     const colorInterpolate = d3
       .scaleLinear()
-      .domain(d3.extent([minTemperatureLimit, maxTemperatureLimit]))
+      .domain(d3.extent([minGradiantLimit, maxGradiantLimit]))
       .range([0, 1]);
-    return TemperatureGradiant.COLOR_SCALE(1 - colorInterpolate(value));
+    return Gradiant.COLOR_SCALE(1 - colorInterpolate(value));
   };
 
   setSensor( sensorId ) {
-    const {referenceId} = this.state;
-    const index = referenceId.indexOf(sensorId);
+    const { referenceIds } = this.state;
+    const option =  this.props.option ?? 'temperature';
+    const index = referenceIds.indexOf(sensorId);
     const selectedSensorData = {
       sensorId: sensorId,
-      sensorName: this.props.sensorName,
-      temperature: this.props.temperatures[index],
-      location: this.props.locations[index],
+      telemetry: this.props[option][index].telemetry,
+      sensorName: this.props[option][index].sensorName,
+      numChannels: this.props[option][index].numChannels,
+      indexArr: this.props[option][index].indexArr,
+      value: this.props[option][index].value,
+      location: this.props[option][index].location,
       position: {
-        x: this.props.xPositions[index],
-        y: this.props.yPositions[index],
-        z: this.props.zPositions[index],
+        x: this.props[option][index].xPosition,
+        y: this.props[option][index].yPosition,
+        z: this.props[option][index].zPosition,
       },
     };
     this.setState({
@@ -112,10 +198,11 @@ export default class MainTelESS extends Component {
   }
 
   render() {
-
-    const { selectedSensor, selectedSensorData, positions, referenceId } = this.state;
-    const { temperatures, minTemperatureLimit, maxTemperatureLimit } = this.props;
-
+    const { selectedSensor, selectedSensorData, positions, referenceIds } = this.state;
+    const { minGradiantLimit, maxGradiantLimit, option } = this.props;
+    const sensors = this.props[option] ?? [];
+    const values = sensors.map((sensor) => sensor.value ?? 0) ?? [];
+    
     return (
       <div className={styles.sceneAndInfoPlotsContainer}>
 
@@ -123,9 +210,9 @@ export default class MainTelESS extends Component {
           <Scene
             positions={positions}
             selectedSensor={selectedSensor}
-            sensorReferenceId={referenceId}
+            sensorReferenceId={referenceIds}
             setSensor={(id) => this.setSensor(id)}
-            temperatures={temperatures}
+            values={values}
             getGradiantColorX={this.getGradiantColorX}
           />
         </div>
@@ -138,18 +225,27 @@ export default class MainTelESS extends Component {
           </div>
 
           <div className={styles.tempContainer}>
-            <TemperatureGradiant
-              sensorReferenceId={referenceId}
+            <Gradiant
+              sensorReferenceId={referenceIds}
               selectedId={selectedSensor}
-              setpoint={selectedSensorData?.temperature}
-              absoluteTemperature={temperatures}
-              minTemperatureLimit={minTemperatureLimit}
-              maxTemperatureLimit={maxTemperatureLimit}
+              setpoint={selectedSensorData?.value}
+              absoluteGradiant={values}
+              minGradiantLimit={minGradiantLimit}
+              maxGradiantLimit={maxGradiantLimit}
+              option={option}
             />
           </div>
 
           <div className={styles.plotsContainer}>
-
+            <div className={styles.title}>Plot</div>
+            <div className={styles.plots} ref={this.plotRef} >
+              <PlotContainer
+                containerNode={this.plotRef?.current}
+                xAxisTitle="Time"
+                legendPosition="bottom"
+                inputs={this.state.plot}
+              />
+            </div>
           </div>
         </div>
 
