@@ -9,9 +9,9 @@
   }
 }
 
-@media (min-width: 1240px) {
+@media (min-width: 3840px) {
   .App {
-    font-size: 14px;
+    font-size: 20px;
   }
 }
 
