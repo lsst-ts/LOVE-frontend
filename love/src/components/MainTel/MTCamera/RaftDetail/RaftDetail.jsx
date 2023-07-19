@@ -106,13 +106,13 @@ class RaftDetail extends Component {
             ref={this.rebsRefs[i]}
             style={{ border: selectedReb?.id === raft.rebs[i].id ? '2px solid white' : `` }}
             className={styles.plot}
-            // onClick={() => {
-            //   setSelectedReb(raft.rebs[i]);
-            // }}
-            // onMouseOver={() => {
-            //   setHoveredReb(raft.rebs[i]);
-            //   setHoveredCCD(null);
-            // }}
+            onClick={() => {
+              setSelectedCCD(raft.ccds[i]);
+            }}
+            onMouseOver={() => {
+              setHoveredCCD(raft.ccds[i]);
+              setHoveredReb(null);
+            }}
           >
             <PlotContainer
               memorySize={50}

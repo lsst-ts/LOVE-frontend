@@ -14,7 +14,6 @@ const COLOR_MAPPING = {
 class RaftDetail extends Component {
   constructor(props) {
     super(props);
-    const rebIndex = [0, 1, 2];
     const plotsRebs0 = [
       {
         hVBiasSwitch: {
