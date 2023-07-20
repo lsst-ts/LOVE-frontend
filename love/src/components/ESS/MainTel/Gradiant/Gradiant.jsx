@@ -66,7 +66,8 @@ export default class Gradiant extends Component {
     return {
       temperature: 'C°',
       relativeHumidity: '%',
-      airflow: 'm/s',
+      airFlow: 'm/s',
+      airTurbulence: 'm/s',
     }[this.props.option ?? 'temperature'];
   }
 

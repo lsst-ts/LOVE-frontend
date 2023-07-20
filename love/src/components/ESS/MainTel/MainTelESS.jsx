@@ -33,9 +33,25 @@ export default class MainTelESS extends Component {
       yPosition: PropTypes.number,
       zPosition: PropTypes.number,
     })),
+    airFlow: PropTypes.arrayOf(PropTypes.shape({
+      sensorName: PropTypes.string,
+      value: PropTypes.number,
+      location: PropTypes.string,
+      xPosition: PropTypes.number,
+      yPosition: PropTypes.number,
+      zPosition: PropTypes.number,
+    })),
+    airTurbulence: PropTypes.arrayOf(PropTypes.shape({
+      sensorName: PropTypes.string,
+      value: PropTypes.number,
+      location: PropTypes.string,
+      xPosition: PropTypes.number,
+      yPosition: PropTypes.number,
+      zPosition: PropTypes.number,
+    })),
     minGradiantLimit: PropTypes.number,
     maxGradiantLimit: PropTypes.number,
-    option: PropTypes.oneOf(['temperature', 'relativeHumidity', 'airflow']),
+    option: PropTypes.oneOf(['temperature', 'relativeHumidity', 'airflow', 'airTurbulence']),
   };
 
   static defaultProps = {
@@ -55,6 +71,20 @@ export default class MainTelESS extends Component {
       yPosition: 0,
       zPosition: 0,
     }],
+    airFlow: [{
+      sensorName: '',
+      value: 0,
+      xPosition: 0,
+      yPosition: 0,
+      zPosition: 0,
+    }],
+    airTurbulence: [{
+      sensorName: '',
+      value: 0,
+      xPosition: 0,
+      yPosition: 0,
+      zPosition: 0,
+    }],
     minGradiantLimit: -20,
     maxGradiantLimit: 40,
     option: 'temperature',
@@ -67,12 +97,12 @@ export default class MainTelESS extends Component {
       selectedSensorData: {},
       positions: [],
       referenceIds: [],
-      plot: this.getBasePlot('temperarure', 1, 0),
+      plot: this.getBasePlot(undefined, undefined, undefined, undefined),
     };
     this.plotRef = React.createRef();
   }
 
-  getBasePlot(topic, salindex, indexArr=undefined) {
+  getBasePlot(salindex, topic, item, indexArr=undefined) {
     const config = {};
     const accessor = indexArr !== undefined ? `(x) => x[${indexArr}]` : '(x) => x';
     config[`${topic}`] = {
@@ -98,7 +128,7 @@ export default class MainTelESS extends Component {
           'csc': 'ESS',
           'salindex': salindex,
           'topic': topic,
-          'item': topic,
+          'item': item,
           'accessor': accessor,
         }
       ]
@@ -156,7 +186,7 @@ export default class MainTelESS extends Component {
       const [category, csc, salindex, topic] = telemetry.split('-');
 
       const option = this.props.option;
-      this.setState({plot: this.getBasePlot(option, salindex, indexArr)});
+      this.setState({plot: this.getBasePlot(salindex, option, option, indexArr)});
     }
   }
 

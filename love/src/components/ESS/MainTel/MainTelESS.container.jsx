@@ -42,7 +42,7 @@ export const schema = {
     },
     option: {
       type: 'string',
-      description: 'select option between temperature, relativeHumidity or airflow',
+      description: 'select option between temperature, relativeHumidity, airflow or airTurbulence',
       default: 'temperature',
     },
   },
@@ -78,6 +78,7 @@ const parse = (streams, option) => {
     case 'temperature': return parseTemperature(streams);
     case 'relativeHumidity': return parseHumidity(streams);
     case 'airflow': return parseAirflow(streams);
+    case 'airTurbulence': return parseAirTurbulence(streams);
     default: return [];
   }
 }
@@ -138,7 +139,7 @@ const parseAirflow = (streams) => {
       const essData = entry[1];
       const sensorName = essData?.sensorName.value ?? '';
       const value = essData?.speed.value ?? 0;
-      const direction = essData?.direction.value ?? 0;
+      const direction = essData?.speed.direction ?? 0;
       const location = essData?.location.value ?? '';
       airflows.push({
         sensorName,
@@ -153,6 +154,37 @@ const parseAirflow = (streams) => {
     });
   });
   return airflows;
+}
+
+const parseAirTurbulence = (streams) => {
+  const airTurbulences = [];
+  streams.forEach((stream) => {
+    Object.entries(stream).forEach((entry) => {
+      const essData = entry[1];
+      const sensorName = essData?.sensorName.value ?? '';
+      const value = essData?.speed.value ?? {x: 0, y: 0, z: 0};
+      const location = essData?.location.value ?? '';
+      airTurbulences.push({
+        sensorName,
+        value: value,
+        location: location,
+        telemetry: entry[0],
+        xPosition: 5 - airTurbulences.length,
+        yPosition: 2,
+        zPosition: airTurbulences.length,
+      });
+    });
+  });
+  airTurbulences.push({
+    sensorName: 'test',
+    value: {x: 1, y: 1, z:-1},
+    location: 'location test',
+    telemetry: 'telemetry-ESS-402-airTurbulence',
+    xPosition: 2,
+    yPosition: 3,
+    zPosition: 2,
+  });
+  return airTurbulences;
 }
 
 const mapStateToProps = (state, ownProps) => {

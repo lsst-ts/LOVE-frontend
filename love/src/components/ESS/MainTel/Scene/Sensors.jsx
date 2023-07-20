@@ -102,24 +102,38 @@ export function Sensors(props) {
   };
   
   const sensors = positions.map((position, index) => {
-    const temperature = values[index];
-    const rgb = (getGradiantColorX  && temperature) ? getGradiantColorX(temperature) : 'rgb(255, 255, 0)';
+    const value = values[index];
+    const rgb = (getGradiantColorX  && value) ? getGradiantColorX(value) : 'rgb(255, 255, 0)';
     return { position: position, id: index + 1, color: rgb };
   });
 
   return (
     <>
       {sensors.map((sensor) => {
-        return (
-          <Sensor
-            key={`sensor-${sensor.id}`}
-            sensorId={sensor.id}
-            position={sensor.position}
-            color={sensor.color}
-            setSensor={() => setSensor(sensor.id)}
-            selectedSensor={selectedSensor}
-          />
-        );
+        if (sensor.values) {
+          return (
+            <Sensor
+              key={`sensor-${sensor.id}`}
+              sensorId={sensor.id}
+              position={sensor.position}
+              color={sensor.color}
+              setSensor={() => setSensor(sensor.id)}
+              selectedSensor={selectedSensor}
+            />
+          );
+        } else {
+          return (
+            <Line
+              key={`sensor-${sensor.id}`}
+              sensorId={sensor.id}
+              start={sensor.position}
+              end={sensor.value}
+              color={sensor.color}
+              setSensor={() => setSensor(sensor.id)}
+              selectedSensor={selectedSensor}
+            />
+          );
+        }
       })}
     </>
   );
@@ -133,7 +147,11 @@ Sensors.propTypes = {
   })),
   setSensor: PropTypes.func,
   selectedSensor: PropTypes.number,
-  values: PropTypes.arrayOf(PropTypes.number),
+  values: PropTypes.oneOf([PropTypes.arrayOf(PropTypes.number), PropTypes.arrayOf(PropTypes.shape({
+    x: PropTypes.number,
+    y: PropTypes.number,
+    z: PropTypes.number,
+  }))]),
   getGradiantColorX: PropTypes.func,
 };
 
@@ -144,3 +162,76 @@ Sensors.defaultProps = {
   values: [],
   getGradiantColorX: () => {0xffff00},
 };
+
+const Line = (props) => {
+  const ref = useRef();
+  const [hovered, setHover] = useState(false);
+  const isSelected = props.selectedSensor === props.sensorId;
+
+  const points = [];
+  const v1 = new THREE.Vector3(props.start.x, props.start.y, props.start.z);
+  const v2 = new THREE.Vector3(props.end.x, props.end.y, props.end.z);
+  points.push(v1);
+  points.push(v2);
+
+  const direction = new THREE.Vector3();
+  const distance = v1.distanceTo(v2);
+  direction.subVectors(v2, v1).normalize();
+
+  const conePosition = new THREE.Vector3().copy(v1).addScaledVector(direction, distance - 0.21);
+  const coneRotation = new THREE.Euler().setFromQuaternion(
+    new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction)
+  );
+
+  const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+
+  return (
+    <>
+      <line
+        {...props}
+        ref={ref}
+        onClick={(e) => props.setSensor(props.sensorId)}
+        geometry={lineGeometry}
+      >
+        <lineBasicMaterial color={hovered ? 0xffffff : props.color}
+          linewidth={5} linecap={'round'} linejoin={'round'}
+        />
+      </line>
+      <mesh
+        {...props}
+        ref={ref}
+        onClick={(e) => props.setSensor(props.sensorId)}
+        position={conePosition}
+        rotation={coneRotation}
+      >
+        <coneGeometry args={[0.2, 0.5, 32]} />
+        <meshBasicMaterial color={hovered ? 0xffffff : props.color}/>
+
+      </mesh>
+    </>
+  );
+}
+
+Line.propTypes = {
+  sensorId: PropTypes.number,
+  start: PropTypes.shape({
+    x: PropTypes.number,
+    y: PropTypes.number,
+    z: PropTypes.number,
+  }),
+  end: PropTypes.shape({
+    x: PropTypes.number,
+    y: PropTypes.number,
+    z: PropTypes.number,
+  }),
+  color: PropTypes.string,
+  setSensor: PropTypes.func,
+};
+
+Line.defaultProps = {
+  sensorId: 0,
+  start: {x: 0, y: 0, z: 0},
+  end: {x: 1, y: 1, z: 1},
+  color: 0xffff00,
+  setSensor: (id) => {console.log('Sensor Arrow default setSensor(', id, ')')},
+}

@@ -70,6 +70,13 @@ Scene.propTypes = {
     z: PropTypes.number,
   })),
   setSensor: PropTypes.func,
+  values: PropTypes.oneOf([PropTypes.arrayOf(PropTypes.number),
+    PropTypes.shape({
+    x: PropTypes.number,
+    y: PropTypes.number,
+    z: PropTypes.number,
+  })]),
+  getGradiantColorX: PropTypes.func,
 };
 
 Scene.defaultProps = {
