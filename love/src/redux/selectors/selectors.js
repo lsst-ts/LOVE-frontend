@@ -1445,6 +1445,300 @@ export const getBlocksInfo = (state, salindex) => {
   };
 };
 
+// CCCamera Summary Detail
+export const getCCCameraSummary = (state) => {
+  const subscriptions = [
+    'event-CCCamera-0-summaryState',
+    'event-CCCamera-0-ccsCommandState',
+    'event-CCCamera-0-calibrationDetailedState',
+    'event-CCCamera-0-offlineDetailedState',
+    'event-CCCamera-0-imageReadinessDetailedState',
+    'event-CCCamera-0-shutterDetailedState',
+    'event-CCCamera-0-filterChangerDetailedState',
+    'event-CCCamera-0-raftsDetailedState',
+  ];
+  const summaryData = getStreamsData(state, subscriptions);
+  return {
+    cccameraSummaryState: summaryData['event-CCCamera-0-summaryState']?.[0]?.summaryState.value ?? 0,
+    cccameraCcsCmdState: summaryData['event-CCCamera-0-ccsCommandState']?.[0]?.substate.value ?? 0,
+    cccameraCalibrationDetailedStatus:
+      summaryData['event-CCCamera-0-calibrationDetailedState']?.[0]?.substate.value ?? 0,
+    cccameraOffLineDetailedState: summaryData['event-CCCamera-0-offlineDetailedState']?.[0]?.substate.value ?? 0,
+    cccameraImageReadinessDetailedState:
+      summaryData['event-CCCamera-0-imageReadinessDetailedState']?.[0]?.substate.value ?? 0,
+    ccCameraShutterDetailedState: summaryData['event-CCCamera-0-shutterDetailedState']?.[0]?.substate.value ?? 0,
+    ccCameraFilterChangerDetailedState:
+      summaryData['event-CCCamera-0-filterChangerDetailedState']?.[0]?.substate.value ?? 0,
+    ccCameraRaftsDetailedState: summaryData['event-CCCamera-0-raftsDetailedState']?.[0]?.substate.value ?? 0,
+  };
+};
+
+// CCCamera
+export const getCCStartIntegration = (state) => {
+  const subscriptions = ['event-CCCamera-0-startIntegration'];
+  const startIntegrationData = getStreamsData(state, subscriptions);
+  return {
+    imagesInSequenceInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imagesInSequence.value ?? 0,
+    imageNameInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageName.value ?? '',
+    imageIndexInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageIndex.value ?? 0,
+    imageSourceInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageSource.value ?? '',
+    imageControllerInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageController.value ?? '',
+    imageDateInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageDate.value ?? '',
+    imageNumberInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStartInt:
+      startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.timestampAcquisitionStart.value ?? 0,
+    exposureTimeInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.exposureTime.value ?? '',
+    modeInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.mode.value ?? '',
+    timeoutInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.timeout.value ?? 0,
+  };
+};
+
+export const getCCStartReadout = (state) => {
+  const subscriptions = ['event-CCCamera-0-startReadout'];
+  const startReadOutData = getStreamsData(state, subscriptions);
+  return {
+    imagesInSequenceSReadout: startReadOutData['event-CCCamera-0-startReadout']?.[0]?.imagesInSequence.value ?? 0,
+    imageNameSReadout: startReadOutData['event-CCCamera-0-startReadout']?.[0]?.imageName.value ?? '',
+    imageIndexSReadout: startReadOutData['event-CCCamera-0-startReadout']?.[0]?.imageIndex.value ?? 0,
+    imageSourceSReadout: startReadOutData['event-CCCamera-0-startReadout']?.[0]?.imageSource.value ?? '',
+    imageControllerSReadout: startReadOutData['event-CCCamera-0-startReadout']?.[0]?.imageController.value ?? '',
+    imageDateSReadout: startReadOutData['event-CCCamera-0-startReadout']?.[0]?.imageDate.value ?? '',
+    imageNumberSReadout: startReadOutData['event-CCCamera-0-startReadout']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStartSReadout:
+      startReadOutData['event-CCCamera-0-startReadout']?.[0]?.timestampAcquisitionStart.value ?? 0,
+    exposureTimeSReadout: startReadOutData['event-CCCamera-0-startReadout']?.[0]?.exposureTime.value ?? 0,
+    timestampStartOfReadoutSReadout:
+      startReadOutData['event-CCCamera-0-startReadout']?.[0]?.timestampStartOfReadout.value ?? 0,
+  };
+};
+
+export const getCCEndReadout = (state) => {
+  const subscriptions = ['event-CCCamera-0-endReadout'];
+  const endReadOutData = getStreamsData(state, subscriptions);
+  return {
+    imagesInSequenceEReadout: endReadOutData['event-CCCamera-0-endReadout']?.[0]?.imagesInSequence.value ?? 0,
+    imageNameEReadout: endReadOutData['event-CCCamera-0-endReadout']?.[0]?.imageName.value ?? '',
+    imageIndexEReadout: endReadOutData['event-CCCamera-0-endReadout']?.[0]?.imageIndex.value ?? 0,
+    imageSourceEReadout: endReadOutData['event-CCCamera-0-endReadout']?.[0]?.imageSource.value ?? '',
+    imageControllerEReadout: endReadOutData['event-CCCamera-0-endReadout']?.[0]?.imageController.value ?? '',
+    imageDateEReadout: endReadOutData['event-CCCamera-0-endReadout']?.[0]?.imageDate.value ?? '',
+    imageNumberEReadout: endReadOutData['event-CCCamera-0-endReadout']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStartEReadout:
+      endReadOutData['event-CCCamera-0-endReadout']?.[0]?.timestampAcquisitionStart.value ?? 0,
+    requestedExposureTimeEReadout: endReadOutData['event-CCCamera-0-endReadout']?.[0]?.requestedExposureTime.value ?? 0,
+    timestampEndOfReadoutEReadout: endReadOutData['event-CCCamera-0-endReadout']?.[0]?.timestampEndOfReadout.value ?? 0,
+  };
+};
+
+export const getCCEndOfImageTelemetry = (state) => {
+  const subscriptions = ['event-CCCamera-0-endOfImageTelemetry'];
+  const endOfImageTelemetryData = getStreamsData(state, subscriptions);
+  return {
+    imagesInSequenceTelemetry:
+      endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.imagesInSequence.value ?? 0,
+    imageNameTelemetry: endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.imageName.value ?? '',
+    imageIndexTelemetry: endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.imageIndex.value ?? 0,
+    imageSourceTelemetry: endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.imageSource.value ?? '',
+    imageControllerTelemetry:
+      endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.imageController.value ?? '',
+    imageDateTelemetry: endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.imageDate.value ?? '',
+    imageNumberTelemetry: endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStartTelemetry:
+      endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.timestampAcquisitionStart.value ?? 0,
+    exposureTimeTelemetry:
+      endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.exposureTime.value ?? 0,
+    imageTagTelemetry: endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.imageTag.value ?? '',
+    timestampDateObsTelemetry:
+      endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.timestampDateObs.value ?? 0,
+    timestampDateEndTelemetry:
+      endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.timestampDateEnd.value ?? 0,
+    measuredShutterOpenTimeTelemetry:
+      endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.measuredShutterOpenTime.value ?? 0,
+    darkTimeTelemetry: endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.darkTime.value ?? 0,
+    emulatedImageTelemetry:
+      endOfImageTelemetryData['event-CCCamera-0-endOfImageTelemetry']?.[0]?.emulatedImage.value ?? '',
+  };
+};
+
+export const getCCTempControlStatus = (state) => {
+  const subscriptions = ['event-CCCamera-0-focal_plane_Raft_RaftTempControlStatusConfiguration'];
+  const tempControlData = getStreamsData(state, subscriptions);
+  return {
+    tempControlActive:
+      tempControlData['event-CCCamera-0-focal_plane_Raft_RaftTempControlStatusConfiguration']?.[0]?.tempcontrol_active
+        .value ?? [],
+  };
+};
+
+export const getCCFocalPlaneReb = (state) => {
+  const subscriptions = ['telemetry-CCCamera-0-focal_plane_Reb'];
+  const focalPlaneReb = getStreamsData(state, subscriptions);
+  return {
+    hVBiasSwitch: focalPlaneReb['telemetry-CCCamera-0-focal_plane_Reb']?.hVBiasSwitch.value ?? [],
+    anaV: focalPlaneReb['telemetry-CCCamera-0-focal_plane_Reb']?.anaV.value ?? [],
+    power: focalPlaneReb['telemetry-CCCamera-0-focal_plane_Reb']?.power.value ?? [],
+  };
+};
+
+export const getCCFocalPlaneCCD = (state) => {
+  const subscriptions = ['telemetry-CCCamera-0-focal_plane_Ccd'];
+  const focalPlaneCCD = getStreamsData(state, subscriptions);
+  return {
+    gDV: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.gDV.value ?? [],
+    oDV: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.oDV.value ?? [],
+    oGV: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.oGV.value ?? [],
+    rDV: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.rDV.value ?? [],
+    temp: focalPlaneCCD['telemetry-CCCamera-0-focal_plane_Ccd']?.temp.value ?? [],
+  };
+};
+
+//MTCamera
+export const getMTCameraSummary = (state) => {
+  const subscriptions = [
+    'event-MTCamera-0-summaryState',
+    'event-MTCamera-0-ccsCommandState',
+    'event-MTCamera-0-calibrationDetailedState',
+    'event-MTCamera-0-offlineDetailedState',
+    'event-MTCamera-0-imageReadinessDetailedState',
+    'event-MTCamera-0-shutterDetailedState',
+    'event-MTCamera-0-filterChangerDetailedState',
+    'event-MTCamera-0-raftsDetailedState',
+  ];
+  const summaryData = getStreamsData(state, subscriptions);
+  return {
+    mtcameraSummaryState: summaryData['event-MTCamera-0-summaryState']?.[0]?.summaryState.value ?? 0,
+    mtcameraCcsCmdState: summaryData['event-MTCamera-0-ccsCommandState']?.[0]?.substate.value ?? 0,
+    mtcameraCalibrationDetailedStatus:
+      summaryData['event-MTCamera-0-calibrationDetailedState']?.[0]?.substate.value ?? 0,
+    mtcameraOffLineDetailedState: summaryData['event-MTCamera-0-offlineDetailedState']?.[0]?.substate.value ?? 0,
+    mtcameraImageReadinessDetailedState:
+      summaryData['event-MTCamera-0-imageReadinessDetailedState']?.[0]?.substate.value ?? 0,
+    mtCameraShutterDetailedState: summaryData['event-MTCamera-0-shutterDetailedState']?.[0]?.substate.value ?? 0,
+    mtCameraFilterChangerDetailedState:
+      summaryData['event-MTCamera-0-filterChangerDetailedState']?.[0]?.substate.value ?? 0,
+    mtCameraRaftsDetailedState: summaryData['event-MTCamera-0-raftsDetailedState']?.[0]?.substate.value ?? 0,
+  };
+};
+
+export const getStartIntegration = (state) => {
+  const subscriptions = ['event-MTCamera-0-startIntegration'];
+  const startIntegrationData = getStreamsData(state, subscriptions);
+  return {
+    imagesInSequenceInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imagesInSequence.value ?? 0,
+    imageNameInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageName.value ?? '',
+    imageIndexInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageIndex.value ?? 0,
+    imageSourceInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageSource.value ?? '',
+    imageControllerInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageController.value ?? '',
+    imageDateInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageDate.value ?? '',
+    imageNumberInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStartInt:
+      startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.timestampAcquisitionStart.value ?? 0,
+    exposureTimeInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.exposureTime.value ?? '',
+    modeInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.mode.value ?? '',
+    timeoutInt: startIntegrationData['event-MTCamera-0-startIntegration']?.[0]?.timeout.value ?? 0,
+  };
+};
+
+export const getStartReadout = (state) => {
+  const subscriptions = ['event-MTCamera-0-startReadout'];
+  const startReadOutData = getStreamsData(state, subscriptions);
+  return {
+    imagesInSequenceSReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imagesInSequence.value ?? 0,
+    imageNameSReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageName.value ?? '',
+    imageIndexSReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageIndex.value ?? 0,
+    imageSourceSReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageSource.value ?? '',
+    imageControllerSReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageController.value ?? '',
+    imageDateSReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageDate.value ?? '',
+    imageNumberSReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStartSReadout:
+      startReadOutData['event-MTCamera-0-startReadout']?.[0]?.timestampAcquisitionStart.value ?? 0,
+    exposureTimeSReadout: startReadOutData['event-MTCamera-0-startReadout']?.[0]?.exposureTime.value ?? 0,
+    timestampStartOfReadoutSReadout:
+      startReadOutData['event-MTCamera-0-startReadout']?.[0]?.timestampStartOfReadout.value ?? 0,
+  };
+};
+
+export const getEndReadout = (state) => {
+  const subscriptions = ['event-MTCamera-0-endReadout'];
+  const endReadOutData = getStreamsData(state, subscriptions);
+  return {
+    imagesInSequenceEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imagesInSequence.value ?? 0,
+    imageNameEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageName.value ?? '',
+    imageIndexEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageIndex.value ?? 0,
+    imageSourceEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageSource.value ?? '',
+    imageControllerEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageController.value ?? '',
+    imageDateEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageDate.value ?? '',
+    imageNumberEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStartEReadout:
+      endReadOutData['event-MTCamera-0-endReadout']?.[0]?.timestampAcquisitionStart.value ?? 0,
+    requestedExposureTimeEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.requestedExposureTime.value ?? 0,
+    timestampEndOfReadoutEReadout: endReadOutData['event-MTCamera-0-endReadout']?.[0]?.timestampEndOfReadout.value ?? 0,
+  };
+};
+
+export const getEndOfImageTelemetry = (state) => {
+  const subscriptions = ['event-MTCamera-0-endOfImageTelemetry'];
+  const endOfImageTelemetryData = getStreamsData(state, subscriptions);
+  return {
+    imagesInSequenceTelemetry:
+      endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imagesInSequence.value ?? 0,
+    imageNameTelemetry: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageName.value ?? '',
+    imageIndexTelemetry: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageIndex.value ?? 0,
+    imageSourceTelemetry: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageSource.value ?? '',
+    imageControllerTelemetry:
+      endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageController.value ?? '',
+    imageDateTelemetry: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageDate.value ?? '',
+    imageNumberTelemetry: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStartTelemetry:
+      endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.timestampAcquisitionStart.value ?? 0,
+    exposureTimeTelemetry:
+      endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.exposureTime.value ?? 0,
+    imageTagTelemetry: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.imageTag.value ?? '',
+    timestampDateObsTelemetry:
+      endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.timestampDateObs.value ?? 0,
+    timestampDateEndTelemetry:
+      endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.timestampDateEnd.value ?? 0,
+    measuredShutterOpenTimeTelemetry:
+      endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.measuredShutterOpenTime.value ?? 0,
+    darkTimeTelemetry: endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.darkTime.value ?? 0,
+    emulatedImageTelemetry:
+      endOfImageTelemetryData['event-MTCamera-0-endOfImageTelemetry']?.[0]?.emulatedImage.value ?? '',
+  };
+};
+
+export const getTempControlStatus = (state) => {
+  const subscriptions = ['event-MTCamera-0-focal_plane_Raft_RaftTempControlStatusConfiguration'];
+  const tempControlData = getStreamsData(state, subscriptions);
+  return {
+    tempControlActive:
+      tempControlData['event-MTCamera-0-focal_plane_Raft_RaftTempControlStatusConfiguration']?.[0]?.tempcontrol_active
+        .value ?? [],
+  };
+};
+
+export const getFocalPlaneReb = (state) => {
+  const subscriptions = ['telemetry-MTCamera-0-focal_plane_Reb'];
+  const focalPlaneReb = getStreamsData(state, subscriptions);
+  return {
+    hVBiasSwitch: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.hVBiasSwitch.value ?? [],
+    anaV: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.anaV.value ?? [],
+    power: focalPlaneReb['telemetry-MTCamera-0-focal_plane_Reb']?.power.value ?? [],
+  };
+};
+
+export const getFocalPlaneCCD = (state) => {
+  const subscriptions = ['telemetry-MTCamera-0-focal_plane_Ccd'];
+  const focalPlaneCCD = getStreamsData(state, subscriptions);
+  return {
+    gDV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.gDV.value ?? [],
+    oDI: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.oDI.value ?? [],
+    oDV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.oDV.value ?? [],
+    oGV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.oGV.value ?? [],
+    rDV: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.rDV.value ?? [],
+    temp: focalPlaneCCD['telemetry-MTCamera-0-focal_plane_Ccd']?.temp.value ?? [],
+  };
+};
+
 /**
  * Selects the Weather Forecast State for Weather Forecat view
  * @param {object} state

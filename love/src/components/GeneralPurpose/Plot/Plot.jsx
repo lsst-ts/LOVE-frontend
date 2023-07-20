@@ -6,7 +6,7 @@ import VegaLegend from './VegaTimeSeriesPlot/VegaLegend';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData } from 'Utils';
-import _ from 'lodash';
+import { isEqual } from 'lodash';
 import styles from './Plot.module.css';
 const moment = extendMoment(Moment);
 
@@ -334,7 +334,7 @@ export default class Plot extends Component {
         newData[inputName] = inputData;
       }
     }
-    if (!_.isEqual(data, newData)) {
+    if (!isEqual(data, newData)) {
       this.setState({ data: newData });
     }
   }
@@ -347,7 +347,7 @@ export default class Plot extends Component {
     }
 
     if (
-      !_.isEqual(prevProps.containerNode, this.props.containerNode) &&
+      !isEqual(prevProps.containerNode, this.props.containerNode) &&
       // this.resizeObserver === undefined &&
       this.props.width === undefined && // width/height have more priority
       this.props.height === undefined
@@ -355,13 +355,21 @@ export default class Plot extends Component {
       if (this.props.containerNode && !this.state.resizeObserverListener) {
         this.resizeObserver = new ResizeObserver((entries) => {
           const container = entries[0];
-          const diffControl = this.timeSeriesControlRef && this.timeSeriesControlRef.current ? this.timeSeriesControlRef.current.offsetHeight + 19 : 0;
-          const diffLegend = this.props.legendPosition === 'bottom' && this.legendRef.current ? this.legendRef.current.offsetHeight : 0;
+          const diffControl =
+            this.timeSeriesControlRef && this.timeSeriesControlRef.current
+              ? this.timeSeriesControlRef.current.offsetHeight + 19
+              : 0;
+          const diffLegend =
+            this.props.legendPosition === 'bottom' && this.legendRef.current ? this.legendRef.current.offsetHeight : 0;
           const newHeight = container.contentRect.height - diffControl - diffLegend;
           const newWidth = container.contentRect.width;
-          if (container.contentRect.height !== 0 && container.contentRect.width !== 0 &&
-            ((this.state.containerHeight === undefined ||  Math.abs(this.state.containerHeight - newHeight) > 1) ||
-            (this.state.containerWidth === undefined || Math.abs(this.state.containerWidth - newWidth) > 1))
+          if (
+            container.contentRect.height !== 0 &&
+            container.contentRect.width !== 0 &&
+            (this.state.containerHeight === undefined ||
+              Math.abs(this.state.containerHeight - newHeight) > 1 ||
+              this.state.containerWidth === undefined ||
+              Math.abs(this.state.containerWidth - newWidth) > 1)
           ) {
             this.setState({
               containerHeight: container.contentRect.height - diffControl - diffLegend,
@@ -388,7 +396,21 @@ export default class Plot extends Component {
       });
     }
 
-    if (!_.isEqual(prevProps.inputs, inputs)) {
+    function inputsAreEqual(prevInput, input) {
+      const cleanPrevInput = { ...prevInput };
+      const cleanInput = { ...input };
+      Object.keys(cleanPrevInput).forEach((key) => {
+        const { accessor, ...rest } = cleanPrevInput[key];
+        cleanPrevInput[key] = rest;
+      });
+      Object.keys(cleanInput).forEach((key) => {
+        const { accessor, ...rest } = cleanInput[key];
+        cleanInput[key] = rest;
+      });
+      return isEqual(cleanPrevInput, cleanInput);
+    }
+
+    if (!inputsAreEqual(prevProps.inputs, inputs)) {
       const { unsubscribeToStreams, subscribeToStreams } = this.props;
       unsubscribeToStreams();
       subscribeToStreams();
@@ -399,7 +421,7 @@ export default class Plot extends Component {
       this.setState({ data: _data });
     }
 
-    if (!_.isEqual(prevProps.inputs, inputs) || !_.isEqual(prevProps.streams, streams)) {
+    if (!inputsAreEqual(prevProps.inputs, inputs) || !isEqual(prevProps.streams, streams)) {
       this.parseInputStream(inputs, streams);
     }
   }
@@ -468,7 +490,7 @@ export default class Plot extends Component {
         ...(inputs[input].dash !== undefined ? { dash: inputs[input].dash } : {}),
         ...(inputs[input].shape !== undefined ? { shape: inputs[input].shape } : {}),
         ...(inputs[input].filled !== undefined ? { filled: inputs[input].filled } : {}),
-        ...(inputs[input].orient !== undefined ? { orient: inputs[input].orient } : {orient: 'right'}),
+        ...(inputs[input].orient !== undefined ? { orient: inputs[input].orient } : { orient: 'right' }),
       };
     });
 

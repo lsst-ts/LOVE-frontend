@@ -529,6 +529,46 @@ export const mainIndex = {
       },
     },
   },
+  MTCamera: {
+    component: require('../MainTel/MTCamera/MTCamera.container').default,
+    schema: {
+      ...require('../MainTel/MTCamera/MTCamera.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/MTCamera/MTCamera.container').schema.props,
+      },
+    },
+  },
+  MTCameraSummaryDetail: {
+    component: require('../MainTel/MTCameraSummaryDetail/MTCameraSummaryDetail.container').default,
+    schema: {
+      ...require('../MainTel/MTCameraSummaryDetail/MTCameraSummaryDetail.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/MTCameraSummaryDetail/MTCameraSummaryDetail.container').schema.props,
+      },
+    },
+  },
+  CCCamera: {
+    component: require('../MainTel/CCCamera/CCCamera.container').default,
+    schema: {
+      ...require('../MainTel/CCCamera/CCCamera.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/CCCamera/CCCamera.container').schema.props,
+      },
+    },
+  },
+  CCCameraSummaryDetail: {
+    component: require('../MainTel/CCCameraSummaryDetail/CCCameraSummaryDetail.container').default,
+    schema: {
+      ...require('../MainTel/CCCameraSummaryDetail/CCCameraSummaryDetail.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/CCCameraSummaryDetail/CCCameraSummaryDetail.container').schema.props,
+      },
+    },
+  },
 };
 
 const environmentIndex = {

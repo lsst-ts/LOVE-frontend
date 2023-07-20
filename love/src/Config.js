@@ -847,7 +847,6 @@ export const mtm1m3tsHeaterDisabledStateToStyle = {
 };
 
 //MTM1M3TS Glycol Loop
-
 export const stateToStyleGlycolLoopPumpStateMap = {
   UNKNOWN: 'invalid',
   FAULT: 'fault',
@@ -890,6 +889,22 @@ export const stateToStyleGlycolLoopSpeedStateMap = {
   UNKNOWN: 'invalid',
   ACCELERATING: 'ok',
   DECELERATING: 'ok',
+};
+
+// MTCamera
+export const mtCameraRaftDetailedStateToStyle = {
+  GOOD: 'ok',
+  REGULAR: 'warning',
+  BAD: 'alert',
+  UNKNOWN: 'invalid',
+};
+
+// CCCamera
+export const ccCameraRaftDetailedStateToStyle = {
+  GOOD: 'ok',
+  REGULAR: 'warning',
+  BAD: 'alert',
+  UNKNOWN: 'invalid',
 };
 
 // Aircraft tracker
@@ -1081,6 +1096,22 @@ export const ataosCorrectionsStateMap = {
   false: 'DISABLED',
   true: 'ENABLED',
   undefined: 'UNKNOWN',
+};
+
+// MTCamera
+export const mtCameraRaftDetailedStateMap = {
+  1: 'GOOD',
+  2: 'REGULAR',
+  3: 'BAD',
+  0: 'UNKNOWN',
+};
+
+// CCCamera
+export const ccCameraRaftDetailedStateMap = {
+  1: 'GOOD',
+  2: 'REGULAR',
+  3: 'BAD',
+  0: 'UNKNOWN',
 };
 
 // ATPneumatics
@@ -2663,4 +2694,244 @@ export const MessagesWarningM1M3ThermalSystem = {
   auxPowerFault: 'Thermal fan unit warning aux Power Fault.',
   ilcFault: 'Force actuator warning ILC Fault.',
   broadcastWarning: 'Force actuator warning broadcast counter Warning.',
+};
+
+// MTCamera
+
+/** Considering rafts from 1 to 25, from top-left to bottom-righ */
+export const mtcameraRaftsNeighborsMapping = {
+  1: { top: null, right: 2, bottom: 6, left: null },
+  2: { top: null, right: 3, bottom: 7, left: 1 },
+  3: { top: null, right: 4, bottom: 8, left: 2 },
+  4: { top: null, right: 5, bottom: 9, left: 3 },
+  5: { top: null, right: null, bottom: 10, left: 4 },
+
+  6: { top: 1, right: 7, bottom: 11, left: null },
+  7: { top: 2, right: 8, bottom: 12, left: 6 },
+  8: { top: 3, right: 9, bottom: 13, left: 7 },
+  9: { top: 4, right: 10, bottom: 14, left: 8 },
+  10: { top: 5, right: null, bottom: 15, left: 9 },
+
+  11: { top: 6, right: 12, bottom: 16, left: null },
+  12: { top: 7, right: 13, bottom: 17, left: 11 },
+  13: { top: 8, right: 14, bottom: 18, left: 12 },
+  14: { top: 9, right: 15, bottom: 19, left: 13 },
+  15: { top: 10, right: null, bottom: 20, left: 14 },
+
+  16: { top: 11, right: 17, bottom: 21, left: null },
+  17: { top: 12, right: 18, bottom: 22, left: 16 },
+  18: { top: 13, right: 19, bottom: 23, left: 17 },
+  19: { top: 14, right: 20, bottom: 24, left: 18 },
+  20: { top: 15, right: null, bottom: 25, left: 19 },
+
+  21: { top: 16, right: 22, bottom: null, left: null },
+  22: { top: 17, right: 23, bottom: null, left: 21 },
+  23: { top: 18, right: 24, bottom: null, left: 22 },
+  24: { top: 19, right: 25, bottom: null, left: 23 },
+  25: { top: 20, right: null, bottom: null, left: 24 },
+};
+
+export const mtcameraRaftTempControlState = {
+  0: 'NON ACTIVE',
+  1: 'ACTIVE',
+};
+
+export const mtcameraRaftTempControlStateToStyle = {
+  'NON ACTIVE': 'warning',
+  ACTIVE: 'ok',
+};
+
+export const mtcameraCcsCommandStateMap = {
+  0: 'IDLE',
+  1: 'BUSY',
+};
+
+export const mtcameaCcsCommandStateToStyle = {
+  IDLE: 'undefined',
+  BUSY: 'ok',
+};
+
+export const mtcameraCalibrationDetailedStateMap = {
+  0: 'DISABLED',
+  1: 'ENABLED',
+  2: 'INTEGRATING',
+};
+
+export const mtcameraCalibrationDetailedStateToStyle = {
+  DISABLED: 'undefined',
+  ENABLED: 'ok',
+  INTEGRATING: 'ok',
+};
+
+export const mtcameraOffLineDetailedStateMap = {
+  0: 'OFFLINE_AVAILABLE',
+  1: 'OFFLINE_PUBLISH_ONLY',
+};
+
+export const mtcameraOffLineDetailedStateToStyle = {
+  OFFLINE_AVAILABLE: 'undefined',
+  OFFLINE_PUBLISH_ONLY: 'ok',
+};
+
+export const mtcameraImageReadlinessDetailedStateMap = {
+  0: 'READY',
+  1: 'NOT_READY',
+  2: 'GETTING_READY',
+};
+
+export const mtcameraImageReadlinessDetailedStateToStyle = {
+  READY: 'ok',
+  NOT_READY: 'undefined',
+  GETTING_READY: 'ok',
+};
+
+export const mtcameraShutterDetailedStateMap = {
+  0: 'CLOSED',
+  1: 'OPEN',
+  2: 'CLOSING',
+  3: 'OPENING',
+};
+
+export const mtcameraShutterDetailedStateToStyle = {
+  CLOSED: 'undefined',
+  OPEN: 'ok',
+  CLOSING: 'ok',
+  OPENING: 'ok',
+};
+
+export const mtcameraFilterChangerDetailedStateMap = {
+  0: 'UNLOADING',
+  1: 'LOADING',
+  2: 'LOADED',
+  3: 'UNLOADED',
+  4: 'ROTATING',
+};
+
+export const mtcameraFilterChangerDetailedStateToStyle = {
+  UNLOADING: 'undefined',
+  LOADING: 'ok',
+  LOADED: 'ok',
+  UNLOADED: 'undefined',
+  ROTATING: 'ok',
+};
+
+export const mtCameraRaftsDetailedStateMap = {
+  0: 'NEEDS_CLEAR',
+  1: 'CLEARING',
+  2: 'INTEGRATING',
+  3: 'READING_OUT',
+  4: 'QUIESCENT',
+  5: 'DISCARDING',
+};
+
+export const mtCameraRaftsDetailedStateToSTyle = {
+  NEEDS_CLEAR: 'warning',
+  CLEARING: 'ok',
+  INTEGRATING: 'ok',
+  READING_OUT: 'warning',
+  QUIESCENT: 'undefined',
+  DISCARDING: 'undefined',
+};
+
+// CCCamera
+export const cccameraRaftTempControlState = {
+  0: 'NON ACTIVE',
+  1: 'ACTIVE',
+};
+
+export const cccameraRaftTempControlStateToStyle = {
+  'NON ACTIVE': 'warning',
+  ACTIVE: 'ok',
+};
+
+export const cccameraCcsCommandStateMap = {
+  0: 'IDLE',
+  1: 'BUSY',
+};
+
+export const cccameaCcsCommandStateToStyle = {
+  IDLE: 'undefined',
+  BUSY: 'ok',
+};
+
+export const cccameraCalibrationDetailedStateMap = {
+  0: 'DISABLED',
+  1: 'ENABLED',
+  2: 'INTEGRATING',
+};
+
+export const cccameraCalibrationDetailedStateToStyle = {
+  DISABLED: 'undefined',
+  ENABLED: 'ok',
+  INTEGRATING: 'ok',
+};
+
+export const cccameraOffLineDetailedStateMap = {
+  0: 'OFFLINE_AVAILABLE',
+  1: 'OFFLINE_PUBLISH_ONLY',
+};
+
+export const cccameraOffLineDetailedStateToStyle = {
+  OFFLINE_AVAILABLE: 'undefined',
+  OFFLINE_PUBLISH_ONLY: 'ok',
+};
+
+export const cccameraImageReadlinessDetailedStateMap = {
+  0: 'READY',
+  1: 'NOT_READY',
+  2: 'GETTING_READY',
+};
+
+export const cccameraImageReadlinessDetailedStateToStyle = {
+  READY: 'ok',
+  NOT_READY: 'undefined',
+  GETTING_READY: 'ok',
+};
+
+export const cccameraShutterDetailedStateMap = {
+  0: 'CLOSED',
+  1: 'OPEN',
+  2: 'CLOSING',
+  3: 'OPENING',
+};
+
+export const cccameraShutterDetailedStateToStyle = {
+  CLOSED: 'undefined',
+  OPEN: 'ok',
+  CLOSING: 'ok',
+  OPENING: 'ok',
+};
+
+export const cccameraFilterChangerDetailedStateMap = {
+  0: 'UNLOADING',
+  1: 'LOADING',
+  2: 'LOADED',
+  3: 'UNLOADED',
+  4: 'ROTATING',
+};
+
+export const cccameraFilterChangerDetailedStateToStyle = {
+  UNLOADING: 'undefined',
+  LOADING: 'ok',
+  LOADED: 'ok',
+  UNLOADED: 'undefined',
+  ROTATING: 'ok',
+};
+
+export const ccCameraRaftsDetailedStateMap = {
+  0: 'NEEDS_CLEAR',
+  1: 'CLEARING',
+  2: 'INTEGRATING',
+  3: 'READING_OUT',
+  4: 'QUIESCENT',
+  5: 'DISCARDING',
+};
+
+export const ccCameraRaftsDetailedStateToSTyle = {
+  NEEDS_CLEAR: 'warning',
+  CLEARING: 'ok',
+  INTEGRATING: 'ok',
+  READING_OUT: 'warning',
+  QUIESCENT: 'undefined',
+  DISCARDING: 'undefined',
 };

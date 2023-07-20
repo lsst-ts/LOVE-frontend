@@ -28,7 +28,8 @@
   background: var(--status-alert-dimmed-color-3);
 }
 
-.invalid {
+.invalid,
+.unknown {
   color: var(--secondary-font-color);
   background: var(--second-tertiary-background-color);
 }

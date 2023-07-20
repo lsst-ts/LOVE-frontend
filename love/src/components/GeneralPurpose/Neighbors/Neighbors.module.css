@@ -1,0 +1,32 @@
+.container {
+  position: relative;
+  box-sizing: border-box;
+  height: calc(100% - 42px);
+  margin: 20px;
+  padding: 1em;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.arrowUp,
+.arrowRight {
+  position: absolute;
+  left: calc(50% - 60px);
+  width: 0;
+  height: 0;
+  border-left: 60px solid transparent;
+  border-right: 60px solid transparent;
+  border-bottom: 20px solid var(--second-tertiary-background-color);
+}
+
+.arrowBottom,
+.arrowLeft {
+  position: absolute;
+  left: calc(50% - 60px);
+  width: 0;
+  height: 0;
+  border-left: 60px solid transparent;
+  border-right: 60px solid transparent;
+  border-top: 20px solid var(--second-tertiary-background-color);
+}
