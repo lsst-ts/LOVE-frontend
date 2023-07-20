@@ -178,7 +178,7 @@ const Line = (props) => {
   const distance = v1.distanceTo(v2);
   direction.subVectors(v2, v1).normalize();
 
-  const conePosition = new THREE.Vector3().copy(v1).addScaledVector(direction, distance - 0.21);
+  const conePosition = new THREE.Vector3().copy(v1).addScaledVector(direction, distance - 0.2);
   const coneRotation = new THREE.Euler().setFromQuaternion(
     new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction)
   );
@@ -194,7 +194,7 @@ const Line = (props) => {
         geometry={lineGeometry}
       >
         <lineBasicMaterial color={hovered ? 0xffffff : props.color}
-          linewidth={5} linecap={'round'} linejoin={'round'}
+          linewidth={3} linecap={'round'} linejoin={'round'}
         />
       </line>
       <mesh
