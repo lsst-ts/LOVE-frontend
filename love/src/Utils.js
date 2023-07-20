@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import { toast } from 'react-toastify';
 import Moment from 'moment';
 import isEqual from 'lodash/isEqual';
-import { WEBSOCKET_SIMULATION } from 'Config.js';
+import { WEBSOCKET_SIMULATION, SUBPATH } from 'Config.js';
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -100,22 +100,27 @@ export default class ManagerInterface {
     this.connectionIsOpen = false;
   }
 
+  static httpProtocol = window.location.protocol;
+  static wsProtocol = ManagerInterface.httpProtocol === 'https:' ? 'wss:' : 'ws:';
+  static httpLocation = `${ManagerInterface.httpProtocol}//${window.location.host}${SUBPATH}`;
+  static wsLocation = `${ManagerInterface.wsProtocol}//${window.location.host}${SUBPATH}`;
+
   static getMediaBaseUrl() {
-    return `http://${window.location.host}/manager/`;
+    return `${ManagerInterface.httpProtocol}//${window.location.host}`;
   }
 
   static getApiBaseUrl() {
-    return `http://${window.location.host}/manager/api/`;
+    return `${ManagerInterface.httpLocation}/manager/api/`;
   }
 
   static getUifBaseUrl() {
-    return `http://${window.location.host}/manager/ui_framework/`;
+    return `${ManagerInterface.httpLocation}/manager/ui_framework/`;
   }
 
   static getWebsocketsUrl() {
     // Connect to a fake local ip when simulating, to avoid getting real messages
     if (WEBSOCKET_SIMULATION) return 'ws://0.0.0.1/';
-    return `ws://${window.location.host}/manager/ws/subscription?token=`;
+    return `${ManagerInterface.wsLocation}/manager/ws/subscription?token=`;
   }
 
   static getHeaders() {
@@ -424,7 +429,7 @@ export default class ManagerInterface {
     });
   }
 
-  static getEFDLogs(start_date, end_date, cscs, efd_instance) {
+  static getEFDLogs(start_date, end_date, cscs, efd_instance, scale = 'utc') {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
@@ -438,6 +443,8 @@ export default class ManagerInterface {
         end_date,
         cscs,
         efd_instance,
+        /* If using timestamps from SAL topics the scale must be "tai", otherwise "utc" */
+        scale,
       }),
     }).then((response) => {
       if (response.status >= 500) {

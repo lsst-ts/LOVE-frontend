@@ -466,14 +466,14 @@ export default class Selector extends Component {
           r={this.state.width / 2 - 30}
         />
 
-        <circle
+        {/* <circle
           className={styles.hiddenCircleOverlay}
           cx={this.state.width / 2}
           cy={this.state.width / 2}
           fill={'none'}
           r={this.state.width / 2 + 50}
           onClick={() => actuatorSelect(null)}
-        />
+        /> */}
 
         <g id="plot-axis">
           <text

@@ -1,5 +1,14 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Initialize Environment variables
+
+We use environment variables to configure the application at build (for production) and run time (for local development).
+These variables are defined in the `.env` file. This file is not committed to the repository, but a template is provided in `.env.example`.
+To initialize the environment variables, copy the template file to `.env` and edit the values as needed.
+The available variables are:
+
+- `PUBLIC_URL`: The base URL of the application. This is used to generate the links to the static files in the HTML.
+
 ## Available Scripts
 
 In the project directory, you can run:

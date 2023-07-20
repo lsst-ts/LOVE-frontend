@@ -1,0 +1,19 @@
+.container {
+  position: relative;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.plotsContainer {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(300px, 1fr));
+  grid-template-rows: repeat(3, 200px);
+  gap: 1em;
+  overflow: hidden;
+  margin-left: 3em;
+}
+
+.plot {
+  width: 100%;
+  overflow: hidden;
+}

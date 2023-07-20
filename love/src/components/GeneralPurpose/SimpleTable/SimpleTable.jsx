@@ -23,7 +23,7 @@ function SimpleTable({ headers, data }) {
       <Tbody>
         {data.map((row, index) => {
           return (
-            <Tr key={`row-${index}`}>
+            <Tr className={row.rowClass} key={`row-${index}`}>
               {headers.map((header, headerIndex) => {
                 const render = header.render || defaultRenderMethod;
                 const value = row[header.field];

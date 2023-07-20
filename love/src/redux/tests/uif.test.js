@@ -110,10 +110,12 @@ const mockViews = [
   {
     id: 0,
     name: 'My-view-0',
+    screen: 'desktop',
   },
   {
     id: 1,
     name: 'My-view-1',
+    screen: 'desktop',
   },
 ];
 

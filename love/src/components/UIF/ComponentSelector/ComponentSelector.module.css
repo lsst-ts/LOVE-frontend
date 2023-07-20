@@ -14,8 +14,8 @@
   cursor: pointer;
   grid-template-rows: 1.8em 1fr;
   padding: 0.5em;
-  border: 1px solid transparent;
-  border-radius: 7px;
+  border: 0.07em solid transparent;
+  border-radius: 0.5em;
   background: var(--second-secondary-background-color);
 }
 
@@ -30,7 +30,7 @@
 }
 
 .card:hover {
-  border: 1px solid var(--secondary-font-color);
+  border: 0.1em solid var(--secondary-font-color);
   background-color: var(--tertiary-background-color);
 }
 
@@ -50,7 +50,7 @@
 
 .customCheckbox label {
   background-color: transparent;
-  border: 1px solid transparent;
+  border: 0.07em solid transparent;
   border-radius: 50%;
   cursor: pointer;
   position: absolute;
@@ -61,7 +61,7 @@
 }
 
 .customCheckbox label:after {
-  border: 2px solid #fff;
+  border: 0.14em solid #fff;
   border-top: none;
   border-right: none;
   content: '';

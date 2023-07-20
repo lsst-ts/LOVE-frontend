@@ -1,0 +1,26 @@
+.container {
+  height: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.ccdsContainer {
+  display: grid;
+  /* grid-template-columns: 1fr 1fr 1fr; BUG, reference: https://css-tricks.com/preventing-a-grid-blowout/  */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: repeat(3, minmax(33%, 200px));
+  max-height: 75%;
+}
+
+.rebsContainer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: minmax(100%, 200px);
+  max-height: 25%;
+}
+
+.plot {
+  /* width: 100%;
+  overflow: hidden; */
+  border: 1px solid transparent;
+  overflow: hidden;
+}
