@@ -27,7 +27,7 @@ import ThumbnailIcon from '../../icons/ThumbnailIcon/ThumbnailIcon';
 import Select from '../../GeneralPurpose/Select/Select';
 import ConfirmationModal from '../../GeneralPurpose/ConfirmationModal/ConfirmationModal';
 import { LAYOUT_CONTAINER_ID } from '../../Layout/Layout';
-import { DEVICE_TO_SIZE, DEVICE_TO_COLS } from '../CustomView';
+import { DEVICE_TO_SIZE, DEVICE_TO_COLS, DEVICE_TO_SCREEN } from '../CustomView';
 import ConfigForm from './ConfigForm';
 
 const deviceOptions = [
@@ -93,6 +93,7 @@ class ViewEditor extends Component {
     super(props);
     this.state = {
       name: this.props.editedViewCurrent ? this.props.editedViewCurrent.name : '',
+      screen: this.props.editedViewCurrent ? this.props.editedViewCurrent.screen : 'desktop',
       layout: JSON.stringify(this.getEditedViewLayout(), null, 2),
       selectedComponent: {},
       id: null,
@@ -408,8 +409,16 @@ class ViewEditor extends Component {
       ? DEVICE_TO_COLS[device.label]
       : DEVICE_TO_COLS[Object.keys(DEVICE_TO_COLS)[0]];
 
+    const screen = DEVICE_TO_SCREEN[device.label] ? DEVICE_TO_SCREEN[device.label] : null;
+
     this.setState({
       device: device,
+      screen: screen,
+    });
+
+    this.props.updateEditedView({
+      ...this.props.editedViewCurrent,
+      screen: screen,
     });
 
     this.setState({
