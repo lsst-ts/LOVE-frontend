@@ -56,7 +56,7 @@ Sensor.defaultProps = {
   position: {x: 0, y: 0, z: 0},
   color: 0xffff00,
   setSensor: (id) => {console.log('Sensor default setSensor(', id, ')')},
-}
+};
 
 // const comparatorSensor = (prevProps, nextProps) => {
 //   console.log('comparatorSensor');
