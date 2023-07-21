@@ -11,7 +11,7 @@ import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
-import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
+import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import { exposureFlagStateToStyle, ISO_INTEGER_DATE_FORMAT } from 'Config';
 import ManagerInterface from 'Utils';
@@ -25,42 +25,50 @@ export default class Exposure extends Component {
   static propTypes = {
     // Instrument Options
     instruments: PropTypes.arrayOf(PropTypes.string),
-    /** Selected observation day */
-    selectedDayExposure: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-    /** Selected instrument */
+    /** Selected instrument
+     * Used to build the query to the exposure logs
+     */
     selectedInstrument: PropTypes.string,
+    /** Selected observation day start
+     * Used to build the query to the exposure logs
+     */
+    selectedDayExposureStart: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.instanceOf(Date),
+      PropTypes.instanceOf(Moment),
+    ]),
+    /** Selected observation day end
+     * Used to build the query to the exposure logs
+     */
+    selectedDayExposureEnd: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.instanceOf(Date),
+      PropTypes.instanceOf(Moment),
+    ]),
     /** Selected exposure type */
     selectedExposureType: PropTypes.string,
-    /** Selected type of date filter: range or day */
-    selectedDayOrRange: PropTypes.string,
-    /** Selected start date */
-    selectedDateStart: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-    /** Selected end date */
-    selectedDateEnd: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-    /** Function to handle type of date filter */
-    changeDayOrRangeSelect: PropTypes.func,
+    /** Mappings of instruments to exposures registries
+     * Used to build the query to the exposure logs
+     */
+    registryMap: PropTypes.object,
+    /** Function to handle instrument filter*/
+    changeInstrumentSelect: PropTypes.func,
     /** Function to handle observation day filter*/
     changeDayExposure: PropTypes.func,
     /** Function to handle exposure type filter*/
     changeExposureTypeSelect: PropTypes.func,
-    /** Function to handle instrument filter*/
-    changeInstrumentSelect: PropTypes.func,
-    /** Mappings of instruments to exposures registries */
-    registryMap: PropTypes.object,
   };
 
   static defaultProps = {
     instruments: [],
-    selectedDayExposure: null,
-    selectedExposureType: 'all',
     selectedInstrument: null,
-    selectedDateStart: null,
-    selectedDateEnd: null,
-    selectedDayOrRange: null,
-    changeDayOrRangeSelect: () => {},
+    selectedDayExposureStart: null,
+    selectedDayExposureEnd: null,
+    selectedExposureType: 'all',
+    registryMap: {},
+    changeInstrumentSelect: () => {},
     changeDayExposure: () => {},
     changeExposureTypeSelect: () => {},
-    changeInstrumentSelect: () => {},
   };
 
   constructor(props) {
@@ -75,7 +83,6 @@ export default class Exposure extends Component {
       exposureTypes: [],
       observationIds: [],
       messages: [],
-      range: [],
       exposureFlags: {},
     };
   }
@@ -218,17 +225,22 @@ export default class Exposure extends Component {
   };
 
   queryExposures(callback) {
-    const { selectedInstrument, selectedDayExposure, registryMap } = this.props;
-    const obsDayInteger = parseInt(moment(selectedDayExposure).format(ISO_INTEGER_DATE_FORMAT));
+    const { selectedInstrument, selectedDayExposureStart, selectedDayExposureEnd, registryMap } = this.props;
+    const startObsDay = selectedDayExposureStart.format(ISO_INTEGER_DATE_FORMAT);
+    const endObsDay = selectedDayExposureEnd.format(ISO_INTEGER_DATE_FORMAT);
     const registry = registryMap[selectedInstrument].split('_')[2];
-    ManagerInterface.getListExposureLogs(selectedInstrument, obsDayInteger, registry).then((data) => {
+
+    // Get the list of exposures
+    this.setState({ updatingLogs: true });
+    ManagerInterface.getListExposureLogs(selectedInstrument, startObsDay, endObsDay, registry).then((data) => {
       const exposureTypes = new Set();
       const exposures = data.map((exposure) => {
         exposureTypes.add(exposure.observation_type);
         return exposure;
       });
 
-      ManagerInterface.getListAllMessagesExposureLogs(obsDayInteger).then((messages) => {
+      // Get the list of messages and retrieve exposure flags
+      ManagerInterface.getListAllMessagesExposureLogs(startObsDay, endObsDay).then((messages) => {
         const exposureFlags = {};
         messages.forEach((message) => {
           if (!exposureFlags[message.obs_id]) {
@@ -244,30 +256,29 @@ export default class Exposure extends Component {
         this.setState({ exposureFlags, messages });
       });
 
-      this.setState({ exposurelogs: exposures, exposureTypes: Array.from(exposureTypes) });
-      if (callback) callback();
+      this.setState({
+        exposurelogs: exposures,
+        exposureTypes: Array.from(exposureTypes),
+        updatingLogs: false,
+      });
     });
   }
 
   componentDidMount() {
-    const { selectedDateStart, selectedDateEnd } = this.props;
-    this.setState({ range: moment.range(selectedDateStart, selectedDateEnd) });
     this.queryExposures();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (
       prevProps.selectedInstrument !== this.props.selectedInstrument ||
-      prevProps.selectedDayExposure !== this.props.selectedDayExposure
+      (this.props.selectedDayExposureStart &&
+        prevProps.selectedDayExposureStart?.format(ISO_INTEGER_DATE_FORMAT) !==
+          this.props.selectedDayExposureStart.format(ISO_INTEGER_DATE_FORMAT)) ||
+      (this.props.selectedDayExposureEnd &&
+        prevProps.selectedDayExposureEnd?.format(ISO_INTEGER_DATE_FORMAT) !==
+          this.props.selectedDayExposureEnd.format(ISO_INTEGER_DATE_FORMAT))
     ) {
       this.queryExposures();
-    }
-
-    if (
-      prevProps.selectedDateStart !== this.props.selectedDateStart ||
-      prevProps.selectedDateEnd !== this.props.selectedDateEnd
-    ) {
-      this.setState({ range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd) });
     }
   }
 
@@ -275,14 +286,14 @@ export default class Exposure extends Component {
     const {
       instruments: instrumentsOptions,
       selectedInstrument,
-      selectedDayOrRange,
-      selectedDayExposure,
+      selectedDayExposureStart,
+      selectedDayExposureEnd,
       selectedExposureType,
+      changeInstrumentSelect,
       changeDayExposure,
       changeExposureTypeSelect,
-      changeInstrumentSelect,
     } = this.props;
-    const { exposurelogs: tableData, modeView, modeAdd, range } = this.state;
+    const { exposurelogs: tableData, modeView, modeAdd, updatingLogs } = this.state;
 
     const headers = this.getHeaders();
 
@@ -290,43 +301,30 @@ export default class Exposure extends Component {
       { label: 'All observation types', value: 'all' },
       ...this.state.exposureTypes.map((type) => ({ label: type, value: type })),
     ];
-    const dayOrRangeExposureOptions = [
-      { label: 'Day Observation', value: 'day' },
-      { label: 'Range', value: 'range' },
-    ];
 
-    // Filter by date range
-    let filteredData = tableData;
-
-    if (selectedDayOrRange === 'range') {
-      filteredData = filteredData.filter((log) => range.contains(Moment(log.timespan_end)));
-    }
-
-    if (selectedDayOrRange === 'day') {
-      filteredData = filteredData.filter((log) => {
-        const format = Moment(selectedDayExposure).format('YYYYMMDD');
-        return format === String(log.day_obs);
-      });
-    }
+    let filteredData = [...tableData];
 
     // Filter by exposure type
-    filteredData =
-      selectedExposureType !== 'all'
-        ? filteredData.filter((exp) => exp.observation_type === selectedExposureType)
-        : filteredData;
+    if (selectedExposureType !== 'all') {
+      filteredData = filteredData.filter((exp) => exp.observation_type === selectedExposureType);
+    }
 
     // Obtain headers to create csv report
     let csvHeaders = null;
     let csvData = "There aren't exposures created for the current search...";
     let csvTitle = 'exposure.csv';
+
     if (filteredData.length > 0) {
       const logExampleKeys = Object.keys(filteredData[0] ?? {});
       csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
       csvData = filteredData;
     }
 
-    if (selectedDayExposure) {
-      csvTitle = `exposures_obsday_${Moment(selectedDayExposure).format(ISO_INTEGER_DATE_FORMAT)}.csv`;
+    if (selectedDayExposureStart && selectedDayExposureEnd) {
+      csvTitle = `exposures_obsday_\
+      ${selectedDayExposureStart.format(ISO_INTEGER_DATE_FORMAT)}\
+      _to_\
+      ${selectedDayExposureEnd.format(ISO_INTEGER_DATE_FORMAT)}.csv`;
     }
 
     return modeView && !modeAdd ? (
@@ -354,17 +352,9 @@ export default class Exposure extends Component {
       <div className={styles.margin10}>
         <div className={styles.title}>Filter</div>
         <div className={styles.filters}>
-          <Button
-            disabled={this.state.updatingLogs}
-            onClick={() => {
-              this.setState({ updatingLogs: true });
-              this.queryExposures(() => {
-                this.setState({ updatingLogs: false });
-              });
-            }}
-          >
+          <Button disabled={updatingLogs} onClick={() => this.queryExposures()}>
             Refresh data
-            {this.state.updatingLogs && <SpinnerIcon className={styles.spinnerIcon} />}
+            {updatingLogs && <SpinnerIcon className={styles.spinnerIcon} />}
           </Button>
           <Select
             options={instrumentsOptions}
@@ -373,13 +363,22 @@ export default class Exposure extends Component {
             className={styles.select}
           />
 
-          <DateTime
-            label="Observation day"
-            value={selectedDayExposure}
-            onChange={(day) => changeDayExposure(day)}
-            dateFormat="YYYY/MM/DD"
-            timeFormat={false}
-            closeOnSelect={true}
+          <DateTimeRange
+            label="From"
+            className={styles.dateRange}
+            startDate={selectedDayExposureStart}
+            endDate={selectedDayExposureEnd}
+            startDateProps={{
+              timeFormat: false,
+              className: styles.rangeDateOnly,
+              maxDate: Moment(),
+            }}
+            endDateProps={{
+              timeFormat: false,
+              className: styles.rangeDateOnly,
+              maxDate: Moment(),
+            }}
+            onChange={changeDayExposure}
           />
 
           <Select

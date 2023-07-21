@@ -32,38 +32,14 @@ export default class OLE extends Component {
       // Exposure filters
       instruments: [],
       selectedInstrument: null,
-      selectedDayExposure: Moment(),
+      selectedDayExposureStart: Moment(Date.now() + 37 * 1000).subtract(1, 'days'),
+      selectedDayExposureEnd: Moment(Date.now() + 37 * 1000),
       selectedExposureType: 'all',
       registryMap: {},
     };
   }
 
-  componentDidMount() {
-    this.props.subscribeToStreams();
-    ManagerInterface.getListExposureInstruments().then((data) => {
-      const registryMap = {};
-      Object.entries(data).forEach(([key, value]) => {
-        value.forEach((instrument) => {
-          if (!instrument) return;
-          registryMap[instrument] = key;
-        });
-      });
-      const instrumentsArray = Object.values(data)
-        .map((arr) => arr[0])
-        .filter((instrument) => instrument);
-
-      this.setState({
-        instruments: instrumentsArray,
-        selectedInstrument: instrumentsArray[0],
-        registryMap: registryMap,
-      });
-    });
-  }
-
-  componentWillUnmount() {
-    this.props.unsubscribeToStreams();
-  }
-
+  /** Non Exposure functions */
   changeDayNarrative(day) {
     const dayObs = Moment(day).format('YYYYMMDD');
     this.setState({ selectedDayNarrative: day });
@@ -81,6 +57,7 @@ export default class OLE extends Component {
     this.setState({ selectedObsTimeLoss: value });
   }
 
+  /** Exposure functions */
   changeInstrumentSelect(value) {
     const { instruments } = this.state;
     const index = instruments.indexOf(value);
@@ -91,9 +68,13 @@ export default class OLE extends Component {
     this.setState({ selectedExposureType: value });
   }
 
-  changeDayExposure(day) {
-    const dayObs = Moment(day).format('YYYYMMDD');
-    this.setState({ selectedDayExposure: day });
+  changeDayExposure(day, type) {
+    console.log('Change date: ' + day + ' type: ' + type);
+    if (type === 'start') {
+      this.setState({ selectedDayExposureStart: day });
+    } else if (type === 'end') {
+      this.setState({ selectedDayExposureEnd: day });
+    }
   }
 
   changeTab(tab) {
@@ -132,8 +113,9 @@ export default class OLE extends Component {
             changeInstrumentSelect={(value) => this.changeInstrumentSelect(value)}
             selectedExposureType={this.state.selectedExposureType}
             changeExposureTypeSelect={(value) => this.changeExposureTypeSelect(value)}
-            selectedDayExposure={this.state.selectedDayExposure}
-            changeDayExposure={(day) => this.changeDayExposure(day)}
+            selectedDayExposureStart={this.state.selectedDayExposureStart}
+            selectedDayExposureEnd={this.state.selectedDayExposureEnd}
+            changeDayExposure={(day, type) => this.changeDayExposure(day, type)}
             registryMap={this.state.registryMap}
           />
         );
@@ -154,6 +136,32 @@ export default class OLE extends Component {
         );
       }
     }
+  }
+
+  componentDidMount() {
+    this.props.subscribeToStreams();
+    ManagerInterface.getListExposureInstruments().then((data) => {
+      const registryMap = {};
+      Object.entries(data).forEach(([key, value]) => {
+        value.forEach((instrument) => {
+          if (!instrument) return;
+          registryMap[instrument] = key;
+        });
+      });
+      const instrumentsArray = Object.values(data)
+        .map((arr) => arr[0])
+        .filter((instrument) => instrument);
+
+      this.setState({
+        instruments: instrumentsArray,
+        selectedInstrument: instrumentsArray[0],
+        registryMap: registryMap,
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    this.props.unsubscribeToStreams();
   }
 
   render() {

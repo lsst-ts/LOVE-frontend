@@ -710,13 +710,13 @@ export default class ManagerInterface {
   }
 
   // OLE APIs
-  static getListExposureLogs(instrument, obsDay, registry = 1) {
+  static getListExposureLogs(instrument, minObsDay, maxObsDay, registry = 1) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
     const url = `${this.getApiBaseUrl()}ole/exposurelog/exposures?instrument=${instrument}&registry=${registry}&order_by=-obs_id&limit=1500${
-      obsDay ? `&min_day_obs=${obsDay}&max_day_obs=${obsDay + 1}` : ''
+      minObsDay && maxObsDay ? `&min_day_obs=${minObsDay}&max_day_obs=${maxObsDay}` : ''
     }`;
     return fetch(url, {
       method: 'GET',
@@ -735,13 +735,13 @@ export default class ManagerInterface {
     });
   }
 
-  static getListAllMessagesExposureLogs(obsDay) {
+  static getListAllMessagesExposureLogs(minObsDay, maxObsDay) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
     const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/?order_by=-date_added&limit=1000${
-      obsDay ? `&min_day_obs=${obsDay}&max_day_obs=${obsDay + 1}` : ''
+      minObsDay && maxObsDay ? `&min_day_obs=${minObsDay}&max_day_obs=${maxObsDay}` : ''
     }`;
     return fetch(url, {
       method: 'GET',

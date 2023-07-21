@@ -1,9 +1,5 @@
 .horizontalFilter {
   display: flex;
-  flex-direction: row;
-  margin-right: 0.5rem;
-  margin-bottom: 0.5rem;
-  align-items: flex-end;
 }
 
 .label {

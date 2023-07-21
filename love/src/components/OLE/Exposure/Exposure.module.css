@@ -345,9 +345,8 @@
   padding-bottom: 5px;
 }
 
-.dateRange {
-  white-space: nowrap;
-  margin-bottom: 0;
+.rangeDateOnly {
+  width: 11ch;
 }
 
 th.tableHead {
