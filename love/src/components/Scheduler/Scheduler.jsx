@@ -517,6 +517,8 @@ export default class Scheduler extends Component {
           {/* column 3 */}
           <div className={styles.rigthDiv}>
             <AccordionSummary
+              requestSALCommand={requestSALCommand}
+              salindex={salindex}
               predictedTargetsRa={predTargetsRa}
               predictedTargetsDecl={predTargetsDecl}
               predictedTargetsRotSkyPos={predTargetsRotSkyPos}

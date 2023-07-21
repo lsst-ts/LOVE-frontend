@@ -11,6 +11,25 @@ import { fixedFloat } from 'Utils';
 import Info from 'components/MainTel/M2/Actuators/Info/Info';
 
 export default class Blocks extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedBlockId: '',
+    };
+  }
+
+  addBlockCommand(params) {
+    const option = 'addBlock';
+    const { requestSALCommand, salindex } = this.props;
+    this.setState({ showOptions: params });
+    requestSALCommand({
+      cmd: `cmd_${option}`,
+      csc: 'Scheduler',
+      salindex,
+      params,
+    });
+  }
+
   HEADERS_PREDTARGETS = [
     {
       field: 'id',
