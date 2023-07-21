@@ -327,6 +327,10 @@
   width: 80px;
 }
 
+.rangeDateOnly {
+  width: 11ch;
+}
+
 .dateTimeRangeStyle {
   margin-bottom: 0;
 }

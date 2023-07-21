@@ -272,11 +272,8 @@ export default class Exposure extends Component {
     if (
       prevProps.selectedInstrument !== this.props.selectedInstrument ||
       (this.props.selectedDayExposureStart &&
-        prevProps.selectedDayExposureStart?.format(ISO_INTEGER_DATE_FORMAT) !==
-          this.props.selectedDayExposureStart.format(ISO_INTEGER_DATE_FORMAT)) ||
-      (this.props.selectedDayExposureEnd &&
-        prevProps.selectedDayExposureEnd?.format(ISO_INTEGER_DATE_FORMAT) !==
-          this.props.selectedDayExposureEnd.format(ISO_INTEGER_DATE_FORMAT))
+        !this.props.selectedDayExposureStart.isSame(prevProps.selectedDayExposureStart)) ||
+      (this.props.selectedDayExposureEnd && !this.props.selectedDayExposureEnd.isSame(prevProps.selectedDayExposureEnd))
     ) {
       this.queryExposures();
     }
@@ -321,10 +318,9 @@ export default class Exposure extends Component {
     }
 
     if (selectedDayExposureStart && selectedDayExposureEnd) {
-      csvTitle = `exposures_obsday_\
-      ${selectedDayExposureStart.format(ISO_INTEGER_DATE_FORMAT)}\
-      _to_\
-      ${selectedDayExposureEnd.format(ISO_INTEGER_DATE_FORMAT)}.csv`;
+      csvTitle = `exposures_obsday_${selectedDayExposureStart.format(
+        ISO_INTEGER_DATE_FORMAT,
+      )}_to_${selectedDayExposureEnd.format(ISO_INTEGER_DATE_FORMAT)}.csv`;
     }
 
     return modeView && !modeAdd ? (

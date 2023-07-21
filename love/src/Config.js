@@ -40,7 +40,7 @@ export const EUIs = {
 };
 
 // Moment formats
-export const ISO_STIRNG_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
+export const ISO_STRING_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
 export const ISO_STIRNG_DATE_FORMAT = 'YYYY-MM-DD';
 export const ISO_DATE_FORMAT = 'YYYY/MM/DD';
 export const ISO_INTEGER_DATE_FORMAT = 'YYYYMMDD';

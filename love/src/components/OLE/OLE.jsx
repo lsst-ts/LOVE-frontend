@@ -25,7 +25,8 @@ export default class OLE extends Component {
       selectedTab: props.tabs[0].value,
       clickNewLog: false,
       // Non Exposure filters
-      selectedDayNarrative: Moment(Date.now() + 37 * 1000),
+      selectedDayNarrativeStart: Moment(Date.now() + 37 * 1000).subtract(1, 'days'),
+      selectedDayNarrativeEnd: Moment(Date.now() + 37 * 1000),
       selectedCommentType: OLE_COMMENT_TYPE_OPTIONS[0],
       selectedSystem: 'all',
       selectedObsTimeLoss: false,
@@ -40,9 +41,12 @@ export default class OLE extends Component {
   }
 
   /** Non Exposure functions */
-  changeDayNarrative(day) {
-    const dayObs = Moment(day).format('YYYYMMDD');
-    this.setState({ selectedDayNarrative: day });
+  changeDayNarrative(day, type) {
+    if (type === 'start') {
+      this.setState({ selectedDayNarrativeStart: day });
+    } else if (type === 'end') {
+      this.setState({ selectedDayNarrativeEnd: day });
+    }
   }
 
   changeCommentTypeSelect(value) {
@@ -69,7 +73,6 @@ export default class OLE extends Component {
   }
 
   changeDayExposure(day, type) {
-    console.log('Change date: ' + day + ' type: ' + type);
     if (type === 'start') {
       this.setState({ selectedDayExposureStart: day });
     } else if (type === 'end') {
@@ -107,7 +110,6 @@ export default class OLE extends Component {
       if (tab === 'exposure') {
         return (
           <Exposure
-            props={this.props}
             instruments={this.state.instruments}
             selectedInstrument={this.state.selectedInstrument}
             changeInstrumentSelect={(value) => this.changeInstrumentSelect(value)}
@@ -123,9 +125,9 @@ export default class OLE extends Component {
       if (tab === 'non-exposure') {
         return (
           <NonExposure
-            props={this.props}
-            selectedDayNarrative={this.state.selectedDayNarrative}
-            changeDayNarrative={(day) => this.changeDayNarrative(day)}
+            selectedDayNarrativeStart={this.state.selectedDayNarrativeStart}
+            selectedDayNarrativeEnd={this.state.selectedDayNarrativeEnd}
+            changeDayNarrative={(day, type) => this.changeDayNarrative(day, type)}
             selectedCommentType={this.state.selectedCommentType}
             changeCommentTypeSelect={(value) => this.changeCommentTypeSelect(value)}
             selectedSystem={this.state.selectedSystem}
