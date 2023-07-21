@@ -36,6 +36,7 @@ export default class MainTelESS extends Component {
     airFlow: PropTypes.arrayOf(PropTypes.shape({
       sensorName: PropTypes.string,
       value: PropTypes.number,
+      direction: PropTypes.number,
       location: PropTypes.string,
       xPosition: PropTypes.number,
       yPosition: PropTypes.number,
@@ -51,7 +52,7 @@ export default class MainTelESS extends Component {
     })),
     minGradiantLimit: PropTypes.number,
     maxGradiantLimit: PropTypes.number,
-    option: PropTypes.oneOf(['temperature', 'relativeHumidity', 'airflow', 'airTurbulence']),
+    option: PropTypes.oneOf(['temperature', 'relativeHumidity', 'airFlow', 'airTurbulence']),
   };
 
   static defaultProps = {
@@ -74,6 +75,7 @@ export default class MainTelESS extends Component {
     airFlow: [{
       sensorName: '',
       value: 0,
+      direction: 0,
       xPosition: 0,
       yPosition: 0,
       zPosition: 0,
@@ -81,6 +83,7 @@ export default class MainTelESS extends Component {
     airTurbulence: [{
       sensorName: '',
       value: 0,
+      speed: {x: 0, y:0, z: 0},
       xPosition: 0,
       yPosition: 0,
       zPosition: 0,
@@ -214,6 +217,8 @@ export default class MainTelESS extends Component {
       numChannels: this.props[option][index].numChannels,
       indexArr: this.props[option][index].indexArr,
       value: this.props[option][index].value,
+      speed: this.props[option][index].speed,
+      direction: this.props[option][index].direction,
       location: this.props[option][index].location,
       position: {
         x: this.props[option][index].xPosition,
@@ -232,6 +237,8 @@ export default class MainTelESS extends Component {
     const { minGradiantLimit, maxGradiantLimit, option } = this.props;
     const sensors = this.props[option] ?? [];
     const values = sensors.map((sensor) => sensor.value ?? 0) ?? [];
+    const speeds = sensors.map((sensor) => sensor.speed ?? undefined) ?? [];
+    const directions = sensors.map((sensor) => sensor.direction ?? undefined) ?? [];
     
     return (
       <div className={styles.sceneAndInfoPlotsContainer}>
@@ -240,9 +247,10 @@ export default class MainTelESS extends Component {
           <Scene
             positions={positions}
             selectedSensor={selectedSensor}
-            sensorReferenceId={referenceIds}
             setSensor={(id) => this.setSensor(id)}
             values={values}
+            speeds={speeds}
+            directions={directions}
             getGradiantColorX={this.getGradiantColorX}
           />
         </div>

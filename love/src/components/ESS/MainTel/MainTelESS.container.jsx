@@ -77,7 +77,7 @@ const parse = (streams, option) => {
   switch(option) {
     case 'temperature': return parseTemperature(streams);
     case 'relativeHumidity': return parseHumidity(streams);
-    case 'airflow': return parseAirflow(streams);
+    case 'airFlow': return parseAirflow(streams);
     case 'airTurbulence': return parseAirTurbulence(streams);
     default: return [];
   }
@@ -153,6 +153,46 @@ const parseAirflow = (streams) => {
       });
     });
   });
+  airflows.push({
+    sensorName: 'test 1',
+    value: 30,
+    direction: 90,
+    location: 'location test',
+    telemetry: 'telemetry-ESS-402-airFlow',
+    xPosition: 0,
+    yPosition: 0,
+    zPosition: 0,
+  });
+  airflows.push({
+    sensorName: 'test 2',
+    value: 10,
+    direction: 180,
+    location: 'location test',
+    telemetry: 'telemetry-ESS-402-airFlow',
+    xPosition: 0,
+    yPosition: 0,
+    zPosition: 0,
+  });
+  airflows.push({
+    sensorName: 'test 3',
+    value: 10,
+    direction: 270,
+    location: 'location test',
+    telemetry: 'telemetry-ESS-402-airFlow',
+    xPosition: 0,
+    yPosition: 0,
+    zPosition: 0,
+  });
+  airflows.push({
+    sensorName: 'test 4',
+    value: 20,
+    direction: 0,
+    location: 'location test',
+    telemetry: 'telemetry-ESS-402-airFlow',
+    xPosition: 0,
+    yPosition: 0,
+    zPosition: 0,
+  });
   return airflows;
 }
 
@@ -162,11 +202,13 @@ const parseAirTurbulence = (streams) => {
     Object.entries(stream).forEach((entry) => {
       const essData = entry[1];
       const sensorName = essData?.sensorName.value ?? '';
-      const value = essData?.speed.value ?? {x: 0, y: 0, z: 0};
+      const value = essData?.speedMagnitud.value ?? 0;
+      const speed = essData?.speed.value ?? {x: 0, y: 0, z: 0};
       const location = essData?.location.value ?? '';
       airTurbulences.push({
         sensorName,
         value: value,
+        speed: speed,
         location: location,
         telemetry: entry[0],
         xPosition: 5 - airTurbulences.length,
@@ -177,11 +219,12 @@ const parseAirTurbulence = (streams) => {
   });
   airTurbulences.push({
     sensorName: 'test',
-    value: {x: 1, y: 1, z:-1},
+    value: 2,
+    speed: {x: 4, y: 0, z: 0 },
     location: 'location test',
     telemetry: 'telemetry-ESS-402-airTurbulence',
     xPosition: 2,
-    yPosition: 3,
+    yPosition: 2,
     zPosition: 2,
   });
   return airTurbulences;

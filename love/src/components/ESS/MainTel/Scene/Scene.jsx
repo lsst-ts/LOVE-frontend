@@ -27,9 +27,10 @@ const Scene = (props) => {
   const {
     positions,
     selectedSensor,
-    sensorReferenceId,
     setSensor,
     values,
+    speeds,
+    directions,
     getGradiantColorX,
   } = props;
 
@@ -53,6 +54,8 @@ const Scene = (props) => {
         setSensor={setSensor}
         positions={positions}
         values={values}
+        speeds={speeds}
+        directions={directions}
         getGradiantColorX={getGradiantColorX}
       />
 
@@ -70,12 +73,13 @@ Scene.propTypes = {
     z: PropTypes.number,
   })),
   setSensor: PropTypes.func,
-  values: PropTypes.oneOf([PropTypes.arrayOf(PropTypes.number),
-    PropTypes.shape({
+  values: PropTypes.arrayOf(PropTypes.number),
+  speeds: PropTypes.oneOf([undefined, PropTypes.shape({
     x: PropTypes.number,
     y: PropTypes.number,
     z: PropTypes.number,
   })]),
+  directions: PropTypes.arrayOf(PropTypes.number),
   getGradiantColorX: PropTypes.func,
 };
 

@@ -77,6 +77,8 @@ export function Sensors(props) {
     setSensor,
     positions,
     values,
+    speeds,
+    directions,
     getGradiantColorX,
   } = props;
 
@@ -103,14 +105,16 @@ export function Sensors(props) {
   
   const sensors = positions.map((position, index) => {
     const value = values[index];
+    const speed = speeds[index];
+    const direction = directions[index];
     const rgb = (getGradiantColorX  && value) ? getGradiantColorX(value) : 'rgb(255, 255, 0)';
-    return { position: position, id: index + 1, color: rgb };
+    return { position: position, id: index + 1, color: rgb, speed: speed, direction: direction };
   });
 
   return (
     <>
       {sensors.map((sensor) => {
-        if (sensor.values) {
+        if (sensor.speed === undefined && sensor.direction === undefined) {
           return (
             <Sensor
               key={`sensor-${sensor.id}`}
@@ -127,7 +131,12 @@ export function Sensors(props) {
               key={`sensor-${sensor.id}`}
               sensorId={sensor.id}
               start={sensor.position}
-              end={sensor.value}
+              end={{
+                x: sensor.position.x + sensor.speed?.x ?? 0,
+                y: sensor.position.y + sensor.speed?.y ?? 0,
+                z: sensor.position.z + sensor.speed?.z ?? 0,
+              }}
+              angle={sensor.direction}
               color={sensor.color}
               setSensor={() => setSensor(sensor.id)}
               selectedSensor={selectedSensor}
@@ -147,7 +156,8 @@ Sensors.propTypes = {
   })),
   setSensor: PropTypes.func,
   selectedSensor: PropTypes.number,
-  values: PropTypes.oneOf([PropTypes.arrayOf(PropTypes.number), PropTypes.arrayOf(PropTypes.shape({
+  values: PropTypes.arrayOf(PropTypes.number),
+  speeds: PropTypes.oneOf([undefined, PropTypes.arrayOf(PropTypes.shape({
     x: PropTypes.number,
     y: PropTypes.number,
     z: PropTypes.number,
@@ -168,11 +178,21 @@ const Line = (props) => {
   const [hovered, setHover] = useState(false);
   const isSelected = props.selectedSensor === props.sensorId;
 
+  console.log('end', props.end, 'angle', props.angle);
+
   const points = [];
   const v1 = new THREE.Vector3(props.start.x, props.start.y, props.start.z);
-  const v2 = new THREE.Vector3(props.end.x, props.end.y, props.end.z);
+  let v2 = undefined;
+  if (props.end !== undefined && props.angle === undefined ) {
+    v2 = new THREE.Vector3(props.end.x, props.end.y, props.end.z);
+  } else {
+    const angleRadians = THREE.MathUtils.degToRad(props.angle); //degree to radians
+    v2 = new THREE.Vector3(Math.cos(angleRadians), Math.sin(angleRadians), 0).normalize();
+  }
   points.push(v1);
   points.push(v2);
+
+  console.log('v1', v1, 'v2', v2);
 
   const direction = new THREE.Vector3();
   const distance = v1.distanceTo(v2);
@@ -219,11 +239,12 @@ Line.propTypes = {
     y: PropTypes.number,
     z: PropTypes.number,
   }),
-  end: PropTypes.shape({
+  end: PropTypes.oneOf([PropTypes.shape({
     x: PropTypes.number,
     y: PropTypes.number,
     z: PropTypes.number,
-  }),
+  }), undefined]),
+  angle: PropTypes.oneOf([PropTypes.number, undefined]),
   color: PropTypes.string,
   setSensor: PropTypes.func,
 };
@@ -231,7 +252,8 @@ Line.propTypes = {
 Line.defaultProps = {
   sensorId: 0,
   start: {x: 0, y: 0, z: 0},
-  end: {x: 1, y: 1, z: 1},
+  end: undefined,
+  angle: undefined,
   color: 0xffff00,
   setSensor: (id) => {console.log('Sensor Arrow default setSensor(', id, ')')},
 }
