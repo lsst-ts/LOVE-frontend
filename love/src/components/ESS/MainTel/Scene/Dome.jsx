@@ -32,3 +32,13 @@ Dome.defaultProps = {
   height: 27,
   displaceY: 0,
 };
+
+const comparator = (prevProps, nextProps) => {
+  return (
+    prevProps.radius === nextProps.radius &&
+    prevProps.height === nextProps.height &&
+    prevProps.displaceY === nextProps.displaceY
+  );
+}
+
+export default React.memo(Dome, comparator);
