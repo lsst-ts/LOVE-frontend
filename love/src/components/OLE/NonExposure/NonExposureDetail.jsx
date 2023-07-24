@@ -1,29 +1,28 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import lodash from 'lodash';
-import ManagerInterface from 'Utils';
-import { formatSecondsToDigital, openInNewTab } from 'Utils';
-import { getLinkJira, getFileURL, getFilename } from 'Utils';
-// import { LOG_TYPE_OPTIONS } from 'Config';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
-import { iconLevelOLE } from 'Config';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
+import { iconLevelOLE } from 'Config';
+import ManagerInterface, { getLinkJira, getFileURL, getFilename, formatSecondsToDigital, openInNewTab } from 'Utils';
 import styles from './NonExposure.module.css';
 
 export default class NonExposureDetail extends Component {
   static propTypes = {
-    back: PropTypes.func,
+    /** Log to edit object */
     logDetail: PropTypes.object,
+    /** Function to go back */
+    back: PropTypes.func,
+    /** Function to edit a log */
+    edit: PropTypes.func,
+    /** Function to remove a log */
     remove: PropTypes.func,
   };
 
   static defaultProps = {
-    back: () => {},
-    edit: () => {},
-    remove: () => {},
     logDetail: {
       id: undefined,
       level: undefined,
@@ -40,6 +39,9 @@ export default class NonExposureDetail extends Component {
       tags: [],
       urls: [],
     },
+    back: () => {},
+    edit: () => {},
+    remove: () => {},
   };
 
   constructor(props) {
@@ -49,6 +51,11 @@ export default class NonExposureDetail extends Component {
       confirmationModalShown: false,
       confirmationModalText: '',
     };
+  }
+
+  getIconLevel(level) {
+    const icon = iconLevelOLE[level >= 100 ? 'urgent' : 'info'];
+    return icon;
   }
 
   deleteMessage(message) {
@@ -91,23 +98,15 @@ export default class NonExposureDetail extends Component {
     );
   }
 
-  getIconLevel(level) {
-    const icon = iconLevelOLE[level >= 100 ? 'urgent' : 'info'];
-    return icon;
-  }
-
   render() {
-    const back = this.props.back;
+    const { back } = this.props;
+    const { confirmationModalShown, confirmationModalText } = this.state;
+
     const logDetail = this.props.logDetail ?? NonExposureDetail.defaultProps.logDetail;
     const edit = this.props.edit ?? NonExposureDetail.defaultProps.edit;
 
-    const { confirmationModalShown, confirmationModalText } = this.state;
-
     const linkJira = getLinkJira(logDetail.urls);
     const fileurl = getFileURL(logDetail.urls);
-
-    // Uncomment next code block to use several level options
-    // const logLevel = logDetail.level ? LOG_TYPE_OPTIONS.find((type) => type.value === logDetail.level).label : 'None';
 
     return (
       <>
@@ -124,8 +123,6 @@ export default class NonExposureDetail extends Component {
         <div id={this.id} className={styles.detailContainer}>
           <div className={styles.header}>
             <span className={styles.bold}>
-              {/* Uncomment next code block to use several level options */}
-              {/* #{logDetail.id} - <span className={styles.levelIcon}>{this.getIconLevel(logLevel)}</span> {logLevel} */}
               #{logDetail.id} <span className={styles.levelIcon}>{this.getIconLevel(logDetail.level)}</span>
             </span>
             {linkJira ? (

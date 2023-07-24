@@ -1,17 +1,16 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import PropTypes from 'prop-types';
-import lodash from 'lodash';
 import Moment from 'moment';
 import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
 import styles from './DateTimeRange.module.css';
 
 const DateTimeRange = ({
+  label = '',
   className,
   startDate,
   endDate,
   startDateProps,
   endDateProps,
-  label = '',
   onChange = () => {},
 }) => {
   const [dateStart, setDateStart] = useState(startDate ?? new Date(Date.now() - 24 * 60 * 60 * 1000 + 37 * 1000)); // Add 37 seconds to comply with TAI
@@ -24,22 +23,22 @@ const DateTimeRange = ({
     onChange(dateEnd, 'end');
   }, []);
 
-  const handleChangeStart = (changeEvent) => {
+  const handleChangeStart = useCallback((changeEvent) => {
     setDateStart(changeEvent);
     onChange(changeEvent, 'start');
-  };
+  }, []);
 
-  const handleChangeEnd = (changeEvent) => {
+  const handleChangeEnd = useCallback((changeEvent) => {
     setDateEnd(changeEvent);
     onChange(changeEvent, 'end');
-  };
+  }, []);
 
   return (
     <div className={[styles.horizontalFilter, className].join(' ')}>
       {label !== '' && <span className={styles.label}>{label}</span>}
       <DateTime
-        viewMode="time"
         inputProps={{ placeholder: 'Initial date' }}
+        viewMode="time"
         value={dateStart}
         onChange={handleChangeStart}
         dateFormat="YYYY/MM/DD"
@@ -49,8 +48,8 @@ const DateTimeRange = ({
       />
       <span className={styles.to}>to</span>
       <DateTime
-        viewMode="time"
         inputProps={{ placeholder: 'Final date' }}
+        viewMode="time"
         value={dateEnd}
         onChange={handleChangeEnd}
         dateFormat="YYYY/MM/DD"
@@ -63,30 +62,29 @@ const DateTimeRange = ({
 };
 
 DateTimeRange.propTypes = {
+  /** Label to be appended at the beginning of the datetime range component */
+  label: PropTypes.string,
   /** Classname of the component */
   className: PropTypes.string,
   /** Date for the datetime range start */
-  startDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.instanceOf(Moment)]),
+  startDate: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date), PropTypes.instanceOf(Moment)]),
   /** Date for the datetime range end */
-  endtDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.instanceOf(Moment)]),
+  endtDate: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date), PropTypes.instanceOf(Moment)]),
   /** Properties to add to the start DateTime component */
   startDateProps: PropTypes.object,
   /** Properties to add to the end DateTime component */
   endDateProps: PropTypes.object,
-  /** Label to be appended at the beginning of the datetime range component */
-  label: PropTypes.string,
   /** Function used to change the values of the dateTimeRange */
   onChange: PropTypes.func,
 };
 
-const checkChangeProps = (prevProps, nextProps) => {
+const arePropsEqual = (prevProps, nextProps) => {
   return (
+    prevProps.label === nextProps.label &&
     prevProps.className === nextProps.className &&
-    prevProps.startDate === nextProps.startDate &&
-    prevProps.endDate === nextProps.endDate &&
-    lodash.isEqual(prevProps.startDateProps, nextProps.startDateProps) &&
-    lodash.isEqual(prevProps.endDateProps, nextProps.endDateProps) &&
-    prevProps.label === nextProps.label
+    Moment(prevProps.startDate).isSame(nextProps.startDate) &&
+    Moment(prevProps.endDate).isSame(nextProps.endDate)
   );
 };
-export default memo(DateTimeRange, checkChangeProps);
+
+export default memo(DateTimeRange, arePropsEqual);

@@ -4,19 +4,18 @@ import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import { CSVLink } from 'react-csv';
 import {
+  OLE_COMMENT_TYPE_OPTIONS,
   LSST_SYSTEMS,
   iconLevelOLE,
   ISO_INTEGER_DATE_FORMAT,
-  ISO_STIRNG_DATE_TIME_FORMAT,
-  /* LSST_SUBSYSTEMS, */
-  /* LOG_TYPE_OPTIONS, */
+  ISO_STRING_DATE_TIME_FORMAT,
 } from 'Config';
 import ManagerInterface, { formatSecondsToDigital, openInNewTab, getLinkJira, getFileURL } from 'Utils';
 
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Input from 'components/GeneralPurpose/Input/Input';
-import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
+import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
@@ -56,7 +55,7 @@ export default class NonExposure extends Component {
 
   static defaultProps = {
     selectedDayNarrative: Moment(Date.now() + 37 * 1000),
-    selectedCommentType: { value: 'all', label: 'All comment types' },
+    selectedCommentType: OLE_COMMENT_TYPE_OPTIONS[0],
     selectedSystem: 'all',
     selectedObsTimeLoss: false,
     changeDayNarrative: () => {},
@@ -96,8 +95,6 @@ export default class NonExposure extends Component {
   }
 
   getLevel(value) {
-    // Uncomment next code line to use several level options
-    // const label = LOG_TYPE_OPTIONS.find((type) => type.value === value)?.label;
     const label = value >= 100 ? 'urgent' : 'info';
     const icon = iconLevelOLE[label] ?? undefined;
     return (
@@ -123,23 +120,18 @@ export default class NonExposure extends Component {
   getHeaders = () => {
     return [
       {
-        field: 'date_added',
-        title: 'Timestamp (UTC)',
-        type: 'timestamp',
-        className: styles.tableHead,
-        render: (value) => value.split('.')[0],
-      },
-      {
-        field: 'user_id',
-        title: 'User Id',
+        field: 'systems',
+        title: 'Systems',
         type: 'string',
         className: styles.tableHead,
+        render: (value) => value.join(', '),
       },
       {
-        field: 'user_agent',
-        title: 'Agent',
+        field: 'level',
+        title: 'Level',
         type: 'string',
         className: styles.tableHead,
+        render: (value) => this.getLevel(value),
       },
       {
         field: null,
@@ -156,18 +148,11 @@ export default class NonExposure extends Component {
         render: (value) => formatSecondsToDigital(value * 3600),
       },
       {
-        field: 'level',
-        title: 'Level',
+        field: 'message_text',
+        title: 'Message',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => this.getLevel(value),
-      },
-      {
-        field: 'systems',
-        title: 'Systems',
-        type: 'string',
-        className: styles.tableHead,
-        render: (value) => value.join(', '),
+        render: (value) => value,
       },
       {
         field: 'urls',
@@ -192,14 +177,17 @@ export default class NonExposure extends Component {
         title: 'Jira',
         type: 'link',
         className: styles.tableHead,
-        render: (value) =>
-          getLinkJira(value) ? (
-            <Button status="link" title={getLinkJira(value)} onClick={() => openInNewTab(getLinkJira(value))}>
-              view Jira ticket
-            </Button>
-          ) : (
-            <></>
-          ),
+        render: (value) => {
+          const link = getLinkJira(value);
+          if (link) {
+            const ticket = link.split('/').pop();
+            return (
+              <a target="_blank" href={link}>
+                {ticket}
+              </a>
+            );
+          }
+        },
       },
       {
         field: 'action',
@@ -240,14 +228,27 @@ export default class NonExposure extends Component {
     ];
   };
 
-  queryNarrativeLogs(callback) {
-    const { selectedDayNarrative } = this.props;
-    const dateFrom = selectedDayNarrative.startOf('day').format(ISO_STIRNG_DATE_TIME_FORMAT);
-    const dateTo = moment(selectedDayNarrative).startOf('day').add(1, 'days').format(ISO_STIRNG_DATE_TIME_FORMAT);
+  queryNarrativeLogs() {
+    const { selectedDayNarrativeStart, selectedDayNarrativeEnd } = this.props;
+    const dateFrom = selectedDayNarrativeStart.format(ISO_STRING_DATE_TIME_FORMAT);
+    const dateTo = selectedDayNarrativeEnd.format(ISO_STRING_DATE_TIME_FORMAT);
+
+    // Get list of narrative logs
+    this.setState({ updatingLogs: true });
     ManagerInterface.getListMessagesNarrativeLogs(dateFrom, dateTo).then((data) => {
-      this.setState({ logs: data });
-      if (callback) callback();
+      this.setState({ logs: data, updatingLogs: false });
     });
+  }
+
+  parseCsvData(data) {
+    const csvData = data.map((row) => {
+      const escapedMessageText = row.message_text.replace(/"/g, '""');
+      return {
+        ...row,
+        message_text: escapedMessageText,
+      };
+    });
+    return csvData;
   }
 
   componentDidMount() {
@@ -255,14 +256,20 @@ export default class NonExposure extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.selectedDayNarrative !== prevProps.selectedDayNarrative) {
+    if (
+      (this.props.selectedDayNarrativeStart &&
+        !this.props.selectedDayNarrativeStart.isSame(prevProps.selectedDayNarrativeStart)) ||
+      (this.props.selectedDayNarrativeEnd &&
+        !this.props.selectedDayNarrativeEnd.isSame(prevProps.selectedDayNarrativeEnd))
+    ) {
       this.queryNarrativeLogs();
     }
   }
 
   render() {
     const {
-      selectedDayNarrative,
+      selectedDayNarrativeStart,
+      selectedDayNarrativeEnd,
       selectedCommentType,
       selectedSystem,
       selectedObsTimeLoss,
@@ -271,48 +278,57 @@ export default class NonExposure extends Component {
       changeSystemSelect,
       changeObsTimeLossSelect,
     } = this.props;
-    const { modeView, modeEdit, showDateRangeFilter } = this.state;
+    const { logs: tableData, modeView, modeEdit } = this.state;
+
     const headers = Object.values(this.getHeaders());
 
-    let filteredData = this.state.logs ?? [];
+    const systemOptions = [{ label: 'System', value: 'all' }, ...LSST_SYSTEMS];
+
+    let filteredData = [...tableData];
 
     // Filter by type
-    filteredData =
-      selectedCommentType.value !== 'all'
-        ? filteredData.filter((log) => log.level === selectedCommentType.value)
-        : filteredData;
+    if (selectedCommentType.value !== 'all') {
+      filteredData = filteredData.filter((log) => log.level === selectedCommentType.value);
+    }
 
     // Filter by system
-    filteredData =
-      selectedSystem !== 'all' ? filteredData.filter((log) => log.systems.includes(selectedSystem)) : filteredData;
+    if (selectedSystem !== 'all') {
+      filteredData = filteredData.filter((log) => log.systems.includes(selectedSystem));
+    }
 
     // Filter by obs time loss
-    filteredData = selectedObsTimeLoss ? filteredData.filter((log) => log.time_lost > 0) : filteredData;
-
-    const tableData = filteredData;
+    if (selectedObsTimeLoss) {
+      filteredData = filteredData.filter((log) => log.time_lost > 0);
+    }
 
     // Obtain headers to create csv report
     let csvHeaders = null;
     let csvData = "There aren't logs created for the current search...";
     let csvTitle = 'narrative_logs.csv';
     if (filteredData.length > 0) {
-      const logExampleKeys = Object.keys(filteredData?.[0] ?? {});
-      csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
-      csvData = filteredData;
+      const exportedParams = [
+        'date_added',
+        'message_text',
+        'level',
+        'tags',
+        'urls',
+        'date_begin',
+        'date_end',
+        'time_lost',
+        'systems',
+        'subsystems',
+        'cscs',
+        'user_id',
+      ];
+      csvHeaders = exportedParams.map((key) => ({ label: key, key }));
+      csvData = this.parseCsvData(filteredData);
     }
 
-    if (selectedDayNarrative) {
-      csvTitle = `narrative_logs_${Moment(selectedDayNarrative).format(ISO_INTEGER_DATE_FORMAT)}.csv`;
+    if (selectedDayNarrativeStart && selectedDayNarrativeEnd) {
+      csvTitle = `narrative_logs_from_${selectedDayNarrativeStart.format(
+        ISO_INTEGER_DATE_FORMAT,
+      )}_to_${selectedDayNarrativeEnd.format(ISO_INTEGER_DATE_FORMAT)}.csv`;
     }
-
-    // Uncomment next code block to use several level options
-    // const commentTypeOptions = [{ label: 'All comment types', value: 'all' }, ...LOG_TYPE_OPTIONS];
-    const commentTypeOptions = [
-      { label: 'All comment types', value: 'all' },
-      { label: 'Urgent', value: 100 },
-      { label: 'Non urgent', value: 0 },
-    ];
-    const systemOptions = [{ label: 'All systems', value: 'all' }, ...LSST_SYSTEMS];
 
     return modeView && !modeEdit ? (
       <NonExposureDetail
@@ -346,30 +362,31 @@ export default class NonExposure extends Component {
       <div className={styles.margin10}>
         <div className={styles.title}>Filter</div>
         <div className={styles.filters}>
-          <Button
-            disabled={this.state.updatingLogs}
-            onClick={() => {
-              this.setState({ updatingLogs: true });
-              this.queryNarrativeLogs(() => {
-                this.setState({ updatingLogs: false });
-              });
-            }}
-          >
+          <Button disabled={this.state.updatingLogs} onClick={() => this.queryNarrativeLogs()}>
             Refresh data
             {this.state.updatingLogs && <SpinnerIcon className={styles.spinnerIcon} />}
           </Button>
 
-          <DateTime
-            label="Creation day"
-            value={selectedDayNarrative}
-            onChange={(day) => changeDayNarrative(day)}
-            dateFormat="YYYY/MM/DD"
-            timeFormat={false}
-            closeOnSelect={true}
+          <DateTimeRange
+            label="From"
+            className={styles.dateRange}
+            startDate={selectedDayNarrativeStart}
+            endDate={selectedDayNarrativeEnd}
+            startDateProps={{
+              timeFormat: false,
+              className: styles.rangeDateOnly,
+              maxDate: Moment(),
+            }}
+            endDateProps={{
+              timeFormat: false,
+              className: styles.rangeDateOnly,
+              maxDate: Moment(),
+            }}
+            onChange={changeDayNarrative}
           />
 
           <Select
-            options={commentTypeOptions}
+            options={OLE_COMMENT_TYPE_OPTIONS}
             option={selectedCommentType}
             onChange={(value) => changeCommentTypeSelect(value)}
             className={styles.select}
@@ -402,7 +419,7 @@ export default class NonExposure extends Component {
             </CSVLink>
           </div>
         </div>
-        <SimpleTable headers={headers} data={tableData} />
+        <SimpleTable headers={headers} data={filteredData} />
       </div>
     );
   }

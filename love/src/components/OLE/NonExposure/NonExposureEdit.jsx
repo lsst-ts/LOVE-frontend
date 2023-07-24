@@ -11,7 +11,6 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
-import Modal from 'components/GeneralPurpose/Modal/Modal';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import { defaultCSCList, LSST_SYSTEMS, LSST_SUBSYSTEMS, iconLevelOLE } from 'Config';
 import ManagerInterface, { getLinkJira, getFileURL, getFilename } from 'Utils';
@@ -19,16 +18,21 @@ import styles from './NonExposure.module.css';
 
 export default class NonExposureEdit extends Component {
   static propTypes = {
-    back: PropTypes.func,
+    /** Log to edit object */
     logEdit: PropTypes.object,
+    /** Flag to show the creation components */
     isLogCreate: PropTypes.bool,
+    /** Flag to show the menu components */
     isMenu: PropTypes.bool,
+    /** Function to go back */
+    back: PropTypes.func,
+    /** Function to save a log */
     save: PropTypes.func,
-    tagsIds: PropTypes.arrayOf(PropTypes.string),
+    /** Function to view a log */
+    view: PropTypes.func,
   };
 
   static defaultProps = {
-    back: () => {},
     logEdit: {
       id: undefined,
       level: 0,
@@ -51,9 +55,9 @@ export default class NonExposureEdit extends Component {
     },
     isLogCreate: false,
     isMenu: false,
-    view: () => {},
+    back: () => {},
     save: () => {},
-    tagsIds: [],
+    view: () => {},
   };
 
   constructor(props) {
@@ -74,8 +78,6 @@ export default class NonExposureEdit extends Component {
 
     this.state = {
       logEdit,
-      confirmationModalShown: false,
-      confirmationModalText: '',
       savingLog: false,
       datesAreValid: true,
     };
@@ -103,41 +105,6 @@ export default class NonExposureEdit extends Component {
     this.setState({ logEdit: NonExposureEdit.defaultProps.logEdit });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-
-    const modalText = (
-      <span>
-        You are about to <b>save</b> changes in this message of Narrative Logs
-        <br />
-        Are you sure ?
-      </span>
-    );
-
-    this.setState({
-      confirmationModalShown: true,
-      confirmationModalText: modalText,
-    });
-  }
-
-  renderModalFooter = () => {
-    const { savingLog } = this.state;
-    return (
-      <div className={styles.modalFooter}>
-        <Button
-          className={styles.borderedButton}
-          onClick={() => this.setState({ confirmationModalShown: false })}
-          status="transparent"
-        >
-          Go back
-        </Button>
-        <Button disabled={savingLog} onClick={() => this.updateOrCreateMessageNarrativeLogs()} status="default">
-          {savingLog ? <SpinnerIcon className={styles.spinnerIcon} /> : 'Yes'}
-        </Button>
-      </div>
-    );
-  };
-
   updateOrCreateMessageNarrativeLogs() {
     const payload = { ...this.state.logEdit };
 
@@ -149,7 +116,7 @@ export default class NonExposureEdit extends Component {
     payload['tags'] = [
       ...(payload['systems'] ?? []),
       ...(payload['subsystems'] ?? []),
-      ...(payload['cscs'].map((c) => c.replace(':', '_')) ?? []),
+      ...(payload['cscs'] ?? []).map((c) => c.replace(':', '_')),
     ];
 
     // Clean null and empty values to avoid API errors
@@ -163,7 +130,6 @@ export default class NonExposureEdit extends Component {
     if (this.state.logEdit.id) {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
         this.setState({
-          confirmationModalShown: false,
           savingLog: false,
         });
         this.props.save(response);
@@ -171,7 +137,6 @@ export default class NonExposureEdit extends Component {
     } else {
       ManagerInterface.createMessageNarrativeLogs(payload).then((response) => {
         this.setState({
-          confirmationModalShown: false,
           savingLog: false,
         });
         this.props.save(response);
@@ -179,6 +144,11 @@ export default class NonExposureEdit extends Component {
         this.props.back();
       });
     }
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.updateOrCreateMessageNarrativeLogs();
   }
 
   handleTimeOfIncident(date, type) {
@@ -228,16 +198,12 @@ export default class NonExposureEdit extends Component {
 
   render() {
     const { back, isLogCreate, isMenu } = this.props;
-    const { confirmationModalShown, confirmationModalText, datesAreValid } = this.state;
+    const { datesAreValid, savingLog } = this.state;
 
     const view = this.props.view ?? NonExposureEdit.defaultProps.view;
     const systemOptions = LSST_SYSTEMS;
     const subsystemOptions = LSST_SUBSYSTEMS;
     const cscOptions = defaultCSCList.map((csc) => `${csc.name}:${csc.salindex}`);
-    // Uncomment next code block to use several level options
-    // const selectedCommentType = this.state.logEdit?.level
-    //   ? LOG_TYPE_OPTIONS.find((type) => type.value === this.state.logEdit.level)
-    //   : null;
 
     return (
       <>
@@ -287,25 +253,6 @@ export default class NonExposureEdit extends Component {
               <div className={styles.contentLeft}>
                 <span className={styles.label}>Urgent?</span>
                 <span className={[styles.value].join(' ')}>
-                  {/* Uncomment next code block to use several level options */}
-                  {/* <Select
-                    option={selectedCommentType}
-                    onChange={({ value }) =>
-                      this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, level: value },
-                      }))
-                    }
-                    options={LOG_TYPE_OPTIONS}
-                    className={styles.select}
-                    small
-                  />
-                  <span className={styles.levelIcon}>
-                    {selectedCommentType && selectedCommentType.label ? (
-                      this.getIconLevel(selectedCommentType.label)
-                    ) : (
-                      <></>
-                    )}
-                  </span>*/}
                   <div style={{ display: 'inline-block', marginRight: '0.5em' }}>
                     <Toggle
                       labels={['No', 'Yes']}
@@ -366,27 +313,6 @@ export default class NonExposureEdit extends Component {
                     placeholder="Select zero or several CSCs"
                   />
                 </span>
-
-                {/* Uncomment next code block to use several level options */}
-                {/* <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
-                <span className={styles.value}>
-                  <Multiselect
-                    options={this.state.imageTags}
-                    selectedValues={this.state.logEdit.tags}
-                    isObject={true}
-                    displayValue="name"
-                    onSelect={(selectedOptions) => {
-                      this.setState((prevState) => ({
-                        logEdit: {
-                          ...prevState.logEdit,
-                          tags: selectedOptions,
-                        },
-                      }));
-                    }}
-                    placeholder="Select zero or several tags"
-                    selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
-                  />
-                </span> */}
 
                 {isMenu ? (
                   <>
@@ -551,20 +477,14 @@ export default class NonExposureEdit extends Component {
                   <></>
                 )}
                 <Button disabled={!datesAreValid} type="submit">
-                  <span className={styles.title}>Upload Log</span>
+                  {savingLog ? (
+                    <SpinnerIcon className={styles.spinnerIcon} />
+                  ) : (
+                    <span className={styles.title}>Upload Log</span>
+                  )}
                 </Button>
               </span>
             </div>
-            <Modal
-              displayTopBar={false}
-              isOpen={!!confirmationModalShown}
-              onRequestClose={() => this.setState({ confirmationModalShown: false })}
-              parentSelector={() => document.querySelector(`#${this.id}`)}
-              size={50}
-            >
-              <p style={{ textAlign: 'center' }}>{confirmationModalText}</p>
-              {this.renderModalFooter()}
-            </Modal>
           </div>
         </form>
       </>
