@@ -218,8 +218,10 @@ export default class Selector extends Component {
   }
 
   zoomOut = () => {
-    d3.select(`#${this.uniqueScatter}`).call(this.zoom.transform, d3.zoomIdentity.scale(1)).call(this.zoom);
-    d3.select(`#${this.uniqueMirrorHole}`).call(this.zoom.transform, d3.zoomIdentity.scale(1)).call(this.zoom);
+    d3.select(`#${this.uniqueCircleOverlay}`).call(this.zoom.transform, d3.zoomIdentity.scale(1)).call(this.zoom);
+    this.setState({
+      zoomLevel: d3.event.transform.k,
+    });
   };
 
   zoomed = () => {
@@ -281,17 +283,22 @@ export default class Selector extends Component {
           onMouseEnter={this.disableScroll}
           onMouseLeave={this.enableScroll}
         >
-          {this.getBackground()}
-          {this.getScatter(
-            scale,
-            margin,
-            showActuatorsID,
-            showMeasuredForce,
-            showCommandedForce,
-            zoomLevel,
-            actuatorSelect,
-            selectedActuator,
-          )}
+          <clipPath id="cut">
+            <circle cx="240" cy="240" r="210"></circle>
+          </clipPath>
+          <g clip-path="url(#cut)">
+            {this.getBackground()}
+            {this.getScatter(
+              scale,
+              margin,
+              showActuatorsID,
+              showMeasuredForce,
+              showCommandedForce,
+              zoomLevel,
+              actuatorSelect,
+              selectedActuator,
+            )}
+          </g>
           {this.getAxis(margin, actuatorSelect)}
           {this.getTangentActuators(
             showActuatorsID,
