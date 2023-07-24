@@ -142,3 +142,9 @@
   fill: white !important;
   stroke: white !important;
 }
+
+.zoomOut {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+}

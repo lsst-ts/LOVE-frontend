@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { uniqueId } from 'lodash';
 import { M2ActuatorPositions, M2ActuatorTangentPositions } from 'Config';
 import ForceGradiant from '../ForceGradiant/ForceGradiant';
+import Button from 'components/GeneralPurpose/Button/Button';
 import styles from './Selector.module.css';
 
 export default class Selector extends Component {
@@ -71,6 +72,8 @@ export default class Selector extends Component {
     this.uniqueCircleOverlay = uniqueId('m2-selector-circle-overlay-');
     this.uniqueScatter = uniqueId('m2-selector-scatter-');
     this.uniqueMirrorHole = uniqueId('m2-selector-mirror-hole-');
+
+    this.zoom = null;
   }
 
   preventDefault(e) {
@@ -210,8 +213,14 @@ export default class Selector extends Component {
   }
 
   componentDidUpdate() {
-    d3.select(`#${this.uniqueCircleOverlay}`).call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
+    this.zoom = d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed);
+    d3.select(`#${this.uniqueCircleOverlay}`).call(this.zoom);
   }
+
+  zoomOut = () => {
+    d3.select(`#${this.uniqueScatter}`).call(this.zoom.transform, d3.zoomIdentity.scale(1)).call(this.zoom);
+    d3.select(`#${this.uniqueMirrorHole}`).call(this.zoom.transform, d3.zoomIdentity.scale(1)).call(this.zoom);
+  };
 
   zoomed = () => {
     const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
@@ -260,32 +269,39 @@ export default class Selector extends Component {
     const margin = 60;
 
     return (
-      <svg
-        className={styles.svgContainer}
-        viewBox={`0 0 ${this.state.width} ${this.state.width}`}
-        onMouseEnter={this.disableScroll}
-        onMouseLeave={this.enableScroll}
-      >
-        {this.getBackground()}
-        {this.getScatter(
-          scale,
-          margin,
-          showActuatorsID,
-          showMeasuredForce,
-          showCommandedForce,
-          zoomLevel,
-          actuatorSelect,
-          selectedActuator,
+      <>
+        {zoomLevel > 1 && (
+          <div className={styles.zoomOut}>
+            <Button onClick={this.zoomOut}>Zoom out</Button>
+          </div>
         )}
-        {this.getAxis(margin, actuatorSelect)}
-        {this.getTangentActuators(
-          showActuatorsID,
-          showMeasuredForce,
-          showCommandedForce,
-          actuatorTangentSelect,
-          selectedActuatorTangent,
-        )}
-      </svg>
+        <svg
+          className={styles.svgContainer}
+          viewBox={`0 0 ${this.state.width} ${this.state.width}`}
+          onMouseEnter={this.disableScroll}
+          onMouseLeave={this.enableScroll}
+        >
+          {this.getBackground()}
+          {this.getScatter(
+            scale,
+            margin,
+            showActuatorsID,
+            showMeasuredForce,
+            showCommandedForce,
+            zoomLevel,
+            actuatorSelect,
+            selectedActuator,
+          )}
+          {this.getAxis(margin, actuatorSelect)}
+          {this.getTangentActuators(
+            showActuatorsID,
+            showMeasuredForce,
+            showCommandedForce,
+            actuatorTangentSelect,
+            selectedActuatorTangent,
+          )}
+        </svg>
+      </>
     );
   }
 
