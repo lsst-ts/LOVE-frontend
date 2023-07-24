@@ -10,25 +10,19 @@ import { fixedFloat } from 'Utils';
 
 export default class Simonyi extends Component {
   render() {
-    const {
-      auxtelTrackingState,
-      auxtelAltitude,
-      auxtelAzimuth,
-      auxtelRotator,
-      auxtelDomeAlt,
-      auxtelDomeAz,
-    } = this.props;
+    const { auxtelTrackingState, auxtelAltitude, auxtelAzimuth, auxtelRotator, auxtelDomeAlt, auxtelDomeAz } =
+      this.props;
     const auxtelTracking = schedulerTrackingStateToMap[auxtelTrackingState];
     return (
       <div className={styles.container}>
-        <SummaryPanel className={styles.summaryPanel}>
+        <SummaryPanel className={[styles.summaryPanel, styles.telescope].join(' ')}>
           <Title>Auxiliary Telescope</Title>
           <Value>
             <StatusText status={schedulerTrackingStateToStyle[auxtelTracking]}>{auxtelTracking}</StatusText>
           </Value>
         </SummaryPanel>
         <div className={styles.mountDomeDiv}>
-          <SummaryPanel className={styles.summaryPanel}>
+          <SummaryPanel className={[styles.summaryPanel, styles.telescope].join(' ')}>
             <Title>Mount</Title>
             <span></span>
             <Label>Altitude</Label>
@@ -38,7 +32,7 @@ export default class Simonyi extends Component {
             <Label>Rotator</Label>
             <Value>{`${fixedFloat(auxtelRotator, 2)} °`}</Value>
           </SummaryPanel>
-          <SummaryPanel className={styles.summaryPanel}>
+          <SummaryPanel className={[styles.summaryPanel, styles.telescope].join(' ')}>
             <Title>Dome</Title>
             <span></span>
             <Label>Altitude</Label>

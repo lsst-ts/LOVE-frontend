@@ -64,9 +64,7 @@ export default class EnvironmentSummary extends Component {
   constructor(props) {
     super(props);
     this.containerRef = React.createRef();
-    this.state = {
-      hideIconTemperature: false,
-    };
+    this.state = {};
   }
 
   hideIconTemperature() {
@@ -127,26 +125,30 @@ export default class EnvironmentSummary extends Component {
             <span>Speed: {windSpeed}</span>
           </div>
         </div>
-        <div className={styles.windRoseContainer}>
-          <WindRose />
-        </div>
-        <div className={styles.iconLeft}>
-          <WeatherForecastIcon pictocode={isRaining ? 23 : 0} />
+        <div className={styles.temperaturesContainer}>
+          <TemperaturesSummary numChannels={numChannels} temperature={temperature} location={location} />
         </div>
         <div ref={this.containerRef} className={styles.telescopes}>
-          <Skymap
-            containerNode={this.containerRef?.current}
-            className={styles.skymap}
-            simonyiRa={simonyiRa}
-            simonyiDec={simonyiDec}
-            simonyiMoonRa={simonyiMoonRa}
-            simonyiMoonDec={simonyiMoonDec}
-            simonyiSunRa={simonyiSunRa}
-            simonyiSunDec={simonyiSunDec}
-            simonyiMoonPhase={simonyiMoonPhase}
-            auxtelRa={auxtelRa}
-            auxtelDec={auxtelDec}
-          />
+          <div className={styles.skymap}>
+            <Skymap
+              containerNode={this.containerRef?.current}
+              simonyiRa={simonyiRa}
+              simonyiDec={simonyiDec}
+              simonyiMoonRa={simonyiMoonRa}
+              simonyiMoonDec={simonyiMoonDec}
+              simonyiSunRa={simonyiSunRa}
+              simonyiSunDec={simonyiSunDec}
+              simonyiMoonPhase={simonyiMoonPhase}
+              auxtelRa={auxtelRa}
+              auxtelDec={auxtelDec}
+            />
+            <div className={styles.weatherIcons}>
+              {/* <WeatherForecastIcon pictocode={isRaining ? 23 : 0} />
+              <WeatherForecastIcon pictocode={isSnowing ? 24 : 0} /> */}
+              <WeatherForecastIcon pictocode={true ? 23 : 0} />
+              <WeatherForecastIcon pictocode={true ? 24 : 0} />
+            </div>
+          </div>
           <SimonyiTelescope
             className={styles.simonyi}
             simonyiTrackingState={simonyiTrackingState}
@@ -171,19 +173,6 @@ export default class EnvironmentSummary extends Component {
             hideIconTemperature={() => this.hideIconTemperature()}
             showIconTemperature={() => this.showIconTemperature()}
           />
-          {!hideIconTemperature && (
-            <div className={styles.iconTemperature}>
-              <Hoverable className={styles.temperaturesHover}>
-                <TemperatureIcon />
-                <div className={styles.temperaturesSummary}>
-                  <TemperaturesSummary numChannels={numChannels} temperature={temperature} location={location} />
-                </div>
-              </Hoverable>
-            </div>
-          )}
-        </div>
-        <div className={styles.iconRight}>
-          <WeatherForecastIcon pictocode={isSnowing ? 24 : 0} />
         </div>
       </div>
     );
