@@ -78,7 +78,11 @@ export default class EnvironmentSummary extends Component {
   }
 
   componentDidMount() {
-    this.setState({ test: 1 });
+    this.props.subscribeToStreams();
+  }
+
+  componentWillUnmount() {
+    this.props.unsubscribeToStreams();
   }
 
   render() {

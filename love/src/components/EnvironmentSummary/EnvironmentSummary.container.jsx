@@ -19,8 +19,8 @@ export const schema = {
 };
 
 const EnvironmentSummaryContainer = ({
-  subscribeToStream,
-  unsubscribeToStream,
+  subscribeToStreams,
+  unsubscribeToStreams,
   simonyiTrackingState,
   simonyiRa,
   simonyiDec,
@@ -56,8 +56,8 @@ const EnvironmentSummaryContainer = ({
   }
   return (
     <EnvironmentSummary
-      subscribeToStream={subscribeToStream}
-      unsubscribeToStream={unsubscribeToStream}
+      subscribeToStreams={subscribeToStreams}
+      unsubscribeToStreams={unsubscribeToStreams}
       simonyiTrackingState={simonyiTrackingState}
       simonyiRa={simonyiRa}
       simonyiDec={simonyiDec}
@@ -108,10 +108,10 @@ const mapDispatchToProps = (dispatch) => {
   ];
   return {
     subscriptions,
-    subscribeToStream: () => {
+    subscribeToStreams: () => {
       subscriptions.forEach((stream) => dispatch(addGroup(stream)));
     },
-    unsubscribeToStream: () => {
+    unsubscribeToStreams: () => {
       subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
     },
   };
