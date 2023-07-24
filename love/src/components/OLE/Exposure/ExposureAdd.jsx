@@ -12,7 +12,7 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
-import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
+import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
 import { EXPOSURE_FLAG_OPTIONS, exposureFlagStateToStyle, ISO_INTEGER_DATE_FORMAT } from 'Config';
@@ -31,8 +31,6 @@ export default class ExposureAdd extends Component {
     isMenu: PropTypes.bool,
     /** Array of observation ids */
     observationIds: PropTypes.arrayOf(PropTypes.string),
-    /** Mappings of instruments to exposures registries */
-    registryMap: PropTypes.object,
     /** Function to go back */
     back: PropTypes.func,
     /** Function to view a log */
@@ -85,8 +83,10 @@ export default class ExposureAdd extends Component {
       confirmationModalText: '',
       imageTags: [],
       selectedTags: [],
+      selectedDayExposureStart: Moment(Date.now() + 37 * 1000).subtract(1, 'days'),
+      selectedDayExposureEnd: Moment(Date.now() + 37 * 1000),
+      registryMap: {},
       updatingExposures: false,
-      selectedDayExposure: Moment(),
       savingLog: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -100,11 +100,15 @@ export default class ExposureAdd extends Component {
     this.setState({ newMessage: ExposureAdd.defaultProps.newMessage });
   }
 
-  queryExposures(callback) {
-    const { selectedInstrument, selectedDayExposure, registryMap } = this.state;
-    const obsDayInteger = parseInt(Moment(selectedDayExposure).format(ISO_INTEGER_DATE_FORMAT));
+  queryExposures() {
+    const { selectedInstrument, selectedDayExposureStart, selectedDayExposureEnd, registryMap } = this.state;
+    const startObsDay = Moment(selectedDayExposureStart).format(ISO_INTEGER_DATE_FORMAT);
+    const endObsDay = Moment(selectedDayExposureEnd).format(ISO_INTEGER_DATE_FORMAT);
     const registry = registryMap[selectedInstrument].split('_')[2];
-    ManagerInterface.getListExposureLogs(selectedInstrument, obsDayInteger, registry).then((data) => {
+
+    // Get the list of exposures
+    this.setState({ updatingExposures: true });
+    ManagerInterface.getListExposureLogs(selectedInstrument, startObsDay, endObsDay, registry).then((data) => {
       const observationIds = data.map((exposure) => exposure.obs_id);
       const dayObs = data.map((exposure) => ({
         obs_id: exposure.obs_id,
@@ -112,11 +116,10 @@ export default class ExposureAdd extends Component {
       }));
 
       this.setState({
+        updatingExposures: false,
         observationIds,
         dayObs,
       });
-
-      if (callback) callback();
     });
   }
 
@@ -128,6 +131,7 @@ export default class ExposureAdd extends Component {
     if (payload['tags']) {
       payload['tags'] = payload['tags'].map((tag) => tag.id);
     }
+
     this.setState({ savingLog: true });
     ManagerInterface.createMessageExposureLogs(payload).then((result) => {
       if (isLogCreate || isMenu || !this.state.logEdit.obs_id) {
@@ -182,13 +186,20 @@ export default class ExposureAdd extends Component {
     );
   }
 
+  changeDayExposure(day, type) {
+    if (type === 'start') {
+      this.setState({ selectedDayExposureStart: day });
+    } else if (type === 'end') {
+      this.setState({ selectedDayExposureEnd: day });
+    }
+  }
+
   handleSubmit(event) {
     event.preventDefault();
     this.saveMessage();
   }
 
   componentDidMount() {
-    // TODO: only when the filter is shown
     ManagerInterface.getListExposureInstruments().then((data) => {
       const registryMap = {};
       Object.entries(data).forEach(([key, value]) => {
@@ -216,7 +227,10 @@ export default class ExposureAdd extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (
       prevState.selectedInstrument !== this.state.selectedInstrument ||
-      prevState.selectedDayExposure !== this.state.selectedDayExposure
+      (this.state.selectedDayExposureStart &&
+        !Moment(this.state.selectedDayExposureStart).isSame(prevState.selectedDayExposureStart)) ||
+      (this.state.selectedDayExposureEnd &&
+        !Moment(this.state.selectedDayExposureEnd).isSame(prevState.selectedDayExposureEnd))
     ) {
       this.setState((prevState) => ({
         newMessage: { ...prevState.newMessage, obs_id: [] },
@@ -227,7 +241,13 @@ export default class ExposureAdd extends Component {
 
   render() {
     const { isLogCreate, isMenu } = this.props;
-    const { confirmationModalShown, confirmationModalText, selectedDayExposure, savingLog } = this.state;
+    const {
+      confirmationModalShown,
+      confirmationModalText,
+      selectedDayExposureStart,
+      selectedDayExposureEnd,
+      savingLog,
+    } = this.state;
     const back = this.props.back;
     const view = this.props.view ?? ExposureAdd.defaultProps.view;
 
@@ -264,14 +284,22 @@ export default class ExposureAdd extends Component {
 
                 <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. day</span>
                 <span className={styles.value}>
-                  <DateTime
-                    value={selectedDayExposure}
-                    onChange={(day) => {
-                      this.setState({ selectedDayExposure: day });
+                  <DateTimeRange
+                    label="From"
+                    className={styles.dateRange}
+                    startDate={selectedDayExposureStart}
+                    endDate={selectedDayExposureEnd}
+                    startDateProps={{
+                      timeFormat: false,
+                      className: styles.rangeDateOnly,
+                      maxDate: Moment(),
                     }}
-                    dateFormat="YYYY/MM/DD"
-                    timeFormat={false}
-                    closeOnSelect={true}
+                    endDateProps={{
+                      timeFormat: false,
+                      className: styles.rangeDateOnly,
+                      maxDate: Moment(),
+                    }}
+                    onChange={(day, type) => this.changeDayExposure(day, type)}
                   />
                 </span>
 
@@ -294,12 +322,7 @@ export default class ExposureAdd extends Component {
                   <Button
                     className={styles.refreshDataBtn}
                     disabled={this.state.updatingExposures}
-                    onClick={() => {
-                      this.setState({ updatingExposures: true });
-                      this.queryExposures(() => {
-                        this.setState({ updatingExposures: false });
-                      });
-                    }}
+                    onClick={() => this.queryExposures()}
                   >
                     Refresh exposures
                     {this.state.updatingExposures && <SpinnerIcon className={styles.spinnerIcon} />}
@@ -340,15 +363,22 @@ export default class ExposureAdd extends Component {
                       />
                     </span>
 
-                    <DateTime
-                      label="Observation day"
-                      value={selectedDayExposure}
-                      onChange={(day) => {
-                        this.setState({ selectedDayExposure: day });
+                    <DateTimeRange
+                      label="From"
+                      className={styles.dateRange}
+                      startDate={selectedDayExposureStart}
+                      endDate={selectedDayExposureEnd}
+                      startDateProps={{
+                        timeFormat: false,
+                        className: styles.rangeDateOnly,
+                        maxDate: Moment(),
                       }}
-                      dateFormat="YYYY/MM/DD"
-                      timeFormat={false}
-                      closeOnSelect={true}
+                      endDateProps={{
+                        timeFormat: false,
+                        className: styles.rangeDateOnly,
+                        maxDate: Moment(),
+                      }}
+                      onChange={(day, type) => this.changeDayExposure(day, type)}
                     />
 
                     <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>

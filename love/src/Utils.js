@@ -716,7 +716,7 @@ export default class ManagerInterface {
       return new Promise((resolve) => resolve(false));
     }
     const url = `${this.getApiBaseUrl()}ole/exposurelog/exposures?instrument=${instrument}&registry=${registry}&order_by=-obs_id&limit=1500${
-      minObsDay && maxObsDay ? `&min_day_obs=${minObsDay}&max_day_obs=${maxObsDay}` : ''
+      (minObsDay ? `&min_day_obs=${minObsDay}` : '') + (maxObsDay ? `&max_day_obs=${maxObsDay}` : '')
     }`;
     return fetch(url, {
       method: 'GET',

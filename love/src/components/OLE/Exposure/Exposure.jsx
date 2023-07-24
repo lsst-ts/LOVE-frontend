@@ -226,8 +226,8 @@ export default class Exposure extends Component {
 
   queryExposures(callback) {
     const { selectedInstrument, selectedDayExposureStart, selectedDayExposureEnd, registryMap } = this.props;
-    const startObsDay = selectedDayExposureStart.format(ISO_INTEGER_DATE_FORMAT);
-    const endObsDay = selectedDayExposureEnd.format(ISO_INTEGER_DATE_FORMAT);
+    const startObsDay = Moment(selectedDayExposureStart).format(ISO_INTEGER_DATE_FORMAT);
+    const endObsDay = Moment(selectedDayExposureEnd).format(ISO_INTEGER_DATE_FORMAT);
     const registry = registryMap[selectedInstrument].split('_')[2];
 
     // Get the list of exposures
@@ -272,8 +272,9 @@ export default class Exposure extends Component {
     if (
       prevProps.selectedInstrument !== this.props.selectedInstrument ||
       (this.props.selectedDayExposureStart &&
-        !this.props.selectedDayExposureStart.isSame(prevProps.selectedDayExposureStart)) ||
-      (this.props.selectedDayExposureEnd && !this.props.selectedDayExposureEnd.isSame(prevProps.selectedDayExposureEnd))
+        !Moment(this.props.selectedDayExposureStart).isSame(prevProps.selectedDayExposureStart)) ||
+      (this.props.selectedDayExposureEnd &&
+        !Moment(this.props.selectedDayExposureEnd).isSame(prevProps.selectedDayExposureEnd))
     ) {
       this.queryExposures();
     }
@@ -318,9 +319,9 @@ export default class Exposure extends Component {
     }
 
     if (selectedDayExposureStart && selectedDayExposureEnd) {
-      csvTitle = `exposures_obsday_${selectedDayExposureStart.format(
-        ISO_INTEGER_DATE_FORMAT,
-      )}_to_${selectedDayExposureEnd.format(ISO_INTEGER_DATE_FORMAT)}.csv`;
+      csvTitle = `exposures_obsday_${Moment(selectedDayExposureStart).format(ISO_INTEGER_DATE_FORMAT)}_to_${Moment(
+        selectedDayExposureEnd,
+      ).format(ISO_INTEGER_DATE_FORMAT)}.csv`;
     }
 
     return modeView && !modeAdd ? (
