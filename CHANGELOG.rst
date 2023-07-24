@@ -6,6 +6,8 @@ v5.24.1
 --------
 
 * More OLE improvements `<https://github.com/lsst-ts/LOVE-frontend/pull/489>`_
+* Bump word-wrap from 1.2.3 to 1.2.4 `<https://github.com/lsst-ts/LOVE-frontend/pull/486>`_
+* Bump semver from 5.7.1 to 5.7.2 `<https://github.com/lsst-ts/LOVE-frontend/pull/483>`_
 
 v5.24.0
 --------
