@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.24.1
+--------
+
+* More OLE improvements `<https://github.com/lsst-ts/LOVE-frontend/pull/489>`_
+
 v5.24.0
 --------
 
