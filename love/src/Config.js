@@ -1,5 +1,5 @@
 import InfoIcon from 'components/icons/CSCExpanded/InfoIcon/InfoIcon';
-import ErrorIcon from 'components/icons/CSCExpanded/ErrorIcon/ErrorIcon';
+import WarningIcon from 'components/icons/CSCExpanded/WarningIcon/WarningIcon';
 
 // Subpath
 export const SUBPATH = process.env.PUBLIC_URL ?? '';
@@ -40,7 +40,7 @@ export const EUIs = {
 };
 
 // Moment formats
-export const ISO_STIRNG_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
+export const ISO_STRING_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
 export const ISO_STIRNG_DATE_FORMAT = 'YYYY-MM-DD';
 export const ISO_DATE_FORMAT = 'YYYY/MM/DD';
 export const ISO_INTEGER_DATE_FORMAT = 'YYYYMMDD';
@@ -332,13 +332,10 @@ export const MTCSCommands = {
 /*****************************************************************************/
 /******************************OLE configurations*****************************/
 /*****************************************************************************/
-
-export const LOG_TYPE_OPTIONS = [
-  { label: 'debug', value: 10 },
-  { label: 'info', value: 20 },
-  { label: 'warning', value: 30 },
-  { label: 'error', value: 40 },
-  { label: 'fatal', value: 50 },
+export const OLE_COMMENT_TYPE_OPTIONS = [
+  { label: 'Priority', value: 'all' },
+  { label: 'Urgent', value: 100 },
+  { label: 'Non urgent', value: 0 },
 ];
 export const EXPOSURE_FLAG_OPTIONS = ['none', 'junk', 'questionable'];
 export const exposureFlagStateToStyle = {
@@ -348,7 +345,7 @@ export const exposureFlagStateToStyle = {
 };
 export const iconLevelOLE = {
   info: <InfoIcon />,
-  urgent: <ErrorIcon />,
+  urgent: <WarningIcon />,
 };
 
 export const LSST_SYSTEMS = [

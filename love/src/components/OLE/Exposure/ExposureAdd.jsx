@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { EXPOSURE_FLAG_OPTIONS, exposureFlagStateToStyle, ISO_INTEGER_DATE_FORMAT } from 'Config';
-import ManagerInterface from 'Utils';
 import lodash from 'lodash';
 import Moment from 'moment';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
@@ -14,15 +12,15 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
-import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
+import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
+import { EXPOSURE_FLAG_OPTIONS, exposureFlagStateToStyle, ISO_INTEGER_DATE_FORMAT } from 'Config';
+import ManagerInterface from 'Utils';
 import styles from './Exposure.module.css';
 
 export default class ExposureAdd extends Component {
   static propTypes = {
-    /** Function to go back */
-    back: PropTypes.func,
     /** Log to edit object */
     logEdit: PropTypes.object,
     /** New message object */
@@ -33,14 +31,13 @@ export default class ExposureAdd extends Component {
     isMenu: PropTypes.bool,
     /** Array of observation ids */
     observationIds: PropTypes.arrayOf(PropTypes.string),
+    /** Function to go back */
+    back: PropTypes.func,
     /** Function to view a log */
     view: PropTypes.func,
-    /** Mappings of instruments to exposures registries */
-    registryMap: PropTypes.object,
   };
 
   static defaultProps = {
-    back: () => {},
     logEdit: {
       obs_id: undefined,
       instrument: undefined,
@@ -65,6 +62,7 @@ export default class ExposureAdd extends Component {
     isLogCreate: false,
     isMenu: false,
     observationIds: [],
+    back: () => {},
     view: () => {},
   };
 
@@ -85,8 +83,10 @@ export default class ExposureAdd extends Component {
       confirmationModalText: '',
       imageTags: [],
       selectedTags: [],
+      selectedDayExposureStart: Moment(Date.now() + 37 * 1000).subtract(1, 'days'),
+      selectedDayExposureEnd: Moment(Date.now() + 37 * 1000),
+      registryMap: {},
       updatingExposures: false,
-      selectedDayExposure: Moment(),
       savingLog: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -100,51 +100,15 @@ export default class ExposureAdd extends Component {
     this.setState({ newMessage: ExposureAdd.defaultProps.newMessage });
   }
 
-  componentDidMount() {
-    // TODO: only when the filter is shown
-    ManagerInterface.getListExposureInstruments().then((data) => {
-      const registryMap = {};
-      Object.entries(data).forEach(([key, value]) => {
-        value.forEach((instrument) => {
-          if (!instrument) return;
-          registryMap[instrument] = key;
-        });
-      });
-      const instrumentsArray = Object.values(data)
-        .map((arr) => arr[0])
-        .filter((instrument) => instrument);
-
-      this.setState({
-        instruments: instrumentsArray,
-        selectedInstrument: instrumentsArray[0],
-        registryMap: registryMap,
-      });
-    });
-
-    ManagerInterface.getListImageTags().then((data) => {
-      this.setState({
-        imageTags: data.map((tag) => ({ name: tag.label, id: tag.key })),
-      });
-    });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      prevState.selectedInstrument !== this.state.selectedInstrument ||
-      prevState.selectedDayExposure !== this.state.selectedDayExposure
-    ) {
-      this.setState((prevState) => ({
-        newMessage: { ...prevState.newMessage, obs_id: [] },
-      }));
-      this.queryExposures();
-    }
-  }
-
-  queryExposures(callback) {
-    const { selectedInstrument, selectedDayExposure, registryMap } = this.state;
-    const obsDayInteger = parseInt(Moment(selectedDayExposure).format(ISO_INTEGER_DATE_FORMAT));
+  queryExposures() {
+    const { selectedInstrument, selectedDayExposureStart, selectedDayExposureEnd, registryMap } = this.state;
+    const startObsDay = Moment(selectedDayExposureStart).format(ISO_INTEGER_DATE_FORMAT);
+    const endObsDay = Moment(selectedDayExposureEnd).format(ISO_INTEGER_DATE_FORMAT);
     const registry = registryMap[selectedInstrument].split('_')[2];
-    ManagerInterface.getListExposureLogs(selectedInstrument, obsDayInteger, registry).then((data) => {
+
+    // Get the list of exposures
+    this.setState({ updatingExposures: true });
+    ManagerInterface.getListExposureLogs(selectedInstrument, startObsDay, endObsDay, registry).then((data) => {
       const observationIds = data.map((exposure) => exposure.obs_id);
       const dayObs = data.map((exposure) => ({
         obs_id: exposure.obs_id,
@@ -152,22 +116,15 @@ export default class ExposureAdd extends Component {
       }));
 
       this.setState({
+        updatingExposures: false,
         observationIds,
         dayObs,
       });
-
-      if (callback) callback();
     });
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    this.confirmSave();
   }
 
   saveMessage() {
     const { isLogCreate, isMenu } = this.props;
-
     const payload = { ...this.state.newMessage };
     payload['request_type'] = 'exposure';
     payload['instrument'] = this.state.selectedInstrument;
@@ -183,17 +140,14 @@ export default class ExposureAdd extends Component {
         this.props.view();
       }
       this.cleanForm();
-
-      this.setState({
-        confirmationModalShown: false,
-        savingLog: false,
-      });
+      this.setState({ savingLog: false });
     });
   }
 
   deleteMessage() {
-    if (this.state.newMessage.id) {
-      ManagerInterface.deleteMessageExposureLogs(this.state.newMessage.id).then((response) => {
+    const { newMessage } = this.state;
+    if (newMessage?.id) {
+      ManagerInterface.deleteMessageExposureLogs(newMessage.id).then((response) => {
         this.setState({ confirmationModalShown: false });
       });
     } else {
@@ -201,15 +155,14 @@ export default class ExposureAdd extends Component {
     }
   }
 
-  confirmSave() {
+  confirmDelete() {
     const modalText = (
       <span>
-        You are about to <b>save</b> this message of Exposure Logs
+        You are about to <b>delete</b> this message of Exposure Logs
         <br />
         Are you sure?
       </span>
     );
-
     this.setState({
       confirmationModalShown: true,
       confirmationModalText: modalText,
@@ -217,7 +170,6 @@ export default class ExposureAdd extends Component {
   }
 
   renderModalFooter() {
-    const { savingLog } = this.state;
     return (
       <div className={styles.modalFooter}>
         <Button
@@ -227,16 +179,75 @@ export default class ExposureAdd extends Component {
         >
           Go back
         </Button>
-        <Button disabled={savingLog} onClick={() => this.saveMessage()} status="default">
-          {savingLog ? <SpinnerIcon className={styles.spinnerIcon} /> : 'Yes'}
+        <Button onClick={() => this.deleteMessage()} status="default">
+          Yes
         </Button>
       </div>
     );
   }
 
+  changeDayExposure(day, type) {
+    if (type === 'start') {
+      this.setState({ selectedDayExposureStart: day });
+    } else if (type === 'end') {
+      this.setState({ selectedDayExposureEnd: day });
+    }
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.saveMessage();
+  }
+
+  componentDidMount() {
+    ManagerInterface.getListExposureInstruments().then((data) => {
+      const registryMap = {};
+      Object.entries(data).forEach(([key, value]) => {
+        value.forEach((instrument) => {
+          if (!instrument) return;
+          registryMap[instrument] = key;
+        });
+      });
+      const instrumentsArray = Object.values(data)
+        .map((arr) => arr[0])
+        .filter((instrument) => instrument);
+      this.setState({
+        instruments: instrumentsArray,
+        selectedInstrument: instrumentsArray[0],
+        registryMap: registryMap,
+      });
+    });
+    ManagerInterface.getListImageTags().then((data) => {
+      this.setState({
+        imageTags: data.map((tag) => ({ name: tag.label, id: tag.key })),
+      });
+    });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.selectedInstrument !== this.state.selectedInstrument ||
+      (this.state.selectedDayExposureStart &&
+        !Moment(this.state.selectedDayExposureStart).isSame(prevState.selectedDayExposureStart)) ||
+      (this.state.selectedDayExposureEnd &&
+        !Moment(this.state.selectedDayExposureEnd).isSame(prevState.selectedDayExposureEnd))
+    ) {
+      this.setState((prevState) => ({
+        newMessage: { ...prevState.newMessage, obs_id: [] },
+      }));
+      this.queryExposures();
+    }
+  }
+
   render() {
     const { isLogCreate, isMenu } = this.props;
-    const { confirmationModalShown, confirmationModalText, selectedDayExposure } = this.state;
+    const {
+      confirmationModalShown,
+      confirmationModalText,
+      selectedDayExposureStart,
+      selectedDayExposureEnd,
+      savingLog,
+    } = this.state;
     const back = this.props.back;
     const view = this.props.view ?? ExposureAdd.defaultProps.view;
 
@@ -273,14 +284,22 @@ export default class ExposureAdd extends Component {
 
                 <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. day</span>
                 <span className={styles.value}>
-                  <DateTime
-                    value={selectedDayExposure}
-                    onChange={(day) => {
-                      this.setState({ selectedDayExposure: day });
+                  <DateTimeRange
+                    label="From"
+                    className={styles.dateRange}
+                    startDate={selectedDayExposureStart}
+                    endDate={selectedDayExposureEnd}
+                    startDateProps={{
+                      timeFormat: false,
+                      className: styles.rangeDateOnly,
+                      maxDate: Moment(),
                     }}
-                    dateFormat="YYYY/MM/DD"
-                    timeFormat={false}
-                    closeOnSelect={true}
+                    endDateProps={{
+                      timeFormat: false,
+                      className: styles.rangeDateOnly,
+                      maxDate: Moment(),
+                    }}
+                    onChange={(day, type) => this.changeDayExposure(day, type)}
                   />
                 </span>
 
@@ -303,12 +322,7 @@ export default class ExposureAdd extends Component {
                   <Button
                     className={styles.refreshDataBtn}
                     disabled={this.state.updatingExposures}
-                    onClick={() => {
-                      this.setState({ updatingExposures: true });
-                      this.queryExposures(() => {
-                        this.setState({ updatingExposures: false });
-                      });
-                    }}
+                    onClick={() => this.queryExposures()}
                   >
                     Refresh exposures
                     {this.state.updatingExposures && <SpinnerIcon className={styles.spinnerIcon} />}
@@ -349,15 +363,22 @@ export default class ExposureAdd extends Component {
                       />
                     </span>
 
-                    <DateTime
-                      label="Observation day"
-                      value={selectedDayExposure}
-                      onChange={(day) => {
-                        this.setState({ selectedDayExposure: day });
+                    <DateTimeRange
+                      label="From"
+                      className={styles.dateRange}
+                      startDate={selectedDayExposureStart}
+                      endDate={selectedDayExposureEnd}
+                      startDateProps={{
+                        timeFormat: false,
+                        className: styles.rangeDateOnly,
+                        maxDate: Moment(),
                       }}
-                      dateFormat="YYYY/MM/DD"
-                      timeFormat={false}
-                      closeOnSelect={true}
+                      endDateProps={{
+                        timeFormat: false,
+                        className: styles.rangeDateOnly,
+                        maxDate: Moment(),
+                      }}
+                      onChange={(day, type) => this.changeDayExposure(day, type)}
                     />
 
                     <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
@@ -415,7 +436,7 @@ export default class ExposureAdd extends Component {
                         className={styles.iconBtn}
                         title="Delete"
                         onClick={() => {
-                          this.deleteMessage();
+                          this.confirmDelete();
                         }}
                         status="transparent"
                       >
@@ -530,7 +551,11 @@ export default class ExposureAdd extends Component {
                 </span>
 
                 <Button type="submit">
-                  <span className={styles.title}>Upload Log</span>
+                  {savingLog ? (
+                    <SpinnerIcon className={styles.spinnerIcon} />
+                  ) : (
+                    <span className={styles.title}>Upload Log</span>
+                  )}
                 </Button>
               </span>
             </div>
