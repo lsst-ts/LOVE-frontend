@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.24.1
+--------
+
+* Bump semver from 5.7.1 to 5.7.2 `<https://github.com/lsst-ts/LOVE-frontend/pull/483>`_
+
 v5.24.0
 --------
 
@@ -9,7 +14,6 @@ v5.24.0
 * LOVE windows are difficult to read on control room displays `<https://github.com/lsst-ts/LOVE-frontend/pull/487>`_
 * Extend LOVE frontend routing system to add SSL and subpath serving `<https://github.com/lsst-ts/LOVE-frontend/pull/485>`_
 * Extend getEFDLogs method to specify the timestamps scale `<https://github.com/lsst-ts/LOVE-frontend/pull/484>`_
-
 
 v5.23.0
 --------
