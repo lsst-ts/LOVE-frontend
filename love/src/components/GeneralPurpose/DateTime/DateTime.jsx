@@ -10,8 +10,6 @@ import styles from './DateTime.module.css';
  * It passes down props directly to the Datetime object.
  */
 const DateTime = (props) => {
-  console.log('Render DateTime');
-  console.log(props);
   const { label = '', inputProps, minDate, maxDate, className: inputClassName, ...otherProps } = props;
   return (
     <>
