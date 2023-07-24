@@ -14,7 +14,7 @@ export default class Blocks extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedBlockId: '',
+      selectedBlockData: null,
     };
   }
 
@@ -61,6 +61,13 @@ export default class Blocks extends Component {
     },
   ];
 
+  handleRowClick = (event) => {
+    const rowData = event.currentTarget.cells;
+    const cellData = Array.from(rowData).map((cell) => cell.textContent);
+
+    this.setState({ selectedBlockData: cellData });
+  };
+
   render() {
     const {
       isOpen,
@@ -78,6 +85,8 @@ export default class Blocks extends Component {
       predTargetsRotSkyPos,
     } = this.props;
 
+    const { selectedBlockData } = this.state;
+
     const listBlocksId = blockInvId ? blockInvId.split(',') : [];
     const listBlocksStatus = blockInvStatus ? blockInvStatus.split(',') : [];
 
@@ -88,7 +97,7 @@ export default class Blocks extends Component {
       decl: predTargetsDecl[i],
       rotSky: predTargetsRotSkyPos[i],
     }));
-
+    console.log(predData);
     return (
       <div className={styles.container}>
         <div onClick={this.props.showContent} className={styles.header}>
@@ -110,7 +119,23 @@ export default class Blocks extends Component {
           </div>
           <div className={styles.blocksTargetsDiv}>
             <div className={styles.predictedTargetsDiv}>
-              <SimpleTable headers={this.HEADERS_PREDTARGETS} data={predData} />
+              {/* <SimpleTable headers={this.HEADERS_PREDTARGETS} data={predData} /> */}
+              {/* Block table */}
+              <table>
+                {this.HEADERS_PREDTARGETS.map((h, i) => {
+                  <thead key={i}>{h.title}</thead>;
+                })}
+                <tbody>
+                  {predData.map((row, index) => (
+                    <tr key={index} onClick={this.handleRowClick}>
+                      <td>{row.id}</td>
+                      <td>{row.ra}</td>
+                      <td>{row.decl}</td>
+                      <td>{row.rotSky}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
           <div className={styles.divButtonBlocks}>
