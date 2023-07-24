@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { memo } from 'react';
 import AceEditor from 'react-ace';
 import PropTypes from 'prop-types';
 import LogMessageDisplay from 'components/GeneralPurpose/LogMessageDisplay/LogMessageDisplay';
@@ -12,7 +12,7 @@ import RequeueIcon from '../../../icons/ScriptQueue/RequeueIcon/RequeueIcon';
 import CopyIcon from '../../../icons/CopyIcon/CopyIcon';
 import ScriptDetails from '../ScriptDetails';
 
-export default class FinishedScript extends PureComponent {
+class FinishedScript extends React.Component {
   static propTypes = {
     /** SAL property: Index of Script SAL component */
     index: PropTypes.number,
@@ -83,8 +83,10 @@ export default class FinishedScript extends PureComponent {
         },
       },
     };
-    const startDateIso = new Date(start * 1000).toISOString();
-    const endDateIso = new Date(end * 1000).toISOString();
+
+    // Convert to ISO format and remove Z at the end
+    const startDateIso = new Date(start * 1000).toISOString().slice(0, -1);
+    const endDateIso = new Date(end * 1000).toISOString().slice(0, -1);
     ManagerInterface.getEFDLogs(startDateIso, endDateIso, cscs, efdInstance, 'tai').then((res) => {
       if (!res) return;
       this.setState({
@@ -238,3 +240,18 @@ export default class FinishedScript extends PureComponent {
     );
   }
 }
+
+function areEqualProps(prevProps, nextProps) {
+  return (
+    prevProps.index === nextProps.index &&
+    prevProps.isStandard === nextProps.isStandard &&
+    prevProps.path === nextProps.path &&
+    prevProps.estimatedTime === nextProps.estimatedTime &&
+    prevProps.elapsedTime === nextProps.elapsedTime &&
+    prevProps.script_state === nextProps.script_state &&
+    prevProps.process_state === nextProps.process_state &&
+    prevProps.isCompact === nextProps.isCompact
+  );
+}
+
+export default memo(FinishedScript, areEqualProps);
