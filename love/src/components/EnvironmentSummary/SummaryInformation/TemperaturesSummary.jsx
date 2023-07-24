@@ -1,5 +1,6 @@
-import React, { PureComponent } from 'react';
+import React, { Component, memo } from 'react';
 import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
 import styles from './SummaryInformation.module.css';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import TemperatureIcon from 'components/icons/TemperatureIcon/TemperatureIcon';
@@ -8,7 +9,7 @@ import Value from '../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../GeneralPurpose/SummaryPanel/Title';
 import { fixedFloat } from 'Utils';
 
-export default class TemperaturesSummary extends PureComponent {
+class TemperaturesSummary extends Component {
   static propTypes = {
     /** Number of channels to display */
     numChannels: PropTypes.number,
@@ -48,3 +49,13 @@ export default class TemperaturesSummary extends PureComponent {
     );
   }
 }
+
+function propsAreEqual(prevProps, nextProps) {
+  return (
+    prevProps.numChannels === nextProps.numChannels &&
+    isEqual(prevProps.temperature, nextProps.temperature) &&
+    prevProps.location === nextProps.location
+  );
+}
+
+export default memo(TemperaturesSummary, propsAreEqual);

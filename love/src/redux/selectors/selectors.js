@@ -2097,17 +2097,17 @@ export const getHVACTelemetry = (state) => {
 
 export const getObservatorySubscriptions = () => {
   return [
-    // Observatory
-    // Simonyi
     'event-Scheduler-1-observingMode',
-    'telemetry-Scheduler-1-observatoryState',
-    // MTPtg
-    'event-MTPtg-0-currentTarget',
-    // Auxtel
     'event-Scheduler-2-observingMode',
-    'telemetry-Scheduler-2-observatoryState',
-    // ATPtg
+    `telemetry-Scheduler-1-observatoryState`,
+    `telemetry-Scheduler-2-observatoryState`,
+    `event-Scheduler-1-target`,
+    `event-Scheduler-2-target`,
+    'event-ESS-301-precipitation',
+    'telemetry-ESS-301-temperature',
+    'telemetry-ESS-301-airFlow',
     'event-ATPtg-0-currentTarget',
+    'event-MTPtg-0-currentTarget',
   ];
 };
 
@@ -2157,7 +2157,7 @@ export const getObservatoryState = (state) => {
     temperature: essTemperatures ? essTemperatures.temperature.value : [],
     location: essTemperatures ? essTemperatures.location.value : '',
     windDirection: essAirFlow ? essAirFlow.direction.value : 0.0,
-    windSpeed: essAirFlow ? essAirFlow.speed : 0.0,
+    windSpeed: essAirFlow ? essAirFlow.speed.value : 0.0,
   };
 };
 

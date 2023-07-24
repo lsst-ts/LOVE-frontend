@@ -2,14 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Skymap from './Skymap/Skymap';
 import styles from './EnvironmentSummary.module.css';
-import WindRose from 'components/icons/WindRose/WindRose';
 import SimonyiTelescope from './Cartoons/SimonyiTelescope';
 import AuxTelescope from './Cartoons/AuxTelescope';
-import TemperatureIcon from 'components/icons/TemperatureIcon/TemperatureIcon';
 import WindDirection from './Cartoons/WindDirection';
-import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import TemperaturesSummary from './SummaryInformation/TemperaturesSummary';
 import WeatherForecastIcon from 'components/icons/WeatherForecastIcon/WeatherForecastIcon';
+import { defaultNumberFormatter } from 'Utils';
 
 export default class EnvironmentSummary extends Component {
   static propTypes = {
@@ -119,10 +117,10 @@ export default class EnvironmentSummary extends Component {
     return (
       <div className={styles.container}>
         <div className={styles.windDirection}>
-          <WindDirection windDirection={windDirection} windSpeed={windSpeed}></WindDirection>
+          <WindDirection windDirection={windDirection} windSpeed={windSpeed} />
           <div className={styles.windDirectionDetail}>
-            <span>Direction: {windDirection}</span>
-            <span>Speed: {windSpeed}</span>
+            <span>Direction: {defaultNumberFormatter(windDirection, 2)}°</span>
+            <span>Speed: {defaultNumberFormatter(windSpeed, 2)} m/s</span>
           </div>
         </div>
         <div className={styles.temperaturesContainer}>
@@ -143,10 +141,8 @@ export default class EnvironmentSummary extends Component {
               auxtelDec={auxtelDec}
             />
             <div className={styles.weatherIcons}>
-              {/* <WeatherForecastIcon pictocode={isRaining ? 23 : 0} />
-              <WeatherForecastIcon pictocode={isSnowing ? 24 : 0} /> */}
-              <WeatherForecastIcon pictocode={true ? 23 : 0} />
-              <WeatherForecastIcon pictocode={true ? 24 : 0} />
+              <WeatherForecastIcon pictocode={isRaining ? 23 : 0} />
+              <WeatherForecastIcon pictocode={isSnowing ? 24 : 0} />
             </div>
           </div>
           <SimonyiTelescope

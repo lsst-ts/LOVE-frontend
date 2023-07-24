@@ -6,13 +6,17 @@ export class WindDirection extends Component {
   render() {
     const { windSpeed, windDirection } = this.props;
     const minSpeed = 0;
-    const maxSpeed = 100;
+    const maxSpeed = 30;
     const currentSpeed = windSpeed;
-    const maxArrowHeight = 500;
+    const maxArrowHeight = 680;
     const arrowHeight = (currentSpeed / maxSpeed) * maxArrowHeight;
 
     return (
-      <svg xmlns="http://www.w3.org/2000/svg" className={styles.svgContainer} viewBox="-40 -40 676 676">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className={styles.svgContainer}
+        viewBox={`-40 -40 ${maxArrowHeight} ${maxArrowHeight}`}
+      >
         <defs>
           <radialGradient id="a">
             <stop offset={0} stopColor="#fff" stopOpacity={0} />
