@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.24.2
+--------
+
+* Fix time parameters to query finished scripts historic logs and config `<https://github.com/lsst-ts/LOVE-frontend/pull/490>`_
+
 v5.24.1
 --------
 
