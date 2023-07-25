@@ -67,19 +67,19 @@ export default class Skymap extends Component {
     const width = this.state.width ?? 350;
     const height = this.state.height ?? 350;
     const simonyiPointing = {
-      az: simonyiRa,
+      az: 90 - simonyiRa,
       el: simonyiDec,
     };
     const auxtelPointing = {
-      az: auxtelRa,
+      az: 90 - auxtelRa,
       el: auxtelDec,
     };
     const sunPointing = {
-      az: simonyiSunRa,
+      az: 90 - simonyiSunRa,
       el: simonyiSunDec,
     };
     const moonPointing = {
-      az: simonyiMoonRa,
+      az: 90 - simonyiMoonRa,
       el: simonyiMoonDec,
     };
     const isProjected = false;

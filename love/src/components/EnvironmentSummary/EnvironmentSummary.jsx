@@ -2,14 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Skymap from './Skymap/Skymap';
 import styles from './EnvironmentSummary.module.css';
-import WindRose from 'components/icons/WindRose/WindRose';
 import SimonyiTelescope from './Cartoons/SimonyiTelescope';
 import AuxTelescope from './Cartoons/AuxTelescope';
-import TemperatureIcon from 'components/icons/TemperatureIcon/TemperatureIcon';
 import WindDirection from './Cartoons/WindDirection';
-import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import TemperaturesSummary from './SummaryInformation/TemperaturesSummary';
 import WeatherForecastIcon from 'components/icons/WeatherForecastIcon/WeatherForecastIcon';
+import { defaultNumberFormatter } from 'Utils';
 
 export default class EnvironmentSummary extends Component {
   static propTypes = {
@@ -64,9 +62,7 @@ export default class EnvironmentSummary extends Component {
   constructor(props) {
     super(props);
     this.containerRef = React.createRef();
-    this.state = {
-      hideIconTemperature: false,
-    };
+    this.state = {};
   }
 
   hideIconTemperature() {
@@ -78,7 +74,11 @@ export default class EnvironmentSummary extends Component {
   }
 
   componentDidMount() {
-    this.setState({ test: 1 });
+    this.props.subscribeToStreams();
+  }
+
+  componentWillUnmount() {
+    this.props.unsubscribeToStreams();
   }
 
   render() {
@@ -117,32 +117,34 @@ export default class EnvironmentSummary extends Component {
     return (
       <div className={styles.container}>
         <div className={styles.windDirection}>
-          <WindDirection windDirection={windDirection} windSpeed={windSpeed}></WindDirection>
+          <WindDirection windDirection={windDirection} windSpeed={windSpeed} />
           <div className={styles.windDirectionDetail}>
-            <span>Direction: {windDirection}</span>
-            <span>Speed: {windSpeed}</span>
+            <span>Direction: {defaultNumberFormatter(windDirection, 2)}°</span>
+            <span>Speed: {defaultNumberFormatter(windSpeed, 2)} m/s</span>
           </div>
         </div>
-        <div className={styles.windRoseContainer}>
-          <WindRose />
-        </div>
-        <div className={styles.iconLeft}>
-          <WeatherForecastIcon pictocode={isRaining ? 23 : 0} />
+        <div className={styles.temperaturesContainer}>
+          <TemperaturesSummary numChannels={numChannels} temperature={temperature} location={location} />
         </div>
         <div ref={this.containerRef} className={styles.telescopes}>
-          <Skymap
-            containerNode={this.containerRef?.current}
-            className={styles.skymap}
-            simonyiRa={simonyiRa}
-            simonyiDec={simonyiDec}
-            simonyiMoonRa={simonyiMoonRa}
-            simonyiMoonDec={simonyiMoonDec}
-            simonyiSunRa={simonyiSunRa}
-            simonyiSunDec={simonyiSunDec}
-            simonyiMoonPhase={simonyiMoonPhase}
-            auxtelRa={auxtelRa}
-            auxtelDec={auxtelDec}
-          />
+          <div className={styles.skymap}>
+            <Skymap
+              containerNode={this.containerRef?.current}
+              simonyiRa={simonyiRa}
+              simonyiDec={simonyiDec}
+              simonyiMoonRa={simonyiMoonRa}
+              simonyiMoonDec={simonyiMoonDec}
+              simonyiSunRa={simonyiSunRa}
+              simonyiSunDec={simonyiSunDec}
+              simonyiMoonPhase={simonyiMoonPhase}
+              auxtelRa={auxtelRa}
+              auxtelDec={auxtelDec}
+            />
+            <div className={styles.weatherIcons}>
+              <WeatherForecastIcon pictocode={isRaining ? 23 : 0} />
+              <WeatherForecastIcon pictocode={isSnowing ? 24 : 0} />
+            </div>
+          </div>
           <SimonyiTelescope
             className={styles.simonyi}
             simonyiTrackingState={simonyiTrackingState}
@@ -167,19 +169,6 @@ export default class EnvironmentSummary extends Component {
             hideIconTemperature={() => this.hideIconTemperature()}
             showIconTemperature={() => this.showIconTemperature()}
           />
-          {!hideIconTemperature && (
-            <div className={styles.iconTemperature}>
-              <Hoverable className={styles.temperaturesHover}>
-                <TemperatureIcon />
-                <div className={styles.temperaturesSummary}>
-                  <TemperaturesSummary numChannels={numChannels} temperature={temperature} location={location} />
-                </div>
-              </Hoverable>
-            </div>
-          )}
-        </div>
-        <div className={styles.iconRight}>
-          <WeatherForecastIcon pictocode={isSnowing ? 24 : 0} />
         </div>
       </div>
     );

@@ -9,14 +9,20 @@
 }
 
 .summaryPanel {
-  grid-template-columns: 1fr 2fr;
-  max-width: 100%;
-  background-color: var(--second-secondary-background-color) !important;
-  justify-content: unset;
-  align-items: unset;
-  align-content: unset;
-  min-width: unset;
-  padding: 1em;
+  display: block;
+  padding: var(--small-padding);
+  max-width: none;
+  min-width: auto;
+}
+
+.summaryPanel.telescope {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: none;
+  min-width: auto;
+  height: 100%;
+  align-content: start;
+  padding: var(--small-padding);
 }
 
 .mountDomeDiv {
@@ -39,10 +45,18 @@
 }
 
 .summaryPanelDetail {
-  overflow: hidden;
   display: grid;
-  width: 100%;
-  justify-items: stretch;
-  align-items: start;
-  height: 80%;
+  grid-template-columns: 1fr 1fr;
+  overflow-y: scroll;
+  max-height: calc(10em - var(--content-padding));
+}
+
+.title {
+  display: flex;
+  align-items: center;
+}
+
+.title > :first-child {
+  margin-right: var(--small-padding);
+  width: 1em;
 }

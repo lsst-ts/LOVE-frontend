@@ -1,13 +1,11 @@
 .skymapContainer {
-  flex-wrap: wrap;
   position: relative;
-  left: 25em;
+  /* left: 25em;
   top: 2em;
-  max-width: 100px;
+  max-width: 100px; */
 }
 
 .skymapGridContainer {
-  flex-wrap: wrap;
   position: relative;
   width: fit-content;
 }
