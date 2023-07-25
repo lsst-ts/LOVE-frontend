@@ -10,26 +10,20 @@ import { fixedFloat } from 'Utils';
 
 export default class Simonyi extends Component {
   render() {
-    const {
-      simonyiTrackingState,
-      simonyiAltitude,
-      simonyiAzimuth,
-      simonyiRotator,
-      simonyiDomeAlt,
-      simonyiDomeAz,
-    } = this.props;
+    const { simonyiTrackingState, simonyiAltitude, simonyiAzimuth, simonyiRotator, simonyiDomeAlt, simonyiDomeAz } =
+      this.props;
     const simonyiTracking = schedulerTrackingStateToMap[simonyiTrackingState];
 
     return (
       <div className={styles.container}>
-        <SummaryPanel className={styles.summaryPanel}>
+        <SummaryPanel className={[styles.summaryPanel, styles.telescope].join(' ')}>
           <Title>Simonyi Enclosure</Title>
           <Value>
             <StatusText status={schedulerTrackingStateToStyle[simonyiTracking]}>{simonyiTracking}</StatusText>
           </Value>
         </SummaryPanel>
         <div className={styles.mountDomeDiv}>
-          <SummaryPanel className={styles.summaryPanel}>
+          <SummaryPanel className={[styles.summaryPanel, styles.telescope].join(' ')}>
             <Title>Mount</Title>
             <span></span>
             <Label>Altitude</Label>
@@ -39,7 +33,7 @@ export default class Simonyi extends Component {
             <Label>Rotator</Label>
             <Value>{`${fixedFloat(simonyiRotator, 2)} °`}</Value>
           </SummaryPanel>
-          <SummaryPanel className={styles.summaryPanel}>
+          <SummaryPanel className={[styles.summaryPanel, styles.telescope].join(' ')}>
             <Title>Dome</Title>
             <span></span>
             <Label>Altitude</Label>

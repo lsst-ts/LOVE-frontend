@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import EnvironmentSummary from './EnvironmentSummary';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
-import { getObservatoryState } from 'redux/selectors';
+import { getObservatorySubscriptions, getObservatoryState } from 'redux/selectors';
 
 export const schema = {
   description: 'Summary view of Environment Summary.',
@@ -19,8 +19,8 @@ export const schema = {
 };
 
 const EnvironmentSummaryContainer = ({
-  subscribeToStream,
-  unsubscribeToStream,
+  subscribeToStreams,
+  unsubscribeToStreams,
   simonyiTrackingState,
   simonyiRa,
   simonyiDec,
@@ -56,8 +56,8 @@ const EnvironmentSummaryContainer = ({
   }
   return (
     <EnvironmentSummary
-      subscribeToStream={subscribeToStream}
-      unsubscribeToStream={unsubscribeToStream}
+      subscribeToStreams={subscribeToStreams}
+      unsubscribeToStreams={unsubscribeToStreams}
       simonyiTrackingState={simonyiTrackingState}
       simonyiRa={simonyiRa}
       simonyiDec={simonyiDec}
@@ -96,22 +96,13 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  const subscriptions = [
-    'event-Scheduler-1-observingMode',
-    'event-Scheduler-2-observingMode',
-    `telemetry-Scheduler-1-observatoryState`,
-    `telemetry-Scheduler-2-observatoryState`,
-    `event-Scheduler-1-target`,
-    'event-ESS-301-precipitation',
-    'telemetry-ESS-301-temperature',
-    'telemetry-ESS-301-airFlow',
-  ];
+  const subscriptions = getObservatorySubscriptions();
   return {
     subscriptions,
-    subscribeToStream: () => {
+    subscribeToStreams: () => {
       subscriptions.forEach((stream) => dispatch(addGroup(stream)));
     },
-    unsubscribeToStream: () => {
+    unsubscribeToStreams: () => {
       subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
     },
   };
