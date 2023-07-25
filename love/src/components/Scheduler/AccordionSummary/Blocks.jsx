@@ -122,9 +122,13 @@ export default class Blocks extends Component {
               {/* <SimpleTable headers={this.HEADERS_PREDTARGETS} data={predData} /> */}
               {/* Block table */}
               <table>
-                {this.HEADERS_PREDTARGETS.map((h, i) => {
-                  <thead key={i}>{h.title}</thead>;
-                })}
+                <thead>
+                  <tr>
+                    {this.HEADERS_PREDTARGETS.map((h, i) => (
+                      <th key={i}>{h.title}</th>
+                    ))}
+                  </tr>
+                </thead>
                 <tbody>
                   {predData.map((row, index) => (
                     <tr key={index} onClick={this.handleRowClick}>
