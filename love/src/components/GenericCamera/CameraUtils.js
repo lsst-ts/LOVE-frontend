@@ -27,7 +27,8 @@ export const getHeaderInfo = (arrayBuffer) => {
   // const encodedBuffer =  encoder.encode(buffer.join(''));
   // const encodedBuffer =  encoder.encode(buffer);
   // 10 is for the \r\n chars
-  const offset = 10 + START.length + widthString.length + heightString.length + lengthString.length + isJPEGString.length;
+  const offset =
+    10 + START.length + widthString.length + heightString.length + lengthString.length + isJPEGString.length;
   const length = parseInt(lengthString, 10);
   const encodedBuffer = new Uint8Array(arrayBuffer.slice(offset, offset + length));
   // 7 is the \r\n[END] size
@@ -60,8 +61,6 @@ export const draw = (array, canvas) => {
   ctx.fillStyle = 'white';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // const data = new Uint8ClampedArray([...array].flatMap(v => [v,v,v, 255]));
-  // const imageData = new ImageData(data, 1024, 1024);
   const imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
   const pixels = imageData.data;
 
@@ -69,7 +68,7 @@ export const draw = (array, canvas) => {
     pixels[index * 4] = val;
     pixels[index * 4 + 1] = val;
     pixels[index * 4 + 2] = val;
-    pixels[index * 4 + 3] = val;
+    pixels[index * 4 + 3] = 255;
   });
 
   ctx.putImageData(imageData, 0, 0);
