@@ -274,12 +274,12 @@ export default class SkyMap extends Component {
     this.props.targets?.map((t, index) => {
       const [lat, long] = [t.lat, t.long];
       let coords1 = [
-          [lat - 2, long],
-          [lat + 2, long],
+          [lat - 1, long],
+          [lat + 1, long],
         ],
         coords2 = [
-          [lat, long - 2],
-          [lat, long + 2],
+          [lat, long - 1],
+          [lat, long + 1],
         ];
 
       features.push({
@@ -287,7 +287,8 @@ export default class SkyMap extends Component {
         id: t.id,
         properties: {
           // Name
-          n: 'Target' + t.id,
+          // n: 'Target' + t.id,
+          n: t.id,
           // Location of name text on the map
           loc: [lat - 2, long + 2],
           style: {},

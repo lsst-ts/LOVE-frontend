@@ -97,7 +97,7 @@ export default class Blocks extends Component {
       decl: predTargetsDecl[i],
       rotSky: predTargetsRotSkyPos[i],
     }));
-    console.log(predData);
+    // console.log(predData);
     return (
       <div className={styles.container}>
         <div onClick={this.props.showContent} className={styles.header}>
@@ -117,39 +117,19 @@ export default class Blocks extends Component {
             <span className={styles.predTargets}>To be completed</span>
             <span>{blockExecTotal}</span>
           </div>
-          <div className={styles.blocksTargetsDiv}>
+          {/* <div className={styles.blocksTargetsDiv}>
             <div className={styles.predictedTargetsDiv}>
-              {/* <SimpleTable headers={this.HEADERS_PREDTARGETS} data={predData} /> */}
-              {/* Block table */}
-              <table>
-                <thead>
-                  <tr>
-                    {this.HEADERS_PREDTARGETS.map((h, i) => (
-                      <th key={i}>{h.title}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {predData.map((row, index) => (
-                    <tr key={index} onClick={this.handleRowClick}>
-                      <td>{row.id}</td>
-                      <td>{row.ra}</td>
-                      <td>{row.decl}</td>
-                      <td>{row.rotSky}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <SimpleTable headers={this.HEADERS_PREDTARGETS} data={predData} />
             </div>
-          </div>
-          <div className={styles.divButtonBlocks}>
+          </div> */}
+          {/* <div className={styles.divButtonBlocks}>
             <Button status="info">Add Block to Scheduler queue</Button>
             <span>{blockHash ? blockHash : 'No data'}</span>
           </div>
           <div className={styles.executionsDiv}>
             <span className={styles.executionsText}>List of blocks</span>
             <span></span>
-          </div>
+          </div> */}
           <SummaryPanel className={styles.blocksPanel}>
             {listOfBlocks.length > 0
               ? listOfBlocks.map((b) => (
@@ -160,6 +140,7 @@ export default class Blocks extends Component {
                 ))
               : 'No data'}
           </SummaryPanel>
+          <Button status="info">Add Block to Scheduler queue</Button>
         </div>
       </div>
     );
