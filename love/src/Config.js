@@ -2968,8 +2968,8 @@ export const LouversPositionESS = [
     id: 1,
     name: 'A1',
     position: {
-      x: -11.695,
-      y: -9.963,
+      x: -11.595,
+      y: -9.563,
       z: 4.958,
     },
     angle: 229.6,
@@ -2990,8 +2990,8 @@ export const LouversPositionESS = [
     id: 3,
     name: 'A2',
     position: {
-      x: -11.695,
-      y: -9.963,
+      x: -10.465,
+      y: -10.463,
       z: 11.128,
     },
     angle: 225.7,
@@ -3024,7 +3024,7 @@ export const LouversPositionESS = [
     name: 'N1',
     position: {
       x: -12.323,
-      y: 9.536,
+      y: 8.963,
       z: 4.958,
     },
     angle: 310.4,

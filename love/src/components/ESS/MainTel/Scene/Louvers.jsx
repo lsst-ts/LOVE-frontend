@@ -5,31 +5,37 @@ import { Canvas, useFrame } from 'react-three-fiber';
 import * as THREE from "three";
 
 
-function createTextCanvas(text) {
+function createTextCanvas(text, color) {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
-  const fontSize = 120;
 
-  context.font = `${fontSize}px Arial`;
+  context.font = `bold 100px Arial`;
   const textWidth = context.measureText(text).width;
 
   canvas.width = textWidth;
-  canvas.height = fontSize * 1.5;
+  canvas.height = 120;
 
-  context.font = `${fontSize}px Arial`;
-  context.fillStyle = 'black';
-  context.fillText(text, 0, fontSize);
-
+  context.font = `bold 100px Arial`;
+  context.fillStyle = color;
+  context.fillText(text, 0, 100);
   return canvas;
 }
 
 export function Louver (props) {
 
   const ref = useRef();
-  const canvas = createTextCanvas(props.name);
+  const canvas = createTextCanvas(props.name, 'white');
+  const canvas2 = createTextCanvas(props.name, 'black');
+
   const textTexture = new THREE.CanvasTexture(canvas);
+  const textTexture2 = new THREE.CanvasTexture(canvas2);
 
   const angleRadians = THREE.MathUtils.degToRad(props.angle); //degree to radians
+
+  const frame = {
+    'I': [6.15, 4.1],
+    'II': [5.125, 3.28],
+  }[props.type];
 
   return (
     <>
@@ -39,17 +45,27 @@ export function Louver (props) {
         rotation-y={angleRadians}
       >
         <mesh ref={ref}
-          position={[0, 0, 0.5]}
+          position={[0, 0, 0.2]}
         >
           <planeGeometry args={[0.5, 0.5]} />
           <meshBasicMaterial map={textTexture} side={THREE.DoubleSide} transparent />
         </mesh>
-        <mesh
+        <mesh ref={ref}
+          position={[0, 0, 0.175]}
+        >
+          <planeGeometry args={[0.5, 0.5]} />
+          <meshBasicMaterial map={textTexture2} side={THREE.DoubleSide} transparent />
+        </mesh>
+        {/* <mesh
           {...props}
           position={[0, 0, 0]}
         >
           <sphereGeometry args={[0.5, 32, 32]} />
           <meshBasicMaterial color='lightgray' transparent opacity={0.6} />
+        </mesh> */}
+        <mesh>
+          <planeBufferGeometry attach="geometry" args={frame} />
+          <meshPhongMaterial attach="material" color="green" side={THREE.DoubleSide} transparent opacity={0.8}/>
         </mesh>
       </group>
     </>
@@ -65,6 +81,7 @@ Louver.propTypes = {
   color: PropTypes.string,
   name: PropTypes.string,
   angle: PropTypes.number,
+  type: PropTypes.string,
 };
 
 Louver.defaultProps = {
@@ -72,6 +89,7 @@ Louver.defaultProps = {
   color: 0xffff00,
   name: '',
   angle: 0,
+  type: 'I',
   setLouver: (name) => {console.log('name', name)}
 };
 
@@ -85,6 +103,7 @@ export function Louvers (props) {
           position={louver.position}
           name={louver.name}
           angle={louver.angle}
+          type={louver.type}
         />
       )
     })
@@ -100,6 +119,7 @@ Louvers.propTypes = {
     }),
     color: PropTypes.string,
     angle: PropTypes.number,
+    type: PropTypes.string,
   })),
 };
 
@@ -109,5 +129,6 @@ Louvers.defaultProps = {
     color: 0xffff00,
     name: '',
     angle: 0,
+    type: 'I',
   },],
 };
