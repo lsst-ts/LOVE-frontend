@@ -19,7 +19,7 @@ const Sensor = (props) => {
           props.setSensor(props.sensorId);
           setHover(true);
         }}
-        position={[props.position.x, props.position.y, props.position.z]}
+        position={[props.position.x, props.position.z, props.position.y]}
       >
         <sphereGeometry args={[0.15, 64, 64]} />
         <meshBasicMaterial color={hovered ? props.color : 0xffffff} side={THREE.BackSide}/>
@@ -31,7 +31,7 @@ const Sensor = (props) => {
         onPointerOver={(e) => setHover(true)}
         onPointerOut={(e) => setHover(false)}
         onClick={(e) => props.setSensor(props.sensorId)}
-        position={[props.position.x, props.position.y, props.position.z]}
+        position={[props.position.x, props.position.z, props.position.y]}
       >
         <sphereGeometry args={[0.15, 32, 32]} />
         <meshBasicMaterial color={hovered ? 0xffffff : props.color}/>
@@ -178,21 +178,17 @@ const Line = (props) => {
   const [hovered, setHover] = useState(false);
   const isSelected = props.selectedSensor === props.sensorId;
 
-  console.log('end', props.end, 'angle', props.angle);
-
   const points = [];
-  const v1 = new THREE.Vector3(props.start.x, props.start.y, props.start.z);
+  const v1 = new THREE.Vector3(props.start.x, props.start.z, props.start.y);
   let v2 = undefined;
   if (props.end !== undefined && props.angle === undefined ) {
-    v2 = new THREE.Vector3(props.end.x, props.end.y, props.end.z);
+    v2 = new THREE.Vector3(props.end.x, props.end.z, props.end.y);
   } else {
     const angleRadians = THREE.MathUtils.degToRad(props.angle); //degree to radians
     v2 = new THREE.Vector3(Math.cos(angleRadians), Math.sin(angleRadians), 0).normalize();
   }
   points.push(v1);
   points.push(v2);
-
-  console.log('v1', v1, 'v2', v2);
 
   const direction = new THREE.Vector3();
   const distance = v1.distanceTo(v2);

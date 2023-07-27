@@ -220,12 +220,12 @@ const parseAirTurbulence = (streams) => {
   airTurbulences.push({
     sensorName: 'test',
     value: 2,
-    speed: {x: 4, y: 0, z: 0 },
+    speed: {x: 1, y: 1, z: 2 },
     location: 'location test',
     telemetry: 'telemetry-ESS-402-airTurbulence',
-    xPosition: 2,
-    yPosition: 2,
-    zPosition: 2,
+    xPosition: 1,
+    yPosition: 1,
+    zPosition: 1,
   });
   return airTurbulences;
 }

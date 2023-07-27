@@ -5,14 +5,18 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { Sensors } from './Sensors';
 import { Dome } from './Dome';
 import { isEqual } from 'lodash';
+import { Louvers } from './Louvers';
+
+const INITIAL_CAMERA_POSITION = [14.8, 19.5, 12];
 
 function CameraController() {
   const { camera, gl } = useThree();
+  // camera.up.set(0, 0, 1);
   useEffect(
      () => {
         const controls = new OrbitControls(camera, gl.domElement);
         controls.minDistance = 3;
-        controls.maxDistance = 30;
+        controls.maxDistance = 35;
         return () => {
           controls.dispose();
         };
@@ -34,11 +38,13 @@ const Scene = (props) => {
     getGradiantColorX,
   } = props;
 
+  const gridRef = useRef();
+
   return (
     <>
     <Canvas
       camera={{
-        position: [15, 15, 17],
+        position: INITIAL_CAMERA_POSITION,
       }}
     >
       <Suspense fallback={<div>loading</div>}>
@@ -46,9 +52,12 @@ const Scene = (props) => {
       <ambientLight intensity={0.8} />
       <directionalLight position={[0, 5, 5]} intensity={1} />
       <axesHelper args={[15]} />
-      <gridHelper />
+      <gridHelper args={[17, 17]}/>
 
       <Dome />
+
+      <Louvers />
+
       <Sensors 
         selectedSensor={selectedSensor}
         setSensor={setSensor}
