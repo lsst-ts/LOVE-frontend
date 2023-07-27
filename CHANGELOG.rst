@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.24.3
+--------
+
+* Fix generic camera image generation `<https://github.com/lsst-ts/LOVE-frontend/pull/492>`_
+
 v5.24.2
 --------
 

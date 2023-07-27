@@ -186,16 +186,6 @@ export default function GenericCameraControls({
     //
   }, [imageWidth, imageHeight, containerWidth, containerHeight, error, initialLoading, canvasRef]);
 
-  // if (error !== null) {
-  //   return (
-  //     <div className={styles.errorContainer}>
-  //       <p>Fetching stream from {feedUrl}, please wait.</p>
-  //       <p>{`ERROR: ${error.message}`}</p>
-  //       <span>Retrying {`(${retryCount})`} </span>
-  //     </div>
-  //   );
-  // }
-
   const imageAspectRatio = imageWidth / imageHeight;
 
   return (
@@ -217,32 +207,41 @@ export default function GenericCameraControls({
           {runLiveView ? <p>Fetching stream from {feedUrl}, please wait.</p> : <p>Live view not started</p>}
         </div>
       ) : (
-        <div className={styles.cameraContainer}>
-          {healpixOverlays.map((overlay, index) => {
-            return (
-              overlay.display && (
-                <HealpixOverlay
-                  key={index}
+        <>
+          {error ? (
+            <div className={syles.errorContainer}>
+              <p>{`ERROR: ${error.message}`}</p>
+              <span>Retrying {`(${retryCount})`} </span>
+            </div>
+          ) : (
+            <div className={styles.cameraContainer}>
+              {healpixOverlays.map((overlay, index) => {
+                return (
+                  overlay.display && (
+                    <HealpixOverlay
+                      key={index}
+                      width={Math.min(containerWidth, imageAspectRatio * containerHeight)}
+                      height={Math.min(containerHeight, (1 / imageAspectRatio) * containerWidth)}
+                      selectedCell={selectedCell}
+                      {...overlay}
+                      onLayerClick={onLayerClick}
+                    ></HealpixOverlay>
+                  )
+                );
+              })}
+              {targetOverlay?.data?.length > 0 && targetOverlay?.display && (
+                <TargetLayer
                   width={Math.min(containerWidth, imageAspectRatio * containerHeight)}
                   height={Math.min(containerHeight, (1 / imageAspectRatio) * containerWidth)}
-                  selectedCell={selectedCell}
-                  {...overlay}
                   onLayerClick={onLayerClick}
-                ></HealpixOverlay>
-              )
-            );
-          })}
-          {targetOverlay?.data?.length > 0 && targetOverlay?.display && (
-            <TargetLayer
-              width={Math.min(containerWidth, imageAspectRatio * containerHeight)}
-              height={Math.min(containerHeight, (1 / imageAspectRatio) * containerWidth)}
-              onLayerClick={onLayerClick}
-              selectedCell={selectedCell}
-              {...targetOverlay}
-            ></TargetLayer>
+                  selectedCell={selectedCell}
+                  {...targetOverlay}
+                ></TargetLayer>
+              )}
+              <canvas ref={onCanvasRefChange}></canvas>
+            </div>
           )}
-          <canvas ref={onCanvasRefChange}></canvas>
-        </div>
+        </>
       )}
     </div>
   );
