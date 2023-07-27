@@ -21,6 +21,7 @@
 .state {
   display: flex;
   margin-right: 1em;
+  align-items: center;
 }
 
 .state :first-child {
