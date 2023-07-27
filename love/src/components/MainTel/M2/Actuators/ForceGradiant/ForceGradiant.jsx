@@ -224,7 +224,7 @@ export default class ForceGradiant extends Component {
         .append('tspan')
         .attr('x', measuredForceX)
         .attr('y', -15)
-        .text(`${defaultNumberFormatter(actuator.measured)} N`);
+        .text(`${defaultNumberFormatter(actuator.measured, 2)} N`);
     }
 
     const commandedText = d3.select(`#${this.uniqueColorScale} svg #commanded-text`);
@@ -278,7 +278,7 @@ export default class ForceGradiant extends Component {
         .append('tspan')
         .attr('x', commandedForceX)
         .attr('y', 90)
-        .text(`${defaultNumberFormatter(actuator.commanded)} N`);
+        .text(`${defaultNumberFormatter(actuator.commanded, 2)} N`);
     }
   };
 
@@ -289,13 +289,13 @@ export default class ForceGradiant extends Component {
         <p className={styles.title}>Force</p>
         <div id={this.uniqueColorScale} className={styles.forceGradient}>
           <div style={{ width: this.state.width, marginBottom: '0.5em' }}>
-            <span style={{ float: 'left' }}>{minForceLimit} [N]</span>
-            <span style={{ float: 'right' }}>{maxForceLimit} [N]</span>
+            <span style={{ float: 'left' }}>{defaultNumberFormatter(minForceLimit, 2)} [N]</span>
+            <span style={{ float: 'right' }}>{defaultNumberFormatter(maxForceLimit, 2)} [N]</span>
           </div>
           <svg className={styles.colorScaleSvg} viewBox={`0 0 ${this.state.width} 40`}></svg>
           <div style={{ width: this.state.width, marginTop: '0.5em' }}>
-            <span style={{ float: 'left' }}>{minForceLimit} [N]</span>
-            <span style={{ float: 'right' }}>{maxForceLimit} [N]</span>
+            <span style={{ float: 'left' }}>{defaultNumberFormatter(minForceLimit, 2)} [N]</span>
+            <span style={{ float: 'right' }}>{defaultNumberFormatter(maxForceLimit, 2)} [N]</span>
           </div>
         </div>
       </>

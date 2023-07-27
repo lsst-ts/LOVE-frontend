@@ -187,16 +187,16 @@ export default class Info extends Component {
             </Value>
 
             <Label>Commanded Force</Label>
-            <Value>{`${defaultNumberFormatter(selectedActuatorData.forceApplied)} N`}</Value>
+            <Value>{`${defaultNumberFormatter(selectedActuatorData.forceApplied, 2)} N`}</Value>
 
             <Label>Measured Force</Label>
-            <Value>{`${defaultNumberFormatter(selectedActuatorData.forceMeasured)} N`}</Value>
+            <Value>{`${defaultNumberFormatter(selectedActuatorData.forceMeasured, 2)} N`}</Value>
 
             <Label>Actuator Steps</Label>
-            <Value>{`${defaultNumberFormatter(selectedActuatorData.actuatorStep)} °`}</Value>
+            <Value>{`${defaultNumberFormatter(selectedActuatorData.actuatorStep, 2)} °`}</Value>
 
             <Label>Position</Label>
-            <Value>{`${defaultNumberFormatter(selectedActuatorData.encoderPosition)} um`}</Value>
+            <Value>{`${defaultNumberFormatter(selectedActuatorData.encoderPosition, 2)} um`}</Value>
           </>
         ) : (
           <div className={styles.noActuator}>No actuator selected</div>

@@ -102,13 +102,8 @@ export default class Actuators extends Component {
   };
 
   render() {
-    const {
-      showActuatorsID,
-      showCommandedForce,
-      showMeasuredForce,
-      selectedActuator,
-      selectedActuatorTangent,
-    } = this.state;
+    const { showActuatorsID, showCommandedForce, showMeasuredForce, selectedActuator, selectedActuatorTangent } =
+      this.state;
 
     const { zenithAngleMeasured, inclinationTelemetrySource } = this.props;
 
@@ -177,12 +172,12 @@ export default class Actuators extends Component {
           </div>
 
           <div className={styles.inclinometerForcegradiantAndInfoContainer}>
-            <div>
+            {/* <div>
               <Inclinometer
                 zenithAngleMeasured={zenithAngleMeasured}
                 inclinationTelemetrySource={inclinationTelemetrySource}
               />
-            </div>
+            </div> */}
             <div>
               <ForceGradiant
                 actuatorReferenceId={actuatorReferenceId}
