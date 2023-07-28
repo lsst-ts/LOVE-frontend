@@ -8,7 +8,8 @@ import MinusIcon from 'components/icons/MinusIcon/MinusIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import { fixedFloat } from 'Utils';
-import Info from 'components/MainTel/M2/Actuators/Info/Info';
+import { schedulerBlocksStateToStyle } from 'Config';
+import StatusText from 'components/GeneralPurpose/AlarmLabelText/AlarmLabelText';
 
 export default class Blocks extends Component {
   constructor(props) {
@@ -97,7 +98,7 @@ export default class Blocks extends Component {
       decl: predTargetsDecl[i],
       rotSky: predTargetsRotSkyPos[i],
     }));
-    // console.log(predData);
+    console.log(selectedBlockData);
     return (
       <div className={styles.container}>
         <div onClick={this.props.showContent} className={styles.header}>
@@ -134,8 +135,10 @@ export default class Blocks extends Component {
             {listOfBlocks.length > 0
               ? listOfBlocks.map((b) => (
                   <div className={styles.predTargets}>
-                    <Label>{b.id}</Label>
-                    <Value>{b.status}</Value>
+                    <Label onClick={() => this.handleRowClick()}>{b.id}</Label>
+                    <Value>
+                      <StatusText status={schedulerBlocksStateToStyle[b.status]}>{b.status}</StatusText>
+                    </Value>
                   </div>
                 ))
               : 'No data'}

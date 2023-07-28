@@ -1433,8 +1433,12 @@ export const getBlocksInfo = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-blockInventory`, `event-Scheduler-${salindex}-blockStatus`];
   const blocks = getStreamsData(state, subscriptions);
   return {
-    blockInvId: blocks[`event-Scheduler-${salindex}-blockInventory`]?.[0]?.ids?.vallue ?? '',
-    blockInvStatus: blocks[`event-Scheduler-${salindex}-blockInventory`]?.[0]?.status?.value ?? '',
+    blockInvId:
+      blocks[`event-Scheduler-${salindex}-blockInventory`]?.[0]?.ids?.vallue ??
+      'OBS-114, OBS-115, OBS-116, OBS-117, OBS-118, OBS-119',
+    blockInvStatus:
+      blocks[`event-Scheduler-${salindex}-blockInventory`]?.[0]?.status?.value ??
+      'COMPLETED, COMPLETED, INTERRUPTED, COMPLETED, EXECUTING, AVAILABLE',
     blockId: blocks[`event-Scheduler-${salindex}-blockStatus`]?.[0]?.id?.value ?? '',
     blockStatusId: blocks[`event-Scheduler-${salindex}-blockStatus`]?.[0]?.statusId?.value ?? 0,
     blockStatus: blocks[`event-Scheduler-${salindex}-blockStatus`]?.[0]?.status?.value ?? '',

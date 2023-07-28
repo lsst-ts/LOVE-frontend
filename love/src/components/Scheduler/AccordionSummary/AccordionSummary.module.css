@@ -57,7 +57,7 @@
 }
 
 .predTargets {
-  display: inline-flex;
+  display: contents;
   margin-right: 10em;
   margin-left: 1em;
 }
