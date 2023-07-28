@@ -5,6 +5,7 @@ Version History
 v5.24.4
 --------
 
+* Hotfix for typo in GenericCameraControls component `<https://github.com/lsst-ts/LOVE-frontend/pull/495>`_
 * Hotfix M1M3 raw button `<https://github.com/lsst-ts/LOVE-frontend/pull/494>`_
 
 v5.24.3
