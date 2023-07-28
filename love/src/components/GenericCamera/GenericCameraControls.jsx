@@ -209,7 +209,7 @@ export default function GenericCameraControls({
       ) : (
         <>
           {error ? (
-            <div className={syles.errorContainer}>
+            <div className={styles.errorContainer}>
               <p>{`ERROR: ${error.message}`}</p>
               <span>Retrying {`(${retryCount})`} </span>
             </div>

@@ -2,10 +2,16 @@
 Version History
 ===============
 
+v5.24.4
+--------
+
+* Hotfix for typo in GenericCameraControls component `<https://github.com/lsst-ts/LOVE-frontend/pull/495>`_
+* Hotfix M1M3 raw button `<https://github.com/lsst-ts/LOVE-frontend/pull/494>`_
+
 v5.24.3
 --------
 
-* Add M2 zoom-out button and remove inclination `<https://github.com/lsst-ts/LOVE-frontend/pull/492>`_
+* Add M2 zoom-out button and remove inclination `<https://github.com/lsst-ts/LOVE-frontend/pull/493>`_
 * Fix generic camera image generation `<https://github.com/lsst-ts/LOVE-frontend/pull/492>`_
 
 v5.24.2

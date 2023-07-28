@@ -32,7 +32,7 @@ export const schema = {
 };
 
 const M1M3Container = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
-  if (props.isRaw && props.hasEUI) {
+  if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
   return <M1M3 subscribeToStreams={subscribeToStreams} unsubscribeToStreams={unsubscribeToStreams} {...props} />;
