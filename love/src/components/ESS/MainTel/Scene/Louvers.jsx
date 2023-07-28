@@ -21,6 +21,10 @@ function createTextCanvas(text, color) {
   return canvas;
 }
 
+function angleOfPercentOpen(percent) {
+  return (-1) * percent * 90 / 100;
+}
+
 export function Louver (props) {
 
   const ref = useRef();
@@ -31,6 +35,7 @@ export function Louver (props) {
   const textTexture2 = new THREE.CanvasTexture(canvas2);
 
   const angleRadians = THREE.MathUtils.degToRad(props.angle); //degree to radians
+  const angleOpen = THREE.MathUtils.degToRad(angleOfPercentOpen(props.percentOpen));
 
   const frame = {
     'I': [6.15, 4.1],
@@ -44,28 +49,38 @@ export function Louver (props) {
         onClick={(e) => props.setLouver(props.name)}
         rotation-y={angleRadians}
       >
-        <mesh ref={ref}
-          position={[0, 0, 0.2]}
+        <group
+          rotation-x={angleOpen}
         >
-          <planeGeometry args={[0.5, 0.5]} />
-          <meshBasicMaterial map={textTexture} side={THREE.DoubleSide} transparent />
-        </mesh>
-        <mesh ref={ref}
-          position={[0, 0, 0.175]}
+          <mesh ref={ref}
+            position={[0, 0, 0.2]}
+          >
+            <planeGeometry args={[0.5, 0.5]} />
+            <meshBasicMaterial map={textTexture} side={THREE.DoubleSide} transparent />
+          </mesh>
+          <mesh ref={ref}
+            position={[0, 0, 0.175]}
+          >
+            <planeGeometry args={[0.5, 0.5]} />
+            <meshBasicMaterial map={textTexture2} side={THREE.DoubleSide} transparent />
+          </mesh>
+          {/* <mesh
+            {...props}
+            position={[0, 0, 0]}
+          >
+            <sphereGeometry args={[0.5, 32, 32]} />
+            <meshBasicMaterial color='lightgray' transparent opacity={0.6} />
+          </mesh> */}
+          <mesh>
+            <planeBufferGeometry attach="geometry" args={frame} />
+            <meshPhongMaterial attach="material" color={0x3f7b9d} side={THREE.DoubleSide} transparent opacity={0.8} />
+          </mesh>
+        </group>
+        <mesh
+          position={[0, 0, -0.05]}
         >
-          <planeGeometry args={[0.5, 0.5]} />
-          <meshBasicMaterial map={textTexture2} side={THREE.DoubleSide} transparent />
-        </mesh>
-        {/* <mesh
-          {...props}
-          position={[0, 0, 0]}
-        >
-          <sphereGeometry args={[0.5, 32, 32]} />
-          <meshBasicMaterial color='lightgray' transparent opacity={0.6} />
-        </mesh> */}
-        <mesh>
-          <planeBufferGeometry attach="geometry" args={frame} />
-          <meshPhongMaterial attach="material" color="green" side={THREE.DoubleSide} transparent opacity={0.8}/>
+          <boxGeometry args={[frame[0], frame[1], 0.05]} />
+          <meshBasicMaterial color={0x3f7b9d} wireframe transparent opacity={0.8} />
         </mesh>
       </group>
     </>
@@ -80,7 +95,9 @@ Louver.propTypes = {
   }),
   color: PropTypes.string,
   name: PropTypes.string,
+  id: PropTypes.number,
   angle: PropTypes.number,
+  percentOpen: PropTypes.number,
   type: PropTypes.string,
 };
 
@@ -88,22 +105,28 @@ Louver.defaultProps = {
   position: {x: 0, y: 0, z: 0},
   color: 0xffff00,
   name: '',
+  id: 1,
   angle: 0,
+  percentOpen: 50,
   type: 'I',
   setLouver: (name) => {console.log('name', name)}
 };
 
 
 export function Louvers (props) {
-
+  const ids = props.ids ?? [1];
+  const percentOpen = props.percentOpen ?? [0];
   return (
     LouversPositionESS.map((louver) => {
+      const index = ids.indexOf(louver.id ?? 1);
       return (
         <Louver
           position={louver.position}
+          id={louver.id}
           name={louver.name}
           angle={louver.angle}
           type={louver.type}
+          percentOpen={percentOpen[index]}
         />
       )
     })
@@ -112,6 +135,7 @@ export function Louvers (props) {
 
 Louvers.propTypes = {
   louvers: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number,
     position: PropTypes.shape({
       x: PropTypes.number,
       y: PropTypes.number,
@@ -121,14 +145,19 @@ Louvers.propTypes = {
     angle: PropTypes.number,
     type: PropTypes.string,
   })),
+  percentOpen: PropTypes.arrayOf(PropTypes.number),
+  ids: PropTypes.arrayOf(PropTypes.number),
 };
 
 Louvers.defaultProps = {
   louvers: [{
+    id: 1,
     position: {x: 0, y: 0, z: 0},
     color: 0xffff00,
     name: '',
     angle: 0,
     type: 'I',
   },],
+  percentOpen: [],
+  ids: [1],
 };

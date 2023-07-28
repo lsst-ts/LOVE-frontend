@@ -1,7 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getStreamsData } from 'redux/selectors';
+import {
+  getStreamsData,
+  getLouversStatus,
+  getApertureShutter,
+} from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import MainTelESS from './MainTelESS';
 import { range } from 'lodash';
@@ -246,13 +250,21 @@ const mapStateToProps = (state, ownProps) => {
   });
   map[option] = cleanStream ? parse(cleanStream, option) : [];
 
-  return {...map};
+  const louversState = getLouversStatus(state);
+  const apertureShutterState = getApertureShutter(state);
+
+  return {
+    ...map,
+    percentOpen: louversState.actualPositionLouvers,
+    apertureShutterState
+  };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const salindexList = ownProps.salindexList;
   const option = ownProps.option;
   const subscriptions = getGroupNames(salindexList, option);
+  subscriptions.push('telemetry-MTDome-0-louvers');
   return {
     subscriptions,
     subscribeToStreams: () => {

@@ -101,6 +101,7 @@ export default class MainTelESS extends Component {
       positions: [],
       referenceIds: [],
       plot: this.getBasePlot(undefined, undefined, undefined, undefined),
+      louversIds: [],
     };
     this.plotRef = React.createRef();
   }
@@ -152,10 +153,12 @@ export default class MainTelESS extends Component {
     }
 
     const referenceIds = Array.from({length: this.props[option].length}).fill(0).map((_, index) => index + 1);
+    const louversIds = Array.from({length: 34}).fill(0).map((_, index) => index + 1);
 
     this.setState({
       positions: positions,
       referenceIds: referenceIds,
+      louversIds: louversIds,
     });
   }
 
@@ -173,11 +176,8 @@ export default class MainTelESS extends Component {
           z: this.props[option][i].zPosition,
         });
       }
-      const referenceIds = Array.from({length: this.props[option].length}).fill(0).map((_, index) => index + 1);
-
       this.setState({
         positions: positions,
-        referenceIds: referenceIds,
       });
     }
 
@@ -233,8 +233,8 @@ export default class MainTelESS extends Component {
   }
 
   render() {
-    const { selectedSensor, selectedSensorData, positions, referenceIds } = this.state;
-    const { minGradiantLimit, maxGradiantLimit, option } = this.props;
+    const { selectedSensor, selectedSensorData, positions, referenceIds, louversIds } = this.state;
+    const { minGradiantLimit, maxGradiantLimit, option, percentOpen } = this.props;
     const sensors = this.props[option] ?? [];
     const values = sensors.map((sensor) => sensor.value ?? 0) ?? [];
     const speeds = sensors.map((sensor) => sensor.speed ?? undefined) ?? [];
@@ -252,6 +252,8 @@ export default class MainTelESS extends Component {
             speeds={speeds}
             directions={directions}
             getGradiantColorX={this.getGradiantColorX}
+            louversIds={louversIds}
+            percentOpen={percentOpen}
           />
         </div>
 

@@ -36,9 +36,9 @@ const Scene = (props) => {
     speeds,
     directions,
     getGradiantColorX,
+    percentOpen,
+    louversIds,
   } = props;
-
-  const gridRef = useRef();
 
   return (
     <>
@@ -56,7 +56,10 @@ const Scene = (props) => {
 
       {/* <Dome /> */}
 
-      <Louvers />
+      <Louvers 
+        ids={louversIds}
+        percentOpen={percentOpen}
+      />
 
       <Sensors 
         selectedSensor={selectedSensor}
@@ -90,17 +93,21 @@ Scene.propTypes = {
   })]),
   directions: PropTypes.arrayOf(PropTypes.number),
   getGradiantColorX: PropTypes.func,
+  louversIds: PropTypes.arrayOf(PropTypes.number),
+  percentOpen: PropTypes.arrayOf(PropTypes.number),
 };
 
 Scene.defaultProps = {
   selectedSensor: 0,
   positions: [],
+  percentOpen: [],
   setSensor: () => {console.log('scene default setSensor')},
 }
 
 const comparator = (prevProps, nextProps) => {
   return (
     prevProps.selectedSensor === nextProps.selectedSensor &&
+    isEqual(prevProps.percentOpen, nextProps.percentOpen ) &&
     isEqual(prevProps.positions, nextProps.positions )
   )
 }
