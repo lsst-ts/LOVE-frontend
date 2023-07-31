@@ -17,6 +17,8 @@ export default class Blocks extends Component {
     this.state = {
       selectedBlockData: null,
     };
+
+    this.handleRowClick = this.handleRowClick.bind(this);
   }
 
   addBlockCommand(params) {
@@ -62,11 +64,14 @@ export default class Blocks extends Component {
     },
   ];
 
-  handleRowClick = (event) => {
-    const rowData = event.currentTarget.cells;
-    const cellData = Array.from(rowData).map((cell) => cell.textContent);
+  handleRowClick = (value) => {
+    // const rowData = event.currentTarget.cells;
+    // const cellData = Array.from(rowData).map((cell) => cell.textContent);
 
-    this.setState({ selectedBlockData: cellData });
+    // this.setState({ selectedBlockData: cellData });
+    // console.log(selectedBlockData);
+
+    console.log(value);
   };
 
   render() {
@@ -98,7 +103,7 @@ export default class Blocks extends Component {
       decl: predTargetsDecl[i],
       rotSky: predTargetsRotSkyPos[i],
     }));
-    console.log(selectedBlockData);
+
     return (
       <div className={styles.container}>
         <div onClick={this.props.showContent} className={styles.header}>
@@ -131,18 +136,19 @@ export default class Blocks extends Component {
             <span className={styles.executionsText}>List of blocks</span>
             <span></span>
           </div> */}
-          <SummaryPanel className={styles.blocksPanel}>
+          <div className={styles.blocksPanel}>
             {listOfBlocks.length > 0
               ? listOfBlocks.map((b) => (
-                  <div className={styles.predTargets}>
-                    <Label onClick={() => this.handleRowClick()}>{b.id}</Label>
-                    <Value>
-                      <StatusText status={schedulerBlocksStateToStyle[b.status]}>{b.status}</StatusText>
-                    </Value>
+                  <div className={styles.listOfBlocks}>
+                    <span onClick={() => this.handleRowClick(b.id)} className={styles.blocksLabel}>
+                      {b.id}
+                    </span>
+                    {/* <span onClick={() => console.log(b.id)} className={styles.blocksLabel}>{b.id}</span> */}
+                    <span>{b.status}</span>
                   </div>
                 ))
               : 'No data'}
-          </SummaryPanel>
+          </div>
           <Button status="info">Add Block to Scheduler queue</Button>
         </div>
       </div>

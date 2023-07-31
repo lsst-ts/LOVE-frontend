@@ -149,6 +149,18 @@
   padding: var(--content-padding);
 }
 
+.listOfBlocks {
+  display: flex;
+  margin-right: 10em;
+  margin-left: 1em;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.blocksLabel:hover {
+  cursor: pointer;
+}
+
 .panel {
   overflow: hidden;
   transition: height 0.7s ease;
