@@ -50,8 +50,8 @@ const Scene = (props) => {
       <Suspense fallback={<div>loading</div>}>
       <CameraController />
       <ambientLight intensity={0.8} />
-      <directionalLight position={[0, 5, 5]} intensity={1} />
-      <axesHelper args={[15]} />
+      <directionalLight position={[-20, 20, 0]} intensity={1} />
+      <axesHelper args={[25]} />
       <gridHelper args={[17*2, 17]}/>
 
       {/* <Dome /> */}

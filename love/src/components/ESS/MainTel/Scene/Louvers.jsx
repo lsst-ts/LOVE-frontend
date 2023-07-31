@@ -64,13 +64,6 @@ export function Louver (props) {
             <planeGeometry args={[0.5, 0.5]} />
             <meshBasicMaterial map={textTexture2} side={THREE.DoubleSide} transparent />
           </mesh>
-          {/* <mesh
-            {...props}
-            position={[0, 0, 0]}
-          >
-            <sphereGeometry args={[0.5, 32, 32]} />
-            <meshBasicMaterial color='lightgray' transparent opacity={0.6} />
-          </mesh> */}
           <mesh>
             <planeBufferGeometry attach="geometry" args={frame} />
             <meshPhongMaterial attach="material" color={0x3f7b9d} side={THREE.DoubleSide} transparent opacity={0.8} />

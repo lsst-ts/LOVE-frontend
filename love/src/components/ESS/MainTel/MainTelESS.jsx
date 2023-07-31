@@ -99,11 +99,17 @@ export default class MainTelESS extends Component {
       selectedSensor: 0,
       selectedSensorData: {},
       positions: [],
-      referenceIds: [],
+      referenceIds: Array.from({length: 16}).fill(0).map((_, index) => index + 1),
       plot: this.getBasePlot(undefined, undefined, undefined, undefined),
-      louversIds: [],
+      louversIds: Array.from({length: 34}).fill(0).map((_, index) => index + 1),
     };
     this.plotRef = React.createRef();
+    this.items = {
+      'temperature': 'temperature',
+      'relativeHumidity': 'relativeHumidity',
+      'airFlow': 'speed',
+      'airTurbulence' : 'speedMagnitude',
+    };
   }
 
   getBasePlot(salindex, topic, item, indexArr=undefined) {
@@ -186,10 +192,12 @@ export default class MainTelESS extends Component {
     ) {
       const telemetry = this.state.selectedSensorData?.telemetry ?? 'telemetry-ESS-1-temperature';
       const indexArr = this.state.selectedSensorData?.indexArr !== undefined ? this.state.selectedSensorData?.indexArr : undefined;
-      const [category, csc, salindex, topic] = telemetry.split('-');
+      const [_category, _csc, salindex, _topic] = telemetry.split('-');
 
-      const option = this.props.option;
-      this.setState({plot: this.getBasePlot(salindex, option, option, indexArr)});
+      const topic = this.props.option;
+      const item = this.items[option] ?? option;
+      const inputsPlot = this.getBasePlot(salindex, topic, item, indexArr);
+      this.setState({plot: inputsPlot});
     }
   }
 
@@ -210,6 +218,7 @@ export default class MainTelESS extends Component {
     const { referenceIds } = this.state;
     const option =  this.props.option ?? 'temperature';
     const index = referenceIds.indexOf(sensorId);
+
     const selectedSensorData = {
       sensorId: sensorId,
       telemetry: this.props[option][index].telemetry,

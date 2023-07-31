@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { isEqual } from 'lodash';
 import * as THREE from "three";
@@ -7,6 +7,11 @@ const Sensor = (props) => {
   const mesh = useRef();
   const [hovered, setHover] = useState(false);
   const isSelected = props.selectedSensor === props.sensorId;
+
+  useEffect(() => {
+    document.body.style.cursor = hovered ? 'pointer' : 'auto'
+  }, [hovered]);
+
   return (
     <>
       { (isSelected || hovered) && (<mesh
@@ -30,7 +35,10 @@ const Sensor = (props) => {
         scale={hovered ? [2, 2, 2]: [1, 1, 1]}
         onPointerOver={(e) => setHover(true)}
         onPointerOut={(e) => setHover(false)}
-        onClick={(e) => props.setSensor(props.sensorId)}
+        onClick={(e) => {
+          props.setSensor(props.sensorId);
+          setHover(true);
+        }}
         position={[props.position.x, props.position.z, props.position.y]}
       >
         <sphereGeometry args={[0.15, 32, 32]} />
@@ -47,7 +55,7 @@ Sensor.propTypes = {
     y: PropTypes.number,
     z: PropTypes.number,
   }),
-  color: PropTypes.string,
+  color: PropTypes.number,
   setSensor: PropTypes.func,
 };
 
@@ -121,13 +129,13 @@ export function Sensors(props) {
               sensorId={sensor.id}
               position={sensor.position}
               color={sensor.color}
-              setSensor={() => setSensor(sensor.id)}
+              setSensor={(id) => {setSensor(id)}}
               selectedSensor={selectedSensor}
             />
           );
         } else {
           return (
-            <Line
+            <Vector
               key={`sensor-${sensor.id}`}
               sensorId={sensor.id}
               start={sensor.position}
@@ -138,7 +146,7 @@ export function Sensors(props) {
               }}
               angle={sensor.direction}
               color={sensor.color}
-              setSensor={() => setSensor(sensor.id)}
+              setSensor={(id) => {setSensor(id)}}
               selectedSensor={selectedSensor}
             />
           );
@@ -173,10 +181,14 @@ Sensors.defaultProps = {
   getGradiantColorX: () => {0xffff00},
 };
 
-const Line = (props) => {
+const Vector = (props) => {
   const ref = useRef();
   const [hovered, setHover] = useState(false);
   const isSelected = props.selectedSensor === props.sensorId;
+
+  useEffect(() => {
+    document.body.style.cursor = hovered ? 'pointer' : 'auto'
+  }, [hovered])
 
   const points = [];
   const v1 = new THREE.Vector3(props.start.x, props.start.z, props.start.y);
@@ -203,32 +215,38 @@ const Line = (props) => {
 
   return (
     <>
-      <line
-        {...props}
-        ref={ref}
-        onClick={(e) => props.setSensor(props.sensorId)}
-        geometry={lineGeometry}
+      <group
+        onPointerEnter={(e) => setHover(true)}
+        onPointerLeave={(e) => setHover(false)}
+        onClick={(e) => {
+          props.setSensor(props.sensorId);
+          setHover(true);
+        }}
       >
-        <lineBasicMaterial color={hovered ? 0xffffff : props.color}
-          linewidth={3} linecap={'round'} linejoin={'round'}
-        />
-      </line>
-      <mesh
-        {...props}
-        ref={ref}
-        onClick={(e) => props.setSensor(props.sensorId)}
-        position={conePosition}
-        rotation={coneRotation}
-      >
-        <coneGeometry args={[0.2, 0.5, 32]} />
-        <meshBasicMaterial color={hovered ? 0xffffff : props.color}/>
-
-      </mesh>
+        <line
+          {...props}
+          ref={ref}
+          geometry={lineGeometry}
+        >
+          <lineBasicMaterial color={hovered ? 0xffffff : props.color}
+            linewidth={3} linecap={'round'} linejoin={'round'}
+          />
+        </line>
+        <mesh
+          {...props}
+          ref={ref}
+          position={conePosition}
+          rotation={coneRotation}
+        >
+          <coneGeometry args={[0.2, 0.5, 32]} />
+          <meshBasicMaterial color={hovered ? 0xffffff : props.color}/>
+        </mesh>
+      </group>
     </>
   );
 }
 
-Line.propTypes = {
+Vector.propTypes = {
   sensorId: PropTypes.number,
   start: PropTypes.shape({
     x: PropTypes.number,
@@ -241,11 +259,11 @@ Line.propTypes = {
     z: PropTypes.number,
   }), undefined]),
   angle: PropTypes.oneOf([PropTypes.number, undefined]),
-  color: PropTypes.string,
+  color: PropTypes.number,
   setSensor: PropTypes.func,
 };
 
-Line.defaultProps = {
+Vector.defaultProps = {
   sensorId: 0,
   start: {x: 0, y: 0, z: 0},
   end: undefined,

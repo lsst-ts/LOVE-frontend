@@ -42,11 +42,11 @@ export const schema = {
       type: 'string',
       description: 'Numbers separated by comma(","), and range of numbers separed with hyphen ("-"). For example 1-99,101,102,105',
       isPrivate: false,
-      default: '1-99,101,102,103,104,105',
+      default: '1,2,3,4,5-199',
     },
     option: {
       type: 'string',
-      description: 'select option between temperature, relativeHumidity, airflow or airTurbulence',
+      description: 'select option between temperature, relativeHumidity, airFlow or airTurbulence',
       default: 'temperature',
     },
   },
