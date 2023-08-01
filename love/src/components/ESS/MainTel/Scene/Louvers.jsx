@@ -27,7 +27,8 @@ function angleOfPercentOpen(percent) {
 
 export function Louver (props) {
 
-  const ref = useRef();
+  const textRef = useRef();
+  const textShadowRef = useRef();
   const canvas = createTextCanvas(props.name, 'white');
   const canvas2 = createTextCanvas(props.name, 'black');
 
@@ -52,13 +53,13 @@ export function Louver (props) {
         <group
           rotation-x={angleOpen}
         >
-          <mesh ref={ref}
+          <mesh ref={textRef}
             position={[0, 0, 0.2]}
           >
             <planeGeometry args={[0.5, 0.5]} />
             <meshBasicMaterial map={textTexture} side={THREE.DoubleSide} transparent />
           </mesh>
-          <mesh ref={ref}
+          <mesh ref={textShadowRef}
             position={[0, 0, 0.175]}
           >
             <planeGeometry args={[0.5, 0.5]} />

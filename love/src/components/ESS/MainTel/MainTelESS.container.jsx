@@ -255,8 +255,8 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     ...map,
-    percentOpen: louversState.actualPositionLouvers,
-    apertureShutterState
+    percentOpenLouvers: louversState.actualPositionLouvers,
+    percentOpenShutter: apertureShutterState.positionActualShutter,
   };
 };
 

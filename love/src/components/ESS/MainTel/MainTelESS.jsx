@@ -174,6 +174,7 @@ export default class MainTelESS extends Component {
     if (
       !isEqual(prevProps[option], this.props[option])
     ) {
+      const referenceIds = Array.from({length: this.props[option].length}).fill(0).map((_, index) => index + 1);
       const positions = [];
       for(let i = 0; i < this.props[option].length; i++) {
         positions.push({
@@ -184,6 +185,7 @@ export default class MainTelESS extends Component {
       }
       this.setState({
         positions: positions,
+        referenceIds: referenceIds,
       });
     }
 
@@ -243,7 +245,7 @@ export default class MainTelESS extends Component {
 
   render() {
     const { selectedSensor, selectedSensorData, positions, referenceIds, louversIds } = this.state;
-    const { minGradiantLimit, maxGradiantLimit, option, percentOpen } = this.props;
+    const { minGradiantLimit, maxGradiantLimit, option, percentOpenLouvers, percentOpenShutter } = this.props;
     const sensors = this.props[option] ?? [];
     const values = sensors.map((sensor) => sensor.value ?? 0) ?? [];
     const speeds = sensors.map((sensor) => sensor.speed ?? undefined) ?? [];
@@ -262,7 +264,8 @@ export default class MainTelESS extends Component {
             directions={directions}
             getGradiantColorX={this.getGradiantColorX}
             louversIds={louversIds}
-            percentOpen={percentOpen}
+            percentOpenLouvers={percentOpenLouvers}
+            percentOpenShutter={percentOpenShutter}
           />
         </div>
 

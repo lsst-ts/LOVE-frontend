@@ -2,21 +2,25 @@ import React, { Suspense, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import * as THREE from "three";
 import { Sensors } from './Sensors';
-import { Dome } from './Dome';
+// import { Dome } from './Dome';
 import { isEqual } from 'lodash';
 import { Louvers } from './Louvers';
+import { Shutter } from './Shutter';
 
-const INITIAL_CAMERA_POSITION = [14.8, 19.5, 12];
+const INITIAL_CAMERA_POSITION = [14.8, 24.5, 12];
+const INITIAL_TARGET = [0, 10, 0];
 
 function CameraController() {
   const { camera, gl } = useThree();
-  // camera.up.set(0, 0, 1);
   useEffect(
      () => {
         const controls = new OrbitControls(camera, gl.domElement);
         controls.minDistance = 3;
         controls.maxDistance = 35;
+        controls.target = new THREE.Vector3(INITIAL_TARGET[0], INITIAL_TARGET[1], INITIAL_TARGET[2]);
+        controls.update();
         return () => {
           controls.dispose();
         };
@@ -36,8 +40,9 @@ const Scene = (props) => {
     speeds,
     directions,
     getGradiantColorX,
-    percentOpen,
+    percentOpenLouvers,
     louversIds,
+    percentOpenShutter
   } = props;
 
   return (
@@ -58,7 +63,19 @@ const Scene = (props) => {
 
       <Louvers 
         ids={louversIds}
-        percentOpen={percentOpen}
+        percentOpen={percentOpenLouvers}
+      />
+
+      <Shutter
+        name={'shutter 0'}
+        position={{x: 0, y: -3.3, z: 7}}
+        openPercent={percentOpenShutter[0] ?? 100}
+      />
+
+      <Shutter
+        name={'shutter 1'}
+        position={{x: 0, y: 3.3, z: 7}}
+        openPercent={percentOpenShutter[1] ?? 100}
       />
 
       <Sensors 
