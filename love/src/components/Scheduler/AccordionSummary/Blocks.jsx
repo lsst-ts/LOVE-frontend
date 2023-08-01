@@ -9,13 +9,14 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import { fixedFloat } from 'Utils';
 import { schedulerBlocksStateToStyle } from 'Config';
-import StatusText from 'components/GeneralPurpose/AlarmLabelText/AlarmLabelText';
+import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 
 export default class Blocks extends Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedBlockData: null,
+      addBlockCmd: false,
     };
 
     this.handleRowClick = this.handleRowClick.bind(this);
@@ -24,13 +25,14 @@ export default class Blocks extends Component {
   addBlockCommand(params) {
     const option = 'addBlock';
     const { requestSALCommand, salindex } = this.props;
-    this.setState({ showOptions: params });
-    requestSALCommand({
-      cmd: `cmd_${option}`,
-      csc: 'Scheduler',
-      salindex,
-      params,
-    });
+    this.setState({ addBlockCmd: true });
+    console.log('addBlockCmd!, block:' + this.state.selectedBlockData);
+    // requestSALCommand({
+    //   cmd: `cmd_${option}`,
+    //   csc: 'Scheduler',
+    //   salindex,
+    //   params,
+    // });
   }
 
   HEADERS_PREDTARGETS = [
@@ -65,13 +67,8 @@ export default class Blocks extends Component {
   ];
 
   handleRowClick = (value) => {
-    // const rowData = event.currentTarget.cells;
-    // const cellData = Array.from(rowData).map((cell) => cell.textContent);
-
-    // this.setState({ selectedBlockData: cellData });
-    // console.log(selectedBlockData);
-
-    console.log(value);
+    this.setState({ selectedBlockData: value });
+    console.log(this.state.selectedBlockData);
   };
 
   render() {
@@ -113,7 +110,11 @@ export default class Blocks extends Component {
         <div className={[styles.panel, isOpen ? styles.openPanel : styles.closePanel].join(' ')}>
           <SummaryPanel className={styles.currentBlock}>
             <Label>{blockId ? blockId : 'No data'}</Label>
-            <Value>{blockStatus ? blockStatus : 'No data'}</Value>
+            <Value>
+              <StatusText status={schedulerBlocksStateToStyle[blockStatus]}>
+                {blockStatus ? blockStatus : 'No data'}
+              </StatusText>
+            </Value>
           </SummaryPanel>
           <div className={styles.executionsDiv}>
             <span className={styles.executionsText}>Executions</span>
@@ -136,20 +137,23 @@ export default class Blocks extends Component {
             <span className={styles.executionsText}>List of blocks</span>
             <span></span>
           </div> */}
-          <div className={styles.blocksPanel}>
+          <SummaryPanel className={styles.blocksPanel}>
             {listOfBlocks.length > 0
               ? listOfBlocks.map((b) => (
                   <div className={styles.listOfBlocks}>
-                    <span onClick={() => this.handleRowClick(b.id)} className={styles.blocksLabel}>
-                      {b.id}
-                    </span>
-                    {/* <span onClick={() => console.log(b.id)} className={styles.blocksLabel}>{b.id}</span> */}
-                    <span>{b.status}</span>
+                    <div onClick={() => this.handleRowClick(b.id)} className={styles.blocksLabel}>
+                      <Label>{b.id}</Label>
+                    </div>
+                    <Value>
+                      <StatusText status={schedulerBlocksStateToStyle[b.status]}>{b.status}</StatusText>
+                    </Value>
                   </div>
                 ))
               : 'No data'}
-          </div>
-          <Button status="info">Add Block to Scheduler queue</Button>
+          </SummaryPanel>
+          <Button status="info" onClick={() => this.addBlockCommand(selectedBlockData)}>
+            Add Block to Scheduler queue
+          </Button>
         </div>
       </div>
     );

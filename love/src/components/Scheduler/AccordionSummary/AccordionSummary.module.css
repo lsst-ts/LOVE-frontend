@@ -150,15 +150,13 @@
 }
 
 .listOfBlocks {
-  display: flex;
+  display: contents;
   margin-right: 10em;
   margin-left: 1em;
-  flex-direction: row;
-  justify-content: space-between;
 }
 
 .blocksLabel:hover {
-  cursor: pointer;
+  cursor: pointer !important;
 }
 
 .panel {
