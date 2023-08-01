@@ -22,8 +22,7 @@ export default class Blocks extends Component {
     this.handleRowClick = this.handleRowClick.bind(this);
   }
 
-  addBlockCommand(params) {
-    const option = 'addBlock';
+  addBlockCommand(option, params) {
     const { requestSALCommand, salindex } = this.props;
     this.setState({ addBlockCmd: true });
     console.log('addBlockCmd!, block:' + this.state.selectedBlockData);
@@ -139,8 +138,8 @@ export default class Blocks extends Component {
           </div> */}
           <SummaryPanel className={styles.blocksPanel}>
             {listOfBlocks.length > 0
-              ? listOfBlocks.map((b) => (
-                  <div className={styles.listOfBlocks}>
+              ? listOfBlocks.map((b, i) => (
+                  <div className={styles.listOfBlocks} key={i}>
                     <div onClick={() => this.handleRowClick(b.id)} className={styles.blocksLabel}>
                       <Label>{b.id}</Label>
                     </div>
@@ -151,7 +150,7 @@ export default class Blocks extends Component {
                 ))
               : 'No data'}
           </SummaryPanel>
-          <Button status="info" onClick={() => this.addBlockCommand(selectedBlockData)}>
+          <Button status="info" onClick={() => this.addBlockCommand('addBlock', { id: selectedBlockData })}>
             Add Block to Scheduler queue
           </Button>
         </div>
