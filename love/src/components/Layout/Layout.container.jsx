@@ -81,11 +81,11 @@ const mapDispatchToProps = (dispatch) => {
     'event-Watcher-0-stream',
     /* Simonyi states */
     'event-Scheduler-1-observingMode',
-    'event-Scheduler-1-observatoryState',
+    'telemetry-Scheduler-1-observatoryState',
     'event-MTPtg-0-currentTarget',
     /* Auxtel states */
     'event-Scheduler-2-observingMode',
-    'event-Scheduler-2-observatoryState',
+    'telemetry-Scheduler-2-observatoryState',
     'event-ATPtg-0-currentTarget',
   ];
   return {
