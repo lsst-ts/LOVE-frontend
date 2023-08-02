@@ -8,8 +8,8 @@ import { Dome } from './Dome';
 import { isEqual } from 'lodash';
 import { Shutter } from './Shutter';
 
-const INITIAL_CAMERA_POSITION = [14.8, 24.5, 12];
-const INITIAL_TARGET = [0, 10, 0];
+const INITIAL_CAMERA_POSITION = [8.8, 4.5, 7];
+const INITIAL_TARGET = [0, 1, 0];
 
 function CameraController() {
   const { camera, gl } = useThree();
@@ -17,7 +17,7 @@ function CameraController() {
      () => {
         const controls = new OrbitControls(camera, gl.domElement);
         controls.minDistance = 3;
-        controls.maxDistance = 35;
+        controls.maxDistance = 15;
         controls.target = new THREE.Vector3(INITIAL_TARGET[0], INITIAL_TARGET[1], INITIAL_TARGET[2]);
         controls.update();
         return () => {
@@ -52,9 +52,9 @@ const Scene = (props) => {
       <Suspense fallback={<div>loading</div>}>
       <CameraController />
       <ambientLight intensity={0.8} />
-      <directionalLight position={[-20, 20, 0]} intensity={1} />
-      <axesHelper args={[25]} />
-      <gridHelper args={[17*2, 17]}/>
+      <directionalLight position={[-12, 12, 0]} intensity={1} />
+      <axesHelper args={[7]} />
+      <gridHelper args={[6, 6]}/>
 
       <Dome />
 
