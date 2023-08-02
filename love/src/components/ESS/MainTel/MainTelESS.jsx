@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import * as d3 from 'd3';
 import Scene from './Scene/Scene';
-import Info from './Info/Info';
-import Gradiant from './Gradiant/Gradiant';
+import Info from '../Common/Info/Info';
+import Gradiant from '../Common/Gradiant/Gradiant';
 
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import styles from './MainTelESS.module.css';

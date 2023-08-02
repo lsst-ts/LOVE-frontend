@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from "three";
-import { Sensors } from './Sensors';
+import { Sensors } from '../../Common/Sensors';
 // import { Dome } from './Dome';
 import { isEqual } from 'lodash';
 import { Louvers } from './Louvers';
