@@ -1,82 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { isEqual } from 'lodash';
-import * as THREE from "three";
-
-const Sensor = (props) => {
-  const mesh = useRef();
-  const [hovered, setHover] = useState(false);
-  const isSelected = props.selectedSensor === props.sensorId;
-
-  useEffect(() => {
-    document.body.style.cursor = hovered ? 'pointer' : 'auto'
-  }, [hovered]);
-
-  return (
-    <>
-      { (isSelected || hovered) && (<mesh
-        {...props}
-        ref={mesh}
-        scale={hovered ? [2.3, 2.3, 2.3]: [1.3, 1.3, 1.3]}
-        onPointerEnter={(e) => setHover(true)}
-        onPointerLeave={(e) => setHover(false)}
-        onClick={(e) => {
-          props.setSensor(props.sensorId);
-          setHover(true);
-        }}
-        position={[props.position.x, props.position.z, props.position.y]}
-      >
-        <sphereGeometry args={[0.15, 64, 64]} />
-        <meshBasicMaterial color={hovered ? props.color : 0xffffff} side={THREE.BackSide}/>
-      </mesh>)}
-      <mesh
-        {...props}
-        ref={mesh}
-        scale={hovered ? [2, 2, 2]: [1, 1, 1]}
-        onPointerOver={(e) => setHover(true)}
-        onPointerOut={(e) => setHover(false)}
-        onClick={(e) => {
-          props.setSensor(props.sensorId);
-          setHover(true);
-        }}
-        position={[props.position.x, props.position.z, props.position.y]}
-      >
-        <sphereGeometry args={[0.15, 32, 32]} />
-        <meshBasicMaterial color={hovered ? 0xffffff : props.color}/>
-      </mesh>
-    </>
-  ); 
-}
-
-Sensor.propTypes = {
-  sensorId: PropTypes.number,
-  position: PropTypes.shape({
-    x: PropTypes.number,
-    y: PropTypes.number,
-    z: PropTypes.number,
-  }),
-  color: PropTypes.number,
-  setSensor: PropTypes.func,
-};
-
-Sensor.defaultProps = {
-  sensorId: 0,
-  position: {x: 0, y: 0, z: 0},
-  color: 0xffff00,
-  setSensor: (id) => {console.log('Sensor default setSensor(', id, ')')},
-};
-
-// const comparatorSensor = (prevProps, nextProps) => {
-//   console.log('comparatorSensor');
-//   return (
-//       nextProps.sensorId === prevProps.sensorId && 
-//       isEqual(nextProps.position, prevProps.position) &&
-//       nextProps.color === prevProps.color && 
-//       nextProps.setSensor === prevProps.setSensor
-//     );
-// };
-
-// React.memo(Sensor, comparatorSensor);
+import Vector from './Vector';
+import Sensor from './Sensor';
 
 export function Sensors(props) {
 
@@ -112,9 +37,9 @@ export function Sensors(props) {
   };
   
   const sensors = positions.map((position, index) => {
-    const value = values[index];
-    const speed = speeds[index];
-    const direction = directions[index];
+    const value = values[index] ?? 0;
+    const speed = speeds[index] ?? undefined;
+    const direction = directions[index] ?? undefined;
     const rgb = (getGradiantColorX  && value) ? getGradiantColorX(value) : 'rgb(255, 255, 0)';
     return { position: position, id: index + 1, color: rgb, speed: speed, direction: direction };
   });
@@ -165,11 +90,18 @@ Sensors.propTypes = {
   setSensor: PropTypes.func,
   selectedSensor: PropTypes.number,
   values: PropTypes.arrayOf(PropTypes.number),
-  speeds: PropTypes.oneOf([undefined, PropTypes.arrayOf(PropTypes.shape({
-    x: PropTypes.number,
-    y: PropTypes.number,
-    z: PropTypes.number,
-  }))]),
+  speeds: PropTypes.arrayOf(PropTypes.oneOf([
+    undefined,
+    PropTypes.shape({
+      x: PropTypes.number,
+      y: PropTypes.number,
+      z: PropTypes.number,
+    }),
+  ])),
+  directions: PropTypes.arrayOf(PropTypes.oneOf([
+    undefined,
+    PropTypes.number,
+  ])),
   getGradiantColorX: PropTypes.func,
 };
 
@@ -178,96 +110,7 @@ Sensors.defaultProps = {
   setSensor: () => {console.log('Sensors default setSensor')},
   selectedSensor: undefined,
   values: [],
+  speeds: [],
+  directions: [],
   getGradiantColorX: () => {0xffff00},
 };
-
-const Vector = (props) => {
-  const ref = useRef();
-  const [hovered, setHover] = useState(false);
-  const isSelected = props.selectedSensor === props.sensorId;
-
-  useEffect(() => {
-    document.body.style.cursor = hovered ? 'pointer' : 'auto'
-  }, [hovered])
-
-  const points = [];
-  const v1 = new THREE.Vector3(props.start.x, props.start.z, props.start.y);
-  let v2 = undefined;
-  if (props.end !== undefined && props.angle === undefined ) {
-    v2 = new THREE.Vector3(props.end.x, props.end.z, props.end.y);
-  } else {
-    const angleRadians = THREE.MathUtils.degToRad(props.angle); //degree to radians
-    v2 = new THREE.Vector3(Math.cos(angleRadians), Math.sin(angleRadians), 0).normalize();
-  }
-  points.push(v1);
-  points.push(v2);
-
-  const direction = new THREE.Vector3();
-  const distance = v1.distanceTo(v2);
-  direction.subVectors(v2, v1).normalize();
-
-  const conePosition = new THREE.Vector3().copy(v1).addScaledVector(direction, distance - 0.2);
-  const coneRotation = new THREE.Euler().setFromQuaternion(
-    new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction)
-  );
-
-  const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-
-  return (
-    <>
-      <group
-        onPointerEnter={(e) => setHover(true)}
-        onPointerLeave={(e) => setHover(false)}
-        onClick={(e) => {
-          props.setSensor(props.sensorId);
-          setHover(true);
-        }}
-      >
-        <line
-          {...props}
-          ref={ref}
-          geometry={lineGeometry}
-        >
-          <lineBasicMaterial color={hovered ? 0xffffff : props.color}
-            linewidth={3} linecap={'round'} linejoin={'round'}
-          />
-        </line>
-        <mesh
-          {...props}
-          ref={ref}
-          position={conePosition}
-          rotation={coneRotation}
-        >
-          <coneGeometry args={[0.2, 0.5, 32]} />
-          <meshBasicMaterial color={hovered ? 0xffffff : props.color}/>
-        </mesh>
-      </group>
-    </>
-  );
-}
-
-Vector.propTypes = {
-  sensorId: PropTypes.number,
-  start: PropTypes.shape({
-    x: PropTypes.number,
-    y: PropTypes.number,
-    z: PropTypes.number,
-  }),
-  end: PropTypes.oneOf([PropTypes.shape({
-    x: PropTypes.number,
-    y: PropTypes.number,
-    z: PropTypes.number,
-  }), undefined]),
-  angle: PropTypes.oneOf([PropTypes.number, undefined]),
-  color: PropTypes.number,
-  setSensor: PropTypes.func,
-};
-
-Vector.defaultProps = {
-  sensorId: 0,
-  start: {x: 0, y: 0, z: 0},
-  end: undefined,
-  angle: undefined,
-  color: 0xffff00,
-  setSensor: (id) => {console.log('Sensor Arrow default setSensor(', id, ')')},
-}

@@ -97,7 +97,7 @@ Shutter.defaultProps = {
 const comparator = (prevProps, nextProps) => {
   return (
     prevProps.name === nextProps.name &&
-    prevProps.angle === nextProps.angle &&
+    prevProps.openPercent === nextProps.openPercent &&
     isEqual(prevProps.position, nextProps.position)
   );
 }

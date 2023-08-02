@@ -29,8 +29,8 @@ Dome.propTypes = {
 };
 
 Dome.defaultProps = {
-  radius: 15,
-  height: 27,
+  radius: 9.3 / 2,
+  height: 10,
   displaceY: 0,
 };
 
