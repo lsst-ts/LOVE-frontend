@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
+import { uniqueId } from 'lodash';
 import TemperatureGradiant from '../Temperature/TemperatureGradiant';
 import { M1M3TSFanCoilPositions } from 'Config';
+import Button from 'components/GeneralPurpose/Button/Button';
 import styles from './Selector.module.css';
 import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
 
@@ -56,6 +58,9 @@ export default class Selector extends Component {
       width: 480,
       zoomLevel: 1,
     };
+    this.uniqueCircleOverlay = uniqueId('m1m3ts-selector-circle-overlay-');
+    this.uniqueScatter = uniqueId('m1m3ts-selector-scatter-');
+    this.zoom = null;
   }
 
   preventDefault(e) {
@@ -195,8 +200,16 @@ export default class Selector extends Component {
   }
 
   componentDidUpdate() {
-    d3.select('#circle-overlay').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
+    this.zoom = d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed);
+    d3.select(`#${this.uniqueCircleOverlay}`).call(this.zoom);
   }
+
+  zoomOut = () => {
+    d3.select(`#${this.uniqueCircleOverlay}`).call(this.zoom.transform, d3.zoomIdentity.scale(1)).call(this.zoom);
+    this.setState({
+      zoomLevel: d3.event.transform.k,
+    });
+  };
 
   zoomed = () => {
     const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
@@ -215,8 +228,7 @@ export default class Selector extends Component {
     d3.event.transform.x = Math.floor(transformX);
     d3.event.transform.y = Math.floor(transformY);
 
-    d3.select('#scatter').attr('transform', d3.event.transform);
-    d3.select('#mirror-hole').attr('transform', d3.event.transform);
+    d3.select(`#${this.uniqueScatter}`).attr('transform', d3.event.transform);
     this.setState({
       zoomLevel: d3.event.transform.k,
     });
@@ -239,31 +251,38 @@ export default class Selector extends Component {
     const margin = 60;
 
     return (
-      <svg
-        className={styles.svgContainer}
-        viewBox={`0 0 ${this.state.width} ${this.state.width}`}
-        onMouseEnter={this.disableScroll}
-        onMouseLeave={this.enableScroll}
-      >
-        {this.getBackground()}
-        {this.getScatter(
-          scale,
-          margin,
-          zoomLevel,
-          showFcuIDs,
-          showDifferentialTemp,
-          showWarning,
-          sensorSelect,
-          selectedSensor,
+      <>
+        {zoomLevel > 1 && (
+          <div className={styles.zoomOut}>
+            <Button onClick={this.zoomOut}>Zoom out</Button>
+          </div>
         )}
-        {this.getAxis(margin, sensorSelect)}
-      </svg>
+        <svg
+          className={styles.svgContainer}
+          viewBox={`0 0 ${this.state.width} ${this.state.width}`}
+          onMouseEnter={this.disableScroll}
+          onMouseLeave={this.enableScroll}
+        >
+          {this.getBackground()}
+          {this.getScatter(
+            scale,
+            margin,
+            zoomLevel,
+            showFcuIDs,
+            showDifferentialTemp,
+            showWarning,
+            sensorSelect,
+            selectedSensor,
+          )}
+          {this.getAxis(margin, sensorSelect)}
+        </svg>
+      </>
     );
   }
 
   getScatter(scale, margin, zoomLevel, showFcuIDs, showDifferentialTemp, showWarning, sensorSelect, selectedSensor) {
     return (
-      <g id="scatter" className={styles.scatter}>
+      <g id={this.uniqueScatter} className={styles.scatter}>
         {this.state.sensors.map((act) => {
           return (
             <g key={act.id} className={styles.sensor} onClick={() => sensorSelect(act.id)}>
@@ -323,7 +342,7 @@ export default class Selector extends Component {
         />
 
         <circle
-          id="circle-overlay"
+          id={this.uniqueCircleOverlay}
           className={this.state.sensors.length > 0 ? styles.cursorMove : styles.circleOverlayDisabled}
           cx={this.state.width / 2}
           cy={this.state.width / 2}
