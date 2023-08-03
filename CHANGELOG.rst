@@ -6,11 +6,11 @@ v5.24.5
 --------
 
 * Fix Scheduler subscription for Layout component `<https://github.com/lsst-ts/LOVE-frontend/pull/498>`_
+* Hotfix Add unique Id to Glycol Loop Temp Ref `<https://github.com/lsst-ts/LOVE-frontend/pull/496>`_
 
 v5.24.4
 --------
 
-* Hotfix Add unique Id to Glycol Loop Temp Ref `<https://github.com/lsst-ts/LOVE-frontend/pull/496>`_
 * Hotfix for typo in GenericCameraControls component `<https://github.com/lsst-ts/LOVE-frontend/pull/495>`_
 * Hotfix M1M3 raw button `<https://github.com/lsst-ts/LOVE-frontend/pull/494>`_
 
