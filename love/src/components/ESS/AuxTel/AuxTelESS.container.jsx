@@ -262,7 +262,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   const salindexList = ownProps.salindexList;
   const option = ownProps.option;
   const subscriptions = getGroupNames(salindexList, option);
-  // subscriptions.push('telemetry-MTDome-0-louvers');
+  subscriptions.push('telemetry-ATDome-0-position');
   return {
     subscriptions,
     subscribeToStreams: () => {

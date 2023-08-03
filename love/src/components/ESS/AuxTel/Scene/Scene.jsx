@@ -6,7 +6,7 @@ import * as THREE from "three";
 import { Sensors } from '../../Common/Sensors';
 import { Dome } from './Dome';
 import { isEqual } from 'lodash';
-import { Shutter } from './Shutter';
+import { Door } from './Door';
 
 const INITIAL_CAMERA_POSITION = [8.8, 4.5, 7];
 const INITIAL_TARGET = [0, 1, 0];
@@ -39,7 +39,8 @@ const Scene = (props) => {
     speeds,
     directions,
     getGradiantColorX,
-    percentOpenShutter
+    percentOpenMainDoor,
+    percentOpenDropoutDoor,
   } = props;
 
   return (
@@ -54,20 +55,24 @@ const Scene = (props) => {
       <ambientLight intensity={0.8} />
       <directionalLight position={[-12, 12, 0]} intensity={1} />
       <axesHelper args={[7]} />
-      <gridHelper args={[6, 6]}/>
+      <gridHelper args={[9, 9]}/>
 
-      <Dome />
+      {/* <Dome /> */}
 
-      <Shutter
-        name={'shutter 0'}
-        position={{x: 0, y: -3.3, z: 7}}
-        openPercent={percentOpenShutter[0] ?? 100}
+      {/** Main Door */}
+      <Door
+        isMainDoor={true}
+        thetaStart={20.2}
+        thetaLength={80}
+        openPercent={percentOpenMainDoor}
       />
 
-      <Shutter
-        name={'shutter 1'}
-        position={{x: 0, y: 3.3, z: 7}}
-        openPercent={percentOpenShutter[1] ?? 100}
+      {/** Dropout Door */}
+      <Door
+        isMainDoor={false}
+        thetaStart={0}
+        thetaLength={20}
+        openPercent={percentOpenDropoutDoor}
       />
 
       <Sensors 
@@ -102,21 +107,23 @@ Scene.propTypes = {
   })]),
   directions: PropTypes.arrayOf(PropTypes.number),
   getGradiantColorX: PropTypes.func,
-  louversIds: PropTypes.arrayOf(PropTypes.number),
-  percentOpen: PropTypes.arrayOf(PropTypes.number),
+  percentOpenMainDoor: PropTypes.number,
+  percentOpenDropoutDoor: PropTypes.number,
 };
 
 Scene.defaultProps = {
   selectedSensor: 0,
   positions: [],
-  percentOpen: [],
+  percentOpenMainDoor: 0,
+  percentOpenDropoutDoor: 0,
   setSensor: () => {console.log('scene default setSensor')},
 }
 
 const comparator = (prevProps, nextProps) => {
   return (
     prevProps.selectedSensor === nextProps.selectedSensor &&
-    isEqual(prevProps.percentOpen, nextProps.percentOpen ) &&
+    prevProps.percentOpenMainDoor === nextProps.percentOpenMainDoor &&
+    prevProps.percentOpenDropoutDoor === nextProps.percentOpenDropoutDoor &&
     isEqual(prevProps.positions, nextProps.positions )
   )
 }
