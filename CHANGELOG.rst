@@ -2,6 +2,12 @@
 Version History
 ===============
 
+v5.24.5
+--------
+
+* Fix Scheduler subscription for Layout component `<https://github.com/lsst-ts/LOVE-frontend/pull/498>`_
+* Hotfix Add unique Id to Glycol Loop Temp Ref `<https://github.com/lsst-ts/LOVE-frontend/pull/496>`_
+
 v5.24.4
 --------
 
