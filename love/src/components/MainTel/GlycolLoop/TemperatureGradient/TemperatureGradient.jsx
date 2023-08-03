@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import lodash, { isArray } from 'lodash';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 import { defaultNumberFormatterm, fixedFloat } from 'Utils';
@@ -51,6 +52,7 @@ export default class TemperatureGradient extends Component {
     this.state = {
       width: 350,
     };
+    this.colorScaleId = lodash.uniqueId('color-scale-');
   }
 
   componentDidMount() {
@@ -87,13 +89,13 @@ export default class TemperatureGradient extends Component {
   }
 
   createColorScale = () => {
-    console.log('cratingScale');
+    const colorScaleId = '#' + this.colorScaleId;
     const height = 44;
     const width = this.state.width;
 
     // Create the gradient
-    const svg = d3.select('#color-scale svg');
-    const temperatureGradientRect = d3.select('#color-scale svg #temperature-gradient-rect');
+    const svg = d3.select(colorScaleId + ' svg');
+    const temperatureGradientRect = d3.select(colorScaleId + ' svg #temperature-gradient-rect');
 
     if (temperatureGradientRect.empty()) {
       svg.attr('width', width).attr('height', height);
@@ -134,7 +136,9 @@ export default class TemperatureGradient extends Component {
   }
 
   render() {
-    const { maxTemperatureLimit, minTemperatureLimit, setpoint } = this.props;
+    const { maxTemperatureLimit, minTemperatureLimit } = this.props;
+    const colorScaleId = this.colorScaleId;
+
     return (
       <div>
         <div className={styles.container}>
@@ -143,7 +147,7 @@ export default class TemperatureGradient extends Component {
         </div>
 
         <div className={styles.temperatureGradientWrapper}>
-          <div id="color-scale" className={styles.temperatureGradient}>
+          <div id={colorScaleId} className={styles.temperatureGradient}>
             <span style={{ position: 'absolute', bottom: '-2em', left: 0 }}>
               {fixedFloat(minTemperatureLimit, 2)} [°C]
             </span>
