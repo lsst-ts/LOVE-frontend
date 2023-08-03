@@ -7,7 +7,7 @@ export default class SchedulerPlots extends Component {
     super(props);
     const plots = [
       {
-        Brightness: {
+        skyBrightness: {
           category: 'event',
           csc: 'Scheduler',
           salindex: this.props.salindex,
@@ -16,38 +16,39 @@ export default class SchedulerPlots extends Component {
           type: 'line',
           accessor: (x) => x,
         },
-        Cloud: {
-          category: 'event',
-          csc: 'Scheduler',
-          salindex: this.props.salindex,
-          topic: 'target',
-          item: 'cloud',
-          type: 'line',
-          accessor: (x) => x,
-        },
-        Airmass: {
-          category: 'event',
-          csc: 'Scheduler',
-          salindex: this.props.salindex,
-          topic: 'target',
-          item: 'airmass',
-          type: 'line',
-          accessor: (x) => x,
-        },
-        Seeing: {
-          category: 'event',
-          csc: 'Scheduler',
-          salindex: this.props.salindex,
-          topic: 'target',
-          item: 'seeing',
-          type: 'line',
-          accessor: (x) => x,
-        },
+        // Cloud: {
+        //   category: 'event',
+        //   csc: 'Scheduler',
+        //   salindex: this.props.salindex,
+        //   topic: 'target',
+        //   item: 'cloud',
+        //   type: 'line',
+        //   accessor: (x) => x,
+        // },
+        // Airmass: {
+        //   category: 'event',
+        //   csc: 'Scheduler',
+        //   salindex: this.props.salindex,
+        //   topic: 'target',
+        //   item: 'airmass',
+        //   type: 'line',
+        //   accessor: (x) => x,
+        // },
+        // Seeing: {
+        //   category: 'event',
+        //   csc: 'Scheduler',
+        //   salindex: this.props.salindex,
+        //   topic: 'target',
+        //   item: 'seeing',
+        //   type: 'line',
+        //   accessor: (x) => x,
+        // },
       },
     ];
-    this.refs = plots.map((plot) => {
-      return React.createRef();
-    });
+    // this.refs = plots.map((plot) => {
+    //   return React.createRef();
+    // });
+    this.refs = React.createRef();
     this.state = {
       plots: plots,
     };
@@ -60,7 +61,8 @@ export default class SchedulerPlots extends Component {
           <div key={p} ref={this.refs[i]} className={styles.plot}>
             <PlotContainer
               inputs={p}
-              containerNode={this.refs[i]}
+              // containerNode={this.refs[i]}
+              containerNode={this.refs?.current}
               xAxisTitle="Time"
               yAxisTitle="Value"
               legendPosition="right"

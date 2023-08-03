@@ -16,21 +16,20 @@ export default class Blocks extends Component {
     super(props);
     this.state = {
       selectedBlockData: null,
-      addBlockCmd: false,
     };
 
     this.handleRowClick = this.handleRowClick.bind(this);
   }
 
-  addBlockCommand(option, params) {
+  addBlockCommand() {
     const { requestSALCommand, salindex } = this.props;
-    this.setState({ addBlockCmd: true });
-    console.log('addBlockCmd!, block:' + this.state.selectedBlockData);
+    const { selectedBlockData } = this.state;
+    console.log('addBlockCmd!, block:' + selectedBlockData);
     // requestSALCommand({
-    //   cmd: `cmd_${option}`,
+    //   cmd: 'addBlock',
     //   csc: 'Scheduler',
     //   salindex,
-    //   params,
+    //   selectedBlockData,
     // });
   }
 
@@ -150,7 +149,7 @@ export default class Blocks extends Component {
                 ))
               : 'No data'}
           </SummaryPanel>
-          <Button status="info" onClick={() => this.addBlockCommand('addBlock', { id: selectedBlockData })}>
+          <Button status="info" onClick={() => this.addBlockCommand()}>
             Add Block to Scheduler queue
           </Button>
         </div>
