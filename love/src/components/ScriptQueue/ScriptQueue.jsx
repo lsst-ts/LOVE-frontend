@@ -86,6 +86,7 @@ export default class ScriptQueue extends Component {
       resetButton: <span>Hide details &#9650;</span>,
       blockedByAuthlist: false,
       scriptsTree: {},
+      openTree: {},
     };
 
     this.observer = null;
@@ -604,6 +605,10 @@ export default class ScriptQueue extends Component {
     });
   };
 
+  setOpenTree = (openTree) => {
+    this.setState({ openTree });
+  };
+
   render() {
     const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
     const availableScriptListClass = this.state.isAvailableScriptListVisible ? '' : styles.collapsedScriptList;
@@ -793,6 +798,8 @@ export default class ScriptQueue extends Component {
                             scriptsTree={this.state.scriptsTree.standard}
                             launchScriptConfig={this.launchScriptConfig}
                             scriptsBlocked={this.props.commandExecutePermission && !this.state.blockedByAuthlist}
+                            openTree={this.state.openTree}
+                            setOpenTree={this.setOpenTree}
                           />
                         </div>
                         <div
@@ -807,6 +814,8 @@ export default class ScriptQueue extends Component {
                             scriptsTree={this.state.scriptsTree.external}
                             launchScriptConfig={this.launchScriptConfig}
                             scriptsBlocked={this.props.commandExecutePermission && !this.state.blockedByAuthlist}
+                            openTree={this.state.openTree}
+                            setOpenTree={this.setOpenTree}
                           />
                         </div>
                       </div>
