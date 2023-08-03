@@ -13,3 +13,9 @@
   width: -webkit-min-content; /* Chrome */
   width: min-content;
 }
+
+.spinnerIcon {
+  width: 1em;
+  height: 1em;
+  margin-right: var(--small-padding);
+}

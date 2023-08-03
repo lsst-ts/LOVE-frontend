@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import * as CameraUtils from './CameraUtils';
-import styles from './GenericCameraControls.module.css';
+import Input from 'components/GeneralPurpose/Input/Input';
+import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import HealpixOverlay from './HealpixOverlay';
 import TargetLayer from './TargetLayer';
 import StartStopLiveViewButton from './StartStopLiveViewButton/StartStopLiveViewButton';
-import Input from '../GeneralPurpose/Input/Input';
+import * as CameraUtils from './CameraUtils';
+import styles from './GenericCameraControls.module.css';
 
 const DEFAULT_URL = 'http://localhost/gencam';
 
@@ -204,14 +205,24 @@ export default function GenericCameraControls({
       <hr />
       {initialLoading ? (
         <div className={styles.errorContainer}>
-          {runLiveView ? <p>Fetching stream from {feedUrl}, please wait.</p> : <p>Live view not started</p>}
+          {runLiveView ? (
+            <p>
+              <SpinnerIcon className={styles.spinnerIcon} />
+              Fetching stream from {feedUrl}, please wait.
+            </p>
+          ) : (
+            <p>Live view not started</p>
+          )}
         </div>
       ) : (
         <>
           {error ? (
             <div className={styles.errorContainer}>
               <p>{`ERROR: ${error.message}`}</p>
-              <span>Retrying {`(${retryCount})`} </span>
+              <p>
+                <SpinnerIcon className={styles.spinnerIcon} />
+                Retrying {`(${retryCount})`}{' '}
+              </p>
             </div>
           ) : (
             <div className={styles.cameraContainer}>
