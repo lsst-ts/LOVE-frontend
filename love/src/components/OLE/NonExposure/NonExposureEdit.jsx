@@ -252,8 +252,8 @@ export default class NonExposureEdit extends Component {
                   <div style={{ display: 'inline-block', marginRight: '0.5em' }}>
                     <Toggle
                       labels={['No', 'Yes']}
-                      isLive={this.state.logEdit.level >= 100}
-                      setLiveMode={(event) =>
+                      toggled={this.state.logEdit.level >= 100}
+                      onToggle={(event) =>
                         this.setState((prevState) => ({
                           logEdit: { ...prevState.logEdit, level: event ? 100 : 0 },
                         }))
@@ -310,7 +310,7 @@ export default class NonExposureEdit extends Component {
                   />
                 </span>
 
-                {isMenu ? (
+                {isMenu && (
                   <>
                     <span className={styles.label}>Time of Incident (UTC)</span>
                     <span className={styles.value}>
@@ -338,17 +338,13 @@ export default class NonExposureEdit extends Component {
                       />
                     </span>
                   </>
-                ) : (
-                  <></>
                 )}
               </div>
 
               <div className={styles.contentRight}>
                 <div className={[styles.mb1, styles.floatLeft, styles.inline].join(' ')}>
                   <span className={styles.title}>Message</span>
-                  {isMenu ? (
-                    <></>
-                  ) : (
+                  {!isMenu && (
                     <>
                       <span className={styles.label}>Time of Incident (UTC)</span>
                       <span className={styles.value}>
@@ -444,8 +440,8 @@ export default class NonExposureEdit extends Component {
                       <>
                         <Toggle
                           labels={['New', 'Existent']}
-                          isLive={this.state.logEdit.jira_comment}
-                          setLiveMode={(event) =>
+                          toggled={this.state.logEdit.jira_comment}
+                          onToggle={(event) =>
                             this.setState((prevState) => ({
                               logEdit: { ...prevState.logEdit, jira_comment: event },
                             }))

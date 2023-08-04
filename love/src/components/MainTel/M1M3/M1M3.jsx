@@ -249,13 +249,8 @@ export default class M1M3 extends Component {
 
   getActuator = (id) => {
     if (id === 0) return { id: 'None', value: 'None', state: CSCDetail.states[0] };
-    const {
-      actuatorIlcState,
-      actuatorReferenceId,
-      actuatorIlcUniqueId,
-      actuatorMinorRevision,
-      actuatorMayorRevision,
-    } = this.props;
+    const { actuatorIlcState, actuatorReferenceId, actuatorIlcUniqueId, actuatorMinorRevision, actuatorMayorRevision } =
+      this.props;
     const { selectedForceParameter } = this.state;
     const actuatorIndex = actuatorReferenceId.indexOf(id);
     const actuator = {
@@ -538,17 +533,13 @@ export default class M1M3 extends Component {
             <div className={styles.control}>
               <span>Show actuators ID:</span>
               <div className={styles.toggleContainer}>
-                <Toggle
-                  labels={['No', 'Yes']}
-                  isLive={this.state.showActuatorsID}
-                  setLiveMode={this.toggleActuatorsID}
-                />
+                <Toggle labels={['No', 'Yes']} toggled={this.state.showActuatorsID} onToggle={this.toggleActuatorsID} />
               </div>
             </div>
             <div className={styles.control}>
               <span>Show hardpoints:</span>
               <div className={styles.toggleContainer}>
-                <Toggle labels={['No', 'Yes']} isLive={this.state.showHardpoints} setLiveMode={this.toggleHardpoints} />
+                <Toggle labels={['No', 'Yes']} toggled={this.state.showHardpoints} onToggle={this.toggleHardpoints} />
               </div>
             </div>
           </div>

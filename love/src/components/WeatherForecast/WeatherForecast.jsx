@@ -116,8 +116,8 @@ export default class WeatherForecast extends Component {
             <div className={styles.toggleContainer}>
               <Toggle
                 labels={['14 days', '48 hours']}
-                isLive={this.state.frecuency === this.frecuencyOptions[1]}
-                setLiveMode={(optionHours) => this.toggleFrecuency(optionHours)}
+                toggled={this.state.frecuency === this.frecuencyOptions[1]}
+                onToggle={(optionHours) => this.toggleFrecuency(optionHours)}
               />
             </div>
           </span>

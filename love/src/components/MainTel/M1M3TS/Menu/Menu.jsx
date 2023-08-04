@@ -18,14 +18,20 @@ export default class Menu extends Component {
     toggleTemperature: PropTypes.func,
     /** Function for interaction toggle of ShowWarnings out of component. */
     toggleWarnings: PropTypes.func,
-      };
+  };
   static defaultProps = {
     showFcuIDs: true,
     showDifferentialTemp: true,
     showWarnings: true,
-    toggleFcuIDs: (show) => { console.log('Selector.defaultProps.toggleFcuIDs(', show, ')')},
-    toggleTemperature: (show) => { console.log('Selector.defaultProps.toggleTemperature(', show, ')')},
-    toggleWarnings: (show) => { console.log('Selector.defaultProps.toggleWarnings(', show, ')')},
+    toggleFcuIDs: (show) => {
+      console.log('Selector.defaultProps.toggleFcuIDs(', show, ')');
+    },
+    toggleTemperature: (show) => {
+      console.log('Selector.defaultProps.toggleTemperature(', show, ')');
+    },
+    toggleWarnings: (show) => {
+      console.log('Selector.defaultProps.toggleWarnings(', show, ')');
+    },
   };
 
   toggleFcuIDs = (show) => {
@@ -41,11 +47,7 @@ export default class Menu extends Component {
   };
 
   render() {
-    const {
-      showFcuIDs,
-      showDifferentialTemp,
-      showWarnings,
-    } = this.props;
+    const { showFcuIDs, showDifferentialTemp, showWarnings } = this.props;
 
     return (
       <div className={styles.menuContainer}>
@@ -54,19 +56,23 @@ export default class Menu extends Component {
             <div className={styles.control}>
               <span>FCU IDs:</span>
               <div className={styles.toggleContainer}>
-                <Toggle labels={['Hide', 'Show']} isLive={showFcuIDs} setLiveMode={this.toggleFcuIDs} />
+                <Toggle labels={['Hide', 'Show']} toggled={showFcuIDs} onToggle={this.toggleFcuIDs} />
               </div>
             </div>
             <div className={styles.control}>
               <span>Temperature:</span>
               <div className={styles.toggleContainer}>
-                <Toggle labels={['Absolute', 'Differential']} isLive={showDifferentialTemp} setLiveMode={this.toggleTemperature} />
+                <Toggle
+                  labels={['Absolute', 'Differential']}
+                  toggled={showDifferentialTemp}
+                  onToggle={this.toggleTemperature}
+                />
               </div>
             </div>
             <div className={styles.control}>
               <span>Warnings:</span>
               <div className={styles.toggleContainer}>
-                <Toggle labels={['Hide', 'Show']} isLive={showWarnings} setLiveMode={this.toggleWarnings} />
+                <Toggle labels={['Hide', 'Show']} toggled={showWarnings} onToggle={this.toggleWarnings} />
               </div>
             </div>
           </div>

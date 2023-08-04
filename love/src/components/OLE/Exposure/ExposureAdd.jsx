@@ -542,8 +542,8 @@ export default class ExposureAdd extends Component {
                     {this.state.newMessage.jira && (
                       <Toggle
                         labels={['New', 'Existent']}
-                        isLive={this.state.newMessage.jira_comment}
-                        setLiveMode={(event) =>
+                        toggled={this.state.newMessage.jira_comment}
+                        onToggle={(event) =>
                           this.setState((prevState) => ({
                             newMessage: { ...prevState.newMessage, jira_comment: event },
                           }))
