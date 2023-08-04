@@ -82,7 +82,7 @@ export default class CurrentTarget extends Component {
               <div className={styles.exposures}>
                 {currentExposureTimes.length > 0
                   ? currentExposureTimes.map((exp, i) => (
-                      <div>
+                      <div key={i}>
                         <div className={styles.expIndexes}>{i + 1}</div>
                         <div className={styles.exposuresDetail}>
                           {fixedFloat(exp, 0) == 0 ? `-` : `${fixedFloat(exp, 0)}s`}
@@ -97,7 +97,11 @@ export default class CurrentTarget extends Component {
             <div className={styles.proposals}>
               <div className={styles.generalDiv}>
                 {currentProposalId.length > 0
-                  ? currentProposalId.map((gp) => <div className={styles.surveysDivs}>{gp}</div>)
+                  ? currentProposalId.map((gp, k) => (
+                      <div key={k} className={styles.surveysDivs}>
+                        {gp}
+                      </div>
+                    ))
                   : 'No data'}
               </div>
             </div>
