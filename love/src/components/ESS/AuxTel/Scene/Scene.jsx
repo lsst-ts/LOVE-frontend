@@ -7,6 +7,7 @@ import { Sensors } from '../../Common/Sensors';
 import { Dome } from './Dome';
 import { isEqual } from 'lodash';
 import { Door } from './Door';
+import { Frame } from './Frame';
 
 const INITIAL_CAMERA_POSITION = [8.8, 4.5, 7];
 const INITIAL_TARGET = [0, 1, 0];
@@ -73,6 +74,35 @@ const Scene = (props) => {
         thetaStart={0}
         thetaLength={20}
         openPercent={percentOpenDropoutDoor}
+      />
+
+      {/** Frame Door */}
+      <Frame
+        position={{x: -1.5, y: 0, z: 0}}
+        thetaStart={0}
+        thetaLength={100}
+      />
+      <Frame
+        position={{x: 1.5, y: 0, z: 0}}
+        thetaStart={0}
+        thetaLength={100}
+        radialSegments={9}
+      />
+      <Frame
+        position={{x: 0, y: 0, z: 0}}
+        thetaStart={99}
+        thetaLength={2}
+        height={3.1}
+        radialSegments={1}
+        heightSegments={3}
+      />
+      <Frame
+        position={{x: 0, y: 0, z: 0}}
+        thetaStart={-1}
+        thetaLength={2}
+        height={3.1}
+        radialSegments={1}
+        heightSegments={3}
       />
 
       <Sensors 
