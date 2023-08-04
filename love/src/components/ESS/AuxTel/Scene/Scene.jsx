@@ -8,9 +8,10 @@ import { Dome } from './Dome';
 import { isEqual } from 'lodash';
 import { Door } from './Door';
 import { Frame } from './Frame';
+import { Fan } from './Fan';
 
 const INITIAL_CAMERA_POSITION = [8.8, 4.5, 7];
-const INITIAL_TARGET = [0, 1, 0];
+const INITIAL_TARGET = [0, 0, 0];
 
 function CameraController() {
   const { camera, gl } = useThree();
@@ -31,6 +32,45 @@ function CameraController() {
 };
 
 const Scene = (props) => {
+
+  const fans = [
+    {
+      position: {
+        x: 0,
+        y: 0,
+        z: -1 -0.8 -1.15,
+      },
+      angle: 45,
+      percentOpen: 50,
+    },
+    {
+      position: {
+        x: 0,
+        y: 0,
+        z: -1 -0.8 -1.15,
+      },
+      angle: 116,
+      percentOpen: 40,
+    },
+    {
+      position: {
+        x: 0,
+        y: 0,
+        z: -1 -0.8 -1.15,
+      },
+      angle: 187,
+      percentOpen: 10,
+    },
+    {
+      position: {
+        x: 0,
+        y: 0,
+        z: -1 -0.8 -1.15,
+      },
+      angle: 262,
+      percentOpen: 70,
+    },
+  ];
 
   const {
     positions,
@@ -104,6 +144,17 @@ const Scene = (props) => {
         radialSegments={1}
         heightSegments={3}
       />
+
+      {/** Windows */}
+      {fans.map((fan) => {
+        return (
+          <Fan
+            position={fan.position}
+            percentOpen={fan.percentOpen}
+            angle={fan.angle}
+          />
+        );
+      })}
 
       <Sensors 
         selectedSensor={selectedSensor}
