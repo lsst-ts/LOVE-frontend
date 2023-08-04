@@ -10,6 +10,7 @@ import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import MultiFileUploader from 'components/GeneralPurpose/MultiFileUploader/MultiFileUploader';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
+import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import { defaultCSCList, LSST_SYSTEMS, LSST_SUBSYSTEMS, iconLevelOLE } from 'Config';
@@ -36,7 +37,7 @@ export default class NonExposureEdit extends Component {
     logEdit: {
       id: undefined,
       level: 0,
-      date_begin: Moment().subtract(1, 'day'),
+      date_begin: Moment(),
       date_end: Moment(),
       systems: [],
       subsystems: [],
@@ -170,6 +171,63 @@ export default class NonExposureEdit extends Component {
         time_lost: duration_hr.toFixed(2),
       },
     }));
+  }
+
+  renderTimeOfIncidentSection() {
+    const { date_begin, date_end, time_lost } = this.state.logEdit ?? {};
+    const { incidentTimeIsSingular, datesAreValid } = this.state;
+
+    return (
+      <>
+        <span className={styles.label}>Time of Incident (UTC)</span>
+        <span className={styles.value}>
+          <div className={styles.incidentTimeTypeContainer}>
+            <Toggle
+              labels={['Singular', 'Range']}
+              toggled={incidentTimeIsSingular}
+              onToggle={(event) => this.setState({ incidentTimeIsSingular: event })}
+            />
+          </div>
+          {incidentTimeIsSingular ? (
+            <DateTimeRange
+              className={styles.dateTimeRangeStyle}
+              startDate={date_begin}
+              endDate={date_end}
+              onChange={(date, type) => this.handleTimeOfIncident(date, type)}
+            />
+          ) : (
+            <DateTime
+              viewMode="time"
+              dateFormat="YYYY/MM/DD"
+              timeFormat="HH:mm:ss"
+              closeOnSelect={true}
+              value={date_begin}
+              onChange={(date) => {
+                this.setState((prevState) => ({
+                  logEdit: { ...prevState.logEdit, date_begin: date },
+                }));
+              }}
+            />
+          )}
+          {!datesAreValid && <div className={styles.inputError}>Error: dates must be input in valid ISO format</div>}
+        </span>
+        <span className={styles.label}>Obs. Time Loss (hours)</span>
+        <span className={styles.value}>
+          <Input
+            type="number"
+            min={0.0}
+            step={0.01}
+            value={time_lost}
+            className={styles.input}
+            onChange={(event) =>
+              this.setState((prevState) => ({
+                logEdit: { ...prevState.logEdit, time_lost: event.target.value },
+              }))
+            }
+          />
+        </span>
+      </>
+    );
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -310,69 +368,13 @@ export default class NonExposureEdit extends Component {
                   />
                 </span>
 
-                {isMenu && (
-                  <>
-                    <span className={styles.label}>Time of Incident (UTC)</span>
-                    <span className={styles.value}>
-                      <DateTimeRange
-                        className={styles.dateTimeRangeStyle}
-                        onChange={(date, type) => this.handleTimeOfIncident(date, type)}
-                      />
-                      {!datesAreValid && (
-                        <div className={styles.inputError}>Error: dates must be input in valid ISO format</div>
-                      )}
-                    </span>
-                    <span className={styles.label}>Obs. Time Loss (hours)</span>
-                    <span className={styles.value}>
-                      <Input
-                        type="number"
-                        min={0.0}
-                        step={0.01}
-                        value={this.state.logEdit.time_lost}
-                        className={styles.input}
-                        onChange={(event) =>
-                          this.setState((prevState) => ({
-                            logEdit: { ...prevState.logEdit, time_lost: event.target.value },
-                          }))
-                        }
-                      />
-                    </span>
-                  </>
-                )}
+                {isMenu && this.renderTimeOfIncidentSection()}
               </div>
 
               <div className={styles.contentRight}>
                 <div className={[styles.mb1, styles.floatLeft, styles.inline].join(' ')}>
                   <span className={styles.title}>Message</span>
-                  {!isMenu && (
-                    <>
-                      <span className={styles.label}>Time of Incident (UTC)</span>
-                      <span className={styles.value}>
-                        <DateTimeRange
-                          className={styles.dateTimeRangeStyle}
-                          onChange={(date, type) => this.handleTimeOfIncident(date, type)}
-                        />
-                        {!datesAreValid && (
-                          <div className={styles.inputError}>Error: dates must be input in valid ISO format</div>
-                        )}
-                      </span>
-                      <span className={styles.label}>Obs. Time Loss (hours)</span>
-                      <span className={styles.value}>
-                        <Input
-                          type="number"
-                          min={0.0}
-                          step={0.01}
-                          value={this.state.logEdit.time_lost}
-                          className={styles.input}
-                          onChange={(event) =>
-                            this.setState((prevState) => ({
-                              logEdit: { ...prevState.logEdit, time_lost: event.target.value },
-                            }))
-                          }
-                        />
-                      </span>
-                    </>
-                  )}
+                  {!isMenu && this.renderTimeOfIncidentSection()}
                 </div>
                 <TextArea
                   value={this.state.logEdit.message_text}
