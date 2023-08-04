@@ -1,4 +1,6 @@
-import React, { useState, useCallback, memo } from 'react';
+import React, { memo } from 'react';
+import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
 import RowExpansionIcon from 'components/icons/RowExpansionIcon/RowExpansionIcon';
 import AvailableScript from '../Scripts/AvailableScript/AvailableScript';
 import styles from './RecursiveScriptsTree.module.css';
@@ -9,12 +11,11 @@ const RecursiveScriptsTree = ({
   scriptsTree,
   breadCrumb,
   scriptsBlocked = false,
+  openTree,
   launchScriptConfig = () => {},
+  setOpenTree = () => {},
 }) => {
   if (!scriptsTree) return null;
-  const [openTree, setOpenTree] = useState({});
-  const cachedLaunchScriptConfig = useCallback(launchScriptConfig, []);
-
   const recursiveKeys = Object.keys(scriptsTree).filter((key) => key !== 'root');
   const openedCategory = openTree[category] || false;
   const lastCategory = category.split('-').pop();
@@ -43,7 +44,9 @@ const RecursiveScriptsTree = ({
                 scriptsTree={scriptsTree[key]}
                 breadCrumb={breadCrumb ? breadCrumb + '/' + key : key}
                 scriptsBlocked={scriptsBlocked}
-                launchScriptConfig={cachedLaunchScriptConfig}
+                launchScriptConfig={launchScriptConfig}
+                openTree={openTree}
+                setOpenTree={setOpenTree}
               />
             );
           })}
@@ -57,7 +60,7 @@ const RecursiveScriptsTree = ({
                   key={`${scriptObject.type}-${scriptObject.path}`}
                   path={scriptObject.path}
                   isStandard={scriptObject.type ? scriptObject.type.toLowerCase() === 'standard' : true}
-                  launchScriptConfig={cachedLaunchScriptConfig}
+                  launchScriptConfig={launchScriptConfig}
                   script={scriptObject}
                   commandExecutePermission={scriptsBlocked}
                   isCompact={true}
@@ -72,4 +75,34 @@ const RecursiveScriptsTree = ({
   );
 };
 
-export default memo(RecursiveScriptsTree);
+RecursiveScriptsTree.propTypes = {
+  /** List of script lists to show */
+  availableScriptList: PropTypes.arrayOf(PropTypes.object),
+  /** Category of the script list, e.g. standard or external */
+  category: PropTypes.string,
+  /** Scripts tree hierarchy */
+  scriptsTree: PropTypes.object,
+  /** Bread crumb to show in the tree */
+  breadCrumb: PropTypes.string,
+  /** Flag to block scripts */
+  scriptsBlocked: PropTypes.bool,
+  /** Object to store which folder is open */
+  openTree: PropTypes.object,
+  /** Function to launch script configuration */
+  launchScriptConfig: PropTypes.func,
+  /** Function to set which folder is open */
+  setOpenTree: PropTypes.func,
+};
+
+function propsAreEqual(prevProps, nextProps) {
+  return (
+    isEqual(prevProps.availableScriptList, nextProps.availableScriptList) &&
+    prevProps.category === nextProps.category &&
+    isEqual(prevProps.scriptsTree, nextProps.scriptsTree) &&
+    prevProps.breadCrumb === nextProps.breadCrumb &&
+    prevProps.scriptsBlocked === nextProps.scriptsBlocked &&
+    isEqual(prevProps.openTree, nextProps.openTree)
+  );
+}
+
+export default memo(RecursiveScriptsTree, propsAreEqual);

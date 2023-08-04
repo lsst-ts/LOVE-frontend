@@ -15,7 +15,6 @@
   user-select: none;
 }
 
-
 .svgContainer {
   flex-grow: 2;
   width: 100%;
@@ -35,7 +34,7 @@
   font-size: 0.5em;
   stroke: #000;
   stroke-width: 0.2px;
-};
+}
 
 .circleOverlayDisabled {
   fill: var(--status-disabled-dimmed-color-2);
@@ -58,7 +57,6 @@
   fill: white;
 }
 
-
 .sensor {
   cursor: pointer;
 }
@@ -70,4 +68,10 @@
 .sensor:hover text {
   fill: white !important;
   stroke: white !important;
+}
+
+.zoomOut {
+  position: absolute;
+  top: 1em;
+  right: 1em;
 }

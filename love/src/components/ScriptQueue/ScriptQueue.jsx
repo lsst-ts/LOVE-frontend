@@ -9,6 +9,7 @@ import ScriptList from './Scripts/ScriptList/ScriptList';
 import CurrentScript from './Scripts/CurrentScript/CurrentScript';
 import FinishedScript from './Scripts/FinishedScript/FinishedScript';
 import DraggableScript from './Scripts/DraggableScript/DraggableScript';
+import AvailableScript from './Scripts/AvailableScript/AvailableScript';
 import styles from './ScriptQueue.module.css';
 import Loader from '../GeneralPurpose/Loader/Loader';
 import ConfigPanel from './ConfigPanel/ConfigPanel';
@@ -85,6 +86,7 @@ export default class ScriptQueue extends Component {
       resetButton: <span>Hide details &#9650;</span>,
       blockedByAuthlist: false,
       scriptsTree: {},
+      openTree: {},
     };
 
     this.observer = null;
@@ -558,6 +560,32 @@ export default class ScriptQueue extends Component {
     this.setState({ isContextMenuOpen: false });
   };
 
+  renderAvailableScript = (script) => {
+    if (!script) return null;
+    return (
+      <DraggableScript
+        key={`dragging-available-${script.type}-${script.path}`}
+        {...script}
+        dragSourceList="available"
+        onDragStart={(e, id) => this.onDragStart(e, id, 'available')}
+        onDragEnd={(e, id) => this.onDragEnd(e, id, 'available')}
+        draggingScriptInstance={this.state.draggingScriptInstance}
+        disabled={true}
+      >
+        <AvailableScript
+          key={`${script.type}-${script.path}`}
+          path={script.path}
+          isStandard={script.type ? script.type.toLowerCase() === 'standard' : true}
+          launchScriptConfig={this.launchScriptConfig}
+          script={script}
+          commandExecutePermission={this.props.commandExecutePermission && !this.state.blockedByAuthlist}
+          {...script}
+          isCompact={this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible}
+        />
+      </DraggableScript>
+    );
+  };
+
   toggleAvailableScriptsExpanded = (scriptType) => {
     if (scriptType === 'standard') {
       this.setState({
@@ -575,6 +603,10 @@ export default class ScriptQueue extends Component {
     this.setState({
       availableScriptsFilter: e.target.value,
     });
+  };
+
+  setOpenTree = (openTree) => {
+    this.setState({ openTree });
   };
 
   render() {
@@ -738,36 +770,57 @@ export default class ScriptQueue extends Component {
                   </div>
                 </div>
                 <ScriptList noOverflow={true}>
-                  <div className={styles.standardExternalContainer}>
+                  {this.state.availableScriptsFilter !== '' ? (
                     <div
                       className={[
                         styles.standardScriptsContainer,
                         this.state.availableScriptsStandardExpanded ? '' : styles.availableListCollapsed,
                       ].join(' ')}
                     >
-                      <RecursiveScriptsTree
-                        availableScriptList={filteredAvailableScripts}
-                        category="standard"
-                        scriptsTree={this.state.scriptsTree.standard}
-                        launchScriptConfig={this.launchScriptConfig}
-                        scriptsBlocked={this.props.commandExecutePermission && !this.state.blockedByAuthlist}
-                      />
+                      {this.props.availableScriptList.map((script) => {
+                        if (!script.path.toLowerCase().includes(this.state.availableScriptsFilter.toLowerCase()))
+                          return null;
+                        return this.renderAvailableScript(script);
+                      })}
                     </div>
-                    <div
-                      className={[
-                        styles.externalScriptsContainer,
-                        this.state.availableScriptsExternalExpanded ? '' : styles.availableListCollapsed,
-                      ].join(' ')}
-                    >
-                      <RecursiveScriptsTree
-                        availableScriptList={filteredAvailableScripts}
-                        category="external"
-                        scriptsTree={this.state.scriptsTree.external}
-                        launchScriptConfig={this.launchScriptConfig}
-                        scriptsBlocked={this.props.commandExecutePermission && !this.state.blockedByAuthlist}
-                      />
-                    </div>
-                  </div>
+                  ) : (
+                    <>
+                      <div className={styles.standardExternalContainer}>
+                        <div
+                          className={[
+                            styles.standardScriptsContainer,
+                            this.state.availableScriptsStandardExpanded ? '' : styles.availableListCollapsed,
+                          ].join(' ')}
+                        >
+                          <RecursiveScriptsTree
+                            availableScriptList={filteredAvailableScripts}
+                            category="standard"
+                            scriptsTree={this.state.scriptsTree.standard}
+                            launchScriptConfig={this.launchScriptConfig}
+                            scriptsBlocked={this.props.commandExecutePermission && !this.state.blockedByAuthlist}
+                            openTree={this.state.openTree}
+                            setOpenTree={this.setOpenTree}
+                          />
+                        </div>
+                        <div
+                          className={[
+                            styles.externalScriptsContainer,
+                            this.state.availableScriptsExternalExpanded ? '' : styles.availableListCollapsed,
+                          ].join(' ')}
+                        >
+                          <RecursiveScriptsTree
+                            availableScriptList={filteredAvailableScripts}
+                            category="external"
+                            scriptsTree={this.state.scriptsTree.external}
+                            launchScriptConfig={this.launchScriptConfig}
+                            scriptsBlocked={this.props.commandExecutePermission && !this.state.blockedByAuthlist}
+                            openTree={this.state.openTree}
+                            setOpenTree={this.setOpenTree}
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </ScriptList>
               </div>
             </div>

@@ -158,7 +158,7 @@ export const readImageDataFromBlob = (blob, imageErrorCallback) => {
  */
 export const fetchImageFromStream = (url, callback, signal, imageErrorCallback) => {
   return fetch(url, { signal }).then(async (r) => {
-    if (!r.ok) {
+    if (!r.ok && !r.body) {
       const message = `(${r.status}) While fetching from ${url}`;
       throw new Error(message);
     }
