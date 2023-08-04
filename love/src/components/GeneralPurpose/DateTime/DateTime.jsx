@@ -46,14 +46,14 @@ const DateTime = (props) => {
 DateTime.propTypes = {
   /** Label to add at the beginning of the datetime picker */
   label: PropTypes.string,
+  /** Classname of the component */
+  className: PropTypes.string,
   /** Properties to add to the input */
   inputProps: PropTypes.object,
   /** Minimum date allowed */
   minDate: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date), PropTypes.instanceOf(Moment)]),
   /** Maximum date allowed */
   maxDate: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date), PropTypes.instanceOf(Moment)]),
-  /** Classname of the component */
-  className: PropTypes.string,
 };
 
 const arePropsEqual = (prevProps, nextProps) => {
@@ -62,8 +62,7 @@ const arePropsEqual = (prevProps, nextProps) => {
     prevProps.className === nextProps.className &&
     isEqual(prevProps.inputProps, nextProps.inputProps) &&
     Moment(prevProps.minDate).isSame(nextProps.minDate) &&
-    Moment(prevProps.maxDate).isSame(nextProps.maxDate) &&
-    prevProps.onChange === nextProps.onChange
+    Moment(prevProps.maxDate).isSame(nextProps.maxDate)
   );
 };
 
