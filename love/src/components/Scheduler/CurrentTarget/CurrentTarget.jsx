@@ -25,6 +25,10 @@ export default class CurrentTarget extends Component {
       currentSequenceDuration,
       currentSequenceNVisits,
       currentSequenceVisits,
+      airmass,
+      skyBrightness,
+      cloud,
+      seeing,
       rotSkyPos,
     } = this.props;
 
@@ -55,6 +59,14 @@ export default class CurrentTarget extends Component {
             <Value>{`${fixedFloat(currentSlewTime, 2)} s`}</Value>
             <Label>Offset arcsec (x,y)</Label>
             <Value>{offSet}</Value>
+            <Label>skyBrightness</Label>
+            <Value>{`${fixedFloat(skyBrightness, 2)}`}</Value>
+            <Label>Cloud</Label>
+            <Value>{`${fixedFloat(cloud, 2)}`}</Value>
+            <Label>Airmass</Label>
+            <Value>{`${fixedFloat(airmass, 2)}`}</Value>
+            <Label>Seeing</Label>
+            <Value>{`${fixedFloat(seeing, 2)} arcsec`}</Value>
           </SummaryPanel>
           <SummaryPanel className={styles.summaryPanel}>
             <Label>Filter</Label>

@@ -115,6 +115,14 @@ export default class Scheduler extends Component {
     currentProposalId: PropTypes.array,
     /** Is this target part of a sequence of observations for the same target? */
     currentSequenceDuration: PropTypes.number,
+    /** Expected airmass of the observation */
+    airmass: PropTypes.number,
+    /** Expected sky brightness of the observation */
+    skyBrightness: PropTypes.number,
+    /** Expected cloud extintion for this observation */
+    cloud: PropTypes.number,
+    /** Expected seeing of this observation */
+    seeing: PropTypes.number,
     /** The rotation angle of the camera relative to the sky E of N (degrees) */
     rotSkyPos: PropTypes.number,
     /** List of Right Ascension for the targets */
@@ -244,6 +252,10 @@ export default class Scheduler extends Component {
     currentSequenceDuration: 0.0,
     currentSequenceNVisits: 0.0,
     currentSequenceVisits: 0.0,
+    airmass: 0.0,
+    skyBrightness: 0.0,
+    cloud: 0.0,
+    seeing: 0.0,
     rotSkyPos: 0.0,
     predictedTargetsRa: [],
     predictedTargetsDecl: [],
@@ -394,6 +406,10 @@ export default class Scheduler extends Component {
       currentSequenceDuration,
       currentSequenceNVisits,
       currentSequenceVisits,
+      airmass,
+      skyBrightness,
+      cloud,
+      seeing,
       rotSkyPos,
       predictedTargetsRa,
       predictedTargetsDecl,
@@ -508,6 +524,10 @@ export default class Scheduler extends Component {
               currentSequenceDuration={currentSequenceDuration}
               currentSequenceNVisits={currentSequenceNVisits}
               currentSequenceVisits={currentSequenceVisits}
+              airmass={airmass}
+              skyBrightness={skyBrightness}
+              cloud={cloud}
+              seeing={seeing}
               rotSkyPos={rotSkyPos}
               filterToMount={filterToMount}
             />

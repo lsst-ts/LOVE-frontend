@@ -1353,6 +1353,10 @@ export const getCurrentTargetInfo = (state, salindex) => {
     currentSequenceDuration: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.sequenceDuration?.value ?? 0.0,
     currentSequenceNVisits: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.sequenceNVisits?.value ?? 0.0,
     currentSequenceVisits: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.sequenceVisits?.value ?? 0.0,
+    airmass: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.airmass?.value ?? 0.0,
+    skyBrightness: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.skyBrightness?.value ?? 0.0,
+    cloud: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.cloud?.value ?? 0.0,
+    seeing: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.seeing?.value ?? 0.0,
   };
 };
 
