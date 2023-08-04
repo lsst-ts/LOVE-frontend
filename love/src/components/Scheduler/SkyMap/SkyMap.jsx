@@ -286,8 +286,6 @@ export default class SkyMap extends Component {
         type: 'Feature',
         id: t.id,
         properties: {
-          // Name
-          // n: 'Target' + t.id,
           n: t.id,
           // Location of name text on the map
           loc: [lat - 2, long + 2],

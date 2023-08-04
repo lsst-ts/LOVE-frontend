@@ -6,8 +6,6 @@ import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 import MinusIcon from 'components/icons/MinusIcon/MinusIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
-import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
-import { fixedFloat } from 'Utils';
 import { schedulerBlocksStateToStyle } from 'Config';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 
@@ -15,59 +13,28 @@ export default class Blocks extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedBlockData: null,
+      selectedBlockId: null,
     };
 
     this.handleRowClick = this.handleRowClick.bind(this);
   }
 
+  handleRowClick = (value) => {
+    this.setState({ selectedBlockId: value });
+  };
+
   addBlockCommand() {
     const { requestSALCommand, salindex } = this.props;
-    const { selectedBlockData } = this.state;
-    console.log('addBlockCmd!, block:' + selectedBlockData);
-    // requestSALCommand({
-    //   cmd: 'addBlock',
-    //   csc: 'Scheduler',
-    //   salindex,
-    //   selectedBlockData,
-    // });
+    const { selectedBlockId } = this.state;
+    requestSALCommand({
+      cmd: 'addBlock',
+      csc: 'Scheduler',
+      salindex,
+      params: {
+        id: selectedBlockId,
+      },
+    });
   }
-
-  HEADERS_PREDTARGETS = [
-    {
-      field: 'id',
-      title: 'ID',
-      className: styles.columns,
-      type: 'number',
-      render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
-    },
-    {
-      field: 'ra',
-      title: 'Ra',
-      className: styles.columns,
-      type: 'number',
-      render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
-    },
-    {
-      field: 'decl',
-      title: 'Decl',
-      className: styles.columns,
-      type: 'number',
-      render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
-    },
-    {
-      field: 'rotSky',
-      title: 'RotSkyPos',
-      className: styles.columns,
-      type: 'number',
-      render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
-    },
-  ];
-
-  handleRowClick = (value) => {
-    this.setState({ selectedBlockData: value });
-    console.log(this.state.selectedBlockData);
-  };
 
   render() {
     const {
@@ -86,18 +53,12 @@ export default class Blocks extends Component {
       predTargetsRotSkyPos,
     } = this.props;
 
-    const { selectedBlockData } = this.state;
+    const { selectedBlockId } = this.state;
 
     const listBlocksId = blockInvId ? blockInvId.split(',') : [];
     const listBlocksStatus = blockInvStatus ? blockInvStatus.split(',') : [];
 
     const listOfBlocks = listBlocksId.map((id, i) => ({ id: id, status: listBlocksStatus[i] }));
-    const predData = predTargetsRa.map((id, i) => ({
-      id: id,
-      ra: predTargetsRa[i],
-      decl: predTargetsDecl[i],
-      rotSky: predTargetsRotSkyPos[i],
-    }));
 
     return (
       <div className={styles.container}>
@@ -122,19 +83,6 @@ export default class Blocks extends Component {
             <span className={styles.predTargets}>To be completed</span>
             <span>{blockExecTotal}</span>
           </div>
-          {/* <div className={styles.blocksTargetsDiv}>
-            <div className={styles.predictedTargetsDiv}>
-              <SimpleTable headers={this.HEADERS_PREDTARGETS} data={predData} />
-            </div>
-          </div> */}
-          {/* <div className={styles.divButtonBlocks}>
-            <Button status="info">Add Block to Scheduler queue</Button>
-            <span>{blockHash ? blockHash : 'No data'}</span>
-          </div>
-          <div className={styles.executionsDiv}>
-            <span className={styles.executionsText}>List of blocks</span>
-            <span></span>
-          </div> */}
           <SummaryPanel className={styles.blocksPanel}>
             {listOfBlocks.length > 0
               ? listOfBlocks.map((b, i) => (
@@ -149,7 +97,11 @@ export default class Blocks extends Component {
                 ))
               : 'No data'}
           </SummaryPanel>
-          <Button status="info" onClick={() => this.addBlockCommand()}>
+          <Button
+            status="info"
+            disabled={selectedBlockId != null ? false : true}
+            onClick={() => this.addBlockCommand()}
+          >
             Add Block to Scheduler queue
           </Button>
         </div>
