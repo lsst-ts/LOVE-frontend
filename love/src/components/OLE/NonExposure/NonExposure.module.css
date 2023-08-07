@@ -157,7 +157,6 @@
 
 .filters {
   display: flex;
-  padding: 0.5em 0;
   margin-bottom: 0.5em;
   align-items: center;
   flex-wrap: wrap;
@@ -182,6 +181,12 @@
   white-space: nowrap;
   flex: 0 0 300px;
   border: 1px solid var(--secondary-font-dimmed-color);
+}
+
+.lastUpdated {
+  text-align: left;
+  margin-bottom: 0.5em;
+  color: var(--primary-font-color);
 }
 
 .floatRight {

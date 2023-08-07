@@ -4,6 +4,7 @@ import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import { CSVLink } from 'react-csv';
 import {
+  DATE_TIME_FORMAT,
   OLE_COMMENT_TYPE_OPTIONS,
   LSST_SYSTEMS,
   iconLevelOLE,
@@ -71,9 +72,12 @@ export default class NonExposure extends Component {
       modeEdit: false,
       selected: null,
       updatingLogs: false,
+      lastUpdated: null,
       logs: [],
       range: [],
     };
+
+    this.queryLogsInterval = null;
   }
 
   view(index) {
@@ -218,7 +222,12 @@ export default class NonExposure extends Component {
     // Get list of narrative logs
     this.setState({ updatingLogs: true });
     ManagerInterface.getListMessagesNarrativeLogs(dateFrom, dateTo).then((data) => {
-      this.setState({ logs: data, updatingLogs: false });
+      this.setQueryNarritveLogsInterval();
+      this.setState({
+        logs: data,
+        updatingLogs: false,
+        lastUpdated: moment(),
+      });
     });
   }
 
@@ -233,8 +242,16 @@ export default class NonExposure extends Component {
     return csvData;
   }
 
+  setQueryNarritveLogsInterval() {
+    clearInterval(this.queryLogsInterval);
+    this.queryLogsInterval = setInterval(() => {
+      this.queryNarrativeLogs();
+    }, 60000);
+  }
+
   componentDidMount() {
     this.queryNarrativeLogs();
+    this.setQueryNarritveLogsInterval();
   }
 
   componentDidUpdate(prevProps) {
@@ -246,6 +263,10 @@ export default class NonExposure extends Component {
     ) {
       this.queryNarrativeLogs();
     }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.queryLogsInterval);
   }
 
   render() {
@@ -346,7 +367,6 @@ export default class NonExposure extends Component {
         <div className={styles.filters}>
           <Button disabled={this.state.updatingLogs} onClick={() => this.queryNarrativeLogs()}>
             Refresh data
-            {this.state.updatingLogs && <SpinnerIcon className={styles.spinnerIcon} />}
           </Button>
 
           <DateTimeRange
@@ -400,6 +420,10 @@ export default class NonExposure extends Component {
               </Hoverable>
             </CSVLink>
           </div>
+        </div>
+        <div className={styles.lastUpdated}>
+          Last updated: {this.state.lastUpdated ? this.state.lastUpdated.format(DATE_TIME_FORMAT) : ''}
+          {this.state.updatingLogs && <SpinnerIcon className={styles.spinnerIcon} />}
         </div>
         <SimpleTable headers={headers} data={filteredData} />
       </div>
