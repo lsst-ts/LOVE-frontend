@@ -197,6 +197,7 @@ export default class NonExposureEdit extends Component {
             />
           ) : (
             <DateTime
+              className={styles.dateTimeSingularStyle}
               viewMode="time"
               dateFormat="YYYY/MM/DD"
               timeFormat="HH:mm:ss"

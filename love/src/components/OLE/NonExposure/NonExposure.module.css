@@ -219,7 +219,12 @@
 }
 
 .contentRight {
-  margin: var(--content-padding) 0 0 var(--content-padding);
+  margin-left: var(--content-padding);
+}
+
+.contentMenu .contentRight {
+  margin-top: var(--content-padding);
+  margin-left: var(--content-padding);
 }
 
 .contentRight textarea {
@@ -332,6 +337,10 @@
 
 .dateTimeRangeStyle :global(.rdtPicker) {
   left: -176px;
+}
+
+.dateTimeSingularStyle {
+  width: 14em;
 }
 
 th.tableHead {
