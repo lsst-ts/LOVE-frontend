@@ -1,5 +1,6 @@
 import React, { useRef, useUpdate } from 'react';
 import PropTypes from 'prop-types';
+import { Frame } from './Frame';
 
 import * as THREE from "three";
 
@@ -33,6 +34,7 @@ export function Door (props) {
     <>
         <group
           position={[props.position.x, props.position.z, props.position.y]}
+          rotation-y={THREE.MathUtils.degToRad(-1 * props.azimuthPosition)}
         >
           <group
             position={[0, 0, !props.isMainDoor ? radius : 0]}
@@ -60,6 +62,41 @@ export function Door (props) {
               </mesh>
             </group>
           </group>
+
+          {/** Frame Door */}
+          { props.isMainDoor ?
+            <>
+              <Frame
+                position={{x: -1.5, y: 0, z: 0}}
+                thetaStart={0}
+                thetaLength={100}
+              />
+              <Frame
+                position={{x: 1.5, y: 0, z: 0}}
+                thetaStart={0}
+                thetaLength={100}
+                radialSegments={9}
+              />
+              <Frame
+                position={{x: 0, y: 0, z: 0}}
+                thetaStart={99}
+                thetaLength={2}
+                height={3.1}
+                radialSegments={1}
+                heightSegments={3}
+              />
+              <Frame
+                position={{x: 0, y: 0, z: 0}}
+                thetaStart={-1}
+                thetaLength={2}
+                height={3.1}
+                radialSegments={1}
+                heightSegments={3}
+              />
+          </>
+          :
+          <></>
+        }
         </group>
     </>
   );
@@ -75,6 +112,7 @@ Door.propTypes = {
   thetaStart: PropTypes.number,
   thetaLength: PropTypes.number,
   isMainDoor: PropTypes.bool,
+  azimuthPosition: PropTypes.number,
 };
 
 Door.defaultProps = {
@@ -87,12 +125,14 @@ Door.defaultProps = {
   thetaStart: 20,
   thetaLength: 80,
   isMainDoor: true,
+  azimuthPosition: 0,
 };
 
 const comparator = (prevProps, nextProps) => {
   return (
     prevProps.name === nextProps.name &&
     prevProps.openPercent === nextProps.openPercent &&
+    prevProps.azimuthPosition === nextProps.azimuthPosition &&
     isEqual(prevProps.position, nextProps.position)
   );
 }

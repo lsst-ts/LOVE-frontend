@@ -8,8 +8,9 @@ export function Fan(props) {
 
   const angleRadians = THREE.MathUtils.degToRad(props.angle); //degree to radians
 
-  const frame = [2, 2];
-  const window = [2, 2 * ((100 - props.percentOpen) / 100) + 0.15];
+  const { width, height } = props;
+  const frame = [width, height];
+  const window = [width, height * ((100 - props.percentOpen) / 100) + 0.15];
 
   return (
     <>
@@ -20,7 +21,7 @@ export function Fan(props) {
         <group
         >
           <mesh
-            position={[0, frame[1] / 2 + 0.15 - window[1]/2, 0]}
+            position={[0, frame[1]/2 + 0.15 - window[1]/2, 0]}
           >
             <planeBufferGeometry attach="geometry" args={window} />
             <meshPhongMaterial attach="material" color={0x3f7b9d} side={THREE.DoubleSide} transparent opacity={0.8} />
@@ -47,6 +48,8 @@ Fan.propTypes = {
   id: PropTypes.number,
   angle: PropTypes.number,
   percentOpen: PropTypes.number,
+  width: PropTypes.number,
+  height: PropTypes.number,
 };
 
 Fan.defaultProps = {
@@ -55,6 +58,8 @@ Fan.defaultProps = {
   id: 1,
   angle: 0,
   percentOpen: 100,
+  width: 2,
+  height: 2,
 };
 
 const comparator = (prevProps, nextProps) => {

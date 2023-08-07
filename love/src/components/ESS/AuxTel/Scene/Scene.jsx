@@ -7,8 +7,8 @@ import { Sensors } from '../../Common/Sensors';
 import { Dome } from './Dome';
 import { isEqual } from 'lodash';
 import { Door } from './Door';
-import { Frame } from './Frame';
 import { Fan } from './Fan';
+import { FirstFloor } from './FirstFloor';
 
 const INITIAL_CAMERA_POSITION = [8.8, 4.5, 7];
 const INITIAL_TARGET = [0, 0, 0];
@@ -36,39 +36,47 @@ const Scene = (props) => {
   const fans = [
     {
       position: {
-        x: 0,
-        y: 0,
-        z: -1 -0.8 -1.15,
+        x: Math.sin(THREE.MathUtils.degToRad(315)) * 9.3 / 2,
+        y: Math.cos(THREE.MathUtils.degToRad(315)) * 9.3 / 2,
+        z: -1.15 - 0.8,
       },
-      angle: 45,
+      angle: 315,
       percentOpen: 50,
+      width: 1.5,
+      height: 1.5,
     },
     {
       position: {
-        x: 0,
-        y: 0,
-        z: -1 -0.8 -1.15,
+        x: Math.sin(THREE.MathUtils.degToRad(26)) * 9.3 / 2,
+        y: Math.cos(THREE.MathUtils.degToRad(26)) * 9.3 / 2,
+        z: -1.15 - 0.8,
       },
-      angle: 116,
+      angle: 26,
       percentOpen: 40,
+      width: 1.5,
+      height: 1.5,
     },
     {
       position: {
-        x: 0,
-        y: 0,
-        z: -1 -0.8 -1.15,
+        x: Math.sin(THREE.MathUtils.degToRad(97)) * 9.3 / 2,
+        y: Math.cos(THREE.MathUtils.degToRad(97)) * 9.3 / 2,
+        z: -1.15 - 0.8,
       },
-      angle: 187,
+      angle: 97,
       percentOpen: 10,
+      width: 1.5,
+      height: 1.5,
     },
     {
       position: {
-        x: 0,
-        y: 0,
-        z: -1 -0.8 -1.15,
+        x: Math.sin(THREE.MathUtils.degToRad(172)) * 9.3 / 2,
+        y: Math.cos(THREE.MathUtils.degToRad(172)) * 9.3 / 2,
+        z: -1.15 - 0.8,
       },
-      angle: 262,
+      angle: 172,
       percentOpen: 70,
+      width: 1.5,
+      height: 1.5,
     },
   ];
 
@@ -82,6 +90,7 @@ const Scene = (props) => {
     getGradiantColorX,
     percentOpenMainDoor,
     percentOpenDropoutDoor,
+    azimuthPosition,
   } = props;
 
   return (
@@ -94,9 +103,9 @@ const Scene = (props) => {
       <Suspense fallback={<div>loading</div>}>
       <CameraController />
       <ambientLight intensity={0.8} />
-      <directionalLight position={[-12, 12, 0]} intensity={1} />
+      <directionalLight position={[0, 12, 12]} intensity={1} />
       <axesHelper args={[7]} />
-      <gridHelper args={[9, 9]}/>
+      <gridHelper args={[10, 10]} />
 
       {/* <Dome /> */}
 
@@ -106,6 +115,7 @@ const Scene = (props) => {
         thetaStart={20.2}
         thetaLength={80}
         openPercent={percentOpenMainDoor}
+        azimuthPosition={azimuthPosition}
       />
 
       {/** Dropout Door */}
@@ -114,35 +124,7 @@ const Scene = (props) => {
         thetaStart={0}
         thetaLength={20}
         openPercent={percentOpenDropoutDoor}
-      />
-
-      {/** Frame Door */}
-      <Frame
-        position={{x: -1.5, y: 0, z: 0}}
-        thetaStart={0}
-        thetaLength={100}
-      />
-      <Frame
-        position={{x: 1.5, y: 0, z: 0}}
-        thetaStart={0}
-        thetaLength={100}
-        radialSegments={9}
-      />
-      <Frame
-        position={{x: 0, y: 0, z: 0}}
-        thetaStart={99}
-        thetaLength={2}
-        height={3.1}
-        radialSegments={1}
-        heightSegments={3}
-      />
-      <Frame
-        position={{x: 0, y: 0, z: 0}}
-        thetaStart={-1}
-        thetaLength={2}
-        height={3.1}
-        radialSegments={1}
-        heightSegments={3}
+        azimuthPosition={azimuthPosition}
       />
 
       {/** Windows */}
@@ -152,9 +134,13 @@ const Scene = (props) => {
             position={fan.position}
             percentOpen={fan.percentOpen}
             angle={fan.angle}
+            width={fan.width}
+            height={fan.height}
           />
         );
       })}
+
+      <FirstFloor />
 
       <Sensors 
         selectedSensor={selectedSensor}

@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 import {
   getStreamsData,
-  getLouversStatus,
-  getApertureShutter,
+  getDomeState,
 } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import AuxTelESS from './AuxTelESS';
@@ -250,19 +249,24 @@ const mapStateToProps = (state, ownProps) => {
   });
   map[option] = cleanStream ? parse(cleanStream, option) : [];
 
-  const apertureShutterState = getApertureShutter(state);
+  const domeState = getDomeState(state);
 
   return {
     ...map,
-    percentOpenShutter: apertureShutterState.positionActualShutter,
+    percentOpenMainDoor: domeState.dropoutDoorOpeningPercentage,
+    percentOpenDropoutDoor: domeState.mainDoorOpeningPercentage,
+    azimuthPosition: domeState.azimuthPosition,
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const salindexList = ownProps.salindexList;
   const option = ownProps.option;
-  const subscriptions = getGroupNames(salindexList, option);
-  subscriptions.push('telemetry-ATDome-0-position');
+  const subscriptions = [
+    'telemetry-ATDome-0-position',
+    ...getGroupNames(salindexList, option)
+  ];
+
   return {
     subscriptions,
     subscribeToStreams: () => {

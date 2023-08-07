@@ -244,8 +244,9 @@ export default class AuxTelESS extends Component {
   }
 
   render() {
-    const { selectedSensor, selectedSensorData, positions, referenceIds, louversIds } = this.state;
-    const { minGradiantLimit, maxGradiantLimit, option, percentOpenLouvers, percentOpenShutter } = this.props;
+    const { selectedSensor, selectedSensorData, positions, referenceIds } = this.state;
+    const { minGradiantLimit, maxGradiantLimit, option,
+      percentOpenDropoutDoor, percentOpenMainDoor, azimuthPosition } = this.props;
     const sensors = this.props[option] ?? [];
     const values = sensors.map((sensor) => sensor.value ?? 0) ?? [];
     const speeds = sensors.map((sensor) => sensor.speed ?? undefined) ?? [];
@@ -263,9 +264,9 @@ export default class AuxTelESS extends Component {
             speeds={speeds}
             directions={directions}
             getGradiantColorX={this.getGradiantColorX}
-            louversIds={louversIds}
-            percentOpenLouvers={percentOpenLouvers}
-            percentOpenShutter={percentOpenShutter}
+            percentOpenMainDoor={percentOpenMainDoor}
+            percentOpenDropoutDoor={percentOpenDropoutDoor}
+            azimuthPosition={azimuthPosition}
           />
         </div>
 

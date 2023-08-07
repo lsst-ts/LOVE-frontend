@@ -2722,7 +2722,6 @@ export const MessagesWarningM1M3ThermalSystem = {
   broadcastWarning: 'Force actuator warning broadcast counter Warning.',
 };
 
-<<<<<<< HEAD
 // MTCamera
 
 /** Considering rafts from 1 to 25, from top-left to bottom-righ */
@@ -2962,7 +2961,7 @@ export const ccCameraRaftsDetailedStateToSTyle = {
   QUIESCENT: 'undefined',
   DISCARDING: 'undefined',
 };
-=======
+
 export const LouversPositionESS = [
   {
     id: 1,
@@ -3339,5 +3338,3 @@ export const LouversPositionESS = [
     type: 'I',
   },
 ];
-
->>>>>>> add point of the louvers for the reference
