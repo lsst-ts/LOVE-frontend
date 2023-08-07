@@ -50,6 +50,12 @@
   border: 1px solid var(--secondary-font-dimmed-color);
 }
 
+.lastUpdated {
+  text-align: left;
+  margin-bottom: 0.5em;
+  color: var(--primary-font-color);
+}
+
 .bold {
   font-weight: bold;
   color: var(--secondary-font-color);
