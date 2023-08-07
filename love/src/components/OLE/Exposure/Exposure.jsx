@@ -13,7 +13,7 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
-import { exposureFlagStateToStyle, DATE_TIME_FORMAT, ISO_INTEGER_DATE_FORMAT } from 'Config';
+import { exposureFlagStateToStyle, DATE_TIME_FORMAT, ISO_INTEGER_DATE_FORMAT, LOG_REFRESH_INTERVAL_MS } from 'Config';
 import ManagerInterface from 'Utils';
 import ExposureAdd from './ExposureAdd';
 import ExposureDetail from './ExposureDetail';
@@ -293,7 +293,7 @@ export default class Exposure extends Component {
   setQueryExposuresInterval() {
     this.queryExposuresInterval = setInterval(() => {
       this.queryExposures();
-    }, 60000);
+    }, LOG_REFRESH_INTERVAL_MS);
   }
 
   componentDidMount() {

@@ -10,6 +10,7 @@ import {
   iconLevelOLE,
   ISO_INTEGER_DATE_FORMAT,
   ISO_STRING_DATE_TIME_FORMAT,
+  LOG_REFRESH_INTERVAL_MS,
 } from 'Config';
 import ManagerInterface, { formatSecondsToDigital, getLinkJira } from 'Utils';
 
@@ -246,7 +247,7 @@ export default class NonExposure extends Component {
     clearInterval(this.queryLogsInterval);
     this.queryLogsInterval = setInterval(() => {
       this.queryNarrativeLogs();
-    }, 60000);
+    }, LOG_REFRESH_INTERVAL_MS);
   }
 
   componentDidMount() {
