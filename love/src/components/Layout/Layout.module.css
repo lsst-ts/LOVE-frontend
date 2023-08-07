@@ -99,6 +99,16 @@
   grid-auto-columns: min-content;
 }
 
+.rightTopbarMobile {
+  position: relative;
+  padding: 0.5em var(--content-padding) 0.5em 0;
+  background-color: var(--tertiary-background-color);
+  text-align: right;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min-content;
+}
+
 .middleTopbar {
 }
 
@@ -352,4 +362,25 @@
   padding: 0em 0.5em;
   fill: var(--base-font-color);
   vertical-align: sub;
+}
+.logoInria {
+  height: 2em;
+  padding: 0em 0.5em;
+  fill: var(--base-font-color);
+  vertical-align: sub;
+}
+
+@media (max-width: 500px) {
+  .rightTopbar {
+    display: none;
+  }
+  .logo {
+    display: none;
+  }
+}
+
+@media (min-width: 501px) {
+  .rightTopbarMobile {
+    display: none;
+  }
 }

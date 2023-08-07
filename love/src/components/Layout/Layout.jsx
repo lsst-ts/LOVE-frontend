@@ -449,6 +449,252 @@ class Layout extends Component {
     );
   };
 
+  renderRightSideMenu = () => {
+    const { controlLocation, lastUpdated } = this.props.controlLocation;
+    const filteredAlarms = this.props.alarms.filter((a) => {
+      return (
+        isActive(a) && !isAcknowledged(a) && !isMuted(a) && a.severity?.value >= this.state.minSeverityNotification
+      );
+    });
+
+    const controlLocationName = controlLocation
+      ? controlLocation.name.charAt(0).toUpperCase() + controlLocation.name.slice(1)
+      : 'Unknown';
+
+    return (
+      <div className={styles.rightTopbar}>
+        {this.renderHeartbeatsMenu()}
+        <DropdownMenu className={styles.settingsDropdown} disabledToggle={true}>
+          <Button className={styles.iconBtn} title="Exposure and Narrative Logs" status="transparent">
+            <MessageIcon className={styles.icon} />
+          </Button>
+          <div className={styles.userMenu}>
+            {!this.state.isNewNonExposureOpen && !this.state.isNewExposureOpen ? (
+              <OLEMenu
+                newNonExposureClick={() => {
+                  this.setState({ isNewNonExposureOpen: true });
+                }}
+                newExposureClick={() => {
+                  this.setState({ isNewExposureOpen: true });
+                }}
+              />
+            ) : this.state.isNewNonExposureOpen ? (
+              <>
+                <div className={styles.title}>
+                  <span className={styles.bold}>New Narrative Log</span>
+                  <span className={styles.floatRight}>
+                    <Button
+                      status="link"
+                      onClick={() => {
+                        this.setState({ isNewNonExposureOpen: false });
+                      }}
+                    >
+                      <span className={styles.bold}>{'< Back'}</span>
+                    </Button>
+                  </span>
+                </div>
+                <div className={styles.divider}></div>
+              </>
+            ) : this.state.isNewExposureOpen ? (
+              <>
+                <div className={styles.title}>
+                  <span className={styles.bold}>New Exposure Log</span>
+                  <span className={styles.floatRight}>
+                    <Button
+                      status="link"
+                      onClick={() => {
+                        this.setState({ isNewExposureOpen: false });
+                      }}
+                    >
+                      <span className={styles.bold}>{'< Back'}</span>
+                    </Button>
+                  </span>
+                </div>
+                <div className={styles.divider}></div>
+              </>
+            ) : (
+              <></>
+            )}
+            {this.state.isNewNonExposureOpen && (
+              <NonExposureEdit isMenu={true} back={() => this.setState({ isNewNonExposureOpen: false })} />
+            )}
+            {this.state.isNewExposureOpen && (
+              <ExposureAdd isMenu={true} back={() => this.setState({ isNewExposureOpen: false })} />
+            )}
+          </div>
+        </DropdownMenu>
+
+        <DropdownMenu className={styles.settingsDropdown}>
+          <Button className={styles.iconBtn} title="View notifications" onClick={() => {}} status="transparent">
+            <IconBadge content={filteredAlarms.length ?? ''} display={filteredAlarms?.length > 0}>
+              <NotificationIcon className={styles.icon} />
+            </IconBadge>
+          </Button>
+          <AlarmsList
+            alarms={filteredAlarms}
+            ackAlarm={this.props.ackAlarm}
+            taiToUtc={this.props.taiToUtc}
+            user={this.props.user}
+          />
+        </DropdownMenu>
+
+        {/** Observatory Summary  * */}
+        <DropdownMenu className={styles.settingsDropdown}>
+          <Button className={styles.iconBtn} title="Settings" status="transparent">
+            {this.getObsLocationIcon(`${styles.icon} ${styles.locationIcon}`)}
+          </Button>
+          <div className={styles.observatorySummaryMenu}>
+            <ObservatorySummaryMenu
+              dividerClassName={styles.divider}
+              locationIcon={this.getObsLocationIcon()}
+              location={controlLocationName}
+              locationLastUpdate={lastUpdated}
+              simonyiOperationMode={'UNKNOWN'}
+              simonyiTrackingState={this.props.observatorySummary?.simonyiTrackingState}
+              simonyiTrackingMode={this.props.observatorySummary?.simonyiTrackingMode}
+              simonyiObsMode={this.props.observatorySummary?.simonyiObservingMode}
+              simonyiPower={'UNKNOWN'}
+              auxtelOperationMode={'UNKNOWN'}
+              auxtelTrackingState={this.props.observatorySummary?.auxtelTrackingState}
+              auxtelTrackingMode={this.props.observatorySummary?.auxtelTrackingMode}
+              auxtelObsMode={this.props.observatorySummary?.auxtelObservingMode}
+              auxtelPower={'UNKNOWN'}
+            ></ObservatorySummaryMenu>
+          </div>
+        </DropdownMenu>
+
+        <DropdownMenu className={styles.settingsDropdown}>
+          <Button className={styles.iconBtn} title="Settings" status="transparent">
+            <UserIcon className={styles.icon} />
+          </Button>
+          <div className={styles.userMenu}>
+            <UserDetails
+              menuElementClassName={styles.menuElement}
+              dividerClassName={styles.divider}
+              username={this.props.user}
+              execPermission={this.props.execPermission}
+              takeScreenshot={() => {
+                this.setState({ isLightHidden: false }, () => {
+                  this.setState({ isTakingScreenshot: true }, () => {
+                    setTimeout(() => {
+                      this.setState({ isTakingScreenshot: false }, () => {
+                        setTimeout(() => {
+                          this.setState({ isLightHidden: true }, () => {
+                            takeScreenshot((img) => {
+                              const link = document.createElement('a');
+                              const timestamp = formatTimestamp(parseTimestamp(this.props.timeData?.clock?.tai));
+                              link.href = img;
+                              link.download = `${timestamp}.png`;
+                              document.body.appendChild(link);
+                              link.click();
+                              document.body.removeChild(link);
+                            });
+                          });
+                        }, 100);
+                      });
+                    }, 200);
+                  });
+                });
+              }}
+              logout={this.props.logout}
+              requireUserSwap={() => {
+                this.setState({ tokenSwapRequested: true });
+                this.props.requireUserSwap(true);
+              }}
+              onXMLClick={() => this.setState({ isXMLModalOpen: true })}
+              onConfigClick={() => this.setState({ isConfigModalOpen: true })}
+              onEmergencyContactsClick={() => this.setState({ isEmergencyContactsModalOpen: true })}
+              onAboutClick={() => this.setState({ isAboutModalOpen: true })}
+            ></UserDetails>
+          </div>
+        </DropdownMenu>
+      </div>
+    );
+  };
+
+  renderMobileRightSideMenu = () => {
+    const { controlLocation, lastUpdated } = this.props.controlLocation;
+    const filteredAlarms = this.props.alarms.filter((a) => {
+      return (
+        isActive(a) && !isAcknowledged(a) && !isMuted(a) && a.severity?.value >= this.state.minSeverityNotification
+      );
+    });
+
+    const controlLocationName = controlLocation
+      ? controlLocation.name.charAt(0).toUpperCase() + controlLocation.name.slice(1)
+      : 'Unknown';
+
+    return (
+      <div className={styles.rightTopbarMobile}>
+        {this.renderHeartbeatsMenu()}
+        <DropdownMenu className={styles.settingsDropdown} disabledToggle={true}>
+          <Button className={styles.iconBtn} title="Settings" status="transparent">
+            {this.getObsLocationIcon(`${styles.icon} ${styles.locationIcon}`)}
+          </Button>
+
+          <div className={styles.observatorySummaryMenu}>
+            <ObservatorySummaryMenu
+              dividerClassName={styles.divider}
+              locationIcon={this.getObsLocationIcon()}
+              location={controlLocationName}
+              locationLastUpdate={lastUpdated}
+              simonyiOperationMode={'UNKNOWN'}
+              simonyiTrackingState={this.props.observatorySummary?.simonyiTrackingState}
+              simonyiTrackingMode={this.props.observatorySummary?.simonyiTrackingMode}
+              simonyiObsMode={this.props.observatorySummary?.simonyiObservingMode}
+              simonyiPower={'UNKNOWN'}
+              auxtelOperationMode={'UNKNOWN'}
+              auxtelTrackingState={this.props.observatorySummary?.auxtelTrackingState}
+              auxtelTrackingMode={this.props.observatorySummary?.auxtelTrackingMode}
+              auxtelObsMode={this.props.observatorySummary?.auxtelObservingMode}
+              auxtelPower={'UNKNOWN'}
+            ></ObservatorySummaryMenu>
+          </div>
+          <div className={styles.userMenu}>
+            <UserDetails
+              menuElementClassName={styles.menuElement}
+              dividerClassName={styles.divider}
+              username={this.props.user}
+              execPermission={this.props.execPermission}
+              takeScreenshot={() => {
+                this.setState({ isLightHidden: false }, () => {
+                  this.setState({ isTakingScreenshot: true }, () => {
+                    setTimeout(() => {
+                      this.setState({ isTakingScreenshot: false }, () => {
+                        setTimeout(() => {
+                          this.setState({ isLightHidden: true }, () => {
+                            takeScreenshot((img) => {
+                              const link = document.createElement('a');
+                              const timestamp = formatTimestamp(parseTimestamp(this.props.timeData?.clock?.tai));
+                              link.href = img;
+                              link.download = `${timestamp}.png`;
+                              document.body.appendChild(link);
+                              link.click();
+                              document.body.removeChild(link);
+                            });
+                          });
+                        }, 100);
+                      });
+                    }, 200);
+                  });
+                });
+              }}
+              logout={this.props.logout}
+              requireUserSwap={() => {
+                this.setState({ tokenSwapRequested: true });
+                this.props.requireUserSwap(true);
+              }}
+              onXMLClick={() => this.setState({ isXMLModalOpen: true })}
+              onConfigClick={() => this.setState({ isConfigModalOpen: true })}
+              onEmergencyContactsClick={() => this.setState({ isEmergencyContactsModalOpen: true })}
+              onAboutClick={() => this.setState({ isAboutModalOpen: true })}
+            ></UserDetails>
+          </div>
+        </DropdownMenu>
+      </div>
+    );
+  };
+
   render() {
     const { controlLocation, lastUpdated } = this.props.controlLocation;
     const filteredAlarms = this.props.alarms.filter((a) => {
@@ -547,155 +793,8 @@ class Layout extends Component {
 
           <div className={styles.rightNotchContainer}>
             <NotchCurve className={styles.notchCurve} flip="true" />
-
-            <div className={styles.rightTopbar}>
-              {this.renderHeartbeatsMenu()}
-
-              <DropdownMenu className={styles.settingsDropdown} disabledToggle={true}>
-                <Button className={styles.iconBtn} title="Exposure and Narrative Logs" status="transparent">
-                  <MessageIcon className={styles.icon} />
-                </Button>
-                <div className={styles.userMenu}>
-                  {!this.state.isNewNonExposureOpen && !this.state.isNewExposureOpen ? (
-                    <OLEMenu
-                      newNonExposureClick={() => {
-                        this.setState({ isNewNonExposureOpen: true });
-                      }}
-                      newExposureClick={() => {
-                        this.setState({ isNewExposureOpen: true });
-                      }}
-                    />
-                  ) : this.state.isNewNonExposureOpen ? (
-                    <>
-                      <div className={styles.title}>
-                        <span className={styles.bold}>New Narrative Log</span>
-                        <span className={styles.floatRight}>
-                          <Button
-                            status="link"
-                            onClick={() => {
-                              this.setState({ isNewNonExposureOpen: false });
-                            }}
-                          >
-                            <span className={styles.bold}>{'< Back'}</span>
-                          </Button>
-                        </span>
-                      </div>
-                      <div className={styles.divider}></div>
-                    </>
-                  ) : this.state.isNewExposureOpen ? (
-                    <>
-                      <div className={styles.title}>
-                        <span className={styles.bold}>New Exposure Log</span>
-                        <span className={styles.floatRight}>
-                          <Button
-                            status="link"
-                            onClick={() => {
-                              this.setState({ isNewExposureOpen: false });
-                            }}
-                          >
-                            <span className={styles.bold}>{'< Back'}</span>
-                          </Button>
-                        </span>
-                      </div>
-                      <div className={styles.divider}></div>
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                  {this.state.isNewNonExposureOpen && (
-                    <NonExposureEdit isMenu={true} back={() => this.setState({ isNewNonExposureOpen: false })} />
-                  )}
-                  {this.state.isNewExposureOpen && (
-                    <ExposureAdd isMenu={true} back={() => this.setState({ isNewExposureOpen: false })} />
-                  )}
-                </div>
-              </DropdownMenu>
-
-              <DropdownMenu className={styles.settingsDropdown}>
-                <Button className={styles.iconBtn} title="View notifications" onClick={() => {}} status="transparent">
-                  <IconBadge content={filteredAlarms.length ?? ''} display={filteredAlarms?.length > 0}>
-                    <NotificationIcon className={styles.icon} />
-                  </IconBadge>
-                </Button>
-                <AlarmsList
-                  alarms={filteredAlarms}
-                  ackAlarm={this.props.ackAlarm}
-                  taiToUtc={this.props.taiToUtc}
-                  user={this.props.user}
-                />
-              </DropdownMenu>
-
-              {/** Observatory Summary  * */}
-              <DropdownMenu className={styles.settingsDropdown}>
-                <Button className={styles.iconBtn} title="Settings" status="transparent">
-                  {this.getObsLocationIcon(`${styles.icon} ${styles.locationIcon}`)}
-                </Button>
-                <div className={styles.observatorySummaryMenu}>
-                  <ObservatorySummaryMenu
-                    dividerClassName={styles.divider}
-                    locationIcon={this.getObsLocationIcon()}
-                    location={controlLocationName}
-                    locationLastUpdate={lastUpdated}
-                    simonyiOperationMode={'UNKNOWN'}
-                    simonyiTrackingState={this.props.observatorySummary?.simonyiTrackingState}
-                    simonyiTrackingMode={this.props.observatorySummary?.simonyiTrackingMode}
-                    simonyiObsMode={this.props.observatorySummary?.simonyiObservingMode}
-                    simonyiPower={'UNKNOWN'}
-                    auxtelOperationMode={'UNKNOWN'}
-                    auxtelTrackingState={this.props.observatorySummary?.auxtelTrackingState}
-                    auxtelTrackingMode={this.props.observatorySummary?.auxtelTrackingMode}
-                    auxtelObsMode={this.props.observatorySummary?.auxtelObservingMode}
-                    auxtelPower={'UNKNOWN'}
-                  ></ObservatorySummaryMenu>
-                </div>
-              </DropdownMenu>
-
-              <DropdownMenu className={styles.settingsDropdown}>
-                <Button className={styles.iconBtn} title="Settings" status="transparent">
-                  <UserIcon className={styles.icon} />
-                </Button>
-                <div className={styles.userMenu}>
-                  <UserDetails
-                    menuElementClassName={styles.menuElement}
-                    dividerClassName={styles.divider}
-                    username={this.props.user}
-                    execPermission={this.props.execPermission}
-                    takeScreenshot={() => {
-                      this.setState({ isLightHidden: false }, () => {
-                        this.setState({ isTakingScreenshot: true }, () => {
-                          setTimeout(() => {
-                            this.setState({ isTakingScreenshot: false }, () => {
-                              setTimeout(() => {
-                                this.setState({ isLightHidden: true }, () => {
-                                  takeScreenshot((img) => {
-                                    const link = document.createElement('a');
-                                    const timestamp = formatTimestamp(parseTimestamp(this.props.timeData?.clock?.tai));
-                                    link.href = img;
-                                    link.download = `${timestamp}.png`;
-                                    document.body.appendChild(link);
-                                    link.click();
-                                    document.body.removeChild(link);
-                                  });
-                                });
-                              }, 100);
-                            });
-                          }, 200);
-                        });
-                      });
-                    }}
-                    logout={this.props.logout}
-                    requireUserSwap={() => {
-                      this.setState({ tokenSwapRequested: true });
-                      this.props.requireUserSwap(true);
-                    }}
-                    onXMLClick={() => this.setState({ isXMLModalOpen: true })}
-                    onConfigClick={() => this.setState({ isConfigModalOpen: true })}
-                    onEmergencyContactsClick={() => this.setState({ isEmergencyContactsModalOpen: true })}
-                    onAboutClick={() => this.setState({ isAboutModalOpen: true })}
-                  ></UserDetails>
-                </div>
-              </DropdownMenu>
-            </div>
+            {this.renderRightSideMenu()}
+            {this.renderMobileRightSideMenu()}
           </div>
         </div>
         <div className={styles.overflownToolbar} id="overflownToolbar" />
@@ -738,7 +837,7 @@ class Layout extends Component {
 
         <div className={styles.footer}>
           Created with love by
-          <InriaLogo className={styles.logo} title="Love" />
+          <InriaLogo className={styles.logoInria} title="Love" />
         </div>
 
         <Modal
