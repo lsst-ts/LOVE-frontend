@@ -40,6 +40,8 @@ export default class AccordionSummary extends Component {
 
   render() {
     const {
+      requestSALCommand,
+      salindex,
       currentRequestTime,
       lastTargetId,
       lastTargetRa,
@@ -123,6 +125,8 @@ export default class AccordionSummary extends Component {
           surveysSeqProps={surveysSeqProps}
         />
         <Blocks
+          requestSALCommand={requestSALCommand}
+          salindex={salindex}
           showContent={() => this.toggleContentBlocks()}
           isOpen={this.state.isOpenBlocks}
           blockInvId={blockInvId}

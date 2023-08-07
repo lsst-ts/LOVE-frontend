@@ -23,7 +23,11 @@ export default class Surveys extends Component {
           </div>
           <div className={styles.generalDiv}>
             {surveysNumGenProps
-              ? generalProposals.map((gp) => <div className={styles.surveysDivs}>{gp}</div>)
+              ? generalProposals.map((gp, k) => (
+                  <div key={k} className={styles.surveysDivs}>
+                    {gp}
+                  </div>
+                ))
               : 'No data'}
           </div>
           <div className={styles.surveysTextsDiv}>
@@ -32,7 +36,11 @@ export default class Surveys extends Component {
           </div>
           <div className={styles.generalDiv}>
             {surveysNumSeqProps
-              ? timedProposals.map((tp) => <div className={styles.surveysDivs}>{tp}</div>)
+              ? timedProposals.map((tp, k) => (
+                  <div key={k} className={styles.surveysDivs}>
+                    {tp}
+                  </div>
+                ))
               : 'No data'}
           </div>
         </div>

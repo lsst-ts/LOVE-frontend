@@ -6,41 +6,35 @@ import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 import MinusIcon from 'components/icons/MinusIcon/MinusIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
-import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
-import { fixedFloat } from 'Utils';
-import Info from 'components/MainTel/M2/Actuators/Info/Info';
+import { schedulerBlocksStateToStyle } from 'Config';
+import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 
 export default class Blocks extends Component {
-  HEADERS_PREDTARGETS = [
-    {
-      field: 'id',
-      title: 'ID',
-      className: styles.columns,
-      type: 'number',
-      render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
-    },
-    {
-      field: 'ra',
-      title: 'Ra',
-      className: styles.columns,
-      type: 'number',
-      render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
-    },
-    {
-      field: 'decl',
-      title: 'Decl',
-      className: styles.columns,
-      type: 'number',
-      render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
-    },
-    {
-      field: 'rotSky',
-      title: 'RotSkyPos',
-      className: styles.columns,
-      type: 'number',
-      render: (value) => (isNaN(value) ? '-' : fixedFloat(value, 2)),
-    },
-  ];
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedBlockId: null,
+    };
+
+    this.handleRowClick = this.handleRowClick.bind(this);
+  }
+
+  handleRowClick = (value) => {
+    this.setState({ selectedBlockId: value });
+  };
+
+  addBlockCommand() {
+    const { requestSALCommand, salindex } = this.props;
+    const { selectedBlockId } = this.state;
+    requestSALCommand({
+      cmd: 'addBlock',
+      csc: 'Scheduler',
+      salindex,
+      params: {
+        id: selectedBlockId,
+      },
+    });
+  }
 
   render() {
     const {
@@ -59,16 +53,12 @@ export default class Blocks extends Component {
       predTargetsRotSkyPos,
     } = this.props;
 
+    const { selectedBlockId } = this.state;
+
     const listBlocksId = blockInvId ? blockInvId.split(',') : [];
     const listBlocksStatus = blockInvStatus ? blockInvStatus.split(',') : [];
 
     const listOfBlocks = listBlocksId.map((id, i) => ({ id: id, status: listBlocksStatus[i] }));
-    const predData = predTargetsRa.map((id, i) => ({
-      id: id,
-      ra: predTargetsRa[i],
-      decl: predTargetsDecl[i],
-      rotSky: predTargetsRotSkyPos[i],
-    }));
 
     return (
       <div className={styles.container}>
@@ -79,7 +69,11 @@ export default class Blocks extends Component {
         <div className={[styles.panel, isOpen ? styles.openPanel : styles.closePanel].join(' ')}>
           <SummaryPanel className={styles.currentBlock}>
             <Label>{blockId ? blockId : 'No data'}</Label>
-            <Value>{blockStatus ? blockStatus : 'No data'}</Value>
+            <Value>
+              <StatusText status={schedulerBlocksStateToStyle[blockStatus]}>
+                {blockStatus ? blockStatus : 'No data'}
+              </StatusText>
+            </Value>
           </SummaryPanel>
           <div className={styles.executionsDiv}>
             <span className={styles.executionsText}>Executions</span>
@@ -89,29 +83,27 @@ export default class Blocks extends Component {
             <span className={styles.predTargets}>To be completed</span>
             <span>{blockExecTotal}</span>
           </div>
-          <div className={styles.blocksTargetsDiv}>
-            <div className={styles.predictedTargetsDiv}>
-              <SimpleTable headers={this.HEADERS_PREDTARGETS} data={predData} />
-            </div>
-          </div>
-          <div className={styles.divButtonBlocks}>
-            <Button status="info">Add Block to Scheduler queue</Button>
-            <span>{blockHash ? blockHash : 'No data'}</span>
-          </div>
-          <div className={styles.executionsDiv}>
-            <span className={styles.executionsText}>List of blocks</span>
-            <span></span>
-          </div>
           <SummaryPanel className={styles.blocksPanel}>
             {listOfBlocks.length > 0
-              ? listOfBlocks.map((b) => (
-                  <div className={styles.predTargets}>
-                    <Label>{b.id}</Label>
-                    <Value>{b.status}</Value>
+              ? listOfBlocks.map((b, i) => (
+                  <div className={styles.listOfBlocks} key={i}>
+                    <div onClick={() => this.handleRowClick(b.id)} className={styles.blocksLabel}>
+                      <Label>{b.id}</Label>
+                    </div>
+                    <Value>
+                      <StatusText status={schedulerBlocksStateToStyle[b.status]}>{b.status}</StatusText>
+                    </Value>
                   </div>
                 ))
               : 'No data'}
           </SummaryPanel>
+          <Button
+            status="info"
+            disabled={selectedBlockId != null ? false : true}
+            onClick={() => this.addBlockCommand()}
+          >
+            Add Block to Scheduler queue
+          </Button>
         </div>
       </div>
     );

@@ -927,6 +927,17 @@ export const schedulerDetailedStateToStyle = {
   QUEUEING_TARGET: 'running',
 };
 
+// Scheduler
+export const schedulerBlocksStateToStyle = {
+  INVALID: 'invalid',
+  AVAILABLE: 'ok',
+  STARTED: 'warning',
+  EXECUTING: 'ok',
+  COMPLETED: 'ok',
+  ERROR: 'alert',
+  INTERRUPTED: 'alert',
+};
+
 /*****************************************************************************/
 /*******************************STATE MAPPINGS********************************/
 /*****************************************************************************/

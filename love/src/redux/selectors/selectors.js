@@ -1353,6 +1353,10 @@ export const getCurrentTargetInfo = (state, salindex) => {
     currentSequenceDuration: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.sequenceDuration?.value ?? 0.0,
     currentSequenceNVisits: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.sequenceNVisits?.value ?? 0.0,
     currentSequenceVisits: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.sequenceVisits?.value ?? 0.0,
+    airmass: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.airmass?.value ?? 0.0,
+    skyBrightness: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.skyBrightness?.value ?? 0.0,
+    cloud: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.cloud?.value ?? 0.0,
+    seeing: currentTarget[`event-Scheduler-${salindex}-target`]?.[0]?.seeing?.value ?? 0.0,
   };
 };
 
@@ -1433,7 +1437,7 @@ export const getBlocksInfo = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-blockInventory`, `event-Scheduler-${salindex}-blockStatus`];
   const blocks = getStreamsData(state, subscriptions);
   return {
-    blockInvId: blocks[`event-Scheduler-${salindex}-blockInventory`]?.[0]?.ids?.vallue ?? '',
+    blockInvId: blocks[`event-Scheduler-${salindex}-blockInventory`]?.[0]?.ids?.value ?? '',
     blockInvStatus: blocks[`event-Scheduler-${salindex}-blockInventory`]?.[0]?.status?.value ?? '',
     blockId: blocks[`event-Scheduler-${salindex}-blockStatus`]?.[0]?.id?.value ?? '',
     blockStatusId: blocks[`event-Scheduler-${salindex}-blockStatus`]?.[0]?.statusId?.value ?? 0,

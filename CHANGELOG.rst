@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.24.7
+--------
+
+* addBlock command into Scheduler component `<https://github.com/lsst-ts/LOVE-frontend/pull/501>`_
+
 v5.24.6
 --------
 
