@@ -6,6 +6,7 @@ import MultiSelect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
+import RefreshIcon from 'components/icons/RefreshIcon/RefreshIcon';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -279,6 +280,45 @@ export default class ExposureAdd extends Component {
     this.saveMessage();
   }
 
+  renderExposuresInput() {
+    const { observationIds, newMessage } = this.state;
+    return (
+      <div className={styles.exposuresSelect}>
+        <Multiselect
+          options={observationIds}
+          selectedValues={newMessage?.obs_id}
+          onSelect={(selectedOptions) => {
+            this.setState((prevState) => ({
+              newMessage: { ...prevState.newMessage, obs_id: selectedOptions },
+            }));
+          }}
+          placeholder="Select one or several observations"
+          selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
+        />
+        {this.renderRefreshLogsButton()}
+      </div>
+    );
+  }
+
+  renderRefreshLogsButton() {
+    const { updatingExposures } = this.state;
+
+    return (
+      <Button
+        className={styles.refreshDataBtn}
+        title="Refresh exposures"
+        disabled={updatingExposures}
+        onClick={() => this.queryExposures()}
+      >
+        {updatingExposures ? (
+          <SpinnerIcon className={styles.spinnerIcon} />
+        ) : (
+          <RefreshIcon title="Refresh exposures" className={styles.refreshIcon} />
+        )}
+      </Button>
+    );
+  }
+
   componentDidMount() {
     ManagerInterface.getListExposureInstruments().then((data) => {
       const registryMap = {};
@@ -382,7 +422,7 @@ export default class ExposureAdd extends Component {
 
                     {this.renderDateTimeRangeSelect()}
 
-                    <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
+                    <span className={styles.label}>Obs. Id</span>
                     <span className={styles.value} style={{ flex: 1 }}>
                       {this.renderExposuresSelect()}
                     </span>

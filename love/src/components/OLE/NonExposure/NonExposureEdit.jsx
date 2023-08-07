@@ -388,9 +388,9 @@ export default class NonExposureEdit extends Component {
               </div>
 
               <div className={styles.contentRight}>
-                <div className={[styles.mb1, styles.floatLeft, styles.inline].join(' ')}>
-                  <span className={styles.title}>Message</span>
-                  {!isMenu && this.renderTimeOfIncidentSection()}
+                <div className={styles.mb1}>
+                  <div className={styles.title}>Message</div>
+                  <div className={styles.inline}>{!isMenu && this.renderTimeOfIncidentSection()}</div>
                 </div>
                 <TextArea
                   value={this.state.logEdit.message_text}
