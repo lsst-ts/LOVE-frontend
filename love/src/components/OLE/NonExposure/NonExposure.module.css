@@ -393,6 +393,17 @@ th.tableHead {
   margin-bottom: var(--small-padding);
 }
 
+.refreshDateIcon {
+  display: flex;
+  align-items: center;
+  padding: 0.25em;
+  margin-left: var(--small-padding);
+}
+.refreshDateIcon > * {
+  width: 1.5em;
+  height: 1.5em;
+}
+
 .footer .attachedFiles {
   display: flex;
   align-items: center;

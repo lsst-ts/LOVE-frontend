@@ -5,6 +5,7 @@ import Moment from 'moment';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
+import RefreshIcon from 'components/icons/RefreshIcon/RefreshIcon';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -102,6 +103,12 @@ export default class NonExposureEdit extends Component {
     this.setState({ logEdit: NonExposureEdit.defaultProps.logEdit });
   }
 
+  updateDates() {
+    this.setState((prevState) => ({
+      logEdit: { ...prevState.logEdit, date_begin: Moment(), date_end: Moment() },
+    }));
+  }
+
   updateOrCreateMessageNarrativeLogs() {
     const payload = { ...this.state.logEdit };
 
@@ -187,6 +194,14 @@ export default class NonExposureEdit extends Component {
               toggled={incidentTimeIsSingular}
               onToggle={(event) => this.setState({ incidentTimeIsSingular: event })}
             />
+            <Button
+              className={styles.refreshDateIcon}
+              size="small"
+              title="Refresh date"
+              onClick={() => this.updateDates()}
+            >
+              <RefreshIcon title="Refresh date" />
+            </Button>
           </div>
           {incidentTimeIsSingular ? (
             <DateTimeRange
