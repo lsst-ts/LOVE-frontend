@@ -2,10 +2,14 @@
 Version History
 ===============
 
-v5.24.6
+v5.24.7
 --------
 
 * addBlock command into Scheduler component `<https://github.com/lsst-ts/LOVE-frontend/pull/501>`_
+
+v5.24.6
+--------
+
 * Improve ScriptQueue search scripts functionality `<https://github.com/lsst-ts/LOVE-frontend/pull/500>`_
 * Add unique Ids and ZoomOut button to M1M3TS `<https://github.com/lsst-ts/LOVE-frontend/pull/499>`_
 * Workaround to fetch an infinite response when status is 0 `<https://github.com/lsst-ts/LOVE-frontend/pull/497>`_
