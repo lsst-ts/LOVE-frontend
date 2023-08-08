@@ -226,6 +226,14 @@
   margin-bottom: var(--content-padding);
 }
 
+.contentRight {
+  padding: 0 var(--content-padding);
+}
+
+.contentMenu .contentRight {
+  padding: 0;
+}
+
 .contentRight textarea {
   width: 100%;
   min-width: 30em;

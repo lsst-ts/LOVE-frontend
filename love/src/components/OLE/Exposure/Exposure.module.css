@@ -494,3 +494,8 @@ th.tableHead {
 .footerMenu .jira :nth-child(4) {
   flex-grow: 1;
 }
+
+.inputError {
+  margin-top: var(--small-padding);
+  color: var(--status-alert-color);
+}

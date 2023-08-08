@@ -47,6 +47,9 @@ export default class NonExposureEdit extends Component {
       user: undefined,
       time_lost: 0,
       jira: false,
+      jira_new: true,
+      jira_issue_title: '',
+      jira_issue_id: '',
       file: undefined,
       fileurl: undefined,
       filename: undefined,
@@ -78,6 +81,7 @@ export default class NonExposureEdit extends Component {
       logEdit,
       savingLog: false,
       datesAreValid: true,
+      jiraIssueError: false,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -264,11 +268,42 @@ export default class NonExposureEdit extends Component {
         });
       }
     }
+
+    if (this.state.logEdit && this.state.logEdit.jira !== prevState.logEdit.jira) {
+      const { jira, jira_issue_title, jira_issue_id } = this.state.logEdit;
+      if (jira_issue_title === '' || jira_issue_id === '') {
+        this.setState({ jiraIssueError: true });
+      }
+
+      if (!jira) {
+        this.setState({
+          jiraIssueError: false,
+        });
+      }
+    }
+
+    if (this.state.logEdit && this.state.logEdit.jira_issue_title !== prevState.logEdit.jira_issue_title) {
+      const { jira_issue_title } = this.state.logEdit;
+      if (jira_issue_title === '') {
+        this.setState({ jiraIssueError: true });
+      } else {
+        this.setState({ jiraIssueError: false });
+      }
+    }
+
+    if (this.state.logEdit && this.state.logEdit.jira_issue_id !== prevState.logEdit.jira_issue_id) {
+      const { jira_issue_id } = this.state.logEdit;
+      if (jira_issue_id === '') {
+        this.setState({ jiraIssueError: true });
+      } else {
+        this.setState({ jiraIssueError: false });
+      }
+    }
   }
 
   render() {
     const { back, isLogCreate, isMenu } = this.props;
-    const { datesAreValid, savingLog } = this.state;
+    const { datesAreValid, savingLog, jiraIssueError } = this.state;
 
     const view = this.props.view ?? NonExposureEdit.defaultProps.view;
     const systemOptions = LSST_SYSTEMS;
@@ -458,23 +493,34 @@ export default class NonExposureEdit extends Component {
                       <>
                         <Toggle
                           labels={['New', 'Existent']}
-                          toggled={this.state.logEdit.jira_comment}
+                          toggled={!this.state.logEdit.jira_new}
                           onToggle={(event) =>
                             this.setState((prevState) => ({
-                              logEdit: { ...prevState.logEdit, jira_comment: event },
+                              logEdit: { ...prevState.logEdit, jira_new: !event },
                             }))
                           }
                         />
-                        {this.state.logEdit.jira_comment && (
-                          <input
-                            className={styles.issueIdInput}
-                            placeholder="Jira ticket id"
+                        {this.state.logEdit.jira_new ? (
+                          <Input
+                            placeholder="Jira ticket title"
                             onChange={(event) =>
                               this.setState((prevState) => ({
-                                logEdit: { ...prevState.logEdit, issue_id: event.target.value },
+                                logEdit: { ...prevState.logEdit, jira_issue_title: event.target.value },
                               }))
                             }
                           />
+                        ) : (
+                          <Input
+                            placeholder="Jira ticket id"
+                            onChange={(event) =>
+                              this.setState((prevState) => ({
+                                logEdit: { ...prevState.logEdit, jira_issue_id: event.target.value },
+                              }))
+                            }
+                          />
+                        )}
+                        {this.state.jiraIssueError && (
+                          <div className={styles.inputError}>This field cannot be empty.</div>
                         )}
                       </>
                     )}
@@ -492,7 +538,7 @@ export default class NonExposureEdit extends Component {
                 ) : (
                   <></>
                 )}
-                <Button disabled={!datesAreValid} type="submit">
+                <Button disabled={!datesAreValid || jiraIssueError} type="submit">
                   {savingLog ? (
                     <SpinnerIcon className={styles.spinnerIcon} />
                   ) : (

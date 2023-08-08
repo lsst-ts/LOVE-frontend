@@ -58,6 +58,9 @@ export default class ExposureAdd extends Component {
       is_new: false,
       exposure_flag: 'none',
       jira: false,
+      jira_new: true,
+      jira_issue_title: '',
+      jira_issue_id: '',
       tags: undefined,
     },
     isLogCreate: false,
@@ -84,6 +87,7 @@ export default class ExposureAdd extends Component {
       registryMap: {},
       updatingExposures: false,
       savingLog: false,
+      jiraIssueError: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -361,11 +365,47 @@ export default class ExposureAdd extends Component {
         },
       );
     }
+
+    if (this.state.newMessage && this.state.newMessage.jira !== prevState.newMessage.jira) {
+      const { jira, jira_issue_title, jira_issue_id } = this.state.newMessage;
+      if (jira_issue_title === '' || jira_issue_id === '') {
+        this.setState({ jiraIssueError: true });
+      }
+
+      if (!jira) {
+        this.setState({
+          jiraIssueError: false,
+        });
+      }
+    }
+
+    if (this.state.newMessage && this.state.newMessage.jira_issue_title !== prevState.newMessage.jira_issue_title) {
+      const { jira_issue_title } = this.state.newMessage;
+      if (jira_issue_title === '') {
+        this.setState({ jiraIssueError: true });
+      } else {
+        this.setState({ jiraIssueError: false });
+      }
+    }
+
+    if (this.state.newMessage && this.state.newMessage.jira_issue_id !== prevState.newMessage.jira_issue_id) {
+      const { jira_issue_id } = this.state.newMessage;
+      if (jira_issue_id === '') {
+        this.setState({ jiraIssueError: true });
+      } else {
+        this.setState({ jiraIssueError: false });
+      }
+    }
   }
 
   render() {
     const { isLogCreate, isMenu, back, view } = this.props;
-    const { confirmationModalShown, confirmationModalText, savingLog } = this.state;
+    const {
+      confirmationModalShown,
+      confirmationModalText,
+      savingLog,
+      jiraIssueError
+    } = this.state;
 
     const filesUrls = getFilesURLs(this.state.newMessage.urls);
 
@@ -582,13 +622,14 @@ export default class ExposureAdd extends Component {
                     {this.state.newMessage.jira && (
                       <Toggle
                         labels={['New', 'Existent']}
-                        toggled={this.state.newMessage.jira_comment}
-                        onToggle={(event) =>
+                        toggled={!this.state.newMessage.jira_new}
+                        onToggle={(event) => {
                           this.setState((prevState) => ({
-                            newMessage: { ...prevState.newMessage, jira_comment: event },
-                          }))
-                        }
+                            newMessage: { ...prevState.newMessage, jira_new: !event },
+                          }));
+                        }}
                       />
+<<<<<<< HEAD
                     )}
                   </span>
                   <span>
@@ -608,6 +649,35 @@ export default class ExposureAdd extends Component {
 
               <div className={isMenu ? styles.footerRightMenu : styles.footerRight}>
                 <Button type="submit">
+=======
+                      {this.state.newMessage.jira_new ? (
+                        <Input
+                          placeholder="Jira ticket title"
+                          onChange={(event) =>
+                            this.setState((prevState) => ({
+                              newMessage: { ...prevState.newMessage, jira_issue_title: event.target.value },
+                            }))
+                          }
+                        />
+                      ) : (
+                        <Input
+                          placeholder="Jira ticket id"
+                          onChange={(event) =>
+                            this.setState((prevState) => ({
+                              newMessage: { ...prevState.newMessage, jira_issue_id: event.target.value },
+                            }))
+                          }
+                        />
+                      )}
+                      {this.state.jiraIssueError && (
+                        <div className={styles.inputError}>This field cannot be empty.</div>
+                      )}
+                    </>
+                  )}
+                </span>
+
+                <Button disabled={jiraIssueError} type="submit">
+>>>>>>> 36f62a8d (Refactor NarrativeLogEdit and ExposureLogAdd to request jira ticket title input)
                   {savingLog ? (
                     <SpinnerIcon className={styles.spinnerIcon} />
                   ) : (
