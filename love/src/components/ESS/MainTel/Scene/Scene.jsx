@@ -30,6 +30,22 @@ function CameraController() {
   return null;
 };
 
+function createTextCanvas(text, color) {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+
+  context.font = `bold 100px Arial`;
+  const textWidth = context.measureText(text).width;
+
+  canvas.width = textWidth;
+  canvas.height = 100;
+
+  context.font = `bold 100px Arial`;
+  context.fillStyle = color;
+  context.fillText(text, 0, 100);
+  return canvas;
+}
+
 const Scene = (props) => {
 
   const {
@@ -46,6 +62,9 @@ const Scene = (props) => {
     positionActualDomeAz,
   } = props;
 
+  const canvas = createTextCanvas('N', 'white');
+  const textTexture = new THREE.CanvasTexture(canvas);
+
   return (
     <>
     <Canvas
@@ -59,6 +78,16 @@ const Scene = (props) => {
       <directionalLight position={[-20, 20, 0]} intensity={1} />
       <axesHelper args={[25]} />
       <gridHelper args={[17*2, 17]}/>
+
+      <mesh
+        position={[0, 0.2, 22]}
+        rotation-x={THREE.MathUtils.degToRad(90)}
+        rotation-y={THREE.MathUtils.degToRad(180)}
+        scale={[5, 5, 5]}
+      >
+        <planeGeometry args={[0.5, 0.5]} />
+        <meshBasicMaterial map={textTexture} side={THREE.DoubleSide} transparent />
+      </mesh>
 
       <group
         rotation-y={THREE.MathUtils.degToRad(90 - positionActualDomeAz)}

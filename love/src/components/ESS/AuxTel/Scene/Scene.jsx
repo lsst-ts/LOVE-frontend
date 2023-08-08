@@ -31,7 +31,27 @@ function CameraController() {
   return null;
 };
 
+function createTextCanvas(text, color) {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+
+  context.font = `bold 100px Arial`;
+  const textWidth = context.measureText(text).width;
+
+  canvas.width = textWidth;
+  canvas.height = 100;
+
+  context.font = `bold 100px Arial`;
+  context.fillStyle = color;
+  context.fillText(text, 0, 100);
+  return canvas;
+}
+
+
 const Scene = (props) => {
+
+  const canvas = createTextCanvas('N', 'white');
+  const textTexture = new THREE.CanvasTexture(canvas);
 
   const fans = [
     {
@@ -107,7 +127,15 @@ const Scene = (props) => {
       <axesHelper args={[7]} />
       <gridHelper args={[10, 10]} />
 
-      {/* <Dome /> */}
+      <mesh
+        position={[0, 0.2, 5.8]}
+        rotation-x={THREE.MathUtils.degToRad(90)}
+        rotation-y={THREE.MathUtils.degToRad(180)}
+        scale={[1.6, 1.6, 1.6]}
+      >
+        <planeGeometry args={[0.5, 0.5]} />
+        <meshBasicMaterial map={textTexture} side={THREE.DoubleSide} transparent />
+      </mesh>
 
       {/** Main Door */}
       <Door
