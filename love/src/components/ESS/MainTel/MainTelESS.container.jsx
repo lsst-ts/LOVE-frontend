@@ -5,6 +5,7 @@ import {
   getStreamsData,
   getLouversStatus,
   getApertureShutter,
+  getDomeAzimuth,
 } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import MainTelESS from './MainTelESS';
@@ -252,11 +253,13 @@ const mapStateToProps = (state, ownProps) => {
 
   const louversState = getLouversStatus(state);
   const apertureShutterState = getApertureShutter(state);
+  const domeAzimuth = getDomeAzimuth(state);
 
   return {
     ...map,
     percentOpenLouvers: louversState.actualPositionLouvers,
     percentOpenShutter: apertureShutterState.positionActualShutter,
+    positionActualDomeAz: domeAzimuth.positionActualDomeAz,
   };
 };
 

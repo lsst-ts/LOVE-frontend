@@ -42,7 +42,8 @@ const Scene = (props) => {
     getGradiantColorX,
     percentOpenLouvers,
     louversIds,
-    percentOpenShutter
+    percentOpenShutter,
+    positionActualDomeAz,
   } = props;
 
   return (
@@ -59,24 +60,26 @@ const Scene = (props) => {
       <axesHelper args={[25]} />
       <gridHelper args={[17*2, 17]}/>
 
-      {/* <Dome /> */}
+      <group
+        rotation-y={THREE.MathUtils.degToRad(90 - positionActualDomeAz)}
+      >
+        <Louvers
+          ids={louversIds}
+          percentOpen={percentOpenLouvers}
+        />
 
-      <Louvers 
-        ids={louversIds}
-        percentOpen={percentOpenLouvers}
-      />
+        <Shutter
+          name={'shutter 0'}
+          position={{x: 0, y: -3.3, z: 7}}
+          openPercent={percentOpenShutter[0] ?? 100}
+        />
 
-      <Shutter
-        name={'shutter 0'}
-        position={{x: 0, y: -3.3, z: 7}}
-        openPercent={percentOpenShutter[0] ?? 100}
-      />
-
-      <Shutter
-        name={'shutter 1'}
-        position={{x: 0, y: 3.3, z: 7}}
-        openPercent={percentOpenShutter[1] ?? 100}
-      />
+        <Shutter
+          name={'shutter 1'}
+          position={{x: 0, y: 3.3, z: 7}}
+          openPercent={percentOpenShutter[1] ?? 100}
+        />
+      </group>
 
       <Sensors 
         selectedSensor={selectedSensor}
@@ -112,18 +115,21 @@ Scene.propTypes = {
   getGradiantColorX: PropTypes.func,
   louversIds: PropTypes.arrayOf(PropTypes.number),
   percentOpen: PropTypes.arrayOf(PropTypes.number),
+  positionActualDomeAz: PropTypes.number,
 };
 
 Scene.defaultProps = {
   selectedSensor: 0,
   positions: [],
   percentOpen: [],
+  positionActualDomeAz: 0,
   setSensor: () => {console.log('scene default setSensor')},
 }
 
 const comparator = (prevProps, nextProps) => {
   return (
     prevProps.selectedSensor === nextProps.selectedSensor &&
+    prevProps.positionActualDomeAz === nextProps.positionActualDomeAz &&
     isEqual(prevProps.percentOpen, nextProps.percentOpen ) &&
     isEqual(prevProps.positions, nextProps.positions )
   )

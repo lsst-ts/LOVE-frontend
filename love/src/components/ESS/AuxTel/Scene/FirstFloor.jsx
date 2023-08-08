@@ -16,6 +16,17 @@ export function FirstFloor() {
     height: 2.30,
   };
 
+  const garageDoor = {
+    position: {
+      x: Math.sin(THREE.MathUtils.degToRad(270)) * radius,
+      y: Math.cos(THREE.MathUtils.degToRad(270)) * radius,
+      z: -0.8 -1.15 - 0.4,
+    },
+    angle: 270,
+    width: 2.3,
+    height: 2.30,
+  }
+
   const displaceY = -radius + door.height/2;
   const height = 0.05;
   const radialSegments = 64;
@@ -78,6 +89,21 @@ export function FirstFloor() {
           position={[door.width/4, 0, 0.03]}
         >
           <planeBufferGeometry attach="geometry" args={[door.width/2 - 0.01, door.height - 0.01]} />
+          <meshPhongMaterial attach="material" color={0x3f7b9d} side={THREE.DoubleSide} transparent opacity={0.8} />
+        </mesh>
+      </group>
+      <group
+        position={[garageDoor.position.x, garageDoor.position.z, garageDoor.position.y]}
+        rotation-y={THREE.MathUtils.degToRad(garageDoor.angle)}
+      >
+        <mesh>
+          <boxGeometry args={[garageDoor.width, garageDoor.height, 0.05]} />
+          <meshBasicMaterial color={0x3f7b9d} wireframe transparent opacity={0.8} />
+        </mesh>
+        <mesh
+          position={[0, 0, 0.03]}
+        >
+          <planeBufferGeometry attach="geometry" args={[garageDoor.width - 0.01, garageDoor.height - 0.01]} />
           <meshPhongMaterial attach="material" color={0x3f7b9d} side={THREE.DoubleSide} transparent opacity={0.8} />
         </mesh>
       </group>

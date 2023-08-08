@@ -245,7 +245,11 @@ export default class MainTelESS extends Component {
 
   render() {
     const { selectedSensor, selectedSensorData, positions, referenceIds, louversIds } = this.state;
-    const { minGradiantLimit, maxGradiantLimit, option, percentOpenLouvers, percentOpenShutter } = this.props;
+    const {
+      minGradiantLimit, maxGradiantLimit,
+      option,
+      percentOpenLouvers, percentOpenShutter, positionActualDomeAz
+    } = this.props;
     const sensors = this.props[option] ?? [];
     const values = sensors.map((sensor) => sensor.value ?? 0) ?? [];
     const speeds = sensors.map((sensor) => sensor.speed ?? undefined) ?? [];
@@ -266,6 +270,7 @@ export default class MainTelESS extends Component {
             louversIds={louversIds}
             percentOpenLouvers={percentOpenLouvers}
             percentOpenShutter={percentOpenShutter}
+            positionActualDomeAz={positionActualDomeAz}
           />
         </div>
 
