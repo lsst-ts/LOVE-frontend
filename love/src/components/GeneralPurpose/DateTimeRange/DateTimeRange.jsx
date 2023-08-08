@@ -43,9 +43,6 @@ const DateTimeRange = ({
     onChange(changeEvent, 'end');
   }, []);
 
-  console.log('render datetime range');
-  console.log(dateStart, dateEnd);
-
   return (
     <div className={[styles.horizontalFilter, className].join(' ')}>
       {label !== '' && <span className={styles.label}>{label}</span>}
