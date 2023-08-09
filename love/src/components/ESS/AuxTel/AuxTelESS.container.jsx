@@ -48,6 +48,11 @@ export const schema = {
       description: 'select option between temperature, relativeHumidity, airFlow or airTurbulence',
       default: 'temperature',
     },
+    initialCameraPosition: {
+      type: 'object',
+      description: 'object of the initial position from the camera. Example {x: -2.8, y: -6, z: 9.5}',
+      default: {x: -2.8, y: -6, z: 9.5},
+    }
   },
 };
 

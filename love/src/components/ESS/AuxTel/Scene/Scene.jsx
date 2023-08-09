@@ -10,7 +10,7 @@ import { Door } from './Door';
 import { Fan } from './Fan';
 import { FirstFloor } from './FirstFloor';
 
-const INITIAL_CAMERA_POSITION = [8.8, 4.5, 7];
+const INITIAL_CAMERA_POSITION = [-2.8, 9.5, -6];
 const INITIAL_TARGET = [0, 0, 0];
 
 function CameraController() {
@@ -113,11 +113,17 @@ const Scene = (props) => {
     azimuthPosition,
   } = props;
 
+  const initialCameraPosition = [
+    props.initialCameraPosition?.x ?? INITIAL_CAMERA_POSITION[0],
+    props.initialCameraPosition?.z ?? INITIAL_CAMERA_POSITION[1],
+    props.initialCameraPosition?.y ?? INITIAL_CAMERA_POSITION[2],
+  ];
+
   return (
     <>
     <Canvas
       camera={{
-        position: INITIAL_CAMERA_POSITION,
+        position: initialCameraPosition,
       }}
     >
       <Suspense fallback={<div>loading</div>}>
@@ -195,11 +201,11 @@ Scene.propTypes = {
   })),
   setSensor: PropTypes.func,
   values: PropTypes.arrayOf(PropTypes.number),
-  speeds: PropTypes.oneOf([undefined, PropTypes.shape({
+  speeds: PropTypes.arrayOf(PropTypes.shape({
     x: PropTypes.number,
     y: PropTypes.number,
     z: PropTypes.number,
-  })]),
+  })),
   directions: PropTypes.arrayOf(PropTypes.number),
   getGradiantColorX: PropTypes.func,
   percentOpenMainDoor: PropTypes.number,

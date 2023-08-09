@@ -50,6 +50,11 @@ export const schema = {
       description: 'select option between temperature, relativeHumidity, airFlow or airTurbulence',
       default: 'temperature',
     },
+    initialCameraPosition: {
+      type: 'object',
+      description: 'object of the initial position from the camera. Example {x: -12, y: -16.5, z: 26.5}',
+      default: {x: -12, y: -16.5, z: 26.5},
+    }
   },
 };
 
@@ -158,6 +163,7 @@ const parseAirflow = (streams) => {
       });
     });
   });
+  // PENDING: DELETE EXAMPLE
   airflows.push({
     sensorName: 'test 1',
     value: 30,
@@ -222,6 +228,7 @@ const parseAirTurbulence = (streams) => {
       });
     });
   });
+  // PENDING: DELETE EXAMPLE
   airTurbulences.push({
     sensorName: 'test',
     value: 2,

@@ -17,9 +17,9 @@ export function Sensors(props) {
 
   const RGBToHex = (rgb) => {
     // Choose correct separator
-    let sep = rgb.indexOf(",") > -1 ? "," : " ";
+    let sep = rgb?.indexOf(",") > -1 ? "," : " ";
     // Turn "rgb(r,g,b)" into [r,g,b]
-    rgb = rgb.substr(4).split(")")[0].split(sep);
+    rgb = rgb?.substr(4).split(")")[0].split(sep) ?? [0, 0, 0];
 
     let r = (+rgb[0]).toString(16),
         g = (+rgb[1]).toString(16),
@@ -40,8 +40,15 @@ export function Sensors(props) {
     const value = values[index] ?? 0;
     const speed = speeds[index] ?? undefined;
     const direction = directions[index] ?? undefined;
-    const rgb = (getGradiantColorX  && value) ? getGradiantColorX(value) : 'rgb(255, 255, 0)';
-    return { position: position, id: index + 1, color: rgb, speed: speed, direction: direction };
+    const rgb = (getGradiantColorX && value) ? getGradiantColorX(value) ?? 'rgb(255, 255, 255)' : 'rgb(255, 255, 255)';
+    const hex = RGBToHex(rgb);
+    return {
+      position: position,
+      id: index + 1,
+      color: hex,
+      speed: speed,
+      direction: direction
+    };
   });
 
   return (

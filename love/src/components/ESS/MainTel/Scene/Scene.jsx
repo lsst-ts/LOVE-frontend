@@ -9,7 +9,7 @@ import { isEqual } from 'lodash';
 import { Louvers } from './Louvers';
 import { Shutter } from './Shutter';
 
-const INITIAL_CAMERA_POSITION = [14.8, 24.5, 12];
+const INITIAL_CAMERA_POSITION = [-12, 26.5, -16.5];
 const INITIAL_TARGET = [0, 10, 0];
 
 function CameraController() {
@@ -65,11 +65,17 @@ const Scene = (props) => {
   const canvas = createTextCanvas('N', 'white');
   const textTexture = new THREE.CanvasTexture(canvas);
 
+  const initialCameraPosition = [
+    props.initialCameraPosition?.x ?? INITIAL_CAMERA_POSITION[0],
+    props.initialCameraPosition?.z ?? INITIAL_CAMERA_POSITION[1],
+    props.initialCameraPosition?.y ?? INITIAL_CAMERA_POSITION[2],
+  ];
+
   return (
     <>
     <Canvas
       camera={{
-        position: INITIAL_CAMERA_POSITION,
+        position: initialCameraPosition,
       }}
     >
       <Suspense fallback={<div>loading</div>}>
@@ -77,7 +83,7 @@ const Scene = (props) => {
       <ambientLight intensity={0.8} />
       <directionalLight position={[-20, 20, 0]} intensity={1} />
       <axesHelper args={[25]} />
-      <gridHelper args={[17*2, 17]}/>
+      <gridHelper args={[18*2, 18]}/>
 
       <mesh
         position={[0, 0.2, 22]}
@@ -135,11 +141,11 @@ Scene.propTypes = {
   })),
   setSensor: PropTypes.func,
   values: PropTypes.arrayOf(PropTypes.number),
-  speeds: PropTypes.oneOf([undefined, PropTypes.shape({
+  speeds: PropTypes.arrayOf(PropTypes.shape({
     x: PropTypes.number,
     y: PropTypes.number,
     z: PropTypes.number,
-  })]),
+  })),
   directions: PropTypes.arrayOf(PropTypes.number),
   getGradiantColorX: PropTypes.func,
   louversIds: PropTypes.arrayOf(PropTypes.number),

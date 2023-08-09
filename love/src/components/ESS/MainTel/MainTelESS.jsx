@@ -248,7 +248,8 @@ export default class MainTelESS extends Component {
     const {
       minGradiantLimit, maxGradiantLimit,
       option,
-      percentOpenLouvers, percentOpenShutter, positionActualDomeAz
+      percentOpenLouvers, percentOpenShutter, positionActualDomeAz,
+      initialCameraPosition,
     } = this.props;
     const sensors = this.props[option] ?? [];
     const values = sensors.map((sensor) => sensor.value ?? 0) ?? [];
@@ -271,6 +272,7 @@ export default class MainTelESS extends Component {
             percentOpenLouvers={percentOpenLouvers}
             percentOpenShutter={percentOpenShutter}
             positionActualDomeAz={positionActualDomeAz}
+            initialCameraPosition={initialCameraPosition}
           />
         </div>
 
