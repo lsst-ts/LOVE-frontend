@@ -436,6 +436,9 @@ export default class Plot extends Component {
 
   componentWillUnmount() {
     this.props.unsubscribeToStreams();
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
   }
 
   render() {

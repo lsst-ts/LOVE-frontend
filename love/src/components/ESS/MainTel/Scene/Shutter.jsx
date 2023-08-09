@@ -4,8 +4,6 @@ import * as THREE from "three";
 
 export function Shutter (props) {
 
-  const ref = useRef();
-
   const width = 6.55;
   const window = 11.3 / 2;
   const open = props.position.y > 0 ? window * props.openPercent/100 : (-1) * window * props.openPercent/100;
@@ -57,7 +55,7 @@ export function Shutter (props) {
         { positions.map((pos, index) => {
           return (
             <mesh
-              ref={ref}
+              key={`shutter-${index}`}
               rotation-x={THREE.MathUtils.degToRad(90)}
               rotation-z={THREE.MathUtils.degToRad(90)}
               rotation-y={THREE.MathUtils.degToRad(angle[index])}
@@ -68,7 +66,6 @@ export function Shutter (props) {
             </mesh>
           );
         })}
-
       </group>
     </>
   );

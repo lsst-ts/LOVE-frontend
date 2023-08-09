@@ -11,6 +11,7 @@ export function Louvers(props) {
       const index = ids.indexOf(louver.id ?? 1);
       return (
         <Louver
+          key={`louver-${index}`}
           position={louver.position}
           id={louver.id}
           name={louver.name}
@@ -31,7 +32,6 @@ Louvers.propTypes = {
       y: PropTypes.number,
       z: PropTypes.number,
     }),
-    color: PropTypes.string,
     angle: PropTypes.number,
     type: PropTypes.string,
   })),
@@ -43,7 +43,6 @@ Louvers.defaultProps = {
   louvers: [{
     id: 1,
     position: {x: 0, y: 0, z: 0},
-    color: 0xffff00,
     name: '',
     angle: 0,
     type: 'I',

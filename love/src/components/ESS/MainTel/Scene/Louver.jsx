@@ -86,7 +86,6 @@ Louver.propTypes = {
     y: PropTypes.number,
     z: PropTypes.number,
   }),
-  color: PropTypes.string,
   name: PropTypes.string,
   id: PropTypes.number,
   angle: PropTypes.number,
@@ -96,7 +95,6 @@ Louver.propTypes = {
 
 Louver.defaultProps = {
   position: {x: 0, y: 0, z: 0},
-  color: 0xffff00,
   name: '',
   id: 1,
   angle: 0,
@@ -108,7 +106,6 @@ Louver.defaultProps = {
 const comparator = (prevProps, nextProps) => {
   return (
       isEqual(nextProps.position, prevProps.position) && 
-      prevProps.color === nextProps.color &&
       prevProps.name === nextProps.name && 
       prevProps.angle === nextProps.angle && 
       prevProps.percentOpen === nextProps.percentOpen
