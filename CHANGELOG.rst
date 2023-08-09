@@ -5,6 +5,7 @@ Version History
 v5.24.7
 --------
 
+* Mobile version menu not stacking `<https://github.com/lsst-ts/LOVE-frontend/pull/502>`_
 * addBlock command into Scheduler component `<https://github.com/lsst-ts/LOVE-frontend/pull/501>`_
 
 v5.24.6
