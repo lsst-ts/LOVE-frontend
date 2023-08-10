@@ -28,8 +28,6 @@ export function Door (props) {
 
   const frameLengthAngle = props.thetaStart + props.thetaLength;
 
-  console.log('frameLengthAngle', frameLengthAngle);
-
   const openDoor = props.isMainDoor ? 
     THREE.MathUtils.degToRad(-1 * props.thetaLength * props.openPercent / 100)
     : THREE.MathUtils.degToRad(90 * props.openPercent / 100);
