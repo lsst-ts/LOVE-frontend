@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ManagerInterface, { parseCommanderData } from 'Utils';
+import ManagerInterface, { parseCommanderData, fixedFloat } from 'Utils';
 import { DATE_TIME_FORMAT } from 'Config';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import PolarPlotContainer from 'components/GeneralPurpose/Plot/PolarPlot/PolarPlot.container';
@@ -18,34 +18,19 @@ export default class WeatherStation extends Component {
   };
 
   temperaturePlot = {
-    'Air temperature': {
-      type: 'line',
-      color: COLORS[0],
-      values: [
-        {
-          variable: 'y',
-          category: 'telemetry',
-          csc: 'WeatherStation',
-          salindex: this.props.salindex,
-          topic: 'airTemperature',
-          item: 'avg1M',
-          accessor: '(x) => x',
-        }
-      ]
-    },
-    'Soil temperature': {
+    Temperature: {
       type: 'line',
       color: COLORS[1],
       values: [
         {
           variable: 'y',
           category: 'telemetry',
-          csc: 'WeatherStation',
+          csc: 'ESS',
           salindex: this.props.salindex,
-          topic: 'soilTemperature',
-          item: 'avg1M',
-          accessor: '(x) => x',
-        }
+          topic: 'temperature',
+          item: 'temperature',
+          accessor: '(x) => x[0]',
+        },
       ],
     },
     'Dew point': {
@@ -55,13 +40,13 @@ export default class WeatherStation extends Component {
         {
           variable: 'y',
           category: 'telemetry',
-          csc: 'WeatherStation',
+          csc: 'ESS',
           salindex: this.props.salindex,
           topic: 'dewPoint',
-          item: 'avg1M',
+          item: 'dewPoint',
           accessor: '(x) => x',
-        }
-      ]
+        },
+      ],
     },
   };
 
@@ -73,14 +58,14 @@ export default class WeatherStation extends Component {
         {
           variable: 'y',
           category: 'telemetry',
-          csc: 'WeatherStation',
+          csc: 'ESS',
           salindex: this.props.salindex,
           topic: 'relativeHumidity',
-          item: 'avg1M',
+          item: 'relativeHumidity',
           accessor: '(x) => x',
         },
-      ]
-    }
+      ],
+    },
   };
 
   pressurePlot = {
@@ -91,13 +76,13 @@ export default class WeatherStation extends Component {
         {
           variable: 'y',
           category: 'telemetry',
-          csc: 'WeatherStation',
+          csc: 'ESS',
           salindex: this.props.salindex,
-          topic: 'airPressure',
-          item: 'paAvg1M',
-          accessor: '(x) => x',
-        }
-      ]
+          topic: 'pressure',
+          item: 'pressure',
+          accessor: '(x) => x[0]',
+        },
+      ],
     },
   };
 
@@ -109,13 +94,13 @@ export default class WeatherStation extends Component {
         {
           variable: 'y',
           category: 'telemetry',
-          csc: 'WeatherStation',
+          csc: 'ESS',
           salindex: this.props.salindex,
-          topic: 'solarNetRadiation',
-          item: 'avg1M',
+          topic: 'solarRadiation',
+          item: 'solarRadiation',
           accessor: '(x) => x',
-        }
-      ]
+        },
+      ],
     },
   };
 
@@ -127,13 +112,13 @@ export default class WeatherStation extends Component {
         {
           variable: 'y',
           category: 'telemetry',
-          csc: 'WeatherStation',
+          csc: 'ESS',
           salindex: this.props.salindex,
-          topic: 'precipitation',
-          item: 'prSum1M',
+          topic: 'rainRate',
+          item: 'rainRate',
           accessor: '(x) => x',
-        }
-      ]
+        },
+      ],
     },
   };
 
@@ -145,58 +130,38 @@ export default class WeatherStation extends Component {
         {
           variable: 'y',
           category: 'telemetry',
-          csc: 'WeatherStation',
+          csc: 'ESS',
           salindex: this.props.salindex,
-          topic: 'snowDepth',
-          item: 'avg1M',
+          topic: 'snowRate',
+          item: 'snowRate',
           accessor: '(x) => x',
-        }
-      ]
+        },
+      ],
     },
   };
 
   windPlot = {
     title: 'Time series plot',
     inputs: {
-      GustSpeed: {
-        csc: 'WeatherStation',
-        item: 'avg2M',
-        group: 1,
-        topic: 'windSpeed',
-        accessor: '(x) => x',
-        category: 'telemetry',
-        encoding: 'radial',
-        salindex: 1,
-      },
       WindSpeed: {
-        csc: 'WeatherStation',
-        item: 'avg2M',
+        csc: 'ESS',
+        item: 'airFlow',
         group: 0,
-        topic: 'windSpeed',
+        topic: 'speed',
         accessor: '(x) => x',
         category: 'telemetry',
         encoding: 'radial',
-        salindex: 1,
-      },
-      GustDirection: {
-        csc: 'WeatherStation',
-        item: 'value10M',
-        group: 1,
-        topic: 'windGustDirection',
-        accessor: '(x) => x',
-        category: 'telemetry',
-        encoding: 'angular',
-        salindex: 1,
+        salindex: this.props.salindex,
       },
       WindDirection: {
-        csc: 'WeatherStation',
-        item: 'avg2M',
+        csc: 'ESS',
+        item: 'airFlow',
         group: 0,
-        topic: 'windDirection',
+        topic: 'direction',
         accessor: '(x) => x',
         category: 'telemetry',
         encoding: 'angular',
-        salindex: 1,
+        salindex: this.props.salindex,
       },
     },
     titleBar: false,
@@ -279,12 +244,11 @@ export default class WeatherStation extends Component {
   };
 
   render() {
-
-    const currentTemperature = this.props.weather?.ambient_temp?.value;
-    const currentHumidity = this.props.weather?.humidity?.value;
-    const currentPressure = this.props.weather?.pressure?.value;
-    const currentWindSpeed = this.props.windSpeed?.value?.value;
-    const currentWindSpeedUnits = this.props.windSpeed?.value?.units;
+    const currentTemperature = fixedFloat(this.props.temperature?.temperature?.value[0], 2);
+    const currentHumidity = fixedFloat(this.props.relativeHumidity?.relativeHumidity?.value, 2);
+    const currentPressure = fixedFloat(this.props.pressure?.pressure?.value[0], 2);
+    const currentWindSpeed = fixedFloat(this.props.airFlow?.speed?.value, 2);
+    const currentWindSpeedUnits = this.props.airFlow?.speed?.units;
 
     const timeSeriesControlsProps = {
       timeWindow: this.state.timeWindow,
@@ -296,7 +260,7 @@ export default class WeatherStation extends Component {
 
     return (
       <div className={styles.container}>
-        <CurrentValues 
+        <CurrentValues
           currentTemperature={currentTemperature}
           currentHumidity={currentHumidity}
           currentPressure={currentPressure}
