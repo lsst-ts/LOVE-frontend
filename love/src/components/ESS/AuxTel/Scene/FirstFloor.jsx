@@ -3,31 +3,8 @@ import * as THREE from "three";
 
 export function FirstFloor() {
 
-  const radius = 9.3 / 2;
-
-  const door = {
-    position: {
-      x: Math.sin(THREE.MathUtils.degToRad(227)) * radius,
-      y: Math.cos(THREE.MathUtils.degToRad(227)) * radius,
-      z: -0.8 -1.15 - 0.4,
-    },
-    angle: 227,
-    width: 2,
-    height: 2.30,
-  };
-
-  const garageDoor = {
-    position: {
-      x: Math.sin(THREE.MathUtils.degToRad(270)) * radius,
-      y: Math.cos(THREE.MathUtils.degToRad(270)) * radius,
-      z: -0.8 -1.15 - 0.4,
-    },
-    angle: 270,
-    width: 2.3,
-    height: 2.30,
-  }
-
-  const displaceY = -radius + door.height/2;
+  const radius = 9.4 / 2;
+  const displaceY = -3.9 - 1.05;
   const height = 0.05;
   const radialSegments = 64;
   const heightSegments = 1;
@@ -44,6 +21,28 @@ export function FirstFloor() {
     thetaStart, 
     thetaLength, 
   ];
+
+  const door = {
+    position: {
+      x: Math.sin(THREE.MathUtils.degToRad(225)) * radius,
+      y: Math.cos(THREE.MathUtils.degToRad(225)) * radius,
+      z: displaceY + 1.05,
+    },
+    angle: 225,
+    width: 1.87,
+    height: 2.10,
+  };
+
+  const garageDoor = {
+    position: {
+      x: Math.sin(THREE.MathUtils.degToRad(270)) * radius,
+      y: Math.cos(THREE.MathUtils.degToRad(270)) * radius,
+      z: displaceY + 1.35,
+    },
+    angle: 270,
+    width: 2.43,
+    height: 2.70,
+  };
 
   return (
     <>

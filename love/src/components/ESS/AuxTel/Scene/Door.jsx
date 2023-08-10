@@ -8,8 +8,8 @@ export function Door (props) {
 
   const ref = useRef();
 
-  const radius = 9.3 / 2;
-  const height = 3;
+  const radius = 9.4 / 2;
+  const height = 2.4;
   const radialSegments = 32;
   const heightSegments = 1;
   const openEnded = true;
@@ -25,6 +25,10 @@ export function Door (props) {
     thetaStart, 
     thetaLength, 
   ];
+
+  const frameLengthAngle = props.thetaStart + props.thetaLength;
+
+  console.log('frameLengthAngle', frameLengthAngle);
 
   const openDoor = props.isMainDoor ? 
     THREE.MathUtils.degToRad(-1 * props.thetaLength * props.openPercent / 100)
@@ -67,21 +71,21 @@ export function Door (props) {
           { props.isMainDoor ?
             <>
               <Frame
-                position={{x: -1.5, y: 0, z: 0}}
+                position={{x: -height/2, y: 0, z: 0}}
                 thetaStart={0}
-                thetaLength={100}
+                thetaLength={frameLengthAngle}
               />
               <Frame
-                position={{x: 1.5, y: 0, z: 0}}
+                position={{x: height/2, y: 0, z: 0}}
                 thetaStart={0}
-                thetaLength={100}
+                thetaLength={frameLengthAngle}
                 radialSegments={9}
               />
               <Frame
                 position={{x: 0, y: 0, z: 0}}
-                thetaStart={99}
+                thetaStart={frameLengthAngle - 1}
                 thetaLength={2}
-                height={3.1}
+                height={height + 0.1}
                 radialSegments={1}
                 heightSegments={3}
               />
@@ -89,7 +93,7 @@ export function Door (props) {
                 position={{x: 0, y: 0, z: 0}}
                 thetaStart={-1}
                 thetaLength={2}
-                height={3.1}
+                height={height + 0.1}
                 radialSegments={1}
                 heightSegments={3}
               />

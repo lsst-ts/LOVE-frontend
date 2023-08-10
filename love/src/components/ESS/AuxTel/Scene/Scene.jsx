@@ -56,47 +56,36 @@ const Scene = (props) => {
   const fans = [
     {
       position: {
-        x: Math.sin(THREE.MathUtils.degToRad(315)) * 9.3 / 2,
-        y: Math.cos(THREE.MathUtils.degToRad(315)) * 9.3 / 2,
+        x: Math.sin(THREE.MathUtils.degToRad(135)) * 4.47,
+        y: Math.cos(THREE.MathUtils.degToRad(135)) * 4.47,
+        z: -1.15 - 0.8,
+      },
+      angle: 135,
+      percentOpen: 50,
+      width: 1.93,
+      height: 1.2,
+    },
+    {
+      position: {
+        x: Math.sin(THREE.MathUtils.degToRad(45)) * 4.47,
+        y: Math.cos(THREE.MathUtils.degToRad(45)) * 4.47,
+        z: -1.15 - 0.8,
+      },
+      angle: 45,
+      percentOpen: 70,
+      width: 1.93,
+      height: 1.2,
+    },
+    {
+      position: {
+        x: Math.sin(THREE.MathUtils.degToRad(315)) * 4.47,
+        y: Math.cos(THREE.MathUtils.degToRad(315)) * 4.47,
         z: -1.15 - 0.8,
       },
       angle: 315,
-      percentOpen: 50,
-      width: 1.5,
-      height: 1.5,
-    },
-    {
-      position: {
-        x: Math.sin(THREE.MathUtils.degToRad(26)) * 9.3 / 2,
-        y: Math.cos(THREE.MathUtils.degToRad(26)) * 9.3 / 2,
-        z: -1.15 - 0.8,
-      },
-      angle: 26,
-      percentOpen: 40,
-      width: 1.5,
-      height: 1.5,
-    },
-    {
-      position: {
-        x: Math.sin(THREE.MathUtils.degToRad(97)) * 9.3 / 2,
-        y: Math.cos(THREE.MathUtils.degToRad(97)) * 9.3 / 2,
-        z: -1.15 - 0.8,
-      },
-      angle: 97,
-      percentOpen: 10,
-      width: 1.5,
-      height: 1.5,
-    },
-    {
-      position: {
-        x: Math.sin(THREE.MathUtils.degToRad(172)) * 9.3 / 2,
-        y: Math.cos(THREE.MathUtils.degToRad(172)) * 9.3 / 2,
-        z: -1.15 - 0.8,
-      },
-      angle: 172,
-      percentOpen: 70,
-      width: 1.5,
-      height: 1.5,
+      percentOpen: 30,
+      width: 1.93,
+      height: 1.2,
     },
   ];
 
@@ -146,8 +135,8 @@ const Scene = (props) => {
       {/** Main Door */}
       <Door
         isMainDoor={true}
-        thetaStart={20.2}
-        thetaLength={80}
+        thetaStart={28}
+        thetaLength={84}
         openPercent={percentOpenMainDoor}
         azimuthPosition={azimuthPosition}
       />
@@ -156,7 +145,7 @@ const Scene = (props) => {
       <Door
         isMainDoor={false}
         thetaStart={0}
-        thetaLength={20}
+        thetaLength={27.9}
         openPercent={percentOpenDropoutDoor}
         azimuthPosition={azimuthPosition}
       />

@@ -7,7 +7,7 @@ export function Frame (props) {
 
   const ref = useRef();
 
-  const radius = 9.3 / 2;
+  const radius = 9.4 / 2;
   const {height = 0.1} = props;
   const {radialSegments = 16} = props;
   const {heightSegments = 1} = props;
