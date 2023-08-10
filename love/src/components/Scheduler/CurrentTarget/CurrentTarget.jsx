@@ -25,6 +25,10 @@ export default class CurrentTarget extends Component {
       currentSequenceDuration,
       currentSequenceNVisits,
       currentSequenceVisits,
+      airmass,
+      skyBrightness,
+      cloud,
+      seeing,
       rotSkyPos,
     } = this.props;
 
@@ -55,6 +59,14 @@ export default class CurrentTarget extends Component {
             <Value>{`${fixedFloat(currentSlewTime, 2)} s`}</Value>
             <Label>Offset arcsec (x,y)</Label>
             <Value>{offSet}</Value>
+            <Label>skyBrightness</Label>
+            <Value>{`${fixedFloat(skyBrightness, 2)}`}</Value>
+            <Label>Cloud</Label>
+            <Value>{`${fixedFloat(cloud, 2)}`}</Value>
+            <Label>Airmass</Label>
+            <Value>{`${fixedFloat(airmass, 2)}`}</Value>
+            <Label>Seeing</Label>
+            <Value>{`${fixedFloat(seeing, 2)} arcsec`}</Value>
           </SummaryPanel>
           <SummaryPanel className={styles.summaryPanel}>
             <Label>Filter</Label>
@@ -70,7 +82,7 @@ export default class CurrentTarget extends Component {
               <div className={styles.exposures}>
                 {currentExposureTimes.length > 0
                   ? currentExposureTimes.map((exp, i) => (
-                      <div>
+                      <div key={i}>
                         <div className={styles.expIndexes}>{i + 1}</div>
                         <div className={styles.exposuresDetail}>
                           {fixedFloat(exp, 0) == 0 ? `-` : `${fixedFloat(exp, 0)}s`}
@@ -85,7 +97,11 @@ export default class CurrentTarget extends Component {
             <div className={styles.proposals}>
               <div className={styles.generalDiv}>
                 {currentProposalId.length > 0
-                  ? currentProposalId.map((gp) => <div className={styles.surveysDivs}>{gp}</div>)
+                  ? currentProposalId.map((gp, k) => (
+                      <div key={k} className={styles.surveysDivs}>
+                        {gp}
+                      </div>
+                    ))
                   : 'No data'}
               </div>
             </div>

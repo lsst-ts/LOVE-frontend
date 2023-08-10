@@ -91,6 +91,10 @@ const SchedulerContainer = ({
   currentSequenceDuration,
   currentSequenceNVisits,
   currentSequenceVisits,
+  airmass,
+  skyBrightness,
+  cloud,
+  seeing,
   rotSkyPos,
   predictedTargetsRa,
   predictedTargetsDecl,
@@ -190,6 +194,10 @@ const SchedulerContainer = ({
       currentSequenceDuration={currentSequenceDuration}
       currentSequenceNVisits={currentSequenceNVisits}
       currentSequenceVisits={currentSequenceVisits}
+      airmass={airmass}
+      skyBrightness={skyBrightness}
+      cloud={cloud}
+      seeing={seeing}
       rotSkyPos={rotSkyPos}
       predictedTargetsRa={predictedTargetsRa}
       predictedTargetsDecl={predictedTargetsDecl}

@@ -57,7 +57,7 @@
 }
 
 .predTargets {
-  display: inline-flex;
+  display: contents;
   margin-right: 10em;
   margin-left: 1em;
 }
@@ -147,6 +147,16 @@
   text-align: justify;
   border: 1px solid var(--tertiary-background-color);
   padding: var(--content-padding);
+}
+
+.listOfBlocks {
+  display: contents;
+  margin-right: 10em;
+  margin-left: 1em;
+}
+
+.blocksLabel:hover {
+  cursor: pointer !important;
 }
 
 .panel {

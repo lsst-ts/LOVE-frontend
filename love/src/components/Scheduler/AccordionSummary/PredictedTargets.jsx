@@ -50,21 +50,22 @@ export default class PredictedTarget extends Component {
       predTargetsNexp,
     } = this.props;
 
-    const predData = predTargetsRa.map((id, i) => ({
-      id: i + 1,
-      ra: predTargetsRa[i],
-      decl: predTargetsDecl[i],
-      rotSky: predTargetsRotSkyPos[i],
-    }));
+    const predData = [];
+    for (let i = 0; i < predTargetsNumTargets; i++) {
+      predData.push({
+        id: i + 1,
+        ra: predTargetsRa[i],
+        decl: predTargetsDecl[i],
+        rotSky: predTargetsRotSkyPos[i],
+      });
+    }
 
     return (
       <div className={styles.container}>
         <div onClick={this.props.showContent} className={styles.header}>
           <div className={styles.targetsTitle}>
             <h3 className={styles.title}>Predicted Target</h3>
-            <h5>
-              {predTargetsNumTargets} targets predicted. Instruments: {predTargetsInstrConfig}
-            </h5>
+            <h5>{predTargetsNumTargets} targets predicted.</h5>
           </div>
           <div className={styles.icons}>{!isOpen ? <AddIcon /> : <MinusIcon />}</div>
         </div>

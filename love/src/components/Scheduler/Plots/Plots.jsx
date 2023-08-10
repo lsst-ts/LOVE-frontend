@@ -7,7 +7,7 @@ export default class SchedulerPlots extends Component {
     super(props);
     const plots = [
       {
-        Brightness: {
+        skyBrightness: {
           category: 'event',
           csc: 'Scheduler',
           salindex: this.props.salindex,
@@ -45,9 +45,7 @@ export default class SchedulerPlots extends Component {
         },
       },
     ];
-    this.refs = plots.map((plot) => {
-      return React.createRef();
-    });
+    this.refs = React.createRef();
     this.state = {
       plots: plots,
     };
@@ -60,7 +58,7 @@ export default class SchedulerPlots extends Component {
           <div key={p} ref={this.refs[i]} className={styles.plot}>
             <PlotContainer
               inputs={p}
-              containerNode={this.refs[i]}
+              containerNode={this.refs?.current}
               xAxisTitle="Time"
               yAxisTitle="Value"
               legendPosition="right"
