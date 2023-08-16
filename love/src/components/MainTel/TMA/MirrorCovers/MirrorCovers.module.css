@@ -1,3 +1,22 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed for Inria Chile Tech Team.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 .container {
   display: flex;
   align-self: center;
@@ -148,7 +167,6 @@
   transition: transform ease-out 0.5s;
 }
 
-
 .textQ1 {
   text-anchor: start;
 }
@@ -210,19 +228,19 @@
 }
 .fillL1 {
   fill: transparent;
-  stroke: #00D68F;
+  stroke: #00d68f;
   transition: stroke-dasharray linear 0.5s;
 }
 .fillL2 {
   fill: transparent;
   /* stroke: #FFFF33; */
-  stroke: #FFFF66;
+  stroke: #ffff66;
   transition: stroke-dasharray linear 0.5s;
 }
 .fillL3 {
   fill: transparent;
   /* stroke: #FE4510; */
-  stroke: #FF1A1A;
+  stroke: #ff1a1a;
   transition: stroke-dasharray linear 0.5s;
 }
 .targetValue {

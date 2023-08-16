@@ -1,31 +1,50 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed for Inria Chile Tech Team.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 .cls1 {
-    fill: #c1ced2;
-    font-size: 8.07px;
-    font-weight: 700;
+  fill: #c1ced2;
+  font-size: 8.07px;
+  font-weight: 700;
 }
 
 .cls2 {
-    letter-spacing: 0em;
+  letter-spacing: 0em;
 }
 
 .cls3 {
-    fill: #af3222;
-    stroke: #af3222;
-    stroke-miterlimit: 10;
-    stroke-width: 3px;
+  fill: #af3222;
+  stroke: #af3222;
+  stroke-miterlimit: 10;
+  stroke-width: 3px;
 }
 
 .cls4 {
-    fill: #af3222;
-    stroke: #af3222;
-    stroke-miterlimit: 10;
-    stroke-width: 3px;
+  fill: #af3222;
+  stroke: #af3222;
+  stroke-miterlimit: 10;
+  stroke-width: 3px;
 }
 
 .cls5 {
-    fill: #788e9a;
+  fill: #788e9a;
 }
 
 .opacity {
-    opacity: 0.35;
+  opacity: 0.35;
 }
