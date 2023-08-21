@@ -247,8 +247,8 @@ export default class SimonyiLightPath extends Component {
 
     let mirrorWidth = 150;
 
-    if (mirrorCoverState === 0 || mirrorCoverState === 4) mirrorWidth = 150; // CLOSED
-    if (mirrorCoverState === 1) mirrorWidth = 20; // OPENED
+    if (mirrorCoverState === 1 || mirrorCoverState === 4) mirrorWidth = 150; // CLOSED
+    if (mirrorCoverState === 0) mirrorWidth = 20; // OPENED
     if (mirrorCoverState === 2 || mirrorCoverState === 3) mirrorWidth = 80; // IN MOTION
 
     return (
@@ -425,7 +425,7 @@ export default class SimonyiLightPath extends Component {
 
   render() {
     const showLightPath = this.props.lightPath;
-    const isM1M3CoverOpen = Math.max(...this.props.mirrorCoversState) === 1;
+    const isM1M3CoverOpen = Math.max(...this.props.mirrorCoversState) === 0;
 
     return (
       <div className={styles.container}>
