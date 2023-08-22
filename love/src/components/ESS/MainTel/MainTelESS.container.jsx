@@ -91,7 +91,7 @@ const parse = (streams, option) => {
     case 'airTurbulence': return parseAirTurbulence(streams);
     default: return [];
   }
-}
+};
 
 const parseTemperature = (streams) => {
   const temperatures = [];
@@ -163,47 +163,6 @@ const parseAirflow = (streams) => {
       });
     });
   });
-  // PENDING: DELETE EXAMPLE
-  airflows.push({
-    sensorName: 'test 1',
-    value: 30,
-    direction: 90,
-    location: 'location test',
-    telemetry: 'telemetry-ESS-402-airFlow',
-    xPosition: 0,
-    yPosition: 0,
-    zPosition: 0,
-  });
-  airflows.push({
-    sensorName: 'test 2',
-    value: 10,
-    direction: 180,
-    location: 'location test',
-    telemetry: 'telemetry-ESS-402-airFlow',
-    xPosition: 0,
-    yPosition: 0,
-    zPosition: 0,
-  });
-  airflows.push({
-    sensorName: 'test 3',
-    value: 10,
-    direction: 270,
-    location: 'location test',
-    telemetry: 'telemetry-ESS-402-airFlow',
-    xPosition: 0,
-    yPosition: 0,
-    zPosition: 0,
-  });
-  airflows.push({
-    sensorName: 'test 4',
-    value: 20,
-    direction: 0,
-    location: 'location test',
-    telemetry: 'telemetry-ESS-402-airFlow',
-    xPosition: 0,
-    yPosition: 0,
-    zPosition: 0,
-  });
   return airflows;
 }
 
@@ -227,17 +186,6 @@ const parseAirTurbulence = (streams) => {
         zPosition: airTurbulences.length,
       });
     });
-  });
-  // PENDING: DELETE EXAMPLE
-  airTurbulences.push({
-    sensorName: 'test',
-    value: 2,
-    speed: {x: 1, y: 1, z: 2 },
-    location: 'location test',
-    telemetry: 'telemetry-ESS-402-airTurbulence',
-    xPosition: 1,
-    yPosition: 1,
-    zPosition: 1,
   });
   return airTurbulences;
 }
@@ -273,8 +221,12 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   const salindexList = ownProps.salindexList;
   const option = ownProps.option;
-  const subscriptions = getGroupNames(salindexList, option);
-  subscriptions.push('telemetry-MTDome-0-louvers');
+  const subscriptions = [
+    'telemetry-MTDome-0-louvers',
+    'telemetry-MTDome-0-apertureShutter',
+    'telemetry-MTDome-0-azimuth',
+    ...getGroupNames(salindexList, option),
+  ];
   return {
     subscriptions,
     subscribeToStreams: () => {

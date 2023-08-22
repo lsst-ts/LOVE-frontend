@@ -3,11 +3,7 @@ import PropTypes from 'prop-types';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from "three";
-import { Sensors } from '../../Common/Sensors';
-// import { Dome } from './Dome';
 import { isEqual } from 'lodash';
-import { Louvers } from './Louvers';
-import { Shutter } from './Shutter';
 
 const INITIAL_CAMERA_POSITION = [-12, 26.5, -16.5];
 const INITIAL_TARGET = [0, 10, 0];
@@ -48,20 +44,6 @@ function createTextCanvas(text, color) {
 
 const Scene = (props) => {
 
-  const {
-    positions,
-    selectedSensor,
-    setSensor,
-    values,
-    speeds,
-    directions,
-    getGradiantColorX,
-    percentOpenLouvers,
-    louversIds,
-    percentOpenShutter,
-    positionActualDomeAz,
-  } = props;
-
   const canvas = createTextCanvas('N', 'white');
   const textTexture = new THREE.CanvasTexture(canvas);
 
@@ -95,79 +77,35 @@ const Scene = (props) => {
         <meshBasicMaterial map={textTexture} side={THREE.DoubleSide} transparent />
       </mesh>
 
-      <group
-        rotation-y={THREE.MathUtils.degToRad(90 - positionActualDomeAz)}
-      >
-        <Louvers
-          ids={louversIds}
-          percentOpen={percentOpenLouvers}
-        />
-
-        <Shutter
-          name={'shutter 0'}
-          position={{x: 0, y: -3.3, z: 7}}
-          openPercent={percentOpenShutter[0] ?? 100}
-        />
-
-        <Shutter
-          name={'shutter 1'}
-          position={{x: 0, y: 3.3, z: 7}}
-          openPercent={percentOpenShutter[1] ?? 100}
-        />
-      </group>
-
-      <Sensors 
-        selectedSensor={selectedSensor}
-        setSensor={setSensor}
-        positions={positions}
-        values={values}
-        speeds={speeds}
-        directions={directions}
-        getGradiantColorX={getGradiantColorX}
-      />
+        {props.children}
 
       </Suspense>
     </Canvas>
     </>
   );
-}
+};
 
 Scene.propTypes = {
-  selectedSensor: PropTypes.number,
-  positions: PropTypes.arrayOf(PropTypes.shape({
+  initialCameraPosition: PropTypes.shape({
     x: PropTypes.number,
     y: PropTypes.number,
     z: PropTypes.number,
-  })),
-  setSensor: PropTypes.func,
-  values: PropTypes.arrayOf(PropTypes.number),
-  speeds: PropTypes.arrayOf(PropTypes.shape({
-    x: PropTypes.number,
-    y: PropTypes.number,
-    z: PropTypes.number,
-  })),
-  directions: PropTypes.arrayOf(PropTypes.number),
-  getGradiantColorX: PropTypes.func,
-  louversIds: PropTypes.arrayOf(PropTypes.number),
-  percentOpen: PropTypes.arrayOf(PropTypes.number),
-  positionActualDomeAz: PropTypes.number,
+  }),
 };
 
 Scene.defaultProps = {
-  selectedSensor: 0,
-  positions: [],
-  percentOpen: [],
-  positionActualDomeAz: 0,
-  setSensor: () => {console.log('scene default setSensor')},
-}
+  initialCameraPosition: {
+    x: INITIAL_CAMERA_POSITION[0],
+    y: INITIAL_CAMERA_POSITION[2],
+    z: INITIAL_CAMERA_POSITION[1],
+  },
+};
 
 const comparator = (prevProps, nextProps) => {
   return (
-    prevProps.selectedSensor === nextProps.selectedSensor &&
-    prevProps.positionActualDomeAz === nextProps.positionActualDomeAz &&
-    isEqual(prevProps.percentOpen, nextProps.percentOpen ) &&
-    isEqual(prevProps.positions, nextProps.positions )
+    isEqual(prevProps.initialCameraPosition, nextProps.initialCameraPosition) &&
+    isEqual(prevProps.children, nextProps.children)
   )
-}
+};
 
 export default React.memo(Scene, comparator);

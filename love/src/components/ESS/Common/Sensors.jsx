@@ -86,7 +86,7 @@ export function Sensors(props) {
       })}
     </>
   );
-}
+};
 
 Sensors.propTypes = {
   positions: PropTypes.arrayOf(PropTypes.shape({
@@ -97,18 +97,14 @@ Sensors.propTypes = {
   setSensor: PropTypes.func,
   selectedSensor: PropTypes.number,
   values: PropTypes.arrayOf(PropTypes.number),
-  speeds: PropTypes.arrayOf(PropTypes.oneOf([
-    undefined,
-    PropTypes.shape({
+  speeds: PropTypes.arrayOf(PropTypes.shape({
       x: PropTypes.number,
       y: PropTypes.number,
       z: PropTypes.number,
     }),
-  ])),
-  directions: PropTypes.arrayOf(PropTypes.oneOf([
-    undefined,
-    PropTypes.number,
-  ])),
+  ),
+  directions: PropTypes.arrayOf(PropTypes.number,
+  ),
   getGradiantColorX: PropTypes.func,
 };
 
