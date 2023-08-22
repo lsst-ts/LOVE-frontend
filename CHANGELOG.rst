@@ -4,7 +4,9 @@ Version History
 
 v5.24.8
 --------
+
 * Simonyi LightPath Covers Hotfix `<https://github.com/lsst-ts/LOVE-frontend/pull/505>`_
+* Fix script configuration storing rendering constraints `<https://github.com/lsst-ts/LOVE-frontend/pull/504>`_
 
 v5.24.7
 --------
