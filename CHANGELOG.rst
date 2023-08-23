@@ -2,6 +2,10 @@
 Version History
 ===============
 
+v5.24.8
+--------
+* Simonyi LightPath Covers Hotfix `<https://github.com/lsst-ts/LOVE-frontend/pull/505>`_
+
 v5.24.7
 --------
 
