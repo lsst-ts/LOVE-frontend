@@ -1,7 +1,6 @@
 import React, { useRef, useUpdate } from 'react';
 import PropTypes from 'prop-types';
 import { Frame } from './Frame';
-
 import * as THREE from "three";
 
 export function Door (props) {
@@ -36,7 +35,6 @@ export function Door (props) {
     <>
         <group
           position={[props.position.x, props.position.z, props.position.y]}
-          rotation-y={THREE.MathUtils.degToRad(-1 * props.azimuthPosition)}
         >
           <group
             position={[0, 0, !props.isMainDoor ? radius : 0]}
@@ -114,7 +112,6 @@ Door.propTypes = {
   thetaStart: PropTypes.number,
   thetaLength: PropTypes.number,
   isMainDoor: PropTypes.bool,
-  azimuthPosition: PropTypes.number,
 };
 
 Door.defaultProps = {
@@ -127,14 +124,12 @@ Door.defaultProps = {
   thetaStart: 20,
   thetaLength: 80,
   isMainDoor: true,
-  azimuthPosition: 0,
 };
 
 const comparator = (prevProps, nextProps) => {
   return (
     prevProps.name === nextProps.name &&
     prevProps.openPercent === nextProps.openPercent &&
-    prevProps.azimuthPosition === nextProps.azimuthPosition &&
     isEqual(prevProps.position, nextProps.position)
   );
 }

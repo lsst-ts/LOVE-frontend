@@ -3,11 +3,7 @@ import PropTypes from 'prop-types';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import * as THREE from "three";
-import { Sensors } from '../../Common/Sensors';
-import { Dome } from './Dome';
 import { isEqual } from 'lodash';
-import { Door } from './Door';
-import { Fan } from './Fan';
 import { FirstFloor } from './FirstFloor';
 
 const INITIAL_CAMERA_POSITION = [-2.8, 9.5, -6];
@@ -47,60 +43,10 @@ function createTextCanvas(text, color) {
   return canvas;
 }
 
-
 const Scene = (props) => {
 
   const canvas = createTextCanvas('N', 'white');
   const textTexture = new THREE.CanvasTexture(canvas);
-
-  const fans = [
-    {
-      position: {
-        x: Math.sin(THREE.MathUtils.degToRad(135)) * 4.47,
-        y: Math.cos(THREE.MathUtils.degToRad(135)) * 4.47,
-        z: -1.15 - 0.8,
-      },
-      angle: 135,
-      percentOpen: 50,
-      width: 1.93,
-      height: 1.2,
-    },
-    {
-      position: {
-        x: Math.sin(THREE.MathUtils.degToRad(45)) * 4.47,
-        y: Math.cos(THREE.MathUtils.degToRad(45)) * 4.47,
-        z: -1.15 - 0.8,
-      },
-      angle: 45,
-      percentOpen: 70,
-      width: 1.93,
-      height: 1.2,
-    },
-    {
-      position: {
-        x: Math.sin(THREE.MathUtils.degToRad(315)) * 4.47,
-        y: Math.cos(THREE.MathUtils.degToRad(315)) * 4.47,
-        z: -1.15 - 0.8,
-      },
-      angle: 315,
-      percentOpen: 30,
-      width: 1.93,
-      height: 1.2,
-    },
-  ];
-
-  const {
-    positions,
-    selectedSensor,
-    setSensor,
-    values,
-    speeds,
-    directions,
-    getGradiantColorX,
-    percentOpenMainDoor,
-    percentOpenDropoutDoor,
-    azimuthPosition,
-  } = props;
 
   const initialCameraPosition = [
     props.initialCameraPosition?.x ?? INITIAL_CAMERA_POSITION[0],
@@ -132,48 +78,9 @@ const Scene = (props) => {
         <meshBasicMaterial map={textTexture} side={THREE.DoubleSide} transparent />
       </mesh>
 
-      {/** Main Door */}
-      <Door
-        isMainDoor={true}
-        thetaStart={28}
-        thetaLength={84}
-        openPercent={percentOpenMainDoor}
-        azimuthPosition={azimuthPosition}
-      />
-
-      {/** Dropout Door */}
-      <Door
-        isMainDoor={false}
-        thetaStart={0}
-        thetaLength={27.9}
-        openPercent={percentOpenDropoutDoor}
-        azimuthPosition={azimuthPosition}
-      />
-
-      {/** Windows */}
-      {fans.map((fan) => {
-        return (
-          <Fan
-            position={fan.position}
-            percentOpen={fan.percentOpen}
-            angle={fan.angle}
-            width={fan.width}
-            height={fan.height}
-          />
-        );
-      })}
-
       <FirstFloor />
 
-      <Sensors 
-        selectedSensor={selectedSensor}
-        setSensor={setSensor}
-        positions={positions}
-        values={values}
-        speeds={speeds}
-        directions={directions}
-        getGradiantColorX={getGradiantColorX}
-      />
+      {props.children}
 
       </Suspense>
     </Canvas>
@@ -182,39 +89,25 @@ const Scene = (props) => {
 }
 
 Scene.propTypes = {
-  selectedSensor: PropTypes.number,
-  positions: PropTypes.arrayOf(PropTypes.shape({
+  initialCameraPosition: PropTypes.shape({
     x: PropTypes.number,
     y: PropTypes.number,
     z: PropTypes.number,
-  })),
-  setSensor: PropTypes.func,
-  values: PropTypes.arrayOf(PropTypes.number),
-  speeds: PropTypes.arrayOf(PropTypes.shape({
-    x: PropTypes.number,
-    y: PropTypes.number,
-    z: PropTypes.number,
-  })),
-  directions: PropTypes.arrayOf(PropTypes.number),
-  getGradiantColorX: PropTypes.func,
-  percentOpenMainDoor: PropTypes.number,
-  percentOpenDropoutDoor: PropTypes.number,
+  }),
 };
 
 Scene.defaultProps = {
-  selectedSensor: 0,
-  positions: [],
-  percentOpenMainDoor: 0,
-  percentOpenDropoutDoor: 0,
-  setSensor: () => {console.log('scene default setSensor')},
-}
+  initialCameraPosition: {
+    x: INITIAL_CAMERA_POSITION[0],
+    y: INITIAL_CAMERA_POSITION[2],
+    z: INITIAL_CAMERA_POSITION[1],
+  },
+};
 
 const comparator = (prevProps, nextProps) => {
   return (
-    prevProps.selectedSensor === nextProps.selectedSensor &&
-    prevProps.percentOpenMainDoor === nextProps.percentOpenMainDoor &&
-    prevProps.percentOpenDropoutDoor === nextProps.percentOpenDropoutDoor &&
-    isEqual(prevProps.positions, nextProps.positions )
+    isEqual(prevProps.initialCameraPosition, nextProps.initialCameraPosition) &&
+    isEqual(prevProps.children, nextProps.children)
   )
 }
 

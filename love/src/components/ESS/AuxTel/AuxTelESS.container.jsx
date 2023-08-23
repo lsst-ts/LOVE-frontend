@@ -255,7 +255,6 @@ const mapStateToProps = (state, ownProps) => {
   map[option] = cleanStream ? parse(cleanStream, option) : [];
 
   const domeState = getDomeState(state);
-
   return {
     ...map,
     percentOpenMainDoor: domeState.dropoutDoorOpeningPercentage,
@@ -269,7 +268,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   const option = ownProps.option;
   const subscriptions = [
     'telemetry-ATDome-0-position',
-    ...getGroupNames(salindexList, option)
+    ...getGroupNames(salindexList, option),
   ];
 
   return {

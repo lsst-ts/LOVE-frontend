@@ -14,38 +14,29 @@ const Sensor = (props) => {
   }, [hovered]);
 
   return (
-    <>
+    <group
+      ref={mesh}
+      onPointerOver={(e) => setHover(true)}
+      onPointerOut={(e) => setHover(false)}
+      onClick={(e) => {
+        props.setSensor(props.sensorId);
+        setHover(true);
+      }}
+      position={[props.position.x, props.position.z, props.position.y]}
+    >
       { (isSelected || hovered) && (<mesh
-        {...props}
-        ref={mesh}
         scale={hovered ? [2.3, 2.3, 2.3]: [1.3, 1.3, 1.3]}
-        onPointerEnter={(e) => setHover(true)}
-        onPointerLeave={(e) => setHover(false)}
-        onClick={(e) => {
-          props.setSensor(props.sensorId);
-          setHover(true);
-        }}
-        position={[props.position.x, props.position.z, props.position.y]}
       >
         <sphereGeometry args={[0.15, 64, 64]} />
         <meshBasicMaterial color={hovered ? props.color : 0xffffff} side={THREE.BackSide}/>
       </mesh>)}
       <mesh
-        {...props}
-        ref={mesh}
         scale={hovered ? [2, 2, 2]: [1, 1, 1]}
-        onPointerOver={(e) => setHover(true)}
-        onPointerOut={(e) => setHover(false)}
-        onClick={(e) => {
-          props.setSensor(props.sensorId);
-          setHover(true);
-        }}
-        position={[props.position.x, props.position.z, props.position.y]}
       >
         <sphereGeometry args={[0.15, 32, 32]} />
         <meshBasicMaterial color={hovered ? 0xffffff : props.color}/>
       </mesh>
-    </>
+    </group>
   ); 
 }
 
