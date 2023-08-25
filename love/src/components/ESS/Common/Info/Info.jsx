@@ -25,6 +25,9 @@ function Info(props) {
           <Title>Sensor { sensor.sensorId ? String(sensor.sensorId).padStart(3, '0') : ''}</Title>
           <div></div>
 
+          <Label>Telemetry</Label>
+          <Value>{sensor.telemetry}</Value>
+
           <Label>Name</Label>
           <Value>
             {sensor.sensorName}
@@ -54,7 +57,7 @@ function Info(props) {
             <>
               <Label>NumChannels</Label>
               <Value>
-                {sensor.numChannels}
+                {fixedFloat(sensor.numChannels, 0)}
               </Value>
             </>
           ) : <></> }
@@ -63,7 +66,7 @@ function Info(props) {
             <>
               <Label>Index</Label>
               <Value>
-                {sensor.indexArr}
+                {fixedFloat(sensor.indexArr, 0)}
               </Value>
             </>
           ) : <></> }
@@ -87,6 +90,7 @@ Info.PropTypes = {
     temperature: PropTypes.number,
     location: PropTypes.string,
     numChannels: PropTypes.number,
+    telemetry: PropTypes.string,
   }),
 };
 
@@ -97,6 +101,7 @@ Info.defaultProps = {
     temperature: 0,
     location: '',
     numChannels: 0,
+    telemetry: '',
   }
 };
 
