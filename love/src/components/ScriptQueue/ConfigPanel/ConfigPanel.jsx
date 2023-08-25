@@ -454,9 +454,14 @@ export default class ConfigPanel extends Component {
     }
 
     if (
-      (configurationList.length > 0 &&
-        configurationList.findIndex((conf) => conf.config_name === inputConfigurationName) === -1) ||
-      (configurationList.length === 0 && inputConfigurationName !== DEFAULT_CONFIG_NAME)
+      inputConfigurationName !== DEFAULT_CONFIG_NAME &&
+      (
+        configurationList.length === 0 ||
+        (
+          configurationList.length > 0 &&
+          configurationList.findIndex((conf) => conf.config_name === inputConfigurationName) === -1
+        )
+      )
     ) {
       configurationNameChanged = true;
     }
@@ -496,9 +501,14 @@ export default class ConfigPanel extends Component {
           const scriptType = configPanel?.script?.type ?? '';
           const configName = inputConfigurationName;
           const configSchema = value;
-          if (configurationNameChanged) {
-            this.saveNewScriptSchema(scriptPath, scriptType, configName, configSchema);
-          } else if (configurationList.length === 0) {
+          if (
+            configurationNameChanged ||
+            (
+              configName === DEFAULT_CONFIG_NAME &&
+              configurationList.length >= 0 &&
+              configurationList.findIndex((conf) => conf.config_name === DEFAULT_CONFIG_NAME) === -1
+            )
+          ) {
             this.saveNewScriptSchema(scriptPath, scriptType, configName, configSchema);
           } else {
             this.updateScriptSchema(selectedConfiguration.value, configSchema);
@@ -565,7 +575,7 @@ export default class ConfigPanel extends Component {
         this.props.configPanel.script.type,
       ).then((data) => {
         const options = data.map((conf) => ({ label: conf.config_name, value: conf.id }));
-        const configuration = data.find((conf) => conf.config_name === 'last_script');
+        const configuration = data.find((conf) => conf.config_name === DEFAULT_CONFIG_NAME);
         this.setState((state) => ({
           configurationList: data,
           configurationOptions: options,
