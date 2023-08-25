@@ -23,15 +23,9 @@ export default class Menu extends Component {
     showFcuIDs: true,
     showDifferentialTemp: true,
     showWarnings: true,
-    toggleFcuIDs: (show) => {
-      console.log('Selector.defaultProps.toggleFcuIDs(', show, ')');
-    },
-    toggleTemperature: (show) => {
-      console.log('Selector.defaultProps.toggleTemperature(', show, ')');
-    },
-    toggleWarnings: (show) => {
-      console.log('Selector.defaultProps.toggleWarnings(', show, ')');
-    },
+    toggleFcuIDs: () => {},
+    toggleTemperature: () => {},
+    toggleWarnings: () => {},
   };
 
   toggleFcuIDs = (show) => {
