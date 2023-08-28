@@ -5,6 +5,7 @@ Version History
 v5.24.8
 --------
 
+* Extend getSALStatus to catch errors on fetching `<https://github.com/lsst-ts/LOVE-frontend/pull/507>`_
 * Simonyi LightPath Covers Hotfix `<https://github.com/lsst-ts/LOVE-frontend/pull/505>`_
 * Fix script configuration storing rendering constraints `<https://github.com/lsst-ts/LOVE-frontend/pull/504>`_
 
