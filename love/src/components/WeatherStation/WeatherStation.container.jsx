@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from '../../redux/actions/ws';
-import { getStreamData } from '../../redux/selectors';
+import { getESSstate } from '../../redux/selectors';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import WeatherStation from './WeatherStation';
 
@@ -15,12 +15,6 @@ export const schema = {
       isPrivate: false,
       default: 'Weather station component',
     },
-    salindex: {
-      type: 'number',
-      description: 'Salindex of the CSC',
-      isPrivate: false,
-      default: 1,
-    },
     hasRawMode: {
       type: 'boolean',
       description: 'Whether the component has a raw mode version',
@@ -31,6 +25,12 @@ export const schema = {
       type: 'boolean',
       description: "Whether to display controls to configure periods of time'",
       default: true,
+      isPrivate: false,
+    },
+    salindex: {
+      type: 'number',
+      description: 'ESS Index the Weather Station listens to',
+      default: '301',
       isPrivate: false,
     },
   },
@@ -44,26 +44,32 @@ const WeatherStationContainer = ({ ...props }) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const ESSstate = getESSstate(state, ownProps.salindex);
   return {
-    weather: getStreamData(state, `telemetry-WeatherStation-${ownProps.salindex}-weather`),
-    windSpeed: getStreamData(state, `telemetry-WeatherStation-${ownProps.salindex}-windSpeed`),
+    ...ESSstate,
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const subscriptions = [
-    `telemetry-WeatherStation-${ownProps.salindex}-weather`,
-    `telemetry-WeatherStation-${ownProps.salindex}-windDirection`,
-    `telemetry-WeatherStation-${ownProps.salindex}-windGustDirection`,
-    `telemetry-WeatherStation-${ownProps.salindex}-windSpeed`,
-    `telemetry-WeatherStation-${ownProps.salindex}-airTemperature`,
-    `telemetry-WeatherStation-${ownProps.salindex}-soilTemperature`,
-    `telemetry-WeatherStation-${ownProps.salindex}-dewPoint`,
-    `telemetry-WeatherStation-${ownProps.salindex}-relativeHumidity`,
-    `telemetry-WeatherStation-${ownProps.salindex}-snowDepth`,
-    `telemetry-WeatherStation-${ownProps.salindex}-precipitation`,
-    `telemetry-WeatherStation-${ownProps.salindex}-airPressure`,
-    `telemetry-WeatherStation-${ownProps.salindex}-solarNetRadiation`,
+    `event-ESS-${ownProps.salindex}-highElectricField`,
+    `event-ESS-${ownProps.salindex}-lightningStrike`,
+    `event-ESS-${ownProps.salindex}-precipitation`,
+    `event-ESS-${ownProps.salindex}-sensorStatus`,
+    `telemetry-ESS-${ownProps.salindex}-accelerometer`,
+    `telemetry-ESS-${ownProps.salindex}-accelerometerPSD`,
+    `telemetry-ESS-${ownProps.salindex}-airFlow`,
+    `telemetry-ESS-${ownProps.salindex}-airTurbulence`,
+    `telemetry-ESS-${ownProps.salindex}-dewPoint`,
+    `telemetry-ESS-${ownProps.salindex}-electricFieldStrength`,
+    `telemetry-ESS-${ownProps.salindex}-lightningStrikeStatus`,
+    `telemetry-ESS-${ownProps.salindex}-pressure`,
+    `telemetry-ESS-${ownProps.salindex}-rainRate`,
+    `telemetry-ESS-${ownProps.salindex}-relativeHumidity`,
+    `telemetry-ESS-${ownProps.salindex}-snowRate`,
+    `telemetry-ESS-${ownProps.salindex}-solarRadiation`,
+    `telemetry-ESS-${ownProps.salindex}-spectrumAnalyzer`,
+    `telemetry-ESS-${ownProps.salindex}-temperature`,
   ];
   return {
     subscriptions,
@@ -78,7 +84,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 const connectedContainer = connect(mapStateToProps, mapDispatchToProps)(WeatherStationContainer);
 
 connectedContainer.defaultProps = {
-  salindex: 1,
+  salindex: 301,
 };
 
 export default connectedContainer;
