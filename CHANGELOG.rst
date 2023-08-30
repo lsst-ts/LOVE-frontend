@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.24.9
+--------
+
+* Point LOVE weather station to read corresponding CSC `<https://github.com/lsst-ts/LOVE-frontend/pull/509>`_
+
 v5.24.8
 --------
 

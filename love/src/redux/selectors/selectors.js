@@ -2165,6 +2165,53 @@ export const getObservatoryState = (state) => {
   };
 };
 
+export const getESSsubscription = (salindex) => {
+  return [
+    `event-ESS-${salindex}-highElectricField`,
+    `event-ESS-${salindex}-lightningStrike`,
+    `event-ESS-${salindex}-precipitation`,
+    `event-ESS-${salindex}-sensorStatus`,
+    `telemetry-ESS-${salindex}-accelerometer`,
+    `telemetry-ESS-${salindex}-accelerometerPSD`,
+    `telemetry-ESS-${salindex}-airFlow`,
+    `telemetry-ESS-${salindex}-airTurbulence`,
+    `telemetry-ESS-${salindex}-dewPoint`,
+    `telemetry-ESS-${salindex}-electricFieldStrength`,
+    `telemetry-ESS-${salindex}-lightningStrikeStatus`,
+    `telemetry-ESS-${salindex}-pressure`,
+    `telemetry-ESS-${salindex}-rainRate`,
+    `telemetry-ESS-${salindex}-relativeHumidity`,
+    `telemetry-ESS-${salindex}-snowRate`,
+    `telemetry-ESS-${salindex}-solarRadiation`,
+    `telemetry-ESS-${salindex}-spectrumAnalyzer`,
+    `telemetry-ESS-${salindex}-temperature`,
+  ];
+};
+
+export const getESSstate = (state, salindex) => {
+  const ESSData = getStreamsData(state, getESSsubscription(salindex));
+  return {
+    highElectricField: ESSData[`event-ESS-${salindex}-highElectricField`] ?? {},
+    lightningStrike: ESSData[`event-ESS-${salindex}-lightningStrike`] ?? {},
+    precipitation: ESSData[`event-ESS-${salindex}-precipitation`] ?? {},
+    sensorStatus: ESSData[`event-ESS-${salindex}-sensorStatus`] ?? {},
+    accelerometer: ESSData[`telemetry-ESS-${salindex}-accelerometer`] ?? {},
+    accelerometerPSD: ESSData[`telemetry-ESS-${salindex}-accelerometerPSD`] ?? {},
+    airFlow: ESSData[`telemetry-ESS-${salindex}-airFlow`] ?? {},
+    airTurbulence: ESSData[`telemetry-ESS-${salindex}-airTurbulence`] ?? {},
+    dewPoint: ESSData[`telemetry-ESS-${salindex}-dewPoint`] ?? {},
+    electricFieldStrength: ESSData[`telemetry-ESS-${salindex}-electricFieldStrength`] ?? {},
+    lightningStrikeStatus: ESSData[`telemetry-ESS-${salindex}-lightningStrikeStatus`] ?? {},
+    pressure: ESSData[`telemetry-ESS-${salindex}-pressure`] ?? {},
+    rainRate: ESSData[`telemetry-ESS-${salindex}-rainRate`] ?? {},
+    relativeHumidity: ESSData[`telemetry-ESS-${salindex}-relativeHumidity`] ?? {},
+    snowRate: ESSData[`telemetry-ESS-${salindex}-snowRate`] ?? {},
+    solarRadiation: ESSData[`telemetry-ESS-${salindex}-solarRadiation`] ?? {},
+    spectrumAnalyzer: ESSData[`telemetry-ESS-${salindex}-spectrumAnalyzer`] ?? {},
+    temperature: ESSData[`telemetry-ESS-${salindex}-temperature`] ?? {},
+  };
+};
+
 export const getAuthlistState = (state, subscriptions) => {
   const authlistData = getStreamsData(state, subscriptions);
   return authlistData;
