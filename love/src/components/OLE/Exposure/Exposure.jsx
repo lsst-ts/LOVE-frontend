@@ -227,7 +227,7 @@ export default class Exposure extends Component {
   queryExposures(callback) {
     const { selectedInstrument, selectedDayExposureStart, selectedDayExposureEnd, registryMap } = this.props;
     const startObsDay = Moment(selectedDayExposureStart).format(ISO_INTEGER_DATE_FORMAT);
-    const endObsDay = Moment(selectedDayExposureEnd).format(ISO_INTEGER_DATE_FORMAT);
+    const endObsDay = Moment(selectedDayExposureEnd).add(1, 'days').format(ISO_INTEGER_DATE_FORMAT);
     const registry = registryMap[selectedInstrument].split('_')[2];
 
     // Get the list of exposures
