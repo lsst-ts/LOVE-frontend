@@ -360,7 +360,7 @@ export default class ManagerInterface {
         });
       })
       .catch((err) => {
-        return { label: 'EFD Healthy Status Fail', style: 'alert', error: err };
+        return { label: 'Error retrieving EFD status', style: 'alert', error: err };
       });
   }
 
@@ -370,26 +370,30 @@ export default class ManagerInterface {
         resolve({ label: 'SAL Status URL is not present in LOVE Configuration File', style: 'invalid' });
       });
     }
-    return fetchWithTimeout(url, { method: 'GET' }).then((result) => {
-      if (result.status >= 500) {
-        return { label: 'Error retrieving SAL status, service not available', style: 'alert' };
-      }
-      if (result.status === 400) {
-        return { label: 'Error retrieving SAL status, service not exist', style: 'alert' };
-      }
-      return result.json().then((res) => {
-        if (!res.brokers) {
-          return { label: 'Error retrieving SAL status, service is not running properly', style: 'alert' };
+    return fetchWithTimeout(url, { method: 'GET' })
+      .then((result) => {
+        if (result.status >= 500) {
+          return { label: 'Error retrieving SAL status, service not available', style: 'alert' };
         }
-
-        const sameBrokers = expectedKafkaBrokers.every((broker) => res.brokers.includes(broker));
-        if (!Array.isArray(res.brokers) || res.brokers?.length === 0 || !sameBrokers) {
-          return { label: 'SAL is not running as expected', style: 'alert' };
+        if (result.status >= 400 && result.status < 500) {
+          return { label: 'Error retrieving SAL status, service not exist', style: 'alert' };
         }
+        return result.json().then((res) => {
+          if (!res.brokers) {
+            return { label: 'Error retrieving SAL status, service is not running properly', style: 'alert' };
+          }
 
-        return { label: 'SAL Healthy Status Pass', style: 'ok' };
+          const sameBrokers = expectedKafkaBrokers.every((broker) => res.brokers.includes(broker));
+          if (!Array.isArray(res.brokers) || res.brokers?.length === 0 || !sameBrokers) {
+            return { label: 'SAL is not running as expected', style: 'alert' };
+          }
+
+          return { label: 'SAL Healthy Status Pass', style: 'ok' };
+        });
+      })
+      .catch((err) => {
+        return { label: 'Error retrieving SAL status', style: 'alert', error: err };
       });
-    });
   }
 
   // EFD APIs
