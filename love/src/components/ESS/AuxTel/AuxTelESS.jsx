@@ -177,7 +177,7 @@ const AuxTelESS = (props) => {
               isMainDoor={true}
               thetaStart={28}
               thetaLength={84}
-              openPercent={percentOpenMainDoor}
+              openPercent={percentOpenMainDoor ?? 0}
             />
 
             {/** Dropout Door */}
@@ -185,7 +185,7 @@ const AuxTelESS = (props) => {
               isMainDoor={false}
               thetaStart={0}
               thetaLength={27.9}
-              openPercent={percentOpenDropoutDoor}
+              openPercent={percentOpenDropoutDoor ?? 0}
             />
           </group>
 

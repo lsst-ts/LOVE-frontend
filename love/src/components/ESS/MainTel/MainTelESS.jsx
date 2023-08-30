@@ -145,13 +145,13 @@ const MainTelESS = (props) => {
             <Shutter
               name={'shutter 0'}
               position={{x: 0, y: -3.3, z: 7}}
-              openPercent={percentOpenShutter[0] ?? 100}
+              openPercent={percentOpenShutter[0] ?? 0}
             />
 
             <Shutter
               name={'shutter 1'}
               position={{x: 0, y: 3.3, z: 7}}
-              openPercent={percentOpenShutter[1] ?? 100}
+              openPercent={percentOpenShutter[1] ?? 0}
             />
           </group>
           <Sensors
