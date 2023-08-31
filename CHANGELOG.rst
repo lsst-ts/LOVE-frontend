@@ -6,6 +6,7 @@ v5.24.10
 ---------
 
 * Highlight block when is selected `<https://github.com/lsst-ts/LOVE-frontend/pull/511>`_
+* Bump @adobe/css-tools from 4.0.1 to 4.3.1 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/508>`_
 
 v5.24.9
 --------
