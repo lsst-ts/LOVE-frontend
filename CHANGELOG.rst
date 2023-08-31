@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.24.11
+---------
+
+* Various ATDome updates `<https://github.com/lsst-ts/LOVE-frontend/pull/512>`_
+
 v5.24.10
 ---------
 

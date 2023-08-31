@@ -343,6 +343,10 @@ export default class WeatherStation extends Component {
               yAxisTitle="Temperature"
               legendPosition="bottom"
               maxHeight={maxHeightPlot}
+              scaleDomain={{
+                domainMax: 40,
+                domainMin: -20,
+              }}
             />
           </div>
         </div>
@@ -357,6 +361,10 @@ export default class WeatherStation extends Component {
               yAxisTitle="Relative humidity"
               legendPosition="bottom"
               maxHeight={maxHeightPlot}
+              scaleDomain={{
+                domainMax: 100,
+                domainMin: 0,
+              }}
             />
           </div>
         </div>

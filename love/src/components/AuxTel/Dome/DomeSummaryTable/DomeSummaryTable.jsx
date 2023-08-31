@@ -48,23 +48,22 @@ export default class DomeSummaryTable extends Component {
   static defaultProps = {};
 
   render() {
-    const {azimuthPosition, azimuthCommanded} = this.props;
-    const {currentPointing, targetPointing} = this.props;
+    const { azimuthPosition, azimuthCommanded } = this.props;
+    const { currentPointing, targetPointing } = this.props;
 
     const domeAz = {
       current: azimuthPosition,
       target: azimuthCommanded,
     };
     const mountAz = {
-      current: currentPointing.az,
-      target: targetPointing.az,
+      current: Math.abs(currentPointing.az),
+      target: Math.abs(targetPointing.az),
     };
     const mountEl = {
       current: currentPointing.el,
       target: targetPointing.el,
     };
 
-    
     const {
       timeAzLim,
       timeRotLim,
@@ -88,7 +87,7 @@ export default class DomeSummaryTable extends Component {
 
     const domeInPositionValue = this.props.domeInPosition ?? 0;
     const mountInPositionValue = this.props.mountInPosition ?? 0;
-    const mountTrackingStateValue = mountTrackingStateMap[this.props.atMountState] ??  mountTrackingStateMap[0];
+    const mountTrackingStateValue = mountTrackingStateMap[this.props.atMountState] ?? mountTrackingStateMap[0];
 
     const m3State = this.props.m3State;
 
@@ -99,15 +98,15 @@ export default class DomeSummaryTable extends Component {
       m3State === 1
         ? {
             name: '(1)',
-            current: currentPointing.nasmyth1,
-            target: targetPointing.nasmyth1,
+            current: Math.abs(currentPointing.nasmyth1),
+            target: Math.abs(targetPointing.nasmyth1),
             minRot: minNas1,
             maxRot: maxNas1,
           }
         : {
             name: '(2)',
-            current: currentPointing.nasmyth2,
-            target: targetPointing.nasmyth2,
+            current: Math.abs(currentPointing.nasmyth2),
+            target: Math.abs(targetPointing.nasmyth2),
             minRot: minNas2,
             maxRot: maxNas2,
           };
@@ -116,6 +115,7 @@ export default class DomeSummaryTable extends Component {
     if (domeInPositionValue !== 0) domeInPositionLabel = domeInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
     let mountInPositionLabel = 'UNKNOWN';
     if (mountInPositionValue !== 0) mountInPositionLabel = mountInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
+
     return (
       <SummaryPanel className={styles.summaryTable}>
         <Title>Track ID</Title>
@@ -193,8 +193,8 @@ export default class DomeSummaryTable extends Component {
         >
           <span>
             <Limits
-              lowerLimit={minAz}
-              upperLimit={maxAz}
+              lowerLimit={0}
+              upperLimit={360}
               currentValue={mountAz.current}
               targetValue={mountAz.target}
               height={30}
@@ -228,7 +228,7 @@ export default class DomeSummaryTable extends Component {
               displayLabels={false}
             />
           </span>
-          
+
           <span>
             <span>{`Time to ${closestLimit}: `}</span>
             <span className={styles.highlight}>{Math.round(timeToElLimit)} min</span>
