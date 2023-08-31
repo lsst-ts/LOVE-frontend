@@ -56,8 +56,8 @@ export default class DomeSummaryTable extends Component {
       target: azimuthCommanded,
     };
     const mountAz = {
-      current: currentPointing.az,
-      target: targetPointing.az,
+      current: Math.abs(currentPointing.az),
+      target: Math.abs(targetPointing.az),
     };
     const mountEl = {
       current: currentPointing.el,
@@ -98,15 +98,15 @@ export default class DomeSummaryTable extends Component {
       m3State === 1
         ? {
             name: '(1)',
-            current: currentPointing.nasmyth1,
-            target: targetPointing.nasmyth1,
+            current: Math.abs(currentPointing.nasmyth1),
+            target: Math.abs(targetPointing.nasmyth1),
             minRot: minNas1,
             maxRot: maxNas1,
           }
         : {
             name: '(2)',
-            current: currentPointing.nasmyth2,
-            target: targetPointing.nasmyth2,
+            current: Math.abs(currentPointing.nasmyth2),
+            target: Math.abs(targetPointing.nasmyth2),
             minRot: minNas2,
             maxRot: maxNas2,
           };
@@ -115,6 +115,8 @@ export default class DomeSummaryTable extends Component {
     if (domeInPositionValue !== 0) domeInPositionLabel = domeInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
     let mountInPositionLabel = 'UNKNOWN';
     if (mountInPositionValue !== 0) mountInPositionLabel = mountInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
+
+    console.log(this.props);
 
     return (
       <SummaryPanel className={styles.summaryTable}>
@@ -148,11 +150,7 @@ export default class DomeSummaryTable extends Component {
         </Value>
         <Label>Az</Label>
         <Value>
-          <CurrentTargetValue
-            currentValue={Math.abs(domeAz.current)}
-            targetValue={Math.abs(domeAz.target)}
-            isChanging={true}
-          />
+          <CurrentTargetValue currentValue={domeAz.current} targetValue={domeAz.target} isChanging={true} />
         </Value>
         {/* <span className={[styles.subRow, styles.wide].join(' ')} title={`Time to limit: ${2} min`}>
           <span>
@@ -186,23 +184,21 @@ export default class DomeSummaryTable extends Component {
         <Label>Az</Label>
         <Value>
           <CurrentTargetValue
-            currentValue={fixedFloat(Math.abs(mountAz.current), 2)}
-            targetValue={fixedFloat(Math.abs(mountAz.target), 2)}
+            currentValue={fixedFloat(mountAz.current, 2)}
+            targetValue={fixedFloat(mountAz.target, 2)}
             isChanging={true}
           />
         </Value>
 
         <Row
-          title={`Current value: ${mountAz.current}\nTarget value: ${Math.abs(
-            mountAz.target,
-          )}\nLimits: [${minAz}º, ${maxAz}º]`}
+          title={`Current value: ${mountAz.current}\nTarget value: ${mountAz.target}\nLimits: [${minAz}º, ${maxAz}º]`}
         >
           <span>
             <Limits
-              lowerLimit={minAz}
-              upperLimit={maxAz}
-              currentValue={Math.abs(mountAz.current)}
-              targetValue={Math.abs(mountAz.target)}
+              lowerLimit={0}
+              upperLimit={360}
+              currentValue={mountAz.current}
+              targetValue={mountAz.target}
               height={30}
               displayLabels={false}
             />
