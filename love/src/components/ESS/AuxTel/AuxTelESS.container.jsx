@@ -257,8 +257,8 @@ const mapStateToProps = (state, ownProps) => {
   const domeState = getDomeState(state);
   return {
     ...map,
-    percentOpenMainDoor: domeState.dropoutDoorOpeningPercentage,
-    percentOpenDropoutDoor: domeState.mainDoorOpeningPercentage,
+    percentOpenMainDoor: domeState.mainDoorOpeningPercentage,
+    percentOpenDropoutDoor: domeState.dropoutDoorOpeningPercentage,
     azimuthPosition: domeState.azimuthPosition,
   };
 };

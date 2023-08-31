@@ -66,36 +66,47 @@ const AuxTelESS = (props) => {
   const fans = [
     {
       position: {
-        x: Math.sin(THREE.MathUtils.degToRad(135)) * 4.47,
-        y: Math.cos(THREE.MathUtils.degToRad(135)) * 4.47,
-        z: -1.15 - 0.8,
-      },
-      angle: 135,
-      percentOpen: 50,
-      width: 1.93,
-      height: 1.2,
-    },
-    {
-      position: {
-        x: Math.sin(THREE.MathUtils.degToRad(45)) * 4.47,
-        y: Math.cos(THREE.MathUtils.degToRad(45)) * 4.47,
-        z: -1.15 - 0.8,
-      },
-      angle: 45,
-      percentOpen: 70,
-      width: 1.93,
-      height: 1.2,
-    },
-    {
-      position: {
         x: Math.sin(THREE.MathUtils.degToRad(315)) * 4.47,
         y: Math.cos(THREE.MathUtils.degToRad(315)) * 4.47,
-        z: -1.15 - 0.8,
+        z: -1.15 - 0.8 - 1,
       },
       angle: 315,
+      percentOpen: 50,
+      width: 1.93,
+      height: 1.5,
+    },
+    {
+      position: {
+        x: Math.sin(THREE.MathUtils.degToRad(26)) * 4.47,
+        y: Math.cos(THREE.MathUtils.degToRad(26)) * 4.47,
+        z: -1.15 - 0.8 - 1,
+      },
+      angle: 26,
+      percentOpen: 70,
+      width: 1.93,
+      height: 1.5,
+    },
+    {
+      position: {
+        x: Math.sin(THREE.MathUtils.degToRad(97)) * 4.47,
+        y: Math.cos(THREE.MathUtils.degToRad(97)) * 4.47,
+        z: -1.15 - 0.8 - 1,
+      },
+      angle: 97,
       percentOpen: 30,
       width: 1.93,
-      height: 1.2,
+      height: 1.5,
+    },
+    {
+      position: {
+        x: Math.sin(THREE.MathUtils.degToRad(172)) * 4.47,
+        y: Math.cos(THREE.MathUtils.degToRad(172)) * 4.47,
+        z: -1.15 - 0.8 - 1,
+      },
+      angle: 172,
+      percentOpen: 100,
+      width: 1.93,
+      height: 1.5,
     },
   ];
 
