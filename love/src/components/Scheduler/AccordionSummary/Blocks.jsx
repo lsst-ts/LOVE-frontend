@@ -14,13 +14,15 @@ export default class Blocks extends Component {
     super(props);
     this.state = {
       selectedBlockId: null,
+      isButtonDisabled: true,
+      clickOverBlock: false,
     };
 
     this.handleRowClick = this.handleRowClick.bind(this);
   }
 
   handleRowClick = (value) => {
-    this.setState({ selectedBlockId: value });
+    this.setState({ selectedBlockId: value, clickOverBlock: true, isButtonDisabled: false });
   };
 
   addBlockCommand() {
@@ -34,6 +36,8 @@ export default class Blocks extends Component {
         id: selectedBlockId,
       },
     });
+
+    this.setState({ isButtonDisabled: true, selectedBlockId: null, clickOverBlock: false });
   }
 
   render() {
@@ -53,7 +57,7 @@ export default class Blocks extends Component {
       predTargetsRotSkyPos,
     } = this.props;
 
-    const { selectedBlockId } = this.state;
+    const { selectedBlockId, clickOverBlock } = this.state;
 
     const listBlocksId = blockInvId ? blockInvId.split(',') : [];
     const listBlocksStatus = blockInvStatus ? blockInvStatus.split(',') : [];
@@ -87,7 +91,10 @@ export default class Blocks extends Component {
             {listOfBlocks.length > 0
               ? listOfBlocks.map((b, i) => (
                   <div className={styles.listOfBlocks} key={i}>
-                    <div onClick={() => this.handleRowClick(b.id)} className={styles.blocksLabel}>
+                    <div
+                      onClick={() => this.handleRowClick(b.id)}
+                      className={clickOverBlock && selectedBlockId === b.id ? styles.selected : styles.blocksLabel}
+                    >
                       <Label>{b.id}</Label>
                     </div>
                     <Value>
@@ -97,11 +104,7 @@ export default class Blocks extends Component {
                 ))
               : 'No data'}
           </SummaryPanel>
-          <Button
-            status="info"
-            disabled={selectedBlockId != null ? false : true}
-            onClick={() => this.addBlockCommand()}
-          >
+          <Button status="info" disabled={this.state.isButtonDisabled} onClick={() => this.addBlockCommand()}>
             Add Block to Scheduler queue
           </Button>
         </div>
