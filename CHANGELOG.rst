@@ -2,10 +2,15 @@
 Version History
 ===============
 
+v5.24.10
+---------
+
+* Highlight block when is selected `<https://github.com/lsst-ts/LOVE-frontend/pull/511>`_
+
 v5.24.9
 --------
 
-* Add 1 day to end obs day for querying exposures `<https://github.com/lsst-ts/LOVE-frontend/pull/510`_
+* Add 1 day to end obs day for querying exposures `<https://github.com/lsst-ts/LOVE-frontend/pull/510>`_
 * Point LOVE weather station to read corresponding CSC `<https://github.com/lsst-ts/LOVE-frontend/pull/509>`_
 
 v5.24.8
