@@ -247,7 +247,6 @@ export default class Dome extends Component {
       isLive: this.state.isLive,
       historicalData: this.state.historicalData,
     };
-    console.log(this.props);
     return (
       <div className={styles.domeContainer}>
         <div className={styles.topRow}>

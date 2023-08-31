@@ -116,8 +116,6 @@ export default class DomeSummaryTable extends Component {
     let mountInPositionLabel = 'UNKNOWN';
     if (mountInPositionValue !== 0) mountInPositionLabel = mountInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
 
-    console.log(this.props);
-
     return (
       <SummaryPanel className={styles.summaryTable}>
         <Title>Track ID</Title>
