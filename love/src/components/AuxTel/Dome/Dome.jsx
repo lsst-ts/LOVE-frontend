@@ -57,6 +57,10 @@ export default class Dome extends Component {
       type: 'line',
       color: 'hsl(201, 70%, 40%)',
       orient: 'left',
+      scaleDomain: {
+        domainMax: 200,
+        domainMin: 100,
+      },
       values: [
         {
           variable: 'y',
@@ -229,12 +233,21 @@ export default class Dome extends Component {
 
     const vignettingDistance = fixedFloat(Math.abs(azDiff) * Math.cos((currentPointingEl * Math.PI) / 180), 2);
 
+    const azScaleDomain = {
+      domainMax: 360,
+      domainMin: 0,
+    };
+    const elScaleDomain = {
+      domainMax: 90,
+      domainMin: 0,
+    };
+
     const timeSeriesControlsProps = {
       timeWindow: this.state.timeWindow,
       isLive: this.state.isLive,
       historicalData: this.state.historicalData,
     };
-
+    console.log(this.props);
     return (
       <div className={styles.domeContainer}>
         <div className={styles.topRow}>
@@ -334,12 +347,12 @@ export default class Dome extends Component {
             timeRotLim={timeRotLim}
             timeUnobservable={timeUnobservable}
             timeElHighLimit={timeElHighLimit}
-            maxEl={maxEl}
+            maxEl={85}
             maxAz={maxAz}
             maxNas1={maxNas1}
             maxNas2={maxNas2}
             maxM3={maxM3}
-            minEl={minEl}
+            minEl={5}
             minAz={minAz}
             minNas1={minNas1}
             minNas2={minNas2}
@@ -369,6 +382,7 @@ export default class Dome extends Component {
                   yAxisTitle="Azimuth"
                   timeSeriesControlsProps={timeSeriesControlsProps}
                   maxHeight={250}
+                  scaleDomain={azScaleDomain}
                 />
               </div>
             </div>
@@ -385,6 +399,7 @@ export default class Dome extends Component {
                   yAxisTitle="Elevation"
                   timeSeriesControlsProps={timeSeriesControlsProps}
                   maxHeight={250}
+                  scaleDomain={elScaleDomain}
                 />
               </div>
             </div>
