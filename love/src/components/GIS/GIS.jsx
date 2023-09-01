@@ -80,6 +80,7 @@ export default class GIS extends Component {
 
   componentDidMount = () => {
     this.props.subscribeToStream();
+    this.updateInterlockStatuses();
   };
 
   componentWillUnmount = () => {
@@ -90,8 +91,6 @@ export default class GIS extends Component {
     const { activeEffects, alertEffects, alertSignals, bypassedAlerts } = this.state;
     const flattenedSignals = Object.entries(signals);
     const effectsArray = Object.entries(effects);
-
-    console.log(bypassedAlerts);
 
     return (
       <div className={styles.div}>
