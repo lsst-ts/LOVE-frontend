@@ -60,7 +60,8 @@ export default class MTDomeShutter extends Component {
     } = this.props;
 
     return (
-      <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 235 235">
+      <>
+      {/* <svg className={styles.svgOverlay} height={height} width={width} viewBox={`0 0 ${width} ${height}`}> */}
         {/* Dome, actual position */}
         <g
           style={{
@@ -204,7 +205,8 @@ export default class MTDomeShutter extends Component {
             />
           </g>
         )}
-      </svg>
+      {/* </svg> */}
+      </>
     );
   }
 }

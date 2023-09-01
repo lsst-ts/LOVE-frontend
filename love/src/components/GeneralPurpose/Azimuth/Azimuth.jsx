@@ -140,6 +140,9 @@ export default class Limits extends Component {
             />
           </g>
         </g>
+        <g transform={`translate(35, 25) scale(${1.25}, ${1.25})`}>
+          {this.props.children}
+        </g>
       </svg>
     );
   }

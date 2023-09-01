@@ -598,27 +598,28 @@ export default class MTDome extends Component {
                 className={styles.svgAzimuth}
                 width={width}
                 height={height}
+                radius={width/2*1.1}
                 currentValue={positionActualDomeAz}
                 targetValue={positionCommandedDomeAz}
-              />
-              <MTDomeShutter
-                width={width}
-                height={height}
-                positionActualShutter={positionActualShutter}
-                positionCommandedShutter={positionCommandedShutter}
-                positionActualDomeAz={positionActualDomeAz}
-                positionCommandedDomeAz={positionCommandedDomeAz}
-                positionActualLightWindScreen={positionActualLightWindScreen}
-                positionCommandedLightWindScreen={positionCommandedLightWindScreen}
-              />
-
-              <MTDomePointing
-                width={width}
-                height={height}
-                currentPointing={currentPointing}
-                targetPointing={targetPointing}
-                isProjected={isProjected}
-              />
+              >
+                <MTDomeShutter
+                  width={width}
+                  height={height}
+                  positionActualShutter={positionActualShutter}
+                  positionCommandedShutter={positionCommandedShutter}
+                  positionActualDomeAz={positionActualDomeAz}
+                  positionCommandedDomeAz={positionCommandedDomeAz}
+                  positionActualLightWindScreen={positionActualLightWindScreen}
+                  positionCommandedLightWindScreen={positionCommandedLightWindScreen}
+                />
+                <MTDomePointing
+                  width={width}
+                  height={height}
+                  currentPointing={currentPointing}
+                  targetPointing={targetPointing}
+                  isProjected={isProjected}
+                />
+              </Azimuth>
               <MTDomeLouvers
                 actualPositionLouvers={actualPositionLouvers}
                 commandedPositionLouvers={commandedPositionLouvers}

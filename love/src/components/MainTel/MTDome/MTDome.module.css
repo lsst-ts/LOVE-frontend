@@ -32,10 +32,10 @@
 }
 
 .svgOverlay {
-  position: absolute;
+  /* position: absolute;
   left: calc(50% - 130px);
   top: 7%;
-  width: auto;
+  width: auto; */
   overflow: visible;
 }
 
