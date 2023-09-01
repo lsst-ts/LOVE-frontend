@@ -166,11 +166,17 @@ export default class ObservingLogInput extends Component {
     }
 
     this.resizeObserver = new ResizeObserver((entries) => {
-      const container = entries[0];
-      console.log(container.contentRect);
-      this.setState({
-        containerWidth: container.contentRect.width,
-        containerHeight: container.contentRect.height,
+      // We wrap it in requestAnimationFrame to avoid this error - ResizeObserver loop limit exceeded
+      window.requestAnimationFrame(() => {
+        if (!Array.isArray(entries) || !entries.length) {
+          return;
+        }
+        const container = entries[0];
+        console.log(container.contentRect);
+        this.setState({
+          containerWidth: container.contentRect.width,
+          containerHeight: container.contentRect.height,
+        });
       });
     });
 

@@ -22,11 +22,17 @@ export default class Skymap extends Component {
     const { containerNode } = this.props;
     if (containerNode) {
       const resizeObserver = new ResizeObserver((entries) => {
-        const container = entries[0];
-        const containerWidth = container.contentRect.width;
-        this.setState({
-          height: containerWidth * 0.3,
-          width: containerWidth * 0.3,
+        // We wrap it in requestAnimationFrame to avoid this error - ResizeObserver loop limit exceeded
+        window.requestAnimationFrame(() => {
+          if (!Array.isArray(entries) || !entries.length) {
+            return;
+          }
+          const container = entries[0];
+          const containerWidth = container.contentRect.width;
+          this.setState({
+            height: containerWidth * 0.3,
+            width: containerWidth * 0.3,
+          });
         });
       });
       if (!(containerNode instanceof Element)) return;

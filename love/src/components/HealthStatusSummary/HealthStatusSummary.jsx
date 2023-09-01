@@ -40,9 +40,15 @@ export default class HealthStatusSummary extends Component {
     this.props.subscribeToStreams();
 
     this.resizeObserver = new ResizeObserver((entries) => {
-      const container = entries[0];
-      this.setState({
-        containerWidth: container.contentRect.width,
+      // We wrap it in requestAnimationFrame to avoid this error - ResizeObserver loop limit exceeded
+      window.requestAnimationFrame(() => {
+        if (!Array.isArray(entries) || !entries.length) {
+          return;
+        }
+        const container = entries[0];
+        this.setState({
+          containerWidth: container.contentRect.width,
+        });
       });
     });
 

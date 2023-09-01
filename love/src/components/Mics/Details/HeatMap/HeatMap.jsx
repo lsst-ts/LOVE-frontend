@@ -85,14 +85,20 @@ export default class HeatMap extends Component {
   componentDidMount() {
     if (this.props.containerNode) {
       this.resizeObserver = new ResizeObserver((entries) => {
-        const container = entries[0];
-        if(container.contentRect.height !== 0 && container.contentRect.width !== 0) {
-          this.setState({
-            containerHeight: container.contentRect.height - 19,
-            containerWidth: container.contentRect.width,
-            resizeObserverListener: true,
-          });
-        }
+        // We wrap it in requestAnimationFrame to avoid this error - ResizeObserver loop limit exceeded
+        window.requestAnimationFrame(() => {
+          if (!Array.isArray(entries) || !entries.length) {
+            return;
+          }
+          const container = entries[0];
+          if(container.contentRect.height !== 0 && container.contentRect.width !== 0) {
+            this.setState({
+              containerHeight: container.contentRect.height - 19,
+              containerWidth: container.contentRect.width,
+              resizeObserverListener: true,
+            });
+          }
+        });
       });
       if (!(this.props.containerNode instanceof Element)) return;
       this.resizeObserver.observe(this.props.containerNode);
@@ -106,10 +112,16 @@ export default class HeatMap extends Component {
     if (prevProps.containerNode !== this.props.containerNode) {
       if (this.props.containerNode && !this.state.resizeObserverListener) {
         this.resizeObserver = new ResizeObserver((entries) => {
-          const container = entries[0];
-          this.setState({
-            containerHeight: container.contentRect.height - 19,
-            containerWidth: container.contentRect.width,
+          // We wrap it in requestAnimationFrame to avoid this error - ResizeObserver loop limit exceeded
+          window.requestAnimationFrame(() => {
+            if (!Array.isArray(entries) || !entries.length) {
+              return;
+            }
+            const container = entries[0];
+            this.setState({
+              containerHeight: container.contentRect.height - 19,
+              containerWidth: container.contentRect.width,
+            });
           });
         });
         this.resizeObserver.observe(this.props.containerNode);

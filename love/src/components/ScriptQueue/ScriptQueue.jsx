@@ -217,22 +217,28 @@ export default class ScriptQueue extends Component {
     this.props.subscribeToStreams();
 
     const debouncedResizeCallback = debounce((entries) => {
-      const newHeight = entries[0].target.clientHeight;
-      if (newHeight >= this.state.currentScriptDetailState.initialHeight) {
-        this.setState((state) => ({
-          currentScriptDetailState: {
-            ...state.currentScriptDetailState,
-            height: state.currentScriptDetailState.initialHeight,
-          },
-        }));
-      } else {
-        this.setState((state) => ({
-          currentScriptDetailState: {
-            ...state.currentScriptDetailState,
-            height: newHeight,
-          },
-        }));
-      }
+       // We wrap it in requestAnimationFrame to avoid this error - ResizeObserver loop limit exceeded
+       window.requestAnimationFrame(() => {
+        if (!Array.isArray(entries) || !entries.length) {
+          return;
+        }
+        const newHeight = entries[0].target.clientHeight;
+        if (newHeight >= this.state.currentScriptDetailState.initialHeight) {
+          this.setState((state) => ({
+            currentScriptDetailState: {
+              ...state.currentScriptDetailState,
+              height: state.currentScriptDetailState.initialHeight,
+            },
+          }));
+        } else {
+          this.setState((state) => ({
+            currentScriptDetailState: {
+              ...state.currentScriptDetailState,
+              height: newHeight,
+            },
+          }));
+        }
+      });
     }, 100);
     this.observer = new ResizeObserver(debouncedResizeCallback);
     if (this.currentScriptDetailsContainer.current) {

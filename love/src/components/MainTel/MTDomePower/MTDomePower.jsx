@@ -61,8 +61,14 @@ export default class MTDomePower extends Component {
 
   setResizeObserver = () => {
     this.resizeObserver = new ResizeObserver((entries) => {
-      const { width, height } = entries[0].contentRect;
-      this.setState({ containerWidth: width, containerHeight: height }, () => this.updateSchema());
+      // We wrap it in requestAnimationFrame to avoid this error - ResizeObserver loop limit exceeded
+      window.requestAnimationFrame(() => {
+        if (!Array.isArray(entries) || !entries.length) {
+          return;
+        }
+        const { width, height } = entries[0].contentRect;
+        this.setState({ containerWidth: width, containerHeight: height }, () => this.updateSchema());
+      });
     });
 
     if (this.props.containerNode.current) {
