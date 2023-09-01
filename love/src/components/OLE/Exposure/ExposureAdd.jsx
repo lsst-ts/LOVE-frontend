@@ -11,7 +11,7 @@ import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
-import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
+import MultiFileUploader from 'components/GeneralPurpose/MultiFileUploader/MultiFileUploader';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
@@ -479,12 +479,17 @@ export default class ExposureAdd extends Component {
               />
             </div>
             <div className={isMenu ? styles.footerMenu : styles.footer}>
-              <FileUploader
-                value={this.state.newMessage.file?.name}
-                handleFile={(file) =>
-                  this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: file } }))
+              <MultiFileUploader
+                values={this.state.logEdit.file}
+                handleFiles={(files) =>
+                  this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: files } }))
                 }
-                handleDelete={() =>
+                handleDelete={(file) => {
+                  const files = { ...this.state.newMessage.file };
+                  delete files[file];
+                  this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: files } }));
+                }}
+                handleDeleteAll={() =>
                   this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: undefined } }))
                 }
               />

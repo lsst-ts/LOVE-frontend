@@ -6,7 +6,7 @@ import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
-import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
+import MultiFileUploader from 'components/GeneralPurpose/MultiFileUploader/MultiFileUploader';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import SaveIcon from 'components/icons/SaveIcon/SaveIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
@@ -124,10 +124,17 @@ export default class MessageEdit extends Component {
         <div className={styles.footer}>
           <span className={[styles.floatLeft, styles.inline].join(' ')}>
             {!this.state.message.id && (
-              <FileUploader
-                value={this.state.message.file?.name}
-                handleFile={(file) => this.setState((prevState) => ({ message: { ...prevState.message, file: file } }))}
-                handleDelete={() =>
+              <MultiFileUploader
+                values={this.state.logEdit.file}
+                handleFiles={(files) =>
+                  this.setState((prevState) => ({ message: { ...prevState.message, file: files } }))
+                }
+                handleDelete={(file) => {
+                  const files = { ...this.state.message.file };
+                  delete files[file];
+                  this.setState((prevState) => ({ message: { ...prevState.message, file: files } }));
+                }}
+                handleDeleteAll={() =>
                   this.setState((prevState) => ({ message: { ...prevState.message, file: undefined } }))
                 }
               />

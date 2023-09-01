@@ -8,7 +8,7 @@ import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
-import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
+import MultiFileUploader from 'components/GeneralPurpose/MultiFileUploader/MultiFileUploader';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
@@ -392,12 +392,17 @@ export default class NonExposureEdit extends Component {
             </div>
             <div className={isMenu ? styles.footerMenu : styles.footer}>
               {!this.state.logEdit.id ? (
-                <FileUploader
-                  value={this.state.logEdit.file?.name}
-                  handleFile={(file) =>
-                    this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: file } }))
+                <MultiFileUploader
+                  values={this.state.logEdit.file}
+                  handleFiles={(files) =>
+                    this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: files } }))
                   }
-                  handleDelete={() =>
+                  handleDelete={(file) => {
+                    const files = { ...this.state.logEdit.file };
+                    delete files[file];
+                    this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: files } }));
+                  }}
+                  handleDeleteAll={() =>
                     this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: undefined } }))
                   }
                 />
