@@ -818,7 +818,17 @@ export default class ManagerInterface {
 
     const formData = new FormData();
     for (const param in params) {
+      if (param == 'file') continue;
       formData.append(param, params[param]);
+    }
+
+    // Files payload
+    if (params.file instanceof FileList) {
+      for (const file in params.file) {
+        formData.append('file[]', params.file[file]);
+      }
+    } else {
+      formData.append('file[]', params.file);
     }
 
     const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/`;
@@ -855,7 +865,17 @@ export default class ManagerInterface {
 
     const formData = new FormData();
     for (const param in params) {
+      if (param == 'file') continue;
       formData.append(param, params[param]);
+    }
+
+    // Files payload
+    if (params.file instanceof FileList) {
+      for (const file in params.file) {
+        formData.append('file[]', params.file[file]);
+      }
+    } else {
+      formData.append('file[]', params.file);
     }
 
     const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/${msgExposureId}/`;
@@ -968,7 +988,17 @@ export default class ManagerInterface {
 
     const formData = new FormData();
     for (const param in params) {
+      if (param == 'file') continue;
       formData.append(param, params[param]);
+    }
+
+    // Files payload
+    if (params.file instanceof FileList) {
+      for (const file in params.file) {
+        formData.append('file[]', params.file[file]);
+      }
+    } else {
+      formData.append('file[]', params.file);
     }
 
     const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/`;
@@ -1010,7 +1040,17 @@ export default class ManagerInterface {
 
     const formData = new FormData();
     for (const param in params) {
+      if (param == 'file') continue;
       formData.append(param, params[param]);
+    }
+
+    // Files payload
+    if (params.file instanceof FileList) {
+      for (const file in params.file) {
+        formData.append('file[]', params.file[file]);
+      }
+    } else {
+      formData.append('file[]', params.file);
     }
 
     const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/${msgNarrativeId}/`;
