@@ -25,16 +25,16 @@ export default class OLE extends Component {
       selectedTab: props.tabs[0].value,
       clickNewLog: false,
       // Non Exposure filters
-      selectedDayNarrativeStart: Moment(Date.now() + 37 * 1000).subtract(1, 'days'),
-      selectedDayNarrativeEnd: Moment(Date.now() + 37 * 1000),
+      selectedDayNarrativeStart: Moment().subtract(1, 'days'),
+      selectedDayNarrativeEnd: Moment(),
       selectedCommentType: OLE_COMMENT_TYPE_OPTIONS[0],
       selectedSystem: 'all',
       selectedObsTimeLoss: false,
       // Exposure filters
       instruments: [],
       selectedInstrument: null,
-      selectedDayExposureStart: Moment(Date.now() + 37 * 1000).subtract(1, 'days'),
-      selectedDayExposureEnd: Moment(Date.now() + 37 * 1000),
+      selectedDayExposureStart: Moment().subtract(1, 'days'),
+      selectedDayExposureEnd: Moment(),
       selectedExposureType: 'all',
       registryMap: {},
     };
