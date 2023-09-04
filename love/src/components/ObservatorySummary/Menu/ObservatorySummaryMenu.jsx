@@ -137,9 +137,9 @@ ObservatorySummaryMenu.propTypes = {
   /** Simonyi Operation Mode */
   simonyiOperationMode: PropTypes.string,
   /** Simonyi Tracking State */
-  simonyiTrackingState: PropTypes.string,
+  simonyiTrackingState: PropTypes.bool,
   /** Simonyi Tracking Mode */
-  simonyiTrackingMode: PropTypes.string,
+  simonyiTrackingMode: PropTypes.number,
   /** Simonyi Observation Mode */
   simonyiObsMode: PropTypes.string,
   /** Simonyi Power Source */
@@ -149,9 +149,9 @@ ObservatorySummaryMenu.propTypes = {
   /** Auxiliary Telescope Operation Mode */
   auxtelOperationMode: PropTypes.string,
   /** Auxiliary Telescope Tracking State */
-  auxtelTrackingState: PropTypes.string,
+  auxtelTrackingState: PropTypes.bool,
   /** Auxiliary Telescope Tracking Mode */
-  auxtelTrackingMode: PropTypes.string,
+  auxtelTrackingMode: PropTypes.number,
   /** Auxiliary Telescope Observation Mode */
   auxtelObsMode: PropTypes.string,
   /** Auxiliary Telescope Power Source */
