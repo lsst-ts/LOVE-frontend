@@ -2,15 +2,12 @@
 Version History
 ===============
 
-v5.24.11
----------
-
-* Fix GIS data expunge `<https://github.com/lsst-ts/LOVE-frontend/pull/513>`_
-* Various ATDome updates `<https://github.com/lsst-ts/LOVE-frontend/pull/512>`_
-
 v5.24.10
 ---------
 
+* Set narrativelog date selector to work between startOfDay and endOfDay `<https://github.com/lsst-ts/LOVE-frontend/pull/514>`_
+* Fix GIS data expunge `<https://github.com/lsst-ts/LOVE-frontend/pull/513>`_
+* Various ATDome updates `<https://github.com/lsst-ts/LOVE-frontend/pull/512>`_
 * Highlight block when is selected `<https://github.com/lsst-ts/LOVE-frontend/pull/511>`_
 * Bump @adobe/css-tools from 4.0.1 to 4.3.1 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/508>`_
 

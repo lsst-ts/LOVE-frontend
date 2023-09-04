@@ -230,8 +230,8 @@ export default class NonExposure extends Component {
 
   queryNarrativeLogs() {
     const { selectedDayNarrativeStart, selectedDayNarrativeEnd } = this.props;
-    const dateFrom = selectedDayNarrativeStart.format(ISO_STRING_DATE_TIME_FORMAT);
-    const dateTo = selectedDayNarrativeEnd.format(ISO_STRING_DATE_TIME_FORMAT);
+    const dateFrom = Moment(selectedDayNarrativeStart).utc().startOf('day').format(ISO_STRING_DATE_TIME_FORMAT);
+    const dateTo = Moment(selectedDayNarrativeEnd).utc().endOf('day').format(ISO_STRING_DATE_TIME_FORMAT);
 
     // Get list of narrative logs
     this.setState({ updatingLogs: true });
