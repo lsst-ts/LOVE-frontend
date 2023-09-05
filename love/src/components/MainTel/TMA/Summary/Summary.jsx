@@ -11,6 +11,8 @@ import {
   stateToStyleMTMountAxisMotionState,
   stateToStyleMTMountPowerState,
   MTMountLimits,
+  summaryStateToStyle,
+  summaryStateMap,
 } from '../../../../Config';
 
 import SummaryPanel from '../../../GeneralPurpose/SummaryPanel/SummaryPanel';
@@ -52,6 +54,8 @@ export default class Summary extends Component {
     elevationActualPosition: PropTypes.number,
     /** Elevation Position computed by the path generator */
     elevationDemandPosition: PropTypes.number,
+    /** Current summary state of MTMount CSC. High level state machine state identifier. */
+    summaryState: PropTypes.number,
   };
 
   static defaultProps = {
@@ -69,6 +73,7 @@ export default class Summary extends Component {
     elevationLimits: 0,
     elevationActualPosition: 0,
     elevationDemandPosition: 0,
+    summaryState: 0,
   };
 
   render() {
@@ -80,6 +85,7 @@ export default class Summary extends Component {
       elevationDemandPosition,
     } = this.props;
 
+    const summaryStateValue = summaryStateMap[this.props.summaryState];
     const commanderValue = mtMountCommanderStateMap[this.props.commander];
     const connectedValue = mtMountConnectedStateMap[this.props.connected];
     const balancingValue = mtMountPowerStateMap[this.props.balancing];
@@ -99,6 +105,12 @@ export default class Summary extends Component {
     return (
       <div className={styles.container}>
         <SummaryPanel>
+          <Title>MTMount CSC</Title>
+          <Value>{
+            <StatusText title={summaryStateValue} status={summaryStateToStyle[summaryStateValue]} small>
+              {summaryStateValue}
+            </StatusText>
+          }</Value>
           <Title>Track ID</Title>
           <Value>{trackId?.toString()}</Value>
           <Label>Commander</Label>

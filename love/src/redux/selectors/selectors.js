@@ -1117,6 +1117,7 @@ export const getTMASummary = (state) => {
     'event-MTMount-0-commander',
     'event-MTMount-0-connected',
     'event-MTMount-0-balanceSystemState',
+    'event-MTMount-0-summaryState',
   ];
   const summaryData = getStreamsData(state, subscriptions);
   return {
@@ -1124,6 +1125,7 @@ export const getTMASummary = (state) => {
     commander: summaryData['event-MTMount-0-commander']?.[0]?.commander?.value ?? 0,
     connected: summaryData['event-MTMount-0-connected']?.[0]?.connected?.value ?? undefined,
     balancing: summaryData['event-MTMount-0-balanceSystemState']?.[0]?.powerState?.value ?? 15,
+    summaryState: summaryData['event-MTMount-0-summaryState']?.[0]?.summaryState?.value ?? 0,
   };
 };
 

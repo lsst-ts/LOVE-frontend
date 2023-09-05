@@ -100,6 +100,7 @@ export default class TMA extends Component {
       mirrorCoversPosition,
       azimuthDrives,
       elevationDrives,
+      summaryState
     } = this.props;
 
     return (
@@ -120,6 +121,7 @@ export default class TMA extends Component {
             elevationLimits={elevationLimits}
             elevationActualPosition={elevationActualPosition}
             elevationDemandPosition={elevationDemandPosition}
+            summaryState={summaryState}
           />
         </div>
         <div className={styles.mirrorAndElevationContainer}>
