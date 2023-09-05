@@ -35,7 +35,8 @@ const MTDomeContainer = ({
   subscribeToStream,
   unsubscribeToStream,
   trackId,
-  mtdomeSummaryState,
+  mtDomeSummaryState,
+  mtMountSummaryState,
   positionActualShutter,
   positionCommandedShutter,
   positionActualDomeAz,
@@ -65,7 +66,8 @@ const MTDomeContainer = ({
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
       trackId={trackId}
-      mtdomeSummaryState={mtdomeSummaryState}
+      mtDomeSummaryState={mtDomeSummaryState}
+      mtMountSummaryState={mtMountSummaryState}
       positionActualShutter={positionActualShutter}
       positionCommandedShutter={positionCommandedShutter}
       positionActualDomeAz={positionActualDomeAz}
@@ -122,6 +124,8 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTDome-0-elTarget',
     'event-MTDome-0-operationalMode',
     'event-MTMount-0-target',
+    'event-MTDome-0-summaryState',
+    'event-MTMount-0-summaryState',
   ];
   return {
     subscriptions,

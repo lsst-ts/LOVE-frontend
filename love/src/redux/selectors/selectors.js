@@ -1083,6 +1083,7 @@ export const getLouversStatus = (state) => {
 export const getDomeStatus = (state) => {
   const subscriptions = [
     'event-MTMount-0-target',
+    'event-MTMount-0-summaryState',
     'event-MTDome-0-summaryState',
     'event-MTDome-0-azEnabled',
     'event-MTDome-0-azMotion',
@@ -1095,7 +1096,7 @@ export const getDomeStatus = (state) => {
   const domeStatus = getStreamsData(state, subscriptions);
   return {
     trackId: domeStatus['event-MTMount-0-target']?.[0]?.trackId?.value ?? 0,
-    mtdomeSummaryState: domeStatus['event-MTDome-0-summaryState']?.[0]?.summaryState?.value ?? 0,
+    mtDomeSummaryState: domeStatus['event-MTDome-0-summaryState']?.[0]?.summaryState?.value ?? 0,
     azimuthDomeState: domeStatus['event-MTDome-0-azEnabled']?.[0]?.state?.value ?? 0,
     azimuthDomeMotion: domeStatus['event-MTDome-0-azMotion']?.[0]?.state?.value ?? 0,
     azimuthDomeTarget: domeStatus['event-MTDome-0-azTarget']?.[0]?.position?.value ?? 0,
@@ -1103,6 +1104,7 @@ export const getDomeStatus = (state) => {
     elevationDomeMotion: domeStatus['event-MTDome-0-elMotion']?.[0]?.state?.value ?? 0,
     elevationDomeTarget: domeStatus['event-MTDome-0-elTarget']?.[0]?.position?.value ?? 0,
     modeDomeStatus: domeStatus['event-MTDome-0-operationalMode']?.[0]?.operationalMode?.value ?? 0,
+    mtMountSummaryState: domeStatus['event-MTMount-0-summaryState']?.[0]?.summaryState?.value ?? 0,
   };
 };
 

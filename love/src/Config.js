@@ -753,10 +753,10 @@ export const hexapodConnectedStatetoStyle = {
 
 export const mtdomeStatusStatetoStyle = {
   UNKNOWN: 'undefined',
-  DISABLED: 'disabled',
+  DISABLED: 'invalid',
   ENABLED: 'enabled',
   FAULT: 'fault',
-  OFFLINE: 'offline',
+  OFFLINE: 'invalid',
   STANDBY: 'standby',
 };
 
