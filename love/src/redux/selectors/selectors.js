@@ -504,6 +504,7 @@ export const getDomeState = (state) => {
     'event-ATDome-0-dropoutDoorState',
     'event-ATDome-0-mainDoorState',
     'event-ATDome-0-allAxesInPosition',
+    'event-ATDome-0-summaryState',
   ];
   const domeData = getStreamsData(state, domeSubscriptions);
   return {
@@ -515,6 +516,7 @@ export const getDomeState = (state) => {
     domeInPosition: domeData['event-ATDome-0-allAxesInPosition']?.[0].inPosition?.value ?? 0,
     dropoutDoorState: domeData['event-ATDome-0-dropoutDoorState']?.[0].state?.value ?? 0,
     mainDoorState: domeData['event-ATDome-0-mainDoorState']?.[0].state?.value ?? 0,
+    atDomeSummaryState: domeData['event-ATDome-0-summaryState']?.[0].summaryState?.value ?? 0,
   };
 };
 
@@ -528,6 +530,7 @@ export const getATMCSState = (state) => {
     'event-ATMCS-0-m3State',
     'event-ATMCS-0-positionLimits',
     'event-ATPtg-1-timesOfLimits',
+    'event-ATMCS-0-summaryState',
   ];
   const data = getStreamsData(state, subscriptions);
   const [minEl, minAz, minNas1, minNas2, minM3] = data['event-ATMCS-0-positionLimits']?.[0].minimum?.value ?? [
@@ -539,6 +542,7 @@ export const getATMCSState = (state) => {
 
   return {
     atMountState: data['event-ATMCS-0-atMountState']?.[0].state?.value ?? 0,
+    ATMCSSummaryState: data['event-ATMCS-0-summaryState']?.[0].summaryState?.value ?? 0,
     mountInPosition: data['event-ATMCS-0-allAxesInPosition']?.[0].inPosition?.value ?? false,
     trackID: data['event-ATMCS-0-target']?.[0].trackId?.value ?? 0,
     targetAzimuth: data['event-ATMCS-0-target']?.[0].azimuth?.value ?? 0,
