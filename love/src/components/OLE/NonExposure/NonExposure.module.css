@@ -86,10 +86,9 @@
   display: flex;
   flex-flow: row;
   flex-direction: row;
-  align-items: center;
-  padding-top: 7px;
+  padding-top: var(--content-padding);
+  margin: var(--small-padding) var(--content-padding);
   border-top: 2px solid var(--secondary-font-color);
-  margin: 7px;
 }
 
 .footerMenu {
@@ -97,9 +96,9 @@
   flex-flow: column;
   flex-direction: column;
   row-gap: 10px;
-  padding-top: 7px;
+  padding-top: var(--content-padding);
+  margin: var(--small-padding) var(--content-padding);
   border-top: 2px solid var(--secondary-font-color);
-  margin: 7px;
 }
 
 .iconBtn {
@@ -290,11 +289,6 @@
 
 .footerRight {
   margin-left: auto;
-  margin-right: 5px;
-  margin-top: 5px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
 }
 
 .footerRightMenu {
@@ -381,4 +375,33 @@ th.tableHead {
 .inputError {
   margin-top: var(--small-padding);
   color: var(--status-alert-color);
+}
+
+.footer .attachedFiles {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  margin-bottom: var(--small-padding);
+}
+
+.buttonWraper {
+  display: inline-block;
+  margin: 0 0.25em 0.25em 0;
+}
+
+.footer .attachedFiles .fileButton {
+  display: flex;
+  align-items: center;
+}
+
+.footer .attachedFiles .fileButton > .downloadIcon {
+  width: 1em;
+  height: auto;
+  margin-right: 0.25em;
+  fill: var(--default-active-font-color);
+}
+
+.footer .attachedFiles .label {
+  margin-left: 0;
+  margin-right: var(--small-padding);
 }

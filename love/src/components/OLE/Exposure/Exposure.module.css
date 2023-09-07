@@ -270,9 +270,9 @@
   display: flex;
   flex-flow: row;
   flex-direction: row;
-  padding-top: 7px;
+  padding-top: var(--content-padding);
+  margin: var(--small-padding) var(--content-padding);
   border-top: 2px solid var(--secondary-font-color);
-  margin: 7px;
 }
 
 .footerMenu {
@@ -280,18 +280,13 @@
   flex-flow: column;
   flex-direction: column;
   row-gap: 10px;
-  padding-top: 7px;
+  padding-top: var(--content-padding);
+  margin: var(--small-padding) var(--content-padding);
   border-top: 2px solid var(--secondary-font-color);
-  margin: 7px;
 }
 
 .footerRight {
   margin-left: auto;
-  margin-right: 5px;
-  margin-top: 5px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
 }
 
 .footerRightMenu {
@@ -318,10 +313,6 @@
 
 .checkboxText > button {
   text-align: right;
-}
-
-.issueIdInput {
-  width: 80px;
 }
 
 .paddingTop {
@@ -433,4 +424,65 @@ th.tableHead {
 
 .refreshDataBtn {
   height: 2.4em;
+}
+
+.footer .attachedFiles,
+.footer .toAttachFiles,
+.footer .flag,
+.footerMenu .attachedFiles,
+.footerMenu .toAttachFiles,
+.footerMenu .flag {
+  text-align: left;
+  margin-bottom: var(--small-padding);
+}
+
+.footer .attachedFiles {
+  display: grid;
+  grid-template-columns: minmax(7em, max-content) 1fr;
+  column-gap: var(--small-padding);
+}
+
+.buttonWraper {
+  display: inline-block;
+  margin: 0 0.25em 0.25em 0;
+}
+
+.footer .attachedFiles .fileButton {
+  display: flex;
+  align-items: center;
+}
+
+.footer .attachedFiles .fileButton > .downloadIcon {
+  width: 1em;
+  height: auto;
+  margin-right: 0.25em;
+  fill: var(--default-active-font-color);
+}
+
+.footer .attachedFiles .label {
+  margin-left: 0;
+}
+
+.footer .flag,
+.footerMenu .flag,
+.footer .jira,
+.footerMenu .jira {
+  display: flex;
+  align-items: center;
+  gap: var(--small-padding);
+  white-space: nowrap;
+}
+
+.footer .flag .label,
+.footerMenu .flag .label,
+.footer .jira .label,
+.footerMenu .jira .label {
+  margin-left: 0;
+}
+
+.footer .flag :nth-child(2),
+.footerMenu .flag :nth-child(2),
+.footer .jira :nth-child(4),
+.footerMenu .jira :nth-child(4) {
+  flex-grow: 1;
 }
