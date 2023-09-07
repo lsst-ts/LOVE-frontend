@@ -818,7 +818,17 @@ export default class ManagerInterface {
 
     const formData = new FormData();
     for (const param in params) {
+      if (param == 'file') continue;
       formData.append(param, params[param]);
+    }
+
+    // Files payload
+    if (params.file instanceof FileList) {
+      for (const file in params.file) {
+        formData.append('file[]', params.file[file]);
+      }
+    } else {
+      formData.append('file[]', params.file);
     }
 
     const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/`;
@@ -855,7 +865,17 @@ export default class ManagerInterface {
 
     const formData = new FormData();
     for (const param in params) {
+      if (param == 'file') continue;
       formData.append(param, params[param]);
+    }
+
+    // Files payload
+    if (params.file instanceof FileList) {
+      for (const file in params.file) {
+        formData.append('file[]', params.file[file]);
+      }
+    } else {
+      formData.append('file[]', params.file);
     }
 
     const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/${msgExposureId}/`;
@@ -968,7 +988,17 @@ export default class ManagerInterface {
 
     const formData = new FormData();
     for (const param in params) {
+      if (param == 'file') continue;
       formData.append(param, params[param]);
+    }
+
+    // Files payload
+    if (params.file instanceof FileList) {
+      for (const file in params.file) {
+        formData.append('file[]', params.file[file]);
+      }
+    } else {
+      formData.append('file[]', params.file);
     }
 
     const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/`;
@@ -1010,7 +1040,17 @@ export default class ManagerInterface {
 
     const formData = new FormData();
     for (const param in params) {
+      if (param == 'file') continue;
       formData.append(param, params[param]);
+    }
+
+    // Files payload
+    if (params.file instanceof FileList) {
+      for (const file in params.file) {
+        formData.append('file[]', params.file[file]);
+      }
+    } else {
+      formData.append('file[]', params.file);
     }
 
     const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/${msgNarrativeId}/`;
@@ -1670,7 +1710,7 @@ export function getLinkJira(urls) {
 /**
  * Function to get OLE Narrative and Exposure logs parameters from urls field.
  * @param {string} urls array of urls that comes from OLE message
- * @returns {string} string with first url with the condition if not jira link
+ * @returns {string} string with first url that is not a jira link
  */
 export function getFileURL(urls) {
   if (!urls) return '';
@@ -1679,6 +1719,17 @@ export function getFileURL(urls) {
     return filtered[0];
   }
   return '';
+}
+
+/**
+ * Function to get OLE Narrative and Exposure logs parameters from urls field.
+ * @param {string} urls array of urls that comes from OLE message
+ * @returns {Array} array with all urls that are not jira links
+ */
+export function getFilesURLs(urls) {
+  if (!urls) return [];
+  const filtered = urls.filter((url) => !url.includes('jira'));
+  return filtered;
 }
 
 /**

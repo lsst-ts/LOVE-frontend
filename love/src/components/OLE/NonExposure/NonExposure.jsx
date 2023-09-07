@@ -10,7 +10,7 @@ import {
   ISO_INTEGER_DATE_FORMAT,
   ISO_STRING_DATE_TIME_FORMAT,
 } from 'Config';
-import ManagerInterface, { formatSecondsToDigital, openInNewTab, getLinkJira, getFileURL } from 'Utils';
+import ManagerInterface, { formatSecondsToDigital, getLinkJira } from 'Utils';
 
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -124,7 +124,7 @@ export default class NonExposure extends Component {
         title: 'Systems',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => value.join(', '),
+        render: (value) => value?.join(', '),
       },
       {
         field: 'level',
@@ -153,24 +153,6 @@ export default class NonExposure extends Component {
         type: 'string',
         className: styles.tableHead,
         render: (value) => value,
-      },
-      {
-        field: 'urls',
-        title: 'File',
-        type: 'link',
-        className: styles.tableHead,
-        render: (value) =>
-          getFileURL(value) ? (
-            <Button
-              className={styles.iconBtn}
-              title={getFileURL(value)}
-              onClick={() => openInNewTab(getFileURL(value))}
-            >
-              <DownloadIcon className={styles.icon} />
-            </Button>
-          ) : (
-            <></>
-          ),
       },
       {
         field: 'urls',
@@ -230,8 +212,8 @@ export default class NonExposure extends Component {
 
   queryNarrativeLogs() {
     const { selectedDayNarrativeStart, selectedDayNarrativeEnd } = this.props;
-    const dateFrom = selectedDayNarrativeStart.format(ISO_STRING_DATE_TIME_FORMAT);
-    const dateTo = selectedDayNarrativeEnd.format(ISO_STRING_DATE_TIME_FORMAT);
+    const dateFrom = Moment(selectedDayNarrativeStart).utc().startOf('day').format(ISO_STRING_DATE_TIME_FORMAT);
+    const dateTo = Moment(selectedDayNarrativeEnd).utc().endOf('day').format(ISO_STRING_DATE_TIME_FORMAT);
 
     // Get list of narrative logs
     this.setState({ updatingLogs: true });

@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import lodash from 'lodash';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
-import Button from 'components/GeneralPurpose/Button/Button';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
+import Button from 'components/GeneralPurpose/Button/Button';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
 import { iconLevelOLE } from 'Config';
-import ManagerInterface, { getLinkJira, getFileURL, getFilename, formatSecondsToDigital, openInNewTab } from 'Utils';
+import ManagerInterface, { getLinkJira, getFilesURLs, getFilename, formatSecondsToDigital, openInNewTab } from 'Utils';
 import styles from './NonExposure.module.css';
 
 export default class NonExposureDetail extends Component {
@@ -106,7 +106,7 @@ export default class NonExposureDetail extends Component {
     const edit = this.props.edit ?? NonExposureDetail.defaultProps.edit;
 
     const linkJira = getLinkJira(logDetail.urls);
-    const fileurl = getFileURL(logDetail.urls);
+    const filesUrls = getFilesURLs(logDetail.urls);
 
     return (
       <>
@@ -186,26 +186,26 @@ export default class NonExposureDetail extends Component {
             </div>
           </div>
           <div className={styles.footer}>
-            {fileurl && (
-              <>
-                <span className={styles.label}>File Attached: </span>
-                <span className={styles.value}>
-                  <div style={{ display: 'flex' }}>
-                    <Button title={fileurl} onClick={() => openInNewTab(fileurl)} status="link">
-                      {getFilename(fileurl)}
-                    </Button>
-                    <Button
-                      className={styles.iconBtn}
-                      title={fileurl}
-                      onClick={() => openInNewTab(fileurl)}
-                      status="transparent"
-                    >
-                      <DownloadIcon className={styles.icon} />
-                    </Button>
-                  </div>
-                </span>
-              </>
-            )}
+            <div className={styles.attachedFiles}>
+              <div className={styles.label}>Files Attached:</div>
+              <div>
+                {filesUrls.length > 0
+                  ? filesUrls.map((fileurl, index) => (
+                      <div className={styles.buttonWraper}>
+                        <Button
+                          className={styles.fileButton}
+                          title={fileurl}
+                          onClick={() => openInNewTab(fileurl)}
+                          status="default"
+                        >
+                          <DownloadIcon className={styles.downloadIcon} />
+                          {getFilename(fileurl)}
+                        </Button>
+                      </div>
+                    ))
+                  : 'no files attached'}
+              </div>
+            </div>
           </div>
         </div>
         <Modal

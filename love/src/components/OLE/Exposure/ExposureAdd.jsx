@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import lodash from 'lodash';
 import Moment from 'moment';
-import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
+import MultiSelect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
@@ -11,18 +11,18 @@ import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
-import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
+import MultiFileUploader from 'components/GeneralPurpose/MultiFileUploader/MultiFileUploader';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
 import { EXPOSURE_FLAG_OPTIONS, exposureFlagStateToStyle, ISO_INTEGER_DATE_FORMAT } from 'Config';
-import ManagerInterface from 'Utils';
+import ManagerInterface, { getFilesURLs } from 'Utils';
 import styles from './Exposure.module.css';
 
 export default class ExposureAdd extends Component {
   static propTypes = {
-    /** Log to edit object */
-    logEdit: PropTypes.object,
+    /** Exposure object to which a log is going to be added */
+    exposure: PropTypes.object,
     /** New message object */
     newMessage: PropTypes.object,
     /** Flag to show the creation components */
@@ -38,7 +38,7 @@ export default class ExposureAdd extends Component {
   };
 
   static defaultProps = {
-    logEdit: {
+    exposure: {
       obs_id: undefined,
       instrument: undefined,
       observation_type: undefined,
@@ -69,20 +69,15 @@ export default class ExposureAdd extends Component {
   constructor(props) {
     super(props);
     this.id = lodash.uniqueId('exposure-message-create-');
-    const logEdit = props.logEdit;
-    const newMessage = ExposureAdd.defaultProps.newMessage;
-    newMessage['obs_id'] = logEdit['obs_id'];
-    newMessage['instrument'] = logEdit['instrument'];
-    newMessage['day_obs'] = logEdit['day_obs'];
+    const { newMessage } = props;
+
     this.state = {
-      logEdit,
       newMessage,
       instruments: [],
       selectedInstrument: null,
       confirmationModalShown: false,
       confirmationModalText: '',
       imageTags: [],
-      selectedTags: [],
       selectedDayExposureStart: Moment(Date.now() + 37 * 1000).subtract(1, 'days'),
       selectedDayExposureEnd: Moment(Date.now() + 37 * 1000),
       registryMap: {},
@@ -124,17 +119,25 @@ export default class ExposureAdd extends Component {
   }
 
   saveMessage() {
-    const { isLogCreate, isMenu } = this.props;
+    const { exposure, isLogCreate, isMenu } = this.props;
     const payload = { ...this.state.newMessage };
     payload['request_type'] = 'exposure';
-    payload['instrument'] = this.state.selectedInstrument;
+
+    // If exposure is not empty, then we are adding a log
+    // to a specific exposure
+    if (exposure.obs_id) {
+      payload['obs_id'] = [exposure['obs_id']];
+      payload['instrument'] = exposure['instrument'];
+      payload['day_obs'] = exposure['day_obs'];
+    }
+
     if (payload['tags']) {
       payload['tags'] = payload['tags'].map((tag) => tag.id);
     }
 
     this.setState({ savingLog: true });
     ManagerInterface.createMessageExposureLogs(payload).then((result) => {
-      if (isLogCreate || isMenu || !this.state.logEdit.obs_id) {
+      if (isLogCreate || isMenu || !exposure.obs_id) {
         this.props.back();
       } else {
         this.props.view();
@@ -167,6 +170,83 @@ export default class ExposureAdd extends Component {
       confirmationModalShown: true,
       confirmationModalText: modalText,
     });
+  }
+
+  renderInstrumentsSelect() {
+    const { instruments, selectedInstrument } = this.state;
+    return (
+      <Select
+        value={selectedInstrument}
+        onChange={({ value }) =>
+          this.setState((prevState) => ({
+            selectedInstrument: value,
+            newMessage: { ...prevState.newMessage, instrument: value },
+          }))
+        }
+        options={instruments}
+        className={styles.select}
+        small
+      />
+    );
+  }
+
+  renderDateTimeRangeSelect() {
+    const { selectedDayExposureStart, selectedDayExposureEnd } = this.state;
+    return (
+      <DateTimeRange
+        label="From"
+        className={styles.dateRange}
+        startDate={selectedDayExposureStart}
+        endDate={selectedDayExposureEnd}
+        startDateProps={{
+          timeFormat: false,
+          className: styles.rangeDateOnly,
+          maxDate: Moment(),
+        }}
+        endDateProps={{
+          timeFormat: false,
+          className: styles.rangeDateOnly,
+          maxDate: Moment(),
+        }}
+        onChange={(day, type) => this.changeDayExposure(day, type)}
+      />
+    );
+  }
+
+  renderImageTagsSelect() {
+    const { imageTags, newMessage } = this.state;
+    return (
+      <MultiSelect
+        options={imageTags}
+        selectedValues={newMessage.tags}
+        isObject={true}
+        displayValue="name"
+        onSelect={(selectedOptions) => {
+          this.setState((prevState) => ({
+            newMessage: { ...prevState.newMessage, tags: selectedOptions },
+          }));
+        }}
+        placeholder="Select one or several tags"
+        selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
+      />
+    );
+  }
+
+  renderExposuresSelect() {
+    const { observationIds, newMessage } = this.state;
+    return (
+      <MultiSelect
+        options={observationIds}
+        selectedValues={newMessage.obs_id}
+        onSelect={(selectedOptions) => {
+          this.setState((prevState) => ({
+            newMessage: { ...prevState.newMessage, obs_id: selectedOptions },
+          }));
+        }}
+        placeholder="Select one or several observations"
+        selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
+      />
+    );
   }
 
   renderModalFooter() {
@@ -232,28 +312,26 @@ export default class ExposureAdd extends Component {
       (this.state.selectedDayExposureEnd &&
         !Moment(this.state.selectedDayExposureEnd).isSame(prevState.selectedDayExposureEnd))
     ) {
-      this.setState((prevState) => ({
-        newMessage: { ...prevState.newMessage, obs_id: [] },
-      }));
-      this.queryExposures();
+      this.setState(
+        {
+          observationIds: [],
+        },
+        () => {
+          this.queryExposures();
+        },
+      );
     }
   }
 
   render() {
-    const { isLogCreate, isMenu } = this.props;
-    const {
-      confirmationModalShown,
-      confirmationModalText,
-      selectedDayExposureStart,
-      selectedDayExposureEnd,
-      savingLog,
-    } = this.state;
-    const back = this.props.back;
-    const view = this.props.view ?? ExposureAdd.defaultProps.view;
+    const { isLogCreate, isMenu, back, view } = this.props;
+    const { confirmationModalShown, confirmationModalText, savingLog } = this.state;
+
+    const filesUrls = getFilesURLs(this.state.newMessage.urls);
 
     return (
       <>
-        {!isLogCreate && !isMenu ? (
+        {back && !isMenu && (
           <div className={styles.returnToLogs}>
             <Button
               status="link"
@@ -264,59 +342,20 @@ export default class ExposureAdd extends Component {
               <span className={styles.title}>{`< Return to Observations`}</span>
             </Button>
           </div>
-        ) : (
-          <></>
         )}
+
         <form onSubmit={this.handleSubmit}>
           <div id={this.id} className={isMenu ? styles.detailContainerMenu : styles.detailContainer}>
             {isMenu ? (
               <div className={isMenu ? styles.headerMenu : styles.header}>
                 <span className={[styles.label, styles.paddingTop].join(' ')}>Instruments</span>
-                <span className={styles.value}>
-                  <Select
-                    value={this.state.selectedInstrument}
-                    onChange={({ value }) => this.setState({ selectedInstrument: value })}
-                    options={this.state.instruments}
-                    className={styles.select}
-                    small
-                  />
-                </span>
+                <span className={styles.value}>{this.renderInstrumentsSelect()}</span>
 
                 <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. day</span>
-                <span className={styles.value}>
-                  <DateTimeRange
-                    label="From"
-                    className={styles.dateRange}
-                    startDate={selectedDayExposureStart}
-                    endDate={selectedDayExposureEnd}
-                    startDateProps={{
-                      timeFormat: false,
-                      className: styles.rangeDateOnly,
-                      maxDate: Moment(),
-                    }}
-                    endDateProps={{
-                      timeFormat: false,
-                      className: styles.rangeDateOnly,
-                      maxDate: Moment(),
-                    }}
-                    onChange={(day, type) => this.changeDayExposure(day, type)}
-                  />
-                </span>
+                <span className={styles.value}>{this.renderDateTimeRangeSelect()}</span>
 
                 <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
-                <span className={styles.value}>
-                  <Multiselect
-                    options={this.state.observationIds}
-                    selectedValues={this.state.newMessage?.obs_id}
-                    onSelect={(selectedOptions) => {
-                      this.setState((prevState) => ({
-                        newMessage: { ...prevState.newMessage, obs_id: selectedOptions },
-                      }));
-                    }}
-                    placeholder="Select one or several observations"
-                    selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
-                  />
-                </span>
+                <span className={styles.value}>{this.renderExposuresSelect()}</span>
 
                 <span className={[styles.value, styles.paddingTop].join(' ')}>
                   <Button
@@ -330,70 +369,22 @@ export default class ExposureAdd extends Component {
                 </span>
 
                 <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
-                <span className={styles.value}>
-                  <Multiselect
-                    options={this.state.imageTags}
-                    selectedValues={this.state.newMessage?.tags}
-                    isObject={true}
-                    displayValue="name"
-                    onSelect={(selectedOptions) => {
-                      this.setState((prevState) => ({
-                        newMessage: { ...prevState.newMessage, tags: selectedOptions },
-                      }));
-                    }}
-                    placeholder="Select one or several tags"
-                    selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
-                  />
-                </span>
+                <span className={styles.value}>{this.renderImageTagsSelect()}</span>
               </div>
             ) : (
-              <div className={[styles.header, !this.state.logEdit.obs_id ? styles.inline : ''].join(' ')}>
-                {this.state.logEdit.obs_id ? (
-                  <span>{this.state.logEdit.obs_id}</span>
+              <div className={[styles.header, !this.props.exposure.obs_id ? styles.inline : ''].join(' ')}>
+                {this.props.exposure.obs_id ? (
+                  <span>{this.props.exposure.obs_id}</span>
                 ) : (
                   <>
                     <span className={[styles.label, styles.paddingTop].join(' ')}>Instruments</span>
-                    <span className={styles.value}>
-                      <Select
-                        value={this.state.selectedInstrument}
-                        onChange={({ value }) => this.setState({ selectedInstrument: value })}
-                        options={this.state.instruments}
-                        className={styles.select}
-                        small
-                      />
-                    </span>
+                    <span className={styles.value}>{this.renderInstrumentsSelect()}</span>
 
-                    <DateTimeRange
-                      label="From"
-                      className={styles.dateRange}
-                      startDate={selectedDayExposureStart}
-                      endDate={selectedDayExposureEnd}
-                      startDateProps={{
-                        timeFormat: false,
-                        className: styles.rangeDateOnly,
-                        maxDate: Moment(),
-                      }}
-                      endDateProps={{
-                        timeFormat: false,
-                        className: styles.rangeDateOnly,
-                        maxDate: Moment(),
-                      }}
-                      onChange={(day, type) => this.changeDayExposure(day, type)}
-                    />
+                    {this.renderDateTimeRangeSelect()}
 
                     <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
                     <span className={styles.value} style={{ flex: 1 }}>
-                      <Multiselect
-                        options={this.state.observationIds}
-                        selectedValues={this.state.newMessage?.obs_id}
-                        onSelect={(selectedOptions) => {
-                          this.setState((prevState) => ({
-                            newMessage: { ...prevState.newMessage, obs_id: selectedOptions },
-                          }));
-                        }}
-                        placeholder="Select one or several observations"
-                        selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
-                      />
+                      {this.renderExposuresSelect()}
                     </span>
 
                     <Button
@@ -409,23 +400,6 @@ export default class ExposureAdd extends Component {
                       Refresh exposures
                       {this.state.updatingExposures && <SpinnerIcon className={styles.spinnerIcon} />}
                     </Button>
-
-                    <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
-                    <span className={styles.value} style={{ flex: 1 }}>
-                      <Multiselect
-                        options={this.state.imageTags}
-                        selectedValues={this.state.newMessage?.tags}
-                        isObject={true}
-                        displayValue="name"
-                        onSelect={(selectedOptions) => {
-                          this.setState((prevState) => ({
-                            newMessage: { ...prevState.newMessage, tags: selectedOptions },
-                          }));
-                        }}
-                        placeholder="Select one or several tags"
-                        selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
-                      />
-                    </span>
                   </>
                 )}
 
@@ -443,29 +417,39 @@ export default class ExposureAdd extends Component {
                         <DeleteIcon className={styles.icon} />
                       </Button>
                     </span>
-                    <span className={styles.floatRight}>[{this.state.logEdit.observation_type}]</span>
-                  </>
-                ) : this.state.logEdit.observation_type ? (
-                  <>
-                    <span className={styles.floatRight}>
-                      <Button
-                        className={styles.iconBtn}
-                        title="View"
-                        onClick={() => {
-                          view(true);
-                        }}
-                        status="transparent"
-                      >
-                        <CloseIcon className={styles.icon} />
-                      </Button>
-                    </span>
-                    <span className={styles.floatRight}>[{this.state.logEdit.observation_type}]</span>
+                    <span className={styles.floatRight}>[{this.props.exposure.observation_type}]</span>
                   </>
                 ) : (
-                  <></>
+                  this.props.exposure.observation_type && (
+                    <>
+                      <span className={styles.floatRight}>
+                        <Button
+                          className={styles.iconBtn}
+                          title="View"
+                          onClick={() => {
+                            view(true);
+                          }}
+                          status="transparent"
+                        >
+                          <CloseIcon className={styles.icon} />
+                        </Button>
+                      </span>
+                      <span className={styles.floatRight}>[{this.props.exposure.observation_type}]</span>
+                    </>
+                  )
                 )}
               </div>
             )}
+
+            {!isMenu && (
+              <div className={[styles.header, styles.inline].join(' ')}>
+                <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
+                <span className={styles.value} style={{ flex: 1 }}>
+                  {this.renderImageTagsSelect()}
+                </span>
+              </div>
+            )}
+
             <div className={isMenu ? styles.contentMenu : styles.content}>
               <div className={[styles.mb1, styles.floatLeft, styles.inline].join(' ')}>
                 <span className={styles.title}>Message</span>
@@ -478,54 +462,84 @@ export default class ExposureAdd extends Component {
                 }
               />
             </div>
+
             <div className={isMenu ? styles.footerMenu : styles.footer}>
-              <FileUploader
-                value={this.state.newMessage.file?.name}
-                handleFile={(file) =>
-                  this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: file } }))
-                }
-                handleDelete={() =>
-                  this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: undefined } }))
-                }
-              />
+              <div>
+                {!isLogCreate && !isMenu && (
+                  <div className={styles.attachedFiles}>
+                    <div className={styles.label}>Files Attached:</div>
+                    <div>
+                      {filesUrls.length > 0
+                        ? filesUrls.map((fileurl) => (
+                            <div key={fileurl} className={styles.buttonWraper}>
+                              <Button
+                                className={styles.fileButton}
+                                title={fileurl}
+                                onClick={() => openInNewTab(fileurl)}
+                                status="default"
+                              >
+                                <DownloadIcon className={styles.downloadIcon} />
+                                {getFilename(fileurl)}
+                              </Button>
+                            </div>
+                          ))
+                        : 'no files attached'}
+                    </div>
+                  </div>
+                )}
 
-              <span className={[styles.label, styles.paddingTop].join(' ')}>Exposure Flag</span>
+                <div className={styles.toAttachFiles}>
+                  <MultiFileUploader
+                    values={this.state.newMessage.file}
+                    handleFiles={(files) =>
+                      this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: files } }))
+                    }
+                    handleDelete={(file) => {
+                      const files = { ...this.state.newMessage.file };
+                      delete files[file];
+                      this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: files } }));
+                    }}
+                    handleDeleteAll={() =>
+                      this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: undefined } }))
+                    }
+                  />
+                </div>
 
-              <span className={[styles.value, styles.inline, !isMenu ? styles.w20 : ' '].join(' ')}>
-                <Select
-                  value={this.state.newMessage.exposure_flag}
-                  onChange={(event) =>
-                    this.setState((prevState) => ({
-                      newMessage: { ...prevState.newMessage, exposure_flag: event.value },
-                    }))
-                  }
-                  options={EXPOSURE_FLAG_OPTIONS}
-                  className={[styles.select, styles.capitalize].join(' ')}
-                  small
-                />
-                <span className={styles.margin3}>
+                <div className={styles.flag}>
+                  <span className={styles.label}>Exposure Flag</span>
+                  <Select
+                    value={this.state.newMessage.exposure_flag}
+                    onChange={(event) =>
+                      this.setState((prevState) => ({
+                        newMessage: { ...prevState.newMessage, exposure_flag: event.value },
+                      }))
+                    }
+                    options={EXPOSURE_FLAG_OPTIONS}
+                    className={[styles.select, styles.capitalize].join(' ')}
+                    small
+                  />
                   <FlagIcon
                     title={this.state.newMessage.exposure_flag}
                     status={this.statusFlag(this.state.newMessage.exposure_flag)}
                     className={styles.iconFlag}
                   />
-                </span>
-              </span>
+                </div>
 
-              <span className={isMenu ? styles.footerRightMenu : styles.footerRight}>
-                <span className={styles.checkboxText}>
-                  <span>link Jira ticket</span>
-                  <Input
-                    type="checkbox"
-                    checked={this.state.newMessage.jira}
-                    onChange={(event) => {
-                      this.setState((prevState) => ({
-                        newMessage: { ...prevState.newMessage, jira: event.target.checked },
-                      }));
-                    }}
-                  />
-                  {this.state.newMessage.jira && (
-                    <>
+                <div className={styles.jira}>
+                  <span className={styles.label}>Jira ticket</span>
+                  <span>
+                    <Input
+                      type="checkbox"
+                      checked={this.state.newMessage.jira}
+                      onChange={(event) => {
+                        this.setState((prevState) => ({
+                          newMessage: { ...prevState.newMessage, jira: event.target.checked },
+                        }));
+                      }}
+                    />
+                  </span>
+                  <span>
+                    {this.state.newMessage.jira && (
                       <Toggle
                         labels={['New', 'Existent']}
                         isLive={this.state.newMessage.jira_comment}
@@ -535,21 +549,24 @@ export default class ExposureAdd extends Component {
                           }))
                         }
                       />
-                      {this.state.newMessage.jira_comment && (
-                        <input
-                          className={styles.issueIdInput}
-                          placeholder="Jira ticket id"
-                          onChange={(event) =>
-                            this.setState((prevState) => ({
-                              newMessage: { ...prevState.newMessage, issue_id: event.target.value },
-                            }))
-                          }
-                        />
-                      )}
-                    </>
-                  )}
-                </span>
+                    )}
+                  </span>
+                  <span>
+                    {this.state.newMessage.jira && this.state.newMessage.jira_comment && (
+                      <Input
+                        placeholder="Jira ticket id"
+                        onChange={(event) =>
+                          this.setState((prevState) => ({
+                            newMessage: { ...prevState.newMessage, issue_id: event.target.value },
+                          }))
+                        }
+                      />
+                    )}
+                  </span>
+                </div>
+              </div>
 
+              <div className={isMenu ? styles.footerRightMenu : styles.footerRight}>
                 <Button type="submit">
                   {savingLog ? (
                     <SpinnerIcon className={styles.spinnerIcon} />
@@ -557,8 +574,9 @@ export default class ExposureAdd extends Component {
                     <span className={styles.title}>Upload Log</span>
                   )}
                 </Button>
-              </span>
+              </div>
             </div>
+
             <Modal
               displayTopBar={false}
               isOpen={!!confirmationModalShown}

@@ -159,6 +159,9 @@
   cursor: pointer !important;
 }
 
+.selected {
+  background: var(--second-tertiary-background-color);
+}
 .panel {
   overflow: hidden;
   transition: height 0.7s ease;

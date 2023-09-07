@@ -23,13 +23,15 @@ const moment = extendMoment(Moment);
 
 export default class Exposure extends Component {
   static propTypes = {
-    // Instrument Options
+    /** List of instruments */
     instruments: PropTypes.arrayOf(PropTypes.string),
-    /** Selected instrument
+    /**
+     * Selected instrument
      * Used to build the query to the exposure logs
      */
     selectedInstrument: PropTypes.string,
-    /** Selected observation day start
+    /**
+     * Selected observation day start
      * Used to build the query to the exposure logs
      */
     selectedDayExposureStart: PropTypes.oneOfType([
@@ -45,9 +47,12 @@ export default class Exposure extends Component {
       PropTypes.instanceOf(Date),
       PropTypes.instanceOf(Moment),
     ]),
-    /** Selected exposure type */
+    /**
+     * Selected exposure type
+     */
     selectedExposureType: PropTypes.string,
-    /** Mappings of instruments to exposures registries
+    /**
+     * Mappings of instruments to exposures registries
      * Used to build the query to the exposure logs
      */
     registryMap: PropTypes.object,
@@ -76,6 +81,7 @@ export default class Exposure extends Component {
     this.state = {
       modeView: false,
       modeAdd: false,
+      updatingExposures: false,
       updatingLogs: false,
       selected: {},
       selectedMessages: [],
@@ -87,25 +93,39 @@ export default class Exposure extends Component {
     };
   }
 
-  view(index) {
-    if (index) {
-      ManagerInterface.getListMessagesExposureLogs(index['obs_id']).then((data) => {
+  /**
+   * Function to view an exposure
+   * The list of messages associated to the selected exposure
+   * is retrieved from the server
+   * and parameters to change the view mode are set
+   * @param {Object} exposure
+   */
+  view(exposure) {
+    this.setState({ updatingLogs: true });
+    if (exposure) {
+      ManagerInterface.getListMessagesExposureLogs(exposure['obs_id']).then((data) => {
         this.setState({
           modeView: true,
           modeAdd: false,
-          selected: index,
+          selected: exposure,
           selectedMessages: data,
+          updatingLogs: false,
         });
       });
     }
   }
 
-  add(index) {
-    if (index) {
+  /**
+   * Function to add a log to an exposure
+   * Parameters to change the view mode are set
+   * @param {Object} exposure
+   */
+  add(exposure) {
+    if (exposure) {
       this.setState({
         modeAdd: true,
         modeView: false,
-        selected: index,
+        selected: exposure,
       });
     }
   }
@@ -201,6 +221,7 @@ export default class Exposure extends Component {
                     this.view(index);
                   }}
                   status="transparent"
+                  disabled={this.state.updatingLogs}
                 >
                   <AcknowledgeIcon className={styles.icon} />
                 </Button>
@@ -224,14 +245,14 @@ export default class Exposure extends Component {
     ];
   };
 
-  queryExposures(callback) {
+  queryExposures() {
     const { selectedInstrument, selectedDayExposureStart, selectedDayExposureEnd, registryMap } = this.props;
     const startObsDay = Moment(selectedDayExposureStart).format(ISO_INTEGER_DATE_FORMAT);
     const endObsDay = Moment(selectedDayExposureEnd).add(1, 'days').format(ISO_INTEGER_DATE_FORMAT);
     const registry = registryMap[selectedInstrument].split('_')[2];
 
     // Get the list of exposures
-    this.setState({ updatingLogs: true });
+    this.setState({ updatingExposures: true });
     ManagerInterface.getListExposureLogs(selectedInstrument, startObsDay, endObsDay, registry).then((data) => {
       const exposureTypes = new Set();
       const exposures = data.map((exposure) => {
@@ -259,13 +280,14 @@ export default class Exposure extends Component {
       this.setState({
         exposurelogs: exposures,
         exposureTypes: Array.from(exposureTypes),
-        updatingLogs: false,
+        updatingExposures: false,
       });
     });
   }
 
   componentDidMount() {
-    this.queryExposures();
+    const { selectedInstrument } = this.props;
+    if (selectedInstrument) this.queryExposures();
   }
 
   componentDidUpdate(prevProps) {
@@ -291,7 +313,7 @@ export default class Exposure extends Component {
       changeDayExposure,
       changeExposureTypeSelect,
     } = this.props;
-    const { exposurelogs: tableData, modeView, modeAdd, updatingLogs } = this.state;
+    const { exposurelogs: tableData, modeView, modeAdd, updatingExposures } = this.state;
 
     const headers = this.getHeaders();
 
@@ -324,34 +346,43 @@ export default class Exposure extends Component {
       ).format(ISO_INTEGER_DATE_FORMAT)}.csv`;
     }
 
-    return modeView && !modeAdd ? (
-      <ExposureDetail
-        back={() => {
-          this.setState({ modeView: false });
-        }}
-        logDetail={this.state.selected}
-        logMessages={this.state.selectedMessages}
-        edit={(isClicked) => {
-          if (isClicked) this.add(this.state.selected);
-        }}
-      />
-    ) : modeAdd && !modeView ? (
-      <ExposureAdd
-        back={() => {
-          this.setState({ modeAdd: false });
-        }}
-        logEdit={this.state.selected}
-        view={(isClicked) => {
-          this.view(this.state.selected);
-        }}
-      />
-    ) : (
+    if (modeView && !modeAdd) {
+      return (
+        <ExposureDetail
+          back={() => {
+            this.setState({ modeView: false });
+          }}
+          logDetail={this.state.selected}
+          logMessages={this.state.selectedMessages}
+          handleAddLog={() => {
+            this.add(this.state.selected);
+          }}
+        />
+      );
+    }
+
+    if (!modeView && modeAdd) {
+      return (
+        <ExposureAdd
+          back={() => {
+            this.setState({ modeAdd: false });
+          }}
+          exposure={this.state.selected}
+          view={() => {
+            this.view(this.state.selected);
+          }}
+          isLogCreate={true}
+        />
+      );
+    }
+
+    return (
       <div className={styles.margin10}>
         <div className={styles.title}>Filter</div>
         <div className={styles.filters}>
-          <Button disabled={updatingLogs} onClick={() => this.queryExposures()}>
+          <Button disabled={updatingExposures} onClick={() => this.queryExposures()}>
             Refresh data
-            {updatingLogs && <SpinnerIcon className={styles.spinnerIcon} />}
+            {updatingExposures && <SpinnerIcon className={styles.spinnerIcon} />}
           </Button>
           <Select
             options={instrumentsOptions}

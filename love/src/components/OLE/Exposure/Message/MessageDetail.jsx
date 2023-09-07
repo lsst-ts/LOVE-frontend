@@ -1,18 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
-import EditIcon from 'components/icons/EditIcon/EditIcon';
-import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
+import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
+import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
+import EditIcon from 'components/icons/EditIcon/EditIcon';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
-import { openInNewTab, getLinkJira, getFileURL, getFilename } from 'Utils';
+import Input from 'components/GeneralPurpose/Input/Input';
+import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
+import { openInNewTab, getLinkJira, getFilesURLs, getFilename } from 'Utils';
 import { exposureFlagStateToStyle } from 'Config';
 import styles from './Message.module.css';
 
 export default class MessageDetail extends Component {
   static propTypes = {
+    /** Message oject */
     message: PropTypes.object,
+    /** Function to edit a message */
     editMessage: PropTypes.func,
+    /** Function to remove a message */
     deleteMessage: PropTypes.func,
   };
 
@@ -34,12 +39,10 @@ export default class MessageDetail extends Component {
   }
 
   render() {
-    const message = this.props.message ?? MessageDetail.defaultProps.message;
-    const edit = this.props.editMessage ?? MessageDetail.defaultProps.editMessage;
-    const deleteMessage = this.props.deleteMessage ?? MessageDetail.defaultProps.deleteMessage;
+    const { message, editMessage, deleteMessage } = this.props;
 
     const linkJira = getLinkJira(message.urls);
-    const fileurl = getFileURL(message.urls);
+    const filesUrls = getFilesURLs(message.urls);
 
     return (
       <div className={styles.message}>
@@ -56,17 +59,32 @@ export default class MessageDetail extends Component {
               <></>
             )}
           </span>
+
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
-            <Button className={styles.iconBtn} title="Delete" onClick={() => deleteMessage(message)} status="transparent">
+            <Button
+              className={styles.iconBtn}
+              title="Delete"
+              onClick={() => deleteMessage(message)}
+              status="transparent"
+            >
               <DeleteIcon className={styles.icon} />
             </Button>
           </span>
+
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
-            <Button className={styles.iconBtn} title="Edit" onClick={() => edit(message)} status="transparent">
+            <Button className={styles.iconBtn} title="Edit" onClick={() => editMessage(message)} status="transparent">
               <EditIcon className={styles.icon} />
             </Button>
           </span>
         </div>
+
+        <div className={styles.tags}>
+          <span className={styles.label}>Tags:</span>
+          <span className={styles.value} style={{ flex: 1 }}>
+            {message.tags ? message.tags.join(', ') : 'no tags'}
+          </span>
+        </div>
+
         <div className={styles.description}>
           <div className={[styles.floatLeft, styles.margin3].join(' ')}>
             <span>On </span>
@@ -76,33 +94,30 @@ export default class MessageDetail extends Component {
           </div>
           <p className={[styles.textDescription, styles.margin3].join(' ')}>{message.message_text}</p>
         </div>
+
         <div className={styles.footer}>
-          <span className={[styles.floatLeft, styles.margin3].join(' ')}>
-            <span className={styles.label}>{fileurl ? 'File Attached:' : ''}</span>
-            <span className={styles.value}>
-              {fileurl ? (
-                <>
-                  <Button status="link" title={fileurl} onClick={() => openInNewTab(fileurl)}>
-                    {getFilename(fileurl)}
-                  </Button>
-                  <Button
-                    className={styles.iconBtn}
-                    title={fileurl}
-                    onClick={() => openInNewTab(fileurl)}
-                    status="transparent"
-                  >
-                    <DownloadIcon className={styles.icon} />
-                  </Button>
-                </>
-              ) : (
-                <></>
-              )}
-            </span>
-          </span>
+          <div className={styles.attachedFiles}>
+            <div className={styles.label}>Files Attached:</div>
+            <div>
+              {filesUrls.length > 0
+                ? filesUrls.map((fileurl) => (
+                    <div key={fileurl} className={styles.buttonWraper}>
+                      <Button
+                        className={styles.fileButton}
+                        title={fileurl}
+                        onClick={() => openInNewTab(fileurl)}
+                        status="default"
+                      >
+                        <DownloadIcon className={styles.downloadIcon} />
+                        {getFilename(fileurl)}
+                      </Button>
+                    </div>
+                  ))
+                : 'no files attached'}
+            </div>
+          </div>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
-            <span className={[styles.margin3, styles.capitalize].join(' ')}>
-              {message.exposure_flag}
-            </span>
+            <span className={[styles.margin3, styles.capitalize].join(' ')}>{message.exposure_flag}</span>
             <span className={styles.vertAlign}>
               <FlagIcon
                 title={message.exposure_flag}
