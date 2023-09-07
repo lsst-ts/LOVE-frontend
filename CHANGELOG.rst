@@ -5,6 +5,7 @@ Version History
 v5.24.10
 ---------
 
+* Implement MultiFileUploader for the OLE component `<https://github.com/lsst-ts/LOVE-frontend/pull/515>`_
 * Set narrativelog date selector to work between startOfDay and endOfDay `<https://github.com/lsst-ts/LOVE-frontend/pull/514>`_
 * Fix GIS data expunge `<https://github.com/lsst-ts/LOVE-frontend/pull/513>`_
 * Various ATDome updates `<https://github.com/lsst-ts/LOVE-frontend/pull/512>`_
