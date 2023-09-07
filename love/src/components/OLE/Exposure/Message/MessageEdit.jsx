@@ -1,35 +1,38 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { openInNewTab, getLinkJira, getFileURL, getFilename } from 'Utils';
+import ManagerInterface, { openInNewTab, getLinkJira, getFilesURLs, getFilename } from 'Utils';
 import { EXPOSURE_FLAG_OPTIONS, exposureFlagStateToStyle } from 'Config';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import MultiFileUploader from 'components/GeneralPurpose/MultiFileUploader/MultiFileUploader';
+import MultiSelect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import SaveIcon from 'components/icons/SaveIcon/SaveIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
+import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import styles from './Message.module.css';
 
 export default class MessageEdit extends Component {
   static propTypes = {
+    /** Message oject */
     message: PropTypes.object,
+    /** Function to edit a message */
     cancel: PropTypes.func,
+    /** Function to remove a message */
     save: PropTypes.func,
   };
 
   static defaultProps = {
     message: {
       id: '',
-      urls: [],
-      file: undefined,
-      fileurl: undefined,
-      filename: undefined,
-      jira: false,
-      jiraurl: undefined,
       message_text: undefined,
+      file: undefined,
+      jira: false,
+      urls: [],
+      tags: [],
     },
     cancel: () => {},
     save: () => {},
@@ -41,11 +44,7 @@ export default class MessageEdit extends Component {
 
   constructor(props) {
     super(props);
-    const message = props.message ?? MessageEdit.defaultProps.message;
-    message.jiraurl = getLinkJira(message.urls);
-    message.fileurl = getFileURL(message.urls);
-    message.filename = getFilename(getFileURL(message.urls));
-    message.jira = false;
+    const { message } = props;
 
     // Clean null and empty values to avoid API errors
     Object.keys(message).forEach((key) => {
@@ -53,36 +52,54 @@ export default class MessageEdit extends Component {
         delete message[key];
       }
     });
+
     this.state = {
       message,
+      imageTags: [],
+      updatingLog: false,
     };
   }
 
+  componentDidMount() {
+    const { message } = this.state;
+    ManagerInterface.getListImageTags().then((data) => {
+      message.tagObjects = message.tags
+        .filter((tag) => tag !== 'undefined')
+        .map((tag) => {
+          const tagObj = data.find((t) => t.key === tag);
+          return { name: tagObj.label, id: tagObj.key };
+        });
+      this.setState({
+        imageTags: data.map((tag) => ({ name: tag.label, id: tag.key })),
+        message,
+      });
+    });
+  }
+
   render() {
-    const cancel = this.props.cancel ?? MessageEdit.defaultProps.cancel;
-    const save = this.props.save ?? MessageEdit.defaultProps.save;
+    const { cancel, save } = this.props;
+    const { message, imageTags, updatingLog } = this.state;
+
+    const jiraUrl = getLinkJira(message.urls);
+    const filesUrls = getFilesURLs(message.urls);
 
     return (
       <div className={styles.message}>
         <div className={styles.header}>
           <span className={[styles.floatLeft, styles.margin3, styles.inline].join(' ')}>
-            <span className={styles.title}>#{this.state.message.id}</span>
-            {this.state.message.jiraurl ? (
+            <span className={styles.title}>#{message.id}</span>
+            {jiraUrl ? (
               <span className={styles.marginLeft}>
-                <Button
-                  status="link"
-                  title={this.state.message.jiraurl}
-                  onClick={() => openInNewTab(this.state.message.jiraurl)}
-                >
+                <Button status="link" title={jiraUrl} onClick={() => openInNewTab(jiraUrl)}>
                   view Jira ticket
                 </Button>
               </span>
-            ) : !this.state.message.id ? (
+            ) : !message.id ? (
               <span className={[styles.checkboxText, styles.marginLeft].join(' ')}>
                 Create and link new Jira ticket
                 <Input
                   type="checkbox"
-                  checked={this.state.message.jira}
+                  checked={message.jira}
                   onChange={(event) => {
                     this.setState((prevState) => ({
                       message: { ...prevState.message, jira: event.target.checked },
@@ -94,6 +111,7 @@ export default class MessageEdit extends Component {
               <></>
             )}
           </span>
+
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
             <Button className={styles.iconBtn} title="Exit" onClick={() => cancel()} status="transparent">
               <CloseIcon className={styles.icon} />
@@ -103,34 +121,80 @@ export default class MessageEdit extends Component {
             <Button
               className={styles.iconBtn}
               title="Save"
-              onClick={() => save(this.state.message)}
+              onClick={() => {
+                this.setState({ updatingLog: true });
+                save(message, () => this.setState({ updatingLog: false }));
+              }}
               status="transparent"
+              disabled={updatingLog}
             >
-              <SaveIcon className={styles.icon} />
+              {updatingLog ? <SpinnerIcon className={styles.spinnerIcon} /> : <SaveIcon className={styles.icon} />}
             </Button>
           </span>
         </div>
+
+        <div className={styles.tags}>
+          <span className={styles.label}>Tags:</span>
+          <span className={styles.value} style={{ flex: 1 }}>
+            <MultiSelect
+              options={imageTags}
+              selectedValues={message.tagObjects}
+              isObject={true}
+              displayValue="name"
+              onSelect={(selectedOptions) => {
+                this.setState((prevState) => ({
+                  message: { ...prevState.message, tags: selectedOptions },
+                }));
+              }}
+              placeholder="Select one or several tags"
+              selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
+            />
+          </span>
+        </div>
+
         <div className={styles.description}>
           <div className={[styles.mb1, styles.floatLeft, styles.inline].join(' ')}>
             <span className={styles.title}>Message</span>
           </div>
           <TextArea
-            value={this.state.message.message_text}
+            value={message.message_text}
             callback={(event) =>
               this.setState((prevState) => ({ message: { ...prevState.message, message_text: event } }))
             }
           />
         </div>
+
         <div className={styles.footer}>
-          <span className={[styles.floatLeft, styles.inline].join(' ')}>
-            {!this.state.message.id && (
+          <div>
+            <div className={styles.attachedFiles}>
+              <div className={styles.label}>Files Attached:</div>
+              <div>
+                {filesUrls.length > 0
+                  ? filesUrls.map((fileurl) => (
+                      <div key={fileurl} className={styles.buttonWraper}>
+                        <Button
+                          className={styles.fileButton}
+                          title={fileurl}
+                          onClick={() => openInNewTab(fileurl)}
+                          status="default"
+                        >
+                          <DownloadIcon className={styles.downloadIcon} />
+                          {getFilename(fileurl)}
+                        </Button>
+                      </div>
+                    ))
+                  : 'no files attached'}
+              </div>
+            </div>
+
+            <div className={styles.toAttachFiles}>
               <MultiFileUploader
-                values={this.state.logEdit.file}
+                values={message.file}
                 handleFiles={(files) =>
                   this.setState((prevState) => ({ message: { ...prevState.message, file: files } }))
                 }
                 handleDelete={(file) => {
-                  const files = { ...this.state.message.file };
+                  const files = { ...message.file };
                   delete files[file];
                   this.setState((prevState) => ({ message: { ...prevState.message, file: files } }));
                 }}
@@ -138,48 +202,28 @@ export default class MessageEdit extends Component {
                   this.setState((prevState) => ({ message: { ...prevState.message, file: undefined } }))
                 }
               />
-            )}
-            {this.state.message.fileurl && (
-              <>
-                <Button
-                  status="link"
-                  title={this.state.message.fileurl}
-                  onClick={() => openInNewTab(this.state.message.fileurl)}
-                >
-                  {this.state.message.filename}
-                </Button>
-                <Button
-                  className={styles.iconBtn}
-                  title={this.state.message.fileurl}
-                  onClick={() => openInNewTab(this.state.message.fileurl)}
-                  status="transparent"
-                >
-                  <DownloadIcon className={styles.icon} />
-                </Button>
-              </>
-            )}
-          </span>
-          <span className={[styles.floatRight, styles.margin3, styles.inline].join(' ')}>
-            <span className={[styles.label, styles.paddingTop].join(' ')}>Exposure Flag</span>
-            <span className={[styles.value, styles.inline].join(' ')}>
+            </div>
+
+            <div className={styles.flag}>
+              <span className={styles.label}>Exposure Flag</span>
               <Select
-                value={this.state.message.exposure_flag}
+                value={message.exposure_flag}
                 onChange={(event) =>
-                  this.setState((prevState) => ({ message: { ...prevState.message, exposure_flag: event.value } }))
+                  this.setState((prevState) => ({
+                    message: { ...prevState.message, exposure_flag: event.value },
+                  }))
                 }
                 options={EXPOSURE_FLAG_OPTIONS}
                 className={[styles.select, styles.capitalize].join(' ')}
                 small
               />
-              <span className={styles.margin3}>
-                <FlagIcon
-                  title={this.state.message.exposure_flag}
-                  status={this.statusFlag(this.state.message.exposure_flag)}
-                  className={styles.iconFlag}
-                />
-              </span>
-            </span>
-          </span>
+              <FlagIcon
+                title={message.exposure_flag}
+                status={this.statusFlag(message.exposure_flag)}
+                className={styles.iconFlag}
+              />
+            </div>
+          </div>
         </div>
       </div>
     );

@@ -92,6 +92,7 @@ export default class OLE extends Component {
             back={() => {
               this.setState({ clickNewLog: false });
             }}
+            isLogCreate={true}
             props={this.props}
           />
         );
@@ -102,6 +103,7 @@ export default class OLE extends Component {
             back={() => {
               this.setState({ clickNewLog: false });
             }}
+            isLogCreate={true}
             props={this.props}
           />
         );

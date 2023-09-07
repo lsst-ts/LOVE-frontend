@@ -41,6 +41,10 @@
   margin: 0.4em;
 }
 
+.tags {
+  text-align: left;
+}
+
 .description {
   margin-right: 5px;
   margin-left: 5px;
@@ -176,4 +180,56 @@
 
 .marginLeft {
   margin-left: 15px;
+}
+
+.spinnerIcon {
+  height: var(--font-size-small);
+  width: var(--font-size-small);
+}
+
+.footer .attachedFiles {
+  display: flex;
+  align-items: center;
+  text-align: left;
+}
+
+.footer .buttonWraper {
+  display: inline-block;
+  margin: 0 0.25em 0.25em 0;
+}
+
+.footer .fileButton {
+  display: flex;
+  align-items: center;
+}
+
+.footer .fileButton > .downloadIcon {
+  width: 1em;
+  height: auto;
+  margin-right: 0.25em;
+  fill: var(--default-active-font-color);
+}
+
+.footer .flag,
+.footerMenu .flag,
+.footer .jira,
+.footerMenu .jira {
+  display: flex;
+  align-items: center;
+  gap: var(--small-padding);
+  white-space: nowrap;
+}
+
+.footer .flag .label,
+.footerMenu .flag .label,
+.footer .jira .label,
+.footerMenu .jira .label {
+  margin-left: 0;
+}
+
+.footer .flag :nth-child(2),
+.footerMenu .flag :nth-child(2),
+.footer .jira :nth-child(4),
+.footerMenu .jira :nth-child(4) {
+  flex-grow: 1;
 }

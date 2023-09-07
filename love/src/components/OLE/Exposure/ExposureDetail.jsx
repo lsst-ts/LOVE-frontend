@@ -27,8 +27,8 @@ export default class ExposureDetail extends Component {
     logMessages: PropTypes.arrayOf(PropTypes.object),
     /** Function to go back */
     back: PropTypes.func,
-    /** Function to edit a log */
-    edit: PropTypes.func,
+    /** Function to handle log adding */
+    handleAddLog: PropTypes.func,
   };
 
   static defaultProps = {
@@ -41,7 +41,7 @@ export default class ExposureDetail extends Component {
     },
     logMessages: [],
     back: () => {},
-    edit: () => {},
+    handleAddLog: () => {},
   };
 
   constructor(props) {
@@ -62,12 +62,23 @@ export default class ExposureDetail extends Component {
     };
   }
 
-  saveMessage(message) {
-    ManagerInterface.updateMessageExposureLogs(message.id, message).then((response) => {
+  saveMessage(message, callback) {
+    const payload = { ...message };
+
+    // Clean payload
+    if (payload['tags']) {
+      payload['tags'] = payload['tags'].map((tag) => tag.id);
+    }
+
+    ManagerInterface.updateMessageExposureLogs(message.id, payload).then((response) => {
       if (response) {
-        const lgMsgs = this.state.logMessages.filter((msg) => message.id !== msg.id);
-        this.setState({ logMessages: [response, ...lgMsgs], confirmationModalShown: false });
+        const logMessages = this.state.logMessages.filter((msg) => message.id !== msg.id);
+        this.setState({
+          logMessages: [response, ...logMessages],
+          confirmationModalShown: false,
+        });
       }
+      if (callback) callback();
     });
   }
 
@@ -77,22 +88,6 @@ export default class ExposureDetail extends Component {
         const lgMsgs = this.state.logMessages.filter((msg) => message.id !== msg.id);
         this.setState({ logMessages: lgMsgs, confirmationModalShown: false });
       }
-    });
-  }
-
-  confirmSave(message) {
-    const modalText = (
-      <span>
-        You are about to <b>Save</b> this message of Exposure Logs
-        <br />
-        Are you sure?
-      </span>
-    );
-
-    this.setState({
-      confirmationModalShown: true,
-      confirmationModalText: modalText,
-      actionModal: () => this.saveMessage(message),
     });
   }
 
@@ -138,10 +133,8 @@ export default class ExposureDetail extends Component {
   }
 
   render() {
-    const back = this.props.back;
-    const logDetail = this.props.logDetail ?? this.defaultProps.logDetail;
-    const logMessages = this.state.logMessages;
-    const edit = this.props.edit ?? ExposureDetail.defaultProps.edit;
+    const { back, logDetail, handleAddLog } = this.props;
+    const { logMessages } = this.state;
 
     const flagsOptions = [
       { label: 'All exposure flags', value: 'All' },
@@ -203,7 +196,7 @@ export default class ExposureDetail extends Component {
                 className={styles.iconBtn}
                 title="Add Message"
                 onClick={() => {
-                  edit(true);
+                  handleAddLog();
                 }}
                 status="transparent"
               >
@@ -259,10 +252,12 @@ export default class ExposureDetail extends Component {
                     cancel={() => {
                       this.setState({ selectedMessage: undefined });
                     }}
-                    save={(message) => {
+                    save={(message, callback) => {
                       if (message) {
-                        this.confirmSave(message);
-                        this.setState({ selectedMessage: undefined });
+                        this.saveMessage(message, () => {
+                          this.setState({ selectedMessage: undefined });
+                          if (callback) callback();
+                        });
                       }
                     }}
                   />

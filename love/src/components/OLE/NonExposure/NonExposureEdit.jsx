@@ -13,7 +13,7 @@ import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import { defaultCSCList, LSST_SYSTEMS, LSST_SUBSYSTEMS, iconLevelOLE } from 'Config';
-import ManagerInterface, { getLinkJira, getFileURL, getFilename } from 'Utils';
+import ManagerInterface, { getFilesURLs, getFilename, openInNewTab } from 'Utils';
 import styles from './NonExposure.module.css';
 
 export default class NonExposureEdit extends Component {
@@ -55,7 +55,7 @@ export default class NonExposureEdit extends Component {
     },
     isLogCreate: false,
     isMenu: false,
-    back: () => {},
+    back: undefined,
     save: () => {},
     view: () => {},
   };
@@ -65,9 +65,9 @@ export default class NonExposureEdit extends Component {
     this.id = lodash.uniqueId('nonexposure-edit-');
     const logEdit = props.logEdit ?? NonExposureEdit.defaultProps.logEdit;
 
-    logEdit.jiraurl = getLinkJira(logEdit.urls);
-    logEdit.fileurl = getFileURL(logEdit.urls);
-    logEdit.filename = getFilename(getFileURL(logEdit.urls));
+    // logEdit.jiraurl = getLinkJira(logEdit.urls);
+    // logEdit.fileurl = getFileURL(logEdit.urls);
+    // logEdit.filename = getFilename(getFileURL(logEdit.urls));
 
     // Clean null and empty values to avoid API errors
     Object.keys(logEdit).forEach((key) => {
@@ -205,9 +205,11 @@ export default class NonExposureEdit extends Component {
     const subsystemOptions = LSST_SUBSYSTEMS;
     const cscOptions = defaultCSCList.map((csc) => `${csc.name}:${csc.salindex}`);
 
+    const filesUrls = getFilesURLs(this.state.logEdit.urls);
+
     return (
       <>
-        {!isLogCreate && !isMenu ? (
+        {!isMenu && back && (
           <div className={styles.returnToLogs}>
             <Button
               status="link"
@@ -218,8 +220,6 @@ export default class NonExposureEdit extends Component {
               <span className={styles.title}>{`< Return to Logs`}</span>
             </Button>
           </div>
-        ) : (
-          <></>
         )}
         <form onSubmit={this.handleSubmit}>
           <div className={isMenu ? styles.detailContainerMenu : styles.detailContainer}>
@@ -391,45 +391,46 @@ export default class NonExposureEdit extends Component {
               </div>
             </div>
             <div className={isMenu ? styles.footerMenu : styles.footer}>
-              {!this.state.logEdit.id ? (
-                <MultiFileUploader
-                  values={this.state.logEdit.file}
-                  handleFiles={(files) =>
-                    this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: files } }))
-                  }
-                  handleDelete={(file) => {
-                    const files = { ...this.state.logEdit.file };
-                    delete files[file];
-                    this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: files } }));
-                  }}
-                  handleDeleteAll={() =>
-                    this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: undefined } }))
-                  }
-                />
-              ) : (
-                <></>
-              )}
-              {this.state.logEdit.fileurl ? (
-                <>
-                  <Button
-                    status="link"
-                    title={this.state.logEdit.fileurl}
-                    onClick={() => openInNewTab(this.state.logEdit.fileurl)}
-                  >
-                    {this.state.logEdit.filename}
-                  </Button>
-                  <Button
-                    className={styles.iconBtn}
-                    title={this.state.logEdit.fileurl}
-                    onClick={() => openInNewTab(this.state.logEdit.fileurl)}
-                    status="transparent"
-                  >
-                    <DownloadIcon className={styles.icon} />
-                  </Button>
-                </>
-              ) : (
-                <></>
-              )}
+              <div>
+                {!isLogCreate && !isMenu && (
+                  <div className={styles.attachedFiles}>
+                    <div className={styles.label}>Files Attached:</div>
+                    <div>
+                      {filesUrls.length > 0
+                        ? filesUrls.map((fileurl) => (
+                            <div key={fileurl} className={styles.buttonWraper}>
+                              <Button
+                                className={styles.fileButton}
+                                title={fileurl}
+                                onClick={() => openInNewTab(fileurl)}
+                                status="default"
+                              >
+                                <DownloadIcon className={styles.downloadIcon} />
+                                {getFilename(fileurl)}
+                              </Button>
+                            </div>
+                          ))
+                        : 'no files attached'}
+                    </div>
+                  </div>
+                )}
+                <div className={styles.toAttachFiles}>
+                  <MultiFileUploader
+                    values={this.state.logEdit.file}
+                    handleFiles={(files) =>
+                      this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: files } }))
+                    }
+                    handleDelete={(file) => {
+                      const files = { ...this.state.logEdit.file };
+                      delete files[file];
+                      this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: files } }));
+                    }}
+                    handleDeleteAll={() =>
+                      this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: undefined } }))
+                    }
+                  />
+                </div>
+              </div>
               <span className={isMenu ? styles.footerRightMenu : styles.footerRight}>
                 {!this.state.logEdit.id ? (
                   <span className={styles.checkboxText}>

@@ -4,6 +4,7 @@ import Button from '../Button/Button';
 import styles from './MultiFileUploader.module.css';
 
 const MultiFileUploader = ({
+  className,
   values = {},
   handleFiles = () => {},
   handleDelete = () => {},
@@ -22,7 +23,7 @@ const MultiFileUploader = ({
   };
 
   return (
-    <div className={styles.containerFileUpload}>
+    <div className={[styles.containerFileUpload, className].join(' ')}>
       <Button onClick={handleClick} className={styles.inputButton}>
         Select Files
       </Button>

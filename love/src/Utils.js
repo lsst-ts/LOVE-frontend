@@ -1710,7 +1710,7 @@ export function getLinkJira(urls) {
 /**
  * Function to get OLE Narrative and Exposure logs parameters from urls field.
  * @param {string} urls array of urls that comes from OLE message
- * @returns {string} string with first url with the condition if not jira link
+ * @returns {string} string with first url that is not a jira link
  */
 export function getFileURL(urls) {
   if (!urls) return '';
@@ -1719,6 +1719,17 @@ export function getFileURL(urls) {
     return filtered[0];
   }
   return '';
+}
+
+/**
+ * Function to get OLE Narrative and Exposure logs parameters from urls field.
+ * @param {string} urls array of urls that comes from OLE message
+ * @returns {Array} array with all urls that are not jira links
+ */
+export function getFilesURLs(urls) {
+  if (!urls) return [];
+  const filtered = urls.filter((url) => !url.includes('jira'));
+  return filtered;
 }
 
 /**
