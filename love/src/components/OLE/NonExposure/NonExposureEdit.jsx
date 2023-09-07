@@ -65,10 +65,6 @@ export default class NonExposureEdit extends Component {
     this.id = lodash.uniqueId('nonexposure-edit-');
     const logEdit = props.logEdit ?? NonExposureEdit.defaultProps.logEdit;
 
-    // logEdit.jiraurl = getLinkJira(logEdit.urls);
-    // logEdit.fileurl = getFileURL(logEdit.urls);
-    // logEdit.filename = getFilename(getFileURL(logEdit.urls));
-
     // Clean null and empty values to avoid API errors
     Object.keys(logEdit).forEach((key) => {
       if (logEdit[key] === null || (Array.isArray(logEdit[key]) && logEdit[key].length === 0)) {
