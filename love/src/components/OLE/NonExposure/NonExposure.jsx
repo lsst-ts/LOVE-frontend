@@ -6,7 +6,6 @@ import { CSVLink } from 'react-csv';
 import {
   DATE_TIME_FORMAT,
   OLE_COMMENT_TYPE_OPTIONS,
-  LSST_SYSTEMS,
   iconLevelOLE,
   ISO_INTEGER_DATE_FORMAT,
   ISO_STRING_DATE_TIME_FORMAT,
@@ -37,7 +36,7 @@ export default class NonExposure extends Component {
     /** End date of the date range filter */
     selectedDateEnd: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
     /** Function to handle the date range filter */
-    handleDateTimeRange: PropTypes.func,
+    changeDayNarrative: PropTypes.func,
     /** Selected comment type of the comment type filter */
     selectedCommentType: PropTypes.shape({
       value: PropTypes.oneOf(['all', 0, 100]),
@@ -45,10 +44,6 @@ export default class NonExposure extends Component {
     }),
     /** Function to handle the comment type filter */
     changeCommentTypeSelect: PropTypes.func,
-    /** Selected system of the system filter */
-    selectedSystem: PropTypes.string,
-    /** Function to handle the system filter */
-    changeSystemSelect: PropTypes.func,
     /** Selected obs time loss of the obs time loss filter */
     selectedObsTimeLoss: PropTypes.bool,
     /** Function to handle the obs time loss filter */
@@ -56,13 +51,12 @@ export default class NonExposure extends Component {
   };
 
   static defaultProps = {
-    selectedDayNarrative: Moment(Date.now() + 37 * 1000),
-    selectedCommentType: OLE_COMMENT_TYPE_OPTIONS[0],
-    selectedSystem: 'all',
-    selectedObsTimeLoss: false,
+    selectedDateStart: null,
+    selectedDateEnd: null,
     changeDayNarrative: () => {},
+    selectedCommentType: OLE_COMMENT_TYPE_OPTIONS[0],
     changeCommentTypeSelect: () => {},
-    changeSystemSelect: () => {},
+    selectedObsTimeLoss: false,
     changeObsTimeLossSelect: () => {},
   };
 
@@ -125,11 +119,11 @@ export default class NonExposure extends Component {
   getHeaders = () => {
     return [
       {
-        field: 'systems',
-        title: 'Systems',
+        field: 'date_added',
+        title: 'Date Added (UTC)',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => value?.join(', '),
+        render: (value) => value,
       },
       {
         field: 'level',
@@ -263,6 +257,9 @@ export default class NonExposure extends Component {
         !this.props.selectedDayNarrativeEnd.isSame(prevProps.selectedDayNarrativeEnd))
     ) {
       this.queryNarrativeLogs();
+      if (!this.queryLogsInterval) {
+        this.setQueryNarritveLogsInterval();
+      }
     }
   }
 
@@ -275,29 +272,19 @@ export default class NonExposure extends Component {
       selectedDayNarrativeStart,
       selectedDayNarrativeEnd,
       selectedCommentType,
-      selectedSystem,
       selectedObsTimeLoss,
       changeDayNarrative,
       changeCommentTypeSelect,
-      changeSystemSelect,
       changeObsTimeLossSelect,
     } = this.props;
     const { logs: tableData, modeView, modeEdit } = this.state;
 
     const headers = Object.values(this.getHeaders());
-
-    const systemOptions = [{ label: 'System', value: 'all' }, ...LSST_SYSTEMS];
-
     let filteredData = [...tableData];
 
     // Filter by type
     if (selectedCommentType.value !== 'all') {
       filteredData = filteredData.filter((log) => log.level === selectedCommentType.value);
-    }
-
-    // Filter by system
-    if (selectedSystem !== 'all') {
-      filteredData = filteredData.filter((log) => log.systems.includes(selectedSystem));
     }
 
     // Filter by obs time loss
@@ -319,9 +306,9 @@ export default class NonExposure extends Component {
         'date_begin',
         'date_end',
         'time_lost',
-        'systems',
-        'subsystems',
-        'cscs',
+        'components',
+        'primary_software_components',
+        'primary_hardware_components',
         'user_id',
       ];
       csvHeaders = exportedParams.map((key) => ({ label: key, key }));
@@ -392,13 +379,6 @@ export default class NonExposure extends Component {
             options={OLE_COMMENT_TYPE_OPTIONS}
             option={selectedCommentType}
             onChange={(value) => changeCommentTypeSelect(value)}
-            className={styles.select}
-          />
-
-          <Select
-            options={systemOptions}
-            option={selectedSystem}
-            onChange={({ value }) => changeSystemSelect(value)}
             className={styles.select}
           />
 

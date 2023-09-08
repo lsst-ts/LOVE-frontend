@@ -339,48 +339,58 @@ export const OLE_COMMENT_TYPE_OPTIONS = [
   { label: 'Urgent', value: 100 },
   { label: 'Non urgent', value: 0 },
 ];
+
 export const EXPOSURE_FLAG_OPTIONS = ['none', 'junk', 'questionable'];
+
 export const exposureFlagStateToStyle = {
   none: 'ok',
   junk: 'alert',
   questionable: 'warning',
 };
+
 export const iconLevelOLE = {
   info: <InfoIcon />,
   urgent: <WarningIcon />,
 };
 
-export const LSST_SYSTEMS = [
-  'Auxtel',
-  'MT',
-  'ComCam',
-  'LSSTCamera',
-  'LATISS',
-  'ComputersAndNetworking',
-  'ObservatorySoftwareTools',
-  'Observing',
-  'SitePerformanceAndMonitoring',
-  'SupportBuildingAndFacilities',
-  'TelescopeFacility',
-  'TelescopePerformanceAndMonitoring',
+// jira OBS project components field
+export const OLE_JIRA_COMPONENTS = [
+  'AuxTel',
+  'Calibrations',
+  'Environmental Monitoring Systems',
+  'Facilities',
+  'IT Infrastricture',
+  'MainTel',
+  'Observer Remark',
   'Other',
-];
-export const LSST_SUBSYSTEMS = [
-  'Hardware',
-  'Software',
-  'Network',
-  'PhoneSystem',
-  'Mechanical',
-  'Electrical',
-  'DM',
-  'Scheduler',
-  'AllSkyCamera',
-  'WeatherMonitor',
-  'SiteCameras',
-  'LOVE',
-  'Calibration',
+  'Unknown',
 ];
 
+// jira OBS project customfield_17204
+export const OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS = [
+  'None',
+  'CSC level',
+  'Component Level (EUI)',
+  'Visualization',
+  'Analysis',
+  'Other',
+  'Camera Control Software',
+];
+
+// jira OBS project customfield_17205
+export const OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS = [
+  'None',
+  'Mount',
+  'Rotator',
+  'Hexapod',
+  'M2',
+  'Science Cameras',
+  'M1M3',
+  'Dome',
+  'Utilities',
+  'Calibration',
+  'Other',
+];
 /*****************************************************************************/
 /**************************CSC Summary configurations*************************/
 /*****************************************************************************/
