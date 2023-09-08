@@ -177,6 +177,19 @@ export default class ExposureAdd extends Component {
     });
   }
 
+  changeDayExposure(day, type) {
+    if (type === 'start') {
+      this.setState({ selectedDayExposureStart: day });
+    } else if (type === 'end') {
+      this.setState({ selectedDayExposureEnd: day });
+    }
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.saveMessage();
+  }
+
   renderInstrumentsSelect() {
     const { instruments, selectedInstrument } = this.state;
     return (
@@ -267,39 +280,6 @@ export default class ExposureAdd extends Component {
         <Button onClick={() => this.deleteMessage()} status="default">
           Yes
         </Button>
-      </div>
-    );
-  }
-
-  changeDayExposure(day, type) {
-    if (type === 'start') {
-      this.setState({ selectedDayExposureStart: day });
-    } else if (type === 'end') {
-      this.setState({ selectedDayExposureEnd: day });
-    }
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    this.saveMessage();
-  }
-
-  renderExposuresInput() {
-    const { observationIds, newMessage } = this.state;
-    return (
-      <div className={styles.exposuresSelect}>
-        <Multiselect
-          options={observationIds}
-          selectedValues={newMessage?.obs_id}
-          onSelect={(selectedOptions) => {
-            this.setState((prevState) => ({
-              newMessage: { ...prevState.newMessage, obs_id: selectedOptions },
-            }));
-          }}
-          placeholder="Select one or several observations"
-          selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
-        />
-        {this.renderRefreshLogsButton()}
       </div>
     );
   }
@@ -400,12 +380,7 @@ export default class ExposureAdd extends Component {
 
   render() {
     const { isLogCreate, isMenu, back, view } = this.props;
-    const {
-      confirmationModalShown,
-      confirmationModalText,
-      savingLog,
-      jiraIssueError
-    } = this.state;
+    const { confirmationModalShown, confirmationModalText, savingLog, jiraIssueError } = this.state;
 
     const filesUrls = getFilesURLs(this.state.newMessage.urls);
 
@@ -435,17 +410,9 @@ export default class ExposureAdd extends Component {
                 <span className={styles.value}>{this.renderDateTimeRangeSelect()}</span>
 
                 <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
-                <span className={styles.value}>{this.renderExposuresSelect()}</span>
-
-                <span className={[styles.value, styles.paddingTop].join(' ')}>
-                  <Button
-                    className={styles.refreshDataBtn}
-                    disabled={this.state.updatingExposures}
-                    onClick={() => this.queryExposures()}
-                  >
-                    Refresh exposures
-                    {this.state.updatingExposures && <SpinnerIcon className={styles.spinnerIcon} />}
-                  </Button>
+                <span className={[styles.value, styles.obsIdSelector].join(' ')}>
+                  {this.renderExposuresSelect()}
+                  {this.renderRefreshLogsButton()}
                 </span>
 
                 <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
@@ -463,23 +430,10 @@ export default class ExposureAdd extends Component {
                     {this.renderDateTimeRangeSelect()}
 
                     <span className={styles.label}>Obs. Id</span>
-                    <span className={styles.value} style={{ flex: 1 }}>
+                    <span className={[styles.value, styles.obsIdSelector].join(' ')}>
                       {this.renderExposuresSelect()}
+                      {this.renderRefreshLogsButton()}
                     </span>
-
-                    <Button
-                      className={styles.refreshDataBtn}
-                      disabled={this.state.updatingExposures}
-                      onClick={() => {
-                        this.setState({ updatingExposures: true });
-                        this.queryExposures(() => {
-                          this.setState({ updatingExposures: false });
-                        });
-                      }}
-                    >
-                      Refresh exposures
-                      {this.state.updatingExposures && <SpinnerIcon className={styles.spinnerIcon} />}
-                    </Button>
                   </>
                 )}
 
@@ -618,38 +572,21 @@ export default class ExposureAdd extends Component {
                       }}
                     />
                   </span>
-                  <span>
-                    {this.state.newMessage.jira && (
-                      <Toggle
-                        labels={['New', 'Existent']}
-                        toggled={!this.state.newMessage.jira_new}
-                        onToggle={(event) => {
-                          this.setState((prevState) => ({
-                            newMessage: { ...prevState.newMessage, jira_new: !event },
-                          }));
-                        }}
-                      />
-<<<<<<< HEAD
-                    )}
-                  </span>
-                  <span>
-                    {this.state.newMessage.jira && this.state.newMessage.jira_comment && (
-                      <Input
-                        placeholder="Jira ticket id"
-                        onChange={(event) =>
-                          this.setState((prevState) => ({
-                            newMessage: { ...prevState.newMessage, issue_id: event.target.value },
-                          }))
-                        }
-                      />
-                    )}
-                  </span>
-                </div>
-              </div>
 
-              <div className={isMenu ? styles.footerRightMenu : styles.footerRight}>
-                <Button type="submit">
-=======
+                  {this.state.newMessage.jira && (
+                    <>
+                      <span>
+                        <Toggle
+                          labels={['New', 'Existent']}
+                          toggled={!this.state.newMessage.jira_new}
+                          onToggle={(event) => {
+                            this.setState((prevState) => ({
+                              newMessage: { ...prevState.newMessage, jira_new: !event },
+                            }));
+                          }}
+                        />
+                      </span>
+
                       {this.state.newMessage.jira_new ? (
                         <Input
                           placeholder="Jira ticket title"
@@ -669,15 +606,15 @@ export default class ExposureAdd extends Component {
                           }
                         />
                       )}
-                      {this.state.jiraIssueError && (
-                        <div className={styles.inputError}>This field cannot be empty.</div>
-                      )}
+
+                      {jiraIssueError && <div className={styles.inputError}>This field cannot be empty.</div>}
                     </>
                   )}
-                </span>
+                </div>
+              </div>
 
+              <div className={isMenu ? styles.footerRightMenu : styles.footerRight}>
                 <Button disabled={jiraIssueError} type="submit">
->>>>>>> 36f62a8d (Refactor NarrativeLogEdit and ExposureLogAdd to request jira ticket title input)
                   {savingLog ? (
                     <SpinnerIcon className={styles.spinnerIcon} />
                   ) : (

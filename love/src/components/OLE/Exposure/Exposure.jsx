@@ -298,7 +298,7 @@ export default class Exposure extends Component {
 
   componentDidMount() {
     const { selectedInstrument } = this.props;
-    if (selectedInstrument){
+    if (selectedInstrument) {
       this.queryExposures();
       this.setQueryExposuresInterval();
     }
@@ -403,7 +403,6 @@ export default class Exposure extends Component {
         <div className={styles.filters}>
           <Button disabled={updatingExposures} onClick={() => this.queryExposures()}>
             Refresh data
-            {updatingExposures && <SpinnerIcon className={styles.spinnerIcon} />}
           </Button>
           <Select
             options={instrumentsOptions}
@@ -449,7 +448,7 @@ export default class Exposure extends Component {
         </div>
         <div className={styles.lastUpdated}>
           Last updated: {this.state.lastUpdated ? this.state.lastUpdated.format(DATE_TIME_FORMAT) : ''}
-          {this.state.updatingLogs && <SpinnerIcon className={styles.spinnerIcon} />}
+          {updatingExposures && <SpinnerIcon className={styles.spinnerIcon} />}
         </div>
         <SimpleTable headers={headers} data={filteredData} />
       </div>

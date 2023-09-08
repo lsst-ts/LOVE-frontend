@@ -403,7 +403,7 @@ export default class NonExposure extends Component {
           />
 
           <div className={styles.checkboxText}>
-            Show only logs with Obs. time loss
+            Show only with time loss
             <Input
               type="checkbox"
               checked={selectedObsTimeLoss}

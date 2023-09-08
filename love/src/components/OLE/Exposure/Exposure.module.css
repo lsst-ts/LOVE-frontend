@@ -110,7 +110,7 @@
 }
 
 .detailContainerMenu {
-  padding: var(--content-padding) calc(1.5 * var(--content-padding));
+  padding: var(--content-padding);
 }
 
 .header {
@@ -270,7 +270,6 @@
   flex-direction: column;
   row-gap: 10px;
   padding-top: var(--content-padding);
-  margin: var(--small-padding) var(--content-padding);
   border-top: 2px solid var(--secondary-font-color);
 }
 
@@ -418,8 +417,8 @@ th.tableHead {
 
 .spinnerIcon,
 .refreshIcon {
-  height: var(--font-size-medium);
-  width: var(--font-size-medium);
+  height: var(--font-size-small);
+  width: var(--font-size-small);
 }
 
 .exposuresSelect {
@@ -481,6 +480,10 @@ th.tableHead {
   white-space: nowrap;
 }
 
+.footerMenu .jira {
+  flex-wrap: wrap;
+}
+
 .footer .flag .label,
 .footerMenu .flag .label,
 .footer .jira .label,
@@ -498,4 +501,8 @@ th.tableHead {
 .inputError {
   margin-top: var(--small-padding);
   color: var(--status-alert-color);
+}
+
+.obsIdSelector {
+  display: flex;
 }

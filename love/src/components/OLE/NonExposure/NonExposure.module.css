@@ -70,6 +70,7 @@
   grid-auto-rows: max-content;
   grid-row-gap: 1em;
   padding-top: 15px;
+  margin-left: var(--content-padding);
 }
 
 .description {
@@ -158,7 +159,6 @@
   display: flex;
   margin-bottom: 0.5em;
   align-items: center;
-  flex-wrap: wrap;
 }
 
 .filters > * {
@@ -313,6 +313,11 @@
   display: flex;
   margin-right: 5px;
   align-items: center;
+  text-align: left;
+  min-width: 24ch;
+}
+
+.footerMenu .checkboxText {
   flex-wrap: wrap;
 }
 
@@ -436,4 +441,14 @@ th.tableHead {
 .footer .attachedFiles .label {
   margin-left: 0;
   margin-right: var(--small-padding);
+}
+
+.footer .toAttachFiles,
+.footerMenu .toAttachFiles {
+  margin-bottom: var(--small-padding);
+}
+
+.footer .jira,
+.footerMenu .jira {
+  white-space: nowrap;
 }

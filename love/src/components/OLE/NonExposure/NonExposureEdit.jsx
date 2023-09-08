@@ -15,7 +15,7 @@ import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import { defaultCSCList, LSST_SYSTEMS, LSST_SUBSYSTEMS, iconLevelOLE } from 'Config';
-import ManagerInterface, { getFilesURLs, getFilename, openInNewTab } from 'Utils';
+import ManagerInterface, { getFilesURLs, getLinkJira, getFilename, openInNewTab } from 'Utils';
 import styles from './NonExposure.module.css';
 
 export default class NonExposureEdit extends Component {
@@ -310,6 +310,8 @@ export default class NonExposureEdit extends Component {
     const subsystemOptions = LSST_SUBSYSTEMS;
     const cscOptions = defaultCSCList.map((csc) => `${csc.name}:${csc.salindex}`);
 
+    // const jiraUrl = getLinkJira(this.state.logEdit.urls);
+    const jiraUrl = 'http://google.cl/';
     const filesUrls = getFilesURLs(this.state.logEdit.urls);
 
     return (
@@ -333,6 +335,17 @@ export default class NonExposureEdit extends Component {
             ) : (
               <div className={styles.header}>
                 {this.state.logEdit.id ? <span className={styles.bold}>#{this.state.logEdit.id}</span> : <></>}
+                {jiraUrl && (
+                  <span>
+                    <Button
+                      status="link"
+                      title={this.state.logEdit.jiraurl}
+                      onClick={() => openInNewTab(this.state.logEdit.jiraurl)}
+                    >
+                      view Jira ticket
+                    </Button>
+                  </span>
+                )}
                 {this.state.logEdit.id ? (
                   <>
                     <span className={styles.floatRight}>
@@ -475,69 +488,60 @@ export default class NonExposureEdit extends Component {
                     }
                   />
                 </div>
+
+                <div className={styles.jira}>
+                  {!this.state.logEdit.id && (
+                    <span className={styles.checkboxText}>
+                      <span>link Jira ticket</span>
+                      <Input
+                        type="checkbox"
+                        checked={this.state.logEdit.jira}
+                        onChange={(event) => {
+                          this.setState((prevState) => ({
+                            logEdit: { ...prevState.logEdit, jira: event.target.checked },
+                          }));
+                        }}
+                      />
+                      {this.state.logEdit.jira && (
+                        <>
+                          <Toggle
+                            labels={['New', 'Existent']}
+                            toggled={!this.state.logEdit.jira_new}
+                            onToggle={(event) =>
+                              this.setState((prevState) => ({
+                                logEdit: { ...prevState.logEdit, jira_new: !event },
+                              }))
+                            }
+                          />
+                          {this.state.logEdit.jira_new ? (
+                            <Input
+                              placeholder="Jira ticket title"
+                              onChange={(event) =>
+                                this.setState((prevState) => ({
+                                  logEdit: { ...prevState.logEdit, jira_issue_title: event.target.value },
+                                }))
+                              }
+                            />
+                          ) : (
+                            <Input
+                              placeholder="Jira ticket id"
+                              onChange={(event) =>
+                                this.setState((prevState) => ({
+                                  logEdit: { ...prevState.logEdit, jira_issue_id: event.target.value },
+                                }))
+                              }
+                            />
+                          )}
+                          {this.state.jiraIssueError && (
+                            <div className={styles.inputError}>This field cannot be empty.</div>
+                          )}
+                        </>
+                      )}
+                    </span>
+                  )}
+                </div>
               </div>
               <span className={isMenu ? styles.footerRightMenu : styles.footerRight}>
-                {!this.state.logEdit.id ? (
-                  <span className={styles.checkboxText}>
-                    <span>link Jira ticket</span>
-                    <Input
-                      type="checkbox"
-                      checked={this.state.logEdit.jira}
-                      onChange={(event) => {
-                        this.setState((prevState) => ({
-                          logEdit: { ...prevState.logEdit, jira: event.target.checked },
-                        }));
-                      }}
-                    />
-                    {this.state.logEdit.jira && (
-                      <>
-                        <Toggle
-                          labels={['New', 'Existent']}
-                          toggled={!this.state.logEdit.jira_new}
-                          onToggle={(event) =>
-                            this.setState((prevState) => ({
-                              logEdit: { ...prevState.logEdit, jira_new: !event },
-                            }))
-                          }
-                        />
-                        {this.state.logEdit.jira_new ? (
-                          <Input
-                            placeholder="Jira ticket title"
-                            onChange={(event) =>
-                              this.setState((prevState) => ({
-                                logEdit: { ...prevState.logEdit, jira_issue_title: event.target.value },
-                              }))
-                            }
-                          />
-                        ) : (
-                          <Input
-                            placeholder="Jira ticket id"
-                            onChange={(event) =>
-                              this.setState((prevState) => ({
-                                logEdit: { ...prevState.logEdit, jira_issue_id: event.target.value },
-                              }))
-                            }
-                          />
-                        )}
-                        {this.state.jiraIssueError && (
-                          <div className={styles.inputError}>This field cannot be empty.</div>
-                        )}
-                      </>
-                    )}
-                  </span>
-                ) : this.state.logEdit.jiraurl ? (
-                  <span className={styles.checkboxText}>
-                    <Button
-                      status="link"
-                      title={this.state.logEdit.jiraurl}
-                      onClick={() => openInNewTab(this.state.logEdit.jiraurl)}
-                    >
-                      view Jira ticket
-                    </Button>
-                  </span>
-                ) : (
-                  <></>
-                )}
                 <Button disabled={!datesAreValid || jiraIssueError} type="submit">
                   {savingLog ? (
                     <SpinnerIcon className={styles.spinnerIcon} />
