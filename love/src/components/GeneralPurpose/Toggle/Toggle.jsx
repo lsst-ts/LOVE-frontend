@@ -3,9 +3,7 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Copyright (c) 2023 Inria Chile.
-
-Developed for Inria Chile.
+Developed by Inria Chile.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
