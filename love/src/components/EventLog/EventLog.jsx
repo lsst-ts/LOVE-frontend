@@ -270,10 +270,7 @@ export default class EventLog extends PureComponent {
           <div className={styles.efd}>
             <div className={styles.efdSelector}>
               <div style={{ display: 'inline-block' }}>
-                <Toggle
-                  isLive={!this.state.efdEnabled}
-                  setLiveMode={(event) => this.setState({ efdEnabled: !event })}
-                />
+                <Toggle toggled={!this.state.efdEnabled} onToggle={(event) => this.setState({ efdEnabled: !event })} />
               </div>
             </div>
             {this.state.efdEnabled && (

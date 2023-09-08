@@ -332,6 +332,8 @@ export const MTCSCommands = {
 /*****************************************************************************/
 /******************************OLE configurations*****************************/
 /*****************************************************************************/
+export const LOG_REFRESH_INTERVAL_MS = 60000;
+
 export const OLE_COMMENT_TYPE_OPTIONS = [
   { label: 'Priority', value: 'all' },
   { label: 'Urgent', value: 100 },

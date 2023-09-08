@@ -1,0 +1,6 @@
+.icon {
+  width: 2.5em;
+  height: 2.5em;
+  stroke: var(--secondary-font-color);
+  fill: var(--secondary-font-color);
+}

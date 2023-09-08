@@ -196,7 +196,7 @@ export default class ObservingLogInput extends Component {
             <div className={styles.filters}>
               <div className={styles.filter}>
                 <span className={styles.filterLabel}>Mode: </span>
-                <Toggle isLive={this.state.timeFilterMode === TIME_FILTER_LIVE} setLiveMode={this.changeTimeMode} />
+                <Toggle toggled={this.state.timeFilterMode === TIME_FILTER_LIVE} onToggle={this.changeTimeMode} />
               </div>
               {this.state.timeFilterMode === TIME_FILTER_QUERY && (
                 <div className={styles.horizontalFilter}>

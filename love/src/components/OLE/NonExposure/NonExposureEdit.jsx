@@ -5,15 +5,17 @@ import Moment from 'moment';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
+import RefreshIcon from 'components/icons/RefreshIcon/RefreshIcon';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import MultiFileUploader from 'components/GeneralPurpose/MultiFileUploader/MultiFileUploader';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
+import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import { defaultCSCList, LSST_SYSTEMS, LSST_SUBSYSTEMS, iconLevelOLE } from 'Config';
-import ManagerInterface, { getFilesURLs, getFilename, openInNewTab } from 'Utils';
+import ManagerInterface, { getFilesURLs, getLinkJira, getFilename, openInNewTab } from 'Utils';
 import styles from './NonExposure.module.css';
 
 export default class NonExposureEdit extends Component {
@@ -36,7 +38,7 @@ export default class NonExposureEdit extends Component {
     logEdit: {
       id: undefined,
       level: 0,
-      date_begin: Moment().subtract(1, 'day'),
+      date_begin: Moment(),
       date_end: Moment(),
       systems: [],
       subsystems: [],
@@ -45,6 +47,9 @@ export default class NonExposureEdit extends Component {
       user: undefined,
       time_lost: 0,
       jira: false,
+      jira_new: true,
+      jira_issue_title: '',
+      jira_issue_id: '',
       file: undefined,
       fileurl: undefined,
       filename: undefined,
@@ -76,6 +81,7 @@ export default class NonExposureEdit extends Component {
       logEdit,
       savingLog: false,
       datesAreValid: true,
+      jiraIssueError: false,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -99,6 +105,12 @@ export default class NonExposureEdit extends Component {
     this.multiselectRefs.cscs.current.resetSelectedValues();
 
     this.setState({ logEdit: NonExposureEdit.defaultProps.logEdit });
+  }
+
+  updateDates() {
+    this.setState((prevState) => ({
+      logEdit: { ...prevState.logEdit, date_begin: Moment(), date_end: Moment() },
+    }));
   }
 
   updateOrCreateMessageNarrativeLogs() {
@@ -172,6 +184,72 @@ export default class NonExposureEdit extends Component {
     }));
   }
 
+  renderTimeOfIncidentSection() {
+    const { date_begin, date_end, time_lost } = this.state.logEdit ?? {};
+    const { incidentTimeIsSingular, datesAreValid } = this.state;
+
+    return (
+      <>
+        <span className={styles.label}>Time of Incident (UTC)</span>
+        <span className={styles.value}>
+          <div className={styles.incidentTimeTypeContainer}>
+            <Toggle
+              labels={['Singular', 'Range']}
+              toggled={incidentTimeIsSingular}
+              onToggle={(event) => this.setState({ incidentTimeIsSingular: event })}
+            />
+            <Button
+              className={styles.refreshDateIcon}
+              size="small"
+              title="Refresh date"
+              onClick={() => this.updateDates()}
+            >
+              <RefreshIcon title="Refresh date" />
+            </Button>
+          </div>
+          {incidentTimeIsSingular ? (
+            <DateTimeRange
+              className={styles.dateTimeRangeStyle}
+              startDate={date_begin}
+              endDate={date_end}
+              onChange={(date, type) => this.handleTimeOfIncident(date, type)}
+            />
+          ) : (
+            <DateTime
+              className={styles.dateTimeSingularStyle}
+              viewMode="time"
+              dateFormat="YYYY/MM/DD"
+              timeFormat="HH:mm:ss"
+              closeOnSelect={true}
+              value={date_begin}
+              onChange={(date) => {
+                this.setState((prevState) => ({
+                  logEdit: { ...prevState.logEdit, date_begin: date },
+                }));
+              }}
+            />
+          )}
+          {!datesAreValid && <div className={styles.inputError}>Error: dates must be input in valid ISO format</div>}
+        </span>
+        <span className={styles.label}>Obs. Time Loss (hours)</span>
+        <span className={styles.value}>
+          <Input
+            type="number"
+            min={0.0}
+            step={0.01}
+            value={time_lost}
+            className={styles.input}
+            onChange={(event) =>
+              this.setState((prevState) => ({
+                logEdit: { ...prevState.logEdit, time_lost: event.target.value },
+              }))
+            }
+          />
+        </span>
+      </>
+    );
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (
       prevState.logEdit?.date_begin !== this.state.logEdit?.date_begin ||
@@ -190,17 +268,50 @@ export default class NonExposureEdit extends Component {
         });
       }
     }
+
+    if (this.state.logEdit && this.state.logEdit.jira !== prevState.logEdit.jira) {
+      const { jira, jira_issue_title, jira_issue_id } = this.state.logEdit;
+      if (jira_issue_title === '' || jira_issue_id === '') {
+        this.setState({ jiraIssueError: true });
+      }
+
+      if (!jira) {
+        this.setState({
+          jiraIssueError: false,
+        });
+      }
+    }
+
+    if (this.state.logEdit && this.state.logEdit.jira_issue_title !== prevState.logEdit.jira_issue_title) {
+      const { jira_issue_title } = this.state.logEdit;
+      if (jira_issue_title === '') {
+        this.setState({ jiraIssueError: true });
+      } else {
+        this.setState({ jiraIssueError: false });
+      }
+    }
+
+    if (this.state.logEdit && this.state.logEdit.jira_issue_id !== prevState.logEdit.jira_issue_id) {
+      const { jira_issue_id } = this.state.logEdit;
+      if (jira_issue_id === '') {
+        this.setState({ jiraIssueError: true });
+      } else {
+        this.setState({ jiraIssueError: false });
+      }
+    }
   }
 
   render() {
     const { back, isLogCreate, isMenu } = this.props;
-    const { datesAreValid, savingLog } = this.state;
+    const { datesAreValid, savingLog, jiraIssueError } = this.state;
 
     const view = this.props.view ?? NonExposureEdit.defaultProps.view;
     const systemOptions = LSST_SYSTEMS;
     const subsystemOptions = LSST_SUBSYSTEMS;
     const cscOptions = defaultCSCList.map((csc) => `${csc.name}:${csc.salindex}`);
 
+    // const jiraUrl = getLinkJira(this.state.logEdit.urls);
+    const jiraUrl = 'http://google.cl/';
     const filesUrls = getFilesURLs(this.state.logEdit.urls);
 
     return (
@@ -224,6 +335,17 @@ export default class NonExposureEdit extends Component {
             ) : (
               <div className={styles.header}>
                 {this.state.logEdit.id ? <span className={styles.bold}>#{this.state.logEdit.id}</span> : <></>}
+                {jiraUrl && (
+                  <span>
+                    <Button
+                      status="link"
+                      title={this.state.logEdit.jiraurl}
+                      onClick={() => openInNewTab(this.state.logEdit.jiraurl)}
+                    >
+                      view Jira ticket
+                    </Button>
+                  </span>
+                )}
                 {this.state.logEdit.id ? (
                   <>
                     <span className={styles.floatRight}>
@@ -252,8 +374,8 @@ export default class NonExposureEdit extends Component {
                   <div style={{ display: 'inline-block', marginRight: '0.5em' }}>
                     <Toggle
                       labels={['No', 'Yes']}
-                      isLive={this.state.logEdit.level >= 100}
-                      setLiveMode={(event) =>
+                      toggled={this.state.logEdit.level >= 100}
+                      onToggle={(event) =>
                         this.setState((prevState) => ({
                           logEdit: { ...prevState.logEdit, level: event ? 100 : 0 },
                         }))
@@ -310,73 +432,13 @@ export default class NonExposureEdit extends Component {
                   />
                 </span>
 
-                {isMenu ? (
-                  <>
-                    <span className={styles.label}>Time of Incident (UTC)</span>
-                    <span className={styles.value}>
-                      <DateTimeRange
-                        className={styles.dateTimeRangeStyle}
-                        onChange={(date, type) => this.handleTimeOfIncident(date, type)}
-                      />
-                      {!datesAreValid && (
-                        <div className={styles.inputError}>Error: dates must be input in valid ISO format</div>
-                      )}
-                    </span>
-                    <span className={styles.label}>Obs. Time Loss (hours)</span>
-                    <span className={styles.value}>
-                      <Input
-                        type="number"
-                        min={0.0}
-                        step={0.01}
-                        value={this.state.logEdit.time_lost}
-                        className={styles.input}
-                        onChange={(event) =>
-                          this.setState((prevState) => ({
-                            logEdit: { ...prevState.logEdit, time_lost: event.target.value },
-                          }))
-                        }
-                      />
-                    </span>
-                  </>
-                ) : (
-                  <></>
-                )}
+                {isMenu && this.renderTimeOfIncidentSection()}
               </div>
 
               <div className={styles.contentRight}>
-                <div className={[styles.mb1, styles.floatLeft, styles.inline].join(' ')}>
-                  <span className={styles.title}>Message</span>
-                  {isMenu ? (
-                    <></>
-                  ) : (
-                    <>
-                      <span className={styles.label}>Time of Incident (UTC)</span>
-                      <span className={styles.value}>
-                        <DateTimeRange
-                          className={styles.dateTimeRangeStyle}
-                          onChange={(date, type) => this.handleTimeOfIncident(date, type)}
-                        />
-                        {!datesAreValid && (
-                          <div className={styles.inputError}>Error: dates must be input in valid ISO format</div>
-                        )}
-                      </span>
-                      <span className={styles.label}>Obs. Time Loss (hours)</span>
-                      <span className={styles.value}>
-                        <Input
-                          type="number"
-                          min={0.0}
-                          step={0.01}
-                          value={this.state.logEdit.time_lost}
-                          className={styles.input}
-                          onChange={(event) =>
-                            this.setState((prevState) => ({
-                              logEdit: { ...prevState.logEdit, time_lost: event.target.value },
-                            }))
-                          }
-                        />
-                      </span>
-                    </>
-                  )}
+                <div className={styles.mb1}>
+                  <div className={styles.title}>Message</div>
+                  <div className={styles.inline}>{!isMenu && this.renderTimeOfIncidentSection()}</div>
                 </div>
                 <TextArea
                   value={this.state.logEdit.message_text}
@@ -426,59 +488,61 @@ export default class NonExposureEdit extends Component {
                     }
                   />
                 </div>
-              </div>
-              <span className={isMenu ? styles.footerRightMenu : styles.footerRight}>
-                {!this.state.logEdit.id ? (
-                  <span className={styles.checkboxText}>
-                    <span>link Jira ticket</span>
-                    <Input
-                      type="checkbox"
-                      checked={this.state.logEdit.jira}
-                      onChange={(event) => {
-                        this.setState((prevState) => ({
-                          logEdit: { ...prevState.logEdit, jira: event.target.checked },
-                        }));
-                      }}
-                    />
-                    {this.state.logEdit.jira && (
-                      <>
-                        <Toggle
-                          labels={['New', 'Existent']}
-                          isLive={this.state.logEdit.jira_comment}
-                          setLiveMode={(event) =>
-                            this.setState((prevState) => ({
-                              logEdit: { ...prevState.logEdit, jira_comment: event },
-                            }))
-                          }
-                        />
-                        {this.state.logEdit.jira_comment && (
-                          <input
-                            className={styles.issueIdInput}
-                            placeholder="Jira ticket id"
-                            onChange={(event) =>
+
+                <div className={styles.jira}>
+                  {!this.state.logEdit.id && (
+                    <span className={styles.checkboxText}>
+                      <span>link Jira ticket</span>
+                      <Input
+                        type="checkbox"
+                        checked={this.state.logEdit.jira}
+                        onChange={(event) => {
+                          this.setState((prevState) => ({
+                            logEdit: { ...prevState.logEdit, jira: event.target.checked },
+                          }));
+                        }}
+                      />
+                      {this.state.logEdit.jira && (
+                        <>
+                          <Toggle
+                            labels={['New', 'Existent']}
+                            toggled={!this.state.logEdit.jira_new}
+                            onToggle={(event) =>
                               this.setState((prevState) => ({
-                                logEdit: { ...prevState.logEdit, issue_id: event.target.value },
+                                logEdit: { ...prevState.logEdit, jira_new: !event },
                               }))
                             }
                           />
-                        )}
-                      </>
-                    )}
-                  </span>
-                ) : this.state.logEdit.jiraurl ? (
-                  <span className={styles.checkboxText}>
-                    <Button
-                      status="link"
-                      title={this.state.logEdit.jiraurl}
-                      onClick={() => openInNewTab(this.state.logEdit.jiraurl)}
-                    >
-                      view Jira ticket
-                    </Button>
-                  </span>
-                ) : (
-                  <></>
-                )}
-                <Button disabled={!datesAreValid} type="submit">
+                          {this.state.logEdit.jira_new ? (
+                            <Input
+                              placeholder="Jira ticket title"
+                              onChange={(event) =>
+                                this.setState((prevState) => ({
+                                  logEdit: { ...prevState.logEdit, jira_issue_title: event.target.value },
+                                }))
+                              }
+                            />
+                          ) : (
+                            <Input
+                              placeholder="Jira ticket id"
+                              onChange={(event) =>
+                                this.setState((prevState) => ({
+                                  logEdit: { ...prevState.logEdit, jira_issue_id: event.target.value },
+                                }))
+                              }
+                            />
+                          )}
+                          {this.state.jiraIssueError && (
+                            <div className={styles.inputError}>This field cannot be empty.</div>
+                          )}
+                        </>
+                      )}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <span className={isMenu ? styles.footerRightMenu : styles.footerRight}>
+                <Button disabled={!datesAreValid || jiraIssueError} type="submit">
                   {savingLog ? (
                     <SpinnerIcon className={styles.spinnerIcon} />
                   ) : (

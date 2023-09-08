@@ -50,8 +50,8 @@ export default class TimeSeriesControls extends Component {
         <div className={styles.switchContainer}>
           <Toggle
             labels={['Live', 'Query']}
-            isLive={!this.props.isLive}
-            setLiveMode={(show) => this.props.setLiveMode(!show)}
+            toggled={!this.props.isLive}
+            onToggle={(show) => this.props.setLiveMode(!show)}
           />
         </div>
         {this.props.isLive ? (

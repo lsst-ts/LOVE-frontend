@@ -10,12 +10,13 @@ import styles from './DateTime.module.css';
  * It passes down props directly to the Datetime object.
  */
 const DateTime = (props) => {
-  const { label = '', inputProps, minDate, maxDate, className: inputClassName, ...otherProps } = props;
+  const { value, label = '', inputProps, minDate, maxDate, className: inputClassName, ...otherProps } = props;
   return (
     <>
       {label !== '' && <span className={styles.label}>{label}</span>}
       <Datetime
         utc={true}
+        value={value}
         inputProps={{
           className: [styles.date, inputClassName].join(' '),
           ...props.inputProps,
@@ -44,26 +45,28 @@ const DateTime = (props) => {
 };
 
 DateTime.propTypes = {
+  /** Value of the input */
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date), PropTypes.instanceOf(Moment)]),
   /** Label to add at the beginning of the datetime picker */
   label: PropTypes.string,
+  /** Classname of the component */
+  className: PropTypes.string,
   /** Properties to add to the input */
   inputProps: PropTypes.object,
   /** Minimum date allowed */
   minDate: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date), PropTypes.instanceOf(Moment)]),
   /** Maximum date allowed */
   maxDate: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date), PropTypes.instanceOf(Moment)]),
-  /** Classname of the component */
-  className: PropTypes.string,
 };
 
 const arePropsEqual = (prevProps, nextProps) => {
   return (
+    prevProps.value === nextProps.value &&
     prevProps.label === nextProps.label &&
     prevProps.className === nextProps.className &&
     isEqual(prevProps.inputProps, nextProps.inputProps) &&
     Moment(prevProps.minDate).isSame(nextProps.minDate) &&
-    Moment(prevProps.maxDate).isSame(nextProps.maxDate) &&
-    prevProps.onChange === nextProps.onChange
+    Moment(prevProps.maxDate).isSame(nextProps.maxDate)
   );
 };
 

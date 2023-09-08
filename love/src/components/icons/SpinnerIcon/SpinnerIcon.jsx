@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './SpinnerIcon.module.css';
 
-function LogoIcon(props) {
+function SpinnerIcon(props) {
   const { className: propsClassName, ...otherProps } = props;
   return (
     <svg className={[styles.spinner, propsClassName].join(' ')} viewBox="0 0 50 50" {...otherProps}>
@@ -11,4 +11,4 @@ function LogoIcon(props) {
   );
 }
 
-export default LogoIcon;
+export default SpinnerIcon;

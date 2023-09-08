@@ -1,38 +1,53 @@
-import React from 'react';
+import React, { memo } from 'react';
+import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
 import styles from './Toggle.module.css';
-const Toggle = ({ isLive, setLiveMode, labels }) => {
+
+const Toggle = ({ toggled = false, labels = [], onToggle = () => {} }) => {
   const handleChangeChk = () => {
-    setLiveMode(!isLive);
+    onToggle(!toggled);
   };
+
   return (
     <div className={styles.switchContainer}>
       <span
-        className={[styles.modeSelection, !isLive ? styles.highlightText : ''].join(' ')}
-        onClick={() => setLiveMode(false)}
+        className={[styles.modeSelection, !toggled ? styles.highlightText : ''].join(' ')}
+        onClick={() => onToggle(false)}
       >
-        { labels[0] }
+        {labels[0]}
       </span>
-      
+
       <label className={styles.switch}>
-        <input type="checkbox" alt="Live/query mode toggle" checked={isLive} onChange={handleChangeChk} />
+        <input
+          type="checkbox"
+          alt={labels.lenght >= 2 ? `${labels[0] - labels[1]}` : ''}
+          checked={toggled}
+          onChange={handleChangeChk}
+        />
         <span className={[styles.slider, styles.round].join(' ')} />
       </label>
 
       <span
-        className={[styles.modeSelection, isLive ? styles.highlightText : ''].join(' ')}
-        onClick={() => setLiveMode(true)}
+        className={[styles.modeSelection, toggled ? styles.highlightText : ''].join(' ')}
+        onClick={() => onToggle(true)}
       >
-        { labels[1] }
+        {labels[1]}
       </span>
-      
     </div>
   );
 };
 
-Toggle.defaultProps = {
-  isLive: false,
-  labels: ['Query', 'Live'],
-  setLiveMode: () => null,
+Toggle.propTypes = {
+  /** The toggle is toggled or not  */
+  toggled: PropTypes.bool,
+  /** The labels for the toggle */
+  labels: PropTypes.arrayOf(PropTypes.string),
+  /** The function to set the live mode */
+  onToggle: PropTypes.func,
 };
 
-export default Toggle;
+function propsAreEqual(prevProps, nextProps) {
+  return nextProps.toggled === prevProps.toggled && isEqual(nextProps.labels, prevProps.labels);
+}
+
+export default memo(Toggle, propsAreEqual);

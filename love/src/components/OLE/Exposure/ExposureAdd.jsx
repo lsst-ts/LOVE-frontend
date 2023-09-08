@@ -6,6 +6,7 @@ import MultiSelect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
+import RefreshIcon from 'components/icons/RefreshIcon/RefreshIcon';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -57,6 +58,9 @@ export default class ExposureAdd extends Component {
       is_new: false,
       exposure_flag: 'none',
       jira: false,
+      jira_new: true,
+      jira_issue_title: '',
+      jira_issue_id: '',
       tags: undefined,
     },
     isLogCreate: false,
@@ -83,6 +87,7 @@ export default class ExposureAdd extends Component {
       registryMap: {},
       updatingExposures: false,
       savingLog: false,
+      jiraIssueError: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -170,6 +175,19 @@ export default class ExposureAdd extends Component {
       confirmationModalShown: true,
       confirmationModalText: modalText,
     });
+  }
+
+  changeDayExposure(day, type) {
+    if (type === 'start') {
+      this.setState({ selectedDayExposureStart: day });
+    } else if (type === 'end') {
+      this.setState({ selectedDayExposureEnd: day });
+    }
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.saveMessage();
   }
 
   renderInstrumentsSelect() {
@@ -266,17 +284,23 @@ export default class ExposureAdd extends Component {
     );
   }
 
-  changeDayExposure(day, type) {
-    if (type === 'start') {
-      this.setState({ selectedDayExposureStart: day });
-    } else if (type === 'end') {
-      this.setState({ selectedDayExposureEnd: day });
-    }
-  }
+  renderRefreshLogsButton() {
+    const { updatingExposures } = this.state;
 
-  handleSubmit(event) {
-    event.preventDefault();
-    this.saveMessage();
+    return (
+      <Button
+        className={styles.refreshDataBtn}
+        title="Refresh exposures"
+        disabled={updatingExposures}
+        onClick={() => this.queryExposures()}
+      >
+        {updatingExposures ? (
+          <SpinnerIcon className={styles.spinnerIcon} />
+        ) : (
+          <RefreshIcon title="Refresh exposures" className={styles.refreshIcon} />
+        )}
+      </Button>
+    );
   }
 
   componentDidMount() {
@@ -321,11 +345,42 @@ export default class ExposureAdd extends Component {
         },
       );
     }
+
+    if (this.state.newMessage && this.state.newMessage.jira !== prevState.newMessage.jira) {
+      const { jira, jira_issue_title, jira_issue_id } = this.state.newMessage;
+      if (jira_issue_title === '' || jira_issue_id === '') {
+        this.setState({ jiraIssueError: true });
+      }
+
+      if (!jira) {
+        this.setState({
+          jiraIssueError: false,
+        });
+      }
+    }
+
+    if (this.state.newMessage && this.state.newMessage.jira_issue_title !== prevState.newMessage.jira_issue_title) {
+      const { jira_issue_title } = this.state.newMessage;
+      if (jira_issue_title === '') {
+        this.setState({ jiraIssueError: true });
+      } else {
+        this.setState({ jiraIssueError: false });
+      }
+    }
+
+    if (this.state.newMessage && this.state.newMessage.jira_issue_id !== prevState.newMessage.jira_issue_id) {
+      const { jira_issue_id } = this.state.newMessage;
+      if (jira_issue_id === '') {
+        this.setState({ jiraIssueError: true });
+      } else {
+        this.setState({ jiraIssueError: false });
+      }
+    }
   }
 
   render() {
     const { isLogCreate, isMenu, back, view } = this.props;
-    const { confirmationModalShown, confirmationModalText, savingLog } = this.state;
+    const { confirmationModalShown, confirmationModalText, savingLog, jiraIssueError } = this.state;
 
     const filesUrls = getFilesURLs(this.state.newMessage.urls);
 
@@ -355,17 +410,9 @@ export default class ExposureAdd extends Component {
                 <span className={styles.value}>{this.renderDateTimeRangeSelect()}</span>
 
                 <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
-                <span className={styles.value}>{this.renderExposuresSelect()}</span>
-
-                <span className={[styles.value, styles.paddingTop].join(' ')}>
-                  <Button
-                    className={styles.refreshDataBtn}
-                    disabled={this.state.updatingExposures}
-                    onClick={() => this.queryExposures()}
-                  >
-                    Refresh exposures
-                    {this.state.updatingExposures && <SpinnerIcon className={styles.spinnerIcon} />}
-                  </Button>
+                <span className={[styles.value, styles.obsIdSelector].join(' ')}>
+                  {this.renderExposuresSelect()}
+                  {this.renderRefreshLogsButton()}
                 </span>
 
                 <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
@@ -382,24 +429,11 @@ export default class ExposureAdd extends Component {
 
                     {this.renderDateTimeRangeSelect()}
 
-                    <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
-                    <span className={styles.value} style={{ flex: 1 }}>
+                    <span className={styles.label}>Obs. Id</span>
+                    <span className={[styles.value, styles.obsIdSelector].join(' ')}>
                       {this.renderExposuresSelect()}
+                      {this.renderRefreshLogsButton()}
                     </span>
-
-                    <Button
-                      className={styles.refreshDataBtn}
-                      disabled={this.state.updatingExposures}
-                      onClick={() => {
-                        this.setState({ updatingExposures: true });
-                        this.queryExposures(() => {
-                          this.setState({ updatingExposures: false });
-                        });
-                      }}
-                    >
-                      Refresh exposures
-                      {this.state.updatingExposures && <SpinnerIcon className={styles.spinnerIcon} />}
-                    </Button>
                   </>
                 )}
 
@@ -538,36 +572,49 @@ export default class ExposureAdd extends Component {
                       }}
                     />
                   </span>
-                  <span>
-                    {this.state.newMessage.jira && (
-                      <Toggle
-                        labels={['New', 'Existent']}
-                        isLive={this.state.newMessage.jira_comment}
-                        setLiveMode={(event) =>
-                          this.setState((prevState) => ({
-                            newMessage: { ...prevState.newMessage, jira_comment: event },
-                          }))
-                        }
-                      />
-                    )}
-                  </span>
-                  <span>
-                    {this.state.newMessage.jira && this.state.newMessage.jira_comment && (
-                      <Input
-                        placeholder="Jira ticket id"
-                        onChange={(event) =>
-                          this.setState((prevState) => ({
-                            newMessage: { ...prevState.newMessage, issue_id: event.target.value },
-                          }))
-                        }
-                      />
-                    )}
-                  </span>
+
+                  {this.state.newMessage.jira && (
+                    <>
+                      <span>
+                        <Toggle
+                          labels={['New', 'Existent']}
+                          toggled={!this.state.newMessage.jira_new}
+                          onToggle={(event) => {
+                            this.setState((prevState) => ({
+                              newMessage: { ...prevState.newMessage, jira_new: !event },
+                            }));
+                          }}
+                        />
+                      </span>
+
+                      {this.state.newMessage.jira_new ? (
+                        <Input
+                          placeholder="Jira ticket title"
+                          onChange={(event) =>
+                            this.setState((prevState) => ({
+                              newMessage: { ...prevState.newMessage, jira_issue_title: event.target.value },
+                            }))
+                          }
+                        />
+                      ) : (
+                        <Input
+                          placeholder="Jira ticket id"
+                          onChange={(event) =>
+                            this.setState((prevState) => ({
+                              newMessage: { ...prevState.newMessage, jira_issue_id: event.target.value },
+                            }))
+                          }
+                        />
+                      )}
+
+                      {jiraIssueError && <div className={styles.inputError}>This field cannot be empty.</div>}
+                    </>
+                  )}
                 </div>
               </div>
 
               <div className={isMenu ? styles.footerRightMenu : styles.footerRight}>
-                <Button type="submit">
+                <Button disabled={jiraIssueError} type="submit">
                   {savingLog ? (
                     <SpinnerIcon className={styles.spinnerIcon} />
                   ) : (
