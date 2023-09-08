@@ -7,18 +7,18 @@ function RefreshIcon(props) {
     <svg className={[styles.icon, propsClassName].join(' ')} viewBox="0 0 256 256" {...otherProps}>
       <title>{props.title}</title>
       <g
-        fill-rule="nonzero"
+        fillRule="nonzero"
         stroke="none"
-        stroke-width="1"
-        stroke-linecap="butt"
-        stroke-linejoin="miter"
-        stroke-miterlimit="10"
-        stroke-dasharray=""
-        stroke-dashoffset="0"
-        font-family="none"
-        font-weight="none"
-        font-size="none"
-        text-anchor="none"
+        strokeWidth="1"
+        strokeLinecap="butt"
+        strokeLinejoin="miter"
+        strokeMiterlimit="10"
+        strokeDasharray=""
+        strokeDashoffset="0"
+        fontFamily="none"
+        fontWeight="none"
+        fontSize="none"
+        textAnchor="none"
       >
         <g transform="scale(5.33333,5.33333)">
           <path d="M13,13c0,-3.3 2.7,-6 6,-6h10c3.3,0 6,2.7 6,6h4c0,-5.5 -4.5,-10 -10,-10h-10c-5.5,0 -10,4.5 -10,10v11.2h4z"></path>

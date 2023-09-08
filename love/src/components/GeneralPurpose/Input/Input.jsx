@@ -34,9 +34,9 @@ const Input = ({
 
 Input.propTypes = {
   /** Default value */
-  defaultValue: PropTypes.string,
+  defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** Value */
-  value: PropTypes.string,
+  defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** Type */
   type: PropTypes.string,
   /** Class name */

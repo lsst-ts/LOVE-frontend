@@ -313,11 +313,9 @@ export default class NonExposureEdit extends Component {
         )}
         <form onSubmit={this.handleSubmit}>
           <div className={isMenu ? styles.detailContainerMenu : styles.detailContainer}>
-            {isMenu ? (
-              <></>
-            ) : (
+            {!isMenu && (
               <div className={styles.header}>
-                {this.state.logEdit.id ? <span className={styles.bold}>#{this.state.logEdit.id}</span> : <></>}
+                {this.state.logEdit.id && <span className={styles.bold}>#{this.state.logEdit.id}</span>}
                 {jiraUrl && (
                   <span>
                     <Button
