@@ -28,9 +28,9 @@ export default class NonExposureDetail extends Component {
       level: undefined,
       date_begin: undefined,
       date_end: undefined,
-      systems: [],
-      subsystems: [],
-      cscs: [],
+      components: [],
+      primary_software_components: [],
+      primary_hardware_components: [],
       user: undefined,
       time_lost: undefined,
       jira: undefined,
@@ -165,12 +165,12 @@ export default class NonExposureDetail extends Component {
               }`}</span>
               <span className={styles.label}>Obs. Time Loss</span>
               <span className={styles.value}>{formatSecondsToDigital(logDetail.time_lost * 3600)}</span>
-              <span className={styles.label}>System</span>
-              <span className={styles.value}>{logDetail.systems?.join(', ')}</span>
-              <span className={styles.label}>Subsystems</span>
-              <span className={styles.value}>{logDetail.subsystems?.join(', ')}</span>
-              <span className={styles.label}>CSCs</span>
-              <span className={styles.value}>{logDetail.cscs?.join(', ')}</span>
+              <span className={styles.label}>Components</span>
+              <span className={styles.value}>{logDetail.components?.join(', ')}</span>
+              <span className={styles.label}>Primary Software Component</span>
+              <span className={styles.value}>{logDetail.primary_software_components?.join(', ')}</span>
+              <span className={styles.label}>Primary Hardware Component</span>
+              <span className={styles.value}>{logDetail.primary_hardware_components?.join(', ')}</span>
             </div>
             <div className={styles.description}>
               <div className={styles.floatLeft}>
@@ -191,7 +191,7 @@ export default class NonExposureDetail extends Component {
               <div>
                 {filesUrls.length > 0
                   ? filesUrls.map((fileurl, index) => (
-                      <div className={styles.buttonWraper}>
+                      <div key={fileurl} className={styles.buttonWraper}>
                         <Button
                           className={styles.fileButton}
                           title={fileurl}

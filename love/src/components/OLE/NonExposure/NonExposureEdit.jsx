@@ -14,7 +14,13 @@ import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange
 import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
-import { defaultCSCList, LSST_SYSTEMS, LSST_SUBSYSTEMS, iconLevelOLE } from 'Config';
+import Select from 'components/GeneralPurpose/Select/Select';
+import {
+  OLE_JIRA_COMPONENTS,
+  OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS,
+  OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS,
+  iconLevelOLE,
+} from 'Config';
 import ManagerInterface, { getFilesURLs, getLinkJira, getFilename, openInNewTab } from 'Utils';
 import styles from './NonExposure.module.css';
 
@@ -40,9 +46,9 @@ export default class NonExposureEdit extends Component {
       level: 0,
       date_begin: Moment(),
       date_end: Moment(),
-      systems: [],
-      subsystems: [],
-      cscs: [],
+      components: [],
+      primary_software_components: ['None'],
+      primary_hardware_components: ['None'],
       salindex: 0,
       user: undefined,
       time_lost: 0,
@@ -51,8 +57,6 @@ export default class NonExposureEdit extends Component {
       jira_issue_title: '',
       jira_issue_id: '',
       file: undefined,
-      fileurl: undefined,
-      filename: undefined,
       urls: [],
       tags: [],
       message_text: '',
@@ -67,15 +71,7 @@ export default class NonExposureEdit extends Component {
 
   constructor(props) {
     super(props);
-    this.id = lodash.uniqueId('nonexposure-edit-');
-    const logEdit = props.logEdit ?? NonExposureEdit.defaultProps.logEdit;
-
-    // Clean null and empty values to avoid API errors
-    Object.keys(logEdit).forEach((key) => {
-      if (logEdit[key] === null || (Array.isArray(logEdit[key]) && logEdit[key].length === 0)) {
-        delete logEdit[key];
-      }
-    });
+    const { logEdit } = props;
 
     this.state = {
       logEdit,
@@ -85,12 +81,8 @@ export default class NonExposureEdit extends Component {
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
-
-    this.multiselectRefs = {
-      systems: React.createRef(),
-      subsystems: React.createRef(),
-      cscs: React.createRef(),
-    };
+    this.multiselectComponentsRef = React.createRef();
+    this.id = lodash.uniqueId('nonexposure-edit-');
   }
 
   getIconLevel(level) {
@@ -100,10 +92,7 @@ export default class NonExposureEdit extends Component {
 
   cleanForm() {
     // Reset multiselects values
-    this.multiselectRefs.systems.current.resetSelectedValues();
-    this.multiselectRefs.subsystems.current.resetSelectedValues();
-    this.multiselectRefs.cscs.current.resetSelectedValues();
-
+    this.multiselectComponentsRef.current.resetSelectedValues();
     this.setState({ logEdit: NonExposureEdit.defaultProps.logEdit });
   }
 
@@ -117,15 +106,11 @@ export default class NonExposureEdit extends Component {
     const payload = { ...this.state.logEdit };
 
     payload['request_type'] = 'narrative';
-    const beginDateISO = this.state.logEdit.date_begin?.toISOString();
-    const endDateISO = this.state.logEdit.date_end?.toISOString();
+
+    const beginDateISO = Moment(this.state.logEdit.date_begin).toISOString();
+    const endDateISO = Moment(this.state.logEdit.date_end).toISOString();
     payload['date_begin'] = beginDateISO.substring(0, beginDateISO.length - 1); // remove Zone due to backend standard
     payload['date_end'] = endDateISO.substring(0, endDateISO.length - 1); // remove Zone due to backend standard
-    payload['tags'] = [
-      ...(payload['systems'] ?? []),
-      ...(payload['subsystems'] ?? []),
-      ...(payload['cscs'] ?? []).map((c) => c.replace(':', '_')),
-    ];
 
     // Clean null and empty values to avoid API errors
     Object.keys(payload).forEach((key) => {
@@ -149,7 +134,7 @@ export default class NonExposureEdit extends Component {
         });
         this.props.save(response);
         this.cleanForm();
-        this.props.back();
+        if (this.props.back) this.props.back();
       });
     }
   }
@@ -302,17 +287,15 @@ export default class NonExposureEdit extends Component {
   }
 
   render() {
-    const { back, isLogCreate, isMenu } = this.props;
+    const { back, isLogCreate, isMenu, view } = this.props;
     const { datesAreValid, savingLog, jiraIssueError } = this.state;
 
-    const view = this.props.view ?? NonExposureEdit.defaultProps.view;
-    const systemOptions = LSST_SYSTEMS;
-    const subsystemOptions = LSST_SUBSYSTEMS;
-    const cscOptions = defaultCSCList.map((csc) => `${csc.name}:${csc.salindex}`);
-
-    // const jiraUrl = getLinkJira(this.state.logEdit.urls);
-    const jiraUrl = 'http://google.cl/';
+    const jiraUrl = getLinkJira(this.state.logEdit.urls);
     const filesUrls = getFilesURLs(this.state.logEdit.urls);
+
+    const componentOptions = OLE_JIRA_COMPONENTS.sort();
+    const primarySoftwareComponentOptions = OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS.sort();
+    const primaryHardwareComponentOptions = OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS.sort();
 
     return (
       <>
@@ -330,11 +313,9 @@ export default class NonExposureEdit extends Component {
         )}
         <form onSubmit={this.handleSubmit}>
           <div className={isMenu ? styles.detailContainerMenu : styles.detailContainer}>
-            {isMenu ? (
-              <></>
-            ) : (
+            {!isMenu && (
               <div className={styles.header}>
-                {this.state.logEdit.id ? <span className={styles.bold}>#{this.state.logEdit.id}</span> : <></>}
+                {this.state.logEdit.id && <span className={styles.bold}>#{this.state.logEdit.id}</span>}
                 {jiraUrl && (
                   <span>
                     <Button
@@ -384,51 +365,46 @@ export default class NonExposureEdit extends Component {
                   </div>
                   <span className={styles.levelIcon}>{this.getIconLevel(this.state.logEdit.level)}</span>
                 </span>
-                <span className={styles.label}>Systems</span>
+                <span className={styles.label}>Components</span>
                 <span className={styles.value}>
                   <Multiselect
-                    innerRef={this.multiselectRefs.systems}
+                    innerRef={this.multiselectComponentsRef}
                     className={styles.select}
-                    options={systemOptions}
-                    selectedValues={this.state.logEdit.systems}
+                    options={componentOptions}
+                    selectedValues={this.state.logEdit.components}
                     onSelect={(selectedOptions) => {
                       this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, systems: selectedOptions },
+                        logEdit: { ...prevState.logEdit, components: selectedOptions },
                       }));
                     }}
-                    placeholder="Select zero or several Systems"
+                    placeholder="Select zero or several components"
                     selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
                   />
                 </span>
-                <span className={styles.label}>Subsystems</span>
+                <span className={styles.label}>Primary Software Component</span>
                 <span className={styles.value}>
-                  <Multiselect
-                    innerRef={this.multiselectRefs.subsystems}
-                    className={styles.select}
-                    options={subsystemOptions}
-                    selectedValues={this.state.logEdit.subsystems}
-                    onSelect={(selectedOptions) => {
+                  <Select
+                    options={primarySoftwareComponentOptions}
+                    option={this.state.logEdit.primary_software_components[0]}
+                    onChange={({ value }) => {
                       this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, subsystems: selectedOptions },
+                        logEdit: { ...prevState.logEdit, primary_software_components: [value] },
                       }));
                     }}
-                    placeholder="Select zero or several Subsystems"
-                    selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
+                    className={styles.select}
                   />
                 </span>
-                <span className={styles.label}>CSCs</span>
-                <span className={[styles.value].join(' ')}>
-                  <Multiselect
-                    innerRef={this.multiselectRefs.cscs}
-                    className={styles.select}
-                    options={cscOptions}
-                    selectedValues={this.state.logEdit.cscs}
-                    onSelect={(selectedOptions) => {
+                <span className={styles.label}>Primary Hardware Component</span>
+                <span className={styles.value}>
+                  <Select
+                    options={primaryHardwareComponentOptions}
+                    option={this.state.logEdit.primary_hardware_components[0]}
+                    onChange={({ value }) => {
                       this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, cscs: selectedOptions },
+                        logEdit: { ...prevState.logEdit, primary_hardware_components: [value] },
                       }));
                     }}
-                    placeholder="Select zero or several CSCs"
+                    className={styles.select}
                   />
                 </span>
 
