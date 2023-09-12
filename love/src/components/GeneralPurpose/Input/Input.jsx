@@ -36,7 +36,7 @@ Input.propTypes = {
   /** Default value */
   defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** Value */
-  defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** Type */
   type: PropTypes.string,
   /** Class name */
