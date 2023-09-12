@@ -209,6 +209,10 @@ export default class MTDome extends Component {
     currentPointingEl: PropTypes.number,
     /** Position computed by the path generator */
     targetPointingEl: PropTypes.number,
+    /** High level state machine state identifier of the MTDome. */
+    mtDomeSummaryState: PropTypes.number,
+    /** High level state machine state identifier of the MTMount. */
+    mtMountSummaryState: PropTypes.number,
   };
 
   static defaultProps = {
@@ -237,6 +241,8 @@ export default class MTDome extends Component {
     height: 350,
     heightLouvers: 400,
     isProjected: true,
+    mtDomeSummaryState: 0,
+    mtMountSummaryState: 0,
   };
 
   constructor(props) {
@@ -534,7 +540,7 @@ export default class MTDome extends Component {
 
     //SummaryPanel
     const trackID = this.props.trackId;
-    const mtdomeSummaryState = this.props.mtdomeSummaryState;
+    const mtDomeSummaryState = this.props.mtDomeSummaryState;
     const modeDomeStatus = this.props.modeDomeStatus;
     const azimuthDomeState = this.props.azimuthDomeState;
     const azimuthDomeTarget = this.props.azimuthDomeTarget;
@@ -542,6 +548,7 @@ export default class MTDome extends Component {
     const elevationDomeState = this.props.elevationDomeState;
     const elevationDomeTarget = this.props.elevationDomeTarget;
     const elevationDomeMotion = this.props.elevationDomeMotion;
+    const mtMountSummaryState = this.props.mtMountSummaryState;
 
     //domeAzimuth
     const positionActualDomeAz = this.props.positionActualDomeAz;
@@ -627,7 +634,8 @@ export default class MTDome extends Component {
             <div className={styles.divSummaryTable}>
               <MTDomeSummaryTable
                 trackID={trackID}
-                mtdomeSummaryState={mtdomeSummaryState}
+                mtDomeSummaryState={mtDomeSummaryState}
+                mtMountSummaryState={mtMountSummaryState}
                 modeDomeStatus={modeDomeStatus}
                 azimuthDomeState={azimuthDomeState}
                 azimuthDomeTarget={azimuthDomeTarget}

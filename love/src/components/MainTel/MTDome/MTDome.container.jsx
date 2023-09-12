@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Dome from './MTDome';
+import MTDome from './MTDome';
 import {
   getDomeStatus,
   getLouversStatus,
@@ -62,7 +62,7 @@ const MTDomeContainer = ({
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
   return (
-    <Dome
+    <MTDome
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
       trackId={trackId}

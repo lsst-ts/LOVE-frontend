@@ -97,9 +97,9 @@ export default class MTDomeSummaryTable extends Component {
         <SummaryPanel className={styles.summaryTable}>
           <Title>Track ID</Title>
           <Value>{trackID?.toString()}</Value>
-          <Title>Dome</Title>
+          <Title>MTDome CSC</Title>
           <Value>
-            <StatusText status={mtdomeStatusStatetoStyle[mtDomeStatus]}>{mtDomeStatus}</StatusText>
+            <StatusText status={summaryStateToStyle[mtDomeStatus]}>{mtDomeStatus}</StatusText>
           </Value>
           <Label>Mode</Label>
           <Value>
@@ -118,7 +118,7 @@ export default class MTDomeSummaryTable extends Component {
             <CurrentTargetValue currentValue={domeActualAz} targetValue={domeCommandedAz} isChanging={true} />
           </Value>
 
-          <Title>Mount</Title>
+          <Title>MTMount CSC</Title>
           <Value>
             <StatusText status={summaryStateToStyle[mtMountStatus]}>{mtMountStatus}</StatusText>
           </Value>
