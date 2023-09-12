@@ -10,17 +10,13 @@ import Label from '../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
 import ProgressBar from '../../../GeneralPurpose/ProgressBar/ProgressBar';
-import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import {
   summaryStateMap,
-  mtdomeStatusStatetoStyle,
   summaryStateToStyle,
   mtDomeModeStateMap,
   mtDomeModeStatetoStyle,
   mtDomeAzimuthEnabledStateMap,
   mtDomeAzimuthEnabledStatetoStyle,
-  mtdomeElevationEnabledStateToMap,
-  mtdomeElevationEnabledStatetoStyle,
   mtdomeMotionStateMap,
   mtdomeMotionStatetoStyle,
   MTMountLimits,
@@ -40,12 +36,6 @@ export default class MTDomeSummaryTable extends Component {
     azimuthDomeMotion: PropTypes.number,
     /** Target position; nan for the crawlAz command */
     azimuthDomeTarget: PropTypes.number,
-    /** Enabled state; an EnabledState enum */
-    elevationDomeState: PropTypes.number,
-    /** The motion state; a MotionState enum */
-    elevationDomeMotion: PropTypes.number,
-    /** Target position; nan for the crawlEl command */
-    elevationDomeTarget: PropTypes.number,
     /** Operational mode; an OperationalMode enum */
     modeDomeStatus: PropTypes.number,
     /** Position measured by the encoders */
@@ -65,8 +55,6 @@ export default class MTDomeSummaryTable extends Component {
     azimuthDomeState: 0,
     azimuthDomeMotion: 0,
     azimuthDomeTarget: 0,
-    elevationDomeState: 0,
-    elevationDomeMotion: 0,
     elevationDomeTarget: 0,
     modeDomeStatus: 0,
     currentPointingAz: 0,
@@ -82,8 +70,6 @@ export default class MTDomeSummaryTable extends Component {
     const modeDomeStatus = mtDomeModeStateMap[this.props.modeDomeStatus];
     const azimuthDomeState = mtDomeAzimuthEnabledStateMap[this.props.azimuthDomeState];
     const azimuthDomeMotion = mtdomeMotionStateMap[this.props.azimuthDomeMotion];
-    const elevationDomeState = mtdomeElevationEnabledStateToMap[this.props.elevationDomeState];
-    const elevationDomeMotion = mtdomeMotionStateMap[this.props.elevationDomeMotion];
     const mtMountStatus = summaryStateMap[this.props.mtMountSummaryState];
 
     const domeActualAz = this.props.positionActualDomeAz;

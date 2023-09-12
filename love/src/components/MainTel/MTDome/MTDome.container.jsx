@@ -48,9 +48,6 @@ const MTDomeContainer = ({
   azimuthDomeState,
   azimuthDomeMotion,
   azimuthDomeTarget,
-  elevationDomeState,
-  elevationDomeMotion,
-  elevationDomeTarget,
   modeDomeStatus,
   currentPointingAz,
   targetPointingAz,
@@ -79,9 +76,6 @@ const MTDomeContainer = ({
       azimuthDomeState={azimuthDomeState}
       azimuthDomeMotion={azimuthDomeMotion}
       azimuthDomeTarget={azimuthDomeTarget}
-      elevationDomeState={elevationDomeState}
-      elevationDomeMotion={elevationDomeMotion}
-      elevationDomeTarget={elevationDomeTarget}
       modeDomeStatus={modeDomeStatus}
       currentPointingAz={currentPointingAz}
       targetPointingAz={targetPointingAz}
@@ -119,9 +113,6 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTDome-0-azEnabled',
     'event-MTDome-0-azMotion',
     'event-MTDome-0-azTarget',
-    'event-MTDome-0-elEnabled',
-    'event-MTDome-0-elMotion',
-    'event-MTDome-0-elTarget',
     'event-MTDome-0-operationalMode',
     'event-MTMount-0-target',
     'event-MTDome-0-summaryState',
