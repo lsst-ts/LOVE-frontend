@@ -50,6 +50,12 @@
   border: 1px solid var(--secondary-font-dimmed-color);
 }
 
+.lastUpdated {
+  text-align: left;
+  margin-bottom: 0.5em;
+  color: var(--primary-font-color);
+}
+
 .bold {
   font-weight: bold;
   color: var(--secondary-font-color);
@@ -64,7 +70,6 @@
 
 .value {
   text-align: left;
-  margin-left: 10px;
 }
 
 .icon {
@@ -105,7 +110,7 @@
 }
 
 .detailContainerMenu {
-  width: 26em;
+  padding: var(--content-padding);
 }
 
 .header {
@@ -124,13 +129,12 @@
 }
 
 .headerMenu {
-  display: flex;
-  flex-flow: column;
-  flex-direction: column;
-  row-gap: 10px;
-  padding-bottom: 7px;
-  margin-top: 5px;
-  margin-right: 5px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-auto-rows: max-content;
+  grid-row-gap: 0.5em;
+  align-items: center;
+  margin-bottom: var(--content-padding);
 }
 
 .body {
@@ -156,7 +160,7 @@
 
 .inline {
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
   column-gap: 10px;
 }
 
@@ -189,10 +193,7 @@
 }
 
 .contentMenu {
-  flex-wrap: wrap;
-  margin-top: 10px;
-  margin-right: 10px;
-  margin-left: 10px;
+  margin-bottom: var(--content-padding);
 }
 
 .contentLeft {
@@ -210,31 +211,16 @@
   align-content: center;
 }
 
-.content textarea {
-  width: 100%;
-  height: 8em;
-  resize: none;
-  background: var(--secondary-background-dimmed-color);
-  color: var(--base-font-color);
-  font-size: 1em;
-  border-radius: 5px;
-  box-sizing: border-box;
-  border-radius: 3px;
-  padding: 0.4em;
-  font-family: inherit;
-  font-size: inherit;
-  border: 1px solid var(--secondary-font-dimmed-color);
-  color: var(--base-font-color);
-}
-
 .content textarea:focus {
   outline: none;
   border: 1px solid var(--secondary-font-color);
 }
 
-.contentMenu textarea {
+.contentMenu textarea,
+.content textarea {
   width: 100%;
-  height: 8em;
+  min-width: 30em;
+  height: 12em;
   resize: none;
   background: var(--secondary-background-dimmed-color);
   color: var(--base-font-color);
@@ -261,9 +247,12 @@
   margin-left: 15px;
 }
 
+.detailContainerMenu .label {
+  margin-left: 0px;
+}
+
 .value {
   text-align: left;
-  margin-left: 10px;
 }
 
 .footer {
@@ -281,8 +270,11 @@
   flex-direction: column;
   row-gap: 10px;
   padding-top: var(--content-padding);
-  margin: var(--small-padding) var(--content-padding);
   border-top: 2px solid var(--secondary-font-color);
+}
+
+.footerMenu button {
+  margin: 0;
 }
 
 .footerRight {
@@ -337,7 +329,7 @@
 }
 
 .rangeDateOnly {
-  width: 11ch;
+  width: 15ch;
 }
 
 th.tableHead {
@@ -417,13 +409,28 @@ th.tableHead {
   align-items: center;
 }
 
-.spinnerIcon {
+.refreshDataBtn {
+  display: flex;
+  align-items: center;
+  padding: 0.25em;
+}
+
+.spinnerIcon,
+.refreshIcon {
   height: var(--font-size-small);
   width: var(--font-size-small);
 }
 
-.refreshDataBtn {
-  height: 2.4em;
+.exposuresSelect {
+  display: flex;
+}
+
+.exposuresSelect :first-child {
+  flex-grow: 1;
+}
+
+.dateTimeRangeStyle :global(.rdtPicker) {
+  left: -176px;
 }
 
 .footer .attachedFiles,
@@ -473,6 +480,10 @@ th.tableHead {
   white-space: nowrap;
 }
 
+.footerMenu .jira {
+  flex-wrap: wrap;
+}
+
 .footer .flag .label,
 .footerMenu .flag .label,
 .footer .jira .label,
@@ -485,4 +496,13 @@ th.tableHead {
 .footer .jira :nth-child(4),
 .footerMenu .jira :nth-child(4) {
   flex-grow: 1;
+}
+
+.inputError {
+  margin-top: var(--small-padding);
+  color: var(--status-alert-color);
+}
+
+.obsIdSelector {
+  display: flex;
 }

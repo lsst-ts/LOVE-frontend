@@ -13,7 +13,7 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
-import { exposureFlagStateToStyle, ISO_INTEGER_DATE_FORMAT } from 'Config';
+import { exposureFlagStateToStyle, DATE_TIME_FORMAT, ISO_INTEGER_DATE_FORMAT, LOG_REFRESH_INTERVAL_MS } from 'Config';
 import ManagerInterface from 'Utils';
 import ExposureAdd from './ExposureAdd';
 import ExposureDetail from './ExposureDetail';
@@ -83,6 +83,7 @@ export default class Exposure extends Component {
       modeAdd: false,
       updatingExposures: false,
       updatingLogs: false,
+      lastUpdated: null,
       selected: {},
       selectedMessages: [],
       exposurelogs: [],
@@ -91,6 +92,8 @@ export default class Exposure extends Component {
       messages: [],
       exposureFlags: {},
     };
+
+    this.queryExposuresInterval = null;
   }
 
   /**
@@ -281,13 +284,24 @@ export default class Exposure extends Component {
         exposurelogs: exposures,
         exposureTypes: Array.from(exposureTypes),
         updatingExposures: false,
+        updatingLogs: false,
+        lastUpdated: moment(),
       });
     });
   }
 
+  setQueryExposuresInterval() {
+    this.queryExposuresInterval = setInterval(() => {
+      this.queryExposures();
+    }, LOG_REFRESH_INTERVAL_MS);
+  }
+
   componentDidMount() {
     const { selectedInstrument } = this.props;
-    if (selectedInstrument) this.queryExposures();
+    if (selectedInstrument) {
+      this.queryExposures();
+      this.setQueryExposuresInterval();
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -299,7 +313,14 @@ export default class Exposure extends Component {
         !Moment(this.props.selectedDayExposureEnd).isSame(prevProps.selectedDayExposureEnd))
     ) {
       this.queryExposures();
+      if (!this.queryExposuresInterval) {
+        this.setQueryExposuresInterval();
+      }
     }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.queryExposuresInterval);
   }
 
   render() {
@@ -382,7 +403,6 @@ export default class Exposure extends Component {
         <div className={styles.filters}>
           <Button disabled={updatingExposures} onClick={() => this.queryExposures()}>
             Refresh data
-            {updatingExposures && <SpinnerIcon className={styles.spinnerIcon} />}
           </Button>
           <Select
             options={instrumentsOptions}
@@ -425,6 +445,10 @@ export default class Exposure extends Component {
               </Hoverable>
             </CSVLink>
           </div>
+        </div>
+        <div className={styles.lastUpdated}>
+          Last updated: {this.state.lastUpdated ? this.state.lastUpdated.format(DATE_TIME_FORMAT) : ''}
+          {updatingExposures && <SpinnerIcon className={styles.spinnerIcon} />}
         </div>
         <SimpleTable headers={headers} data={filteredData} />
       </div>

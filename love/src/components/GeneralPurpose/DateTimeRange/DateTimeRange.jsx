@@ -23,6 +23,16 @@ const DateTimeRange = ({
     onChange(dateEnd, 'end');
   }, []);
 
+  // Effect used to update startDate and endDate
+  useEffect(() => {
+    if (startDate) {
+      setDateStart(startDate);
+    }
+    if (endDate) {
+      setDateEnd(endDate);
+    }
+  }, [startDate, endDate]);
+
   const handleChangeStart = useCallback((changeEvent) => {
     setDateStart(changeEvent);
     onChange(changeEvent, 'start');

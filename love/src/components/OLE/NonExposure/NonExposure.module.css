@@ -3,6 +3,7 @@
   font-weight: bold;
   text-align: left;
   font-size: 15px;
+  margin-bottom: var(--small-padding);
 }
 
 .returnToLogs {
@@ -54,9 +55,7 @@
 }
 
 .contentMenu {
-  flex-wrap: wrap;
-  margin-top: 15px;
-  margin-right: 10px;
+  padding: var(--content-padding) calc(1.5 * var(--content-padding));
 }
 
 .twoColumn {
@@ -71,6 +70,7 @@
   grid-auto-rows: max-content;
   grid-row-gap: 1em;
   padding-top: 15px;
+  margin-left: var(--content-padding);
 }
 
 .description {
@@ -157,10 +157,8 @@
 
 .filters {
   display: flex;
-  padding: 0.5em 0;
   margin-bottom: 0.5em;
   align-items: center;
-  flex-wrap: wrap;
 }
 
 .filters > * {
@@ -184,6 +182,12 @@
   border: 1px solid var(--secondary-font-dimmed-color);
 }
 
+.lastUpdated {
+  text-align: left;
+  margin-bottom: 0.5em;
+  color: var(--primary-font-color);
+}
+
 .floatRight {
   float: right;
   margin: 3px;
@@ -202,12 +206,10 @@
   font-weight: bold;
   color: var(--secondary-font-color);
   text-align: left;
-  margin-left: 15px;
 }
 
 .value {
   text-align: left;
-  margin-left: 10px;
 }
 
 .contentLeft {
@@ -216,24 +218,33 @@
   grid-auto-rows: max-content;
   grid-row-gap: 0.5em;
   align-items: center;
+  padding: 0 var(--content-padding);
+}
+
+.contentMenu .contentLeft {
+  padding: 0;
+  margin-bottom: var(--content-padding);
 }
 
 .contentRight {
-  margin: var(--content-padding) 0 0 var(--content-padding);
+  padding: 0 var(--content-padding);
+}
+
+.contentMenu .contentRight {
+  padding: 0;
 }
 
 .contentRight textarea {
   width: 100%;
+  min-width: 30em;
   height: 12em;
   resize: none;
   background: var(--secondary-background-dimmed-color);
   color: var(--base-font-color);
   font-size: 1em;
-  padding: 0.5em;
   border-radius: 5px;
   box-sizing: border-box;
   border-radius: 3px;
-  padding: 0.4em;
   font-family: inherit;
   font-size: inherit;
   border: 1px solid var(--secondary-font-dimmed-color);
@@ -251,7 +262,7 @@
 
 .inline {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(2, 2fr 3fr);
   row-gap: 5px;
   grid-auto-rows: auto;
 }
@@ -302,6 +313,11 @@
   display: flex;
   margin-right: 5px;
   align-items: center;
+  text-align: left;
+  min-width: 24ch;
+}
+
+.footerMenu .checkboxText {
   flex-wrap: wrap;
 }
 
@@ -331,6 +347,10 @@
 
 .dateTimeRangeStyle :global(.rdtPicker) {
   left: -176px;
+}
+
+.dateTimeSingularStyle {
+  width: 14em;
 }
 
 th.tableHead {
@@ -377,6 +397,23 @@ th.tableHead {
   color: var(--status-alert-color);
 }
 
+.incidentTimeTypeContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--small-padding);
+}
+
+.refreshDateIcon {
+  display: flex;
+  align-items: center;
+  padding: 0.25em;
+  margin-left: var(--small-padding);
+}
+.refreshDateIcon > * {
+  width: 1.5em;
+  height: 1.5em;
+}
+
 .footer .attachedFiles {
   display: flex;
   align-items: center;
@@ -404,4 +441,14 @@ th.tableHead {
 .footer .attachedFiles .label {
   margin-left: 0;
   margin-right: var(--small-padding);
+}
+
+.footer .toAttachFiles,
+.footerMenu .toAttachFiles {
+  margin-bottom: var(--small-padding);
+}
+
+.footer .jira,
+.footerMenu .jira {
+  white-space: nowrap;
 }

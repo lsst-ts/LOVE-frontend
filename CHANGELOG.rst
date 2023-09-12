@@ -2,6 +2,12 @@
 Version History
 ===============
 
+v5.24.11
+--------
+
+* Update narrative log to use new jira fields `<https://github.com/lsst-ts/LOVE-frontend/pull/517>`_
+* OLE layout improvements `<https://github.com/lsst-ts/LOVE-frontend/pull/503>`_
+
 v5.24.10
 ---------
 
