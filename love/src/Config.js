@@ -354,6 +354,8 @@ export const iconLevelOLE = {
 };
 
 // jira OBS project components field
+// Should match keys of mappings at
+// https://github.com/lsst-ts/LOVE-manager/blob/develop/manager/manager/utils.py
 export const OLE_JIRA_COMPONENTS = [
   'AuxTel',
   'Calibrations',
@@ -367,6 +369,8 @@ export const OLE_JIRA_COMPONENTS = [
 ];
 
 // jira OBS project customfield_17204
+// Should match keys of mappings at
+// https://github.com/lsst-ts/LOVE-manager/blob/develop/manager/manager/utils.py
 export const OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS = [
   'None',
   'CSC level',
@@ -378,6 +382,8 @@ export const OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS = [
 ];
 
 // jira OBS project customfield_17205
+// Should match keys of mappings at
+// https://github.com/lsst-ts/LOVE-manager/blob/develop/manager/manager/utils.py
 export const OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS = [
   'None',
   'Mount',
