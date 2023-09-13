@@ -5,6 +5,7 @@ Version History
 v5.25.0
 --------
 
+* ESS Implementation `<https://github.com/lsst-ts/LOVE-frontend/pull/506>`_
 * CSC Summary State into MTDome ATDome and TMA Component `<https://github.com/lsst-ts/LOVE-frontend/pull/519>`_
 
 v5.24.11
