@@ -9,6 +9,8 @@ import {
   mainDoorStateMap,
   mountTrackingStateMap,
   stateToStyleDomeAndMount,
+  summaryStateToStyle,
+  summaryStateMap,
 } from '../../../../Config';
 import Limits from 'components/GeneralPurpose/Limits/Limits';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
@@ -43,6 +45,8 @@ export default class DomeSummaryTable extends Component {
     minNas1: PropTypes.number,
     minNas2: PropTypes.number,
     minM3: PropTypes.number,
+    atDomeSummaryState: PropTypes.number,
+    ATMCSSummaryState: PropTypes.number,
   };
 
   static defaultProps = {};
@@ -79,6 +83,8 @@ export default class DomeSummaryTable extends Component {
       minNas1,
       minNas2,
       minM3,
+      atDomeSummaryState,
+      ATMCSSummaryState,
     } = this.props;
 
     const azimuthStateValue = domeAzimuthStateMap[this.props.azimuthState];
@@ -111,6 +117,9 @@ export default class DomeSummaryTable extends Component {
             maxRot: maxNas2,
           };
 
+    const atDomeSummaryStateValue = summaryStateMap[atDomeSummaryState];
+    const ATMCSSummaryStateValue = summaryStateMap[ATMCSSummaryState];
+
     let domeInPositionLabel = 'UNKNOWN';
     if (domeInPositionValue !== 0) domeInPositionLabel = domeInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
     let mountInPositionLabel = 'UNKNOWN';
@@ -121,7 +130,13 @@ export default class DomeSummaryTable extends Component {
         <Title>Track ID</Title>
         <Value>{this.props.trackID?.toString()}</Value>
         {/* Dome */}
-        <Title>Dome</Title>
+        <Title>ATDome CSC</Title>
+        <Value>
+          <StatusText title={atDomeSummaryStateValue} status={summaryStateToStyle[atDomeSummaryStateValue]} small>
+            {atDomeSummaryStateValue}
+          </StatusText>
+        </Value>
+        <Label>Dome</Label>
         <Value>
           <StatusText title={domeInPositionValue} status={stateToStyleDome[domeInPositionLabel]} small>
             {domeInPositionLabel}
@@ -167,7 +182,13 @@ export default class DomeSummaryTable extends Component {
           </span>
         </span> */}
         {/* Mount */}
-        <Title>Mount</Title>
+        <Title>ATMCS CSC</Title>
+        <Value>
+          <StatusText title={ATMCSSummaryStateValue} status={summaryStateToStyle[ATMCSSummaryStateValue]} small>
+            {ATMCSSummaryStateValue}
+          </StatusText>
+        </Value>
+        <Label>Mount</Label>
         <Value>
           <StatusText title={mountInPositionValue} status={stateToStyleMount[mountInPositionLabel]} small>
             {mountInPositionLabel}

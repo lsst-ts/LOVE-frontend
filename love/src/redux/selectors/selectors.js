@@ -504,6 +504,7 @@ export const getDomeState = (state) => {
     'event-ATDome-0-dropoutDoorState',
     'event-ATDome-0-mainDoorState',
     'event-ATDome-0-allAxesInPosition',
+    'event-ATDome-0-summaryState',
   ];
   const domeData = getStreamsData(state, domeSubscriptions);
   return {
@@ -515,6 +516,7 @@ export const getDomeState = (state) => {
     domeInPosition: domeData['event-ATDome-0-allAxesInPosition']?.[0].inPosition?.value ?? 0,
     dropoutDoorState: domeData['event-ATDome-0-dropoutDoorState']?.[0].state?.value ?? 0,
     mainDoorState: domeData['event-ATDome-0-mainDoorState']?.[0].state?.value ?? 0,
+    atDomeSummaryState: domeData['event-ATDome-0-summaryState']?.[0].summaryState?.value ?? 0,
   };
 };
 
@@ -528,6 +530,7 @@ export const getATMCSState = (state) => {
     'event-ATMCS-0-m3State',
     'event-ATMCS-0-positionLimits',
     'event-ATPtg-1-timesOfLimits',
+    'event-ATMCS-0-summaryState',
   ];
   const data = getStreamsData(state, subscriptions);
   const [minEl, minAz, minNas1, minNas2, minM3] = data['event-ATMCS-0-positionLimits']?.[0].minimum?.value ?? [
@@ -539,6 +542,7 @@ export const getATMCSState = (state) => {
 
   return {
     atMountState: data['event-ATMCS-0-atMountState']?.[0].state?.value ?? 0,
+    ATMCSSummaryState: data['event-ATMCS-0-summaryState']?.[0].summaryState?.value ?? 0,
     mountInPosition: data['event-ATMCS-0-allAxesInPosition']?.[0].inPosition?.value ?? false,
     trackID: data['event-ATMCS-0-target']?.[0].trackId?.value ?? 0,
     targetAzimuth: data['event-ATMCS-0-target']?.[0].azimuth?.value ?? 0,
@@ -1083,26 +1087,22 @@ export const getLouversStatus = (state) => {
 export const getDomeStatus = (state) => {
   const subscriptions = [
     'event-MTMount-0-target',
+    'event-MTMount-0-summaryState',
     'event-MTDome-0-summaryState',
     'event-MTDome-0-azEnabled',
     'event-MTDome-0-azMotion',
     'event-MTDome-0-azTarget',
-    'event-MTDome-0-elEnabled',
-    'event-MTDome-0-elMotion',
-    'event-MTDome-0-elTarget',
     'event-MTDome-0-operationalMode',
   ];
   const domeStatus = getStreamsData(state, subscriptions);
   return {
     trackId: domeStatus['event-MTMount-0-target']?.[0]?.trackId?.value ?? 0,
-    mtdomeSummaryState: domeStatus['event-MTDome-0-summaryState']?.[0]?.summaryState?.value ?? 0,
+    mtDomeSummaryState: domeStatus['event-MTDome-0-summaryState']?.[0]?.summaryState?.value ?? 0,
     azimuthDomeState: domeStatus['event-MTDome-0-azEnabled']?.[0]?.state?.value ?? 0,
     azimuthDomeMotion: domeStatus['event-MTDome-0-azMotion']?.[0]?.state?.value ?? 0,
     azimuthDomeTarget: domeStatus['event-MTDome-0-azTarget']?.[0]?.position?.value ?? 0,
-    elevationDomeState: domeStatus['event-MTDome-0-elEnabled']?.[0]?.state?.value ?? 0,
-    elevationDomeMotion: domeStatus['event-MTDome-0-elMotion']?.[0]?.state?.value ?? 0,
-    elevationDomeTarget: domeStatus['event-MTDome-0-elTarget']?.[0]?.position?.value ?? 0,
     modeDomeStatus: domeStatus['event-MTDome-0-operationalMode']?.[0]?.operationalMode?.value ?? 0,
+    mtMountSummaryState: domeStatus['event-MTMount-0-summaryState']?.[0]?.summaryState?.value ?? 0,
   };
 };
 
@@ -1117,6 +1117,7 @@ export const getTMASummary = (state) => {
     'event-MTMount-0-commander',
     'event-MTMount-0-connected',
     'event-MTMount-0-balanceSystemState',
+    'event-MTMount-0-summaryState',
   ];
   const summaryData = getStreamsData(state, subscriptions);
   return {
@@ -1124,6 +1125,7 @@ export const getTMASummary = (state) => {
     commander: summaryData['event-MTMount-0-commander']?.[0]?.commander?.value ?? 0,
     connected: summaryData['event-MTMount-0-connected']?.[0]?.connected?.value ?? undefined,
     balancing: summaryData['event-MTMount-0-balanceSystemState']?.[0]?.powerState?.value ?? 15,
+    summaryState: summaryData['event-MTMount-0-summaryState']?.[0]?.summaryState?.value ?? 0,
   };
 };
 

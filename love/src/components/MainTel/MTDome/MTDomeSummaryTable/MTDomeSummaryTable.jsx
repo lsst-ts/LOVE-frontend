@@ -10,15 +10,13 @@ import Label from '../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
 import ProgressBar from '../../../GeneralPurpose/ProgressBar/ProgressBar';
-import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import {
-  mtdomeStatusStatetoStyle,
+  summaryStateMap,
+  summaryStateToStyle,
   mtDomeModeStateMap,
   mtDomeModeStatetoStyle,
   mtDomeAzimuthEnabledStateMap,
   mtDomeAzimuthEnabledStatetoStyle,
-  mtdomeElevationEnabledStateToMap,
-  mtdomeElevationEnabledStatetoStyle,
   mtdomeMotionStateMap,
   mtdomeMotionStatetoStyle,
   MTMountLimits,
@@ -29,19 +27,15 @@ export default class MTDomeSummaryTable extends Component {
     /** Unique target identifier. Echoed from the trackTarget command */
     trackId: PropTypes.number,
     /** High level state machine state identifier */
-    mtdomeSummaryState: PropTypes.number,
+    mtDomeSummaryState: PropTypes.number,
+    /** High level state machine state identifier */
+    mtMountSummaryState: PropTypes.number,
     /** Enabled state; an EnabledState enum */
     azimuthDomeState: PropTypes.number,
     /** The motion state; a MotionState enum */
     azimuthDomeMotion: PropTypes.number,
     /** Target position; nan for the crawlAz command */
     azimuthDomeTarget: PropTypes.number,
-    /** Enabled state; an EnabledState enum */
-    elevationDomeState: PropTypes.number,
-    /** The motion state; a MotionState enum */
-    elevationDomeMotion: PropTypes.number,
-    /** Target position; nan for the crawlEl command */
-    elevationDomeTarget: PropTypes.number,
     /** Operational mode; an OperationalMode enum */
     modeDomeStatus: PropTypes.number,
     /** Position measured by the encoders */
@@ -56,12 +50,11 @@ export default class MTDomeSummaryTable extends Component {
 
   static defaultProps = {
     trackId: 0,
-    mtdomeSummaryState: 0,
+    mtDomeSummaryState: 0,
+    mtMountSummaryState: 0,
     azimuthDomeState: 0,
     azimuthDomeMotion: 0,
     azimuthDomeTarget: 0,
-    elevationDomeState: 0,
-    elevationDomeMotion: 0,
     elevationDomeTarget: 0,
     modeDomeStatus: 0,
     currentPointingAz: 0,
@@ -72,12 +65,11 @@ export default class MTDomeSummaryTable extends Component {
 
   render() {
     const trackID = this.props.trackID;
-    const domeStatus = CSCDetail.states[this.props.mtdomeSummaryState];
+    const mtDomeStatus = summaryStateMap[this.props.mtDomeSummaryState];
     const modeDomeStatus = mtDomeModeStateMap[this.props.modeDomeStatus];
     const azimuthDomeState = mtDomeAzimuthEnabledStateMap[this.props.azimuthDomeState];
     const azimuthDomeMotion = mtdomeMotionStateMap[this.props.azimuthDomeMotion];
-    const elevationDomeState = mtdomeElevationEnabledStateToMap[this.props.elevationDomeState];
-    const elevationDomeMotion = mtdomeMotionStateMap[this.props.elevationDomeMotion];
+    const mtMountStatus = summaryStateMap[this.props.mtMountSummaryState];
 
     const domeActualAz = this.props.positionActualDomeAz;
     const domeCommandedAz = this.props.positionCommandedDomeAz;
@@ -90,9 +82,9 @@ export default class MTDomeSummaryTable extends Component {
         <SummaryPanel className={styles.summaryTable}>
           <Title>Track ID</Title>
           <Value>{trackID?.toString()}</Value>
-          <Title>Dome</Title>
+          <Title>MTDome CSC</Title>
           <Value>
-            <span className={[domeStatus.class, styles.summaryState].join(' ')}>{domeStatus.name}</span>
+            <StatusText status={summaryStateToStyle[mtDomeStatus]}>{mtDomeStatus}</StatusText>
           </Value>
           <Label>Mode</Label>
           <Value>
@@ -111,10 +103,9 @@ export default class MTDomeSummaryTable extends Component {
             <CurrentTargetValue currentValue={domeActualAz} targetValue={domeCommandedAz} isChanging={true} />
           </Value>
 
-          <Title>Mount</Title>
+          <Title>MTMount CSC</Title>
           <Value>
-            <span className={[domeStatus.class, styles.summaryState].join(' ')}>{domeStatus.name}</span>
-            {/* TODO: insert mount values, same as ATDome */}
+            <StatusText status={summaryStateToStyle[mtMountStatus]}>{mtMountStatus}</StatusText>
           </Value>
           <Label>Elevation</Label>
           <Value>

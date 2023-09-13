@@ -185,20 +185,14 @@ export default class MTDome extends Component {
     commandedPositionLouvers: PropTypes.array,
     /** Unique target identifier. Echoed from the trackTarget command */
     trackId: PropTypes.number,
-    /** High level state machine state identifier */
-    mtdomeSummaryState: PropTypes.number,
+    /** High level state machine state identifier of the MTDome. */
+    mtDomeSummaryState: PropTypes.number,
     /** Enabled state; an EnabledState enum */
     azimuthDomeState: PropTypes.number,
     /** The motion state; a MotionState enum */
     azimuthDomeMotion: PropTypes.number,
     /** Target position; nan for the crawlAz command */
     azimuthDomeTarget: PropTypes.number,
-    /** Enabled state; an EnabledState enum */
-    elevationDomeState: PropTypes.number,
-    /** The motion state; a MotionState enum */
-    elevationDomeMotion: PropTypes.number,
-    /** Target position; nan for the crawlEl command */
-    elevationDomeTarget: PropTypes.number,
     /** Operational mode; an OperationalMode enum */
     modeDomeStatus: PropTypes.number,
     /** Position measured by the encoders */
@@ -209,6 +203,8 @@ export default class MTDome extends Component {
     currentPointingEl: PropTypes.number,
     /** Position computed by the path generator */
     targetPointingEl: PropTypes.number,
+    /** High level state machine state identifier of the MTMount. */
+    mtMountSummaryState: PropTypes.number,
   };
 
   static defaultProps = {
@@ -225,9 +221,6 @@ export default class MTDome extends Component {
     azimuthDomeState: 0,
     azimuthDomeMotion: 0,
     azimuthDomeTarget: 0,
-    elevationDomeState: 0,
-    elevationDomeMotion: 0,
-    elevationDomeTarget: 0,
     modeDomeStatus: 0,
     currentPointingAz: 0,
     targetPointingAz: 0,
@@ -237,6 +230,8 @@ export default class MTDome extends Component {
     height: 350,
     heightLouvers: 400,
     isProjected: true,
+    mtDomeSummaryState: 0,
+    mtMountSummaryState: 0,
   };
 
   constructor(props) {
@@ -534,14 +529,12 @@ export default class MTDome extends Component {
 
     //SummaryPanel
     const trackID = this.props.trackId;
-    const mtdomeSummaryState = this.props.mtdomeSummaryState;
+    const mtDomeSummaryState = this.props.mtDomeSummaryState;
     const modeDomeStatus = this.props.modeDomeStatus;
     const azimuthDomeState = this.props.azimuthDomeState;
     const azimuthDomeTarget = this.props.azimuthDomeTarget;
     const azimuthDomeMotion = this.props.azimuthDomeMotion;
-    const elevationDomeState = this.props.elevationDomeState;
-    const elevationDomeTarget = this.props.elevationDomeTarget;
-    const elevationDomeMotion = this.props.elevationDomeMotion;
+    const mtMountSummaryState = this.props.mtMountSummaryState;
 
     //domeAzimuth
     const positionActualDomeAz = this.props.positionActualDomeAz;
@@ -627,14 +620,12 @@ export default class MTDome extends Component {
             <div className={styles.divSummaryTable}>
               <MTDomeSummaryTable
                 trackID={trackID}
-                mtdomeSummaryState={mtdomeSummaryState}
+                mtDomeSummaryState={mtDomeSummaryState}
+                mtMountSummaryState={mtMountSummaryState}
                 modeDomeStatus={modeDomeStatus}
                 azimuthDomeState={azimuthDomeState}
                 azimuthDomeTarget={azimuthDomeTarget}
                 azimuthDomeMotion={azimuthDomeMotion}
-                elevationDomeState={elevationDomeState}
-                elevationDomeTarget={elevationDomeTarget}
-                elevationDomeMotion={elevationDomeMotion}
                 positionActualDomeAz={positionActualDomeAz}
                 positionCommandedDomeAz={positionCommandedDomeAz}
                 positionActualLightWindScreen={positionActualLightWindScreen}
