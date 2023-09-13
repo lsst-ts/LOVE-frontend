@@ -1,0 +1,215 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import * as d3 from 'd3';
+import { uniqueId } from 'lodash';
+import { defaultNumberFormatter } from 'Utils';
+import styles from './Gradiant.module.css';
+
+export default class Gradiant extends Component {
+  static propTypes = {
+    /** Array for the identify of the position in array with an index */
+    sensorReferenceId: PropTypes.arrayOf(PropTypes.number),
+    /** Thermal status response data. Absolute temperature. */
+    absoluteGradiant: PropTypes.arrayOf(PropTypes.number),
+    /** Id of sensor selected */
+    selectedId: PropTypes.number,
+    /** Applied setpoint. */
+    setpoint: PropTypes.number,
+    /** Number of the minimum force limit, used for the gradiant color */
+    minGradiantLimit: PropTypes.number,
+    /** Number of the maximum force limit, used for the gradiant color */
+    maxGradiantLimit: PropTypes.number,
+    option: PropTypes.string,
+  };
+
+  static defaultProps = {
+    sensorReferenceId: [],
+    absoluteGradiant: [],
+    selectedId: undefined,
+    setpoint: 0,
+    minGradiantLimit: -6000,
+    maxGradiantLimit: 6000,
+    option: 'temperature',
+  };
+
+  static COLOURS_INV = [
+    '#2c7bb6',
+    '#00a6ca',
+    '#00ccbc',
+    '#90eb9d',
+    '#ffff8c',
+    '#f9d057',
+    '#f29e2e',
+    '#e76818',
+    '#d7191c',
+  ];
+  static COLOURS = ['#d7191c', '#e76818', '#f29e2e', '#f9d057', '#ffff8c', '#90eb9d', '#00ccbc', '#00a6ca', '#2c7bb6'];
+
+  static COLOUR_RANGE = [...d3.range(0, 1, 1.0 / (Gradiant.COLOURS.length - 1)), 1];
+
+  static COLOR_SCALE = d3
+    .scaleLinear()
+    .domain(Gradiant.COLOUR_RANGE)
+    .range(Gradiant.COLOURS)
+    .interpolate(d3.interpolateHcl);
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      width: 350,
+    };
+    this.uniqueColorScale = uniqueId('ess-maintel-temp-gradient-color-scale-');
+    this.uniqueTempGradient = uniqueId('ess-maintel-temp-gradient-');
+  }
+
+  getUnit() {
+    return {
+      temperature: 'C°',
+      relativeHumidity: '%',
+      airFlow: 'm/s',
+      airTurbulence: 'm/s',
+    }[this.props.option ?? 'temperature'];
+  }
+
+
+  getSensor = (id) => {
+    if (id === 0 || id === null || id === undefined) return { id: undefined };
+    const { sensorReferenceId, absoluteGradiant } = this.props;
+    const sensorIndex = sensorReferenceId.indexOf(id);
+
+    const sensor = {
+      id: `${String(id).padStart(3, '0')}`,
+      absolute: absoluteGradiant[sensorIndex] ?? 0,
+      unit: this.props.option
+    };
+    return sensor;
+  };
+
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.absoluteGradiant !== this.props.absoluteGradiant
+    ) {
+      this.createColorScale();
+      const sensor = this.getSensor(this.props.selectedId ?? Gradiant.defaultProps.selectedId);
+      this.setGradiant(sensor, this.props.minGradiantLimit, this.maxGradiantLimit);
+    }
+
+    if (prevProps.selectedId !== this.props.selectedId) {
+      const sensor = this.getSensor(this.props.selectedId ?? Gradiant.defaultProps.selectedId);
+      this.setGradiant(sensor, this.props.minGradiantLimit, this.maxGradiantLimit);
+    }
+  }
+
+  createColorScale = () => {
+    const height = 40;
+    const width = this.state.width;
+
+    // Create the gradient
+    const svg = d3.select(`#${this.uniqueColorScale} svg`);
+    const temperatureGradientRect = d3.select(`#${this.uniqueColorScale} svg #${this.uniqueForceGradient}-rect`);
+
+    if (temperatureGradientRect.empty()) {
+      svg.attr('width', width).attr('height', height);
+      svg
+        .append('defs')
+        .append('linearGradient')
+        .attr('id', `${this.uniqueTempGradient}`)
+        .attr('x1', '100%')
+        .attr('y1', '0%')
+        .attr('x2', '0%')
+        .attr('y2', '0%')
+        .selectAll('stop')
+        .data(Gradiant.COLOURS)
+        .enter()
+        .append('stop')
+        .attr('offset', (d, i) => i / (Gradiant.COLOR_SCALE.range().length - 1))
+        .attr('stop-color', (d) => d);
+
+      svg
+        .append('rect')
+        .attr('id', `${this.uniqueTempGradient}-rect`)
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('rx', 0)
+        .attr('ry', 0)
+        .attr('width', width)
+        .attr('height', 40)
+        .style('fill', `url(#${this.uniqueTempGradient})`);
+    }
+  };
+
+  static getGradiantPositionX(value, min, max, width) {
+    const lerp = (x, y, a) => x * (1 - a) + y * a;
+    const clamp = (a, _min = 0, _max = 1) => Math.min(_max, Math.max(_min, a));
+    const invlerp = (x, y, a) => clamp((a - x) / (y - x));
+    const range = (x1, y1, x2, y2, a) => lerp(x2, y2, invlerp(x1, y1, a));
+    return range(min, max, 0, width, value);
+  }
+
+  setGradiant = (sensor) => {
+    const { minGradiantLimit, maxGradiantLimit, setpoint, showDifferentialTemp } = this.props;
+
+    const svg = d3.select(`#${this.uniqueColorScale} svg`);
+    const absoluteText = d3.select(`#${this.uniqueColorScale} svg #absolute-text`);
+    const absoluteLine = d3.select(`#${this.uniqueColorScale} svg #absolute-line`);
+
+    const absoluteGradiantX = Gradiant.getGradiantPositionX(
+      sensor.absolute,
+      minGradiantLimit,
+      maxGradiantLimit,
+      this.state.width,
+    );
+
+    if (absoluteText) {
+      absoluteText.remove();
+      absoluteLine.remove();
+    }
+
+    if (sensor.id !== undefined) {
+      svg
+        .append('line')
+        .attr('id', 'absolute-line')
+        .attr('x1', absoluteGradiantX)
+        .attr('y1', -8)
+        .attr('x2', absoluteGradiantX)
+        .attr('y2', 43)
+        .style('stroke', 'white')
+        .style('stroke-width', 3);
+
+      const textAbsolute = svg
+        .append('text')
+        .attr('id', 'absolute-text')
+        .attr('x', absoluteGradiantX)
+        .attr('y', -10)
+        .attr('fill', !showDifferentialTemp ? 'white' : 'var(--base-font-color)')
+        .style('font-size', '1em');
+      /* .style('font-weight', !showDifferentialTemp ? '600' : 'normal'); */
+
+      if (absoluteGradiantX > (this.state.width * 3) / 4) {
+        textAbsolute.attr('text-anchor', 'end');
+      }
+      textAbsolute.append('tspan').attr('x', absoluteGradiantX).attr('y', -30).text(sensor.id);
+      textAbsolute.append('tspan').attr('x', absoluteGradiantX).attr('y', -15).text(`${defaultNumberFormatter(sensor.absolute, 2)} ${this.getUnit()}`);
+    }
+  };
+
+  render() {
+    const { maxGradiantLimit, minGradiantLimit } = this.props;
+    return (
+      <div>
+        <div className={styles.container}>
+          <span className={styles.title}>{this.props.option?.charAt(0).toUpperCase() + this.props.option?.slice(1)}</span>
+          <span className={styles.value}></span>
+        </div>
+
+        <div className={styles.temperatureGradientWrapper}>
+          <div id={this.uniqueColorScale} className={styles.temperatureGradient}>
+            <span style={{ position: 'absolute', bottom: '-2em', left: 0 }}>{minGradiantLimit} [{this.getUnit()}]</span>
+            <svg className={styles.colorScaleSvg} viewBox={`0 0 ${this.state.width} 40`}></svg>
+            <span style={{ position: 'absolute', bottom: '-2em', right: 0 }}>{maxGradiantLimit} [{this.getUnit()}]</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
