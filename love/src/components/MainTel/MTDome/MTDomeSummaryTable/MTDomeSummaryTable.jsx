@@ -65,7 +65,6 @@ export default class MTDomeSummaryTable extends Component {
 
   render() {
     const trackID = this.props.trackID;
-    // const domeStatus = CSCDetail.states[this.props.mtdomeSummaryState];
     const mtDomeStatus = summaryStateMap[this.props.mtDomeSummaryState];
     const modeDomeStatus = mtDomeModeStateMap[this.props.modeDomeStatus];
     const azimuthDomeState = mtDomeAzimuthEnabledStateMap[this.props.azimuthDomeState];
