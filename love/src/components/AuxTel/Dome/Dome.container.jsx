@@ -42,6 +42,8 @@ const DomeContainer = ({
   mainDoorState,
   detailedState,
   atMountState,
+  atDomeSummaryState,
+  ATMCSSummaryState,
   mountInPosition,
   trackID,
   targetAzimuth,
@@ -103,6 +105,8 @@ const DomeContainer = ({
       width={width}
       height={height}
       controls={controls}
+      atDomeSummaryState={atDomeSummaryState}
+      ATMCSSummaryState={ATMCSSummaryState}
     />
   );
 };
@@ -129,6 +133,8 @@ const mapDispatchToProps = (dispatch) => {
     'event-ATMCS-0-m3State',
     'event-ATMCS-0-positionLimits',
     'event-ATPtg-1-timesOfLimits',
+    'event-ATDome-0-summaryState',
+    'event-ATMCS-0-summaryState',
   ];
   return {
     subscriptions,

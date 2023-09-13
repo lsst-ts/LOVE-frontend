@@ -73,6 +73,7 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTMount-0-mirrorCoversMotionState',
     'event-MTMount-0-target',
     'event-Heartbeat-0-stream',
+    'event-MTMount-0-summaryState',
   ];
   return {
     subscriptions,

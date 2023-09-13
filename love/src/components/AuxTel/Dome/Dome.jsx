@@ -225,6 +225,8 @@ export default class Dome extends Component {
       currentPointingEl,
       currentPointingNasmyth1,
       currentPointingNasmyth2,
+      atDomeSummaryState,
+      ATMCSSummaryState,
     } = this.props;
 
     const isProjected = true;
@@ -356,6 +358,8 @@ export default class Dome extends Component {
             minNas1={minNas1}
             minNas2={minNas2}
             minM3={minM3}
+            atDomeSummaryState={atDomeSummaryState}
+            ATMCSSummaryState={ATMCSSummaryState}
           />
         </div>
         {this.props.controls && (

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Dome from './MTDome';
+import MTDome from './MTDome';
 import {
   getDomeStatus,
   getLouversStatus,
@@ -35,7 +35,8 @@ const MTDomeContainer = ({
   subscribeToStream,
   unsubscribeToStream,
   trackId,
-  mtdomeSummaryState,
+  mtDomeSummaryState,
+  mtMountSummaryState,
   positionActualShutter,
   positionCommandedShutter,
   positionActualDomeAz,
@@ -47,9 +48,6 @@ const MTDomeContainer = ({
   azimuthDomeState,
   azimuthDomeMotion,
   azimuthDomeTarget,
-  elevationDomeState,
-  elevationDomeMotion,
-  elevationDomeTarget,
   modeDomeStatus,
   currentPointingAz,
   targetPointingAz,
@@ -61,11 +59,12 @@ const MTDomeContainer = ({
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
   return (
-    <Dome
+    <MTDome
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
       trackId={trackId}
-      mtdomeSummaryState={mtdomeSummaryState}
+      mtDomeSummaryState={mtDomeSummaryState}
+      mtMountSummaryState={mtMountSummaryState}
       positionActualShutter={positionActualShutter}
       positionCommandedShutter={positionCommandedShutter}
       positionActualDomeAz={positionActualDomeAz}
@@ -77,9 +76,6 @@ const MTDomeContainer = ({
       azimuthDomeState={azimuthDomeState}
       azimuthDomeMotion={azimuthDomeMotion}
       azimuthDomeTarget={azimuthDomeTarget}
-      elevationDomeState={elevationDomeState}
-      elevationDomeMotion={elevationDomeMotion}
-      elevationDomeTarget={elevationDomeTarget}
       modeDomeStatus={modeDomeStatus}
       currentPointingAz={currentPointingAz}
       targetPointingAz={targetPointingAz}
@@ -117,11 +113,10 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTDome-0-azEnabled',
     'event-MTDome-0-azMotion',
     'event-MTDome-0-azTarget',
-    'event-MTDome-0-elEnabled',
-    'event-MTDome-0-elMotion',
-    'event-MTDome-0-elTarget',
     'event-MTDome-0-operationalMode',
     'event-MTMount-0-target',
+    'event-MTDome-0-summaryState',
+    'event-MTMount-0-summaryState',
   ];
   return {
     subscriptions,
