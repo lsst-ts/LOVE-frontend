@@ -1,6 +1,5 @@
 import React, { useRef, useState, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Canvas, useFrame } from 'react-three-fiber';
 import { isEqual } from 'lodash';
 import * as THREE from "three";
 

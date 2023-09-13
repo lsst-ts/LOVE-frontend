@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { isEqual } from 'lodash';
 import * as THREE from "three";
-import { Vector } from './Vector';
 
 const Sensor = (props) => {
   const mesh = useRef();
