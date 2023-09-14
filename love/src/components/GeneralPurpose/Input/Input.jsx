@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
+
 import styles from './Input.module.css';
 
 const Input = ({
@@ -55,17 +56,4 @@ Input.propTypes = {
   onClick: PropTypes.func,
 };
 
-const propsAreEqual = (prevProps, nextProps) => {
-  return (
-    nextProps.defaultValue === prevProps.defaultValue &&
-    nextProps.value === prevProps.value &&
-    nextProps.type === prevProps.type &&
-    nextProps.className === prevProps.className &&
-    nextProps.placeholder === prevProps.placeholder &&
-    nextProps.checked === prevProps.checked &&
-    nextProps.min === prevProps.min &&
-    nextProps.max === prevProps.max
-  );
-};
-
-export default React.memo(Input, propsAreEqual);
+export default memo(Input);
