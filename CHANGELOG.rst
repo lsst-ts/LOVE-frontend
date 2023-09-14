@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.25.1
+-------
+
+* Fix components configuration saving method `<https://github.com/lsst-ts/LOVE-frontend/pull/518>`_
+
 v5.25.0
 --------
 
