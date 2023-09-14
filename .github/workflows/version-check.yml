@@ -1,20 +1,16 @@
-name: PackageVersionUpdated
+name: VersionUpdated
 on:
   pull_request:
     types: [assigned, opened, synchronize, reopened, labeled, unlabeled]
     branches:
       - develop
-    paths:
-      - 'love/package.json'
 jobs:
   build:
     name: Check Actions
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
-        uses: actions/checkout@v1
-
-      - name: Check version change in package.json
+      - uses: actions/checkout@v1
+      - name: Changelog check
         run: |
           # Checkout the target branch
           git fetch origin ${{ github.base_ref }}:${{ github.base_ref }}
@@ -33,3 +29,5 @@ jobs:
             echo "Error: Version in package.json was not updated!"
             exit 1
           fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
