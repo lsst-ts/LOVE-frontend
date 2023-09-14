@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.25.2
+-------
+
+* Add version checker `<https://github.com/lsst-ts/LOVE-frontend/pull/520>`_
+
 v5.25.1
 -------
 
