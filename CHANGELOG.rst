@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.25.2
+-------
+
+* Change Illinois timezone to California as USDF is at SLAC now `<https://github.com/lsst-ts/LOVE-frontend/pull/521>`_
+
 v5.25.1
 -------
 
