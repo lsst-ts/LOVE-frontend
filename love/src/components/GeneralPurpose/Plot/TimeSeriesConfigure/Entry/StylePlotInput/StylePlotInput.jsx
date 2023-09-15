@@ -6,7 +6,12 @@ import styles from './StylePlotInput.module.css';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Select from 'components/GeneralPurpose/Select/Select';
-import { COLORS, DASHES, SHAPES, ORIENT } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.jsx';
+import {
+  COLORS,
+  DASHES,
+  SHAPES,
+  ORIENT,
+} from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.jsx';
 
 /**
  * Component to configure the Health Status Summary
@@ -16,9 +21,9 @@ export default class StylePlotInput extends PureComponent {
     name: PropTypes.string,
     /** String describing the type of mark, can be either "line", "bar" or "pointLine" */
     type: PropTypes.string,
-   /**
-    * List of inputs for the configuration.
-    */
+    /**
+     * List of inputs for the configuration.
+     */
     config: PropTypes.shape({
       /** (optional) Color of the mark to be used */
       color: PropTypes.string.isRequired,
@@ -37,16 +42,20 @@ export default class StylePlotInput extends PureComponent {
      * - config
      */
     onChange: PropTypes.func,
+    /**
+     * Callback to call when removing the input.
+     */
     onRemove: PropTypes.func,
   };
 
   static itemOptions = ['line', 'pointLine', 'bar', 'arrow', 'area'];
 
   static defaultProps = {
+    name: '',
     type: StylePlotInput.itemOptions[0],
     config: {},
-    onChange: (config) => {},
-    onRemove: null,
+    onChange: () => {},
+    onRemove: () => {},
   };
 
   onNameChange = (name) => {
@@ -67,7 +76,6 @@ export default class StylePlotInput extends PureComponent {
       [styleName]: style.value,
     });
   };
-
 
   render() {
     const input = this.props.config;
@@ -153,16 +161,22 @@ export default class StylePlotInput extends PureComponent {
                 fontSize="6px"
                 fontStyle="normal"
                 fontWeight="normal"
-                fill="white">➟</text>
+                fill="white"
+              >
+                ➟
+              </text>
             </svg>
           )}
 
           {['area'].includes(this.props.type) && (
             <svg viewBox="0 0 870 190" xmlns="http://www.w3.org/2000/svg">
-              <path aria-label="u: 1; v: 28" role="graphics-symbol" aria-roledescription="area mark"
+              <path
+                aria-label="u: 1; v: 28"
+                role="graphics-symbol"
+                aria-roledescription="area mark"
                 d="M0,98.18181818181819L60,0L120,47.272727272727266L180,76.36363636363637L240,69.0909090909091L300,25.454545454545464L300,200L240,200L180,200L120,200L60,200L0,200Z"
-                fill={input?.color}>
-              </path>
+                fill={input?.color}
+              ></path>
             </svg>
           )}
 
@@ -228,8 +242,6 @@ export default class StylePlotInput extends PureComponent {
               />
             </>
           )}
-
-
         </div>
       </div>
     );

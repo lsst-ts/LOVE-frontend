@@ -6,13 +6,9 @@ import StreamInput from './StreamInput/StreamInput';
 
 export default class Entry extends Component {
   static propTypes = {
-    /**
-     * Name of the entry
-     */
+    /** Name of the entry */
     name: PropTypes.string,
-    /**
-     * List of inputs for the configuration.
-     */
+    /** List of inputs for the configuration. */
     values: PropTypes.arrayOf(
       PropTypes.shape({
         /** Category of the message obtained from salobj */
@@ -27,9 +23,8 @@ export default class Entry extends Component {
         accessor: PropTypes.string,
       }),
     ),
-    /**
-     * String describing the type of mark, can be either "line", "bar" or "pointLine"
-     */
+    /** String describing the type of mark,
+     * can be either "line", "bar" or "pointLine" */
     type: PropTypes.string,
     config: PropTypes.shape({
       /** (optional) Color of the mark to be used */
@@ -41,40 +36,41 @@ export default class Entry extends Component {
       /** (optional) Whether to plot a filled or empty (contour only) point. Used in point and pointLine marks.*/
       filled: PropTypes.bool.isRequired,
     }),
-    /**
-     * Callback to call when removing the input, should have the following arguments:
+    /** Id of the entry */
+    entryId: PropTypes.string,
+    /** Options tree with data about cscs, topics and paramteres */
+    optionsTree: PropTypes.object,
+    /** Callback to call when removing the input, should have the following arguments:
      * - index
      */
     onRemove: PropTypes.func,
-    entryId: PropTypes.string,
   };
 
   static defaultProps = {
+    name: null,
     values: [{}],
     type: 'line',
     config: {},
-    name: null,
-    type: null,
+    entryId: null,
+    optionsTree: {},
     onRemove: null,
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      name: props.name ?? Entry.defaultProps.name,
-      type: props.type ?? Entry.defaultProps.type,
-      config: props.config ?? Entry.defaultProps.config,
-      values: props.values ?? Entry.defaultProps.values,
-      inputsRef: props.values
-        ? props.values.map((item) => React.createRef())
-        : Entry.defaultProps.values.map((item) => React.createRef()),
+      name: props.name,
+      type: props.type,
+      config: props.config,
+      values: props.values,
+      inputsRef: props.values.map(() => React.createRef()),
     };
   }
 
   getInfo() {
     let name;
     const values = [...this.state.inputsRef.map((ref) => ref.current.getInfo())];
-    if (this.state.name === undefined || this.state.name === null) {
+    if (this.state.name === null) {
       name = values
         .map((value) => {
           const { category, csc, salindex, topic, item } = value;
@@ -96,6 +92,7 @@ export default class Entry extends Component {
 
   getStreamInput(values) {
     const { inputsRef } = this.state;
+    const { optionsTree } = this.props;
     return values.map((value, index) => {
       return (
         <StreamInput
@@ -111,6 +108,7 @@ export default class Entry extends Component {
           isArray={value?.isArray}
           arrayIndex={value?.arrayIndex}
           accessor={value?.accessor}
+          optionsTree={optionsTree}
         />
       );
     });
