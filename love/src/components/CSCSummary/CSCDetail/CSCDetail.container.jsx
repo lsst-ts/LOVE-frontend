@@ -25,7 +25,7 @@ import CSCDetail from './CSCDetail';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
-  description: 'Displays heartbit and Summary State for a single CSC',
+  description: 'Displays heartbeat and Summary State for a single CSC',
   defaultSize: [12, 6],
   props: {
     titleBar: {
