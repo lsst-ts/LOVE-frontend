@@ -1,3 +1,23 @@
+/** This file is part of LOVE-frontend.
+
+Developed for Inria Chile Tech Team.
+
+See the COPYRIGHT file at the top-level directory of this distribution
+for details of code ownership.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import MapFlightTracker from './MapFlightTracker';
@@ -21,15 +41,17 @@ export default class FlightTracker extends Component {
     /** Number about the status availabled of the Aircraft Tracker CSC */
     status: PropTypes.number,
     /** Array of all detected aircrafts with their information */
-    aircrafts: PropTypes.arrayOf(PropTypes.objectOf({
-      id: PropTypes.string,
-      latitude: PropTypes.number,
-      longitude: PropTypes.number,
-      altitude: PropTypes.number,
-      track: PropTypes.number,
-      distance: PropTypes.number,
-      speed: PropTypes.number,
-    })),
+    aircrafts: PropTypes.arrayOf(
+      PropTypes.objectOf({
+        id: PropTypes.string,
+        latitude: PropTypes.number,
+        longitude: PropTypes.number,
+        altitude: PropTypes.number,
+        track: PropTypes.number,
+        distance: PropTypes.number,
+        speed: PropTypes.number,
+      }),
+    ),
   };
 
   static defaultProps = {
@@ -70,9 +92,10 @@ export default class FlightTracker extends Component {
   };
 
   componentDidUpdate = (prevProps) => {
-    if(!isEqual(prevProps.aircrafts, this.props.aircrafts)) {
-      const aircraftInRadius = this.props.aircrafts.filter((aircraft) => aircraft.id !== undefined &&
-        aircraft.id !== null && aircraft.id !== '' ).length;
+    if (!isEqual(prevProps.aircrafts, this.props.aircrafts)) {
+      const aircraftInRadius = this.props.aircrafts.filter(
+        (aircraft) => aircraft.id !== undefined && aircraft.id !== null && aircraft.id !== '',
+      ).length;
       this.setState({
         aircraftInRadius: aircraftInRadius,
         lastUpdate: Date.now(),
@@ -81,8 +104,9 @@ export default class FlightTracker extends Component {
   };
 
   componentDidMount = () => {
-    const aircraftInRadius = this.props.aircrafts.filter((aircraft) => aircraft.id !== undefined &&
-      aircraft.id !== null && aircraft.id !== '' ).length;
+    const aircraftInRadius = this.props.aircrafts.filter(
+      (aircraft) => aircraft.id !== undefined && aircraft.id !== null && aircraft.id !== '',
+    ).length;
     this.setState({
       aircraftInRadius: aircraftInRadius,
       lastUpdate: Date.now(),
@@ -114,10 +138,10 @@ export default class FlightTracker extends Component {
     if (distance < RADIO_ALERT) return 'alert';
     if (distance < RADIO_WARNING) return 'warning';
     return 'running';
-  }
+  };
 
   render() {
-    const headers= [
+    const headers = [
       {
         field: 'id',
         title: 'AirCraft ID',
@@ -132,11 +156,12 @@ export default class FlightTracker extends Component {
         type: 'array',
         className: styles.statusColumn,
         render: (value) => {
-          if (value) return (
-            <StatusText small status={this.distanceStatus(value)}>
-              {value.toString() + ' km'}
-            </StatusText>
-          );
+          if (value)
+            return (
+              <StatusText small status={this.distanceStatus(value)}>
+                {value.toString() + ' km'}
+              </StatusText>
+            );
           else return '-';
         },
       },
@@ -184,7 +209,11 @@ export default class FlightTracker extends Component {
                 <Title>Monitoring status</Title>
               </div>
               <div className={styles.statusElement}>
-                <StatusText title={'Monitoring status'} status={aircraftTrackerStatetoStyle[aircraftTrackerStateToMap[status]]} small>
+                <StatusText
+                  title={'Monitoring status'}
+                  status={aircraftTrackerStatetoStyle[aircraftTrackerStateToMap[status]]}
+                  small
+                >
                   {aircraftTrackerStateToMap[status]}
                 </StatusText>
               </div>
@@ -204,11 +233,7 @@ export default class FlightTracker extends Component {
           </div>
         </div>
         <div className={styles.mapContainer}>
-          <MapFlightTracker
-            planes={aircrafts}
-            zoom={this.state.zoom}
-            distanceStatus={this.distanceStatus}
-          />
+          <MapFlightTracker planes={aircrafts} zoom={this.state.zoom} distanceStatus={this.distanceStatus} />
           <div className={styles.zoomDiv}>
             <Button
               className={styles.iconBtn}
@@ -236,7 +261,7 @@ export default class FlightTracker extends Component {
             <SimpleTable headers={headers} data={aircrafts}></SimpleTable>
           </div>
           <div className={styles.divLastUp}>
-            <span>LAST UPDATE: { moment(dateNow).format('HH:mm:ss') }</span>
+            <span>LAST UPDATE: {moment(dateNow).format('HH:mm:ss')}</span>
             <span></span>
             <span>UPDATE DELAY: {Math.round((dateNow - this.state.lastUpdate) / 1000)} SEC</span>
           </div>

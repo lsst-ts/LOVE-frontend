@@ -1,3 +1,23 @@
+/** This file is part of LOVE-frontend.
+
+Developed for Inria Chile Tech Team.
+
+See the COPYRIGHT file at the top-level directory of this distribution
+for details of code ownership.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
@@ -455,13 +475,9 @@ export default class ConfigPanel extends Component {
 
     if (
       inputConfigurationName !== DEFAULT_CONFIG_NAME &&
-      (
-        configurationList.length === 0 ||
-        (
-          configurationList.length > 0 &&
-          configurationList.findIndex((conf) => conf.config_name === inputConfigurationName) === -1
-        )
-      )
+      (configurationList.length === 0 ||
+        (configurationList.length > 0 &&
+          configurationList.findIndex((conf) => conf.config_name === inputConfigurationName) === -1))
     ) {
       configurationNameChanged = true;
     }
@@ -503,11 +519,9 @@ export default class ConfigPanel extends Component {
           const configSchema = value;
           if (
             configurationNameChanged ||
-            (
-              configName === DEFAULT_CONFIG_NAME &&
+            (configName === DEFAULT_CONFIG_NAME &&
               configurationList.length >= 0 &&
-              configurationList.findIndex((conf) => conf.config_name === DEFAULT_CONFIG_NAME) === -1
-            )
+              configurationList.findIndex((conf) => conf.config_name === DEFAULT_CONFIG_NAME) === -1)
           ) {
             this.saveNewScriptSchema(scriptPath, scriptType, configName, configSchema);
           } else {

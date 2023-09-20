@@ -1,3 +1,23 @@
+/** This file is part of LOVE-frontend.
+
+Developed for Inria Chile Tech Team.
+
+See the COPYRIGHT file at the top-level directory of this distribution
+for details of code ownership.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.*/
+
 import React from 'react';
 import { VegaLite } from 'react-vega';
 import PropTypes from 'prop-types';
@@ -31,12 +51,16 @@ class VegaLegendMiniPlot extends React.PureComponent {
   };
 
   lineSpec = (markType) => {
-    if (markType !== 'line' && markType !== 'pointLine' ) {
+    if (markType !== 'line' && markType !== 'pointLine') {
       return {};
     }
     return {
       data: {
-        values: [{ a: -10, b: 2, c: 8, d: 5 }, { a: 0, b: 2, c: 8, d: 5 }, { a: 10, b: 2, c: 8, d: 5 }],
+        values: [
+          { a: -10, b: 2, c: 8, d: 5 },
+          { a: 0, b: 2, c: 8, d: 5 },
+          { a: 10, b: 2, c: 8, d: 5 },
+        ],
       },
       layer: [
         {
@@ -77,12 +101,12 @@ class VegaLegendMiniPlot extends React.PureComponent {
               },
             },
           },
-        }
+        },
       ],
       config: {
         background: null,
         axis: {
-          orient: "right"
+          orient: 'right',
         },
         style: {
           triangle: {
@@ -101,7 +125,13 @@ class VegaLegendMiniPlot extends React.PureComponent {
       return {};
     }
     return {
-      data: { values: [{ a: 1, b: 4 },{ a: 3, b: 6 },{ a: 5, b: 3}] },
+      data: {
+        values: [
+          { a: 1, b: 4 },
+          { a: 3, b: 6 },
+          { a: 5, b: 3 },
+        ],
+      },
       mark: {
         type: 'bar',
         color: this.props.color,
@@ -125,13 +155,13 @@ class VegaLegendMiniPlot extends React.PureComponent {
           },
         },
         opacity: {
-          value: 0.9
-        }
+          value: 0.9,
+        },
       },
       config: {
         background: null,
         axis: {
-          orient: "right"
+          orient: 'right',
         },
         bar: {
           continuousBandSize: 5,
@@ -146,7 +176,11 @@ class VegaLegendMiniPlot extends React.PureComponent {
     }
     return {
       data: {
-        values: [{ a: -10, b: 2, c: 7}, { a: 0, b: 2, c: 7 }, { a: 10, b: 2, c: 7 }],
+        values: [
+          { a: -10, b: 2, c: 7 },
+          { a: 0, b: 2, c: 7 },
+          { a: 10, b: 2, c: 7 },
+        ],
       },
       layer: [
         {
@@ -255,15 +289,15 @@ class VegaLegendMiniPlot extends React.PureComponent {
               },
             },
             opacity: {
-              value: 0.5
-            }
+              value: 0.5,
+            },
           },
-        }
+        },
       ],
       config: {
         background: null,
         axis: {
-          orient: "right"
+          orient: 'right',
         },
       },
     };
@@ -275,7 +309,11 @@ class VegaLegendMiniPlot extends React.PureComponent {
     }
     return {
       data: {
-        values: [{ a: -10, b: 2, c: 8, d: 5 }, { a: 0, b: 2, c: 8, d: 5 }, { a: 10, b: 2, c: 8, d: 5 }],
+        values: [
+          { a: -10, b: 2, c: 8, d: 5 },
+          { a: 0, b: 2, c: 8, d: 5 },
+          { a: 10, b: 2, c: 8, d: 5 },
+        ],
       },
       layer: [
         {
@@ -352,29 +390,31 @@ class VegaLegendMiniPlot extends React.PureComponent {
               },
             },
             opacity: {
-              value: 0.5
-            }
+              value: 0.5,
+            },
           },
-        }
+        },
       ],
       config: {
         background: null,
         axis: {
-          orient: "right"
+          orient: 'right',
         },
       },
     };
   };
 
   arrowSpec = (markType) => {
-    if (markType !== 'arrow' ) {
+    if (markType !== 'arrow') {
       return {};
     }
     return {
       data: {
         values: [
-          {x: -1, y: 0.5, angle: 165}, {x: 0.5, y: 2, angle: 105}, {x: 2, y: 1, angle: 25}
-        ]
+          { x: -1, y: 0.5, angle: 165 },
+          { x: 0.5, y: 2, angle: 105 },
+          { x: 2, y: 1, angle: 25 },
+        ],
       },
       layer: [
         {
@@ -406,8 +446,8 @@ class VegaLegendMiniPlot extends React.PureComponent {
               },
             },
             opacity: {
-              value: 0.8
-            }
+              value: 0.8,
+            },
           },
         },
         {
@@ -419,7 +459,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
           },
           encoding: {
             text: {
-              value: '➟'
+              value: '➟',
             },
             x: {
               field: 'x',
@@ -446,30 +486,32 @@ class VegaLegendMiniPlot extends React.PureComponent {
             angle: {
               field: 'angle',
               type: 'quantitative',
-              scale: {domain: [360, 0]}
-            }
-          }
+              scale: { domain: [360, 0] },
+            },
+          },
         },
       ],
       config: {
         background: null,
         axis: {
-          orient: "right"
+          orient: 'right',
         },
       },
-    }
-  }
+    };
+  };
 
   bigoteSpec = (markType) => {
     if (markType !== 'bigote') {
       return {};
     }
     return {
-      data: { values: [
-        { x: 1, x2: 1.2, y: 0.5, y2: 3, lux: 0.5, lux2: 1.7, luy: 3, luy2: 3.1, ldy: 0.4 },
-        { x: 2.5, x2: 2.7, y: 1.5, y2: 4, lux: 2, lux2: 3.2, luy: 4, luy2: 4.1, ldy: 1.4  },
-        { x: 4, x2: 4.2, y: 0.64, y2: 2.5, lux: 3.5, lux2: 4.7, luy: 2.5, luy2: 2.6, ldy: 0.74 },
-      ] },
+      data: {
+        values: [
+          { x: 1, x2: 1.2, y: 0.5, y2: 3, lux: 0.5, lux2: 1.7, luy: 3, luy2: 3.1, ldy: 0.4 },
+          { x: 2.5, x2: 2.7, y: 1.5, y2: 4, lux: 2, lux2: 3.2, luy: 4, luy2: 4.1, ldy: 1.4 },
+          { x: 4, x2: 4.2, y: 0.64, y2: 2.5, lux: 3.5, lux2: 4.7, luy: 2.5, luy2: 2.6, ldy: 0.74 },
+        ],
+      },
       layer: [
         {
           mark: {
@@ -514,8 +556,8 @@ class VegaLegendMiniPlot extends React.PureComponent {
               },
             },
             opacity: {
-              value: 0.9
-            }
+              value: 0.9,
+            },
           },
         },
         {
@@ -561,8 +603,8 @@ class VegaLegendMiniPlot extends React.PureComponent {
               },
             },
             opacity: {
-              value: 0.9
-            }
+              value: 0.9,
+            },
           },
         },
         {
@@ -608,15 +650,15 @@ class VegaLegendMiniPlot extends React.PureComponent {
               },
             },
             opacity: {
-              value: 0.9
-            }
+              value: 0.9,
+            },
           },
-        }
+        },
       ],
       config: {
         background: null,
         axis: {
-          orient: "right"
+          orient: 'right',
         },
         bar: {
           continuousBandSize: 5,
@@ -630,7 +672,13 @@ class VegaLegendMiniPlot extends React.PureComponent {
       return {};
     }
     return {
-      data: { values: [{ a: 0.5, b: 3, c: 0, d: 2 },{ a: 2.5, b: 4, c: 0, d: 4 },{ a: 4.5, b: 3, c: 0, d: 6}] },
+      data: {
+        values: [
+          { a: 0.5, b: 3, c: 0, d: 2 },
+          { a: 2.5, b: 4, c: 0, d: 4 },
+          { a: 4.5, b: 3, c: 0, d: 6 },
+        ],
+      },
       mark: {
         type: 'rect',
         strokeWidth: 1,
@@ -673,14 +721,14 @@ class VegaLegendMiniPlot extends React.PureComponent {
           },
         },
         fillOpacity: {
-          value: 0.5
+          value: 0.5,
         },
       },
       config: {
         background: null,
         axis: {
-          orient: "right"
-        }
+          orient: 'right',
+        },
       },
     };
   };
@@ -691,19 +739,23 @@ class VegaLegendMiniPlot extends React.PureComponent {
     }
     return {
       data: {
-        values: [{ a: -10, b: 2, c: 8, d: 5 }, { a: 0, b: 2, c: 8, d: 5 }, { a: 10, b: 2, c: 8, d: 5 }],
+        values: [
+          { a: -10, b: 2, c: 8, d: 5 },
+          { a: 0, b: 2, c: 8, d: 5 },
+          { a: 10, b: 2, c: 8, d: 5 },
+        ],
       },
       layer: [
         {
           transform: [
             {
-              fold: [ 'b', 'c', 'd'],
-              as: ['category', 'value']
-            }
+              fold: ['b', 'c', 'd'],
+              as: ['category', 'value'],
+            },
           ],
           mark: {
             type: 'bar',
-            clip: true
+            clip: true,
           },
           encoding: {
             y: {
@@ -718,20 +770,20 @@ class VegaLegendMiniPlot extends React.PureComponent {
               field: 'value',
               type: 'quantitative',
               scale: {
-                range: [this.props.color.slice(0,7) + '00', this.props.color.slice(0,7) + 'ff']
+                range: [this.props.color.slice(0, 7) + '00', this.props.color.slice(0, 7) + 'ff'],
               },
-              legend: null
+              legend: null,
             },
             opacity: {
-              value: 0.6
-            }
+              value: 0.6,
+            },
           },
-        }
+        },
       ],
       config: {
         background: null,
         axis: {
-          orient: "right"
+          orient: 'right',
         },
       },
     };
@@ -763,18 +815,20 @@ class VegaLegendMiniPlot extends React.PureComponent {
       ...heatmapSpec,
     };
 
-    return <VegaLite
+    return (
+      <VegaLite
         style={{
-          display: 'flex'
+          display: 'flex',
         }}
         padding={{
           right: '10px',
-          left: '0px'
+          left: '0px',
         }}
         renderer="svg"
         spec={spec}
         actions={false}
-      />;
+      />
+    );
   }
 }
 

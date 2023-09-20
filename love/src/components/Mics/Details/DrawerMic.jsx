@@ -1,3 +1,23 @@
+/** This file is part of LOVE-frontend.
+
+Developed for Inria Chile Tech Team.
+
+See the COPYRIGHT file at the top-level directory of this distribution
+for details of code ownership.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.*/
+
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Record from './Record';
@@ -7,7 +27,6 @@ import Collapse from 'components/GeneralPurpose/Collapse/Collapse';
 import RowExpansionIcon from 'components/icons/RowExpansionIcon/RowExpansionIcon';
 
 import styles from './DrawerMic.module.css';
-
 
 export default class DrawerMic extends Component {
   static propTypes = {
@@ -69,7 +88,7 @@ export default class DrawerMic extends Component {
     isRecording: false,
     record: () => {},
     records: [],
-  }
+  };
 
   static MAXHEIGHTPLOT = 215;
 
@@ -82,31 +101,13 @@ export default class DrawerMic extends Component {
   }
 
   render() {
-    const {
-      id,
-      name,
-      drawerDetailCss,
-      play,
-      setVolume,
-      volume,
-      isPlaying,
-      isRecording,
-      record,
-      records,
-    } = this.props;
+    const { id, name, drawerDetailCss, play, setVolume, volume, isPlaying, isRecording, record, records } = this.props;
 
     if (!this.props.infoPlot) {
       return <></>;
     }
 
-    const {
-      actualMaxFreq,
-      actualMaxDb,
-      actualMinFreq,
-      actualMinDb,
-      setDbLimitState,
-      dbLimit
-    } = this.props.infoPlot;
+    const { actualMaxFreq, actualMaxDb, actualMinFreq, actualMinDb, setDbLimitState, dbLimit } = this.props.infoPlot;
 
     return (
       <div className={drawerDetailCss}>
@@ -134,21 +135,23 @@ export default class DrawerMic extends Component {
           </div>
 
           <Fragment>
-            <button className={styles.buttonShowSpectrogram} onClick={() => this.setState((prevState) => ({ showHeatMap: !prevState.showHeatMap }))}>
+            <button
+              className={styles.buttonShowSpectrogram}
+              onClick={() => this.setState((prevState) => ({ showHeatMap: !prevState.showHeatMap }))}
+            >
               <div className={styles.spectrogramTitle}>
                 <span className={[styles.detailsTitle, styles.headers].join(' ')}>SPECTROGRAM</span>
-                <span><RowExpansionIcon expanded={this.state.showHeatMap}/></span>
+                <span>
+                  <RowExpansionIcon expanded={this.state.showHeatMap} />
+                </span>
               </div>
             </button>
             <Collapse isOpen={this.state.showHeatMap} childrenMaxHeight={DrawerMic.MAXHEIGHTPLOT}>
-                <div style={{"maxHeight": DrawerMic.MAXHEIGHTPLOT}}>
-                  <div ref={this.containerRef} className={styles.containerHeatMap}>
-                    <HeatMap
-                      infoPlot={this.props.infoPlot}
-                      containerNode={this.containerRef.current?.parentNode}
-                    />
-                  </div>
+              <div style={{ maxHeight: DrawerMic.MAXHEIGHTPLOT }}>
+                <div ref={this.containerRef} className={styles.containerHeatMap}>
+                  <HeatMap infoPlot={this.props.infoPlot} containerNode={this.containerRef.current?.parentNode} />
                 </div>
+              </div>
             </Collapse>
           </Fragment>
 
@@ -160,7 +163,6 @@ export default class DrawerMic extends Component {
               })}
             </div>
           </div>
-
         </div>
       </div>
     );

@@ -1,3 +1,23 @@
+/** This file is part of LOVE-frontend.
+
+Developed for Inria Chile Tech Team.
+
+See the COPYRIGHT file at the top-level directory of this distribution
+for details of code ownership.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ExposureAdd from './Exposure/ExposureAdd';
@@ -11,8 +31,7 @@ export default class CreateOLE extends Component {
   };
 
   static defaultProps = {
-    tabs: [
-    ],
+    tabs: [],
     isLogCreate: false,
   };
 
@@ -37,20 +56,10 @@ export default class CreateOLE extends Component {
 
   getComponent(tab) {
     if (tab === 'exposure') {
-      return (
-        <ExposureAdd
-          isLogCreate={this.props.isLogCreate}
-          props={this.props}
-        />
-      );
+      return <ExposureAdd isLogCreate={this.props.isLogCreate} props={this.props} />;
     }
     if (tab === 'non-exposure') {
-      return (
-        <NonExposureEdit
-          isLogCreate={this.props.isLogCreate}
-          props={this.props}
-        />
-      );
+      return <NonExposureEdit isLogCreate={this.props.isLogCreate} props={this.props} />;
     }
   }
 
@@ -69,15 +78,11 @@ export default class CreateOLE extends Component {
         </div>
       );
     });
-    
+
     return (
       <div className={styles.tabsWrapper}>
-        <div className={styles.tabsRow}>
-          { html }
-        </div>
-        <div className={styles.tableWrapper}>
-          { this.getComponent(selectedTab) }
-        </div>
+        <div className={styles.tabsRow}>{html}</div>
+        <div className={styles.tableWrapper}>{this.getComponent(selectedTab)}</div>
       </div>
     );
   }

@@ -1,3 +1,23 @@
+/** This file is part of LOVE-frontend.
+
+Developed for Inria Chile Tech Team.
+
+See the COPYRIGHT file at the top-level directory of this distribution
+for details of code ownership.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.*/
+
 import React, { Component } from 'react';
 import {
   m3RotatorStateMap,
@@ -101,9 +121,15 @@ export default class LightPath extends Component {
     const m1CoverStateText = m1CoverStateStateMap[props.m1CoverState];
     const m1CoverLimitSwitches = props.m1CoverLimitSwitches;
     const getLimitSwitchStatus = (number) => {
-      if (!m1CoverLimitSwitches[`cover${number}ClosedActive`]?.value && m1CoverLimitSwitches[`cover${number}OpenedActive`]?.value)
+      if (
+        !m1CoverLimitSwitches[`cover${number}ClosedActive`]?.value &&
+        m1CoverLimitSwitches[`cover${number}OpenedActive`]?.value
+      )
         return m1CoverLimitSwitchesStateMap[1];
-      if (m1CoverLimitSwitches[`cover${number}ClosedActive`]?.value && !m1CoverLimitSwitches[`cover${number}OpenedActive`]?.value)
+      if (
+        m1CoverLimitSwitches[`cover${number}ClosedActive`]?.value &&
+        !m1CoverLimitSwitches[`cover${number}OpenedActive`]?.value
+      )
         return m1CoverLimitSwitchesStateMap[2];
       return m1CoverLimitSwitchesStateMap[0];
     };
@@ -579,10 +605,7 @@ export default class LightPath extends Component {
           {this.drawM1(this.props)}
 
           {/* M3 container draw over M1 */}
-          <rect className={styles.st3}
-            x={106} y={310}
-            width="30.7" height="16.4"
-          />
+          <rect className={styles.st3} x={106} y={310} width="30.7" height="16.4" />
 
           {/* M1 cover */}
           {this.drawM1Cover(this.props)}

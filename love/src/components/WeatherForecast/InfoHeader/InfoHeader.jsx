@@ -1,3 +1,23 @@
+/** This file is part of LOVE-frontend.
+
+Developed for Inria Chile Tech Team.
+
+See the COPYRIGHT file at the top-level directory of this distribution
+for details of code ownership.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
@@ -180,32 +200,29 @@ export default class InfoHeader extends Component {
               );
             })}
             <Td key={'row[1]_col[' + data.length + ']'} className={styles.paddingInfoHeader}>
-            <span className={styles.text}>Pictocode</span>
+              <span className={styles.text}>Pictocode</span>
             </Td>
           </Tr>
           {this.props.frecuency === this.frecuencyOptions[0] ? (
             <>
               <Tr key={'row[2]'}>
                 <Td key={'row[2]_col[]'} className={styles.paddingInfoHeader}>
-                <span className={styles.text}>High °C</span>
+                  <span className={styles.text}>High °C</span>
                 </Td>
                 {data.map((row, i) => {
                   return (
-                    <Td
-                      key={'row[2]_col[' + i + ']'}
-                      className={styles.paddingInfoHeader}
-                    >
+                    <Td key={'row[2]_col[' + i + ']'} className={styles.paddingInfoHeader}>
                       <span className={styles.temperatureMax}>{row.temperatureMax}</span>
                     </Td>
                   );
                 })}
                 <Td key={'row[2]_col[' + data.length + ']'} className={styles.paddingInfoHeader}>
-                <span className={styles.text}>High °C</span>
+                  <span className={styles.text}>High °C</span>
                 </Td>
               </Tr>
               <Tr key={'row[3]'}>
                 <Td key={'row[3]_col[]'} className={styles.paddingInfoHeader}>
-                <span className={styles.text}>Low °C</span>
+                  <span className={styles.text}>Low °C</span>
                 </Td>
                 {data.map((row, i) => {
                   return (
@@ -215,7 +232,7 @@ export default class InfoHeader extends Component {
                   );
                 })}
                 <Td key={'row[3]_col[' + data.length + ']'} className={styles.paddingInfoHeader}>
-                <span className={styles.text}>Low °C</span>
+                  <span className={styles.text}>Low °C</span>
                 </Td>
               </Tr>
             </>
@@ -243,7 +260,7 @@ export default class InfoHeader extends Component {
           {this.props.frecuency === this.frecuencyOptions[0] && (
             <Tr key={'row[5]'}>
               <Td key={'row[5]_col[]'} className={styles.paddingInfoHeader}>
-              <span className={styles.text}>Predictability</span>
+                <span className={styles.text}>Predictability</span>
               </Td>
               {data.map((row, i) => {
                 return (

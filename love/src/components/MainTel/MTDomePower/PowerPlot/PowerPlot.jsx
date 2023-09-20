@@ -1,3 +1,23 @@
+/** This file is part of LOVE-frontend.
+
+Developed for Inria Chile Tech Team.
+
+See the COPYRIGHT file at the top-level directory of this distribution
+for details of code ownership.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
@@ -20,172 +40,167 @@ export default class PowerPlot extends Component {
 
   static defaultProps = {
     powerDraw: 50,
-    height:600,
-    width:600,
-    limit:75,
-    title:"Title",
-    data:[],
+    height: 600,
+    width: 600,
+    limit: 75,
+    title: 'Title',
+    data: [],
   };
 
   render() {
-
     const powerDraw = this.props?.powerDraw;
 
-    const height=this.props?.height;
-    const width=this.props?.width;
-    const title=this.props?.title;
+    const height = this.props?.height;
+    const width = this.props?.width;
+    const title = this.props?.title;
 
-    const limit=this.props?.limit;
+    const limit = this.props?.limit;
 
     const spec = {
-
       //////////////////////////
       // 1.0.0 Basic Encoding //
       //////////////////////////
-      "encoding":{
-
+      encoding: {
         // 1.1.0 axis //
-        "x":{
-          "field":"date",
-          "type":"temporal",
-          "title":"Time",
-          "axis":{
-            "zindex":1,
-            "labels":0,
-            "ticks":0,
-            "title":0,
-          }
+        x: {
+          field: 'date',
+          type: 'temporal',
+          title: 'Time',
+          axis: {
+            zindex: 1,
+            labels: 0,
+            ticks: 0,
+            title: 0,
+          },
         },
-        "y":{
-          "field":"count",
-          "type":"quantitative",
-          "title":"kW",
-          "color":"#788e9b",
-          "axis":{
-            "zindex":1,
-            "labelColor":"#788e9b",
-            "ticks":0,
-            "title":0,
-          }
+        y: {
+          field: 'count',
+          type: 'quantitative',
+          title: 'kW',
+          color: '#788e9b',
+          axis: {
+            zindex: 1,
+            labelColor: '#788e9b',
+            ticks: 0,
+            title: 0,
+          },
         },
 
         // 1.2.0 - Color //
-        "color":{
-          "field":"system",
-          "type":"nominal",
-          "legend":null
+        color: {
+          field: 'system',
+          type: 'nominal',
+          legend: null,
         },
 
         // 1.3.0 - Conditional Opacity //
-        "opacity":{
-          "value":1
-        }
+        opacity: {
+          value: 1,
+        },
       },
-      
+
       ////////////////////////
       // 2.0.0 Datum layers //
       ////////////////////////
-        "layer":[
-
+      layer: [
         // 2.2.0 Area Mark //
-          {
-            "mark":{
-              "type":"area",
-              "strokeWidth":2,
-              "color":"#27434f"
+        {
+          mark: {
+            type: 'area',
+            strokeWidth: 2,
+            color: '#27434f',
+          },
+          encoding: {
+            y: {
+              field: 'count',
+              scale: {
+                domain: [0, limit],
+              },
+              stack: 'zero',
             },
-            "encoding":{
-              "y":{
-                
-                "field":"count",
-                "scale":{
-                  "domain":[0,limit]
-                },
-                "stack":"zero"
-              },
-              "color":{
-                "field":"system",
-                "type":"nominal",
-                "legend":null,
-                "scale": {"range": ["#27434f","#27434f"]}
-              },
+            color: {
+              field: 'system',
+              type: 'nominal',
+              legend: null,
+              scale: { range: ['#27434f', '#27434f'] },
             },
           },
-        ],
+        },
+      ],
 
       //////////////////
       // 3.0.0 Config //
       //////////////////
-        "config": {
-          //Grid config
-          "axis": {
-            "gridOpacity" : 0.2,
-            "gridColor": "#c1ced2",
-            "gridWidth": 0.5
-          },
-          //No border for plot
-          "view": {"stroke": null}
+      config: {
+        //Grid config
+        axis: {
+          gridOpacity: 0.2,
+          gridColor: '#c1ced2',
+          gridWidth: 0.5,
         },
+        //No border for plot
+        view: { stroke: null },
+      },
 
-        //Size 
-        "width": width, "height": height,
+      //Size
+      width: width,
+      height: height,
 
-        //Responsiveness
-        autosize: {
-          type: 'fit',
-          contains: 'padding',
-        },
-        
+      //Responsiveness
+      autosize: {
+        type: 'fit',
+        contains: 'padding',
+      },
 
       ////////////////
       // 4.0.0 DATA //
       ////////////////
-        "data": {
-          "values":this.props.data
-            // [
-            //   {
-            //     "system":"aCalibration Screen",
-            //     "count":powerDraw*0.35,
-            //     "date":"2020-01-01 10:10:00",
-            //   },{
-            //     "system":"aCalibration Screen",
-            //     "count":powerDraw*0.1,
-            //     "date":"2020-01-01 10:12:00",
-            //   },{
-            //     "system":"aCalibration Screen",
-            //     "count":powerDraw*0.05,
-            //     "date":"2020-01-01 10:14:00",
-            //   },{
-            //     "system":"aCalibration Screen",
-            //     "count":powerDraw*0.75,
-            //     "date":"2020-01-01 10:16:00",
-            //   },{
-            //     "system":"aCalibration Screen",
-            //     "count":powerDraw,
-            //     "date":"2020-01-01 10:18:00",
-            //   }
-            // ]
-          }
-      };
+      data: {
+        values: this.props.data,
+        // [
+        //   {
+        //     "system":"aCalibration Screen",
+        //     "count":powerDraw*0.35,
+        //     "date":"2020-01-01 10:10:00",
+        //   },{
+        //     "system":"aCalibration Screen",
+        //     "count":powerDraw*0.1,
+        //     "date":"2020-01-01 10:12:00",
+        //   },{
+        //     "system":"aCalibration Screen",
+        //     "count":powerDraw*0.05,
+        //     "date":"2020-01-01 10:14:00",
+        //   },{
+        //     "system":"aCalibration Screen",
+        //     "count":powerDraw*0.75,
+        //     "date":"2020-01-01 10:16:00",
+        //   },{
+        //     "system":"aCalibration Screen",
+        //     "count":powerDraw,
+        //     "date":"2020-01-01 10:18:00",
+        //   }
+        // ]
+      },
+    };
 
     return (
       <div className={styles.container}>
         <div className={styles.plot}>
           <VegaLite
-          style={{ display: 'flex' }}
-          renderer="svg"
-          spec={spec}
-          className={[styles.plotContainer, this.props.className].join(' ')}
-          actions={false}
+            style={{ display: 'flex' }}
+            renderer="svg"
+            spec={spec}
+            className={[styles.plotContainer, this.props.className].join(' ')}
+            actions={false}
           />
-          <div style={{width:0}}>
-            <div style={{top: `${height*0.5-25}px`,left: `${width*-0.5-25}px`,}} className={styles.powerDraw}>
+          <div style={{ width: 0 }}>
+            <div style={{ top: `${height * 0.5 - 25}px`, left: `${width * -0.5 - 25}px` }} className={styles.powerDraw}>
               {`${powerDraw} kW`}
             </div>
           </div>
         </div>
         <div className={styles.titleContainer}>
-          <div style={{width: `${width}px`}} className={styles.title}>
+          <div style={{ width: `${width}px` }} className={styles.title}>
             {title}
           </div>
         </div>

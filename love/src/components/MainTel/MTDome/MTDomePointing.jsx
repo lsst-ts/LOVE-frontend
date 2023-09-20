@@ -1,3 +1,23 @@
+/** This file is part of LOVE-frontend.
+
+Developed for Inria Chile Tech Team.
+
+See the COPYRIGHT file at the top-level directory of this distribution
+for details of code ownership.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './MTDome.module.css';
@@ -51,13 +71,14 @@ export default class MTDomePointing extends Component {
   render() {
     const { width, height } = this.props;
     const zenithPixels = this.azelToPixel({ az: 0, el: 90 }, false);
-    const {currentPointing, targetPointing} = this.props;
+    const { currentPointing, targetPointing } = this.props;
 
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 300 300">
         {/* pointing */}
         {(targetPointing?.az !== currentPointing?.az || targetPointing?.el !== currentPointing?.el) && (
-          <g className={styles.pointing}
+          <g
+            className={styles.pointing}
             style={{
               transform: `rotateZ(${targetPointing?.az}deg)`,
               transformOrigin: `50% 50%`,
@@ -76,23 +97,23 @@ export default class MTDomePointing extends Component {
           </g>
         )}
 
-          <g
+        <g
+          style={{
+            transform: `rotateZ(${currentPointing?.az}deg)`,
+            transformOrigin: `50% 50%`,
+          }}
+        >
+          <circle
+            className={styles.currentPointing}
+            r={16}
+            strokeWidth={2}
+            cx={zenithPixels.x}
+            cy={zenithPixels.y}
             style={{
-              transform: `rotateZ(${currentPointing?.az}deg)`,
-              transformOrigin: `50% 50%`,
+              transform: `rotateX(${currentPointing?.el - 90}deg)`,
             }}
-          >
-            <circle
-              className={styles.currentPointing}
-              r={16}
-              strokeWidth={2}
-              cx={zenithPixels.x}
-              cy={zenithPixels.y}
-              style={{
-                transform: `rotateX(${currentPointing?.el - 90}deg)`,
-              }}
-            />
-          </g>
+          />
+        </g>
       </svg>
     );
   }

@@ -1,3 +1,23 @@
+/** This file is part of LOVE-frontend.
+
+Developed for Inria Chile Tech Team.
+
+See the COPYRIGHT file at the top-level directory of this distribution
+for details of code ownership.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.*/
+
 import React, { Component } from 'react';
 import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
 import PropTypes from 'prop-types';
@@ -208,32 +228,31 @@ export default class SummaryTable extends Component {
         <Label>Cell load</Label>
         <Value>{this.props.loadCell}</Value>
         <Row>
-            <Limits
-              lowerLimit={ATPneumaticsLimits.cellLoad.min}
-              upperLimit={ATPneumaticsLimits.cellLoad.max}
-              currentValue={this.props.loadCell.value}
-              targetValue="Unknown"
-              height={30}
-              displayLabels={true}
-              displayLabelsUnit=" kg"
-              limitWarning={4.2}
-            />
+          <Limits
+            lowerLimit={ATPneumaticsLimits.cellLoad.min}
+            upperLimit={ATPneumaticsLimits.cellLoad.max}
+            currentValue={this.props.loadCell.value}
+            targetValue="Unknown"
+            height={30}
+            displayLabels={true}
+            displayLabelsUnit=" kg"
+            limitWarning={4.2}
+          />
         </Row>
 
         <Label>M1 Air pressure</Label>
         <Value>{this.props.m1AirPressure}</Value>
         <Row>
-            <Limits
-              lowerLimit={ATPneumaticsLimits.pressure.min}
-              upperLimit={ATPneumaticsLimits.pressure.max}
-              currentValue={this.props.m1AirPressure.value}
-              targetValue={this.props.m1SetPressure}
-              height={30}
-              displayLabels={true}
-
-              displayLabelsUnit=" Pa"
-              limitWarning={5000}
-            />
+          <Limits
+            lowerLimit={ATPneumaticsLimits.pressure.min}
+            upperLimit={ATPneumaticsLimits.pressure.max}
+            currentValue={this.props.m1AirPressure.value}
+            targetValue={this.props.m1SetPressure}
+            height={30}
+            displayLabels={true}
+            displayLabelsUnit=" Pa"
+            limitWarning={5000}
+          />
         </Row>
 
         {/* Hexapod */}

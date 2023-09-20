@@ -1,3 +1,23 @@
+/** This file is part of LOVE-frontend.
+
+Developed for Inria Chile Tech Team.
+
+See the COPYRIGHT file at the top-level directory of this distribution
+for details of code ownership.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.*/
+
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import lodash from 'lodash';
@@ -165,17 +185,21 @@ export default class SummaryAuthList extends Component {
     if (type === 'User') {
       this.setState({
         removeIdentityRequest: () => {
-          ManagerInterface.requestAuthListAuthorization(user, targetCSC, `-${identityToRemove}`, '').then((response) => {
-            this.setState({ removeIdentityModalShown: false });
-          });
+          ManagerInterface.requestAuthListAuthorization(user, targetCSC, `-${identityToRemove}`, '').then(
+            (response) => {
+              this.setState({ removeIdentityModalShown: false });
+            },
+          );
         },
       });
     } else if (type === 'CSC') {
       this.setState({
         removeIdentityRequest: () => {
-          ManagerInterface.requestAuthListAuthorization(user, targetCSC, '', `-${identityToRemove}`).then((response) => {
-            this.setState({ removeIdentityModalShown: false });
-          });
+          ManagerInterface.requestAuthListAuthorization(user, targetCSC, '', `-${identityToRemove}`).then(
+            (response) => {
+              this.setState({ removeIdentityModalShown: false });
+            },
+          );
         },
       });
     }
@@ -232,10 +256,7 @@ export default class SummaryAuthList extends Component {
     const { user, authlistState } = this.props;
     const requests = [];
     Object.entries(authlistState).forEach(([key, val]) => {
-      if (
-        !val
-        || (val[0].authorizedUsers.value === '' && val[0].nonAuthorizedCSCs.value === '')
-      ) return;
+      if (!val || (val[0].authorizedUsers.value === '' && val[0].nonAuthorizedCSCs.value === '')) return;
 
       const keyTokens = key.split('-');
       const csc = `${keyTokens[1]}:${keyTokens[2]}`;

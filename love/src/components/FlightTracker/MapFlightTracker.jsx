@@ -1,3 +1,23 @@
+/** This file is part of LOVE-frontend.
+
+Developed for Inria Chile Tech Team.
+
+See the COPYRIGHT file at the top-level directory of this distribution
+for details of code ownership.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './FlightTracker.module.css';
@@ -15,15 +35,17 @@ const LON_LAT_TELESCOPE = [-70.73709442008416, -30.240476801377167];
 export default class MapFlightTracker extends Component {
   static propTypes = {
     /* Planes data with the distance to the center */
-    planes: PropTypes.arrayOf(PropTypes.objectOf({
-      id: PropTypes.string,
-      latitude: PropTypes.number,
-      longitude: PropTypes.number,
-      altitude: PropTypes.number,
-      track: PropTypes.number,
-      distance: PropTypes.number,
-      speed: PropTypes.number,
-    })),
+    planes: PropTypes.arrayOf(
+      PropTypes.objectOf({
+        id: PropTypes.string,
+        latitude: PropTypes.number,
+        longitude: PropTypes.number,
+        altitude: PropTypes.number,
+        track: PropTypes.number,
+        distance: PropTypes.number,
+        speed: PropTypes.number,
+      }),
+    ),
     /* Level of maps zoom*/
     zoom: PropTypes.string,
     /** Function to determine the status of the aircraft, from the distance to the radar */
@@ -243,7 +265,10 @@ export default class MapFlightTracker extends Component {
       .append('polygon')
       .attr('id', `polyggon${id}`)
       .attr('points', pointsFillPlane)
-      .attr('class', status === 'warning' ? styles.warningFill : (status === 'alert' ? styles.alertFill : styles.runningFill) )
+      .attr(
+        'class',
+        status === 'warning' ? styles.warningFill : status === 'alert' ? styles.alertFill : styles.runningFill,
+      )
       .style('opacity', opacity);
 
     svg
@@ -251,8 +276,8 @@ export default class MapFlightTracker extends Component {
       .attr('id', `rect-id${id}`)
       .attr('x', `${cordx + 20}`)
       .attr('y', `${cordy - 20}`)
-      .attr("width", '60px')
-      .attr("height", '1.25em')
+      .attr('width', '60px')
+      .attr('height', '1.25em')
       .attr('class', styles.rect);
 
     svg
