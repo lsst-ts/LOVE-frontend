@@ -27,7 +27,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .dropDownControlClassName {
   background-color: var(--second-secondary-background-color);
-  border: inherit;
+  border: 1px solid var(--secondary-font-dimmed-color);
+  border-radius: 3px;
   color: var(--base-font-color);
   text-align: left;
   height: 2.4em;
