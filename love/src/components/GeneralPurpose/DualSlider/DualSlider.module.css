@@ -1,0 +1,63 @@
+.formControl {
+  display: flex;
+  justify-content: space-between;
+}
+
+.slidersControl {
+  position: relative;
+  min-height: 2em;
+  margin-top: 9px;
+}
+
+.slidersControl input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 2px;
+  width: 100%;
+  position: absolute;
+  background-color: #c6c6c6;
+  pointer-events: none;
+}
+
+.slidersControl input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: all;
+  box-shadow: 0px 0px 0px #788e9a;
+  border: 2px solid #ffffff;
+  height: 1.25em;
+  width: 1.25em;
+  border-radius: 25px;
+  background: #788e9a;
+  cursor: pointer;
+}
+
+.slidersControl input[type='range']::-moz-range-thumb {
+  appearance: none;
+  pointer-events: all;
+  box-shadow: 0px 0px 0px #788e9a;
+  border: 2px solid #ffffff;
+  height: 1.25em;
+  width: 1.25em;
+  border-radius: 25px;
+  background: #788e9a;
+  cursor: pointer;
+}
+
+.container:not(.disabled) .slidersControl input[type='range']::-webkit-slider-thumb:hover {
+  background: #f7f7f7;
+}
+
+.slidersControl .toSlider {
+  top: -1px;
+}
+
+.slidersControl .fromSlider {
+  height: 0 !important;
+  z-index: 1;
+}
+
+.container.disabled .slidersControl,
+.container.disabled input,
+.container.disabled .slidersControl input[type='range']::-webkit-slider-thumb {
+  cursor: not-allowed !important;
+}
