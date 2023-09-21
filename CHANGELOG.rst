@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.25.3
+-------
+
+* LOVE License `<https://github.com/lsst-ts/LOVE-frontend/pull/524>`_
+
 v5.25.2
 -------
 
