@@ -1,3 +1,22 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
@@ -71,7 +90,6 @@ export default class Gradiant extends Component {
     }[this.props.option ?? 'temperature'];
   }
 
-
   getSensor = (id) => {
     if (id === 0 || id === null || id === undefined) return { id: undefined };
     const { sensorReferenceId, absoluteGradiant } = this.props;
@@ -80,15 +98,13 @@ export default class Gradiant extends Component {
     const sensor = {
       id: `${String(id).padStart(3, '0')}`,
       absolute: absoluteGradiant[sensorIndex] ?? 0,
-      unit: this.props.option
+      unit: this.props.option,
     };
     return sensor;
   };
 
   componentDidUpdate(prevProps) {
-    if (
-      prevProps.absoluteGradiant !== this.props.absoluteGradiant
-    ) {
+    if (prevProps.absoluteGradiant !== this.props.absoluteGradiant) {
       this.createColorScale();
       const sensor = this.getSensor(this.props.selectedId ?? Gradiant.defaultProps.selectedId);
       this.setGradiant(sensor, this.props.minGradiantLimit, this.maxGradiantLimit);
@@ -189,7 +205,11 @@ export default class Gradiant extends Component {
         textAbsolute.attr('text-anchor', 'end');
       }
       textAbsolute.append('tspan').attr('x', absoluteGradiantX).attr('y', -30).text(sensor.id);
-      textAbsolute.append('tspan').attr('x', absoluteGradiantX).attr('y', -15).text(`${defaultNumberFormatter(sensor.absolute, 2)} ${this.getUnit()}`);
+      textAbsolute
+        .append('tspan')
+        .attr('x', absoluteGradiantX)
+        .attr('y', -15)
+        .text(`${defaultNumberFormatter(sensor.absolute, 2)} ${this.getUnit()}`);
     }
   };
 
@@ -198,15 +218,21 @@ export default class Gradiant extends Component {
     return (
       <div>
         <div className={styles.container}>
-          <span className={styles.title}>{this.props.option?.charAt(0).toUpperCase() + this.props.option?.slice(1)}</span>
+          <span className={styles.title}>
+            {this.props.option?.charAt(0).toUpperCase() + this.props.option?.slice(1)}
+          </span>
           <span className={styles.value}></span>
         </div>
 
         <div className={styles.temperatureGradientWrapper}>
           <div id={this.uniqueColorScale} className={styles.temperatureGradient}>
-            <span style={{ position: 'absolute', bottom: '-2em', left: 0 }}>{minGradiantLimit} [{this.getUnit()}]</span>
+            <span style={{ position: 'absolute', bottom: '-2em', left: 0 }}>
+              {minGradiantLimit} [{this.getUnit()}]
+            </span>
             <svg className={styles.colorScaleSvg} viewBox={`0 0 ${this.state.width} 40`}></svg>
-            <span style={{ position: 'absolute', bottom: '-2em', right: 0 }}>{maxGradiantLimit} [{this.getUnit()}]</span>
+            <span style={{ position: 'absolute', bottom: '-2em', right: 0 }}>
+              {maxGradiantLimit} [{this.getUnit()}]
+            </span>
           </div>
         </div>
       </div>
