@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import * as d3 from 'd3';
-import * as THREE from "three";
+import * as THREE from 'three';
 import Scene from './Scene/Scene';
 import Info from '../Common/Info/Info';
 import Gradiant from '../Common/Gradiant/Gradiant';
@@ -12,36 +12,33 @@ import { Fan } from './Scene/Fan';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import styles from './AuxTelESS.module.css';
 
-const getBasePlot = (salindex, topic, item, indexArr=undefined) => {
+const getBasePlot = (salindex, topic, item, indexArr = undefined) => {
   const config = {};
   const accessor = indexArr !== undefined ? `(x) => x[${indexArr}]` : '(x) => x';
   config[`${topic}`] = {
-    'type': 'line',
+    type: 'line',
     // 'color': '#ff7f0e',
-    'dash': [
-      4,
-      0
-    ],
-    'values': [
+    dash: [4, 0],
+    values: [
       {
-        'variable': 'x',
-        'category': 'telemetry',
-        'csc': 'ESS',
-        'salindex': salindex,
-        'topic': topic,
-        'item': 'timestamp',
-        'accessor': accessor,
+        variable: 'x',
+        category: 'telemetry',
+        csc: 'ESS',
+        salindex: salindex,
+        topic: topic,
+        item: 'timestamp',
+        accessor: accessor,
       },
       {
-        'variable': 'y',
-        'category': 'telemetry',
-        'csc': 'ESS',
-        'salindex': salindex,
-        'topic': topic,
-        'item': item,
-        'accessor': accessor,
-      }
-    ]
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'ESS',
+        salindex: salindex,
+        topic: topic,
+        item: item,
+        accessor: accessor,
+      },
+    ],
   };
   return config;
 };
@@ -55,7 +52,6 @@ const getGradiantColorX = (value, minGradiantLimit, maxGradiantLimit) => {
 };
 
 const AuxTelESS = (props) => {
-
   useEffect(() => {
     props.subscribeToStreams();
     return () => {
@@ -111,11 +107,12 @@ const AuxTelESS = (props) => {
   ];
 
   const {
-    minGradiantLimit, maxGradiantLimit,
+    minGradiantLimit,
+    maxGradiantLimit,
     percentOpenDropoutDoor,
     percentOpenMainDoor,
     azimuthPosition,
-    initialCameraPosition
+    initialCameraPosition,
   } = props;
 
   const [selectedSensor, setSelectedSensor] = useState(0);
@@ -125,20 +122,22 @@ const AuxTelESS = (props) => {
 
   const option = props.option ?? 'temperature';
   const positions = [];
-  for(let i = 0; i < props[option].length; i++) {
+  for (let i = 0; i < props[option].length; i++) {
     positions.push({
       x: props[option][i].xPosition,
       y: props[option][i].yPosition,
       z: props[option][i].zPosition,
     });
   }
-  const referenceIds = Array.from({length: props[option].length}).fill(0).map((_, index) => index + 1);
+  const referenceIds = Array.from({ length: props[option].length })
+    .fill(0)
+    .map((_, index) => index + 1);
 
   const items = {
-    'temperature': 'temperature',
-    'relativeHumidity': 'relativeHumidity',
-    'airFlow': 'speed',
-    'airTurbulence' : 'speedMagnitude',
+    temperature: 'temperature',
+    relativeHumidity: 'relativeHumidity',
+    airFlow: 'speed',
+    airTurbulence: 'speedMagnitude',
   };
   const setSensor = (sensorId) => {
     const index = referenceIds.indexOf(sensorId);
@@ -170,34 +169,20 @@ const AuxTelESS = (props) => {
   };
 
   const sensors = props[option] ?? [];
-  const values = sensors.map((sensor) => !Number.isNaN(+sensor.value) ? +sensor.value : 0 ) ?? [];
+  const values = sensors.map((sensor) => (!Number.isNaN(+sensor.value) ? +sensor.value : 0)) ?? [];
   const speeds = sensors.map((sensor) => sensor.speed ?? undefined) ?? [];
   const directions = sensors.map((sensor) => sensor.direction ?? undefined) ?? [];
 
   return (
     <div className={styles.sceneAndInfoPlotsContainer}>
       <div className={styles.sceneContainer}>
-        <Scene
-          initialCameraPosition={initialCameraPosition}
-        >
-          <group
-            rotation-y={THREE.MathUtils.degToRad((-1) * azimuthPosition)}
-          >
-             {/** Main Door */}
-            <Door
-              isMainDoor={true}
-              thetaStart={28}
-              thetaLength={84}
-              openPercent={percentOpenMainDoor ?? 0}
-            />
+        <Scene initialCameraPosition={initialCameraPosition}>
+          <group rotation-y={THREE.MathUtils.degToRad(-1 * azimuthPosition)}>
+            {/** Main Door */}
+            <Door isMainDoor={true} thetaStart={28} thetaLength={84} openPercent={percentOpenMainDoor ?? 0} />
 
             {/** Dropout Door */}
-            <Door
-              isMainDoor={false}
-              thetaStart={0}
-              thetaLength={27.9}
-              openPercent={percentOpenDropoutDoor ?? 0}
-            />
+            <Door isMainDoor={false} thetaStart={0} thetaLength={27.9} openPercent={percentOpenDropoutDoor ?? 0} />
           </group>
 
           {/** Windows */}
@@ -228,9 +213,7 @@ const AuxTelESS = (props) => {
 
       <div className={styles.infoAndPlotsContainer}>
         <div className={styles.infoContainer}>
-          <Info
-            sensor={selectedSensorData}
-          />
+          <Info sensor={selectedSensorData} />
         </div>
 
         <div className={styles.tempContainer}>
@@ -247,13 +230,8 @@ const AuxTelESS = (props) => {
 
         <div className={styles.plotsContainer}>
           <div className={styles.title}>Plot</div>
-          <div className={styles.plots} ref={plotRef} >
-            <PlotContainer
-              containerNode={plotRef?.current}
-              xAxisTitle="Time"
-              legendPosition="bottom"
-              inputs={inputsPlot}
-            />
+          <div className={styles.plots} ref={plotRef}>
+            <PlotContainer containerNode={plotRef} xAxisTitle="Time" legendPosition="bottom" inputs={inputsPlot} />
           </div>
         </div>
       </div>
@@ -266,41 +244,49 @@ AuxTelESS.propTypes = {
   subscribeToStreams: PropTypes.func,
   /** Function to unsubscribe to streams to stop receiving */
   unsubscribeToStreams: PropTypes.func,
-  temperature: PropTypes.arrayOf(PropTypes.shape({
-    sensorName: PropTypes.string,
-    value: PropTypes.number,
-    indexArr: PropTypes.number,
-    location: PropTypes.string,
-    numChannels: PropTypes.number,
-    xPosition: PropTypes.number,
-    yPosition: PropTypes.number,
-    zPosition: PropTypes.number,
-  })),
-  relativeHumidity: PropTypes.arrayOf(PropTypes.shape({
-    sensorName: PropTypes.string,
-    value: PropTypes.number,
-    location: PropTypes.string,
-    xPosition: PropTypes.number,
-    yPosition: PropTypes.number,
-    zPosition: PropTypes.number,
-  })),
-  airFlow: PropTypes.arrayOf(PropTypes.shape({
-    sensorName: PropTypes.string,
-    value: PropTypes.number,
-    direction: PropTypes.number,
-    location: PropTypes.string,
-    xPosition: PropTypes.number,
-    yPosition: PropTypes.number,
-    zPosition: PropTypes.number,
-  })),
-  airTurbulence: PropTypes.arrayOf(PropTypes.shape({
-    sensorName: PropTypes.string,
-    value: PropTypes.number,
-    location: PropTypes.string,
-    xPosition: PropTypes.number,
-    yPosition: PropTypes.number,
-    zPosition: PropTypes.number,
-  })),
+  temperature: PropTypes.arrayOf(
+    PropTypes.shape({
+      sensorName: PropTypes.string,
+      value: PropTypes.number,
+      indexArr: PropTypes.number,
+      location: PropTypes.string,
+      numChannels: PropTypes.number,
+      xPosition: PropTypes.number,
+      yPosition: PropTypes.number,
+      zPosition: PropTypes.number,
+    }),
+  ),
+  relativeHumidity: PropTypes.arrayOf(
+    PropTypes.shape({
+      sensorName: PropTypes.string,
+      value: PropTypes.number,
+      location: PropTypes.string,
+      xPosition: PropTypes.number,
+      yPosition: PropTypes.number,
+      zPosition: PropTypes.number,
+    }),
+  ),
+  airFlow: PropTypes.arrayOf(
+    PropTypes.shape({
+      sensorName: PropTypes.string,
+      value: PropTypes.number,
+      direction: PropTypes.number,
+      location: PropTypes.string,
+      xPosition: PropTypes.number,
+      yPosition: PropTypes.number,
+      zPosition: PropTypes.number,
+    }),
+  ),
+  airTurbulence: PropTypes.arrayOf(
+    PropTypes.shape({
+      sensorName: PropTypes.string,
+      value: PropTypes.number,
+      location: PropTypes.string,
+      xPosition: PropTypes.number,
+      yPosition: PropTypes.number,
+      zPosition: PropTypes.number,
+    }),
+  ),
   minGradiantLimit: PropTypes.number,
   maxGradiantLimit: PropTypes.number,
   option: PropTypes.oneOf(['temperature', 'relativeHumidity', 'airFlow', 'airTurbulence']),
@@ -312,55 +298,63 @@ AuxTelESS.propTypes = {
 AuxTelESS.defaultProps = {
   subscribeToStreams: () => console.log('default subscribeToStreams'),
   unsubscribeToStreams: () => console.log('default unsubscribeToStreams'),
-  temperature: [{
-    sensorName: '',
-    value: 0,
-    indexArr: 0,
-    numChannels: 0,
-    xPosition: 0,
-    yPosition: 0,
-    zPosition: 0,
-  }],
-  relativeHumidity: [{
-    sensorName: '',
-    value: 0,
-    xPosition: 0,
-    yPosition: 0,
-    zPosition: 0,
-  }],
-  airFlow: [{
-    sensorName: '',
-    value: 0,
-    direction: 0,
-    xPosition: 0,
-    yPosition: 0,
-    zPosition: 0,
-  }],
-  airTurbulence: [{
-    sensorName: '',
-    value: 0,
-    speed: {x: 0, y:0, z: 0},
-    xPosition: 0,
-    yPosition: 0,
-    zPosition: 0,
-  }],
+  temperature: [
+    {
+      sensorName: '',
+      value: 0,
+      indexArr: 0,
+      numChannels: 0,
+      xPosition: 0,
+      yPosition: 0,
+      zPosition: 0,
+    },
+  ],
+  relativeHumidity: [
+    {
+      sensorName: '',
+      value: 0,
+      xPosition: 0,
+      yPosition: 0,
+      zPosition: 0,
+    },
+  ],
+  airFlow: [
+    {
+      sensorName: '',
+      value: 0,
+      direction: 0,
+      xPosition: 0,
+      yPosition: 0,
+      zPosition: 0,
+    },
+  ],
+  airTurbulence: [
+    {
+      sensorName: '',
+      value: 0,
+      speed: { x: 0, y: 0, z: 0 },
+      xPosition: 0,
+      yPosition: 0,
+      zPosition: 0,
+    },
+  ],
   minGradiantLimit: -20,
   maxGradiantLimit: 40,
   option: 'temperature',
   percentOpenDropoutDoor: 0,
   percentOpenMainDoor: 0,
   azimuthPosition: 0,
-  };
+};
 
 const comparator = (prevProps, nextProps) => {
- return (
-   isEqual(prevProps.subscriptions, nextProps.subscriptions) &&
-   prevProps.percentOpenDropoutDoor === nextProps.percentOpenDropoutDoor &&
-   prevProps.percentOpenMainDoor === nextProps.percentOpenMainDoor &&
-   prevProps.azimuthPosition === nextProps.azimuthPosition &&
-   prevProps.option === nextProps.option &&
-   isEqual(prevProps[nextProps.option], nextProps[nextProps.option])
- );
+  return (
+    isEqual(prevProps.subscriptions, nextProps.subscriptions) &&
+    prevProps.percentOpenDropoutDoor === nextProps.percentOpenDropoutDoor &&
+    prevProps.percentOpenMainDoor === nextProps.percentOpenMainDoor &&
+    prevProps.azimuthPosition === nextProps.azimuthPosition &&
+    prevProps.option === nextProps.option &&
+    isEqual(prevProps[nextProps.option], nextProps[nextProps.option])
+  );
 };
 
 export default React.memo(AuxTelESS, comparator);

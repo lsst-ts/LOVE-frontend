@@ -8,6 +8,7 @@ import { defaultStyles } from 'components/GeneralPurpose/Plot/Plot.container';
 import VegaTimeseriesPlot from '../VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import { COLORS } from '../VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
+
 /**
  * Component to configure the Health Status Summary
  */
@@ -60,6 +61,7 @@ export default class TimeSeriesConfigure extends PureComponent {
       currentConfig: [],
       changed: false,
       entries: [],
+      optionsTree: null,
     };
   }
 
@@ -73,6 +75,11 @@ export default class TimeSeriesConfigure extends PureComponent {
 
     const refs = this.state.entries.map((item) => React.createRef());
     this.setState({ entries, refs });
+
+    // Get the options for the dropdowns from SAL info endpoint
+    ManagerInterface.getTopicData('event-telemetry').then((data) => {
+      this.setState({ optionsTree: data });
+    });
   };
 
   onEntryRemove = (index) => {
@@ -92,6 +99,7 @@ export default class TimeSeriesConfigure extends PureComponent {
   };
 
   render() {
+    const { optionsTree, cscOptions } = this.state;
     const refs = this.state.entries.map((item) => React.createRef());
 
     return (
@@ -115,6 +123,7 @@ export default class TimeSeriesConfigure extends PureComponent {
                     shape: shape ?? defaultStyles[index % (defaultStyles.length - 1)].shape,
                     filled: filled ?? defaultStyles[index % (defaultStyles.length - 1)].filled,
                   }}
+                  optionsTree={optionsTree}
                   onRemove={() => this.onEntryRemove(index)}
                 />
               );
@@ -135,11 +144,7 @@ export default class TimeSeriesConfigure extends PureComponent {
           <Button status="default" onClick={this.props.onCancel} className={styles.button}>
             Cancel
           </Button>
-          <Button
-            status="primary"
-            onClick={() => this.onApply(refs)}
-            className={styles.button}
-          >
+          <Button status="primary" onClick={() => this.onApply(refs)} className={styles.button}>
             Apply
           </Button>
         </div>

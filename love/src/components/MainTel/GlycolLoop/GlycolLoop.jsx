@@ -317,18 +317,16 @@ export default class GlycolLoop extends Component {
             <div className={styles.plotContainer}>
               <div className={styles.telemetryTable}>
                 <div className={styles.tsmcSection}>
-                  <h2>Inside Mirror Temperatures</h2>
+                  <h2 onClick={() => console.log(this.tsmcPlotRef)}>Inside Mirror Temperatures</h2>
                   <div ref={this.tsmcPlotRef} className={styles.tsmcPlot}>
-                    <div>
-                      <PlotContainer
-                        inputs={this.tsmcPlotInputs}
-                        containerNode={this.tsmcPlotRef?.current}
-                        xAxisTitle="Time"
-                        yAxisTitle="Temperature"
-                        maxHeight={250}
-                        scaleDomain={{ domainMin: minTemp, domainMax: maxTemp }}
-                      />
-                    </div>
+                    <PlotContainer
+                      inputs={this.tsmcPlotInputs}
+                      containerNode={this.tsmcPlotRef}
+                      xAxisTitle="Time"
+                      yAxisTitle="Temperature"
+                      maxHeight={250}
+                      scaleDomain={{ domainMin: minTemp, domainMax: maxTemp }}
+                    />
                   </div>
                 </div>
                 <div className={styles.tsgSection}>
@@ -337,7 +335,7 @@ export default class GlycolLoop extends Component {
                     <div>
                       <PlotContainer
                         inputs={this.tsgPlotInputs}
-                        containerNode={this.tsgPlotRef?.current}
+                        containerNode={this.tsgPlotRef}
                         xAxisTitle="Time"
                         yAxisTitle="Temperature"
                         maxHeight={250}
