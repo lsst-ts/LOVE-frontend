@@ -134,7 +134,7 @@ export default class WeatherForecast extends Component {
             <div className={styles.sectionTitle}>Cloud</div>
             <div ref={this.cloudPlotRef} className={styles.plot}>
               <PlotContainer
-                containerNode={this.cloudPlotRef.current}
+                containerNode={this.cloudPlotRef}
                 xAxisTitle="Time"
                 yAxisTitle=""
                 legendPosition=""
@@ -150,7 +150,7 @@ export default class WeatherForecast extends Component {
             </div>
             <div ref={this.cloudComplementPlotRef} className={styles.plot}>
               <PlotContainer
-                containerNode={this.cloudComplementPlotRef.current}
+                containerNode={this.cloudComplementPlotRef}
                 xAxisTitle="Time"
                 yAxisTitle="Cloud"
                 legendPosition="bottom"
@@ -172,7 +172,7 @@ export default class WeatherForecast extends Component {
             <div className={styles.sectionTitle}>Wind</div>
             <div ref={this.windPlotRef} className={styles.plot}>
               <PlotContainer
-                containerNode={this.windPlotRef.current}
+                containerNode={this.windPlotRef}
                 xAxisTitle="Time"
                 yAxisTitle=""
                 legendPosition="bottom"
@@ -192,7 +192,7 @@ export default class WeatherForecast extends Component {
             <div className={styles.sectionTitle}>Temperature</div>
             <div ref={this.temperaturePlotRef} className={styles.plot}>
               <PlotContainer
-                containerNode={this.temperaturePlotRef.current}
+                containerNode={this.temperaturePlotRef}
                 xAxisTitle="Time"
                 yAxisTitle="Temperature"
                 legendPosition="bottom"
@@ -212,7 +212,7 @@ export default class WeatherForecast extends Component {
             <div className={styles.sectionTitle}>Rain</div>
             <div ref={this.rainPlotRef} className={styles.plot}>
               <PlotContainer
-                containerNode={this.rainPlotRef.current}
+                containerNode={this.rainPlotRef}
                 xAxisTitle="Time"
                 yAxisTitle=""
                 legendPosition="bottom"

@@ -380,7 +380,7 @@ export default class Dome extends Component {
               <div>
                 <PlotContainer
                   inputs={this.azimuthPlotInputs}
-                  containerNode={this.azimuthPlotRef?.current}
+                  containerNode={this.azimuthPlotRef}
                   xAxisTitle="Time"
                   yAxisTitle="Azimuth"
                   timeSeriesControlsProps={timeSeriesControlsProps}
@@ -397,7 +397,7 @@ export default class Dome extends Component {
               <div>
                 <PlotContainer
                   inputs={this.elevationPlotInputs}
-                  containerNode={this.elevationPlotRef?.current}
+                  containerNode={this.elevationPlotRef}
                   xAxisTitle="Time"
                   yAxisTitle="Elevation"
                   timeSeriesControlsProps={timeSeriesControlsProps}

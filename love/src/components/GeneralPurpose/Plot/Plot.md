@@ -82,6 +82,6 @@ const height = 200 + 10 * Math.sin(time * Math.PI);
     height: `${height}px`,
   }}
 >
-  <Plot layers={{ lines: data }} legend={legend} containerNode={containerRef.current} />
+  <Plot layers={{ lines: data }} legend={legend} containerNode={containerRef} />
 </div>;
 ```

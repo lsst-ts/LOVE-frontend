@@ -58,7 +58,7 @@ export default class SchedulerPlots extends Component {
           <div key={p} ref={this.refs[i]} className={styles.plot}>
             <PlotContainer
               inputs={p}
-              containerNode={this.refs?.current}
+              containerNode={this.refs[i]}
               xAxisTitle="Time"
               yAxisTitle="Value"
               legendPosition="right"

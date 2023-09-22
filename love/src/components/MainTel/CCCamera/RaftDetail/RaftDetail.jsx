@@ -166,7 +166,6 @@ class RaftDetail extends Component {
               height={100}
               width={300}
               inputs={p}
-              // containerNode={this.CCDsrefs[i]?.current}
               xAxisTitle="Time"
               yAxisTitle={`${selectedCCDVar} - ${raft.ccds[i].id}`}
               legendPosition="bottom"
@@ -188,7 +187,6 @@ class RaftDetail extends Component {
                 height={350}
                 width={500}
                 inputs={p}
-                containerNode={this.rebsRefs?.current}
                 xAxisTitle="Time"
                 yAxisTitle=""
                 legendPosition="right"
@@ -205,7 +203,6 @@ class RaftDetail extends Component {
                 height={350}
                 width={500}
                 inputs={p}
-                containerNode={this.rebsRefs?.current}
                 xAxisTitle="Time"
                 yAxisTitle=""
                 legendPosition="right"
@@ -222,7 +219,6 @@ class RaftDetail extends Component {
                 height={350}
                 width={500}
                 inputs={p}
-                containerNode={this.rebsRefs?.current}
                 xAxisTitle="Time"
                 yAxisTitle=""
                 legendPosition="right"
