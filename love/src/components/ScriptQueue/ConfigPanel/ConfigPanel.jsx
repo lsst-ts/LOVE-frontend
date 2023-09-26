@@ -21,7 +21,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
-import YAML from 'yaml';
 import yaml from 'js-yaml';
 import Form from '@rjsf/core';
 import rjsfValidator from '@rjsf/validator-ajv8';
@@ -286,7 +285,7 @@ export default class ConfigPanel extends Component {
         if (r.output) {
           this.setState({
             validationStatus: VALID,
-            autoFilledValue: YAML.stringify(r.output),
+            autoFilledValue: yaml.dump(r.output),
             configErrors: [],
             configErrorTitle: '',
             formData: r.output,
@@ -298,7 +297,7 @@ export default class ConfigPanel extends Component {
         /** Handle yaml syntax errors */
         if (r.error) {
           if (r.title === 'ERROR WHILE PARSING YAML STRING') {
-            const message = `${r.error.problem}\n ${YAML.stringify({
+            const message = `${r.error.problem}\n ${yaml.dump({
               line: r.error.problem_mark.line,
               column: r.error.problem_mark.column,
               pointer: r.error.problem_mark.pointer,
@@ -589,6 +588,7 @@ export default class ConfigPanel extends Component {
       ).then((data) => {
         const options = data.map((conf) => ({ label: conf.config_name, value: conf.id }));
         const configuration = data.find((conf) => conf.config_name === DEFAULT_CONFIG_NAME);
+
         this.setState((state) => ({
           configurationList: data,
           configurationOptions: options,
