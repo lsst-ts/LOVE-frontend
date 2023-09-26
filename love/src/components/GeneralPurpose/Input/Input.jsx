@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './Input.module.css';
