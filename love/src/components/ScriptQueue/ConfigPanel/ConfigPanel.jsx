@@ -21,7 +21,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
-import YAML from 'yaml';
 import yaml from 'js-yaml';
 import Form from '@rjsf/core';
 import rjsfValidator from '@rjsf/validator-ajv8';
@@ -286,7 +285,7 @@ export default class ConfigPanel extends Component {
         if (r.output) {
           this.setState({
             validationStatus: VALID,
-            autoFilledValue: YAML.stringify(r.output),
+            autoFilledValue: yaml.dump(r.output),
             configErrors: [],
             configErrorTitle: '',
             formData: r.output,
@@ -298,7 +297,7 @@ export default class ConfigPanel extends Component {
         /** Handle yaml syntax errors */
         if (r.error) {
           if (r.title === 'ERROR WHILE PARSING YAML STRING') {
-            const message = `${r.error.problem}\n ${YAML.stringify({
+            const message = `${r.error.problem}\n ${yaml.dump({
               line: r.error.problem_mark.line,
               column: r.error.problem_mark.column,
               pointer: r.error.problem_mark.pointer,
@@ -436,11 +435,19 @@ export default class ConfigPanel extends Component {
   selectConfiguration = (event) => {
     const { configurationList } = this.state;
     const configuration = configurationList.find((conf) => conf.id === event.value);
+
+    let yamlData;
+    try {
+      yamlData = configuration ? yaml.load(configuration.config_schema) : {};
+    } catch {
+      yamlData = {};
+    }
+
     this.setState({
       selectedConfiguration: event,
       value: configuration?.config_schema ?? '',
       inputConfigurationName: configuration?.config_name ?? '',
-      formData: yaml.load(configuration?.config_schema),
+      formData: yamlData,
     });
   };
 
@@ -589,13 +596,21 @@ export default class ConfigPanel extends Component {
       ).then((data) => {
         const options = data.map((conf) => ({ label: conf.config_name, value: conf.id }));
         const configuration = data.find((conf) => conf.config_name === DEFAULT_CONFIG_NAME);
+
+        let yamlData;
+        try {
+          yamlData = configuration ? yaml.load(configuration.config_schema) : {};
+        } catch {
+          yamlData = {};
+        }
+
         this.setState((state) => ({
           configurationList: data,
           configurationOptions: options,
           selectedConfiguration: configuration ? { label: configuration.config_name, value: configuration.id } : null,
           value: configuration?.config_schema ?? DEFAULT_CONFIG_VALUE,
           inputConfigurationName: configuration?.config_name ?? DEFAULT_CONFIG_NAME,
-          formData: configuration ? yaml.load(configuration.config_schema) : null,
+          formData: yamlData,
         }));
       });
     }
@@ -643,7 +658,13 @@ export default class ConfigPanel extends Component {
     const configPanelBarClassName = 'configPanelBar';
 
     // RJSF variables
-    const rjsfSchema = yamlSchema ? yaml.load(yamlSchema) : {};
+    let rjsfSchema;
+    try {
+      rjsfSchema = yamlSchema ? yaml.load(yamlSchema) : {};
+    } catch {
+      rjsfSchema = {};
+    }
+
     const rjsfWidgets = {
       SelectWidget: this.CustomSelect,
       TextWidget: this.CustomInput,
