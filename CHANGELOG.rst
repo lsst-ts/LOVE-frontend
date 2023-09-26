@@ -5,8 +5,9 @@ Version History
 v5.25.2
 -------
 
-* LOVE License `<https://github.com/lsst-ts/LOVE-frontend/pull/524>`_
 * Improvements for Plot component `<https://github.com/lsst-ts/LOVE-frontend/pull/525>`_
+* LOVE License `<https://github.com/lsst-ts/LOVE-frontend/pull/524>`_
+* Make CSCExpanded select inputs more clear `<https://github.com/lsst-ts/LOVE-frontend/pull/523>`_
 * Reorganize Component Select Screen `<https://github.com/lsst-ts/LOVE-frontend/pull/522>`_
 * Change Illinois timezone to California as USDF is at SLAC now `<https://github.com/lsst-ts/LOVE-frontend/pull/521>`_
 
