@@ -1,225 +1,301 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 .cls1 {
-        letter-spacing: -.01em;
-      }
+  letter-spacing: -0.01em;
+}
 
-      .cls2 {
-        letter-spacing: -.02em;
-      }
+.cls2 {
+  letter-spacing: -0.02em;
+}
 
-      .cls3 {
-        letter-spacing: -.02em;
-      }
+.cls3 {
+  letter-spacing: -0.02em;
+}
 
-      .cls4 {
-        letter-spacing: -.02em;
-      }
+.cls4 {
+  letter-spacing: -0.02em;
+}
 
-      .cls5 {
-        stroke-width: 3px;
-      }
+.cls5 {
+  stroke-width: 3px;
+}
 
-      .cls5, .cls6, .cls7, .cls8, .cls9, .cls10, .cls11, .cls12, .cls13, .cls14, .cls15, .cls16, .cls17 {
-        stroke-linecap: round;
-        stroke-linejoin: round;
-      }
+.cls5,
+.cls6,
+.cls7,
+.cls8,
+.cls9,
+.cls10,
+.cls11,
+.cls12,
+.cls13,
+.cls14,
+.cls15,
+.cls16,
+.cls17 {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
-      .cls5, .cls6, .cls7, .cls9, .cls10, .cls12, .cls18, .cls19, .cls13, .cls14, .cls16, .cls17 {
-        stroke: #bbd4e2;
-      }
+.cls5,
+.cls6,
+.cls7,
+.cls9,
+.cls10,
+.cls12,
+.cls18,
+.cls19,
+.cls13,
+.cls14,
+.cls16,
+.cls17 {
+  stroke: #bbd4e2;
+}
 
-      .cls5, .cls8, .cls9, .cls10, .cls11, .cls12, .cls20, .cls13, .cls21, .cls14, .cls15 {
-        fill: none;
-      }
+.cls5,
+.cls8,
+.cls9,
+.cls10,
+.cls11,
+.cls12,
+.cls20,
+.cls13,
+.cls21,
+.cls14,
+.cls15 {
+  fill: none;
+}
 
-      .cls6, .cls7 {
-        fill: rgba(187, 212, 226, .1);
-      }
+.cls6,
+.cls7 {
+  fill: rgba(187, 212, 226, 0.1);
+}
 
-      .cls6, .cls18, .cls19, .cls14, .cls15 {
-        stroke-width: .25px;
-      }
+.cls6,
+.cls18,
+.cls19,
+.cls14,
+.cls15 {
+  stroke-width: 0.25px;
+}
 
-      .cls22, .cls23, .cls24, .cls25 {
-        fill: #788f9b;
-      }
+.cls22,
+.cls23,
+.cls24,
+.cls25 {
+  fill: #788f9b;
+}
 
-      .cls26 {
-        letter-spacing: 0em;
-      }
+.cls26 {
+  letter-spacing: 0em;
+}
 
-      .cls27 {
-        letter-spacing: -.03em;
-      }
+.cls27 {
+  letter-spacing: -0.03em;
+}
 
-      .cls28 {
-        letter-spacing: -.01em;
-      }
+.cls28 {
+  letter-spacing: -0.01em;
+}
 
-      .cls7 {
-        stroke-dasharray: 0 0 .5 1;
-        stroke-width: .5px;
-      }
+.cls7 {
+  stroke-dasharray: 0 0 0.5 1;
+  stroke-width: 0.5px;
+}
 
-      .cls8, .cls10, .cls12, .cls13, .cls17 {
-        stroke-width: .71px;
-      }
+.cls8,
+.cls10,
+.cls12,
+.cls13,
+.cls17 {
+  stroke-width: 0.71px;
+}
 
-      .cls8, .cls11, .cls20, .cls24, .cls21, .cls15 {
-        stroke: #788f9b;
-      }
+.cls8,
+.cls11,
+.cls20,
+.cls24,
+.cls21,
+.cls15 {
+  stroke: #788f9b;
+}
 
-      .cls9, .cls16 {
-        stroke-width: .71px;
-      }
+.cls9,
+.cls16 {
+  stroke-width: 0.71px;
+}
 
-      .cls29 {
-        letter-spacing: -.05em;
-      }
+.cls29 {
+  letter-spacing: -0.05em;
+}
 
-      .cls11 {
-        stroke-width: .9px;
-      }
+.cls11 {
+  stroke-width: 0.9px;
+}
 
-      .cls23 {
-        font-size: 6px;
-      }
+.cls23 {
+  font-size: 6px;
+}
 
-      .cls23, .cls25 {
-        font-family: Montserrat-Regular, Montserrat;
-      }
+.cls23,
+.cls25 {
+  font-family: Montserrat-Regular, Montserrat;
+}
 
-      .cls12 {
-        stroke-dasharray: 0 0 0 0 0 0 0 0 0 0 2.5 1.25;
-      }
+.cls12 {
+  stroke-dasharray: 0 0 0 0 0 0 0 0 0 0 2.5 1.25;
+}
 
-      .cls30 {
-        letter-spacing: 0em;
-      }
+.cls30 {
+  letter-spacing: 0em;
+}
 
-      .cls31 {
-        letter-spacing: 0em;
-      }
+.cls31 {
+  letter-spacing: 0em;
+}
 
-      .cls18 {
-        fill: #15242d;
-      }
+.cls18 {
+  fill: #15242d;
+}
 
-      .cls18, .cls20, .cls19, .cls24, .cls21 {
-        stroke-miterlimit: 10;
-      }
+.cls18,
+.cls20,
+.cls19,
+.cls24,
+.cls21 {
+  stroke-miterlimit: 10;
+}
 
-      .cls20 {
-        stroke-width: .75px;
-      }
+.cls20 {
+  stroke-width: 0.75px;
+}
 
-      .cls32 {
-        letter-spacing: 0em;
-      }
+.cls32 {
+  letter-spacing: 0em;
+}
 
-      .cls19 {
-        fill: rgba(187, 212, 226, .2);
-      }
+.cls19 {
+  fill: rgba(187, 212, 226, 0.2);
+}
 
-      .cls33 {
-        letter-spacing: -.06em;
-      }
+.cls33 {
+  letter-spacing: -0.06em;
+}
 
-      .cls34 {
-        letter-spacing: 0em;
-      }
+.cls34 {
+  letter-spacing: 0em;
+}
 
-      .cls35 {
-        letter-spacing: -.03em;
-      }
+.cls35 {
+  letter-spacing: -0.03em;
+}
 
-      .cls36 {
-        letter-spacing: 0em;
-      }
+.cls36 {
+  letter-spacing: 0em;
+}
 
-      .cls37 {
-        letter-spacing: -.02em;
-      }
+.cls37 {
+  letter-spacing: -0.02em;
+}
 
-      .cls13 {
-        stroke-dasharray: 0 0 0 0 0 0 5 2.5;
-      }
+.cls13 {
+  stroke-dasharray: 0 0 0 0 0 0 5 2.5;
+}
 
-      .cls38 {
-        letter-spacing: .01em;
-      }
+.cls38 {
+  letter-spacing: 0.01em;
+}
 
-      .cls39 {
-        letter-spacing: 0em;
-      }
+.cls39 {
+  letter-spacing: 0em;
+}
 
-      .cls40 {
-        letter-spacing: 0em;
-      }
+.cls40 {
+  letter-spacing: 0em;
+}
 
-      .cls41 {
-        opacity: .2;
-      }
+.cls41 {
+  opacity: 0.2;
+}
 
-      .cls42 {
-        opacity: .5;
-      }
+.cls42 {
+  opacity: 0.5;
+}
 
-      .cls43 {
-        letter-spacing: -.02em;
-      }
+.cls43 {
+  letter-spacing: -0.02em;
+}
 
-      .cls44 {
-        letter-spacing: 0em;
-      }
+.cls44 {
+  letter-spacing: 0em;
+}
 
-      .cls45 {
-        letter-spacing: 0em;
-      }
+.cls45 {
+  letter-spacing: 0em;
+}
 
-      .cls46 {
-        letter-spacing: 0em;
-      }
+.cls46 {
+  letter-spacing: 0em;
+}
 
-      .cls47 {
-        letter-spacing: -.02em;
-      }
+.cls47 {
+  letter-spacing: -0.02em;
+}
 
-      .cls48 {
-        isolation: isolate;
-      }
+.cls48 {
+  isolation: isolate;
+}
 
-      .cls49 {
-        letter-spacing: -.02em;
-      }
+.cls49 {
+  letter-spacing: -0.02em;
+}
 
-      .cls25 {
-        font-size: 4px;
-      }
+.cls25 {
+  font-size: 4px;
+}
 
-      .cls50 {
-        letter-spacing: 0em;
-      }
+.cls50 {
+  letter-spacing: 0em;
+}
 
-      .cls51 {
-        letter-spacing: -.02em;
-      }
+.cls51 {
+  letter-spacing: -0.02em;
+}
 
-      .cls52 {
-        letter-spacing: 0em;
-      }
+.cls52 {
+  letter-spacing: 0em;
+}
 
-      .cls53 {
-        letter-spacing: -.03em;
-      }
+.cls53 {
+  letter-spacing: -0.03em;
+}
 
-      .cls16, .cls17 {
-        fill: #bbd4e2;
-      }
+.cls16,
+.cls17 {
+  fill: #bbd4e2;
+}
 
-      .cls54 {
-        letter-spacing: -.01em;
-      }
+.cls54 {
+  letter-spacing: -0.01em;
+}
 
-      .cls55 {
-        letter-spacing: -.01em;
-      }
+.cls55 {
+  letter-spacing: -0.01em;
+}

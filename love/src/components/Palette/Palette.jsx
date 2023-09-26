@@ -1,3 +1,22 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 import React from 'react';
 import { isConcatSpec } from 'vega-lite/build/src/spec/concat';
 import Button from '../GeneralPurpose/Button/Button';
@@ -30,7 +49,6 @@ import EditIcon from 'components/icons/EditIcon/EditIcon';
 import MessageIcon from 'components/icons/MessageIcon/MessageIcon';
 
 import styles from './Palette.module.css';
-
 
 function Palette(props) {
   const fontSizes = [
@@ -95,35 +113,34 @@ function Palette(props) {
   ];
 
   const icons = [
-    <AddIcon className={styles.icon}/>,
-    <ArrowIcon className={styles.icon}/>,
-    <BackArrowIcon className={styles.icon}/>,
-    <CheckStatusIcon className={styles.icon}/>,
-    <CloseIcon className={styles.icon}/>,
-    <EmergencyContactIcon className={styles.icon}/>,
-    <ErrorIcon className={styles.icon}/>,
-    <ExitModeIcon className={styles.icon}/>,
-    <ExportIcon className={styles.icon}/>,
-    <FilterIcon className={styles.icon}/>,
-    <GearIcon className={styles.icon}/>,
-    <GoBackIcon className={styles.icon}/>,
-    <IconBadge className={styles.icon}/>,
-    <ImportIcon className={styles.icon}/>,
-    <InfoIcon className={styles.icon}/>,
-    <MenuIcon className={styles.icon}/>,
-    <NotificationIcon className={styles.icon}/>,
-    <RedoIcon className={styles.icon}/>,
-    <RotateIcon className={styles.icon}/>,
-    <ScriptIcon className={styles.icon}/>,
-    <UndoIcon className={styles.icon}/>,
-    <WarningIcon className={styles.icon}/>,
-    <AcknowledgeIcon className={styles.icon}/>,
-    <GearIcon className={styles.icon}/>,
-    <HelpIcon className={styles.icon}/>,
-    <EditIcon className={styles.icon}/>,
-    <MessageIcon className={styles.icon}/>,
+    <AddIcon className={styles.icon} />,
+    <ArrowIcon className={styles.icon} />,
+    <BackArrowIcon className={styles.icon} />,
+    <CheckStatusIcon className={styles.icon} />,
+    <CloseIcon className={styles.icon} />,
+    <EmergencyContactIcon className={styles.icon} />,
+    <ErrorIcon className={styles.icon} />,
+    <ExitModeIcon className={styles.icon} />,
+    <ExportIcon className={styles.icon} />,
+    <FilterIcon className={styles.icon} />,
+    <GearIcon className={styles.icon} />,
+    <GoBackIcon className={styles.icon} />,
+    <IconBadge className={styles.icon} />,
+    <ImportIcon className={styles.icon} />,
+    <InfoIcon className={styles.icon} />,
+    <MenuIcon className={styles.icon} />,
+    <NotificationIcon className={styles.icon} />,
+    <RedoIcon className={styles.icon} />,
+    <RotateIcon className={styles.icon} />,
+    <ScriptIcon className={styles.icon} />,
+    <UndoIcon className={styles.icon} />,
+    <WarningIcon className={styles.icon} />,
+    <AcknowledgeIcon className={styles.icon} />,
+    <GearIcon className={styles.icon} />,
+    <HelpIcon className={styles.icon} />,
+    <EditIcon className={styles.icon} />,
+    <MessageIcon className={styles.icon} />,
   ];
-
 
   const scriptColors = ['--script-ok-color', '--script-ok-dimmed-color'];
 
@@ -245,10 +262,13 @@ function Palette(props) {
       <h1> Icons </h1>
       <div className={styles.grid}>
         {icons.map((icon, index) => {
-          return <Button key={index} className={styles.btn}>{icon}</Button>;
+          return (
+            <Button key={index} className={styles.btn}>
+              {icon}
+            </Button>
+          );
         })}
       </div>
-
     </div>
   );
 }

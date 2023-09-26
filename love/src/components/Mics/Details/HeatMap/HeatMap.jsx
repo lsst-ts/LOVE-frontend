@@ -1,7 +1,25 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { VegaLite } from 'react-vega';
-
 
 export default class HeatMap extends Component {
   static propTypes = {
@@ -28,7 +46,10 @@ export default class HeatMap extends Component {
     const initialContainerHeight = 206;
     const initialContainerWidth = 390;
 
-    const domain = (props.minDecibels !== undefined && props.maxDecibels !== undefined) ? [props.minDecibels, props.maxDecibels] : [-100, 0];
+    const domain =
+      props.minDecibels !== undefined && props.maxDecibels !== undefined
+        ? [props.minDecibels, props.maxDecibels]
+        : [-100, 0];
 
     this.state = {
       infoPlot: null,
@@ -53,14 +74,14 @@ export default class HeatMap extends Component {
             field: 'amp',
             scale: {
               range: [...HeatMap.COLOURS],
-              domain: domain
+              domain: domain,
             },
             legend: {
               labelColor: '#ddd',
               labelFontSize: 14,
               titleColor: '#ddd',
               title: 'dB',
-              gradientLength: initialContainerHeight
+              gradientLength: initialContainerHeight,
             },
           },
         },
@@ -86,7 +107,7 @@ export default class HeatMap extends Component {
     if (this.props.containerNode) {
       this.resizeObserver = new ResizeObserver((entries) => {
         const container = entries[0];
-        if(container.contentRect.height !== 0 && container.contentRect.width !== 0) {
+        if (container.contentRect.height !== 0 && container.contentRect.width !== 0) {
           this.setState({
             containerHeight: container.contentRect.height - 19,
             containerWidth: container.contentRect.width,
@@ -135,7 +156,7 @@ export default class HeatMap extends Component {
         this.resizeObserver.disconnect();
       };
     }
-  }
+  };
 
   /**
    * Function that update the spec inpu to Vega Lite Heat Map.
@@ -147,60 +168,60 @@ export default class HeatMap extends Component {
     const height = this.state.containerHeight;
     const width = this.state.containerWidth;
     const { minDecibels, maxDecibels } = this.props.infoPlot;
-    const domain = (minDecibels !== undefined && maxDecibels !== undefined) ? [minDecibels, maxDecibels] : undefined;
+    const domain = minDecibels !== undefined && maxDecibels !== undefined ? [minDecibels, maxDecibels] : undefined;
 
     const spec = {
-        width: width,
-        height: height,
-        autosize: { resize: 'true' },
-        data: { name: 'table' },
-        mark: { type: 'rect' },
-        encoding: {
-          x: {
-            field: 't_min',
-            type: 'temporal',
-            axis: { title: 'TIME', format: '%H:%M:%S', tickCount: windowTimePlot - 1, grid: true },
-            scale: { domain: timeDomain },
-          },
-          x2: {
-            field: 't_max',
-            type: 'temporal',
-          },
-          y: {
-            field: 'f_min',
-            type: 'quantitative',
-            axis: { title: 'FREQUENCY [Hz]', grid: true, labels: true },
-            scale: { domain: [0, bufferLength + 1] },
-          },
-          y2: { field: 'f_max', type: 'quantitative' },
-          color: {
-            type: 'quantitative',
-            field: 'amp',
-            scale: {
-              range: [...HeatMap.COLOURS],
-              domain: domain,
-            },
-            legend: {
-              labelColor: '#ddd',
-              labelFontSize: 14,
-              titleColor: '#ddd',
-              title: 'dB',
-              gradientLength: height
-            },
-          },
+      width: width,
+      height: height,
+      autosize: { resize: 'true' },
+      data: { name: 'table' },
+      mark: { type: 'rect' },
+      encoding: {
+        x: {
+          field: 't_min',
+          type: 'temporal',
+          axis: { title: 'TIME', format: '%H:%M:%S', tickCount: windowTimePlot - 1, grid: true },
+          scale: { domain: timeDomain },
         },
-        config: {
-          background: null,
-          axis: {
-            gridColor: '#424242',
-            tickColor: null,
-            titleColor: '#ddd',
+        x2: {
+          field: 't_max',
+          type: 'temporal',
+        },
+        y: {
+          field: 'f_min',
+          type: 'quantitative',
+          axis: { title: 'FREQUENCY [Hz]', grid: true, labels: true },
+          scale: { domain: [0, bufferLength + 1] },
+        },
+        y2: { field: 'f_max', type: 'quantitative' },
+        color: {
+          type: 'quantitative',
+          field: 'amp',
+          scale: {
+            range: [...HeatMap.COLOURS],
+            domain: domain,
+          },
+          legend: {
             labelColor: '#ddd',
-            titleFontWeight: 750,
-            labelFontWeight: 750,
-            titlePadding: 16,
+            labelFontSize: 14,
+            titleColor: '#ddd',
+            title: 'dB',
+            gradientLength: height,
           },
         },
+      },
+      config: {
+        background: null,
+        axis: {
+          gridColor: '#424242',
+          tickColor: null,
+          titleColor: '#ddd',
+          labelColor: '#ddd',
+          titleFontWeight: 750,
+          labelFontWeight: 750,
+          titlePadding: 16,
+        },
+      },
     };
     this.setState({ spec: spec });
   };
@@ -218,15 +239,7 @@ export default class HeatMap extends Component {
     const { data3D } = this.props.infoPlot;
     return (
       <>
-        {
-          <VegaLite
-            style={{ display: 'flex' }}
-            renderer="svg"
-            spec={this.state.spec}
-            data={data3D}
-            actions={false}
-          />
-        }
+        {<VegaLite style={{ display: 'flex' }} renderer="svg" spec={this.state.spec} data={data3D} actions={false} />}
       </>
     );
   }

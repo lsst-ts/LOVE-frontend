@@ -1,3 +1,22 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ManagerInterface, { parseCommanderData } from 'Utils';
@@ -94,38 +113,44 @@ export default class Row extends Component {
     }, 1000);
 
     if (this.props.initialPlaying) {
-      let playAttempt = setInterval(() => {
-        if (!this.state.isPlaying){
-          this.play(this.props.initialPlaying);
-        } else {
-          clearInterval(playAttempt);
-        }
-      }, 2000 + Number(this.props.id) * 1000)
+      let playAttempt = setInterval(
+        () => {
+          if (!this.state.isPlaying) {
+            this.play(this.props.initialPlaying);
+          } else {
+            clearInterval(playAttempt);
+          }
+        },
+        2000 + Number(this.props.id) * 1000,
+      );
     }
-  }
+  };
 
   componentDidUpdate = (prevProps, prevState) => {
     if (prevState.dbLimit !== this.state.dbLimit) {
-      this.props.setInfoPlot({dbLimit: this.state.dbLimit});
+      this.props.setInfoPlot({ dbLimit: this.state.dbLimit });
     }
 
-    if (this.state.notifications &&
+    if (
+      this.state.notifications &&
       !this.state.alarm &&
       prevState.actualMaxDb !== this.state.actualMaxDb &&
-      this.state.actualMaxDb > (-1) * this.state.dbLimit) {
-        this.setState({alarm: true});
+      this.state.actualMaxDb > -1 * this.state.dbLimit
+    ) {
+      this.setState({ alarm: true });
     }
 
-    if (this.state.isSelected && (
-      prevState.actualMaxFreq !== this.state.actualMaxFreq ||
-      prevState.actualMaxDb !== this.state.actualMaxDb ||
-      prevState.actualMinFreq !== this.state.actualMinFreq ||
-      prevState.actualMinDb !== this.state.actualMinDb ||
-      prevState.windowTimePlot !== this.state.windowTimePlot ||
-      prevState.bufferLength !== this.state.bufferLength  ||
-      prevState.timeDomain !== this.state.timeDomain ||
-      prevState.data3D !== this.state.data3D
-    )) {
+    if (
+      this.state.isSelected &&
+      (prevState.actualMaxFreq !== this.state.actualMaxFreq ||
+        prevState.actualMaxDb !== this.state.actualMaxDb ||
+        prevState.actualMinFreq !== this.state.actualMinFreq ||
+        prevState.actualMinDb !== this.state.actualMinDb ||
+        prevState.windowTimePlot !== this.state.windowTimePlot ||
+        prevState.bufferLength !== this.state.bufferLength ||
+        prevState.timeDomain !== this.state.timeDomain ||
+        prevState.data3D !== this.state.data3D)
+    ) {
       const infoPlot = {
         actualMaxFreq: this.state.actualMaxFreq,
         actualMaxDb: this.state.actualMaxDb,
@@ -140,7 +165,7 @@ export default class Row extends Component {
       };
       this.props.setInfoPlot(infoPlot);
     }
-  }
+  };
 
   componentWillUnmount = () => {
     if (this.countPollingInterval) clearInterval(this.countPollingInterval);
@@ -328,12 +353,11 @@ export default class Row extends Component {
     this.setState((prevState) => {
       if (!prevState.isSelected) {
         return { isSelected: true, alarm: false };
-      }
-      else {
+      } else {
         return { isSelected: false };
       }
     });
-    
+
     const infoPlot = {
       actualMaxFreq: this.state.actualMaxFreq,
       actualMaxDb: this.state.actualMaxDb,
@@ -356,8 +380,7 @@ export default class Row extends Component {
     this.setState((prevState) => {
       if (prevState.notifications) {
         return { notifications: false, alarm: false };
-      }
-      else {
+      } else {
         return { notifications: true };
       }
     });
@@ -524,8 +547,8 @@ export default class Row extends Component {
       volume: this.masterGain?.gain,
     };
 
-    const statusMic = (this.state.isPlaying) ? 'ok' : 'warning';
-    const textMic = (this.state.isPlaying) ? 'LISTENING' : 'NOT LISTENING';
+    const statusMic = this.state.isPlaying ? 'ok' : 'warning';
+    const textMic = this.state.isPlaying ? 'LISTENING' : 'NOT LISTENING';
 
     return (
       <tr key={`mics-row-${id}`} className={classSelectedMic}>
@@ -541,23 +564,28 @@ export default class Row extends Component {
           </StatusText>
         </td>
         <td onClick={() => this.props.selectMic(mic)} className={styles.pointer}>
-          <VolumeIcon className={styles.svgTable}
+          <VolumeIcon
+            className={styles.svgTable}
             isOpacity={mic.volume?.value == 0 || !this.state.isPlaying}
             volumeValue={!this.state.isPlaying ? 0 : mic.volume?.value}
           />
         </td>
-        <td onClick={() => {this.turnNotifications(); }}>
+        <td
+          onClick={() => {
+            this.turnNotifications();
+          }}
+        >
           {this.state.notifications ? (
-            <NotificationSoundOnIcon selected={isSelected} className={[styles.svgTable, styles.pointer].join(' ')}/>
+            <NotificationSoundOnIcon selected={isSelected} className={[styles.svgTable, styles.pointer].join(' ')} />
           ) : (
-            <NotificationSoundOffIcon selected={isSelected} className={[styles.svgTable, styles.pointer].join(' ')}/>
+            <NotificationSoundOffIcon selected={isSelected} className={[styles.svgTable, styles.pointer].join(' ')} />
           )}
         </td>
         <td>
           {this.state.alarm ? (
-            <AlarmOnIcon className={styles.svgTable}/>
+            <AlarmOnIcon className={styles.svgTable} />
           ) : (
-            <AlarmOffIcon className={styles.svgTable}/>
+            <AlarmOffIcon className={styles.svgTable} />
           )}
         </td>
       </tr>

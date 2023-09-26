@@ -1,10 +1,26 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import {
-  getStreamsData,
-  getDomeState,
-} from 'redux/selectors';
+import { getStreamsData, getDomeState } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import AuxTelESS from './AuxTelESS';
 import { range } from 'lodash';
@@ -39,7 +55,8 @@ export const schema = {
     },
     salindexList: {
       type: 'string',
-      description: 'Numbers separated by comma(","), and range of numbers separed with hyphen ("-"). For example 1-99,101,102,105',
+      description:
+        'Numbers separated by comma(","), and range of numbers separed with hyphen ("-"). For example 1-99,101,102,105',
       isPrivate: false,
       default: '201-299',
     },
@@ -51,13 +68,12 @@ export const schema = {
     initialCameraPosition: {
       type: 'object',
       description: 'object of the initial position from the camera. Example {x: -2.8, y: -6, z: 9.5}',
-      default: {x: -2.8, y: -6, z: 9.5},
-    }
+      default: { x: -2.8, y: -6, z: 9.5 },
+    },
   },
 };
 
 const AuxTelESSContainer = (props) => {
-
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
@@ -67,14 +83,16 @@ const AuxTelESSContainer = (props) => {
 
 const getGroupNames = (salindexList, option) => {
   const sep = salindexList?.split(',');
-  const listSal = sep?.map((s) => {
-    if (s.indexOf('-') >= 0) {
-      const [init, end] = s.split('-');
-      return range(init, end);
-    } else {
-      return [Number(s)];
-    }
-  }).flat();
+  const listSal = sep
+    ?.map((s) => {
+      if (s.indexOf('-') >= 0) {
+        const [init, end] = s.split('-');
+        return range(init, end);
+      } else {
+        return [Number(s)];
+      }
+    })
+    .flat();
   const subscriptions = listSal.map((salindex) => {
     return `telemetry-ESS-${salindex}-${option}`;
   });
@@ -82,14 +100,19 @@ const getGroupNames = (salindexList, option) => {
 };
 
 const parse = (streams, option) => {
-  switch(option) {
-    case 'temperature': return parseTemperature(streams);
-    case 'relativeHumidity': return parseHumidity(streams);
-    case 'airFlow': return parseAirflow(streams);
-    case 'airTurbulence': return parseAirTurbulence(streams);
-    default: return [];
+  switch (option) {
+    case 'temperature':
+      return parseTemperature(streams);
+    case 'relativeHumidity':
+      return parseHumidity(streams);
+    case 'airFlow':
+      return parseAirflow(streams);
+    case 'airTurbulence':
+      return parseAirTurbulence(streams);
+    default:
+      return [];
   }
-}
+};
 
 const parseTemperature = (streams) => {
   const temperatures = [];
@@ -116,7 +139,7 @@ const parseTemperature = (streams) => {
     });
   });
   return temperatures;
-}
+};
 
 const parseHumidity = (streams) => {
   const humidities = [];
@@ -138,7 +161,7 @@ const parseHumidity = (streams) => {
     });
   });
   return humidities;
-}
+};
 
 const parseAirflow = (streams) => {
   const airflows = [];
@@ -202,7 +225,7 @@ const parseAirflow = (streams) => {
     zPosition: 0,
   });
   return airflows;
-}
+};
 
 const parseAirTurbulence = (streams) => {
   const airTurbulences = [];
@@ -211,7 +234,7 @@ const parseAirTurbulence = (streams) => {
       const essData = entry[1];
       const sensorName = essData?.sensorName.value ?? '';
       const value = essData?.speedMagnitud.value ?? 0;
-      const speed = essData?.speed.value ?? {x: 0, y: 0, z: 0};
+      const speed = essData?.speed.value ?? { x: 0, y: 0, z: 0 };
       const location = essData?.location.value ?? '';
       airTurbulences.push({
         sensorName,
@@ -228,7 +251,7 @@ const parseAirTurbulence = (streams) => {
   airTurbulences.push({
     sensorName: 'test',
     value: 2,
-    speed: {x: 1, y: 1, z: 2 },
+    speed: { x: 1, y: 1, z: 2 },
     location: 'location test',
     telemetry: 'telemetry-ESS-402-airTurbulence',
     xPosition: 1,
@@ -236,7 +259,7 @@ const parseAirTurbulence = (streams) => {
     zPosition: 1,
   });
   return airTurbulences;
-}
+};
 
 const mapStateToProps = (state, ownProps) => {
   const salindexList = ownProps.salindexList;
@@ -245,13 +268,15 @@ const mapStateToProps = (state, ownProps) => {
   let map = {};
   const groupNames = getGroupNames(salindexList, option);
   const streams = getStreamsData(state, groupNames);
-  const cleanStream = Object.entries(streams).filter((stream) => {
-    return stream[1] !== undefined;
-  }).map((entry) => {
-    const result = {};
-    result[entry[0]] = entry[1];
-    return result;
-  });
+  const cleanStream = Object.entries(streams)
+    .filter((stream) => {
+      return stream[1] !== undefined;
+    })
+    .map((entry) => {
+      const result = {};
+      result[entry[0]] = entry[1];
+      return result;
+    });
   map[option] = cleanStream ? parse(cleanStream, option) : [];
 
   const domeState = getDomeState(state);
@@ -266,10 +291,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   const salindexList = ownProps.salindexList;
   const option = ownProps.option;
-  const subscriptions = [
-    'telemetry-ATDome-0-position',
-    ...getGroupNames(salindexList, option),
-  ];
+  const subscriptions = ['telemetry-ATDome-0-position', ...getGroupNames(salindexList, option)];
 
   return {
     subscriptions,

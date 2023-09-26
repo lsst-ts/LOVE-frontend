@@ -1,3 +1,22 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 .divDetails {
   background-color: var(--second-quaternary-background-dimmed-color);
   border-radius: 5px;
@@ -7,32 +26,32 @@
   border-color: hsl(205deg 40% 8% / 65%);
   padding-bottom: 1.75em;
 }
-  
+
 .headers {
   vertical-align: sub;
   font-size: small;
   color: var(--base-font-color);
 }
-  
+
 .divTitleSection {
   height: 7.5%;
   margin-block: 2px;
   color: var(--base-font-color);
   display: grid;
 }
-  
+
 .audioStream {
   display: grid;
   justify-items: center;
 }
-  
+
 .detailsTitle {
   display: flex;
   margin: 0.5em;
   font-weight: bold;
   width: 95%;
 }
-  
+
 .recordsDiv {
   background-color: #2b3f4a;
   border-radius: 7.5px;
@@ -44,7 +63,7 @@
   display: inline-grid;
   justify-items: center;
 }
-  
+
 .spanIdDetails {
   display: flex;
   font-weight: bold;
@@ -70,7 +89,7 @@
   background-color: var(--base-background-color);
   border-radius: 10px;
 }
-  
+
 .svgButtonDiv {
   position: relative;
   transform: translate(-10%, 0%);
@@ -87,7 +106,7 @@
   stroke-linejoin: round;
   stroke-width: 0.3px;
 }
-  
+
 .fontTitle {
   display: flex;
   font-weight: bold;

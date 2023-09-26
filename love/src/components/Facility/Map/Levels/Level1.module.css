@@ -1,164 +1,214 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 .cls1 {
-        stroke-dasharray: 0 0 0 0 3.02 2.52 0 0;
-      }
+  stroke-dasharray: 0 0 0 0 3.02 2.52 0 0;
+}
 
-      .cls1, .cls2, .cls3, .cls4, .cls5, .cls6, .cls7, .cls8, .cls9, .cls10, .cls11, .cls12, .cls13 {
-        stroke: #bbd4e2;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-      }
+.cls1,
+.cls2,
+.cls3,
+.cls4,
+.cls5,
+.cls6,
+.cls7,
+.cls8,
+.cls9,
+.cls10,
+.cls11,
+.cls12,
+.cls13 {
+  stroke: #bbd4e2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
-      .cls1, .cls3, .cls4, .cls5, .cls6, .cls14, .cls7, .cls8, .cls9, .cls10, .cls11 {
-        fill: none;
-      }
+.cls1,
+.cls3,
+.cls4,
+.cls5,
+.cls6,
+.cls14,
+.cls7,
+.cls8,
+.cls9,
+.cls10,
+.cls11 {
+  fill: none;
+}
 
-      .cls1, .cls3, .cls6, .cls10, .cls11 {
-        stroke-width: .5px;
-      }
+.cls1,
+.cls3,
+.cls6,
+.cls10,
+.cls11 {
+  stroke-width: 0.5px;
+}
 
-      .cls15 {
-        letter-spacing: .01em;
-      }
+.cls15 {
+  letter-spacing: 0.01em;
+}
 
-      .cls16 {
-        letter-spacing: .02em;
-      }
+.cls16 {
+  letter-spacing: 0.02em;
+}
 
-      .cls2 {
-        fill: rgba(187, 212, 226, .1);
-      }
+.cls2 {
+  fill: rgba(187, 212, 226, 0.1);
+}
 
-      .cls2, .cls8, .cls9 {
-        stroke-width: .25px;
-      }
+.cls2,
+.cls8,
+.cls9 {
+  stroke-width: 0.25px;
+}
 
-      .cls18, .cls12, .cls13 {
-        fill: #bbd4e2;
-      }
+.cls18,
+.cls12,
+.cls13 {
+  fill: #bbd4e2;
+}
 
-      .cls19, .cls20, .cls21 {
-        fill: #788f9b;
-      }
+.cls19,
+.cls20,
+.cls21 {
+  fill: #788f9b;
+}
 
-      .cls22 {
-        letter-spacing: 0em;
-      }
+.cls22 {
+  letter-spacing: 0em;
+}
 
-      .cls23 {
-        letter-spacing: .03em;
-      }
+.cls23 {
+  letter-spacing: 0.03em;
+}
 
-      .cls24 {
-        letter-spacing: .01em;
-      }
+.cls24 {
+  letter-spacing: 0.01em;
+}
 
-      .cls25 {
-        letter-spacing: 0em;
-      }
+.cls25 {
+  letter-spacing: 0em;
+}
 
-      .cls3 {
-        stroke-dasharray: 0 0 0 0 2.98 2.48 0 0;
-      }
+.cls3 {
+  stroke-dasharray: 0 0 0 0 2.98 2.48 0 0;
+}
 
-      .cls4, .cls12 {
-        stroke-width: .71px;
-      }
+.cls4,
+.cls12 {
+  stroke-width: 0.71px;
+}
 
-      .cls5, .cls7, .cls13 {
-        stroke-width: .71px;
-      }
+.cls5,
+.cls7,
+.cls13 {
+  stroke-width: 0.71px;
+}
 
-      .cls6 {
-        stroke-dasharray: 0 0 0 0 3.02 2.52 0 0;
-      }
+.cls6 {
+  stroke-dasharray: 0 0 0 0 3.02 2.52 0 0;
+}
 
-      .cls26 {
-        letter-spacing: .02em;
-      }
+.cls26 {
+  letter-spacing: 0.02em;
+}
 
-      .cls27 {
-        letter-spacing: .08em;
-      }
+.cls27 {
+  letter-spacing: 0.08em;
+}
 
-      .cls28 {
-        letter-spacing: .05em;
-      }
+.cls28 {
+  letter-spacing: 0.05em;
+}
 
-      .cls20 {
-        font-size: 6px;
-      }
+.cls20 {
+  font-size: 6px;
+}
 
-      .cls20, .cls21 {
-        font-family: MontserratRegular, Montserrat;
-      }
+.cls20,
+.cls21 {
+  font-family: MontserratRegular, Montserrat;
+}
 
-      .cls29 {
-        letter-spacing: 0em;
-      }
+.cls29 {
+  letter-spacing: 0em;
+}
 
-      .cls30 {
-        letter-spacing: 0em;
-      }
+.cls30 {
+  letter-spacing: 0em;
+}
 
-      .cls31 {
-        letter-spacing: 0em;
-      }
+.cls31 {
+  letter-spacing: 0em;
+}
 
-      .cls14 {
-        stroke: #788f9b;
-        stroke-miterlimit: 10;
-        stroke-width: .75px;
-      }
+.cls14 {
+  stroke: #788f9b;
+  stroke-miterlimit: 10;
+  stroke-width: 0.75px;
+}
 
-      .cls32 {
-        letter-spacing: 0em;
-      }
+.cls32 {
+  letter-spacing: 0em;
+}
 
-      .cls33 {
-        letter-spacing: .06em;
-      }
+.cls33 {
+  letter-spacing: 0.06em;
+}
 
-      .cls34 {
-        letter-spacing: 0em;
-      }
+.cls34 {
+  letter-spacing: 0em;
+}
 
-      .cls35 {
-        letter-spacing: .01em;
-      }
+.cls35 {
+  letter-spacing: 0.01em;
+}
 
-      .cls36 {
-        letter-spacing: 0em;
-      }
+.cls36 {
+  letter-spacing: 0em;
+}
 
-      .cls37 {
-        letter-spacing: 0em;
-      }
+.cls37 {
+  letter-spacing: 0em;
+}
 
-      .cls7 {
-        stroke-dasharray: 0 0 0 0 0 0 5 2.5;
-      }
+.cls7 {
+  stroke-dasharray: 0 0 0 0 0 0 5 2.5;
+}
 
+.cls8 {
+  stroke-dasharray: 0 0 1 1;
+}
 
-      .cls8 {
-        stroke-dasharray: 0 0 1 1;
-      }
+.cls45 {
+  opacity: 0.5;
+}
 
+.cls21 {
+  font-size: 4px;
+}
 
+.cls11 {
+  stroke-dasharray: 0 0 0 0 2.95 2.46 0 0;
+}
 
-      .cls45 {
-        opacity: .5;
-      }
-
-
-
-      .cls21 {
-        font-size: 4px;
-      }
-
-      .cls11 {
-        stroke-dasharray: 0 0 0 0 2.95 2.46 0 0;
-      }
-
-      .background{
-        fill: var(--second-secondary-background-color);
-      }
+.background {
+  fill: var(--second-secondary-background-color);
+}

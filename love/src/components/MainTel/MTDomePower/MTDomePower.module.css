@@ -1,54 +1,72 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 .container {
-	display:flex;
+  display: flex;
 }
 
 .leftPanel {
-	display:flex;
-	background-color:#1a2d37;
-	border-radius:5px;
-	padding:5px;
-	margin:5px;
-
+  display: flex;
+  background-color: #1a2d37;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
 }
 
 .rightPanel {
-	display:flex;
-	background-color:#1a2d37;
-	border-radius:5px;
-	padding:5px;
-	margin:5px;	
-    flex-wrap: wrap;
+  display: flex;
+  background-color: #1a2d37;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  flex-wrap: wrap;
 }
 
 .plotContainer {
 }
 
-.plotContainer svg{
-	background:none !important;
+.plotContainer svg {
+  background: none !important;
 }
 
 .systemList {
-	text-align: left;
-	width:210px;
-	vertical-align:text-bottom;
+  text-align: left;
+  width: 210px;
+  vertical-align: text-bottom;
 }
 
 .systemList div {
-	position: relative;
+  position: relative;
 }
 
-.kwBold{
-	font-weight:bold;
-	color:#a8b9c1;
+.kwBold {
+  font-weight: bold;
+  color: #a8b9c1;
 }
 
-.powerTotal{
-	color: #c1ced2;
-	font-weight:bold;
-	font-size:2em;
-	position:relative;
+.powerTotal {
+  color: #c1ced2;
+  font-weight: bold;
+  font-size: 2em;
+  position: relative;
 }
 
-.powerTotal:after{
-	width: 0px
+.powerTotal:after {
+  width: 0px;
 }

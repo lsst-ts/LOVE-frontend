@@ -1,9 +1,27 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 import React from 'react';
 import { connect } from 'react-redux';
 import { getAllTelemetries } from 'redux/selectors';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 import TimeSeriesConfigure from './TimeSeriesConfigure';
-
 
 export const schema = {
   description: `Timeseries Configure`,
@@ -13,11 +31,9 @@ export const schema = {
       description:
         'List of subscriptions in the format: <"event"|"telemetry">-<CSC>-<CSCIndex>-<topic>, e.g. "telemetry-all-all-all"',
       isPrivate: false,
-      default: [
-        'telemetry-all-all-all',
-      ],
+      default: ['telemetry-all-all-all'],
     },
-  }
+  },
 };
 
 const TimeSeriesConfigureContainer = ({
@@ -44,7 +60,6 @@ const TimeSeriesConfigureContainer = ({
     />
   );
 };
-
 
 const mapStateToProps = (state, ownProps) => {
   const getStreamDataProp = (groupName) => getStreamData(state, groupName);
