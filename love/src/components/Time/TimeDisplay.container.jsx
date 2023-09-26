@@ -1,3 +1,22 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 import React from 'react';
 import { connect } from 'react-redux';
 import { getClock } from '../../redux/selectors';
@@ -42,7 +61,7 @@ export const schema = {
         1. name: (string) name of the clock, to be displayed above it.
         2. hideAnalog: (boolean = false) flag to hide the analog clock.
         3. hideDate: (boolean = false) flag to hide the date.
-        4. hideOffset: (boolean = false) flag to hide the UTC offset, displayed at the right of the name
+        4. hideOffset: (boolean = false) flag to hide the UTC offset, displayed at the right of the name.
         5. timezone: timezone string used to configure which UTC offset to use. 'local' if current should be used. 'local' by default.
 
         The format for the timezone string can be a fixed string (for UTC or TAI); a fixed-offset string (e.g. UTC+5);
@@ -57,9 +76,10 @@ export const schema = {
         - For Observing Day use observing-day
         - For La Serena use America/Santiago
         - For Arizona use America/Phoenix
-        - For Illinois use America/Chicago
-        Note that not every city is available, check the IANA DB documentation for more info: https://www.iana.org/time-zones
-        See the default value as an example`,
+        - For California use America/Los_Angeles
+        Note that not every city is available, check the IANA DB documentation for more info: https://www.iana.org/time-zones.
+        https://time.is/ is a good website to check the current time in different timezones too.
+        See the default value as an example.`,
       isPrivate: false,
       default: [
         [
@@ -95,11 +115,11 @@ export const schema = {
               timezone: 'America/Phoenix',
             },
             {
-              name: 'Illinois',
+              name: 'California',
               hideAnalog: true,
               hideDate: false,
               hideOffset: false,
-              timezone: 'America/Chicago',
+              timezone: 'America/Los_Angeles',
             },
           ],
           [

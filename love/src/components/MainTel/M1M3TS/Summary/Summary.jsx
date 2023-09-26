@@ -1,9 +1,25 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  m1m3tsSummaryStates,
-  m1m3tsSummaryStateToStyle,
-} from 'Config';
+import { m1m3tsSummaryStates, m1m3tsSummaryStateToStyle } from 'Config';
 import CSCDetailStyles from 'components/CSCSummary/CSCDetail/CSCDetail.module.css';
 
 import styles from './Summary.module.css';
@@ -40,29 +56,26 @@ export default class Summary extends Component {
     };
 
     return (
-        <div className={styles.summaryPanelControls}>
-          <div className={styles.controls}>
-            <div className={styles.control}>
-              <span className={styles.title}>M1M3TS</span>
-              <span className={[summaryStateValue?.class, styles.summaryState].join(' ')}>
-                {summaryStateValue?.name}
-              </span>
-            </div>
-            <div className={styles.control}>
-              <span >Fan Heaters</span>
-              <span className={[m1m3tsFanHeatersValue.class, styles.summaryState].join(' ')}>
-                {m1m3tsFanHeatersValue.name}
-              </span>
-            </div>
-            <div className={styles.control}>
-              <span >Coolant Pump</span>
-              <span className={[m1m3tsCoolantPumpValue.class, styles.summaryState].join(' ')}>
-                {m1m3tsCoolantPumpValue.name}
-              </span>
-            </div>
+      <div className={styles.summaryPanelControls}>
+        <div className={styles.controls}>
+          <div className={styles.control}>
+            <span className={styles.title}>M1M3TS</span>
+            <span className={[summaryStateValue?.class, styles.summaryState].join(' ')}>{summaryStateValue?.name}</span>
           </div>
-          
+          <div className={styles.control}>
+            <span>Fan Heaters</span>
+            <span className={[m1m3tsFanHeatersValue.class, styles.summaryState].join(' ')}>
+              {m1m3tsFanHeatersValue.name}
+            </span>
+          </div>
+          <div className={styles.control}>
+            <span>Coolant Pump</span>
+            <span className={[m1m3tsCoolantPumpValue.class, styles.summaryState].join(' ')}>
+              {m1m3tsCoolantPumpValue.name}
+            </span>
+          </div>
         </div>
+      </div>
     );
   }
 }

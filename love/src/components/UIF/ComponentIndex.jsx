@@ -1,3 +1,22 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 /* eslint-disable global-require */
 /**
  * Important!!
@@ -186,6 +205,16 @@ export const observatoryIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../EnvironmentSummary/EnvironmentSummary.container').schema.props,
+      },
+    },
+  },
+  GIS: {
+    component: require('../GIS/GIS.container').default,
+    schema: {
+      ...require('../GIS/GIS.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../GIS/GIS.container').schema.props,
       },
     },
   },
@@ -479,16 +508,6 @@ export const mainIndex = {
       },
     },
   },
-  CameraHexapod: {
-    component: require('../MainTel/CameraHexapod/CameraHexapod.container').default,
-    schema: {
-      ...require('../MainTel/CameraHexapod/CameraHexapod.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../MainTel/CameraHexapod/CameraHexapod.container').schema.props,
-      },
-    },
-  },
   SimonyiDome: {
     component: require('../MainTel/MTDome/MTDome.container').default,
     schema: {
@@ -509,16 +528,6 @@ export const mainIndex = {
       },
     },
   },
-  SimonyiLightPath: {
-    component: require('../MainTel/LightPath/SimonyiLightPath.container').default,
-    schema: {
-      ...require('../MainTel/LightPath/SimonyiLightPath.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../MainTel/LightPath/SimonyiLightPath.container').schema.props,
-      },
-    },
-  },
   TMA: {
     component: require('../MainTel/TMA/TMA.container').default,
     schema: {
@@ -529,13 +538,26 @@ export const mainIndex = {
       },
     },
   },
-  GIS: {
-    component: require('../GIS/GIS.container').default,
+};
+
+export const mainCameraIndex = {
+  CameraHexapod: {
+    component: require('../MainTel/CameraHexapod/CameraHexapod.container').default,
     schema: {
-      ...require('../GIS/GIS.container').schema,
+      ...require('../MainTel/CameraHexapod/CameraHexapod.container').schema,
       props: {
         ...defaultSchemaProps,
-        ...require('../GIS/GIS.container').schema.props,
+        ...require('../MainTel/CameraHexapod/CameraHexapod.container').schema.props,
+      },
+    },
+  },
+  SimonyiLightPath: {
+    component: require('../MainTel/LightPath/SimonyiLightPath.container').default,
+    schema: {
+      ...require('../MainTel/LightPath/SimonyiLightPath.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/LightPath/SimonyiLightPath.container').schema.props,
       },
     },
   },
@@ -734,6 +756,10 @@ export const indexes = [
     index: mainIndex,
   },
   {
+    name: 'Simonyi Camera',
+    index: mainCameraIndex,
+  },
+  {
     name: 'Environment',
     index: environmentIndex,
   },
@@ -751,6 +777,7 @@ export default {
   ...observatoryIndex,
   ...auxtelIndex,
   ...mainIndex,
+  ...mainCameraIndex,
   ...environmentIndex,
   ...utilitiesIndex,
   ...internalIndex,

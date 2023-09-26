@@ -1,3 +1,22 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
@@ -134,7 +153,7 @@ export default class WeatherForecast extends Component {
             <div className={styles.sectionTitle}>Cloud</div>
             <div ref={this.cloudPlotRef} className={styles.plot}>
               <PlotContainer
-                containerNode={this.cloudPlotRef.current}
+                containerNode={this.cloudPlotRef}
                 xAxisTitle="Time"
                 yAxisTitle=""
                 legendPosition=""
@@ -150,7 +169,7 @@ export default class WeatherForecast extends Component {
             </div>
             <div ref={this.cloudComplementPlotRef} className={styles.plot}>
               <PlotContainer
-                containerNode={this.cloudComplementPlotRef.current}
+                containerNode={this.cloudComplementPlotRef}
                 xAxisTitle="Time"
                 yAxisTitle="Cloud"
                 legendPosition="bottom"
@@ -172,7 +191,7 @@ export default class WeatherForecast extends Component {
             <div className={styles.sectionTitle}>Wind</div>
             <div ref={this.windPlotRef} className={styles.plot}>
               <PlotContainer
-                containerNode={this.windPlotRef.current}
+                containerNode={this.windPlotRef}
                 xAxisTitle="Time"
                 yAxisTitle=""
                 legendPosition="bottom"
@@ -192,7 +211,7 @@ export default class WeatherForecast extends Component {
             <div className={styles.sectionTitle}>Temperature</div>
             <div ref={this.temperaturePlotRef} className={styles.plot}>
               <PlotContainer
-                containerNode={this.temperaturePlotRef.current}
+                containerNode={this.temperaturePlotRef}
                 xAxisTitle="Time"
                 yAxisTitle="Temperature"
                 legendPosition="bottom"
@@ -212,7 +231,7 @@ export default class WeatherForecast extends Component {
             <div className={styles.sectionTitle}>Rain</div>
             <div ref={this.rainPlotRef} className={styles.plot}>
               <PlotContainer
-                containerNode={this.rainPlotRef.current}
+                containerNode={this.rainPlotRef}
                 xAxisTitle="Time"
                 yAxisTitle=""
                 legendPosition="bottom"

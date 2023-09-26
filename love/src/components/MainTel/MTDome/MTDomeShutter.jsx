@@ -1,3 +1,22 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { fixedFloat } from 'Utils';
@@ -54,9 +73,13 @@ export default class MTDomeShutter extends Component {
   };
 
   render() {
-    const { width, height,
-      positionActualDomeAz, positionCommandedDomeAz,
-      positionActualShutter, positionCommandedShutter
+    const {
+      width,
+      height,
+      positionActualDomeAz,
+      positionCommandedDomeAz,
+      positionActualShutter,
+      positionCommandedShutter,
     } = this.props;
 
     return (
@@ -189,7 +212,7 @@ export default class MTDomeShutter extends Component {
         </g>
 
         {/* Dome, commanded position */}
-        { fixedFloat(positionCommandedDomeAz, 1) !== fixedFloat(positionActualDomeAz, 1) && (
+        {fixedFloat(positionCommandedDomeAz, 1) !== fixedFloat(positionActualDomeAz, 1) && (
           <g
             style={{
               transformOrigin: `50% 50%`,

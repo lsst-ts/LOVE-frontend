@@ -2,6 +2,17 @@
 Version History
 ===============
 
+v5.25.2
+-------
+
+* Improve copyright file `<https://github.com/lsst-ts/LOVE-frontend/pull/527>`_
+* Patch ScriptQueue ConfigPanel yaml strings parsing `<https://github.com/lsst-ts/LOVE-frontend/pull/526>`_
+* Improvements for Plot component `<https://github.com/lsst-ts/LOVE-frontend/pull/525>`_
+* LOVE License `<https://github.com/lsst-ts/LOVE-frontend/pull/524>`_
+* Make CSCExpanded select inputs more clear `<https://github.com/lsst-ts/LOVE-frontend/pull/523>`_
+* Reorganize Component Select Screen `<https://github.com/lsst-ts/LOVE-frontend/pull/522>`_
+* Change Illinois timezone to California as USDF is at SLAC now `<https://github.com/lsst-ts/LOVE-frontend/pull/521>`_
+
 v5.25.1
 -------
 

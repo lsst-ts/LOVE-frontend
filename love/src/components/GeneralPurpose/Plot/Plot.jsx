@@ -1,3 +1,23 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
@@ -12,41 +32,44 @@ const moment = extendMoment(Moment);
 
 export default class Plot extends Component {
   static propTypes = {
-    /** Function to subscribe to streams to receive */
-    subscribeToStreams: PropTypes.func,
-    /** Function to unsubscribe to streams to stop receiving */
-    unsubscribeToStreams: PropTypes.func,
     /** Title of the x axis */
     xAxisTitle: PropTypes.string,
     /** Title of the y axis */
     yAxisTitle: PropTypes.string,
     /** If true, x axis labels will be rendered as timestamps */
     temporalXAxis: PropTypes.bool,
+    /** If temporalXAxis is true, this string will be used to format the x axis labels */
+    temporalXAxisFormat: PropTypes.string,
+    /** Position of the legends: right or bottom */
     legendPosition: PropTypes.string,
+    /** If true, controls to configure the time window will be rendered */
     controls: PropTypes.bool,
+    /** Inputs for the plot */
     inputs: PropTypes.object,
     /** Width of the plot in pixels */
     width: PropTypes.number,
     /** Height of the plot in pixels */
     height: PropTypes.number,
+    /** Max height of the plot in pixels */
+    maxHeight: PropTypes.number,
     /** Node to be used to track width and height.
      *  Use this instead of props.width and props.height for responsive plots.
      *  Will be ignored if both props.width and props.height are provided */
     containerNode: PropTypes.instanceOf(Element),
+    /** Object with the configuration of the timeSeriesControls */
     timeSeriesControlsProps: PropTypes.object,
+    /** Object with the configuration of the efd */
     efdConfigFile: PropTypes.object,
-    maxHeight: PropTypes.number,
-    /** Size of the slice array, when receive more the historical data that the window time for the visualization */
-    sliceSize: PropTypes.number,
     /** In the weatherforecast telemetries is received data in one array with time and value.
      * In other telemetries, the data is received one to one */
     isForecast: PropTypes.bool,
+    /** Size of the slice array, when receive more the historical data that the window time for the visualization */
+    sliceSize: PropTypes.number,
     /** In weatherforecast for the hourly telemetry, receive 14 days to the future, but It's necessary the firts 48 hours.
      * Used for the correctly operation of array between daily and hourly telemetry */
     sliceInvert: PropTypes.bool,
     /** Size array of telemetry of the weatherforecast, It's needed for the correctly slice */
     sizeLimit: PropTypes.number,
-    temporalXAxisFormat: PropTypes.string,
     /** Used for the multi axis when the scale of data is difference, for example the units data is percent and milimeters */
     scaleIndependent: PropTypes.bool,
     /** Used for the set limit range of the plot */
@@ -54,19 +77,32 @@ export default class Plot extends Component {
       domainMax: PropTypes.number,
       domainMin: PropTypes.number,
     }),
+    /** Function to subscribe to streams to receive */
+    subscribeToStreams: PropTypes.func,
+    /** Function to unsubscribe to streams to stop receiving */
+    unsubscribeToStreams: PropTypes.func,
   };
 
   static defaultProps = {
-    maxHeight: 240,
+    xAxisTitle: 'Time',
+    yAxisTitle: 'Value',
+    temporalXAxis: true,
+    temporalXAxisFormat: '%H:%M',
+    legendPosition: 'right',
+    controls: false,
     inputs: {},
+    // width: null,
+    // height: null,
+    maxHeight: 240,
+    // containerNode: null,
+    // timeSeriesControlsProps: null,
+    // efdConfigFile: null,
+    isForecast: false,
     sliceSize: 1800,
     sliceInvert: false,
     sizeLimit: 1800,
-    temporalXAxisFormat: '%H:%M',
-    isForecast: false,
     scaleIndependent: false,
     scaleDomain: {},
-    legendPosition: 'right',
   };
 
   static defaultStyles = [
@@ -97,20 +133,27 @@ export default class Plot extends Component {
     super(props);
     this.state = {
       data: {},
-      isLive: true,
-      timeWindow: 60,
-      historicalData: [],
+      isLive: props.timeSeriesControlsProps?.isLive ?? true,
+      timeWindow: props.timeSeriesControlsProps?.timeWindow ?? 60,
+      historicalData: props.timeSeriesControlsProps?.historicalData ?? [],
       efdClients: [],
       selectedEfdClient: null,
       containerWidth: undefined,
       containerHeight: undefined,
-      resizeObserverListener: false,
     };
     this.timeSeriesControlRef = React.createRef();
     this.legendRef = React.createRef();
     this.resizeObserver = undefined;
   }
 
+  /** Queries the EFD for timeseries
+   * @param {Moment} startDate - Start date of the query
+   * @param {number} timeWindow - Time window in minutes
+   *
+   * Notes:
+   * - The query is done for all inputs in props.inputs
+   * - The query is done to the EFD instance
+   */
   setHistoricalData = (startDate, timeWindow) => {
     const { inputs } = this.props;
     const { selectedEfdClient } = this.state;
@@ -123,8 +166,10 @@ export default class Plot extends Component {
     });
   };
 
-  // Get pairs containing topic and item names of the form
-  // [csc-index-topic, item], based on the inputs
+  /** Get pairs containing topic and item names of the form
+   * [csc-index-topic, item], based on the inputs
+   * @param {object} inputs - Object containing the inputs
+   */
   getTopicItemPair = (inputs) => {
     const topics = {};
     Object.keys(inputs).forEach((inputKey) => {
@@ -140,6 +185,17 @@ export default class Plot extends Component {
     return topics;
   };
 
+  /** Get data for the plot, based on the inputs
+   * @param {object} data - Data to be filtered
+   * @param {number} timeWindow - Time window in minutes
+   * @param {object} historicalData - Historical data
+   * @param {boolean} isLive - If true, live mode is enabled
+   * @param {object} inputs - Object containing the inputs
+   *
+   * Notes:
+   * - If isLive is true, the data is filtered based on the timeWindow
+   * - If isLive is false, the data is filtered based on the historicalData
+   */
   getRangedData = (data, timeWindow, historicalData, isLive, inputs) => {
     let filteredData;
     const topics = this.getTopicItemPair(inputs);
@@ -162,6 +218,7 @@ export default class Plot extends Component {
     return filteredData;
   };
 
+  /** Make array of data for forecast plots */
   getForecastData = (inputName, data) => {
     let result = [];
     data.forEach((d) => {
@@ -170,68 +227,16 @@ export default class Plot extends Component {
     return result;
   };
 
-  componentDidMount() {
-    this.props.subscribeToStreams();
-    ManagerInterface.getEFDClients().then(({ instances }) => this.setState({ efdClients: instances }));
-    const { defaultEfdInstance } = this.props.efdConfigFile ?? {};
-    if (defaultEfdInstance) {
-      this.setState({ selectedEfdClient: defaultEfdInstance }, () => {
-        this.setHistoricalData(Moment().subtract(3600, 'seconds'), 60);
-      });
-    }
-    if (this.props.height !== undefined || this.props.width !== undefined) {
-      this.setState({
-        containerHeight: this.props.height,
-        containerWidth: this.props.width,
-      });
-    }
-
-    if (
-      this.props.width === undefined && // width/height have more priority
-      this.props.height === undefined
-    ) {
-      if (this.props.containerNode) {
-        this.resizeObserver = new ResizeObserver((entries) => {
-          // We wrap it in requestAnimationFrame to avoid this error - ResizeObserver loop limit exceeded
-          window.requestAnimationFrame(() => {
-            if (!Array.isArray(entries) || !entries.length) {
-              return;
-            }
-            // your code
-            const container = entries[0];
-            const diffControl =
-              this.timeSeriesControlRef && this.timeSeriesControlRef.current
-                ? this.timeSeriesControlRef.current.offsetHeight + 19
-                : 0;
-            const diffLegend =
-              this.props.legendPosition === 'bottom' && this.legendRef.current ? this.legendRef.current.offsetHeight : 0;
-            const newHeight = container.contentRect.height - diffControl - diffLegend;
-            const newWidth = container.contentRect.width;
-            if (
-              container.contentRect.height !== 0 &&
-              container.contentRect.width !== 0 &&
-              (this.state.containerHeight === undefined ||
-                Math.abs(this.state.containerHeight - newHeight) > 1 ||
-                this.state.containerWidth === undefined ||
-                Math.abs(this.state.containerWidth - newWidth) > 1)
-            ) {
-              this.setState({
-                containerHeight: container.contentRect.height - diffControl - diffLegend,
-                containerWidth: container.contentRect.width,
-                resizeObserverListener: true,
-              });
-            }
-          });
-        });
-        if (!(this.props.containerNode instanceof Element)) return;
-        this.resizeObserver.observe(this.props.containerNode);
-        return () => {
-          this.resizeObserver.disconnect();
-        };
-      }
-    }
-  }
-
+  /** Parse inputs and streams to generate data to be plotted
+   * @param {object} inputs - Object containing the inputs
+   * @param {object} streams - Object containing the streams
+   *
+   * Notes:
+   * - The data is stored in the state
+   * - The data is parsed based on the inputs and streams
+   * - The data is also sliced based on sliceSize, sliceInver, and sizeLimit
+   * - If isForecast is true, the data is parsed differently
+   */
   parseInputStream(inputs, streams) {
     const { sliceSize, sizeLimit } = this.props;
     const { data } = this.state;
@@ -346,90 +351,82 @@ export default class Plot extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { timeSeriesControlsProps, inputs, streams } = this.props;
+  setResizeObserver() {
+    const { containerNode, legendPosition } = this.props;
+    this.resizeObserver = new ResizeObserver((entries) => {
+      // We wrap it in requestAnimationFrame to avoid this error - ResizeObserver loop limit exceeded
+      window.requestAnimationFrame(() => {
+        const container = entries[0];
 
-    if (prevProps.timeSeriesControlsProps !== timeSeriesControlsProps) {
-      this.setState({ ...timeSeriesControlsProps });
-    }
+        const diffControl =
+          this.timeSeriesControlRef && this.timeSeriesControlRef.current
+            ? this.timeSeriesControlRef.current.offsetHeight + 19
+            : 0;
+        const diffLegend =
+          legendPosition === 'bottom' && this.legendRef.current ? this.legendRef.current.offsetHeight : 0;
 
-    if (
-      !isEqual(prevProps.containerNode, this.props.containerNode) &&
-      // this.resizeObserver === undefined &&
-      this.props.width === undefined && // width/height have more priority
-      this.props.height === undefined
-    ) {
-      if (this.props.containerNode && !this.state.resizeObserverListener) {
-
-        this.resizeObserver = new ResizeObserver((entries) => {
-          // We wrap it in requestAnimationFrame to avoid this error - ResizeObserver loop limit exceeded
-          window.requestAnimationFrame(() => {
-            if (!Array.isArray(entries) || !entries.length) {
-              return;
-            }
-            // your code
-            const container = entries[0];
-            const diffControl = this.timeSeriesControlRef && this.timeSeriesControlRef.current ? this.timeSeriesControlRef.current.offsetHeight + 19 : 0;
-            const diffLegend = this.props.legendPosition === 'bottom' && this.legendRef.current ? this.legendRef.current.offsetHeight : 0;
-            const newHeight = container.contentRect.height - diffControl - diffLegend;
-            const newWidth = container.contentRect.width;
-            if (container.contentRect.height !== 0 && container.contentRect.width !== 0 &&
-              ((this.state.containerHeight === undefined ||  Math.abs(this.state.containerHeight - newHeight) > 1) ||
-              (this.state.containerWidth === undefined || Math.abs(this.state.containerWidth - newWidth) > 1))
-            ) {
-              this.setState({
-                containerHeight: container.contentRect.height - diffControl - diffLegend,
-                containerWidth: container.contentRect.width,
-              });
-          }
-          });
-          
+        this.setState({
+          containerHeight: container.contentRect.height - diffControl - diffLegend,
+          containerWidth: container.contentRect.width,
         });
-        if (!(this.props.containerNode instanceof Element)) return;
-        this.resizeObserver.observe(this.props.containerNode);
-        return () => {
-          this.resizeObserver.disconnect();
-        };
-      }
+      });
+    });
+
+    if (!(containerNode instanceof Element)) return;
+    this.resizeObserver.observe(containerNode);
+  }
+
+  componentDidMount() {
+    this.props.subscribeToStreams();
+
+    // Query for available EFD clients
+    ManagerInterface.getEFDClients().then(({ instances }) => this.setState({ efdClients: instances }));
+
+    // Query for historical data if defaultEfdInstance is defined
+    const { defaultEfdInstance } = this.props.efdConfigFile ?? {};
+    if (defaultEfdInstance) {
+      this.setState({ selectedEfdClient: defaultEfdInstance }, () => {
+        this.setHistoricalData(Moment().subtract(3600, 'seconds'), 60);
+      });
     }
 
-    if (
-      this.props.width !== undefined &&
-      this.props.height !== undefined &&
-      (this.props.width !== prevProps.width || this.props.height !== prevProps.height)
-    ) {
+    // Set container height and width if props are defined
+    if (this.props.height !== undefined && this.props.width !== undefined) {
       this.setState({
         containerHeight: this.props.height,
         containerWidth: this.props.width,
       });
     }
 
-    function inputsAreEqual(prevInput, input) {
-      const cleanPrevInput = { ...prevInput };
-      const cleanInput = { ...input };
-      Object.keys(cleanPrevInput).forEach((key) => {
-        const { accessor, ...rest } = cleanPrevInput[key];
-        cleanPrevInput[key] = rest;
-      });
-      Object.keys(cleanInput).forEach((key) => {
-        const { accessor, ...rest } = cleanInput[key];
-        cleanInput[key] = rest;
-      });
-      return isEqual(cleanPrevInput, cleanInput);
+    // Set resize observer if containerNode is defined
+    if (this.props.width === undefined && this.props.height === undefined && this.props.containerNode) {
+      this.setResizeObserver();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { height, width, inputs, containerNode, timeSeriesControlsProps, streams } = this.props;
+
+    // Check if timeSeriesControlsProps has changed
+    if (timeSeriesControlsProps && !isEqual(prevProps.timeSeriesControlsProps, timeSeriesControlsProps)) {
+      this.setState({ ...timeSeriesControlsProps });
     }
 
-    if (!inputsAreEqual(prevProps.inputs, inputs)) {
-      const { unsubscribeToStreams, subscribeToStreams } = this.props;
-      unsubscribeToStreams();
-      subscribeToStreams();
-      const _data = {};
-      for (const key of Object.keys(inputs)) {
-        _data[key] = [];
-      }
-      this.setState({ data: _data });
+    // Check if height or width has changed so we can update the containerHeight and containerWidth
+    if (width !== undefined && height !== undefined && (prevProps.width !== width || prevProps.height !== height)) {
+      this.setState({
+        containerHeight: this.props.height,
+        containerWidth: this.props.width,
+      });
     }
 
-    if (!inputsAreEqual(prevProps.inputs, inputs) || !isEqual(prevProps.streams, streams)) {
+    // Check if containerNode has changed so we can update the resizeObserver
+    if (width === undefined && height === undefined && containerNode && prevProps.containerNode !== containerNode) {
+      this.setResizeObserver();
+    }
+
+    // Check if inputs or streams have changed so we can parse the input stream
+    if (!isEqual(prevProps.inputs, inputs) || !isEqual(prevProps.streams, streams)) {
       this.parseInputStream(inputs, streams);
     }
   }
@@ -442,31 +439,18 @@ export default class Plot extends Component {
   }
 
   render() {
-    const { data, efdClients, containerWidth, containerHeight } = this.state;
-    const { controls, xAxisTitle, yAxisTitle, inputs, legendPosition, timeSeriesControlsProps } = this.props;
-    const { isLive, timeWindow, historicalData } = timeSeriesControlsProps ?? this.state;
-    const { streams, temporalXAxisFormat, scaleIndependent, scaleDomain } = this.props;
+    const {
+      xAxisTitle,
+      yAxisTitle,
+      inputs,
+      legendPosition,
+      controls,
+      temporalXAxisFormat,
+      scaleIndependent,
+      scaleDomain,
+    } = this.props;
 
-    const streamsItems = Object.entries(inputs)
-      .map(([name, inputConfig]) => {
-        const { type } = inputConfig;
-        if (inputConfig.values) {
-          let newStreams = [];
-          for (const value of Object.values(inputConfig.values)) {
-            const { variable, category, csc, salindex, topic, item } = value;
-            const streamName = `${category}-${csc}-${salindex}-${topic}`;
-            const stream = { name: name, variable: variable, type: type + 's', value: streams[streamName]?.[item] };
-            newStreams.push(stream);
-          }
-          return newStreams;
-        } else {
-          const { category, csc, salindex, topic, item } = inputConfig;
-          const streamName = `${category}-${csc}-${salindex}-${topic}`;
-          return streams[streamName]?.[item];
-        }
-      })
-      .flat();
-
+    const { data, efdClients, containerWidth, containerHeight, isLive, timeWindow, historicalData } = this.state;
     const layerTypes = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads', 'bigotes', 'rects', 'heatmaps'];
     const layers = {};
     for (const [inputName, inputConfig] of Object.entries(inputs)) {
@@ -526,7 +510,6 @@ export default class Plot extends Component {
         {controls && (
           <div ref={this.timeSeriesControlRef}>
             <TimeSeriesControls
-              // ref={this.timeSeriesControlRef}
               setTimeWindow={(timeWindow) => this.setState({ timeWindow })}
               timeWindow={this.state.timeWindow}
               setLiveMode={(isLive) => this.setState({ isLive })}

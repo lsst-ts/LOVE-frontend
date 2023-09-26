@@ -1,9 +1,27 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Limits.module.css';
 
 export default class Limits extends Component {
-
   static propTypes = {
     /** Minimum possible value, start of the limit bar */
     lowerLimit: PropTypes.number,
@@ -35,7 +53,7 @@ export default class Limits extends Component {
   };
 
   render() {
-    const { lowerLimit, upperLimit, limitWarning, currentValue, targetValue, height, displayLabelsUnit} = this.props;
+    const { lowerLimit, upperLimit, limitWarning, currentValue, targetValue, height, displayLabelsUnit } = this.props;
     const barHeight = height / 7;
     const xMargin = 5;
     const currentValueX = ((100 - 2 * xMargin) * (currentValue - lowerLimit)) / (upperLimit - lowerLimit);
@@ -46,7 +64,7 @@ export default class Limits extends Component {
 
     return (
       <div className={styles.container}>
-        <svg version="1.1" x="0px" y="0px" viewBox={`0 0 100 ${height+1}`} className={styles.container}>
+        <svg version="1.1" x="0px" y="0px" viewBox={`0 0 100 ${height + 1}`} className={styles.container}>
           <line
             className={styles.backgroundBar}
             x1={xMargin}
@@ -72,24 +90,24 @@ export default class Limits extends Component {
             strokeWidth={barHeight}
           />
           {this.props.currentValue !== 'Unknown' && (
-          <rect
-            className={styles.currentValue}
-            x={currentValueX + xMargin}
-            y={height / 3 + yOffset}
-            height={height / 3}
-            width={1}
-            strokeWidth={0}
-          />
+            <rect
+              className={styles.currentValue}
+              x={currentValueX + xMargin}
+              y={height / 3 + yOffset}
+              height={height / 3}
+              width={1}
+              strokeWidth={0}
+            />
           )}
 
           {this.props.targetValue !== 'Unknown' && (
-          <line
-            className={styles.targetValue}
-            x1={targetValueX + xMargin}
-            y1={height / 3 + yOffset}
-            x2={targetValueX + xMargin}
-            y2={(2 * height) / 3 + yOffset}
-          />
+            <line
+              className={styles.targetValue}
+              x1={targetValueX + xMargin}
+              y1={height / 3 + yOffset}
+              x2={targetValueX + xMargin}
+              y2={(2 * height) / 3 + yOffset}
+            />
           )}
 
           {this.props.displayLabels && (
@@ -99,14 +117,16 @@ export default class Limits extends Component {
                 x={xMargin}
                 y={height / 2 + yOffset + barHeight / 2}
               >
-                {lowerLimit}{displayLabelsUnit}
+                {lowerLimit}
+                {displayLabelsUnit}
               </text>
               <text
                 className={[styles.text, styles.bottom, styles.bottomRight].join(' ')}
                 x={100 - xMargin}
                 y={height / 2 + yOffset + barHeight / 2}
               >
-                {upperLimit}{displayLabelsUnit}
+                {upperLimit}
+                {displayLabelsUnit}
               </text>
             </>
           )}

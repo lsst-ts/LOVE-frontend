@@ -1,3 +1,23 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ManagerInterface, { parseCommanderData, fixedFloat } from 'Utils';
@@ -325,7 +345,7 @@ export default class WeatherStation extends Component {
             <div className={styles.windPlotFullWidth}>
               <PolarPlotContainer
                 timeSeriesControlsProps={timeSeriesControlsProps}
-                containerNode={this.windDirectionPlotRef.current}
+                containerNode={this.windDirectionPlotRef}
                 {...this.windPlot}
               />
             </div>
@@ -338,7 +358,7 @@ export default class WeatherStation extends Component {
             <PlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.temperaturePlot}
-              containerNode={this.temperaturePlotRef?.current}
+              containerNode={this.temperaturePlotRef}
               xAxisTitle="Time"
               yAxisTitle="Temperature"
               legendPosition="bottom"
@@ -356,7 +376,7 @@ export default class WeatherStation extends Component {
             <PlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.humidityPlot}
-              containerNode={this.humidityPlotRef?.current}
+              containerNode={this.humidityPlotRef}
               xAxisTitle="Time"
               yAxisTitle="Relative humidity"
               legendPosition="bottom"
@@ -375,7 +395,7 @@ export default class WeatherStation extends Component {
             <PlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.precipitationPlot}
-              containerNode={this.precipitationPlotRef?.current}
+              containerNode={this.precipitationPlotRef}
               xAxisTitle="Time"
               yAxisTitle="Precipitation"
               legendPosition="bottom"
@@ -390,7 +410,7 @@ export default class WeatherStation extends Component {
             <PlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.snowDepthPlot}
-              containerNode={this.snowDepthPlotRef?.current}
+              containerNode={this.snowDepthPlotRef}
               xAxisTitle="Time"
               yAxisTitle="Snow depth"
               legendPosition="bottom"
@@ -405,7 +425,7 @@ export default class WeatherStation extends Component {
             <PlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.solarPlot}
-              containerNode={this.solarPlotRef?.current}
+              containerNode={this.solarPlotRef}
               xAxisTitle="Time"
               yAxisTitle="Solar radiation"
               legendPosition="bottom"
@@ -420,7 +440,7 @@ export default class WeatherStation extends Component {
             <PlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.pressurePlot}
-              containerNode={this.pressurePlotRef?.current}
+              containerNode={this.pressurePlotRef}
               xAxisTitle="Time"
               yAxisTitle="Air pressure"
               legendPosition="bottom"

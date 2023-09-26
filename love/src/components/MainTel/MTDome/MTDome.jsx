@@ -1,3 +1,22 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import MTDomeShutter from './MTDomeShutter';
@@ -68,8 +87,8 @@ const azimuthPlotInputs = {
         topic: 'azimuth',
         item: 'positionActual',
         accessor: '(x) => x',
-      }
-    ]
+      },
+    ],
   },
   'Dome Target Az': {
     type: 'line',
@@ -85,8 +104,8 @@ const azimuthPlotInputs = {
         topic: 'azimuth',
         item: 'positionCommanded',
         accessor: '(x) => x',
-      }
-    ]
+      },
+    ],
   },
   'Mount Azimuth': {
     type: 'line',
@@ -102,8 +121,8 @@ const azimuthPlotInputs = {
         topic: 'azimuth',
         item: 'actualPosition',
         accessor: '(x) => x',
-      }
-    ]
+      },
+    ],
   },
   'Mount Target': {
     type: 'line',
@@ -119,8 +138,8 @@ const azimuthPlotInputs = {
         topic: 'azimuth',
         item: 'demandPosition',
         accessor: '(x) => x',
-      }
-    ]
+      },
+    ],
   },
 };
 
@@ -139,8 +158,8 @@ const elevationPlotInputs = {
         topic: 'elevation',
         item: 'actualPosition',
         accessor: '(x) => x',
-      }
-    ]
+      },
+    ],
   },
   'Mount target': {
     type: 'line',
@@ -156,9 +175,9 @@ const elevationPlotInputs = {
         topic: 'elevation',
         item: 'demandPosition',
         accessor: '(x) => x',
-      }
-    ]
-  }
+      },
+    ],
+  },
 };
 
 export default class MTDome extends Component {
@@ -645,7 +664,7 @@ export default class MTDome extends Component {
             <div ref={this.azimuthPlotRef}>
               <PlotContainer
                 inputs={azimuthPlotInputs}
-                containerNode={this.azimuthPlotRef?.current}
+                containerNode={this.azimuthPlotRef}
                 xAxisTitle="Time"
                 yAxisTitle="Azimuth"
                 maxHeight={250}
@@ -657,7 +676,7 @@ export default class MTDome extends Component {
             <div ref={this.elevationPlotRef}>
               <PlotContainer
                 inputs={elevationPlotInputs}
-                containerNode={this.elevationPlotRef?.current}
+                containerNode={this.elevationPlotRef}
                 xAxisTitle="Time"
                 yAxisTitle="Elevation"
                 maxHeight={250}

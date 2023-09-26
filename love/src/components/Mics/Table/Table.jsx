@@ -1,3 +1,22 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Row from './Row';
@@ -8,22 +27,24 @@ export default class Table extends Component {
     /**
      * Array of dictonary with the mics info
      */
-    mics: PropTypes.arrayOf(PropTypes.shape({
-      /** Id unique for the reference to the mic */
-      id: PropTypes.number,
-      /** Name for the text in table and the title in the player component */
-      name: PropTypes.string,
-      /** Name of location for the grouping the microphones */
-      location: PropTypes.string,
-      /** String of the source url of the microphone */
-      src: PropTypes.string,
-      /** number in positive about the limit decibels for the alarm alert */
-      dbLimit: PropTypes.number,
-      /** minimum number for the range of spectrogram plot */
-      minDecibels: PropTypes.number,
-      /** maximum number for the range of spectrogram plot */
-      maxDecibels: PropTypes.number,
-    })),
+    mics: PropTypes.arrayOf(
+      PropTypes.shape({
+        /** Id unique for the reference to the mic */
+        id: PropTypes.number,
+        /** Name for the text in table and the title in the player component */
+        name: PropTypes.string,
+        /** Name of location for the grouping the microphones */
+        location: PropTypes.string,
+        /** String of the source url of the microphone */
+        src: PropTypes.string,
+        /** number in positive about the limit decibels for the alarm alert */
+        dbLimit: PropTypes.number,
+        /** minimum number for the range of spectrogram plot */
+        minDecibels: PropTypes.number,
+        /** maximum number for the range of spectrogram plot */
+        maxDecibels: PropTypes.number,
+      }),
+    ),
     /**
      * Function to change the mic's component state of the currentMic and show on mic details
      */
@@ -84,8 +105,8 @@ export default class Table extends Component {
           minDecibels={item.minDecibels}
           maxDecibels={item.maxDecibels}
         />
-      )
-    })
+      );
+    });
   }
 
   render() {
@@ -108,15 +129,14 @@ export default class Table extends Component {
 
     return (
       <table>
-        { Object.entries(microphones).map((item, i) => {
-            return (
-              <>
-                { this.renderHeader(item[0], i) }
-                { this.renderMicrophones(Object.values(item[1])) }
-              </>
-            );
-          })
-        }
+        {Object.entries(microphones).map((item, i) => {
+          return (
+            <>
+              {this.renderHeader(item[0], i)}
+              {this.renderMicrophones(Object.values(item[1]))}
+            </>
+          );
+        })}
       </table>
     );
   }

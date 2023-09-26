@@ -1,42 +1,29 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './MTDome.module.css';
 
 const heightsLouvers = [
-  19,
-  35,
-  19,
-  35,
-  35,
-  35,
-  35,
-  35,
-  35,
-  35,
-  35,
-  19,
-  35,
-  35,
-  19,
-  19,
-  35,
-  19,
-  19,
-  35,
-  19,
-  35,
-  35,
-  35,
-  35,
-  35,
-  35,
-  35,
-  35,
-  19,
-  35,
-  35,
-  19,
-  35,
+  19, 35, 19, 35, 35, 35, 35, 35, 35, 35, 35, 19, 35, 35, 19, 19, 35, 19, 19, 35, 19, 35, 35, 35, 35, 35, 35, 35, 35,
+  19, 35, 35, 19, 35,
 ];
 
 export default class MTDomeLouvers extends Component {
@@ -95,7 +82,7 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* A2 */}
-          { commandedPositionLouvers[0] !== actualPositionLouvers[0] && (
+          {commandedPositionLouvers[0] !== actualPositionLouvers[0] && (
             <line
               className={styles.louver5}
               x1="34.52"
@@ -107,10 +94,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[0] / 100) * commandedPositionLouvers[0]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* A1 */}
-          { commandedPositionLouvers[1] !== actualPositionLouvers[1] && (
+          {commandedPositionLouvers[1] !== actualPositionLouvers[1] && (
             <line
               className={styles.louver5}
               x1="34.52"
@@ -122,8 +109,8 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[1] / 100) * commandedPositionLouvers[1]}px)`,
               }}
-            />)
-          }
+            />
+          )}
         </g>
 
         {/* from left to right (2) */}
@@ -179,7 +166,7 @@ export default class MTDomeLouvers extends Component {
           />
 
           {/* B3 */}
-          { commandedPositionLouvers[2] !== actualPositionLouvers[2] && (
+          {commandedPositionLouvers[2] !== actualPositionLouvers[2] && (
             <line
               className={styles.louver5}
               x1="73.27"
@@ -191,10 +178,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[2] / 100) * commandedPositionLouvers[2]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* B2 */}
-          { commandedPositionLouvers[3] !== actualPositionLouvers[3] && (
+          {commandedPositionLouvers[3] !== actualPositionLouvers[3] && (
             <line
               className={styles.louver5}
               x1="73.27"
@@ -206,10 +193,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[3] / 100) * commandedPositionLouvers[3]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* B1 */}
-          { commandedPositionLouvers[4] !== actualPositionLouvers[4] && (
+          {commandedPositionLouvers[4] !== actualPositionLouvers[4] && (
             <line
               className={styles.louver5}
               x1="73.27"
@@ -221,8 +208,8 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[4] / 100) * commandedPositionLouvers[4]}px)`,
               }}
-            />)
-          }
+            />
+          )}
         </g>
 
         {/* from left to right (3) */}
@@ -277,7 +264,7 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* C3 */}
-          { commandedPositionLouvers[5] !== actualPositionLouvers[5] && (
+          {commandedPositionLouvers[5] !== actualPositionLouvers[5] && (
             <line
               className={styles.louver5}
               x1="112.27"
@@ -289,10 +276,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[5] / 100) * commandedPositionLouvers[5]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* C2 */}
-          { commandedPositionLouvers[6] !== actualPositionLouvers[6] && (
+          {commandedPositionLouvers[6] !== actualPositionLouvers[6] && (
             <line
               className={styles.louver5}
               x1="112.27"
@@ -304,10 +291,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[6] / 100) * commandedPositionLouvers[6]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* C1 */}
-          { commandedPositionLouvers[7] !== actualPositionLouvers[7] && (
+          {commandedPositionLouvers[7] !== actualPositionLouvers[7] && (
             <line
               className={styles.louver5}
               x1="112.27"
@@ -319,8 +306,8 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[7] / 100) * commandedPositionLouvers[7]}px)`,
               }}
-            />)
-          }
+            />
+          )}
         </g>
 
         {/* from left to right (4) */}
@@ -375,7 +362,7 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* D3 */}
-          { commandedPositionLouvers[8] !== actualPositionLouvers[8] && (
+          {commandedPositionLouvers[8] !== actualPositionLouvers[8] && (
             <line
               className={styles.louver5}
               x1="151.27"
@@ -387,10 +374,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[8] / 100) * commandedPositionLouvers[8]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* D2 */}
-          { commandedPositionLouvers[9] !== actualPositionLouvers[9] && (
+          {commandedPositionLouvers[9] !== actualPositionLouvers[9] && (
             <line
               className={styles.louver5}
               x1="151.27"
@@ -402,10 +389,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[9] / 100) * commandedPositionLouvers[9]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* D1 */}
-          { commandedPositionLouvers[10] !== actualPositionLouvers[10] && (
+          {commandedPositionLouvers[10] !== actualPositionLouvers[10] && (
             <line
               className={styles.louver5}
               x1="151.27"
@@ -417,8 +404,8 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[10] / 100) * commandedPositionLouvers[10]}px)`,
               }}
-            />)
-          }
+            />
+          )}
         </g>
 
         {/* from left to right (5) */}
@@ -473,7 +460,7 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* E3 */}
-          { commandedPositionLouvers[11] !== actualPositionLouvers[11] && (
+          {commandedPositionLouvers[11] !== actualPositionLouvers[11] && (
             <line
               className={styles.louver5}
               x1="194.77"
@@ -485,10 +472,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[11] / 100) * commandedPositionLouvers[11]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* E2 */}
-          { commandedPositionLouvers[12] !== actualPositionLouvers[12] && (
+          {commandedPositionLouvers[12] !== actualPositionLouvers[12] && (
             <line
               className={styles.louver5}
               x1="194.77"
@@ -500,10 +487,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[12] / 100) * commandedPositionLouvers[12]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* E1 */}
-          { commandedPositionLouvers[13] !== actualPositionLouvers[13] && (
+          {commandedPositionLouvers[13] !== actualPositionLouvers[13] && (
             <line
               className={styles.louver5}
               x1="194.77"
@@ -515,8 +502,8 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[13] / 100) * commandedPositionLouvers[13]}px)`,
               }}
-            />)
-          }
+            />
+          )}
         </g>
 
         {/* from left to right (6) (the middle) */}
@@ -612,7 +599,7 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* F3 */}
-          { commandedPositionLouvers[14] !== actualPositionLouvers[14] && (
+          {commandedPositionLouvers[14] !== actualPositionLouvers[14] && (
             <line
               className={styles.louver5}
               x1="244.52"
@@ -624,10 +611,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[14] / 100) * commandedPositionLouvers[14]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* F2 */}
-          { commandedPositionLouvers[15] !== actualPositionLouvers[15] && (
+          {commandedPositionLouvers[15] !== actualPositionLouvers[15] && (
             <line
               className={styles.louver5}
               x1="244.52"
@@ -639,10 +626,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[15] / 100) * commandedPositionLouvers[15]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* F1 */}
-          { commandedPositionLouvers[16] !== actualPositionLouvers[16] && (
+          {commandedPositionLouvers[16] !== actualPositionLouvers[16] && (
             <line
               className={styles.louver5}
               x1="239.52"
@@ -654,10 +641,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[16] / 100) * commandedPositionLouvers[16]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* G3 */}
-          { commandedPositionLouvers[17] !== actualPositionLouvers[17] && (
+          {commandedPositionLouvers[17] !== actualPositionLouvers[17] && (
             <line
               className={styles.louver5}
               x1="316.02"
@@ -669,10 +656,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[17] / 100) * commandedPositionLouvers[17]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* G2 */}
-          { commandedPositionLouvers[18] !== actualPositionLouvers[18] && (
+          {commandedPositionLouvers[18] !== actualPositionLouvers[18] && (
             <line
               className={styles.louver5}
               x1="316.02"
@@ -684,10 +671,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[18] / 100) * commandedPositionLouvers[18]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* G1 */}
-          { commandedPositionLouvers[19] !== actualPositionLouvers[19] && (
+          {commandedPositionLouvers[19] !== actualPositionLouvers[19] && (
             <line
               className={styles.louver5}
               x1="321.02"
@@ -699,8 +686,8 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[19] / 100) * commandedPositionLouvers[19]}px)`,
               }}
-            />)
-          }
+            />
+          )}
         </g>
 
         {/* from left to right (7) */}
@@ -755,7 +742,7 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* H3 */}
-          { commandedPositionLouvers[20] !== actualPositionLouvers[20] && (
+          {commandedPositionLouvers[20] !== actualPositionLouvers[20] && (
             <line
               className={styles.louver5}
               x1="365.27"
@@ -767,10 +754,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[20] / 100) * commandedPositionLouvers[20]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* H2 */}
-          { commandedPositionLouvers[21] !== actualPositionLouvers[21] && (
+          {commandedPositionLouvers[21] !== actualPositionLouvers[21] && (
             <line
               className={styles.louver5}
               x1="365.77"
@@ -782,10 +769,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[21] / 100) * commandedPositionLouvers[21]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* H1 */}
-          { commandedPositionLouvers[22] !== actualPositionLouvers[22] && (
+          {commandedPositionLouvers[22] !== actualPositionLouvers[22] && (
             <line
               className={styles.louver5}
               x1="365.77"
@@ -797,8 +784,8 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[22] / 100) * commandedPositionLouvers[22]}px)`,
               }}
-            />)
-          }
+            />
+          )}
         </g>
 
         {/* from left to right (8) */}
@@ -866,7 +853,7 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* I3 */}
-          { commandedPositionLouvers[23] !== actualPositionLouvers[23] && (
+          {commandedPositionLouvers[23] !== actualPositionLouvers[23] && (
             <line
               className={styles.louver5}
               x1="409.27"
@@ -878,10 +865,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[23] / 100) * commandedPositionLouvers[23]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* I2 */}
-          { commandedPositionLouvers[24] !== actualPositionLouvers[24] && (
+          {commandedPositionLouvers[24] !== actualPositionLouvers[24] && (
             <line
               className={styles.louver5}
               x1="409.27"
@@ -893,10 +880,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[24] / 100) * commandedPositionLouvers[24]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* I3 */}
-          { commandedPositionLouvers[25] !== actualPositionLouvers[25] && (
+          {commandedPositionLouvers[25] !== actualPositionLouvers[25] && (
             <line
               className={styles.louver5}
               x1="409.27"
@@ -908,8 +895,8 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[25] / 100) * commandedPositionLouvers[25]}px)`,
               }}
-            />)
-          }
+            />
+          )}
         </g>
 
         {/* from left to right (9) */}
@@ -977,7 +964,7 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* L3 */}
-          { commandedPositionLouvers[26] !== actualPositionLouvers[26] && (
+          {commandedPositionLouvers[26] !== actualPositionLouvers[26] && (
             <line
               className={styles.louver5}
               x1="448.27"
@@ -989,10 +976,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[26] / 100) * commandedPositionLouvers[26]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* L2 */}
-          { commandedPositionLouvers[27] !== actualPositionLouvers[27] && (
+          {commandedPositionLouvers[27] !== actualPositionLouvers[27] && (
             <line
               className={styles.louver5}
               x1="448.27"
@@ -1004,10 +991,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[27] / 100) * commandedPositionLouvers[27]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* L1 */}
-          { commandedPositionLouvers[28] !== actualPositionLouvers[28] && (
+          {commandedPositionLouvers[28] !== actualPositionLouvers[28] && (
             <line
               className={styles.louver5}
               x1="448.27"
@@ -1019,8 +1006,8 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[28] / 100) * commandedPositionLouvers[28]}px)`,
               }}
-            />)
-          }
+            />
+          )}
         </g>
 
         {/* from left to right (10) */}
@@ -1096,7 +1083,7 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* M3 */}
-          { commandedPositionLouvers[29] !== actualPositionLouvers[29] && (
+          {commandedPositionLouvers[29] !== actualPositionLouvers[29] && (
             <line
               className={styles.louver5}
               x1="487.27"
@@ -1108,10 +1095,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[29] / 100) * commandedPositionLouvers[29]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* M2 */}
-          { commandedPositionLouvers[30] !== actualPositionLouvers[30] && (
+          {commandedPositionLouvers[30] !== actualPositionLouvers[30] && (
             <line
               className={styles.louver5}
               x1="487.27"
@@ -1123,10 +1110,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[30] / 100) * commandedPositionLouvers[30]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* M1 */}
-          { commandedPositionLouvers[31] !== actualPositionLouvers[31] && (
+          {commandedPositionLouvers[31] !== actualPositionLouvers[31] && (
             <line
               className={styles.louver5}
               x1="487.27"
@@ -1138,8 +1125,8 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[31] / 100) * commandedPositionLouvers[31]}px)`,
               }}
-            />)
-          }
+            />
+          )}
         </g>
 
         {/* from left to right (11) */}
@@ -1193,7 +1180,7 @@ export default class MTDomeLouvers extends Component {
             }}
           />
           {/* N2 */}
-          { commandedPositionLouvers[32] !== actualPositionLouvers[32] && (
+          {commandedPositionLouvers[32] !== actualPositionLouvers[32] && (
             <line
               className={styles.louver5}
               x1="526.02"
@@ -1205,10 +1192,10 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[32] / 100) * commandedPositionLouvers[32]}px)`,
               }}
-            />)
-          }
+            />
+          )}
           {/* N1 */}
-          { commandedPositionLouvers[33] !== actualPositionLouvers[33] && (
+          {commandedPositionLouvers[33] !== actualPositionLouvers[33] && (
             <line
               className={styles.louver5}
               x1="526.02"
@@ -1220,8 +1207,8 @@ export default class MTDomeLouvers extends Component {
                 transformBox: 'fill-box',
                 transform: `translateY(${(heightsLouvers[33] / 100) * commandedPositionLouvers[33]}px)`,
               }}
-            />)
-          }
+            />
+          )}
         </g>
         {/* horizontal labels */}
         <g className={styles.louver6}>

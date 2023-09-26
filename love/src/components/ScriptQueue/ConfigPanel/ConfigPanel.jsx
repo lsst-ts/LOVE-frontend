@@ -1,8 +1,26 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
-import YAML from 'yaml';
 import yaml from 'js-yaml';
 import Form from '@rjsf/core';
 import rjsfValidator from '@rjsf/validator-ajv8';
@@ -267,7 +285,7 @@ export default class ConfigPanel extends Component {
         if (r.output) {
           this.setState({
             validationStatus: VALID,
-            autoFilledValue: YAML.stringify(r.output),
+            autoFilledValue: yaml.dump(r.output),
             configErrors: [],
             configErrorTitle: '',
             formData: r.output,
@@ -279,7 +297,7 @@ export default class ConfigPanel extends Component {
         /** Handle yaml syntax errors */
         if (r.error) {
           if (r.title === 'ERROR WHILE PARSING YAML STRING') {
-            const message = `${r.error.problem}\n ${YAML.stringify({
+            const message = `${r.error.problem}\n ${yaml.dump({
               line: r.error.problem_mark.line,
               column: r.error.problem_mark.column,
               pointer: r.error.problem_mark.pointer,
@@ -417,11 +435,19 @@ export default class ConfigPanel extends Component {
   selectConfiguration = (event) => {
     const { configurationList } = this.state;
     const configuration = configurationList.find((conf) => conf.id === event.value);
+
+    let yamlData;
+    try {
+      yamlData = configuration ? yaml.load(configuration.config_schema) : {};
+    } catch {
+      yamlData = {};
+    }
+
     this.setState({
       selectedConfiguration: event,
       value: configuration?.config_schema ?? '',
       inputConfigurationName: configuration?.config_name ?? '',
-      formData: yaml.load(configuration?.config_schema),
+      formData: yamlData,
     });
   };
 
@@ -455,13 +481,9 @@ export default class ConfigPanel extends Component {
 
     if (
       inputConfigurationName !== DEFAULT_CONFIG_NAME &&
-      (
-        configurationList.length === 0 ||
-        (
-          configurationList.length > 0 &&
-          configurationList.findIndex((conf) => conf.config_name === inputConfigurationName) === -1
-        )
-      )
+      (configurationList.length === 0 ||
+        (configurationList.length > 0 &&
+          configurationList.findIndex((conf) => conf.config_name === inputConfigurationName) === -1))
     ) {
       configurationNameChanged = true;
     }
@@ -503,11 +525,9 @@ export default class ConfigPanel extends Component {
           const configSchema = value;
           if (
             configurationNameChanged ||
-            (
-              configName === DEFAULT_CONFIG_NAME &&
+            (configName === DEFAULT_CONFIG_NAME &&
               configurationList.length >= 0 &&
-              configurationList.findIndex((conf) => conf.config_name === DEFAULT_CONFIG_NAME) === -1
-            )
+              configurationList.findIndex((conf) => conf.config_name === DEFAULT_CONFIG_NAME) === -1)
           ) {
             this.saveNewScriptSchema(scriptPath, scriptType, configName, configSchema);
           } else {
@@ -576,13 +596,21 @@ export default class ConfigPanel extends Component {
       ).then((data) => {
         const options = data.map((conf) => ({ label: conf.config_name, value: conf.id }));
         const configuration = data.find((conf) => conf.config_name === DEFAULT_CONFIG_NAME);
+
+        let yamlData;
+        try {
+          yamlData = configuration ? yaml.load(configuration.config_schema) : {};
+        } catch {
+          yamlData = {};
+        }
+
         this.setState((state) => ({
           configurationList: data,
           configurationOptions: options,
           selectedConfiguration: configuration ? { label: configuration.config_name, value: configuration.id } : null,
           value: configuration?.config_schema ?? DEFAULT_CONFIG_VALUE,
           inputConfigurationName: configuration?.config_name ?? DEFAULT_CONFIG_NAME,
-          formData: configuration ? yaml.load(configuration.config_schema) : null,
+          formData: yamlData,
         }));
       });
     }
@@ -630,7 +658,13 @@ export default class ConfigPanel extends Component {
     const configPanelBarClassName = 'configPanelBar';
 
     // RJSF variables
-    const rjsfSchema = yamlSchema ? yaml.load(yamlSchema) : {};
+    let rjsfSchema;
+    try {
+      rjsfSchema = yamlSchema ? yaml.load(yamlSchema) : {};
+    } catch {
+      rjsfSchema = {};
+    }
+
     const rjsfWidgets = {
       SelectWidget: this.CustomSelect,
       TextWidget: this.CustomInput,

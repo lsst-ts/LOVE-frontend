@@ -1,11 +1,27 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { closestEquivalentAngle, fixedFloat } from 'Utils';
 import WindRose from '../../../icons/WindRose/WindRose';
-import {
-  mtMountMirrorCoversStateMap,
-  stateToStyleMTMountMirrorCoversState,
-} from 'Config';
+import { mtMountMirrorCoversStateMap, stateToStyleMTMountMirrorCoversState } from 'Config';
 import InfoPanel from 'components/GeneralPurpose/InfoPanel/InfoPanel';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Label from 'components/GeneralPurpose/SummaryPanel/Label';
@@ -72,26 +88,17 @@ export default class MirrorCovers extends Component {
     const mirrorCoversValue = this.props.mirrorCoversState.map((state) => mtMountMirrorCoversStateMap[state]);
     const mirrorCoversState = mirrorCoversValue.map((value) => stateToStyleMTMountMirrorCoversState[value]);
     return (
-      <InfoPanel
-        title="Mirror Covers"
-        className={this.state.showMirrorCoverInfo === false ? styles.hide : styles.show}
-      >
+      <InfoPanel title="Mirror Covers" className={this.state.showMirrorCoverInfo === false ? styles.hide : styles.show}>
         <SummaryPanel className={[styles.summaryPanel, styles.m1Panel].join(' ')}>
           {index.map((i) => {
             return (
               <>
-              <Label
-                key={`mirror-cover-status-label-${i}`}
-              >{`Mirror cover ${i + 1}`}</Label>
-              <Value
-                key={`mirror-cover-status-value-${i}`}
-              >
-                <StatusText status={mirrorCoversState[i]}>
-                  {mirrorCoversValue[i]}
-                </StatusText>
-              </Value>
+                <Label key={`mirror-cover-status-label-${i}`}>{`Mirror cover ${i + 1}`}</Label>
+                <Value key={`mirror-cover-status-value-${i}`}>
+                  <StatusText status={mirrorCoversState[i]}>{mirrorCoversValue[i]}</StatusText>
+                </Value>
               </>
-            )
+            );
           })}
         </SummaryPanel>
       </InfoPanel>
@@ -109,7 +116,7 @@ export default class MirrorCovers extends Component {
       return {
         //'ok': styles.ok,
         //'warning': styles.warning,
-        'alert': styles.alert, // Only this representation for the color in mirror cover
+        alert: styles.alert, // Only this representation for the color in mirror cover
       }[stateToStyleMTMountMirrorCoversState[mtMountMirrorCoversStateMap[state]]];
     });
 
@@ -124,19 +131,17 @@ export default class MirrorCovers extends Component {
 
     return (
       <>
-        <svg
-          data-name="mirrorCoverSvg"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 385 385"
-        >
-          <g
-            transform="scale(0.94 0.94) translate(15, 15)"
-          >
-            {this.getAzimuthChart(x0, y0, viewBoxSize, this.props.azimuthActualPosition, this.props.azimuthDemandPosition)}
+        <svg data-name="mirrorCoverSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 385 385">
+          <g transform="scale(0.94 0.94) translate(15, 15)">
+            {this.getAzimuthChart(
+              x0,
+              y0,
+              viewBoxSize,
+              this.props.azimuthActualPosition,
+              this.props.azimuthDemandPosition,
+            )}
           </g>
-          <g
-            transform="scale(0.59 0.59) translate(138, 138)"
-          >
+          <g transform="scale(0.59 0.59) translate(138, 138)">
             {this.getBase(x0, y0, equivalentAzimuthActual)}
             <g
               style={{
@@ -150,10 +155,9 @@ export default class MirrorCovers extends Component {
             </g>
             {equivalentAzimuthDemand !== equivalentAzimuthActual ?? this.getDemand(equivalentAzimuthDemand)}
           </g>
-          
         </svg>
         <div
-          style={{position: 'absolute', top: `${viewBoxSize/3}px`, left: `${viewBoxSize + offset}px`, zIndex: 1000}}
+          style={{ position: 'absolute', top: `${viewBoxSize / 3}px`, left: `${viewBoxSize + offset}px`, zIndex: 1000 }}
         >
           {this.getInfoMirrorCover()}
         </div>
@@ -162,18 +166,13 @@ export default class MirrorCovers extends Component {
   };
 
   getArcLengthPixel(angle, radius) {
-    return `${(angle / 360 * radius * Math.PI) + ' ' + (radius * Math.PI )}`;
+    return `${(angle / 360) * radius * Math.PI + ' ' + radius * Math.PI}`;
   }
 
   getBackgrownAzimuthChart(x0, y0, radius, rotationOffset) {
     return (
       <>
-        <circle
-          cx={x0}
-          cy={y0}
-          r={radius + 4}
-          className={styles.bg}
-        />
+        <circle cx={x0} cy={y0} r={radius + 4} className={styles.bg} />
 
         <g style={{ translate: `${x0}px ${y0}px`, transform: `rotate(${rotationOffset}deg)` }}>
           {/* Origin value text */}
@@ -196,7 +195,7 @@ export default class MirrorCovers extends Component {
       <>
         <g
           className={styles.targetText}
-          transform={`${'translate(' + x0 + ' ' + (y0) + ') rotate(' + (azimuthActualPosition) + ')'}`}
+          transform={`${'translate(' + x0 + ' ' + y0 + ') rotate(' + azimuthActualPosition + ')'}`}
         >
           <text
             transform={`${'translate(0 ' + (radius * -1 - 4) + ') rotate(' + azimuthActualPosition * -1 + ')'}`}
@@ -224,7 +223,7 @@ export default class MirrorCovers extends Component {
         <g transform-origin="50% 50%" transform={`${'rotate(' + rotationOffset + ')'}`}>
           {/* Target background */}
           <circle
-            r={`${radius/2 + 4}`}
+            r={`${radius / 2 + 4}`}
             cx={`${x0}`}
             cy={`${y0}`}
             className={styles.bgTarget}
@@ -235,7 +234,7 @@ export default class MirrorCovers extends Component {
           {/* Current background POS */}
           <circle
             visibility={[azimuthActualPosition >= 0 ? 'visible' : 'hidden']}
-            r={`${radius/2 + 3}`}
+            r={`${radius / 2 + 3}`}
             cx={`${x0}`}
             cy={`${y0}`}
             className={styles.bgCurrent}
@@ -248,7 +247,7 @@ export default class MirrorCovers extends Component {
           {/* Current background NEG */}
           <circle
             visibility={[azimuthActualPosition < 0 ? 'visible' : 'hidden']}
-            r={`${radius/2 + 3}`}
+            r={`${radius / 2 + 3}`}
             cx={`${x0}`}
             cy={`${y0}`}
             className={styles.bgCurrent}
@@ -258,7 +257,7 @@ export default class MirrorCovers extends Component {
           />
         </g>
       </>
-    )
+    );
   }
 
   getAzimuthPositionLight(x0, y0, radius, rotationOffset, azimuthActualPosition) {
@@ -268,7 +267,7 @@ export default class MirrorCovers extends Component {
           {/* Current background POS */}
           <circle
             visibility={[azimuthActualPosition >= 0 ? 'visible' : 'hidden']}
-            r={`${radius/2 + 3}`}
+            r={`${radius / 2 + 3}`}
             cx={`${x0}`}
             cy={`${y0}`}
             className={styles.lightCurrent}
@@ -281,7 +280,7 @@ export default class MirrorCovers extends Component {
           {/* Current background NEG */}
           <circle
             visibility={[azimuthActualPosition < 0 ? 'visible' : 'hidden']}
-            r={`${radius/2 + 3}`}
+            r={`${radius / 2 + 3}`}
             cx={`${x0}`}
             cy={`${y0}`}
             className={styles.lightCurrent}
@@ -294,7 +293,7 @@ export default class MirrorCovers extends Component {
     );
   }
 
-  getLimitsGauge(x0, y0, radius, radiusInner, rotationOffset, azimuthActualPosition, azimuthDemandPosition){
+  getLimitsGauge(x0, y0, radius, radiusInner, rotationOffset, azimuthActualPosition, azimuthDemandPosition) {
     const maxL3 = 270;
     const maxL2 = 265;
     const maxL1 = 260;
@@ -313,12 +312,10 @@ export default class MirrorCovers extends Component {
     return (
       <>
         {/** Path Positive */}
-        <g
-          transform-origin="50% 50%" transform={`${'rotate(' + rotationOffset + ')'}`}
-        >
+        <g transform-origin="50% 50%" transform={`${'rotate(' + rotationOffset + ')'}`}>
           {/* L3 Gauge */}
           <circle
-            r={`${radiusWithoutBorder/2}`}
+            r={`${radiusWithoutBorder / 2}`}
             cx={`${x0 - radiusWidth}`}
             cy={`${y0}`}
             className={styles.gaugeL3}
@@ -328,7 +325,7 @@ export default class MirrorCovers extends Component {
 
           {/* L2 Gauge */}
           <circle
-            r={`${radiusWithoutBorder/2}`}
+            r={`${radiusWithoutBorder / 2}`}
             cx={`${x0 - radiusWidth}`}
             cy={`${y0}`}
             className={styles.gaugeL2}
@@ -338,7 +335,7 @@ export default class MirrorCovers extends Component {
 
           {/* L1 Gauge */}
           <circle
-            r={`${radiusWithoutBorder/2}`}
+            r={`${radiusWithoutBorder / 2}`}
             cx={`${x0 - radiusWidth}`}
             cy={`${y0}`}
             className={styles.gaugeL1}
@@ -350,30 +347,24 @@ export default class MirrorCovers extends Component {
           <circle
             visibility={[azimuthActualPosition >= 0 ? 'visible' : 'hidden']}
             className={[isInDangerZone ? styles.fillL3 : [isInWarningZone ? styles.fillL2 : styles.fillL1]]}
-            r={`${radiusWithoutBorder/2}`}
+            r={`${radiusWithoutBorder / 2}`}
             cx={`${x0 - radiusWidth}`}
             cy={`${y0}`}
             stroke-width={`${radiusWithoutBorder}`}
-            stroke-dasharray={
-              this.getArcLengthPixel(azimuthActualPosition - radiusWidth/2 * Math.sin(azimuthActualPosition * Math.PI / 180), radiusWithoutBorder)
-            }
+            stroke-dasharray={this.getArcLengthPixel(
+              azimuthActualPosition - (radiusWidth / 2) * Math.sin((azimuthActualPosition * Math.PI) / 180),
+              radiusWithoutBorder,
+            )}
           />
           {/* border */}
-            <circle
-              cx={x0 - radiusWidth}
-              cy={y0}
-              r={radiusWithoutBorder - radiusWidth * 1.5}
-              className={styles.bg}
-            />
+          <circle cx={x0 - radiusWidth} cy={y0} r={radiusWithoutBorder - radiusWidth * 1.5} className={styles.bg} />
         </g>
 
         {/** Path Negative */}
-        <g
-          transform-origin="50% 50%" transform={`${'rotate(' + rotationOffset + ') scale(1 -1)'}`}
-        >
+        <g transform-origin="50% 50%" transform={`${'rotate(' + rotationOffset + ') scale(1 -1)'}`}>
           {/* L3 Gauge */}
           <circle
-            r={`${radiusInnerWithoutBorder/2}`}
+            r={`${radiusInnerWithoutBorder / 2}`}
             cx={`${x0 + radiusWidth}`}
             cy={`${y0}`}
             className={styles.gaugeL3}
@@ -383,7 +374,7 @@ export default class MirrorCovers extends Component {
 
           {/* L2 Gauge */}
           <circle
-            r={`${radiusInnerWithoutBorder/2}`}
+            r={`${radiusInnerWithoutBorder / 2}`}
             cx={`${x0 + radiusWidth}`}
             cy={`${y0}`}
             className={styles.gaugeL2}
@@ -393,7 +384,7 @@ export default class MirrorCovers extends Component {
 
           {/* L1 Gauge */}
           <circle
-            r={`${radiusInnerWithoutBorder/2}`}
+            r={`${radiusInnerWithoutBorder / 2}`}
             cx={`${x0 + radiusWidth}`}
             cy={`${y0}`}
             className={styles.gaugeL1}
@@ -405,18 +396,23 @@ export default class MirrorCovers extends Component {
           <circle
             visibility={[azimuthActualPosition < 0 ? 'visible' : 'hidden']}
             className={[isInDangerZone ? styles.fillL3 : [isInWarningZone ? styles.fillL2 : styles.fillL1]]}
-            r={`${radiusInnerWithoutBorder/2}`}
+            r={`${radiusInnerWithoutBorder / 2}`}
             cx={`${x0 + radiusWidth}`}
             cy={`${y0}`}
             stroke-width={`${radiusInnerWithoutBorder}`}
-            stroke-dasharray={this.getArcLengthPixel(Math.abs(azimuthActualPosition), Math.abs(azimuthActualPosition) < 180 ? radiusInnerWithoutBorder + radiusWidth/4 : radiusInnerWithoutBorder - radiusWidth/4)}
+            stroke-dasharray={this.getArcLengthPixel(
+              Math.abs(azimuthActualPosition),
+              Math.abs(azimuthActualPosition) < 180
+                ? radiusInnerWithoutBorder + radiusWidth / 4
+                : radiusInnerWithoutBorder - radiusWidth / 4,
+            )}
           />
 
           {/* border */}
           <circle
             cx={x0 + radiusWidth}
             cy={y0}
-            r={radiusInnerWithoutBorder - radiusWidth*1.5}
+            r={radiusInnerWithoutBorder - radiusWidth * 1.5}
             className={styles.bg}
           />
         </g>
@@ -425,7 +421,7 @@ export default class MirrorCovers extends Component {
           {/* Current background POS */}
           <circle
             visibility={[azimuthActualPosition >= 0 ? 'visible' : 'hidden']}
-            r={`${(radiusInnerWithoutBorder)/2 - 8}`}
+            r={`${radiusInnerWithoutBorder / 2 - 8}`}
             cx={`${x0}`}
             cy={`${y0}`}
             className={styles.bgCurrent}
@@ -439,7 +435,7 @@ export default class MirrorCovers extends Component {
           {/* Current background NEG */}
           <circle
             visibility={[azimuthActualPosition < 0 ? 'visible' : 'hidden']}
-            r={`${radiusInnerWithoutBorder/2 - 8}`}
+            r={`${radiusInnerWithoutBorder / 2 - 8}`}
             cx={`${x0}`}
             cy={`${y0}`}
             className={styles.bgCurrent}
@@ -481,7 +477,7 @@ export default class MirrorCovers extends Component {
               <path
                 className={styles.targetBg}
                 d={`${'M 0 0 L ' + (radius + 8) + ' 0'}`}
-                transform={`${'translate(' + x0 + ' ' + y0 + ') rotate(' + (azimuthDemandPosition) + ')'}`}
+                transform={`${'translate(' + x0 + ' ' + y0 + ') rotate(' + azimuthDemandPosition + ')'}`}
               />
               <path
                 className={[
@@ -490,53 +486,74 @@ export default class MirrorCovers extends Component {
                     : [isTargetWarningZone ? styles.targetValueWarning : styles.targetValue],
                 ]}
                 d={`${'M 0 0 L ' + (radius + 8) + ' 0'}`}
-                transform={`${'translate(' + x0 + ' ' + y0 + ') rotate(' + (azimuthDemandPosition) + ')'}`}
+                transform={`${'translate(' + x0 + ' ' + y0 + ') rotate(' + azimuthDemandPosition + ')'}`}
               />
             </>
-          ) : (<></>)
-          }
+          ) : (
+            <></>
+          )}
           {azimuthDemandPosition > 90 ? (
-              <>
-                <path
-                  className={styles.targetBg}
-                  d={`${'M 0 0 L ' + 22 + ' 0'}`}
-                  transform={`${'translate(' + (x0 + (radius - 14)* Math.cos(azimuthDemandPosition * Math.PI / 180) ) + ' ' + (y0 + (radius - 14)* Math.sin(azimuthDemandPosition * Math.PI / 180)) + ') rotate(' + (azimuthDemandPosition) + ')'}`}
-                />
-                <path
-                  className={[
-                    isTargetDangerZone
-                      ? styles.targetValueDanger
-                      : [isTargetWarningZone ? styles.targetValueWarning : styles.targetValue],
-                  ]}
-                  d={`${'M 0 0 L ' + 22 + ' 0'}`}
-                  transform={`${'translate(' + (x0 + (radius - 14) * Math.cos(azimuthDemandPosition * Math.PI / 180) ) + ' ' + (y0 + (radius - 14) * Math.sin(azimuthDemandPosition * Math.PI / 180)) + ') rotate(' + (azimuthDemandPosition) + ')'}`}
-                />
-              </>
-            ) : (<></>)}
-            {azimuthDemandPosition < -90 ? (
-              <>
-                <path
-                  className={styles.targetBg}
-                  d={`${'M 0 0 L ' + (radius - 12) + ' 0'}`}
-                  transform={`${'translate(' + x0 + ' ' + y0 + ') rotate(' + (azimuthDemandPosition) + ')'}`}
-                />
-                <path
-                  className={[
-                    isTargetDangerZone
-                      ? styles.targetValueDanger
-                      : [isTargetWarningZone ? styles.targetValueWarning : styles.targetValue],
-                  ]}
-                  d={`${'M 0 0 L ' + (radius - 12) + ' 0'}`}
-                  transform={`${'translate(' + x0 + ' ' + y0 + ') rotate(' + (azimuthDemandPosition) + ')'}`}
-                />
-              </>
-            ) : (<></>)}
+            <>
+              <path
+                className={styles.targetBg}
+                d={`${'M 0 0 L ' + 22 + ' 0'}`}
+                transform={`${
+                  'translate(' +
+                  (x0 + (radius - 14) * Math.cos((azimuthDemandPosition * Math.PI) / 180)) +
+                  ' ' +
+                  (y0 + (radius - 14) * Math.sin((azimuthDemandPosition * Math.PI) / 180)) +
+                  ') rotate(' +
+                  azimuthDemandPosition +
+                  ')'
+                }`}
+              />
+              <path
+                className={[
+                  isTargetDangerZone
+                    ? styles.targetValueDanger
+                    : [isTargetWarningZone ? styles.targetValueWarning : styles.targetValue],
+                ]}
+                d={`${'M 0 0 L ' + 22 + ' 0'}`}
+                transform={`${
+                  'translate(' +
+                  (x0 + (radius - 14) * Math.cos((azimuthDemandPosition * Math.PI) / 180)) +
+                  ' ' +
+                  (y0 + (radius - 14) * Math.sin((azimuthDemandPosition * Math.PI) / 180)) +
+                  ') rotate(' +
+                  azimuthDemandPosition +
+                  ')'
+                }`}
+              />
+            </>
+          ) : (
+            <></>
+          )}
+          {azimuthDemandPosition < -90 ? (
+            <>
+              <path
+                className={styles.targetBg}
+                d={`${'M 0 0 L ' + (radius - 12) + ' 0'}`}
+                transform={`${'translate(' + x0 + ' ' + y0 + ') rotate(' + azimuthDemandPosition + ')'}`}
+              />
+              <path
+                className={[
+                  isTargetDangerZone
+                    ? styles.targetValueDanger
+                    : [isTargetWarningZone ? styles.targetValueWarning : styles.targetValue],
+                ]}
+                d={`${'M 0 0 L ' + (radius - 12) + ' 0'}`}
+                transform={`${'translate(' + x0 + ' ' + y0 + ') rotate(' + azimuthDemandPosition + ')'}`}
+              />
+            </>
+          ) : (
+            <></>
+          )}
         </g>
 
         {this.getTextAzimuthPosition(x0, y0, radius, azimuthActualPosition)}
 
         {/* Front Mask */}
-        <circle r={`${radiusInner }`} cx={`${x0}`} cy={`${y0}`} className={styles.cutOut} />
+        <circle r={`${radiusInner}`} cx={`${x0}`} cy={`${y0}`} className={styles.cutOut} />
       </g>
     );
   }
@@ -599,7 +616,7 @@ export default class MirrorCovers extends Component {
         showMirrorCoverInfo: true,
       });
     }
-  }
+  };
 
   handleMouseLeave = () => {
     if (this.state.showMirrorCoverInfo !== false) {
@@ -607,11 +624,11 @@ export default class MirrorCovers extends Component {
         showMirrorCoverInfo: false,
       });
     }
-  }
+  };
 
   getMirrorCover = (angleClosed, statesStyle, x0, y0, viewBoxSize) => {
     const r = viewBoxSize / 4;
-    const alpha1 = (3 * Math.PI) / 2 + (5 * Math.PI / 180.0); // Displace initial angle for always showing
+    const alpha1 = (3 * Math.PI) / 2 + (5 * Math.PI) / 180.0; // Displace initial angle for always showing
     const rSinAlpha1 = r * Math.sin(alpha1);
     const rCosAlpha1 = r * Math.cos(alpha1);
     const index = [0, 1, 2, 3];
@@ -623,7 +640,7 @@ export default class MirrorCovers extends Component {
       `translate(-45px, -110px) rotateZ(270deg)`,
     ];
 
-    const alpha2 = angleClosed.map((angle) => angle * Math.PI / 180.0);
+    const alpha2 = angleClosed.map((angle) => (angle * Math.PI) / 180.0);
     const rSinAlpha2 = alpha2.map((a2) => r * Math.sin(a2));
     const rCosAlpha2 = alpha2.map((a2) => r * Math.cos(a2));
 
@@ -634,7 +651,7 @@ export default class MirrorCovers extends Component {
             <>
               <path
                 key={`mirror-cover-${i}`}
-                className={[styles.cls4, statesStyle? statesStyle[i] : '' ].join(' ')}
+                className={[styles.cls4, statesStyle ? statesStyle[i] : ''].join(' ')}
                 d={`
                   M ${x0} ${y0}
                   L ${x0 + rCosAlpha1} ${y0 - rSinAlpha1}
@@ -643,13 +660,16 @@ export default class MirrorCovers extends Component {
                   L ${x0} ${y0}z
                 `}
                 style={{ transformOrigin: `50% 50%`, transform: transforms[i] }}
-                onMouseEnter={() => {this.handleMouseEnter()}}
-                onMouseLeave={() => {this.handleMouseLeave()}}
+                onMouseEnter={() => {
+                  this.handleMouseEnter();
+                }}
+                onMouseLeave={() => {
+                  this.handleMouseLeave();
+                }}
               />
             </>
           );
-        } 
-        )}
+        })}
       </>
     );
   };

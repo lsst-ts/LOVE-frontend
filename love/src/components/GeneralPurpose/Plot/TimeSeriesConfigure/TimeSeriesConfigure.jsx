@@ -1,3 +1,22 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styles from './TimeSeriesConfigure.module.css';
@@ -8,6 +27,7 @@ import { defaultStyles } from 'components/GeneralPurpose/Plot/Plot.container';
 import VegaTimeseriesPlot from '../VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import { COLORS } from '../VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
+
 /**
  * Component to configure the Health Status Summary
  */
@@ -60,6 +80,7 @@ export default class TimeSeriesConfigure extends PureComponent {
       currentConfig: [],
       changed: false,
       entries: [],
+      optionsTree: null,
     };
   }
 
@@ -73,6 +94,11 @@ export default class TimeSeriesConfigure extends PureComponent {
 
     const refs = this.state.entries.map((item) => React.createRef());
     this.setState({ entries, refs });
+
+    // Get the options for the dropdowns from SAL info endpoint
+    ManagerInterface.getTopicData('event-telemetry').then((data) => {
+      this.setState({ optionsTree: data });
+    });
   };
 
   onEntryRemove = (index) => {
@@ -92,6 +118,7 @@ export default class TimeSeriesConfigure extends PureComponent {
   };
 
   render() {
+    const { optionsTree, cscOptions } = this.state;
     const refs = this.state.entries.map((item) => React.createRef());
 
     return (
@@ -115,6 +142,7 @@ export default class TimeSeriesConfigure extends PureComponent {
                     shape: shape ?? defaultStyles[index % (defaultStyles.length - 1)].shape,
                     filled: filled ?? defaultStyles[index % (defaultStyles.length - 1)].filled,
                   }}
+                  optionsTree={optionsTree}
                   onRemove={() => this.onEntryRemove(index)}
                 />
               );
@@ -135,11 +163,7 @@ export default class TimeSeriesConfigure extends PureComponent {
           <Button status="default" onClick={this.props.onCancel} className={styles.button}>
             Cancel
           </Button>
-          <Button
-            status="primary"
-            onClick={() => this.onApply(refs)}
-            className={styles.button}
-          >
+          <Button status="primary" onClick={() => this.onApply(refs)} className={styles.button}>
             Apply
           </Button>
         </div>

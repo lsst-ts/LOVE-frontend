@@ -1,3 +1,22 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Dome.module.css';
@@ -54,8 +73,7 @@ export default class DomePointing extends Component {
 
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596">
-
-        {(this.props.targetPointing.az !== az && this.props.targetPointing.el !== el) && (
+        {this.props.targetPointing.az !== az && this.props.targetPointing.el !== el && (
           <circle
             className={styles.targetPointing}
             r={16}
@@ -63,7 +81,9 @@ export default class DomePointing extends Component {
             cx={zenithPixels.x}
             cy={zenithPixels.y}
             style={{
-              transform: `rotateZ(${this.props.targetPointing.az}deg) translate(0px, ${posTranslate}px) rotateX(${this.props.targetPointing.el - 90}deg)`,
+              transform: `rotateZ(${this.props.targetPointing.az}deg) translate(0px, ${posTranslate}px) rotateX(${
+                this.props.targetPointing.el - 90
+              }deg)`,
               transformOrigin: '50% 50%',
             }}
           />

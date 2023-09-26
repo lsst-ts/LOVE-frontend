@@ -1,127 +1,182 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 .cls1 {
-        letter-spacing: .01em;
-      }
+  letter-spacing: 0.01em;
+}
 
-      .cls2 {
-        letter-spacing: .02em;
-      }
+.cls2 {
+  letter-spacing: 0.02em;
+}
 
-      .cls3 {
-        letter-spacing: .02em;
-      }
+.cls3 {
+  letter-spacing: 0.02em;
+}
 
-      .cls4 {
-        stroke-width: 3px;
-      }
+.cls4 {
+  stroke-width: 3px;
+}
 
-      .cls4, .cls5, .cls6, .cls7, .cls8, .cls9, .cls10, .cls11 {
-        stroke: #bbd4e2;
-      }
+.cls4,
+.cls5,
+.cls6,
+.cls7,
+.cls8,
+.cls9,
+.cls10,
+.cls11 {
+  stroke: #bbd4e2;
+}
 
-      .cls4, .cls12, .cls6, .cls7, .cls8, .cls13, .cls9, .cls11 {
-        fill: none;
-      }
+.cls4,
+.cls12,
+.cls6,
+.cls7,
+.cls8,
+.cls13,
+.cls9,
+.cls11 {
+  fill: none;
+}
 
-      .cls4, .cls13, .cls11 {
-        stroke-miterlimit: 10;
-      }
+.cls4,
+.cls13,
+.cls11 {
+  stroke-miterlimit: 10;
+}
 
-      .cls14 {
-        letter-spacing: .02em;
-      }
+.cls14 {
+  letter-spacing: 0.02em;
+}
 
-      .cls15 {
-        letter-spacing: .03em;
-      }
+.cls15 {
+  letter-spacing: 0.03em;
+}
 
-      .cls5 {
-        fill: rgba(187, 212, 226, .1);
-      }
+.cls5 {
+  fill: rgba(187, 212, 226, 0.1);
+}
 
-      .cls5, .cls12, .cls6, .cls7, .cls8, .cls9, .cls10 {
-        stroke-linejoin: round;
-      }
+.cls5,
+.cls12,
+.cls6,
+.cls7,
+.cls8,
+.cls9,
+.cls10 {
+  stroke-linejoin: round;
+}
 
-      .cls5, .cls12, .cls6, .cls7, .cls9, .cls10 {
-        stroke-linecap: round;
-      }
+.cls5,
+.cls12,
+.cls6,
+.cls7,
+.cls9,
+.cls10 {
+  stroke-linecap: round;
+}
 
-      .cls5, .cls9 {
-        stroke-width: .25px;
-      }
+.cls5,
+.cls9 {
+  stroke-width: 0.25px;
+}
 
-      .cls16, .cls10 {
-        fill: #bbd4e2;
-      }
+.cls16,
+.cls10 {
+  fill: #bbd4e2;
+}
 
-      .cls17 {
-        fill: #3f4e57;
-      }
+.cls17 {
+  fill: #3f4e57;
+}
 
-      .cls18, .cls19, .cls20 {
-        fill: #788f9b;
-      }
+.cls18,
+.cls19,
+.cls20 {
+  fill: #788f9b;
+}
 
-      .cls21 {
-        fill: #4e5d68;
-      }
+.cls21 {
+  fill: #4e5d68;
+}
 
-      .cls12, .cls7 {
-        stroke-width: .71px;
-      }
+.cls12,
+.cls7 {
+  stroke-width: 0.71px;
+}
 
-      .cls12, .cls13 {
-        stroke: #788f9b;
-      }
+.cls12,
+.cls13 {
+  stroke: #788f9b;
+}
 
-      .cls6, .cls8, .cls10 {
-        stroke-width: .71px;
-      }
+.cls6,
+.cls8,
+.cls10 {
+  stroke-width: 0.71px;
+}
 
-      .cls19 {
-        font-size: 6px;
-      }
+.cls19 {
+  font-size: 6px;
+}
 
-      .cls19, .cls20 {
-        font-family: MontserratRegular, Montserrat;
-      }
+.cls19,
+.cls20 {
+  font-family: MontserratRegular, Montserrat;
+}
 
-      .cls13 {
-        stroke-width: .75px;
-      }
+.cls13 {
+  stroke-width: 0.75px;
+}
 
-      .cls22 {
-        letter-spacing: 0em;
-      }
+.cls22 {
+  letter-spacing: 0em;
+}
 
-      .cls23 {
-        letter-spacing: 0em;
-      }
+.cls23 {
+  letter-spacing: 0em;
+}
 
-      .cls24 {
-        letter-spacing: 0em;
-      }
+.cls24 {
+  letter-spacing: 0em;
+}
 
-      .cls25 {
-        opacity: .5;
-      }
+.cls25 {
+  opacity: 0.5;
+}
 
-      .cls26 {
-        letter-spacing: 0em;
-      }
+.cls26 {
+  letter-spacing: 0em;
+}
 
-      .cls27 {
-        isolation: isolate;
-      }
+.cls27 {
+  isolation: isolate;
+}
 
-      .cls28 {
-        letter-spacing: .02em;
-      }
+.cls28 {
+  letter-spacing: 0.02em;
+}
 
-      .cls20 {
-        font-size: 4px;
-      }
+.cls20 {
+  font-size: 4px;
+}
 
-      .cls11 {
-        stroke-width: 5.6px;
-      }
+.cls11 {
+  stroke-width: 5.6px;
+}
