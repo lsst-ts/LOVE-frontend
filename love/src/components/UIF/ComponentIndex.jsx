@@ -208,6 +208,16 @@ export const observatoryIndex = {
       },
     },
   },
+  GIS: {
+    component: require('../GIS/GIS.container').default,
+    schema: {
+      ...require('../GIS/GIS.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../GIS/GIS.container').schema.props,
+      },
+    },
+  },
   Network: {
     component: require('../Network/Network.container').default,
     schema: {
@@ -245,6 +255,16 @@ export const observatoryIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../Facility/FacilityMap.container').schema.props,
+      },
+    },
+  },
+  Dynalene: {
+    component: require('../MainTel/Dynalene/Dynalene.container').default,
+    schema: {
+      ...require('../MainTel/Dynalene/Dynalene.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/Dynalene/Dynalene.container').schema.props,
       },
     },
   },
@@ -498,16 +518,6 @@ export const mainIndex = {
       },
     },
   },
-  CameraHexapod: {
-    component: require('../MainTel/CameraHexapod/CameraHexapod.container').default,
-    schema: {
-      ...require('../MainTel/CameraHexapod/CameraHexapod.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../MainTel/CameraHexapod/CameraHexapod.container').schema.props,
-      },
-    },
-  },
   SimonyiDome: {
     component: require('../MainTel/MTDome/MTDome.container').default,
     schema: {
@@ -528,16 +538,6 @@ export const mainIndex = {
       },
     },
   },
-  SimonyiLightPath: {
-    component: require('../MainTel/LightPath/SimonyiLightPath.container').default,
-    schema: {
-      ...require('../MainTel/LightPath/SimonyiLightPath.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../MainTel/LightPath/SimonyiLightPath.container').schema.props,
-      },
-    },
-  },
   TMA: {
     component: require('../MainTel/TMA/TMA.container').default,
     schema: {
@@ -548,13 +548,26 @@ export const mainIndex = {
       },
     },
   },
-  GIS: {
-    component: require('../GIS/GIS.container').default,
+};
+
+export const mainCameraIndex = {
+  CameraHexapod: {
+    component: require('../MainTel/CameraHexapod/CameraHexapod.container').default,
     schema: {
-      ...require('../GIS/GIS.container').schema,
+      ...require('../MainTel/CameraHexapod/CameraHexapod.container').schema,
       props: {
         ...defaultSchemaProps,
-        ...require('../GIS/GIS.container').schema.props,
+        ...require('../MainTel/CameraHexapod/CameraHexapod.container').schema.props,
+      },
+    },
+  },
+  SimonyiLightPath: {
+    component: require('../MainTel/LightPath/SimonyiLightPath.container').default,
+    schema: {
+      ...require('../MainTel/LightPath/SimonyiLightPath.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/LightPath/SimonyiLightPath.container').schema.props,
       },
     },
   },
@@ -753,6 +766,10 @@ export const indexes = [
     index: mainIndex,
   },
   {
+    name: 'Simonyi Camera',
+    index: mainCameraIndex,
+  },
+  {
     name: 'Environment',
     index: environmentIndex,
   },
@@ -770,6 +787,7 @@ export default {
   ...observatoryIndex,
   ...auxtelIndex,
   ...mainIndex,
+  ...mainCameraIndex,
   ...environmentIndex,
   ...utilitiesIndex,
   ...internalIndex,
