@@ -157,66 +157,10 @@ export default class Level7 extends Component {
               <g className={styles.cls26}>
                 <text className={styles.cls18} transform="translate(155.37 149.4)">
                   <tspan className={styles.cls13} x="0" y="0">
-                    P
-                  </tspan>
-                  <tspan x="4.17" y="0">
-                    ier
+                    Pier
                   </tspan>
                   <tspan x="-22.22" y="7.2">
-                    In
-                  </tspan>
-                  <tspan className={styles.cls27} x="-16.35" y="7.2">
-                    t
-                  </tspan>
-                  <tspan x="-14.03" y="7.2">
-                    e
-                  </tspan>
-                  <tspan className={styles.cls23} x="-10.4" y="7.2">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls22} x="-8.05" y="7.2">
-                    m
-                  </tspan>
-                  <tspan x="-1.67" y="7.2">
-                    edia
-                  </tspan>
-                  <tspan className={styles.cls3} x="11.18" y="7.2">
-                    t
-                  </tspan>
-                  <tspan className={styles.cls21} x="13.5" y="7.2">
-                    e Floor
-                  </tspan>
-                </text>
-                <text className={styles.cls18} transform="translate(155.37 149.4)">
-                  <tspan className={styles.cls13} x="0" y="0">
-                    P
-                  </tspan>
-                  <tspan x="4.17" y="0">
-                    ier
-                  </tspan>
-                  <tspan x="-22.22" y="7.2">
-                    In
-                  </tspan>
-                  <tspan className={styles.cls27} x="-16.35" y="7.2">
-                    t
-                  </tspan>
-                  <tspan x="-14.03" y="7.2">
-                    e
-                  </tspan>
-                  <tspan className={styles.cls23} x="-10.4" y="7.2">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls22} x="-8.05" y="7.2">
-                    m
-                  </tspan>
-                  <tspan x="-1.67" y="7.2">
-                    edia
-                  </tspan>
-                  <tspan className={styles.cls3} x="11.18" y="7.2">
-                    t
-                  </tspan>
-                  <tspan className={styles.cls21} x="13.5" y="7.2">
-                    e Floor
+                    Intermediate Floor
                   </tspan>
                 </text>
               </g>
@@ -225,30 +169,7 @@ export default class Level7 extends Component {
               <g className={styles.cls26}>
                 <text className={styles.cls19} transform="translate(212.71 193.75)">
                   <tspan x="0" y="0">
-                    Ha
-                  </tspan>
-                  <tspan className={styles.cls2} x="5.61" y="0">
-                    t
-                  </tspan>
-                  <tspan className={styles.cls25} x="7.16" y="0">
-                    c
-                  </tspan>
-                  <tspan x="9.38" y="0">
-                    h
-                  </tspan>
-                </text>
-                <text className={styles.cls19} transform="translate(212.71 193.75)">
-                  <tspan x="0" y="0">
-                    Ha
-                  </tspan>
-                  <tspan className={styles.cls2} x="5.61" y="0">
-                    t
-                  </tspan>
-                  <tspan className={styles.cls25} x="7.16" y="0">
-                    c
-                  </tspan>
-                  <tspan x="9.38" y="0">
-                    h
+                    Hatch
                   </tspan>
                 </text>
               </g>
@@ -266,30 +187,7 @@ export default class Level7 extends Component {
             <g className={styles.cls26}>
               <text className={styles.cls19} transform="translate(206.67 84.73)">
                 <tspan x="0" y="0">
-                  El
-                </tspan>
-                <tspan className={styles.cls1} x="3.75" y="0">
-                  e
-                </tspan>
-                <tspan className={styles.cls14} x="6.13" y="0">
-                  v
-                </tspan>
-                <tspan x="8.16" y="0">
-                  . 3
-                </tspan>
-              </text>
-              <text className={styles.cls19} transform="translate(206.67 84.73)">
-                <tspan x="0" y="0">
-                  El
-                </tspan>
-                <tspan className={styles.cls1} x="3.75" y="0">
-                  e
-                </tspan>
-                <tspan className={styles.cls14} x="6.13" y="0">
-                  v
-                </tspan>
-                <tspan x="8.16" y="0">
-                  . 3
+                  Elev. 3
                 </tspan>
               </text>
             </g>
