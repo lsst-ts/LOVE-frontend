@@ -109,6 +109,7 @@ const MainTelESS = (props) => {
   const louversIds = Array.from({ length: 34 })
     .fill(0)
     .map((_, index) => index + 1);
+
   const items = {
     temperature: 'temperature',
     relativeHumidity: 'relativeHumidity',

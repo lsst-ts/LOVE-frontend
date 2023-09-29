@@ -23,6 +23,7 @@ import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getStreamsData, getDomeState } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import AuxTelESS from './AuxTelESS';
+import { SensorsPositionESS } from 'Config';
 import { range } from 'lodash';
 
 export const schema = {
@@ -99,19 +100,52 @@ const getGroupNames = (salindexList, option) => {
   return [...new Set(subscriptions)];
 };
 
+const prevParseToArraySensors = (prevParse, option) => {
+  const list = Object.values(prevParse[option] ?? {}) ?? [];
+  const objs = Object.values(list).map((values) => {
+    return Object.values(values);
+  });
+
+  const result = Array.prototype.concat.apply([], objs);
+  const sorted = result.sort((a, b) => {
+    return a.sensorName > b.sensorName ? 1 : (
+      a.sensorName < b.sensorName ? -1 : (
+        a.sensorName === b.sensorName && a.indexArr > b.indexArr ? 1 : (
+          a.indexArr < b.indexArr ? -1 : 0
+        )
+      )
+    );
+  });
+  return sorted;
+}
+
+let prevParse = {};
 const parse = (streams, option) => {
+  let arr;
   switch (option) {
     case 'temperature':
-      return parseTemperature(streams);
+      arr = parseTemperature(streams);
+      break;
     case 'relativeHumidity':
-      return parseHumidity(streams);
+      arr = parseHumidity(streams);
+      break;
     case 'airFlow':
-      return parseAirflow(streams);
+      arr = parseAirflow(streams);
+      break;
     case 'airTurbulence':
-      return parseAirTurbulence(streams);
+      arr = parseAirTurbulence(streams);
+      break;
     default:
-      return [];
+      arr = [];
   }
+  arr.forEach((parse) => {
+    if (!prevParse[option]) prevParse[option] = {};
+    if (!prevParse[option][parse.sensorName]) prevParse[option][parse.sensorName] = {};
+    if (!prevParse[option][parse.sensorName][parse.indexArr]) prevParse[option][parse.sensorName][parse.indexArr] = {};
+    prevParse[option][parse.sensorName][parse.indexArr] = parse;
+  })
+  const arrSensors = prevParseToArraySensors(prevParse, option);
+  return arrSensors;
 };
 
 const parseTemperature = (streams) => {
@@ -119,10 +153,14 @@ const parseTemperature = (streams) => {
   streams.forEach((stream) => {
     Object.entries(stream).forEach((entry) => {
       const essData = entry[1];
-      const sensorName = essData?.sensorName.value ?? '';
-      const numChannels = essData?.numChannels.value ?? 1;
-      const values = essData?.temperature.value?.slice(0, numChannels) ?? [];
-      const locations = essData?.location.value.split(',')?.slice(0, numChannels) ?? [];
+      const sensorName = essData?.sensorName?.value ?? '';
+      const numChannels = essData?.numChannels?.value ?? 1;
+      const values = essData?.temperature?.value?.slice(0, numChannels) ?? [];
+      const locations = essData?.location?.value.split(',')?.slice(0, numChannels) ?? [];
+      const timestamp = essData?.timestamp?.value ?? undefined;
+      const xPosition = essData?.xPosition?.value ?? undefined;
+      const yPosition = essData?.yPosition?.value ?? undefined;
+      const zPosition = essData?.zPosition?.value ?? undefined;
       for (let i = 0; i < numChannels; i++) {
         temperatures.push({
           sensorName,
@@ -131,9 +169,10 @@ const parseTemperature = (streams) => {
           indexArr: i,
           location: locations[i],
           telemetry: entry[0],
-          xPosition: i,
-          yPosition: temperatures.length,
-          zPosition: i + temperatures.length,
+          xPosition: xPosition ?? SensorsPositionESS[sensorName][i]?.xPosition,
+          yPosition: yPosition ?? SensorsPositionESS[sensorName][i]?.yPosition,
+          zPosition: zPosition ?? SensorsPositionESS[sensorName][i]?.zPosition,
+          timestamp: timestamp,
         });
       }
     });
@@ -146,17 +185,22 @@ const parseHumidity = (streams) => {
   streams.forEach((stream) => {
     Object.entries(stream).forEach((entry) => {
       const essData = entry[1];
-      const sensorName = essData?.sensorName.value ?? '';
-      const value = essData?.relativeHumidity.value ?? 0;
-      const location = essData?.location.value ?? '';
+      const sensorName = essData?.sensorName?.value ?? '';
+      const value = essData?.relativeHumidity?.value ?? 0;
+      const location = essData?.location?.value ?? '';
+      const timestamp = essData?.timestamp?.value ?? undefined;
+      const xPosition = essData?.xPosition?.value ?? undefined;
+      const yPosition = essData?.yPosition?.value ?? undefined;
+      const zPosition = essData?.zPosition?.value ?? undefined;
       humidities.push({
         sensorName,
         value: value,
         location: location,
         telemetry: entry[0],
-        xPosition: humidities.length,
-        yPosition: 5,
-        zPosition: 5 + humidities.length,
+        xPosition: xPosition ?? SensorsPositionESS[sensorName][0]?.xPosition,
+        yPosition: yPosition ?? SensorsPositionESS[sensorName][0]?.yPosition,
+        zPosition: zPosition ?? SensorsPositionESS[sensorName][0]?.zPosition,
+        timestamp: timestamp,
       });
     });
   });
@@ -168,19 +212,24 @@ const parseAirflow = (streams) => {
   streams.forEach((stream) => {
     Object.entries(stream).forEach((entry) => {
       const essData = entry[1];
-      const sensorName = essData?.sensorName.value ?? '';
-      const value = essData?.speed.value ?? 0;
-      const direction = essData?.speed.direction ?? 0;
-      const location = essData?.location.value ?? '';
+      const sensorName = essData?.sensorName?.value ?? '';
+      const value = essData?.speed?.value ?? 0;
+      const direction = essData?.speed?.direction ?? 0;
+      const location = essData?.location?.value ?? '';
+      const timestamp = essData?.timestamp?.value ?? undefined;
+      const xPosition = essData?.xPosition?.value ?? undefined;
+      const yPosition = essData?.yPosition?.value ?? undefined;
+      const zPosition = essData?.zPosition?.value ?? undefined;
       airflows.push({
         sensorName,
         value: value,
         direction: direction,
         location: location,
         telemetry: entry[0],
-        xPosition: 5 - airflows.length,
-        yPosition: 2,
-        zPosition: airflows.length,
+        xPosition: xPosition ?? SensorsPositionESS[sensorName][0]?.xPosition,
+        yPosition: yPosition ?? SensorsPositionESS[sensorName][0]?.yPosition,
+        zPosition: zPosition ?? SensorsPositionESS[sensorName][0]?.zPosition,
+        timestamp: timestamp,
       });
     });
   });
@@ -232,19 +281,24 @@ const parseAirTurbulence = (streams) => {
   streams.forEach((stream) => {
     Object.entries(stream).forEach((entry) => {
       const essData = entry[1];
-      const sensorName = essData?.sensorName.value ?? '';
-      const value = essData?.speedMagnitud.value ?? 0;
-      const speed = essData?.speed.value ?? { x: 0, y: 0, z: 0 };
-      const location = essData?.location.value ?? '';
+      const sensorName = essData?.sensorName?.value ?? '';
+      const value = essData?.speedMagnitud?.value ?? 0;
+      const speed = essData?.speed?.value ?? { x: 0, y: 0, z: 0 };
+      const location = essData?.location?.value ?? '';
+      const timestamp = essData?.timestamp?.value ?? undefined;
+      const xPosition = essData?.xPosition?.value ?? undefined;
+      const yPosition = essData?.yPosition?.value ?? undefined;
+      const zPosition = essData?.zPosition?.value ?? undefined;
       airTurbulences.push({
         sensorName,
         value: value,
         speed: speed,
         location: location,
         telemetry: entry[0],
-        xPosition: 5 - airTurbulences.length,
-        yPosition: 2,
-        zPosition: airTurbulences.length,
+        xPosition: xPosition ?? SensorsPositionESS[sensorName][0]?.xPosition,
+        yPosition: yPosition ?? SensorsPositionESS[sensorName][0]?.yPosition,
+        zPosition: zPosition ?? SensorsPositionESS[sensorName][0]?.zPosition,
+        timestamp: timestamp,
       });
     });
   });

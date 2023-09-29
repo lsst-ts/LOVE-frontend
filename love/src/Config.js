@@ -3357,3 +3357,103 @@ export const LouversPositionESS = [
     type: 'I',
   },
 ];
+
+export const SensorsPositionESS = {
+  'AuxTel-ESS01': [
+    {
+      xPosition: 1,
+      yPosition: 1,
+      zPosition: 1,
+    },
+    {
+      xPosition: 1,
+      yPosition: 1,
+      zPosition: 2,
+    },
+    {
+      xPosition: 1,
+      yPosition: 1,
+      zPosition: 3,
+    },
+    {
+      xPosition: 1,
+      yPosition: 1,
+      zPosition: 4,
+    },
+    {
+      xPosition: 1,
+      yPosition: 1,
+      zPosition: 5,
+    },
+    {
+      xPosition: 1,
+      yPosition: 1,
+      zPosition: 6,
+    },
+    {
+      xPosition: 1,
+      yPosition: 1,
+      zPosition: 7,
+    },
+    {
+      xPosition: 1,
+      yPosition: 1,
+      zPosition: 8,
+    },
+  ],
+  'AuxTel-ESS02': [
+    {
+      xPosition: 0,
+      yPosition: 0,
+      zPosition: 4,
+    }
+  ],
+  'AuxTel-ESS03': [
+    {
+      xPosition: 2,
+      yPosition: 2,
+      zPosition: 1,
+    },
+    {
+      xPosition: 2,
+      yPosition: 2,
+      zPosition: 2,
+    },
+    {
+      xPosition: 2,
+      yPosition: 2,
+      zPosition: 3,
+    },
+    {
+      xPosition: 2,
+      yPosition: 2,
+      zPosition: 4,
+    },
+    {
+      xPosition: 2,
+      yPosition: 2,
+      zPosition: 5,
+    },
+  ],
+  'MTDome-ESS01': [
+    {
+      xPosition: 3.2,
+      yPosition: 3.2,
+      zPosition: 0,
+    },
+  ],
+  'MTDome-ESS02': [
+    {
+      xPosition: 13.2,
+      yPosition: 3.2,
+      zPosition: 3,
+    },
+  ],
+  'MTDome-ESS03': [
+    {
+      xPosition: 5.2,
+      yPosition: 3.2,
+      zPosition: 6,
+    },
+  ],
+};
