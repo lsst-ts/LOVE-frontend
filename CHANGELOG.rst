@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.25.3
+-------
+
+* Fix ESS component with the sorted sensors in cache `<https://github.com/lsst-ts/LOVE-frontend/pull/531>`
+
 v5.25.2
 -------
 
