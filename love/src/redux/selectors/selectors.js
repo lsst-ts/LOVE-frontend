@@ -2124,31 +2124,44 @@ export const getObservatorySubscriptions = () => {
   return [
     'event-Scheduler-1-observingMode',
     'event-Scheduler-2-observingMode',
+    'event-Scheduler-1-operationMode',
+    'event-Scheduler-2-operationMode',
     `telemetry-Scheduler-1-observatoryState`,
     `telemetry-Scheduler-2-observatoryState`,
     `event-Scheduler-1-target`,
-    `event-Scheduler-2-target`,
+    // `event-Scheduler-2-target`,
+    'event-ATPtg-0-currentTarget',
+    'event-MTPtg-0-currentTarget',
     'event-ESS-301-precipitation',
     'telemetry-ESS-301-temperature',
     'telemetry-ESS-301-airFlow',
-    'event-ATPtg-0-currentTarget',
-    'event-MTPtg-0-currentTarget',
   ];
 };
 
 export const getObservatoryState = (state) => {
   const observatorySubscriptions = getObservatorySubscriptions();
   const observatoryData = getStreamsData(state, observatorySubscriptions);
+
   const simonyiObservingMode = observatoryData['event-Scheduler-1-observingMode'];
-  const simonyiTarget = observatoryData[`event-Scheduler-1-target`];
-  const auxtelObservingMode = observatoryData['event-Scheduler-2-observingMode'];
+  const simonyiOperationMode = observatoryData['event-Scheduler-1-operationMode'];
   const simonyiObservatoryState = observatoryData['telemetry-Scheduler-1-observatoryState'];
+  // TODO: update once data source is available.
+  const simonyiPower = observatoryData['telemetry-Power-1-source'];
+
+  const auxtelObservingMode = observatoryData['event-Scheduler-2-observingMode'];
+  const auxtelOperationMode = observatoryData['event-Scheduler-2-operationMode'];
   const auxtelObservatoryState = observatoryData['telemetry-Scheduler-2-observatoryState'];
+  // TODO: update once data source is available.
+  const auxtelPower = observatoryData['telemetry-Power-2-source'];
+
+  const simonyiTarget = observatoryData[`event-Scheduler-1-target`];
+
+  const mptgCurrentTarget = observatoryData['event-MTPtg-0-currentTarget'];
+  const atptgCurrentTarget = observatoryData['event-ATPtg-0-currentTarget'];
+
   const environmentVariables = observatoryData['event-ESS-301-precipitation'];
   const essTemperatures = observatoryData['telemetry-ESS-301-temperature'];
   const essAirFlow = observatoryData['telemetry-ESS-301-airFlow'];
-  const mptgCurrentTarget = observatoryData['event-MTPtg-0-currentTarget'];
-  const atptgCurrentTarget = observatoryData['event-ATPtg-0-currentTarget'];
 
   return {
     simonyiObservingMode: simonyiObservingMode ? simonyiObservingMode[0].mode.value : 'UNKNOWN',

@@ -568,17 +568,17 @@ class Layout extends Component {
               locationIcon={this.getObsLocationIcon()}
               location={controlLocationName}
               locationLastUpdate={lastUpdated}
-              simonyiOperationMode={'UNKNOWN'}
+              simonyiOperationMode={this.props.observatorySummary?.simonyiOperationMode}
               simonyiTrackingState={this.props.observatorySummary?.simonyiTrackingState}
               simonyiTrackingMode={this.props.observatorySummary?.simonyiTrackingMode}
               simonyiObsMode={this.props.observatorySummary?.simonyiObservingMode}
-              simonyiPower={'UNKNOWN'}
-              auxtelOperationMode={'UNKNOWN'}
+              simonyiPower={this.props.observatorySummary?.simonyiPower}
+              auxtelOperationMode={this.props.observatorySummary?.auxtelOperationMode}
               auxtelTrackingState={this.props.observatorySummary?.auxtelTrackingState}
               auxtelTrackingMode={this.props.observatorySummary?.auxtelTrackingMode}
               auxtelObsMode={this.props.observatorySummary?.auxtelObservingMode}
-              auxtelPower={'UNKNOWN'}
-            ></ObservatorySummaryMenu>
+              auxtelPower={this.props.observatorySummary?.auxtelPower}
+            />
           </div>
         </DropdownMenu>
 
@@ -657,17 +657,17 @@ class Layout extends Component {
               locationIcon={this.getObsLocationIcon()}
               location={controlLocationName}
               locationLastUpdate={lastUpdated}
-              simonyiOperationMode={'UNKNOWN'}
+              simonyiOperationMode={this.props.observatorySummary?.simonyiOperationMode}
               simonyiTrackingState={this.props.observatorySummary?.simonyiTrackingState}
               simonyiTrackingMode={this.props.observatorySummary?.simonyiTrackingMode}
               simonyiObsMode={this.props.observatorySummary?.simonyiObservingMode}
-              simonyiPower={'UNKNOWN'}
-              auxtelOperationMode={'UNKNOWN'}
+              simonyiPower={this.props.observatorySummary?.simonyiPower}
+              auxtelOperationMode={this.props.observatorySummary?.auxtelOperationMode}
               auxtelTrackingState={this.props.observatorySummary?.auxtelTrackingState}
               auxtelTrackingMode={this.props.observatorySummary?.auxtelTrackingMode}
               auxtelObsMode={this.props.observatorySummary?.auxtelObservingMode}
-              auxtelPower={'UNKNOWN'}
-            ></ObservatorySummaryMenu>
+              auxtelPower={this.props.observatorySummary?.auxtelPower}
+            />
           </div>
           <div className={styles.userMenu}>
             <UserDetails

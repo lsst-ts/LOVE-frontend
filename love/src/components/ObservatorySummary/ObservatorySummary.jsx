@@ -75,10 +75,14 @@ export default class ObservatorySummary extends Component {
 
   render() {
     const {
+      simonyiOperationMode,
       simonyiObservingMode,
+      simonyiPower,
       simonyiTrackingState,
       simonyiTrackingMode,
+      auxtelOperationMode,
       auxtelObservingMode,
+      auxtelPower,
       auxtelTrackingState,
       auxtelTrackingMode,
       controlLocation,
@@ -105,13 +109,13 @@ export default class ObservatorySummary extends Component {
             </StatusText>
           </Value>
           <Label>Operation Mode</Label>
-          <Value>UNKNOWN</Value>
+          <Value>{simonyiOperationMode}</Value>
           <Label>Observation Mode</Label>
           <Value>{simonyiObservingMode}</Value>
           <Label>Tracking Mode</Label>
           <Value>{simonyiTrackingModeText}</Value>
           <Label>Power Source</Label>
-          <Value>UNKNOWN</Value>
+          <Value>{simonyiPower}</Value>
         </SummaryPanel>
 
         <SummaryPanel>
@@ -120,8 +124,6 @@ export default class ObservatorySummary extends Component {
           <Value>
             <span title={`Last updated: ${lastUpdated?.toUTCString()}`}>{controlLocationName}</span>
           </Value>
-          <Label>Power Source</Label>
-          <Value>UNKNOWN</Value>
         </SummaryPanel>
 
         <SummaryPanel>
@@ -133,13 +135,13 @@ export default class ObservatorySummary extends Component {
             </StatusText>
           </Value>
           <Label>Operation Mode</Label>
-          <Value>UNKNOWN</Value>
+          <Value>{auxtelOperationMode}</Value>
           <Label>Observation Mode</Label>
           <Value>{auxtelObservingMode}</Value>
           <Label>Tracking Mode</Label>
           <Value>{auxtelTrackingModeText}</Value>
           <Label>Power Source</Label>
-          <Value>UNKNOWN</Value>
+          <Value>{auxtelPower}</Value>
         </SummaryPanel>
       </div>
     );

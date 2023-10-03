@@ -99,10 +99,14 @@ const mapDispatchToProps = (dispatch) => {
     'event-Watcher-0-alarm',
     'event-Watcher-0-stream',
     /* Simonyi states */
+    // TODO: update when operation mode is available
+    'event-Scheduler-1-operationMode',
     'event-Scheduler-1-observingMode',
     'telemetry-Scheduler-1-observatoryState',
     'event-MTPtg-0-currentTarget',
     /* Auxtel states */
+    // TODO: update when operation mode is available
+    'event-Scheduler-2-operationMode',
     'event-Scheduler-2-observingMode',
     'telemetry-Scheduler-2-observatoryState',
     'event-ATPtg-0-currentTarget',
