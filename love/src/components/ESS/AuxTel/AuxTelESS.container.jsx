@@ -100,6 +100,12 @@ const getGroupNames = (salindexList, option) => {
   return [...new Set(subscriptions)];
 };
 
+/**
+ * 
+ * @param {dict} prevParse dict data of the sensors
+ * @param {string} option string between the values (temperature, relativeHumidity, airFlow, airTurbulence)
+ * @returns {array} array of the sensors data sorted
+ */
 const prevParseToArraySensors = (prevParse, option) => {
   const list = prevParse[option] ? Object.values(prevParse[option]) : [];
   const objs = list.map((values) => {
@@ -118,6 +124,7 @@ const prevParseToArraySensors = (prevParse, option) => {
   return sorted;
 };
 
+/** Variable for not delete the sensors not received in stream of telemetry */
 let prevParse = {};
 const parse = (streams, option) => {
   let arr;
@@ -147,6 +154,11 @@ const parse = (streams, option) => {
   return arrSensors;
 };
 
+/**
+ * 
+ * @param {array} streams 
+ * @returns array with the data separate parse of the temperature telemetry
+ */
 const parseTemperature = (streams) => {
   const temperatures = [];
   streams.forEach((stream) => {
@@ -179,6 +191,11 @@ const parseTemperature = (streams) => {
   return temperatures;
 };
 
+/**
+ * 
+ * @param {array} streams 
+ * @returns array with the data separate parse of the relativeHumidity telemetry
+ */
 const parseHumidity = (streams) => {
   const humidities = [];
   streams.forEach((stream) => {
@@ -206,6 +223,11 @@ const parseHumidity = (streams) => {
   return humidities;
 };
 
+/**
+ * 
+ * @param {array} streams 
+ * @returns array with the data separate parse of the speed telemetry
+ */
 const parseAirflow = (streams) => {
   const airflows = [];
   streams.forEach((stream) => {
@@ -275,6 +297,11 @@ const parseAirflow = (streams) => {
   return airflows;
 };
 
+/**
+ * 
+ * @param {array} streams 
+ * @returns array with the data separate parse of the speedMagnitud telemetry
+ */
 const parseAirTurbulence = (streams) => {
   const airTurbulences = [];
   streams.forEach((stream) => {
