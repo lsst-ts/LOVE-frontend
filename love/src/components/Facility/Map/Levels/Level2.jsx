@@ -69,6 +69,14 @@ export default class Level2 extends Component {
     this.props.savePos(transformData);
   };
 
+  zoomOut = () => {
+    const overlayId = '#' + this.overlayId;
+
+    const zoom = d3.zoom().scaleExtent([1, 8]).on('zoom', this.zoomMap);
+
+    d3.select(overlayId).call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1)).call(zoom);
+  };
+
   getDevices() {
     const {
       crack01P02,
@@ -1416,6 +1424,7 @@ export default class Level2 extends Component {
   }
 
   render() {
+    const zoomLevel = this.props.transformData.k;
     return (
       <React.Fragment>
         <g id={this.mapId}>
@@ -2075,6 +2084,16 @@ export default class Level2 extends Component {
         <rect id={this.overlayId} pointerEvents="all" fill="none" width="882.42" height="461.23" />
 
         <g id={this.deviceId}>{!this.props.hideHVAC && this.getDevices()}</g>
+        {zoomLevel > 1 && (
+          <g className={styles.zoomOut} transform="translate(808 10)">
+            <rect onClick={this.zoomOut} className={styles.zoomOutButton} width="64" height="21" rx="4" />
+            <text onClick={this.zoomOut} className={styles.zoomOutText}>
+              <tspan x="10" y="13">
+                Zoom out
+              </tspan>
+            </text>
+          </g>
+        )}
       </React.Fragment>
     );
   }

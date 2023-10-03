@@ -259,3 +259,15 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .cls13 {
   fill: var(--base-font-color);
 }
+.zoomOut {
+  cursor: pointer;
+}
+
+.zoomOutButton {
+  fill: var(--default-background-color);
+}
+
+.zoomOutText {
+  fill: var(--default-font-color);
+  font-size: 0.6em;
+}
