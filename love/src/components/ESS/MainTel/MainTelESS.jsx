@@ -147,8 +147,8 @@ const MainTelESS = (props) => {
 
   const sensors = props[option] ?? [];
   const values = sensors.map((sensor) => (!Number.isNaN(+sensor.value) ? +sensor.value : 0)) ?? [];
-  const speeds = sensors.map((sensor) => sensor.speed ?? undefined) ?? [];
-  const directions = sensors.map((sensor) => sensor.direction ?? undefined) ?? [];
+  const speeds = sensors.map((sensor) => sensor.speed) ?? [];
+  const directions = sensors.map((sensor) => sensor.direction) ?? [];
 
   return (
     <div className={styles.sceneAndInfoPlotsContainer}>
@@ -216,6 +216,7 @@ MainTelESS.propTypes = {
       xPosition: PropTypes.number,
       yPosition: PropTypes.number,
       zPosition: PropTypes.number,
+      timestamp: PropTypes.number,
     }),
   ),
   relativeHumidity: PropTypes.arrayOf(
@@ -226,6 +227,7 @@ MainTelESS.propTypes = {
       xPosition: PropTypes.number,
       yPosition: PropTypes.number,
       zPosition: PropTypes.number,
+      timestamp: PropTypes.number,
     }),
   ),
   airFlow: PropTypes.arrayOf(
@@ -237,6 +239,7 @@ MainTelESS.propTypes = {
       xPosition: PropTypes.number,
       yPosition: PropTypes.number,
       zPosition: PropTypes.number,
+      timestamp: PropTypes.number,
     }),
   ),
   airTurbulence: PropTypes.arrayOf(
@@ -247,6 +250,7 @@ MainTelESS.propTypes = {
       xPosition: PropTypes.number,
       yPosition: PropTypes.number,
       zPosition: PropTypes.number,
+      timestamp: PropTypes.number,
     }),
   ),
   minGradiantLimit: PropTypes.number,
@@ -258,46 +262,10 @@ MainTelESS.propTypes = {
 };
 
 MainTelESS.defaultProps = {
-  temperature: [
-    {
-      sensorName: '',
-      value: 0,
-      indexArr: 0,
-      numChannels: 0,
-      xPosition: 0,
-      yPosition: 0,
-      zPosition: 0,
-    },
-  ],
-  relativeHumidity: [
-    {
-      sensorName: '',
-      value: 0,
-      xPosition: 0,
-      yPosition: 0,
-      zPosition: 0,
-    },
-  ],
-  airFlow: [
-    {
-      sensorName: '',
-      value: 0,
-      direction: 0,
-      xPosition: 0,
-      yPosition: 0,
-      zPosition: 0,
-    },
-  ],
-  airTurbulence: [
-    {
-      sensorName: '',
-      value: 0,
-      speed: { x: 0, y: 0, z: 0 },
-      xPosition: 0,
-      yPosition: 0,
-      zPosition: 0,
-    },
-  ],
+  temperature: [],
+  relativeHumidity: [],
+  airFlow: [],
+  airTurbulence: [],
   minGradiantLimit: -20,
   maxGradiantLimit: 40,
   option: 'temperature',

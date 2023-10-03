@@ -101,23 +101,22 @@ const getGroupNames = (salindexList, option) => {
 };
 
 const prevParseToArraySensors = (prevParse, option) => {
-  const list = Object.values(prevParse[option] ?? {}) ?? [];
-  const objs = Object.values(list).map((values) => {
+  const list = prevParse[option] ? Object.values(prevParse[option]) : [];
+  const objs = list.map((values) => {
     return Object.values(values);
   });
 
-  const result = Array.prototype.concat.apply([], objs);
-  const sorted = result.sort((a, b) => {
-    return a.sensorName > b.sensorName ? 1 : (
-      a.sensorName < b.sensorName ? -1 : (
-        a.sensorName === b.sensorName && a.indexArr > b.indexArr ? 1 : (
-          a.indexArr < b.indexArr ? -1 : 0
-        )
-      )
-    );
+  const sorted = objs.flat().sort((a, b) => {
+    if (a.sensorName > b.sensorName || (a.sensorName === b.sensorName && a.indexArr > b.indexArr)) {
+      return 1;
+    } else if (a.sensorName < b.sensorName || (a.sensorName === b.sensorName && a.indexArr < b.indexArr)) {
+      return -1;
+    } else {
+      return 0;
+    }
   });
   return sorted;
-}
+};
 
 let prevParse = {};
 const parse = (streams, option) => {
@@ -157,15 +156,15 @@ const parseTemperature = (streams) => {
       const numChannels = essData?.numChannels?.value ?? 1;
       const values = essData?.temperature?.value?.slice(0, numChannels) ?? [];
       const locations = essData?.location?.value.split(',')?.slice(0, numChannels) ?? [];
-      const timestamp = essData?.timestamp?.value ?? undefined;
-      const xPosition = essData?.xPosition?.value ?? undefined;
-      const yPosition = essData?.yPosition?.value ?? undefined;
-      const zPosition = essData?.zPosition?.value ?? undefined;
+      const timestamp = essData?.timestamp?.value;
+      const xPosition = essData?.xPosition?.value;
+      const yPosition = essData?.yPosition?.value;
+      const zPosition = essData?.zPosition?.value;
       for (let i = 0; i < numChannels; i++) {
         temperatures.push({
           sensorName,
           numChannels,
-          value: values[i],
+          value: +values[i],
           indexArr: i,
           location: locations[i],
           telemetry: entry[0],
@@ -188,13 +187,13 @@ const parseHumidity = (streams) => {
       const sensorName = essData?.sensorName?.value ?? '';
       const value = essData?.relativeHumidity?.value ?? 0;
       const location = essData?.location?.value ?? '';
-      const timestamp = essData?.timestamp?.value ?? undefined;
-      const xPosition = essData?.xPosition?.value ?? undefined;
-      const yPosition = essData?.yPosition?.value ?? undefined;
-      const zPosition = essData?.zPosition?.value ?? undefined;
+      const timestamp = essData?.timestamp?.value;
+      const xPosition = essData?.xPosition?.value;
+      const yPosition = essData?.yPosition?.value;
+      const zPosition = essData?.zPosition?.value;
       humidities.push({
         sensorName,
-        value: value,
+        value: +value,
         location: location,
         telemetry: entry[0],
         xPosition: xPosition ?? SensorsPositionESS[sensorName][0]?.xPosition,
@@ -216,13 +215,13 @@ const parseAirflow = (streams) => {
       const value = essData?.speed?.value ?? 0;
       const direction = essData?.speed?.direction ?? 0;
       const location = essData?.location?.value ?? '';
-      const timestamp = essData?.timestamp?.value ?? undefined;
-      const xPosition = essData?.xPosition?.value ?? undefined;
-      const yPosition = essData?.yPosition?.value ?? undefined;
-      const zPosition = essData?.zPosition?.value ?? undefined;
+      const timestamp = essData?.timestamp?.value;
+      const xPosition = essData?.xPosition?.value;
+      const yPosition = essData?.yPosition?.value;
+      const zPosition = essData?.zPosition?.value;
       airflows.push({
         sensorName,
-        value: value,
+        value: +value,
         direction: direction,
         location: location,
         telemetry: entry[0],
@@ -285,14 +284,14 @@ const parseAirTurbulence = (streams) => {
       const value = essData?.speedMagnitud?.value ?? 0;
       const speed = essData?.speed?.value ?? { x: 0, y: 0, z: 0 };
       const location = essData?.location?.value ?? '';
-      const timestamp = essData?.timestamp?.value ?? undefined;
-      const xPosition = essData?.xPosition?.value ?? undefined;
-      const yPosition = essData?.yPosition?.value ?? undefined;
-      const zPosition = essData?.zPosition?.value ?? undefined;
+      const timestamp = essData?.timestamp?.value;
+      const xPosition = essData?.xPosition?.value;
+      const yPosition = essData?.yPosition?.value;
+      const zPosition = essData?.zPosition?.value;
       airTurbulences.push({
         sensorName,
-        value: value,
-        speed: speed,
+        value: +value,
+        speed: +speed,
         location: location,
         telemetry: entry[0],
         xPosition: xPosition ?? SensorsPositionESS[sensorName][0]?.xPosition,
