@@ -19,8 +19,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import styles from './Map.module.css';
-import { isArray } from 'lodash';
-
 import Level1 from './Levels/Level1.jsx';
 import Level2 from './Levels/Level2.jsx';
 import Level3 from './Levels/Level3.jsx';
