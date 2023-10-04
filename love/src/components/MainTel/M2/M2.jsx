@@ -97,6 +97,7 @@ export default class M2 extends Component {
       tangentForceMeasured,
       minForceLimit,
       maxForceLimit,
+      alignment,
     } = this.props;
     const { summaryState, commandableByDDS, forceBalanceSystemStatus, m2AssemblyInPosition } = this.props;
     const { zenithAngleMeasured, inclinationTelemetrySource } = this.props;
@@ -108,6 +109,7 @@ export default class M2 extends Component {
           commandableByDDS={commandableByDDS}
           forceBalanceSystemStatus={forceBalanceSystemStatus}
           m2AssemblyInPosition={m2AssemblyInPosition}
+          alignment={alignment}
         />
 
         <Actuators

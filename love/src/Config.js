@@ -638,6 +638,13 @@ export const ccCameraFilterChangerDetailedStateToStyle = {
   UNKNOWN: 'invalid',
 };
 
+// Optical Alignment Alarm
+export const alignedStateToStyle = {
+  ALIGNED: 'ok',
+  'NOT ALIGNED': 'warning',
+  UNKNOWN: 'invalid',
+};
+
 //  MTM1M3
 export const m1m3DetailedStateToStyle = {
   'DISABLED STATE': 'warning',
@@ -1046,6 +1053,13 @@ export const ccCameraFilterChangerDetailedStateMap = {
   3: 'LOADED',
   4: 'UNLOADED',
   5: 'ROTATING',
+  0: 'UNKNOWN',
+};
+
+// Optical Alignment Alarm
+export const alignedStateMap = {
+  1: 'ALIGNED',
+  2: 'NOT ALIGNED',
   0: 'UNKNOWN',
 };
 

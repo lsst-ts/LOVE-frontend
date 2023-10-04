@@ -19,7 +19,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { summaryStateMap, summaryStateToStyle } from 'Config';
+import { summaryStateMap, summaryStateToStyle, alignedStateMap, alignedStateToStyle } from 'Config';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Title from 'components/GeneralPurpose/SummaryPanel/Title';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
@@ -51,6 +51,9 @@ export default class Summary extends Component {
     const summaryStateName = summaryStateMap[this.props.summaryState];
     const summaryStateStatus = summaryStateToStyle[summaryStateName];
 
+    const alignedStateName = alignedStateMap[this.props.alignment];
+    const alignedStateStatus = alignedStateToStyle[alignedStateName];
+
     const commandableByDDSValue = {
       name: this.props.commandableByDDS ? 'CSC' : 'EUI',
       class: this.props.commandableByDDS ? 'ok' : 'warning',
@@ -81,6 +84,10 @@ export default class Summary extends Component {
           <div className={styles.state}>
             <Title>Force Balance</Title>
             <StatusText status={forceBalanceSystemStatusValue?.class}>{forceBalanceSystemStatusValue?.name}</StatusText>
+          </div>
+          <div className={styles.state}>
+            <Title>M1M3 Alignment</Title>
+            <StatusText status={alignedStateStatus}>{alignedStateName}</StatusText>
           </div>
         </SummaryPanel>
       </div>

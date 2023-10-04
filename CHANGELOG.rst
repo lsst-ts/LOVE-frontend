@@ -6,6 +6,7 @@ v5.25.3
 -------
 
 * Add mock Dome Tracking to ATDome and MTDome `<https://github.com/lsst-ts/LOVE-frontend/pull/535>`_
+* Add Optical Alignment Alarm to M2 and M1M3 `<https://github.com/lsst-ts/LOVE-frontend/pull/534>`_
 * Add ZoomOut button and better performance on FacilityMap component `<https://github.com/lsst-ts/LOVE-frontend/pull/533>`_
 * Fix ESS component with the sorted sensors in cache `<https://github.com/lsst-ts/LOVE-frontend/pull/531>`_
 * MTCamera and CCCamera zoom out button `<https://github.com/lsst-ts/LOVE-frontend/pull/530>`_

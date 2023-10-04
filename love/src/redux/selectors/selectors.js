@@ -107,6 +107,14 @@ export const getCameraState = (state) => {
 export const getLastSALCommand = (state) => {
   return state.ws.lastSALCommand;
 };
+// Optical Alignment Alarm
+export const getAlignmentState = (state) => {
+  const subscriptions = ['telemetry-MTM1M3-0-forceActuatorData'];
+  const alignmentData = getStreamsData(state, subscriptions);
+  return {
+    alignment: 0,
+  };
+};
 
 // MTM1M3 selectors
 export const getM1M3ActuatorsState = (state) => {
