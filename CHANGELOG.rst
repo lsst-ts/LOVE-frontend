@@ -5,8 +5,8 @@ Version History
 v5.25.3
 -------
 
-* Add ZoomOut button and better performance on FacilityMap component `<https://github.com/lsst-ts/LOVE-frontend/pull/533>`_
-
+* Fix ESS component with the sorted sensors in cache `<https://github.com/lsst-ts/LOVE-frontend/pull/531>`
+* Add ZoomOut button and better performance on FacilityMap component `<https://github.com/lsst-ts/LOVE-frontend/pull/533>`
 
 v5.25.2
 -------
