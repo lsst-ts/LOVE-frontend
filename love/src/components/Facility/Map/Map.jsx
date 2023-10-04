@@ -19,8 +19,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import styles from './Map.module.css';
-import Badge from '../../GeneralPurpose/Badge/Badge';
-
 import Level1 from './Levels/Level1.jsx';
 import Level2 from './Levels/Level2.jsx';
 import Level3 from './Levels/Level3.jsx';
@@ -120,7 +118,9 @@ export default class Map extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { chiller01P01, chiller02P01, chiller03P01 } = this.props.HVACDataLevel1;
+    const { chiller01P01, chiller02P01, chiller03P01, status1, status2, warnings1, warnings2, errors1, errors2 } =
+      this.props.HVACDataLevel1;
+
     const { crack01P02, crack02P02 } = this.props.HVACDataLevel2;
     const { manejadoraSblancaP04, manejadoraSlimpiaP04, vex04CargaP04, vex03LowerP04 } = this.props.HVACDataLevel4;
     const {
@@ -162,10 +162,120 @@ export default class Map extends Component {
       chiller03P01.compresor01Alarmado ? chiller03P01.compresor01Alarmado.value : null,
       chiller03P01.compresor02Alarmado ? chiller03P01.compresor02Alarmado.value : null,
       chiller03P01.compresor03Alarmado ? chiller03P01.compresor03Alarmado.value : null,
+      status1.serviceRequired ? status1.serviceRequired.value : null,
+      errors1.powerSupplyFailureE400 ? errors1.powerSupplyFailureE400.value : null,
+      errors1.emergencyStopActivatedE401 ? errors1.emergencyStopActivatedE401.value : null,
+      errors1.highMotorTemperatureM1E402 ? errors1.highMotorTemperatureM1E402.value : null,
+      errors1.compressorDischargeTemperatureE403 ? errors1.compressorDischargeTemperatureE403.value : null,
+      errors1.startTemperatureLowE404 ? errors1.startTemperatureLowE404.value : null,
+      errors1.dischargeOverPressureE405 ? errors1.dischargeOverPressureE405.value : null,
+      errors1.linePressureSensorB1E406 ? errors1.linePressureSensorB1E406.value : null,
+      errors1.dischargePressureSensorB2E407 ? errors1.dischargePressureSensorB2E407.value : null,
+      errors1.dischargeTemperatureSensorR2E408 ? errors1.dischargeTemperatureSensorR2E408.value : null,
+      errors1.controllerHardwareE409 ? errors1.controllerHardwareE409.value : null,
+      errors1.coolingE410 ? errors1.coolingE410.value : null,
+      errors1.oilPressureLowE411 ? errors1.oilPressureLowE411.value : null,
+      errors1.externalFaultE412 ? errors1.externalFaultE412.value : null,
+      errors1.dryerE413 ? errors1.dryerE413.value : null,
+      errors1.condensateDrainE414 ? errors1.condensateDrainE414.value : null,
+      errors1.noPressureBuildUpE415 ? errors1.noPressureBuildUpE415.value : null,
+      errors1.heavyStartupE416 ? errors1.heavyStartupE416.value : null,
+      errors1.preAdjustmentVSDE500 ? errors1.preAdjustmentVSDE500.value : null,
+      errors1.preAdjustmentE501 ? errors1.preAdjustmentE501.value : null,
+      errors1.lockedVSDE502 ? errors1.lockedVSDE502.value : null,
+      errors1.writeFaultVSDE503 ? errors1.writeFaultVSDE503.value : null,
+      errors1.communicationVSDE504 ? errors1.communicationVSDE504.value : null,
+      errors1.stopPressedVSDE505 ? errors1.stopPressedVSDE505.value : null,
+      errors1.stopInputEMVSDE506 ? errors1.stopInputEMVSDE506.value : null,
+      errors1.readFaultVSDE507 ? errors1.readFaultVSDE507.value : null,
+      errors1.stopInputVSDEME508 ? errors1.stopInputVSDEME508.value : null,
+      errors1.seeVSDDisplayE509 ? errors1.seeVSDDisplayE509.value : null,
+      errors1.speedBelowMinLimitE510 ? errors1.speedBelowMinLimitE510.value : null,
+      warnings1.serviceDueA600 ? warnings1.serviceDueA600.value : null,
+      warnings1.dischargeOverPressureA601 ? warnings1.dischargeOverPressureA601.value : null,
+      warnings1.compressorDischargeTemperatureA602 ? warnings1.compressorDischargeTemperatureA602.value : null,
+      warnings1.linePressureHighA606 ? warnings1.linePressureHighA606.value : null,
+      warnings1.controllerBatteryEmptyA607 ? warnings1.controllerBatteryEmptyA607.value : null,
+      warnings1.dryerA608 ? warnings1.dryerA608?.value : null,
+      warnings1.condensateDrainA609 ? warnings1.condensateDrainA609.value : null,
+      warnings1.fineSeparatorA610 ? warnings1.fineSeparatorA610.value : null,
+      warnings1.airFilterA611 ? warnings1.airFilterA611.value : null,
+      warnings1.oilFilterA612 ? warnings1.oilFilterA612.value : null,
+      warnings1.oilLevelLowA613 ? warnings1.oilLevelLowA613.value : null,
+      warnings1.oilTemperatureHighA614 ? warnings1.oilTemperatureHighA614.value : null,
+      warnings1.externalWarningA615 ? warnings1.externalWarningA615.value : null,
+      warnings1.motorLuricationSystemA616 ? warnings1.motorLuricationSystemA616.value : null,
+      warnings1.input1A617 ? warnings1.input1A617.value : null,
+      warnings1.input2A618 ? warnings1.input2A618.value : null,
+      warnings1.input3A619 ? warnings1.input3A619.value : null,
+      warnings1.input4A620 ? warnings1.input4A620.value : null,
+      warnings1.input5A621 ? warnings1.input5A621.value : null,
+      warnings1.input6A622 ? warnings1.input6A622.value : null,
+      warnings1.fullSDCardA623 ? warnings1.fullSDCardA623.value : null,
+      warnings1.temperatureHighVSDA700 ? warnings1.temperatureHighVSDA700.value : null,
+      status2.serviceRequired ? status2.serviceRequired.value : null,
+      errors2.powerSupplyFailureE400 ? errors2.powerSupplyFailureE400.value : null,
+      errors2.emergencyStopActivatedE401 ? errors2.emergencyStopActivatedE401.value : null,
+      errors2.highMotorTemperatureM1E402 ? errors2.highMotorTemperatureM1E402.value : null,
+      errors2.compressorDischargeTemperatureE403 ? errors2.compressorDischargeTemperatureE403.value : null,
+      errors2.startTemperatureLowE404 ? errors2.startTemperatureLowE404.value : null,
+      errors2.dischargeOverPressureE405 ? errors2.dischargeOverPressureE405.value : null,
+      errors2.linePressureSensorB1E406 ? errors2.linePressureSensorB1E406.value : null,
+      errors2.dischargePressureSensorB2E407 ? errors2.dischargePressureSensorB2E407.value : null,
+      errors2.dischargeTemperatureSensorR2E408 ? errors2.dischargeTemperatureSensorR2E408.value : null,
+      errors2.controllerHardwareE409 ? errors2.controllerHardwareE409.value : null,
+      errors2.coolingE410 ? errors2.coolingE410.value : null,
+      errors2.oilPressureLowE411 ? errors2.oilPressureLowE411.value : null,
+      errors2.externalFaultE412 ? errors2.externalFaultE412.value : null,
+      errors2.dryerE413 ? errors2.dryerE413.value : null,
+      errors2.condensateDrainE414 ? errors2.condensateDrainE414.value : null,
+      errors2.noPressureBuildUpE415 ? errors2.noPressureBuildUpE415.value : null,
+      errors2.heavyStartupE416 ? errors2.heavyStartupE416.value : null,
+      errors2.preAdjustmentVSDE500 ? errors2.preAdjustmentVSDE500.value : null,
+      errors2.preAdjustmentE501 ? errors2.preAdjustmentE501.value : null,
+      errors2.lockedVSDE502 ? errors2.lockedVSDE502.value : null,
+      errors2.writeFaultVSDE503 ? errors2.writeFaultVSDE503.value : null,
+      errors2.communicationVSDE504 ? errors2.communicationVSDE504.value : null,
+      errors2.stopPressedVSDE505 ? errors2.stopPressedVSDE505.value : null,
+      errors2.stopInputEMVSDE506 ? errors2.stopInputEMVSDE506.value : null,
+      errors2.readFaultVSDE507 ? errors2.readFaultVSDE507.value : null,
+      errors2.stopInputVSDEME508 ? errors2.stopInputVSDEME508.value : null,
+      errors2.seeVSDDisplayE509 ? errors2.seeVSDDisplayE509.value : null,
+      errors2.speedBelowMinLimitE510 ? errors2.speedBelowMinLimitE510.value : null,
+      warnings2.serviceDueA600 ? warnings2.serviceDueA600.value : null,
+      warnings2.dischargeOverPressureA601 ? warnings2.dischargeOverPressureA601.value : null,
+      warnings2.compressorDischargeTemperatureA602 ? warnings2.compressorDischargeTemperatureA602.value : null,
+      warnings2.linePressureHighA606 ? warnings2.linePressureHighA606.value : null,
+      warnings2.controllerBatteryEmptyA607 ? warnings2.controllerBatteryEmptyA607.value : null,
+      warnings2.dryerA608 ? warnings2.dryerA608?.value : null,
+      warnings2.condensateDrainA609 ? warnings2.condensateDrainA609.value : null,
+      warnings2.fineSeparatorA610 ? warnings2.fineSeparatorA610.value : null,
+      warnings2.airFilterA611 ? warnings2.airFilterA611.value : null,
+      warnings2.oilFilterA612 ? warnings2.oilFilterA612.value : null,
+      warnings2.oilLevelLowA613 ? warnings2.oilLevelLowA613.value : null,
+      warnings2.oilTemperatureHighA614 ? warnings2.oilTemperatureHighA614.value : null,
+      warnings2.externalWarningA615 ? warnings2.externalWarningA615.value : null,
+      warnings2.motorLuricationSystemA616 ? warnings2.motorLuricationSystemA616.value : null,
+      warnings2.input1A617 ? warnings2.input1A617.value : null,
+      warnings2.input2A618 ? warnings2.input2A618.value : null,
+      warnings2.input3A619 ? warnings2.input3A619.value : null,
+      warnings2.input4A620 ? warnings2.input4A620.value : null,
+      warnings2.input5A621 ? warnings2.input5A621.value : null,
+      warnings2.input6A622 ? warnings2.input6A622.value : null,
+      warnings2.fullSDCardA623 ? warnings2.fullSDCardA623.value : null,
+      warnings2.temperatureHighVSDA700 ? warnings2.temperatureHighVSDA700.value : null,
     ];
 
     if (
-      (chiller01P01 || chiller02P01 || chiller03P01) &&
+      (chiller01P01 ||
+        chiller02P01 ||
+        chiller03P01 ||
+        errors1 ||
+        status1 ||
+        warnings1 ||
+        errors2 ||
+        status2 ||
+        warnings2) &&
       (prevHVACDataLevel1.chiller01P01?.alarmaGeneral?.value !== chiller01P01.alarmaGeneral?.value ||
         prevHVACDataLevel1.chiller01P01?.compresor01Alarmado?.value !== chiller01P01.compresor01Alarmado?.value ||
         prevHVACDataLevel1.chiller01P01?.compresor02Alarmado?.value !== chiller01P01.compresor02Alarmado?.value ||
@@ -177,7 +287,119 @@ export default class Map extends Component {
         prevHVACDataLevel1.chiller03P01?.alarmaGeneral?.value !== chiller03P01.alarmaGeneral?.value ||
         prevHVACDataLevel1.chiller03P01?.compresor01Alarmado?.value !== chiller03P01.compresor01Alarmado?.value ||
         prevHVACDataLevel1.chiller03P01?.compresor02Alarmado?.value !== chiller03P01.compresor02Alarmado?.value ||
-        prevHVACDataLevel1.chiller03P01?.compresor03Alarmado?.value !== chiller03P01.compresor03Alarmado?.value)
+        prevHVACDataLevel1.chiller03P01?.compresor03Alarmado?.value !== chiller03P01.compresor03Alarmado?.value ||
+        prevHVACDataLevel1.status1?.serviceRequired?.value != status1.serviceRequired?.value ||
+        prevHVACDataLevel1.errors1?.powerSupplyFailureE400?.value != errors1.powerSupplyFailureE400?.value ||
+        prevHVACDataLevel1.errors1?.emergencyStopActivatedE401?.value != errors1.emergencyStopActivatedE401?.value ||
+        prevHVACDataLevel1.errors1?.highMotorTemperatureM1E402?.value != errors1.highMotorTemperatureM1E402?.value ||
+        prevHVACDataLevel1.errors1?.compressorDischargeTemperatureE403?.value !=
+          errors1.compressorDischargeTemperatureE403?.value ||
+        prevHVACDataLevel1.errors1?.startTemperatureLowE404?.value != errors1.startTemperatureLowE404?.value ||
+        prevHVACDataLevel1.errors1?.dischargeOverPressureE405?.value != errors1.dischargeOverPressureE405?.value ||
+        prevHVACDataLevel1.errors1?.linePressureSensorB1E406?.value != errors1.linePressureSensorB1E406?.value ||
+        prevHVACDataLevel1.errors1?.dischargePressureSensorB2E407?.value !=
+          errors1.dischargePressureSensorB2E407?.value ||
+        prevHVACDataLevel1.errors1?.dischargeTemperatureSensorR2E408?.value !=
+          errors1.dischargeTemperatureSensorR2E408?.value ||
+        prevHVACDataLevel1.errors1?.controllerHardwareE409?.value != errors1.controllerHardwareE409?.value ||
+        prevHVACDataLevel1.errors1?.coolingE410?.value != errors1.coolingE410?.value ||
+        prevHVACDataLevel1.errors1?.oilPressureLowE411?.value != errors1.oilPressureLowE411?.value ||
+        prevHVACDataLevel1.errors1?.externalFaultE412?.value != errors1.externalFaultE412?.value ||
+        prevHVACDataLevel1.errors1?.dryerE413?.value != errors1.dryerE413?.value ||
+        prevHVACDataLevel1.errors1?.condensateDrainE414?.value != errors1.condensateDrainE414?.value ||
+        prevHVACDataLevel1.errors1?.noPressureBuildUpE415?.value != errors1.noPressureBuildUpE415?.value ||
+        prevHVACDataLevel1.errors1?.heavyStartupE416?.value != errors1.heavyStartupE416?.value ||
+        prevHVACDataLevel1.errors1?.preAdjustmentVSDE500?.value != errors1.preAdjustmentVSDE500?.value ||
+        prevHVACDataLevel1.errors1?.preAdjustmentE501?.value != errors1.preAdjustmentE501?.value ||
+        prevHVACDataLevel1.errors1?.lockedVSDE502?.value != errors1.lockedVSDE502?.value ||
+        prevHVACDataLevel1.errors1?.writeFaultVSDE503?.value != errors1.writeFaultVSDE503?.value ||
+        prevHVACDataLevel1.errors1?.communicationVSDE504?.value != errors1.communicationVSDE504?.value ||
+        prevHVACDataLevel1.errors1?.stopPressedVSDE505?.value != errors1.stopPressedVSDE505?.value ||
+        prevHVACDataLevel1.errors1?.stopInputEMVSDE506?.value != errors1.stopInputEMVSDE506?.value ||
+        prevHVACDataLevel1.errors1?.readFaultVSDE507?.value != errors1.readFaultVSDE507?.value ||
+        prevHVACDataLevel1.errors1?.stopInputVSDEME508?.value != errors1.stopInputVSDEME508?.value ||
+        prevHVACDataLevel1.errors1?.seeVSDDisplayE509?.value != errors1.seeVSDDisplayE509?.value ||
+        prevHVACDataLevel1.errors1?.speedBelowMinLimitE510?.value != errors1.speedBelowMinLimitE510?.value ||
+        prevHVACDataLevel1.warnings1?.serviceDueA600?.value != warnings1.serviceDueA600?.value ||
+        prevHVACDataLevel1.warnings1?.dischargeOverPressureA601?.value != warnings1.dischargeOverPressureA601?.value ||
+        prevHVACDataLevel1.warnings1?.compressorDischargeTemperatureA602?.value !=
+          warnings1.compressorDischargeTemperatureA602?.value ||
+        prevHVACDataLevel1.warnings1?.linePressureHighA606?.value != warnings1.linePressureHighA606?.value ||
+        prevHVACDataLevel1.warnings1?.controllerBatteryEmptyA607?.value !=
+          warnings1.controllerBatteryEmptyA607?.value ||
+        prevHVACDataLevel1.warnings1?.dryerA608?.value != warnings1.dryerA608?.value ||
+        prevHVACDataLevel1.warnings1?.condensateDrainA609?.value != warnings1.condensateDrainA609?.value ||
+        prevHVACDataLevel1.warnings1?.fineSeparatorA610?.value != warnings1.fineSeparatorA610?.value ||
+        prevHVACDataLevel1.warnings1?.airFilterA611?.value != warnings1.airFilterA611?.value ||
+        prevHVACDataLevel1.warnings1?.oilFilterA612?.value != warnings1.oilFilterA612?.value ||
+        prevHVACDataLevel1.warnings1?.oilLevelLowA613?.value != warnings1.oilLevelLowA613?.value ||
+        prevHVACDataLevel1.warnings1?.oilTemperatureHighA614?.value != warnings1.oilTemperatureHighA614?.value ||
+        prevHVACDataLevel1.warnings1?.externalWarningA615?.value != warnings1.externalWarningA615?.value ||
+        prevHVACDataLevel1.warnings1?.motorLuricationSystemA616?.value != warnings1.motorLuricationSystemA616?.value ||
+        prevHVACDataLevel1.warnings1?.input1A617?.value != warnings1.input1A617?.value ||
+        prevHVACDataLevel1.warnings1?.input2A618?.value != warnings1.input2A618?.value ||
+        prevHVACDataLevel1.warnings1?.input3A619?.value != warnings1.input3A619?.value ||
+        prevHVACDataLevel1.warnings1?.input4A620?.value != warnings1.input4A620?.value ||
+        prevHVACDataLevel1.warnings1?.input5A621?.value != warnings1.input5A621?.value ||
+        prevHVACDataLevel1.warnings1?.input6A622?.value != warnings1.input6A622?.value ||
+        prevHVACDataLevel1.warnings1?.fullSDCardA623?.value != warnings1.fullSDCardA623?.value ||
+        prevHVACDataLevel1.warnings1?.temperatureHighVSDA700?.value != warnings1.temperatureHighVSDA700?.value ||
+        prevHVACDataLevel1.status2?.serviceRequired?.value != status2.serviceRequired?.value ||
+        prevHVACDataLevel1.errors2?.powerSupplyFailureE400?.value != errors2.powerSupplyFailureE400?.value ||
+        prevHVACDataLevel1.errors2?.emergencyStopActivatedE401?.value != errors2.emergencyStopActivatedE401?.value ||
+        prevHVACDataLevel1.errors2?.highMotorTemperatureM1E402?.value != errors2.highMotorTemperatureM1E402?.value ||
+        prevHVACDataLevel1.errors2?.compressorDischargeTemperatureE403?.value !=
+          errors2.compressorDischargeTemperatureE403?.value ||
+        prevHVACDataLevel1.errors2?.startTemperatureLowE404?.value != errors2.startTemperatureLowE404?.value ||
+        prevHVACDataLevel1.errors2?.dischargeOverPressureE405?.value != errors2.dischargeOverPressureE405?.value ||
+        prevHVACDataLevel1.errors2?.linePressureSensorB1E406?.value != errors2.linePressureSensorB1E406?.value ||
+        prevHVACDataLevel1.errors2?.dischargePressureSensorB2E407?.value !=
+          errors2.dischargePressureSensorB2E407?.value ||
+        prevHVACDataLevel1.errors2?.dischargeTemperatureSensorR2E408?.value !=
+          errors2.dischargeTemperatureSensorR2E408?.value ||
+        prevHVACDataLevel1.errors2?.controllerHardwareE409?.value != errors2.controllerHardwareE409?.value ||
+        prevHVACDataLevel1.errors2?.coolingE410?.value != errors2.coolingE410?.value ||
+        prevHVACDataLevel1.errors2?.oilPressureLowE411?.value != errors2.oilPressureLowE411?.value ||
+        prevHVACDataLevel1.errors2?.externalFaultE412?.value != errors2.externalFaultE412?.value ||
+        prevHVACDataLevel1.errors2?.dryerE413?.value != errors2.dryerE413?.value ||
+        prevHVACDataLevel1.errors2?.condensateDrainE414?.value != errors2.condensateDrainE414?.value ||
+        prevHVACDataLevel1.errors2?.noPressureBuildUpE415?.value != errors2.noPressureBuildUpE415?.value ||
+        prevHVACDataLevel1.errors2?.heavyStartupE416?.value != errors2.heavyStartupE416?.value ||
+        prevHVACDataLevel1.errors2?.preAdjustmentVSDE500?.value != errors2.preAdjustmentVSDE500?.value ||
+        prevHVACDataLevel1.errors2?.preAdjustmentE501?.value != errors2.preAdjustmentE501?.value ||
+        prevHVACDataLevel1.errors2?.lockedVSDE502?.value != errors2.lockedVSDE502?.value ||
+        prevHVACDataLevel1.errors2?.writeFaultVSDE503?.value != errors2.writeFaultVSDE503?.value ||
+        prevHVACDataLevel1.errors2?.communicationVSDE504?.value != errors2.communicationVSDE504?.value ||
+        prevHVACDataLevel1.errors2?.stopPressedVSDE505?.value != errors2.stopPressedVSDE505?.value ||
+        prevHVACDataLevel1.errors2?.stopInputEMVSDE506?.value != errors2.stopInputEMVSDE506?.value ||
+        prevHVACDataLevel1.errors2?.readFaultVSDE507?.value != errors2.readFaultVSDE507?.value ||
+        prevHVACDataLevel1.errors2?.stopInputVSDEME508?.value != errors2.stopInputVSDEME508?.value ||
+        prevHVACDataLevel1.errors2?.seeVSDDisplayE509?.value != errors2.seeVSDDisplayE509?.value ||
+        prevHVACDataLevel1.errors2?.speedBelowMinLimitE510?.value != errors2.speedBelowMinLimitE510?.value ||
+        prevHVACDataLevel1.warnings2?.serviceDueA600?.value != warnings2.serviceDueA600?.value ||
+        prevHVACDataLevel1.warnings2?.dischargeOverPressureA601?.value != warnings2.dischargeOverPressureA601?.value ||
+        prevHVACDataLevel1.warnings2?.compressorDischargeTemperatureA602?.value !=
+          warnings2.compressorDischargeTemperatureA602?.value ||
+        prevHVACDataLevel1.warnings2?.linePressureHighA606?.value != warnings2.linePressureHighA606?.value ||
+        prevHVACDataLevel1.warnings2?.controllerBatteryEmptyA607?.value !=
+          warnings2.controllerBatteryEmptyA607?.value ||
+        prevHVACDataLevel1.warnings2?.dryerA608?.value != warnings2.dryerA608?.value ||
+        prevHVACDataLevel1.warnings2?.condensateDrainA609?.value != warnings2.condensateDrainA609?.value ||
+        prevHVACDataLevel1.warnings2?.fineSeparatorA610?.value != warnings2.fineSeparatorA610?.value ||
+        prevHVACDataLevel1.warnings2?.airFilterA611?.value != warnings2.airFilterA611?.value ||
+        prevHVACDataLevel1.warnings2?.oilFilterA612?.value != warnings2.oilFilterA612?.value ||
+        prevHVACDataLevel1.warnings2?.oilLevelLowA613?.value != warnings2.oilLevelLowA613?.value ||
+        prevHVACDataLevel1.warnings2?.oilTemperatureHighA614?.value != warnings2.oilTemperatureHighA614?.value ||
+        prevHVACDataLevel1.warnings2?.externalWarningA615?.value != warnings2.externalWarningA615?.value ||
+        prevHVACDataLevel1.warnings2?.motorLuricationSystemA616?.value != warnings2.motorLuricationSystemA616?.value ||
+        prevHVACDataLevel1.warnings2?.input1A617?.value != warnings2.input1A617?.value ||
+        prevHVACDataLevel1.warnings2?.input2A618?.value != warnings2.input2A618?.value ||
+        prevHVACDataLevel1.warnings2?.input3A619?.value != warnings2.input3A619?.value ||
+        prevHVACDataLevel1.warnings2?.input4A620?.value != warnings2.input4A620?.value ||
+        prevHVACDataLevel1.warnings2?.input5A621?.value != warnings2.input5A621?.value ||
+        prevHVACDataLevel1.warnings2?.input6A622?.value != warnings2.input6A622?.value ||
+        prevHVACDataLevel1.warnings2?.fullSDCardA623?.value != warnings2.fullSDCardA623?.value ||
+        prevHVACDataLevel1.warnings2?.temperatureHighVSDA700?.value != warnings2.temperatureHighVSDA700?.value)
     ) {
       const isAlarmed_1 = alarms_1.some((a) => {
         return a;
