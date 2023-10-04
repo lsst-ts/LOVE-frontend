@@ -100,32 +100,6 @@ const getGroupNames = (salindexList, option) => {
   return [...new Set(subscriptions)];
 };
 
-/**
- * 
- * @param {dict} prevParse dict data of the sensors
- * @param {string} option string between the values (temperature, relativeHumidity, airFlow, airTurbulence)
- * @returns {array} array of the sensors data sorted
- */
-const prevParseToArraySensors = (prevParse, option) => {
-  const list = prevParse[option] ? Object.values(prevParse[option]) : [];
-  const objs = list.map((values) => {
-    return Object.values(values);
-  });
-
-  const sorted = objs.flat().sort((a, b) => {
-    if (a.sensorName > b.sensorName || (a.sensorName === b.sensorName && a.indexArr > b.indexArr)) {
-      return 1;
-    } else if (a.sensorName < b.sensorName || (a.sensorName === b.sensorName && a.indexArr < b.indexArr)) {
-      return -1;
-    } else {
-      return 0;
-    }
-  });
-  return sorted;
-};
-
-/** Variable for not delete the sensors not received in stream of telemetry */
-let prevParse = {};
 const parse = (streams, option) => {
   let arr;
   switch (option) {
@@ -144,14 +118,7 @@ const parse = (streams, option) => {
     default:
       arr = [];
   }
-  arr.forEach((parse) => {
-    if (!prevParse[option]) prevParse[option] = {};
-    if (!prevParse[option][parse.sensorName]) prevParse[option][parse.sensorName] = {};
-    if (!prevParse[option][parse.sensorName][parse.indexArr]) prevParse[option][parse.sensorName][parse.indexArr] = {};
-    prevParse[option][parse.sensorName][parse.indexArr] = parse;
-  })
-  const arrSensors = prevParseToArraySensors(prevParse, option);
-  return arrSensors;
+  return arr;
 };
 
 /**

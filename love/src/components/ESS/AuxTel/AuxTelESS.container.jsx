@@ -101,32 +101,14 @@ const getGroupNames = (salindexList, option) => {
 };
 
 /**
- * 
- * @param {dict} prevParse dict data of the sensors
- * @param {string} option string between the values (temperature, relativeHumidity, airFlow, airTurbulence)
- * @returns {array} array of the sensors data sorted
+ * This function is used to parse dicts by 4 type of the telemetries
+ * @param object prevParse 
+ * @param array streams 
+ * @param string option string for the option between temperature, relativeHumidity,
+ *        airFlow and airTurbulence 
+ * @returns array with the data separate parse of the telemetry
  */
-const prevParseToArraySensors = (prevParse, option) => {
-  const list = prevParse[option] ? Object.values(prevParse[option]) : [];
-  const objs = list.map((values) => {
-    return Object.values(values);
-  });
-
-  const sorted = objs.flat().sort((a, b) => {
-    if (a.sensorName > b.sensorName || (a.sensorName === b.sensorName && a.indexArr > b.indexArr)) {
-      return 1;
-    } else if (a.sensorName < b.sensorName || (a.sensorName === b.sensorName && a.indexArr < b.indexArr)) {
-      return -1;
-    } else {
-      return 0;
-    }
-  });
-  return sorted;
-};
-
-/** Variable for not delete the sensors not received in stream of telemetry */
-let prevParse = {};
-const parse = (streams, option) => {
+const parseStreams = (streams, option) => {
   let arr;
   switch (option) {
     case 'temperature':
@@ -144,18 +126,11 @@ const parse = (streams, option) => {
     default:
       arr = [];
   }
-  arr.forEach((parse) => {
-    if (!prevParse[option]) prevParse[option] = {};
-    if (!prevParse[option][parse.sensorName]) prevParse[option][parse.sensorName] = {};
-    if (!prevParse[option][parse.sensorName][parse.indexArr]) prevParse[option][parse.sensorName][parse.indexArr] = {};
-    prevParse[option][parse.sensorName][parse.indexArr] = parse;
-  })
-  const arrSensors = prevParseToArraySensors(prevParse, option);
-  return arrSensors;
+  return arr;
 };
 
 /**
- * 
+ * This function is used to parse dicts by temperature telemetry
  * @param {array} streams 
  * @returns array with the data separate parse of the temperature telemetry
  */
@@ -192,7 +167,7 @@ const parseTemperature = (streams) => {
 };
 
 /**
- * 
+ * This function is used to parse dicts by relativeHumidity telemetry
  * @param {array} streams 
  * @returns array with the data separate parse of the relativeHumidity telemetry
  */
@@ -224,7 +199,7 @@ const parseHumidity = (streams) => {
 };
 
 /**
- * 
+ * This function is used to parse dicts by speed telemetry
  * @param {array} streams 
  * @returns array with the data separate parse of the speed telemetry
  */
@@ -298,7 +273,7 @@ const parseAirflow = (streams) => {
 };
 
 /**
- * 
+ * This function is used to parse dicts by speedMagnitud telemetry
  * @param {array} streams 
  * @returns array with the data separate parse of the speedMagnitud telemetry
  */
@@ -357,7 +332,7 @@ const mapStateToProps = (state, ownProps) => {
       result[entry[0]] = entry[1];
       return result;
     });
-  map[option] = cleanStream ? parse(cleanStream, option) : [];
+  map[option] = cleanStream ? parseStreams(cleanStream, option) : [];
 
   const domeState = getDomeState(state);
   return {
