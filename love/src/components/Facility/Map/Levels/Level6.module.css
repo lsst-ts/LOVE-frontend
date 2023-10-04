@@ -17,18 +17,139 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-.cls1 {
-  letter-spacing: 0.01em;
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 100;
+  src: url('../../../../fonts/Montserrat-Thin.ttf') format('truetype');
 }
-
-.cls2 {
-  letter-spacing: 0.02em;
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 200;
+  src: url('../../../../fonts/Montserrat-ExtraLight.ttf') format('truetype');
 }
-
-.cls3 {
-  letter-spacing: 0.02em;
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 300;
+  src: url('../../../../fonts/Montserrat-Light.ttf') format('truetype');
 }
-
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  src: url('../../../../fonts/Montserrat-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  src: url('../../../../fonts/Montserrat-Medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  src: url('../../../../fonts/Montserrat-SemiBold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  src: url('../../../../fonts/Montserrat-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 800;
+  src: url('../../../../fonts/Montserrat-ExtraBold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 900;
+  src: url('../../../../fonts/Montserrat-Black.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  src: url('../../../../fonts/Montserrat-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  src: url('../../../../fonts/Montserrat-Bold.ttf') format('truetype');
+}
+/* Italic fonts */
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+  font-weight: 100;
+  src: url('../../../../fonts/Montserrat-ThinItalic.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+  font-weight: 200;
+  src: url('../../../../fonts/Montserrat-ExtraLightItalic.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+  font-weight: 300;
+  src: url('../../../../fonts/Montserrat-LightItalic.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+  font-weight: 400;
+  src: url('../../../../fonts/Montserrat-Italic.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+  font-weight: 500;
+  src: url('../../../../fonts/Montserrat-MediumItalic.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+  font-weight: 600;
+  src: url('../../../../fonts/Montserrat-SemiBoldItalic.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+  font-weight: 700;
+  src: url('../../../../fonts/Montserrat-BoldItalic.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  src: url('../../../../fonts/Montserrat-ExtraBoldItalic.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+  font-weight: 900;
+  src: url('../../../../fonts/Montserrat-BlackItalic.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+  font-weight: normal;
+  src: url('../../../../fonts/Montserrat-Italic.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+  font-weight: bold;
+  src: url('../../../../fonts/Montserrat-BoldItalic.ttf') format('truetype');
+}
 .cls4 {
   stroke-width: 3px;
 }
@@ -60,15 +181,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .cls11 {
   stroke-miterlimit: 10;
 }
-
-.cls14 {
-  letter-spacing: 0.02em;
-}
-
-.cls15 {
-  letter-spacing: 0.03em;
-}
-
 .cls5 {
   fill: rgba(187, 212, 226, 0.1);
 }
@@ -138,39 +250,19 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .cls19,
 .cls20 {
-  font-family: MontserratRegular, Montserrat;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .cls13 {
   stroke-width: 0.75px;
 }
 
-.cls22 {
-  letter-spacing: 0em;
-}
-
-.cls23 {
-  letter-spacing: 0em;
-}
-
-.cls24 {
-  letter-spacing: 0em;
-}
-
 .cls25 {
   opacity: 0.5;
 }
 
-.cls26 {
-  letter-spacing: 0em;
-}
-
 .cls27 {
   isolation: isolate;
-}
-
-.cls28 {
-  letter-spacing: 0.02em;
 }
 
 .cls20 {
@@ -179,4 +271,17 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .cls11 {
   stroke-width: 5.6px;
+}
+
+.zoomOut {
+  cursor: pointer;
+}
+
+.zoomOutButton {
+  fill: var(--default-background-color);
+}
+
+.zoomOutText {
+  fill: var(--default-font-color);
+  font-size: 0.6em;
 }
