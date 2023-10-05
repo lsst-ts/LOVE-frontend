@@ -69,10 +69,19 @@ export default class Level3 extends Component {
     this.props.savePos(transformData);
   };
 
+  zoomOut = () => {
+    const overlayId = '#' + this.overlayId;
+
+    const zoom = d3.zoom().scaleExtent([1, 8]).on('zoom', this.zoomMap);
+
+    d3.select(overlayId).call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1)).call(zoom);
+  };
+
   getDevices() {
     return <React.Fragment></React.Fragment>;
   }
   render() {
+    const zoomLevel = this.props.transformData.k;
     return (
       <React.Fragment>
         <g id={this.mapId}>
@@ -667,624 +676,111 @@ export default class Level3 extends Component {
               <g className={styles.cls48}>
                 <text className={styles.cls23} transform="translate(681.5 79.96)">
                   <tspan className={styles.cls33} x="0" y="0">
-                    T
-                  </tspan>
-                  <tspan x="3.11" y="0">
-                    eles
-                  </tspan>
-                  <tspan className={styles.cls26} x="14.91" y="0">
-                    c
-                  </tspan>
-                  <tspan className={styles.cls34} x="18.23" y="0">
-                    ope
+                    Telescope
                   </tspan>
                   <tspan x="-1.62" y="7.2">
-                    Utili
-                  </tspan>
-                  <tspan className={styles.cls1} x="10.41" y="7.2">
-                    t
-                  </tspan>
-                  <tspan x="12.78" y="7.2">
-                    y A
-                  </tspan>
-                  <tspan className={styles.cls55} x="21.91" y="7.2">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls43} x="24.24" y="7.2">
-                    e
-                  </tspan>
-                  <tspan x="27.77" y="7.2">
-                    a
-                  </tspan>
-                </text>
-                <text className={styles.cls23} transform="translate(681.5 79.96)">
-                  <tspan className={styles.cls33} x="0" y="0">
-                    T
-                  </tspan>
-                  <tspan x="3.11" y="0">
-                    eles
-                  </tspan>
-                  <tspan className={styles.cls26} x="14.91" y="0">
-                    c
-                  </tspan>
-                  <tspan className={styles.cls34} x="18.23" y="0">
-                    ope
-                  </tspan>
-                  <tspan x="-1.62" y="7.2">
-                    Utili
-                  </tspan>
-                  <tspan className={styles.cls1} x="10.41" y="7.2">
-                    t
-                  </tspan>
-                  <tspan x="12.78" y="7.2">
-                    y A
-                  </tspan>
-                  <tspan className={styles.cls55} x="21.91" y="7.2">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls43} x="24.24" y="7.2">
-                    e
-                  </tspan>
-                  <tspan x="27.77" y="7.2">
-                    a
+                    Utility Area
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls48}>
                 <text className={styles.cls23} transform="translate(554.35 79.96)">
                   <tspan x="0" y="0">
-                    St
-                  </tspan>
-                  <tspan className={styles.cls52} x="6.13" y="0">
-                    a
-                  </tspan>
-                  <tspan className={styles.cls32} x="9.68" y="0">
-                    gi
-                  </tspan>
-                  <tspan className={styles.cls52} x="15.41" y="0">
-                    n
-                  </tspan>
-                  <tspan className={styles.cls32} x="19.48" y="0">
-                    g &amp;{' '}
-                  </tspan>
-                  <tspan className={styles.cls29} x="30.76" y="0">
-                    T
-                  </tspan>
-                  <tspan className={styles.cls34} x="33.87" y="0">
-                    est
+                    Staging Test
                   </tspan>
                   <tspan x="14.58" y="7.2">
-                    A
-                  </tspan>
-                  <tspan className={styles.cls55} x="18.88" y="7.2">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls28} x="21.21" y="7.2">
-                    e
-                  </tspan>
-                  <tspan x="24.74" y="7.2">
-                    a
-                  </tspan>
-                </text>
-                <text className={styles.cls23} transform="translate(554.35 79.96)">
-                  <tspan x="0" y="0">
-                    St
-                  </tspan>
-                  <tspan className={styles.cls52} x="6.13" y="0">
-                    a
-                  </tspan>
-                  <tspan className={styles.cls32} x="9.68" y="0">
-                    gi
-                  </tspan>
-                  <tspan className={styles.cls52} x="15.41" y="0">
-                    n
-                  </tspan>
-                  <tspan className={styles.cls32} x="19.48" y="0">
-                    g &amp;{' '}
-                  </tspan>
-                  <tspan className={styles.cls29} x="30.76" y="0">
-                    T
-                  </tspan>
-                  <tspan className={styles.cls34} x="33.87" y="0">
-                    est
-                  </tspan>
-                  <tspan x="14.58" y="7.2">
-                    A
-                  </tspan>
-                  <tspan className={styles.cls55} x="18.88" y="7.2">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls28} x="21.21" y="7.2">
-                    e
-                  </tspan>
-                  <tspan x="24.74" y="7.2">
-                    a
+                    Area
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls48}>
                 <text className={styles.cls23} transform="translate(466.54 75.87)">
                   <tspan x="0" y="0">
-                    Whi
-                  </tspan>
-                  <tspan className={styles.cls49} x="12.34" y="0">
-                    t
-                  </tspan>
-                  <tspan x="14.66" y="0">
-                    e
+                    White
                   </tspan>
                   <tspan x="2.29" y="7.2">
-                    A
-                  </tspan>
-                  <tspan className={styles.cls55} x="6.59" y="7.2">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls28} x="8.92" y="7.2">
-                    e
-                  </tspan>
-                  <tspan x="12.46" y="7.2">
-                    a
-                  </tspan>
-                </text>
-                <text className={styles.cls23} transform="translate(466.54 75.87)">
-                  <tspan x="0" y="0">
-                    Whi
-                  </tspan>
-                  <tspan className={styles.cls49} x="12.34" y="0">
-                    t
-                  </tspan>
-                  <tspan x="14.66" y="0">
-                    e
-                  </tspan>
-                  <tspan x="2.29" y="7.2">
-                    A
-                  </tspan>
-                  <tspan className={styles.cls55} x="6.59" y="7.2">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls28} x="8.92" y="7.2">
-                    e
-                  </tspan>
-                  <tspan x="12.46" y="7.2">
-                    a
+                    Area
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls48}>
                 <text className={styles.cls23} transform="translate(317.75 105.91)">
                   <tspan x="0" y="0">
-                    An
-                  </tspan>
-                  <tspan className={styles.cls2} x="8.36" y="0">
-                    t
-                  </tspan>
-                  <tspan className={styles.cls34} x="10.69" y="0">
-                    e Room
-                  </tspan>
-                </text>
-                <text className={styles.cls23} transform="translate(317.75 105.91)">
-                  <tspan x="0" y="0">
-                    An
-                  </tspan>
-                  <tspan className={styles.cls2} x="8.36" y="0">
-                    t
-                  </tspan>
-                  <tspan className={styles.cls34} x="10.69" y="0">
-                    e Room
+                    Ante Room
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls48}>
                 <text className={styles.cls23} transform="translate(334.31 69.01)">
                   <tspan x="0" y="0">
-                    Cl
-                  </tspan>
-                  <tspan className={styles.cls28} x="5.93" y="0">
-                    e
-                  </tspan>
-                  <tspan x="9.46" y="0">
-                    anRoom
-                  </tspan>
-                </text>
-                <text className={styles.cls23} transform="translate(334.31 69.01)">
-                  <tspan x="0" y="0">
-                    Cl
-                  </tspan>
-                  <tspan className={styles.cls28} x="5.93" y="0">
-                    e
-                  </tspan>
-                  <tspan x="9.46" y="0">
-                    anRoom
+                    Clean Room
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls48}>
                 <text className={styles.cls23} transform="translate(366.07 197.01)">
                   <tspan x="0" y="0">
-                    8
-                  </tspan>
-                  <tspan className={styles.cls46} x="3.83" y="0">
-                    0
-                  </tspan>
-                  <tspan className={styles.cls53} x="7.85" y="0">
-                    -
-                  </tspan>
-                  <tspan className={styles.cls33} x="9.95" y="0">
-                    T
-                  </tspan>
-                  <tspan x="13.06" y="0">
-                    on
+                    80-Ton
                   </tspan>
                   <tspan x="-8.33" y="7.2">
-                    Plat
-                  </tspan>
-                  <tspan className={styles.cls31} x="3.56" y="7.2">
-                    f
-                  </tspan>
-                  <tspan className={styles.cls34} x="5.54" y="7.2">
-                    o
-                  </tspan>
-                  <tspan className={styles.cls39} x="9.31" y="7.2">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls32} x="11.66" y="7.2">
-                    m Lift
-                  </tspan>
-                </text>
-                <text className={styles.cls23} transform="translate(366.07 197.01)">
-                  <tspan x="0" y="0">
-                    8
-                  </tspan>
-                  <tspan className={styles.cls46} x="3.83" y="0">
-                    0
-                  </tspan>
-                  <tspan className={styles.cls53} x="7.85" y="0">
-                    -
-                  </tspan>
-                  <tspan className={styles.cls33} x="9.95" y="0">
-                    T
-                  </tspan>
-                  <tspan x="13.06" y="0">
-                    on
-                  </tspan>
-                  <tspan x="-8.33" y="7.2">
-                    Plat
-                  </tspan>
-                  <tspan className={styles.cls31} x="3.56" y="7.2">
-                    f
-                  </tspan>
-                  <tspan className={styles.cls34} x="5.54" y="7.2">
-                    o
-                  </tspan>
-                  <tspan className={styles.cls39} x="9.31" y="7.2">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls32} x="11.66" y="7.2">
-                    m Lift
+                    Platform Lift
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls48}>
                 <text className={styles.cls23} transform="translate(800.95 202.05)">
                   <tspan x="0" y="0">
-                    M2{' '}
-                  </tspan>
-                  <tspan className={styles.cls33} x="10.71" y="0">
-                    V
-                  </tspan>
-                  <tspan x="14.57" y="0">
-                    essel
+                    M2 Vessel
                   </tspan>
                   <tspan x="2.94" y="7.2">
-                    S
-                  </tspan>
-                  <tspan className={styles.cls49} x="6.63" y="7.2">
-                    t
-                  </tspan>
-                  <tspan x="8.95" y="7.2">
-                    o
-                  </tspan>
-                  <tspan className={styles.cls26} x="12.71" y="7.2">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls52} x="15.07" y="7.2">
-                    a
-                  </tspan>
-                  <tspan className={styles.cls32} x="18.62" y="7.2">
-                    ge
-                  </tspan>
-                </text>
-                <text className={styles.cls23} transform="translate(800.95 202.05)">
-                  <tspan x="0" y="0">
-                    M2{' '}
-                  </tspan>
-                  <tspan className={styles.cls33} x="10.71" y="0">
-                    V
-                  </tspan>
-                  <tspan x="14.57" y="0">
-                    essel
-                  </tspan>
-                  <tspan x="2.94" y="7.2">
-                    S
-                  </tspan>
-                  <tspan className={styles.cls49} x="6.63" y="7.2">
-                    t
-                  </tspan>
-                  <tspan x="8.95" y="7.2">
-                    o
-                  </tspan>
-                  <tspan className={styles.cls26} x="12.71" y="7.2">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls52} x="15.07" y="7.2">
-                    a
-                  </tspan>
-                  <tspan className={styles.cls32} x="18.62" y="7.2">
-                    ge
+                    Storage
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls48}>
                 <text className={styles.cls23} transform="translate(711.2 202.05)">
                   <tspan x="0" y="0">
-                    Mi
-                  </tspan>
-                  <tspan className={styles.cls39} x="7.34" y="0">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls55} x="9.7" y="0">
-                    r
-                  </tspan>
-                  <tspan x="12.03" y="0">
-                    or
+                    Mirror
                   </tspan>
                   <tspan className={styles.cls3} x="-2.75" y="7.2">
-                    C
-                  </tspan>
-                  <tspan className={styles.cls30} x="1.42" y="7.2">
-                    o
-                  </tspan>
-                  <tspan x="5.17" y="7.2">
-                    ati
-                  </tspan>
-                  <tspan className={styles.cls36} x="12.76" y="7.2">
-                    n
-                  </tspan>
-                  <tspan x="16.83" y="7.2">
-                    g
-                  </tspan>
-                </text>
-                <text className={styles.cls23} transform="translate(711.2 202.05)">
-                  <tspan x="0" y="0">
-                    Mi
-                  </tspan>
-                  <tspan className={styles.cls39} x="7.34" y="0">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls55} x="9.7" y="0">
-                    r
-                  </tspan>
-                  <tspan x="12.03" y="0">
-                    or
-                  </tspan>
-                  <tspan className={styles.cls3} x="-2.75" y="7.2">
-                    C
-                  </tspan>
-                  <tspan className={styles.cls30} x="1.42" y="7.2">
-                    o
-                  </tspan>
-                  <tspan x="5.17" y="7.2">
-                    ati
-                  </tspan>
-                  <tspan className={styles.cls36} x="12.76" y="7.2">
-                    n
-                  </tspan>
-                  <tspan x="16.83" y="7.2">
-                    g
+                    Coating
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls48}>
                 <text className={styles.cls23} transform="translate(832.4 65.87)">
                   <tspan x="0" y="0">
-                    Offi
-                  </tspan>
-                  <tspan className={styles.cls26} x="11.2" y="0">
-                    c
-                  </tspan>
-                  <tspan className={styles.cls34} x="14.52" y="0">
-                    e
+                    Office
                   </tspan>
                   <tspan className={styles.cls3} x="-2.78" y="7.2">
-                    C
-                  </tspan>
-                  <tspan className={styles.cls30} x="1.4" y="7.2">
-                    o
-                  </tspan>
-                  <tspan x="5.14" y="7.2">
-                    ati
-                  </tspan>
-                  <tspan className={styles.cls36} x="12.73" y="7.2">
-                    n
-                  </tspan>
-                  <tspan x="16.81" y="7.2">
-                    g
+                    Coating
                   </tspan>
                   <tspan className={styles.cls3} x="-2" y="14.4">
-                    C
-                  </tspan>
-                  <tspan x="2.18" y="14.4">
-                    ont
-                  </tspan>
-                  <tspan className={styles.cls54} x="12.44" y="14.4">
-                    r
-                  </tspan>
-                  <tspan x="14.77" y="14.4">
-                    ol
-                  </tspan>
-                </text>
-                <text className={styles.cls23} transform="translate(832.4 65.87)">
-                  <tspan x="0" y="0">
-                    Offi
-                  </tspan>
-                  <tspan className={styles.cls26} x="11.2" y="0">
-                    c
-                  </tspan>
-                  <tspan className={styles.cls34} x="14.52" y="0">
-                    e
-                  </tspan>
-                  <tspan className={styles.cls3} x="-2.78" y="7.2">
-                    C
-                  </tspan>
-                  <tspan className={styles.cls30} x="1.4" y="7.2">
-                    o
-                  </tspan>
-                  <tspan x="5.14" y="7.2">
-                    ati
-                  </tspan>
-                  <tspan className={styles.cls36} x="12.73" y="7.2">
-                    n
-                  </tspan>
-                  <tspan x="16.81" y="7.2">
-                    g
-                  </tspan>
-                  <tspan className={styles.cls3} x="-2" y="14.4">
-                    C
-                  </tspan>
-                  <tspan x="2.18" y="14.4">
-                    ont
-                  </tspan>
-                  <tspan className={styles.cls54} x="12.44" y="14.4">
-                    r
-                  </tspan>
-                  <tspan x="14.77" y="14.4">
-                    ol
+                    Control
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls48}>
                 <text className={styles.cls23} transform="translate(596.67 202.05)">
                   <tspan className={styles.cls33} x="0" y="0">
-                    W
-                  </tspan>
-                  <tspan x="6.34" y="0">
-                    ash
-                  </tspan>
-                  <tspan className={styles.cls4} x="16.87" y="0">
-                    /
-                  </tspan>
-                  <tspan x="18.76" y="0">
-                    St
-                  </tspan>
-                  <tspan className={styles.cls39} x="24.89" y="0">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls32} x="27.25" y="0">
-                    ip
+                    Wash/Strip
                   </tspan>
                   <tspan x="9.61" y="7.2">
-                    A
-                  </tspan>
-                  <tspan className={styles.cls55} x="13.91" y="7.2">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls28} x="16.24" y="7.2">
-                    e
-                  </tspan>
-                  <tspan x="19.78" y="7.2">
-                    a
-                  </tspan>
-                </text>
-                <text className={styles.cls23} transform="translate(596.67 202.05)">
-                  <tspan className={styles.cls33} x="0" y="0">
-                    W
-                  </tspan>
-                  <tspan x="6.34" y="0">
-                    ash
-                  </tspan>
-                  <tspan className={styles.cls4} x="16.87" y="0">
-                    /
-                  </tspan>
-                  <tspan x="18.76" y="0">
-                    St
-                  </tspan>
-                  <tspan className={styles.cls39} x="24.89" y="0">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls32} x="27.25" y="0">
-                    ip
-                  </tspan>
-                  <tspan x="9.61" y="7.2">
-                    A
-                  </tspan>
-                  <tspan className={styles.cls55} x="13.91" y="7.2">
-                    r
-                  </tspan>
-                  <tspan className={styles.cls28} x="16.24" y="7.2">
-                    e
-                  </tspan>
-                  <tspan x="19.78" y="7.2">
-                    a
+                    Area
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls48}>
                 <text className={styles.cls23} transform="translate(478.34 205.65)">
                   <tspan x="0" y="0">
-                    Re
-                  </tspan>
-                  <tspan className={styles.cls26} x="7.96" y="0">
-                    c
-                  </tspan>
-                  <tspan className={styles.cls34} x="11.29" y="0">
-                    eivi
-                  </tspan>
-                  <tspan className={styles.cls36} x="21.39" y="0">
-                    n
-                  </tspan>
-                  <tspan x="25.46" y="0">
-                    g
-                  </tspan>
-                </text>
-                <text className={styles.cls23} transform="translate(478.34 205.65)">
-                  <tspan x="0" y="0">
-                    Re
-                  </tspan>
-                  <tspan className={styles.cls26} x="7.96" y="0">
-                    c
-                  </tspan>
-                  <tspan className={styles.cls34} x="11.29" y="0">
-                    eivi
-                  </tspan>
-                  <tspan className={styles.cls36} x="21.39" y="0">
-                    n
-                  </tspan>
-                  <tspan x="25.46" y="0">
-                    g
+                    Receiving
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls48}>
                 <text className={styles.cls23} transform="translate(657.85 296.73)">
                   <tspan x="0" y="0">
-                    De
-                  </tspan>
-                  <tspan className={styles.cls45} x="8.58" y="0">
-                    c
-                  </tspan>
-                  <tspan x="11.91" y="0">
-                    k
-                  </tspan>
-                </text>
-                <text className={styles.cls23} transform="translate(657.85 296.73)">
-                  <tspan x="0" y="0">
-                    De
-                  </tspan>
-                  <tspan className={styles.cls45} x="8.58" y="0">
-                    c
-                  </tspan>
-                  <tspan x="11.91" y="0">
-                    k
+                    Deck
                   </tspan>
                 </text>
               </g>
@@ -1293,45 +789,14 @@ export default class Level3 extends Component {
               <g className={styles.cls48}>
                 <text className={styles.cls25} transform="translate(774.92 59.94)">
                   <tspan className={styles.cls29} x="0" y="0">
-                    W
-                  </tspan>
-                  <tspan x="4.22" y="0">
-                    et Shaft
-                  </tspan>
-                </text>
-                <text className={styles.cls25} transform="translate(774.92 59.94)">
-                  <tspan className={styles.cls29} x="0" y="0">
-                    W
-                  </tspan>
-                  <tspan x="4.22" y="0">
-                    et Shaft
+                    Wet Shaft
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls48}>
                 <text className={styles.cls25} transform="translate(802.06 92.28)">
                   <tspan x="0" y="0">
-                    D
-                  </tspan>
-                  <tspan className={styles.cls38} x="3.3" y="0">
-                    r
-                  </tspan>
-                  <tspan x="4.97" y="0">
-                    y
-                  </tspan>
-                  <tspan x="-1.69" y="4.8">
-                    Shaft
-                  </tspan>
-                </text>
-                <text className={styles.cls25} transform="translate(802.06 92.28)">
-                  <tspan x="0" y="0">
-                    D
-                  </tspan>
-                  <tspan className={styles.cls38} x="3.3" y="0">
-                    r
-                  </tspan>
-                  <tspan x="4.97" y="0">
-                    y
+                    Dry
                   </tspan>
                   <tspan x="-1.69" y="4.8">
                     Shaft
@@ -1341,156 +806,28 @@ export default class Level3 extends Component {
               <g className={styles.cls48}>
                 <text className={styles.cls25} transform="translate(774.48 87.54)">
                   <tspan x="0" y="0">
-                    El
-                  </tspan>
-                  <tspan className={styles.cls1} x="3.75" y="0">
-                    e
-                  </tspan>
-                  <tspan className={styles.cls27} x="6.13" y="0">
-                    v
-                  </tspan>
-                  <tspan className={styles.cls40} x="8.16" y="0">
-                    . 1
-                  </tspan>
-                </text>
-                <text className={styles.cls25} transform="translate(774.48 87.54)">
-                  <tspan x="0" y="0">
-                    El
-                  </tspan>
-                  <tspan className={styles.cls1} x="3.75" y="0">
-                    e
-                  </tspan>
-                  <tspan className={styles.cls27} x="6.13" y="0">
-                    v
-                  </tspan>
-                  <tspan className={styles.cls40} x="8.16" y="0">
-                    . 1
+                    Elev. 1
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls48}>
                 <text className={styles.cls25} transform="translate(630.36 125.28)">
                   <tspan className={styles.cls29} x="0" y="0">
-                    W
-                  </tspan>
-                  <tspan x="4.22" y="0">
-                    al
-                  </tspan>
-                  <tspan className={styles.cls35} x="7.66" y="0">
-                    k
-                  </tspan>
-                  <tspan className={styles.cls37} x="9.96" y="0">
-                    w
-                  </tspan>
-                  <tspan className={styles.cls1} x="13.41" y="0">
-                    a
-                  </tspan>
-                  <tspan x="15.73" y="0">
-                    y{' '}
-                  </tspan>
-                  <tspan className={styles.cls47} x="18.94" y="0">
-                    Z
-                  </tspan>
-                  <tspan className={styles.cls44} x="21.49" y="0">
-                    o
-                  </tspan>
-                  <tspan className={styles.cls52} x="24" y="0">
-                    n
-                  </tspan>
-                  <tspan x="26.71" y="0">
-                    e
-                  </tspan>
-                </text>
-                <text className={styles.cls25} transform="translate(630.36 125.28)">
-                  <tspan className={styles.cls29} x="0" y="0">
-                    W
-                  </tspan>
-                  <tspan x="4.22" y="0">
-                    al
-                  </tspan>
-                  <tspan className={styles.cls35} x="7.66" y="0">
-                    k
-                  </tspan>
-                  <tspan className={styles.cls37} x="9.96" y="0">
-                    w
-                  </tspan>
-                  <tspan className={styles.cls1} x="13.41" y="0">
-                    a
-                  </tspan>
-                  <tspan x="15.73" y="0">
-                    y{' '}
-                  </tspan>
-                  <tspan className={styles.cls47} x="18.94" y="0">
-                    Z
-                  </tspan>
-                  <tspan className={styles.cls44} x="21.49" y="0">
-                    o
-                  </tspan>
-                  <tspan className={styles.cls52} x="24" y="0">
-                    n
-                  </tspan>
-                  <tspan x="26.71" y="0">
-                    e
+                    Walkway Zone
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls48}>
                 <text className={styles.cls25} transform="translate(279.43 50.65)">
                   <tspan x="0" y="0">
-                    El
-                  </tspan>
-                  <tspan className={styles.cls1} x="3.75" y="0">
-                    e
-                  </tspan>
-                  <tspan className={styles.cls27} x="6.13" y="0">
-                    v
-                  </tspan>
-                  <tspan className={styles.cls40} x="8.16" y="0">
-                    . 2
-                  </tspan>
-                </text>
-                <text className={styles.cls25} transform="translate(279.43 50.65)">
-                  <tspan x="0" y="0">
-                    El
-                  </tspan>
-                  <tspan className={styles.cls1} x="3.75" y="0">
-                    e
-                  </tspan>
-                  <tspan className={styles.cls27} x="6.13" y="0">
-                    v
-                  </tspan>
-                  <tspan className={styles.cls40} x="8.16" y="0">
-                    . 2
+                    Elev. 2
                   </tspan>
                 </text>
               </g>
               <g className={styles.cls48}>
                 <text className={styles.cls25} transform="translate(326.56 124.01)">
                   <tspan x="0" y="0">
-                    Hall
-                  </tspan>
-                  <tspan className={styles.cls51} x="7.76" y="0">
-                    w
-                  </tspan>
-                  <tspan className={styles.cls50} x="11.22" y="0">
-                    a
-                  </tspan>
-                  <tspan x="13.54" y="0">
-                    y
-                  </tspan>
-                </text>
-                <text className={styles.cls25} transform="translate(326.56 124.01)">
-                  <tspan x="0" y="0">
-                    Hall
-                  </tspan>
-                  <tspan className={styles.cls51} x="7.76" y="0">
-                    w
-                  </tspan>
-                  <tspan className={styles.cls50} x="11.22" y="0">
-                    a
-                  </tspan>
-                  <tspan x="13.54" y="0">
-                    y
+                    Hallway
                   </tspan>
                 </text>
               </g>
@@ -1552,6 +889,16 @@ export default class Level3 extends Component {
         <rect id={this.overlayId} pointerEvents="all" fill="none" width="882.42" height="461.23" />
 
         <g id={this.deviceId}>{!this.props.hideHVAC && this.getDevices()}</g>
+        {zoomLevel > 1 && (
+          <g className={styles.zoomOut} transform="translate(808 10)">
+            <rect onClick={this.zoomOut} className={styles.zoomOutButton} width="64" height="21" rx="4" />
+            <text onClick={this.zoomOut} className={styles.zoomOutText}>
+              <tspan x="10" y="13">
+                Zoom out
+              </tspan>
+            </text>
+          </g>
+        )}
       </React.Fragment>
     );
   }

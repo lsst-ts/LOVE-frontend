@@ -70,13 +70,72 @@ const getGradiantColorX = (value, minGradiantLimit, maxGradiantLimit) => {
   return Gradiant.COLOR_SCALE(1 - colorInterpolate(value));
 };
 
+/**
+ * 
+ * @param {object} prevParse dict data of the sensors
+ * @param {string} option string between the values (temperature, relativeHumidity, airFlow, airTurbulence)
+ * @returns {array} array of the sensors data sorted
+ */
+const prevParseToArraySensors = (prevParse, option) => {
+  const list = prevParse[option] ? Object.values(prevParse[option]) : [];
+  const objs = list.map((values) => {
+    return Object.values(values);
+  });
+
+  const sorted = objs.flat().sort((a, b) => {
+    if (a.sensorName > b.sensorName || (a.sensorName === b.sensorName && a.indexArr > b.indexArr)) {
+      return 1;
+    } else if (a.sensorName < b.sensorName || (a.sensorName === b.sensorName && a.indexArr < b.indexArr)) {
+      return -1;
+    } else {
+      return 0;
+    }
+  });
+  return sorted;
+};
+
 const AuxTelESS = (props) => {
+  const [selectedSensor, setSelectedSensor] = useState(0);
+  const [selectedSensorData, setSelectedSensorData] = useState({});
+  const [inputsPlot, setInputsPlot] = useState({});
+  const [prevParseSensors, setPrevParseSensors] = useState({});
+  const [sensors, setSensors] = useState([]);
+  const plotRef = useRef();
+
   useEffect(() => {
     props.subscribeToStreams();
     return () => {
       props.unsubscribeToStreams();
     };
   }, []);
+
+  useEffect(() => {
+    const option = props.option;
+    props[option].forEach((parse) => {
+      if (!prevParseSensors[option]) {
+        const opt = {};
+        opt[option] = {};
+        setPrevParseSensors({...prevParseSensors, ...opt});
+      }
+      if (prevParseSensors[option] && !prevParseSensors[option][parse.sensorName]) {
+        const opt = {};
+        opt[option] = prevParseSensors[option];
+        opt[option][parse.sensorName] = {};
+        setPrevParseSensors({...prevParseSensors, ...opt});
+      }
+      if (prevParseSensors[option] &&
+          prevParseSensors[option][parse.sensorName]
+      ) {
+        const opt = {};
+        opt[option] = prevParseSensors[option];
+        opt[option][parse.sensorName] = prevParseSensors[option][parse.sensorName];
+        opt[option][parse.sensorName][parse.indexArr] = parse;
+        setPrevParseSensors({...prevParseSensors, ...opt});
+      }
+    });
+    setSensors(prevParseToArraySensors(prevParseSensors, option));
+    return () => {};
+  }, [props.option, props[props.option]]);
 
   const fans = [
     {
@@ -134,21 +193,16 @@ const AuxTelESS = (props) => {
     initialCameraPosition,
   } = props;
 
-  const [selectedSensor, setSelectedSensor] = useState(0);
-  const [selectedSensorData, setSelectedSensorData] = useState({});
-  const [inputsPlot, setInputsPlot] = useState({});
-  const plotRef = useRef();
-
   const option = props.option ?? 'temperature';
   const positions = [];
-  for (let i = 0; i < props[option].length; i++) {
+  for (let i = 0; i < sensors.length; i++) {
     positions.push({
-      x: props[option][i].xPosition,
-      y: props[option][i].yPosition,
-      z: props[option][i].zPosition,
+      x: sensors[i].xPosition,
+      y: sensors[i].yPosition,
+      z: sensors[i].zPosition,
     });
   }
-  const referenceIds = Array.from({ length: props[option].length })
+  const referenceIds = Array.from({ length: sensors.length })
     .fill(0)
     .map((_, index) => index + 1);
 
@@ -162,18 +216,18 @@ const AuxTelESS = (props) => {
     const index = referenceIds.indexOf(sensorId);
     const selectedSensorData = {
       sensorId: sensorId,
-      telemetry: props[option][index].telemetry,
-      sensorName: props[option][index].sensorName,
-      numChannels: props[option][index].numChannels,
-      indexArr: props[option][index].indexArr,
-      value: props[option][index].value,
-      speed: props[option][index].speed,
-      direction: props[option][index].direction,
-      location: props[option][index].location,
+      telemetry: sensors[index].telemetry,
+      sensorName: sensors[index].sensorName,
+      numChannels: sensors[index].numChannels,
+      indexArr: sensors[index].indexArr,
+      value: sensors[index].value,
+      speed: sensors[index].speed,
+      direction: sensors[index].direction,
+      location: sensors[index].location,
       position: {
-        x: props[option][index].xPosition,
-        y: props[option][index].yPosition,
-        z: props[option][index].zPosition,
+        x: sensors[index].xPosition,
+        y: sensors[index].yPosition,
+        z: sensors[index].zPosition,
       },
     };
     setSelectedSensor(sensorId);
@@ -187,10 +241,9 @@ const AuxTelESS = (props) => {
     setInputsPlot(getBasePlot(salindex, topic, item, indexArr));
   };
 
-  const sensors = props[option] ?? [];
   const values = sensors.map((sensor) => (!Number.isNaN(+sensor.value) ? +sensor.value : 0)) ?? [];
-  const speeds = sensors.map((sensor) => sensor.speed ?? undefined) ?? [];
-  const directions = sensors.map((sensor) => sensor.direction ?? undefined) ?? [];
+  const speeds = sensors.map((sensor) => sensor.speed) ?? [];
+  const directions = sensors.map((sensor) => sensor.direction) ?? [];
 
   return (
     <div className={styles.sceneAndInfoPlotsContainer}>
@@ -273,6 +326,7 @@ AuxTelESS.propTypes = {
       xPosition: PropTypes.number,
       yPosition: PropTypes.number,
       zPosition: PropTypes.number,
+      timestamp: PropTypes.number,
     }),
   ),
   relativeHumidity: PropTypes.arrayOf(
@@ -283,6 +337,7 @@ AuxTelESS.propTypes = {
       xPosition: PropTypes.number,
       yPosition: PropTypes.number,
       zPosition: PropTypes.number,
+      timestamp: PropTypes.number,
     }),
   ),
   airFlow: PropTypes.arrayOf(
@@ -294,6 +349,7 @@ AuxTelESS.propTypes = {
       xPosition: PropTypes.number,
       yPosition: PropTypes.number,
       zPosition: PropTypes.number,
+      timestamp: PropTypes.number,
     }),
   ),
   airTurbulence: PropTypes.arrayOf(
@@ -304,6 +360,7 @@ AuxTelESS.propTypes = {
       xPosition: PropTypes.number,
       yPosition: PropTypes.number,
       zPosition: PropTypes.number,
+      timestamp: PropTypes.number,
     }),
   ),
   minGradiantLimit: PropTypes.number,
@@ -317,46 +374,10 @@ AuxTelESS.propTypes = {
 AuxTelESS.defaultProps = {
   subscribeToStreams: () => console.log('default subscribeToStreams'),
   unsubscribeToStreams: () => console.log('default unsubscribeToStreams'),
-  temperature: [
-    {
-      sensorName: '',
-      value: 0,
-      indexArr: 0,
-      numChannels: 0,
-      xPosition: 0,
-      yPosition: 0,
-      zPosition: 0,
-    },
-  ],
-  relativeHumidity: [
-    {
-      sensorName: '',
-      value: 0,
-      xPosition: 0,
-      yPosition: 0,
-      zPosition: 0,
-    },
-  ],
-  airFlow: [
-    {
-      sensorName: '',
-      value: 0,
-      direction: 0,
-      xPosition: 0,
-      yPosition: 0,
-      zPosition: 0,
-    },
-  ],
-  airTurbulence: [
-    {
-      sensorName: '',
-      value: 0,
-      speed: { x: 0, y: 0, z: 0 },
-      xPosition: 0,
-      yPosition: 0,
-      zPosition: 0,
-    },
-  ],
+  temperature: [],
+  relativeHumidity: [],
+  airFlow: [],
+  airTurbulence: [],
   minGradiantLimit: -20,
   maxGradiantLimit: 40,
   option: 'temperature',

@@ -62,8 +62,15 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .focalPlanceContainer {
   overflow: hidden;
   aspect-ratio: 1 / 1;
+  position: relative;
 }
 
 .focalPlanceContainer > * {
   height: 100%;
+}
+
+.zoomOut {
+  position: absolute;
+  top: 1em;
+  right: 1em;
 }

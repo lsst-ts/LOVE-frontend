@@ -638,6 +638,13 @@ export const ccCameraFilterChangerDetailedStateToStyle = {
   UNKNOWN: 'invalid',
 };
 
+// Optical Alignment Alarm
+export const alignedStateToStyle = {
+  ALIGNED: 'ok',
+  'NOT ALIGNED': 'warning',
+  UNKNOWN: 'invalid',
+};
+
 //  MTM1M3
 export const m1m3DetailedStateToStyle = {
   'DISABLED STATE': 'warning',
@@ -830,6 +837,14 @@ export const mtdomeElevationEnabledStatetoStyle = {
   DISABLED: 'undefined',
   ENABLED: 'ok',
   FAULT: 'fault',
+};
+
+export const mtDomeTrackingStatetoStyle = {
+  UNKNOWN: 'invalid',
+};
+
+export const atDomeTrackingStatetoStyle = {
+  UNKNOWN: 'invalid',
 };
 
 export const ataosCorrectionsStateToStyle = {
@@ -1041,6 +1056,13 @@ export const ccCameraFilterChangerDetailedStateMap = {
   0: 'UNKNOWN',
 };
 
+// Optical Alignment Alarm
+export const alignedStateMap = {
+  1: 'ALIGNED',
+  2: 'NOT ALIGNED',
+  0: 'UNKNOWN',
+};
+
 // M1M3
 export const m1m3DetailedStateMap = {
   1: 'DISABLED STATE',
@@ -1101,6 +1123,14 @@ export const mainDoorStateMap = {
   3: 'PARTIALLY OPEN',
   4: 'OPENING',
   5: 'CLOSING',
+  0: 'UNKNOWN',
+};
+
+export const mtDomeTrackingStateMap = {
+  0: 'UNKNOWN',
+};
+
+export const atDomeTrackingStateMap = {
   0: 'UNKNOWN',
 };
 
@@ -3357,3 +3387,103 @@ export const LouversPositionESS = [
     type: 'I',
   },
 ];
+
+export const SensorsPositionESS = {
+  'AuxTel-ESS01': [
+    {
+      xPosition: 1,
+      yPosition: 1,
+      zPosition: 1,
+    },
+    {
+      xPosition: 1,
+      yPosition: 1,
+      zPosition: 2,
+    },
+    {
+      xPosition: 1,
+      yPosition: 1,
+      zPosition: 3,
+    },
+    {
+      xPosition: 1,
+      yPosition: 1,
+      zPosition: 4,
+    },
+    {
+      xPosition: 1,
+      yPosition: 1,
+      zPosition: 5,
+    },
+    {
+      xPosition: 1,
+      yPosition: 1,
+      zPosition: 6,
+    },
+    {
+      xPosition: 1,
+      yPosition: 1,
+      zPosition: 7,
+    },
+    {
+      xPosition: 1,
+      yPosition: 1,
+      zPosition: 8,
+    },
+  ],
+  'AuxTel-ESS02': [
+    {
+      xPosition: 0,
+      yPosition: 0,
+      zPosition: 4,
+    }
+  ],
+  'AuxTel-ESS03': [
+    {
+      xPosition: 2,
+      yPosition: 2,
+      zPosition: 1,
+    },
+    {
+      xPosition: 2,
+      yPosition: 2,
+      zPosition: 2,
+    },
+    {
+      xPosition: 2,
+      yPosition: 2,
+      zPosition: 3,
+    },
+    {
+      xPosition: 2,
+      yPosition: 2,
+      zPosition: 4,
+    },
+    {
+      xPosition: 2,
+      yPosition: 2,
+      zPosition: 5,
+    },
+  ],
+  'MTDome-ESS01': [
+    {
+      xPosition: 3.2,
+      yPosition: 3.2,
+      zPosition: 0,
+    },
+  ],
+  'MTDome-ESS02': [
+    {
+      xPosition: 13.2,
+      yPosition: 3.2,
+      zPosition: 3,
+    },
+  ],
+  'MTDome-ESS03': [
+    {
+      xPosition: 5.2,
+      yPosition: 3.2,
+      zPosition: 6,
+    },
+  ],
+};

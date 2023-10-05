@@ -108,6 +108,16 @@ export const getLastSALCommand = (state) => {
   return state.ws.lastSALCommand;
 };
 
+// Optical Alignment Alarm
+export const getAlignmentState = (state) => {
+  //This is a mock event that returns a parameter that does not yet exist.
+  //Whenever OAS is implemented and a CSC or Topic is published for it
+  //this selector should be updated and connected to the proper CSC
+  return {
+    alignment: 0,
+  };
+};
+
 // MTM1M3 selectors
 export const getM1M3ActuatorsState = (state) => {
   const subscriptions = [
@@ -536,6 +546,8 @@ export const getDomeState = (state) => {
     dropoutDoorState: domeData['event-ATDome-0-dropoutDoorState']?.[0].state?.value ?? 0,
     mainDoorState: domeData['event-ATDome-0-mainDoorState']?.[0].state?.value ?? 0,
     atDomeSummaryState: domeData['event-ATDome-0-summaryState']?.[0].summaryState?.value ?? 0,
+    // TODO: The following parameter is missing a CSC, add it when it becomes available//
+    atDomeTracking: 0,
   };
 };
 
@@ -1122,6 +1134,8 @@ export const getDomeStatus = (state) => {
     azimuthDomeTarget: domeStatus['event-MTDome-0-azTarget']?.[0]?.position?.value ?? 0,
     modeDomeStatus: domeStatus['event-MTDome-0-operationalMode']?.[0]?.operationalMode?.value ?? 0,
     mtMountSummaryState: domeStatus['event-MTMount-0-summaryState']?.[0]?.summaryState?.value ?? 0,
+    // TODO: The following parameter is missing a CSC, add it when it becomes available//
+    mtDomeTracking: 0,
   };
 };
 

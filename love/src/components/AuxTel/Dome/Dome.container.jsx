@@ -85,6 +85,7 @@ const DomeContainer = ({
   subscribeToStream,
   unsubscribeToStream,
   controls,
+  atDomeTracking,
   ...props
 }) => {
   if (props.isRaw) {
@@ -126,6 +127,7 @@ const DomeContainer = ({
       controls={controls}
       atDomeSummaryState={atDomeSummaryState}
       ATMCSSummaryState={ATMCSSummaryState}
+      atDomeTracking={atDomeTracking}
     />
   );
 };

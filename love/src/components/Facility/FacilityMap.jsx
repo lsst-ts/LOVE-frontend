@@ -19,11 +19,10 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { isArray } from 'lodash';
 
 import styles from './FacilityMap.module.css';
-import Badge from '../GeneralPurpose/Badge/Badge';
 import Map from './Map/Map.jsx';
-import Device from './Map/Device.jsx';
 import EyeIcon from '../icons/EyeIcon/EyeIcon';
 import SimpleArrowIcon from '../icons/SimpleArrowIcon/SimpleArrowIcon';
 import { thresholdScott } from 'd3';
@@ -172,6 +171,14 @@ export default class FacilityMap extends Component {
     return <EyeIcon active={!active} />;
   };
 
+  checkArray(ctx) {
+    if (isArray(ctx)) {
+      return ctx[0];
+    } else {
+      return ctx;
+    }
+  }
+
   hideHVAC = () => {
     this.setState((prevState) => ({
       showHVAC: !prevState.showHVAC,
@@ -197,21 +204,21 @@ export default class FacilityMap extends Component {
   render() {
     const { showHVAC, showPower } = this.state;
     const HVACDataLevel1 = {
-      compressorInfo1: this.props.compressorInfo1,
-      connectionStatus1: this.props.connectionStatus1,
-      errors1: this.props.errors1,
-      status1: this.props.status1,
-      timerInfo1: this.props.timerInfo1,
-      warnings1: this.props.warnings1,
-      analogData1: this.props.analogData1,
+      compressorInfo1: this.checkArray(this.props.compressorInfo1),
+      connectionStatus1: this.checkArray(this.props.connectionStatus1),
+      errors1: this.checkArray(this.props.errors1),
+      status1: this.checkArray(this.props.status1),
+      timerInfo1: this.checkArray(this.props.timerInfo1),
+      warnings1: this.checkArray(this.props.warnings1),
+      analogData1: this.checkArray(this.props.analogData1),
 
-      compressorInfo2: this.props.compressorInfo2,
-      connectionStatus2: this.props.connectionStatus2,
-      errors2: this.props.errors2,
-      status2: this.props.status2,
-      timerInfo2: this.props.timerInfo2,
-      warnings2: this.props.warnings2,
-      analogData2: this.props.analogData2,
+      compressorInfo2: this.checkArray(this.props.compressorInfo2),
+      connectionStatus2: this.checkArray(this.props.connectionStatus2),
+      errors2: this.checkArray(this.props.errors2),
+      status2: this.checkArray(this.props.status2),
+      timerInfo2: this.checkArray(this.props.timerInfo2),
+      warnings2: this.checkArray(this.props.warnings2),
+      analogData2: this.checkArray(this.props.analogData2),
 
       bombaAguaFriaP01: this.props.bombaAguaFriaP01,
       chiller01P01: this.props.chiller01P01,

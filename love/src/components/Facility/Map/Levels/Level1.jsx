@@ -69,6 +69,14 @@ export default class Level1 extends Component {
     this.props.savePos(transformData);
   };
 
+  zoomOut = () => {
+    const overlayId = '#' + this.overlayId;
+
+    const zoom = d3.zoom().scaleExtent([1, 8]).on('zoom', this.zoomMap);
+
+    d3.select(overlayId).call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1)).call(zoom);
+  };
+
   checkArray(ctx) {
     if (isArray(ctx)) {
       return ctx[0];
@@ -1554,6 +1562,7 @@ export default class Level1 extends Component {
   }
 
   render() {
+    const zoomLevel = this.props.transformData.k;
     return (
       <React.Fragment>
         <g id={this.mapId}>
@@ -1606,7 +1615,7 @@ export default class Level1 extends Component {
                 <circle className={styles.cls4} cx="689.69" cy="402.69" r="11.16" />
               </g>
             </g>
-            <g id="MoveableWall" className={styles.cls45}>
+            <g id="MoveableWall" className={styles.opacity50}>
               <g>
                 <polyline className={styles.cls10} points="747.25 259.28 747.25 260.78 744.61 260.78 744.61 259.28" />
                 <line className={styles.cls11} x1="744.61" y1="256.82" x2="744.61" y2="105.28" />
@@ -1668,7 +1677,7 @@ export default class Level1 extends Component {
               />
               <rect className={styles.cls5} x="795.92" y="78.47" width="1.81" height="23.67" />
             </g>
-            <g id="ClosedSection" className={styles.cls45}>
+            <g id="ClosedSection" className={styles.opacity50}>
               <path className={styles.cls18} d="m692.47,181.25h-56.19v2.64h56.19v-2.64Z" />
               <path className={styles.cls18} d="m721.03,101.45h-80.79v2.64h80.79v-2.64Z" />
               <path className={styles.cls18} d="m694.85,83.93v49.23h2.64v-49.23h-2.64Z" />
@@ -1845,9 +1854,9 @@ export default class Level1 extends Component {
           </g>
           <g id="text">
             <g id="t1">
-              <g className={styles.cls47}>
-                <text className={styles.cls20} transform="translate(655.89 60.51)">
-                  <tspan className={styles.cls42} x="0" y="0">
+              <g>
+                <text className={styles.smallText} transform="translate(655.89 60.51)">
+                  <tspan x="0" y="0">
                     Camera
                   </tspan>
                   <tspan x="-7.91" y="7.2">
@@ -1856,7 +1865,7 @@ export default class Level1 extends Component {
                   <tspan x="-8.13" y="14.4">
                     Refrigeration
                   </tspan>
-                  <tspan className={styles.cls16} x="-6.33" y="21.6">
+                  <tspan x="-6.33" y="21.6">
                     Compressor
                   </tspan>
                   <tspan x="2.74" y="28.8">
@@ -1864,8 +1873,8 @@ export default class Level1 extends Component {
                   </tspan>
                 </text>
               </g>
-              <g className={styles.cls47}>
-                <text className={styles.cls20} transform="translate(751.25 193.67)">
+              <g>
+                <text className={styles.smallText} transform="translate(751.25 193.67)">
                   <tspan x="0" y="0">
                     Mechanical
                   </tspan>
@@ -1877,8 +1886,8 @@ export default class Level1 extends Component {
                   </tspan>
                 </text>
               </g>
-              <g className={styles.cls47}>
-                <text className={styles.cls20} transform="translate(721.67 68.98)">
+              <g>
+                <text className={styles.smallText} transform="translate(721.67 68.98)">
                   <tspan x="0" y="0">
                     Entry
                   </tspan>
@@ -1887,8 +1896,8 @@ export default class Level1 extends Component {
                   </tspan>
                 </text>
               </g>
-              <g className={styles.cls47}>
-                <text className={styles.cls20} transform="translate(658.91 128.19)">
+              <g>
+                <text className={styles.smallText} transform="translate(658.91 128.19)">
                   <tspan x="0" y="0">
                     Utility
                   </tspan>
@@ -1897,8 +1906,8 @@ export default class Level1 extends Component {
                   </tspan>
                 </text>
               </g>
-              <g className={styles.cls47}>
-                <text className={styles.cls20} transform="translate(655.67 223.64)">
+              <g>
+                <text className={styles.smallText} transform="translate(655.67 223.64)">
                   <tspan x="0" y="0">
                     Electrical
                   </tspan>
@@ -1910,8 +1919,8 @@ export default class Level1 extends Component {
                   </tspan>
                 </text>
               </g>
-              <g className={styles.cls47}>
-                <text className={styles.cls20} transform="translate(647.23 296.73)">
+              <g>
+                <text className={styles.smallText} transform="translate(647.23 296.73)">
                   <tspan className={styles.cls38} x="0" y="0">
                     Transformer
                   </tspan>
@@ -1920,9 +1929,9 @@ export default class Level1 extends Component {
                   </tspan>
                 </text>
               </g>
-              <g className={styles.cls47}>
-                <text className={styles.cls20} transform="translate(632.94 373.41)">
-                  <tspan className={styles.cls16} x="0" y="0">
+              <g>
+                <text className={styles.smallText} transform="translate(632.94 373.41)">
+                  <tspan x="0" y="0">
                     Coatingg
                   </tspan>
                   <tspan className={styles.cls46} x="-5.28" y="7.2">
@@ -1933,65 +1942,65 @@ export default class Level1 extends Component {
                   </tspan>
                 </text>
               </g>
-              <g className={styles.cls47}>
-                <text className={styles.cls20} transform="translate(722.96 28.63)">
-                  <tspan className={styles.cls33} x="0" y="0">
+              <g>
+                <text className={styles.smallText} transform="translate(722.96 28.63)">
+                  <tspan x="0" y="0">
                     Vestibule
                   </tspan>
                 </text>
               </g>
             </g>
-            <g id="t2" className={styles.cls45}>
-              <g className={styles.cls47}>
-                <text className={styles.cls21} transform="translate(852.29 228.04) rotate(-90)">
+            <g id="t2" className={styles.opacity50}>
+              <g>
+                <text className={styles.text} transform="translate(852.29 228.04) rotate(-90)">
                   <tspan x="0" y="0">
                     Chiller 3
                   </tspan>
                 </text>
-                <text className={styles.cls21} transform="translate(852.29 228.04) rotate(-90)">
+                <text className={styles.text} transform="translate(852.29 228.04) rotate(-90)">
                   <tspan x="0" y="0">
                     Chiller 3
                   </tspan>
                 </text>
               </g>
-              <g className={styles.cls47}>
-                <text className={styles.cls21} transform="translate(792.82 211.19)">
-                  <tspan className={styles.cls16} x="0" y="0">
+              <g>
+                <text className={styles.text} transform="translate(792.82 211.19)">
+                  <tspan x="0" y="0">
                     Process Air
                   </tspan>
-                  <tspan className={styles.cls26} x="-2.1" y="4.8">
+                  <tspan x="-2.1" y="4.8">
                     Compressors
                   </tspan>
                 </text>
               </g>
-              <g className={styles.cls47}>
-                <text className={styles.cls21} transform="translate(774.92 59.94)">
-                  <tspan className={styles.cls28} x="0" y="0">
+              <g>
+                <text className={styles.text} transform="translate(774.92 59.94)">
+                  <tspan x="0" y="0">
                     Wet Shaft
                   </tspan>
                 </text>
               </g>
               <g>
-                <text className={styles.cls21} transform="translate(771.05 162.47)">
+                <text className={styles.text} transform="translate(771.05 162.47)">
                   <tspan x="0" y="0">
                     OSS Equip
                   </tspan>
                 </text>
               </g>
-              <g className={styles.cls47}>
-                <text className={styles.cls21} transform="translate(852.29 85.68) rotate(-90)">
+              <g>
+                <text className={styles.text} transform="translate(852.29 85.68) rotate(-90)">
                   <tspan x="0" y="0">
                     Chiller 1
                   </tspan>
                 </text>
-                <text className={styles.cls21} transform="translate(852.29 85.68) rotate(-90)">
+                <text className={styles.text} transform="translate(852.29 85.68) rotate(-90)">
                   <tspan x="0" y="0">
                     Chiller 1
                   </tspan>
                 </text>
               </g>
-              <g className={styles.cls47}>
-                <text className={styles.cls21} transform="translate(802.06 92.28)">
+              <g>
+                <text className={styles.text} transform="translate(802.06 92.28)">
                   <tspan x="0" y="0">
                     Dry
                   </tspan>
@@ -2000,30 +2009,30 @@ export default class Level1 extends Component {
                   </tspan>
                 </text>
               </g>
-              <g className={styles.cls47}>
-                <text className={styles.cls21} transform="translate(774.48 87.54)">
+              <g>
+                <text className={styles.text} transform="translate(774.48 87.54)">
                   <tspan x="0" y="0">
                     Elev. 1
                   </tspan>
                 </text>
               </g>
-              <g className={styles.cls47}>
-                <text className={styles.cls21} transform="translate(711.54 176.07) rotate(-90)">
+              <g>
+                <text className={styles.text} transform="translate(711.54 176.07) rotate(-90)">
                   <tspan x="0" y="0">
                     Service Air
                   </tspan>
-                  <tspan className={styles.cls26} x="-1.61" y="4.8">
+                  <tspan x="-1.61" y="4.8">
                     Compressor
                   </tspan>
                 </text>
               </g>
-              <g className={styles.cls47}>
-                <text className={styles.cls21} transform="translate(852.29 152.06) rotate(-90)">
+              <g>
+                <text className={styles.text} transform="translate(852.29 152.06) rotate(-90)">
                   <tspan x="0" y="0">
                     Chiller 2
                   </tspan>
                 </text>
-                <text className={styles.cls21} transform="translate(852.29 152.06) rotate(-90)">
+                <text className={styles.text} transform="translate(852.29 152.06) rotate(-90)">
                   <tspan x="0" y="0">
                     Chiller 2
                   </tspan>
@@ -2036,6 +2045,16 @@ export default class Level1 extends Component {
         <rect id={this.overlayId} pointerEvents="all" fill="none" width="882.42" height="461.23" />
 
         <g id={this.deviceId}>{!this.props.hideHVAC && this.getDevices()}</g>
+        {zoomLevel > 1 && (
+          <g className={styles.zoomOut} transform="translate(808 10)">
+            <rect onClick={this.zoomOut} className={styles.zoomOutButton} width="64" height="21" rx="4" />
+            <text onClick={this.zoomOut} className={styles.zoomOutText}>
+              <tspan x="10" y="13">
+                Zoom out
+              </tspan>
+            </text>
+          </g>
+        )}
       </React.Fragment>
     );
   }

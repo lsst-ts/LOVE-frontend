@@ -212,10 +212,10 @@ export default class Info extends Component {
             <Value>{`${defaultNumberFormatter(selectedActuatorData.forceMeasured, 2)} N`}</Value>
 
             <Label>Actuator Steps</Label>
-            <Value>{`${defaultNumberFormatter(selectedActuatorData.actuatorStep, 2)} °`}</Value>
+            <Value>{`${defaultNumberFormatter(selectedActuatorData.actuatorStep, 2)}`}</Value>
 
             <Label>Position</Label>
-            <Value>{`${defaultNumberFormatter(selectedActuatorData.encoderPosition, 2)} um`}</Value>
+            <Value>{`${defaultNumberFormatter(selectedActuatorData.encoderPosition, 2)} µm`}</Value>
           </>
         ) : (
           <div className={styles.noActuator}>No actuator selected</div>

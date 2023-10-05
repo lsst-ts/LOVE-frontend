@@ -23,6 +23,7 @@ import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getStreamsData, getDomeState } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import AuxTelESS from './AuxTelESS';
+import { SensorsPositionESS } from 'Config';
 import { range } from 'lodash';
 
 export const schema = {
@@ -99,41 +100,65 @@ const getGroupNames = (salindexList, option) => {
   return [...new Set(subscriptions)];
 };
 
-const parse = (streams, option) => {
+/**
+ * This function is used to parse dicts by 4 type of the telemetries
+ * @param object prevParse 
+ * @param array streams 
+ * @param string option string for the option between temperature, relativeHumidity,
+ *        airFlow and airTurbulence 
+ * @returns array with the data separate parse of the telemetry
+ */
+const parseStreams = (streams, option) => {
+  let arr;
   switch (option) {
     case 'temperature':
-      return parseTemperature(streams);
+      arr = parseTemperature(streams);
+      break;
     case 'relativeHumidity':
-      return parseHumidity(streams);
+      arr = parseHumidity(streams);
+      break;
     case 'airFlow':
-      return parseAirflow(streams);
+      arr = parseAirflow(streams);
+      break;
     case 'airTurbulence':
-      return parseAirTurbulence(streams);
+      arr = parseAirTurbulence(streams);
+      break;
     default:
-      return [];
+      arr = [];
   }
+  return arr;
 };
 
+/**
+ * This function is used to parse dicts by temperature telemetry
+ * @param {array} streams 
+ * @returns array with the data separate parse of the temperature telemetry
+ */
 const parseTemperature = (streams) => {
   const temperatures = [];
   streams.forEach((stream) => {
     Object.entries(stream).forEach((entry) => {
       const essData = entry[1];
-      const sensorName = essData?.sensorName.value ?? '';
-      const numChannels = essData?.numChannels.value ?? 1;
-      const values = essData?.temperature.value?.slice(0, numChannels) ?? [];
-      const locations = essData?.location.value.split(',')?.slice(0, numChannels) ?? [];
+      const sensorName = essData?.sensorName?.value ?? '';
+      const numChannels = essData?.numChannels?.value ?? 1;
+      const values = essData?.temperature?.value?.slice(0, numChannels) ?? [];
+      const locations = essData?.location?.value.split(',')?.slice(0, numChannels) ?? [];
+      const timestamp = essData?.timestamp?.value;
+      const xPosition = essData?.xPosition?.value;
+      const yPosition = essData?.yPosition?.value;
+      const zPosition = essData?.zPosition?.value;
       for (let i = 0; i < numChannels; i++) {
         temperatures.push({
           sensorName,
           numChannels,
-          value: values[i],
+          value: +values[i],
           indexArr: i,
           location: locations[i],
           telemetry: entry[0],
-          xPosition: i,
-          yPosition: temperatures.length,
-          zPosition: i + temperatures.length,
+          xPosition: xPosition ?? SensorsPositionESS[sensorName][i]?.xPosition,
+          yPosition: yPosition ?? SensorsPositionESS[sensorName][i]?.yPosition,
+          zPosition: zPosition ?? SensorsPositionESS[sensorName][i]?.zPosition,
+          timestamp: timestamp,
         });
       }
     });
@@ -141,46 +166,66 @@ const parseTemperature = (streams) => {
   return temperatures;
 };
 
+/**
+ * This function is used to parse dicts by relativeHumidity telemetry
+ * @param {array} streams 
+ * @returns array with the data separate parse of the relativeHumidity telemetry
+ */
 const parseHumidity = (streams) => {
   const humidities = [];
   streams.forEach((stream) => {
     Object.entries(stream).forEach((entry) => {
       const essData = entry[1];
-      const sensorName = essData?.sensorName.value ?? '';
-      const value = essData?.relativeHumidity.value ?? 0;
-      const location = essData?.location.value ?? '';
+      const sensorName = essData?.sensorName?.value ?? '';
+      const value = essData?.relativeHumidity?.value ?? 0;
+      const location = essData?.location?.value ?? '';
+      const timestamp = essData?.timestamp?.value;
+      const xPosition = essData?.xPosition?.value;
+      const yPosition = essData?.yPosition?.value;
+      const zPosition = essData?.zPosition?.value;
       humidities.push({
         sensorName,
-        value: value,
+        value: +value,
         location: location,
         telemetry: entry[0],
-        xPosition: humidities.length,
-        yPosition: 5,
-        zPosition: 5 + humidities.length,
+        xPosition: xPosition ?? SensorsPositionESS[sensorName][0]?.xPosition,
+        yPosition: yPosition ?? SensorsPositionESS[sensorName][0]?.yPosition,
+        zPosition: zPosition ?? SensorsPositionESS[sensorName][0]?.zPosition,
+        timestamp: timestamp,
       });
     });
   });
   return humidities;
 };
 
+/**
+ * This function is used to parse dicts by speed telemetry
+ * @param {array} streams 
+ * @returns array with the data separate parse of the speed telemetry
+ */
 const parseAirflow = (streams) => {
   const airflows = [];
   streams.forEach((stream) => {
     Object.entries(stream).forEach((entry) => {
       const essData = entry[1];
-      const sensorName = essData?.sensorName.value ?? '';
-      const value = essData?.speed.value ?? 0;
-      const direction = essData?.speed.direction ?? 0;
-      const location = essData?.location.value ?? '';
+      const sensorName = essData?.sensorName?.value ?? '';
+      const value = essData?.speed?.value ?? 0;
+      const direction = essData?.speed?.direction ?? 0;
+      const location = essData?.location?.value ?? '';
+      const timestamp = essData?.timestamp?.value;
+      const xPosition = essData?.xPosition?.value;
+      const yPosition = essData?.yPosition?.value;
+      const zPosition = essData?.zPosition?.value;
       airflows.push({
         sensorName,
-        value: value,
+        value: +value,
         direction: direction,
         location: location,
         telemetry: entry[0],
-        xPosition: 5 - airflows.length,
-        yPosition: 2,
-        zPosition: airflows.length,
+        xPosition: xPosition ?? SensorsPositionESS[sensorName][0]?.xPosition,
+        yPosition: yPosition ?? SensorsPositionESS[sensorName][0]?.yPosition,
+        zPosition: zPosition ?? SensorsPositionESS[sensorName][0]?.zPosition,
+        timestamp: timestamp,
       });
     });
   });
@@ -227,24 +272,34 @@ const parseAirflow = (streams) => {
   return airflows;
 };
 
+/**
+ * This function is used to parse dicts by speedMagnitud telemetry
+ * @param {array} streams 
+ * @returns array with the data separate parse of the speedMagnitud telemetry
+ */
 const parseAirTurbulence = (streams) => {
   const airTurbulences = [];
   streams.forEach((stream) => {
     Object.entries(stream).forEach((entry) => {
       const essData = entry[1];
-      const sensorName = essData?.sensorName.value ?? '';
-      const value = essData?.speedMagnitud.value ?? 0;
-      const speed = essData?.speed.value ?? { x: 0, y: 0, z: 0 };
-      const location = essData?.location.value ?? '';
+      const sensorName = essData?.sensorName?.value ?? '';
+      const value = essData?.speedMagnitud?.value ?? 0;
+      const speed = essData?.speed?.value ?? { x: 0, y: 0, z: 0 };
+      const location = essData?.location?.value ?? '';
+      const timestamp = essData?.timestamp?.value;
+      const xPosition = essData?.xPosition?.value;
+      const yPosition = essData?.yPosition?.value;
+      const zPosition = essData?.zPosition?.value;
       airTurbulences.push({
         sensorName,
-        value: value,
-        speed: speed,
+        value: +value,
+        speed: +speed,
         location: location,
         telemetry: entry[0],
-        xPosition: 5 - airTurbulences.length,
-        yPosition: 2,
-        zPosition: airTurbulences.length,
+        xPosition: xPosition ?? SensorsPositionESS[sensorName][0]?.xPosition,
+        yPosition: yPosition ?? SensorsPositionESS[sensorName][0]?.yPosition,
+        zPosition: zPosition ?? SensorsPositionESS[sensorName][0]?.zPosition,
+        timestamp: timestamp,
       });
     });
   });
@@ -277,7 +332,7 @@ const mapStateToProps = (state, ownProps) => {
       result[entry[0]] = entry[1];
       return result;
     });
-  map[option] = cleanStream ? parse(cleanStream, option) : [];
+  map[option] = cleanStream ? parseStreams(cleanStream, option) : [];
 
   const domeState = getDomeState(state);
   return {

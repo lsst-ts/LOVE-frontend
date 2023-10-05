@@ -34,6 +34,8 @@ import {
   M1M3YActuatorsMapping,
   M1M3ZActuatorsMapping,
   M1M3SActuatorsMapping,
+  alignedStateMap,
+  alignedStateToStyle,
 } from 'Config';
 import ArrowIcon from 'components/icons/ArrowIcon/ArrowIcon';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
@@ -507,6 +509,9 @@ export default class M1M3 extends Component {
     const detailedStateName = m1m3DetailedStateMap[this.props.detailedState];
     const detailedStateStatus = m1m3DetailedStateToStyle[detailedStateName];
 
+    const alignedStateName = alignedStateMap[this.props.alignment];
+    const alignedStateStatus = alignedStateToStyle[alignedStateName];
+
     const maxForce = defaultNumberFormatter(Math.max(...actuatorsForce));
     const minForce = defaultNumberFormatter(Math.min(...actuatorsForce));
 
@@ -518,12 +523,16 @@ export default class M1M3 extends Component {
       <div className={styles.mirrorContainer}>
         <SummaryPanel className={styles.summaryPanelStates}>
           <div className={styles.state}>
-            <Title>STATE</Title>
+            <Title>State</Title>
             <StatusText status={summaryStateStatus}>{summaryStateName}</StatusText>
           </div>
           <div className={styles.state}>
-            <Title>DETAILED STATE</Title>
+            <Title>Detailed State</Title>
             <StatusText status={detailedStateStatus}>{detailedStateName}</StatusText>
+          </div>
+          <div className={styles.state}>
+            <Title>M2 Alignement</Title>
+            <StatusText status={alignedStateStatus}>{alignedStateName}</StatusText>
           </div>
         </SummaryPanel>
 

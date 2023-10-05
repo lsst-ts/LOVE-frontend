@@ -20,7 +20,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getM2State, getM2Inclinometer, getM2Actuator, getM2ActuatorForce } from 'redux/selectors';
+import { getM2State, getM2Inclinometer, getM2Actuator, getM2ActuatorForce, getAlignmentState } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import M2 from './M2';
 import { EUIs } from 'Config';
@@ -74,8 +74,9 @@ const mapStateToProps = (state) => {
   const inclinometerState = getM2Inclinometer(state);
   const actuators = getM2Actuator(state);
   const forces = getM2ActuatorForce(state);
+  const alignmentState = getAlignmentState(state);
 
-  return { ...m2State, ...inclinometerState, ...actuators, ...forces };
+  return { ...m2State, ...inclinometerState, ...actuators, ...forces, ...alignmentState };
 };
 
 const mapDispatchToProps = (dispatch) => {
