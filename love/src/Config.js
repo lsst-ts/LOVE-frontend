@@ -832,6 +832,14 @@ export const mtdomeElevationEnabledStatetoStyle = {
   FAULT: 'fault',
 };
 
+export const mtDomeTrackingStatetoStyle = {
+  UNKNOWN: 'invalid',
+};
+
+export const atDomeTrackingStatetoStyle = {
+  UNKNOWN: 'invalid',
+};
+
 export const ataosCorrectionsStateToStyle = {
   DISABLED: 'warning',
   ENABLED: 'ok',
@@ -1101,6 +1109,14 @@ export const mainDoorStateMap = {
   3: 'PARTIALLY OPEN',
   4: 'OPENING',
   5: 'CLOSING',
+  0: 'UNKNOWN',
+};
+
+export const mtDomeTrackingStateMap = {
+  0: 'UNKNOWN',
+};
+
+export const atDomeTrackingStateMap = {
   0: 'UNKNOWN',
 };
 

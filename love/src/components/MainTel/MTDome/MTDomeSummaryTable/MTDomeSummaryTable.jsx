@@ -39,6 +39,8 @@ import {
   mtdomeMotionStateMap,
   mtdomeMotionStatetoStyle,
   MTMountLimits,
+  mtDomeTrackingStateMap,
+  mtDomeTrackingStatetoStyle,
 } from '../../../../Config';
 
 export default class MTDomeSummaryTable extends Component {
@@ -89,6 +91,8 @@ export default class MTDomeSummaryTable extends Component {
     const azimuthDomeState = mtDomeAzimuthEnabledStateMap[this.props.azimuthDomeState];
     const azimuthDomeMotion = mtdomeMotionStateMap[this.props.azimuthDomeMotion];
     const mtMountStatus = summaryStateMap[this.props.mtMountSummaryState];
+    const mtDomeTrackingName = mtDomeTrackingStateMap[this.props.domeTracking];
+    const mtDomeTrackingStyle = mtDomeTrackingStatetoStyle[mtDomeTrackingName];
 
     const domeActualAz = this.props.positionActualDomeAz;
     const domeCommandedAz = this.props.positionCommandedDomeAz;
@@ -108,6 +112,10 @@ export default class MTDomeSummaryTable extends Component {
           <Label>Mode</Label>
           <Value>
             <StatusText status={mtDomeModeStatetoStyle[modeDomeStatus]}>{modeDomeStatus}</StatusText>
+          </Value>
+          <Label>Tracking</Label>
+          <Value>
+            <StatusText status={mtDomeTrackingStyle}>{mtDomeTrackingName}</StatusText>
           </Value>
           <Label>Az State</Label>
           <Value>
