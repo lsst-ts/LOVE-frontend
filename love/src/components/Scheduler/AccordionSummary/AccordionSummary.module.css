@@ -88,7 +88,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .predictedTargetsDiv {
   margin: 0.5em;
-  height: 200px;
+  height: 12em;
   overflow-x: hidden;
   overflow-y: auto;
   text-align: justify;
@@ -127,7 +127,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .blocksTargetsDiv {
   margin: 0.5em;
-  height: 200px;
+  height: 12em;
   overflow: hidden;
   text-align: justify;
   border: 1px solid var(--tertiary-background-color);
@@ -160,12 +160,13 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .blocksPanel {
   max-width: 100%;
   margin: 0 0.5em;
-  height: 200px;
+  height: 12em;
   overflow-x: hidden;
   overflow-y: auto;
   text-align: justify;
   border: 1px solid var(--tertiary-background-color);
   padding: var(--content-padding);
+  align-content: baseline !important;
 }
 
 .listOfBlocks {
