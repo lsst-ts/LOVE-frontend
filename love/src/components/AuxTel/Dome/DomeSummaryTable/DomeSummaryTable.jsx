@@ -30,6 +30,8 @@ import {
   stateToStyleDomeAndMount,
   summaryStateToStyle,
   summaryStateMap,
+  atDomeTrackingStateMap,
+  atDomeTrackingStatetoStyle,
 } from '../../../../Config';
 import Limits from 'components/GeneralPurpose/Limits/Limits';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
@@ -104,6 +106,7 @@ export default class DomeSummaryTable extends Component {
       minM3,
       atDomeSummaryState,
       ATMCSSummaryState,
+      domeTracking,
     } = this.props;
 
     const azimuthStateValue = domeAzimuthStateMap[this.props.azimuthState];
@@ -139,6 +142,9 @@ export default class DomeSummaryTable extends Component {
     const atDomeSummaryStateValue = summaryStateMap[atDomeSummaryState];
     const ATMCSSummaryStateValue = summaryStateMap[ATMCSSummaryState];
 
+    const domeTrackingName = atDomeTrackingStateMap[domeTracking];
+    const domeTrackingStyle = atDomeTrackingStatetoStyle[domeTrackingName];
+
     let domeInPositionLabel = 'UNKNOWN';
     if (domeInPositionValue !== 0) domeInPositionLabel = domeInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
     let mountInPositionLabel = 'UNKNOWN';
@@ -161,7 +167,10 @@ export default class DomeSummaryTable extends Component {
             {domeInPositionLabel}
           </StatusText>
         </Value>
-
+        <Label>Tracking</Label>
+        <Value>
+          <StatusText status={domeTrackingStyle}>{domeTrackingName}</StatusText>
+        </Value>
         <Label>Azimuth</Label>
         <Value>
           <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} small>

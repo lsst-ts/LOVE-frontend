@@ -72,6 +72,7 @@ const MTDomeContainer = ({
   targetPointingAz,
   currentPointingEl,
   targetPointingEl,
+  mtDomeTracking,
   ...props
 }) => {
   if (props.isRaw) {
@@ -100,6 +101,7 @@ const MTDomeContainer = ({
       targetPointingAz={targetPointingAz}
       currentPointingEl={currentPointingEl}
       targetPointingEl={targetPointingEl}
+      mtDomeTracking={mtDomeTracking}
     />
   );
 };
