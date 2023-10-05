@@ -26,6 +26,7 @@ import {
   getM1M3ActuatorForces,
   getM1M3HardpointMonitorData,
   getM1M3HardpointActuatorState,
+  getAlignmentState,
 } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import M1M3 from './M1M3';
@@ -63,7 +64,15 @@ const mapStateToProps = (state) => {
   const actuatorsForces = getM1M3ActuatorForces(state);
   const hardpointsMonitor = getM1M3HardpointMonitorData(state);
   const hardpointsActuatorState = getM1M3HardpointActuatorState(state);
-  return { ...m1m3State, ...actuatorsState, ...actuatorsForces, ...hardpointsMonitor, ...hardpointsActuatorState };
+  const alignmentState = getAlignmentState(state);
+  return {
+    ...m1m3State,
+    ...actuatorsState,
+    ...actuatorsForces,
+    ...hardpointsMonitor,
+    ...hardpointsActuatorState,
+    ...alignmentState,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
