@@ -468,7 +468,7 @@ export default class ConfigPanel extends Component {
 
     let yamlData;
     try {
-      yamlData = configuration ? yaml.load(configuration.config_schema) : {};
+      yamlData = configuration && configuration.config_schema ? yaml.load(configuration.config_schema) ?? {} : {};
     } catch {
       yamlData = {};
     }
@@ -629,19 +629,20 @@ export default class ConfigPanel extends Component {
 
         let yamlData;
         try {
-          yamlData = configuration ? yaml.load(configuration.config_schema) : {};
+          yamlData = configuration && configuration.config_schema ? yaml.load(configuration.config_schema) ?? {} : {};
         } catch {
           yamlData = {};
         }
-
+        const value = configuration?.config_schema ?? DEFAULT_CONFIG_VALUE;
         this.setState((state) => ({
           configurationList: data,
           configurationOptions: options,
           selectedConfiguration: configuration ? { label: configuration.config_name, value: configuration.id } : null,
-          value: configuration?.config_schema ?? DEFAULT_CONFIG_VALUE,
+          value: value,
           inputConfigurationName: configuration?.config_name ?? DEFAULT_CONFIG_NAME,
           formData: yamlData,
         }));
+        this.validateConfig(value, true);
       });
     }
 
@@ -690,7 +691,7 @@ export default class ConfigPanel extends Component {
     // RJSF variables
     let rjsfSchema;
     try {
-      rjsfSchema = yamlSchema ? yaml.load(yamlSchema) : {};
+      rjsfSchema = yamlSchema ? yaml.load(yamlSchema) ?? {} : {};
     } catch {
       rjsfSchema = {};
     }
