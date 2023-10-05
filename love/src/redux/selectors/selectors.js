@@ -107,10 +107,12 @@ export const getCameraState = (state) => {
 export const getLastSALCommand = (state) => {
   return state.ws.lastSALCommand;
 };
+
 // Optical Alignment Alarm
 export const getAlignmentState = (state) => {
-  const subscriptions = ['telemetry-MTM1M3-0-forceActuatorData'];
-  const alignmentData = getStreamsData(state, subscriptions);
+  //This is a mock event that returns a parameter that does not yet exist.
+  //Whenever OAS is implemented and a CSC or Topic is published for it
+  //this selector should be updated and connected to the proper CSC
   return {
     alignment: 0,
   };

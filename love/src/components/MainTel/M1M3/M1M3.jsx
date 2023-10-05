@@ -519,10 +519,6 @@ export default class M1M3 extends Component {
     const selectedHardpoint = this.getHardpoint(selectedHardpointId);
     const forceInputs = Object.keys(M1M3ActuatorForces);
 
-    console.log('alignment: ' + this.props.alignment);
-    console.log('state name: ' + alignedStateName);
-    console.log('state status: ' + alignedStateStatus);
-
     return (
       <div className={styles.mirrorContainer}>
         <SummaryPanel className={styles.summaryPanelStates}>

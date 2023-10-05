@@ -99,7 +99,6 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTM1M3-0-appliedOffsetForces',
     'event-MTM1M3-0-appliedStaticForces',
     'event-MTM1M3-0-enabledForceActuators',
-    'event-OAA-0-alignment',
     // 'event-MTM1M3-0-preclippedAccelerationForces',
     // 'event-MTM1M3-0-preclippedActiveOpticForces',
     // 'event-MTM1M3-0-preclippedBalanceForces',
