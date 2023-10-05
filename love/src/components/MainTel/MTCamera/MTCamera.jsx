@@ -25,8 +25,10 @@ import CCDDetail from './CCDDetail/CCDDetail';
 import PropTypes from 'prop-types';
 import styles from './MTCamera.module.css';
 import FocalPlaneSummaryDetail from './FocalPlaneSummaryDetail/FocalPlaneSummaryDetail';
+import Button from 'components/GeneralPurpose/Button/Button';
 import { mtcameraRaftsNeighborsMapping } from 'Config';
 import RebDetail from './RebDetail/RebDetail';
+import { uniqueId } from 'lodash';
 
 const rafts = [];
 const unusedCCDs = [
@@ -116,6 +118,10 @@ class MTCamera extends Component {
       selectedRebVar: 'anaI',
     };
     this.zoom = null;
+    this.uniqueZoomOverlay = uniqueId('zoom-overlay-');
+    this.uniqueFocalplane = uniqueId('focalplane-');
+    this.uniqueRaftDetail = uniqueId('raftdetail-');
+    this.uniqueCcdRebDetail = uniqueId('ccdrebdetail-');
   }
 
   setSelectedRaft = (raft) => {
@@ -182,17 +188,21 @@ class MTCamera extends Component {
     this.setSelectedCCD(nextCCD);
   };
 
+  zoomOut = () => {
+    d3.select(`#${this.uniqueZoomOverlay}`).call(this.zoom.transform, d3.zoomIdentity.scale(1)).call(this.zoom);
+  };
+
   componentDidMount() {
     this.props.subscribeToStreams();
     this.zoom = d3.zoom().scaleExtent([1, 2]).on('zoom', this.zoomed);
-    d3.select('#zoom-overlay').call(this.zoom);
+    d3.select(`#${this.uniqueZoomOverlay}`).call(this.zoom);
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.activeViewId !== this.state.activeViewId) {
       // Reset zoom level when switching views
       // a value of 1.01 is used to prevent the zoom level from being set to 1
-      d3.select('#zoom-overlay').call(this.zoom.transform, d3.zoomIdentity.scale(1.01));
+      d3.select(`#${this.uniqueZoomOverlay}`).call(this.zoom.transform, d3.zoomIdentity.scale(1.01));
     }
   }
 
@@ -264,14 +274,14 @@ class MTCamera extends Component {
     }
 
     if (targetId === 'focalplane') {
-      d3.select('#focalplane').style('transform', d3TransformToString(d3.event.transform));
-      d3.select('#focalplane').style('transform-origin', '0 0');
+      d3.select(`#${this.uniqueFocalplane}`).style('transform', d3TransformToString(d3.event.transform));
+      d3.select(`#${this.uniqueFocalplane}`).style('transform-origin', '0 0');
     } else if (targetId === 'raftdetail') {
-      d3.select('#raftdetail').style('transform', d3TransformToString(d3.event.transform));
-      d3.select('#raftdetail').style('transform-origin', '0 0');
+      d3.select(`#${this.uniqueRaftDetail}`).style('transform', d3TransformToString(d3.event.transform));
+      d3.select(`#${this.uniqueRaftDetail}`).style('transform-origin', '0 0');
     } else if (targetId === 'ccdrebdetail') {
-      d3.select('#ccdrebdetail').style('transform', d3TransformToString(d3.event.transform));
-      d3.select('#ccdrebdetail').style('transform-origin', '0 0');
+      d3.select(`#${this.uniqueCcdRebDetail}`).style('transform', d3TransformToString(d3.event.transform));
+      d3.select(`#${this.uniqueCcdRebDetail}`).style('transform-origin', '0 0');
     }
 
     this.setState((prevState) => ({
@@ -295,7 +305,7 @@ class MTCamera extends Component {
     const { tempControlActive, hVBiasSwitch, anaV, power, gDV, oDI, oDV, oGV, rDV, temp } = this.props;
     return (
       <div className={styles.container}>
-        <div id="zoom-overlay" className={styles.focalPlanceContainer}>
+        <div id={this.uniqueZoomOverlay} className={styles.focalPlanceContainer}>
           <div style={{ display: activeViewId === 'ccdrebdetail' ? 'block' : 'none' }}>
             {selectedCCD && this.getCCDdetail()}
             {/* {selectedReb && this.getRebDetail()} */}
@@ -304,6 +314,11 @@ class MTCamera extends Component {
             {selectedRaft && this.getRaftdetail()}
           </div>
           <div style={{ display: activeViewId === 'focalplane' ? 'block' : 'none' }}>{this.getMTCamera()}</div>
+          {zoomLevel > 1 && (
+            <div className={styles.zoomOut}>
+              <Button onClick={this.zoomOut}>Zoom out</Button>
+            </div>
+          )}
         </div>
         <div className={styles.summaryDetailContainer}>
           {selectedRaft ? (
@@ -341,9 +356,9 @@ class MTCamera extends Component {
     const { selectedRaft } = this.state;
     const { hVBiasSwitch, anaV, power, gDV, oDI, oDV, oGV, rDV, temp } = this.props;
     return (
-      <div id="focalplane">
+      <div id={this.uniqueFocalplane}>
         <FocalPlane
-          id="focalplane"
+          id={this.uniqueFocalplane}
           rafts={rafts}
           selectedRaft={this.state.selectedRaft}
           setSelectedRaft={this.setSelectedRaft}
@@ -376,7 +391,7 @@ class MTCamera extends Component {
       },
     };
     return (
-      <div id="raftdetail">
+      <div id={this.uniqueRaftDetail}>
         <RaftDetail
           raft={raftWithNeighbors}
           showNeighbors={true}
@@ -400,7 +415,7 @@ class MTCamera extends Component {
   getCCDdetail() {
     const { selectedCCD } = this.state;
     return (
-      <div id="ccdrebdetail">
+      <div id={this.uniqueCcdRebDetail}>
         <CCDDetail ccd={selectedCCD} showNeighbors={true} selectNeighborCCD={this.selectNeighborCCD} />
       </div>
     );
@@ -409,7 +424,7 @@ class MTCamera extends Component {
   getRebDetail() {
     const { selectedReb } = this.state;
     return (
-      <div id="ccdrebdetail">
+      <div id={this.uniqueCcdRebDetail}>
         <RebDetail reb={selectedReb} />
       </div>
     );

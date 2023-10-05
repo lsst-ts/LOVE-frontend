@@ -66,8 +66,15 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   margin: auto;
   border: 1px solid var(--secondary-font-dimmed-color);
   border-radius: 0.5em;
+  position: relative;
 }
 
 .focalPlanceContainer > * {
   height: 100%;
+}
+
+.zoomOut {
+  position: absolute;
+  top: 1em;
+  right: 1em;
 }
