@@ -27,19 +27,22 @@ import rjsfValidator from '@rjsf/validator-ajv8';
 import { SCRIPT_DOCUMENTATION_BASE_URL } from 'Config';
 import Select from 'components/GeneralPurpose/Select/Select';
 import styles from './ConfigPanel.module.css';
-import Button from '../../GeneralPurpose/Button/Button';
-import Input from '../../GeneralPurpose/Input/Input';
-import DeleteIcon from '../../icons/DeleteIcon/DeleteIcon';
-import ErrorIcon from '../../icons/ErrorIcon/ErrorIcon';
-import RotateIcon from '../../icons/RotateIcon/RotateIcon';
-import CloseIcon from '../../icons/CloseIcon/CloseIcon';
-import SaveNewIcon from '../../icons/SaveNewIcon/SaveNewIcon';
-import SaveIcon from '../../icons/SaveIcon/SaveIcon';
-import SpinnerIcon from '../../icons/SpinnerIcon/SpinnerIcon';
-import RowExpansionIcon from '../../icons/RowExpansionIcon/RowExpansionIcon';
-import Hoverable from '../../GeneralPurpose/Hoverable/Hoverable';
-import InfoPanel from '../../GeneralPurpose/InfoPanel/InfoPanel';
-import ManagerInterface from '../../../Utils';
+import Button from 'components/GeneralPurpose/Button/Button';
+import Input from 'components/GeneralPurpose/Input/Input';
+import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
+import ErrorIcon from 'components/icons/ErrorIcon/ErrorIcon';
+import RotateIcon from 'components/icons/RotateIcon/RotateIcon';
+import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
+import SaveNewIcon from 'components/icons/SaveNewIcon/SaveNewIcon';
+import SaveIcon from 'components/icons/SaveIcon/SaveIcon';
+import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
+import RowExpansionIcon from 'components/icons/RowExpansionIcon/RowExpansionIcon';
+import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
+import InfoPanel from 'components/GeneralPurpose/InfoPanel/InfoPanel';
+import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
+import { SCRIPTQUEUE_SCRIPT_LOCATION } from 'Config';
+import ManagerInterface from 'Utils';
+
 import 'brace/mode/yaml';
 import 'brace/theme/solarized_dark';
 
@@ -133,6 +136,7 @@ export default class ConfigPanel extends Component {
       inputConfigurationName: DEFAULT_CONFIG_NAME,
       formData: {},
       updatingScriptSchema: false,
+      queueToTop: false,
     };
   }
 
@@ -347,6 +351,9 @@ export default class ConfigPanel extends Component {
   };
 
   closeConfigPanel = () => {
+    this.setState({
+      queueToTop: false,
+    });
     this.props.closeConfigPanel();
   };
 
@@ -385,6 +392,7 @@ export default class ConfigPanel extends Component {
     const isStandard = script.type === 'standard';
     const logLevel = logLevelMap[this.state.logLevel] ?? 20;
     const config = this.state.value.replace(/^#.*\n?/gm, '');
+    const location = this.state.queueToTop ? SCRIPTQUEUE_SCRIPT_LOCATION.FIRST : SCRIPTQUEUE_SCRIPT_LOCATION.LAST;
 
     this.saveLastUsedConfiguration();
 
@@ -393,7 +401,7 @@ export default class ConfigPanel extends Component {
       script.path,
       config,
       'description',
-      2,
+      location,
       this.state.pauseCheckpoint,
       this.state.stopCheckpoint,
       logLevel,
@@ -629,7 +637,7 @@ export default class ConfigPanel extends Component {
   };
 
   render() {
-    const { orientation, showSchema } = this.state;
+    const { orientation, showSchema, queueToTop } = this.state;
     const scriptName = this.props.configPanel?.name ?? '';
     const scriptPath = this.props.configPanel?.script?.path ?? '';
     const isStandard = this.props.configPanel?.script ? this.props.configPanel.script?.type === 'standard' : false;
@@ -839,6 +847,13 @@ export default class ConfigPanel extends Component {
                 option={this.state.logLevel}
                 placeholder="Debug"
                 onChange={(selection) => this.onLogLevelChange(selection.value)}
+              />
+
+              <span className={styles.logLevelLabel}>Queue position</span>
+              <Toggle
+                toggled={queueToTop}
+                labels={['Bottom', 'Top']}
+                onToggle={(value) => this.setState({ queueToTop: value })}
               />
             </div>
             <div className={styles.addBtnContainer}>
