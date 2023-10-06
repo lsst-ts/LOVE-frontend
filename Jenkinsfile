@@ -1,3 +1,20 @@
+properties(
+    [
+    buildDiscarder(
+        logRotator(
+            artifactDaysToKeepStr: '',
+            artifactNumToKeepStr: '',
+            daysToKeepStr: '14',
+            numToKeepStr: '10',
+        )
+    ),
+    // Make new builds terminate existing builds
+    disableConcurrentBuilds(
+        abortPrevious: true,
+    )
+    ]
+)
+
 pipeline {
   agent any
   environment {
