@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.25.4
+-------
+
+* Move docs creation to CI `<https://github.com/lsst-ts/LOVE-frontend/pull/532>`_
+
 v5.25.3
 -------
 
