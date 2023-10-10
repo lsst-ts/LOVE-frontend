@@ -577,6 +577,7 @@ class Layout extends Component {
               auxtelTrackingState={this.props.observatorySummary?.auxtelTrackingState}
               auxtelTrackingMode={this.props.observatorySummary?.auxtelTrackingMode}
               auxtelObsMode={this.props.observatorySummary?.auxtelObservingMode}
+              degradation={this.props.observatorySummary?.degradation}
               auxtelPower={'UNKNOWN'}
             ></ObservatorySummaryMenu>
           </div>

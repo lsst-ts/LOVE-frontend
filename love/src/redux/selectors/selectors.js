@@ -2197,6 +2197,8 @@ export const getObservatoryState = (state) => {
     location: essTemperatures ? essTemperatures.location.value : '',
     windDirection: essAirFlow ? essAirFlow.direction.value : 0.0,
     windSpeed: essAirFlow ? essAirFlow.speed.value : 0.0,
+    // TODO: Add the corresponding telemetry or event when Enviromental Degradation gets integrated into SAL
+    degradation: 'Unknown',
   };
 };
 

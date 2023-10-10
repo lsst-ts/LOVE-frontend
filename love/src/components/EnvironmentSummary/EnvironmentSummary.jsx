@@ -25,6 +25,7 @@ import SimonyiTelescope from './Cartoons/SimonyiTelescope';
 import AuxTelescope from './Cartoons/AuxTelescope';
 import WindDirection from './Cartoons/WindDirection';
 import TemperaturesSummary from './SummaryInformation/TemperaturesSummary';
+import DegradationSummary from './SummaryInformation/DegradationSummary';
 import WeatherForecastIcon from 'components/icons/WeatherForecastIcon/WeatherForecastIcon';
 import { defaultNumberFormatter } from 'Utils';
 
@@ -132,6 +133,7 @@ export default class EnvironmentSummary extends Component {
       windSpeed,
     } = this.props;
     const { hideIconTemperature } = this.state;
+    const degradation = 'Unknown';
 
     return (
       <div className={styles.container}>
@@ -144,6 +146,9 @@ export default class EnvironmentSummary extends Component {
         </div>
         <div className={styles.temperaturesContainer}>
           <TemperaturesSummary numChannels={numChannels} temperature={temperature} location={location} />
+        </div>
+        <div className={styles.enviroContainer}>
+          <DegradationSummary degradation={degradation} />
         </div>
         <div ref={this.containerRef} className={styles.telescopes}>
           <div className={styles.skymap}>
