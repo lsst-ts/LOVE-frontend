@@ -310,8 +310,14 @@ export default class Exposure extends Component {
   }
 
   parseCsvData(data) {
-    // TODO: implement if needed.
-    return data;
+    const csvData = data.map((row) => {
+      const exposureLength = Moment(row.timespan_end).diff(Moment(row.timespan_begin), 'seconds', true);
+      return {
+        ...row,
+        seconds_length: exposureLength,
+      };
+    });
+    return csvData;
   }
 
   setQueryExposuresInterval() {
@@ -393,7 +399,7 @@ export default class Exposure extends Component {
         'tracking_dec',
         'sky_angle',
         'timespan_begin',
-        'timespan_end',
+        'seconds_length',
       ];
       csvHeaders = exportedParams.map((key) => ({ label: key, key }));
       csvData = this.parseCsvData(filteredData);
