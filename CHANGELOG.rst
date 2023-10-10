@@ -10,6 +10,7 @@ v5.26.0
 * Layout improvements for OLE components `<https://github.com/lsst-ts/LOVE-frontend/pull/540>`_
 * Update ATMCS Mount Tracking config file `<https://github.com/lsst-ts/LOVE-frontend/pull/539>`_
 * Add Environmental Degradation to top level summaries `<https://github.com/lsst-ts/LOVE-frontend/pull/538>`_
+* Possibly malformed YAML in script dialog causes crash loop on subsequent use `<https://github.com/lsst-ts/LOVE-frontend/pull/536>`
 * Add ability to add a script at the top of the queue from LOVE `<https://github.com/lsst-ts/LOVE-frontend/pull/537>`_
 * Move docs creation to CI `<https://github.com/lsst-ts/LOVE-frontend/pull/532>`_
 
