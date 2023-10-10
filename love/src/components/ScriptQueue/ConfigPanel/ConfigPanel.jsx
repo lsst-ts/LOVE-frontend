@@ -275,7 +275,16 @@ export default class ConfigPanel extends Component {
      */
     const schema = this.props.configPanel.configSchema;
     if (!schema) {
-      this.setState({ validationStatus: EMPTY });
+      this.setState({
+        validationStatus: EMPTY,
+        configErrorTitle: 'Waiting for schema',
+        configErrors: [
+          {
+            name: ``,
+            message: `Schema not yet loaded`,
+          },
+        ],
+      });
       return;
     }
 
@@ -298,7 +307,16 @@ export default class ConfigPanel extends Component {
 
         /** Server error */
         if (!r.ok) {
-          this.setState({ validationStatus: SERVER_ERROR });
+          this.setState({
+            validationStatus: SERVER_ERROR,
+            configErrorTitle: 'Validation Failed',
+            configErrors: [
+              {
+                name: ``,
+                message: `There is no schema to validate or another server error was encountered`,
+              },
+            ],
+          });
           failValidate();
           return false;
         }
@@ -308,6 +326,16 @@ export default class ConfigPanel extends Component {
       .then((r) => {
         /** Handle SERVER_ERROR */
         failValidate();
+        this.setState({
+          validationStatus: SERVER_ERROR,
+          configErrorTitle: 'Validation Failed',
+          configErrors: [
+            {
+              name: ``,
+              message: `There is no schema to validate or another server error was encountered`,
+            },
+          ],
+        });
         if (!r) return;
 
         /** Valid schema should show no message */
