@@ -597,7 +597,7 @@ export const stateToStyleMount = {
   UNKNOWN: 'invalid',
   'UNKNOWN POSITION': 'invalid',
   TRACKINGDISABLED: 'warning',
-  TRACKINGENABLED: 'warning',
+  TRACKINGENABLED: 'ok',
   STOPPING: 'warning',
 };
 
