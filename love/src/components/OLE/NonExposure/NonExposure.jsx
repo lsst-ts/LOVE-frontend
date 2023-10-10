@@ -248,9 +248,11 @@ export default class NonExposure extends Component {
   parseCsvData(data) {
     const csvData = data.map((row) => {
       const escapedMessageText = row.message_text.replace(/"/g, '""');
+      const parsedLevel = OLE_COMMENT_TYPE_OPTIONS.find((option) => option.value === row.level).label;
       return {
         ...row,
         message_text: escapedMessageText,
+        level: parsedLevel,
       };
     });
     return csvData;
@@ -320,7 +322,6 @@ export default class NonExposure extends Component {
         'date_added',
         'message_text',
         'level',
-        'tags',
         'urls',
         'date_begin',
         'date_end',
