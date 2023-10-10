@@ -309,6 +309,11 @@ export default class Exposure extends Component {
     });
   }
 
+  parseCsvData(data) {
+    // TODO: implement if needed.
+    return data;
+  }
+
   setQueryExposuresInterval() {
     this.queryExposuresInterval = setInterval(() => {
       this.queryExposures();
@@ -373,11 +378,25 @@ export default class Exposure extends Component {
     let csvHeaders = null;
     let csvData = "There aren't exposures created for the current search...";
     let csvTitle = 'exposure.csv';
-
     if (filteredData.length > 0) {
-      const logExampleKeys = Object.keys(filteredData[0] ?? {});
-      csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
-      csvData = filteredData;
+      const exportedParams = [
+        'obs_id',
+        'instrument',
+        'observation_type',
+        'observation_reason',
+        'day_obs',
+        'seq_num',
+        'group_name',
+        'target_name',
+        'science_program',
+        'tracking_ra',
+        'tracking_dec',
+        'sky_angle',
+        'timespan_begin',
+        'timespan_end',
+      ];
+      csvHeaders = exportedParams.map((key) => ({ label: key, key }));
+      csvData = this.parseCsvData(filteredData);
     }
 
     if (selectedDayExposureStart && selectedDayExposureEnd) {
