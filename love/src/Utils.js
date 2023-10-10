@@ -1826,3 +1826,15 @@ export function copyToClipboard(text, effect) {
   navigator.clipboard.writeText(text);
   if (effect) effect();
 }
+
+/**
+ * Function to trim a string to a specified length
+ * @param {string} string text to be trimmed
+ * @param {number} length length to be trimmed, 100 by default
+ */
+export function trimString(string, length = 100) {
+  if (string.length > length) {
+    return `${string.substring(0, length)}...`;
+  }
+  return string;
+}
