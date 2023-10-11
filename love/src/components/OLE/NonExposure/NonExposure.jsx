@@ -25,6 +25,7 @@ import { CSVLink } from 'react-csv';
 import {
   DATE_TIME_FORMAT,
   OLE_COMMENT_TYPE_OPTIONS,
+  OLE_JIRA_COMPONENTS,
   iconLevelOLE,
   ISO_INTEGER_DATE_FORMAT,
   ISO_STRING_DATE_TIME_FORMAT,
@@ -63,6 +64,10 @@ export default class NonExposure extends Component {
     }),
     /** Function to handle the comment type filter */
     changeCommentTypeSelect: PropTypes.func,
+    /** Selected component of the component filter */
+    selectedComponent: PropTypes.string,
+    /** Function to handle the component filter */
+    changeComponentSelect: PropTypes.func,
     /** Selected obs time loss of the obs time loss filter */
     selectedObsTimeLoss: PropTypes.bool,
     /** Function to handle the obs time loss filter */
@@ -75,6 +80,8 @@ export default class NonExposure extends Component {
     changeDayNarrative: () => {},
     selectedCommentType: OLE_COMMENT_TYPE_OPTIONS[0],
     changeCommentTypeSelect: () => {},
+    selectedComponent: 'All components',
+    changeComponentSelect: () => {},
     selectedObsTimeLoss: false,
     changeObsTimeLossSelect: () => {},
   };
@@ -150,6 +157,13 @@ export default class NonExposure extends Component {
         type: 'string',
         className: styles.tableHead,
         render: (value) => this.getLevel(value),
+      },
+      {
+        field: 'components',
+        title: 'Components',
+        type: 'string',
+        className: styles.tableHead,
+        render: (value) => value.join(', '),
       },
       {
         field: null,
@@ -293,9 +307,11 @@ export default class NonExposure extends Component {
       selectedDayNarrativeStart,
       selectedDayNarrativeEnd,
       selectedCommentType,
+      selectedComponent,
       selectedObsTimeLoss,
       changeDayNarrative,
       changeCommentTypeSelect,
+      changeComponentSelect,
       changeObsTimeLossSelect,
     } = this.props;
     const { logs: tableData, modeView, modeEdit } = this.state;
@@ -304,8 +320,13 @@ export default class NonExposure extends Component {
     let filteredData = [...tableData];
 
     // Filter by type
-    if (selectedCommentType.value !== 'all') {
+    if (selectedCommentType.value !== OLE_COMMENT_TYPE_OPTIONS[0].value) {
       filteredData = filteredData.filter((log) => log.level === selectedCommentType.value);
+    }
+
+    // Filter by component
+    if (selectedComponent !== 'All components') {
+      filteredData = filteredData.filter((log) => log.components.includes(selectedComponent));
     }
 
     // Filter by obs time loss
@@ -399,6 +420,13 @@ export default class NonExposure extends Component {
             options={OLE_COMMENT_TYPE_OPTIONS}
             option={selectedCommentType}
             onChange={(value) => changeCommentTypeSelect(value)}
+            className={styles.select}
+          />
+
+          <Select
+            options={['All components', ...OLE_JIRA_COMPONENTS]}
+            option={selectedComponent}
+            onChange={({ value }) => changeComponentSelect(value)}
             className={styles.select}
           />
 
