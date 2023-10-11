@@ -116,9 +116,9 @@ export default class NonExposure extends Component {
     const label = value >= 100 ? 'urgent' : 'info';
     const icon = iconLevelOLE[label] ?? undefined;
     return (
-      <>
-        <span className={styles.levelIcon}>{icon}</span> {label}
-      </>
+      <span title={label} className={styles.levelIcon}>
+        {icon}
+      </span>
     );
   }
 
