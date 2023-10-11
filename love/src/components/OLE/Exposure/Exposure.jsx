@@ -32,7 +32,7 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
-import { exposureFlagStateToStyle, DATE_TIME_FORMAT, ISO_INTEGER_DATE_FORMAT, LOG_REFRESH_INTERVAL_MS } from 'Config';
+import { exposureFlagStateToStyle, TIME_FORMAT, ISO_INTEGER_DATE_FORMAT, LOG_REFRESH_INTERVAL_MS } from 'Config';
 import ManagerInterface, { trimString } from 'Utils';
 import ExposureAdd from './ExposureAdd';
 import ExposureDetail from './ExposureDetail';
@@ -465,7 +465,6 @@ export default class Exposure extends Component {
 
     return (
       <div className={styles.margin10}>
-        <div className={styles.title}>Filter</div>
         <div className={styles.filters}>
           <Button disabled={updatingExposures} onClick={() => this.queryExposures()}>
             Refresh data
@@ -513,7 +512,7 @@ export default class Exposure extends Component {
           </div>
         </div>
         <div className={styles.lastUpdated}>
-          Last updated: {this.state.lastUpdated ? this.state.lastUpdated.format(DATE_TIME_FORMAT) : ''}
+          Last updated: {this.state.lastUpdated ? this.state.lastUpdated.format(TIME_FORMAT) : ''}
           {updatingExposures && <SpinnerIcon className={styles.spinnerIcon} />}
         </div>
         <SimpleTable headers={headers} data={filteredData} />

@@ -23,7 +23,7 @@ import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import { CSVLink } from 'react-csv';
 import {
-  DATE_TIME_FORMAT,
+  TIME_FORMAT,
   OLE_COMMENT_TYPE_OPTIONS,
   OLE_JIRA_COMPONENTS,
   iconLevelOLE,
@@ -392,7 +392,6 @@ export default class NonExposure extends Component {
       />
     ) : (
       <div className={styles.margin10}>
-        <div className={styles.title}>Filter</div>
         <div className={styles.filters}>
           <Button disabled={this.state.updatingLogs} onClick={() => this.queryNarrativeLogs()}>
             Refresh data
@@ -416,28 +415,28 @@ export default class NonExposure extends Component {
             onChange={changeDayNarrative}
           />
 
+          <div className={styles.checkboxText}>
+            <Input
+              type="checkbox"
+              checked={selectedObsTimeLoss}
+              onChange={(event) => changeObsTimeLossSelect(event.target.checked)}
+            />
+            Show only with time loss
+          </div>
+
           <Select
             options={OLE_COMMENT_TYPE_OPTIONS}
             option={selectedCommentType}
             onChange={(value) => changeCommentTypeSelect(value)}
-            className={styles.select}
+            className={styles.selectComment}
           />
 
           <Select
             options={['All components', ...OLE_JIRA_COMPONENTS]}
             option={selectedComponent}
             onChange={({ value }) => changeComponentSelect(value)}
-            className={styles.select}
+            className={styles.selectComponent}
           />
-
-          <div className={styles.checkboxText}>
-            Show only with time loss
-            <Input
-              type="checkbox"
-              checked={selectedObsTimeLoss}
-              onChange={(event) => changeObsTimeLossSelect(event.target.checked)}
-            />
-          </div>
 
           <div className={styles.divExportBtn}>
             <CSVLink data={csvData} headers={csvHeaders} filename={csvTitle}>
@@ -451,7 +450,7 @@ export default class NonExposure extends Component {
           </div>
         </div>
         <div className={styles.lastUpdated}>
-          Last updated: {this.state.lastUpdated ? this.state.lastUpdated.format(DATE_TIME_FORMAT) : ''}
+          Last updated: {this.state.lastUpdated ? this.state.lastUpdated.format(TIME_FORMAT) : ''}
           {this.state.updatingLogs && <SpinnerIcon className={styles.spinnerIcon} />}
         </div>
         <SimpleTable headers={headers} data={filteredData} />

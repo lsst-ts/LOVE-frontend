@@ -195,16 +195,27 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   height: 1.5em;
 }
 
-.filters .select {
+.filters .selectComment,
+.filters .selectComponent {
+  text-align: left;
   white-space: nowrap;
-  flex: 0 0 300px;
   border: 1px solid var(--secondary-font-dimmed-color);
 }
 
+.filters .selectComment {
+  flex: 0 0 20ch;
+}
+
+.filters .selectComponent {
+  flex: 0 0 35ch;
+}
+
 .lastUpdated {
+  display: flex;
+  align-items: center;
   text-align: left;
-  margin-bottom: 0.5em;
   color: var(--primary-font-color);
+  margin-bottom: var(--small-padding);
 }
 
 .floatRight {
