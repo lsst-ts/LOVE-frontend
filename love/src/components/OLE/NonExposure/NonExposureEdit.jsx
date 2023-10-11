@@ -188,72 +188,6 @@ export default class NonExposureEdit extends Component {
     }));
   }
 
-  renderTimeOfIncidentSection() {
-    const { date_begin, date_end, time_lost } = this.state.logEdit ?? {};
-    const { incidentTimeIsSingular, datesAreValid } = this.state;
-
-    return (
-      <>
-        <span className={styles.label}>Time of Incident (UTC)</span>
-        <span className={styles.value}>
-          <div className={styles.incidentTimeTypeContainer}>
-            <Toggle
-              labels={['Singular', 'Range']}
-              toggled={incidentTimeIsSingular}
-              onToggle={(event) => this.setState({ incidentTimeIsSingular: event })}
-            />
-            <Button
-              className={styles.refreshDateIcon}
-              size="small"
-              title="Refresh date"
-              onClick={() => this.updateDates()}
-            >
-              <RefreshIcon title="Refresh date" />
-            </Button>
-          </div>
-          {incidentTimeIsSingular ? (
-            <DateTimeRange
-              className={styles.dateTimeRangeStyle}
-              startDate={date_begin}
-              endDate={date_end}
-              onChange={(date, type) => this.handleTimeOfIncident(date, type)}
-            />
-          ) : (
-            <DateTime
-              className={styles.dateTimeSingularStyle}
-              viewMode="time"
-              dateFormat="YYYY/MM/DD"
-              timeFormat="HH:mm:ss"
-              closeOnSelect={true}
-              value={date_begin}
-              onChange={(date) => {
-                this.setState((prevState) => ({
-                  logEdit: { ...prevState.logEdit, date_begin: date },
-                }));
-              }}
-            />
-          )}
-          {!datesAreValid && <div className={styles.inputError}>Error: dates must be input in valid ISO format</div>}
-        </span>
-        <span className={styles.label}>Obs. Time Loss (hours)</span>
-        <span className={styles.value}>
-          <Input
-            type="number"
-            min={0.0}
-            step={0.01}
-            value={time_lost}
-            className={styles.input}
-            onChange={(event) =>
-              this.setState((prevState) => ({
-                logEdit: { ...prevState.logEdit, time_lost: event.target.value },
-              }))
-            }
-          />
-        </span>
-      </>
-    );
-  }
-
   componentDidUpdate(prevProps, prevState) {
     if (
       prevState.logEdit?.date_begin !== this.state.logEdit?.date_begin ||
@@ -305,12 +239,30 @@ export default class NonExposureEdit extends Component {
     }
   }
 
-  render() {
-    const { back, isLogCreate, isMenu, view } = this.props;
-    const { datesAreValid, savingLog, jiraIssueError } = this.state;
+  renderUrgentField() {
+    return (
+      <>
+        <span className={styles.label}>Urgent?</span>
+        <span className={[styles.value].join(' ')}>
+          <div style={{ display: 'inline-block', marginRight: '0.5em' }}>
+            <Toggle
+              labels={['No', 'Yes']}
+              toggled={this.state.logEdit.level >= 100}
+              onToggle={(event) =>
+                this.setState((prevState) => ({
+                  logEdit: { ...prevState.logEdit, level: event ? 100 : 0 },
+                }))
+              }
+            />
+          </div>
+          <span className={styles.levelIcon}>{this.getIconLevel(this.state.logEdit.level)}</span>
+        </span>
+      </>
+    );
+  }
 
-    const jiraUrl = getLinkJira(this.state.logEdit.urls);
-    const filesUrls = getFilesURLs(this.state.logEdit.urls);
+  renderComponentsFields() {
+    const { logEdit } = this.state;
 
     const componentOptions = OLE_JIRA_COMPONENTS.sort();
     const primarySoftwareComponentOptions = OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS.sort();
@@ -318,7 +270,293 @@ export default class NonExposureEdit extends Component {
 
     return (
       <>
-        {!isMenu && back && (
+        <span className={styles.label}>Components</span>
+        <span className={styles.value}>
+          <Multiselect
+            innerRef={this.multiselectComponentsRef}
+            className={styles.select}
+            options={componentOptions}
+            selectedValues={logEdit?.components}
+            onSelect={(selectedOptions) => {
+              this.setState((prevState) => ({
+                logEdit: { ...prevState.logEdit, components: selectedOptions },
+              }));
+            }}
+            placeholder="Select zero or several components"
+            selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
+          />
+        </span>
+        <span className={styles.label}>Primary Software Component</span>
+        <span className={styles.value}>
+          <Select
+            options={primarySoftwareComponentOptions}
+            option={logEdit?.primary_software_components[0]}
+            onChange={({ value }) => {
+              this.setState((prevState) => ({
+                logEdit: { ...prevState.logEdit, primary_software_components: [value] },
+              }));
+            }}
+            className={styles.select}
+          />
+        </span>
+        <span className={styles.label}>Primary Hardware Component</span>
+        <span className={styles.value}>
+          <Select
+            options={primaryHardwareComponentOptions}
+            option={logEdit?.primary_hardware_components[0]}
+            onChange={({ value }) => {
+              this.setState((prevState) => ({
+                logEdit: { ...prevState.logEdit, primary_hardware_components: [value] },
+              }));
+            }}
+            className={styles.select}
+          />
+        </span>
+      </>
+    );
+  }
+
+  renderTimeOfIncidentFields() {
+    const { date_begin, date_end, time_lost } = this.state.logEdit ?? {};
+    const { incidentTimeIsSingular, datesAreValid } = this.state;
+
+    return (
+      <>
+        <span className={styles.label}>Time of Incident (UTC)</span>
+        <span className={styles.value}>
+          <div className={styles.incidentTimeTypeContainer}>
+            <Toggle
+              labels={['Singular', 'Range']}
+              toggled={incidentTimeIsSingular}
+              onToggle={(event) => this.setState({ incidentTimeIsSingular: event })}
+            />
+            {incidentTimeIsSingular ? (
+              <DateTimeRange
+                className={styles.dateTimeRangeStyle}
+                startDate={date_begin}
+                endDate={date_end}
+                onChange={(date, type) => this.handleTimeOfIncident(date, type)}
+              />
+            ) : (
+              <DateTime
+                className={styles.dateTimeSingularStyle}
+                viewMode="time"
+                dateFormat="YYYY/MM/DD"
+                timeFormat="HH:mm:ss"
+                closeOnSelect={true}
+                value={date_begin}
+                onChange={(date) => {
+                  this.setState((prevState) => ({
+                    logEdit: { ...prevState.logEdit, date_begin: date },
+                  }));
+                }}
+              />
+            )}
+            <Button
+              className={styles.refreshDateIcon}
+              size="small"
+              title="Refresh date"
+              onClick={() => this.updateDates()}
+            >
+              <RefreshIcon title="Refresh date" />
+            </Button>
+          </div>
+          {!datesAreValid && <div className={styles.inputError}>Error: dates must be input in valid ISO format</div>}
+        </span>
+        <span className={styles.label}>Obs. Time Loss (hours)</span>
+        <span className={styles.value}>
+          <Input
+            type="number"
+            min={0.0}
+            step={0.01}
+            value={time_lost}
+            className={styles.input}
+            onChange={(event) =>
+              this.setState((prevState) => ({
+                logEdit: { ...prevState.logEdit, time_lost: event.target.value },
+              }))
+            }
+          />
+        </span>
+      </>
+    );
+  }
+
+  renderMessageField() {
+    const { logEdit } = this.state;
+
+    return (
+      <>
+        <div className={styles.mb1}>
+          <div className={styles.title}>Message</div>
+        </div>
+        <TextArea
+          value={logEdit?.message_text}
+          callback={(event) =>
+            this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, message_text: event } }))
+          }
+        />
+      </>
+    );
+  }
+
+  renderFilesField() {
+    const { logEdit } = this.state;
+
+    return (
+      <>
+        <div className={styles.toAttachFiles}>
+          <MultiFileUploader
+            values={logEdit?.file}
+            handleFiles={(files) => this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: files } }))}
+            handleDelete={(file) => {
+              const files = { ...logEdit?.file };
+              delete files[file];
+              this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: files } }));
+            }}
+            handleDeleteAll={() =>
+              this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: undefined } }))
+            }
+          />
+        </div>
+      </>
+    );
+  }
+
+  renderJiraFields() {
+    const { logEdit, jiraIssueError } = this.state;
+    return (
+      <>
+        <div className={styles.jira}>
+          {!logEdit?.id && (
+            <span className={styles.checkboxText}>
+              <Input
+                type="checkbox"
+                checked={logEdit?.jira}
+                onChange={(event) => {
+                  this.setState((prevState) => ({
+                    logEdit: { ...prevState.logEdit, jira: event.target.checked },
+                  }));
+                }}
+              />
+              <span>link Jira ticket</span>
+              {logEdit?.jira && (
+                <>
+                  <Toggle
+                    labels={['New', 'Existent']}
+                    toggled={!logEdit?.jira_new}
+                    onToggle={(event) =>
+                      this.setState((prevState) => ({
+                        logEdit: { ...prevState.logEdit, jira_new: !event },
+                      }))
+                    }
+                  />
+                  <div>
+                    {logEdit?.jira_new ? (
+                      <Input
+                        className={jiraIssueError ? styles.inputError : ''}
+                        placeholder="Jira ticket title"
+                        onChange={(event) =>
+                          this.setState((prevState) => ({
+                            logEdit: { ...prevState.logEdit, jira_issue_title: event.target.value },
+                          }))
+                        }
+                      />
+                    ) : (
+                      <Input
+                        className={jiraIssueError ? styles.inputError : ''}
+                        placeholder="Jira ticket id"
+                        onChange={(event) =>
+                          this.setState((prevState) => ({
+                            logEdit: { ...prevState.logEdit, jira_issue_id: event.target.value },
+                          }))
+                        }
+                      />
+                    )}
+                  </div>
+                </>
+              )}
+            </span>
+          )}
+        </div>
+      </>
+    );
+  }
+
+  renderAttachedFiles() {
+    const filesUrls = getFilesURLs(this.state.logEdit.urls);
+
+    return (
+      <>
+        <div className={styles.attachedFiles}>
+          <div className={styles.label}>Files Attached:</div>
+          <div>
+            {filesUrls.length > 0
+              ? filesUrls.map((fileurl) => (
+                  <div key={fileurl} className={styles.buttonWraper}>
+                    <Button
+                      className={styles.fileButton}
+                      title={fileurl}
+                      onClick={() => openInNewTab(fileurl)}
+                      status="default"
+                    >
+                      <DownloadIcon className={styles.downloadIcon} />
+                      {getFilename(fileurl)}
+                    </Button>
+                  </div>
+                ))
+              : 'no files attached'}
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  renderSubmitButton() {
+    const { datesAreValid, savingLog, jiraIssueError } = this.state;
+
+    return (
+      <>
+        <Button disabled={!datesAreValid || jiraIssueError} type="submit">
+          {savingLog ? <SpinnerIcon className={styles.spinnerIcon} /> : <span className={styles.title}>Save</span>}
+        </Button>
+      </>
+    );
+  }
+
+  renderMenu() {
+    return (
+      <>
+        <form onSubmit={this.handleSubmit}>
+          <div className={styles.detailContainerMenu}>
+            <div id={this.id} className={styles.contentMenu}>
+              <div className={styles.contentLeft}>
+                {this.renderUrgentField()}
+                {this.renderComponentsFields()}
+                {this.renderTimeOfIncidentFields()}
+              </div>
+              <div className={styles.contentRight}>{this.renderMessageField()}</div>
+            </div>
+          </div>
+          <div className={styles.footerMenu}>
+            <div className={styles.footerLeftMenu}>
+              {this.renderJiraFields()}
+              {this.renderFilesField()}
+            </div>
+            <span className={styles.footerRightMenu}>{this.renderSubmitButton()}</span>
+          </div>
+        </form>
+      </>
+    );
+  }
+
+  renderComponent() {
+    const { back, isLogCreate, view } = this.props;
+    const jiraUrl = getLinkJira(this.state.logEdit.urls);
+
+    return (
+      <>
+        {back && (
           <div className={styles.returnToLogs}>
             <Button
               status="link"
@@ -330,225 +568,63 @@ export default class NonExposureEdit extends Component {
             </Button>
           </div>
         )}
+
         <form onSubmit={this.handleSubmit}>
-          <div className={isMenu ? styles.detailContainerMenu : styles.detailContainer}>
-            {!isMenu && (
-              <div className={styles.header}>
-                {this.state.logEdit.id && <span className={styles.bold}>#{this.state.logEdit.id}</span>}
-                {jiraUrl && (
-                  <span>
-                    <Button
-                      status="link"
-                      title={this.state.logEdit.jiraurl}
-                      onClick={() => openInNewTab(this.state.logEdit.jiraurl)}
-                    >
-                      view Jira ticket
-                    </Button>
-                  </span>
-                )}
-                {this.state.logEdit.id ? (
-                  <>
-                    <span className={styles.floatRight}>
-                      <Button
-                        className={styles.iconBtn}
-                        title="View"
-                        onClick={() => {
-                          view(true);
-                        }}
-                        status="transparent"
-                      >
-                        <CloseIcon className={styles.icon} />
-                      </Button>
-                    </span>
-                  </>
-                ) : (
-                  <></>
-                )}
-              </div>
-            )}
-
-            <div id={this.id} className={isMenu ? styles.contentMenu : styles.content}>
-              <div className={styles.contentLeft}>
-                <span className={styles.label}>Urgent?</span>
-                <span className={[styles.value].join(' ')}>
-                  <div style={{ display: 'inline-block', marginRight: '0.5em' }}>
-                    <Toggle
-                      labels={['No', 'Yes']}
-                      toggled={this.state.logEdit.level >= 100}
-                      onToggle={(event) =>
-                        this.setState((prevState) => ({
-                          logEdit: { ...prevState.logEdit, level: event ? 100 : 0 },
-                        }))
-                      }
-                    />
-                  </div>
-                  <span className={styles.levelIcon}>{this.getIconLevel(this.state.logEdit.level)}</span>
+          <div className={styles.detailContainer}>
+            <div className={styles.header}>
+              {this.state.logEdit.id && <span className={styles.bold}>#{this.state.logEdit.id}</span>}
+              {jiraUrl && (
+                <span>
+                  <Button
+                    status="link"
+                    title={this.state.logEdit.jiraurl}
+                    onClick={() => openInNewTab(this.state.logEdit.jiraurl)}
+                  >
+                    view Jira ticket
+                  </Button>
                 </span>
-                <span className={styles.label}>Components</span>
-                <span className={styles.value}>
-                  <Multiselect
-                    innerRef={this.multiselectComponentsRef}
-                    className={styles.select}
-                    options={componentOptions}
-                    selectedValues={this.state.logEdit.components}
-                    onSelect={(selectedOptions) => {
-                      this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, components: selectedOptions },
-                      }));
+              )}
+              {this.state.logEdit.id && (
+                <span className={styles.floatRight}>
+                  <Button
+                    className={styles.iconBtn}
+                    title="View"
+                    onClick={() => {
+                      view(true);
                     }}
-                    placeholder="Select zero or several components"
-                    selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
-                  />
+                    status="transparent"
+                  >
+                    <CloseIcon className={styles.icon} />
+                  </Button>
                 </span>
-                <span className={styles.label}>Primary Software Component</span>
-                <span className={styles.value}>
-                  <Select
-                    options={primarySoftwareComponentOptions}
-                    option={this.state.logEdit.primary_software_components[0]}
-                    onChange={({ value }) => {
-                      this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, primary_software_components: [value] },
-                      }));
-                    }}
-                    className={styles.select}
-                  />
-                </span>
-                <span className={styles.label}>Primary Hardware Component</span>
-                <span className={styles.value}>
-                  <Select
-                    options={primaryHardwareComponentOptions}
-                    option={this.state.logEdit.primary_hardware_components[0]}
-                    onChange={({ value }) => {
-                      this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, primary_hardware_components: [value] },
-                      }));
-                    }}
-                    className={styles.select}
-                  />
-                </span>
-
-                {isMenu && this.renderTimeOfIncidentSection()}
-              </div>
-
-              <div className={styles.contentRight}>
-                <div className={styles.mb1}>
-                  <div className={styles.title}>Message</div>
-                  <div className={styles.inline}>{!isMenu && this.renderTimeOfIncidentSection()}</div>
-                </div>
-                <TextArea
-                  value={this.state.logEdit.message_text}
-                  callback={(event) =>
-                    this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, message_text: event } }))
-                  }
-                />
-              </div>
+              )}
             </div>
-            <div className={isMenu ? styles.footerMenu : styles.footer}>
-              <div>
-                {!isLogCreate && !isMenu && (
-                  <div className={styles.attachedFiles}>
-                    <div className={styles.label}>Files Attached:</div>
-                    <div>
-                      {filesUrls.length > 0
-                        ? filesUrls.map((fileurl) => (
-                            <div key={fileurl} className={styles.buttonWraper}>
-                              <Button
-                                className={styles.fileButton}
-                                title={fileurl}
-                                onClick={() => openInNewTab(fileurl)}
-                                status="default"
-                              >
-                                <DownloadIcon className={styles.downloadIcon} />
-                                {getFilename(fileurl)}
-                              </Button>
-                            </div>
-                          ))
-                        : 'no files attached'}
-                    </div>
-                  </div>
-                )}
-                <div className={styles.toAttachFiles}>
-                  <MultiFileUploader
-                    values={this.state.logEdit.file}
-                    handleFiles={(files) =>
-                      this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: files } }))
-                    }
-                    handleDelete={(file) => {
-                      const files = { ...this.state.logEdit.file };
-                      delete files[file];
-                      this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: files } }));
-                    }}
-                    handleDeleteAll={() =>
-                      this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: undefined } }))
-                    }
-                  />
-                </div>
 
-                <div className={styles.jira}>
-                  {!this.state.logEdit.id && (
-                    <span className={styles.checkboxText}>
-                      <span>link Jira ticket</span>
-                      <Input
-                        type="checkbox"
-                        checked={this.state.logEdit.jira}
-                        onChange={(event) => {
-                          this.setState((prevState) => ({
-                            logEdit: { ...prevState.logEdit, jira: event.target.checked },
-                          }));
-                        }}
-                      />
-                      {this.state.logEdit.jira && (
-                        <>
-                          <Toggle
-                            labels={['New', 'Existent']}
-                            toggled={!this.state.logEdit.jira_new}
-                            onToggle={(event) =>
-                              this.setState((prevState) => ({
-                                logEdit: { ...prevState.logEdit, jira_new: !event },
-                              }))
-                            }
-                          />
-                          {this.state.logEdit.jira_new ? (
-                            <Input
-                              placeholder="Jira ticket title"
-                              onChange={(event) =>
-                                this.setState((prevState) => ({
-                                  logEdit: { ...prevState.logEdit, jira_issue_title: event.target.value },
-                                }))
-                              }
-                            />
-                          ) : (
-                            <Input
-                              placeholder="Jira ticket id"
-                              onChange={(event) =>
-                                this.setState((prevState) => ({
-                                  logEdit: { ...prevState.logEdit, jira_issue_id: event.target.value },
-                                }))
-                              }
-                            />
-                          )}
-                          {this.state.jiraIssueError && (
-                            <div className={styles.inputError}>This field cannot be empty.</div>
-                          )}
-                        </>
-                      )}
-                    </span>
-                  )}
-                </div>
+            <div id={this.id} className={styles.content}>
+              <div className={styles.contentLeft}>
+                {this.renderUrgentField()}
+                {this.renderComponentsFields()}
+                {this.renderTimeOfIncidentFields()}
               </div>
-              <span className={isMenu ? styles.footerRightMenu : styles.footerRight}>
-                <Button disabled={!datesAreValid || jiraIssueError} type="submit">
-                  {savingLog ? (
-                    <SpinnerIcon className={styles.spinnerIcon} />
-                  ) : (
-                    <span className={styles.title}>Upload Log</span>
-                  )}
-                </Button>
-              </span>
+              <div className={styles.contentRight}>{this.renderMessageField()}</div>
+            </div>
+
+            <div className={styles.footer}>
+              <div className={styles.footerLeft}>
+                {!isLogCreate && this.renderAttachedFiles()}
+                {this.renderJiraFields()}
+                {this.renderFilesField()}
+              </div>
+              <span className={styles.footerRight}>{this.renderSubmitButton()}</span>
             </div>
           </div>
         </form>
       </>
     );
+  }
+
+  render() {
+    const { isMenu } = this.props;
+    return isMenu ? this.renderMenu() : this.renderComponent();
   }
 }
