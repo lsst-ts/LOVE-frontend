@@ -5,6 +5,7 @@ Version History
 v5.25.4
 -------
 
+* Update ATMCS Mount Tracking config file `<https://github.com/lsst-ts/LOVE-frontend/pull/539>`_
 * Add ability to add a script at the top of the queue from LOVE `<https://github.com/lsst-ts/LOVE-frontend/pull/537>`_
 * Move docs creation to CI `<https://github.com/lsst-ts/LOVE-frontend/pull/532>`_
 
