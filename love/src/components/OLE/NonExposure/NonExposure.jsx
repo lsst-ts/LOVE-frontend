@@ -149,7 +149,7 @@ export default class NonExposure extends Component {
         title: 'Date Added (UTC)',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => value,
+        render: (value) => value.split('.')[0],
       },
       {
         field: 'level',
