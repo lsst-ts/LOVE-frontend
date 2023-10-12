@@ -22,10 +22,13 @@ import PropTypes from 'prop-types';
 import styles from './SummaryInformation.module.css';
 
 class DegradationSummary extends Component {
+  static propTypes = {
+    /** Environmental degradation. */
+    degradation: PropTypes.any,
+  };
+
   static defaultProps = {
-    numChannels: 0,
-    temperature: [],
-    location: '',
+    degradation: 'Unknown',
   };
 
   render() {

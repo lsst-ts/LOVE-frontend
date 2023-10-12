@@ -131,9 +131,9 @@ export default class EnvironmentSummary extends Component {
       location,
       windDirection,
       windSpeed,
+      degradation,
     } = this.props;
     const { hideIconTemperature } = this.state;
-    const degradation = 'Unknown';
 
     return (
       <div className={styles.container}>
