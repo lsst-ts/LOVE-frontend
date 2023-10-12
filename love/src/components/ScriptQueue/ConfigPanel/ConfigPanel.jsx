@@ -739,7 +739,7 @@ export default class ConfigPanel extends Component {
     // RJSF variables
     let rjsfSchema;
     try {
-      rjsfSchema = yamlSchema ? yaml.load(yamlSchema) ?? {} : {};
+      rjsfSchema = yaml.load(yamlSchema) ?? {};
     } catch {
       rjsfSchema = {};
     }
