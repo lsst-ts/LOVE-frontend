@@ -418,3 +418,18 @@ fieldset p {
 :global(.ace_editor) {
   width: 100% !important;
 }
+
+.iconBtn {
+  margin: auto;
+  padding: 0.3em;
+  height: 2em;
+  width: 2em;
+}
+
+.icon {
+  height: 1.4em;
+}
+
+.element {
+  margin-right: 0.15rem;
+}
