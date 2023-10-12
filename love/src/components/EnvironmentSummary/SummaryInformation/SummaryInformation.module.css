@@ -75,6 +75,11 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   align-items: center;
 }
 
+.textTitle {
+  font-weight: bold;
+  color: var(--base-font-color);
+}
+
 .title > :first-child {
   margin-right: var(--small-padding);
   width: 1em;

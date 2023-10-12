@@ -30,6 +30,13 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   width: calc(35% - var(--content-padding));
 }
 
+.enviroContainer {
+  position: absolute;
+  right: 17%;
+  top: 0;
+  width: calc(20% - var(--content-padding));
+}
+
 .windDirection {
   width: 12%;
   position: absolute;
