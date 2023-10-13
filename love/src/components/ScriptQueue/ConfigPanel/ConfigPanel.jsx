@@ -157,14 +157,6 @@ export default class ConfigPanel extends Component {
     );
   };
 
-  CustomTitleField = (props) => {
-    return <div className={styles.formTitleModifier}>{props.title}</div>;
-  };
-
-  CustomDescriptionField = (props) => {
-    return <div className={styles.formDescriptionModifier}>{props.description}</div>;
-  };
-
   CustomSelect = (props) => {
     return (
       <Select
@@ -719,7 +711,6 @@ export default class ConfigPanel extends Component {
       ButtonTemplates: {
         AddButton: this.AddButtonTemplate,
         RemoveButton: this.RemoveButtonTemplate,
-        SubmitButton: this.SubmitButtonTemplate,
       },
     };
 
@@ -851,23 +842,66 @@ export default class ConfigPanel extends Component {
                   showPrintMargin={false}
                 />
               ) : (
-                <Form
-                  validator={rjsfValidator}
-                  schema={rjsfSchema}
-                  // uiSchema={uiSchema}
-                  widgets={rjsfWidgets}
-                  fields={rjsfFields}
-                  children={true}
-                  className={styles.scriptForm}
-                  formData={this.state.formData}
-                  templates={rjsfTemplates}
-                  onChange={(e) => {
-                    this.setState({
-                      formData: e.formData,
-                      value: yaml.dump(e.formData, { flowLevel: 2 }),
-                    });
-                  }}
-                />
+                <>
+                  <style type="text/css">
+                      {`
+                  .control-label {
+                    padding-top: 7px;
+                    margin-bottom: 0;
+                    text-align: right;
+                  }
+                  .form-group {
+                    margin-bottom: 15px;
+                  }
+
+                  .form-control {
+                    width: 95%;
+                    box-sizing: border-box;
+                    border-radius: 3px;
+                    padding: 0.4em;
+                    font-family: inherit;
+                    font-size: inherit;
+                    background-color: transparent;
+                    border: 1px solid var(--secondary-font-dimmed-color);
+                    color: inherit;
+                    color: var(--base-font-color);
+                  }
+
+                  .form-control:focus {
+                    outline: none;
+                    border: 1px solid var(--secondary-font-color);
+                  }
+                  .row {
+                    display: flex;
+                    align-items: center;
+                    flex-wrap: wrap;
+                  }
+                  .col-xs-5 {
+                    width: calc(100% / 12 * 5 );
+                  }
+                  .col-xs-2 {
+                    width: calc(100% / 12 * 2 );
+                  }
+                  `}
+                  </style>
+                  <Form
+                    validator={rjsfValidator}
+                    schema={rjsfSchema}
+                    // uiSchema={uiSchema}
+                    widgets={rjsfWidgets}
+                    fields={rjsfFields}
+                    children={true}
+                    className={styles.scriptForm}
+                    formData={this.state.formData}
+                    templates={rjsfTemplates}
+                    onChange={(e) => {
+                      this.setState({
+                        formData: e.formData,
+                        value: yaml.dump(e.formData, { flowLevel: 2 }),
+                      });
+                    }}
+                  />
+                </>
               )}
             </div>
           </div>

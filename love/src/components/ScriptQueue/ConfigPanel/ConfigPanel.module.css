@@ -424,6 +424,7 @@ fieldset p {
   padding: 0.3em;
   height: 2em;
   width: 2em;
+  border-radius: 100%;
 }
 
 .icon {
@@ -431,5 +432,5 @@ fieldset p {
 }
 
 .element {
-  margin-right: 0.15rem;
+  margin: 0.25rem;
 }
