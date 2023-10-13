@@ -316,6 +316,10 @@ a.documentationLink {
   margin-bottom: var(--content-padding);
 }
 
+.arrayContainer {
+  margin-left: 0.5em;
+}
+
 .arrayContainer input {
   margin: 7px;
 }
@@ -323,10 +327,13 @@ a.documentationLink {
 .deleteItemButtonContainer {
   display: flex;
   align-items: center;
+  border: 1px solid var(--secondary-font-dimmed-color);
+  margin: 0.25em;
+  border-radius: 0.5em;
 }
 
 .deleteItem {
-  flex-grow: 1;
+  margin: 0px;
 }
 
 .deleteItemButton {
@@ -353,6 +360,7 @@ a.documentationLink {
   flex-grow: 8;
   display: flex;
   align-items: center;
+  margin: 0.3em 0;
 }
 
 .arrayElement > div {
@@ -363,6 +371,10 @@ a.documentationLink {
 .availableScriptTypeSeparator {
   border-bottom: 1px solid var(--second-quaternary-background-color);
   margin: 1em 0;
+}
+
+.addNewArray {
+  margin-bottom: 0.5em;
 }
 
 .addNewArray button {
@@ -412,7 +424,7 @@ fieldset p {
 }
 
 :global(.field) > *:nth-child(2) {
-  margin: 1em 0;
+  margin: 0.5em 0;
 }
 
 :global(.ace_editor) {

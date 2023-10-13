@@ -853,7 +853,6 @@ export default class ConfigPanel extends Component {
                   .form-group {
                     margin-bottom: 15px;
                   }
-
                   .form-control {
                     width: 95%;
                     box-sizing: border-box;
@@ -866,7 +865,6 @@ export default class ConfigPanel extends Component {
                     color: inherit;
                     color: var(--base-font-color);
                   }
-
                   .form-control:focus {
                     outline: none;
                     border: 1px solid var(--secondary-font-color);
@@ -876,11 +874,35 @@ export default class ConfigPanel extends Component {
                     align-items: center;
                     flex-wrap: wrap;
                   }
+                  .col-xs-9 {
+                    width: calc(100% / 12 * 9 );
+                  }
                   .col-xs-5 {
                     width: calc(100% / 12 * 5 );
                   }
+                  .col-xs-3 {
+                    width: calc(100% / 12 * 3 );
+                  }
                   .col-xs-2 {
                     width: calc(100% / 12 * 2 );
+                  }
+                  .array-item-list {
+                    display: -webkit-box;
+                    display: -ms-flexbox;
+                    display: flex;
+                    -webkit-box-orient: vertical;
+                    -webkit-box-direction: normal;
+                    -ms-flex-direction: row;
+                    flex-direction: row;
+                    padding-left: 0;
+                    margin-bottom: 0;
+                  }
+                  .array-item {
+                    position: relative;
+                    display: block;
+                    padding: 0.5rem 1rem;
+                    text-decoration: none;
+                    border: 1px solid rgba(0,0,0,.125);
                   }
                   `}
                   </style>
