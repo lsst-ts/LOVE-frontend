@@ -40,7 +40,7 @@ import {
   OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS,
   iconLevelOLE,
 } from 'Config';
-import ManagerInterface, { getFilesURLs, getLinkJira, getFilename, openInNewTab } from 'Utils';
+import ManagerInterface, { getFilesURLs, getLinkJira, getFilename, openInNewTab, htmlToJiraMarkdown } from 'Utils';
 import styles from './NonExposure.module.css';
 
 export default class NonExposureEdit extends Component {
