@@ -26,7 +26,14 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
 import { iconLevelOLE } from 'Config';
-import ManagerInterface, { getLinkJira, getFilesURLs, getFilename, formatSecondsToDigital, openInNewTab } from 'Utils';
+import ManagerInterface, {
+  getLinkJira,
+  getFilesURLs,
+  getFilename,
+  formatSecondsToDigital,
+  openInNewTab,
+  jiraMarkdownToHtml,
+} from 'Utils';
 import styles from './NonExposure.module.css';
 
 export default class NonExposureDetail extends Component {
@@ -198,10 +205,13 @@ export default class NonExposureDetail extends Component {
                 <span className={styles.bold}>{logDetail.user_id} </span>
                 <span>wrote:</span>
               </div>
-              <div className={styles.textDescription}>
-                <br></br>
-                {logDetail.message_text}
-              </div>
+              <br></br>
+              <div
+                className={styles.wikiMarkupText}
+                dangerouslySetInnerHTML={{
+                  __html: jiraMarkdownToHtml(logDetail.message_text),
+                }}
+              />
             </div>
           </div>
           <div className={styles.footer}>

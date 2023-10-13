@@ -1866,48 +1866,48 @@ export function htmlToJiraMarkdown(html) {
 
   // Parse indentations
   markdown = markdown.replace(/<p class="ql-indent-1">(.*)<\/p>/g, (match, p1) => {
-    return `\t${p1}\n`;
+    return `\t${p1}\r\n`;
   });
   markdown = markdown.replace(/<p class="ql-indent-2">(.*)<\/p>/g, (match, p1) => {
-    return `\t\t${p1}\n`;
+    return `\t\t${p1}\r\n`;
   });
   markdown = markdown.replace(/<p class="ql-indent-3">(.*)<\/p>/g, (match, p1) => {
-    return `\t\t\t${p1}\n`;
+    return `\t\t\t${p1}\r\n`;
   });
   markdown = markdown.replace(/<p class="ql-indent-4">(.*)<\/p>/g, (match, p1) => {
-    return `\t\t\t\t${p1}\n`;
+    return `\t\t\t\t${p1}\r\n`;
   });
   markdown = markdown.replace(/<p class="ql-indent-5">(.*)<\/p>/g, (match, p1) => {
-    return `\t\t\t\t\t${p1}\n`;
+    return `\t\t\t\t\t${p1}\r\n`;
   });
   markdown = markdown.replace(/<p class="ql-indent-6">(.*)<\/p>/g, (match, p1) => {
-    return `\t\t\t\t\t\t${p1}\n`;
+    return `\t\t\t\t\t\t${p1}\r\n`;
   });
   markdown = markdown.replace(/<p class="ql-indent-7">(.*)<\/p>/g, (match, p1) => {
-    return `\t\t\t\t\t\t\t${p1}\n`;
+    return `\t\t\t\t\t\t\t${p1}\r\n`;
   });
   markdown = markdown.replace(/<p class="ql-indent-8">(.*)<\/p>/g, (match, p1) => {
-    return `\t\t\t\t\t\t\t\t${p1}\n`;
+    return `\t\t\t\t\t\t\t\t${p1}\r\n`;
   });
 
   // Parse headings
   markdown = markdown.replace(/<h1>(.*)<\/h1>/g, (match, p1) => {
-    return `h1. ${p1}\n`;
+    return `h1. ${p1}\r\n`;
   });
   markdown = markdown.replace(/<h2>(.*)<\/h2>/g, (match, p1) => {
-    return `h2. ${p1}\n`;
+    return `h2. ${p1}\r\n`;
   });
   markdown = markdown.replace(/<h3>(.*)<\/h3>/g, (match, p1) => {
-    return `h3. ${p1}\n`;
+    return `h3. ${p1}\r\n`;
   });
   markdown = markdown.replace(/<h4>(.*)<\/h4>/g, (match, p1) => {
-    return `h4. ${p1}\n`;
+    return `h4. ${p1}\r\n`;
   });
   markdown = markdown.replace(/<h5>(.*)<\/h5>/g, (match, p1) => {
-    return `h5. ${p1}\n`;
+    return `h5. ${p1}\r\n`;
   });
   markdown = markdown.replace(/<h6>(.*)<\/h6>/g, (match, p1) => {
-    return `h6. ${p1}\n`;
+    return `h6. ${p1}\r\n`;
   });
 
   // Parse links
@@ -1932,8 +1932,8 @@ export function htmlToJiraMarkdown(html) {
 
   // Parse rest of stuff
   markdown = markdown.replace(/<p>/g, '');
-  markdown = markdown.replace(/<\/p>/g, '\n');
-  markdown = markdown.replace(/<br>/g, '\n');
+  markdown = markdown.replace(/<\/p>/g, '\r\n');
+  markdown = markdown.replace(/<br>/g, '\r\n');
 
   return markdown;
 }
@@ -1942,68 +1942,47 @@ export function htmlToJiraMarkdown(html) {
  * Function to parse Jira Markdown to HTML in the react-quill format
  * Check https://jira.atlassian.com/secure/WikiRendererHelpAction.jspa?section=all for more info
  * @param {string} markdown markdown to be parsed
+ * @params {object} options options to be used on the parser, default: { codeFriendly: true }
+ * @params {boolean} options.codeFriendly if true, text formatting is not applied
  * @returns {string} html string
  */
-export function jiraMarkdownToHtml(markdown) {
+export function jiraMarkdownToHtml(markdown, options = { codeFriendly: true }) {
+  const { codeFriendly } = options;
   let html = markdown;
 
   // Parse text formats
-  html = html.replace(/\*(.*)\*/g, (match, p1) => {
-    return `<strong>${p1}</strong>`;
-  });
-  html = html.replace(/_(.*)_/g, (match, p1) => {
-    return `<em>${p1}</em>`;
-  });
-  html = html.replace(/\+(.*)\+/g, (match, p1) => {
-    return `<u>${p1}</u>`;
-  });
-  html = html.replace(/-(.*)-/g, (match, p1) => {
-    return `<s>${p1}</s>`;
-  });
-
-  // Parse indentations
-  html = html.replace(/\t(.*)\n/g, (match, p1) => {
-    return `<p class="ql-indent-1">${p1}</p>`;
-  });
-  html = html.replace(/\t\t(.*)\n/g, (match, p1) => {
-    return `<p class="ql-indent-2">${p1}</p>`;
-  });
-  html = html.replace(/\t\t\t(.*)\n/g, (match, p1) => {
-    return `<p class="ql-indent-3">${p1}</p>`;
-  });
-  html = html.replace(/\t\t\t\t(.*)\n/g, (match, p1) => {
-    return `<p class="ql-indent-4">${p1}</p>`;
-  });
-  html = html.replace(/\t\t\t\t\t(.*)\n/g, (match, p1) => {
-    return `<p class="ql-indent-5">${p1}</p>`;
-  });
-  html = html.replace(/\t\t\t\t\t\t(.*)\n/g, (match, p1) => {
-    return `<p class="ql-indent-6">${p1}</p>`;
-  });
-  html = html.replace(/\t\t\t\t\t\t\t(.*)\n/g, (match, p1) => {
-    return `<p class="ql-indent-7">${p1}</p>`;
-  });
-  html = html.replace(/\t\t\t\t\t\t\t\t(.*)\n/g, (match, p1) => {
-    return `<p class="ql-indent-8">${p1}</p>`;
-  });
+  if (!codeFriendly) {
+    html = html.replace(/\*(.*)\*/g, (match, p1) => {
+      return `<strong>${p1}</strong>`;
+    });
+    html = html.replace(/_(.*)_/g, (match, p1) => {
+      return `<em>${p1}</em>`;
+    });
+    html = html.replace(/\+(.*)\+/g, (match, p1) => {
+      return `<u>${p1}</u>`;
+    });
+    html = html.replace(/-(.*)-/g, (match, p1) => {
+      return `<s>${p1}</s>`;
+    });
+  }
 
   // Parse headings
-  html = html.replace(/h1\.(.*)/g, (match, p1) => {
+  html = html.replace(/h1\.\s(.*)/g, (match, p1) => {
     return `<h1>${p1}</h1>`;
   });
-  html = html.replace(/h2\.(.*)\n/g, (match, p1) => {
+  html = html.replace(/h2\.\s(.*)/g, (match, p1) => {
     return `<h2>${p1}</h2>`;
   });
-  html = html.replace(/h3\.(.*)\n/g, (match, p1) => {
+  html = html.replace(/h3\.\s(.*)/g, (match, p1) => {
     return `<h3>${p1}</h3>`;
   });
-  html = html.replace(/h4\.(.*)\n/g, (match, p1) => {
+  html = html.replace(/h4\.\s(.*)/g, (match, p1) => {
     return `<h4>${p1}</h4>`;
   });
-  html = html.replace(/h5\.(.*)\n/g, (match, p1) => {
+  html = html.replace(/h5\.\s(.*)/g, (match, p1) => {
     return `<h5>${p1}</h5>`;
   });
-  html = html.replace(/h6\.(.*)\n/g, (match, p1) => {
+  html = html.replace(/h6\.\s(.*)/g, (match, p1) => {
     return `<h6>${p1}</h6>`;
   });
 
@@ -2017,8 +1996,10 @@ export function jiraMarkdownToHtml(markdown) {
     return `<code>${p1}</code>`;
   });
 
-  // Parse rest of stuff
-  html = html.replace(/\n/g, '<br>');
+  // Parse full lines
+  html = html.replace(/^(\s*)(.*)\r\n/gm, (match, p1, p2) => {
+    return `<p>${[...p1].map((e) => '&nbsp;').join('')}${p2}</p>`;
+  });
 
   return html;
 }

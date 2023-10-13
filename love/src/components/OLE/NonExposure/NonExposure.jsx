@@ -163,7 +163,7 @@ export default class NonExposure extends Component {
         title: 'Components',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => value.join(', '),
+        render: (value) => value?.join(', '),
       },
       {
         field: null,
@@ -186,7 +186,7 @@ export default class NonExposure extends Component {
         className: styles.tableHead,
         render: (value) => {
           const parsedValue = jiraMarkdownToHtml(value);
-          return <div dangerouslySetInnerHTML={{ __html: parsedValue }} />;
+          return <div className={styles.wikiMarkupText} dangerouslySetInnerHTML={{ __html: parsedValue }} />;
         },
       },
       {

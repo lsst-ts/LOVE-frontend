@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, memo } from 'react';
+import React, { useState, useEffect, useRef, memo, forwardRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 import ReactQuill from 'react-quill';
 import styles from './RichTextEditor.module.css';
@@ -6,23 +6,31 @@ import 'react-quill/dist/quill.snow.css';
 
 const modules = {
   toolbar: [
-    [{ header: [1, 2, false] }],
-    ['bold', 'italic', 'underline', 'strike'],
+    [{ header: [1, 2, 3, false] }],
+    // TODO: allow text formatting, by setting no code friendly mode.
+    // ['bold', 'italic', 'underline', 'strike'],
     // TODO: allow list and indentation formatting.
     // [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
     ['link'],
-    ['clean'],
+    // TODO: allow text un-formatting, by setting no code friendly mode.
+    // ['clean'],
   ],
 };
 
-function RichTextEditor({ className, onChange = () => {} }) {
-  const [value, setValue] = useState('');
+function RichTextEditor({ defaultValue, className, onChange = () => {} }, ref) {
+  const [value, setValue] = useState(defaultValue);
   const reactQuillRef = useRef(null);
 
   const handleChange = (value) => {
     setValue(value);
     onChange(value);
   };
+
+  useImperativeHandle(ref, () => ({
+    cleanContent() {
+      setValue('');
+    },
+  }));
 
   const attachQuillRefs = () => {
     if (typeof reactQuillRef?.current?.getEditor !== 'function') return;
@@ -53,10 +61,12 @@ function RichTextEditor({ className, onChange = () => {} }) {
 }
 
 RichTextEditor.propTypes = {
+  /** Default value for the editor */
+  defaultValue: PropTypes.string,
   /** Class name to apply to the component */
   className: PropTypes.string,
   /** Function to handle ReactQuill onChange */
   onChange: PropTypes.func,
 };
 
-export default memo(RichTextEditor);
+export default memo(forwardRef(RichTextEditor));
