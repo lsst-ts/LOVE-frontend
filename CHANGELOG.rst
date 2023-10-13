@@ -5,6 +5,7 @@ Version History
 v5.25.4
 -------
 
+* Layout improvements for OLE components `<https://github.com/lsst-ts/LOVE-frontend/pull/540>`_
 * Update ATMCS Mount Tracking config file `<https://github.com/lsst-ts/LOVE-frontend/pull/539>`_
 * Add Environmental Degradation to top level summaries `<https://github.com/lsst-ts/LOVE-frontend/pull/538>`_
 * Add ability to add a script at the top of the queue from LOVE `<https://github.com/lsst-ts/LOVE-frontend/pull/537>`_
