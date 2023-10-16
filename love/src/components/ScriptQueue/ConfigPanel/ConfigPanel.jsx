@@ -840,88 +840,23 @@ export default class ConfigPanel extends Component {
                   showPrintMargin={false}
                 />
               ) : (
-                <>
-                  <style type="text/css">
-                      {`
-                  .control-label {
-                    padding-top: 7px;
-                    margin-bottom: 0;
-                    text-align: right;
-                  }
-                  .form-group {
-                    margin-bottom: 15px;
-                  }
-                  .form-control {
-                    width: 95%;
-                    box-sizing: border-box;
-                    border-radius: 3px;
-                    padding: 0.4em;
-                    font-family: inherit;
-                    font-size: inherit;
-                    background-color: transparent;
-                    border: 1px solid var(--secondary-font-dimmed-color);
-                    color: inherit;
-                    color: var(--base-font-color);
-                  }
-                  .form-control:focus {
-                    outline: none;
-                    border: 1px solid var(--secondary-font-color);
-                  }
-                  .row {
-                    display: flex;
-                    align-items: center;
-                    flex-wrap: wrap;
-                  }
-                  .col-xs-9 {
-                    width: calc(100% / 12 * 9 );
-                  }
-                  .col-xs-5 {
-                    width: calc(100% / 12 * 5 );
-                  }
-                  .col-xs-3 {
-                    width: calc(100% / 12 * 3 );
-                  }
-                  .col-xs-2 {
-                    width: calc(100% / 12 * 2 );
-                  }
-                  .array-item-list {
-                    display: -webkit-box;
-                    display: -ms-flexbox;
-                    display: flex;
-                    -webkit-box-orient: vertical;
-                    -webkit-box-direction: normal;
-                    -ms-flex-direction: row;
-                    flex-direction: row;
-                    padding-left: 0;
-                    margin-bottom: 0;
-                  }
-                  .array-item {
-                    position: relative;
-                    display: block;
-                    padding: 0.5rem 1rem;
-                    text-decoration: none;
-                    border: 1px solid rgba(0,0,0,.125);
-                  }
-                  `}
-                  </style>
-                  <Form
-                    validator={rjsfValidator}
-                    schema={rjsfSchema}
-                    // uiSchema={uiSchema}
-                    widgets={rjsfWidgets}
-                    fields={rjsfFields}
-                    children={true}
-                    className={styles.scriptForm}
-                    formData={this.state.formData}
-                    templates={rjsfTemplates}
-                    onChange={(e) => {
-                      this.setState({
-                        formData: e.formData,
-                        value: yaml.dump(e.formData, { flowLevel: 2 }),
-                      });
-                    }}
-                  />
-                </>
+                <Form
+                  validator={rjsfValidator}
+                  schema={rjsfSchema}
+                  // uiSchema={uiSchema}
+                  widgets={rjsfWidgets}
+                  fields={rjsfFields}
+                  children={true}
+                  className={styles.scriptForm}
+                  formData={this.state.formData}
+                  templates={rjsfTemplates}
+                  onChange={(e) => {
+                    this.setState({
+                      formData: e.formData,
+                      value: yaml.dump(e.formData, { flowLevel: 2 }),
+                    });
+                  }}
+                />
               )}
             </div>
           </div>
