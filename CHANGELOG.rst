@@ -5,7 +5,10 @@ Version History
 v5.25.4
 -------
 
+<<<<<<< HEAD
 * Layout improvements for OLE components `<https://github.com/lsst-ts/LOVE-frontend/pull/540>`_
+=======
+>>>>>>> fix update changelog
 * Scripts Form Config is not showing button icons `<https://github.com/lsst-ts/LOVE-frontend/pull/541>`_
 * Update ATMCS Mount Tracking config file `<https://github.com/lsst-ts/LOVE-frontend/pull/539>`_
 * Add Environmental Degradation to top level summaries `<https://github.com/lsst-ts/LOVE-frontend/pull/538>`_
