@@ -268,7 +268,7 @@ export default class ConfigPanel extends Component {
    * @param {string} newValue, the new value to validate
    * @param {boolean} noRevalidation, if true, do not revalidate if already validating
    */
-  validateConfig = (newValue, noRevalidation, postValidate=()=>{}, failValidate=()=>{}) => {
+  validateConfig = (newValue, noRevalidation) => {
     this.setState({ value: newValue });
     /** Do nothing if schema is not available
      * stay in EMPTY state
@@ -317,15 +317,12 @@ export default class ConfigPanel extends Component {
               },
             ],
           });
-          failValidate();
           return false;
         }
-        postValidate();
         return r.json();
       })
       .then((r) => {
         /** Handle SERVER_ERROR */
-        failValidate();
         this.setState({
           validationStatus: SERVER_ERROR,
           configErrorTitle: 'Validation Failed',
@@ -617,50 +614,39 @@ export default class ConfigPanel extends Component {
   saveNewScriptSchema = (scriptPath, scriptType, configName, configSchema) => {
     const { configurationList, value } = this.state;
     this.setState({ updatingScriptSchema: true });
-    const postValidate = () => {
-      ManagerInterface.postScriptConfiguration(scriptPath, scriptType, configName, configSchema).then((res) => {
-        const newConfigurationList = [res, ...configurationList];
-        const options = newConfigurationList.map((conf) => ({ label: conf.config_name, value: conf.id }));
-        const newSelectedConfiguration = { label: res.config_name, value: res.id };
-        this.setState({
-          updatingScriptSchema: false,
-          configurationList: newConfigurationList,
-          configurationOptions: options,
-          selectedConfiguration: newSelectedConfiguration,
-          value: res?.config_schema ?? '',
-          inputConfigurationName: res?.config_name ?? '',
-          formData: yaml.load(res?.config_schema),
-        });
-      });
-    };
-    const failValidate = () => {
+
+    ManagerInterface.postScriptConfiguration(scriptPath, scriptType, configName, configSchema).then((res) => {
+      const newConfigurationList = [res, ...configurationList];
+      const options = newConfigurationList.map((conf) => ({ label: conf.config_name, value: conf.id }));
+      const newSelectedConfiguration = { label: res.config_name, value: res.id };
       this.setState({
         updatingScriptSchema: false,
+        configurationList: newConfigurationList,
+        configurationOptions: options,
+        selectedConfiguration: newSelectedConfiguration,
+        value: res?.config_schema ?? '',
+        inputConfigurationName: res?.config_name ?? '',
+        formData: yaml.load(res?.config_schema),
       });
-    };
-    this.validateConfig(value, configSchema, postValidate, failValidate);
+    });
+
+    this.validateConfig(value, configSchema);
   };
 
   updateScriptSchema = (id, configSchema) => {
     const { configurationList, value } = this.state;
     this.setState({ updatingScriptSchema: true });
 
-    const postValidate = () => {
-      ManagerInterface.updateScriptSchema(id, configSchema).then((res) => {
-        const newSelectedConfiguration = { label: res.config_name, value: res.id };
-        this.setState({
-          updatingScriptSchema: false,
-          selectedConfiguration: newSelectedConfiguration,
-          configurationList: configurationList.map((conf) => (conf.id === id ? res : conf)),
-        });
-      });
-    }
-    const failValidate = () => {
+    ManagerInterface.updateScriptSchema(id, configSchema).then((res) => {
+      const newSelectedConfiguration = { label: res.config_name, value: res.id };
       this.setState({
         updatingScriptSchema: false,
+        selectedConfiguration: newSelectedConfiguration,
+        configurationList: configurationList.map((conf) => (conf.id === id ? res : conf)),
       });
-    };
-    this.validateConfig(value, configSchema, postValidate, failValidate);
+    });
+
+    this.validateConfig(value, configSchema);
   };
 
   componentDidUpdate = (prevProps, prevState) => {
