@@ -2147,8 +2147,6 @@ export const getObservatorySubscriptions = () => {
     'telemetry-ESS-301-airFlow',
     'event-ATPtg-0-currentTarget',
     'event-MTPtg-0-currentTarget',
-    'event-Scheduler-1-summaryState',
-    'event-Scheduler-2-summaryState',
   ];
 };
 
@@ -2165,8 +2163,6 @@ export const getObservatoryState = (state) => {
   const essAirFlow = observatoryData['telemetry-ESS-301-airFlow'];
   const mptgCurrentTarget = observatoryData['event-MTPtg-0-currentTarget'];
   const atptgCurrentTarget = observatoryData['event-ATPtg-0-currentTarget'];
-  const atSummaryState = observatoryData['event-Scheduler-1-summaryState'];
-  const mtSummaryState = observatoryData['event-Scheduler-2-summaryState'];
 
   return {
     simonyiObservingMode: simonyiObservingMode ? simonyiObservingMode[0].mode.value : 'UNKNOWN',
@@ -2201,8 +2197,6 @@ export const getObservatoryState = (state) => {
     location: essTemperatures ? essTemperatures.location.value : '',
     windDirection: essAirFlow ? essAirFlow.direction.value : 0.0,
     windSpeed: essAirFlow ? essAirFlow.speed.value : 0.0,
-    atSummaryState: atSummaryState?.[0]?.summaryState?.value ?? 0,
-    mtSummaryState: mtSummaryState?.[0]?.summaryState?.value ?? 0,
     // TODO: Add the corresponding telemetry or event when Enviromental Degradation gets integrated into SAL
     degradation: 'Unknown',
   };

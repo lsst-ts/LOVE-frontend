@@ -132,18 +132,8 @@ export default class EnvironmentSummary extends Component {
       windDirection,
       windSpeed,
       degradation,
-      mtSummaryState,
-      atSummaryState,
     } = this.props;
     const { hideIconTemperature } = this.state;
-
-    const skymapAvailable = atSummaryState == 2 ? '' : mtSummaryState == 2 ? '' : styles.unavailable;
-
-    console.log(this.props);
-    console.log(atSummaryState);
-    console.log(mtSummaryState);
-    console.log(skymapAvailable);
-    console.log(styles.unavailable);
 
     return (
       <div className={styles.container}>
@@ -173,7 +163,6 @@ export default class EnvironmentSummary extends Component {
               simonyiMoonPhase={simonyiMoonPhase}
               auxtelRa={auxtelRa}
               auxtelDec={auxtelDec}
-              className={skymapAvailable}
             />
             <div className={styles.weatherIcons}>
               <WeatherForecastIcon pictocode={isRaining ? 23 : 0} />
