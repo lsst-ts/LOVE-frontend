@@ -24,8 +24,6 @@ import { Rnd } from 'react-rnd';
 import yaml from 'js-yaml';
 import Form from '@rjsf/core';
 import rjsfValidator from '@rjsf/validator-ajv8';
-import { getSubmitButtonOptions } from '@rjsf/utils';
-// import { FormattedMessage } from 'react-intl';
 import { SCRIPT_DOCUMENTATION_BASE_URL } from 'Config';
 import Select from 'components/GeneralPurpose/Select/Select';
 import styles from './ConfigPanel.module.css';
