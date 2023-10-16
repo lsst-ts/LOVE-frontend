@@ -29,6 +29,7 @@ import Select from 'components/GeneralPurpose/Select/Select';
 import styles from './ConfigPanel.module.css';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Input from 'components/GeneralPurpose/Input/Input';
+import AddIcon from 'components/icons/AddIcon/AddIcon';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import ErrorIcon from 'components/icons/ErrorIcon/ErrorIcon';
 import RotateIcon from 'components/icons/RotateIcon/RotateIcon';
@@ -154,14 +155,6 @@ export default class ConfigPanel extends Component {
     );
   };
 
-  CustomTitleField = (props) => {
-    return <div className={styles.formTitleModifier}>{props.title}</div>;
-  };
-
-  CustomDescriptionField = (prop) => {
-    return <div className={styles.formDescriptionModifier}>{this.props.description}</div>;
-  };
-
   CustomSelect = (props) => {
     return (
       <Select
@@ -239,6 +232,35 @@ export default class ConfigPanel extends Component {
       </>
     );
   };
+
+  AddButtonTemplate = (props) => {
+    const { ...btnProps } = props;
+    return (
+      <Button
+        className={[styles.iconBtn, styles.element].join(' ')}
+        title="Add"
+        onClick={btnProps.onClick}
+        status="transparent"
+      >
+        <AddIcon className={styles.icon} />
+      </Button>
+    );
+  };
+
+  RemoveButtonTemplate = (props) => {
+    const { ...btnProps } = props;
+    return (
+      <Button
+        className={[styles.iconBtn, styles.element].join(' ')}
+        title="Remove"
+        onClick={btnProps.onClick}
+        status="transparent"
+      >
+        <DeleteIcon className={styles.icon} />
+      </Button>
+    );
+  };
+
   /************************/
 
   /**
@@ -682,6 +704,14 @@ export default class ConfigPanel extends Component {
       TitleField: this.CustomTitleField,
     };
 
+    const rjsfTemplates = {
+      ArrayFieldTemplate: this.ArrayFieldTemplate,
+      ButtonTemplates: {
+        AddButton: this.AddButtonTemplate,
+        RemoveButton: this.RemoveButtonTemplate,
+      },
+    };
+
     const isBeside = orientation === 'beside';
 
     return this.props.configPanel.show ? (
@@ -819,7 +849,7 @@ export default class ConfigPanel extends Component {
                   children={true}
                   className={styles.scriptForm}
                   formData={this.state.formData}
-                  templates={{ ArrayFieldTemplate: this.ArrayFieldTemplate }}
+                  templates={rjsfTemplates}
                   onChange={(e) => {
                     this.setState({
                       formData: e.formData,
