@@ -23,8 +23,9 @@ import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import { CSVLink } from 'react-csv';
 import {
-  DATE_TIME_FORMAT,
+  TIME_FORMAT,
   OLE_COMMENT_TYPE_OPTIONS,
+  OLE_JIRA_COMPONENTS,
   iconLevelOLE,
   ISO_INTEGER_DATE_FORMAT,
   ISO_STRING_DATE_TIME_FORMAT,
@@ -63,6 +64,10 @@ export default class NonExposure extends Component {
     }),
     /** Function to handle the comment type filter */
     changeCommentTypeSelect: PropTypes.func,
+    /** Selected component of the component filter */
+    selectedComponent: PropTypes.string,
+    /** Function to handle the component filter */
+    changeComponentSelect: PropTypes.func,
     /** Selected obs time loss of the obs time loss filter */
     selectedObsTimeLoss: PropTypes.bool,
     /** Function to handle the obs time loss filter */
@@ -75,6 +80,8 @@ export default class NonExposure extends Component {
     changeDayNarrative: () => {},
     selectedCommentType: OLE_COMMENT_TYPE_OPTIONS[0],
     changeCommentTypeSelect: () => {},
+    selectedComponent: 'All components',
+    changeComponentSelect: () => {},
     selectedObsTimeLoss: false,
     changeObsTimeLossSelect: () => {},
   };
@@ -116,9 +123,9 @@ export default class NonExposure extends Component {
     const label = value >= 100 ? 'urgent' : 'info';
     const icon = iconLevelOLE[label] ?? undefined;
     return (
-      <>
-        <span className={styles.levelIcon}>{icon}</span> {label}
-      </>
+      <span title={label} className={styles.levelIcon}>
+        {icon}
+      </span>
     );
   }
 
@@ -142,7 +149,7 @@ export default class NonExposure extends Component {
         title: 'Date Added (UTC)',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => value,
+        render: (value) => value.split('.')[0],
       },
       {
         field: 'level',
@@ -150,6 +157,13 @@ export default class NonExposure extends Component {
         type: 'string',
         className: styles.tableHead,
         render: (value) => this.getLevel(value),
+      },
+      {
+        field: 'components',
+        title: 'Components',
+        type: 'string',
+        className: styles.tableHead,
+        render: (value) => value.join(', '),
       },
       {
         field: null,
@@ -248,9 +262,11 @@ export default class NonExposure extends Component {
   parseCsvData(data) {
     const csvData = data.map((row) => {
       const escapedMessageText = row.message_text.replace(/"/g, '""');
+      const parsedLevel = OLE_COMMENT_TYPE_OPTIONS.find((option) => option.value === row.level).label;
       return {
         ...row,
         message_text: escapedMessageText,
+        level: parsedLevel,
       };
     });
     return csvData;
@@ -291,9 +307,11 @@ export default class NonExposure extends Component {
       selectedDayNarrativeStart,
       selectedDayNarrativeEnd,
       selectedCommentType,
+      selectedComponent,
       selectedObsTimeLoss,
       changeDayNarrative,
       changeCommentTypeSelect,
+      changeComponentSelect,
       changeObsTimeLossSelect,
     } = this.props;
     const { logs: tableData, modeView, modeEdit } = this.state;
@@ -302,8 +320,13 @@ export default class NonExposure extends Component {
     let filteredData = [...tableData];
 
     // Filter by type
-    if (selectedCommentType.value !== 'all') {
+    if (selectedCommentType.value !== OLE_COMMENT_TYPE_OPTIONS[0].value) {
       filteredData = filteredData.filter((log) => log.level === selectedCommentType.value);
+    }
+
+    // Filter by component
+    if (selectedComponent !== 'All components') {
+      filteredData = filteredData.filter((log) => log.components.includes(selectedComponent));
     }
 
     // Filter by obs time loss
@@ -320,7 +343,6 @@ export default class NonExposure extends Component {
         'date_added',
         'message_text',
         'level',
-        'tags',
         'urls',
         'date_begin',
         'date_end',
@@ -370,7 +392,6 @@ export default class NonExposure extends Component {
       />
     ) : (
       <div className={styles.margin10}>
-        <div className={styles.title}>Filter</div>
         <div className={styles.filters}>
           <Button disabled={this.state.updatingLogs} onClick={() => this.queryNarrativeLogs()}>
             Refresh data
@@ -394,21 +415,28 @@ export default class NonExposure extends Component {
             onChange={changeDayNarrative}
           />
 
-          <Select
-            options={OLE_COMMENT_TYPE_OPTIONS}
-            option={selectedCommentType}
-            onChange={(value) => changeCommentTypeSelect(value)}
-            className={styles.select}
-          />
-
           <div className={styles.checkboxText}>
-            Show only with time loss
             <Input
               type="checkbox"
               checked={selectedObsTimeLoss}
               onChange={(event) => changeObsTimeLossSelect(event.target.checked)}
             />
+            Show only with time loss
           </div>
+
+          <Select
+            options={OLE_COMMENT_TYPE_OPTIONS}
+            option={selectedCommentType}
+            onChange={(value) => changeCommentTypeSelect(value)}
+            className={styles.selectComment}
+          />
+
+          <Select
+            options={['All components', ...OLE_JIRA_COMPONENTS]}
+            option={selectedComponent}
+            onChange={({ value }) => changeComponentSelect(value)}
+            className={styles.selectComponent}
+          />
 
           <div className={styles.divExportBtn}>
             <CSVLink data={csvData} headers={csvHeaders} filename={csvTitle}>
@@ -422,7 +450,7 @@ export default class NonExposure extends Component {
           </div>
         </div>
         <div className={styles.lastUpdated}>
-          Last updated: {this.state.lastUpdated ? this.state.lastUpdated.format(DATE_TIME_FORMAT) : ''}
+          Last updated: {this.state.lastUpdated ? this.state.lastUpdated.format(TIME_FORMAT) : ''}
           {this.state.updatingLogs && <SpinnerIcon className={styles.spinnerIcon} />}
         </div>
         <SimpleTable headers={headers} data={filteredData} />

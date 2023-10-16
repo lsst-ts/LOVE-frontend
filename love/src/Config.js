@@ -365,7 +365,7 @@ export const MTCSCommands = {
 export const LOG_REFRESH_INTERVAL_MS = 60000;
 
 export const OLE_COMMENT_TYPE_OPTIONS = [
-  { label: 'Priority', value: 'all' },
+  { label: 'All priorities', value: 'all' },
   { label: 'Urgent', value: 100 },
   { label: 'Non urgent', value: 0 },
 ];

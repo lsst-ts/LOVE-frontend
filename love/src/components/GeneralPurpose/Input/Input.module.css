@@ -40,5 +40,9 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .input:focus {
   outline: none;
   border: 1px solid var(--secondary-font-color);
-  /* outline: var(--primary-active-font-color) auto 5px; */
+}
+
+.input.checkbox {
+  height: 1.25em;
+  width: 1.25em;
 }

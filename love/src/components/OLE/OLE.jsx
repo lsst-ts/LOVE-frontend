@@ -47,6 +47,7 @@ export default class OLE extends Component {
       selectedDayNarrativeStart: Moment().subtract(1, 'days'),
       selectedDayNarrativeEnd: Moment(),
       selectedCommentType: OLE_COMMENT_TYPE_OPTIONS[0],
+      selectedComponent: 'All components',
       selectedObsTimeLoss: false,
       // Exposure filters
       instruments: [],
@@ -69,6 +70,10 @@ export default class OLE extends Component {
 
   changeCommentTypeSelect(value) {
     this.setState({ selectedCommentType: value });
+  }
+
+  changeComponentSelect(value) {
+    this.setState({ selectedComponent: value });
   }
 
   changeObsTimeLossSelect(value) {
@@ -146,6 +151,8 @@ export default class OLE extends Component {
             changeDayNarrative={(day, type) => this.changeDayNarrative(day, type)}
             selectedCommentType={this.state.selectedCommentType}
             changeCommentTypeSelect={(value) => this.changeCommentTypeSelect(value)}
+            selectedComponent={this.state.selectedComponent}
+            changeComponentSelect={(value) => this.changeComponentSelect(value)}
             selectedObsTimeLoss={this.state.selectedObsTimeLoss}
             changeObsTimeLossSelect={(value) => this.changeObsTimeLossSelect(value)}
           />
