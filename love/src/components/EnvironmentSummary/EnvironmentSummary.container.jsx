@@ -68,6 +68,8 @@ const EnvironmentSummaryContainer = ({
   location,
   windDirection,
   windSpeed,
+  atSummaryState,
+  mtSummaryState,
   ...props
 }) => {
   if (props.isRaw) {
@@ -105,6 +107,8 @@ const EnvironmentSummaryContainer = ({
       location={location}
       windDirection={windDirection}
       windSpeed={windSpeed}
+      atSummaryState={atSummaryState}
+      mtSummaryState={mtSummaryState}
     />
   );
 };

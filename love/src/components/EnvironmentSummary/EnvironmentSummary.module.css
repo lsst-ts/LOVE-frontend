@@ -109,3 +109,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   bottom: 40px !important;
   width: 325px;
 }
+
+.unavailable {
+  opacity: 0.2;
+}
