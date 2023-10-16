@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.26.0
+-------
+
+* Add Simonyi Interlock Signals `<https://github.com/lsst-ts/LOVE-frontend/pull/542>`_
+
 v5.25.4
 -------
 

@@ -538,6 +538,16 @@ export const mainIndex = {
       },
     },
   },
+  MTIS: {
+    component: require('../MainTel/MTIS/MTIS.container').default,
+    schema: {
+      ...require('../MainTel/MTIS/MTIS.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/MTIS/MTIS.container').schema.props,
+      },
+    },
+  },
 };
 
 export const mainCameraIndex = {
