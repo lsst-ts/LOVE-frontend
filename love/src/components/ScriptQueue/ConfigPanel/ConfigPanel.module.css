@@ -447,15 +447,15 @@ fieldset p {
   margin: 0.25rem;
 }
 
-:global(.control-label) {
+.sidePanel :global(.control-label) {
   padding-top: 7px;
   margin-bottom: 0;
   text-align: right;
 }
-:global(.form-group) {
+.sidePanel :global(.form-group) {
   margin-bottom: 15px;
 }
-:global(.form-control) {
+.sidePanel :global(.form-control) {
   width: 95%;
   box-sizing: border-box;
   border-radius: 3px;
@@ -467,28 +467,28 @@ fieldset p {
   color: inherit;
   color: var(--base-font-color);
 }
-:global(.form-control:focus) {
+.sidePanel :global(.form-control:focus) {
   outline: none;
   border: 1px solid var(--secondary-font-color);
 }
-:global(.row) {
+.sidePanel :global(.row) {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
 }
-:global(.col-xs-9) {
+.sidePanel :global(.col-xs-9) {
   width: calc(100% / 12 * 9 );
 }
-:global(.col-xs-5) {
+.sidePanel :global(.col-xs-5) {
   width: calc(100% / 12 * 5 );
 }
-:global(.col-xs-3) {
+.sidePanel :global(.col-xs-3) {
   width: calc(100% / 12 * 3 );
 }
-:global(.col-xs-2) {
+.sidePanel :global(.col-xs-2) {
   width: calc(100% / 12 * 2 );
 }
-:global(.array-item-list) {
+.sidePanel :global(.array-item-list) {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -499,7 +499,7 @@ fieldset p {
   padding-left: 0;
   margin-bottom: 0;
 }
-:global(.array-item) {
+.sidePanel :global(.array-item) {
   position: relative;
   display: block;
   padding: 0.5rem 1rem;
