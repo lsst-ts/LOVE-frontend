@@ -2238,6 +2238,12 @@ export const getObservatoryState = (state) => {
     windSpeed: essAirFlow ? essAirFlow.speed.value : 0.0,
     // TODO: Add the corresponding telemetry or event when Enviromental Degradation gets integrated into SAL
     degradation: 'Unknown',
+    // TODO: Add the corresponding telemetry or event when the following variables gets integrated into SAL
+    atmosphericTrans: 'Unknown',
+    airTemp: 'Unknown',
+    pressure: 'Unknown',
+    humidity: 'Unknown',
+    seeing: 'Unknown',
   };
 };
 

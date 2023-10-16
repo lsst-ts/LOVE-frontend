@@ -68,6 +68,12 @@ const EnvironmentSummaryContainer = ({
   location,
   windDirection,
   windSpeed,
+  degradation,
+  atmosphericTrans,
+  airTemp,
+  pressure,
+  humidity,
+  seeing,
   ...props
 }) => {
   if (props.isRaw) {
@@ -105,6 +111,12 @@ const EnvironmentSummaryContainer = ({
       location={location}
       windDirection={windDirection}
       windSpeed={windSpeed}
+      degradation={degradation}
+      atmosphericTrans={atmosphericTrans}
+      airTemp={airTemp}
+      pressure={pressure}
+      humidity={humidity}
+      seeing={seeing}
     />
   );
 };
