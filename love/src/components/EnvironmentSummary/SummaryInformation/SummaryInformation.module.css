@@ -33,6 +33,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   width: 100%;
   margin-bottom: var(--small-margin);
   padding: var(--small-padding);
+  height: 100px;
 }
 
 .summaryPanel {

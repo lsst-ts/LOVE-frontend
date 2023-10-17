@@ -24,8 +24,6 @@ import styles from './EnvironmentSummary.module.css';
 import SimonyiTelescope from './Cartoons/SimonyiTelescope';
 import AuxTelescope from './Cartoons/AuxTelescope';
 import WindDirection from './Cartoons/WindDirection';
-import TemperaturesSummary from './SummaryInformation/TemperaturesSummary';
-import DegradationSummary from './SummaryInformation/DegradationSummary';
 import WeatherForecastIcon from 'components/icons/WeatherForecastIcon/WeatherForecastIcon';
 import { defaultNumberFormatter } from 'Utils';
 import Summary from './Summary/Summary';
@@ -78,6 +76,55 @@ export default class EnvironmentSummary extends Component {
     windDirection: PropTypes.number,
     /** Median (mean for some sensors) wind speed */
     windSpeed: PropTypes.number,
+    /** Enviromental Degradation */
+    degradation: PropTypes.number,
+    /** Atmospheric Transmission */
+    atmosphericTrans: PropTypes.number,
+    /** Air Temperature */
+    airTemp: PropTypes.number,
+    /** Pressure sensors with up to 8 channels */
+    pressure: PropTypes.number,
+    /** Relative humidity */
+    humidity: PropTypes.number,
+    /** Seeing */
+    seeing: PropTypes.number,
+  };
+
+  static defaultProps = {
+    simonyiTrackingState: false,
+    simonyiRa: 0,
+    simonyiDec: 0,
+    simonyiAltitude: 0,
+    simonyiAzimuth: 0,
+    simonyiRotator: 0,
+    simonyiDomeAlt: 0,
+    simonyiDomeAz: 0,
+    simonyiMoonRa: 0,
+    simonyiMoonDec: 0,
+    simonyiMoonPhase: 0,
+    simonyiSunRa: 0,
+    simonyiSunDec: 0,
+    auxtelTrackingState: false,
+    auxtelRa: 0,
+    auxtelDec: 0,
+    auxtelAltitude: 0,
+    auxtelAzimuth: 0,
+    auxtelRotator: 0,
+    auxtelDomeAlt: 0,
+    auxtelDomeAz: 0,
+    isRaining: false,
+    isSnowing: false,
+    windDirection: 0,
+    windSpeed: 0,
+    degradation: 'Unknown',
+    atmosphericTrans: 'Unknown',
+    airTemp: 'Unknown',
+    pressure: 'Unknown',
+    humidity: 'Unknown',
+    seeing: 'Unknown',
+    numChannels: 'Unknown',
+    temperature: 'Unknown',
+    location: 'Unknown',
   };
 
   constructor(props) {
@@ -166,12 +213,6 @@ export default class EnvironmentSummary extends Component {
               <span>Speed: {defaultNumberFormatter(windSpeed, 2)} m/s</span>
             </div>
           </div>
-          {/* <div className={styles.temperaturesContainer}>
-            <TemperaturesSummary numChannels={numChannels} temperature={temperature} location={location} />
-          </div>
-          <div className={styles.enviroContainer}>
-            <DegradationSummary degradation={degradation} />
-          </div> */}
           <div ref={this.containerRef} className={styles.telescopes}>
             <div className={styles.skymap}>
               <Skymap
