@@ -2200,6 +2200,8 @@ export const getObservatoryState = (state) => {
   const environmentVariables = observatoryData['event-ESS-301-precipitation'];
   const essTemperatures = observatoryData['telemetry-ESS-301-temperature'];
   const essAirFlow = observatoryData['telemetry-ESS-301-airFlow'];
+  const essPressure = observatoryData['telemetry-ESS-301-pressure'];
+  const essRelativeHumidity = observatoryData['telemetry-ESS-301-relativeHumidity'];
   const mptgCurrentTarget = observatoryData['event-MTPtg-0-currentTarget'];
   const atptgCurrentTarget = observatoryData['event-ATPtg-0-currentTarget'];
 
@@ -2238,11 +2240,11 @@ export const getObservatoryState = (state) => {
     windSpeed: essAirFlow ? essAirFlow.speed.value : 0.0,
     // TODO: Add the corresponding telemetry or event when Enviromental Degradation gets integrated into SAL
     degradation: 'Unknown',
+    pressure: essPressure ? essPressure.pressureItem.value : 'Unknown',
+    humidity: essRelativeHumidity ? essRelativeHumidity.relativeHumidity.value : 'Unknown',
     // TODO: Add the corresponding telemetry or event when the following variables gets integrated into SAL
-    atmosphericTrans: 'Unknown',
     airTemp: 'Unknown',
-    pressure: 'Unknown',
-    humidity: 'Unknown',
+    atmosphericTrans: 'Unknown',
     seeing: 'Unknown',
   };
 };

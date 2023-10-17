@@ -27,6 +27,14 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   padding: var(--small-padding);
 }
 
+.containerTemperaturesSummary {
+  box-sizing: border-box;
+  border-radius: 0.5em;
+  width: 100%;
+  margin-bottom: var(--small-margin);
+  padding: var(--small-padding);
+}
+
 .summaryPanel {
   display: block;
   padding: var(--small-padding);

@@ -114,10 +114,10 @@ export default class Summary extends Component {
 
     return (
       <div className={styles.container}>
-        <SummaryPanel>
+        <SummaryPanel className={[styles.summaryPanel, styles.pt].join(' ')}>
           <Label>Env. Degradation</Label>
           <Value>{degradation}</Value>
-          <Label>Atmospheric Transmition</Label>
+          <Label>Atm. Transmition</Label>
           <Value>{atmosphericTrans}</Value>
           <Label>Air Temperature</Label>
           <Value>{airTemp}</Value>
@@ -136,21 +136,7 @@ export default class Summary extends Component {
           <Value>{seeing}</Value>
         </SummaryPanel>
 
-        {/* <SummaryPanel className={[styles.summaryPanel, styles.pt].join(' ')}>
-         <div className={styles.title}>
-            <TemperatureIcon />
-            <Title>Temperatures</Title>
-          </div>
-          <div className={styles.summaryPanelDetail}>
-            {temperatures.map((t, i) => (
-              <>
-                <Label>{locations[i]}</Label>
-                <Value>{`${fixedFloat(t, 2)} °`}</Value>
-              </>
-            ))}
-          </div> 
-        </SummaryPanel>*/}
-        <div className={styles.temperaturesContainer}>
+        <div className={[styles.pt].join(' ')}>
           <TemperaturesSummary numChannels={numChannels} temperature={temperature} location={location} />
         </div>
       </div>
