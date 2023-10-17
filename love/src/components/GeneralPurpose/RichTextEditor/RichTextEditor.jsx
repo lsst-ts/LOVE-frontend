@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, memo } from 'react';
 import PropTypes from 'prop-types';
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import styles from './RichTextEditor.module.css';
+import 'react-quill/dist/quill.snow.css';
 
 const modules = {
   toolbar: [
@@ -15,7 +15,7 @@ const modules = {
   ],
 };
 
-function RichTextEditor({ onChange = () => {} }) {
+function RichTextEditor({ className, onChange = () => {} }) {
   const [value, setValue] = useState('');
   const reactQuillRef = useRef(null);
 
@@ -46,13 +46,15 @@ function RichTextEditor({ onChange = () => {} }) {
   }, []);
 
   return (
-    <div className={styles.container}>
+    <div className={[className ?? '', styles.container].join(' ')}>
       <ReactQuill ref={reactQuillRef} modules={modules} theme="snow" value={value} onChange={handleChange} />
     </div>
   );
 }
 
 RichTextEditor.propTypes = {
+  /** Class name to apply to the component */
+  className: PropTypes.string,
   /** Function to handle ReactQuill onChange */
   onChange: PropTypes.func,
 };

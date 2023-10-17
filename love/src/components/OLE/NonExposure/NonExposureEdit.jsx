@@ -390,11 +390,12 @@ export default class NonExposureEdit extends Component {
         <div className={styles.mb1}>
           <div className={styles.title}>Message</div>
         </div>
-        <TextArea
-          value={logEdit?.message_text}
-          callback={(event) =>
-            this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, message_text: event } }))
-          }
+        <RichTextEditor
+          className={styles.textArea}
+          onChange={(value) => {
+            const parsedValue = htmlToJiraMarkdown(value);
+            this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, message_text: parsedValue } }));
+          }}
         />
       </>
     );
