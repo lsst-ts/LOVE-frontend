@@ -612,10 +612,10 @@ export default class ConfigPanel extends Component {
   };
 
   saveNewScriptSchema = (scriptPath, scriptType, configName, configSchema) => {
-    const { configurationList, value } = this.state;
+    const { configurationList } = this.state;
     this.setState({ updatingScriptSchema: true });
 
-    ManagerInterface.postScriptConfiguration(scriptPath, scriptType, configName, configSchema).then((res) => {
+    ManagerInterface.postScriptConfiguration(scriptPath, scriptType, configName, configSchema, this.props.configPanel.configSchema).then((res) => {
       const newConfigurationList = [res, ...configurationList];
       const options = newConfigurationList.map((conf) => ({ label: conf.config_name, value: conf.id }));
       const newSelectedConfiguration = { label: res.config_name, value: res.id };
@@ -629,15 +629,13 @@ export default class ConfigPanel extends Component {
         formData: yaml.load(res?.config_schema),
       });
     });
-
-    this.validateConfig(value, configSchema);
   };
 
   updateScriptSchema = (id, configSchema) => {
-    const { configurationList, value } = this.state;
+    const { configurationList } = this.state;
     this.setState({ updatingScriptSchema: true });
 
-    ManagerInterface.updateScriptSchema(id, configSchema).then((res) => {
+    ManagerInterface.updateScriptSchema(id, configSchema, this.props.configPanel.configSchema).then((res) => {
       const newSelectedConfiguration = { label: res.config_name, value: res.id };
       this.setState({
         updatingScriptSchema: false,
@@ -645,8 +643,6 @@ export default class ConfigPanel extends Component {
         configurationList: configurationList.map((conf) => (conf.id === id ? res : conf)),
       });
     });
-
-    this.validateConfig(value, configSchema);
   };
 
   componentDidUpdate = (prevProps, prevState) => {
