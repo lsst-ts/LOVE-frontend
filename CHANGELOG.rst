@@ -6,15 +6,8 @@ v5.26.0
 -------
 
 * Add Simonyi Interlock Signals `<https://github.com/lsst-ts/LOVE-frontend/pull/542>`_
-
-v5.25.4
--------
-
-<<<<<<< HEAD
-* Layout improvements for OLE components `<https://github.com/lsst-ts/LOVE-frontend/pull/540>`_
-=======
->>>>>>> fix update changelog
 * Scripts Form Config is not showing button icons `<https://github.com/lsst-ts/LOVE-frontend/pull/541>`_
+* Layout improvements for OLE components `<https://github.com/lsst-ts/LOVE-frontend/pull/540>`_
 * Update ATMCS Mount Tracking config file `<https://github.com/lsst-ts/LOVE-frontend/pull/539>`_
 * Add Environmental Degradation to top level summaries `<https://github.com/lsst-ts/LOVE-frontend/pull/538>`_
 * Add ability to add a script at the top of the queue from LOVE `<https://github.com/lsst-ts/LOVE-frontend/pull/537>`_
