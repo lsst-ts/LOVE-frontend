@@ -275,7 +275,16 @@ export default class ConfigPanel extends Component {
      */
     const schema = this.props.configPanel.configSchema;
     if (!schema) {
-      this.setState({ validationStatus: EMPTY });
+      this.setState({
+        validationStatus: EMPTY,
+        configErrorTitle: 'Waiting for schema',
+        configErrors: [
+          {
+            name: ``,
+            message: `Schema not yet loaded`,
+          },
+        ],
+      });
       return;
     }
 
@@ -298,13 +307,32 @@ export default class ConfigPanel extends Component {
 
         /** Server error */
         if (!r.ok) {
-          this.setState({ validationStatus: SERVER_ERROR });
+          this.setState({
+            validationStatus: SERVER_ERROR,
+            configErrorTitle: 'Validation Failed',
+            configErrors: [
+              {
+                name: ``,
+                message: `There is no schema to validate or another server error was encountered`,
+              },
+            ],
+          });
           return false;
         }
         return r.json();
       })
       .then((r) => {
         /** Handle SERVER_ERROR */
+        this.setState({
+          validationStatus: SERVER_ERROR,
+          configErrorTitle: 'Validation Failed',
+          configErrors: [
+            {
+              name: ``,
+              message: `There is no schema to validate or another server error was encountered`,
+            },
+          ],
+        });
         if (!r) return;
 
         /** Valid schema should show no message */
@@ -468,7 +496,7 @@ export default class ConfigPanel extends Component {
 
     let yamlData;
     try {
-      yamlData = configuration ? yaml.load(configuration.config_schema) : {};
+      yamlData = configuration && configuration.config_schema ? yaml.load(configuration.config_schema) ?? {} : {};
     } catch {
       yamlData = {};
     }
@@ -543,7 +571,7 @@ export default class ConfigPanel extends Component {
     const buttonHtml = (
       <Button
         disabled={
-          [ERROR, VALIDATING, NEED_REVALIDATION].includes(validationStatus) ||
+          [ERROR, VALIDATING, NEED_REVALIDATION, EMPTY, SERVER_ERROR].includes(validationStatus) ||
           (!configurationSchemaChanged && !configurationNameChanged)
         }
         status="transparent"
@@ -586,7 +614,8 @@ export default class ConfigPanel extends Component {
   saveNewScriptSchema = (scriptPath, scriptType, configName, configSchema) => {
     const { configurationList } = this.state;
     this.setState({ updatingScriptSchema: true });
-    ManagerInterface.postScriptConfiguration(scriptPath, scriptType, configName, configSchema).then((res) => {
+
+    ManagerInterface.postScriptConfiguration(scriptPath, scriptType, configName, configSchema, this.props.configPanel.configSchema).then((res) => {
       const newConfigurationList = [res, ...configurationList];
       const options = newConfigurationList.map((conf) => ({ label: conf.config_name, value: conf.id }));
       const newSelectedConfiguration = { label: res.config_name, value: res.id };
@@ -605,7 +634,8 @@ export default class ConfigPanel extends Component {
   updateScriptSchema = (id, configSchema) => {
     const { configurationList } = this.state;
     this.setState({ updatingScriptSchema: true });
-    ManagerInterface.updateScriptSchema(id, configSchema).then((res) => {
+
+    ManagerInterface.updateScriptSchema(id, configSchema, this.props.configPanel.configSchema).then((res) => {
       const newSelectedConfiguration = { label: res.config_name, value: res.id };
       this.setState({
         updatingScriptSchema: false,
@@ -629,19 +659,20 @@ export default class ConfigPanel extends Component {
 
         let yamlData;
         try {
-          yamlData = configuration ? yaml.load(configuration.config_schema) : {};
+          yamlData = configuration && configuration.config_schema ? yaml.load(configuration.config_schema) ?? {} : {};
         } catch {
           yamlData = {};
         }
-
+        const value = configuration?.config_schema ?? DEFAULT_CONFIG_VALUE;
         this.setState((state) => ({
           configurationList: data,
           configurationOptions: options,
           selectedConfiguration: configuration ? { label: configuration.config_name, value: configuration.id } : null,
-          value: configuration?.config_schema ?? DEFAULT_CONFIG_VALUE,
+          value: value,
           inputConfigurationName: configuration?.config_name ?? DEFAULT_CONFIG_NAME,
           formData: yamlData,
         }));
+        this.validateConfig(value, true);
       });
     }
 
@@ -690,7 +721,7 @@ export default class ConfigPanel extends Component {
     // RJSF variables
     let rjsfSchema;
     try {
-      rjsfSchema = yamlSchema ? yaml.load(yamlSchema) : {};
+      rjsfSchema = yaml.load(yamlSchema) ?? {};
     } catch {
       rjsfSchema = {};
     }
@@ -891,7 +922,7 @@ export default class ConfigPanel extends Component {
                 title="Enqueue script"
                 size="large"
                 onClick={this.onLaunch}
-                disabled={[ERROR, VALIDATING, NEED_REVALIDATION].includes(this.state.validationStatus)}
+                disabled={[ERROR, VALIDATING, NEED_REVALIDATION, EMPTY].includes(this.state.validationStatus)}
                 command
               >
                 Add

@@ -1176,7 +1176,7 @@ export default class ManagerInterface {
     });
   }
 
-  static updateScriptSchema(id, configSchema) {
+  static updateScriptSchema(id, configSchema, schema) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
@@ -1187,6 +1187,7 @@ export default class ManagerInterface {
       headers: this.getHeaders(),
       body: JSON.stringify({
         config_schema: configSchema,
+        schema: schema,
       }),
     }).then((response) => {
       if (response.status >= 500) {
@@ -1198,7 +1199,7 @@ export default class ManagerInterface {
       }
       if (response.status === 400) {
         return response.json().then((resp) => {
-          toast.error(resp.ack);
+          toast.error(resp.title);
           return false;
         });
       }
@@ -1208,7 +1209,7 @@ export default class ManagerInterface {
     });
   }
 
-  static postScriptConfiguration(scriptPath, scriptType, configName, configSchema) {
+  static postScriptConfiguration(scriptPath, scriptType, configName, configSchema, schema) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
@@ -1222,6 +1223,7 @@ export default class ManagerInterface {
         script_type: scriptType,
         config_name: configName,
         config_schema: configSchema,
+        schema: schema,
       }),
     }).then((response) => {
       if (response.status >= 500) {
@@ -1233,7 +1235,7 @@ export default class ManagerInterface {
       }
       if (response.status === 400) {
         return response.json().then((resp) => {
-          toast.error(resp.ack);
+          toast.error(resp.title);
           return false;
         });
       }
