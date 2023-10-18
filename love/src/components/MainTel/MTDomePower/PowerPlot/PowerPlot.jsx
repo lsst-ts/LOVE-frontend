@@ -155,30 +155,58 @@ export default class PowerPlot extends Component {
       // 4.0.0 DATA //
       ////////////////
       data: {
-        values: this.props.data,
-        // [
-        //   {
-        //     "system":"aCalibration Screen",
-        //     "count":powerDraw*0.35,
-        //     "date":"2020-01-01 10:10:00",
-        //   },{
-        //     "system":"aCalibration Screen",
-        //     "count":powerDraw*0.1,
-        //     "date":"2020-01-01 10:12:00",
-        //   },{
-        //     "system":"aCalibration Screen",
-        //     "count":powerDraw*0.05,
-        //     "date":"2020-01-01 10:14:00",
-        //   },{
-        //     "system":"aCalibration Screen",
-        //     "count":powerDraw*0.75,
-        //     "date":"2020-01-01 10:16:00",
-        //   },{
-        //     "system":"aCalibration Screen",
-        //     "count":powerDraw,
-        //     "date":"2020-01-01 10:18:00",
-        //   }
-        // ]
+        values: [
+          {
+            system: this.props.data[0]?.system ?? 0,
+            count: this.props.data[0]?.count ?? 0,
+            date: '2020-01-01 10:10:00',
+          },
+          {
+            system: this.props.data[1]?.system ?? 0,
+            count: this.props.data[1]?.count ?? 0,
+            date: '2020-01-01 10:11:00',
+          },
+          {
+            system: this.props.data[2]?.system ?? 0,
+            count: this.props.data[2]?.count ?? 0,
+            date: '2020-01-01 10:12:00',
+          },
+          {
+            system: this.props.data[3]?.system ?? 0,
+            count: this.props.data[3]?.count ?? 0,
+            date: '2020-01-01 10:13:00',
+          },
+          {
+            system: this.props.data[4]?.system ?? 0,
+            count: this.props.data[4]?.count ?? 0,
+            date: '2020-01-01 10:14:00',
+          },
+          {
+            system: this.props.data[5]?.system ?? 0,
+            count: this.props.data[5]?.count ?? 0,
+            date: '2020-01-01 10:15:00',
+          },
+          {
+            system: this.props.data[6]?.system ?? 0,
+            count: this.props.data[6]?.count ?? 0,
+            date: '2020-01-01 10:16:00',
+          },
+          {
+            system: this.props.data[7]?.system ?? 0,
+            count: this.props.data[7]?.count ?? 0,
+            date: '2020-01-01 10:17:00',
+          },
+          {
+            system: this.props.data[8]?.system ?? 0,
+            count: this.props.data[8]?.count ?? 0,
+            date: '2020-01-01 10:18:00',
+          },
+          {
+            system: this.props.data[9]?.system ?? 0,
+            count: this.props.data[9]?.count ?? 0,
+            date: '2020-01-01 10:19:00',
+          },
+        ],
       },
     };
 

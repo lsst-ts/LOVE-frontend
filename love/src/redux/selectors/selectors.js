@@ -1139,6 +1139,36 @@ export const getDomeStatus = (state) => {
   };
 };
 
+// MTDome Power Draw
+export const getMtDomePowerDraw = (state) => {
+  const subscriptions = [
+    'telemetry-MTDome-0-apertureShutter',
+    'telemetry-MTDome-0-lightWindScreen',
+    'telemetry-MTDome-0-louvers',
+    'telemetry-MTDome-0-rearAccessDoor',
+    'telemetry-ESS-301-temperature',
+  ];
+  const mtDomePowerDraw = getStreamsData(state, subscriptions);
+  return {
+    powerDrawCalibration: Math.floor(Math.random() * 750),
+    timestampCalibration: mtDomePowerDraw['telemetry-ESS-301-temperature']?.timestamp?.value ?? undefined,
+    powerDrawRAD: mtDomePowerDraw['telemetry-MTDome-0-rearAccessDoor']?.powerDraw?.value ?? undefined,
+    timestampRAD: mtDomePowerDraw['telemetry-ESS-301-temperature']?.timestamp?.value ?? undefined,
+    powerDrawOBC: Math.floor(Math.random() * 6000),
+    timestampOBC: mtDomePowerDraw['telemetry-ESS-301-temperature']?.timestamp?.value ?? undefined,
+    powerDrawFans: Math.floor(Math.random() * 22500) + 2500,
+    timestampFans: mtDomePowerDraw['telemetry-ESS-301-temperature']?.timestamp?.value ?? undefined,
+    powerDrawLouvers: mtDomePowerDraw['telemetry-MTDome-0-louvers']?.powerDraw?.value ?? undefined,
+    timestampLouvers: mtDomePowerDraw['telemetry-ESS-301-temperature']?.timestamp?.value ?? undefined,
+    powerDrawLWS: mtDomePowerDraw['telemetry-MTDome-0-lightWindScreen']?.powerDraw?.value ?? undefined,
+    timestampLWS: mtDomePowerDraw['telemetry-ESS-301-temperature']?.timestamp?.value ?? undefined,
+    powerDrawShutter: mtDomePowerDraw['telemetry-MTDome-0-apertureShutter']?.powerDraw?.value ?? undefined,
+    timestampShutter: mtDomePowerDraw['telemetry-ESS-301-temperature']?.timestamp?.value ?? undefined,
+    powerDrawElectronics: Math.floor(Math.random() * 500) + 500,
+    timestampElectronics: mtDomePowerDraw['telemetry-ESS-301-temperature']?.timestamp?.value ?? undefined,
+  };
+};
+
 // MTMount
 /**
  * Selects the TMA status for summary view
