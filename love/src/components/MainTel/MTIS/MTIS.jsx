@@ -46,8 +46,8 @@ export default class MTIS extends Component {
   }
 
   flattenMtDome = () => {
-    //const {mtDome} = this.props;
-    const mtDome = '0010011000001101';
+    const { mtDome } = this.props;
+    //const mtDome = '0010011000001101';
     //const mtDomeSignals = Object.entries();
     //const mtDomeArray = mtDome[0].split("");
     const mtDomeArray = Array.from(String(mtDome), Number);
