@@ -1,0 +1,91 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+.div {
+  display: flex;
+  align-items: flex-start;
+  background-color: var(--second-primary-background-color);
+}
+
+.h3 {
+  width: 100%;
+}
+
+.div2 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.separator {
+  align-self: stretch;
+  margin: 4.5em 2em 0 2em;
+  border-left: 2px solid gray;
+  padding: 1em 0;
+}
+
+.system {
+  border: 3px solid var(--second-primary-background-color);
+  border-radius: 0.5em;
+  padding: 1.5em;
+  width: calc(50% - var(--content-padding));
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  background-color: var(--second-secondary-background-color);
+  flex: 1 1 300px;
+}
+
+.signal {
+  padding: 1em;
+  border: 1px solid var(--tertiary-background-color);
+  border-radius: 0.5em;
+  margin-bottom: 0.5em;
+  margin-right: 0.5em;
+  background-color: var(--tertiary-background-color);
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  word-break: break-all;
+}
+
+.system h3 {
+  flex: 1 1 100%;
+}
+
+.inactive {
+  opacity: 0.1;
+  background-color: var(--second-quaternary-background-dimmed-color);
+  border-color: gray;
+}
+
+.alert {
+  background-color: #3c2b20;
+  border-color: #3c2b20;
+  color: #dd5602;
+}
+
+.alertSystem {
+  border: 3px solid #3c2b20;
+}
+
+.signal:hover {
+  border: 1px solid white;
+}
