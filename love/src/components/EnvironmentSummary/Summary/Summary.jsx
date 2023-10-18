@@ -40,9 +40,6 @@ export default class Summary extends Component {
       location,
     } = this.props;
 
-    const temperatures = temperature.slice(0, numChannels);
-    const locations = location ? location.split(',') : [];
-
     return (
       <div className={styles.container}>
         <SummaryPanel className={[styles.summaryPanel, styles.pt].join(' ')}>

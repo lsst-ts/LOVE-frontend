@@ -34,6 +34,10 @@ export default class EnvironmentSummary extends Component {
     subscribeToStreams: PropTypes.func,
     /** Function to unsubscribe to streams to stop receiving */
     unsubscribeToStreams: PropTypes.func,
+    /** Current summary state of Simonyi Scheduler */
+    simonyiState: PropTypes.number,
+    /** Current summary state of Auxtel Scheduler */
+    auxtelState: PropTypes.number,
     /** Is the simonyi telescope tracking? */
     simonyiTrackingState: PropTypes.bool,
     /** Simonyi telescope altitude */
@@ -91,6 +95,8 @@ export default class EnvironmentSummary extends Component {
   };
 
   static defaultProps = {
+    simonyiState: 0,
+    auxtelState: 0,
     simonyiTrackingState: false,
     simonyiRa: 0,
     simonyiDec: 0,
@@ -119,7 +125,7 @@ export default class EnvironmentSummary extends Component {
     degradation: 'Unknown',
     atmosphericTrans: 'Unknown',
     airTemp: 'Unknown',
-    pressure: 'Unknown',
+    pressure: 0,
     humidity: 'Unknown',
     seeing: 'Unknown',
     numChannels: 'Unknown',
@@ -151,6 +157,8 @@ export default class EnvironmentSummary extends Component {
 
   render() {
     const {
+      simonyiState,
+      auxtelState,
       simonyiTrackingState,
       simonyiRa,
       simonyiDec,
@@ -186,7 +194,6 @@ export default class EnvironmentSummary extends Component {
       humidity,
       seeing,
     } = this.props;
-    const { hideIconTemperature } = this.state;
 
     return (
       <div>
@@ -214,7 +221,7 @@ export default class EnvironmentSummary extends Component {
             </div>
           </div>
           <div ref={this.containerRef} className={styles.telescopes}>
-            <div className={styles.skymap}>
+            <div className={simonyiState === 2 || auxtelState === 2 ? styles.skymap : styles.skymapDisabled}>
               <Skymap
                 containerNode={this.containerRef?.current}
                 simonyiRa={simonyiRa}

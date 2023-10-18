@@ -69,7 +69,16 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   z-index: 1;
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
+}
+
+.skymapDisabled {
+  position: absolute;
+  top: 0;
+  left: 35%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  opacity: 0.2;
 }
 
 .simonyi {

@@ -40,6 +40,8 @@ export const schema = {
 const EnvironmentSummaryContainer = ({
   subscribeToStreams,
   unsubscribeToStreams,
+  simonyiState,
+  auxtelState,
   simonyiTrackingState,
   simonyiRa,
   simonyiDec,
@@ -83,6 +85,8 @@ const EnvironmentSummaryContainer = ({
     <EnvironmentSummary
       subscribeToStreams={subscribeToStreams}
       unsubscribeToStreams={unsubscribeToStreams}
+      simonyiState={simonyiState}
+      auxtelState={auxtelState}
       simonyiTrackingState={simonyiTrackingState}
       simonyiRa={simonyiRa}
       simonyiDec={simonyiDec}

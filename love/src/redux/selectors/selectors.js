@@ -2175,6 +2175,8 @@ export const getHVACTelemetry = (state) => {
 
 export const getObservatorySubscriptions = () => {
   return [
+    'event-Scheduler-1-summaryState',
+    'event-Scheduler-2-summaryState',
     'event-Scheduler-1-observingMode',
     'event-Scheduler-2-observingMode',
     `telemetry-Scheduler-1-observatoryState`,
@@ -2192,6 +2194,8 @@ export const getObservatorySubscriptions = () => {
 export const getObservatoryState = (state) => {
   const observatorySubscriptions = getObservatorySubscriptions();
   const observatoryData = getStreamsData(state, observatorySubscriptions);
+  const simonyiSummaryState = observatoryData['event-Scheduler-1-summaryState'];
+  const auxtelSummaryState = observatoryData['event-Scheduler-2-summaryState'];
   const simonyiObservingMode = observatoryData['event-Scheduler-1-observingMode'];
   const simonyiTarget = observatoryData[`event-Scheduler-1-target`];
   const auxtelObservingMode = observatoryData['event-Scheduler-2-observingMode'];
@@ -2206,6 +2210,8 @@ export const getObservatoryState = (state) => {
   const atptgCurrentTarget = observatoryData['event-ATPtg-0-currentTarget'];
 
   return {
+    simonyiState: simonyiSummaryState ? simonyiSummaryState[0].summaryState.value : 0,
+    auxtelState: auxtelSummaryState ? auxtelSummaryState[0].summaryState.value : 0,
     simonyiObservingMode: simonyiObservingMode ? simonyiObservingMode[0].mode.value : 'UNKNOWN',
     auxtelObservingMode: auxtelObservingMode ? auxtelObservingMode[0].mode.value : 'UNKNOWN',
     simonyiTrackingState: simonyiObservatoryState ? simonyiObservatoryState.tracking?.value : false,
@@ -2240,8 +2246,8 @@ export const getObservatoryState = (state) => {
     windSpeed: essAirFlow ? essAirFlow.speed.value : 0.0,
     // TODO: Add the corresponding telemetry or event when Enviromental Degradation gets integrated into SAL
     degradation: 'Unknown',
-    pressure: essPressure ? essPressure.pressureItem.value : 'Unknown',
-    humidity: essRelativeHumidity ? essRelativeHumidity.relativeHumidity.value : 'Unknown',
+    pressure: essPressure ? essPressure.pressureItem.value : 0,
+    humidity: essRelativeHumidity ? essRelativeHumidity.relativeHumidityItem.value : 0,
     // TODO: Add the corresponding telemetry or event when the following variables gets integrated into SAL
     airTemp: 'Unknown',
     atmosphericTrans: 'Unknown',

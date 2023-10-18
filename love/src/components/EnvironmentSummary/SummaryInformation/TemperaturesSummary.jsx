@@ -52,8 +52,7 @@ class TemperaturesSummary extends Component {
       <div className={styles.containerTemperaturesSummary}>
         <SummaryPanel className={styles.summaryPanel}>
           <div className={styles.title}>
-            <TemperatureIcon />
-            <Title>Temperatures</Title>
+            <Label>Temperatures</Label>
           </div>
           <div className={styles.summaryPanelDetail}>
             {temperatures.map((t, i) => (
