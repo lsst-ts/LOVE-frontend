@@ -69,7 +69,16 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   z-index: 1;
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
+}
+
+.skymapDisabled {
+  position: absolute;
+  top: 0;
+  left: 35%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  opacity: 0.2;
 }
 
 .simonyi {
@@ -108,4 +117,26 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   left: 40px !important;
   bottom: 40px !important;
   width: 325px;
+}
+
+.summaryContainer {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  padding: 1em;
+  border-radius: 5px;
+  background: var(--second-secondary-background-color);
+  margin-bottom: 1em;
+}
+
+.summaryPanelDetail {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow-y: scroll;
+  max-height: calc(10em - var(--content-padding));
+}
+
+.title {
+  display: flex;
+  align-items: center;
 }
