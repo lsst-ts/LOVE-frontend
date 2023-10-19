@@ -1947,6 +1947,8 @@ export function htmlToJiraMarkdown(html) {
  * @returns {string} html string
  */
 export function jiraMarkdownToHtml(markdown, options = { codeFriendly: true }) {
+  if (!markdown) return '';
+
   const { codeFriendly } = options;
   let html = markdown;
 
