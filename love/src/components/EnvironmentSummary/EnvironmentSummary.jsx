@@ -86,8 +86,8 @@ export default class EnvironmentSummary extends Component {
     atmosphericTrans: PropTypes.number,
     /** Air Temperature */
     airTemp: PropTypes.number,
-    /** Pressure sensors with up to 8 channels */
-    pressure: PropTypes.number,
+    /** The pressures */
+    pressure: PropTypes.array,
     /** Relative humidity */
     humidity: PropTypes.number,
     /** Seeing */
@@ -125,7 +125,7 @@ export default class EnvironmentSummary extends Component {
     degradation: 'Unknown',
     atmosphericTrans: 'Unknown',
     airTemp: 'Unknown',
-    pressure: 0,
+    pressure: [],
     humidity: 'Unknown',
     seeing: 'Unknown',
     numChannels: 'Unknown',

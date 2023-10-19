@@ -2185,6 +2185,8 @@ export const getObservatorySubscriptions = () => {
     `event-Scheduler-2-target`,
     'event-ESS-301-precipitation',
     'telemetry-ESS-301-temperature',
+    'telemetry-ESS-301-pressure',
+    'telemetry-ESS-301-relativeHumidity',
     'telemetry-ESS-301-airFlow',
     'event-ATPtg-0-currentTarget',
     'event-MTPtg-0-currentTarget',
@@ -2246,8 +2248,8 @@ export const getObservatoryState = (state) => {
     windSpeed: essAirFlow ? essAirFlow.speed.value : 0.0,
     // TODO: Add the corresponding telemetry or event when Enviromental Degradation gets integrated into SAL
     degradation: 'Unknown',
-    pressure: essPressure ? essPressure.pressureItem.value : 0,
-    humidity: essRelativeHumidity ? essRelativeHumidity.relativeHumidityItem.value : 0,
+    pressure: essPressure ? essPressure.pressure.value : 0,
+    humidity: essRelativeHumidity ? essRelativeHumidity.relativeHumidity.value : 0,
     // TODO: Add the corresponding telemetry or event when the following variables gets integrated into SAL
     airTemp: 'Unknown',
     atmosphericTrans: 'Unknown',

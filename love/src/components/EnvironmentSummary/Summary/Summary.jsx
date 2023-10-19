@@ -23,6 +23,7 @@ import SummaryPanel from '../../GeneralPurpose/SummaryPanel/SummaryPanel';
 import Label from '../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../GeneralPurpose/SummaryPanel/Value';
 import TemperaturesSummary from '../SummaryInformation/TemperaturesSummary';
+import { fixedFloat } from 'Utils';
 
 export default class Summary extends Component {
   render() {
@@ -50,16 +51,16 @@ export default class Summary extends Component {
           <Label>Air Temperature</Label>
           <Value>{airTemp}</Value>
           <Label>Pressure</Label>
-          <Value>{pressure}</Value>
+          <Value>{`${fixedFloat(pressure[0], 2)} Pa`}</Value>
         </SummaryPanel>
 
         <SummaryPanel className={[styles.summaryPanel, styles.pt].join(' ')}>
           <Label>Humidity</Label>
-          <Value>{humidity}</Value>
+          <Value>{`${fixedFloat(humidity, 2)} %`}</Value>
           <Label>Wind Speed</Label>
-          <Value>{windSpeed}</Value>
+          <Value>{`${fixedFloat(windSpeed, 2)} m/s`}</Value>
           <Label>Wind Direction</Label>
-          <Value>{windDirection}</Value>
+          <Value>{`${fixedFloat(windDirection, 2)} °`}</Value>
           <Label>Seeing</Label>
           <Value>{seeing}</Value>
         </SummaryPanel>
