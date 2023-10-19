@@ -7,12 +7,10 @@ import 'react-quill/dist/quill.snow.css';
 const modules = {
   toolbar: [
     [{ header: [1, 2, 3, false] }],
-    // TODO: allow text formatting, by setting no code friendly mode.
-    // ['bold', 'italic', 'underline', 'strike'],
-    // TODO: allow list and indentation formatting.
-    // [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
     ['link'],
-    // TODO: allow text un-formatting, by setting no code friendly mode.
+    // TODO: DM-41265
+    // ['bold', 'italic', 'underline', 'strike'],
+    // [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
     // ['clean'],
   ],
 };

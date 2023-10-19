@@ -1926,7 +1926,7 @@ export function htmlToJiraMarkdown(html) {
     return `{code}${p1}{code}`;
   });
 
-  // TODO: Parse lists
+  // TODO: DM-41265
   // markdown = markdown.replace(/<ul>|<\/ul>|<ol>|<\/ol>|<li>/g, '');
   // markdown = markdown.replace(/<\/li>/g, '\n');
 
