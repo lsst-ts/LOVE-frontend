@@ -24,6 +24,7 @@ import { addGroup, removeGroup } from 'redux/actions/ws';
 import OLE from './OLE';
 import Exposure from './Exposure/Exposure';
 import NonExposure from './NonExposure/NonExposure';
+import Tekniker from './Tekniker/Tekniker';
 
 export const schema = {
   description: 'View of Log service',
@@ -64,14 +65,6 @@ const OLEContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) =>
   );
 };
 
-const mapStateToProps = (state) => {
-  const tabs = [
-    { name: 'Narrative Logs', value: 'non-exposure', component: NonExposure },
-    { name: 'Exposure Logs', value: 'exposure', component: Exposure },
-  ];
-  return { tabs };
-};
-
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [];
   return {
@@ -85,4 +78,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(OLEContainer);
+export default connect(null, mapDispatchToProps)(OLEContainer);

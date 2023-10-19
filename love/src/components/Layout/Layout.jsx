@@ -27,6 +27,7 @@ import MessageIcon from 'components/icons/MessageIcon/MessageIcon';
 import OLEMenu from 'components/OLE/Menu/OLEMenu';
 import ExposureAdd from 'components/OLE/Exposure/ExposureAdd';
 import NonExposureEdit from 'components/OLE/NonExposure/NonExposureEdit';
+import TeknikerAdd from 'components/OLE/Tekniker/TeknikerAdd';
 import ObservatorySummaryMenu from 'components/ObservatorySummary/Menu/ObservatorySummaryMenu';
 import ManagerInterface, {
   getNotificationMessage,
@@ -147,8 +148,7 @@ class Layout extends Component {
       isLightHidden: true,
       efdStatus: { label: 'EFD Healthy status Unknown', style: 'invalid' },
       salStatus: { label: 'SAL status Unknown', style: 'invalid' },
-      isNewNonExposureOpen: false,
-      isNewExposureOpen: false,
+      oleTabOpen: null,
     };
 
     this.requestToastID = null;
@@ -484,20 +484,24 @@ class Layout extends Component {
       <div className={styles.rightTopbar}>
         {this.renderHeartbeatsMenu()}
         <DropdownMenu className={styles.settingsDropdown} disabledToggle={true}>
-          <Button className={styles.iconBtn} title="Exposure and Narrative Logs" status="transparent">
+          <Button className={styles.iconBtn} title="Exposure, Narrative and TMA Logs" status="transparent">
             <MessageIcon className={styles.icon} />
           </Button>
           <div className={styles.userMenu}>
-            {!this.state.isNewNonExposureOpen && !this.state.isNewExposureOpen ? (
+            {!this.state.oleTabOpen && (
               <OLEMenu
-                newNonExposureClick={() => {
-                  this.setState({ isNewNonExposureOpen: true });
+                newNarrativeLogClick={() => {
+                  this.setState({ oleTabOpen: 'narrative' });
                 }}
-                newExposureClick={() => {
-                  this.setState({ isNewExposureOpen: true });
+                newExposureLogClick={() => {
+                  this.setState({ oleTabOpen: 'exposure' });
+                }}
+                newTMALogClick={() => {
+                  this.setState({ oleTabOpen: 'tma' });
                 }}
               />
-            ) : this.state.isNewNonExposureOpen ? (
+            )}
+            {this.state.oleTabOpen === 'narrative' && (
               <>
                 <div className={styles.title}>
                   <span className={styles.bold}>New Narrative Log</span>
@@ -505,7 +509,7 @@ class Layout extends Component {
                     <Button
                       status="link"
                       onClick={() => {
-                        this.setState({ isNewNonExposureOpen: false });
+                        this.setState({ oleTabOpen: null });
                       }}
                     >
                       <span className={styles.bold}>{'< Back'}</span>
@@ -513,8 +517,10 @@ class Layout extends Component {
                   </span>
                 </div>
                 <div className={styles.divider}></div>
+                <NonExposureEdit isMenu={true} back={() => this.setState({ oleTabOpen: null })} />
               </>
-            ) : this.state.isNewExposureOpen ? (
+            )}
+            {this.state.oleTabOpen === 'exposure' && (
               <>
                 <div className={styles.title}>
                   <span className={styles.bold}>New Exposure Log</span>
@@ -522,7 +528,7 @@ class Layout extends Component {
                     <Button
                       status="link"
                       onClick={() => {
-                        this.setState({ isNewExposureOpen: false });
+                        this.setState({ oleTabOpen: null });
                       }}
                     >
                       <span className={styles.bold}>{'< Back'}</span>
@@ -530,15 +536,27 @@ class Layout extends Component {
                   </span>
                 </div>
                 <div className={styles.divider}></div>
+                <ExposureAdd isMenu={true} back={() => this.setState({ oleTabOpen: null })} />
               </>
-            ) : (
-              <></>
             )}
-            {this.state.isNewNonExposureOpen && (
-              <NonExposureEdit isMenu={true} back={() => this.setState({ isNewNonExposureOpen: false })} />
-            )}
-            {this.state.isNewExposureOpen && (
-              <ExposureAdd isMenu={true} back={() => this.setState({ isNewExposureOpen: false })} />
+            {this.state.oleTabOpen === 'tma' && (
+              <>
+                <div className={styles.title}>
+                  <span className={styles.bold}>New TMA Log</span>
+                  <span className={styles.floatRight}>
+                    <Button
+                      status="link"
+                      onClick={() => {
+                        this.setState({ oleTabOpen: null });
+                      }}
+                    >
+                      <span className={styles.bold}>{'< Back'}</span>
+                    </Button>
+                  </span>
+                </div>
+                <div className={styles.divider}></div>
+                <TeknikerAdd isMenu={true} back={() => this.setState({ oleTabOpen: null })} />
+              </>
             )}
           </div>
         </DropdownMenu>
