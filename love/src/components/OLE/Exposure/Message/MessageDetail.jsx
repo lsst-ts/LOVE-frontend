@@ -24,9 +24,7 @@ import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
-import Input from 'components/GeneralPurpose/Input/Input';
-import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
-import { openInNewTab, getLinkJira, getFilesURLs, getFilename } from 'Utils';
+import { openInNewTab, getLinkJira, getFilesURLs, getFilename, jiraMarkdownToHtml } from 'Utils';
 import { exposureFlagStateToStyle } from 'Config';
 import styles from './Message.module.css';
 
@@ -105,13 +103,18 @@ export default class MessageDetail extends Component {
         </div>
 
         <div className={styles.description}>
-          <div className={[styles.floatLeft, styles.margin3].join(' ')}>
+          <div className={[styles.margin3].join(' ')}>
             <span>On </span>
             <span className={styles.bold}>{message.date_added} </span>
             <span className={styles.bold}>{message.user_id} </span>
             <span>wrote:</span>
           </div>
-          <p className={[styles.textDescription, styles.margin3].join(' ')}>{message.message_text}</p>
+          <div
+            className={styles.wikiMarkupText}
+            dangerouslySetInnerHTML={{
+              __html: jiraMarkdownToHtml(message.message_text),
+            }}
+          />
         </div>
 
         <div className={styles.footer}>

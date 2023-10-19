@@ -19,9 +19,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ManagerInterface, { openInNewTab, getLinkJira, getFilesURLs, getFilename } from 'Utils';
 import { EXPOSURE_FLAG_OPTIONS, exposureFlagStateToStyle } from 'Config';
-import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
+import RichTextEditor from 'components/GeneralPurpose/RichTextEditor/RichTextEditor';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
@@ -32,6 +31,14 @@ import SaveIcon from 'components/icons/SaveIcon/SaveIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
+import ManagerInterface, {
+  openInNewTab,
+  getLinkJira,
+  getFilesURLs,
+  getFilename,
+  htmlToJiraMarkdown,
+  jiraMarkdownToHtml,
+} from 'Utils';
 import styles from './Message.module.css';
 
 export default class MessageEdit extends Component {
@@ -77,6 +84,8 @@ export default class MessageEdit extends Component {
       imageTags: [],
       updatingLog: false,
     };
+
+    this.richTextEditorRef = React.createRef();
   }
 
   componentDidMount() {
@@ -101,6 +110,8 @@ export default class MessageEdit extends Component {
 
     const jiraUrl = getLinkJira(message.urls);
     const filesUrls = getFilesURLs(message.urls);
+
+    const htmlMessage = jiraMarkdownToHtml(message.message_text);
 
     return (
       <div className={styles.message}>
@@ -172,14 +183,15 @@ export default class MessageEdit extends Component {
         </div>
 
         <div className={styles.description}>
-          <div className={[styles.mb1, styles.floatLeft, styles.inline].join(' ')}>
-            <span className={styles.title}>Message</span>
-          </div>
-          <TextArea
-            value={message.message_text}
-            callback={(event) =>
-              this.setState((prevState) => ({ message: { ...prevState.message, message_text: event } }))
-            }
+          <div className={[styles.mb1, styles.title].join(' ')}>Message</div>
+          <RichTextEditor
+            ref={this.richTextEditorRef}
+            className={styles.textArea}
+            defaultValue={htmlMessage}
+            onChange={(value) => {
+              const parsedValue = htmlToJiraMarkdown(value);
+              this.setState((prevState) => ({ message: { ...prevState.message, message_text: parsedValue } }));
+            }}
           />
         </div>
 
