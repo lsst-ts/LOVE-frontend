@@ -40,6 +40,8 @@ export const schema = {
 const EnvironmentSummaryContainer = ({
   subscribeToStreams,
   unsubscribeToStreams,
+  simonyiState,
+  auxtelState,
   simonyiTrackingState,
   simonyiRa,
   simonyiDec,
@@ -68,6 +70,12 @@ const EnvironmentSummaryContainer = ({
   location,
   windDirection,
   windSpeed,
+  degradation,
+  atmosphericTrans,
+  airTemp,
+  pressure,
+  humidity,
+  seeing,
   ...props
 }) => {
   if (props.isRaw) {
@@ -77,6 +85,8 @@ const EnvironmentSummaryContainer = ({
     <EnvironmentSummary
       subscribeToStreams={subscribeToStreams}
       unsubscribeToStreams={unsubscribeToStreams}
+      simonyiState={simonyiState}
+      auxtelState={auxtelState}
       simonyiTrackingState={simonyiTrackingState}
       simonyiRa={simonyiRa}
       simonyiDec={simonyiDec}
@@ -105,6 +115,12 @@ const EnvironmentSummaryContainer = ({
       location={location}
       windDirection={windDirection}
       windSpeed={windSpeed}
+      degradation={degradation}
+      atmosphericTrans={atmosphericTrans}
+      airTemp={airTemp}
+      pressure={pressure}
+      humidity={humidity}
+      seeing={seeing}
     />
   );
 };

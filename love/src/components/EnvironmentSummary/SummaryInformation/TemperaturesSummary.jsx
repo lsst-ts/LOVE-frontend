@@ -49,11 +49,10 @@ class TemperaturesSummary extends Component {
     const temperatures = temperature.slice(0, numChannels);
     const locations = location ? location.split(',') : [];
     return (
-      <div className={styles.container}>
+      <div className={styles.containerTemperaturesSummary}>
         <SummaryPanel className={styles.summaryPanel}>
           <div className={styles.title}>
-            <TemperatureIcon />
-            <Title>Temperatures</Title>
+            <Label>Temperatures</Label>
           </div>
           <div className={styles.summaryPanelDetail}>
             {temperatures.map((t, i) => (

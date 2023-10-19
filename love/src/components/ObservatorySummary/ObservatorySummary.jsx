@@ -83,6 +83,7 @@ export default class ObservatorySummary extends Component {
       auxtelTrackingMode,
       controlLocation,
       lastUpdated,
+      degradation,
     } = this.props;
 
     const controlLocationName = controlLocation
@@ -122,6 +123,8 @@ export default class ObservatorySummary extends Component {
           </Value>
           <Label>Power Source</Label>
           <Value>UNKNOWN</Value>
+          <Label>Env. Degradation</Label>
+          <Value>{degradation}</Value>
         </SummaryPanel>
 
         <SummaryPanel>

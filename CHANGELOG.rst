@@ -2,6 +2,20 @@
 Version History
 ===============
 
+v5.26.0
+-------
+
+* Final adjustments for EnvironmentSummary `<https://github.com/lsst-ts/LOVE-frontend/pull/545>`_
+* Bump @babel/traverse from 7.22.5 to 7.23.2 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/544>`_
+* Add Simonyi Interlock Signals `<https://github.com/lsst-ts/LOVE-frontend/pull/542>`_
+* Scripts Form Config is not showing button icons `<https://github.com/lsst-ts/LOVE-frontend/pull/541>`_
+* Layout improvements for OLE components `<https://github.com/lsst-ts/LOVE-frontend/pull/540>`_
+* Update ATMCS Mount Tracking config file `<https://github.com/lsst-ts/LOVE-frontend/pull/539>`_
+* Add Environmental Degradation to top level summaries `<https://github.com/lsst-ts/LOVE-frontend/pull/538>`_
+* Possibly malformed YAML in script dialog causes crash loop on subsequent use `<https://github.com/lsst-ts/LOVE-frontend/pull/536>`_
+* Add ability to add a script at the top of the queue from LOVE `<https://github.com/lsst-ts/LOVE-frontend/pull/537>`_
+* Move docs creation to CI `<https://github.com/lsst-ts/LOVE-frontend/pull/532>`_
+
 v5.25.3
 -------
 

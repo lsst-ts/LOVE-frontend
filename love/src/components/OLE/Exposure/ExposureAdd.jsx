@@ -637,7 +637,7 @@ export default class ExposureAdd extends Component {
                   {savingLog ? (
                     <SpinnerIcon className={styles.spinnerIcon} />
                   ) : (
-                    <span className={styles.title}>Upload Log</span>
+                    <span className={styles.title}>Save</span>
                   )}
                 </Button>
               </div>

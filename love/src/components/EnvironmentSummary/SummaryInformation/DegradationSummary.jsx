@@ -17,32 +17,29 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-.input {
-  width: 100%;
-  box-sizing: border-box;
-  border-radius: 3px;
-  padding: 0.4em;
-  font-family: inherit;
-  font-size: inherit;
-  background-color: transparent;
-  border: 1px solid var(--secondary-font-dimmed-color);
-  /* color: inherit; */
-  color: var(--base-font-color);
+import React, { Component, memo } from 'react';
+import PropTypes from 'prop-types';
+import styles from './SummaryInformation.module.css';
+
+class DegradationSummary extends Component {
+  static propTypes = {
+    /** Environmental degradation. */
+    degradation: PropTypes.any,
+  };
+
+  static defaultProps = {
+    degradation: 'Unknown',
+  };
+
+  render() {
+    const { degradation } = this.props;
+    return (
+      <div className={styles.container}>
+        <div className={styles.textTitle}>Env. Degradation</div>
+        <div>{degradation}</div>
+      </div>
+    );
+  }
 }
 
-.input::placeholder {
-  color: var(--secondary-font-color);
-  opacity: 1; /* Firefox */
-  font-family: inherit;
-  font-size: inherit;
-}
-
-.input:focus {
-  outline: none;
-  border: 1px solid var(--secondary-font-color);
-}
-
-.input.checkbox {
-  height: 1.25em;
-  width: 1.25em;
-}
+export default memo(DegradationSummary);

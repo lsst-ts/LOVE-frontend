@@ -21,6 +21,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   display: grid;
   grid-template-columns: 2.5em max-content;
   column-gap: 0.5em;
+  grid-column: 1 /3;
 }
 
 .menuElement {

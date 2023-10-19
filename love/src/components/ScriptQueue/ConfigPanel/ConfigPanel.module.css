@@ -316,6 +316,10 @@ a.documentationLink {
   margin-bottom: var(--content-padding);
 }
 
+.arrayContainer {
+  margin-left: 0.5em;
+}
+
 .arrayContainer input {
   margin: 7px;
 }
@@ -323,10 +327,13 @@ a.documentationLink {
 .deleteItemButtonContainer {
   display: flex;
   align-items: center;
+  border: 1px solid var(--secondary-font-dimmed-color);
+  margin: 0.25em;
+  border-radius: 0.5em;
 }
 
 .deleteItem {
-  flex-grow: 1;
+  margin: 0px;
 }
 
 .deleteItemButton {
@@ -353,6 +360,7 @@ a.documentationLink {
   flex-grow: 8;
   display: flex;
   align-items: center;
+  margin: 0.3em 0;
 }
 
 .arrayElement > div {
@@ -363,6 +371,10 @@ a.documentationLink {
 .availableScriptTypeSeparator {
   border-bottom: 1px solid var(--second-quaternary-background-color);
   margin: 1em 0;
+}
+
+.addNewArray {
+  margin-bottom: 0.5em;
 }
 
 .addNewArray button {
@@ -412,9 +424,85 @@ fieldset p {
 }
 
 :global(.field) > *:nth-child(2) {
-  margin: 1em 0;
+  margin: 0.5em 0;
 }
 
 :global(.ace_editor) {
   width: 100% !important;
+}
+
+.iconBtn {
+  margin: auto;
+  padding: 0.3em;
+  height: 2em;
+  width: 2em;
+  border-radius: 100%;
+}
+
+.icon {
+  height: 1.4em;
+}
+
+.element {
+  margin: 0.25rem;
+}
+
+.sidePanel :global(.control-label) {
+  padding-top: 7px;
+  margin-bottom: 0;
+  text-align: right;
+}
+.sidePanel :global(.form-group) {
+  margin-bottom: 15px;
+}
+.sidePanel :global(.form-control) {
+  width: 95%;
+  box-sizing: border-box;
+  border-radius: 3px;
+  padding: 0.4em;
+  font-family: inherit;
+  font-size: inherit;
+  background-color: transparent;
+  border: 1px solid var(--secondary-font-dimmed-color);
+  color: inherit;
+  color: var(--base-font-color);
+}
+.sidePanel :global(.form-control:focus) {
+  outline: none;
+  border: 1px solid var(--secondary-font-color);
+}
+.sidePanel :global(.row) {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.sidePanel :global(.col-xs-9) {
+  width: calc(100% / 12 * 9 );
+}
+.sidePanel :global(.col-xs-5) {
+  width: calc(100% / 12 * 5 );
+}
+.sidePanel :global(.col-xs-3) {
+  width: calc(100% / 12 * 3 );
+}
+.sidePanel :global(.col-xs-2) {
+  width: calc(100% / 12 * 2 );
+}
+.sidePanel :global(.array-item-list) {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+.sidePanel :global(.array-item) {
+  position: relative;
+  display: block;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  border: 1px solid rgba(0,0,0,.125);
 }

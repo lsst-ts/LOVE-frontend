@@ -1290,6 +1290,45 @@ export const getRawStatus = (state) => {
   };
 };
 
+// MTIS
+export const getMTIS = (state) => {
+  const subscriptions = [
+    'event-MTMount-0-safetyInterlocks',
+    'event-MTDome-0-interlocks',
+    'event-MTM1M3-0-interlockWarning',
+  ];
+  const mtInterlocksData = getStreamsData(state, subscriptions);
+  return {
+    mtMountSubcausesEmergencyStop:
+      mtInterlocksData['event-MTMount-0-safetyInterlock']?.[0]?.subcausesEmergencyStop?.value ?? false,
+    mtMountSubcausesLimitSwitch:
+      mtInterlocksData['event-MTMount-0-safetyInterlock']?.[0]?.subcausesLimitSwitch?.value ?? false,
+    mtMountSubcausesDeployablePlatform:
+      mtInterlocksData['event-MTMount-0-safetyInterlock']?.[0]?.subcausesDeployablePlatform?.value ?? false,
+    mtMountSubcausesDoorHatchLadder:
+      mtInterlocksData['event-MTMount-0-safetyInterlock']?.[0]?.subcausesDoorHatchLadder?.value ?? false,
+    mtMountSubcausesMirrorCover:
+      mtInterlocksData['event-MTMount-0-safetyInterlock']?.[0]?.subcausesMirrorCover?.value ?? false,
+    mtMountSubcausesLockingPin:
+      mtInterlocksData['event-MTMount-0-safetyInterlock']?.[0]?.subcausesLockingPin?.value ?? false,
+    mtMountSubcausesCapacitorDoor:
+      mtInterlocksData['event-MTMount-0-safetyInterlock']?.[0]?.subcausesCapacitorDoor?.value ?? false,
+    mtMountSubcausesBrakesFailed:
+      mtInterlocksData['event-MTMount-0-safetyInterlock']?.[0]?.subcausesBrakesFailed?.value ?? false,
+    mtDome: mtInterlocksData['event-MTDome-0-interlocks']?.[0]?.data?.value ?? '0'.repeat(16),
+    mtM1m3HeartbeatStateOutputMismatch:
+      mtInterlocksData['event-MTM1M3-0-interlockWarning']?.[0]?.heartbeatStateOutputMismatch?.value ?? false,
+    mtM1m3AuxPowerNetworksOff:
+      mtInterlocksData['event-MTM1M3-0-interlockWarning']?.[0]?.auxPowerNetworksOff?.value ?? false,
+    mtM1m3ThermalEquipmentOff:
+      mtInterlocksData['event-MTM1M3-0-interlockWarning']?.[0]?.thermalEquipmentOff?.value ?? false,
+    mtM1m3AirSupplyOff: mtInterlocksData['event-MTM1M3-0-interlockWarning']?.[0]?.airSupplyOff?.value ?? false,
+    mtM1m3TmaMotionStop: mtInterlocksData['event-MTM1M3-0-interlockWarning']?.[0]?.tmaMotionStop?.value ?? false,
+    mtM1m3GisHeartbeatLost: mtInterlocksData['event-MTM1M3-0-interlockWarning']?.[0]?.gisHeartbeatLost?.value ?? false,
+    mtM1m3CabinetDoorOpen: mtInterlocksData['event-MTM1M3-0-interlockWarning']?.[0]?.cabinetDoorOpen?.value ?? false,
+  };
+};
+
 // Scheduler
 export const getSchedulerSummaryState = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-summaryState`];
@@ -2136,6 +2175,8 @@ export const getHVACTelemetry = (state) => {
 
 export const getObservatorySubscriptions = () => {
   return [
+    'event-Scheduler-1-summaryState',
+    'event-Scheduler-2-summaryState',
     'event-Scheduler-1-observingMode',
     'event-Scheduler-2-observingMode',
     `telemetry-Scheduler-1-observatoryState`,
@@ -2144,6 +2185,8 @@ export const getObservatorySubscriptions = () => {
     `event-Scheduler-2-target`,
     'event-ESS-301-precipitation',
     'telemetry-ESS-301-temperature',
+    'telemetry-ESS-301-pressure',
+    'telemetry-ESS-301-relativeHumidity',
     'telemetry-ESS-301-airFlow',
     'event-ATPtg-0-currentTarget',
     'event-MTPtg-0-currentTarget',
@@ -2153,6 +2196,8 @@ export const getObservatorySubscriptions = () => {
 export const getObservatoryState = (state) => {
   const observatorySubscriptions = getObservatorySubscriptions();
   const observatoryData = getStreamsData(state, observatorySubscriptions);
+  const simonyiSummaryState = observatoryData['event-Scheduler-1-summaryState'];
+  const auxtelSummaryState = observatoryData['event-Scheduler-2-summaryState'];
   const simonyiObservingMode = observatoryData['event-Scheduler-1-observingMode'];
   const simonyiTarget = observatoryData[`event-Scheduler-1-target`];
   const auxtelObservingMode = observatoryData['event-Scheduler-2-observingMode'];
@@ -2161,10 +2206,14 @@ export const getObservatoryState = (state) => {
   const environmentVariables = observatoryData['event-ESS-301-precipitation'];
   const essTemperatures = observatoryData['telemetry-ESS-301-temperature'];
   const essAirFlow = observatoryData['telemetry-ESS-301-airFlow'];
+  const essPressure = observatoryData['telemetry-ESS-301-pressure'];
+  const essRelativeHumidity = observatoryData['telemetry-ESS-301-relativeHumidity'];
   const mptgCurrentTarget = observatoryData['event-MTPtg-0-currentTarget'];
   const atptgCurrentTarget = observatoryData['event-ATPtg-0-currentTarget'];
 
   return {
+    simonyiState: simonyiSummaryState ? simonyiSummaryState[0].summaryState.value : 0,
+    auxtelState: auxtelSummaryState ? auxtelSummaryState[0].summaryState.value : 0,
     simonyiObservingMode: simonyiObservingMode ? simonyiObservingMode[0].mode.value : 'UNKNOWN',
     auxtelObservingMode: auxtelObservingMode ? auxtelObservingMode[0].mode.value : 'UNKNOWN',
     simonyiTrackingState: simonyiObservatoryState ? simonyiObservatoryState.tracking?.value : false,
@@ -2197,6 +2246,14 @@ export const getObservatoryState = (state) => {
     location: essTemperatures ? essTemperatures.location.value : '',
     windDirection: essAirFlow ? essAirFlow.direction.value : 0.0,
     windSpeed: essAirFlow ? essAirFlow.speed.value : 0.0,
+    // TODO: Add the corresponding telemetry or event when Enviromental Degradation gets integrated into SAL
+    degradation: 'Unknown',
+    pressure: essPressure ? essPressure.pressure.value : 0,
+    humidity: essRelativeHumidity ? essRelativeHumidity.relativeHumidity.value : 0,
+    // TODO: Add the corresponding telemetry or event when the following variables gets integrated into SAL
+    airTemp: 'Unknown',
+    atmosphericTrans: 'Unknown',
+    seeing: 'Unknown',
   };
 };
 

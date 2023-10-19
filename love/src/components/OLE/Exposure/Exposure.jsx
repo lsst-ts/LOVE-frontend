@@ -32,8 +32,8 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
-import { exposureFlagStateToStyle, DATE_TIME_FORMAT, ISO_INTEGER_DATE_FORMAT, LOG_REFRESH_INTERVAL_MS } from 'Config';
-import ManagerInterface from 'Utils';
+import { exposureFlagStateToStyle, TIME_FORMAT, ISO_INTEGER_DATE_FORMAT, LOG_REFRESH_INTERVAL_MS } from 'Config';
+import ManagerInterface, { trimString } from 'Utils';
 import ExposureAdd from './ExposureAdd';
 import ExposureDetail from './ExposureDetail';
 import styles from './Exposure.module.css';
@@ -110,6 +110,7 @@ export default class Exposure extends Component {
       observationIds: [],
       messages: [],
       exposureFlags: {},
+      lastMessages: {},
     };
 
     this.queryExposuresInterval = null;
@@ -228,6 +229,16 @@ export default class Exposure extends Component {
         },
       },
       {
+        field: 'obs_id',
+        title: 'Last Message',
+        type: 'string',
+        className: styles.tableHead,
+        render: (value, _) => {
+          const lastMessage = this.state.lastMessages[value];
+          return lastMessage ? trimString(lastMessage) : '';
+        },
+      },
+      {
         field: 'action',
         title: 'Action',
         type: 'string',
@@ -282,10 +293,12 @@ export default class Exposure extends Component {
         return exposure;
       });
 
-      // Get the list of messages and retrieve exposure flags
+      // Get the list of messages and retrieve exposure flags and last message per exposure
       ManagerInterface.getListAllMessagesExposureLogs(startObsDay, endObsDay).then((messages) => {
         const exposureFlags = {};
+        const lastMessages = {};
         messages.forEach((message) => {
+          // Get exposure flags per exposure
           if (!exposureFlags[message.obs_id]) {
             exposureFlags[message.obs_id] = {};
           }
@@ -294,9 +307,18 @@ export default class Exposure extends Component {
           } else {
             exposureFlags[message.obs_id][message.exposure_flag] = 1;
           }
+
+          // Get last message per exposure
+          if (!lastMessages[message.obs_id]) {
+            lastMessages[message.obs_id] = message.message_text;
+          } else {
+            if (Moment(message.timestamp).isAfter(lastMessages[message.obs_id].timestamp)) {
+              lastMessages[message.obs_id] = message.message_text;
+            }
+          }
         });
 
-        this.setState({ exposureFlags, messages });
+        this.setState({ exposureFlags, lastMessages, messages });
       });
 
       this.setState({
@@ -307,6 +329,17 @@ export default class Exposure extends Component {
         lastUpdated: moment(),
       });
     });
+  }
+
+  parseCsvData(data) {
+    const csvData = data.map((row) => {
+      const exposureLength = Moment(row.timespan_end).diff(Moment(row.timespan_begin), 'seconds', true);
+      return {
+        ...row,
+        seconds_length: exposureLength,
+      };
+    });
+    return csvData;
   }
 
   setQueryExposuresInterval() {
@@ -373,11 +406,25 @@ export default class Exposure extends Component {
     let csvHeaders = null;
     let csvData = "There aren't exposures created for the current search...";
     let csvTitle = 'exposure.csv';
-
     if (filteredData.length > 0) {
-      const logExampleKeys = Object.keys(filteredData[0] ?? {});
-      csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
-      csvData = filteredData;
+      const exportedParams = [
+        'obs_id',
+        'instrument',
+        'observation_type',
+        'observation_reason',
+        'day_obs',
+        'seq_num',
+        'group_name',
+        'target_name',
+        'science_program',
+        'tracking_ra',
+        'tracking_dec',
+        'sky_angle',
+        'timespan_begin',
+        'seconds_length',
+      ];
+      csvHeaders = exportedParams.map((key) => ({ label: key, key }));
+      csvData = this.parseCsvData(filteredData);
     }
 
     if (selectedDayExposureStart && selectedDayExposureEnd) {
@@ -418,7 +465,6 @@ export default class Exposure extends Component {
 
     return (
       <div className={styles.margin10}>
-        <div className={styles.title}>Filter</div>
         <div className={styles.filters}>
           <Button disabled={updatingExposures} onClick={() => this.queryExposures()}>
             Refresh data
@@ -466,7 +512,7 @@ export default class Exposure extends Component {
           </div>
         </div>
         <div className={styles.lastUpdated}>
-          Last updated: {this.state.lastUpdated ? this.state.lastUpdated.format(DATE_TIME_FORMAT) : ''}
+          Last updated: {this.state.lastUpdated ? this.state.lastUpdated.format(TIME_FORMAT) : ''}
           {updatingExposures && <SpinnerIcon className={styles.spinnerIcon} />}
         </div>
         <SimpleTable headers={headers} data={filteredData} />

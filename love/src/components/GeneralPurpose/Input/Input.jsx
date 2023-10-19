@@ -40,7 +40,7 @@ const Input = ({
       defaultValue={defaultValue}
       value={value}
       type={type}
-      className={[styles.input, className].join(' ')}
+      className={[className, styles.input, type === 'checkbox' ? styles.checkbox : ''].join(' ')}
       placeholder={placeholder}
       checked={checked}
       min={min}

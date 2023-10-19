@@ -71,6 +71,17 @@ export const URL_REGEX =
   /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
 
 /*****************************************************************************/
+/*************************ScriptQueue configurations**************************/
+/*****************************************************************************/
+
+export const SCRIPTQUEUE_SCRIPT_LOCATION = {
+  FIRST: 1,
+  LAST: 2,
+  BEFORE: 3,
+  AFTER: 4,
+};
+
+/*****************************************************************************/
 /****************************Limits configurations****************************/
 /*****************************************************************************/
 
@@ -354,7 +365,7 @@ export const MTCSCommands = {
 export const LOG_REFRESH_INTERVAL_MS = 60000;
 
 export const OLE_COMMENT_TYPE_OPTIONS = [
-  { label: 'Priority', value: 'all' },
+  { label: 'All priorities', value: 'all' },
   { label: 'Urgent', value: 100 },
   { label: 'Non urgent', value: 0 },
 ];
@@ -586,7 +597,7 @@ export const stateToStyleMount = {
   UNKNOWN: 'invalid',
   'UNKNOWN POSITION': 'invalid',
   TRACKINGDISABLED: 'warning',
-  TRACKINGENABLED: 'warning',
+  TRACKINGENABLED: 'ok',
   STOPPING: 'warning',
 };
 
@@ -3436,7 +3447,7 @@ export const SensorsPositionESS = {
       xPosition: 0,
       yPosition: 0,
       zPosition: 4,
-    }
+    },
   ],
   'AuxTel-ESS03': [
     {

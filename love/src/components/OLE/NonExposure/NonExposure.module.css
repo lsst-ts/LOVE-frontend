@@ -195,16 +195,27 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   height: 1.5em;
 }
 
-.filters .select {
+.filters .selectComment,
+.filters .selectComponent {
+  text-align: left;
   white-space: nowrap;
-  flex: 0 0 300px;
   border: 1px solid var(--secondary-font-dimmed-color);
 }
 
+.filters .selectComment {
+  flex: 0 0 20ch;
+}
+
+.filters .selectComponent {
+  flex: 0 0 35ch;
+}
+
 .lastUpdated {
+  display: flex;
+  align-items: center;
   text-align: left;
-  margin-bottom: 0.5em;
   color: var(--primary-font-color);
+  margin-bottom: var(--small-padding);
 }
 
 .floatRight {
@@ -256,7 +267,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .contentRight textarea {
   width: 100%;
   min-width: 30em;
-  height: 12em;
+  min-height: 12ch;
   resize: none;
   background: var(--secondary-background-dimmed-color);
   color: var(--base-font-color);
@@ -317,6 +328,11 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   border: 1px solid var(--secondary-font-color);
 }
 
+.footerLeft {
+  display: flex;
+  align-items: center;
+}
+
 .footerRight {
   margin-left: auto;
 }
@@ -333,7 +349,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   margin-right: 5px;
   align-items: center;
   text-align: left;
-  min-width: 24ch;
 }
 
 .footerMenu .checkboxText {
@@ -342,10 +357,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .checkboxText > *:not(:last-child) {
   margin-right: 0.5em;
-}
-
-.checkboxText > input:first-of-type {
-  width: auto;
 }
 
 .checkboxText > button {
@@ -412,14 +423,17 @@ th.tableHead {
 }
 
 .inputError {
-  margin-top: var(--small-padding);
-  color: var(--status-alert-color);
+  border-color: var(--status-alert-color);
 }
 
 .incidentTimeTypeContainer {
   display: flex;
   align-items: center;
   margin-bottom: var(--small-padding);
+}
+
+.incidentTimeTypeContainer > :first-child {
+  margin-right: var(--small-padding);
 }
 
 .refreshDateIcon {
@@ -462,12 +476,15 @@ th.tableHead {
   margin-right: var(--small-padding);
 }
 
-.footer .toAttachFiles,
-.footerMenu .toAttachFiles {
-  margin-bottom: var(--small-padding);
-}
-
 .footer .jira,
 .footerMenu .jira {
   white-space: nowrap;
+}
+
+.footer .jira {
+  margin-right: var(--small-padding);
+}
+
+.footerMenu .jira {
+  margin-bottom: var(--small-padding);
 }

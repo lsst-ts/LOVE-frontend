@@ -27,19 +27,23 @@ import rjsfValidator from '@rjsf/validator-ajv8';
 import { SCRIPT_DOCUMENTATION_BASE_URL } from 'Config';
 import Select from 'components/GeneralPurpose/Select/Select';
 import styles from './ConfigPanel.module.css';
-import Button from '../../GeneralPurpose/Button/Button';
-import Input from '../../GeneralPurpose/Input/Input';
-import DeleteIcon from '../../icons/DeleteIcon/DeleteIcon';
-import ErrorIcon from '../../icons/ErrorIcon/ErrorIcon';
-import RotateIcon from '../../icons/RotateIcon/RotateIcon';
-import CloseIcon from '../../icons/CloseIcon/CloseIcon';
-import SaveNewIcon from '../../icons/SaveNewIcon/SaveNewIcon';
-import SaveIcon from '../../icons/SaveIcon/SaveIcon';
-import SpinnerIcon from '../../icons/SpinnerIcon/SpinnerIcon';
-import RowExpansionIcon from '../../icons/RowExpansionIcon/RowExpansionIcon';
-import Hoverable from '../../GeneralPurpose/Hoverable/Hoverable';
-import InfoPanel from '../../GeneralPurpose/InfoPanel/InfoPanel';
-import ManagerInterface from '../../../Utils';
+import Button from 'components/GeneralPurpose/Button/Button';
+import Input from 'components/GeneralPurpose/Input/Input';
+import AddIcon from 'components/icons/AddIcon/AddIcon';
+import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
+import ErrorIcon from 'components/icons/ErrorIcon/ErrorIcon';
+import RotateIcon from 'components/icons/RotateIcon/RotateIcon';
+import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
+import SaveNewIcon from 'components/icons/SaveNewIcon/SaveNewIcon';
+import SaveIcon from 'components/icons/SaveIcon/SaveIcon';
+import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
+import RowExpansionIcon from 'components/icons/RowExpansionIcon/RowExpansionIcon';
+import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
+import InfoPanel from 'components/GeneralPurpose/InfoPanel/InfoPanel';
+import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
+import { SCRIPTQUEUE_SCRIPT_LOCATION } from 'Config';
+import ManagerInterface from 'Utils';
+
 import 'brace/mode/yaml';
 import 'brace/theme/solarized_dark';
 
@@ -133,6 +137,7 @@ export default class ConfigPanel extends Component {
       inputConfigurationName: DEFAULT_CONFIG_NAME,
       formData: {},
       updatingScriptSchema: false,
+      queueToTop: false,
     };
   }
 
@@ -148,14 +153,6 @@ export default class ConfigPanel extends Component {
         ))}
       </div>
     );
-  };
-
-  CustomTitleField = (props) => {
-    return <div className={styles.formTitleModifier}>{props.title}</div>;
-  };
-
-  CustomDescriptionField = (prop) => {
-    return <div className={styles.formDescriptionModifier}>{this.props.description}</div>;
   };
 
   CustomSelect = (props) => {
@@ -235,6 +232,35 @@ export default class ConfigPanel extends Component {
       </>
     );
   };
+
+  AddButtonTemplate = (props) => {
+    const { ...btnProps } = props;
+    return (
+      <Button
+        className={[styles.iconBtn, styles.element].join(' ')}
+        title="Add"
+        onClick={btnProps.onClick}
+        status="transparent"
+      >
+        <AddIcon className={styles.icon} />
+      </Button>
+    );
+  };
+
+  RemoveButtonTemplate = (props) => {
+    const { ...btnProps } = props;
+    return (
+      <Button
+        className={[styles.iconBtn, styles.element].join(' ')}
+        title="Remove"
+        onClick={btnProps.onClick}
+        status="transparent"
+      >
+        <DeleteIcon className={styles.icon} />
+      </Button>
+    );
+  };
+
   /************************/
 
   /**
@@ -249,7 +275,16 @@ export default class ConfigPanel extends Component {
      */
     const schema = this.props.configPanel.configSchema;
     if (!schema) {
-      this.setState({ validationStatus: EMPTY });
+      this.setState({
+        validationStatus: EMPTY,
+        configErrorTitle: 'Waiting for schema',
+        configErrors: [
+          {
+            name: ``,
+            message: `Schema not yet loaded`,
+          },
+        ],
+      });
       return;
     }
 
@@ -272,13 +307,32 @@ export default class ConfigPanel extends Component {
 
         /** Server error */
         if (!r.ok) {
-          this.setState({ validationStatus: SERVER_ERROR });
+          this.setState({
+            validationStatus: SERVER_ERROR,
+            configErrorTitle: 'Validation Failed',
+            configErrors: [
+              {
+                name: ``,
+                message: `There is no schema to validate or another server error was encountered`,
+              },
+            ],
+          });
           return false;
         }
         return r.json();
       })
       .then((r) => {
         /** Handle SERVER_ERROR */
+        this.setState({
+          validationStatus: SERVER_ERROR,
+          configErrorTitle: 'Validation Failed',
+          configErrors: [
+            {
+              name: ``,
+              message: `There is no schema to validate or another server error was encountered`,
+            },
+          ],
+        });
         if (!r) return;
 
         /** Valid schema should show no message */
@@ -347,6 +401,9 @@ export default class ConfigPanel extends Component {
   };
 
   closeConfigPanel = () => {
+    this.setState({
+      queueToTop: false,
+    });
     this.props.closeConfigPanel();
   };
 
@@ -385,6 +442,7 @@ export default class ConfigPanel extends Component {
     const isStandard = script.type === 'standard';
     const logLevel = logLevelMap[this.state.logLevel] ?? 20;
     const config = this.state.value.replace(/^#.*\n?/gm, '');
+    const location = this.state.queueToTop ? SCRIPTQUEUE_SCRIPT_LOCATION.FIRST : SCRIPTQUEUE_SCRIPT_LOCATION.LAST;
 
     this.saveLastUsedConfiguration();
 
@@ -393,7 +451,7 @@ export default class ConfigPanel extends Component {
       script.path,
       config,
       'description',
-      2,
+      location,
       this.state.pauseCheckpoint,
       this.state.stopCheckpoint,
       logLevel,
@@ -438,7 +496,7 @@ export default class ConfigPanel extends Component {
 
     let yamlData;
     try {
-      yamlData = configuration ? yaml.load(configuration.config_schema) : {};
+      yamlData = configuration && configuration.config_schema ? yaml.load(configuration.config_schema) ?? {} : {};
     } catch {
       yamlData = {};
     }
@@ -513,7 +571,7 @@ export default class ConfigPanel extends Component {
     const buttonHtml = (
       <Button
         disabled={
-          [ERROR, VALIDATING, NEED_REVALIDATION].includes(validationStatus) ||
+          [ERROR, VALIDATING, NEED_REVALIDATION, EMPTY, SERVER_ERROR].includes(validationStatus) ||
           (!configurationSchemaChanged && !configurationNameChanged)
         }
         status="transparent"
@@ -556,7 +614,8 @@ export default class ConfigPanel extends Component {
   saveNewScriptSchema = (scriptPath, scriptType, configName, configSchema) => {
     const { configurationList } = this.state;
     this.setState({ updatingScriptSchema: true });
-    ManagerInterface.postScriptConfiguration(scriptPath, scriptType, configName, configSchema).then((res) => {
+
+    ManagerInterface.postScriptConfiguration(scriptPath, scriptType, configName, configSchema, this.props.configPanel.configSchema).then((res) => {
       const newConfigurationList = [res, ...configurationList];
       const options = newConfigurationList.map((conf) => ({ label: conf.config_name, value: conf.id }));
       const newSelectedConfiguration = { label: res.config_name, value: res.id };
@@ -575,7 +634,8 @@ export default class ConfigPanel extends Component {
   updateScriptSchema = (id, configSchema) => {
     const { configurationList } = this.state;
     this.setState({ updatingScriptSchema: true });
-    ManagerInterface.updateScriptSchema(id, configSchema).then((res) => {
+
+    ManagerInterface.updateScriptSchema(id, configSchema, this.props.configPanel.configSchema).then((res) => {
       const newSelectedConfiguration = { label: res.config_name, value: res.id };
       this.setState({
         updatingScriptSchema: false,
@@ -599,19 +659,20 @@ export default class ConfigPanel extends Component {
 
         let yamlData;
         try {
-          yamlData = configuration ? yaml.load(configuration.config_schema) : {};
+          yamlData = configuration && configuration.config_schema ? yaml.load(configuration.config_schema) ?? {} : {};
         } catch {
           yamlData = {};
         }
-
+        const value = configuration?.config_schema ?? DEFAULT_CONFIG_VALUE;
         this.setState((state) => ({
           configurationList: data,
           configurationOptions: options,
           selectedConfiguration: configuration ? { label: configuration.config_name, value: configuration.id } : null,
-          value: configuration?.config_schema ?? DEFAULT_CONFIG_VALUE,
+          value: value,
           inputConfigurationName: configuration?.config_name ?? DEFAULT_CONFIG_NAME,
           formData: yamlData,
         }));
+        this.validateConfig(value, true);
       });
     }
 
@@ -629,7 +690,7 @@ export default class ConfigPanel extends Component {
   };
 
   render() {
-    const { orientation, showSchema } = this.state;
+    const { orientation, showSchema, queueToTop } = this.state;
     const scriptName = this.props.configPanel?.name ?? '';
     const scriptPath = this.props.configPanel?.script?.path ?? '';
     const isStandard = this.props.configPanel?.script ? this.props.configPanel.script?.type === 'standard' : false;
@@ -660,7 +721,7 @@ export default class ConfigPanel extends Component {
     // RJSF variables
     let rjsfSchema;
     try {
-      rjsfSchema = yamlSchema ? yaml.load(yamlSchema) : {};
+      rjsfSchema = yaml.load(yamlSchema) ?? {};
     } catch {
       rjsfSchema = {};
     }
@@ -672,6 +733,14 @@ export default class ConfigPanel extends Component {
     };
     const rjsfFields = {
       TitleField: this.CustomTitleField,
+    };
+
+    const rjsfTemplates = {
+      ArrayFieldTemplate: this.ArrayFieldTemplate,
+      ButtonTemplates: {
+        AddButton: this.AddButtonTemplate,
+        RemoveButton: this.RemoveButtonTemplate,
+      },
     };
 
     const isBeside = orientation === 'beside';
@@ -811,7 +880,7 @@ export default class ConfigPanel extends Component {
                   children={true}
                   className={styles.scriptForm}
                   formData={this.state.formData}
-                  templates={{ ArrayFieldTemplate: this.ArrayFieldTemplate }}
+                  templates={rjsfTemplates}
                   onChange={(e) => {
                     this.setState({
                       formData: e.formData,
@@ -840,13 +909,20 @@ export default class ConfigPanel extends Component {
                 placeholder="Debug"
                 onChange={(selection) => this.onLogLevelChange(selection.value)}
               />
+
+              <span className={styles.logLevelLabel}>Queue position</span>
+              <Toggle
+                toggled={queueToTop}
+                labels={['Bottom', 'Top']}
+                onToggle={(value) => this.setState({ queueToTop: value })}
+              />
             </div>
             <div className={styles.addBtnContainer}>
               <Button
                 title="Enqueue script"
                 size="large"
                 onClick={this.onLaunch}
-                disabled={[ERROR, VALIDATING, NEED_REVALIDATION].includes(this.state.validationStatus)}
+                disabled={[ERROR, VALIDATING, NEED_REVALIDATION, EMPTY].includes(this.state.validationStatus)}
                 command
               >
                 Add

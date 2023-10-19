@@ -45,6 +45,7 @@ export default function ObservatorySummaryMenu({
   auxtelTrackingMode,
   auxtelObsMode,
   auxtelPower,
+  degradation,
 }) {
   const simonyiTrackingStateText = telescopeTrackingStateMap[simonyiTrackingState];
   const simonyiTrackingModeText = telescopeTrackingModeStateMap[simonyiTrackingMode];
@@ -52,7 +53,7 @@ export default function ObservatorySummaryMenu({
   const auxtelTrackingModeText = telescopeTrackingModeStateMap[auxtelTrackingMode];
   return (
     <>
-      <div className={[menuElementClassName, styles.menuElement].join(' ')}>
+      <div className={[menuElementClassName, styles.menuElement, styles.section].join(' ')}>
         <div className={styles.bigIconRow}>
           <div className={styles.iconContainer}>{locationIcon}</div>
           <div className={styles.contentContainer}>
@@ -64,6 +65,8 @@ export default function ObservatorySummaryMenu({
             </div>
           </div>
         </div>
+        <span className={styles.label}>Env. Degradation</span>
+        <span>{degradation}</span>
       </div>
 
       <div className={dividerClassName}></div>

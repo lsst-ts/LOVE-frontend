@@ -24,9 +24,9 @@ import styles from './EnvironmentSummary.module.css';
 import SimonyiTelescope from './Cartoons/SimonyiTelescope';
 import AuxTelescope from './Cartoons/AuxTelescope';
 import WindDirection from './Cartoons/WindDirection';
-import TemperaturesSummary from './SummaryInformation/TemperaturesSummary';
 import WeatherForecastIcon from 'components/icons/WeatherForecastIcon/WeatherForecastIcon';
 import { defaultNumberFormatter } from 'Utils';
+import Summary from './Summary/Summary';
 
 export default class EnvironmentSummary extends Component {
   static propTypes = {
@@ -34,6 +34,10 @@ export default class EnvironmentSummary extends Component {
     subscribeToStreams: PropTypes.func,
     /** Function to unsubscribe to streams to stop receiving */
     unsubscribeToStreams: PropTypes.func,
+    /** Current summary state of Simonyi Scheduler */
+    simonyiState: PropTypes.number,
+    /** Current summary state of Auxtel Scheduler */
+    auxtelState: PropTypes.number,
     /** Is the simonyi telescope tracking? */
     simonyiTrackingState: PropTypes.bool,
     /** Simonyi telescope altitude */
@@ -76,6 +80,57 @@ export default class EnvironmentSummary extends Component {
     windDirection: PropTypes.number,
     /** Median (mean for some sensors) wind speed */
     windSpeed: PropTypes.number,
+    /** Enviromental Degradation */
+    degradation: PropTypes.number,
+    /** Atmospheric Transmission */
+    atmosphericTrans: PropTypes.number,
+    /** Air Temperature */
+    airTemp: PropTypes.number,
+    /** The pressures */
+    pressure: PropTypes.array,
+    /** Relative humidity */
+    humidity: PropTypes.number,
+    /** Seeing */
+    seeing: PropTypes.number,
+  };
+
+  static defaultProps = {
+    simonyiState: 0,
+    auxtelState: 0,
+    simonyiTrackingState: false,
+    simonyiRa: 0,
+    simonyiDec: 0,
+    simonyiAltitude: 0,
+    simonyiAzimuth: 0,
+    simonyiRotator: 0,
+    simonyiDomeAlt: 0,
+    simonyiDomeAz: 0,
+    simonyiMoonRa: 0,
+    simonyiMoonDec: 0,
+    simonyiMoonPhase: 0,
+    simonyiSunRa: 0,
+    simonyiSunDec: 0,
+    auxtelTrackingState: false,
+    auxtelRa: 0,
+    auxtelDec: 0,
+    auxtelAltitude: 0,
+    auxtelAzimuth: 0,
+    auxtelRotator: 0,
+    auxtelDomeAlt: 0,
+    auxtelDomeAz: 0,
+    isRaining: false,
+    isSnowing: false,
+    windDirection: 0,
+    windSpeed: 0,
+    degradation: 'Unknown',
+    atmosphericTrans: 'Unknown',
+    airTemp: 'Unknown',
+    pressure: [],
+    humidity: 'Unknown',
+    seeing: 'Unknown',
+    numChannels: 'Unknown',
+    temperature: 'Unknown',
+    location: 'Unknown',
   };
 
   constructor(props) {
@@ -102,6 +157,8 @@ export default class EnvironmentSummary extends Component {
 
   render() {
     const {
+      simonyiState,
+      auxtelState,
       simonyiTrackingState,
       simonyiRa,
       simonyiDec,
@@ -130,64 +187,83 @@ export default class EnvironmentSummary extends Component {
       location,
       windDirection,
       windSpeed,
+      degradation,
+      atmosphericTrans,
+      airTemp,
+      pressure,
+      humidity,
+      seeing,
     } = this.props;
-    const { hideIconTemperature } = this.state;
 
     return (
-      <div className={styles.container}>
-        <div className={styles.windDirection}>
-          <WindDirection windDirection={windDirection} windSpeed={windSpeed} />
-          <div className={styles.windDirectionDetail}>
-            <span>Direction: {defaultNumberFormatter(windDirection, 2)}°</span>
-            <span>Speed: {defaultNumberFormatter(windSpeed, 2)} m/s</span>
-          </div>
+      <div>
+        <div className={styles.summaryContainer}>
+          <Summary
+            degradation={degradation}
+            atmosphericTrans={atmosphericTrans}
+            airTemp={airTemp}
+            pressure={pressure}
+            humidity={humidity}
+            windSpeed={windSpeed}
+            windDirection={windDirection}
+            seeing={seeing}
+            numChannels={numChannels}
+            temperature={temperature}
+            location={location}
+          />
         </div>
-        <div className={styles.temperaturesContainer}>
-          <TemperaturesSummary numChannels={numChannels} temperature={temperature} location={location} />
-        </div>
-        <div ref={this.containerRef} className={styles.telescopes}>
-          <div className={styles.skymap}>
-            <Skymap
-              containerNode={this.containerRef?.current}
-              simonyiRa={simonyiRa}
-              simonyiDec={simonyiDec}
-              simonyiMoonRa={simonyiMoonRa}
-              simonyiMoonDec={simonyiMoonDec}
-              simonyiSunRa={simonyiSunRa}
-              simonyiSunDec={simonyiSunDec}
-              simonyiMoonPhase={simonyiMoonPhase}
-              auxtelRa={auxtelRa}
-              auxtelDec={auxtelDec}
-            />
-            <div className={styles.weatherIcons}>
-              <WeatherForecastIcon pictocode={isRaining ? 23 : 0} />
-              <WeatherForecastIcon pictocode={isSnowing ? 24 : 0} />
+        <div className={styles.container}>
+          <div className={styles.windDirection}>
+            <WindDirection windDirection={windDirection} windSpeed={windSpeed} />
+            <div className={styles.windDirectionDetail}>
+              <span>Direction: {defaultNumberFormatter(windDirection, 2)}°</span>
+              <span>Speed: {defaultNumberFormatter(windSpeed, 2)} m/s</span>
             </div>
           </div>
-          <SimonyiTelescope
-            className={styles.simonyi}
-            simonyiTrackingState={simonyiTrackingState}
-            simonyiAltitude={simonyiAltitude}
-            simonyiAzimuth={simonyiAzimuth}
-            simonyiRotator={simonyiRotator}
-            simonyiDomeAlt={simonyiDomeAlt}
-            simonyiDomeAz={simonyiDomeAz}
-            auxtelRa={auxtelRa}
-            auxtelDec0={auxtelDec}
-            hideIconTemperature={() => this.hideIconTemperature()}
-            showIconTemperature={() => this.showIconTemperature()}
-          />
-          <AuxTelescope
-            className={styles.auxTel}
-            auxtelTrackingState={auxtelTrackingState}
-            auxtelAltitude={auxtelAltitude}
-            auxtelAzimuth={auxtelAzimuth}
-            auxtelRotator={auxtelRotator}
-            auxtelDomeAlt={auxtelDomeAlt}
-            auxtelDomeAz={auxtelDomeAz}
-            hideIconTemperature={() => this.hideIconTemperature()}
-            showIconTemperature={() => this.showIconTemperature()}
-          />
+          <div ref={this.containerRef} className={styles.telescopes}>
+            <div className={simonyiState === 2 || auxtelState === 2 ? styles.skymap : styles.skymapDisabled}>
+              <Skymap
+                containerNode={this.containerRef?.current}
+                simonyiRa={simonyiRa}
+                simonyiDec={simonyiDec}
+                simonyiMoonRa={simonyiMoonRa}
+                simonyiMoonDec={simonyiMoonDec}
+                simonyiSunRa={simonyiSunRa}
+                simonyiSunDec={simonyiSunDec}
+                simonyiMoonPhase={simonyiMoonPhase}
+                auxtelRa={auxtelRa}
+                auxtelDec={auxtelDec}
+              />
+              <div className={styles.weatherIcons}>
+                <WeatherForecastIcon pictocode={isRaining ? 23 : 0} />
+                <WeatherForecastIcon pictocode={isSnowing ? 24 : 0} />
+              </div>
+            </div>
+            <SimonyiTelescope
+              className={styles.simonyi}
+              simonyiTrackingState={simonyiTrackingState}
+              simonyiAltitude={simonyiAltitude}
+              simonyiAzimuth={simonyiAzimuth}
+              simonyiRotator={simonyiRotator}
+              simonyiDomeAlt={simonyiDomeAlt}
+              simonyiDomeAz={simonyiDomeAz}
+              auxtelRa={auxtelRa}
+              auxtelDec0={auxtelDec}
+              hideIconTemperature={() => this.hideIconTemperature()}
+              showIconTemperature={() => this.showIconTemperature()}
+            />
+            <AuxTelescope
+              className={styles.auxTel}
+              auxtelTrackingState={auxtelTrackingState}
+              auxtelAltitude={auxtelAltitude}
+              auxtelAzimuth={auxtelAzimuth}
+              auxtelRotator={auxtelRotator}
+              auxtelDomeAlt={auxtelDomeAlt}
+              auxtelDomeAz={auxtelDomeAz}
+              hideIconTemperature={() => this.hideIconTemperature()}
+              showIconTemperature={() => this.showIconTemperature()}
+            />
+          </div>
         </div>
       </div>
     );

@@ -1,6 +1,6 @@
 {
   "name": "love",
-  "version": "5.25.3",
+  "version": "5.26.0",
   "private": true,
   "dependencies": {
     "@emotion/core": "^10.3.1",
@@ -94,6 +94,7 @@
     "@babel/core": "^7.17.10",
     "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-react": "^7.16.7",
+    "@projectstorm/react-diagrams-core": "^7.0.2",
     "@testing-library/jest-dom": "^5.1.1",
     "@testing-library/react": "^11.2.2",
     "cypress": "^4.1.0",
