@@ -48,8 +48,11 @@ export default class TeknikerAdd extends Component {
       date_begin: Moment(),
       date_end: Moment(),
       components: [],
+      components_ids: [],
       primary_software_components: ['None'],
+      primary_software_components_ids: OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS['None'],
       primary_hardware_components: ['None'],
+      primary_hardware_components_ids: OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS['None'],
       salindex: 0,
       user: undefined,
       time_lost: 0,
@@ -132,6 +135,8 @@ export default class TeknikerAdd extends Component {
     delete payload['tmaError'];
     delete payload['tmaSituation'];
     delete payload['tmaDescription'];
+
+    console.log(payload);
 
     // Clean null and empty values to avoid API errors
     Object.keys(payload).forEach((key) => {
@@ -266,9 +271,9 @@ export default class TeknikerAdd extends Component {
   renderComponentsFields() {
     const { logEdit } = this.state;
 
-    const componentOptions = OLE_JIRA_COMPONENTS.sort();
-    const primarySoftwareComponentOptions = OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS.sort();
-    const primaryHardwareComponentOptions = OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS.sort();
+    const componentOptions = Object.keys(OLE_JIRA_COMPONENTS).sort();
+    const primarySoftwareComponentOptions = Object.keys(OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS).sort();
+    const primaryHardwareComponentOptions = Object.keys(OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS).sort();
 
     return (
       <>
@@ -281,7 +286,13 @@ export default class TeknikerAdd extends Component {
             selectedValues={logEdit?.components}
             onSelect={(selectedOptions) => {
               this.setState((prevState) => ({
-                logEdit: { ...prevState.logEdit, components: selectedOptions },
+                logEdit: {
+                  ...prevState.logEdit,
+                  components: selectedOptions,
+                  components_ids: selectedOptions.map((component) => {
+                    return OLE_JIRA_COMPONENTS[component];
+                  }),
+                },
               }));
             }}
             placeholder="Select zero or several components"
@@ -295,7 +306,11 @@ export default class TeknikerAdd extends Component {
             option={logEdit?.primary_software_components[0]}
             onChange={({ value }) => {
               this.setState((prevState) => ({
-                logEdit: { ...prevState.logEdit, primary_software_components: [value] },
+                logEdit: {
+                  ...prevState.logEdit,
+                  primary_software_components: [value],
+                  primary_software_components_ids: [OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS[value]],
+                },
               }));
             }}
             className={styles.select}
@@ -308,7 +323,11 @@ export default class TeknikerAdd extends Component {
             option={logEdit?.primary_hardware_components[0]}
             onChange={({ value }) => {
               this.setState((prevState) => ({
-                logEdit: { ...prevState.logEdit, primary_hardware_components: [value] },
+                logEdit: {
+                  ...prevState.logEdit,
+                  primary_hardware_components: [value],
+                  primary_hardware_components_ids: [OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS[value]],
+                },
               }));
             }}
             className={styles.select}

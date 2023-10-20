@@ -295,9 +295,9 @@ export default class NonExposureEdit extends Component {
   renderComponentsFields() {
     const { logEdit } = this.state;
 
-    const componentOptions = OLE_JIRA_COMPONENTS.sort();
-    const primarySoftwareComponentOptions = OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS.sort();
-    const primaryHardwareComponentOptions = OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS.sort();
+    const componentOptions = Object.keys(OLE_JIRA_COMPONENTS).sort();
+    const primarySoftwareComponentOptions = Object.keys(OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS).sort();
+    const primaryHardwareComponentOptions = Object.keys(OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS).sort();
 
     return (
       <>
@@ -310,7 +310,11 @@ export default class NonExposureEdit extends Component {
             selectedValues={logEdit?.components}
             onSelect={(selectedOptions) => {
               this.setState((prevState) => ({
-                logEdit: { ...prevState.logEdit, components: selectedOptions },
+                logEdit: {
+                  ...prevState.logEdit,
+                  components: selectedOptions,
+                  components_ids: selectedOptions.map((component) => OLE_JIRA_COMPONENTS[component]),
+                },
               }));
             }}
             placeholder="Select zero or several components"
@@ -324,7 +328,11 @@ export default class NonExposureEdit extends Component {
             option={logEdit?.primary_software_components[0]}
             onChange={({ value }) => {
               this.setState((prevState) => ({
-                logEdit: { ...prevState.logEdit, primary_software_components: [value] },
+                logEdit: {
+                  ...prevState.logEdit,
+                  primary_software_components: [value],
+                  primary_software_components_ids: [OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS[value]],
+                },
               }));
             }}
             className={styles.select}
@@ -337,7 +345,11 @@ export default class NonExposureEdit extends Component {
             option={logEdit?.primary_hardware_components[0]}
             onChange={({ value }) => {
               this.setState((prevState) => ({
-                logEdit: { ...prevState.logEdit, primary_hardware_components: [value] },
+                logEdit: {
+                  ...prevState.logEdit,
+                  primary_hardware_components: [value],
+                  primary_hardware_components_ids: [OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS[value]],
+                },
               }));
             }}
             className={styles.select}
