@@ -25,7 +25,7 @@ import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import RefreshIcon from 'components/icons/RefreshIcon/RefreshIcon';
-import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
+import RichTextEditor from 'components/GeneralPurpose/RichTextEditor/RichTextEditor';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import MultiFileUploader from 'components/GeneralPurpose/MultiFileUploader/MultiFileUploader';
@@ -40,7 +40,14 @@ import {
   OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS,
   iconLevelOLE,
 } from 'Config';
-import ManagerInterface, { getFilesURLs, getLinkJira, getFilename, openInNewTab } from 'Utils';
+import ManagerInterface, {
+  getFilesURLs,
+  getLinkJira,
+  getFilename,
+  openInNewTab,
+  htmlToJiraMarkdown,
+  jiraMarkdownToHtml,
+} from 'Utils';
 import styles from './NonExposure.module.css';
 
 export default class NonExposureEdit extends Component {
@@ -101,6 +108,7 @@ export default class NonExposureEdit extends Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.multiselectComponentsRef = React.createRef();
+    this.richTextEditorRef = React.createRef();
     this.id = lodash.uniqueId('nonexposure-edit-');
   }
 
@@ -112,6 +120,7 @@ export default class NonExposureEdit extends Component {
   cleanForm() {
     // Reset multiselects values
     this.multiselectComponentsRef.current.resetSelectedValues();
+    this.richTextEditorRef.current.cleanContent();
     this.setState({ logEdit: NonExposureEdit.defaultProps.logEdit });
   }
 
@@ -384,17 +393,21 @@ export default class NonExposureEdit extends Component {
 
   renderMessageField() {
     const { logEdit } = this.state;
+    const htmlMessage = jiraMarkdownToHtml(logEdit?.message_text);
 
     return (
       <>
         <div className={styles.mb1}>
           <div className={styles.title}>Message</div>
         </div>
-        <TextArea
-          value={logEdit?.message_text}
-          callback={(event) =>
-            this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, message_text: event } }))
-          }
+        <RichTextEditor
+          ref={this.richTextEditorRef}
+          className={styles.textArea}
+          defaultValue={htmlMessage}
+          onChange={(value) => {
+            const parsedValue = htmlToJiraMarkdown(value);
+            this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, message_text: parsedValue } }));
+          }}
         />
       </>
     );

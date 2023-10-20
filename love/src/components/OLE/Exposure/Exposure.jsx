@@ -33,7 +33,7 @@ import Select from 'components/GeneralPurpose/Select/Select';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import { exposureFlagStateToStyle, TIME_FORMAT, ISO_INTEGER_DATE_FORMAT, LOG_REFRESH_INTERVAL_MS } from 'Config';
-import ManagerInterface, { trimString } from 'Utils';
+import ManagerInterface, { jiraMarkdownToHtml } from 'Utils';
 import ExposureAdd from './ExposureAdd';
 import ExposureDetail from './ExposureDetail';
 import styles from './Exposure.module.css';
@@ -233,9 +233,10 @@ export default class Exposure extends Component {
         title: 'Last Message',
         type: 'string',
         className: styles.tableHead,
-        render: (value, _) => {
+        render: (value) => {
           const lastMessage = this.state.lastMessages[value];
-          return lastMessage ? trimString(lastMessage) : '';
+          const parsedValue = jiraMarkdownToHtml(lastMessage);
+          return <div className={styles.wikiMarkupText} dangerouslySetInnerHTML={{ __html: parsedValue }} />;
         },
       },
       {

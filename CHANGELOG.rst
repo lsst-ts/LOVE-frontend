@@ -5,6 +5,7 @@ Version History
 v5.26.0
 -------
 
+* Extend OLE Jira feature by implementing a compatible wysiwyg `<https://github.com/lsst-ts/LOVE-frontend/pull/543>`_
 * Final adjustments for EnvironmentSummary `<https://github.com/lsst-ts/LOVE-frontend/pull/545>`_
 * Bump @babel/traverse from 7.22.5 to 7.23.2 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/544>`_
 * Add Simonyi Interlock Signals `<https://github.com/lsst-ts/LOVE-frontend/pull/542>`_

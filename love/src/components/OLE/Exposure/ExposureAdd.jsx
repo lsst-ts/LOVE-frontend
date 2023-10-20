@@ -26,7 +26,7 @@ import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import RefreshIcon from 'components/icons/RefreshIcon/RefreshIcon';
-import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
+import RichTextEditor from 'components/GeneralPurpose/RichTextEditor/RichTextEditor';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
@@ -36,7 +36,7 @@ import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange
 import Modal from 'components/GeneralPurpose/Modal/Modal';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
 import { EXPOSURE_FLAG_OPTIONS, exposureFlagStateToStyle, ISO_INTEGER_DATE_FORMAT } from 'Config';
-import ManagerInterface, { getFilesURLs } from 'Utils';
+import ManagerInterface, { getFilesURLs, htmlToJiraMarkdown, jiraMarkdownToHtml } from 'Utils';
 import styles from './Exposure.module.css';
 
 export default class ExposureAdd extends Component {
@@ -109,6 +109,7 @@ export default class ExposureAdd extends Component {
       jiraIssueError: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.richTextEditorRef = React.createRef();
   }
 
   statusFlag(flag) {
@@ -117,6 +118,7 @@ export default class ExposureAdd extends Component {
 
   cleanForm() {
     this.setState({ newMessage: ExposureAdd.defaultProps.newMessage });
+    this.richTextEditorRef.current.cleanContent();
   }
 
   queryExposures() {
@@ -403,6 +405,8 @@ export default class ExposureAdd extends Component {
 
     const filesUrls = getFilesURLs(this.state.newMessage.urls);
 
+    const htmlMessage = jiraMarkdownToHtml(this.state.newMessage?.message_text);
+
     return (
       <>
         {back && !isMenu && (
@@ -504,15 +508,26 @@ export default class ExposureAdd extends Component {
             )}
 
             <div className={isMenu ? styles.contentMenu : styles.content}>
-              <div className={[styles.mb1, styles.floatLeft, styles.inline].join(' ')}>
+              <div className={styles.mb1}>
                 <span className={styles.title}>Message</span>
               </div>
 
-              <TextArea
+              {/* <TextArea
                 value={this.state.newMessage.message_text}
                 callback={(event) =>
                   this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, message_text: event } }))
                 }
+              /> */}
+              <RichTextEditor
+                ref={this.richTextEditorRef}
+                className={styles.textArea}
+                defaultValue={htmlMessage}
+                onChange={(value) => {
+                  const parsedValue = htmlToJiraMarkdown(value);
+                  this.setState((prevState) => ({
+                    newMessage: { ...prevState.newMessage, message_text: parsedValue },
+                  }));
+                }}
               />
             </div>
 

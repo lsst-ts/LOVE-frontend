@@ -17,15 +17,18 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+/******/
+.mb1 {
+  margin-bottom: 0.5em;
+}
+/******/
+
 .message {
   background-color: var(--second-quaternary-background-color);
   border-radius: 6px;
   display: grid;
-  padding: 2px;
-  margin-bottom: 12px;
-  margin-top: 2px;
-  margin-left: 5px;
-  margin-right: 5px;
+  padding: var(--small-padding);
+  margin-bottom: var(--content-padding);
 }
 
 .header {
@@ -62,14 +65,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .tags {
   text-align: left;
-}
-
-.description {
-  margin-right: 5px;
-  margin-left: 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  margin-bottom: var(--small-padding);
 }
 
 .textDescription {
@@ -149,6 +145,10 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .description textarea:focus {
   outline: none;
   border: 1px solid var(--secondary-font-color);
+}
+
+.textArea {
+  height: calc(100% - 2.5em);
 }
 
 .input {
@@ -251,4 +251,29 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .footer .jira :nth-child(4),
 .footerMenu .jira :nth-child(4) {
   flex-grow: 1;
+}
+
+/* Following is related to the use of the RichTextEditor component */
+.wikiMarkupText {
+  white-space: pre;
+  text-align: left;
+  overflow-x: auto;
+}
+
+.wikiMarkupText h1,
+.wikiMarkupText h2,
+.wikiMarkupText h3,
+.wikiMarkupText h4,
+.wikiMarkupText h5,
+.wikiMarkupText h6 {
+  margin: calc(var(--small-padding) * 0.5) 0;
+}
+
+.wikiMarkupText a {
+  color: var(--link-font-color);
+}
+
+.wikiMarkupText a:hover,
+.wikiMarkupText a:focus {
+  color: var(--link-hover-font-color);
 }

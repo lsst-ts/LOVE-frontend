@@ -1,0 +1,45 @@
+.container {
+  text-align: left;
+  background: var(--secondary-background-dimmed-color);
+}
+
+.container :global(.quill) {
+  height: 100%;
+}
+
+.container :global(.ql-container) {
+  height: calc(100% - 3em);
+}
+
+.container :global(.ql-editor) {
+  min-height: 12ch;
+}
+
+.container :global(.ql-snow .ql-stroke),
+.container :global(.ql-snow .ql-stroke-miter) {
+  stroke: var(--base-font-color);
+}
+
+.container :global(.ql-snow .ql-fill) {
+  fill: var(--base-font-color);
+}
+
+.container :global(.ql-snow .ql-picker),
+.container :global(.ql-snow .ql-tooltip) {
+  color: var(--base-font-color);
+}
+
+.container :global(.ql-toolbar.ql-snow + .ql-container.ql-snow),
+.container :global(.ql-toolbar.ql-snow) {
+  border: none;
+}
+
+.container :global(.ql-snow .ql-picker-options) {
+  background-color: var(--secondary-background-dimmed-color);
+}
+
+.container :global(.ql-snow .ql-tooltip) {
+  background-color: var(--secondary-background-dimmed-color);
+  border: 1px solid var(--secondary-font-dimmed-color);
+  box-shadow: 0 0 5px var(--secondary-font-dimmed-color);
+}
