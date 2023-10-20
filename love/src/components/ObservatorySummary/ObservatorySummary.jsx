@@ -52,6 +52,8 @@ export default class ObservatorySummary extends Component {
     controlLocation: PropTypes.object,
     /** Last Updated Control Location info */
     lastUpdated: PropTypes.instanceOf(Date),
+    /** Atmospheric Transmission */
+    atmosphericTrans: PropTypes.string,
   };
 
   static defaultProps = {
@@ -63,6 +65,7 @@ export default class ObservatorySummary extends Component {
     auxtelTrackingMode: 'UNKNOWN',
     controlLocation: null,
     lastUpdated: null,
+    atmosphericTrans: 'UNKNOWN',
   };
 
   componentDidMount() {
@@ -84,6 +87,7 @@ export default class ObservatorySummary extends Component {
       controlLocation,
       lastUpdated,
       degradation,
+      atmosphericTrans,
     } = this.props;
 
     const controlLocationName = controlLocation
@@ -143,6 +147,8 @@ export default class ObservatorySummary extends Component {
           <Value>{auxtelTrackingModeText}</Value>
           <Label>Power Source</Label>
           <Value>UNKNOWN</Value>
+          <Label>Atmos. Trans.</Label>
+          <Value>{atmosphericTrans}</Value>
         </SummaryPanel>
       </div>
     );

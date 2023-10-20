@@ -46,6 +46,7 @@ export default function ObservatorySummaryMenu({
   auxtelObsMode,
   auxtelPower,
   degradation,
+  atmosphericTrans,
 }) {
   const simonyiTrackingStateText = telescopeTrackingStateMap[simonyiTrackingState];
   const simonyiTrackingModeText = telescopeTrackingModeStateMap[simonyiTrackingMode];
@@ -138,6 +139,9 @@ export default function ObservatorySummaryMenu({
 
         <span className={styles.label}>Power Source</span>
         <span>{auxtelPower}</span>
+
+        <span className={styles.label}>Atmos. Trans.</span>
+        <span>{atmosphericTrans}</span>
       </div>
     </>
   );
@@ -178,4 +182,6 @@ ObservatorySummaryMenu.propTypes = {
   auxtelObsMode: PropTypes.string,
   /** Auxiliary Telescope Power Source */
   auxtelPower: PropTypes.string,
+  /** Atmospheric Transmission */
+  atmosphericTrans: PropTypes.string,
 };
