@@ -248,6 +248,26 @@ export default class NonExposureEdit extends Component {
     }
   }
 
+  renderCategoryField() {
+    return (
+      <>
+        <span className={styles.label}>Category</span>
+        <span className={styles.value}>
+          <Select
+            options={['None', 'ENG', 'SCIENCE']}
+            option={this.state.logEdit?.category}
+            onChange={({ value }) => {
+              this.setState((prevState) => ({
+                logEdit: { ...prevState.logEdit, category: value },
+              }));
+            }}
+            className={styles.select}
+          />
+        </span>
+      </>
+    );
+  }
+
   renderUrgentField() {
     return (
       <>
@@ -326,7 +346,7 @@ export default class NonExposureEdit extends Component {
   }
 
   renderTimeOfIncidentFields() {
-    const { date_begin, date_end, time_lost } = this.state.logEdit ?? {};
+    const { date_begin, date_end, time_lost, time_lost_type } = this.state.logEdit ?? {};
     const { incidentTimeIsSingular, datesAreValid } = this.state;
 
     return (
@@ -371,6 +391,18 @@ export default class NonExposureEdit extends Component {
             </Button>
           </div>
           {!datesAreValid && <div className={styles.inputError}>Error: dates must be input in valid ISO format</div>}
+        </span>
+        <span className={styles.label}>Obs. Time Loss Type</span>
+        <span className={styles.value}>
+          <Toggle
+            labels={['Fault', 'Weather']}
+            toggled={time_lost_type === 'weather'}
+            onToggle={(event) =>
+              this.setState((prevState) => ({
+                logEdit: { ...prevState.logEdit, time_lost_type: event ? 'weather' : 'fault' },
+              }))
+            }
+          />
         </span>
         <span className={styles.label}>Obs. Time Loss (hours)</span>
         <span className={styles.value}>
@@ -544,6 +576,7 @@ export default class NonExposureEdit extends Component {
           <div className={styles.detailContainerMenu}>
             <div id={this.id} className={styles.contentMenu}>
               <div className={styles.contentLeft}>
+                {this.renderCategoryField()}
                 {this.renderUrgentField()}
                 {this.renderComponentsFields()}
                 {this.renderTimeOfIncidentFields()}
@@ -615,6 +648,7 @@ export default class NonExposureEdit extends Component {
 
             <div id={this.id} className={styles.content}>
               <div className={styles.contentLeft}>
+                {this.renderCategoryField()}
                 {this.renderUrgentField()}
                 {this.renderComponentsFields()}
                 {this.renderTimeOfIncidentFields()}
