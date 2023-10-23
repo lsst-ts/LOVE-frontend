@@ -2283,7 +2283,6 @@ export const getObservatoryState = (state) => {
     pressure: essPressure ? essPressure.pressureItem.value : 0,
     humidity: essRelativeHumidity ? essRelativeHumidity.relativeHumidityItem.value : 0,
     // TODO: Add the corresponding telemetry or event when the following variables gets integrated into SAL
-    airTemp: 'Unknown',
     atmosphericTrans: 'Unknown',
     seeing: 'Unknown',
   };

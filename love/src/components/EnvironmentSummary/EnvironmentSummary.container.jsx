@@ -72,7 +72,6 @@ const EnvironmentSummaryContainer = ({
   windSpeed,
   degradation,
   atmosphericTrans,
-  airTemp,
   pressure,
   humidity,
   seeing,
@@ -117,7 +116,6 @@ const EnvironmentSummaryContainer = ({
       windSpeed={windSpeed}
       degradation={degradation}
       atmosphericTrans={atmosphericTrans}
-      airTemp={airTemp}
       pressure={pressure}
       humidity={humidity}
       seeing={seeing}
