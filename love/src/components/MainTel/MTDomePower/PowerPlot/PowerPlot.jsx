@@ -35,6 +35,8 @@ export default class PowerPlot extends Component {
     powerDrawLightWindScreen: PropTypes.number,
     /** Shutters power draw (W) */
     powerDrawShutter: PropTypes.number,
+    /** ClassName style to be asigned to the Power Plot */
+    className: PropTypes.string,
   };
 
   static defaultProps = {
@@ -211,13 +213,13 @@ export default class PowerPlot extends Component {
     };
 
     return (
-      <div className={styles.container}>
+      <div className={[styles.container, this.props.className].join(' ')}>
         <div className={styles.plot}>
           <VegaLite
             style={{ display: 'flex' }}
             renderer="svg"
             spec={spec}
-            className={[styles.plotContainer, this.props.className].join(' ')}
+            className={styles.plotContainer}
             actions={false}
           />
           <div style={{ width: 0 }}>

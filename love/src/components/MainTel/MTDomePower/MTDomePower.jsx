@@ -112,9 +112,9 @@ export default class MTDomePower extends Component {
 
   componentDidUpdate = (prevProps, prevState) => {
     //Calibration Screen
-    if (prevState.timestamp !== this.state.timestamp) {
+    if (prevProps.timestampCalibration !== this.props.timestampCalibration) {
       const newValue = {
-        system: 'calibration',
+        system: '01-calibration',
         date: parseForPlotTimestamp(this.state.timestamp * 1000),
         count: this.props.powerDrawCalibration / 1000,
       };
@@ -124,9 +124,9 @@ export default class MTDomePower extends Component {
     }
 
     //RAD
-    if (prevState.timestamp !== this.state.timestamp) {
+    if (prevProps.timestampRAD !== this.props.timestampRAD) {
       const newValue = {
-        system: 'rad',
+        system: '04-rad',
         date: parseForPlotTimestamp(this.state.timestamp * 1000),
         count: this.props.powerDrawRAD / 1000,
       };
@@ -136,9 +136,9 @@ export default class MTDomePower extends Component {
     }
 
     //OBC
-    if (prevState.timestamp !== this.state.timestamp) {
+    if (prevProps.timestampOBC !== this.props.timestampOBC) {
       const newValue = {
-        system: 'obc',
+        system: '05-obc',
         date: parseForPlotTimestamp(this.state.timestamp * 1000),
         count: this.props.powerDrawOBC / 1000,
       };
@@ -148,9 +148,9 @@ export default class MTDomePower extends Component {
     }
 
     //Fans
-    if (prevState.timestamp !== this.state.timestamp) {
+    if (prevProps.timestampFans !== this.props.timestampFans) {
       const newValue = {
-        system: 'fans',
+        system: '03-fans',
         date: parseForPlotTimestamp(this.state.timestamp * 1000),
         count: this.props.powerDrawFans / 1000,
       };
@@ -160,9 +160,9 @@ export default class MTDomePower extends Component {
     }
 
     //Louvers
-    if (prevState.timestamp !== this.state.timestamp) {
+    if (prevProps.timestampLouvers !== this.props.timestampLouvers) {
       const newValue = {
-        system: 'louvers',
+        system: '08-louvers',
         date: parseForPlotTimestamp(this.state.timestamp * 1000),
         count: this.props.powerDrawLouvers / 1000,
       };
@@ -172,9 +172,9 @@ export default class MTDomePower extends Component {
     }
 
     //LWS
-    if (prevState.timestamp !== this.state.timestamp) {
+    if (prevProps.timestampLWS !== this.props.timestampLWS) {
       const newValue = {
-        system: 'lws',
+        system: '07-lws',
         date: parseForPlotTimestamp(this.state.timestamp * 1000),
         count: this.props.powerDrawLWS / 1000,
       };
@@ -184,9 +184,9 @@ export default class MTDomePower extends Component {
     }
 
     //Shutters
-    if (prevState.timestamp !== this.state.timestamp) {
+    if (prevProps.timestampShutter !== this.props.timestampShutter) {
       const newValue = {
-        system: 'shutters',
+        system: '06-shutters',
         date: parseForPlotTimestamp(this.state.timestamp * 1000),
         count: this.props.powerDrawShutter / 1000,
       };
@@ -196,9 +196,9 @@ export default class MTDomePower extends Component {
     }
 
     //Electronics
-    if (prevState.timestamp !== this.state.timestamp) {
+    if (prevProps.timestampElectronics !== this.props.timestampElectronics) {
       const newValue = {
-        system: 'electronics',
+        system: '02-electronics',
         date: parseForPlotTimestamp(this.state.timestamp * 1000),
         count: this.props.powerDrawElectronics / 1000,
       };
@@ -253,16 +253,40 @@ export default class MTDomePower extends Component {
     //Plot height without its axis info. Used to measure the relative plot height for the y axis system labels.
     const height2 = height - 34;
 
-    //Calculating the position for lateral labels, from tiop to bottom.
-    //First add all values and find the corresponding position
-    const powerDrawCalibration2 = height2 - (powerTotal * height2) / limit;
-    const powerDrawRAD2 = (powerDrawCalibration * height2) / limit - fontHeight + powerDrawCalibration2;
-    const powerDrawOBC2 = (powerDrawRAD * height2) / limit - fontHeight + powerDrawRAD2;
-    const powerDrawFans2 = (powerDrawOBC * height2) / limit - fontHeight + powerDrawOBC2;
-    const powerDrawLouvers2 = (powerDrawFans * height2) / limit - fontHeight + powerDrawFans2;
-    const powerDrawLWS2 = (powerDrawLouvers * height2) / limit - fontHeight + powerDrawLouvers2;
-    const powerDrawShutter2 = (powerDrawLWS * height2) / limit - fontHeight + powerDrawLWS2;
-    const powerDrawElectronics2 = (powerDrawShutter * height2) / limit - fontHeight + powerDrawShutter2;
+    //Calculating the position for lateral labels.
+
+    const powerDrawLouvers2 =
+      -fontHeight * 6.5 +
+      height2 -
+      ((powerDrawLouvers * height) / limit < fontHeight ? fontHeight : (powerDrawLouvers * height) / limit);
+    const powerDrawLWS2 =
+      powerDrawLouvers2 +
+      fontHeight -
+      ((powerDrawLWS * height) / limit < fontHeight ? fontHeight : (powerDrawLWS * height) / limit);
+    const powerDrawShutter2 =
+      powerDrawLWS2 +
+      fontHeight -
+      ((powerDrawShutter * height) / limit < fontHeight ? fontHeight : (powerDrawShutter * height) / limit);
+    const powerDrawOBC2 =
+      powerDrawShutter2 +
+      fontHeight -
+      ((powerDrawOBC * height) / limit < fontHeight ? fontHeight : (powerDrawOBC * height) / limit);
+    const powerDrawRAD2 =
+      powerDrawOBC2 +
+      fontHeight -
+      ((powerDrawRAD * height) / limit < fontHeight ? fontHeight : (powerDrawRAD * height) / limit);
+    const powerDrawFans2 =
+      powerDrawRAD2 +
+      fontHeight -
+      ((powerDrawFans * height) / limit < fontHeight ? fontHeight : (powerDrawFans * height) / limit);
+    const powerDrawElectronics2 =
+      powerDrawFans2 +
+      fontHeight -
+      ((powerDrawElectronics * height) / limit < fontHeight ? fontHeight : (powerDrawElectronics * height) / limit);
+    const powerDrawCalibration2 =
+      powerDrawElectronics2 +
+      fontHeight -
+      ((powerDrawCalibration * height) / limit < fontHeight ? fontHeight : (powerDrawCalibration * height) / limit);
 
     //The Plot Info
     const spec = {
@@ -423,8 +447,6 @@ export default class MTDomePower extends Component {
       },
     };
 
-    console.log(this.state.data);
-
     return (
       <div className={styles.container}>
         <div className={styles.leftPanel}>
@@ -436,37 +458,61 @@ export default class MTDomePower extends Component {
             actions={false}
           />
           <div className={styles.systemList}>
-            <div style={{ top: `${powerDrawCalibration2}px` }}>
+            <div
+              style={{ top: `${powerDrawCalibration2}px` }}
+              className={this.props.powerDrawCalibration === undefined ? styles.disabled : ''}
+            >
               <span className={styles.kwBold}>{`${fixedFloat(powerDrawCalibration, 1)} kW`}</span>
               {` Calibration`}
             </div>
-            <div style={{ top: `${powerDrawRAD2}px` }}>
-              <span className={styles.kwBold}>{`${fixedFloat(powerDrawRAD, 1)} kW`}</span>
-              {` RAD`}
+            <div
+              style={{ top: `${powerDrawElectronics2}px` }}
+              className={this.props.powerDrawElectronics === undefined ? styles.disabled : ''}
+            >
+              <span className={styles.kwBold}>{`${fixedFloat(powerDrawElectronics, 1)} kW`}</span>
+              {` Electronics`}
             </div>
-            <div style={{ top: `${powerDrawOBC2}px` }}>
-              <span className={styles.kwBold}>{`${fixedFloat(powerDrawOBC, 1)} kW`}</span>
-              {` OBC`}
-            </div>
-            <div style={{ top: `${powerDrawFans2}px` }}>
+            <div
+              style={{ top: `${powerDrawFans2}px` }}
+              className={this.props.powerDrawFans === undefined ? styles.disabled : ''}
+            >
               <span className={styles.kwBold}>{`${fixedFloat(powerDrawFans, 1)} kW`}</span>
               {` Fans`}
             </div>
-            <div style={{ top: `${powerDrawLouvers2}px` }}>
-              <span className={styles.kwBold}>{`${fixedFloat(powerDrawLouvers, 1)} kW`}</span>
-              {` Louvers`}
+            <div
+              style={{ top: `${powerDrawRAD2}px` }}
+              className={this.props.powerDrawRAD === undefined ? styles.disabled : ''}
+            >
+              <span className={styles.kwBold}>{`${fixedFloat(powerDrawRAD, 1)} kW`}</span>
+              {` RAD`}
             </div>
-            <div style={{ top: `${powerDrawLWS2}px` }}>
-              <span className={styles.kwBold}>{`${fixedFloat(powerDrawLWS, 1)} kW`}</span>
-              {` LWS`}
+            <div
+              style={{ top: `${powerDrawOBC2}px` }}
+              className={this.props.powerDrawOBC === undefined ? styles.disabled : ''}
+            >
+              <span className={styles.kwBold}>{`${fixedFloat(powerDrawOBC, 1)} kW`}</span>
+              {` OBC`}
             </div>
-            <div style={{ top: `${powerDrawShutter2}px` }}>
+            <div
+              style={{ top: `${powerDrawShutter2}px` }}
+              className={this.props.powerDrawShutter === undefined ? styles.disabled : ''}
+            >
               <span className={styles.kwBold}>{`${fixedFloat(powerDrawShutter, 1)} kW`}</span>
               {` Shutters`}
             </div>
-            <div style={{ top: `${powerDrawElectronics2}px` }}>
-              <span className={styles.kwBold}>{`${fixedFloat(powerDrawElectronics, 1)} kW`}</span>
-              {` Electronics`}
+            <div
+              style={{ top: `${powerDrawLWS2}px` }}
+              className={this.props.powerDrawLWS === undefined ? styles.disabled : ''}
+            >
+              <span className={styles.kwBold}>{`${fixedFloat(powerDrawLWS, 1)} kW`}</span>
+              {` LWS`}
+            </div>
+            <div
+              style={{ top: `${powerDrawLouvers2}px` }}
+              className={this.props.powerDrawLouvers === undefined ? styles.disabled : ''}
+            >
+              <span className={styles.kwBold}>{`${fixedFloat(powerDrawLouvers, 1)} kW`}</span>
+              {` Louvers`}
             </div>
           </div>
           <div style={{ width: 0 }}>
@@ -483,7 +529,7 @@ export default class MTDomePower extends Component {
             powerDraw={fixedFloat(powerDrawCalibration, 1)}
             data={this.state.dataCS}
             title={'Calibration Screen'}
-            className={styles.powerPlot}
+            className={this.props.powerDrawCalibration === undefined ? styles.disabled : ''}
             height={200}
             width={150}
             limit={0.75}
@@ -492,7 +538,7 @@ export default class MTDomePower extends Component {
             powerDraw={fixedFloat(powerDrawRAD, 1)}
             data={this.state.dataRAD}
             title={'Rear Access Door'}
-            className={styles.powerPlot}
+            className={this.props.powerDrawRAD === undefined ? styles.disabled : ''}
             height={200}
             width={150}
             limit={3}
@@ -501,7 +547,7 @@ export default class MTDomePower extends Component {
             powerDraw={fixedFloat(powerDrawOBC, 1)}
             data={this.state.dataOBC}
             title={'Overhead Bridge Crane'}
-            className={styles.powerPlot}
+            className={this.props.powerDrawOBC === undefined ? styles.disabled : ''}
             height={200}
             width={150}
             limit={6}
@@ -510,7 +556,7 @@ export default class MTDomePower extends Component {
             powerDraw={fixedFloat(powerDrawFans, 1)}
             data={this.state.dataFans}
             title={'Fans'}
-            className={styles.powerPlot}
+            className={this.props.powerDrawFans === undefined ? styles.disabled : ''}
             height={200}
             width={150}
             limit={25}
@@ -519,7 +565,7 @@ export default class MTDomePower extends Component {
             powerDraw={fixedFloat(powerDrawLouvers, 1)}
             data={this.state.dataLouvers}
             title={'Louvers'}
-            className={styles.powerPlot}
+            className={this.props.powerDrawLouvers === undefined ? styles.disabled : ''}
             height={200}
             width={150}
             limit={69}
@@ -528,7 +574,7 @@ export default class MTDomePower extends Component {
             powerDraw={fixedFloat(powerDrawLWS, 1)}
             data={this.state.dataLWS}
             title={'Light Wind Screen'}
-            className={styles.powerPlot}
+            className={this.props.powerDrawLWS === undefined ? styles.disabled : ''}
             height={200}
             width={150}
             limit={68}
@@ -537,7 +583,7 @@ export default class MTDomePower extends Component {
             powerDraw={fixedFloat(powerDrawShutter, 1)}
             data={this.state.dataShutters}
             title={'Shutters'}
-            className={styles.powerPlot}
+            className={this.props.powerDrawShutter === undefined ? styles.disabled : ''}
             height={200}
             width={150}
             limit={6}
@@ -546,7 +592,7 @@ export default class MTDomePower extends Component {
             powerDraw={fixedFloat(powerDrawElectronics, 1)}
             data={this.state.dataED}
             title={'Electronic Devices'}
-            className={styles.powerPlot}
+            className={this.props.powerDrawElectronics === undefined ? styles.disabled : ''}
             height={200}
             width={150}
             limit={1}
