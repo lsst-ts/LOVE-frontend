@@ -84,8 +84,6 @@ export default class EnvironmentSummary extends Component {
     degradation: PropTypes.number,
     /** Atmospheric Transmission */
     atmosphericTrans: PropTypes.number,
-    /** Air Temperature */
-    airTemp: PropTypes.number,
     /** The pressures */
     pressure: PropTypes.array,
     /** Relative humidity */
@@ -124,7 +122,6 @@ export default class EnvironmentSummary extends Component {
     windSpeed: 0,
     degradation: 'Unknown',
     atmosphericTrans: 'Unknown',
-    airTemp: 'Unknown',
     pressure: [],
     humidity: 'Unknown',
     seeing: 'Unknown',
@@ -189,7 +186,6 @@ export default class EnvironmentSummary extends Component {
       windSpeed,
       degradation,
       atmosphericTrans,
-      airTemp,
       pressure,
       humidity,
       seeing,
@@ -201,7 +197,6 @@ export default class EnvironmentSummary extends Component {
           <Summary
             degradation={degradation}
             atmosphericTrans={atmosphericTrans}
-            airTemp={airTemp}
             pressure={pressure}
             humidity={humidity}
             windSpeed={windSpeed}

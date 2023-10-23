@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ManagerInterface, { parseCommanderData, fixedFloat } from 'Utils';
@@ -57,7 +56,7 @@ export default class WeatherStation extends Component {
           csc: 'ESS',
           salindex: this.props.salindex,
           topic: 'temperature',
-          item: 'temperature',
+          item: 'temperatureItem',
           accessor: '(x) => x[0]',
         },
       ],
@@ -82,7 +81,7 @@ export default class WeatherStation extends Component {
           csc: 'ESS',
           salindex: this.props.salindex,
           topic: 'dewPoint',
-          item: 'dewPoint',
+          item: 'dewPointItem',
           accessor: '(x) => x',
         },
       ],
@@ -100,7 +99,7 @@ export default class WeatherStation extends Component {
           csc: 'ESS',
           salindex: this.props.salindex,
           topic: 'relativeHumidity',
-          item: 'relativeHumidity',
+          item: 'relativeHumidityItem',
           accessor: '(x) => x',
         },
       ],
@@ -118,7 +117,7 @@ export default class WeatherStation extends Component {
           csc: 'ESS',
           salindex: this.props.salindex,
           topic: 'pressure',
-          item: 'pressure',
+          item: 'pressureItem',
           accessor: '(x) => x[0]',
         },
       ],
@@ -136,7 +135,7 @@ export default class WeatherStation extends Component {
           csc: 'ESS',
           salindex: this.props.salindex,
           topic: 'solarRadiation',
-          item: 'solarRadiation',
+          item: 'solarRadiationItem',
           accessor: '(x) => x',
         },
       ],
@@ -154,7 +153,7 @@ export default class WeatherStation extends Component {
           csc: 'ESS',
           salindex: this.props.salindex,
           topic: 'rainRate',
-          item: 'rainRate',
+          item: 'rainRateItem',
           accessor: '(x) => x',
         },
       ],
@@ -172,7 +171,7 @@ export default class WeatherStation extends Component {
           csc: 'ESS',
           salindex: this.props.salindex,
           topic: 'snowRate',
-          item: 'snowRate',
+          item: 'snowRateItem',
           accessor: '(x) => x',
         },
       ],
@@ -285,7 +284,7 @@ export default class WeatherStation extends Component {
   render() {
     const currentTemperature = fixedFloat(this.props.temperature?.temperature?.value[0], 2);
     const currentHumidity = fixedFloat(this.props.relativeHumidity?.relativeHumidity?.value, 2);
-    const currentPressure = fixedFloat(this.props.pressure?.pressure?.value[0], 2);
+    const currentPressure = fixedFloat(this.props.pressure?.pressureItem?.value[0], 2);
     const currentWindSpeed = fixedFloat(this.props.airFlow?.speed?.value, 2);
     const currentWindSpeedUnits = this.props.airFlow?.speed?.units;
 
