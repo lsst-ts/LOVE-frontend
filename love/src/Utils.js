@@ -1397,7 +1397,17 @@ export const defaultNumberFormatter = (value, precision = 4) => {
  */
 export const formatTimestamp = (timestamp, location = 'TAI') => {
   const t = parseTimestamp(timestamp);
-  return `${t.toUTC().toFormat('yyyy/MM/dd HH:mm:ss')} ${location}`;
+  return `${t.toUTC().toFormat('yyyy/MM/dd HH:mm:ss') + (location ? ' ' + location : '')}`;
+};
+
+/**
+ * Converts a timestamp into  "YYYY-MM-DD HH:MM:SS" formatted string
+ * @param {date-able} timestamp if float it must be in milliseconds
+ * @returns {string} "YYYY-MM-DD HH:MM:SS" formatted string
+ */
+export const parseForPlotTimestamp = (timestamp) => {
+  const t = parseTimestamp(timestamp);
+  return `${t.toUTC().toFormat('yyyy-MM-dd HH:mm:ss')}`;
 };
 
 /**

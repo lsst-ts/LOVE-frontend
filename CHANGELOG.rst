@@ -5,6 +5,7 @@ Version History
 v5.26.1
 -------
 
+* Reconnect MTDome Power Draw Plots to mocekd 'undefined' telemetries `<https://github.com/lsst-ts/LOVE-frontend/pull/548>`_
 * Add AuxTel Atmospheric Transmission `<https://github.com/lsst-ts/LOVE-frontend/pull/546>`_
 * Extend OLE Jira feature by implementing a compatible wysiwyg `<https://github.com/lsst-ts/LOVE-frontend/pull/543>`_
 

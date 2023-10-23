@@ -18,9 +18,10 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Power from './MTDomePower';
-import { getDomeStatus, getLouversStatus, getApertureShutter, getLightWindScreen } from '../../../redux/selectors';
+import MtDomePower from './MTDomePower';
+import { getMtDomePowerDraw } from '../../../redux/selectors';
 import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
@@ -57,39 +58,57 @@ export const schema = {
 };
 
 const MTDomePowerContainer = ({
-  subscribeToStream,
-  unsubscribeToStream,
-  powerDrawShutter,
-  powerDrawLWS,
+  subscribeToStreams,
+  unsubscribeToStreams,
+  powerDrawCalibration,
+  powerDrawRAD,
+  powerDrawOBC,
+  powerDrawFans,
   powerDrawLouvers,
-  atDomePosition,
+  powerDrawLWS,
+  powerDrawShutter,
+  powerDrawElectronics,
+  timestampCalibration,
+  timestampRAD,
+  timestampOBC,
+  timestampFans,
+  timestampLouvers,
+  timestampLWS,
+  timestampShutter,
+  timestampElectronics,
   ...props
 }) => {
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
   return (
-    <Power
-      subscribeToStream={subscribeToStream}
-      unsubscribeToStream={unsubscribeToStream}
-      powerDrawShutter={powerDrawShutter}
-      powerDrawLWS={powerDrawLWS}
+    <MtDomePower
+      subscribeToStreams={subscribeToStreams}
+      unsubscribeToStreams={unsubscribeToStreams}
+      powerDrawCalibration={powerDrawCalibration}
+      powerDrawRAD={powerDrawRAD}
+      powerDrawOBC={powerDrawOBC}
+      powerDrawFans={powerDrawFans}
       powerDrawLouvers={powerDrawLouvers}
-      atDomePosition={atDomePosition}
+      powerDrawLWS={powerDrawLWS}
+      powerDrawShutter={powerDrawShutter}
+      powerDrawElectronics={powerDrawElectronics}
+      timestampCalibration={timestampCalibration}
+      timestampRAD={timestampRAD}
+      timestampOBC={timestampOBC}
+      timestampFans={timestampFans}
+      timestampLouvers={timestampLouvers}
+      timestampLWS={timestampLWS}
+      timestampShutter={timestampShutter}
+      timestampElectronics={timestampElectronics}
     />
   );
 };
 
 const mapStateToProps = (state) => {
-  const domeState = getDomeStatus(state);
-  const louversState = getLouversStatus(state);
-  const apertureShutterState = getApertureShutter(state);
-  const lightWindScreenState = getLightWindScreen(state);
+  const mtDomePowerDraw = getMtDomePowerDraw(state);
   return {
-    ...domeState,
-    ...louversState,
-    ...apertureShutterState,
-    ...lightWindScreenState,
+    ...mtDomePowerDraw,
   };
 };
 
@@ -98,17 +117,25 @@ const mapDispatchToProps = (dispatch) => {
     'telemetry-MTDome-0-apertureShutter',
     'telemetry-MTDome-0-lightWindScreen',
     'telemetry-MTDome-0-louvers',
-    'telemetry-ATDome-0-position',
+    'telemetry-MTDome-0-rearAccessDoor',
+    'telemetry-ESS-301-temperature',
   ];
   return {
     subscriptions,
-    subscribeToStream: () => {
+    subscribeToStreams: () => {
       subscriptions.forEach((stream) => dispatch(addGroup(stream)));
     },
-    unsubscribeToStream: () => {
+    unsubscribeToStreams: () => {
       subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
     },
   };
+};
+
+MtDomePower.propTypes = {
+  /** Wheter the component is in raw mode */
+  isRaw: PropTypes.bool,
+  /** List of the component's subscriptions */
+  subscriptions: PropTypes.array,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MTDomePowerContainer);

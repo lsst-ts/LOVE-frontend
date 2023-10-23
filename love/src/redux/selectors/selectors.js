@@ -1139,6 +1139,38 @@ export const getDomeStatus = (state) => {
   };
 };
 
+// MTDome Power Draw
+export const getMtDomePowerDraw = (state) => {
+  const subscriptions = [
+    'telemetry-MTDome-0-apertureShutter',
+    'telemetry-MTDome-0-lightWindScreen',
+    'telemetry-MTDome-0-louvers',
+    'telemetry-MTDome-0-rearAccessDoor',
+    'telemetry-ESS-301-temperature',
+  ];
+  const mtDomePowerDraw = getStreamsData(state, subscriptions);
+  return {
+    powerDrawRAD: mtDomePowerDraw['telemetry-MTDome-0-rearAccessDoor']?.powerDraw?.value ?? undefined,
+    timestampRAD: mtDomePowerDraw['telemetry-MTDome-0-rearAccessDoor']?.timestamp?.value ?? undefined,
+    powerDrawLouvers: mtDomePowerDraw['telemetry-MTDome-0-louvers']?.powerDraw?.value ?? undefined,
+    timestampLouvers: mtDomePowerDraw['telemetry-MTDome-0-louvers']?.timestamp?.value ?? undefined,
+    powerDrawShutter: mtDomePowerDraw['telemetry-MTDome-0-apertureShutter']?.powerDraw?.value ?? undefined,
+    timestampShutter: mtDomePowerDraw['telemetry-MTDome-0-apertureShutter']?.timestamp?.value ?? undefined,
+
+    //TODO: Once telemetries are created, add them here.
+    powerDrawCalibration: undefined,
+    timestampCalibration: undefined,
+    powerDrawOBC: undefined,
+    timestampOBC: undefined,
+    powerDrawFans: undefined,
+    timestampFans: undefined,
+    powerDrawLWS: undefined,
+    timestampLWS: undefined,
+    powerDrawElectronics: undefined,
+    timestampElectronics: undefined,
+  };
+};
+
 // MTMount
 /**
  * Selects the TMA status for summary view
