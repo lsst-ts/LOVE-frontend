@@ -2043,3 +2043,19 @@ export function simpleHtmlTokenizer(html) {
   }
   return tokens;
 }
+
+/**
+ * Function to get the OBS day from a date
+ * If the date is after 12:00 UTC, the day is the same day
+ * If the date is before 12:00 UTC, the day is the previous day
+ * @param {object} date date, as a Moment object, to be parsed
+ * @returns {string} OBS day in format YYYYMMDD
+ */
+export function getObsDayFromDate(date) {
+  const utcDate = date.utc();
+  const utcHour = utcDate.hour();
+  if (utcHour >= 12) {
+    return utcDate.format('YYYYMMDD');
+  }
+  return utcDate.subtract(1, 'day').format('YYYYMMDD');
+}

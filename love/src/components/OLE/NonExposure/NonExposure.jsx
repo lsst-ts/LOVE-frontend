@@ -31,7 +31,7 @@ import {
   ISO_STRING_DATE_TIME_FORMAT,
   LOG_REFRESH_INTERVAL_MS,
 } from 'Config';
-import ManagerInterface, { formatSecondsToDigital, getLinkJira, jiraMarkdownToHtml } from 'Utils';
+import ManagerInterface, { formatSecondsToDigital, getLinkJira, jiraMarkdownToHtml, getObsDayFromDate } from 'Utils';
 
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -146,10 +146,10 @@ export default class NonExposure extends Component {
     return [
       {
         field: 'date_added',
-        title: 'Date Added (UTC)',
+        title: 'Day Observation',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => value.split('.')[0],
+        render: (value) => getObsDayFromDate(moment(value)),
       },
       {
         field: 'level',
@@ -264,10 +264,12 @@ export default class NonExposure extends Component {
 
   parseCsvData(data) {
     const csvData = data.map((row) => {
+      const obsDay = getObsDayFromDate(moment(row.date_added));
       const escapedMessageText = row.message_text.replace(/"/g, '""');
       const parsedLevel = OLE_COMMENT_TYPE_OPTIONS.find((option) => option.value === row.level).label;
       return {
         ...row,
+        obs_day: obsDay,
         message_text: escapedMessageText,
         level: parsedLevel,
       };
@@ -338,12 +340,13 @@ export default class NonExposure extends Component {
     }
 
     // Obtain headers to create csv report
+    // obs_day, message_text and level are parsed by this.parseCsvData
     let csvHeaders = null;
     let csvData = "There aren't logs created for the current search...";
     let csvTitle = 'narrative_logs.csv';
     if (filteredData.length > 0) {
       const exportedParams = [
-        'date_added',
+        'obs_day',
         'message_text',
         'level',
         'urls',
