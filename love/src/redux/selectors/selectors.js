@@ -2274,14 +2274,14 @@ export const getObservatoryState = (state) => {
     isRaining: environmentVariables ? environmentVariables[0].raining.value : false,
     isSnowing: environmentVariables ? environmentVariables[0].snowing.value : false,
     numChannels: essTemperatures ? essTemperatures.numChannels.value : 0,
-    temperature: essTemperatures ? essTemperatures.temperature.value : [],
+    temperature: essTemperatures ? essTemperatures.temperatureItem.value : [],
     location: essTemperatures ? essTemperatures.location.value : '',
     windDirection: essAirFlow ? essAirFlow.direction.value : 0.0,
     windSpeed: essAirFlow ? essAirFlow.speed.value : 0.0,
     // TODO: Add the corresponding telemetry or event when Enviromental Degradation gets integrated into SAL
     degradation: 'Unknown',
-    pressure: essPressure ? essPressure.pressure.value : 0,
-    humidity: essRelativeHumidity ? essRelativeHumidity.relativeHumidity.value : 0,
+    pressure: essPressure ? essPressure.pressureItem.value : 0,
+    humidity: essRelativeHumidity ? essRelativeHumidity.relativeHumidityItem.value : 0,
     // TODO: Add the corresponding telemetry or event when the following variables gets integrated into SAL
     airTemp: 'Unknown',
     atmosphericTrans: 'Unknown',

@@ -102,10 +102,10 @@ const getGroupNames = (salindexList, option) => {
 
 /**
  * This function is used to parse dicts by 4 type of the telemetries
- * @param object prevParse 
- * @param array streams 
+ * @param object prevParse
+ * @param array streams
  * @param string option string for the option between temperature, relativeHumidity,
- *        airFlow and airTurbulence 
+ *        airFlow and airTurbulence
  * @returns array with the data separate parse of the telemetry
  */
 const parseStreams = (streams, option) => {
@@ -131,7 +131,7 @@ const parseStreams = (streams, option) => {
 
 /**
  * This function is used to parse dicts by temperature telemetry
- * @param {array} streams 
+ * @param {array} streams
  * @returns array with the data separate parse of the temperature telemetry
  */
 const parseTemperature = (streams) => {
@@ -168,7 +168,7 @@ const parseTemperature = (streams) => {
 
 /**
  * This function is used to parse dicts by relativeHumidity telemetry
- * @param {array} streams 
+ * @param {array} streams
  * @returns array with the data separate parse of the relativeHumidity telemetry
  */
 const parseHumidity = (streams) => {
@@ -177,7 +177,7 @@ const parseHumidity = (streams) => {
     Object.entries(stream).forEach((entry) => {
       const essData = entry[1];
       const sensorName = essData?.sensorName?.value ?? '';
-      const value = essData?.relativeHumidity?.value ?? 0;
+      const value = essData?.relativeHumidityItem?.value ?? 0;
       const location = essData?.location?.value ?? '';
       const timestamp = essData?.timestamp?.value;
       const xPosition = essData?.xPosition?.value;
@@ -200,7 +200,7 @@ const parseHumidity = (streams) => {
 
 /**
  * This function is used to parse dicts by speed telemetry
- * @param {array} streams 
+ * @param {array} streams
  * @returns array with the data separate parse of the speed telemetry
  */
 const parseAirflow = (streams) => {
@@ -274,7 +274,7 @@ const parseAirflow = (streams) => {
 
 /**
  * This function is used to parse dicts by speedMagnitud telemetry
- * @param {array} streams 
+ * @param {array} streams
  * @returns array with the data separate parse of the speedMagnitud telemetry
  */
 const parseAirTurbulence = (streams) => {
