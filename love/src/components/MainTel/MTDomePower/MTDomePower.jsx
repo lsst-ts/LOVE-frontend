@@ -19,11 +19,9 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import { VegaLite } from 'react-vega';
 import PowerPlot from './PowerPlot/PowerPlot';
 import styles from './MTDomePower.module.css';
-import isEqual from 'lodash';
 import { parseForPlotTimestamp, fixedFloat } from 'Utils';
 
 export default class MTDomePower extends Component {
