@@ -565,10 +565,10 @@ export const getATMCSState = (state) => {
   ];
   const data = getStreamsData(state, subscriptions);
   const [minEl, minAz, minNas1, minNas2, minM3] = data['event-ATMCS-0-positionLimits']?.[0].minimum?.value ?? [
-    5, -270, -165, -165, 0,
+    25, -270, -165, -165, 0,
   ];
   const [maxEl, maxAz, maxNas1, maxNas2, maxM3] = data['event-ATMCS-0-positionLimits']?.[0].maximum?.value ?? [
-    90, 270, 165, 165, 180,
+    86, 270, 165, 165, 180,
   ];
 
   return {

@@ -81,13 +81,17 @@ export default class DomeSummaryTable extends Component {
       target: azimuthCommanded,
     };
     const mountAz = {
-      current: Math.abs(currentPointing.az),
-      target: Math.abs(targetPointing.az),
+      // current: Math.abs(currentPointing.az),
+      // target: Math.abs(targetPointing.az),
+      current: currentPointing.az,
+      target: targetPointing.az,
     };
     const mountEl = {
       current: currentPointing.el,
       target: targetPointing.el,
     };
+
+    console.log(mountAz);
 
     const {
       timeAzLim,
@@ -242,8 +246,8 @@ export default class DomeSummaryTable extends Component {
         >
           <span>
             <Limits
-              lowerLimit={0}
-              upperLimit={360}
+              lowerLimit={minAz}
+              upperLimit={maxAz}
               currentValue={mountAz.current}
               targetValue={mountAz.target}
               height={30}
