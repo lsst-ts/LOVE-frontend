@@ -562,13 +562,14 @@ export const getATMCSState = (state) => {
     'event-ATMCS-0-positionLimits',
     'event-ATPtg-1-timesOfLimits',
     'event-ATMCS-0-summaryState',
+    `event-ATPtg-1-currentTarget`,
   ];
   const data = getStreamsData(state, subscriptions);
   const [minEl, minAz, minNas1, minNas2, minM3] = data['event-ATMCS-0-positionLimits']?.[0].minimum?.value ?? [
-    5, -270, -165, -165, 0,
+    25, -270, -165, -165, 0,
   ];
   const [maxEl, maxAz, maxNas1, maxNas2, maxM3] = data['event-ATMCS-0-positionLimits']?.[0].maximum?.value ?? [
-    90, 270, 165, 165, 180,
+    86, 270, 165, 165, 180,
   ];
 
   return {
@@ -599,6 +600,7 @@ export const getATMCSState = (state) => {
     currentPointingEl: data['telemetry-ATMCS-0-mount_AzEl_Encoders']?.elevationCalculatedAngle?.value?.[0],
     currentPointingNasmyth1: data['telemetry-ATMCS-0-mount_Nasmyth_Encoders']?.nasmyth1CalculatedAngle?.value?.[0],
     currentPointingNasmyth2: data['telemetry-ATMCS-0-mount_Nasmyth_Encoders']?.nasmyth2CalculatedAngle?.value?.[0],
+    targetName: data[`event-ATPtg-1-currentTarget`]?.[0].targetName?.value ?? 'Unknown',
   };
 };
 

@@ -81,8 +81,8 @@ export default class DomeSummaryTable extends Component {
       target: azimuthCommanded,
     };
     const mountAz = {
-      current: Math.abs(currentPointing.az),
-      target: Math.abs(targetPointing.az),
+      current: currentPointing.az,
+      target: targetPointing.az,
     };
     const mountEl = {
       current: currentPointing.el,
@@ -107,6 +107,7 @@ export default class DomeSummaryTable extends Component {
       atDomeSummaryState,
       ATMCSSummaryState,
       domeTracking,
+      targetName,
     } = this.props;
 
     const azimuthStateValue = domeAzimuthStateMap[this.props.azimuthState];
@@ -154,6 +155,8 @@ export default class DomeSummaryTable extends Component {
       <SummaryPanel className={styles.summaryTable}>
         <Title>Track ID</Title>
         <Value>{this.props.trackID?.toString()}</Value>
+        <Label>Target Name</Label>
+        <Value>{targetName}</Value>
         {/* Dome */}
         <Title>ATDome CSC</Title>
         <Value>
@@ -242,8 +245,8 @@ export default class DomeSummaryTable extends Component {
         >
           <span>
             <Limits
-              lowerLimit={0}
-              upperLimit={360}
+              lowerLimit={minAz}
+              upperLimit={maxAz}
               currentValue={mountAz.current}
               targetValue={mountAz.target}
               height={30}
