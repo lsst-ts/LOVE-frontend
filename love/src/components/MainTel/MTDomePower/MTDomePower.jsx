@@ -19,12 +19,10 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import { VegaLite } from 'react-vega';
 import PowerPlot from './PowerPlot/PowerPlot';
 import styles from './MTDomePower.module.css';
-import isEqual from 'lodash';
-import { parseTimestamp } from 'Utils';
+import { parseForPlotTimestamp, fixedFloat } from 'Utils';
 
 export default class MTDomePower extends Component {
   static propTypes = {
@@ -57,10 +55,16 @@ export default class MTDomePower extends Component {
       containerHeight: 200,
       spec: {},
       data: [],
+      timestamp: 0,
 
+      dataCS: [],
+      dataRAD: [],
+      dataOBC: [],
+      dataFans: [],
       dataLouvers: [],
       dataLWS: [],
       dataShutters: [],
+      dataED: [],
     };
   }
 
@@ -90,76 +94,148 @@ export default class MTDomePower extends Component {
   };
 
   componentDidMount = () => {
-    this.props.subscribeToStream();
+    this.props.subscribeToStreams();
+    this.interval = setInterval(() => {
+      this.setState((prevState) => ({
+        timestamp: prevState.timestamp + 1000,
+      }));
+    }, 1000);
   };
 
-  componentDidUpdate = (prevProps, prevState) => {
-    //Louvers
-    if (prevProps.powerDrawLouvers?.private_rcvStamp?.value !== this.props.powerDrawLouvers?.private_rcvStamp?.value) {
-      const prevValues = this.state.data;
-
-      const newValue = {
-        system: 'eLouvers',
-        date: parseTimestamp(this.props.powerDrawLouvers.private_rcvStamp?.value * 1000),
-        count: this.props.powerDrawLouvers.powerDraw.value,
-      };
-
-      prevValues.push(newValue);
-      this.setState((prevState) => ({ data: [...prevState.data, newValue] }));
-      this.setState((prevState) => ({ dataLouvers: [...prevState.data, newValue] }));
-      this.state.powerDrawLouvers;
-    }
-
-    //LWS
-    if (prevProps.powerDrawLWS?.private_rcvStamp?.value !== this.props.powerDrawLWS?.private_rcvStamp?.value) {
-      const prevValues = this.state.data;
-
-      const newValue = {
-        system: 'eLouvers',
-        date: parseTimestamp(this.props.powerDrawLWS.private_rcvStamp?.value * 1000),
-        count: this.props.powerDrawLWS.powerDraw.value,
-      };
-
-      prevValues.push(newValue);
-      this.setState((prevState) => ({ data: [...prevState.data, newValue] }));
-      this.setState((prevState) => ({ dataLWS: [...prevState.data, newValue] }));
-      this.state.powerDrawLWS;
-    }
-
-    //Louvers
-    if (prevProps.powerDrawLouvers?.private_rcvStamp?.value !== this.props.powerDrawLouvers?.private_rcvStamp?.value) {
-      const prevValues = this.state.data;
-
-      const newValue = {
-        system: 'eLouvers',
-        date: parseTimestamp(this.props.powerDrawLouvers.private_rcvStamp?.value * 1000),
-        count: this.props.powerDrawLouvers.powerDraw.value,
-      };
-
-      prevValues.push(newValue);
-      this.setState((prevState) => ({ data: [...prevState.data, newValue] }));
-      this.setState((prevState) => ({ dataLouvers: [...prevState.data, newValue] }));
-      this.state.powerDrawLouvers;
-    }
-  };
   componentWillUnmount = () => {
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
   };
 
+  componentDidUpdate = (prevProps, prevState) => {
+    //Calibration Screen
+    if (prevProps.timestampCalibration !== this.props.timestampCalibration) {
+      const newValue = {
+        system: '01-calibration',
+        date: parseForPlotTimestamp(this.state.timestamp * 1000),
+        count: this.props.powerDrawCalibration / 1000,
+      };
+
+      this.setState((prevState) => ({ data: [...prevState.data, newValue].slice(-80) }));
+      this.setState((prevState) => ({ dataCS: [...prevState.dataCS, newValue].slice(-10) }));
+    }
+
+    //RAD
+    if (prevProps.timestampRAD !== this.props.timestampRAD) {
+      const newValue = {
+        system: '04-rad',
+        date: parseForPlotTimestamp(this.state.timestamp * 1000),
+        count: this.props.powerDrawRAD / 1000,
+      };
+
+      this.setState((prevState) => ({ data: [...prevState.data, newValue].slice(-80) }));
+      this.setState((prevState) => ({ dataRAD: [...prevState.dataRAD, newValue].slice(-10) }));
+    }
+
+    //OBC
+    if (prevProps.timestampOBC !== this.props.timestampOBC) {
+      const newValue = {
+        system: '05-obc',
+        date: parseForPlotTimestamp(this.state.timestamp * 1000),
+        count: this.props.powerDrawOBC / 1000,
+      };
+
+      this.setState((prevState) => ({ data: [...prevState.data, newValue].slice(-80) }));
+      this.setState((prevState) => ({ dataOBC: [...prevState.dataOBC, newValue].slice(-10) }));
+    }
+
+    //Fans
+    if (prevProps.timestampFans !== this.props.timestampFans) {
+      const newValue = {
+        system: '03-fans',
+        date: parseForPlotTimestamp(this.state.timestamp * 1000),
+        count: this.props.powerDrawFans / 1000,
+      };
+
+      this.setState((prevState) => ({ data: [...prevState.data, newValue].slice(-80) }));
+      this.setState((prevState) => ({ dataFans: [...prevState.dataFans, newValue].slice(-10) }));
+    }
+
+    //Louvers
+    if (prevProps.timestampLouvers !== this.props.timestampLouvers) {
+      const newValue = {
+        system: '08-louvers',
+        date: parseForPlotTimestamp(this.state.timestamp * 1000),
+        count: this.props.powerDrawLouvers / 1000,
+      };
+
+      this.setState((prevState) => ({ data: [...prevState.data, newValue].slice(-80) }));
+      this.setState((prevState) => ({ dataLouvers: [...prevState.dataLouvers, newValue].slice(-10) }));
+    }
+
+    //LWS
+    if (prevProps.timestampLWS !== this.props.timestampLWS) {
+      const newValue = {
+        system: '07-lws',
+        date: parseForPlotTimestamp(this.state.timestamp * 1000),
+        count: this.props.powerDrawLWS / 1000,
+      };
+
+      this.setState((prevState) => ({ data: [...prevState.data, newValue].slice(-80) }));
+      this.setState((prevState) => ({ dataLWS: [...prevState.dataLWS, newValue].slice(-10) }));
+    }
+
+    //Shutters
+    if (prevProps.timestampShutter !== this.props.timestampShutter) {
+      const newValue = {
+        system: '06-shutters',
+        date: parseForPlotTimestamp(this.state.timestamp * 1000),
+        count: this.props.powerDrawShutter / 1000,
+      };
+
+      this.setState((prevState) => ({ data: [...prevState.data, newValue].slice(-80) }));
+      this.setState((prevState) => ({ dataShutters: [...prevState.dataShutters, newValue].slice(-10) }));
+    }
+
+    //Electronics
+    if (prevProps.timestampElectronics !== this.props.timestampElectronics) {
+      const newValue = {
+        system: '02-electronics',
+        date: parseForPlotTimestamp(this.state.timestamp * 1000),
+        count: this.props.powerDrawElectronics / 1000,
+      };
+
+      this.setState((prevState) => ({ data: [...prevState.data, newValue].slice(-80) }));
+      this.setState((prevState) => ({ dataED: [...prevState.dataED, newValue].slice(-10) }));
+    }
+  };
+
+  wattToKiloWatt = (watt) => {
+    if (watt === undefined) {
+      return 0;
+    } else {
+      const kiloWatt = watt / 1000;
+      return kiloWatt;
+    }
+  };
+
   render() {
     //Consume telemetries and convert to kW//
-    const powerDrawLouvers = this.props.powerDrawLouvers.powerDraw
-      ? this.props.powerDrawLouvers.powerDraw.value / 1000
-      : 0;
-    const powerDrawLWS = this.props.powerDrawLWS.powerDraw ? this.props.powerDrawLWS.powerDraw.value / 1000 : 0;
-    const powerDrawShutter = this.props.powerDrawShutter.powerDraw
-      ? this.props?.powerDrawShutter.powerDraw.value / 1000
-      : 0;
+    const powerDrawCalibration = this.wattToKiloWatt(this.props.powerDrawCalibration);
+    const powerDrawRAD = this.wattToKiloWatt(this.props.powerDrawRAD);
+    const powerDrawOBC = this.wattToKiloWatt(this.props.powerDrawOBC);
+    const powerDrawFans = this.wattToKiloWatt(this.props.powerDrawFans);
+    const powerDrawLouvers = this.wattToKiloWatt(this.props.powerDrawLouvers);
+    const powerDrawLWS = this.wattToKiloWatt(this.props.powerDrawLWS);
+    const powerDrawShutter = this.wattToKiloWatt(this.props.powerDrawShutter);
+    const powerDrawElectronics = this.wattToKiloWatt(this.props.powerDrawElectronics);
 
     //Sum of all systems power draw//
-    const powerTotal = powerDrawLouvers + powerDrawLWS + powerDrawShutter;
+    const powerTotal =
+      powerDrawCalibration +
+      powerDrawRAD +
+      powerDrawOBC +
+      powerDrawFans +
+      powerDrawLouvers +
+      powerDrawLWS +
+      powerDrawShutter +
+      powerDrawElectronics;
 
     //Plot height and width. Should make this responsive(!)//
     const height = 600;
@@ -175,11 +251,40 @@ export default class MTDomePower extends Component {
     //Plot height without its axis info. Used to measure the relative plot height for the y axis system labels.
     const height2 = height - 34;
 
-    //Calculating the position for lateral labels, from tiop to bottom.
-    //First add all values and find the corresponding position
-    const powerLouvers2 = height2 - ((powerDrawLouvers + powerDrawLWS + powerDrawShutter) * height2) / limit;
-    const powerLWS2 = (powerDrawLouvers * height2) / limit - fontHeight + powerLouvers2;
-    const powerShutter2 = (powerDrawLWS * height2) / limit - fontHeight + powerLWS2;
+    //Calculating the position for lateral labels.
+
+    const powerDrawLouvers2 =
+      -fontHeight * 6.5 +
+      height2 -
+      ((powerDrawLouvers * height) / limit < fontHeight ? fontHeight : (powerDrawLouvers * height) / limit);
+    const powerDrawLWS2 =
+      powerDrawLouvers2 +
+      fontHeight -
+      ((powerDrawLWS * height) / limit < fontHeight ? fontHeight : (powerDrawLWS * height) / limit);
+    const powerDrawShutter2 =
+      powerDrawLWS2 +
+      fontHeight -
+      ((powerDrawShutter * height) / limit < fontHeight ? fontHeight : (powerDrawShutter * height) / limit);
+    const powerDrawOBC2 =
+      powerDrawShutter2 +
+      fontHeight -
+      ((powerDrawOBC * height) / limit < fontHeight ? fontHeight : (powerDrawOBC * height) / limit);
+    const powerDrawRAD2 =
+      powerDrawOBC2 +
+      fontHeight -
+      ((powerDrawRAD * height) / limit < fontHeight ? fontHeight : (powerDrawRAD * height) / limit);
+    const powerDrawFans2 =
+      powerDrawRAD2 +
+      fontHeight -
+      ((powerDrawFans * height) / limit < fontHeight ? fontHeight : (powerDrawFans * height) / limit);
+    const powerDrawElectronics2 =
+      powerDrawFans2 +
+      fontHeight -
+      ((powerDrawElectronics * height) / limit < fontHeight ? fontHeight : (powerDrawElectronics * height) / limit);
+    const powerDrawCalibration2 =
+      powerDrawElectronics2 +
+      fontHeight -
+      ((powerDrawCalibration * height) / limit < fontHeight ? fontHeight : (powerDrawCalibration * height) / limit);
 
     //The Plot Info
     const spec = {
@@ -351,17 +456,61 @@ export default class MTDomePower extends Component {
             actions={false}
           />
           <div className={styles.systemList}>
-            <div style={{ top: `${powerLouvers2}px` }}>
-              <span className={styles.kwBold}>{`${powerDrawLouvers} kW`}</span>
-              {` Louvers`}
+            <div
+              style={{ top: `${powerDrawCalibration2}px` }}
+              className={this.props.powerDrawCalibration === undefined ? styles.disabled : ''}
+            >
+              <span className={styles.kwBold}>{`${fixedFloat(powerDrawCalibration, 1)} kW`}</span>
+              {` Calibration`}
             </div>
-            <div style={{ top: `${powerLWS2}px` }}>
-              <span className={styles.kwBold}>{`${powerDrawLWS} kW`}</span>
+            <div
+              style={{ top: `${powerDrawElectronics2}px` }}
+              className={this.props.powerDrawElectronics === undefined ? styles.disabled : ''}
+            >
+              <span className={styles.kwBold}>{`${fixedFloat(powerDrawElectronics, 1)} kW`}</span>
+              {` Electronics`}
+            </div>
+            <div
+              style={{ top: `${powerDrawFans2}px` }}
+              className={this.props.powerDrawFans === undefined ? styles.disabled : ''}
+            >
+              <span className={styles.kwBold}>{`${fixedFloat(powerDrawFans, 1)} kW`}</span>
+              {` Fans`}
+            </div>
+            <div
+              style={{ top: `${powerDrawRAD2}px` }}
+              className={this.props.powerDrawRAD === undefined ? styles.disabled : ''}
+            >
+              <span className={styles.kwBold}>{`${fixedFloat(powerDrawRAD, 1)} kW`}</span>
+              {` RAD`}
+            </div>
+            <div
+              style={{ top: `${powerDrawOBC2}px` }}
+              className={this.props.powerDrawOBC === undefined ? styles.disabled : ''}
+            >
+              <span className={styles.kwBold}>{`${fixedFloat(powerDrawOBC, 1)} kW`}</span>
+              {` OBC`}
+            </div>
+            <div
+              style={{ top: `${powerDrawShutter2}px` }}
+              className={this.props.powerDrawShutter === undefined ? styles.disabled : ''}
+            >
+              <span className={styles.kwBold}>{`${fixedFloat(powerDrawShutter, 1)} kW`}</span>
+              {` Shutters`}
+            </div>
+            <div
+              style={{ top: `${powerDrawLWS2}px` }}
+              className={this.props.powerDrawLWS === undefined ? styles.disabled : ''}
+            >
+              <span className={styles.kwBold}>{`${fixedFloat(powerDrawLWS, 1)} kW`}</span>
               {` LWS`}
             </div>
-            <div style={{ top: `${powerShutter2}px` }}>
-              <span className={styles.kwBold}>{`${powerDrawShutter} kW`}</span>
-              {` powerShutter`}
+            <div
+              style={{ top: `${powerDrawLouvers2}px` }}
+              className={this.props.powerDrawLouvers === undefined ? styles.disabled : ''}
+            >
+              <span className={styles.kwBold}>{`${fixedFloat(powerDrawLouvers, 1)} kW`}</span>
+              {` Louvers`}
             </div>
           </div>
           <div style={{ width: 0 }}>
@@ -369,79 +518,79 @@ export default class MTDomePower extends Component {
               style={{ top: `${height2 * 0.5}px`, left: `${width * -0.5 - 280}px`, width: 140 }}
               className={styles.powerTotal}
             >
-              {`${powerTotal} kW`}
+              {`${fixedFloat(powerTotal, 2)} kW`}
             </div>
           </div>
         </div>
         <div className={styles.rightPanel}>
           <PowerPlot
-            powerDraw={0}
+            powerDraw={fixedFloat(powerDrawCalibration, 1)}
             data={this.state.dataCS}
             title={'Calibration Screen'}
-            className={styles.powerPlot}
+            className={this.props.powerDrawCalibration === undefined ? styles.disabled : ''}
             height={200}
             width={150}
             limit={0.75}
           />
           <PowerPlot
-            powerDraw={0}
+            powerDraw={fixedFloat(powerDrawRAD, 1)}
             data={this.state.dataRAD}
             title={'Rear Access Door'}
-            className={styles.powerPlot}
+            className={this.props.powerDrawRAD === undefined ? styles.disabled : ''}
             height={200}
             width={150}
             limit={3}
           />
           <PowerPlot
-            powerDraw={0}
-            data={this.state.dataOBS}
+            powerDraw={fixedFloat(powerDrawOBC, 1)}
+            data={this.state.dataOBC}
             title={'Overhead Bridge Crane'}
-            className={styles.powerPlot}
+            className={this.props.powerDrawOBC === undefined ? styles.disabled : ''}
             height={200}
             width={150}
             limit={6}
           />
           <PowerPlot
-            powerDraw={0}
+            powerDraw={fixedFloat(powerDrawFans, 1)}
             data={this.state.dataFans}
             title={'Fans'}
-            className={styles.powerPlot}
+            className={this.props.powerDrawFans === undefined ? styles.disabled : ''}
             height={200}
             width={150}
             limit={25}
           />
           <PowerPlot
-            powerDraw={powerDrawLouvers}
+            powerDraw={fixedFloat(powerDrawLouvers, 1)}
             data={this.state.dataLouvers}
             title={'Louvers'}
-            className={styles.powerPlot}
+            className={this.props.powerDrawLouvers === undefined ? styles.disabled : ''}
             height={200}
             width={150}
             limit={69}
           />
           <PowerPlot
-            powerDraw={powerDrawLWS}
+            powerDraw={fixedFloat(powerDrawLWS, 1)}
             data={this.state.dataLWS}
             title={'Light Wind Screen'}
-            className={styles.powerPlot}
+            className={this.props.powerDrawLWS === undefined ? styles.disabled : ''}
             height={200}
             width={150}
             limit={68}
           />
           <PowerPlot
-            powerDraw={powerDrawShutter}
-            data={this.state.dataShutter}
+            powerDraw={fixedFloat(powerDrawShutter, 1)}
+            data={this.state.dataShutters}
             title={'Shutters'}
-            className={styles.powerPlot}
+            className={this.props.powerDrawShutter === undefined ? styles.disabled : ''}
             height={200}
             width={150}
             limit={6}
           />
           <PowerPlot
-            powerDraw={0}
+            powerDraw={fixedFloat(powerDrawElectronics, 1)}
             data={this.state.dataED}
             title={'Electronic Devices'}
-            className={styles.powerPlot}
+            className={this.props.powerDrawElectronics === undefined ? styles.disabled : ''}
             height={200}
             width={150}
             limit={1}

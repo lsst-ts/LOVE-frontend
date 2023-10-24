@@ -38,9 +38,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   flex-wrap: wrap;
 }
 
-.plotContainer {
-}
-
 .plotContainer svg {
   background: none !important;
 }
@@ -69,4 +66,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .powerTotal:after {
   width: 0px;
+}
+
+.disabled {
+  opacity: 0.2;
 }

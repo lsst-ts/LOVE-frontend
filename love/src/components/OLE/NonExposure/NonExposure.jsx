@@ -31,7 +31,7 @@ import {
   ISO_STRING_DATE_TIME_FORMAT,
   LOG_REFRESH_INTERVAL_MS,
 } from 'Config';
-import ManagerInterface, { formatSecondsToDigital, getLinkJira } from 'Utils';
+import ManagerInterface, { formatSecondsToDigital, getLinkJira, jiraMarkdownToHtml } from 'Utils';
 
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -163,7 +163,7 @@ export default class NonExposure extends Component {
         title: 'Components',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => value.join(', '),
+        render: (value) => value?.join(', '),
       },
       {
         field: null,
@@ -184,7 +184,10 @@ export default class NonExposure extends Component {
         title: 'Message',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => value,
+        render: (value) => {
+          const parsedValue = jiraMarkdownToHtml(value);
+          return <div className={styles.wikiMarkupText} dangerouslySetInnerHTML={{ __html: parsedValue }} />;
+        },
       },
       {
         field: 'urls',

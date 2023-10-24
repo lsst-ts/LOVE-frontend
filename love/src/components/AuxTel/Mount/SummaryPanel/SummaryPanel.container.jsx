@@ -35,6 +35,30 @@ export const schema = {
       isPrivate: false,
       default: 'AT summary',
     },
+    cellLoadMin: {
+      type: 'number',
+      description: 'Min cell load value as a number',
+      isPrivate: false,
+      default: 3.83,
+    },
+    cellLoadMax: {
+      type: 'number',
+      description: 'Max cell load value as a number',
+      isPrivate: false,
+      default: 117.8,
+    },
+    pressureMin: {
+      type: 'number',
+      description: 'Min pressure value as a number',
+      isPrivate: false,
+      default: 47160.14,
+    },
+    pressureMax: {
+      type: 'number',
+      description: 'Max pressure value as a number',
+      isPrivate: false,
+      default: 182159.49,
+    },
     EUI: {
       type: 'boolean',
       description: 'Whether the component has a EUI link',

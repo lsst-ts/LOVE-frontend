@@ -86,6 +86,7 @@ const DomeContainer = ({
   unsubscribeToStream,
   controls,
   atDomeTracking,
+  targetName,
   ...props
 }) => {
   if (props.isRaw) {
@@ -128,6 +129,7 @@ const DomeContainer = ({
       atDomeSummaryState={atDomeSummaryState}
       ATMCSSummaryState={ATMCSSummaryState}
       atDomeTracking={atDomeTracking}
+      targetName={targetName}
     />
   );
 };
@@ -156,6 +158,7 @@ const mapDispatchToProps = (dispatch) => {
     'event-ATPtg-1-timesOfLimits',
     'event-ATDome-0-summaryState',
     'event-ATMCS-0-summaryState',
+    `event-ATPtg-1-currentTarget`,
   ];
   return {
     subscriptions,

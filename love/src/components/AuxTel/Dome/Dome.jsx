@@ -247,6 +247,7 @@ export default class Dome extends Component {
       atDomeSummaryState,
       ATMCSSummaryState,
       atDomeTracking,
+      targetName,
     } = this.props;
 
     const isProjected = true;
@@ -381,6 +382,7 @@ export default class Dome extends Component {
             atDomeSummaryState={atDomeSummaryState}
             ATMCSSummaryState={ATMCSSummaryState}
             domeTracking={atDomeTracking}
+            targetName={targetName}
           />
         </div>
         {this.props.controls && (

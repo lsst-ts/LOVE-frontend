@@ -32,7 +32,6 @@ export default class Summary extends Component {
       windSpeed,
       degradation,
       atmosphericTrans,
-      airTemp,
       pressure,
       humidity,
       seeing,
@@ -48,8 +47,6 @@ export default class Summary extends Component {
           <Value>{degradation}</Value>
           <Label>Atm. Transmition</Label>
           <Value>{atmosphericTrans}</Value>
-          <Label>Air Temperature</Label>
-          <Value>{airTemp}</Value>
           <Label>Pressure</Label>
           <Value>{`${fixedFloat(pressure[0], 2)} Pa`}</Value>
         </SummaryPanel>

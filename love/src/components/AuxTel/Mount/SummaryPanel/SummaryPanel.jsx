@@ -228,8 +228,8 @@ export default class SummaryTable extends Component {
         <Value>{this.props.loadCell}</Value>
         <Row>
           <Limits
-            lowerLimit={ATPneumaticsLimits.cellLoad.min}
-            upperLimit={ATPneumaticsLimits.cellLoad.max}
+            lowerLimit={this.props.cellLoadMin}
+            upperLimit={this.props.cellLoadMax}
             currentValue={this.props.loadCell.value}
             targetValue="Unknown"
             height={30}
@@ -243,8 +243,8 @@ export default class SummaryTable extends Component {
         <Value>{this.props.m1AirPressure}</Value>
         <Row>
           <Limits
-            lowerLimit={ATPneumaticsLimits.pressure.min}
-            upperLimit={ATPneumaticsLimits.pressure.max}
+            lowerLimit={this.props.pressureMin}
+            upperLimit={this.props.pressureMax}
             currentValue={this.props.m1AirPressure.value}
             targetValue={this.props.m1SetPressure}
             height={30}

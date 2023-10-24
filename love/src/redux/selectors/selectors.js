@@ -562,13 +562,14 @@ export const getATMCSState = (state) => {
     'event-ATMCS-0-positionLimits',
     'event-ATPtg-1-timesOfLimits',
     'event-ATMCS-0-summaryState',
+    `event-ATPtg-1-currentTarget`,
   ];
   const data = getStreamsData(state, subscriptions);
   const [minEl, minAz, minNas1, minNas2, minM3] = data['event-ATMCS-0-positionLimits']?.[0].minimum?.value ?? [
-    5, -270, -165, -165, 0,
+    25, -270, -165, -165, 0,
   ];
   const [maxEl, maxAz, maxNas1, maxNas2, maxM3] = data['event-ATMCS-0-positionLimits']?.[0].maximum?.value ?? [
-    90, 270, 165, 165, 180,
+    86, 270, 165, 165, 180,
   ];
 
   return {
@@ -599,6 +600,7 @@ export const getATMCSState = (state) => {
     currentPointingEl: data['telemetry-ATMCS-0-mount_AzEl_Encoders']?.elevationCalculatedAngle?.value?.[0],
     currentPointingNasmyth1: data['telemetry-ATMCS-0-mount_Nasmyth_Encoders']?.nasmyth1CalculatedAngle?.value?.[0],
     currentPointingNasmyth2: data['telemetry-ATMCS-0-mount_Nasmyth_Encoders']?.nasmyth2CalculatedAngle?.value?.[0],
+    targetName: data[`event-ATPtg-1-currentTarget`]?.[0].targetName?.value ?? 'Unknown',
   };
 };
 
@@ -1136,6 +1138,38 @@ export const getDomeStatus = (state) => {
     mtMountSummaryState: domeStatus['event-MTMount-0-summaryState']?.[0]?.summaryState?.value ?? 0,
     // TODO: The following parameter is missing a CSC, add it when it becomes available//
     mtDomeTracking: 0,
+  };
+};
+
+// MTDome Power Draw
+export const getMtDomePowerDraw = (state) => {
+  const subscriptions = [
+    'telemetry-MTDome-0-apertureShutter',
+    'telemetry-MTDome-0-lightWindScreen',
+    'telemetry-MTDome-0-louvers',
+    'telemetry-MTDome-0-rearAccessDoor',
+    'telemetry-ESS-301-temperature',
+  ];
+  const mtDomePowerDraw = getStreamsData(state, subscriptions);
+  return {
+    powerDrawRAD: mtDomePowerDraw['telemetry-MTDome-0-rearAccessDoor']?.powerDraw?.value ?? undefined,
+    timestampRAD: mtDomePowerDraw['telemetry-MTDome-0-rearAccessDoor']?.timestamp?.value ?? undefined,
+    powerDrawLouvers: mtDomePowerDraw['telemetry-MTDome-0-louvers']?.powerDraw?.value ?? undefined,
+    timestampLouvers: mtDomePowerDraw['telemetry-MTDome-0-louvers']?.timestamp?.value ?? undefined,
+    powerDrawShutter: mtDomePowerDraw['telemetry-MTDome-0-apertureShutter']?.powerDraw?.value ?? undefined,
+    timestampShutter: mtDomePowerDraw['telemetry-MTDome-0-apertureShutter']?.timestamp?.value ?? undefined,
+
+    //TODO: Once telemetries are created, add them here.
+    powerDrawCalibration: undefined,
+    timestampCalibration: undefined,
+    powerDrawOBC: undefined,
+    timestampOBC: undefined,
+    powerDrawFans: undefined,
+    timestampFans: undefined,
+    powerDrawLWS: undefined,
+    timestampLWS: undefined,
+    powerDrawElectronics: undefined,
+    timestampElectronics: undefined,
   };
 };
 
@@ -2242,16 +2276,15 @@ export const getObservatoryState = (state) => {
     isRaining: environmentVariables ? environmentVariables[0].raining.value : false,
     isSnowing: environmentVariables ? environmentVariables[0].snowing.value : false,
     numChannels: essTemperatures ? essTemperatures.numChannels.value : 0,
-    temperature: essTemperatures ? essTemperatures.temperature.value : [],
+    temperature: essTemperatures ? essTemperatures.temperatureItem.value : [],
     location: essTemperatures ? essTemperatures.location.value : '',
     windDirection: essAirFlow ? essAirFlow.direction.value : 0.0,
     windSpeed: essAirFlow ? essAirFlow.speed.value : 0.0,
     // TODO: Add the corresponding telemetry or event when Enviromental Degradation gets integrated into SAL
     degradation: 'Unknown',
-    pressure: essPressure ? essPressure.pressure.value : 0,
-    humidity: essRelativeHumidity ? essRelativeHumidity.relativeHumidity.value : 0,
+    pressure: essPressure ? essPressure.pressureItem.value : 0,
+    humidity: essRelativeHumidity ? essRelativeHumidity.relativeHumidityItem.value : 0,
     // TODO: Add the corresponding telemetry or event when the following variables gets integrated into SAL
-    airTemp: 'Unknown',
     atmosphericTrans: 'Unknown',
     seeing: 'Unknown',
   };

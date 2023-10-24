@@ -132,6 +132,11 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   padding: var(--content-padding);
 }
 
+.detailContainer,
+.detailContainerMenu {
+  text-align: left;
+}
+
 .header {
   font-weight: bold;
   text-align: left;
@@ -257,6 +262,10 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .contentMenu textarea:focus {
   outline: none;
   border: 1px solid var(--secondary-font-color);
+}
+
+.content .textArea {
+  height: calc(100% - 2.5em);
 }
 
 .label {
@@ -524,4 +533,29 @@ th.tableHead {
 
 .obsIdSelector {
   display: flex;
+}
+
+/* Following is related to the use of the RichTextEditor component */
+.wikiMarkupText {
+  white-space: pre;
+  text-align: left;
+  overflow-x: auto;
+}
+
+.wikiMarkupText h1,
+.wikiMarkupText h2,
+.wikiMarkupText h3,
+.wikiMarkupText h4,
+.wikiMarkupText h5,
+.wikiMarkupText h6 {
+  margin: calc(var(--small-padding) * 0.5) 0;
+}
+
+.wikiMarkupText a {
+  color: var(--link-font-color);
+}
+
+.wikiMarkupText a:hover,
+.wikiMarkupText a:focus {
+  color: var(--link-hover-font-color);
 }

@@ -579,6 +579,7 @@ class Layout extends Component {
               auxtelObsMode={this.props.observatorySummary?.auxtelObservingMode}
               degradation={this.props.observatorySummary?.degradation}
               auxtelPower={'UNKNOWN'}
+              atmosphericTrans={this.props.observatorySummary?.atmosphericTrans}
             ></ObservatorySummaryMenu>
           </div>
         </DropdownMenu>
