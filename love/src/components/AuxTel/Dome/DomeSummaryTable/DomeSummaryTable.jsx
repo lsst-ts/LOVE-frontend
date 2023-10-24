@@ -107,6 +107,7 @@ export default class DomeSummaryTable extends Component {
       atDomeSummaryState,
       ATMCSSummaryState,
       domeTracking,
+      targetName,
     } = this.props;
 
     const azimuthStateValue = domeAzimuthStateMap[this.props.azimuthState];
@@ -154,6 +155,8 @@ export default class DomeSummaryTable extends Component {
       <SummaryPanel className={styles.summaryTable}>
         <Title>Track ID</Title>
         <Value>{this.props.trackID?.toString()}</Value>
+        <Label>Target Name</Label>
+        <Value>{targetName}</Value>
         {/* Dome */}
         <Title>ATDome CSC</Title>
         <Value>
