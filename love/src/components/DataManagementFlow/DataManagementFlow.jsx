@@ -26,7 +26,7 @@ import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import Info from './Info/Info';
 import PipelineIcon from 'components/icons/DMFlowIcon/PipelineIcon';
 import ConnectionIcon from 'components/icons/DMFlowIcon/ConnectionIcon';
-
+import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 
 let dataMock = [];
 for (let i = 1; i < 100; i++) {
@@ -89,11 +89,31 @@ export default class DMFlow extends Component {
         type: 'string',
       },
       {
+        field: 'processed',
+        title: 'Processed',
+        type: 'string',
+      },
+      {
+        field: 'failed',
+        title: 'Failed',
+        type: 'string',
+      },
+      {
+        field: 'failedPercent',
+        title: 'F %',
+        type: 'string',
+      },
+      {
         field: 'phases',
         title: 'Pipeline',
         render: (value) => {
-          return <PipelineIcon phases={value}/>;
+          return <PipelineIcon phases={value} />;
         },
+      },
+      {
+        field: 'imgQlty',
+        title: 'Img. Qlty.',
+        type: 'string',
       },
       {
         field: 'textStatus',
@@ -114,10 +134,11 @@ export default class DMFlow extends Component {
 
     return (
       <div className={styles.container}>
-        <div>
+        {/* <div>
           <Info state={'enabled'} name={'OODS'}></Info>
           <Info state={'disabled'} name={'DAQ'}></Info>
-        </div>
+        </div> */}
+        <SummaryPanel></SummaryPanel>
         <div className={styles.divTable}>
           <PaginatedTable headers={headers} data={dataMock}></PaginatedTable>
         </div>
