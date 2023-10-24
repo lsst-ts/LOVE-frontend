@@ -81,8 +81,6 @@ export default class DomeSummaryTable extends Component {
       target: azimuthCommanded,
     };
     const mountAz = {
-      // current: Math.abs(currentPointing.az),
-      // target: Math.abs(targetPointing.az),
       current: currentPointing.az,
       target: targetPointing.az,
     };
@@ -90,8 +88,6 @@ export default class DomeSummaryTable extends Component {
       current: currentPointing.el,
       target: targetPointing.el,
     };
-
-    console.log(mountAz);
 
     const {
       timeAzLim,
