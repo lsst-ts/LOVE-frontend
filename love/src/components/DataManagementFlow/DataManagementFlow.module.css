@@ -17,18 +17,28 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 .container {
   color: var(--primary-font-color);
   display: grid;
   justify-items: center;
   align-items: center;
 }
+
 .containerCenter {
   text-align: center;
 }
+
 .divTable {
-  width: 75%;
   align-self: center;
   justify-self: center;
+}
+
+.summaryPanel {
+  max-width: 81%;
+  display: grid;
+  width: 100%;
+  justify-content: space-around;
+  align-items: stretch;
+  justify-items: start;
+  background: none !important;
 }

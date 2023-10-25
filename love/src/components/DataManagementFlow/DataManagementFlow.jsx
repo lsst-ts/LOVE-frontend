@@ -27,12 +27,17 @@ import Info from './Info/Info';
 import PipelineIcon from 'components/icons/DMFlowIcon/PipelineIcon';
 import ConnectionIcon from 'components/icons/DMFlowIcon/ConnectionIcon';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
+import Title from 'components/GeneralPurpose/SummaryPanel/Title';
+import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 
 let dataMock = [];
 for (let i = 1; i < 100; i++) {
   dataMock.push({
     thumbnail: 'img',
     imageName: 'CC_O_200202_000' + i.toString(),
+    processed: `${Math.floor(Math.random() * 301)}/${Math.floor(Math.random() * 301)}`,
+    failed: Math.floor(Math.random() * 201),
+    failedPercent: `${Math.floor(Math.random() * 101)}%`,
     phases: {
       0: Math.floor(Math.random() * 4),
       1: Math.floor(Math.random() * 4),
@@ -41,6 +46,7 @@ for (let i = 1; i < 100; i++) {
       4: Math.floor(Math.random() * 4),
       5: Math.floor(Math.random() * 4),
     },
+    imgQlty: 'Unknown',
     status: Math.floor(Math.random() * 7),
   });
 }
@@ -76,6 +82,18 @@ export default class DMFlow extends Component {
 
   componentDidMount = () => {};
 
+  percentageFormatter(value) {
+    const numericValue = parseInt(value, 10);
+    let style = {};
+    if (numericValue >= 50) {
+      style = { color: 'var(--status-alert-dimmed-color-2' };
+    } else if (numericValue >= 20) {
+      style = { color: 'var(--status-warning-dimmed-color-2' };
+    }
+
+    return <span style={style}>{value}</span>;
+  }
+
   render() {
     const headers = [
       {
@@ -102,6 +120,7 @@ export default class DMFlow extends Component {
         field: 'failedPercent',
         title: 'F %',
         type: 'string',
+        render: (value) => this.percentageFormatter(value),
       },
       {
         field: 'phases',
@@ -138,9 +157,16 @@ export default class DMFlow extends Component {
           <Info state={'enabled'} name={'OODS'}></Info>
           <Info state={'disabled'} name={'DAQ'}></Info>
         </div> */}
-        <SummaryPanel></SummaryPanel>
+        <SummaryPanel className={styles.summaryPanel}>
+          <Title>DMFlow State</Title>
+          <Value>Unknown</Value>
+          <Title>OODS State</Title>
+          <Value>Unknown</Value>
+          <Title>USDF State</Title>
+          <Value>Unknown</Value>
+        </SummaryPanel>
         <div className={styles.divTable}>
-          <PaginatedTable headers={headers} data={dataMock}></PaginatedTable>
+          <PaginatedTable headers={headers} data={dataMock} title={'Exposures'}></PaginatedTable>
         </div>
       </div>
     );
