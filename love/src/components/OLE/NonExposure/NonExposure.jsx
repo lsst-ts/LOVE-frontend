@@ -31,7 +31,13 @@ import {
   ISO_STRING_DATE_TIME_FORMAT,
   LOG_REFRESH_INTERVAL_MS,
 } from 'Config';
-import ManagerInterface, { formatSecondsToDigital, getLinkJira, jiraMarkdownToHtml, getObsDayFromDate } from 'Utils';
+import ManagerInterface, {
+  formatSecondsToDigital,
+  getLinkJira,
+  jiraMarkdownToHtml,
+  getObsDayFromDate,
+  truncateISODateToMinutes,
+} from 'Utils';
 
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -170,7 +176,7 @@ export default class NonExposure extends Component {
         title: 'Time of Incident (UTC)',
         type: 'string',
         className: styles.tableHead,
-        render: (_, row) => `${row.date_begin?.split('.')[0]} - ${row.date_end?.split('.')[0]}`,
+        render: (_, row) => `${truncateISODateToMinutes(row.date_begin)} - ${truncateISODateToMinutes(row.date_end)}`,
       },
       {
         field: 'time_lost',

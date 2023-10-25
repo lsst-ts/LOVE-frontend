@@ -21,9 +21,7 @@ import html2canvas from 'html2canvas';
 import { DateTime } from 'luxon';
 import { toast } from 'react-toastify';
 import Moment from 'moment';
-import isEqual from 'lodash/isEqual';
-import { WEBSOCKET_SIMULATION, SUBPATH } from 'Config.js';
-import { parse } from 'vega';
+import { WEBSOCKET_SIMULATION, SUBPATH, ISO_INTEGER_DATE_FORMAT } from 'Config.js';
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -2058,7 +2056,16 @@ export function getObsDayFromDate(date) {
   const utcDate = date.utc();
   const utcHour = utcDate.hour();
   if (utcHour >= 12) {
-    return utcDate.format('YYYYMMDD');
+    return utcDate.format(ISO_INTEGER_DATE_FORMAT);
   }
-  return utcDate.subtract(1, 'day').format('YYYYMMDD');
+  return utcDate.subtract(1, 'day').format(ISO_INTEGER_DATE_FORMAT);
+}
+
+/**
+ * Function to truncate date ISO string to minutes
+ * @param {string} date date, as a ISO string, to be truncated
+ * @returns {string} truncated date in format YYYY-MM-DDTHH:mm
+ */
+export function truncateISODateToMinutes(date) {
+  return date.substring(0, 16);
 }
