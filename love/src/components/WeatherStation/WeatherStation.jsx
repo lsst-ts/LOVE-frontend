@@ -282,8 +282,8 @@ export default class WeatherStation extends Component {
   };
 
   render() {
-    const currentTemperature = fixedFloat(this.props.temperature?.temperature?.value[0], 2);
-    const currentHumidity = fixedFloat(this.props.relativeHumidity?.relativeHumidity?.value, 2);
+    const currentTemperature = fixedFloat(this.props.temperature?.temperatureItem?.value[0], 2);
+    const currentHumidity = fixedFloat(this.props.relativeHumidity?.relativeHumidityItem?.value, 2);
     const currentPressure = fixedFloat(this.props.pressure?.pressureItem?.value[0], 2);
     const currentWindSpeed = fixedFloat(this.props.airFlow?.speed?.value, 2);
     const currentWindSpeedUnits = this.props.airFlow?.speed?.units;
