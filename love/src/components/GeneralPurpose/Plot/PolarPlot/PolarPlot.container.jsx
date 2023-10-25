@@ -126,7 +126,7 @@ export const schema = {
       type: 'function',
       description: 'Color interpolation function. It takes a value, its range (min and max) and the group index.',
       default: `(value, minValue, maxValue, group) => { 
-  const proportion = (value - minValue) / (maxValue - minValue); 
+  const proportion = maxValue !== minValue ? (value - minValue) / (maxValue - minValue) : 0;
   return [255, 255 * (1 - proportion), 255 * (1 - proportion)]; 
 }`,
       isPrivate: false,

@@ -210,7 +210,7 @@ export default class WeatherStation extends Component {
     groupTitles: ['Wind', 'Gust'],
     radialUnits: 'km/s',
     colorInterpolation:
-      '(value, minValue, maxValue, group) => { \n    if(group == 1){\n        const proportion = (value - minValue) / (maxValue - minValue); \n        return [255 * (1 - proportion), 255, 255 * (1 - proportion)]; \n    }\n  const proportion = (value - minValue) / (maxValue - minValue); \n  return [255 * (1 - proportion), 255 * (1 - proportion), 255]; \n}',
+      '(value, minValue, maxValue, group) => { \n    if(group == 1){\n        const proportion = maxValue !== minValue ? (value - minValue) / (maxValue - minValue) : 0; \n        return [255 * (1 - proportion), 255, 255 * (1 - proportion)]; \n    }\n  const proportion = maxValue !== minValue ? (value - minValue) / (maxValue - minValue) : 0; \n  return [255 * (1 - proportion), 255 * (1 - proportion), 255]; \n}',
     opacityInterpolation:
       '(value, minValue, maxValue, group) => {\n  if (maxValue === minValue) return 1;\n  return 0.01 + ((value - minValue) / (maxValue - minValue)) * 0.9;\n}',
   };
