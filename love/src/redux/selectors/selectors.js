@@ -1937,27 +1937,120 @@ export const getLATISSState = (state) => {
   };
 };
 
+/////////////////
+/// DYNALENE ///
+///////////////
+
+// Dynalene Events
+export const getDynaleneStatus = (state) => {
+  const subscriptions = [
+    'event-HVAC-0-dynaleneState',
+    'event-HVAC-0-dynAmbientDeltaModeStatus',
+    'event-HVAC-0-dynCH1PressRemoteSP',
+    'event-HVAC-0-dynCH2PressRemoteSP',
+    'event-HVAC-0-dynExhaustAirBackupModeStatus',
+    'event-HVAC-0-dynExtAirRemoteSP',
+    'event-HVAC-0-dynMainGridAlarm',
+    'event-HVAC-0-dynMainGridAlarmCMD',
+    'event-HVAC-0-dynMainGridFailureFlag',
+    'event-HVAC-0-dynPierFansOnOff',
+    'event-HVAC-0-dynRemoteLocalModeStatus',
+    'event-HVAC-0-dynSafetyResetFlag',
+    'event-HVAC-0-dynSysFault',
+    'event-HVAC-0-dynSysOK',
+    'event-HVAC-0-dynSysWarning',
+    'event-HVAC-0-dynSystOnOff',
+    'event-HVAC-0-dynTAalarm',
+    'event-HVAC-0-dynTAalarmCMD',
+    'event-HVAC-0-dynTAalarmMonitor',
+    'event-HVAC-0-dynTMAalarm',
+    'event-HVAC-0-dynTMAalarmCMD',
+    'event-HVAC-0-dynTMAalarmMonitor',
+    'event-HVAC-0-dynTaRemoteSP',
+    'event-HVAC-0-dynTankLevelAlarmCMD',
+    'event-HVAC-0-dynTelemetryEnable',
+    'event-HVAC-0-dynTmaRemoteSP',
+    'event-HVAC-0-dynaleneTankLevel',
+  ];
+  const dynaleneData = getStreamsData(state, subscriptions);
+  return {
+    dynaleneState: dynaleneData['event-HVAC-0-dynaleneState']?.[0].state?.value ?? 9,
+    dynAmbientDeltaModeStatus: dynaleneData['event-HVAC-0-dynAmbientDeltaModeStatus']?.[0].state?.value ?? undefined,
+    dynCH1PressRemoteSP: dynaleneData['event-HVAC-0-dynCH1PressRemoteSP']?.[0].dynCH1PressRemoteSP?.value ?? undefined,
+    dynCH2PressRemoteSP: dynaleneData['event-HVAC-0-dynCH2PressRemoteSP']?.[0].dynCH2PressRemoteSP?.value ?? undefined,
+    dynExhaustAirBackupModeStatus:
+      dynaleneData['event-HVAC-0-dynExhaustAirBackupModeStatus']?.[0].state?.value ?? undefined,
+    dynExtAirRemoteSP: dynaleneData['event-HVAC-0-dynExtAirRemoteSP']?.[0].dynExtAirRemoteSP?.value ?? undefined,
+    dynMainGridAlarm: dynaleneData['event-HVAC-0-dynMainGridAlarm']?.[0].state?.value ?? undefined,
+    dynMainGridAlarmCMD: dynaleneData['event-HVAC-0-dynMainGridAlarmCMD']?.[0].state?.value ?? undefined,
+    dynMainGridFailureFlag: dynaleneData['event-HVAC-0-dynMainGridFailureFlag']?.[0].state?.value ?? undefined,
+    dynPierFansOnOff: dynaleneData['event-HVAC-0-dynPierFansOnOff']?.[0].dynPierFansOnOff?.value ?? undefined,
+    dynRemoteLocalModeStatus: dynaleneData['event-HVAC-0-dynRemoteLocalModeStatus']?.[0].state?.value ?? undefined,
+    dynSafetyResetFlag: dynaleneData['event-HVAC-0-dynSafetyResetFlag']?.[0].state?.value ?? undefined,
+    dynSysFault: dynaleneData['event-HVAC-0-dynSysFault']?.[0].state?.value ?? undefined,
+    dynSysOK: dynaleneData['event-HVAC-0-dynSysOK']?.[0].state?.value ?? undefined,
+    dynSysWarning: dynaleneData['event-HVAC-0-dynSysWarning']?.[0].state?.value ?? undefined,
+    dynSystOnOff: dynaleneData['event-HVAC-0-dynSystOnOff']?.[0].dynSystOnOff?.value ?? undefined,
+    dynTAalarm: dynaleneData['event-HVAC-0-dynTAalarm']?.[0].state?.value ?? undefined,
+    dynTAalarmCMD: dynaleneData['event-HVAC-0-dynTAalarmCMD']?.[0].state?.value ?? undefined,
+    dynTAalarmMonitor: dynaleneData['event-HVAC-0-dynTAalarmMonitor']?.[0].state?.value ?? undefined,
+    dynTMAalarm: dynaleneData['event-HVAC-0-dynTMAalarm']?.[0].state?.value ?? undefined,
+    dynTMAalarmCMD: dynaleneData['event-HVAC-0-dynTMAalarmCMD']?.[0].state?.value ?? undefined,
+    dynTMAalarmMonitor: dynaleneData['event-HVAC-0-dynTMAalarmMonitor']?.[0].state?.value ?? undefined,
+    dynTaRemoteSP: dynaleneData['event-HVAC-0-dynTaRemoteSP']?.[0].dynTaRemoteSP?.value ?? undefined,
+    dynTankLevelAlarmCMD: dynaleneData['event-HVAC-0-dynTankLevelAlarmCMD']?.[0].state?.value ?? undefined,
+    dynTelemetryEnable: dynaleneData['event-HVAC-0-dynTelemetryEnable']?.[0].dynTelemetryEnable?.value ?? undefined,
+    dynTmaRemoteSP: dynaleneData['event-HVAC-0-dynTmaRemoteSP']?.[0].dynTmaRemoteSP?.value ?? undefined,
+    dynaleneTankLevel: dynaleneData['event-HVAC-0-dynaleneTankLevel']?.[0].state?.value ?? 9,
+  };
+};
+
+// Dynalene Telemetry
+export const getDynaleneData = (state) => {
+  const subscriptions = ['telemetry-HVAC-0-dynaleneP05'];
+  const dynaleneData = getStreamsData(state, subscriptions);
+  return {
+    dynCH01LS01: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH01LS01?.value ?? undefined,
+    dynCH01supFS01: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH01supFS01?.value ?? undefined,
+    dynCH01supPS11: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH01supPS11?.value ?? undefined,
+    dynCH01supTS05: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH01supTS05?.value ?? undefined,
+    dynCH02LS02: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH02LS02?.value ?? undefined,
+    dynCH02supFS02: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH02supFS02?.value ?? undefined,
+    dynCH02supPS13: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH02supPS13?.value ?? undefined,
+    dynCH02supTS07: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH02supTS07?.value ?? undefined,
+    dynCH01retCGLYpres: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH01retCGLYpres?.value ?? undefined,
+    dynCH01retCGLYtemp: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH01retCGLYtemp?.value ?? undefined,
+    dynCH01supCGLYpres: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH01supCGLYpres?.value ?? undefined,
+    dynCH01supCGLYtemp: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH01supCGLYtemp?.value ?? undefined,
+    dynCH02retGPGLYpres: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH02retGPGLYpres?.value ?? undefined,
+    dynCH02retGPGLYtemp: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH02retGPGLYtemp?.value ?? undefined,
+    dynCH02supGPGLYpres: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH02supGPGLYpres?.value ?? undefined,
+    dynCH02supGPGLYtemp: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH02supGPGLYtemp?.value ?? undefined,
+    dynCH1CGLYtpd: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH1CGLYtpd?.value ?? undefined,
+    dynCH1supCGLYflow: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH1supCGLYflow?.value ?? undefined,
+    dynCH2GPGLYtpd: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH2GPGLYtpd?.value ?? undefined,
+    dynCH2supGPGLYflow: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynCH2supGPGLYflow?.value ?? undefined,
+    dynTAretPS04: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynTAretPS04?.value ?? undefined,
+    dynTAretTS04: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynTAretTS04?.value ?? undefined,
+    dynTAsupFS04: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynTAsupFS04?.value ?? undefined,
+    dynTAsupPS03: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynTAsupPS03?.value ?? undefined,
+    dynTAsupTS03: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynTAsupTS03?.value ?? undefined,
+    dynTAtpd: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynTAtpd?.value ?? undefined,
+    dynTMAcmv01pos: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynTMAcmv01pos?.value ?? undefined,
+    dynTMAcmv02pos: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynTMAcmv02pos?.value ?? undefined,
+    dynTMAretPS02: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynTMAretPS02?.value ?? undefined,
+    dynTMAretTS02: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynTMAretTS02?.value ?? undefined,
+    dynTMAsupFS03: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynTMAsupFS03?.value ?? undefined,
+    dynTMAsupPS01: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynTMAsupPS01?.value ?? undefined,
+    dynTMAsupTS01: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynTMAsupTS01?.value ?? undefined,
+    dynTMAtpd: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.dynTMAtpd?.value ?? undefined,
+    exhAirAvrgTemp: dynaleneData['telemetry-HVAC-0-dynaleneP05']?.exhAirAvrgTemp?.value ?? undefined,
+  };
+};
+
 /////////////////////////////////////////
 // F A C I L I T Y - S E L E C T O R S //
 /////////////////////////////////////////
-
-// HVAC Events //
-export const getHVACEvents = (state) => {
-  const subscriptions = [
-    'telemetry-MTM1M3-0-forceActuatorData',
-    'event-MTM1M3-0-forceActuatorInfo',
-    'event-MTM1M3-0-forceActuatorState',
-  ];
-  const m1m3Data = getStreamsData(state, subscriptions);
-  return {
-    forceActuatorData: m1m3Data['telemetry-MTM1M3-0-forceActuatorData'] ?? {},
-    xPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.xPosition?.value ?? [],
-    yPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.yPosition?.value ?? [],
-    zPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.zPosition?.value ?? [],
-    actuatorReferenceId: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.referenceId?.value ?? [],
-    actuatorIlcState: m1m3Data['event-MTM1M3-0-forceActuatorState']?.[0]?.ilcState?.value ?? [],
-  };
-};
 
 export const getHVACSubscription = () => {
   return [

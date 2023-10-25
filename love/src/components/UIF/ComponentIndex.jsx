@@ -258,6 +258,16 @@ export const observatoryIndex = {
       },
     },
   },
+  Dynalene: {
+    component: require('../Dynalene/Dynalene.container').default,
+    schema: {
+      ...require('../Dynalene/Dynalene.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../Dynalene/Dynalene.container').schema.props,
+      },
+    },
+  },
   WeatherForecast: {
     component: require('../WeatherForecast/WeatherForecast.container').default,
     schema: {
