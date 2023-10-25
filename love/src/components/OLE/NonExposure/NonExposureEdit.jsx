@@ -425,7 +425,7 @@ export default class NonExposureEdit extends Component {
 
   renderMessageField() {
     const { logEdit } = this.state;
-    const htmlMessage = jiraMarkdownToHtml(logEdit?.message_text);
+    const htmlMessage = jiraMarkdownToHtml(logEdit?.message_text, { codeFriendly: true, parseLines: true });
 
     return (
       <>

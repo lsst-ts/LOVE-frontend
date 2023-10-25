@@ -23,6 +23,7 @@ import { toast } from 'react-toastify';
 import Moment from 'moment';
 import isEqual from 'lodash/isEqual';
 import { WEBSOCKET_SIMULATION, SUBPATH } from 'Config.js';
+import { parse } from 'vega';
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -1956,10 +1957,10 @@ export function htmlToJiraMarkdown(html) {
  * @params {boolean} options.codeFriendly if true, text formatting is not applied
  * @returns {string} html string
  */
-export function jiraMarkdownToHtml(markdown, options = { codeFriendly: true }) {
+export function jiraMarkdownToHtml(markdown, options = { codeFriendly: true, parseLines: false }) {
   if (!markdown) return '';
 
-  const { codeFriendly } = options;
+  const { codeFriendly, parseLines } = options;
   let html = markdown;
 
   // Parse text formats
@@ -2009,9 +2010,11 @@ export function jiraMarkdownToHtml(markdown, options = { codeFriendly: true }) {
   });
 
   // Parse full lines
-  html = html.replace(/^(\s*)(.*)\r\n/gm, (match, p1, p2) => {
-    return `<p>${[...p1].map((e) => '&nbsp;').join('')}${p2}</p>`;
-  });
+  if (parseLines) {
+    html = html.replace(/^(\s*)(.*)\r\n/gm, (match, p1, p2) => {
+      return `<p>${[...p1].map((e) => '&nbsp;').join('')}${p2}</p>`;
+    });
+  }
 
   return html;
 }
