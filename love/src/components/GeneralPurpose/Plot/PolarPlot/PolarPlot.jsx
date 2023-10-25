@@ -139,7 +139,7 @@ export default class PolarPlot extends Component {
       r = w / 2 - margin;
       return (
         <g>
-          <circle cx={w / 2} cy={h / 2} r={r} />
+          <circle className={styles.radialMarkerCircle} cx={w / 2} cy={h / 2} r={r} />
           <text className={styles.label} x={w / 2 + r} y={(h * (1 + 0.05)) / 2}>
             {temporalRadius ? relativeTime(maxRadialValue, this.props.taiToUtc) : maxRadialValue}
             {temporalRadius ? '' : radialMarkersUnits}
@@ -153,7 +153,7 @@ export default class PolarPlot extends Component {
       else r = ((value - minRadialValue) / (maxRadialValue - minRadialValue)) * (w / 2 - margin);
       return (
         <g key={`circle ${i}`}>
-          <circle cx={w / 2} cy={h / 2} r={r} />
+          <circle cx={w / 2} cy={h / 2} r={r} className={styles.radialMarkerCircle}/>
           <text className={styles.label} x={w / 2 + r} y={(h * (1 + (i % 2 === 0 ? 0.03 : -0.03))) / 2}>
             {temporalRadius ? relativeTime(value, this.props.taiToUtc) : Math.round(100 * value) / 100}
             {temporalRadius ? '' : radialMarkersUnits}
@@ -332,8 +332,8 @@ export default class PolarPlot extends Component {
               {ticks}
               <g className={styles.innerGrid} id="svg_144">
                 {radialLines}
-                {circles}
               </g>
+              {circles}
             </g>
             {tripletGroups.map((triplets, layerIndex) => {
               const colorValues = triplets.map((t) => t.color);

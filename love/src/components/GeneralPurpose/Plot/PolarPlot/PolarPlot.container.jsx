@@ -77,9 +77,9 @@ export const schema = {
       default: {
         WindSpeed: {
           category: 'telemetry',
-          csc: 'WeatherStation',
-          salindex: '1',
-          topic: 'windSpeed',
+          csc: 'ESS',
+          salindex: 301,
+          topic: 'airFlow',
           item: 'avg2M',
           type: 'line',
           accessor: '(x) => x',
@@ -89,9 +89,9 @@ export const schema = {
         },
         WindDirection: {
           category: 'telemetry',
-          csc: 'WeatherStation',
-          salindex: '1',
-          topic: 'windDirection',
+          csc: 'ESS',
+          salindex: 301,
+          topic: 'airFlow',
           item: 'avg2M',
           type: 'line',
           accessor: '(x) => x',
@@ -127,7 +127,7 @@ export const schema = {
       description: 'Color interpolation function. It takes a value, its range (min and max) and the group index.',
       default: `(value, minValue, maxValue, group) => { 
   const proportion = maxValue !== minValue ? (value - minValue) / (maxValue - minValue) : 0;
-  return [255, 255 * (1 - proportion), 255 * (1 - proportion)]; 
+  return [255 * (1 - proportion), 255, 255 * (1 - proportion)];
 }`,
       isPrivate: false,
     },

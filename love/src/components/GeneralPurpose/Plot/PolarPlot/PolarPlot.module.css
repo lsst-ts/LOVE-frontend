@@ -60,9 +60,11 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 }
 
 .label {
+  fill: var(--base-font-color);
   text-anchor: middle;
   alignment-baseline: middle;
   dominant-baseline: central;
+  stroke:none;
 }
 
 .innerDome {
@@ -89,4 +91,10 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .legendItem > span {
   padding: 0.5em;
+}
+
+.radialMarkerCircle {
+  fill: none;
+  stroke: var(--second-senary-background-dimmed-color);
+  stroke-width: 1;
 }
