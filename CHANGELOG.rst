@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.27.0
+-------
+
+* Add Dynalene Component `<https://github.com/lsst-ts/LOVE-frontend/pull/552>`_
+
 v5.26.1
 -------
 
