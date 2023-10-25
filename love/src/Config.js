@@ -2655,6 +2655,50 @@ export const signalBypassIndexes = {
   manLiftNotParked: [26, 2],
 };
 
+/***************************************************************************/
+/***************************** Dynalenel System ***************************/
+/*************************************************************************/
+
+export const dynaleneDetailedStateMap = {
+  0: 'Initialized',
+  1: 'ShuttingDown',
+  2: 'PoweringOn',
+  3: 'PoweredOn',
+  4: 'PoweringOff',
+  5: 'PoweredOff',
+  6: 'Warning',
+  7: 'Alarm',
+  8: 'ShutOff',
+  9: 'Unknown',
+};
+
+export const dynaleneDetailedStateToStyle = {
+  Initialized: 'ok',
+  ShuttingDown: 'warning',
+  PoweringOn: 'warning',
+  PoweredOn: 'warning',
+  PoweringOff: 'warning',
+  PoweredOff: 'undefined',
+  Warning: 'warning',
+  Alarm: 'alert',
+  ShutOff: 'undefined',
+  Unknown: 'undefined',
+};
+
+export const dynaleneTankLevelDetailedStateMap = {
+  0: 'Ok',
+  1: 'Warning',
+  2: 'Alarm',
+  9: 'Unknown',
+};
+
+export const dynaleneTankLevelToStyle = {
+  Ok: 'ok',
+  Warning: 'warning',
+  Alarm: 'alert',
+  Unknown: 'invalid',
+};
+
 /*****************************************************************************/
 /***************************** M1M3 Thermal System ***************************/
 /*****************************************************************************/
