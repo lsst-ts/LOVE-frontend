@@ -17,37 +17,41 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-.summaryContainer {
-  display: flex;
-  flex-grow: 1;
-  flex-direction: column;
-  padding: 1em;
-  border-radius: 5px;
-  background: var(--second-secondary-background-color);
-  margin-bottom: 1em;
+.borderRadiusLeft {
+  border-bottom-left-radius: 0.2em;
+  border-top-left-radius: 0.2em;
 }
-
-.container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  background: var(--second-quaternary-background-dimmed-color);
-}
-
-.containerCenter {
+.divIcon {
+  color: #555;
   text-align: center;
-}
-
-.divTable {
+  background-color: var(--tertiary-background-color);
+  /* border: 0.1em solid #d6d6d6; */
   align-self: center;
-  justify-self: center;
+  /* aspect-ratio: 1 / 1; */
+  width: 20%;
+  height: 80%;
+  display: inline-grid;
+  align-items: center;
+  justify-items: center;
+  margin-right: 0.1em;
+}
+.divIcon > * {
+  height: 90%;
+  width: 90%;
+}
+.div {
+  display: flex;
+  align-items: center;
+}
+.component {
+  width: 50%;
 }
 
-.summaryPanel {
-  max-width: 81%;
-  display: grid;
-  width: 100%;
-  justify-content: space-around;
-  align-items: stretch;
-  justify-items: start;
-  background: none !important;
+.divName {
+  background-color: var(--tertiary-background-color);
+  border-bottom-right-radius: 0.2em;
+  border-top-right-radius: 0.2em;
+  display: flex;
+  height: 100%;
+  align-items: center;
 }

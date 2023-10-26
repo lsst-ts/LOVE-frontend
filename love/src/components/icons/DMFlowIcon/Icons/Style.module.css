@@ -1,0 +1,50 @@
+.disabled {
+  fill: #788f9b;
+}
+.enabled {
+  fill: #00a26d;
+}
+.danger {
+  fill: #eee203;
+}
+.error {
+  fill: #dd5602;
+}
+
+.wait,
+.path,
+.processing,
+.complete {
+  stroke: #788f9b;
+  stroke-miterlimit: 10;
+}
+
+.wait,
+.processing {
+  fill: rgba(120, 143, 155, 0.2);
+}
+
+.path,
+.complete {
+  opacity: 0.8;
+}
+
+.wait {
+  opacity: 0.2;
+}
+
+.alert {
+  fill: #dd5602;
+}
+
+.path {
+  fill: none;
+}
+
+.complete {
+  fill: #788f9b;
+}
+
+.noDisplay {
+  display: none;
+}

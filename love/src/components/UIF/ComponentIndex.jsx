@@ -68,6 +68,16 @@ export const observatoryIndex = {
       },
     },
   },
+  DataManagementFlow: {
+    component: require('../DataManagementFlow/DataManagementFlow.container').default,
+    schema: {
+      ...require('../DataManagementFlow/DataManagementFlow.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../DataManagementFlow/DataManagementFlow.container').schema.props,
+      },
+    },
+  },
   CSCDetail: {
     component: require('../CSCSummary/CSCDetail/CSCDetail.container').default,
     schema: {

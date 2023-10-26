@@ -25,7 +25,6 @@ import './App.css';
 import ComponentIndexContainer from './components/ComponentIndex/ComponentIndex.container';
 import ViewsIndexContainer from './components/UIF/ViewsIndex/ViewsIndex.container';
 import HealthStatusSummaryContainer from './components/HealthStatusSummary/HealthStatusSummary.container';
-import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
 import LayoutContainer from './components/Layout/Layout.container';
 import LoginContainer from './components/Login/Login.container';
 import PrivateRoute from './components/GeneralPurpose/PrivateRoute/PrivateRoute';
@@ -88,7 +87,6 @@ class App extends Component {
               path="/health-status-summary"
               render={() => <HealthStatusSummaryContainer />}
             />
-            <PrivateRoute token={this.props.token} path="/dm-flow" component={DataManagementFlow} />
             <Route
               path="/test"
               render={() => (

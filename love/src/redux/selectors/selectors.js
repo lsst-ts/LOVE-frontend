@@ -2430,6 +2430,14 @@ export const getESSstate = (state, salindex) => {
   };
 };
 
+export const getDMFlowState = (state) => {
+  return {
+    dmFlowState: 0,
+    oodsState: 0,
+    usdfState: 0,
+  };
+};
+
 export const getAuthlistState = (state, subscriptions) => {
   const authlistData = getStreamsData(state, subscriptions);
   return authlistData;

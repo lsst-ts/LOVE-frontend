@@ -653,6 +653,28 @@ export const ccCameraFilterChangerDetailedStateToStyle = {
 export const alignedStateToStyle = {
   ALIGNED: 'ok',
   'NOT ALIGNED': 'warning',
+}
+
+//DM Flow
+export const dmFlowStatusMap = {
+  1: 'INTEGRATING',
+  2: 'FORDWARDED',
+  3: 'STOPPED',
+  4: 'DROPPED',
+  5: 'COMPLETE',
+  6: 'COPYING',
+  7: 'PROCESSED',
+  0: 'UNKNOWN',
+};
+
+export const stateToStyleDMFlow = {
+  INTEGRATING: 'warning',
+  FORDWARDED: 'warning',
+  STOPPED: 'ok',
+  DROPPED: 'alert',
+  COMPLETE: 'running',
+  COPYING: 'warning',
+  PROCESSED: 'running',
   UNKNOWN: 'invalid',
 };
 
