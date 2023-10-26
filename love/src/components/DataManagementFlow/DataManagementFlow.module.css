@@ -17,11 +17,20 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+.summaryContainer {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  padding: 1em;
+  border-radius: 5px;
+  background: var(--second-secondary-background-color);
+  margin-bottom: 1em;
+}
+
 .container {
-  color: var(--primary-font-color);
   display: grid;
-  justify-items: center;
-  align-items: center;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  background: var(--second-quaternary-background-dimmed-color);
 }
 
 .containerCenter {

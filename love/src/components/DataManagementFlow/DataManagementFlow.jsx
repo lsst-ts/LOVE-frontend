@@ -23,12 +23,11 @@ import styles from './DataManagementFlow.module.css';
 import { dmFlowStatusMap, stateToStyleDMFlow } from 'Config';
 import PaginatedTable from 'components/GeneralPurpose/PaginatedTable/PaginatedTable';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
-import Info from './Info/Info';
 import PipelineIcon from 'components/icons/DMFlowIcon/PipelineIcon';
-import ConnectionIcon from 'components/icons/DMFlowIcon/ConnectionIcon';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Title from 'components/GeneralPurpose/SummaryPanel/Title';
 import Value from 'components/GeneralPurpose/SummaryPanel/Value';
+import Label from 'components/GeneralPurpose/SummaryPanel/Label';
 
 let dataMock = [];
 for (let i = 1; i < 100; i++) {
@@ -151,20 +150,41 @@ export default class DMFlow extends Component {
       value.textStatus = dmFlowStatusMap[value.status];
     });
 
+    const { dmFlowState, oodsState, usdfState } = this.props;
+
+    const dmFlow = dmFlowStatusMap[dmFlowState];
+    const oods = dmFlowStatusMap[oodsState];
+    const usdf = dmFlowStatusMap[usdfState];
+
     return (
-      <div className={styles.container}>
-        {/* <div>
-          <Info state={'enabled'} name={'OODS'}></Info>
-          <Info state={'disabled'} name={'DAQ'}></Info>
-        </div> */}
-        <SummaryPanel className={styles.summaryPanel}>
-          <Title>DMFlow State</Title>
-          <Value>Unknown</Value>
-          <Title>OODS State</Title>
-          <Value>Unknown</Value>
-          <Title>USDF State</Title>
-          <Value>Unknown</Value>
-        </SummaryPanel>
+      <div>
+        <div className={styles.summaryContainer}>
+          <div className={styles.container}>
+            <SummaryPanel>
+              <Title>DMFlow State</Title>
+              <Value>
+                <StatusText status={stateToStyleDMFlow[dmFlow]} small>
+                  {dmFlow}
+                </StatusText>
+              </Value>
+            </SummaryPanel>
+
+            <SummaryPanel className={styles.summaryPanel}>
+              <Label>OODS State</Label>
+              <Value>
+                <StatusText status={stateToStyleDMFlow[oods]} small>
+                  {oods}
+                </StatusText>
+              </Value>
+              <Label>USDF State</Label>
+              <Value>
+                <StatusText status={stateToStyleDMFlow[usdf]} small>
+                  {usdf}
+                </StatusText>
+              </Value>
+            </SummaryPanel>
+          </div>
+        </div>
         <div className={styles.divTable}>
           <PaginatedTable headers={headers} data={dataMock} title={'Exposures'}></PaginatedTable>
         </div>
