@@ -87,6 +87,8 @@ export default class NonExposureEdit extends Component {
       tags: [],
       message_text: '',
       is_human: true,
+      category: 'None',
+      time_lost_type: 'fault',
     },
     isLogCreate: false,
     isMenu: false,

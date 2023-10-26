@@ -2069,3 +2069,13 @@ export function getObsDayFromDate(date) {
 export function truncateISODateToMinutes(date) {
   return date.substring(0, 16);
 }
+
+/**
+ * Function to convert first letter to uppercase
+ * @param {string} string string to be converted
+ * @returns {string} string with first letter in uppercase
+ */
+export function firstLetterToUpperCase(string) {
+  if (!string) return '';
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
