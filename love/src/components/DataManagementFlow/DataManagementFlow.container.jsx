@@ -28,29 +28,11 @@ export const schema = {
   description: 'Data Management Flow',
   defaultSize: [12, 6],
   props: {
-    titleBar: {
-      type: 'boolean',
-      description: 'Tittlebar of person',
-      isPrivate: false,
-      default: false,
-    },
     title: {
       type: 'string',
-      description: 'Name diplayed in the title bar (if visible)',
+      description: 'Name displayed in the title bar (if visible)',
       isPrivate: false,
-      default: 'CSC details',
-    },
-    margin: {
-      type: 'boolean',
-      description: 'Whether to display component with a margin',
-      isPrivate: false,
-      default: false,
-    },
-    name: {
-      type: 'string',
-      description: 'Name of the person',
-      isPrivate: false,
-      default: 'Test',
+      default: 'Data Management Flow',
     },
   },
 };
