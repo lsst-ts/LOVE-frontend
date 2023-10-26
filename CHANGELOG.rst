@@ -5,6 +5,7 @@ Version History
 v5.27.0
 -------
 
+* Point LOVE weather station to read corresponding CSC `<https://github.com/lsst-ts/LOVE-frontend/pull/553>`_
 * Add Dynalene Component `<https://github.com/lsst-ts/LOVE-frontend/pull/552>`_
 
 v5.26.1

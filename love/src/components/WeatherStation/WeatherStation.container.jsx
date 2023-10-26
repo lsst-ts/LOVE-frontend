@@ -89,6 +89,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     `telemetry-ESS-${ownProps.salindex}-solarRadiation`,
     `telemetry-ESS-${ownProps.salindex}-spectrumAnalyzer`,
     `telemetry-ESS-${ownProps.salindex}-temperature`,
+    'telemetry-ATDome-0-position',
   ];
   return {
     subscriptions,

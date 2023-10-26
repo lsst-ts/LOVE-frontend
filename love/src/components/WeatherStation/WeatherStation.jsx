@@ -182,24 +182,24 @@ export default class WeatherStation extends Component {
     title: 'Time series plot',
     inputs: {
       WindSpeed: {
-        csc: 'ESS',
-        item: 'airFlow',
-        group: 0,
-        topic: 'speed',
-        accessor: '(x) => x',
         category: 'telemetry',
-        encoding: 'radial',
+        csc: 'ESS',
         salindex: this.props.salindex,
+        topic: 'airFlow',
+        item: 'speed',
+        accessor: '(x) => x',
+        group: 0,
+        encoding: 'radial',
       },
       WindDirection: {
-        csc: 'ESS',
-        item: 'airFlow',
-        group: 0,
-        topic: 'direction',
-        accessor: '(x) => x',
         category: 'telemetry',
-        encoding: 'angular',
+        csc: 'ESS',
         salindex: this.props.salindex,
+        topic: 'airFlow',
+        item: 'direction',
+        accessor: '(x) => x',
+        group: 0,
+        encoding: 'angular',
       },
     },
     titleBar: false,
@@ -210,7 +210,7 @@ export default class WeatherStation extends Component {
     groupTitles: ['Wind', 'Gust'],
     radialUnits: 'km/s',
     colorInterpolation:
-      '(value, minValue, maxValue, group) => { \n    if(group == 1){\n        const proportion = (value - minValue) / (maxValue - minValue); \n        return [255 * (1 - proportion), 255, 255 * (1 - proportion)]; \n    }\n  const proportion = (value - minValue) / (maxValue - minValue); \n  return [255 * (1 - proportion), 255 * (1 - proportion), 255]; \n}',
+      '(value, minValue, maxValue, group) => { \n    if(group == 1){\n        const proportion = maxValue !== minValue ? (value - minValue) / (maxValue - minValue) : 0; \n        return [255 * (1 - proportion), 255 * (1 - proportion), 255 * (1 - proportion)]; \n    }\n  const proportion = maxValue !== minValue ? (value - minValue) / (maxValue - minValue) : 0; \n  return [255 * (1 - proportion), 255, 255 * (1 - proportion)]; \n}',
     opacityInterpolation:
       '(value, minValue, maxValue, group) => {\n  if (maxValue === minValue) return 1;\n  return 0.01 + ((value - minValue) / (maxValue - minValue)) * 0.9;\n}',
   };
@@ -254,7 +254,6 @@ export default class WeatherStation extends Component {
           precipitation: ['prSum1M'],
           snowDepth: ['avg1M'],
           windSpeed: ['avg2M'],
-          windSpeed: ['avg2M'],
           windGustDirection: ['value10M'],
           windDirection: ['avg2M'],
         },
@@ -282,8 +281,8 @@ export default class WeatherStation extends Component {
   };
 
   render() {
-    const currentTemperature = fixedFloat(this.props.temperature?.temperature?.value[0], 2);
-    const currentHumidity = fixedFloat(this.props.relativeHumidity?.relativeHumidity?.value, 2);
+    const currentTemperature = fixedFloat(this.props.temperature?.temperatureItem?.value[0], 2);
+    const currentHumidity = fixedFloat(this.props.relativeHumidity?.relativeHumidityItem?.value, 2);
     const currentPressure = fixedFloat(this.props.pressure?.pressureItem?.value[0], 2);
     const currentWindSpeed = fixedFloat(this.props.airFlow?.speed?.value, 2);
     const currentWindSpeedUnits = this.props.airFlow?.speed?.units;
