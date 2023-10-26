@@ -17,37 +17,39 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-.summaryContainer {
-  display: flex;
-  flex-grow: 1;
-  flex-direction: column;
-  padding: 1em;
-  border-radius: 5px;
-  background: var(--second-secondary-background-color);
-  margin-bottom: 1em;
+.label {
+  font-size: var(--font-size-medium);
+  color: var(--secondary-font-color);
+  text-align: left;
+  white-space: pre;
 }
 
-.container {
+.value {
+  color: var(--base-font-color);
+  text-align: right;
+  padding-right: 0em;
+}
+
+.containerTop {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  background: var(--second-quaternary-background-dimmed-color);
+  justify-content: flex-start;
 }
 
-.containerCenter {
-  text-align: center;
-}
-
-.divTable {
-  align-self: center;
-  justify-self: center;
-}
-
-.summaryPanel {
-  max-width: 81%;
+.containerBottom {
+  margin-top: 8px;
   display: grid;
-  width: 100%;
-  justify-content: space-around;
-  align-items: stretch;
-  justify-items: start;
-  background: none !important;
+  grid-template-columns: auto auto;
+  column-gap: 30%;
+}
+
+.title {
+  text-align: left;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+  color: var(--base-font-color);
+}
+
+.labelValue {
+  display: grid;
+  grid-template-columns: auto auto;
 }

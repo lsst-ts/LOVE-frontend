@@ -21,8 +21,7 @@ import html2canvas from 'html2canvas';
 import { DateTime } from 'luxon';
 import { toast } from 'react-toastify';
 import Moment from 'moment';
-import isEqual from 'lodash/isEqual';
-import { WEBSOCKET_SIMULATION, SUBPATH } from 'Config.js';
+import { WEBSOCKET_SIMULATION, SUBPATH, ISO_INTEGER_DATE_FORMAT } from 'Config.js';
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -1956,10 +1955,10 @@ export function htmlToJiraMarkdown(html) {
  * @params {boolean} options.codeFriendly if true, text formatting is not applied
  * @returns {string} html string
  */
-export function jiraMarkdownToHtml(markdown, options = { codeFriendly: true }) {
+export function jiraMarkdownToHtml(markdown, options = { codeFriendly: true, parseLines: false }) {
   if (!markdown) return '';
 
-  const { codeFriendly } = options;
+  const { codeFriendly, parseLines } = options;
   let html = markdown;
 
   // Parse text formats
@@ -2009,9 +2008,11 @@ export function jiraMarkdownToHtml(markdown, options = { codeFriendly: true }) {
   });
 
   // Parse full lines
-  html = html.replace(/^(\s*)(.*)\r\n/gm, (match, p1, p2) => {
-    return `<p>${[...p1].map((e) => '&nbsp;').join('')}${p2}</p>`;
-  });
+  if (parseLines) {
+    html = html.replace(/^(\s*)(.*)\r\n/gm, (match, p1, p2) => {
+      return `<p>${[...p1].map((e) => '&nbsp;').join('')}${p2}</p>`;
+    });
+  }
 
   return html;
 }
@@ -2042,4 +2043,39 @@ export function simpleHtmlTokenizer(html) {
     }
   }
   return tokens;
+}
+
+/**
+ * Function to get the OBS day from a date
+ * If the date is after 12:00 UTC, the day is the same day
+ * If the date is before 12:00 UTC, the day is the previous day
+ * @param {object} date date, as a Moment object, to be parsed
+ * @returns {string} OBS day in format YYYYMMDD
+ */
+export function getObsDayFromDate(date) {
+  const utcDate = date.utc();
+  const utcHour = utcDate.hour();
+  if (utcHour >= 12) {
+    return utcDate.format(ISO_INTEGER_DATE_FORMAT);
+  }
+  return utcDate.subtract(1, 'day').format(ISO_INTEGER_DATE_FORMAT);
+}
+
+/**
+ * Function to truncate date ISO string to minutes
+ * @param {string} date date, as a ISO string, to be truncated
+ * @returns {string} truncated date in format YYYY-MM-DDTHH:mm
+ */
+export function truncateISODateToMinutes(date) {
+  return date.substring(0, 16);
+}
+
+/**
+ * Function to convert first letter to uppercase
+ * @param {string} string string to be converted
+ * @returns {string} string with first letter in uppercase
+ */
+export function firstLetterToUpperCase(string) {
+  if (!string) return '';
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }

@@ -27,27 +27,21 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   margin-bottom: 1em;
 }
 
-.container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  background: var(--second-quaternary-background-dimmed-color);
+.contentWrapper {
+  display: flex;
 }
 
-.containerCenter {
-  text-align: center;
-}
-
-.divTable {
-  align-self: center;
-  justify-self: center;
-}
-
-.summaryPanel {
-  max-width: 81%;
-  display: grid;
+.cartoonContainer {
   width: 100%;
-  justify-content: space-around;
-  align-items: stretch;
-  justify-items: start;
-  background: none !important;
+  padding: 0 2em 0 1em;
+}
+
+.tableContainer {
+  padding: 2em 1em 1em 1em;
+}
+
+.rightRow {
+  display: grid;
+  justify-content: end;
+  padding-right: 1em;
 }

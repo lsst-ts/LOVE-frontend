@@ -17,37 +17,16 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-.summaryContainer {
-  display: flex;
-  flex-grow: 1;
-  flex-direction: column;
-  padding: 1em;
-  border-radius: 5px;
-  background: var(--second-secondary-background-color);
-  margin-bottom: 1em;
-}
-
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   background: var(--second-quaternary-background-dimmed-color);
 }
 
-.containerCenter {
-  text-align: center;
+.highlight {
+  color: var(--base-font-color);
 }
 
-.divTable {
-  align-self: center;
-  justify-self: center;
-}
-
-.summaryPanel {
-  max-width: 81%;
-  display: grid;
-  width: 100%;
-  justify-content: space-around;
-  align-items: stretch;
-  justify-items: start;
-  background: none !important;
+.errorCell {
+  grid-column: 1/3;
 }

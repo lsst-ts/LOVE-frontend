@@ -68,6 +68,16 @@ export const observatoryIndex = {
       },
     },
   },
+  DataManagementFlow: {
+    component: require('../DataManagementFlow/DataManagementFlow.container').default,
+    schema: {
+      ...require('../DataManagementFlow/DataManagementFlow.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../DataManagementFlow/DataManagementFlow.container').schema.props,
+      },
+    },
+  },
   CSCDetail: {
     component: require('../CSCSummary/CSCDetail/CSCDetail.container').default,
     schema: {
@@ -255,6 +265,16 @@ export const observatoryIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../Facility/FacilityMap.container').schema.props,
+      },
+    },
+  },
+  Dynalene: {
+    component: require('../Dynalene/Dynalene.container').default,
+    schema: {
+      ...require('../Dynalene/Dynalene.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../Dynalene/Dynalene.container').schema.props,
       },
     },
   },

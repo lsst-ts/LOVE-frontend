@@ -33,6 +33,7 @@ import ManagerInterface, {
   formatSecondsToDigital,
   openInNewTab,
   jiraMarkdownToHtml,
+  firstLetterToUpperCase,
 } from 'Utils';
 import styles from './NonExposure.module.css';
 
@@ -185,10 +186,14 @@ export default class NonExposureDetail extends Component {
           </div>
           <div className={styles.content}>
             <div className={styles.detail}>
+              <span className={styles.label}>Category</span>
+              <span className={styles.value}>{logDetail.category}</span>
               <span className={styles.label}>Time of Incident</span>
               <span className={styles.value}>{`${logDetail.date_begin.split('.')[0]} - ${
                 logDetail.date_end.split('.')[0]
               }`}</span>
+              <span className={styles.label}>Time loss type</span>
+              <span className={styles.value}>{firstLetterToUpperCase(logDetail.time_lost_type)}</span>
               <span className={styles.label}>Obs. Time Loss</span>
               <span className={styles.value}>{formatSecondsToDigital(logDetail.time_lost * 3600)}</span>
               <span className={styles.label}>Components</span>

@@ -111,7 +111,7 @@ export default class MessageEdit extends Component {
     const jiraUrl = getLinkJira(message.urls);
     const filesUrls = getFilesURLs(message.urls);
 
-    const htmlMessage = jiraMarkdownToHtml(message.message_text);
+    const htmlMessage = jiraMarkdownToHtml(message.message_text, { codeFriendly: true, parseLines: true });
 
     return (
       <div className={styles.message}>

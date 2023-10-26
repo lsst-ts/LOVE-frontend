@@ -1,0 +1,105 @@
+/** 
+This file is part of LOVE-frontend.
+
+Copyright (c) 2023 Inria Chile.
+
+Developed by Inria Chile.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+.grad01to02 {
+  fill: url(#grad01to02);
+}
+
+.grad03to04 {
+  fill: url(#grad03to04);
+}
+
+.grad05to06 {
+  fill: url(#grad05to06);
+}
+
+.grad07to08 {
+  fill: url(#grad07to08);
+}
+
+.grad09to10 {
+  fill: url(#grad09to10);
+}
+
+.grad11to12 {
+  fill: url(#grad11to12);
+}
+
+.grad13to14 {
+  fill: url(#grad13to14);
+}
+
+.grad15to16 {
+  fill: url(#grad15to16);
+}
+
+.cls14 {
+  fill: #182e39;
+}
+
+.cls14,
+.cls15 {
+  stroke: #27434f;
+  stroke-width: 2px;
+}
+
+.cls14,
+.cls15,
+.cls16 {
+  stroke-miterlimit: 10;
+}
+
+.cls15 {
+  fill: #27434f;
+}
+
+.systemTitle {
+  fill: #788e9b;
+  font-family: Montserrat-SemiBold, Montserrat;
+  font-size: 0.86em;
+  font-weight: 600;
+}
+
+.tankLevel {
+  font-family: Montserrat-SemiBold, Montserrat;
+  font-size: 0.86em;
+  font-weight: 600;
+  fill: #fff;
+}
+
+.cls18 {
+  font-family: Montserrat-SemiBold, Montserrat;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cls18,
+.cls11 {
+  fill: #fff;
+}
+
+.cls16 {
+  fill: #0c171e;
+  stroke: var(--second-quaternary-background-dimmed-color);
+  stroke-width: 7px;
+}
+
+.pipeBorder {
+  fill: var(--second-quaternary-background-dimmed-color);
+}
