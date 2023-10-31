@@ -92,12 +92,12 @@ export default class MirrorCovers extends Component {
         <SummaryPanel className={[styles.summaryPanel, styles.m1Panel].join(' ')}>
           {index.map((i) => {
             return (
-              <>
+              <div key={i}>
                 <Label key={`mirror-cover-status-label-${i}`}>{`Mirror cover ${i + 1}`}</Label>
                 <Value key={`mirror-cover-status-value-${i}`}>
                   <StatusText status={mirrorCoversState[i]}>{mirrorCoversValue[i]}</StatusText>
                 </Value>
-              </>
+              </div>
             );
           })}
         </SummaryPanel>
@@ -227,7 +227,7 @@ export default class MirrorCovers extends Component {
             cx={`${x0}`}
             cy={`${y0}`}
             className={styles.bgTarget}
-            stroke-width={`${radius + 8}`}
+            strokeWidth={`${radius + 8}`}
             transition=" transform 1s linear 0s"
           />
 
@@ -238,8 +238,8 @@ export default class MirrorCovers extends Component {
             cx={`${x0}`}
             cy={`${y0}`}
             className={styles.bgCurrent}
-            stroke-width={`${radius + 8}`}
-            stroke-dasharray={this.getArcLengthPixel(azimuthActualPosition, radius + 6)}
+            strokeWidth={`${radius + 8}`}
+            strokeDasharray={this.getArcLengthPixel(azimuthActualPosition, radius + 6)}
             transition=" transform 1.7s linear 0s"
           />
         </g>
@@ -251,8 +251,8 @@ export default class MirrorCovers extends Component {
             cx={`${x0}`}
             cy={`${y0}`}
             className={styles.bgCurrent}
-            stroke-width={`${radius + 8}`}
-            stroke-dasharray={this.getArcLengthPixel(Math.abs(azimuthActualPosition), radius + 6)}
+            strokeWidth={`${radius + 8}`}
+            strokeDasharray={this.getArcLengthPixel(Math.abs(azimuthActualPosition), radius + 6)}
             transition=" transform 1.7s linear 0s"
           />
         </g>
@@ -271,8 +271,8 @@ export default class MirrorCovers extends Component {
             cx={`${x0}`}
             cy={`${y0}`}
             className={styles.lightCurrent}
-            stroke-width={`${radius + 8}`}
-            stroke-dasharray={this.getArcLengthPixel(azimuthActualPosition, radius + 6)}
+            strokeWidth={`${radius + 8}`}
+            strokeDasharray={this.getArcLengthPixel(azimuthActualPosition, radius + 6)}
             transition=" transform 1.7s linear 0s"
           />
         </g>
@@ -284,8 +284,8 @@ export default class MirrorCovers extends Component {
             cx={`${x0}`}
             cy={`${y0}`}
             className={styles.lightCurrent}
-            stroke-width={`${radius + 8}`}
-            stroke-dasharray={this.getArcLengthPixel(Math.abs(azimuthActualPosition), radius + 6)}
+            strokeWidth={`${radius + 8}`}
+            strokeDasharray={this.getArcLengthPixel(Math.abs(azimuthActualPosition), radius + 6)}
             transition=" transform 1.7s linear 0s"
           />
         </g>
@@ -319,8 +319,8 @@ export default class MirrorCovers extends Component {
             cx={`${x0 - radiusWidth}`}
             cy={`${y0}`}
             className={styles.gaugeL3}
-            stroke-width={`${radiusWithoutBorder}`}
-            stroke-dasharray={this.getArcLengthPixel(maxL3, radiusWithoutBorder)}
+            strokeWidth={`${radiusWithoutBorder}`}
+            strokeDasharray={this.getArcLengthPixel(maxL3, radiusWithoutBorder)}
           />
 
           {/* L2 Gauge */}
@@ -329,8 +329,8 @@ export default class MirrorCovers extends Component {
             cx={`${x0 - radiusWidth}`}
             cy={`${y0}`}
             className={styles.gaugeL2}
-            stroke-width={`${radiusWithoutBorder}`}
-            stroke-dasharray={this.getArcLengthPixel(maxL2, radiusWithoutBorder)}
+            strokeWidth={`${radiusWithoutBorder}`}
+            strokeDasharray={this.getArcLengthPixel(maxL2, radiusWithoutBorder)}
           />
 
           {/* L1 Gauge */}
@@ -339,8 +339,8 @@ export default class MirrorCovers extends Component {
             cx={`${x0 - radiusWidth}`}
             cy={`${y0}`}
             className={styles.gaugeL1}
-            stroke-width={`${radiusWithoutBorder}`}
-            stroke-dasharray={this.getArcLengthPixel(maxL1, radiusWithoutBorder)}
+            strokeWidth={`${radiusWithoutBorder}`}
+            strokeDasharray={this.getArcLengthPixel(maxL1, radiusWithoutBorder)}
           />
 
           {/* Current Gauge */}
@@ -350,8 +350,8 @@ export default class MirrorCovers extends Component {
             r={`${radiusWithoutBorder / 2}`}
             cx={`${x0 - radiusWidth}`}
             cy={`${y0}`}
-            stroke-width={`${radiusWithoutBorder}`}
-            stroke-dasharray={this.getArcLengthPixel(
+            strokeWidth={`${radiusWithoutBorder}`}
+            strokeDasharray={this.getArcLengthPixel(
               azimuthActualPosition - (radiusWidth / 2) * Math.sin((azimuthActualPosition * Math.PI) / 180),
               radiusWithoutBorder,
             )}
@@ -368,8 +368,8 @@ export default class MirrorCovers extends Component {
             cx={`${x0 + radiusWidth}`}
             cy={`${y0}`}
             className={styles.gaugeL3}
-            stroke-width={`${radiusInnerWithoutBorder}`}
-            stroke-dasharray={this.getArcLengthPixel(Math.abs(minL3), radiusInnerWithoutBorder)}
+            strokeWidth={`${radiusInnerWithoutBorder}`}
+            strokeDasharray={this.getArcLengthPixel(Math.abs(minL3), radiusInnerWithoutBorder)}
           />
 
           {/* L2 Gauge */}
@@ -378,8 +378,8 @@ export default class MirrorCovers extends Component {
             cx={`${x0 + radiusWidth}`}
             cy={`${y0}`}
             className={styles.gaugeL2}
-            stroke-width={`${radiusInnerWithoutBorder}`}
-            stroke-dasharray={this.getArcLengthPixel(Math.abs(minL2), radiusInnerWithoutBorder)}
+            strokeWidth={`${radiusInnerWithoutBorder}`}
+            strokeDasharray={this.getArcLengthPixel(Math.abs(minL2), radiusInnerWithoutBorder)}
           />
 
           {/* L1 Gauge */}
@@ -388,8 +388,8 @@ export default class MirrorCovers extends Component {
             cx={`${x0 + radiusWidth}`}
             cy={`${y0}`}
             className={styles.gaugeL1}
-            stroke-width={`${radiusInnerWithoutBorder}`}
-            stroke-dasharray={this.getArcLengthPixel(Math.abs(minL1), radiusInnerWithoutBorder)}
+            strokeWidth={`${radiusInnerWithoutBorder}`}
+            strokeDasharray={this.getArcLengthPixel(Math.abs(minL1), radiusInnerWithoutBorder)}
           />
 
           {/* Current Gauge */}
@@ -399,8 +399,8 @@ export default class MirrorCovers extends Component {
             r={`${radiusInnerWithoutBorder / 2}`}
             cx={`${x0 + radiusWidth}`}
             cy={`${y0}`}
-            stroke-width={`${radiusInnerWithoutBorder}`}
-            stroke-dasharray={this.getArcLengthPixel(
+            strokeWidth={`${radiusInnerWithoutBorder}`}
+            strokeDasharray={this.getArcLengthPixel(
               Math.abs(azimuthActualPosition),
               Math.abs(azimuthActualPosition) < 180
                 ? radiusInnerWithoutBorder + radiusWidth / 4
@@ -425,8 +425,8 @@ export default class MirrorCovers extends Component {
             cx={`${x0}`}
             cy={`${y0}`}
             className={styles.bgCurrent}
-            stroke-width={`${radiusInnerWithoutBorder - 16}`}
-            stroke-dasharray={this.getArcLengthPixel(azimuthActualPosition, radiusInnerWithoutBorder - 16)}
+            strokeWidth={`${radiusInnerWithoutBorder - 16}`}
+            strokeDasharray={this.getArcLengthPixel(azimuthActualPosition, radiusInnerWithoutBorder - 16)}
             transition=" transform 1.7s linear 0s"
           />
         </g>
@@ -439,8 +439,8 @@ export default class MirrorCovers extends Component {
             cx={`${x0}`}
             cy={`${y0}`}
             className={styles.bgCurrent}
-            stroke-width={`${radiusInnerWithoutBorder - 16}`}
-            stroke-dasharray={this.getArcLengthPixel(Math.abs(azimuthActualPosition), radiusInnerWithoutBorder - 16)}
+            strokeWidth={`${radiusInnerWithoutBorder - 16}`}
+            strokeDasharray={this.getArcLengthPixel(Math.abs(azimuthActualPosition), radiusInnerWithoutBorder - 16)}
             transition=" transform 1.5s linear 0s"
           />
         </g>
@@ -648,7 +648,7 @@ export default class MirrorCovers extends Component {
       <>
         {index.map((i) => {
           return (
-            <>
+            <div key={`mirror-cover-${i}`}>
               <path
                 key={`mirror-cover-${i}`}
                 className={[styles.cls4, statesStyle ? statesStyle[i] : ''].join(' ')}
@@ -667,7 +667,7 @@ export default class MirrorCovers extends Component {
                   this.handleMouseLeave();
                 }}
               />
-            </>
+            </div>
           );
         })}
       </>
