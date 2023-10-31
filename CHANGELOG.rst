@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.27.1
+-------
+
+* Add jira tickets auto conversion `<https://github.com/lsst-ts/LOVE-frontend/pull/555>`_
+
 v5.27.0
 -------
 

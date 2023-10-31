@@ -362,6 +362,8 @@ export const MTCSCommands = {
 /*****************************************************************************/
 /******************************OLE configurations*****************************/
 /*****************************************************************************/
+export const AUTO_HYPERLINK_JIRA_PROJECTS = ['BLOCK', 'LOVE', 'OBS', 'DM'];
+
 export const LOG_REFRESH_INTERVAL_MS = 60000;
 
 export const OLE_COMMENT_TYPE_OPTIONS = [
@@ -653,7 +655,7 @@ export const ccCameraFilterChangerDetailedStateToStyle = {
 export const alignedStateToStyle = {
   ALIGNED: 'ok',
   'NOT ALIGNED': 'warning',
-}
+};
 
 //DM Flow
 export const dmFlowStatusMap = {
