@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.27.2
+-------
+
+* Clean compilation warnings on LOVE-frontend `<https://github.com/lsst-ts/LOVE-frontend/pull/557>`_
+
 v5.27.1
 -------
 
