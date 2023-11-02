@@ -206,7 +206,7 @@ class CCCamera extends Component {
    * Makes transformations to the shown view based on the zoom level
    * Set the activeViewId and prevActiveViewId state variables and selectedRaft, selectedCCD, and selectedRebS
    */
-  zoomed = () => {
+  zoomed = (event) => {
     const {
       zoomLevel,
       activeViewId: targetId,
@@ -223,7 +223,7 @@ class CCCamera extends Component {
     newSelectedCCDVar = selectedCCDVar;
     newSelectedCCD = selectedCCD;
     newSelectedReb = selectedReb;
-    const k = d3.event.transform.k;
+    const k = event.transform.k;
 
     const zoomReset = k === 1;
     if (zoomReset) {
@@ -264,13 +264,13 @@ class CCCamera extends Component {
     }
 
     if (targetId === 'focalplane') {
-      d3.select(`#${this.uniqueFocalplane}`).style('transform', d3TransformToString(d3.event.transform));
+      d3.select(`#${this.uniqueFocalplane}`).style('transform', d3TransformToString(event.transform));
       d3.select(`#${this.uniqueFocalplane}`).style('transform-origin', '0 0');
     } else if (targetId === 'raftdetail') {
-      d3.select(`#${this.uniqueRaftDetail}`).style('transform', d3TransformToString(d3.event.transform));
+      d3.select(`#${this.uniqueRaftDetail}`).style('transform', d3TransformToString(event.transform));
       d3.select(`#${this.uniqueRaftDetail}`).style('transform-origin', '0 0');
     } else if (targetId === 'ccdrebdetail') {
-      d3.select(`#${this.uniqueCcdRebDetail}`).style('transform', d3TransformToString(d3.event.transform));
+      d3.select(`#${this.uniqueCcdRebDetail}`).style('transform', d3TransformToString(event.transform));
       d3.select(`#${this.uniqueCcdRebDetail}`).style('transform-origin', '0 0');
     }
 

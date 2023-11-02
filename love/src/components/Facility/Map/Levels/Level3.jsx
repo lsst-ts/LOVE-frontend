@@ -59,10 +59,10 @@ export default class Level3 extends Component {
       .call(zoom);
   }
 
-  zoomMap = () => {
+  zoomMap = (event) => {
     const deviceId = '#' + this.deviceId;
     const mapId = '#' + this.mapId;
-    const transformData = d3.event.transform;
+    const transformData = event.transform;
 
     d3.select(mapId).attr('transform', transformData);
     d3.select(deviceId).attr('transform', transformData);
