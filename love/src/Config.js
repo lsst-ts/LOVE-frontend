@@ -386,49 +386,46 @@ export const iconLevelOLE = {
 };
 
 // jira OBS project components field
-// Should match keys of mappings at
-// https://github.com/lsst-ts/LOVE-manager/blob/develop/manager/manager/utils.py
-export const OLE_JIRA_COMPONENTS = [
-  'AuxTel',
-  'Calibrations',
-  'Environmental Monitoring Systems',
-  'Facilities',
-  'IT Infrastricture',
-  'MainTel',
-  'Observer Remark',
-  'Other',
-  'Unknown',
-];
+export const OLE_JIRA_COMPONENTS = {
+  AuxTel: 20710,
+  Calibrations: 20714,
+  'Environmental Monitoring Systems': 20711,
+  Facilities: 20712,
+  'IT Infrastricture': 20718,
+  MainTel: 20709,
+  'Observer Remark': 20717,
+  Other: 20713,
+  Unknown: 19507,
+};
 
 // jira OBS project customfield_17204
-// Should match keys of mappings at
-// https://github.com/lsst-ts/LOVE-manager/blob/develop/manager/manager/utils.py
-export const OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS = [
-  'None',
-  'CSC level',
-  'Component Level (EUI)',
-  'Visualization',
-  'Analysis',
-  'Other',
-  'Camera Control Software',
-];
+export const OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS = {
+  None: -1,
+  'CSC level': 16810,
+  'Component Level (EUI)': 16811,
+  Visualization: 16812,
+  Analysis: 16813,
+  Other: 16814,
+  'Camera Control Software': 16815,
+  TMA_CSC: 16860,
+  TMA_EUI: 16859,
+  TMA_HDD: 16861,
+};
 
 // jira OBS project customfield_17205
-// Should match keys of mappings at
-// https://github.com/lsst-ts/LOVE-manager/blob/develop/manager/manager/utils.py
-export const OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS = [
-  'None',
-  'Mount',
-  'Rotator',
-  'Hexapod',
-  'M2',
-  'Science Cameras',
-  'M1M3',
-  'Dome',
-  'Utilities',
-  'Calibration',
-  'Other',
-];
+export const OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS = {
+  None: -1,
+  Mount: 16816,
+  Rotator: 16817,
+  Hexapod: 16818,
+  M2: 16819,
+  'Science Cameras': 16820,
+  M1M3: 16821,
+  Dome: 16822,
+  Utilities: 16825,
+  Calibration: 16826,
+  Other: 16827,
+};
 /*****************************************************************************/
 /**************************CSC Summary configurations*************************/
 /*****************************************************************************/

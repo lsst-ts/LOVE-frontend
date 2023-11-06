@@ -70,7 +70,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(max(var(--grid-item--min-width), var(--grid-item--max-width)), 1fr));
   grid-row: auto;
-  padding-right: var(--content-padding);
 }
 
 .contentMenu {
@@ -266,6 +265,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .contentRight textarea {
   width: 100%;
+  height: calc(100% - 2em);
   min-width: 30em;
   min-height: 12ch;
   resize: none;

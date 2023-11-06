@@ -463,28 +463,26 @@ export default class M1M3 extends Component {
     }
   }
 
-  zoomed = () => {
+  zoomed = (event) => {
     const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
     const xRadius = this.state.xRadius + 60; // + margin of render
     const yRadius = this.state.yRadius + 60; // + margin of render
 
     const transformX = Math.min(
       0,
-      Math.max(d3.event.transform.x, 2 * xRadius * scale - 2 * xRadius * scale * d3.event.transform.k),
+      Math.max(event.transform.x, 2 * xRadius * scale - 2 * xRadius * scale * event.transform.k),
     );
     const transformY = Math.min(
       0,
-      Math.max(d3.event.transform.y, 2 * yRadius * scale - 2 * yRadius * scale * d3.event.transform.k),
+      Math.max(event.transform.y, 2 * yRadius * scale - 2 * yRadius * scale * event.transform.k),
     );
 
-    d3.event.transform.x = Math.floor(transformX);
-    d3.event.transform.y = Math.floor(transformY);
+    event.transform.x = Math.floor(transformX);
+    event.transform.y = Math.floor(transformY);
 
-    d3.select(`#${this.uniqueScatter}`).attr('transform', d3.event.transform);
-    // d3.select('#background-circle').attr('transform', d3.event.transform);
-    // d3.select('#plot-axis').attr('transform', d3.event.transform);
+    d3.select(`#${this.uniqueScatter}`).attr('transform', event.transform);
     this.setState({
-      zoomLevel: d3.event.transform.k,
+      zoomLevel: event.transform.k,
     });
   };
 

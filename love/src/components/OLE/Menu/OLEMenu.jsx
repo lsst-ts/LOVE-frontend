@@ -23,27 +23,42 @@ import styles from './OLEMenu.module.css';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 
 /** Contents of the User details Dropdown Menu */
-const OLEMenu = ({ newNonExposureClick, newExposureClick }) => {
+const OLEMenu = ({ newNarrativeLogClick, newExposureLogClick, newTMALogClick }) => {
   return (
     <>
       <div className={styles.menuElement}>
         <span className={styles.title}>OLE</span>
       </div>
       <div className={styles.divider}></div>
-      <div className={[styles.menuElement, styles.highlight].join(' ')} onClick={newNonExposureClick}>
+      <div className={[styles.menuElement, styles.highlight].join(' ')} onClick={newNarrativeLogClick}>
         <div className={styles.smallIconRow}>
           <AddIcon className={styles.addIcon} />
           <span>New Narrative Log</span>
         </div>
       </div>
-      <div className={[styles.menuElement, styles.highlight].join(' ')} onClick={newExposureClick}>
+      <div className={[styles.menuElement, styles.highlight].join(' ')} onClick={newExposureLogClick}>
         <div className={styles.smallIconRow}>
           <AddIcon className={styles.addIcon} />
           <span>New Exposure Log</span>
         </div>
       </div>
+      <div className={[styles.menuElement, styles.highlight].join(' ')} onClick={newTMALogClick}>
+        <div className={styles.smallIconRow}>
+          <AddIcon className={styles.addIcon} />
+          <span>New TMA Log</span>
+        </div>
+      </div>
     </>
   );
+};
+
+OLEMenu.propTypes = {
+  /** Function to handle the click on the new Narrative Log option */
+  newNarrativeLogClick: PropTypes.func,
+  /** Function to handle the click on the new Exposure Log option */
+  newExposureLogClick: PropTypes.func,
+  /** Function to handle the click on the new TMA Log option */
+  newTMALogClick: PropTypes.func,
 };
 
 export default OLEMenu;

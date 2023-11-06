@@ -18,9 +18,10 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import styles from './TextArea.module.css';
 
-export default function TextArea({ value, callback, ...otherProps }) {
+function TextArea({ value, className, callback, ...otherProps }) {
   const [content, setContent] = useState(value ?? '');
 
   useEffect(() => {
@@ -32,5 +33,23 @@ export default function TextArea({ value, callback, ...otherProps }) {
     callback(e.target.value);
   };
 
-  return <textarea className={styles.textarea} onChange={onChange} value={content} {...otherProps}></textarea>;
+  return (
+    <textarea
+      value={content}
+      onChange={onChange}
+      className={[styles.textarea, className].join(' ')}
+      {...otherProps}
+    ></textarea>
+  );
 }
+
+TextArea.propTypes = {
+  /** Value of the text area */
+  value: PropTypes.string,
+  /** Class name for the text area */
+  className: PropTypes.string,
+  /** Callback function to be called when the text area changes */
+  callback: PropTypes.func,
+};
+
+export default TextArea;

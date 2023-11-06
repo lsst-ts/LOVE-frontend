@@ -1,0 +1,4 @@
+textarea.textArea {
+  min-height: 0px;
+  height: 4em;
+}

@@ -19,7 +19,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import Moment from 'moment';
-import PropTypes from 'prop-types';
 import Button from 'components/GeneralPurpose/Button/Button';
 import { OLE_COMMENT_TYPE_OPTIONS } from 'Config';
 import ManagerInterface from 'Utils';
@@ -29,19 +28,16 @@ import ExposureAdd from './Exposure/ExposureAdd';
 import NonExposureEdit from './NonExposure/NonExposureEdit';
 import styles from './OLE.module.css';
 
+const tabs = [
+  { name: 'Narrative Logs', value: 'non-exposure' },
+  { name: 'Exposure Logs', value: 'exposure' },
+];
+
 export default class OLE extends Component {
-  static propTypes = {
-    tabs: PropTypes.arrayOf(PropTypes.object),
-  };
-
-  static defaultProps = {
-    tabs: [],
-  };
-
   constructor(props) {
     super(props);
     this.state = {
-      selectedTab: props.tabs[0].value,
+      selectedTab: tabs[0].value,
       clickNewLog: false,
       // Non Exposure filters
       selectedDayNarrativeStart: Moment().subtract(1, 'days'),
@@ -188,7 +184,6 @@ export default class OLE extends Component {
   }
 
   render() {
-    const tabs = this.props.tabs;
     const selectedTab = this.state.selectedTab;
 
     const html = tabs.map((item, index) => {
