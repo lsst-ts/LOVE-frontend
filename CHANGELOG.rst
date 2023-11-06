@@ -2,6 +2,8 @@
 Version History
 ===============
 
+
+
 v5.27.2
 -------
 
@@ -10,6 +12,7 @@ v5.27.2
 * Bump d3, d3-geo-veroni, get rid of cypress and vega-lib, update component d3 use of d3.event `<https://github.com/lsst-ts/LOVE-frontend/pull/558>`_
 * Clean compilation warnings on LOVE-frontend `<https://github.com/lsst-ts/LOVE-frontend/pull/557>`_
 * Update to node:lts docker image `<https://github.com/lsst-ts/LOVE-frontend/pull/556>`_
+* Extend OLE for Tekniker tickets logging `<https://github.com/lsst-ts/LOVE-frontend/pull/547>`_
 
 v5.27.1
 -------
