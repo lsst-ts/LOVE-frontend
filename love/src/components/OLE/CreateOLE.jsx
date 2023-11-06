@@ -21,23 +21,29 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ExposureAdd from './Exposure/ExposureAdd';
 import NonExposureEdit from './NonExposure/NonExposureEdit';
+import TeknikerAdd from './Tekniker/TeknikerAdd';
 import styles from './OLE.module.css';
+
+const tabs = [
+  { name: 'Narrative Logs', value: 'non-exposure' },
+  { name: 'Exposure Logs', value: 'exposure' },
+  { name: 'TMA Logs', value: 'tekniker' },
+];
 
 export default class CreateOLE extends Component {
   static propTypes = {
-    tabs: PropTypes.arrayOf(PropTypes.object),
+    /** Boolean to indicate if this component is used for create Logs */
     isLogCreate: PropTypes.bool,
   };
 
   static defaultProps = {
-    tabs: [],
     isLogCreate: false,
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      selectedTab: props.tabs[0].value,
+      selectedTab: tabs[0].value,
     };
   }
 
@@ -54,16 +60,17 @@ export default class CreateOLE extends Component {
   }
 
   getComponent(tab) {
+    const { isLogCreate } = this.props;
     if (tab === 'exposure') {
-      return <ExposureAdd isLogCreate={this.props.isLogCreate} props={this.props} />;
-    }
-    if (tab === 'non-exposure') {
-      return <NonExposureEdit isLogCreate={this.props.isLogCreate} props={this.props} />;
+      return <ExposureAdd isLogCreate={isLogCreate} props={this.props} />;
+    } else if (tab === 'non-exposure') {
+      return <NonExposureEdit isLogCreate={isLogCreate} props={this.props} />;
+    } else if (tab === 'tekniker') {
+      return <TeknikerAdd isLogCreate={isLogCreate} props={this.props} />;
     }
   }
 
   render() {
-    const tabs = this.props.tabs;
     const selectedTab = this.state.selectedTab;
 
     const html = tabs.map((item, index) => {

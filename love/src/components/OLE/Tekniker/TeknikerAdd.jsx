@@ -1,22 +1,3 @@
-/** 
-This file is part of LOVE-frontend.
-
-Copyright (c) 2023 Inria Chile.
-
-Developed by Inria Chile.
-
-This program is free software: you can redistribute it and/or modify it under 
-the terms of the GNU General Public License as published by the Free Software 
-Foundation, either version 3 of the License, or at your option) any later version.
-
-This program is distributed in the hope that it will be useful,but WITHOUT ANY
- WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
- A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with 
-this program. If not, see <http://www.gnu.org/licenses/>.
-*/
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import lodash from 'lodash';
@@ -25,7 +6,7 @@ import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import RefreshIcon from 'components/icons/RefreshIcon/RefreshIcon';
-import RichTextEditor from 'components/GeneralPurpose/RichTextEditor/RichTextEditor';
+import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import MultiFileUploader from 'components/GeneralPurpose/MultiFileUploader/MultiFileUploader';
@@ -40,17 +21,11 @@ import {
   OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS,
   iconLevelOLE,
 } from 'Config';
-import ManagerInterface, {
-  getFilesURLs,
-  getLinkJira,
-  getFilename,
-  openInNewTab,
-  htmlToJiraMarkdown,
-  jiraMarkdownToHtml,
-} from 'Utils';
-import styles from './NonExposure.module.css';
+import ManagerInterface, { getFilesURLs, getLinkJira, getFilename, openInNewTab } from 'Utils';
+import styles from '../NonExposure/NonExposure.module.css';
+import customStyles from './Tekniker.module.css';
 
-export default class NonExposureEdit extends Component {
+export default class TeknikerAdd extends Component {
   static propTypes = {
     /** Log to edit object */
     logEdit: PropTypes.object,
@@ -73,8 +48,11 @@ export default class NonExposureEdit extends Component {
       date_begin: Moment(),
       date_end: Moment(),
       components: [],
+      components_ids: [],
       primary_software_components: ['None'],
+      primary_software_components_ids: OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS['None'],
       primary_hardware_components: ['None'],
+      primary_hardware_components_ids: OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS['None'],
       salindex: 0,
       user: undefined,
       time_lost: 0,
@@ -87,8 +65,6 @@ export default class NonExposureEdit extends Component {
       tags: [],
       message_text: '',
       is_human: true,
-      category: 'None',
-      time_lost_type: 'fault',
     },
     isLogCreate: false,
     isMenu: false,
@@ -110,7 +86,6 @@ export default class NonExposureEdit extends Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.multiselectComponentsRef = React.createRef();
-    this.richTextEditorRef = React.createRef();
     this.id = lodash.uniqueId('nonexposure-edit-');
   }
 
@@ -122,14 +97,28 @@ export default class NonExposureEdit extends Component {
   cleanForm() {
     // Reset multiselects values
     this.multiselectComponentsRef.current.resetSelectedValues();
-    this.richTextEditorRef.current.cleanContent();
-    this.setState({ logEdit: NonExposureEdit.defaultProps.logEdit });
+    this.setState({ logEdit: TeknikerAdd.defaultProps.logEdit });
   }
 
   updateDates() {
     this.setState((prevState) => ({
       logEdit: { ...prevState.logEdit, date_begin: Moment(), date_end: Moment() },
     }));
+  }
+
+  makeTemplateMessage() {
+    const { logEdit } = this.state;
+
+    const content = [
+      'h3. Error/Failure explanation:',
+      logEdit.tmaError,
+      'h3. What were you doing when the failure occurred?:',
+      logEdit.tmaSituation,
+      'h3. Detailed description of the steps followed that caused the error/failure:',
+      logEdit.tmaDescription,
+    ];
+
+    return content.join('\r\n');
   }
 
   updateOrCreateMessageNarrativeLogs() {
@@ -141,6 +130,13 @@ export default class NonExposureEdit extends Component {
     const endDateISO = Moment(this.state.logEdit.date_end).toISOString();
     payload['date_begin'] = beginDateISO.substring(0, beginDateISO.length - 1); // remove Zone due to backend standard
     payload['date_end'] = endDateISO.substring(0, endDateISO.length - 1); // remove Zone due to backend standard
+
+    payload['message_text'] = this.makeTemplateMessage();
+    delete payload['tmaError'];
+    delete payload['tmaSituation'];
+    delete payload['tmaDescription'];
+
+    console.log(payload);
 
     // Clean null and empty values to avoid API errors
     Object.keys(payload).forEach((key) => {
@@ -251,13 +247,14 @@ export default class NonExposureEdit extends Component {
   }
 
   renderCategoryField() {
+    const { category } = this.state.logEdit ?? {};
     return (
       <>
         <span className={styles.label}>Category</span>
         <span className={styles.value}>
           <Select
             options={['None', 'ENG', 'SCIENCE']}
-            option={this.state.logEdit?.category}
+            option={category}
             onChange={({ value }) => {
               this.setState((prevState) => ({
                 logEdit: { ...prevState.logEdit, category: value },
@@ -313,7 +310,9 @@ export default class NonExposureEdit extends Component {
                 logEdit: {
                   ...prevState.logEdit,
                   components: selectedOptions,
-                  components_ids: selectedOptions.map((component) => OLE_JIRA_COMPONENTS[component]),
+                  components_ids: selectedOptions.map((component) => {
+                    return OLE_JIRA_COMPONENTS[component];
+                  }),
                 },
               }));
             }}
@@ -437,23 +436,64 @@ export default class NonExposureEdit extends Component {
     );
   }
 
-  renderMessageField() {
+  renderErrorMessageField() {
     const { logEdit } = this.state;
-    const htmlMessage = jiraMarkdownToHtml(logEdit?.message_text, { codeFriendly: true, parseLines: true });
 
     return (
       <>
         <div className={styles.mb1}>
-          <div className={styles.title}>Message</div>
+          <div className={styles.title}>Error/Failure explanation:</div>
         </div>
-        <RichTextEditor
-          ref={this.richTextEditorRef}
-          className={styles.textArea}
-          defaultValue={htmlMessage}
-          onChange={(value) => {
-            const parsedValue = htmlToJiraMarkdown(value);
-            this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, message_text: parsedValue } }));
-          }}
+        <TextArea
+          className={customStyles.textArea}
+          value={logEdit?.tmaError}
+          callback={(event) =>
+            this.setState((prevState) => ({
+              logEdit: { ...prevState.logEdit, tmaError: event },
+            }))
+          }
+        />
+      </>
+    );
+  }
+
+  renderSituationMessageField() {
+    const { logEdit } = this.state;
+
+    return (
+      <>
+        <div className={styles.mb1}>
+          <div className={styles.title}>What were you doing when the failure occurred?:</div>
+        </div>
+        <TextArea
+          className={customStyles.textArea}
+          value={logEdit?.tmaSituation}
+          callback={(event) =>
+            this.setState((prevState) => ({
+              logEdit: { ...prevState.logEdit, tmaSituation: event },
+            }))
+          }
+        />
+      </>
+    );
+  }
+
+  renderDescriptionMessageField() {
+    const { logEdit } = this.state;
+
+    return (
+      <>
+        <div className={styles.mb1}>
+          <div className={styles.title}>Detailed description of the steps followed that caused the error/failure:</div>
+        </div>
+        <TextArea
+          className={customStyles.textArea}
+          value={logEdit?.tmaDescription}
+          callback={(event) =>
+            this.setState((prevState) => ({
+              logEdit: { ...prevState.logEdit, tmaDescription: event },
+            }))
+          }
         />
       </>
     );
@@ -595,7 +635,11 @@ export default class NonExposureEdit extends Component {
                 {this.renderComponentsFields()}
                 {this.renderTimeOfIncidentFields()}
               </div>
-              <div className={styles.contentRight}>{this.renderMessageField()}</div>
+              <div className={styles.contentRight}>
+                {this.renderErrorMessageField()}
+                {this.renderSituationMessageField()}
+                {this.renderDescriptionMessageField()}
+              </div>
             </div>
           </div>
           <div className={styles.footerMenu}>
@@ -667,7 +711,11 @@ export default class NonExposureEdit extends Component {
                 {this.renderComponentsFields()}
                 {this.renderTimeOfIncidentFields()}
               </div>
-              <div className={styles.contentRight}>{this.renderMessageField()}</div>
+              <div className={styles.contentRight}>
+                {this.renderErrorMessageField()}
+                {this.renderSituationMessageField()}
+                {this.renderDescriptionMessageField()}
+              </div>
             </div>
 
             <div className={styles.footer}>

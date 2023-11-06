@@ -374,6 +374,8 @@ export default class NonExposure extends Component {
       )}_to_${selectedDayNarrativeEnd.format(ISO_INTEGER_DATE_FORMAT)}.csv`;
     }
 
+    const componentOptions = ['All components', ...Object.keys(OLE_JIRA_COMPONENTS).sort()];
+
     return modeView && !modeEdit ? (
       <NonExposureDetail
         back={() => {
@@ -444,7 +446,7 @@ export default class NonExposure extends Component {
           />
 
           <Select
-            options={['All components', ...OLE_JIRA_COMPONENTS]}
+            options={componentOptions}
             option={selectedComponent}
             onChange={({ value }) => changeComponentSelect(value)}
             className={styles.selectComponent}
