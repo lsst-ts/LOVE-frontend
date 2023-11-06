@@ -22,9 +22,6 @@ import { connect } from 'react-redux';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 import OLE from './OLE';
-import Exposure from './Exposure/Exposure';
-import NonExposure from './NonExposure/NonExposure';
-import Tekniker from './Tekniker/Tekniker';
 
 export const schema = {
   description: 'View of Log service',

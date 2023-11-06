@@ -407,6 +407,9 @@ export const OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS = {
   Analysis: 16813,
   Other: 16814,
   'Camera Control Software': 16815,
+  TMA_CSC: 16860,
+  TMA_EUI: 16859,
+  TMA_HDD: 16861,
 };
 
 // jira OBS project customfield_17205
