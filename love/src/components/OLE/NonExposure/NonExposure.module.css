@@ -490,9 +490,10 @@ th.tableHead {
 
 /* Following is related to the use of the RichTextEditor component */
 .wikiMarkupText {
-  white-space: pre;
+  white-space: pre-wrap;
   text-align: left;
   overflow-x: auto;
+  max-width: 80em;
 }
 
 .wikiMarkupText h1,
