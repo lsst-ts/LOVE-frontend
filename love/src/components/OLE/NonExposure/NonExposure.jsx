@@ -37,6 +37,8 @@ import ManagerInterface, {
   jiraMarkdownToHtml,
   getObsDayFromDate,
   truncateISODateToMinutes,
+  getEndDateFromObsDay,
+  getStartDateFromObsDay,
 } from 'Utils';
 
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
@@ -253,8 +255,10 @@ export default class NonExposure extends Component {
 
   queryNarrativeLogs() {
     const { selectedDayNarrativeStart, selectedDayNarrativeEnd } = this.props;
-    const dateFrom = Moment(selectedDayNarrativeStart).utc().startOf('day').format(ISO_STRING_DATE_TIME_FORMAT);
-    const dateTo = Moment(selectedDayNarrativeEnd).utc().endOf('day').format(ISO_STRING_DATE_TIME_FORMAT);
+    const fromObsDay = getObsDayFromDate(selectedDayNarrativeStart);
+    const toObsDay = getObsDayFromDate(selectedDayNarrativeEnd);
+    const dateFrom = getStartDateFromObsDay(fromObsDay).utc().format(ISO_STRING_DATE_TIME_FORMAT);
+    const dateTo = getEndDateFromObsDay(toObsDay).utc().format(ISO_STRING_DATE_TIME_FORMAT);
 
     // Get list of narrative logs
     this.setState({ updatingLogs: true });

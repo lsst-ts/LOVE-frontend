@@ -2073,6 +2073,28 @@ export function getObsDayFromDate(date) {
 }
 
 /**
+ * Function to get the end date of an OBS day
+ * @param {object} obsDay OBS day in format YYYYMMDD
+ * @returns {object} end date of the OBS day
+ */
+export function getEndDateFromObsDay(obsDay) {
+  return Moment(
+    `${obsDay.slice(0, 4)}-${obsDay.slice(4, 6)}-${(parseInt(obsDay.slice(6, 8), 10) + 1)
+      .toString()
+      .padStart(2, '0')}T12:00:00Z`,
+  );
+}
+
+/**
+ * Function to get the start date of an OBS day
+ * @param {string} obsDay OBS day in format YYYYMMDD
+ * @returns {object} start date of the OBS day
+ */
+export function getStartDateFromObsDay(obsDay) {
+  return Moment(`${obsDay.slice(0, 4)}-${obsDay.slice(4, 6)}-${obsDay.slice(6, 8)}T12:00:00Z`);
+}
+
+/**
  * Function to truncate date ISO string to minutes
  * @param {string} date date, as a ISO string, to be truncated
  * @returns {string} truncated date in format YYYY-MM-DDTHH:mm
