@@ -170,7 +170,7 @@ export default class NonExposureEdit extends Component {
   }
 
   handleSubmit(event) {
-    event.preventDefault();
+    if (event) event.preventDefault();
     this.updateOrCreateMessageNarrativeLogs();
   }
 
@@ -453,6 +453,11 @@ export default class NonExposureEdit extends Component {
           onChange={(value) => {
             const parsedValue = htmlToJiraMarkdown(value);
             this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, message_text: parsedValue } }));
+          }}
+          onKeyCombination={(combination) => {
+            if (combination === 'ctrl+enter') {
+              this.handleSubmit();
+            }
           }}
         />
       </>

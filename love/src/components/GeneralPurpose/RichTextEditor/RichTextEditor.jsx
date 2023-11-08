@@ -34,48 +34,81 @@ const modules = {
   ],
 };
 
-const RichTextEditor = forwardRef(({ defaultValue, className, onChange = () => {} }, ref) => {
-  const [value, setValue] = useState(defaultValue);
-  const reactQuillRef = useRef(null);
+const RichTextEditor = forwardRef(
+  ({ defaultValue, className, onChange = () => {}, onKeyCombination = () => {} }, ref) => {
+    const [value, setValue] = useState(defaultValue);
+    const [isControlPressed, setIsControlPressed] = useState(false);
+    const reactQuillRef = useRef(null);
 
-  const handleChange = (value) => {
-    setValue(value);
-    onChange(value);
-  };
+    const handleChange = (value) => {
+      setValue(value);
+      onChange(value);
+    };
 
-  useImperativeHandle(ref, () => ({
-    cleanContent() {
-      setValue('');
-    },
-  }));
-
-  const attachQuillRefs = () => {
-    if (typeof reactQuillRef?.current?.getEditor !== 'function') return;
-    const quillRef = reactQuillRef.current.getEditor();
-    quillRef.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
-      let ops = [];
-      delta.ops.forEach((op) => {
-        if (op.insert && typeof op.insert === 'string') {
-          ops.push({
-            insert: op.insert,
-          });
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        if (isControlPressed) {
+          event.preventDefault();
+          event.stopPropagation();
+          onKeyCombination('ctrl+enter');
         }
+      } else if (event.key === 'Control') {
+        event.preventDefault();
+        event.stopPropagation();
+        setIsControlPressed(true);
+      }
+    };
+
+    const handleKeyUp = (event) => {
+      if (event.key === 'Control') {
+        event.preventDefault();
+        event.stopPropagation();
+        setIsControlPressed(false);
+      }
+    };
+
+    useImperativeHandle(ref, () => ({
+      cleanContent() {
+        setValue('');
+      },
+    }));
+
+    const attachQuillRefs = () => {
+      if (typeof reactQuillRef?.current?.getEditor !== 'function') return;
+      const quillRef = reactQuillRef.current.getEditor();
+      quillRef.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
+        let ops = [];
+        delta.ops.forEach((op) => {
+          if (op.insert && typeof op.insert === 'string') {
+            ops.push({
+              insert: op.insert,
+            });
+          }
+        });
+        delta.ops = ops;
+        return delta;
       });
-      delta.ops = ops;
-      return delta;
-    });
-  };
+    };
 
-  useEffect(() => {
-    attachQuillRefs();
-  }, []);
+    useEffect(() => {
+      attachQuillRefs();
+    }, []);
 
-  return (
-    <div className={[className ?? '', styles.container].join(' ')}>
-      <ReactQuill ref={reactQuillRef} modules={modules} theme="snow" value={value} onChange={handleChange} />
-    </div>
-  );
-});
+    return (
+      <div className={[className ?? '', styles.container].join(' ')}>
+        <ReactQuill
+          ref={reactQuillRef}
+          modules={modules}
+          theme="snow"
+          value={value}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          onKeyUp={handleKeyUp}
+        />
+      </div>
+    );
+  },
+);
 
 RichTextEditor.propTypes = {
   /** Default value for the editor */
@@ -84,6 +117,12 @@ RichTextEditor.propTypes = {
   className: PropTypes.string,
   /** Function to handle ReactQuill onChange */
   onChange: PropTypes.func,
+  /** Function to handle key combinations
+   * @param {string} combination - Key combination pressed
+   * Notes:
+   * - Only 'ctrl+enter' is supported at the moment
+   */
+  onKeyCombination: PropTypes.func,
 };
 
 RichTextEditor.displayName = 'RichTextEditor';
