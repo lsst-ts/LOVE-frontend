@@ -27,8 +27,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .returnToLogs {
   display: flex;
-  padding-left: 0.5em;
-  min-height: 2em;
+  padding-right: 0.5em;
+  justify-content: flex-end;
 }
 
 .detailContainer {
