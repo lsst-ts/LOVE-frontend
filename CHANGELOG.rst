@@ -5,6 +5,7 @@ Version History
 v5.27.3
 -------
 
+* Minimize mouse clicks and other OLE adjustments `<https://github.com/lsst-ts/LOVE-frontend/pull/562>`_
 * Fix documentation pipeline `<https://github.com/lsst-ts/LOVE-frontend/pull/561>`_
 
 v5.27.2
