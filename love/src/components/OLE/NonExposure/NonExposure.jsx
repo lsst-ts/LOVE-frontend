@@ -38,8 +38,6 @@ import ManagerInterface, {
   jiraMarkdownToHtml,
   getObsDayFromDate,
   truncateISODateToMinutes,
-  getEndDateFromObsDay,
-  getStartDateFromObsDay,
 } from 'Utils';
 
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
@@ -159,7 +157,7 @@ export default class NonExposure extends Component {
         title: 'Day Observation',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => getObsDayFromDate(moment(value)),
+        render: (value) => getObsDayFromDate(moment(value + 'Z')),
       },
       {
         field: 'level',
@@ -274,10 +272,8 @@ export default class NonExposure extends Component {
 
   queryNarrativeLogs() {
     const { selectedDayNarrativeStart, selectedDayNarrativeEnd } = this.props;
-    const fromObsDay = getObsDayFromDate(selectedDayNarrativeStart);
-    const toObsDay = getObsDayFromDate(selectedDayNarrativeEnd);
-    const dateFrom = getStartDateFromObsDay(fromObsDay).utc().format(ISO_STRING_DATE_TIME_FORMAT);
-    const dateTo = getEndDateFromObsDay(toObsDay).utc().format(ISO_STRING_DATE_TIME_FORMAT);
+    const dateFrom = moment(selectedDayNarrativeStart).utc().hours(12).format(ISO_STRING_DATE_TIME_FORMAT);
+    const dateTo = moment(selectedDayNarrativeEnd).utc().add(1, 'day').hours(12).format(ISO_STRING_DATE_TIME_FORMAT);
 
     // Get list of narrative logs
     this.setState({ updatingLogs: true });
@@ -293,7 +289,7 @@ export default class NonExposure extends Component {
 
   parseCsvData(data) {
     const csvData = data.map((row) => {
-      const obsDay = getObsDayFromDate(moment(row.date_added));
+      const obsDay = getObsDayFromDate(moment(row.date_added + 'Z'));
       const escapedMessageText = row.message_text.replace(/"/g, '""');
       const parsedLevel = OLE_COMMENT_TYPE_OPTIONS.find((option) => option.value === row.level).label;
       return {

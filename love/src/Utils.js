@@ -2064,34 +2064,12 @@ export function simpleHtmlTokenizer(html) {
  * @returns {string} OBS day in format YYYYMMDD
  */
 export function getObsDayFromDate(date) {
-  const utcDate = date.utc();
+  const utcDate = Moment(date).utc();
   const utcHour = utcDate.hour();
   if (utcHour >= 12) {
     return utcDate.format(ISO_INTEGER_DATE_FORMAT);
   }
   return utcDate.subtract(1, 'day').format(ISO_INTEGER_DATE_FORMAT);
-}
-
-/**
- * Function to get the end date of an OBS day
- * @param {object} obsDay OBS day in format YYYYMMDD
- * @returns {object} end date of the OBS day
- */
-export function getEndDateFromObsDay(obsDay) {
-  return Moment(
-    `${obsDay.slice(0, 4)}-${obsDay.slice(4, 6)}-${(parseInt(obsDay.slice(6, 8), 10) + 1)
-      .toString()
-      .padStart(2, '0')}T12:00:00Z`,
-  );
-}
-
-/**
- * Function to get the start date of an OBS day
- * @param {string} obsDay OBS day in format YYYYMMDD
- * @returns {object} start date of the OBS day
- */
-export function getStartDateFromObsDay(obsDay) {
-  return Moment(`${obsDay.slice(0, 4)}-${obsDay.slice(4, 6)}-${obsDay.slice(6, 8)}T12:00:00Z`);
 }
 
 /**
