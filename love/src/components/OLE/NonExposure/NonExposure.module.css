@@ -17,6 +17,11 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+.container {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 .title {
   color: white;
   font-weight: bold;
@@ -512,4 +517,14 @@ th.tableHead {
 .wikiMarkupText a:hover,
 .wikiMarkupText a:focus {
   color: var(--link-hover-font-color);
+}
+
+.container table {
+  margin: 0;
+  border: 0;
+}
+
+.container table th {
+  position: sticky;
+  top: 0;
 }

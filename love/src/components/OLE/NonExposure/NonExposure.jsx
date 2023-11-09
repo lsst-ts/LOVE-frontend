@@ -409,7 +409,7 @@ export default class NonExposure extends Component {
         }}
       />
     ) : (
-      <div className={styles.margin10}>
+      <div className={styles.container}>
         <div className={styles.filters}>
           <Button disabled={this.state.updatingLogs} onClick={() => this.queryNarrativeLogs()}>
             Refresh data

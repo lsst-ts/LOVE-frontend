@@ -465,7 +465,7 @@ export default class Exposure extends Component {
     }
 
     return (
-      <div className={styles.margin10}>
+      <div className={styles.container}>
         <div className={styles.filters}>
           <Button disabled={updatingExposures} onClick={() => this.queryExposures()}>
             Refresh data
