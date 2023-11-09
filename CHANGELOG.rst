@@ -2,7 +2,10 @@
 Version History
 ===============
 
+v5.27.3
+-------
 
+* Fix documentation pipeline `<https://github.com/lsst-ts/LOVE-frontend/pull/561>`_
 
 v5.27.2
 -------
