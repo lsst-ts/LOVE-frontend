@@ -116,6 +116,8 @@ pipeline {
         script {
           sh """
             source ${env.SAL_SETUP_FILE}
+            # Remove old docs folder
+            rm -rf ./docs
             # Install dependencies
             cd ./love
             npm install
