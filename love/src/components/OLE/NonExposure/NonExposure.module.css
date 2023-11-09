@@ -498,7 +498,7 @@ th.tableHead {
   white-space: pre-wrap;
   text-align: left;
   overflow-x: auto;
-  max-width: 80em;
+  max-width: 70em;
 }
 
 .wikiMarkupText h1,
@@ -527,4 +527,11 @@ th.tableHead {
 .container table th {
   position: sticky;
   top: 0;
+}
+
+.attachmentIcon {
+  width: 1em;
+  height: auto;
+  margin-right: 0.25em;
+  fill: var(--default-active-font-color);
 }

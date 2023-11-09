@@ -34,6 +34,7 @@ import {
 import ManagerInterface, {
   formatSecondsToDigital,
   getLinkJira,
+  getFilesURLs,
   jiraMarkdownToHtml,
   getObsDayFromDate,
   truncateISODateToMinutes,
@@ -45,6 +46,7 @@ import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Input from 'components/GeneralPurpose/Input/Input';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
+import ClipIcon from 'components/icons/ClipIcon/ClipIcon';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
@@ -192,9 +194,26 @@ export default class NonExposure extends Component {
         title: 'Message',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => {
+        render: (value, row) => {
+          const files = getFilesURLs(row.urls);
           const parsedValue = jiraMarkdownToHtml(value);
-          return <div className={styles.wikiMarkupText} dangerouslySetInnerHTML={{ __html: parsedValue }} />;
+          return (
+            <>
+              <div className={styles.wikiMarkupText} dangerouslySetInnerHTML={{ __html: parsedValue }} />
+              {files.length > 0 && (
+                <h3>
+                  Attachments:{' '}
+                  {files.map((file, index) => {
+                    return (
+                      <a key={index} target="_blank" href={file} title={file}>
+                        <ClipIcon className={styles.attachmentIcon} />
+                      </a>
+                    );
+                  })}
+                </h3>
+              )}
+            </>
+          );
         },
       },
       {
