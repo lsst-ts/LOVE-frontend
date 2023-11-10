@@ -170,7 +170,7 @@ export default class NonExposureEdit extends Component {
   }
 
   handleSubmit(event) {
-    event.preventDefault();
+    if (event) event.preventDefault();
     this.updateOrCreateMessageNarrativeLogs();
   }
 
@@ -253,7 +253,7 @@ export default class NonExposureEdit extends Component {
   renderCategoryField() {
     return (
       <>
-        <span className={styles.label}>Category</span>
+        <span className={styles.label}>Type of observing time</span>
         <span className={styles.value}>
           <Select
             options={['None', 'ENG', 'SCIENCE']}
@@ -454,6 +454,11 @@ export default class NonExposureEdit extends Component {
             const parsedValue = htmlToJiraMarkdown(value);
             this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, message_text: parsedValue } }));
           }}
+          onKeyCombination={(combination) => {
+            if (combination === 'ctrl+enter') {
+              this.handleSubmit();
+            }
+          }}
         />
       </>
     );
@@ -590,10 +595,10 @@ export default class NonExposureEdit extends Component {
           <div className={styles.detailContainerMenu}>
             <div id={this.id} className={styles.contentMenu}>
               <div className={styles.contentLeft}>
-                {this.renderCategoryField()}
                 {this.renderUrgentField()}
                 {this.renderComponentsFields()}
                 {this.renderTimeOfIncidentFields()}
+                {this.renderCategoryField()}
               </div>
               <div className={styles.contentRight}>{this.renderMessageField()}</div>
             </div>
@@ -662,10 +667,10 @@ export default class NonExposureEdit extends Component {
 
             <div id={this.id} className={styles.content}>
               <div className={styles.contentLeft}>
-                {this.renderCategoryField()}
                 {this.renderUrgentField()}
                 {this.renderComponentsFields()}
                 {this.renderTimeOfIncidentFields()}
+                {this.renderCategoryField()}
               </div>
               <div className={styles.contentRight}>{this.renderMessageField()}</div>
             </div>

@@ -1439,7 +1439,7 @@ export const relativeTime = (timestamp, taiToUtc) => {
  * @returns {string} seconds in digitial format
  */
 export const formatSecondsToDigital = (time) => {
-  let seconds = time % 60;
+  let seconds = Math.floor(time % 60);
   let minutes = Math.floor((time % 3600) / 60);
   let hours = Math.floor(time / 3600);
   minutes = minutes.toString().length === 1 ? `0${minutes}` : minutes;
@@ -2064,7 +2064,7 @@ export function simpleHtmlTokenizer(html) {
  * @returns {string} OBS day in format YYYYMMDD
  */
 export function getObsDayFromDate(date) {
-  const utcDate = date.utc();
+  const utcDate = Moment(date).utc();
   const utcHour = utcDate.hour();
   if (utcHour >= 12) {
     return utcDate.format(ISO_INTEGER_DATE_FORMAT);

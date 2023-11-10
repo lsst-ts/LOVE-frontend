@@ -17,6 +17,11 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+.container {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 .title {
   color: white;
   font-weight: bold;
@@ -27,8 +32,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .returnToLogs {
   display: flex;
-  padding-left: 0.5em;
-  min-height: 2em;
+  padding-right: 0.5em;
+  justify-content: flex-end;
 }
 
 .detailContainer {
@@ -490,9 +495,10 @@ th.tableHead {
 
 /* Following is related to the use of the RichTextEditor component */
 .wikiMarkupText {
-  white-space: pre;
+  white-space: pre-wrap;
   text-align: left;
   overflow-x: auto;
+  max-width: 70em;
 }
 
 .wikiMarkupText h1,
@@ -511,4 +517,21 @@ th.tableHead {
 .wikiMarkupText a:hover,
 .wikiMarkupText a:focus {
   color: var(--link-hover-font-color);
+}
+
+.container table {
+  margin: 0;
+  border: 0;
+}
+
+.container table th {
+  position: sticky;
+  top: 0;
+}
+
+.attachmentIcon {
+  width: 1em;
+  height: auto;
+  margin-right: 0.25em;
+  fill: var(--default-active-font-color);
 }
