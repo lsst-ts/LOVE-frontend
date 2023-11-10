@@ -80,7 +80,7 @@ export const schema = {
           csc: 'ESS',
           salindex: 301,
           topic: 'airFlow',
-          item: 'avg2M',
+          item: 'speed',
           type: 'line',
           accessor: '(x) => x',
           encoding: 'radial', // radial, color, angular
@@ -92,7 +92,7 @@ export const schema = {
           csc: 'ESS',
           salindex: 301,
           topic: 'airFlow',
-          item: 'avg2M',
+          item: 'direction',
           type: 'line',
           accessor: '(x) => x',
           encoding: 'angular', // radial, color, angular

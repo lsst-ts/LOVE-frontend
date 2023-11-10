@@ -38,7 +38,7 @@ export const schema = {
       type: 'boolean',
       description: 'Whether the component has a raw mode version',
       isPrivate: true,
-      default: false,
+      default: true,
     },
     controls: {
       type: 'boolean',
