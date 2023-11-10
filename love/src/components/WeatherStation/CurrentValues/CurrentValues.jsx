@@ -71,7 +71,7 @@ export default class CurrentValues extends Component {
             <div className={styles.iconWrapper}>
               <PressureIcon className={styles.icon} />
             </div>
-            <div className={styles.summaryValue}>{currentPressure !== undefined ? `${currentPressure} pa` : '-'}</div>
+            <div className={styles.summaryValue}>{currentPressure !== undefined ? `${currentPressure} Pa` : '-'}</div>
           </div>
           <div className={styles.summaryVariable}>
             <div className={styles.summaryLabel}>Wind speed</div>
