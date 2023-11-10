@@ -34,6 +34,7 @@ import {
 import ManagerInterface, {
   formatSecondsToDigital,
   getLinkJira,
+  getFilesURLs,
   jiraMarkdownToHtml,
   getObsDayFromDate,
   truncateISODateToMinutes,
@@ -43,6 +44,7 @@ import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Input from 'components/GeneralPurpose/Input/Input';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
+import ClipIcon from 'components/icons/ClipIcon/ClipIcon';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
@@ -155,7 +157,7 @@ export default class NonExposure extends Component {
         title: 'Day Observation',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => getObsDayFromDate(moment(value)),
+        render: (value) => getObsDayFromDate(moment(value + 'Z')),
       },
       {
         field: 'level',
@@ -190,9 +192,26 @@ export default class NonExposure extends Component {
         title: 'Message',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => {
+        render: (value, row) => {
+          const files = getFilesURLs(row.urls);
           const parsedValue = jiraMarkdownToHtml(value);
-          return <div className={styles.wikiMarkupText} dangerouslySetInnerHTML={{ __html: parsedValue }} />;
+          return (
+            <>
+              <div className={styles.wikiMarkupText} dangerouslySetInnerHTML={{ __html: parsedValue }} />
+              {files.length > 0 && (
+                <h3>
+                  Attachments:{' '}
+                  {files.map((file, index) => {
+                    return (
+                      <a key={index} target="_blank" href={file} title={file}>
+                        <ClipIcon className={styles.attachmentIcon} />
+                      </a>
+                    );
+                  })}
+                </h3>
+              )}
+            </>
+          );
         },
       },
       {
@@ -253,8 +272,8 @@ export default class NonExposure extends Component {
 
   queryNarrativeLogs() {
     const { selectedDayNarrativeStart, selectedDayNarrativeEnd } = this.props;
-    const dateFrom = Moment(selectedDayNarrativeStart).utc().startOf('day').format(ISO_STRING_DATE_TIME_FORMAT);
-    const dateTo = Moment(selectedDayNarrativeEnd).utc().endOf('day').format(ISO_STRING_DATE_TIME_FORMAT);
+    const dateFrom = moment(selectedDayNarrativeStart).utc().hours(12).format(ISO_STRING_DATE_TIME_FORMAT);
+    const dateTo = moment(selectedDayNarrativeEnd).utc().add(1, 'day').hours(12).format(ISO_STRING_DATE_TIME_FORMAT);
 
     // Get list of narrative logs
     this.setState({ updatingLogs: true });
@@ -270,7 +289,7 @@ export default class NonExposure extends Component {
 
   parseCsvData(data) {
     const csvData = data.map((row) => {
-      const obsDay = getObsDayFromDate(moment(row.date_added));
+      const obsDay = getObsDayFromDate(moment(row.date_added + 'Z'));
       const escapedMessageText = row.message_text.replace(/"/g, '""');
       const parsedLevel = OLE_COMMENT_TYPE_OPTIONS.find((option) => option.value === row.level).label;
       return {
@@ -405,7 +424,7 @@ export default class NonExposure extends Component {
         }}
       />
     ) : (
-      <div className={styles.margin10}>
+      <div className={styles.container}>
         <div className={styles.filters}>
           <Button disabled={this.state.updatingLogs} onClick={() => this.queryNarrativeLogs()}>
             Refresh data

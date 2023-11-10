@@ -207,7 +207,7 @@ export default class ExposureAdd extends Component {
   }
 
   handleSubmit(event) {
-    event.preventDefault();
+    if (event) event.preventDefault();
     this.saveMessage();
   }
 
@@ -527,6 +527,11 @@ export default class ExposureAdd extends Component {
                   this.setState((prevState) => ({
                     newMessage: { ...prevState.newMessage, message_text: parsedValue },
                   }));
+                }}
+                onKeyCombination={(combination) => {
+                  if (combination === 'ctrl+enter') {
+                    this.handleSubmit();
+                  }
                 }}
               />
             </div>

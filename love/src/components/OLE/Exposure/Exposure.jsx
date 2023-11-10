@@ -33,7 +33,7 @@ import Select from 'components/GeneralPurpose/Select/Select';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import { exposureFlagStateToStyle, TIME_FORMAT, ISO_INTEGER_DATE_FORMAT, LOG_REFRESH_INTERVAL_MS } from 'Config';
-import ManagerInterface, { jiraMarkdownToHtml } from 'Utils';
+import ManagerInterface, { getFilesURLs, jiraMarkdownToHtml } from 'Utils';
 import ExposureAdd from './ExposureAdd';
 import ExposureDetail from './ExposureDetail';
 import styles from './Exposure.module.css';
@@ -235,8 +235,25 @@ export default class Exposure extends Component {
         className: styles.tableHead,
         render: (value) => {
           const lastMessage = this.state.lastMessages[value];
-          const parsedValue = jiraMarkdownToHtml(lastMessage);
-          return <div className={styles.wikiMarkupText} dangerouslySetInnerHTML={{ __html: parsedValue }} />;
+          const parsedValue = jiraMarkdownToHtml(lastMessage?.message_text);
+          const files = getFilesURLs(lastMessage?.urls);
+          return (
+            <>
+              <div className={styles.wikiMarkupText} dangerouslySetInnerHTML={{ __html: parsedValue }} />
+              {files.length > 0 && (
+                <h3>
+                  Attachments:{' '}
+                  {files.map((file, index) => {
+                    return (
+                      <a key={index} target="_blank" href={file} title={file}>
+                        <ClipIcon className={styles.attachmentIcon} />
+                      </a>
+                    );
+                  })}
+                </h3>
+              )}
+            </>
+          );
         },
       },
       {
@@ -298,7 +315,7 @@ export default class Exposure extends Component {
       ManagerInterface.getListAllMessagesExposureLogs(startObsDay, endObsDay).then((messages) => {
         const exposureFlags = {};
         const lastMessages = {};
-        messages.forEach((message) => {
+        messages?.forEach((message) => {
           // Get exposure flags per exposure
           if (!exposureFlags[message.obs_id]) {
             exposureFlags[message.obs_id] = {};
@@ -311,10 +328,10 @@ export default class Exposure extends Component {
 
           // Get last message per exposure
           if (!lastMessages[message.obs_id]) {
-            lastMessages[message.obs_id] = message.message_text;
+            lastMessages[message.obs_id] = message;
           } else {
             if (Moment(message.timestamp).isAfter(lastMessages[message.obs_id].timestamp)) {
-              lastMessages[message.obs_id] = message.message_text;
+              lastMessages[message.obs_id] = message;
             }
           }
         });
@@ -465,7 +482,7 @@ export default class Exposure extends Component {
     }
 
     return (
-      <div className={styles.margin10}>
+      <div className={styles.container}>
         <div className={styles.filters}>
           <Button disabled={updatingExposures} onClick={() => this.queryExposures()}>
             Refresh data

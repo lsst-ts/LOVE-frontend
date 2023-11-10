@@ -64,10 +64,6 @@ export default class MessageEdit extends Component {
     save: () => {},
   };
 
-  statusFlag(flag) {
-    return exposureFlagStateToStyle[flag] ? exposureFlagStateToStyle[flag] : 'unknown';
-  }
-
   constructor(props) {
     super(props);
     const { message } = props;
@@ -88,6 +84,16 @@ export default class MessageEdit extends Component {
     this.richTextEditorRef = React.createRef();
   }
 
+  statusFlag(flag) {
+    return exposureFlagStateToStyle[flag] ? exposureFlagStateToStyle[flag] : 'unknown';
+  }
+
+  handleSubmit() {
+    const { save } = this.props;
+    this.setState({ updatingLog: true });
+    save(message, () => this.setState({ updatingLog: false }));
+  }
+
   componentDidMount() {
     const { message } = this.state;
     ManagerInterface.getListImageTags().then((data) => {
@@ -105,7 +111,7 @@ export default class MessageEdit extends Component {
   }
 
   render() {
-    const { cancel, save } = this.props;
+    const { cancel } = this.props;
     const { message, imageTags, updatingLog } = this.state;
 
     const jiraUrl = getLinkJira(message.urls);
@@ -151,10 +157,7 @@ export default class MessageEdit extends Component {
             <Button
               className={styles.iconBtn}
               title="Save"
-              onClick={() => {
-                this.setState({ updatingLog: true });
-                save(message, () => this.setState({ updatingLog: false }));
-              }}
+              onClick={() => this.handleSubmit()}
               status="transparent"
               disabled={updatingLog}
             >
@@ -191,6 +194,11 @@ export default class MessageEdit extends Component {
             onChange={(value) => {
               const parsedValue = htmlToJiraMarkdown(value);
               this.setState((prevState) => ({ message: { ...prevState.message, message_text: parsedValue } }));
+            }}
+            onKeyCombination={(combination) => {
+              if (combination === 'ctrl+enter') {
+                this.handleSubmit();
+              }
             }}
           />
         </div>
