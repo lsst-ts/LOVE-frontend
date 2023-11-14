@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.27.4
+-------
+
+* Fixes for Wind plot `<https://github.com/lsst-ts/LOVE-frontend/pull/563>`_
+
 v5.27.3
 -------
 
