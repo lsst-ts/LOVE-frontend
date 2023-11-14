@@ -25,6 +25,8 @@ import _ from 'lodash';
 import PolarPlot from './PolarPlot';
 import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData } from 'Utils';
 
+const DATA_WINDOW = 10;
+
 export const defaultStyles = [
   {
     color: '#ff7bb5',
@@ -80,7 +82,7 @@ export const schema = {
           csc: 'ESS',
           salindex: 301,
           topic: 'airFlow',
-          item: 'avg2M',
+          item: 'speed',
           type: 'line',
           accessor: '(x) => x',
           encoding: 'radial', // radial, color, angular
@@ -92,7 +94,7 @@ export const schema = {
           csc: 'ESS',
           salindex: 301,
           topic: 'airFlow',
-          item: 'avg2M',
+          item: 'direction',
           type: 'line',
           accessor: '(x) => x',
           encoding: 'angular', // radial, color, angular
@@ -146,7 +148,7 @@ export const schema = {
     radialUnits: {
       type: 'string',
       description: 'Units for the radial values',
-      default: 'km/s',
+      default: 'm/s',
       isPrivate: false,
     },
     controls: {
@@ -225,9 +227,9 @@ class PolarPlotContainer extends React.Component {
           inputData.push(newValue);
         }
 
-        // Slice inputData array if it has more than 1800 datapoints (corresponding to one hour if telemetry is received every two seconds)
-        if (inputData.length > 1800) {
-          inputData = inputData.slice(-1800);
+        // Slice inputData array if it has more than DATA_WINDOW datapoints (corresponding to one hour if telemetry is received every two seconds)
+        if (inputData.length > DATA_WINDOW) {
+          inputData = inputData.slice(-DATA_WINDOW);
         }
         newData[inputName] = inputData;
       }

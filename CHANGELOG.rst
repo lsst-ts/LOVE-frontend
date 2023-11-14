@@ -2,6 +2,12 @@
 Version History
 ===============
 
+v5.27.4
+-------
+
+* Update package.json version to 5.27.4 `<https://github.com/lsst-ts/LOVE-frontend/pull/564>`_
+* Fixes for Wind plot `<https://github.com/lsst-ts/LOVE-frontend/pull/563>`_
+
 v5.27.3
 -------
 

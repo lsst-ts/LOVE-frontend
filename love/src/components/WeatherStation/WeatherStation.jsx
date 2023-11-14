@@ -208,7 +208,7 @@ export default class WeatherStation extends Component {
     yAxisTitle: '',
     displayDome: true,
     groupTitles: ['Wind', 'Gust'],
-    radialUnits: 'km/s',
+    radialUnits: 'm/s',
     colorInterpolation:
       '(value, minValue, maxValue, group) => { \n    if(group == 1){\n        const proportion = maxValue !== minValue ? (value - minValue) / (maxValue - minValue) : 0; \n        return [255 * (1 - proportion), 255 * (1 - proportion), 255 * (1 - proportion)]; \n    }\n  const proportion = maxValue !== minValue ? (value - minValue) / (maxValue - minValue) : 0; \n  return [255 * (1 - proportion), 255, 255 * (1 - proportion)]; \n}',
     opacityInterpolation:

@@ -64,7 +64,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   text-anchor: middle;
   alignment-baseline: middle;
   dominant-baseline: central;
-  stroke:none;
+  stroke: none;
+  font-size: var(--font-size-large);
 }
 
 .innerDome {

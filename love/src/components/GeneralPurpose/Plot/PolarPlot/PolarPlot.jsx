@@ -98,14 +98,7 @@ export default class PolarPlot extends Component {
 
   getCircles = (radii, w, h, margin) => {
     return radii.map((radius) => {
-      return (
-        <circle
-          key={`circle ${radius}`}
-          cx={w / 2}
-          cy={h / 2}
-          r={((90 - radius) / 90) * (w / 2 - margin)}
-        />
-      );
+      return <circle key={`circle ${radius}`} cx={w / 2} cy={h / 2} r={((90 - radius) / 90) * (w / 2 - margin)} />;
     });
   };
 
@@ -153,7 +146,7 @@ export default class PolarPlot extends Component {
       else r = ((value - minRadialValue) / (maxRadialValue - minRadialValue)) * (w / 2 - margin);
       return (
         <g key={`circle ${i}`}>
-          <circle cx={w / 2} cy={h / 2} r={r} className={styles.radialMarkerCircle}/>
+          <circle cx={w / 2} cy={h / 2} r={r} className={styles.radialMarkerCircle} />
           <text className={styles.label} x={w / 2 + r} y={(h * (1 + (i % 2 === 0 ? 0.03 : -0.03))) / 2}>
             {temporalRadius ? relativeTime(value, this.props.taiToUtc) : Math.round(100 * value) / 100}
             {temporalRadius ? '' : radialMarkersUnits}
@@ -173,7 +166,7 @@ export default class PolarPlot extends Component {
     let radius;
     if (maxRadialValue === minRadialValue) radius = w / 2 - margin;
     else radius = ((triplet.r - minRadialValue) / (maxRadialValue - minRadialValue)) * (w / 2 - margin);
-    const angleInRadians = (triplet.theta * Math.PI) / 180.0;
+    const angleInRadians = ((triplet.theta - 90) * Math.PI) / 180.0;
 
     return {
       x: centerX + radius * Math.cos(angleInRadians),
