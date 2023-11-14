@@ -148,7 +148,7 @@ export const schema = {
     radialUnits: {
       type: 'string',
       description: 'Units for the radial values',
-      default: 'km/s',
+      default: 'm/s',
       isPrivate: false,
     },
     controls: {
