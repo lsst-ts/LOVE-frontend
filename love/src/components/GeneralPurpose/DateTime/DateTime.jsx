@@ -19,7 +19,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
 import Datetime from 'react-datetime';
 import Moment from 'moment';
 import styles from './DateTime.module.css';
@@ -78,15 +77,4 @@ DateTime.propTypes = {
   maxDate: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date), PropTypes.instanceOf(Moment)]),
 };
 
-const arePropsEqual = (prevProps, nextProps) => {
-  return (
-    prevProps.value === nextProps.value &&
-    prevProps.label === nextProps.label &&
-    prevProps.className === nextProps.className &&
-    isEqual(prevProps.inputProps, nextProps.inputProps) &&
-    Moment(prevProps.minDate).isSame(nextProps.minDate) &&
-    Moment(prevProps.maxDate).isSame(nextProps.maxDate)
-  );
-};
-
-export default memo(DateTime, arePropsEqual);
+export default memo(DateTime);
