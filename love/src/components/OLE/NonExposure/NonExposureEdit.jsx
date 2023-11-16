@@ -363,6 +363,10 @@ export default class NonExposureEdit extends Component {
     const { date_begin, date_end, time_lost, time_lost_type } = this.state.logEdit ?? {};
     const { incidentTimeIsSingular, datesAreValid } = this.state;
 
+    const renderDateTimeInput = (props) => {
+      return <input {...props} readOnly />;
+    };
+
     return (
       <>
         <span className={styles.label}>Time of Incident (UTC)</span>
@@ -379,6 +383,12 @@ export default class NonExposureEdit extends Component {
                 startDate={date_begin}
                 endDate={date_end}
                 onChange={(date, type) => this.handleTimeOfIncident(date, type)}
+                startDateProps={{
+                  renderInput: renderDateTimeInput,
+                }}
+                endDateProps={{
+                  renderInput: renderDateTimeInput,
+                }}
               />
             ) : (
               <DateTime
@@ -393,6 +403,7 @@ export default class NonExposureEdit extends Component {
                     logEdit: { ...prevState.logEdit, date_begin: date },
                   }));
                 }}
+                renderInput={renderDateTimeInput}
               />
             )}
             <Button
