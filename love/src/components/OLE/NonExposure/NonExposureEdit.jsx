@@ -106,6 +106,7 @@ export default class NonExposureEdit extends Component {
       savingLog: false,
       datesAreValid: true,
       jiraIssueError: false,
+      incidentTimeIsRange: false,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -248,6 +249,17 @@ export default class NonExposureEdit extends Component {
         this.setState({ jiraIssueError: false });
       }
     }
+
+    if (this.state.incidentTimeIsRange !== prevState.incidentTimeIsRange) {
+      if (!this.state.incidentTimeIsRange) {
+        this.setState((prevState) => ({
+          logEdit: {
+            ...prevState.logEdit,
+            date_end: Moment(prevState.logEdit.date_begin),
+          },
+        }));
+      }
+    }
   }
 
   renderCategoryField() {
@@ -361,7 +373,7 @@ export default class NonExposureEdit extends Component {
 
   renderTimeOfIncidentFields() {
     const { date_begin, date_end, time_lost, time_lost_type } = this.state.logEdit ?? {};
-    const { incidentTimeIsSingular, datesAreValid } = this.state;
+    const { incidentTimeIsRange, datesAreValid } = this.state;
 
     const renderDateTimeInput = (props) => {
       return <input {...props} readOnly />;
@@ -374,10 +386,10 @@ export default class NonExposureEdit extends Component {
           <div className={styles.incidentTimeTypeContainer}>
             <Toggle
               labels={['Singular', 'Range']}
-              toggled={incidentTimeIsSingular}
-              onToggle={(event) => this.setState({ incidentTimeIsSingular: event })}
+              toggled={incidentTimeIsRange}
+              onToggle={(event) => this.setState({ incidentTimeIsRange: event })}
             />
-            {incidentTimeIsSingular ? (
+            {incidentTimeIsRange ? (
               <DateTimeRange
                 className={styles.dateTimeRangeStyle}
                 startDate={date_begin}

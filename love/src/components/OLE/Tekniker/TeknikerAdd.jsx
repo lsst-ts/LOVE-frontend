@@ -84,6 +84,7 @@ export default class TeknikerAdd extends Component {
       savingLog: false,
       datesAreValid: true,
       jiraIssueError: false,
+      incidentTimeIsRange: false,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -137,8 +138,6 @@ export default class TeknikerAdd extends Component {
     delete payload['tmaError'];
     delete payload['tmaSituation'];
     delete payload['tmaDescription'];
-
-    console.log(payload);
 
     // Clean null and empty values to avoid API errors
     Object.keys(payload).forEach((key) => {
@@ -244,6 +243,17 @@ export default class TeknikerAdd extends Component {
         this.setState({ jiraIssueError: true });
       } else {
         this.setState({ jiraIssueError: false });
+      }
+    }
+
+    if (this.state.incidentTimeIsRange !== prevState.incidentTimeIsRange) {
+      if (!this.state.incidentTimeIsRange) {
+        this.setState((prevState) => ({
+          logEdit: {
+            ...prevState.logEdit,
+            date_end: Moment(prevState.logEdit.date_begin),
+          },
+        }));
       }
     }
   }
@@ -362,7 +372,7 @@ export default class TeknikerAdd extends Component {
 
   renderTimeOfIncidentFields() {
     const { date_begin, date_end, time_lost, time_lost_type } = this.state.logEdit ?? {};
-    const { incidentTimeIsSingular, datesAreValid } = this.state;
+    const { incidentTimeIsRange, datesAreValid } = this.state;
 
     const renderDateTimeInput = (props) => {
       return <input {...props} readOnly />;
@@ -375,10 +385,10 @@ export default class TeknikerAdd extends Component {
           <div className={styles.incidentTimeTypeContainer}>
             <Toggle
               labels={['Singular', 'Range']}
-              toggled={incidentTimeIsSingular}
-              onToggle={(event) => this.setState({ incidentTimeIsSingular: event })}
+              toggled={incidentTimeIsRange}
+              onToggle={(event) => this.setState({ incidentTimeIsRange: event })}
             />
-            {incidentTimeIsSingular ? (
+            {incidentTimeIsRange ? (
               <DateTimeRange
                 className={styles.dateTimeRangeStyle}
                 startDate={date_begin}
