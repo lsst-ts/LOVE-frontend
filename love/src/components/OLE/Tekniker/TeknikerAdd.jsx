@@ -252,7 +252,7 @@ export default class TeknikerAdd extends Component {
     const { category } = this.state.logEdit ?? {};
     return (
       <>
-        <span className={styles.label}>Category</span>
+        <span className={styles.label}>Type of observing time</span>
         <span className={styles.value}>
           <Select
             options={['None', 'ENG', 'SCIENCE']}
@@ -643,10 +643,10 @@ export default class TeknikerAdd extends Component {
           <div className={styles.detailContainerMenu}>
             <div id={this.id} className={styles.contentMenu}>
               <div className={styles.contentLeft}>
-                {this.renderCategoryField()}
                 {this.renderUrgentField()}
                 {this.renderComponentsFields()}
                 {this.renderTimeOfIncidentFields()}
+                {this.renderCategoryField()}
               </div>
               <div className={styles.contentRight}>
                 {this.renderErrorMessageField()}
@@ -719,10 +719,10 @@ export default class TeknikerAdd extends Component {
 
             <div id={this.id} className={styles.content}>
               <div className={styles.contentLeft}>
-                {this.renderCategoryField()}
                 {this.renderUrgentField()}
                 {this.renderComponentsFields()}
                 {this.renderTimeOfIncidentFields()}
+                {this.renderCategoryField()}
               </div>
               <div className={styles.contentRight}>
                 {this.renderErrorMessageField()}
