@@ -356,7 +356,7 @@ export default class NonExposure extends Component {
 
     // Filter by component
     if (selectedComponent !== 'All components') {
-      filteredData = filteredData.filter((log) => log.components.includes(selectedComponent));
+      filteredData = filteredData.filter((log) => log.components?.includes(selectedComponent));
     }
 
     // Filter by obs time loss
@@ -394,6 +394,10 @@ export default class NonExposure extends Component {
     }
 
     const componentOptions = ['All components', ...Object.keys(OLE_JIRA_COMPONENTS).sort()];
+
+    const renderDateTimeInput = (props) => {
+      return <input {...props} readOnly />;
+    };
 
     return modeView && !modeEdit ? (
       <NonExposureDetail
@@ -439,11 +443,13 @@ export default class NonExposure extends Component {
               timeFormat: false,
               className: styles.rangeDateOnly,
               maxDate: Moment(),
+              renderInput: renderDateTimeInput,
             }}
             endDateProps={{
               timeFormat: false,
               className: styles.rangeDateOnly,
               maxDate: Moment(),
+              renderInput: renderDateTimeInput,
             }}
             onChange={changeDayNarrative}
           />

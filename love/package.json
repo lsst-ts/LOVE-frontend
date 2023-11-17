@@ -1,6 +1,6 @@
 {
   "name": "love",
-  "version": "5.27.4",
+  "version": "5.27.5",
   "private": true,
   "dependencies": {
     "@emotion/core": "^10.3.1",
@@ -66,6 +66,10 @@
     "vega-embed": "^6.12.2",
     "vega-lite": "^5.2.0",
     "websocket-playback": "^1.0.0"
+  },
+  "resolutions": {
+    "semver": "^7.5.2",
+    "postcss": "^8.4.31"
   },
   "scripts": {
     "start": "npx react-scripts start",

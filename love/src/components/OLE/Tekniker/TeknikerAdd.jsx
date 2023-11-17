@@ -84,6 +84,7 @@ export default class TeknikerAdd extends Component {
       savingLog: false,
       datesAreValid: true,
       jiraIssueError: false,
+      incidentTimeIsRange: false,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -137,8 +138,6 @@ export default class TeknikerAdd extends Component {
     delete payload['tmaError'];
     delete payload['tmaSituation'];
     delete payload['tmaDescription'];
-
-    console.log(payload);
 
     // Clean null and empty values to avoid API errors
     Object.keys(payload).forEach((key) => {
@@ -246,13 +245,24 @@ export default class TeknikerAdd extends Component {
         this.setState({ jiraIssueError: false });
       }
     }
+
+    if (this.state.incidentTimeIsRange !== prevState.incidentTimeIsRange) {
+      if (!this.state.incidentTimeIsRange) {
+        this.setState((prevState) => ({
+          logEdit: {
+            ...prevState.logEdit,
+            date_end: Moment(prevState.logEdit.date_begin),
+          },
+        }));
+      }
+    }
   }
 
   renderCategoryField() {
     const { category } = this.state.logEdit ?? {};
     return (
       <>
-        <span className={styles.label}>Category</span>
+        <span className={styles.label}>Type of observing time</span>
         <span className={styles.value}>
           <Select
             options={['None', 'ENG', 'SCIENCE']}
@@ -362,7 +372,11 @@ export default class TeknikerAdd extends Component {
 
   renderTimeOfIncidentFields() {
     const { date_begin, date_end, time_lost, time_lost_type } = this.state.logEdit ?? {};
-    const { incidentTimeIsSingular, datesAreValid } = this.state;
+    const { incidentTimeIsRange, datesAreValid } = this.state;
+
+    const renderDateTimeInput = (props) => {
+      return <input {...props} readOnly />;
+    };
 
     return (
       <>
@@ -371,15 +385,21 @@ export default class TeknikerAdd extends Component {
           <div className={styles.incidentTimeTypeContainer}>
             <Toggle
               labels={['Singular', 'Range']}
-              toggled={incidentTimeIsSingular}
-              onToggle={(event) => this.setState({ incidentTimeIsSingular: event })}
+              toggled={incidentTimeIsRange}
+              onToggle={(event) => this.setState({ incidentTimeIsRange: event })}
             />
-            {incidentTimeIsSingular ? (
+            {incidentTimeIsRange ? (
               <DateTimeRange
                 className={styles.dateTimeRangeStyle}
                 startDate={date_begin}
                 endDate={date_end}
                 onChange={(date, type) => this.handleTimeOfIncident(date, type)}
+                startDateProps={{
+                  renderInput: renderDateTimeInput,
+                }}
+                endDateProps={{
+                  renderInput: renderDateTimeInput,
+                }}
               />
             ) : (
               <DateTime
@@ -394,6 +414,7 @@ export default class TeknikerAdd extends Component {
                     logEdit: { ...prevState.logEdit, date_begin: date },
                   }));
                 }}
+                renderInput={renderDateTimeInput}
               />
             )}
             <Button
@@ -632,10 +653,10 @@ export default class TeknikerAdd extends Component {
           <div className={styles.detailContainerMenu}>
             <div id={this.id} className={styles.contentMenu}>
               <div className={styles.contentLeft}>
-                {this.renderCategoryField()}
                 {this.renderUrgentField()}
                 {this.renderComponentsFields()}
                 {this.renderTimeOfIncidentFields()}
+                {this.renderCategoryField()}
               </div>
               <div className={styles.contentRight}>
                 {this.renderErrorMessageField()}
@@ -708,10 +729,10 @@ export default class TeknikerAdd extends Component {
 
             <div id={this.id} className={styles.content}>
               <div className={styles.contentLeft}>
-                {this.renderCategoryField()}
                 {this.renderUrgentField()}
                 {this.renderComponentsFields()}
                 {this.renderTimeOfIncidentFields()}
+                {this.renderCategoryField()}
               </div>
               <div className={styles.contentRight}>
                 {this.renderErrorMessageField()}
