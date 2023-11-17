@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.27.5
+-------
+
+* Add package override for Semver and PostCSS `<https://github.com/lsst-ts/LOVE-frontend/pull/567>`_
+
 v5.27.4
 -------
 
