@@ -231,6 +231,11 @@ export default class ExposureAdd extends Component {
 
   renderDateTimeRangeSelect() {
     const { selectedDayExposureStart, selectedDayExposureEnd } = this.state;
+
+    const renderDateTimeInput = (props) => {
+      return <input {...props} readOnly />;
+    };
+
     return (
       <DateTimeRange
         label="From"
@@ -241,11 +246,13 @@ export default class ExposureAdd extends Component {
           timeFormat: false,
           className: styles.rangeDateOnly,
           maxDate: Moment(),
+          renderInput: renderDateTimeInput,
         }}
         endDateProps={{
           timeFormat: false,
           className: styles.rangeDateOnly,
           maxDate: Moment(),
+          renderInput: renderDateTimeInput,
         }}
         onChange={(day, type) => this.changeDayExposure(day, type)}
       />

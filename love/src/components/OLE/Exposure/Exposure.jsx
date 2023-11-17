@@ -481,6 +481,10 @@ export default class Exposure extends Component {
       );
     }
 
+    const renderDateTimeInput = (props) => {
+      return <input {...props} readOnly />;
+    };
+
     return (
       <div className={styles.container}>
         <div className={styles.filters}>
@@ -503,11 +507,13 @@ export default class Exposure extends Component {
               timeFormat: false,
               className: styles.rangeDateOnly,
               maxDate: Moment(),
+              renderInput: renderDateTimeInput,
             }}
             endDateProps={{
               timeFormat: false,
               className: styles.rangeDateOnly,
               maxDate: Moment(),
+              renderInput: renderDateTimeInput,
             }}
             onChange={changeDayExposure}
           />

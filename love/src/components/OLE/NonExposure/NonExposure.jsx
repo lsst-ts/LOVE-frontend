@@ -395,6 +395,10 @@ export default class NonExposure extends Component {
 
     const componentOptions = ['All components', ...Object.keys(OLE_JIRA_COMPONENTS).sort()];
 
+    const renderDateTimeInput = (props) => {
+      return <input {...props} readOnly />;
+    };
+
     return modeView && !modeEdit ? (
       <NonExposureDetail
         back={() => {
@@ -439,11 +443,13 @@ export default class NonExposure extends Component {
               timeFormat: false,
               className: styles.rangeDateOnly,
               maxDate: Moment(),
+              renderInput: renderDateTimeInput,
             }}
             endDateProps={{
               timeFormat: false,
               className: styles.rangeDateOnly,
               maxDate: Moment(),
+              renderInput: renderDateTimeInput,
             }}
             onChange={changeDayNarrative}
           />
