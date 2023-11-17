@@ -356,7 +356,7 @@ export default class NonExposure extends Component {
 
     // Filter by component
     if (selectedComponent !== 'All components') {
-      filteredData = filteredData.filter((log) => log.components.includes(selectedComponent));
+      filteredData = filteredData.filter((log) => log.components?.includes(selectedComponent));
     }
 
     // Filter by obs time loss

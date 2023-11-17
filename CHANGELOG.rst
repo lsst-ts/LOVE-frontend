@@ -8,6 +8,7 @@ v5.27.5
 * Add script failure alert sound `<https://github.com/lsst-ts/LOVE-frontend/pull/568>`_
 * Add package override for Semver and PostCSS `<https://github.com/lsst-ts/LOVE-frontend/pull/567>`_
 * Fix OLE time of incident input `<https://github.com/lsst-ts/LOVE-frontend/pull/566>`_
+* Fix narrative log to avoid crashing when filtering by log components `<https://github.com/lsst-ts/LOVE-frontend/pull/565>`_
 
 v5.27.4
 -------
