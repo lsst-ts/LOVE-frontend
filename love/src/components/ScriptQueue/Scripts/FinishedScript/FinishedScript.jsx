@@ -18,18 +18,16 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { memo } from 'react';
-import AceEditor from 'react-ace';
 import PropTypes from 'prop-types';
 import LogMessageDisplay from 'components/GeneralPurpose/LogMessageDisplay/LogMessageDisplay';
 import Button from 'components/GeneralPurpose/Button/Button';
-import ManagerInterface, { parseToSALFormat, copyToClipboard } from 'Utils';
 import styles from './FinishedScript.module.css';
 import scriptStyles from '../Scripts.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
 import RequeueIcon from '../../../icons/ScriptQueue/RequeueIcon/RequeueIcon';
-import CopyIcon from '../../../icons/CopyIcon/CopyIcon';
 import ScriptDetails from '../ScriptDetails';
+import ScriptConfig from '../ScriptConfig/ScriptConfig';
 
 class FinishedScript extends React.Component {
   static propTypes = {
@@ -70,59 +68,16 @@ class FinishedScript extends React.Component {
       expanded: false,
       showLogs: false,
       logs: [],
-      appliedConfiguration: null,
-      coppiedToClipboard: false,
     };
   }
 
   onClick = () => {
-    this.setState(
-      (state) => ({ expanded: !state.expanded }),
-      () => {
-        if (this.state.expanded) {
-          const { index, timestampProcessStart: startTime, timestampProcessEnd: endTime } = this.props;
-          this.queryAll(index, startTime, endTime);
-        }
-      },
-    );
+    this.setState((state) => ({ expanded: !state.expanded }));
     this.props.onClick();
   };
 
   toggleLogs = () => {
     this.setState((state) => ({ showLogs: !state.showLogs }));
-  };
-
-  queryAll = (scriptIndex, start, end) => {
-    const efdInstance = this.props.efdConfig?.defaultEfdInstance ?? 'summit_efd';
-    const cscs = {
-      Script: {
-        [scriptIndex]: {
-          logevent_logMessage: ['private_rcvStamp', 'level', 'message', 'traceback'],
-          command_configure: ['private_rcvStamp', 'config'],
-        },
-      },
-    };
-
-    // Convert to ISO format and remove Z at the end
-    const startDateIso = new Date(start * 1000).toISOString().slice(0, -1);
-    const endDateIso = new Date(end * 1000).toISOString().slice(0, -1);
-    ManagerInterface.getEFDLogs(startDateIso, endDateIso, cscs, efdInstance, 'tai').then((res) => {
-      if (!res) return;
-      this.setState({
-        logs: res[`Script-${scriptIndex}-logevent_logMessage`].map(parseToSALFormat),
-        appliedConfiguration: res[`Script-${scriptIndex}-command_configure`][0]?.config,
-      });
-    });
-  };
-
-  copyConfigToClipboard = (e) => {
-    const { appliedConfiguration } = this.state;
-    copyToClipboard(appliedConfiguration, () => {
-      this.setState({ coppiedToClipboard: true });
-      setTimeout(() => {
-        this.setState({ coppiedToClipboard: false });
-      }, 1500);
-    });
   };
 
   clearLogs = () => {
@@ -213,28 +168,7 @@ class FinishedScript extends React.Component {
             className={[scriptStyles.expandedSectionWrapper, this.state.expanded ? '' : scriptStyles.hidden].join(' ')}
           >
             <ScriptDetails {...this.props} />
-            {this.state.appliedConfiguration && (
-              <div className={styles.configurationContainer}>
-                <div>
-                  APPLIED CONFIGURATION
-                  {this.state.coppiedToClipboard && <div className={styles.fadeElement}>Coppied to clipboard</div>}
-                  <div className={styles.copyToClipboardIcon} onClick={this.copyConfigToClipboard}>
-                    <CopyIcon title="Copy to clipboard" />
-                  </div>
-                </div>
-                <AceEditor
-                  mode="yaml"
-                  theme="solarized_dark"
-                  name="UNIQUE_ID_OF_DIV"
-                  width={'26em'}
-                  height={'150px'}
-                  value={this.state.appliedConfiguration}
-                  fontSize={18}
-                  readOnly
-                  showPrintMargin={false}
-                />
-              </div>
-            )}
+            {this.props.timestampConfigureEnd > 0 && this.state.expanded && <ScriptConfig {...this.props} />}
             {this.state.logs.length > 0 && (
               <div className={styles.logsContainer}>
                 <div>LOGS</div>

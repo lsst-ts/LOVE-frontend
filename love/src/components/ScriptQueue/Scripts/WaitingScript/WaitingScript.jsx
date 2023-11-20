@@ -29,6 +29,7 @@ import StopIcon from '../../../icons/ScriptQueue/StopIcon/StopIcon';
 import MoveUpIcon from '../../../icons/ScriptQueue/MoveUpIcon/MoveUpIcon';
 import MoveDownIcon from '../../../icons/ScriptQueue/MoveDownIcon/MoveDownIcon';
 import ScriptDetails from '../ScriptDetails';
+import ScriptConfig from '../ScriptConfig/ScriptConfig';
 
 export default class WaitingScript extends PureComponent {
   static propTypes = {
@@ -249,6 +250,7 @@ export default class WaitingScript extends PureComponent {
             className={[scriptStyles.expandedSectionWrapper, this.state.expanded ? '' : scriptStyles.hidden].join(' ')}
           >
             <ScriptDetails {...this.props} />
+            {this.props.timestampConfigureEnd > 0 && this.state.expanded && <ScriptConfig {...this.props} />}
           </div>
         </div>
       </div>
