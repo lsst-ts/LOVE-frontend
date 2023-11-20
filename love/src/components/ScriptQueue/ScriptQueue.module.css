@@ -118,8 +118,12 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 }
 
 .currentScriptDescription {
+  overflow-y: scroll;
   background: var(--second-secondary-background-color);
-  border-right: 1px solid var(--second-tertiary-background-color);
+}
+
+.currentScriptDescription > :first-child {
+  border-bottom: 1px solid var(--second-tertiary-background-color);
 }
 
 .currentScriptLogs {
