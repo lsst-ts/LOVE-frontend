@@ -94,6 +94,9 @@ class FinishedScript extends React.Component {
         ? path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'))
         : path.substring(path.lastIndexOf('/') + 1);
     const fileExtension = path.lastIndexOf('.') > -1 ? path.substring(path.lastIndexOf('.')) : '';
+
+    const dateScriptFinished = this.props.timestampProcessEnd && new Date(this.props.timestampProcessEnd * 1000);
+
     return (
       <div className={scriptStyles.scriptContainer}>
         <div>
@@ -110,6 +113,10 @@ class FinishedScript extends React.Component {
                     title={this.props.isStandard ? 'Standard script' : 'External script'}
                   >
                     {this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'}
+                  </span>
+                  <span> - </span>
+                  <span className={scriptStyles.externalText} title="timestampProcessEnd">
+                    {dateScriptFinished?.toISOString()}
                   </span>
                 </div>
                 <div className={scriptStyles.pathTextContainer} title={path}>
