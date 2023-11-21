@@ -41,6 +41,7 @@ import { SALCommandStatus } from '../../redux/actions/ws';
 import Input from '../GeneralPurpose/Input/Input';
 import GlobalState from './GlobalState/GlobalState';
 import ScriptDetails from './Scripts/ScriptDetails';
+import ScriptConfig from './Scripts/ScriptConfig/ScriptConfig';
 
 const CONFIG_PANEL_INITIAL_WIDTH = 590;
 
@@ -744,6 +745,7 @@ export default class ScriptQueue extends Component {
           >
             <div className={styles.currentScriptDescription}>
               <ScriptDetails {...current} />
+              <ScriptConfig {...current} defaultEfdInstance={this.props.efdConfig?.defaultEfdInstance} />
             </div>
             <div className={styles.currentScriptLogs}>
               <CSCExpandedContainer

@@ -1,0 +1,45 @@
+.container {
+  padding: 1em;
+}
+
+.title {
+  position: relative;
+  text-align: left;
+  color: var(--highlighted-font-color);
+  font-size: var(--font-size-large);
+}
+
+.copyToClipboardIcon {
+  cursor: pointer;
+  user-select: none;
+  margin-left: auto;
+  width: 1em;
+  float: right;
+}
+
+.fadeElement {
+  font-size: var(--font-size-small);
+  animation: fade 2s ease-out forwards;
+  -webkit-animation: fade 2s ease-out forwards;
+  opacity: 0;
+  white-space: nowrap;
+  position: absolute;
+  /* top: calc(50% - 1em); */
+  top: 0;
+  right: 2em;
+  border-radius: 1em;
+  padding: 0.25em 0.5em;
+  background-color: var(--quaternary-background-color);
+}
+
+@-webkit-keyframes fade {
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade {
+  50% {
+    opacity: 1;
+  }
+}

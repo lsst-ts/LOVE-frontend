@@ -2,6 +2,13 @@
 Version History
 ===============
 
+v5.27.6
+-------
+
+* Update package.json version to v5.27.6 `<https://github.com/lsst-ts/LOVE-frontend/pull/571>`_
+* Add more info on scripts for ScriptQueue `<https://github.com/lsst-ts/LOVE-frontend/pull/570>`_
+* Remove auto formatting from RichTextEditor `<https://github.com/lsst-ts/LOVE-frontend/pull/569>`_
+
 v5.27.5
 -------
 
