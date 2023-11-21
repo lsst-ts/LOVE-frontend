@@ -172,7 +172,8 @@ export default class CurrentScript extends Component {
 
     const isPaused = this.props.scriptState.toLowerCase() === 'paused';
 
-    const dateScriptStarted = this.props.timestampConfigureEnd && new Date(this.props.timestampConfigureEnd * 1000);
+    const dateScriptStarted =
+      this.props.timestampConfigureEnd > 0 ? new Date(this.props.timestampConfigureEnd * 1000) : null;
 
     return (
       <div className={[scriptStyles.scriptContainer].join(' ')}>
