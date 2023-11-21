@@ -95,7 +95,8 @@ class FinishedScript extends React.Component {
         : path.substring(path.lastIndexOf('/') + 1);
     const fileExtension = path.lastIndexOf('.') > -1 ? path.substring(path.lastIndexOf('.')) : '';
 
-    const dateScriptFinished = this.props.timestampProcessEnd && new Date(this.props.timestampProcessEnd * 1000);
+    const dateScriptFinished =
+      this.props.timestampProcessEnd > 0 ? new Date(this.props.timestampProcessEnd * 1000) : null;
 
     return (
       <div className={scriptStyles.scriptContainer}>
