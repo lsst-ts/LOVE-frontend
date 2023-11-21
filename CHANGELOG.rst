@@ -2,6 +2,11 @@
 Version History
 ===============
 
+5.27.7
+------
+
+* Hotfix: make scripts timestamp evaluation more robust `<https://github.com/lsst-ts/LOVE-frontend/pull/572>`_
+
 v5.27.6
 -------
 
