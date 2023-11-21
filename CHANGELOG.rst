@@ -5,6 +5,7 @@ Version History
 v5.27.6
 -------
 
+* Add more info on scripts for ScriptQueue `<https://github.com/lsst-ts/LOVE-frontend/pull/570>`_
 * Remove auto formatting from RichTextEditor `<https://github.com/lsst-ts/LOVE-frontend/pull/569>`_
 
 v5.27.5

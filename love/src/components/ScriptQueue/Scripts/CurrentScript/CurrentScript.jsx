@@ -20,6 +20,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Howl } from 'howler';
+import ManagerInterface from 'Utils';
 import LoadingBar from '../../../GeneralPurpose/LoadingBar/LoadingBar';
 import scriptStyles from '../Scripts.module.css';
 import styles from './CurrentScript.module.css';
@@ -118,11 +119,14 @@ export default class CurrentScript extends Component {
   };
 
   componentDidUpdate = (prevProps) => {
-    if (prevProps.index !== this.props.index && this.props.index !== undefined) {
+    if (this.props.index && prevProps.index !== this.props.index) {
       this.animateProgress();
     }
 
-    if (prevProps.scriptState !== this.props.scriptState && this.props.scriptState === 'FAILED') {
+    if (
+      (prevProps.scriptState !== this.props.scriptState && this.props.scriptState === 'FAILED') ||
+      (prevProps.index !== this.props.index && this.props.scriptState === 'FAILED')
+    ) {
       this.reproduceScriptFailureSound();
     }
   };
@@ -168,6 +172,8 @@ export default class CurrentScript extends Component {
 
     const isPaused = this.props.scriptState.toLowerCase() === 'paused';
 
+    const dateScriptStarted = this.props.timestampConfigureEnd && new Date(this.props.timestampConfigureEnd * 1000);
+
     return (
       <div className={[scriptStyles.scriptContainer].join(' ')}>
         <div>
@@ -198,6 +204,11 @@ export default class CurrentScript extends Component {
                       </span>
                     </>
                   )}
+                  <div>
+                    <span className={scriptStyles.externalSeparator}>{' - '}</span>
+                    <span className={scriptStyles.timestampLabel}>Started at: </span>
+                    <span className={scriptStyles.externalText}>{dateScriptStarted?.toISOString()}</span>
+                  </div>
                 </div>
 
                 <div className={[scriptStyles.pathTextContainer, styles.filenameContainer].join(' ')}>
