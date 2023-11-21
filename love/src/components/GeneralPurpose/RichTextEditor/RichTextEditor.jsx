@@ -99,6 +99,7 @@ const RichTextEditor = forwardRef(
         <ReactQuill
           ref={reactQuillRef}
           modules={modules}
+          formats={[]}
           theme="snow"
           value={value}
           onChange={handleChange}
