@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.27.6
+-------
+
+* Remove auto formatting from RichTextEditor `<https://github.com/lsst-ts/LOVE-frontend/pull/569>`_
+
 v5.27.5
 -------
 
