@@ -21,11 +21,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Howl } from 'howler';
 import isEqual from 'lodash/isEqual';
-import { throttle } from 'lodash';
+import { set, throttle } from 'lodash';
 
-import { severityEnum } from '../../../Config';
-import { isAcknowledged, isMuted, isMaxCritical, isCritical } from '../AlarmUtils';
+import { severityEnum, ALARM_SOUND_THROTLING_TIME } from 'Config';
 
+import { isAcknowledged, isMuted, isCritical } from '../AlarmUtils';
 import newWarningFile from '../../../sounds/new_warning.mp3';
 import newSeriousFile from '../../../sounds/new_serious.mp3';
 import newCriticalFile from '../../../sounds/new_critical.mp3';
@@ -86,12 +86,16 @@ export default class AlarmAudio extends Component {
     });
     this.newCriticalSound = new Howl({
       src: [newCriticalFile],
-      loop: 1,
       onplayerror: () => {
         console.error('Error playing sound for critical alarm: ', newCriticalFile);
       },
       onloaderror: () => {
         console.error('Error loading sound for critical alarm: ', newCriticalFile);
+      },
+      onend: () => {
+        setTimeout(() => {
+          this.newCriticalSound.play();
+        }, ALARM_SOUND_THROTLING_TIME - 3000); // subtract alarm sound length
       },
     });
     this.increasedWarningSound = new Howl({
@@ -114,12 +118,16 @@ export default class AlarmAudio extends Component {
     });
     this.increasedCriticalSound = new Howl({
       src: [increasedCriticalFile],
-      loop: 1,
       onplayerror: () => {
         console.error('Error playing sound for critical alarm: ', increasedCriticalFile);
       },
       onloaderror: () => {
         console.error('Error loading sound for critical alarm: ', increasedCriticalFile);
+      },
+      onend: () => {
+        setTimeout(() => {
+          this.increasedCriticalSound.play();
+        }, ALARM_SOUND_THROTLING_TIME - 3000); // subtract alarm sound length
       },
     });
     this.unackedWarningSound = new Howl({
@@ -142,12 +150,16 @@ export default class AlarmAudio extends Component {
     });
     this.unackedCriticalSound = new Howl({
       src: [unackedCriticalFile],
-      loop: 1,
       onplayerror: () => {
         console.error('Error playing sound for critical alarm: ', unackedCriticalFile);
       },
       onloaderror: () => {
         console.error('Error loading sound for critical alarm: ', unackedCriticalFile);
+      },
+      onend: () => {
+        setTimeout(() => {
+          this.unackedCriticalSound.play();
+        }, ALARM_SOUND_THROTLING_TIME - 3000); // subtract alarm sound length
       },
     });
     this.stillCriticalSound = new Howl({
@@ -262,7 +274,7 @@ export default class AlarmAudio extends Component {
   /**
    * Throtle checkAndNotifyAlarms
    */
-  throtCheckAndNotifyAlarms = throttle(this.checkAndNotifyAlarms, 3000);
+  throtCheckAndNotifyAlarms = throttle(this.checkAndNotifyAlarms, ALARM_SOUND_THROTLING_TIME);
 
   playSound = (severity, type) => {
     if (severity < this.state.minSeveritySound) {
