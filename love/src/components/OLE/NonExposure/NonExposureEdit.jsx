@@ -164,7 +164,12 @@ export default class NonExposureEdit extends Component {
           savingLog: false,
         });
         this.props.save(response);
-        this.cleanForm();
+
+        // Clean form only if the response is successful
+        if (!response.error) {
+          this.cleanForm();
+        }
+
         if (this.props.back) this.props.back();
       });
     }

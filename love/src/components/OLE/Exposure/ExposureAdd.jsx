@@ -168,7 +168,12 @@ export default class ExposureAdd extends Component {
       } else {
         this.props.view();
       }
-      this.cleanForm();
+
+      // Clean form only if the response is successful
+      if (!result.error) {
+        this.cleanForm();
+      }
+
       this.setState({ savingLog: false });
     });
   }
