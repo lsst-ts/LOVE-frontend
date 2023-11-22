@@ -5,6 +5,7 @@ Version History
 v5.27.8
 -------
 
+* Increase interval between audio alarms `<https://github.com/lsst-ts/LOVE-frontend/pull/574>`_
 * Improve OLE behavior when jira ticket creation fails `<https://github.com/lsst-ts/LOVE-frontend/pull/573>`_
 
 v5.27.7
