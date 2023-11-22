@@ -2,7 +2,12 @@
 Version History
 ===============
 
-5.27.7
+v5.27.8
+-------
+
+* Improve OLE behavior when jira ticket creation fails `<https://github.com/lsst-ts/LOVE-frontend/pull/573>`_
+
+v5.27.7
 ------
 
 * Hotfix: make scripts timestamp evaluation more robust `<https://github.com/lsst-ts/LOVE-frontend/pull/572>`_
