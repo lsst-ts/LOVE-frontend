@@ -21,6 +21,8 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import LogMessageDisplay from 'components/GeneralPurpose/LogMessageDisplay/LogMessageDisplay';
 import Button from 'components/GeneralPurpose/Button/Button';
+import ManagerInterface, { parseToSALFormat } from 'Utils';
+
 import styles from './FinishedScript.module.css';
 import scriptStyles from '../Scripts.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
@@ -72,7 +74,14 @@ class FinishedScript extends React.Component {
   }
 
   onClick = () => {
-    this.setState((state) => ({ expanded: !state.expanded }));
+    this.setState(
+      (state) => ({ expanded: !state.expanded }),
+      () => {
+        if (this.state.expanded) {
+          this.queryLogs();
+        }
+      },
+    );
     this.props.onClick();
   };
 
@@ -83,6 +92,30 @@ class FinishedScript extends React.Component {
   clearLogs = () => {
     this.setState({
       logs: [],
+    });
+  };
+
+  queryLogs = () => {
+    const { index: scriptIndex, timestampProcessStart, timestampProcessEnd } = this.props;
+    const efdInstance = this.props.efdConfig?.defaultEfdInstance ?? 'summit_efd';
+
+    const cscs = {
+      Script: {
+        [scriptIndex]: {
+          logevent_logMessage: ['private_rcvStamp', 'level', 'message', 'traceback'],
+        },
+      },
+    };
+
+    // Convert to ISO format and remove Z at the end
+    const startDateIso = new Date(timestampProcessStart * 1000).toISOString().slice(0, -1);
+    const endDateIso = new Date(timestampProcessEnd * 1000).toISOString().slice(0, -1);
+    ManagerInterface.getEFDLogs(startDateIso, endDateIso, cscs, efdInstance, 'tai').then((res) => {
+      if (res) {
+        this.setState({
+          logs: res[`Script-${scriptIndex}-logevent_logMessage`].map(parseToSALFormat),
+        });
+      }
     });
   };
 
