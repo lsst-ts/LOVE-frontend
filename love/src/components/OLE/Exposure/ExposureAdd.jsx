@@ -109,6 +109,8 @@ export default class ExposureAdd extends Component {
       jiraIssueError: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.multiselectImageTagsComponentRef = React.createRef();
+    this.multiselectExposuresComponentRef = React.createRef();
     this.richTextEditorRef = React.createRef();
   }
 
@@ -117,8 +119,12 @@ export default class ExposureAdd extends Component {
   }
 
   cleanForm() {
-    this.setState({ newMessage: ExposureAdd.defaultProps.newMessage });
+    // Reset MultiSelect components value
+    this.multiselectImageTagsComponentRef.current.resetSelectedValues();
+    this.multiselectExposuresComponentRef.current.resetSelectedValues();
+    // Reset RichTextEditor component value
     this.richTextEditorRef.current.cleanContent();
+    this.setState({ newMessage: ExposureAdd.defaultProps.newMessage });
   }
 
   queryExposures() {
@@ -268,6 +274,7 @@ export default class ExposureAdd extends Component {
     const { imageTags, newMessage } = this.state;
     return (
       <MultiSelect
+        innerRef={this.multiselectImageTagsComponentRef}
         options={imageTags}
         selectedValues={newMessage.tags}
         isObject={true}
@@ -287,6 +294,7 @@ export default class ExposureAdd extends Component {
     const { observationIds, newMessage } = this.state;
     return (
       <MultiSelect
+        innerRef={this.multiselectExposuresComponentRef}
         options={observationIds}
         selectedValues={newMessage.obs_id}
         onSelect={(selectedOptions) => {
