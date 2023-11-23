@@ -869,6 +869,12 @@ export default class ManagerInterface {
           return resp;
         });
       }
+      if (response.status === 404) {
+        return response.json().then((resp) => {
+          toast.error('Error adding log.');
+          return resp;
+        });
+      }
       return response.json().then((resp) => {
         toast.success('Log added succesfully.');
         return resp;

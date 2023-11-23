@@ -67,7 +67,7 @@ export default class ExposureAdd extends Component {
       timespan_end: undefined,
     },
     newMessage: {
-      obs_id: undefined,
+      obs_id: [],
       instrument: undefined,
       message_text: undefined,
       level: 10,
@@ -176,7 +176,7 @@ export default class ExposureAdd extends Component {
       }
 
       // Clean form only if the response is successful
-      if (!result.error) {
+      if (!result.error && !result.detail) {
         this.cleanForm();
       }
 
@@ -220,6 +220,17 @@ export default class ExposureAdd extends Component {
   handleSubmit(event) {
     if (event) event.preventDefault();
     this.saveMessage();
+  }
+
+  isSubmitDisabled() {
+    const { jiraIssueError, savingLog, newMessage, selectedInstrument } = this.state;
+    return (
+      jiraIssueError ||
+      savingLog ||
+      newMessage.obs_id.length === 0 ||
+      !selectedInstrument ||
+      !newMessage.message_text?.trim()
+    );
   }
 
   renderInstrumentsSelect() {
@@ -370,6 +381,12 @@ export default class ExposureAdd extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (this.state.selectedInstrument && prevState.selectedInstrument !== this.state.selectedInstrument) {
+      this.setState((state) => ({
+        newMessage: { ...state.newMessage, instrument: state.selectedInstrument },
+      }));
+    }
+
     if (
       prevState.selectedInstrument !== this.state.selectedInstrument ||
       (this.state.selectedDayExposureStart &&
@@ -550,7 +567,9 @@ export default class ExposureAdd extends Component {
                 }}
                 onKeyCombination={(combination) => {
                   if (combination === 'ctrl+enter') {
-                    this.handleSubmit();
+                    if (!this.isSubmitDisabled()) {
+                      this.handleSubmit();
+                    }
                   }
                 }}
               />
@@ -673,7 +692,7 @@ export default class ExposureAdd extends Component {
               </div>
 
               <div className={isMenu ? styles.footerRightMenu : styles.footerRight}>
-                <Button disabled={jiraIssueError} type="submit">
+                <Button disabled={this.isSubmitDisabled()} type="submit">
                   {savingLog ? (
                     <SpinnerIcon className={styles.spinnerIcon} />
                   ) : (
