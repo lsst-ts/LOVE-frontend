@@ -322,6 +322,16 @@ export default class NonExposureEdit extends Component {
     const primarySoftwareComponentOptions = Object.keys(OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS).sort();
     const primaryHardwareComponentOptions = Object.keys(OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS).sort();
 
+    const setLogEditComponents = (selectedOptions) => {
+      this.setState((prevState) => ({
+        logEdit: {
+          ...prevState.logEdit,
+          components: selectedOptions,
+          components_ids: selectedOptions.map((component) => OLE_JIRA_COMPONENTS[component]),
+        },
+      }));
+    };
+
     return (
       <>
         <span className={styles.label}>Components</span>
@@ -331,15 +341,8 @@ export default class NonExposureEdit extends Component {
             className={styles.select}
             options={componentOptions}
             selectedValues={logEdit?.components}
-            onSelect={(selectedOptions) => {
-              this.setState((prevState) => ({
-                logEdit: {
-                  ...prevState.logEdit,
-                  components: selectedOptions,
-                  components_ids: selectedOptions.map((component) => OLE_JIRA_COMPONENTS[component]),
-                },
-              }));
-            }}
+            onSelect={setLogEditComponents}
+            onRemove={setLogEditComponents}
             placeholder="Select zero or several components"
             selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
           />
