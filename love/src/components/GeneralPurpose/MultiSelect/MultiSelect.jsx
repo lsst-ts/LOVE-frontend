@@ -17,20 +17,27 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
+import React, { memo } from 'react';
+import PropTypes from 'prop-types';
 import { Multiselect as ReactMultiselect } from 'multiselect-react-dropdown';
 import styles from './MultiSelect.module.css';
 
-const MultiSelect = ({ options = [], onChange = () => {}, ...props }) => {
-  const { className: propsClassName, innerRef, ...otherProps } = props;
-
+const MultiSelect = ({
+  options,
+  onSelect = () => {},
+  onRemove = () => {},
+  className = '',
+  innerRef,
+  ...otherProps
+}) => {
   return (
     <ReactMultiselect
       ref={innerRef}
       isObject={false}
-      className={[styles.dropDownClassName, propsClassName].join(' ')}
+      className={[styles.dropDownClassName, className].join(' ')}
+      onSelect={onSelect}
+      onRemove={onRemove}
       options={options}
-      onSelect={onChange}
       placeholder="Select an option"
       style={{
         chips: {
@@ -59,4 +66,17 @@ const MultiSelect = ({ options = [], onChange = () => {}, ...props }) => {
   );
 };
 
-export default MultiSelect;
+MultiSelect.propTypes = {
+  /** Array of options to be displayed */
+  options: PropTypes.array.isRequired,
+  /** CSS class to be applied to the outermost element */
+  className: PropTypes.string,
+  /** Ref created with React.createRef() */
+  innerRef: PropTypes.object,
+  /** Function to be called when an option is selected */
+  onSelect: PropTypes.func,
+  /** Function to be called when an option is removed */
+  onRemove: PropTypes.func,
+};
+
+export default memo(MultiSelect);
