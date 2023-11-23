@@ -23,7 +23,7 @@ import { Howl } from 'howler';
 import isEqual from 'lodash/isEqual';
 import { set, throttle } from 'lodash';
 
-import { severityEnum, ALARM_SOUND_THROTLING_TIME } from 'Config';
+import { severityEnum, ALARM_SOUND_THROTLING_TIME_MS } from 'Config';
 
 import { isAcknowledged, isMuted, isCritical } from '../AlarmUtils';
 import newWarningFile from '../../../sounds/new_warning.mp3';
@@ -36,6 +36,8 @@ import unackedWarningFile from '../../../sounds/unacked_warning.mp3';
 import unackedSeriousFile from '../../../sounds/unacked_serious.mp3';
 import unackedCriticalFile from '../../../sounds/unacked_critical.mp3';
 import stillCriticalFile from '../../../sounds/still_critical.mp3';
+
+const CRITICAL_ALARM_SOUND_TIME_MS = 3000;
 
 export default class AlarmAudio extends Component {
   static propTypes = {
@@ -95,7 +97,7 @@ export default class AlarmAudio extends Component {
       onend: () => {
         setTimeout(() => {
           this.newCriticalSound.play();
-        }, ALARM_SOUND_THROTLING_TIME - 3000); // subtract alarm sound length
+        }, ALARM_SOUND_THROTLING_TIME_MS - CRITICAL_ALARM_SOUND_TIME_MS);
       },
     });
     this.increasedWarningSound = new Howl({
@@ -127,7 +129,7 @@ export default class AlarmAudio extends Component {
       onend: () => {
         setTimeout(() => {
           this.increasedCriticalSound.play();
-        }, ALARM_SOUND_THROTLING_TIME - 3000); // subtract alarm sound length
+        }, ALARM_SOUND_THROTLING_TIME_MS - CRITICAL_ALARM_SOUND_TIME_MS);
       },
     });
     this.unackedWarningSound = new Howl({
@@ -159,7 +161,7 @@ export default class AlarmAudio extends Component {
       onend: () => {
         setTimeout(() => {
           this.unackedCriticalSound.play();
-        }, ALARM_SOUND_THROTLING_TIME - 3000); // subtract alarm sound length
+        }, ALARM_SOUND_THROTLING_TIME_MS - CRITICAL_ALARM_SOUND_TIME_MS);
       },
     });
     this.stillCriticalSound = new Howl({
@@ -274,7 +276,7 @@ export default class AlarmAudio extends Component {
   /**
    * Throtle checkAndNotifyAlarms
    */
-  throtCheckAndNotifyAlarms = throttle(this.checkAndNotifyAlarms, ALARM_SOUND_THROTLING_TIME);
+  throtCheckAndNotifyAlarms = throttle(this.checkAndNotifyAlarms, ALARM_SOUND_THROTLING_TIME_MS);
 
   playSound = (severity, type) => {
     if (severity < this.state.minSeveritySound) {

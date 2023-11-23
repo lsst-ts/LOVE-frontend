@@ -127,7 +127,7 @@ export const severityEnum = {
   critical: 4,
 };
 
-export const ALARM_SOUND_THROTLING_TIME = 6000;
+export const ALARM_SOUND_THROTLING_TIME_MS = 6000;
 
 /*****************************************************************************/
 /******************************TCS configurations*****************************/
