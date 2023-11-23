@@ -181,6 +181,11 @@ export default class NonExposureEdit extends Component {
     this.updateOrCreateMessageNarrativeLogs();
   }
 
+  isSubmitDisabled() {
+    const { logEdit, datesAreValid, savingLog, jiraIssueError } = this.state;
+    return !datesAreValid || jiraIssueError || savingLog || !logEdit?.message_text?.trim();
+  }
+
   handleTimeOfIncident(date, type) {
     if (type === 'start') {
       this.setState((prevState) => ({
@@ -467,7 +472,7 @@ export default class NonExposureEdit extends Component {
   }
 
   renderMessageField() {
-    const { logEdit } = this.state;
+    const { logEdit, datesAreValid, savingLog, jiraIssueError } = this.state;
     const htmlMessage = jiraMarkdownToHtml(logEdit?.message_text, { codeFriendly: true, parseLines: true });
 
     return (
@@ -485,7 +490,9 @@ export default class NonExposureEdit extends Component {
           }}
           onKeyCombination={(combination) => {
             if (combination === 'ctrl+enter') {
-              this.handleSubmit();
+              if (!this.isSubmitDisabled()) {
+                this.handleSubmit();
+              }
             }
           }}
         />
@@ -610,7 +617,7 @@ export default class NonExposureEdit extends Component {
 
     return (
       <>
-        <Button disabled={!datesAreValid || jiraIssueError} type="submit">
+        <Button disabled={this.isSubmitDisabled()} type="submit">
           {savingLog ? <SpinnerIcon className={styles.spinnerIcon} /> : <span className={styles.title}>Save</span>}
         </Button>
       </>
