@@ -120,10 +120,10 @@ export default class ExposureAdd extends Component {
 
   cleanForm() {
     // Reset MultiSelect components value
-    this.multiselectImageTagsComponentRef.current.resetSelectedValues();
-    this.multiselectExposuresComponentRef.current.resetSelectedValues();
+    this.multiselectImageTagsComponentRef.current?.resetSelectedValues();
+    this.multiselectExposuresComponentRef.current?.resetSelectedValues();
     // Reset RichTextEditor component value
-    this.richTextEditorRef.current.cleanContent();
+    this.richTextEditorRef.current?.cleanContent();
     this.setState({ newMessage: ExposureAdd.defaultProps.newMessage });
   }
 
@@ -283,6 +283,13 @@ export default class ExposureAdd extends Component {
 
   renderImageTagsSelect() {
     const { imageTags, newMessage } = this.state;
+
+    const setNewMessageTags = (selectedOptions) => {
+      this.setState((prevState) => ({
+        newMessage: { ...prevState.newMessage, tags: selectedOptions },
+      }));
+    };
+
     return (
       <MultiSelect
         innerRef={this.multiselectImageTagsComponentRef}
@@ -290,11 +297,8 @@ export default class ExposureAdd extends Component {
         selectedValues={newMessage.tags}
         isObject={true}
         displayValue="name"
-        onSelect={(selectedOptions) => {
-          this.setState((prevState) => ({
-            newMessage: { ...prevState.newMessage, tags: selectedOptions },
-          }));
-        }}
+        onSelect={setNewMessageTags}
+        onRemove={setNewMessageTags}
         placeholder="Select one or several tags"
         selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
       />
@@ -303,16 +307,20 @@ export default class ExposureAdd extends Component {
 
   renderExposuresSelect() {
     const { observationIds, newMessage } = this.state;
+
+    const setNewMessageObsId = (selectedOptions) => {
+      this.setState((prevState) => ({
+        newMessage: { ...prevState.newMessage, obs_id: selectedOptions },
+      }));
+    };
+
     return (
       <MultiSelect
         innerRef={this.multiselectExposuresComponentRef}
         options={observationIds}
         selectedValues={newMessage.obs_id}
-        onSelect={(selectedOptions) => {
-          this.setState((prevState) => ({
-            newMessage: { ...prevState.newMessage, obs_id: selectedOptions },
-          }));
-        }}
+        onSelect={setNewMessageObsId}
+        onRemove={setNewMessageObsId}
         placeholder="Select one or several observations"
         selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
       />

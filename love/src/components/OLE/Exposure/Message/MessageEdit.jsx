@@ -94,6 +94,12 @@ export default class MessageEdit extends Component {
     save(message, () => this.setState({ updatingLog: false }));
   }
 
+  saveMessageTags(selectedOptions) {
+    this.setState((prevState) => ({
+      message: { ...prevState.message, tags: selectedOptions },
+    }));
+  }
+
   componentDidMount() {
     const { message } = this.state;
     ManagerInterface.getListImageTags().then((data) => {
@@ -174,11 +180,8 @@ export default class MessageEdit extends Component {
               selectedValues={message.tagObjects}
               isObject={true}
               displayValue="name"
-              onSelect={(selectedOptions) => {
-                this.setState((prevState) => ({
-                  message: { ...prevState.message, tags: selectedOptions },
-                }));
-              }}
+              onSelect={(selectedOptions) => this.saveMessageTags(selectedOptions)}
+              onRemove={(selectedOptions) => this.saveMessageTags(selectedOptions)}
               placeholder="Select one or several tags"
               selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
             />
