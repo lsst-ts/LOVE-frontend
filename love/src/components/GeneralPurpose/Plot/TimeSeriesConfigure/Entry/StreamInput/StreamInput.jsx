@@ -135,9 +135,12 @@ export default class StreamInput extends Component {
     const { category, csc, salindex, topic, item, isArray, arrayIndex, accessor } = this.state;
 
     const cscOptions = optionsTree ? Object.keys(optionsTree) : [];
-    const topicOptions = optionsTree && category && csc ? Object.keys(optionsTree[csc][`${category}_data`]) : [];
-    const itemOptions =
-      optionsTree && category && csc && topic ? Object.keys(optionsTree[csc][`${category}_data`][topic]) : [];
+    const topicOptions = optionsTree?.[csc]?.[`${category}_data`]
+      ? Object.keys(optionsTree[csc][`${category}_data`])
+      : [];
+    const itemOptions = optionsTree?.[csc]?.[`${category}_data`]?.[topic]
+      ? Object.keys(optionsTree[csc][`${category}_data`][topic])
+      : [];
 
     return (
       <>
