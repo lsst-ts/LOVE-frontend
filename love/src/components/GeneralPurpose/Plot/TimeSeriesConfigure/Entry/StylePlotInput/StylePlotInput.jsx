@@ -118,15 +118,26 @@ export default class StylePlotInput extends PureComponent {
               onChange={(selection) => this.onTypeChange(selection.value)}
             />
           </div>
-          <Button
-            className={styles.button}
-            onClick={this.props.onRemove}
-            disabled={this.props.onRemove === null}
-            size="small"
-            title="Remove from config"
-          >
-            Remove
-          </Button>
+          <div className={styles.entryButtons}>
+            <Button
+              className={styles.button}
+              onClick={this.props.onRemove}
+              disabled={this.props.onRemove === null}
+              size="small"
+              title="Remove from config"
+            >
+              Remove
+            </Button>
+            <Button
+              className={styles.button}
+              onClick={this.props.onDuplicate}
+              disabled={!this.props.onDuplicate}
+              size="small"
+              title="Duplicate entry"
+            >
+              Duplicate
+            </Button>
+          </div>
         </div>
 
         <div className={styles.stylesContainer}>

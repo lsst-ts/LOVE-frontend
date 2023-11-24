@@ -63,6 +63,10 @@ export default class Entry extends Component {
      * - index
      */
     onRemove: PropTypes.func,
+    /** Callback to call when duplicating the input, should have the following arguments:
+     * - index
+     */
+    onDuplicate: PropTypes.func,
   };
 
   static defaultProps = {
@@ -73,6 +77,7 @@ export default class Entry extends Component {
     entryId: null,
     optionsTree: {},
     onRemove: null,
+    onDuplicate: null,
   };
 
   constructor(props) {
@@ -162,6 +167,7 @@ export default class Entry extends Component {
           config={this.state.config}
           onChange={(name, type, config) => this.onChangeStylePlot(name, type, config)}
           onRemove={() => this.props.onRemove()}
+          onDuplicate={() => this.props.onDuplicate()}
         />
         <div className={styles.container}>{values ? this.getStreamInput(values) : <></>}</div>
       </div>
