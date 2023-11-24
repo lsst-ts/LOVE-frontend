@@ -1533,78 +1533,32 @@ export const takeScreenshot = (callback) => {
  *   }
  * }
  */
-export const parsePlotInputs = (inputs) => {
-  const cscs = {};
+export const parsePlotInputsEFD = (inputs) => {
+  const parsedInputs = {};
   Object.values(inputs).forEach((input) => {
-    if (!input.values) {
-      const cscDict = cscs[input.csc];
-      const indexDict = cscs[input.csc]?.[input.salindex];
-      const topicDict = cscs[input.csc]?.[input.salindex]?.[input.topic];
-      let newTopicDict = topicDict ?? [];
-      let newIndexDict = indexDict ?? {};
-      const newCSCDict = cscDict ?? {};
-      if (topicDict) {
-        newIndexDict[input.topic].push(input.item);
-        return;
+    Object.values(input.values).forEach((value) => {
+      // EFD receives topic names of events with the logevent_ prefix
+      const topicName = value.category === 'telemetry' ? value.topic : `logevent_${value.topic}`;
+
+      // Check if the cscDict exists, if not create it
+      if (!parsedInputs[value.csc]) {
+        parsedInputs[value.csc] = {};
       }
-      // Next line was added to support EFD Querying for Array type items (influx)
-      newIndexDict[input.topic] = [`${input.item}${input.arrayIndex ?? ''}`];
 
-      newTopicDict = newIndexDict[input.topic];
-      if (indexDict) {
-        newCSCDict[input.salindex][input.topic] = newTopicDict;
-        newIndexDict = newCSCDict[input.salindex];
-      } else {
-        newIndexDict = {
-          [input.topic]: newTopicDict,
-        };
-        newCSCDict[input.salindex] = newIndexDict;
+      // Check if the indexDict exists, if not create it
+      if (!parsedInputs[value.csc][value.salindex]) {
+        parsedInputs[value.csc][value.salindex] = {};
       }
-      if (cscDict) {
-        cscs[input.csc][input.salindex] = newIndexDict;
-      } else {
-        cscs[input.csc] = {
-          [input.salindex]: newIndexDict,
-        };
+      // Check if the topicDict exists, if not create it
+      if (!parsedInputs[value.csc][value.salindex][topicName]) {
+        parsedInputs[value.csc][value.salindex][topicName] = [];
       }
-    } else {
-      Object.values(input.values).forEach((value) => {
-        const cscDict = cscs[value.csc];
-        const indexDict = cscs[value.csc]?.[value.salindex];
-        const topicDict = cscs[value.csc]?.[value.salindex]?.[value.topic];
 
-        const newCSCDict = cscDict ?? {};
-        let newIndexDict = indexDict ?? {};
-        let newTopicDict = topicDict ?? [];
-
-        // If topicDict array exists, push the new item
-        if (topicDict) {
-          //  Array index is used for queries to the EFD (influx)
-          topicDict.push(`${value.item}${value.arrayIndex ?? ''}`);
-          return;
-        }
-
-        //  Array index is used for queries to the EFD (influx)
-        newIndexDict[value.topic] = [`${value.item}${value.arrayIndex ?? ''}`];
-        newTopicDict = newIndexDict[value.topic];
-
-        //  If indexDict exists, add the new topicDict
-        if (indexDict) {
-          indexDict[value.topic] = newTopicDict;
-        } else {
-          newCSCDict[value.salindex] = newIndexDict;
-        }
-
-        //  If cscDict exists, add the new indexDict
-        if (cscDict) {
-          cscDict[value.salindex] = newIndexDict;
-        } else {
-          cscs[value.csc] = newCSCDict;
-        }
-      });
-    }
+      //  Array index is used for queries to the EFD (influx)
+      parsedInputs[value.csc][value.salindex][topicName].push(`${value.item}${value.isArray ? value.arrayIndex : ''}`);
+    });
   });
-  return cscs;
+  return parsedInputs;
 };
 
 /**

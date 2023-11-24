@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
@@ -25,7 +24,7 @@ import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import VegaLegend from './VegaTimeSeriesPlot/VegaLegend';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
-import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData } from 'Utils';
+import ManagerInterface, { parseTimestamp, parsePlotInputsEFD, parseCommanderData } from 'Utils';
 import { isEqual } from 'lodash';
 import styles from './Plot.module.css';
 const moment = extendMoment(Moment);
@@ -157,11 +156,18 @@ export default class Plot extends Component {
   setHistoricalData = (startDate, timeWindow) => {
     const { inputs } = this.props;
     const { selectedEfdClient } = this.state;
-    const cscs = parsePlotInputs(inputs);
+    const cscs = parsePlotInputsEFD(inputs);
     const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
     ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min', selectedEfdClient).then((data) => {
       if (!data) return;
       const parsedData = parseCommanderData(data);
+      const parsedDataKeys = Object.keys(parsedData);
+      parsedDataKeys.forEach((key) => {
+        if (key.includes('logevent_')) {
+          parsedData[key.replace('logevent_', '')] = parsedData[key];
+          delete parsedData[key];
+        }
+      });
       this.setState({ historicalData: parsedData });
     });
   };
