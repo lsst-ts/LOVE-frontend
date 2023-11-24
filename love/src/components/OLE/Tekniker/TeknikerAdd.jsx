@@ -99,7 +99,7 @@ export default class TeknikerAdd extends Component {
 
   cleanForm() {
     // Reset multiselects values
-    this.multiselectComponentsRef.current.resetSelectedValues();
+    this.multiselectComponentsRef.current?.resetSelectedValues();
     this.setState({ logEdit: TeknikerAdd.defaultProps.logEdit });
   }
 

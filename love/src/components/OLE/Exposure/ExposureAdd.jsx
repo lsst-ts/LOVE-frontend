@@ -120,10 +120,10 @@ export default class ExposureAdd extends Component {
 
   cleanForm() {
     // Reset MultiSelect components value
-    this.multiselectImageTagsComponentRef.current.resetSelectedValues();
-    this.multiselectExposuresComponentRef.current.resetSelectedValues();
+    this.multiselectImageTagsComponentRef.current?.resetSelectedValues();
+    this.multiselectExposuresComponentRef.current?.resetSelectedValues();
     // Reset RichTextEditor component value
-    this.richTextEditorRef.current.cleanContent();
+    this.richTextEditorRef.current?.cleanContent();
     this.setState({ newMessage: ExposureAdd.defaultProps.newMessage });
   }
 

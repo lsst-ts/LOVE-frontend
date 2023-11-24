@@ -122,9 +122,9 @@ export default class NonExposureEdit extends Component {
 
   cleanForm() {
     // Reset MultiSelect component value
-    this.multiselectComponentsRef.current.resetSelectedValues();
+    this.multiselectComponentsRef.current?.resetSelectedValues();
     // Reset RichTextEditor component value
-    this.richTextEditorRef.current.cleanContent();
+    this.richTextEditorRef.current?.cleanContent();
     this.setState({ logEdit: NonExposureEdit.defaultProps.logEdit });
   }
 
