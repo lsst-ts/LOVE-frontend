@@ -28,7 +28,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   grid-gap: 0.5em;
   padding: 1em;
   border: 1px solid var(--secondary-font-dimmed-color);
-  font-size: 0.8em;
 }
 
 .firstRow {
