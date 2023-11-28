@@ -36,7 +36,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   flex-flow: row;
   justify-content: space-between;
   align-items: stretch;
-  margin-bottom: 0.5em;
 }
 
 .firstRow .nameMark {
@@ -90,4 +89,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .labeledCheckbox {
   display: flex;
+}
+
+.orientSelect {
+  min-width: 18.5em;
 }

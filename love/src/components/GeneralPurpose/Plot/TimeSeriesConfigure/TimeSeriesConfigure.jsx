@@ -71,6 +71,7 @@ export default class TimeSeriesConfigure extends PureComponent {
     dash: defaultStyles[0].dash,
     shape: defaultStyles[0].shape,
     filled: defaultStyles[0].filled,
+    orient: defaultStyles[0].orient,
   };
 
   constructor(props) {
@@ -178,7 +179,7 @@ export default class TimeSeriesConfigure extends PureComponent {
         <div className={styles.content}>
           <div className={styles.list}>
             {entries.map((entry, index) => {
-              const { name, values, type, color, dash, shape, filled } = entry;
+              const { name, values, type, color, dash, shape, filled, orient } = entry;
               return (
                 <Entry
                   key={name}
@@ -192,6 +193,7 @@ export default class TimeSeriesConfigure extends PureComponent {
                     dash: dash ?? defaultStyles[index % (defaultStyles.length - 1)].dash,
                     shape: shape ?? defaultStyles[index % (defaultStyles.length - 1)].shape,
                     filled: filled ?? defaultStyles[index % (defaultStyles.length - 1)].filled,
+                    orient: orient ?? defaultStyles[index % (defaultStyles.length - 1)].orient,
                   }}
                   optionsTree={optionsTree}
                   onRemove={() => this.onEntryRemove(index)}
