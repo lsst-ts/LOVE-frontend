@@ -19,14 +19,13 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import styles from './TimeSeriesConfigure.module.css';
-import Entry from './Entry/Entry';
+import ManagerInterface, { getEntryAccessorString } from 'Utils';
 import Button from 'components/GeneralPurpose/Button/Button';
-import ManagerInterface from 'Utils';
 import { defaultStyles } from 'components/GeneralPurpose/Plot/Plot.container';
 import { COLORS } from '../VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
-
+import Entry from './Entry/Entry';
+import styles from './TimeSeriesConfigure.module.css';
 /**
  * Component to configure the Health Status Summary
  */
@@ -44,6 +43,8 @@ export default class TimeSeriesConfigure extends PureComponent {
      *     "item": <item of the topic>,
      *     "type": <"bar", "line" or "pointLine">,
      *     "accessor": <Access function as string>,
+     *     "isArray": <boolean indicating if the variable is an array>,
+     *     "arrayIndex": <index of the array to plot>,
      *   }
      * }
      */
@@ -80,26 +81,10 @@ export default class TimeSeriesConfigure extends PureComponent {
       currentConfig: [],
       changed: false,
       entries: [],
+      refs: [],
       optionsTree: null,
     };
   }
-
-  componentDidMount = () => {
-    const inputs = JSON.parse(this.props.initialData);
-    const entries = Object.keys(inputs).map((key) => {
-      const input = inputs[key];
-      input['name'] = key;
-      return input;
-    });
-
-    const refs = entries.map(() => React.createRef());
-    this.setState({ entries, refs });
-
-    // Get the options for the dropdowns from SAL info endpoint
-    ManagerInterface.getTopicData('event-telemetry').then((data) => {
-      this.setState({ optionsTree: data });
-    });
-  };
 
   onEntryRemove = (index) => {
     const { entries, refs } = this.state;
@@ -130,6 +115,8 @@ export default class TimeSeriesConfigure extends PureComponent {
       'topic',
       'variable',
     ];
+
+    // Update plot level params
     plotLevelParams.forEach((param) => {
       if (
         changedEntry?.[param] !== null &&
@@ -139,6 +126,8 @@ export default class TimeSeriesConfigure extends PureComponent {
         newEntry[param] = changedEntry[param];
       }
     });
+
+    // Update values level params
     valuesLevelParams.forEach((param) => {
       if (
         changedEntry?.values?.[0]?.[param] !== null &&
@@ -161,13 +150,30 @@ export default class TimeSeriesConfigure extends PureComponent {
 
   onApply = (refs) => {
     const inputs = {};
-    refs.map((ref, index) => {
+    refs.map((ref) => {
       const entry = ref.current.getInfo();
       const name = entry.name;
       delete entry.name;
       inputs[name] = entry;
     });
     this.props.onSave(inputs);
+  };
+
+  componentDidMount = () => {
+    const inputs = JSON.parse(this.props.initialData);
+    const entries = Object.keys(inputs).map((key) => {
+      const input = inputs[key];
+      input['name'] = key;
+      return input;
+    });
+
+    const refs = entries.map(() => React.createRef());
+    this.setState({ entries, refs });
+
+    // Get the options for the dropdowns from SAL info endpoint
+    ManagerInterface.getTopicData('event-telemetry').then((data) => {
+      this.setState({ optionsTree: data });
+    });
   };
 
   render() {
@@ -204,8 +210,10 @@ export default class TimeSeriesConfigure extends PureComponent {
             <Button
               status="default"
               onClick={() => {
-                const newEntries = [...this.state.entries, TimeSeriesConfigure.defaultEntry];
-                this.setState({ entries: newEntries });
+                this.setState((prevState) => ({
+                  entries: [...prevState.entries, TimeSeriesConfigure.defaultEntry],
+                  refs: [...prevState.refs, React.createRef()],
+                }));
               }}
               className={styles.button}
             >

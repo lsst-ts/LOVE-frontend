@@ -2053,3 +2053,16 @@ export function firstLetterToUpperCase(string) {
   if (!string) return '';
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+/**
+ * Function to get accessor function string from
+ * isArray and arrayIndex parameters for
+ * getting telemetry and events data on
+ * VegaTimeSeriesPlots
+ */
+export function getEntryAccessorString(isArray, arrayIndex) {
+  if (isArray) {
+    return `(x) => x[${arrayIndex}]`;
+  }
+  return '(x) => x';
+}

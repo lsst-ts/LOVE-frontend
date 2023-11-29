@@ -21,9 +21,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import 'brace/mode/javascript';
 import 'brace/theme/solarized_dark';
-import styles from './StreamInput.module.css';
+import { getEntryAccessorString } from 'Utils';
 import Input from 'components/GeneralPurpose/Input/Input.jsx';
 import Select from 'components/GeneralPurpose/Select/Select.jsx';
+import styles from './StreamInput.module.css';
 
 const STREAM_CATEGORY_OPTIONS = ['event', 'telemetry'];
 
@@ -125,7 +126,7 @@ export default class StreamInput extends Component {
       item,
       isArray,
       arrayIndex,
-      accessor: accessor ? accessor : `(x) => x${isArray ? '[' + arrayIndex + ']' : ''}`,
+      accessor: accessor ? accessor : getEntryAccessorString(isArray, arrayIndex),
     };
   }
 
@@ -187,8 +188,11 @@ export default class StreamInput extends Component {
               className={styles.checkboxInput}
               type="checkbox"
               defaultChecked={isArray}
-              onChange={(ev) => {
-                this.setState((prevState) => ({ isArray: !prevState.isArray }));
+              onChange={() => {
+                this.setState((state) => ({
+                  isArray: !state.isArray,
+                  accessor: getEntryAccessorString(!state.isArray, state.arrayIndex),
+                }));
               }}
             />
             {isArray && (
@@ -200,7 +204,12 @@ export default class StreamInput extends Component {
                   min={0}
                   value={arrayIndex}
                   placeholder="Array index"
-                  onChange={(ev) => this.setState({ arrayIndex: parseInt(ev.target.value) })}
+                  onChange={(ev) =>
+                    this.setState({
+                      arrayIndex: parseInt(ev.target.value),
+                      accessor: getEntryAccessorString(true, parseInt(ev.target.value)),
+                    })
+                  }
                 />
               </>
             )}
