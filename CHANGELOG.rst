@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.27.9
+-------
+
+* Several fixes for Plot components `<https://github.com/lsst-ts/LOVE-frontend/pull/578>`_
+
 v5.27.8
 -------
 
