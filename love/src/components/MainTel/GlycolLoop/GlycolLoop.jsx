@@ -19,13 +19,12 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
-import styles from './GlycolLoop.module.css';
+import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import Summary from './Summary/Summary';
 import LoopCartoon from './LoopCartoon/LoopCartoon';
 import Mixing from './Mixing/Mixing';
 import TemperatureGradient from './TemperatureGradient/TemperatureGradient';
-import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
+import styles from './GlycolLoop.module.css';
 
 export default class GlycolLoop extends Component {
   static propTypes = {
@@ -333,34 +332,32 @@ export default class GlycolLoop extends Component {
                 <TemperatureGradient minTemperatureLimit={minTemp} maxTemperatureLimit={maxTemp} width={width} />
               </div>
             </div>
-            <div className={styles.plotContainer}>
-              <div className={styles.telemetryTable}>
-                <div className={styles.tsmcSection}>
-                  <h2 onClick={() => console.log(this.tsmcPlotRef)}>Inside Mirror Temperatures</h2>
-                  <div ref={this.tsmcPlotRef} className={styles.tsmcPlot}>
+            <div>
+              <div className={styles.plotContainer}>
+                <h2 onClick={() => console.log(this.tsmcPlotRef)}>Inside Mirror Temperatures</h2>
+                <div ref={this.tsmcPlotRef}>
+                  <PlotContainer
+                    inputs={this.tsmcPlotInputs}
+                    containerNode={this.tsmcPlotRef}
+                    xAxisTitle="Time"
+                    yAxisTitle="Temperature"
+                    maxHeight={250}
+                    scaleDomain={{ domainMin: minTemp, domainMax: maxTemp }}
+                  />
+                </div>
+              </div>
+              <div className={styles.plotContainer}>
+                <h2>Chiller to Telescope Temperatures</h2>
+                <div ref={this.tsgPlotRef}>
+                  <div>
                     <PlotContainer
-                      inputs={this.tsmcPlotInputs}
-                      containerNode={this.tsmcPlotRef}
+                      inputs={this.tsgPlotInputs}
+                      containerNode={this.tsgPlotRef}
                       xAxisTitle="Time"
                       yAxisTitle="Temperature"
                       maxHeight={250}
                       scaleDomain={{ domainMin: minTemp, domainMax: maxTemp }}
                     />
-                  </div>
-                </div>
-                <div className={styles.tsgSection}>
-                  <h2>Chiller to Telescope Temperatures</h2>
-                  <div ref={this.tsgPlotRef} className={styles.tsgPlot}>
-                    <div>
-                      <PlotContainer
-                        inputs={this.tsgPlotInputs}
-                        containerNode={this.tsgPlotRef}
-                        xAxisTitle="Time"
-                        yAxisTitle="Temperature"
-                        maxHeight={250}
-                        scaleDomain={{ domainMin: minTemp, domainMax: maxTemp }}
-                      />
-                    </div>
                   </div>
                 </div>
               </div>

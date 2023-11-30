@@ -669,7 +669,6 @@ export default class MTDome extends Component {
                 containerNode={this.azimuthPlotRef}
                 xAxisTitle="Time"
                 yAxisTitle="Azimuth"
-                maxHeight={250}
               />
             </div>
           </div>
@@ -681,7 +680,6 @@ export default class MTDome extends Component {
                 containerNode={this.elevationPlotRef}
                 xAxisTitle="Time"
                 yAxisTitle="Elevation"
-                maxHeight={250}
               />
             </div>
           </div>

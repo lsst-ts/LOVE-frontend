@@ -71,7 +71,7 @@ const getGradiantColorX = (value, minGradiantLimit, maxGradiantLimit) => {
 };
 
 /**
- * 
+ *
  * @param {object} prevParse dict data of the sensors
  * @param {string} option string between the values (temperature, relativeHumidity, airFlow, airTurbulence)
  * @returns {array} array of the sensors data sorted
@@ -115,22 +115,20 @@ const AuxTelESS = (props) => {
       if (!prevParseSensors[option]) {
         const opt = {};
         opt[option] = {};
-        setPrevParseSensors({...prevParseSensors, ...opt});
+        setPrevParseSensors({ ...prevParseSensors, ...opt });
       }
       if (prevParseSensors[option] && !prevParseSensors[option][parse.sensorName]) {
         const opt = {};
         opt[option] = prevParseSensors[option];
         opt[option][parse.sensorName] = {};
-        setPrevParseSensors({...prevParseSensors, ...opt});
+        setPrevParseSensors({ ...prevParseSensors, ...opt });
       }
-      if (prevParseSensors[option] &&
-          prevParseSensors[option][parse.sensorName]
-      ) {
+      if (prevParseSensors[option] && prevParseSensors[option][parse.sensorName]) {
         const opt = {};
         opt[option] = prevParseSensors[option];
         opt[option][parse.sensorName] = prevParseSensors[option][parse.sensorName];
         opt[option][parse.sensorName][parse.indexArr] = parse;
-        setPrevParseSensors({...prevParseSensors, ...opt});
+        setPrevParseSensors({ ...prevParseSensors, ...opt });
       }
     });
     setSensors(prevParseToArraySensors(prevParseSensors, option));
@@ -300,7 +298,7 @@ const AuxTelESS = (props) => {
           />
         </div>
 
-        <div className={styles.plotsContainer}>
+        <div>
           <div className={styles.title}>Plot</div>
           <div className={styles.plots} ref={plotRef}>
             <PlotContainer containerNode={plotRef} xAxisTitle="Time" legendPosition="bottom" inputs={inputsPlot} />
