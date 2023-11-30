@@ -5,6 +5,7 @@ Version History
 v5.27.8
 -------
 
+* Update package.json version to v5.27.8 `<https://github.com/lsst-ts/LOVE-frontend/pull/579>`_
 * Fix MultiSelect selection removing behavior `<https://github.com/lsst-ts/LOVE-frontend/pull/577>`_
 * Make constraints to save logs more robust `<https://github.com/lsst-ts/LOVE-frontend/pull/576>`_
 * Rollback query to FinishedScript removed on a previous commit `<https://github.com/lsst-ts/LOVE-frontend/pull/575>`_
