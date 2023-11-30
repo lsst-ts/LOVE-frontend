@@ -1465,21 +1465,6 @@ class VegaTimeseriesPlot extends Component {
   };
 
   componentDidMount = () => {
-    if (
-      this.props.width === undefined && // width/height have more priority
-      this.props.height === undefined
-    ) {
-      if (this.props.containerNode) {
-        this.resizeObserver = new ResizeObserver((entries) => {
-          const container = entries[0];
-          this.setState({
-            containerHeight: container.contentRect.height,
-            containerWidth: container.contentRect.width,
-          });
-        });
-        this.resizeObserver.observe(this.props.containerNode);
-      }
-    }
     this.updateSpec();
   };
 
@@ -1498,24 +1483,6 @@ class VegaTimeseriesPlot extends Component {
   };
 
   componentDidUpdate = (prevProps) => {
-    if (
-      prevProps.containerNode !== this.props.containerNode &&
-      this.props.width === undefined && // width/height have more priority
-      this.props.height === undefined
-    ) {
-      if (this.props.containerNode) {
-        this.resizeObserver = new ResizeObserver((entries) => {
-          const container = entries[0];
-
-          this.setState({
-            containerHeight: container.contentRect.height,
-            containerWidth: container.contentRect.width,
-          });
-        });
-        this.resizeObserver.observe(this.props.containerNode);
-      }
-    }
-
     let updateSpec = false;
     if (
       this.props.width !== undefined &&
@@ -1543,7 +1510,6 @@ class VegaTimeseriesPlot extends Component {
   };
 
   componentWillUnmount = () => {
-    // this.props.unsubscribeToStreams();
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
