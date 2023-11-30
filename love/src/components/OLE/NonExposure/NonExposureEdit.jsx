@@ -121,9 +121,10 @@ export default class NonExposureEdit extends Component {
   }
 
   cleanForm() {
-    // Reset multiselects values
-    this.multiselectComponentsRef.current.resetSelectedValues();
-    this.richTextEditorRef.current.cleanContent();
+    // Reset MultiSelect component value
+    this.multiselectComponentsRef.current?.resetSelectedValues();
+    // Reset RichTextEditor component value
+    this.richTextEditorRef.current?.cleanContent();
     this.setState({ logEdit: NonExposureEdit.defaultProps.logEdit });
   }
 
@@ -164,7 +165,12 @@ export default class NonExposureEdit extends Component {
           savingLog: false,
         });
         this.props.save(response);
-        this.cleanForm();
+
+        // Clean form only if the response is successful
+        if (!response.error) {
+          this.cleanForm();
+        }
+
         if (this.props.back) this.props.back();
       });
     }
@@ -173,6 +179,11 @@ export default class NonExposureEdit extends Component {
   handleSubmit(event) {
     if (event) event.preventDefault();
     this.updateOrCreateMessageNarrativeLogs();
+  }
+
+  isSubmitDisabled() {
+    const { logEdit, datesAreValid, savingLog, jiraIssueError } = this.state;
+    return !datesAreValid || jiraIssueError || savingLog || !logEdit?.message_text?.trim();
   }
 
   handleTimeOfIncident(date, type) {
@@ -311,6 +322,16 @@ export default class NonExposureEdit extends Component {
     const primarySoftwareComponentOptions = Object.keys(OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS).sort();
     const primaryHardwareComponentOptions = Object.keys(OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS).sort();
 
+    const setLogEditComponents = (selectedOptions) => {
+      this.setState((prevState) => ({
+        logEdit: {
+          ...prevState.logEdit,
+          components: selectedOptions,
+          components_ids: selectedOptions.map((component) => OLE_JIRA_COMPONENTS[component]),
+        },
+      }));
+    };
+
     return (
       <>
         <span className={styles.label}>Components</span>
@@ -320,15 +341,8 @@ export default class NonExposureEdit extends Component {
             className={styles.select}
             options={componentOptions}
             selectedValues={logEdit?.components}
-            onSelect={(selectedOptions) => {
-              this.setState((prevState) => ({
-                logEdit: {
-                  ...prevState.logEdit,
-                  components: selectedOptions,
-                  components_ids: selectedOptions.map((component) => OLE_JIRA_COMPONENTS[component]),
-                },
-              }));
-            }}
+            onSelect={setLogEditComponents}
+            onRemove={setLogEditComponents}
             placeholder="Select zero or several components"
             selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
           />
@@ -461,7 +475,7 @@ export default class NonExposureEdit extends Component {
   }
 
   renderMessageField() {
-    const { logEdit } = this.state;
+    const { logEdit, datesAreValid, savingLog, jiraIssueError } = this.state;
     const htmlMessage = jiraMarkdownToHtml(logEdit?.message_text, { codeFriendly: true, parseLines: true });
 
     return (
@@ -479,7 +493,9 @@ export default class NonExposureEdit extends Component {
           }}
           onKeyCombination={(combination) => {
             if (combination === 'ctrl+enter') {
-              this.handleSubmit();
+              if (!this.isSubmitDisabled()) {
+                this.handleSubmit();
+              }
             }
           }}
         />
@@ -604,7 +620,7 @@ export default class NonExposureEdit extends Component {
 
     return (
       <>
-        <Button disabled={!datesAreValid || jiraIssueError} type="submit">
+        <Button disabled={this.isSubmitDisabled()} type="submit">
           {savingLog ? <SpinnerIcon className={styles.spinnerIcon} /> : <span className={styles.title}>Save</span>}
         </Button>
       </>

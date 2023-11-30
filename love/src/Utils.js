@@ -866,6 +866,13 @@ export default class ManagerInterface {
       if (response.status === 400) {
         return response.json().then((resp) => {
           toast.error(resp.ack);
+          return resp;
+        });
+      }
+      if (response.status === 404) {
+        return response.json().then((resp) => {
+          toast.error('Error adding log.');
+          return resp;
         });
       }
       return response.json().then((resp) => {
@@ -1036,11 +1043,13 @@ export default class ManagerInterface {
       if (response.status === 400) {
         return response.json().then((resp) => {
           toast.error(resp.ack);
+          return resp;
         });
       }
       if (response.status === 422) {
         return response.json().then((resp) => {
           toast.error(resp.detail);
+          return resp;
         });
       }
       return response.json().then((resp) => {

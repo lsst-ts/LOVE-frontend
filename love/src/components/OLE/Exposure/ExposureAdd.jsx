@@ -67,7 +67,7 @@ export default class ExposureAdd extends Component {
       timespan_end: undefined,
     },
     newMessage: {
-      obs_id: undefined,
+      obs_id: [],
       instrument: undefined,
       message_text: undefined,
       level: 10,
@@ -109,6 +109,8 @@ export default class ExposureAdd extends Component {
       jiraIssueError: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.multiselectImageTagsComponentRef = React.createRef();
+    this.multiselectExposuresComponentRef = React.createRef();
     this.richTextEditorRef = React.createRef();
   }
 
@@ -117,8 +119,12 @@ export default class ExposureAdd extends Component {
   }
 
   cleanForm() {
+    // Reset MultiSelect components value
+    this.multiselectImageTagsComponentRef.current?.resetSelectedValues();
+    this.multiselectExposuresComponentRef.current?.resetSelectedValues();
+    // Reset RichTextEditor component value
+    this.richTextEditorRef.current?.cleanContent();
     this.setState({ newMessage: ExposureAdd.defaultProps.newMessage });
-    this.richTextEditorRef.current.cleanContent();
   }
 
   queryExposures() {
@@ -168,7 +174,12 @@ export default class ExposureAdd extends Component {
       } else {
         this.props.view();
       }
-      this.cleanForm();
+
+      // Clean form only if the response is successful
+      if (!result.error && !result.detail) {
+        this.cleanForm();
+      }
+
       this.setState({ savingLog: false });
     });
   }
@@ -209,6 +220,17 @@ export default class ExposureAdd extends Component {
   handleSubmit(event) {
     if (event) event.preventDefault();
     this.saveMessage();
+  }
+
+  isSubmitDisabled() {
+    const { jiraIssueError, savingLog, newMessage, selectedInstrument } = this.state;
+    return (
+      jiraIssueError ||
+      savingLog ||
+      newMessage.obs_id.length === 0 ||
+      !selectedInstrument ||
+      !newMessage.message_text?.trim()
+    );
   }
 
   renderInstrumentsSelect() {
@@ -261,17 +283,22 @@ export default class ExposureAdd extends Component {
 
   renderImageTagsSelect() {
     const { imageTags, newMessage } = this.state;
+
+    const setNewMessageTags = (selectedOptions) => {
+      this.setState((prevState) => ({
+        newMessage: { ...prevState.newMessage, tags: selectedOptions },
+      }));
+    };
+
     return (
       <MultiSelect
+        innerRef={this.multiselectImageTagsComponentRef}
         options={imageTags}
         selectedValues={newMessage.tags}
         isObject={true}
         displayValue="name"
-        onSelect={(selectedOptions) => {
-          this.setState((prevState) => ({
-            newMessage: { ...prevState.newMessage, tags: selectedOptions },
-          }));
-        }}
+        onSelect={setNewMessageTags}
+        onRemove={setNewMessageTags}
         placeholder="Select one or several tags"
         selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
       />
@@ -280,15 +307,20 @@ export default class ExposureAdd extends Component {
 
   renderExposuresSelect() {
     const { observationIds, newMessage } = this.state;
+
+    const setNewMessageObsId = (selectedOptions) => {
+      this.setState((prevState) => ({
+        newMessage: { ...prevState.newMessage, obs_id: selectedOptions },
+      }));
+    };
+
     return (
       <MultiSelect
+        innerRef={this.multiselectExposuresComponentRef}
         options={observationIds}
         selectedValues={newMessage.obs_id}
-        onSelect={(selectedOptions) => {
-          this.setState((prevState) => ({
-            newMessage: { ...prevState.newMessage, obs_id: selectedOptions },
-          }));
-        }}
+        onSelect={setNewMessageObsId}
+        onRemove={setNewMessageObsId}
         placeholder="Select one or several observations"
         selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
       />
@@ -357,6 +389,12 @@ export default class ExposureAdd extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (this.state.selectedInstrument && prevState.selectedInstrument !== this.state.selectedInstrument) {
+      this.setState((state) => ({
+        newMessage: { ...state.newMessage, instrument: state.selectedInstrument },
+      }));
+    }
+
     if (
       prevState.selectedInstrument !== this.state.selectedInstrument ||
       (this.state.selectedDayExposureStart &&
@@ -537,7 +575,9 @@ export default class ExposureAdd extends Component {
                 }}
                 onKeyCombination={(combination) => {
                   if (combination === 'ctrl+enter') {
-                    this.handleSubmit();
+                    if (!this.isSubmitDisabled()) {
+                      this.handleSubmit();
+                    }
                   }
                 }}
               />
@@ -660,7 +700,7 @@ export default class ExposureAdd extends Component {
               </div>
 
               <div className={isMenu ? styles.footerRightMenu : styles.footerRight}>
-                <Button disabled={jiraIssueError} type="submit">
+                <Button disabled={this.isSubmitDisabled()} type="submit">
                   {savingLog ? (
                     <SpinnerIcon className={styles.spinnerIcon} />
                   ) : (

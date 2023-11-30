@@ -2,7 +2,16 @@
 Version History
 ===============
 
-5.27.7
+v5.27.8
+-------
+
+* Fix MultiSelect selection removing behavior `<https://github.com/lsst-ts/LOVE-frontend/pull/577>`_
+* Make constraints to save logs more robust `<https://github.com/lsst-ts/LOVE-frontend/pull/576>`_
+* Rollback query to FinishedScript removed on a previous commit `<https://github.com/lsst-ts/LOVE-frontend/pull/575>`_
+* Increase interval between audio alarms `<https://github.com/lsst-ts/LOVE-frontend/pull/574>`_
+* Improve OLE behavior when jira ticket creation fails `<https://github.com/lsst-ts/LOVE-frontend/pull/573>`_
+
+v5.27.7
 ------
 
 * Hotfix: make scripts timestamp evaluation more robust `<https://github.com/lsst-ts/LOVE-frontend/pull/572>`_
