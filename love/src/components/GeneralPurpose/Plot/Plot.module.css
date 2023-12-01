@@ -45,3 +45,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .marginLegend {
   margin-left: 4rem;
 }
+
+.controlsContainer > :first-child {
+  margin-top: var(--small-padding);
+}

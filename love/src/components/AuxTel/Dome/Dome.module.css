@@ -44,9 +44,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   text-align: left;
 }
 
-.grid {
-}
-
 .topRow {
   display: grid;
   justify-items: center;
@@ -165,4 +162,9 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .svgAzimuth svg {
   width: 110%;
+}
+
+.azimuthPlot,
+.elevationPlot {
+  height: 18em;
 }

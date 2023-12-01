@@ -56,3 +56,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   align-items: start;
   gap: 1em;
 }
+
+.plotContainer {
+  display: grid;
+  grid-template-rows: min-content minmax(auto, 18em);
+}

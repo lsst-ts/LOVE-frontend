@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
@@ -25,7 +24,7 @@ import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import VegaLegend from './VegaTimeSeriesPlot/VegaLegend';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
-import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData } from 'Utils';
+import ManagerInterface, { parseTimestamp, parsePlotInputsEFD, parseCommanderData } from 'Utils';
 import { isEqual } from 'lodash';
 import styles from './Plot.module.css';
 const moment = extendMoment(Moment);
@@ -138,8 +137,8 @@ export default class Plot extends Component {
       historicalData: props.timeSeriesControlsProps?.historicalData ?? [],
       efdClients: [],
       selectedEfdClient: null,
-      containerWidth: undefined,
-      containerHeight: undefined,
+      plotWidth: undefined,
+      plotHeight: undefined,
     };
     this.timeSeriesControlRef = React.createRef();
     this.legendRef = React.createRef();
@@ -157,11 +156,18 @@ export default class Plot extends Component {
   setHistoricalData = (startDate, timeWindow) => {
     const { inputs } = this.props;
     const { selectedEfdClient } = this.state;
-    const cscs = parsePlotInputs(inputs);
+    const cscs = parsePlotInputsEFD(inputs);
     const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
     ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min', selectedEfdClient).then((data) => {
       if (!data) return;
       const parsedData = parseCommanderData(data);
+      const parsedDataKeys = Object.keys(parsedData);
+      parsedDataKeys.forEach((key) => {
+        if (key.includes('logevent_')) {
+          parsedData[key.replace('logevent_', '')] = parsedData[key];
+          delete parsedData[key];
+        }
+      });
       this.setState({ historicalData: parsedData });
     });
   };
@@ -358,16 +364,15 @@ export default class Plot extends Component {
       window.requestAnimationFrame(() => {
         const container = entries[0];
 
-        const diffControl =
-          this.timeSeriesControlRef && this.timeSeriesControlRef.current
-            ? this.timeSeriesControlRef.current.offsetHeight + 19
-            : 0;
-        const diffLegend =
-          legendPosition === 'bottom' && this.legendRef.current ? this.legendRef.current.offsetHeight : 0;
+        const diffControlHeight = this.timeSeriesControlRef.current?.offsetHeight ?? 0;
+        const diffLegendHeight = (legendPosition === 'bottom' && this.legendRef.current?.offsetHeight) ?? 0;
+        const diffLegendWidth = (legendPosition === 'right' && this.legendRef.current?.offsetWidth) ?? 0;
 
         this.setState({
-          containerHeight: container.contentRect.height - diffControl - diffLegend,
-          containerWidth: container.contentRect.width,
+          /** Subtract 16 to height and width to
+          avoid bug with resizing. TODO: DM-41914 */
+          plotHeight: container.contentRect.height - diffControlHeight - diffLegendHeight - 16,
+          plotWidth: container.contentRect.width - diffLegendWidth - 16,
         });
       });
     });
@@ -393,8 +398,8 @@ export default class Plot extends Component {
     // Set container height and width if props are defined
     if (this.props.height !== undefined && this.props.width !== undefined) {
       this.setState({
-        containerHeight: this.props.height,
-        containerWidth: this.props.width,
+        plotHeight: this.props.height,
+        plotWidth: this.props.width,
       });
     }
 
@@ -412,11 +417,11 @@ export default class Plot extends Component {
       this.setState({ ...timeSeriesControlsProps });
     }
 
-    // Check if height or width has changed so we can update the containerHeight and containerWidth
+    // Check if height or width has changed so we can update the plotHeight and plotWidth
     if (width !== undefined && height !== undefined && (prevProps.width !== width || prevProps.height !== height)) {
       this.setState({
-        containerHeight: this.props.height,
-        containerWidth: this.props.width,
+        plotHeight: this.props.height,
+        plotWidth: this.props.width,
       });
     }
 
@@ -450,7 +455,7 @@ export default class Plot extends Component {
       scaleDomain,
     } = this.props;
 
-    const { data, efdClients, containerWidth, containerHeight, isLive, timeWindow, historicalData } = this.state;
+    const { data, efdClients, plotWidth, plotHeight, isLive, timeWindow, historicalData } = this.state;
     const layerTypes = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads', 'bigotes', 'rects', 'heatmaps'];
     const layers = {};
     for (const [inputName, inputConfig] of Object.entries(inputs)) {
@@ -508,7 +513,7 @@ export default class Plot extends Component {
     return (
       <>
         {controls && (
-          <div ref={this.timeSeriesControlRef}>
+          <div className={styles.controlsContainer} ref={this.timeSeriesControlRef}>
             <TimeSeriesControls
               setTimeWindow={(timeWindow) => this.setState({ timeWindow })}
               timeWindow={this.state.timeWindow}
@@ -529,14 +534,16 @@ export default class Plot extends Component {
               yAxisTitle={yAxisTitle}
               marksStyles={completedMarksStyles}
               temporalXAxis
-              width={containerWidth - 160} // from the .autogrid grid-template-columns
-              height={containerHeight}
+              width={plotWidth}
+              height={plotHeight}
               className={styles.plot}
               temporalXAxisFormat={temporalXAxisFormat}
               scaleIndependent={scaleIndependent}
               scaleDomain={scaleDomain}
             />
-            <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
+            <div ref={this.legendRef}>
+              <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
+            </div>
           </div>
         ) : (
           <div
@@ -550,8 +557,8 @@ export default class Plot extends Component {
                 yAxisTitle={yAxisTitle}
                 marksStyles={completedMarksStyles}
                 temporalXAxis
-                width={containerWidth - 30} // from the .autogrid grid-template-columns
-                height={containerHeight}
+                width={plotWidth}
+                height={plotHeight}
                 className={styles.plot}
                 temporalXAxisFormat={temporalXAxisFormat}
                 scaleIndependent={scaleIndependent}

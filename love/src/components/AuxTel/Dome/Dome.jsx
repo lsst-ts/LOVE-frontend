@@ -400,34 +400,30 @@ export default class Dome extends Component {
           <div className={styles.azimuthSection}>
             <h2>Azimuth</h2>
             <div ref={this.azimuthPlotRef} className={styles.azimuthPlot}>
-              <div>
-                <PlotContainer
-                  inputs={this.azimuthPlotInputs}
-                  containerNode={this.azimuthPlotRef}
-                  xAxisTitle="Time"
-                  yAxisTitle="Azimuth"
-                  timeSeriesControlsProps={timeSeriesControlsProps}
-                  maxHeight={250}
-                  scaleDomain={azScaleDomain}
-                />
-              </div>
+              <PlotContainer
+                inputs={this.azimuthPlotInputs}
+                containerNode={this.azimuthPlotRef}
+                xAxisTitle="Time"
+                yAxisTitle="Azimuth"
+                timeSeriesControlsProps={timeSeriesControlsProps}
+                maxHeight={250}
+                scaleDomain={azScaleDomain}
+              />
             </div>
           </div>
 
           <div className={styles.elevationSection}>
             <h2>Elevation</h2>
             <div ref={this.elevationPlotRef} className={styles.elevationPlot}>
-              <div>
-                <PlotContainer
-                  inputs={this.elevationPlotInputs}
-                  containerNode={this.elevationPlotRef}
-                  xAxisTitle="Time"
-                  yAxisTitle="Elevation"
-                  timeSeriesControlsProps={timeSeriesControlsProps}
-                  maxHeight={250}
-                  scaleDomain={elScaleDomain}
-                />
-              </div>
+              <PlotContainer
+                inputs={this.elevationPlotInputs}
+                containerNode={this.elevationPlotRef}
+                xAxisTitle="Time"
+                yAxisTitle="Elevation"
+                timeSeriesControlsProps={timeSeriesControlsProps}
+                maxHeight={250}
+                scaleDomain={elScaleDomain}
+              />
             </div>
           </div>
         </div>
