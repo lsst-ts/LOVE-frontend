@@ -54,7 +54,7 @@ export default class Entry extends Component {
       shape: PropTypes.string.isRequired,
       /** Whether to plot a filled or empty (contour only) point. Used in point and pointLine marks */
       filled: PropTypes.bool.isRequired,
-      /** Wether the labels of the variables go to the left or right side */
+      /** Whether the labels of the variables go to the left or right side */
       orient: PropTypes.oneOf('left', 'right').isRequired,
     }),
     /** Id of the entry */
