@@ -5,6 +5,7 @@ Version History
 v5.27.9
 -------
 
+* Bump @adobe/css-tools from 4.3.1 to 4.3.2 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/580>`_
 * Several fixes for Plot components `<https://github.com/lsst-ts/LOVE-frontend/pull/578>`_
 
 v5.27.8
