@@ -86,9 +86,11 @@ export default class NonExposureDetail extends Component {
   }
 
   deleteMessage(message) {
-    ManagerInterface.deleteMessageNarrativeLogs(message.id).then(() => {
+    ManagerInterface.deleteMessageNarrativeLogs(message.id).then((response) => {
       this.setState({ confirmationModalShown: false });
-      this.props.remove(message);
+      if (response) {
+        this.props.remove(message);
+      }
     });
   }
 
