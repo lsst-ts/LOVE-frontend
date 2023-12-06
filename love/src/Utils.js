@@ -744,16 +744,7 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      return response.json().then((resp) => {
-        return resp;
-      });
+      return checkJSONResponse(response);
     });
   }
 
@@ -769,16 +760,7 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      return response.json().then((resp) => {
-        return resp;
-      });
+      return checkJSONResponse(response);
     });
   }
 
@@ -792,16 +774,7 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      return response.json().then((resp) => {
-        return resp;
-      });
+      return checkJSONResponse(response);
     });
   }
 
@@ -815,16 +788,7 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      return response.json().then((resp) => {
-        return resp;
-      });
+      return checkJSONResponse(response);
     });
   }
 
@@ -855,29 +819,15 @@ export default class ManagerInterface {
       headers: ManagerInterface.getSimpleHeaders(),
       body: formData,
     }).then((response) => {
-      if (response.status >= 500) {
-        toast.error('Error communicating with the server.');
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      if (response.status === 400) {
+      if (response.status === 422) {
         return response.json().then((resp) => {
-          toast.error(resp.ack);
-          return resp;
+          toast.error(resp.detail);
+          return false;
         });
       }
-      if (response.status === 404) {
-        return response.json().then((resp) => {
-          toast.error('Error adding log.');
-          return resp;
-        });
-      }
-      return response.json().then((resp) => {
+
+      return checkJSONResponse(response, () => {
         toast.success('Log added succesfully.');
-        return resp;
       });
     });
   }
@@ -909,21 +859,8 @@ export default class ManagerInterface {
       headers: ManagerInterface.getSimpleHeaders(),
       body: formData,
     }).then((response) => {
-      if (response.status >= 500) {
-        toast.error('Error communicating with the server.');
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      if (response.status >= 400 && response.status < 500) {
-        toast.error('Unable to save request.');
-        return false;
-      }
-      return response.json().then((resp) => {
+      return checkJSONResponse(response, () => {
         toast.success('Log edited succesfully.');
-        return resp;
       });
     });
   }
@@ -938,21 +875,8 @@ export default class ManagerInterface {
       method: 'DELETE',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
-        toast.error('Error communicating with the server.');
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      if (response.status >= 400 && response.status < 500) {
-        toast.error('Unable to save request.');
-        return false;
-      }
-      return response.json().then((resp) => {
-        toast.success(resp.ack);
-        return resp;
+      return checkJSONResponse(response, () => {
+        toast.success('Log deleted succesfully.');
       });
     });
   }
@@ -967,16 +891,7 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      return response.json().then((resp) => {
-        return resp;
-      });
+      return checkJSONResponse(response);
     });
   }
 
@@ -992,16 +907,7 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      return response.json().then((resp) => {
-        return resp;
-      });
+      return checkJSONResponse(response);
     });
   }
 
@@ -1032,29 +938,15 @@ export default class ManagerInterface {
       headers: ManagerInterface.getSimpleHeaders(),
       body: formData,
     }).then((response) => {
-      if (response.status >= 500) {
-        toast.error('Error communicating with the server.');
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      if (response.status === 400) {
-        return response.json().then((resp) => {
-          toast.error(resp.ack);
-          return resp;
-        });
-      }
       if (response.status === 422) {
         return response.json().then((resp) => {
           toast.error(resp.detail);
-          return resp;
+          return false;
         });
       }
-      return response.json().then((resp) => {
+
+      return checkJSONResponse(response, () => {
         toast.success('Log added succesfully.');
-        return resp;
       });
     });
   }
@@ -1086,21 +978,8 @@ export default class ManagerInterface {
       headers: ManagerInterface.getSimpleHeaders(),
       body: formData,
     }).then((response) => {
-      if (response.status >= 500) {
-        toast.error('Error communicating with the server.');
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      if (response.status >= 400 && response.status < 500) {
-        toast.error('Unable to save request.');
-        return false;
-      }
-      return response.json().then((resp) => {
+      return checkJSONResponse(response, () => {
         toast.success('Log edited succesfully.');
-        return resp;
       });
     });
   }
@@ -1115,21 +994,8 @@ export default class ManagerInterface {
       method: 'DELETE',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
-        toast.error('Error communicating with the server.');
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      if (response.status >= 400 && response.status < 500) {
-        toast.error('Unable to save request.');
-        return false;
-      }
-      return response.json().then((resp) => {
-        toast.success(resp.ack);
-        return resp;
+      return checkJSONResponse(response, () => {
+        toast.success('Log deleted succesfully.');
       });
     });
   }
@@ -1144,16 +1010,7 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      return response.json().then((resp) => {
-        return resp;
-      });
+      return checkJSONResponse(response);
     });
   }
 
@@ -2065,4 +1922,51 @@ export function getEntryAccessorString(isArray, arrayIndex) {
     return `(x) => x[${arrayIndex}]`;
   }
   return '(x) => x';
+}
+
+/**
+ * Function to check response statuses of
+ * ManagerInterface requests. Errors are handled
+ * and if success json() promise is returned
+ * @param {object} response the response object
+ * @param {function} onSuccess function to be executed on success
+ * @returns {object} promise if success, false otherwise
+ * Notes:
+ * - 500 errors are shown as a toast.
+ * - 400 errors are handled and the `ack` param is shown as a toast.
+ * - 401 errors are handled and the token is removed.
+ * - 413 errors are shown as a toast.
+ * - 200, 201 and 204 responses are handled and the onSuccess function is executed.
+ */
+export function checkJSONResponse(response, onSuccess) {
+  if (response.status >= 500) {
+    toast.error('Error communicating with the server.');
+    return false;
+  }
+  if (response.status === 400) {
+    return response.json().then((resp) => {
+      toast.error(resp.ack);
+      return false;
+    });
+  }
+  if (response.status === 401) {
+    ManagerInterface.removeToken();
+    return false;
+  }
+  if (response.status === 404) {
+    toast.error('Not found.');
+    return false;
+  }
+  if (response.status === 413) {
+    toast.error('File too large.');
+    return false;
+  }
+
+  if (response.status === 200 || response.status === 201 || response.status === 204) {
+    if (onSuccess) onSuccess();
+  }
+
+  return response.json().then((resp) => {
+    return resp;
+  });
 }
