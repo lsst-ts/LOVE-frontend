@@ -91,10 +91,12 @@ export default class ExposureDetail extends Component {
 
     ManagerInterface.updateMessageExposureLogs(message.id, payload).then((response) => {
       if (response) {
-        const logMessages = this.state.logMessages.filter((msg) => message.id !== msg.id);
-        this.setState({
-          logMessages: [response, ...logMessages],
-          confirmationModalShown: false,
+        this.setState((state) => {
+          const logMessages = state.logMessages.filter((msg) => message.id !== msg.id);
+          return {
+            logMessages: [response, ...logMessages],
+            confirmationModalShown: false,
+          };
         });
       }
       if (callback) callback();
@@ -104,8 +106,13 @@ export default class ExposureDetail extends Component {
   deleteMessage(message) {
     ManagerInterface.deleteMessageExposureLogs(message.id).then((response) => {
       if (response) {
-        const lgMsgs = this.state.logMessages.filter((msg) => message.id !== msg.id);
-        this.setState({ logMessages: lgMsgs, confirmationModalShown: false });
+        this.setState((state) => {
+          const newLogMessages = state.logMessages.filter((msg) => message.id !== msg.id);
+          return {
+            logMessages: newLogMessages,
+            confirmationModalShown: false,
+          };
+        });
       }
     });
   }

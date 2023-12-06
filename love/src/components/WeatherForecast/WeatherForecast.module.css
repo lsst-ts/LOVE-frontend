@@ -70,6 +70,16 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   padding: 0.5rem;
 }
 
+.fullSectionPlot {
+  display: grid;
+  grid-template-rows: min-content minmax(auto, 19em);
+  grid-template-columns: 1fr;
+  border: 2px solid var(--second-tertiary-background-color);
+  border-radius: 5px;
+  box-sizing: border-box;
+  padding: 0.5rem;
+}
+
 .doubleSectionSimple {
   display: grid;
   grid-template-rows: min-content 1fr;
@@ -80,11 +90,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   box-sizing: border-box;
   padding: 0.5rem;
   text-align: left;
-}
-
-.plot {
-  width: 100%;
-  overflow: hidden;
 }
 
 .windPlotContainer {

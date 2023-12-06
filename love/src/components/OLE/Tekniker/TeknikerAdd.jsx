@@ -149,24 +149,20 @@ export default class TeknikerAdd extends Component {
     this.setState({ savingLog: true });
     if (this.state.logEdit.id) {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
-        this.setState({
-          savingLog: false,
-        });
-        this.props.save(response);
+        this.setState({ savingLog: false });
+        if (response) {
+          this.props.save(response);
+        }
       });
     } else {
       ManagerInterface.createMessageNarrativeLogs(payload).then((response) => {
-        this.setState({
-          savingLog: false,
-        });
-        this.props.save(response);
-
-        // Clean form only if the response is successful
-        if (!response.error) {
+        this.setState({ savingLog: false });
+        // Calbacks only if the response is successful
+        if (response) {
           this.cleanForm();
+          this.props.save(response);
+          if (this.props.back) this.props.back();
         }
-
-        if (this.props.back) this.props.back();
       });
     }
   }

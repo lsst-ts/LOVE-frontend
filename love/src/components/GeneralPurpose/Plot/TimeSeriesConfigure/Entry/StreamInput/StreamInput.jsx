@@ -19,14 +19,12 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
-import AceEditor from 'react-ace';
 import 'brace/mode/javascript';
 import 'brace/theme/solarized_dark';
-import styles from './StreamInput.module.css';
+import { getEntryAccessorString } from 'Utils';
 import Input from 'components/GeneralPurpose/Input/Input.jsx';
 import Select from 'components/GeneralPurpose/Select/Select.jsx';
-import ManagerInterface from 'Utils';
+import styles from './StreamInput.module.css';
 
 const STREAM_CATEGORY_OPTIONS = ['event', 'telemetry'];
 
@@ -80,9 +78,9 @@ export default class StreamInput extends Component {
       salindex: props.salindex,
       topic: props.topic,
       item: props.item,
-      isArray: props.isArray ?? false, //TODO: remove param
-      arrayIndex: props.arrayIndex ?? 0, //TODO: remove param
-      accessor: props.accessor ?? props.category === 'telemetry' ? '(x) => x[0]' : '(x) => x',
+      isArray: props.isArray ?? false,
+      arrayIndex: props.arrayIndex ?? 0,
+      accessor: props.accessor,
     };
   }
 
@@ -117,27 +115,32 @@ export default class StreamInput extends Component {
   }
 
   getInfo() {
+    const { variable } = this.props;
+    const { category, csc, salindex, topic, item, isArray, arrayIndex, accessor } = this.state;
     return {
-      variable: this.props.variable,
-      category: this.state.category,
-      csc: this.state.csc,
-      salindex: parseInt(this.state.salindex),
-      topic: this.state.topic,
-      item: this.state.item,
-      isArray: this.state.isArray,
-      arrayIndex: this.state.arrayIndex,
-      accessor: this.state.accessor,
+      variable,
+      category,
+      csc,
+      salindex: parseInt(salindex, 10),
+      topic,
+      item,
+      isArray,
+      arrayIndex,
+      accessor: accessor ? accessor : getEntryAccessorString(isArray, arrayIndex),
     };
   }
 
   render() {
-    const { streamInputId, variable, optionsTree } = this.props;
-    const { category, csc, salindex, topic, item, isArray, arrayIndex, accessor } = this.state;
+    const { variable, optionsTree } = this.props;
+    const { category, csc, salindex, topic, item, isArray, arrayIndex } = this.state;
 
     const cscOptions = optionsTree ? Object.keys(optionsTree) : [];
-    const topicOptions = optionsTree && category && csc ? Object.keys(optionsTree[csc][`${category}_data`]) : [];
-    const itemOptions =
-      optionsTree && category && csc && topic ? Object.keys(optionsTree[csc][`${category}_data`][topic]) : [];
+    const topicOptions = optionsTree?.[csc]?.[`${category}_data`]
+      ? Object.keys(optionsTree[csc][`${category}_data`])
+      : [];
+    const itemOptions = optionsTree?.[csc]?.[`${category}_data`]?.[topic]
+      ? Object.keys(optionsTree[csc][`${category}_data`][topic])
+      : [];
 
     return (
       <>
@@ -185,8 +188,11 @@ export default class StreamInput extends Component {
               className={styles.checkboxInput}
               type="checkbox"
               defaultChecked={isArray}
-              onChange={(ev) => {
-                this.setState((prevState) => ({ isArray: !prevState.isArray }));
+              onChange={() => {
+                this.setState((state) => ({
+                  isArray: !state.isArray,
+                  accessor: getEntryAccessorString(!state.isArray, state.arrayIndex),
+                }));
               }}
             />
             {isArray && (
@@ -198,27 +204,16 @@ export default class StreamInput extends Component {
                   min={0}
                   value={arrayIndex}
                   placeholder="Array index"
-                  onChange={(ev) => this.setState({ arrayIndex: parseInt(ev.target.value) })}
+                  onChange={(ev) =>
+                    this.setState({
+                      arrayIndex: parseInt(ev.target.value),
+                      accessor: getEntryAccessorString(true, parseInt(ev.target.value)),
+                    })
+                  }
                 />
               </>
             )}
           </div>
-        </div>
-        <div className={styles.container}>
-          <div>Accessor: </div>
-          <AceEditor
-            mode="javascript"
-            className={styles.editor}
-            theme="solarized_dark"
-            name={`ace-editor-${streamInputId}`}
-            onChange={(ev) => {
-              this.setState({ accessor: ev });
-            }}
-            debounceChangePeriod={100}
-            width={'100%'}
-            height={'50px'}
-            value={accessor}
-          />
         </div>
       </>
     );

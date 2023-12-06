@@ -169,6 +169,7 @@ export default class ExposureAdd extends Component {
 
     this.setState({ savingLog: true });
     ManagerInterface.createMessageExposureLogs(payload).then((result) => {
+      this.setState({ savingLog: false });
       if (isLogCreate || isMenu || !exposure.obs_id) {
         this.props.back();
       } else {
@@ -176,11 +177,9 @@ export default class ExposureAdd extends Component {
       }
 
       // Clean form only if the response is successful
-      if (!result.error && !result.detail) {
+      if (result) {
         this.cleanForm();
       }
-
-      this.setState({ savingLog: false });
     });
   }
 

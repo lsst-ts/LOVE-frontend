@@ -23,7 +23,7 @@ import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getStreamsData, getTaiToUtc } from 'redux/selectors/selectors';
 import _ from 'lodash';
 import PolarPlot from './PolarPlot';
-import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData } from 'Utils';
+import ManagerInterface, { parseTimestamp, parsePlotInputsEFD, parseCommanderData } from 'Utils';
 
 const DATA_WINDOW = 10;
 
@@ -321,7 +321,7 @@ class PolarPlotContainer extends React.Component {
         this.setState({ timeWindow });
       },
       setHistoricalData: (startDate, timeWindow) => {
-        const cscs = parsePlotInputs(inputs);
+        const cscs = parsePlotInputsEFD(inputs);
         const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
         // historicalData
         ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min').then((data) => {

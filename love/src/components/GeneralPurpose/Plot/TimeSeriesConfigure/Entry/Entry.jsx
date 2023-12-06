@@ -46,14 +46,16 @@ export default class Entry extends Component {
      * can be either "line", "bar" or "pointLine" */
     type: PropTypes.string,
     config: PropTypes.shape({
-      /** (optional) Color of the mark to be used */
+      /** Color of the mark to be used */
       color: PropTypes.string.isRequired,
-      /** (optional) Dashes pattern for line and pointline marks */
+      /** Dashes pattern for line and pointline marks */
       dash: PropTypes.arrayOf(PropTypes.number).isRequired,
-      /** (optional) Shape used for the mark. Used in point and pointLine marks.*/
+      /** Shape used for the mark. Used in point and pointLine marks */
       shape: PropTypes.string.isRequired,
-      /** (optional) Whether to plot a filled or empty (contour only) point. Used in point and pointLine marks.*/
+      /** Whether to plot a filled or empty (contour only) point. Used in point and pointLine marks */
       filled: PropTypes.bool.isRequired,
+      /** Whether the labels of the variables go to the left or right side */
+      orient: PropTypes.oneOf('left', 'right').isRequired,
     }),
     /** Id of the entry */
     entryId: PropTypes.string,
@@ -63,6 +65,10 @@ export default class Entry extends Component {
      * - index
      */
     onRemove: PropTypes.func,
+    /** Callback to call when duplicating the input, should have the following arguments:
+     * - index
+     */
+    onDuplicate: PropTypes.func,
   };
 
   static defaultProps = {
@@ -73,6 +79,7 @@ export default class Entry extends Component {
     entryId: null,
     optionsTree: {},
     onRemove: null,
+    onDuplicate: null,
   };
 
   constructor(props) {
@@ -162,6 +169,7 @@ export default class Entry extends Component {
           config={this.state.config}
           onChange={(name, type, config) => this.onChangeStylePlot(name, type, config)}
           onRemove={() => this.props.onRemove()}
+          onDuplicate={() => this.props.onDuplicate()}
         />
         <div className={styles.container}>{values ? this.getStreamInput(values) : <></>}</div>
       </div>

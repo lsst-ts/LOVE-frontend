@@ -744,16 +744,7 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      return response.json().then((resp) => {
-        return resp;
-      });
+      return checkJSONResponse(response);
     });
   }
 
@@ -769,16 +760,7 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      return response.json().then((resp) => {
-        return resp;
-      });
+      return checkJSONResponse(response);
     });
   }
 
@@ -792,16 +774,7 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      return response.json().then((resp) => {
-        return resp;
-      });
+      return checkJSONResponse(response);
     });
   }
 
@@ -815,16 +788,7 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      return response.json().then((resp) => {
-        return resp;
-      });
+      return checkJSONResponse(response);
     });
   }
 
@@ -855,29 +819,15 @@ export default class ManagerInterface {
       headers: ManagerInterface.getSimpleHeaders(),
       body: formData,
     }).then((response) => {
-      if (response.status >= 500) {
-        toast.error('Error communicating with the server.');
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      if (response.status === 400) {
+      if (response.status === 422) {
         return response.json().then((resp) => {
-          toast.error(resp.ack);
-          return resp;
+          toast.error(resp.detail);
+          return false;
         });
       }
-      if (response.status === 404) {
-        return response.json().then((resp) => {
-          toast.error('Error adding log.');
-          return resp;
-        });
-      }
-      return response.json().then((resp) => {
+
+      return checkJSONResponse(response, () => {
         toast.success('Log added succesfully.');
-        return resp;
       });
     });
   }
@@ -909,21 +859,8 @@ export default class ManagerInterface {
       headers: ManagerInterface.getSimpleHeaders(),
       body: formData,
     }).then((response) => {
-      if (response.status >= 500) {
-        toast.error('Error communicating with the server.');
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      if (response.status >= 400 && response.status < 500) {
-        toast.error('Unable to save request.');
-        return false;
-      }
-      return response.json().then((resp) => {
+      return checkJSONResponse(response, () => {
         toast.success('Log edited succesfully.');
-        return resp;
       });
     });
   }
@@ -938,21 +875,8 @@ export default class ManagerInterface {
       method: 'DELETE',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
-        toast.error('Error communicating with the server.');
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      if (response.status >= 400 && response.status < 500) {
-        toast.error('Unable to save request.');
-        return false;
-      }
-      return response.json().then((resp) => {
-        toast.success(resp.ack);
-        return resp;
+      return checkJSONResponse(response, () => {
+        toast.success('Log deleted succesfully.');
       });
     });
   }
@@ -967,16 +891,7 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      return response.json().then((resp) => {
-        return resp;
-      });
+      return checkJSONResponse(response);
     });
   }
 
@@ -992,16 +907,7 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      return response.json().then((resp) => {
-        return resp;
-      });
+      return checkJSONResponse(response);
     });
   }
 
@@ -1032,29 +938,15 @@ export default class ManagerInterface {
       headers: ManagerInterface.getSimpleHeaders(),
       body: formData,
     }).then((response) => {
-      if (response.status >= 500) {
-        toast.error('Error communicating with the server.');
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      if (response.status === 400) {
-        return response.json().then((resp) => {
-          toast.error(resp.ack);
-          return resp;
-        });
-      }
       if (response.status === 422) {
         return response.json().then((resp) => {
           toast.error(resp.detail);
-          return resp;
+          return false;
         });
       }
-      return response.json().then((resp) => {
+
+      return checkJSONResponse(response, () => {
         toast.success('Log added succesfully.');
-        return resp;
       });
     });
   }
@@ -1086,21 +978,8 @@ export default class ManagerInterface {
       headers: ManagerInterface.getSimpleHeaders(),
       body: formData,
     }).then((response) => {
-      if (response.status >= 500) {
-        toast.error('Error communicating with the server.');
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      if (response.status >= 400 && response.status < 500) {
-        toast.error('Unable to save request.');
-        return false;
-      }
-      return response.json().then((resp) => {
+      return checkJSONResponse(response, () => {
         toast.success('Log edited succesfully.');
-        return resp;
       });
     });
   }
@@ -1115,21 +994,8 @@ export default class ManagerInterface {
       method: 'DELETE',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
-        toast.error('Error communicating with the server.');
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      if (response.status >= 400 && response.status < 500) {
-        toast.error('Unable to save request.');
-        return false;
-      }
-      return response.json().then((resp) => {
-        toast.success(resp.ack);
-        return resp;
+      return checkJSONResponse(response, () => {
+        toast.success('Log deleted succesfully.');
       });
     });
   }
@@ -1144,16 +1010,7 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      return response.json().then((resp) => {
-        return resp;
-      });
+      return checkJSONResponse(response);
     });
   }
 
@@ -1533,78 +1390,32 @@ export const takeScreenshot = (callback) => {
  *   }
  * }
  */
-export const parsePlotInputs = (inputs) => {
-  const cscs = {};
+export const parsePlotInputsEFD = (inputs) => {
+  const parsedInputs = {};
   Object.values(inputs).forEach((input) => {
-    if (!input.values) {
-      const cscDict = cscs[input.csc];
-      const indexDict = cscs[input.csc]?.[input.salindex];
-      const topicDict = cscs[input.csc]?.[input.salindex]?.[input.topic];
-      let newTopicDict = topicDict ?? [];
-      let newIndexDict = indexDict ?? {};
-      const newCSCDict = cscDict ?? {};
-      if (topicDict) {
-        newIndexDict[input.topic].push(input.item);
-        return;
+    Object.values(input.values).forEach((value) => {
+      // EFD receives topic names of events with the logevent_ prefix
+      const topicName = value.category === 'telemetry' ? value.topic : `logevent_${value.topic}`;
+
+      // Check if the cscDict exists, if not create it
+      if (!parsedInputs[value.csc]) {
+        parsedInputs[value.csc] = {};
       }
-      // Next line was added to support EFD Querying for Array type items (influx)
-      newIndexDict[input.topic] = [`${input.item}${input.arrayIndex ?? ''}`];
 
-      newTopicDict = newIndexDict[input.topic];
-      if (indexDict) {
-        newCSCDict[input.salindex][input.topic] = newTopicDict;
-        newIndexDict = newCSCDict[input.salindex];
-      } else {
-        newIndexDict = {
-          [input.topic]: newTopicDict,
-        };
-        newCSCDict[input.salindex] = newIndexDict;
+      // Check if the indexDict exists, if not create it
+      if (!parsedInputs[value.csc][value.salindex]) {
+        parsedInputs[value.csc][value.salindex] = {};
       }
-      if (cscDict) {
-        cscs[input.csc][input.salindex] = newIndexDict;
-      } else {
-        cscs[input.csc] = {
-          [input.salindex]: newIndexDict,
-        };
+      // Check if the topicDict exists, if not create it
+      if (!parsedInputs[value.csc][value.salindex][topicName]) {
+        parsedInputs[value.csc][value.salindex][topicName] = [];
       }
-    } else {
-      Object.values(input.values).forEach((value) => {
-        const cscDict = cscs[value.csc];
-        const indexDict = cscs[value.csc]?.[value.salindex];
-        const topicDict = cscs[value.csc]?.[value.salindex]?.[value.topic];
 
-        const newCSCDict = cscDict ?? {};
-        let newIndexDict = indexDict ?? {};
-        let newTopicDict = topicDict ?? [];
-
-        // If topicDict array exists, push the new item
-        if (topicDict) {
-          //  Array index is used for queries to the EFD (influx)
-          topicDict.push(`${value.item}${value.arrayIndex ?? ''}`);
-          return;
-        }
-
-        //  Array index is used for queries to the EFD (influx)
-        newIndexDict[value.topic] = [`${value.item}${value.arrayIndex ?? ''}`];
-        newTopicDict = newIndexDict[value.topic];
-
-        //  If indexDict exists, add the new topicDict
-        if (indexDict) {
-          indexDict[value.topic] = newTopicDict;
-        } else {
-          newCSCDict[value.salindex] = newIndexDict;
-        }
-
-        //  If cscDict exists, add the new indexDict
-        if (cscDict) {
-          cscDict[value.salindex] = newIndexDict;
-        } else {
-          cscs[value.csc] = newCSCDict;
-        }
-      });
-    }
+      //  Array index is used for queries to the EFD (influx)
+      parsedInputs[value.csc][value.salindex][topicName].push(`${value.item}${value.isArray ? value.arrayIndex : ''}`);
+    });
   });
-  return cscs;
+  return parsedInputs;
 };
 
 /**
@@ -2098,4 +1909,64 @@ export function truncateISODateToMinutes(date) {
 export function firstLetterToUpperCase(string) {
   if (!string) return '';
   return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+/**
+ * Function to get accessor function string from
+ * isArray and arrayIndex parameters for
+ * getting telemetry and events data on
+ * VegaTimeSeriesPlots
+ */
+export function getEntryAccessorString(isArray, arrayIndex) {
+  if (isArray) {
+    return `(x) => x[${arrayIndex}]`;
+  }
+  return '(x) => x';
+}
+
+/**
+ * Function to check response statuses of
+ * ManagerInterface requests. Errors are handled
+ * and if success json() promise is returned
+ * @param {object} response the response object
+ * @param {function} onSuccess function to be executed on success
+ * @returns {object} promise if success, false otherwise
+ * Notes:
+ * - 500 errors are shown as a toast.
+ * - 400 errors are handled and the `ack` param is shown as a toast.
+ * - 401 errors are handled and the token is removed.
+ * - 413 errors are shown as a toast.
+ * - 200, 201 and 204 responses are handled and the onSuccess function is executed.
+ */
+export function checkJSONResponse(response, onSuccess) {
+  if (response.status >= 500) {
+    toast.error('Error communicating with the server.');
+    return false;
+  }
+  if (response.status === 400) {
+    return response.json().then((resp) => {
+      toast.error(resp.ack);
+      return false;
+    });
+  }
+  if (response.status === 401) {
+    ManagerInterface.removeToken();
+    return false;
+  }
+  if (response.status === 404) {
+    toast.error('Not found.');
+    return false;
+  }
+  if (response.status === 413) {
+    toast.error('File too large.');
+    return false;
+  }
+
+  if (response.status === 200 || response.status === 201 || response.status === 204) {
+    if (onSuccess) onSuccess();
+  }
+
+  return response.json().then((resp) => {
+    return resp;
+  });
 }

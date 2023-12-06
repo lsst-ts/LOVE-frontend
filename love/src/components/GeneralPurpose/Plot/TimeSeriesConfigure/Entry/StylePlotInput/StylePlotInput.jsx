@@ -44,16 +44,16 @@ export default class StylePlotInput extends PureComponent {
      * List of inputs for the configuration.
      */
     config: PropTypes.shape({
-      /** (optional) Color of the mark to be used */
+      /** Color of the mark to be used */
       color: PropTypes.string.isRequired,
-      /** (optional) Dashes pattern for line and pointline marks */
+      /** Dashes pattern for line and pointline marks */
       dash: PropTypes.arrayOf(PropTypes.number).isRequired,
-      /** (optional) Shape used for the mark. Used in point and pointLine marks.*/
+      /** Shape used for the mark. Used in point and pointLine marks.*/
       shape: PropTypes.string.isRequired,
-      /** (optional) Whether to plot a filled or empty (contour only) point. Used in point and pointLine marks.*/
+      /** Whether to plot a filled or empty (contour only) point. Used in point and pointLine marks.*/
       filled: PropTypes.bool.isRequired,
-      /** (optional) Axis-y orient for the line plot. (left or right)*/
-      orient: PropTypes.string,
+      /** Axis-y orient for the line plot. (left or right)*/
+      orient: PropTypes.string.isRequired,
     }),
 
     /**
@@ -97,7 +97,7 @@ export default class StylePlotInput extends PureComponent {
   };
 
   render() {
-    const input = this.props.config;
+    const { config } = this.props;
     return (
       <div className={styles.container}>
         <div className={styles.firstRow}>
@@ -118,22 +118,33 @@ export default class StylePlotInput extends PureComponent {
               onChange={(selection) => this.onTypeChange(selection.value)}
             />
           </div>
-          <Button
-            className={styles.button}
-            onClick={this.props.onRemove}
-            disabled={this.props.onRemove === null}
-            size="small"
-            title="Remove from config"
-          >
-            Remove
-          </Button>
+          <div className={styles.entryButtons}>
+            <Button
+              className={styles.button}
+              onClick={this.props.onRemove}
+              disabled={this.props.onRemove === null}
+              size="small"
+              title="Remove from config"
+            >
+              Remove
+            </Button>
+            <Button
+              className={styles.button}
+              onClick={this.props.onDuplicate}
+              disabled={!this.props.onDuplicate}
+              size="small"
+              title="Duplicate entry"
+            >
+              Duplicate
+            </Button>
+          </div>
         </div>
 
         <div className={styles.stylesContainer}>
           <Select
             className={styles.select}
             options={COLORS}
-            option={input?.color}
+            option={config?.color}
             placeholder="Select a color"
             onChange={(selection) => this.onStyleChange('color', selection)}
           />
@@ -142,7 +153,7 @@ export default class StylePlotInput extends PureComponent {
             <Select
               className={styles.select}
               options={DASHES.map((d) => JSON.stringify(d))}
-              option={JSON.stringify(input?.dash)}
+              option={JSON.stringify(config?.dash)}
               placeholder="Select a dash pattern"
               onChange={(selection) => this.onStyleChange('dash', { ...selection, value: JSON.parse(selection.value) })}
             />
@@ -151,12 +162,12 @@ export default class StylePlotInput extends PureComponent {
           {['line', 'pointLine'].includes(this.props.type) && (
             <svg viewBox="0 0 20 4" xmlns="http://www.w3.org/2000/svg">
               <line
-                stroke={input?.color}
+                stroke={config?.color}
                 x1="2"
                 y1="2"
                 x2="20"
                 y2="2"
-                strokeDasharray={`${input?.dash[0]} ${input?.dash[1]}`}
+                strokeDasharray={`${config?.dash[0]} ${config?.dash[1]}`}
               />
             </svg>
           )}
@@ -164,12 +175,12 @@ export default class StylePlotInput extends PureComponent {
           {['arrow'].includes(this.props.type) && (
             <svg viewBox="0 0 20 4" xmlns="http://www.w3.org/2000/svg">
               <line
-                stroke={input?.color}
+                stroke={config?.color}
                 x1="0"
                 y1="2"
                 x2="20"
                 y2="2"
-                strokeDasharray={`${input?.dash[0]} ${input?.dash[1]}`}
+                strokeDasharray={`${config?.dash[0]} ${config?.dash[1]}`}
               />
               <text
                 role="graphics-symbol"
@@ -194,7 +205,7 @@ export default class StylePlotInput extends PureComponent {
                 role="graphics-symbol"
                 aria-roledescription="area mark"
                 d="M0,98.18181818181819L60,0L120,47.272727272727266L180,76.36363636363637L240,69.0909090909091L300,25.454545454545464L300,200L240,200L180,200L120,200L60,200L0,200Z"
-                fill={input?.color}
+                fill={config?.color}
               ></path>
             </svg>
           )}
@@ -202,28 +213,28 @@ export default class StylePlotInput extends PureComponent {
           {['bar'].includes(this.props.type) && (
             <svg viewBox="1 0 16 4" xmlns="http://www.w3.org/2000/svg">
               <line
-                stroke={input?.color}
+                stroke={config?.color}
                 x1="1.5"
                 y1="4"
                 x2="1.5"
                 y2="2"
-                strokeDasharray={`${input?.dash[0]} ${input?.dash[1]}`}
+                strokeDasharray={`${config?.dash[0]} ${config?.dash[1]}`}
               />
               <line
-                stroke={input?.color}
+                stroke={config?.color}
                 x1="3"
                 y1="4"
                 x2="3"
                 y2="0"
-                strokeDasharray={`${input?.dash[0]} ${input?.dash[1]}`}
+                strokeDasharray={`${config?.dash[0]} ${config?.dash[1]}`}
               />
               <line
-                stroke={input?.color}
+                stroke={config?.color}
                 x1="4.5"
                 y1="4"
                 x2="4.5"
                 y2="1"
-                strokeDasharray={`${input?.dash[0]} ${input?.dash[1]}`}
+                strokeDasharray={`${config?.dash[0]} ${config?.dash[1]}`}
               />
             </svg>
           )}
@@ -232,7 +243,7 @@ export default class StylePlotInput extends PureComponent {
             <Select
               className={styles.select}
               options={SHAPES}
-              option={input?.shape}
+              option={config?.shape}
               placeholder="Select a shape"
               onChange={(selection) => this.onStyleChange('shape', selection)}
             />
@@ -243,20 +254,20 @@ export default class StylePlotInput extends PureComponent {
               <span>Filled</span>
               <input
                 type="checkbox"
-                defaultChecked={input?.filled}
-                onChange={() => this.onStyleChange('filled', { value: !input?.filled })}
+                defaultChecked={config?.filled}
+                onChange={() => this.onStyleChange('filled', { value: !config?.filled })}
               />
             </div>
           )}
-
+        </div>
+        <div className={styles.stylesContainer}>
           {['line'].includes(this.props.type) && (
             <>
-              <span>Orient</span>
               <Select
-                className={styles.select}
+                className={[styles.select, styles.orientSelect].join(' ')}
                 options={ORIENT}
-                option={input?.orient}
-                placeholder="Select a orient"
+                option={config?.orient}
+                placeholder="Select a orientation"
                 onChange={(selection) => this.onStyleChange('orient', selection)}
               />
             </>

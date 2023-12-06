@@ -149,8 +149,8 @@ export default class WeatherForecast extends Component {
         )}
 
         {this.props.cloud && (
-          <div className={styles.fullSection}>
-            <div className={styles.sectionTitle}>Cloud</div>
+          <div className={styles.fullSectionPlot}>
+            <div className={styles.sectionTitle}>Clouds</div>
             <div ref={this.cloudPlotRef} className={styles.plot}>
               <PlotContainer
                 containerNode={this.cloudPlotRef}
@@ -167,6 +167,12 @@ export default class WeatherForecast extends Component {
                 maxHeight={130}
               />
             </div>
+          </div>
+        )}
+
+        {this.props.cloud && (
+          <div className={styles.fullSectionPlot}>
+            <div></div>
             <div ref={this.cloudComplementPlotRef} className={styles.plot}>
               <PlotContainer
                 containerNode={this.cloudComplementPlotRef}
@@ -187,7 +193,7 @@ export default class WeatherForecast extends Component {
         )}
 
         {this.props.wind && (
-          <div className={styles.fullSection}>
+          <div className={styles.fullSectionPlot}>
             <div className={styles.sectionTitle}>Wind</div>
             <div ref={this.windPlotRef} className={styles.plot}>
               <PlotContainer
@@ -207,7 +213,7 @@ export default class WeatherForecast extends Component {
         )}
 
         {this.props.temperature && (
-          <div className={styles.fullSection}>
+          <div className={styles.fullSectionPlot}>
             <div className={styles.sectionTitle}>Temperature</div>
             <div ref={this.temperaturePlotRef} className={styles.plot}>
               <PlotContainer
@@ -227,7 +233,7 @@ export default class WeatherForecast extends Component {
         )}
 
         {this.props.rain && (
-          <div className={styles.fullSection}>
+          <div className={styles.fullSectionPlot}>
             <div className={styles.sectionTitle}>Rain</div>
             <div ref={this.rainPlotRef} className={styles.plot}>
               <PlotContainer
