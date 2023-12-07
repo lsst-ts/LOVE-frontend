@@ -114,6 +114,7 @@ export default class Watcher extends Component {
       if (
         alarm.severity.value <= 1 &&
         alarm.maxSeverity.value <= 1 &&
+        alarm.timestampAcknowledged.value !== 0 &&
         now - alarm.timestampAcknowledged.value >= TIMEOUT
       ) {
         return;
@@ -141,8 +142,6 @@ export default class Watcher extends Component {
         }
       }
     });
-
-    this.test = null;
 
     return (
       <div className={styles.tabsWrapper}>
