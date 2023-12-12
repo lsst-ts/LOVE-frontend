@@ -216,34 +216,25 @@ export default class TeknikerAdd extends Component {
       }
     }
 
-    if (this.state.logEdit && this.state.logEdit.jira !== prevState.logEdit.jira) {
-      const { jira, jira_issue_title, jira_issue_id } = this.state.logEdit;
-      if (jira_issue_title === '' || jira_issue_id === '') {
-        this.setState({ jiraIssueError: true });
-      }
+    if (this.state.logEdit) {
+      const { jira, jira_new, jira_issue_title, jira_issue_id } = this.state.logEdit;
 
-      if (!jira) {
-        this.setState({
-          jiraIssueError: false,
-        });
-      }
-    }
-
-    if (this.state.logEdit && this.state.logEdit.jira_issue_title !== prevState.logEdit.jira_issue_title) {
-      const { jira_issue_title } = this.state.logEdit;
-      if (jira_issue_title === '') {
-        this.setState({ jiraIssueError: true });
-      } else {
-        this.setState({ jiraIssueError: false });
-      }
-    }
-
-    if (this.state.logEdit && this.state.logEdit.jira_issue_id !== prevState.logEdit.jira_issue_id) {
-      const { jira_issue_id } = this.state.logEdit;
-      if (jira_issue_id === '') {
-        this.setState({ jiraIssueError: true });
-      } else {
-        this.setState({ jiraIssueError: false });
+      if (
+        prevState.logEdit?.jira !== jira ||
+        prevState.logEdit?.jira_new !== jira_new ||
+        prevState.logEdit?.jira_issue_title !== jira_issue_title ||
+        prevState.logEdit?.jira_issue_id !== jira_issue_id
+      ) {
+        if (jira) {
+          if ((jira_new && jira_issue_title === '') || (!jira_new && jira_issue_id === '')) {
+            this.setState({ jiraIssueError: true });
+          }
+          if ((jira_new && jira_issue_title !== '') || (!jira_new && jira_issue_id !== '')) {
+            this.setState({ jiraIssueError: false });
+          }
+        } else {
+          this.setState({ jiraIssueError: false });
+        }
       }
     }
 
@@ -578,6 +569,7 @@ export default class TeknikerAdd extends Component {
                   <div>
                     {logEdit?.jira_new ? (
                       <Input
+                        value={logEdit?.jira_issue_title}
                         className={jiraIssueError ? styles.inputError : ''}
                         placeholder="Jira ticket title"
                         onChange={(event) =>
@@ -588,6 +580,7 @@ export default class TeknikerAdd extends Component {
                       />
                     ) : (
                       <Input
+                        value={logEdit?.jira_issue_id}
                         className={jiraIssueError ? styles.inputError : ''}
                         placeholder="Jira ticket id"
                         onChange={(event) =>
