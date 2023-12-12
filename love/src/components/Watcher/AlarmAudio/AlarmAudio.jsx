@@ -221,16 +221,15 @@ export default class AlarmAudio extends Component {
       }
     }
 
-    if (
-      this.props.alarms &&
-      (!isEqual(this.props.alarms, prevProps.alarms) || this.state.minSeveritySound !== prevState.minSeveritySound)
-    ) {
-      const difference = this.props.alarms.filter((x) => prevProps.alarms.findIndex((y) => x.name === y.name) === -1);
-      // Don't play sound for new OK alarm
-      if (difference.length === 1 && difference[0].severity.value === 1) {
-        return;
+    if (this.props.alarms) {
+      if (prevProps.alarms?.length === 0 && this.props.alarms?.length > 0) {
+        this.checkAndNotifyAlarms(this.props.alarms, prevProps.alarms);
+      } else if (
+        !isEqual(this.props.alarms, prevProps.alarms) ||
+        this.state.minSeveritySound !== prevState.minSeveritySound
+      ) {
+        this.throtCheckAndNotifyAlarms(this.props.alarms, prevProps.alarms);
       }
-      this.throtCheckAndNotifyAlarms(this.props.alarms, prevProps.alarms);
     }
   };
 
@@ -253,12 +252,15 @@ export default class AlarmAudio extends Component {
         return oldAlarm.name.value === newAlarm.name.value;
       });
 
-      // If alarm was acknowledged stop the critical sound
-      if (
-        (oldAlarm && !isAcknowledged(oldAlarm) && isAcknowledged(newAlarm)) ||
-        (oldAlarm && !isMuted(oldAlarm) && isMuted(newAlarm))
-      ) {
-        this.stopCriticals();
+      if (oldAlarm) {
+        // If alarm is acknowledged stop the critical sound
+        if (!isAcknowledged(oldAlarm) && isAcknowledged(newAlarm)) {
+          this.stopCriticals();
+        }
+        // If alarm is muted stop the critical sound
+        if (!isMuted(oldAlarm) && isMuted(newAlarm)) {
+          this.stopCriticals();
+        }
       }
 
       // If they are non-acked and non-muted
@@ -269,15 +271,13 @@ export default class AlarmAudio extends Component {
         }
 
         if (oldAlarm) {
-          if (oldAlarm.severity.value < newAlarm.severity.value) {
-            // If they are increased, play the "increased" sound
-            if (newAlarm.severity.value > newHighestAlarm.severity) {
-              newHighestAlarm.severity = newAlarm.severity.value;
-              newHighestAlarm.type = 'increased';
-            }
+          // If they are increased, play the "increased" sound
+          if (newAlarm.severity.value > oldAlarm.severity.value && newAlarm.severity.value > newHighestAlarm.severity) {
+            newHighestAlarm.severity = newAlarm.severity.value;
+            newHighestAlarm.type = 'increased';
           }
 
-          if (!isAcknowledged(newAlarm) && isAcknowledged(oldAlarm)) {
+          if (isAcknowledged(oldAlarm)) {
             // If they are unacknowledged, play the "unacked" sound
             if (newAlarm.severity.value >= newHighestAlarm.severity) {
               newHighestAlarm.severity = newAlarm.severity.value;
@@ -285,7 +285,7 @@ export default class AlarmAudio extends Component {
             }
           }
 
-          if (!isAcknowledged(newAlarm) && !isAcknowledged(oldAlarm)) {
+          if (!isAcknowledged(oldAlarm)) {
             // If they are still critical, play the "still critical" sound
             if (isCritical(newAlarm) && isCritical(oldAlarm)) {
               newHighestAlarm.severity = newAlarm.severity.value;
