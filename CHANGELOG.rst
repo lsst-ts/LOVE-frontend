@@ -5,6 +5,7 @@ Version History
 v5.27.9
 -------
 
+* Update package.json version to v5.27.9 `<https://github.com/lsst-ts/LOVE-frontend/pull/582>`_
 * Improve ManagerInterface response handling `<https://github.com/lsst-ts/LOVE-frontend/pull/581>`_
 * Bump @adobe/css-tools from 4.3.1 to 4.3.2 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/580>`_
 * Several fixes for Plot components `<https://github.com/lsst-ts/LOVE-frontend/pull/578>`_
