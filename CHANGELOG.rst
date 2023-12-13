@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.27.10
+--------
+
+* Fix OLE JIRA tickets handling `<https://github.com/lsst-ts/LOVE-frontend/pull/583>`_
+
 v5.27.9
 -------
 
