@@ -462,7 +462,7 @@ export default class NonExposureEdit extends Component {
   }
 
   renderMessageField() {
-    const { logEdit, datesAreValid, savingLog, jiraIssueError } = this.state;
+    const { logEdit } = this.state;
     const htmlMessage = jiraMarkdownToHtml(logEdit?.message_text, { codeFriendly: true, parseLines: true });
 
     return (
@@ -605,7 +605,7 @@ export default class NonExposureEdit extends Component {
   }
 
   renderSubmitButton() {
-    const { datesAreValid, savingLog, jiraIssueError } = this.state;
+    const { savingLog } = this.state;
 
     return (
       <>
