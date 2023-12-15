@@ -2,6 +2,26 @@
 
 When contributing to this repository, please consider the following aspects
 
+## Making a release (creating a tag)
+
+In order to make a release of the frontend, you need to create a tag in the repository. The tag should be named `vX.Y.Z` where `X.Y.Z` is the version number. The version number should follow [semantic versioning](https://semver.org/). The tag should be created from the `master` branch.
+
+Before creating the tag, make sure to:
+- Create a PR that updates the `love/package.json` file with the new version number `X.Y.Z`.
+- Check the `CHANGELOG.md` file is updated with the changes that are going to be released.
+
+Once the PR is merged, create the tag with the following command:
+
+```
+git checkout develop
+git pull
+git checkout main
+git pull
+git merge --no-ff develop
+git tag -a vX.Y.Z -m "Release vX.Y.Z"
+git push origin vX.Y.Z
+```
+
 ## Adding a new Container component
 
 Container components implement the communication with Redux to obtain the available telemetry/event data. Container components:
