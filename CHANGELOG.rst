@@ -5,6 +5,7 @@ Version History
 v5.27.10
 --------
 
+* Add release instructions to CONTRIBUTING guide `<https://github.com/lsst-ts/LOVE-frontend/pull/585>`_
 * Fix OLE JIRA tickets handling `<https://github.com/lsst-ts/LOVE-frontend/pull/583>`_
 
 v5.27.9
