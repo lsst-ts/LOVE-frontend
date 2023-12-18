@@ -539,7 +539,7 @@ export default class Exposure extends Component {
           Last updated: {this.state.lastUpdated ? this.state.lastUpdated.format(TIME_FORMAT) : ''}
           {updatingExposures && <SpinnerIcon className={styles.spinnerIcon} />}
         </div>
-        <SimpleTable headers={headers} data={filteredData} />
+        <SimpleTable className={styles.table} headers={headers} data={filteredData} />
       </div>
     );
   }
