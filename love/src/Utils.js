@@ -1970,3 +1970,14 @@ export function checkJSONResponse(response, onSuccess) {
     return resp;
   });
 }
+
+/**
+ * Function to format time of incident for OLE
+ * @param {string} dateStart start date of incident in ISO format
+ * @param {string} dateEnd end date of incident in ISO format
+ * @returns {string} formatted string for OLE
+ */
+export function formatOLETimeOfIncident(dateStart, dateEnd) {
+  if (dateStart === dateEnd) return truncateISODateToMinutes(dateStart);
+  return `${truncateISODateToMinutes(dateStart)} - ${truncateISODateToMinutes(dateEnd)}`;
+}

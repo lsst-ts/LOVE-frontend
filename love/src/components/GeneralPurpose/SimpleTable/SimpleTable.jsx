@@ -25,11 +25,11 @@ export { Table, Thead, Tr, Td, Th, Tbody };
 /**
  * Renders a table from data and headers configuration
  */
-function SimpleTable({ headers, data }) {
+function SimpleTable({ className, headers, data }) {
   const defaultRenderMethod = (value, row) => value;
 
   return (
-    <Table>
+    <Table className={className}>
       <Thead>
         <Tr>
           {headers.map((header, index) => (
@@ -61,6 +61,8 @@ function SimpleTable({ headers, data }) {
 }
 
 SimpleTable.propTypes = {
+  /** className to be applied to the table */
+  className: PropTypes.string,
   /** Array with properties of table columns and its headers.*/
   headers: PropTypes.arrayOf(
     PropTypes.shape({
