@@ -29,15 +29,8 @@ import ManagerInterface, { formatTimestamp } from 'Utils';
 import ScriptIcon from '../../icons/ScriptIcon/ScriptIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
 
-ConfigPanel.propTypes = {
-  /** Current LOVE configuration */
-  config: PropTypes.object,
-  /** Set Current LOVE configuration */
-  setConfig: PropTypes.func,
-};
-
 /** Contents of the Config File view Panel, displayed in a modal */
-function ConfigPanel({ config, setConfig }) {
+function ConfigPanel({ config, setConfig, closeModal = () => {} }) {
   const [ownConf, setOwnConf] = useState(config);
   const [configList, setConfigList] = useState([]);
 
@@ -63,6 +56,7 @@ function ConfigPanel({ config, setConfig }) {
     } else {
       setConfig(ownConf);
     }
+    closeModal();
   };
 
   const getConfigSelectOption = (conf, index) => {
@@ -119,4 +113,14 @@ function ConfigPanel({ config, setConfig }) {
     </div>
   );
 }
+
+ConfigPanel.propTypes = {
+  /** Current LOVE configuration */
+  config: PropTypes.object,
+  /** Set Current LOVE configuration */
+  setConfig: PropTypes.func,
+  /** Function to close the modal */
+  closeModal: PropTypes.func,
+};
+
 export default memo(ConfigPanel);
