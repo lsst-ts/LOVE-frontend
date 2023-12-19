@@ -66,10 +66,6 @@ table {
 .dataTable {
   display: grid;
   grid-template-rows: min-content minmax(0, 1fr);
-  width: calc(
-    var(--ack-width) + 2 * var(--status-width) + var(--name-width) + var(--timestamp-width) + 10 * var(--cell-padding)
-  );
-  height: inherit; /* necessary for scroll, but parent component must define height */
   table-layout: fixed;
   border-collapse: collapse;
 }

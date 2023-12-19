@@ -411,45 +411,35 @@ export default class ExposureAdd extends Component {
       );
     }
 
-    if (this.state.newMessage && this.state.newMessage.jira !== prevState.newMessage.jira) {
-      const { jira, jira_issue_title, jira_issue_id } = this.state.newMessage;
-      if (jira_issue_title === '' || jira_issue_id === '') {
-        this.setState({ jiraIssueError: true });
-      }
+    if (this.state.newMessage) {
+      const { jira, jira_new, jira_issue_title, jira_issue_id } = this.state.newMessage;
 
-      if (!jira) {
-        this.setState({
-          jiraIssueError: false,
-        });
-      }
-    }
-
-    if (this.state.newMessage && this.state.newMessage.jira_issue_title !== prevState.newMessage.jira_issue_title) {
-      const { jira_issue_title } = this.state.newMessage;
-      if (jira_issue_title === '') {
-        this.setState({ jiraIssueError: true });
-      } else {
-        this.setState({ jiraIssueError: false });
-      }
-    }
-
-    if (this.state.newMessage && this.state.newMessage.jira_issue_id !== prevState.newMessage.jira_issue_id) {
-      const { jira_issue_id } = this.state.newMessage;
-      if (jira_issue_id === '') {
-        this.setState({ jiraIssueError: true });
-      } else {
-        this.setState({ jiraIssueError: false });
+      if (
+        prevState.newMessage?.jira !== jira ||
+        prevState.newMessage?.jira_new !== jira_new ||
+        prevState.newMessage?.jira_issue_title !== jira_issue_title ||
+        prevState.newMessage?.jira_issue_id !== jira_issue_id
+      ) {
+        if (jira) {
+          if ((jira_new && jira_issue_title === '') || (!jira_new && jira_issue_id === '')) {
+            this.setState({ jiraIssueError: true });
+          }
+          if ((jira_new && jira_issue_title !== '') || (!jira_new && jira_issue_id !== '')) {
+            this.setState({ jiraIssueError: false });
+          }
+        } else {
+          this.setState({ jiraIssueError: false });
+        }
       }
     }
   }
 
   render() {
     const { isLogCreate, isMenu, back, view } = this.props;
-    const { confirmationModalShown, confirmationModalText, savingLog, jiraIssueError } = this.state;
+    const { newMessage, confirmationModalShown, confirmationModalText, savingLog, jiraIssueError } = this.state;
 
-    const filesUrls = getFilesURLs(this.state.newMessage.urls);
-
-    const htmlMessage = jiraMarkdownToHtml(this.state.newMessage?.message_text);
+    const filesUrls = getFilesURLs(newMessage?.urls);
+    const htmlMessage = jiraMarkdownToHtml(newMessage?.message_text);
 
     return (
       <>
@@ -504,7 +494,7 @@ export default class ExposureAdd extends Component {
                   </>
                 )}
 
-                {this.state.newMessage.id ? (
+                {newMessage?.id ? (
                   <>
                     <span className={styles.floatRight}>
                       <Button
@@ -557,7 +547,7 @@ export default class ExposureAdd extends Component {
               </div>
 
               {/* <TextArea
-                value={this.state.newMessage.message_text}
+                value={newMessage?.message_text}
                 callback={(event) =>
                   this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, message_text: event } }))
                 }
@@ -609,12 +599,12 @@ export default class ExposureAdd extends Component {
 
                 <div className={styles.toAttachFiles}>
                   <MultiFileUploader
-                    values={this.state.newMessage.file}
+                    values={newMessage?.file}
                     handleFiles={(files) =>
                       this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: files } }))
                     }
                     handleDelete={(file) => {
-                      const files = { ...this.state.newMessage.file };
+                      const files = { ...newMessage?.file };
                       delete files[file];
                       this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: files } }));
                     }}
@@ -627,7 +617,7 @@ export default class ExposureAdd extends Component {
                 <div className={styles.flag}>
                   <span className={styles.label}>Exposure Flag</span>
                   <Select
-                    value={this.state.newMessage.exposure_flag}
+                    value={newMessage?.exposure_flag}
                     onChange={(event) =>
                       this.setState((prevState) => ({
                         newMessage: { ...prevState.newMessage, exposure_flag: event.value },
@@ -638,8 +628,8 @@ export default class ExposureAdd extends Component {
                     small
                   />
                   <FlagIcon
-                    title={this.state.newMessage.exposure_flag}
-                    status={this.statusFlag(this.state.newMessage.exposure_flag)}
+                    title={newMessage?.exposure_flag}
+                    status={this.statusFlag(newMessage?.exposure_flag)}
                     className={styles.iconFlag}
                   />
                 </div>
@@ -649,7 +639,7 @@ export default class ExposureAdd extends Component {
                   <span>
                     <Input
                       type="checkbox"
-                      checked={this.state.newMessage.jira}
+                      checked={newMessage?.jira}
                       onChange={(event) => {
                         this.setState((prevState) => ({
                           newMessage: { ...prevState.newMessage, jira: event.target.checked },
@@ -658,12 +648,12 @@ export default class ExposureAdd extends Component {
                     />
                   </span>
 
-                  {this.state.newMessage.jira && (
+                  {newMessage?.jira && (
                     <>
                       <span>
                         <Toggle
                           labels={['New', 'Existent']}
-                          toggled={!this.state.newMessage.jira_new}
+                          toggled={!newMessage?.jira_new}
                           onToggle={(event) => {
                             this.setState((prevState) => ({
                               newMessage: { ...prevState.newMessage, jira_new: !event },
@@ -672,8 +662,9 @@ export default class ExposureAdd extends Component {
                         />
                       </span>
 
-                      {this.state.newMessage.jira_new ? (
+                      {newMessage?.jira_new ? (
                         <Input
+                          value={newMessage?.jira_issue_title}
                           placeholder="Jira ticket title"
                           onChange={(event) =>
                             this.setState((prevState) => ({
@@ -683,6 +674,7 @@ export default class ExposureAdd extends Component {
                         />
                       ) : (
                         <Input
+                          value={newMessage?.jira_issue_id}
                           placeholder="Jira ticket id"
                           onChange={(event) =>
                             this.setState((prevState) => ({

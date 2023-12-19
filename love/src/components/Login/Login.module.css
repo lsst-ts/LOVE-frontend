@@ -122,8 +122,14 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 }
 
 .LSSTContainer {
-  width: 50em;
+  width: 100%;
   padding-top: 1em;
+}
+
+@media only screen and (min-width: 992px) {
+  .LSSTContainer {
+    width: 75em;
+  }
 }
 
 .LSSTlogo {
