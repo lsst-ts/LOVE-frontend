@@ -5,6 +5,7 @@ Version History
 v5.27.10
 --------
 
+* Update Rubin logos lineup `<https://github.com/lsst-ts/LOVE-frontend/pull/586>`_
 * Add release instructions to CONTRIBUTING guide `<https://github.com/lsst-ts/LOVE-frontend/pull/585>`_
 * Improve Watcher alarm handling to comply with new rules `<https://github.com/lsst-ts/LOVE-frontend/pull/584>`_
 * Fix OLE JIRA tickets handling `<https://github.com/lsst-ts/LOVE-frontend/pull/583>`_

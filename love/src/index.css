@@ -281,6 +281,14 @@ body {
   --commandable-background-hover: hsl(188, 79%, 46%);
   --commandable-font-color: hsl(201, 26%, 23%);
   --commandable-font-color-hover: hsl(201, 26%, 23%);
+
+  /** Breakpoints for min-width
+  This is here only for reference, it is not being used in the code.
+  When using media queries use values defined here */
+  --breakpoint-sm: 600px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
 }
 
 @media (min-width: 3800px) {
