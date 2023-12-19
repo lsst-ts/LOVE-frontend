@@ -5,6 +5,7 @@ Version History
 v5.27.10
 --------
 
+* Update package.json version to v5.27.10 `<https://github.com/lsst-ts/LOVE-frontend/pull/587>`_
 * Update Rubin logos lineup `<https://github.com/lsst-ts/LOVE-frontend/pull/586>`_
 * Add release instructions to CONTRIBUTING guide `<https://github.com/lsst-ts/LOVE-frontend/pull/585>`_
 * Improve Watcher alarm handling to comply with new rules `<https://github.com/lsst-ts/LOVE-frontend/pull/584>`_
