@@ -5,6 +5,7 @@ Version History
 v5.27.11
 --------
 
+* Add MTM2 powerSystemState data `<https://github.com/lsst-ts/LOVE-frontend/pull/590>`_
 * Remove custom failed script sound alert `<https://github.com/lsst-ts/LOVE-frontend/pull/589>`_
 
 v5.27.10
