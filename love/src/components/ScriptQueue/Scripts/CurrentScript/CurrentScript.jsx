@@ -19,8 +19,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Howl } from 'howler';
-import ManagerInterface from 'Utils';
 import LoadingBar from '../../../GeneralPurpose/LoadingBar/LoadingBar';
 import scriptStyles from '../Scripts.module.css';
 import styles from './CurrentScript.module.css';
@@ -29,8 +27,6 @@ import { getStatusStyle } from '../Scripts';
 import HeartbeatIcon from '../../../icons/HeartbeatIcon/HeartbeatIcon';
 import StopIcon from '../../../icons/ScriptQueue/StopIcon/StopIcon';
 import ResumeIcon from '../../../icons/ScriptQueue/ResumeIcon/ResumeIcon';
-
-import scriptFailureFile from 'sounds/script_failure.mp3';
 
 export default class CurrentScript extends Component {
   static propTypes = {
@@ -78,24 +74,10 @@ export default class CurrentScript extends Component {
     this.state = {
       elapsedTime: 0,
     };
-
-    this.scriptFailureSound = new Howl({
-      src: [scriptFailureFile],
-      onplayerror: () => {
-        console.error('Error playing sound for script failure: ', scriptFailureFile);
-      },
-      onloaderror: () => {
-        console.error('Error loading sound for script failure: ', scriptFailureFile);
-      },
-    });
   }
 
   onClick = () => {
     this.props.onClick();
-  };
-
-  reproduceScriptFailureSound = () => {
-    this.scriptFailureSound.play();
   };
 
   animateProgress = () => {
@@ -121,13 +103,6 @@ export default class CurrentScript extends Component {
   componentDidUpdate = (prevProps) => {
     if (this.props.index && prevProps.index !== this.props.index) {
       this.animateProgress();
-    }
-
-    if (
-      (prevProps.scriptState !== this.props.scriptState && this.props.scriptState === 'FAILED') ||
-      (prevProps.index !== this.props.index && this.props.scriptState === 'FAILED')
-    ) {
-      this.reproduceScriptFailureSound();
     }
   };
 
