@@ -702,7 +702,23 @@ export const m1m3ILCStateToStyle = {
   OFF: 'warning',
 };
 
-// MTM1M2
+// MTM2
+export const m2PowerTypeStateToStyle = {
+  UNKNOWN: 'invalid',
+  ACTUATOR: 'ok',
+  ILC: 'ok',
+};
+
+export const m2PowerStateToStyle = {
+  UNKNOWN: 'invalid',
+  INITIALIZATION: 'ok',
+  ON: 'ok',
+  OFF: 'warning',
+  POWERING_ON: 'running',
+  RESETTING_BREAKS: 'running',
+  POWERING_OFF: 'running',
+};
+
 export const m2ActuatorILCStateToStyle = {
   OPERATIVE: 'ok',
   FAULT: 'warning',
@@ -1095,6 +1111,23 @@ export const alignedStateMap = {
   1: 'ALIGNED',
   2: 'NOT ALIGNED',
   0: 'UNKNOWN',
+};
+
+// MTM2
+export const m2PowerTypeStateMap = {
+  0: 'UNKNOWN',
+  1: 'ACTUATOR',
+  2: 'ILC',
+};
+
+export const m2PowerStateMap = {
+  0: 'UNKNOWN',
+  1: 'INITIALIZATION',
+  2: 'OFF',
+  3: 'POWERING_ON',
+  4: 'RESETTING_BREAKS',
+  5: 'ON',
+  6: 'POWERING_OFF',
 };
 
 // M1M3

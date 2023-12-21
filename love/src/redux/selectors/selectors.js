@@ -525,6 +525,15 @@ export const getM2ActuatorTable = (state) => {
   };
 };
 
+export const getM2PowerState = (state) => {
+  const subscriptions = ['event-MTM2-0-powerSystemState'];
+  const data = getStreamsData(state, subscriptions);
+  return {
+    powerType: data['event-MTM2-0-powerSystemState']?.[0].powerType?.value ?? 0,
+    powerState: data['event-MTM2-0-powerSystemState']?.[0].state?.value ?? 0,
+  };
+};
+
 export const getDomeState = (state) => {
   const domeSubscriptions = [
     'telemetry-ATDome-0-position',
