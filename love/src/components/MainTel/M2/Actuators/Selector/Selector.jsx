@@ -236,11 +236,8 @@ export default class Selector extends Component {
     d3.select(`#${this.uniqueCircleOverlay}`).call(this.zoom);
   }
 
-  zoomOut = (event) => {
+  zoomOut = () => {
     d3.select(`#${this.uniqueCircleOverlay}`).call(this.zoom.transform, d3.zoomIdentity.scale(1)).call(this.zoom);
-    this.setState({
-      zoomLevel: event.transform.k,
-    });
   };
 
   zoomed = (event) => {
