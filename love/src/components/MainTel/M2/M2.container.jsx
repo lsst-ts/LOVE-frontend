@@ -20,7 +20,14 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getM2State, getM2Inclinometer, getM2Actuator, getM2ActuatorForce, getAlignmentState } from 'redux/selectors';
+import {
+  getM2State,
+  getM2Inclinometer,
+  getM2Actuator,
+  getM2ActuatorForce,
+  getAlignmentState,
+  getM2PowerState,
+} from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import M2 from './M2';
 import { EUIs } from 'Config';
@@ -75,27 +82,37 @@ const mapStateToProps = (state) => {
   const actuators = getM2Actuator(state);
   const forces = getM2ActuatorForce(state);
   const alignmentState = getAlignmentState(state);
+  const powerState = getM2PowerState(state);
 
-  return { ...m2State, ...inclinometerState, ...actuators, ...forces, ...alignmentState };
+  return {
+    ...m2State,
+    ...inclinometerState,
+    ...actuators,
+    ...forces,
+    ...alignmentState,
+    ...powerState,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
-    'telemetry-MTM2-0-axialActuatorSteps',
-    'telemetry-MTM2-0-axialEncoderPositions',
-    'telemetry-MTM2-0-tangentActuatorSteps',
-    'telemetry-MTM2-0-tangentEncoderPositions',
-    'telemetry-MTM2-0-axialForce',
-    'telemetry-MTM2-0-tangentForce',
-    'telemetry-MTM2-0-ilcData',
-    'telemetry-MTM2-0-zenithAngle',
-    'event-MTM2-0-inclinationTelemetrySource',
-    'event-MTM2-0-summaryState',
+    'event-Heartbeat-0-stream',
     'event-MTM2-0-commandableByDDS',
     'event-MTM2-0-forceBalanceSystemStatus',
+    'event-MTM2-0-inclinationTelemetrySource',
     'event-MTM2-0-m2AssemblyInPosition',
-    'event-Heartbeat-0-stream',
+    'event-MTM2-0-powerSystemState',
+    'event-MTM2-0-summaryState',
+    'telemetry-MTM2-0-axialActuatorSteps',
+    'telemetry-MTM2-0-axialEncoderPositions',
+    'telemetry-MTM2-0-axialForce',
+    'telemetry-MTM2-0-ilcData',
+    'telemetry-MTM2-0-tangentActuatorSteps',
+    'telemetry-MTM2-0-tangentEncoderPositions',
+    'telemetry-MTM2-0-tangentForce',
+    'telemetry-MTM2-0-zenithAngle',
   ];
+
   return {
     subscriptions,
     subscribeToStreams: () => {
@@ -106,4 +123,5 @@ const mapDispatchToProps = (dispatch) => {
     },
   };
 };
+
 export default connect(mapStateToProps, mapDispatchToProps)(M2Container);
