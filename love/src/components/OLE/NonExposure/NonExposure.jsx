@@ -157,14 +157,14 @@ export default class NonExposure extends Component {
         title: 'Date Added',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => moment(value + 'Z').format(ISO_STRING_DATE_TIME_FORMAT),
+        render: (value) => moment(value).format(ISO_STRING_DATE_TIME_FORMAT),
       },
       {
         field: 'date_added',
         title: 'Obs Day',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => getObsDayFromDate(moment(value + 'Z')),
+        render: (value) => getObsDayFromDate(moment(value)),
       },
       {
         field: 'level',
