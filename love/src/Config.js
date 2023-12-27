@@ -2538,7 +2538,7 @@ export const signals = {
     ],
   },
   tmaInterlockSystem: {
-    breaksNotEngaged: [
+    brakesNotEngaged: [
       /** DOME IS */
       'stoCraneDrives',
       /** MAN-LIFT IS */
@@ -2674,7 +2674,7 @@ export const alertSignalIndexes = {
   emergencyStop: [23, 3],
   unauthorizedPierAccess: [23, 4],
   unauthorizedDomeAccess: [23, 5],
-  breaksNotEngaged: [23, 6],
+  brakesNotEngaged: [23, 6],
   ccwSafetyDevice: [23, 7],
   tmaEtpbs: [23, 8],
   failedWatchdogOrLossCommunication: [24, 0],
@@ -2696,7 +2696,7 @@ export const signalBypassIndexes = {
   emergencyStop: [25, 3],
   unauthorizedPierAccess: [25, 4],
   unauthorizedDomeAccess: [25, 5],
-  breaksNotEngaged: [25, 6],
+  brakesNotEngaged: [25, 6],
   ccwSafetyDevice: [25, 7],
   tmaEtpbs: [25, 8],
   failedWatchdogOrLossCommunication: [26, 0],
