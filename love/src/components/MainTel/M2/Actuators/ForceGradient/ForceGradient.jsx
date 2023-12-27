@@ -23,9 +23,9 @@ import * as d3 from 'd3';
 import { isEqual, uniqueId } from 'lodash';
 import { defaultNumberFormatter } from 'Utils';
 
-import styles from './ForceGradiant.module.css';
+import styles from './ForceGradient.module.css';
 
-export default class ForceGradiant extends Component {
+export default class ForceGradient extends Component {
   static propTypes = {
     /** Array for the identify of the position in array with an index */
     actuatorReferenceId: PropTypes.arrayOf(PropTypes.number),
@@ -64,12 +64,12 @@ export default class ForceGradiant extends Component {
 
   static COLOURS = ['#2c7bb6', '#00a6ca', '#00ccbc', '#90eb9d', '#ffff8c', '#f9d057', '#f29e2e', '#e76818', '#d7191c'];
 
-  static COLOUR_RANGE = [...d3.range(0, 1, 1.0 / (ForceGradiant.COLOURS.length - 1)), 1];
+  static COLOUR_RANGE = [...d3.range(0, 1, 1.0 / (ForceGradient.COLOURS.length - 1)), 1];
 
   static COLOR_SCALE = d3
     .scaleLinear()
-    .domain(ForceGradiant.COLOUR_RANGE)
-    .range(ForceGradiant.COLOURS)
+    .domain(ForceGradient.COLOUR_RANGE)
+    .range(ForceGradient.COLOURS)
     .interpolate(d3.interpolateHcl);
 
   constructor(props) {
@@ -161,10 +161,10 @@ export default class ForceGradiant extends Component {
         .attr('x2', '100%')
         .attr('y2', '0%')
         .selectAll('stop')
-        .data(ForceGradiant.COLOURS)
+        .data(ForceGradient.COLOURS)
         .enter()
         .append('stop')
-        .attr('offset', (d, i) => i / (ForceGradiant.COLOR_SCALE.range().length - 1))
+        .attr('offset', (d, i) => i / (ForceGradient.COLOR_SCALE.range().length - 1))
         .attr('stop-color', (d) => d);
 
       svg
@@ -195,7 +195,7 @@ export default class ForceGradiant extends Component {
     svg.style('z-index', 999);
     const measuredText = d3.select(`#${this.uniqueColorScale} svg #measured-text`);
     const measuredLine = d3.select(`#${this.uniqueColorScale} svg #measured-line`);
-    const measuredForceX = ForceGradiant.getGradiantPositionX(
+    const measuredForceX = ForceGradient.getGradiantPositionX(
       actuator.measured,
       minForceLimit,
       maxForceLimit,
@@ -255,7 +255,7 @@ export default class ForceGradiant extends Component {
     }
 
     if (actuator.id !== undefined) {
-      const commandedForceX = ForceGradiant.getGradiantPositionX(
+      const commandedForceX = ForceGradient.getGradiantPositionX(
         actuator.commanded,
         minForceLimit,
         maxForceLimit,
