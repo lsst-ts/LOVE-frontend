@@ -149,7 +149,7 @@ export default class Selector extends Component {
       .scaleLinear()
       .domain(d3.extent([minForceLimit, maxForceLimit]))
       .range([0, 1]);
-    return ForceGradiant.COLOR_SCALE(1 - colorInterpolate(value));
+    return ForceGradiant.COLOR_SCALE(colorInterpolate(value));
   };
 
   getActuator = (id) => {
