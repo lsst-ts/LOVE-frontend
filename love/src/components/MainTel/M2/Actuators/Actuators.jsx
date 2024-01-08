@@ -135,12 +135,13 @@ export default class Actuators extends Component {
       tangentEncoderPositions,
       tangentForceApplied,
       tangentForceMeasured,
-      minForceLimit,
-      maxForceLimit,
     } = this.props;
 
     const actuatorReferenceId = this.arrayReferenceId().slice(0, 72);
     const actuatorTangentReferenceId = this.arrayReferenceId().slice(0, 6);
+
+    const minForceLimit = Math.min(...axialForceMeasured, ...tangentForceMeasured);
+    const maxForceLimit = Math.max(...axialForceMeasured, ...tangentForceMeasured);
 
     return (
       <div className={styles.actuatorsContainer}>
