@@ -22,7 +22,7 @@ import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 import { uniqueId } from 'lodash';
 import { M2ActuatorPositions, M2ActuatorTangentPositions } from 'Config';
-import ForceGradiant from '../ForceGradiant/ForceGradiant';
+import ForceGradient from '../ForceGradient/ForceGradient';
 import Button from 'components/GeneralPurpose/Button/Button';
 import styles from './Selector.module.css';
 
@@ -149,7 +149,7 @@ export default class Selector extends Component {
       .scaleLinear()
       .domain(d3.extent([minForceLimit, maxForceLimit]))
       .range([0, 1]);
-    return ForceGradiant.COLOR_SCALE(1 - colorInterpolate(value));
+    return ForceGradient.COLOR_SCALE(colorInterpolate(value));
   };
 
   getActuator = (id) => {
