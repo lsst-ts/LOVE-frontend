@@ -37,7 +37,7 @@ import ManagerInterface, {
   getFilesURLs,
   jiraMarkdownToHtml,
   getObsDayFromDate,
-  truncateISODateToMinutes,
+  formatOLETimeOfIncident,
 } from 'Utils';
 
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
@@ -154,10 +154,17 @@ export default class NonExposure extends Component {
     return [
       {
         field: 'date_added',
-        title: 'Day Observation',
+        title: 'Date Added',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => getObsDayFromDate(moment(value + 'Z')),
+        render: (value) => moment(value).format(ISO_STRING_DATE_TIME_FORMAT),
+      },
+      {
+        field: 'date_added',
+        title: 'Obs Day',
+        type: 'string',
+        className: styles.tableHead,
+        render: (value) => getObsDayFromDate(moment(value)),
       },
       {
         field: 'level',
@@ -174,18 +181,15 @@ export default class NonExposure extends Component {
         render: (value) => value?.join(', '),
       },
       {
-        field: null,
-        title: 'Time of Incident (UTC)',
-        type: 'string',
-        className: styles.tableHead,
-        render: (_, row) => `${truncateISODateToMinutes(row.date_begin)} - ${truncateISODateToMinutes(row.date_end)}`,
-      },
-      {
         field: 'time_lost',
         title: 'Obs. Time Loss',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => formatSecondsToDigital(value * 3600),
+        render: (value, row) => (
+          <span title={formatOLETimeOfIncident(row.date_begin, row.date_end)}>
+            {formatSecondsToDigital(value * 3600)}
+          </span>
+        ),
       },
       {
         field: 'message_text',
@@ -198,6 +202,7 @@ export default class NonExposure extends Component {
           return (
             <>
               <div className={styles.wikiMarkupText} dangerouslySetInnerHTML={{ __html: parsedValue }} />
+              {value.length > 500 && <input className={styles.expandBtn} type="checkbox" />}
               {files.length > 0 && (
                 <h3>
                   Attachments:{' '}
@@ -347,7 +352,7 @@ export default class NonExposure extends Component {
     const { logs: tableData, modeView, modeEdit } = this.state;
 
     const headers = Object.values(this.getHeaders());
-    let filteredData = [...tableData];
+    let filteredData = [...(tableData ?? [])];
 
     // Filter by type
     if (selectedCommentType.value !== OLE_COMMENT_TYPE_OPTIONS[0].value) {
@@ -492,7 +497,7 @@ export default class NonExposure extends Component {
           Last updated: {this.state.lastUpdated ? this.state.lastUpdated.format(TIME_FORMAT) : ''}
           {this.state.updatingLogs && <SpinnerIcon className={styles.spinnerIcon} />}
         </div>
-        <SimpleTable headers={headers} data={filteredData} />
+        <SimpleTable className={styles.table} headers={headers} data={filteredData} />
       </div>
     );
   }
