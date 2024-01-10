@@ -477,16 +477,16 @@ fieldset p {
   flex-wrap: wrap;
 }
 .sidePanel :global(.col-xs-9) {
-  width: calc(100% / 12 * 9 );
+  width: calc(100% / 12 * 9);
 }
 .sidePanel :global(.col-xs-5) {
-  width: calc(100% / 12 * 5 );
+  width: calc(100% / 12 * 5);
 }
 .sidePanel :global(.col-xs-3) {
-  width: calc(100% / 12 * 3 );
+  width: calc(100% / 12 * 3);
 }
 .sidePanel :global(.col-xs-2) {
-  width: calc(100% / 12 * 2 );
+  width: calc(100% / 12 * 2);
 }
 .sidePanel :global(.array-item-list) {
   display: -webkit-box;
@@ -504,5 +504,19 @@ fieldset p {
   display: block;
   padding: 0.5rem 1rem;
   text-decoration: none;
-  border: 1px solid rgba(0,0,0,.125);
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.refreshSchemaSection {
+  display: flex;
+  align-items: center;
+  margin-left: var(--content-padding);
+  margin-bottom: var(--small-padding);
+}
+
+.refreshSchemaSection svg {
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 0.5em;
+  fill: var(--second-primary-background-color);
 }
