@@ -5,6 +5,7 @@ Version History
 v5.27.11
 --------
 
+* Add button to send showSchema command `<https://github.com/lsst-ts/LOVE-frontend/pull/594>`_
 * Adjust LOVE M2 force gradient coloring `<https://github.com/lsst-ts/LOVE-frontend/pull/592>`_
 * Fix GIS signals typo `<https://github.com/lsst-ts/LOVE-frontend/pull/591>`_
 * Add MTM2 powerSystemState data `<https://github.com/lsst-ts/LOVE-frontend/pull/590>`_
