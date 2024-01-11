@@ -449,6 +449,19 @@ export default class ScriptQueue extends Component {
     this.closeConfigPanel();
   };
 
+  reloadSchema = (path, isStandard) => {
+    const payload = {
+      component: 'ScriptQueue',
+      salindex: this.props.salindex,
+      cmd: 'cmd_showSchema',
+      params: {
+        path,
+        isStandard,
+      },
+    };
+    this.props.requestSALCommand(payload);
+  };
+
   closeConfigPanel = () => {
     this.setState({
       configPanel: {
@@ -687,6 +700,7 @@ export default class ScriptQueue extends Component {
         <ConfigPanel
           launchScript={this.launchScript}
           closeConfigPanel={this.closeConfigPanel}
+          reloadSchema={this.reloadSchema}
           configPanel={this.state.configPanel}
         />
         <ContextMenu
