@@ -555,7 +555,7 @@ table.table th {
 }
 
 table.table tr td {
-  border-bottom: 2px solid var(--second-tertiary-background-color) !important;
+  border-bottom: 6px solid var(--second-tertiary-background-color) !important;
 }
 
 table.table tr:hover td {
