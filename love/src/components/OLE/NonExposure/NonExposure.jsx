@@ -154,7 +154,7 @@ export default class NonExposure extends Component {
     return [
       {
         field: 'date_added',
-        title: 'Date Added',
+        title: 'Date Added (UTC)',
         type: 'string',
         className: styles.tableHead,
         render: (value) => moment(value).format(ISO_STRING_DATE_TIME_FORMAT),
@@ -186,7 +186,7 @@ export default class NonExposure extends Component {
         type: 'string',
         className: styles.tableHead,
         render: (value, row) => (
-          <span title={formatOLETimeOfIncident(row.date_begin, row.date_end)}>
+          <span title={formatOLETimeOfIncident(row.date_begin, row.date_end) + ' (UTC)'}>
             {formatSecondsToDigital(value * 3600)}
           </span>
         ),
