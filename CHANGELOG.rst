@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.27.12
+--------
+
+* Fix time of incident handling `<https://github.com/lsst-ts/LOVE-frontend/pull/599>`_
+
 v5.27.11
 --------
 
