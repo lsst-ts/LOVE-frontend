@@ -186,7 +186,7 @@ export default class NonExposure extends Component {
         type: 'string',
         className: styles.tableHead,
         render: (value, row) => (
-          <span title={formatOLETimeOfIncident(row.date_begin, row.date_end) + ' (UTC)'}>
+          <span title={formatOLETimeOfIncident(row.date_begin + 'Z', row.date_end + 'Z') + ' (UTC)'}>
             {formatSecondsToDigital(value * 3600)}
           </span>
         ),
