@@ -7,6 +7,7 @@ v5.27.11
 
 * Update package.json version to v5.27.11 `<https://github.com/lsst-ts/LOVE-frontend/pull/598>`_
 * Fix time of incident handling `<https://github.com/lsst-ts/LOVE-frontend/pull/599>`_
+* Update package.json version to v5.27.10 `<https://github.com/lsst-ts/LOVE-frontend/pull/598>`_
 * Bump follow-redirects from 1.15.2 to 1.15.5 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/597>`_
 * Increase OLE tables contrast even more `<https://github.com/lsst-ts/LOVE-frontend/pull/596>`_
 * Make OLE components field to persist set values `<https://github.com/lsst-ts/LOVE-frontend/pull/595>`_
