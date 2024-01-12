@@ -70,8 +70,8 @@ export default class NonExposureEdit extends Component {
     logEdit: {
       id: undefined,
       level: 0,
-      date_begin: Moment(),
-      date_end: Moment(),
+      date_begin: undefined,
+      date_end: undefined,
       components: [],
       primary_software_components: ['None'],
       primary_hardware_components: ['None'],
@@ -100,6 +100,9 @@ export default class NonExposureEdit extends Component {
   constructor(props) {
     super(props);
     const { logEdit } = props;
+
+    logEdit['date_begin'] = logEdit['date_begin'] ? Moment(logEdit['date_begin'] + 'Z') : Moment();
+    logEdit['date_end'] = logEdit['date_end'] ? Moment(logEdit['date_end'] + 'Z') : Moment();
 
     this.state = {
       logEdit,

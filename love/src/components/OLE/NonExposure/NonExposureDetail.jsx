@@ -190,7 +190,7 @@ export default class NonExposureDetail extends Component {
             <div className={styles.detail}>
               <span className={styles.label}>Category</span>
               <span className={styles.value}>{logDetail.category}</span>
-              <span className={styles.label}>Time of Incident</span>
+              <span className={styles.label}>Time of Incident (UTC)</span>
               <span className={styles.value}>{`${logDetail.date_begin.split('.')[0]} - ${
                 logDetail.date_end.split('.')[0]
               }`}</span>
