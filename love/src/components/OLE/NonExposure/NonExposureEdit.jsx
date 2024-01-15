@@ -124,11 +124,24 @@ export default class NonExposureEdit extends Component {
   }
 
   cleanForm() {
-    // Reset MultiSelect component value
-    this.multiselectComponentsRef.current?.resetSelectedValues();
     // Reset RichTextEditor component value
     this.richTextEditorRef.current?.cleanContent();
-    this.setState({ logEdit: NonExposureEdit.defaultProps.logEdit });
+
+    // Reset logEdit values
+    // Keep previously saved components for persistence
+    this.setState((prevState) => ({
+      logEdit: {
+        ...NonExposureEdit.defaultProps.logEdit,
+        components: prevState.logEdit.components,
+      },
+    }));
+  }
+
+  clearComponentsInput() {
+    this.setState((prevState) => ({
+      logEdit: { ...prevState.logEdit, components: [] },
+    }));
+    this.multiselectComponentsRef.current?.resetSelectedValues();
   }
 
   updateDates() {
@@ -326,16 +339,19 @@ export default class NonExposureEdit extends Component {
       <>
         <span className={styles.label}>Components</span>
         <span className={styles.value}>
-          <Multiselect
-            innerRef={this.multiselectComponentsRef}
-            className={styles.select}
-            options={componentOptions}
-            selectedValues={logEdit?.components}
-            onSelect={setLogEditComponents}
-            onRemove={setLogEditComponents}
-            placeholder="Select zero or several components"
-            selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
-          />
+          <div className={styles.inputGroup}>
+            <Multiselect
+              innerRef={this.multiselectComponentsRef}
+              className={styles.select}
+              options={componentOptions}
+              selectedValues={logEdit?.components}
+              onSelect={setLogEditComponents}
+              onRemove={setLogEditComponents}
+              placeholder="Select zero or several components"
+              selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
+            />
+            <Button onClick={() => this.clearComponentsInput()}>Clear</Button>
+          </div>
         </span>
         <span className={styles.label}>Primary Software Component</span>
         <span className={styles.value}>

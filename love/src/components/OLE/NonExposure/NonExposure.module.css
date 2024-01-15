@@ -600,3 +600,11 @@ table.table tr {
 .wikiMarkupText:has(+ .expandBtn:checked) {
   max-height: none;
 }
+
+.inputGroup {
+  display: flex;
+}
+
+.inputGroup > :first-child {
+  flex-grow: 1;
+}

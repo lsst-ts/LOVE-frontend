@@ -12,6 +12,7 @@ v5.27.11
 
 * Bump follow-redirects from 1.15.2 to 1.15.5 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/597>`_
 * Increase OLE tables contrast even more `<https://github.com/lsst-ts/LOVE-frontend/pull/596>`_
+* Make OLE components field to persist set values `<https://github.com/lsst-ts/LOVE-frontend/pull/595>`_
 * Add button to send showSchema command `<https://github.com/lsst-ts/LOVE-frontend/pull/594>`_
 * Adjust LOVE M2 force gradient coloring `<https://github.com/lsst-ts/LOVE-frontend/pull/592>`_
 * Fix GIS signals typo `<https://github.com/lsst-ts/LOVE-frontend/pull/591>`_
