@@ -19,7 +19,16 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { summaryStateMap, summaryStateToStyle, alignedStateMap, alignedStateToStyle } from 'Config';
+import {
+  summaryStateMap,
+  summaryStateToStyle,
+  alignedStateMap,
+  alignedStateToStyle,
+  m2PowerStateMap,
+  m2PowerStateToStyle,
+  m2PowerTypeStateMap,
+  m2PowerTypeStateToStyle,
+} from 'Config';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Title from 'components/GeneralPurpose/SummaryPanel/Title';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
@@ -38,21 +47,32 @@ export default class Summary extends Component {
     /** Indicates when all of the M2 axes are within tolerance of the target positions.
      * True if the M2 assembly is in position. */
     m2AssemblyInPosition: PropTypes.bool,
+
+    /** M2 power system type */
+    powerType: PropTypes.number,
+    /** M2 power system state */
+    powerState: PropTypes.number,
   };
 
   static defaultProps = {
     summaryState: 0,
-    commandableByDDS: false,
-    forceBalanceSystemStatus: false,
-    m2AssemblyInPosition: false,
+    commandableByDDS: undefined,
+    forceBalanceSystemStatus: undefined,
+    m2AssemblyInPosition: undefined,
+
+    powerType: 0,
+    powerState: 0,
   };
 
   render() {
     const summaryStateName = summaryStateMap[this.props.summaryState];
     const summaryStateStatus = summaryStateToStyle[summaryStateName];
-
     const alignedStateName = alignedStateMap[this.props.alignment];
     const alignedStateStatus = alignedStateToStyle[alignedStateName];
+    const powerStateName = m2PowerStateMap[this.props.powerState];
+    const powerStateStatus = m2PowerStateToStyle[powerStateName];
+    const powerTypeStateName = m2PowerTypeStateMap[this.props.powerType];
+    const powerTypeStateStatus = m2PowerTypeStateToStyle[powerTypeStateName];
 
     const commandableByDDSValue = {
       name: this.props.commandableByDDS ? 'CSC' : 'EUI',
@@ -84,6 +104,14 @@ export default class Summary extends Component {
           <div className={styles.state}>
             <Title>Force Balance</Title>
             <StatusText status={forceBalanceSystemStatusValue?.class}>{forceBalanceSystemStatusValue?.name}</StatusText>
+          </div>
+          <div className={styles.state}>
+            <Title>Power Status</Title>
+            <StatusText status={powerStateStatus}>{powerStateName}</StatusText>
+          </div>
+          <div className={styles.state}>
+            <Title>Power Type</Title>
+            <StatusText status={powerTypeStateStatus}>{powerTypeStateName}</StatusText>
           </div>
           <div className={styles.state}>
             <Title>M1M3 Alignment</Title>

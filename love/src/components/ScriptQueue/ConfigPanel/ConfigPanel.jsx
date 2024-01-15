@@ -34,6 +34,7 @@ import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import ErrorIcon from 'components/icons/ErrorIcon/ErrorIcon';
 import RotateIcon from 'components/icons/RotateIcon/RotateIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
+import RefreshIcon from 'components/icons/RefreshIcon/RefreshIcon';
 import SaveNewIcon from 'components/icons/SaveNewIcon/SaveNewIcon';
 import SaveIcon from 'components/icons/SaveIcon/SaveIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
@@ -99,8 +100,13 @@ const getDocumentationLink = (scriptPath) => {
 
 export default class ConfigPanel extends Component {
   static propTypes = {
+    /** Function to launch a script */
     launchScript: PropTypes.func,
+    /** Function to close the config panel */
     closeConfigPanel: PropTypes.func,
+    /** Function to reload the schema */
+    reloadSchema: PropTypes.func,
+    /** Object containing the configuration panel information */
     configPanel: PropTypes.object,
   };
 
@@ -458,6 +464,13 @@ export default class ConfigPanel extends Component {
     );
   };
 
+  onReloadSchema = () => {
+    const { script } = this.props.configPanel ?? {};
+    const path = script.path;
+    const isStandard = script.type === 'standard';
+    this.props.reloadSchema(path, isStandard);
+  };
+
   startResizingWithMouse = (ev) => {
     this.setState({ resizingStart: { x: ev.clientX, y: ev.clientY, sizeWeight: this.state.sizeWeight } });
     document.onmousemove = this.onMouseMove;
@@ -615,7 +628,13 @@ export default class ConfigPanel extends Component {
     const { configurationList } = this.state;
     this.setState({ updatingScriptSchema: true });
 
-    ManagerInterface.postScriptConfiguration(scriptPath, scriptType, configName, configSchema, this.props.configPanel.configSchema).then((res) => {
+    ManagerInterface.postScriptConfiguration(
+      scriptPath,
+      scriptType,
+      configName,
+      configSchema,
+      this.props.configPanel.configSchema,
+    ).then((res) => {
       const newConfigurationList = [res, ...configurationList];
       const options = newConfigurationList.map((conf) => ({ label: conf.config_name, value: conf.id }));
       const newSelectedConfiguration = { label: res.config_name, value: res.id };
@@ -792,6 +811,19 @@ export default class ConfigPanel extends Component {
                 >
                   Go to documentation
                 </a>
+              )}
+
+              {showSchema && (
+                <Button
+                  title="Send command to reload schema"
+                  className={styles.refreshSchemaSection}
+                  onClick={this.onReloadSchema}
+                  size="extra-small"
+                  command
+                >
+                  <RefreshIcon />
+                  Reload schema
+                </Button>
               )}
 
               {showSchema && (

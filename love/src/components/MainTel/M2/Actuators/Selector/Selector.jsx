@@ -22,7 +22,7 @@ import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 import { uniqueId } from 'lodash';
 import { M2ActuatorPositions, M2ActuatorTangentPositions } from 'Config';
-import ForceGradiant from '../ForceGradiant/ForceGradiant';
+import ForceGradient from '../ForceGradient/ForceGradient';
 import Button from 'components/GeneralPurpose/Button/Button';
 import styles from './Selector.module.css';
 
@@ -149,7 +149,7 @@ export default class Selector extends Component {
       .scaleLinear()
       .domain(d3.extent([minForceLimit, maxForceLimit]))
       .range([0, 1]);
-    return ForceGradiant.COLOR_SCALE(1 - colorInterpolate(value));
+    return ForceGradient.COLOR_SCALE(colorInterpolate(value));
   };
 
   getActuator = (id) => {
@@ -236,11 +236,8 @@ export default class Selector extends Component {
     d3.select(`#${this.uniqueCircleOverlay}`).call(this.zoom);
   }
 
-  zoomOut = (event) => {
+  zoomOut = () => {
     d3.select(`#${this.uniqueCircleOverlay}`).call(this.zoom.transform, d3.zoomIdentity.scale(1)).call(this.zoom);
-    this.setState({
-      zoomLevel: event.transform.k,
-    });
   };
 
   zoomed = (event) => {

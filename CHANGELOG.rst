@@ -2,6 +2,22 @@
 Version History
 ===============
 
+v5.27.11
+--------
+
+* Update package.json version to v5.27.11 `<https://github.com/lsst-ts/LOVE-frontend/pull/598>`_
+* Fix time of incident handling `<https://github.com/lsst-ts/LOVE-frontend/pull/599>`_
+* Update package.json version to v5.27.10 `<https://github.com/lsst-ts/LOVE-frontend/pull/598>`_
+* Bump follow-redirects from 1.15.2 to 1.15.5 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/597>`_
+* Increase OLE tables contrast even more `<https://github.com/lsst-ts/LOVE-frontend/pull/596>`_
+* Make OLE components field to persist set values `<https://github.com/lsst-ts/LOVE-frontend/pull/595>`_
+* Add button to send showSchema command `<https://github.com/lsst-ts/LOVE-frontend/pull/594>`_
+* Adjust LOVE M2 force gradient coloring `<https://github.com/lsst-ts/LOVE-frontend/pull/592>`_
+* Fix GIS signals typo `<https://github.com/lsst-ts/LOVE-frontend/pull/591>`_
+* Add MTM2 powerSystemState data `<https://github.com/lsst-ts/LOVE-frontend/pull/590>`_
+* Remove custom failed script sound alert `<https://github.com/lsst-ts/LOVE-frontend/pull/589>`_
+* OLE visual improvements `<https://github.com/lsst-ts/LOVE-frontend/pull/588>`_
+
 v5.27.10
 --------
 

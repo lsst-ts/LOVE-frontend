@@ -66,14 +66,22 @@ export default class M2 extends Component {
     /** Force measurement by load cell for each actuator in sequence. */
     tangentForceMeasured: PropTypes.arrayOf(PropTypes.number),
 
+    /** M2 power system type */
+    powerType: PropTypes.number,
+    /** M2 power system state */
+    powerState: PropTypes.number,
+
     /** Number of the minimum force limit, used for the gradiant color */
     minForceLimit: PropTypes.number,
     /** Number of the maximum force limit, used for the gradiant color */
     maxForceLimit: PropTypes.number,
   };
+
   static defaultProps = {
     minForceLimit: 0,
     maxForceLimit: 1000,
+    subscribeToStreams: () => {},
+    unsubscribeToStreams: () => {},
   };
 
   componentDidMount() {
@@ -98,6 +106,8 @@ export default class M2 extends Component {
       minForceLimit,
       maxForceLimit,
       alignment,
+      powerType,
+      powerState,
     } = this.props;
     const { summaryState, commandableByDDS, forceBalanceSystemStatus, m2AssemblyInPosition } = this.props;
     const { zenithAngleMeasured, inclinationTelemetrySource } = this.props;
@@ -110,6 +120,8 @@ export default class M2 extends Component {
           forceBalanceSystemStatus={forceBalanceSystemStatus}
           m2AssemblyInPosition={m2AssemblyInPosition}
           alignment={alignment}
+          powerType={powerType}
+          powerState={powerState}
         />
 
         <Actuators

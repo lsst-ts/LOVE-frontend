@@ -80,7 +80,7 @@ td {
 }
 
 .table td {
-  color: var(--secondary-font-color);
+  color: var(--primary-font-color);
   padding: 0.4em 1em;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;

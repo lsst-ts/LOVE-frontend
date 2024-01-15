@@ -565,14 +565,27 @@ th.tableHead {
   color: var(--link-hover-font-color);
 }
 
-.container table {
+table.table {
   margin: 0;
   border: 0;
 }
 
-.container table th {
+table.table th {
   position: sticky;
   top: 0;
+  z-index: 1;
+}
+
+table.table tr td {
+  border-bottom: 2px solid var(--second-tertiary-background-color) !important;
+}
+
+table.table tr:hover td {
+  background-color: var(--second-tertiary-background-color);
+}
+
+table.table tr {
+  background-color: var(--second-primary-background-color) !important;
 }
 
 .attachmentIcon {

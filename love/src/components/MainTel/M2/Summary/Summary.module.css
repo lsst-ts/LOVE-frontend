@@ -30,6 +30,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .summaryPanelStates {
   max-width: 100%;
   display: flex;
+  flex-wrap: wrap;
+  gap: var(--small-padding);
   justify-content: flex-start;
   padding: 1em;
   margin-bottom: 1em;

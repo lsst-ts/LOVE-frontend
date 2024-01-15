@@ -23,9 +23,8 @@ import PropTypes from 'prop-types';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 
-import Inclinometer from './Inclinometer/Inclinometer';
 import Selector from './Selector/Selector';
-import ForceGradiant from './ForceGradiant/ForceGradiant';
+import ForceGradient from './ForceGradient/ForceGradient';
 import Info from './Info/Info';
 import styles from './Actuators.module.css';
 
@@ -136,12 +135,13 @@ export default class Actuators extends Component {
       tangentEncoderPositions,
       tangentForceApplied,
       tangentForceMeasured,
-      minForceLimit,
-      maxForceLimit,
     } = this.props;
 
     const actuatorReferenceId = this.arrayReferenceId().slice(0, 72);
     const actuatorTangentReferenceId = this.arrayReferenceId().slice(0, 6);
+
+    const minForceLimit = Math.min(...axialForceMeasured, ...tangentForceMeasured);
+    const maxForceLimit = Math.max(...axialForceMeasured, ...tangentForceMeasured);
 
     return (
       <div className={styles.actuatorsContainer}>
@@ -190,7 +190,7 @@ export default class Actuators extends Component {
             />
           </div>
 
-          <div className={styles.inclinometerForcegradiantAndInfoContainer}>
+          <div className={styles.inclinometerForcegradientAndInfoContainer}>
             {/* <div>
               <Inclinometer
                 zenithAngleMeasured={zenithAngleMeasured}
@@ -198,7 +198,7 @@ export default class Actuators extends Component {
               />
             </div> */}
             <div>
-              <ForceGradiant
+              <ForceGradient
                 actuatorReferenceId={actuatorReferenceId}
                 actuatorTangentReferenceId={actuatorTangentReferenceId}
                 selectedActuator={selectedActuator}

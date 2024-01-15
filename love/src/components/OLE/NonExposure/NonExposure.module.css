@@ -498,8 +498,32 @@ th.tableHead {
   white-space: pre-wrap;
   text-align: left;
   overflow-x: auto;
-  max-width: 70em;
+  position: relative;
 }
+
+.wikiMarkupText:has(+ .expandBtn) {
+  max-height: 5em;
+  overflow-y: hidden;
+}
+
+.wikiMarkupText:has(+ .expandBtn:not(:checked))::before {
+  content: '';
+  position: absolute;
+  height: 1em;
+  width: 100%;
+  bottom: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, var(--second-primary-background-color));
+}
+
+tr:hover .wikiMarkupText:has(+ .expandBtn:not(:checked))::before {
+  background: linear-gradient(to bottom, transparent, var(--second-tertiary-background-color));
+}
+
+/* .wikiMarkupText:has(+ .expandBtn) {
+  overflow-y: hidden;
+  max-width: 70em;
+} */
 
 .wikiMarkupText h1,
 .wikiMarkupText h2,
@@ -519,14 +543,27 @@ th.tableHead {
   color: var(--link-hover-font-color);
 }
 
-.container table {
+table.table {
   margin: 0;
   border: 0;
 }
 
-.container table th {
+table.table th {
   position: sticky;
   top: 0;
+  z-index: 1;
+}
+
+table.table tr td {
+  border-bottom: 6px solid var(--second-tertiary-background-color) !important;
+}
+
+table.table tr:hover td {
+  background-color: var(--second-tertiary-background-color);
+}
+
+table.table tr {
+  background-color: var(--second-primary-background-color) !important;
 }
 
 .attachmentIcon {
@@ -534,4 +571,40 @@ th.tableHead {
   height: auto;
   margin-right: 0.25em;
   fill: var(--default-active-font-color);
+}
+
+.expandBtn {
+  font-size: var(--font-size-smaller);
+  color: white;
+  appearance: none;
+  border: 1px solid white;
+  padding: 0.2em;
+  border-radius: 0.25em;
+  cursor: pointer;
+  margin: 0;
+  margin-top: 0.25em;
+}
+
+.expandBtn:hover {
+  background-color: #ccc;
+}
+
+.expandBtn::before {
+  content: '⊕ Expand';
+}
+
+.expandBtn:checked::before {
+  content: '⊖ Collapse';
+}
+
+.wikiMarkupText:has(+ .expandBtn:checked) {
+  max-height: none;
+}
+
+.inputGroup {
+  display: flex;
+}
+
+.inputGroup > :first-child {
+  flex-grow: 1;
 }
