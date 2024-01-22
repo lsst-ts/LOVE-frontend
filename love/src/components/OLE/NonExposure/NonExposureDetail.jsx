@@ -20,12 +20,13 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import lodash from 'lodash';
+import moment from 'moment';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
-import { iconLevelOLE } from 'Config';
+import { iconLevelOLE, ISO_STRING_DATE_TIME_FORMAT } from 'Config';
 import ManagerInterface, {
   getLinkJira,
   getFilesURLs,
@@ -188,8 +189,6 @@ export default class NonExposureDetail extends Component {
           </div>
           <div className={styles.content}>
             <div className={styles.detail}>
-              <span className={styles.label}>Category</span>
-              <span className={styles.value}>{logDetail.category}</span>
               <span className={styles.label}>Time of Incident (UTC)</span>
               <span className={styles.value}>{`${logDetail.date_begin.split('.')[0]} - ${
                 logDetail.date_end.split('.')[0]
@@ -199,16 +198,22 @@ export default class NonExposureDetail extends Component {
               <span className={styles.label}>Obs. Time Loss</span>
               <span className={styles.value}>{formatSecondsToDigital(logDetail.time_lost * 3600)}</span>
               <span className={styles.label}>Components</span>
-              <span className={styles.value}>{logDetail.components?.join(', ')}</span>
+              <span className={styles.value}>
+                {logDetail.components?.length > 0 ? logDetail.components.join(', ') : 'None'}
+              </span>
               <span className={styles.label}>Primary Software Component</span>
               <span className={styles.value}>{logDetail.primary_software_components?.join(', ')}</span>
               <span className={styles.label}>Primary Hardware Component</span>
               <span className={styles.value}>{logDetail.primary_hardware_components?.join(', ')}</span>
+              <span className={styles.label}>Type of observing time</span>
+              <span className={styles.value}>{logDetail.category}</span>
             </div>
             <div className={styles.description}>
               <div className={styles.floatLeft}>
                 <span>On </span>
-                <span className={styles.bold}>{logDetail.date_added} </span>
+                <span className={styles.bold}>
+                  {moment(logDetail.date_added).format(ISO_STRING_DATE_TIME_FORMAT) + ' (UTC) '}
+                </span>
                 <span className={styles.bold}>{logDetail.user_id} </span>
                 <span>wrote:</span>
               </div>
