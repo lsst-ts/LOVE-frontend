@@ -468,6 +468,10 @@ class Layout extends Component {
     );
   };
 
+  goBackFromOLETab = () => {
+    this.setState({ oleTabOpen: null });
+  };
+
   renderRightSideMenu = () => {
     const { controlLocation, lastUpdated } = this.props.controlLocation;
     const filteredAlarms = this.props.alarms.filter((a) => {
@@ -517,7 +521,7 @@ class Layout extends Component {
                   </span>
                 </div>
                 <div className={styles.divider}></div>
-                <NonExposureEdit isMenu={true} back={() => this.setState({ oleTabOpen: null })} />
+                <NonExposureEdit isMenu={true} back={this.goBackFromOLETab} />
               </>
             )}
             {this.state.oleTabOpen === 'exposure' && (
@@ -536,7 +540,7 @@ class Layout extends Component {
                   </span>
                 </div>
                 <div className={styles.divider}></div>
-                <ExposureAdd isMenu={true} back={() => this.setState({ oleTabOpen: null })} />
+                <ExposureAdd isMenu={true} back={this.goBackFromOLETab} />
               </>
             )}
             {this.state.oleTabOpen === 'tma' && (
@@ -555,7 +559,7 @@ class Layout extends Component {
                   </span>
                 </div>
                 <div className={styles.divider}></div>
-                <TeknikerAdd isMenu={true} back={() => this.setState({ oleTabOpen: null })} />
+                <TeknikerAdd isMenu={true} back={this.goBackFromOLETab} />
               </>
             )}
           </div>

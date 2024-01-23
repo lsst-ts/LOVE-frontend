@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import React, { Component, memo } from 'react';
 import PropTypes from 'prop-types';
 import lodash from 'lodash';
 import Moment from 'moment';
@@ -39,7 +39,7 @@ import { EXPOSURE_FLAG_OPTIONS, exposureFlagStateToStyle, ISO_INTEGER_DATE_FORMA
 import ManagerInterface, { getFilesURLs, htmlToJiraMarkdown, jiraMarkdownToHtml } from 'Utils';
 import styles from './Exposure.module.css';
 
-export default class ExposureAdd extends Component {
+class ExposureAdd extends Component {
   static propTypes = {
     /** Exposure object to which a log is going to be added */
     exposure: PropTypes.object,
@@ -717,3 +717,5 @@ export default class ExposureAdd extends Component {
     );
   }
 }
+
+export default memo(ExposureAdd);

@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import React, { Component, memo } from 'react';
 import PropTypes from 'prop-types';
 import lodash from 'lodash';
 import Moment from 'moment';
@@ -31,7 +31,6 @@ import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import MultiFileUploader from 'components/GeneralPurpose/MultiFileUploader/MultiFileUploader';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
-import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import Select from 'components/GeneralPurpose/Select/Select';
@@ -51,7 +50,7 @@ import ManagerInterface, {
 } from 'Utils';
 import styles from './NonExposure.module.css';
 
-export default class NonExposureEdit extends Component {
+class NonExposureEdit extends Component {
   static propTypes = {
     /** Log to edit object */
     logEdit: PropTypes.object,
@@ -831,3 +830,5 @@ export default class NonExposureEdit extends Component {
     return isMenu ? this.renderMenu() : this.renderComponent();
   }
 }
+
+export default memo(NonExposureEdit);
