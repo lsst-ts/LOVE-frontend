@@ -107,13 +107,4 @@ DateTimeRange.propTypes = {
   onChange: PropTypes.func,
 };
 
-const arePropsEqual = (prevProps, nextProps) => {
-  return (
-    prevProps.label === nextProps.label &&
-    prevProps.className === nextProps.className &&
-    Moment(prevProps.startDate).isSame(nextProps.startDate) &&
-    Moment(prevProps.endDate).isSame(nextProps.endDate)
-  );
-};
-
-export default memo(DateTimeRange, arePropsEqual);
+export default memo(DateTimeRange);
