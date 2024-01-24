@@ -44,13 +44,14 @@ import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Input from 'components/GeneralPurpose/Input/Input';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
+import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import ClipIcon from 'components/icons/ClipIcon/ClipIcon';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
+import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import Select from 'components/GeneralPurpose/Select/Select';
-import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import NonExposureDetail from './NonExposureDetail';
 import NonExposureEdit from './NonExposureEdit';
 import styles from './NonExposure.module.css';
@@ -153,15 +154,36 @@ export default class NonExposure extends Component {
   getHeaders = () => {
     return [
       {
-        field: 'date_added',
-        title: 'Date Added (UTC)',
+        field: 'date_begin',
+        title: 'Time of incident (UTC)',
         type: 'string',
         className: styles.tableHead,
         render: (value) => moment(value).format(ISO_STRING_DATE_TIME_FORMAT),
       },
       {
-        field: 'date_added',
-        title: 'Obs Day',
+        field: 'time_lost',
+        title: 'Obs. Time Loss',
+        type: 'string',
+        className: styles.tableHead,
+        render: (value, row) => (
+          <span title={formatOLETimeOfIncident(row.date_begin + 'Z', row.date_end + 'Z') + ' (UTC)'}>
+            {formatSecondsToDigital(value * 3600)}
+          </span>
+        ),
+      },
+      {
+        field: 'date_begin',
+        title: (
+          <div className={styles.obsDayTableHeader}>
+            <span>Obs Day</span>
+            <div className={styles.infoIcon}>
+              <InfoIcon
+                title="This is a calculated field based on the time of the incident set by the user.
+              Constrained from 12 UTC of a day to 12 UTC of the next one."
+              />
+            </div>
+          </div>
+        ),
         type: 'string',
         className: styles.tableHead,
         render: (value) => getObsDayFromDate(moment(value)),
@@ -179,17 +201,6 @@ export default class NonExposure extends Component {
         type: 'string',
         className: styles.tableHead,
         render: (value) => value?.join(', '),
-      },
-      {
-        field: 'time_lost',
-        title: 'Obs. Time Loss',
-        type: 'string',
-        className: styles.tableHead,
-        render: (value, row) => (
-          <span title={formatOLETimeOfIncident(row.date_begin + 'Z', row.date_end + 'Z') + ' (UTC)'}>
-            {formatSecondsToDigital(value * 3600)}
-          </span>
-        ),
       },
       {
         field: 'message_text',

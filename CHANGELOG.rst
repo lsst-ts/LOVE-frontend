@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.27.12
+--------
+
+* Make narrative log time of incident optional and improve usability `<https://github.com/lsst-ts/LOVE-frontend/pull/600>`_
+
 v5.27.11
 --------
 

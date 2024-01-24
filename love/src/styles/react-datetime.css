@@ -148,7 +148,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   cursor: pointer;
 }
 .rdtPicker thead tr:first-child th:hover {
-  background: #eeeeee;
+  color: var(--highlighted-font-color);
 }
 
 .rdtPicker tfoot {
