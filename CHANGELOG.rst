@@ -5,6 +5,7 @@ Version History
 v5.27.12
 --------
 
+* Remove drag and drop ability on RichTextEditor component `<https://github.com/lsst-ts/LOVE-frontend/pull/602>`_
 * Make narrative log time of incident optional and improve usability `<https://github.com/lsst-ts/LOVE-frontend/pull/600>`_
 
 v5.27.11
