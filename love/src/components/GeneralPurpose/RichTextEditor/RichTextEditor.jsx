@@ -95,7 +95,7 @@ const RichTextEditor = forwardRef(
     }, []);
 
     return (
-      <div className={[className ?? '', styles.container].join(' ')}>
+      <div onDrop={(e) => e.preventDefault()} className={[className ?? '', styles.container].join(' ')}>
         <ReactQuill
           ref={reactQuillRef}
           modules={modules}
