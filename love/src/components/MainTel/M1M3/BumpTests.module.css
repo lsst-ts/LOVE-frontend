@@ -1,0 +1,40 @@
+.container {
+  background-color: var(--secondary-background-color);
+}
+
+.filtersTitle {
+  color: var(--highlighted-font-color);
+  text-align: left;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  margin-bottom: var(--small-padding);
+}
+
+.input {
+  max-width: 10em;
+}
+
+.externalLink svg {
+  width: 1.5em;
+  height: 1.5em;
+}
+
+.spinnerIcon {
+  width: 1em;
+  height: 1em;
+}
+
+.secondaryFilters {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  margin-bottom: var(--small-padding);
+}
+
+.dateTimeInput {
+  width: 5em;
+}

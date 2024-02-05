@@ -512,6 +512,27 @@ export default class ManagerInterface {
     });
   }
 
+  // Reports APIs
+  static getReportsM1M3BumpTests(actuator_id, start_date, end_date, efd_instance) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}reports/m1m3-bump-tests`;
+    return fetch(url, {
+      method: 'POST',
+      headers: ManagerInterface.getHeaders(),
+      body: JSON.stringify({
+        actuator_id,
+        start_date,
+        end_date,
+        efd_instance,
+      }),
+    }).then((response) => {
+      return checkJSONResponse(response);
+    });
+  }
+
   // TCS APIs
   static runATCSCommand(commandName, params = {}) {
     const token = ManagerInterface.getToken();
