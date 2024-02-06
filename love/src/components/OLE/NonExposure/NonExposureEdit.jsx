@@ -17,12 +17,13 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import React, { Component, memo } from 'react';
 import PropTypes from 'prop-types';
 import lodash from 'lodash';
 import Moment from 'moment';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
+import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import RefreshIcon from 'components/icons/RefreshIcon/RefreshIcon';
 import RichTextEditor from 'components/GeneralPurpose/RichTextEditor/RichTextEditor';
@@ -30,7 +31,6 @@ import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import MultiFileUploader from 'components/GeneralPurpose/MultiFileUploader/MultiFileUploader';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
-import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import Select from 'components/GeneralPurpose/Select/Select';
@@ -50,7 +50,7 @@ import ManagerInterface, {
 } from 'Utils';
 import styles from './NonExposure.module.css';
 
-export default class NonExposureEdit extends Component {
+class NonExposureEdit extends Component {
   static propTypes = {
     /** Log to edit object */
     logEdit: PropTypes.object,
@@ -70,11 +70,14 @@ export default class NonExposureEdit extends Component {
     logEdit: {
       id: undefined,
       level: 0,
-      date_begin: undefined,
-      date_end: undefined,
+      date_begin: '',
+      date_end: '',
       components: [],
+      components_ids: [],
       primary_software_components: ['None'],
+      primary_software_components_ids: OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS['None'],
       primary_hardware_components: ['None'],
+      primary_hardware_components_ids: OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS['None'],
       salindex: 0,
       user: undefined,
       time_lost: 0,
@@ -101,21 +104,23 @@ export default class NonExposureEdit extends Component {
     super(props);
     const { logEdit } = props;
 
-    logEdit['date_begin'] = logEdit['date_begin'] ? Moment(logEdit['date_begin'] + 'Z') : Moment();
-    logEdit['date_end'] = logEdit['date_end'] ? Moment(logEdit['date_end'] + 'Z') : Moment();
+    logEdit['date_begin'] = logEdit['date_begin'] ? Moment(logEdit['date_begin'] + 'Z') : '';
+    logEdit['date_end'] = logEdit['date_end'] ? Moment(logEdit['date_end'] + 'Z') : '';
 
     this.state = {
       logEdit,
       savingLog: false,
       datesAreValid: true,
       jiraIssueError: false,
-      incidentTimeIsRange: false,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.multiselectComponentsRef = React.createRef();
     this.richTextEditorRef = React.createRef();
     this.id = lodash.uniqueId('nonexposure-edit-');
+
+    this.dateBeginInputRef = React.createRef();
+    this.dateEndInputRef = React.createRef();
   }
 
   getIconLevel(level) {
@@ -126,6 +131,9 @@ export default class NonExposureEdit extends Component {
   cleanForm() {
     // Reset RichTextEditor component value
     this.richTextEditorRef.current?.cleanContent();
+
+    // Reset time of incident datetime pickers
+    this.clearDates();
 
     // Reset logEdit values
     // Keep previously saved components for persistence
@@ -150,13 +158,72 @@ export default class NonExposureEdit extends Component {
     }));
   }
 
+  closeCalendar(ref) {
+    const buttons = ref?.querySelectorAll('button');
+    const clickEvent = new Event('click', { bubbles: true });
+    if (buttons && buttons.length > 0) {
+      // buttons[2] is the button to close the calendar
+      // hidden by default so it can only be clicked programatically
+      buttons[2].dispatchEvent(clickEvent);
+    }
+  }
+
+  updateDateBeginToNow() {
+    this.setState(
+      (prevState) => ({
+        logEdit: { ...prevState.logEdit, date_begin: Moment() },
+      }),
+      () => {
+        this.closeCalendar(this.dateBeginInputRef?.current);
+      },
+    );
+  }
+
+  updateDateEndToNow() {
+    this.setState(
+      (prevState) => ({
+        logEdit: { ...prevState.logEdit, date_end: Moment() },
+      }),
+      () => {
+        this.closeCalendar(this.dateEndInputRef?.current);
+      },
+    );
+  }
+
+  clearDates() {
+    // For some reason setting logEdit.date_begin to '' does not work
+    // thus we clear the date by calling the onClick function of the clear button
+    // of each DateTime component
+    const dateBeginElement = this.dateBeginInputRef.current;
+    const dateEndElement = this.dateEndInputRef.current;
+
+    const dateBeginButtons = dateBeginElement?.querySelectorAll('button');
+    const dateEndButtons = dateEndElement?.querySelectorAll('button');
+
+    // const clickEvent = new MouseEvent('click');
+    const clickEvent = new Event('click', { bubbles: true });
+
+    if (dateBeginButtons && dateBeginButtons.length > 0) {
+      dateBeginButtons[0].dispatchEvent(clickEvent);
+      dateBeginButtons[2].dispatchEvent(clickEvent);
+    }
+
+    if (dateEndButtons && dateEndButtons.length > 0) {
+      dateEndButtons[0].dispatchEvent(clickEvent);
+      dateEndButtons[2].dispatchEvent(clickEvent);
+    }
+  }
+
   updateOrCreateMessageNarrativeLogs() {
     const payload = { ...this.state.logEdit };
-
+    const nowMoment = Moment();
     payload['request_type'] = 'narrative';
 
-    const beginDateISO = Moment(this.state.logEdit.date_begin).toISOString();
-    const endDateISO = Moment(this.state.logEdit.date_end).toISOString();
+    // Handle dates saving
+    let beginDateISO, endDateISO;
+    beginDateISO = payload.date_begin != '' ? Moment(payload.date_begin).toISOString() : nowMoment.toISOString();
+    endDateISO = payload.date_end != '' ? Moment(payload.date_end).toISOString() : nowMoment.toISOString();
+
     payload['date_begin'] = beginDateISO.substring(0, beginDateISO.length - 1); // remove Zone due to backend standard
     payload['date_end'] = endDateISO.substring(0, endDateISO.length - 1); // remove Zone due to backend standard
 
@@ -212,6 +279,9 @@ export default class NonExposureEdit extends Component {
 
   handleTimeLost() {
     const { date_begin, date_end } = this.state.logEdit;
+    if (date_begin === '' || date_end === '') {
+      return;
+    }
     const start = Moment(date_begin);
     const end = Moment(date_end);
     const duration_hr = end.diff(start, 'hours', true);
@@ -228,18 +298,7 @@ export default class NonExposureEdit extends Component {
       prevState.logEdit?.date_begin !== this.state.logEdit?.date_begin ||
       prevState.logEdit?.date_end !== this.state.logEdit?.date_end
     ) {
-      try {
-        this.state.logEdit.date_begin.toISOString();
-        this.state.logEdit.date_end.toISOString();
-        this.setState({
-          datesAreValid: true,
-        });
-        this.handleTimeLost();
-      } catch (error) {
-        this.setState({
-          datesAreValid: false,
-        });
-      }
+      this.handleTimeLost();
     }
 
     if (this.state.logEdit) {
@@ -261,17 +320,6 @@ export default class NonExposureEdit extends Component {
         } else {
           this.setState({ jiraIssueError: false });
         }
-      }
-    }
-
-    if (this.state.incidentTimeIsRange !== prevState.incidentTimeIsRange) {
-      if (!this.state.incidentTimeIsRange) {
-        this.setState((prevState) => ({
-          logEdit: {
-            ...prevState.logEdit,
-            date_end: Moment(prevState.logEdit.date_begin),
-          },
-        }));
       }
     }
   }
@@ -393,59 +441,100 @@ export default class NonExposureEdit extends Component {
 
   renderTimeOfIncidentFields() {
     const { date_begin, date_end, time_lost, time_lost_type } = this.state.logEdit ?? {};
-    const { incidentTimeIsRange, datesAreValid } = this.state;
+    const { datesAreValid } = this.state;
 
-    const renderDateTimeInput = (props) => {
-      return <input {...props} readOnly />;
+    const renderDateTimeInput = (ref) => {
+      return (props, openCalendar, closeCalendar) => {
+        function clearDate() {
+          props.onChange({ target: { value: '' } });
+        }
+        return (
+          <div ref={ref} className={styles.timeOfIncidentInputContainer}>
+            <input {...props} readOnly />
+            <Button
+              // ref={ref}
+              className={styles.clearDateIcon}
+              size="small"
+              title="Clear date"
+              onClick={clearDate}
+            >
+              <CloseIcon title="Clear date" />
+            </Button>
+            <button className={styles.hiddenButtons} type="button" onClick={openCalendar} />
+            <button className={styles.hiddenButtons} type="button" onClick={closeCalendar} />
+          </div>
+        );
+      };
+    };
+
+    const renderDatePickerView = (dateBegin = true) => {
+      return (mode, renderDefault) => {
+        const updateToNow = () => {
+          if (dateBegin) {
+            this.updateDateBeginToNow();
+          } else {
+            this.updateDateEndToNow();
+          }
+        };
+
+        // Only for years, months and days view
+        if (mode === 'time') return renderDefault();
+
+        return (
+          <div className="wrapper">
+            {renderDefault()}
+            <div className={styles.rdtControls}>
+              <Button title="Set date to now" className={styles.rdtControlsButton} onClick={updateToNow}>
+                <RefreshIcon />
+                Now
+              </Button>
+            </div>
+          </div>
+        );
+      };
     };
 
     return (
       <>
-        <span className={styles.label}>Time of Incident (UTC)</span>
+        <span className={styles.label}>
+          Time of Incident (UTC)
+          <div className={styles.infoIcon}>
+            <InfoIcon title="This fields are optionals. If not filled, the current time will be used." />
+          </div>
+        </span>
         <span className={styles.value}>
           <div className={styles.incidentTimeTypeContainer}>
-            <Toggle
-              labels={['Singular', 'Range']}
-              toggled={incidentTimeIsRange}
-              onToggle={(event) => this.setState({ incidentTimeIsRange: event })}
+            <DateTimeRange
+              label="From"
+              className={styles.dateTimeRangeStyle}
+              startDate={date_begin}
+              endDate={date_end}
+              onChange={(date, type) => this.handleTimeOfIncident(date, type)}
+              startDateProps={{
+                renderInput: renderDateTimeInput(this.dateBeginInputRef),
+                renderView: renderDatePickerView(true),
+                inputProps: {
+                  title: 'This field is optional. If it is not filled, the current time will be used.',
+                  placeholder: 'YYYY/MM/DD HH:mm',
+                  className: styles.timeOfIncidentInput,
+                },
+                dateFormat: 'YYYY/MM/DD',
+                timeFormat: 'HH:mm A',
+                closeOnSelect: false,
+              }}
+              endDateProps={{
+                renderInput: renderDateTimeInput(this.dateEndInputRef),
+                renderView: renderDatePickerView(false),
+                inputProps: {
+                  title: 'This field is optional. If it is not filled, the current time will be used.',
+                  placeholder: 'YYYY/MM/DD HH:mm',
+                  className: styles.timeOfIncidentInput,
+                },
+                dateFormat: 'YYYY/MM/DD',
+                timeFormat: 'HH:mm A',
+                closeOnSelect: false,
+              }}
             />
-            {incidentTimeIsRange ? (
-              <DateTimeRange
-                className={styles.dateTimeRangeStyle}
-                startDate={date_begin}
-                endDate={date_end}
-                onChange={(date, type) => this.handleTimeOfIncident(date, type)}
-                startDateProps={{
-                  renderInput: renderDateTimeInput,
-                }}
-                endDateProps={{
-                  renderInput: renderDateTimeInput,
-                }}
-              />
-            ) : (
-              <DateTime
-                className={styles.dateTimeSingularStyle}
-                viewMode="time"
-                dateFormat="YYYY/MM/DD"
-                timeFormat="HH:mm:ss"
-                closeOnSelect={true}
-                value={date_begin}
-                onChange={(date) => {
-                  this.setState((prevState) => ({
-                    logEdit: { ...prevState.logEdit, date_begin: date },
-                  }));
-                }}
-                renderInput={renderDateTimeInput}
-              />
-            )}
-            <Button
-              className={styles.refreshDateIcon}
-              size="small"
-              title="Refresh date"
-              onClick={() => this.updateDates()}
-            >
-              <RefreshIcon title="Refresh date" />
-            </Button>
           </div>
           {!datesAreValid && <div className={styles.inputError}>Error: dates must be input in valid ISO format</div>}
         </span>
@@ -741,3 +830,5 @@ export default class NonExposureEdit extends Component {
     return isMenu ? this.renderMenu() : this.renderComponent();
   }
 }
+
+export default memo(NonExposureEdit);

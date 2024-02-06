@@ -2,12 +2,19 @@
 Version History
 ===============
 
+v5.28.0
+-------
+
+* Update package.json version to v5.28.0 `<https://github.com/lsst-ts/LOVE-frontend/pull/603>`_
+* Remove drag and drop ability on RichTextEditor component `<https://github.com/lsst-ts/LOVE-frontend/pull/602>`_
+* Add M1M3 Bump Tests reports `<https://github.com/lsst-ts/LOVE-frontend/pull/601>`_
+* Make narrative log time of incident optional and improve usability `<https://github.com/lsst-ts/LOVE-frontend/pull/600>`_
+
 v5.27.11
 --------
 
 * Update package.json version to v5.27.11 `<https://github.com/lsst-ts/LOVE-frontend/pull/598>`_
 * Fix time of incident handling `<https://github.com/lsst-ts/LOVE-frontend/pull/599>`_
-* Update package.json version to v5.27.10 `<https://github.com/lsst-ts/LOVE-frontend/pull/598>`_
 * Bump follow-redirects from 1.15.2 to 1.15.5 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/597>`_
 * Increase OLE tables contrast even more `<https://github.com/lsst-ts/LOVE-frontend/pull/596>`_
 * Make OLE components field to persist set values `<https://github.com/lsst-ts/LOVE-frontend/pull/595>`_

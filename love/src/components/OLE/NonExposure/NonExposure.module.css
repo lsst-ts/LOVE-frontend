@@ -46,6 +46,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   box-sizing: border-box;
   margin-left: 15px;
   margin-right: 15px;
+  container: content / inline-size;
 }
 
 .header {
@@ -153,6 +154,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .infoIcon {
   width: 1em;
+  height: 1em;
   margin-left: 0.5em;
   margin-right: 0.5em;
   position: relative;
@@ -237,6 +239,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 }
 
 .label {
+  display: flex;
+  align-items: center;
   font-weight: bold;
   color: var(--secondary-font-color);
   text-align: left;
@@ -248,7 +252,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .contentLeft {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: minmax(12em, 1fr) 2fr;
   grid-auto-rows: max-content;
   grid-row-gap: 0.5em;
   align-items: center;
@@ -386,6 +390,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .dateTimeRangeStyle :global(.rdtPicker) {
   left: -176px;
+  min-width: 250px;
 }
 
 .dateTimeSingularStyle {
@@ -436,17 +441,12 @@ th.tableHead {
   margin-bottom: var(--small-padding);
 }
 
-.incidentTimeTypeContainer > :first-child {
-  margin-right: var(--small-padding);
-}
-
-.refreshDateIcon {
+.clearDateIcon {
   display: flex;
   align-items: center;
   padding: 0.25em;
-  margin-left: var(--small-padding);
 }
-.refreshDateIcon > * {
+.clearDateIcon > * {
   width: 1.5em;
   height: 1.5em;
 }
@@ -607,4 +607,50 @@ table.table tr {
 
 .inputGroup > :first-child {
   flex-grow: 1;
+}
+
+.timeOfIncidentInputContainer {
+  display: flex;
+}
+
+.timeOfIncidentInput:hover::placeholder {
+  color: #c3c3c3;
+}
+
+.hiddenButtons {
+  display: none;
+}
+
+:global(.rdtPicker) button.rdtControlsButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  --button-margin: 0.75em;
+  width: calc(100% - 2 * var(--button-margin));
+  padding: 0.25em;
+  background-color: var(--default-background-color);
+  color: var(--default-font-color);
+  margin: 0 var(--button-margin);
+}
+
+:global(.rdtPicker) button.rdtControlsButton:hover {
+  background-color: var(--default-active-background-color);
+  color: var(--default-active-font-color);
+}
+
+:global(.rdtPicker) button.rdtControlsButton svg {
+  width: 1em;
+  height: 1em;
+}
+
+.obsDayTableHeader {
+  display: flex;
+  align-items: center;
+}
+
+@container content (min-width: 1260px) {
+  .dateTimeRangeStyle :global(.rdtPicker) {
+    left: 184px;
+    top: -161px;
+  }
 }
