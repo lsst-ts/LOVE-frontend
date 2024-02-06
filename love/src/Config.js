@@ -38,6 +38,9 @@ export const WEBSOCKET_SIMULATION = false;
 // set of websocket messages
 export const WEBSOCKET_SIMULATION_FILE = 'test.json';
 
+// Base URL prefix for LSST JIRA tickets
+export const JIRA_TICKETS_BASE_URL = 'https://jira.lsstcorp.org/browse';
+
 // Base URL for ScriptQueue scripts' documentation
 export const SCRIPT_DOCUMENTATION_BASE_URL = 'https://ts-standardscripts.lsst.io/py-api';
 

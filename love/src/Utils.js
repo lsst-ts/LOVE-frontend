@@ -21,7 +21,13 @@ import html2canvas from 'html2canvas';
 import { DateTime } from 'luxon';
 import { toast } from 'react-toastify';
 import Moment from 'moment';
-import { WEBSOCKET_SIMULATION, SUBPATH, ISO_INTEGER_DATE_FORMAT, AUTO_HYPERLINK_JIRA_PROJECTS } from 'Config.js';
+import {
+  WEBSOCKET_SIMULATION,
+  SUBPATH,
+  ISO_INTEGER_DATE_FORMAT,
+  AUTO_HYPERLINK_JIRA_PROJECTS,
+  JIRA_TICKETS_BASE_URL,
+} from 'Config.js';
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -1566,12 +1572,12 @@ export function openInNewTab(url) {
 
 /**
  * Function to get OLE Narrative and Exposure logs parameters from urls field.
- * @param {string} urls array of urls that comes from OLE message
+ * @param {string[]} urls array of urls that comes from OLE message
  * @returns {string} string with first url with the condition if jira link
  */
 export function getLinkJira(urls) {
   if (!urls) return '';
-  const filtered = urls.filter((url) => url.includes('jira'));
+  const filtered = urls.filter((url) => url.includes(JIRA_TICKETS_BASE_URL));
   if (filtered.length > 0) {
     return filtered[0];
   }
@@ -1580,12 +1586,12 @@ export function getLinkJira(urls) {
 
 /**
  * Function to get OLE Narrative and Exposure logs parameters from urls field.
- * @param {string} urls array of urls that comes from OLE message
+ * @param {string[]} urls array of urls that comes from OLE message
  * @returns {string} string with first url that is not a jira link
  */
 export function getFileURL(urls) {
   if (!urls) return '';
-  const filtered = urls.filter((url) => !url.includes('jira'));
+  const filtered = urls.filter((url) => !url.includes(JIRA_TICKETS_BASE_URL));
   if (filtered.length > 0) {
     return filtered[0];
   }
