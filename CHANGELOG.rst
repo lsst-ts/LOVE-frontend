@@ -5,6 +5,7 @@ Version History
 v5.28.0
 -------
 
+* Update package.json version to v5.28.0 `<https://github.com/lsst-ts/LOVE-frontend/pull/603>`_
 * Remove drag and drop ability on RichTextEditor component `<https://github.com/lsst-ts/LOVE-frontend/pull/602>`_
 * Add M1M3 Bump Tests reports `<https://github.com/lsst-ts/LOVE-frontend/pull/601>`_
 * Make narrative log time of incident optional and improve usability `<https://github.com/lsst-ts/LOVE-frontend/pull/600>`_
