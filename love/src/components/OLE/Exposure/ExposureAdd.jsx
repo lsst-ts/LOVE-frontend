@@ -36,7 +36,7 @@ import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange
 import Modal from 'components/GeneralPurpose/Modal/Modal';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
 import { EXPOSURE_FLAG_OPTIONS, exposureFlagStateToStyle, ISO_INTEGER_DATE_FORMAT } from 'Config';
-import ManagerInterface, { getFilesURLs, htmlToJiraMarkdown, jiraMarkdownToHtml } from 'Utils';
+import ManagerInterface, { getFilesURLs, getLinkJira, htmlToJiraMarkdown, jiraMarkdownToHtml } from 'Utils';
 import styles from './Exposure.module.css';
 
 class ExposureAdd extends Component {
@@ -323,6 +323,92 @@ class ExposureAdd extends Component {
         placeholder="Select one or several observations"
         selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
       />
+    );
+  }
+
+  renderJiraFields() {
+    const { newMessage, jiraIssueError } = this.state;
+    const logHasJira = getLinkJira(newMessage.urls) !== '';
+    return (
+      <>
+        <div className={styles.jira}>
+          {!logHasJira && (
+            <>
+              <div className={styles.checkboxText}>
+                <Input
+                  type="checkbox"
+                  checked={newMessage?.jira}
+                  onChange={(event) => {
+                    this.setState((prevState) => ({
+                      newMessage: { ...prevState.newMessage, jira: event.target.checked },
+                    }));
+                  }}
+                />
+                <span>link Jira ticket</span>
+              </div>
+              {newMessage?.jira && (
+                <div className={styles.radioText}>
+                  <div>
+                    <input
+                      type="radio"
+                      name="jira"
+                      value="new"
+                      checked={newMessage?.jira_new}
+                      onChange={() => {
+                        this.setState((prevState) => ({
+                          newMessage: { ...prevState.newMessage, jira_new: true },
+                        }));
+                      }}
+                    />
+                    <span>New</span>
+                  </div>
+                  <div>
+                    <input
+                      type="radio"
+                      name="jira"
+                      value="existent"
+                      checked={!newMessage?.jira_new}
+                      onChange={() => {
+                        this.setState((prevState) => ({
+                          newMessage: { ...prevState.newMessage, jira_new: false },
+                        }));
+                      }}
+                    />
+                    <span>Existent</span>
+                  </div>
+                </div>
+              )}
+              {newMessage?.jira && (
+                <div className={styles.textInput}>
+                  {newMessage?.jira_new ? (
+                    <Input
+                      value={newMessage?.jira_issue_title}
+                      className={jiraIssueError ? styles.inputError : ''}
+                      placeholder="Jira ticket title"
+                      onChange={(event) =>
+                        this.setState((prevState) => ({
+                          newMessage: { ...prevState.newMessage, jira_issue_title: event.target.value },
+                        }))
+                      }
+                    />
+                  ) : (
+                    <Input
+                      value={newMessage?.jira_issue_id}
+                      className={jiraIssueError ? styles.inputError : ''}
+                      placeholder="Jira ticket id"
+                      onChange={(event) =>
+                        this.setState((prevState) => ({
+                          newMessage: { ...prevState.newMessage, jira_issue_id: event.target.value },
+                        }))
+                      }
+                    />
+                  )}
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </>
     );
   }
 
@@ -634,60 +720,7 @@ class ExposureAdd extends Component {
                   />
                 </div>
 
-                <div className={styles.jira}>
-                  <span className={styles.label}>Jira ticket</span>
-                  <span>
-                    <Input
-                      type="checkbox"
-                      checked={newMessage?.jira}
-                      onChange={(event) => {
-                        this.setState((prevState) => ({
-                          newMessage: { ...prevState.newMessage, jira: event.target.checked },
-                        }));
-                      }}
-                    />
-                  </span>
-
-                  {newMessage?.jira && (
-                    <>
-                      <span>
-                        <Toggle
-                          labels={['New', 'Existent']}
-                          toggled={!newMessage?.jira_new}
-                          onToggle={(event) => {
-                            this.setState((prevState) => ({
-                              newMessage: { ...prevState.newMessage, jira_new: !event },
-                            }));
-                          }}
-                        />
-                      </span>
-
-                      {newMessage?.jira_new ? (
-                        <Input
-                          value={newMessage?.jira_issue_title}
-                          placeholder="Jira ticket title"
-                          onChange={(event) =>
-                            this.setState((prevState) => ({
-                              newMessage: { ...prevState.newMessage, jira_issue_title: event.target.value },
-                            }))
-                          }
-                        />
-                      ) : (
-                        <Input
-                          value={newMessage?.jira_issue_id}
-                          placeholder="Jira ticket id"
-                          onChange={(event) =>
-                            this.setState((prevState) => ({
-                              newMessage: { ...prevState.newMessage, jira_issue_id: event.target.value },
-                            }))
-                          }
-                        />
-                      )}
-
-                      {jiraIssueError && <div className={styles.inputError}>This field cannot be empty.</div>}
-                    </>
-                  )}
-                </div>
+                {this.renderJiraFields()}
               </div>
 
               <div className={isMenu ? styles.footerRightMenu : styles.footerRight}>

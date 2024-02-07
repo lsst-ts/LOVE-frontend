@@ -323,21 +323,22 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .checkboxText {
   display: flex;
-  margin-right: 5px;
   align-items: center;
-  flex-wrap: wrap;
+  margin-bottom: var(--small-padding);
 }
 
-.checkboxText > * {
+.checkboxText > *:not(:last-child) {
   margin-right: 0.5em;
-}
-
-.checkboxText > input:first-of-type {
-  width: auto;
 }
 
 .checkboxText > button {
   text-align: right;
+}
+
+.radioText {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--small-padding);
 }
 
 .paddingTop {
@@ -504,17 +505,11 @@ th.tableHead {
 }
 
 .footer .flag,
-.footerMenu .flag,
-.footer .jira,
-.footerMenu .jira {
+.footerMenu .flag {
   display: flex;
   align-items: center;
   gap: var(--small-padding);
   white-space: nowrap;
-}
-
-.footerMenu .jira {
-  flex-wrap: wrap;
 }
 
 .footer .flag .label,
@@ -532,8 +527,7 @@ th.tableHead {
 }
 
 .inputError {
-  margin-top: var(--small-padding);
-  color: var(--status-alert-color);
+  border-color: var(--status-alert-color);
 }
 
 .obsIdSelector {
