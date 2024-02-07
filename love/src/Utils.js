@@ -927,9 +927,9 @@ export default class ManagerInterface {
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
-    const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/?order_by=-date_added&limit=1000${
-      from ? `&min_date_added=${from}` : ''
-    }${to ? `&max_date_added=${to}` : ''}`;
+    const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/?order_by=-date_begin&limit=1000${
+      from ? `&min_date_begin=${from}` : ''
+    }${to ? `&max_date_begin=${to}` : ''}`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
