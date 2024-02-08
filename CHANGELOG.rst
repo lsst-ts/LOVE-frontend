@@ -5,6 +5,7 @@ Version History
 v5.28.1
 -------
 
+* Create OrderableTable to extend SimpleTable to allow rows sorting by column `<https://github.com/lsst-ts/LOVE-frontend/pull/605>`_
 * Extend logs edition feature to allow JIRA tickets attachment `<https://github.com/lsst-ts/LOVE-frontend/pull/604>`_
 
 v5.28.0
