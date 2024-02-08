@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.28.1
+-------
+
+* Extend logs edition feature to allow JIRA tickets attachment `<https://github.com/lsst-ts/LOVE-frontend/pull/604>`_
+
 v5.28.0
 -------
 
