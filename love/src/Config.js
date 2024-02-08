@@ -61,6 +61,11 @@ export const EUIs = {
   ATDOME: 'https://atmcs-dev.cp.lsst.org',
 };
 
+// Types of sorting
+export const SORT_ASCENDING = 'ascending';
+export const SORT_DESCENDING = 'descending';
+export const SORT_UNSORTED = 'unsorted';
+
 // Moment formats
 export const ISO_STRING_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
 export const ISO_STRING_DATE_FORMAT = 'YYYY-MM-DD';
