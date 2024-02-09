@@ -40,7 +40,7 @@ import ManagerInterface, {
   formatOLETimeOfIncident,
 } from 'Utils';
 
-import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
+import OrderableTable from 'components/GeneralPurpose/OrderableTable/OrderableTable';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Input from 'components/GeneralPurpose/Input/Input';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
@@ -362,7 +362,7 @@ export default class NonExposure extends Component {
     } = this.props;
     const { logs: tableData, modeView, modeEdit } = this.state;
 
-    const headers = Object.values(this.getHeaders());
+    const headers = this.getHeaders();
     let filteredData = [...(tableData ?? [])];
 
     // Filter by type
@@ -508,7 +508,7 @@ export default class NonExposure extends Component {
           Last updated: {this.state.lastUpdated ? this.state.lastUpdated.format(TIME_FORMAT) : ''}
           {this.state.updatingLogs && <SpinnerIcon className={styles.spinnerIcon} />}
         </div>
-        <SimpleTable className={styles.table} headers={headers} data={filteredData} />
+        <OrderableTable className={styles.table} headers={headers} data={filteredData} />
       </div>
     );
   }

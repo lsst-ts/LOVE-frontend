@@ -27,12 +27,18 @@ import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
-import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
+import OrderableTable from 'components/GeneralPurpose/OrderableTable/OrderableTable';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
-import { exposureFlagStateToStyle, TIME_FORMAT, ISO_INTEGER_DATE_FORMAT, LOG_REFRESH_INTERVAL_MS } from 'Config';
+import {
+  exposureFlagStateToStyle,
+  TIME_FORMAT,
+  ISO_INTEGER_DATE_FORMAT,
+  LOG_REFRESH_INTERVAL_MS,
+  SORT_ASCENDING,
+} from 'Config';
 import ManagerInterface, { getFilesURLs, jiraMarkdownToHtml } from 'Utils';
 import ExposureAdd from './ExposureAdd';
 import ExposureDetail from './ExposureDetail';
@@ -188,6 +194,15 @@ export default class Exposure extends Component {
           const end = Moment(row['timespan_end']);
           const duration_s = end.diff(start, 'seconds', true);
           return duration_s.toFixed(2);
+        },
+        sort: (row1, row2, sortingColumn, sortingDirection) => {
+          const start1 = Moment(row1['timespan_begin']);
+          const start2 = Moment(row2['timespan_begin']);
+          const end1 = Moment(row1['timespan_end']);
+          const end2 = Moment(row2['timespan_end']);
+          const duration1 = end1.diff(start1, 'seconds', true);
+          const duration2 = end2.diff(start2, 'seconds', true);
+          return sortingDirection === SORT_ASCENDING ? duration1 - duration2 : duration2 - duration1;
         },
       },
       {
@@ -539,7 +554,7 @@ export default class Exposure extends Component {
           Last updated: {this.state.lastUpdated ? this.state.lastUpdated.format(TIME_FORMAT) : ''}
           {updatingExposures && <SpinnerIcon className={styles.spinnerIcon} />}
         </div>
-        <SimpleTable className={styles.table} headers={headers} data={filteredData} />
+        <OrderableTable className={styles.table} headers={headers} data={filteredData} />
       </div>
     );
   }
