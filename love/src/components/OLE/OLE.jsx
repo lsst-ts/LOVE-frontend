@@ -45,6 +45,7 @@ export default class OLE extends Component {
       selectedCommentType: OLE_COMMENT_TYPE_OPTIONS[0],
       selectedComponent: 'All components',
       selectedObsTimeLoss: false,
+      selectedJiraTickets: false,
       // Exposure filters
       instruments: [],
       selectedInstrument: null,
@@ -74,6 +75,10 @@ export default class OLE extends Component {
 
   changeObsTimeLossSelect(value) {
     this.setState({ selectedObsTimeLoss: value });
+  }
+
+  changeJiraTicketsSelect(value) {
+    this.setState({ selectedJiraTickets: value });
   }
 
   /** Exposure functions */
@@ -151,6 +156,8 @@ export default class OLE extends Component {
             changeComponentSelect={(value) => this.changeComponentSelect(value)}
             selectedObsTimeLoss={this.state.selectedObsTimeLoss}
             changeObsTimeLossSelect={(value) => this.changeObsTimeLossSelect(value)}
+            selectedJiraTickets={this.state.selectedJiraTickets}
+            changeJiraTicketsSelect={(value) => this.changeJiraTicketsSelect(value)}
           />
         );
       }

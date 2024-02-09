@@ -79,8 +79,12 @@ export default class NonExposure extends Component {
     changeComponentSelect: PropTypes.func,
     /** Selected obs time loss of the obs time loss filter */
     selectedObsTimeLoss: PropTypes.bool,
+    /** Selected jira ticket of the jira ticket filter */
+    selectedJiraTickets: PropTypes.bool,
     /** Function to handle the obs time loss filter */
     changeObsTimeLossSelect: PropTypes.func,
+    /** Function to handle the jira ticket filter */
+    changeJiraTicketsSelect: PropTypes.func,
   };
 
   static defaultProps = {
@@ -93,6 +97,8 @@ export default class NonExposure extends Component {
     changeComponentSelect: () => {},
     selectedObsTimeLoss: false,
     changeObsTimeLossSelect: () => {},
+    selectedJiraTickets: false,
+    changeJiraTicketsSelect: () => {},
   };
 
   constructor(props) {
@@ -355,10 +361,12 @@ export default class NonExposure extends Component {
       selectedCommentType,
       selectedComponent,
       selectedObsTimeLoss,
+      selectedJiraTickets,
       changeDayNarrative,
       changeCommentTypeSelect,
       changeComponentSelect,
       changeObsTimeLossSelect,
+      changeJiraTicketsSelect,
     } = this.props;
     const { logs: tableData, modeView, modeEdit } = this.state;
 
@@ -378,6 +386,13 @@ export default class NonExposure extends Component {
     // Filter by obs time loss
     if (selectedObsTimeLoss) {
       filteredData = filteredData.filter((log) => log.time_lost > 0);
+    }
+
+    // Filter by jira tickets
+    if (selectedJiraTickets) {
+      filteredData = filteredData.filter((log) => {
+        return getLinkJira(log.urls) !== '';
+      });
     }
 
     // Obtain headers to create csv report
@@ -446,10 +461,6 @@ export default class NonExposure extends Component {
     ) : (
       <div className={styles.container}>
         <div className={styles.filters}>
-          <Button disabled={this.state.updatingLogs} onClick={() => this.queryNarrativeLogs()}>
-            Refresh data
-          </Button>
-
           <DateTimeRange
             label="From"
             className={styles.dateRange}
@@ -479,6 +490,15 @@ export default class NonExposure extends Component {
             Show only with time loss
           </div>
 
+          <div className={styles.checkboxText}>
+            <Input
+              type="checkbox"
+              checked={selectedJiraTickets}
+              onChange={(event) => changeJiraTicketsSelect(event.target.checked)}
+            />
+            Show only with jira tickets
+          </div>
+
           <Select
             options={OLE_COMMENT_TYPE_OPTIONS}
             option={selectedCommentType}
@@ -505,7 +525,10 @@ export default class NonExposure extends Component {
           </div>
         </div>
         <div className={styles.lastUpdated}>
-          Last updated: {this.state.lastUpdated ? this.state.lastUpdated.format(TIME_FORMAT) : ''}
+          <Button disabled={this.state.updatingLogs} onClick={() => this.queryNarrativeLogs()}>
+            Refresh data
+          </Button>
+          <span>Last updated: {this.state.lastUpdated ? this.state.lastUpdated.format(TIME_FORMAT) : ''}</span>
           {this.state.updatingLogs && <SpinnerIcon className={styles.spinnerIcon} />}
         </div>
         <OrderableTable className={styles.table} headers={headers} data={filteredData} />
