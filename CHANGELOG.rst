@@ -2,9 +2,10 @@
 Version History
 ===============
 
-v5.28.1
+v5.29.0
 -------
 
+* Update package.json version to v5.29.0 `<https://github.com/lsst-ts/LOVE-frontend/pull/607>`_
 * Add jira tickets filter for NonExposure logs table `<https://github.com/lsst-ts/LOVE-frontend/pull/606>`_
 * Create OrderableTable to extend SimpleTable to allow rows sorting by column `<https://github.com/lsst-ts/LOVE-frontend/pull/605>`_
 * Extend logs edition feature to allow JIRA tickets attachment `<https://github.com/lsst-ts/LOVE-frontend/pull/604>`_
