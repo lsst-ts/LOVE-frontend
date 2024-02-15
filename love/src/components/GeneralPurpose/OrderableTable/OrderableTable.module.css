@@ -1,0 +1,18 @@
+.columnHeader {
+  display: flex;
+  align-items: center;
+}
+
+.orderSymbol {
+  cursor: pointer;
+  display: inline-flex;
+  flex-direction: column;
+  line-height: 1em;
+  margin-left: var(--small-padding);
+  color: var(--secondary-font-dimmed-color);
+  user-select: none;
+}
+
+.orderSymbol > .selected {
+  color: var(--highlighted-font-color);
+}

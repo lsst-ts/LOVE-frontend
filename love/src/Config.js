@@ -38,6 +38,9 @@ export const WEBSOCKET_SIMULATION = false;
 // set of websocket messages
 export const WEBSOCKET_SIMULATION_FILE = 'test.json';
 
+// Base URL prefix for LSST JIRA tickets
+export const JIRA_TICKETS_BASE_URL = 'https://jira.lsstcorp.org/browse';
+
 // Base URL for ScriptQueue scripts' documentation
 export const SCRIPT_DOCUMENTATION_BASE_URL = 'https://ts-standardscripts.lsst.io/py-api';
 
@@ -57,6 +60,11 @@ export const EUIs = {
   TMA: 'https://confluence.lsstcorp.org/pages/viewpage.action?pageId=214147380',
   ATDOME: 'https://atmcs-dev.cp.lsst.org',
 };
+
+// Types of sorting
+export const SORT_ASCENDING = 'ascending';
+export const SORT_DESCENDING = 'descending';
+export const SORT_UNSORTED = 'unsorted';
 
 // Moment formats
 export const ISO_STRING_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss';

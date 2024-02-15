@@ -108,7 +108,7 @@ class NonExposureEdit extends Component {
     logEdit['date_end'] = logEdit['date_end'] ? Moment(logEdit['date_end'] + 'Z') : '';
 
     this.state = {
-      logEdit,
+      logEdit: { ...NonExposureEdit.defaultProps.logEdit, ...logEdit },
       savingLog: false,
       datesAreValid: true,
       jiraIssueError: false,
@@ -623,60 +623,84 @@ class NonExposureEdit extends Component {
 
   renderJiraFields() {
     const { logEdit, jiraIssueError } = this.state;
+    const logHasJira = getLinkJira(logEdit.urls) !== '';
     return (
       <>
         <div className={styles.jira}>
-          {!logEdit?.id && (
-            <span className={styles.checkboxText}>
-              <Input
-                type="checkbox"
-                checked={logEdit?.jira}
-                onChange={(event) => {
-                  this.setState((prevState) => ({
-                    logEdit: { ...prevState.logEdit, jira: event.target.checked },
-                  }));
-                }}
-              />
-              <span>link Jira ticket</span>
+          {!logHasJira && (
+            <>
+              <div className={styles.checkboxText}>
+                <Input
+                  type="checkbox"
+                  checked={logEdit?.jira}
+                  onChange={(event) => {
+                    this.setState((prevState) => ({
+                      logEdit: { ...prevState.logEdit, jira: event.target.checked },
+                    }));
+                  }}
+                />
+                <span>link Jira ticket</span>
+              </div>
               {logEdit?.jira && (
-                <>
-                  <Toggle
-                    labels={['New', 'Existent']}
-                    toggled={!logEdit?.jira_new}
-                    onToggle={(event) =>
-                      this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, jira_new: !event },
-                      }))
-                    }
-                  />
+                <div className={styles.radioText}>
                   <div>
-                    {logEdit?.jira_new ? (
-                      <Input
-                        value={logEdit?.jira_issue_title}
-                        className={jiraIssueError ? styles.inputError : ''}
-                        placeholder="Jira ticket title"
-                        onChange={(event) =>
-                          this.setState((prevState) => ({
-                            logEdit: { ...prevState.logEdit, jira_issue_title: event.target.value },
-                          }))
-                        }
-                      />
-                    ) : (
-                      <Input
-                        value={logEdit?.jira_issue_id}
-                        className={jiraIssueError ? styles.inputError : ''}
-                        placeholder="Jira ticket id"
-                        onChange={(event) =>
-                          this.setState((prevState) => ({
-                            logEdit: { ...prevState.logEdit, jira_issue_id: event.target.value },
-                          }))
-                        }
-                      />
-                    )}
+                    <input
+                      type="radio"
+                      name="jira"
+                      value="new"
+                      checked={logEdit?.jira_new}
+                      onChange={() => {
+                        this.setState((prevState) => ({
+                          logEdit: { ...prevState.logEdit, jira_new: true },
+                        }));
+                      }}
+                    />
+                    <span>New</span>
                   </div>
-                </>
+                  <div>
+                    <input
+                      type="radio"
+                      name="jira"
+                      value="existent"
+                      checked={!logEdit?.jira_new}
+                      onChange={() => {
+                        this.setState((prevState) => ({
+                          logEdit: { ...prevState.logEdit, jira_new: false },
+                        }));
+                      }}
+                    />
+                    <span>Existent</span>
+                  </div>
+                </div>
               )}
-            </span>
+              {logEdit?.jira && (
+                <div className={styles.textInput}>
+                  {logEdit?.jira_new ? (
+                    <Input
+                      value={logEdit?.jira_issue_title}
+                      className={jiraIssueError ? styles.inputError : ''}
+                      placeholder="Jira ticket title"
+                      onChange={(event) =>
+                        this.setState((prevState) => ({
+                          logEdit: { ...prevState.logEdit, jira_issue_title: event.target.value },
+                        }))
+                      }
+                    />
+                  ) : (
+                    <Input
+                      value={logEdit?.jira_issue_id}
+                      className={jiraIssueError ? styles.inputError : ''}
+                      placeholder="Jira ticket id"
+                      onChange={(event) =>
+                        this.setState((prevState) => ({
+                          logEdit: { ...prevState.logEdit, jira_issue_id: event.target.value },
+                        }))
+                      }
+                    />
+                  )}
+                </div>
+              )}
+            </>
           )}
         </div>
       </>
@@ -776,11 +800,7 @@ class NonExposureEdit extends Component {
               {this.state.logEdit.id && <span className={styles.bold}>#{this.state.logEdit.id}</span>}
               {jiraUrl && (
                 <span>
-                  <Button
-                    status="link"
-                    title={this.state.logEdit.jiraurl}
-                    onClick={() => openInNewTab(this.state.logEdit.jiraurl)}
-                  >
+                  <Button status="link" title={jiraUrl} onClick={() => openInNewTab(jiraUrl)}>
                     view Jira ticket
                   </Button>
                 </span>
@@ -813,8 +833,8 @@ class NonExposureEdit extends Component {
 
             <div className={styles.footer}>
               <div className={styles.footerLeft}>
-                {!isLogCreate && this.renderAttachedFiles()}
                 {this.renderJiraFields()}
+                {!isLogCreate && this.renderAttachedFiles()}
                 {this.renderFilesField()}
               </div>
               <span className={styles.footerRight}>{this.renderSubmitButton()}</span>

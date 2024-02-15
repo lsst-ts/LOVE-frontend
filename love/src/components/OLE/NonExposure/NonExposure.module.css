@@ -224,6 +224,10 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   margin-bottom: var(--small-padding);
 }
 
+.lastUpdated button {
+  margin-right: var(--small-padding);
+}
+
 .floatRight {
   float: right;
   margin: 3px;
@@ -341,11 +345,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   border: 1px solid var(--secondary-font-color);
 }
 
-.footerLeft {
-  display: flex;
-  align-items: center;
-}
-
 .footerRight {
   margin-left: auto;
 }
@@ -357,15 +356,17 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   align-items: end;
 }
 
-.checkboxText {
-  display: flex;
-  margin-right: 5px;
-  align-items: center;
-  text-align: left;
-}
-
 .footerMenu .checkboxText {
   flex-wrap: wrap;
+}
+
+.checkboxText {
+  display: flex;
+  align-items: center;
+}
+
+.jira .checkboxText {
+  margin-bottom: var(--small-padding);
 }
 
 .checkboxText > *:not(:last-child) {
@@ -374,6 +375,16 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .checkboxText > button {
   text-align: right;
+}
+
+.radioText {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--small-padding);
+}
+
+.textInput {
+  margin-bottom: var(--small-padding);
 }
 
 .issueIdInput {
@@ -482,11 +493,8 @@ th.tableHead {
 
 .footer .jira,
 .footerMenu .jira {
+  text-align: left;
   white-space: nowrap;
-}
-
-.footer .jira {
-  margin-right: var(--small-padding);
 }
 
 .footerMenu .jira {
