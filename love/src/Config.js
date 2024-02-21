@@ -395,46 +395,89 @@ export const iconLevelOLE = {
   urgent: <WarningIcon />,
 };
 
-// jira OBS project components field
+/**
+ * The following constants:
+ * OLE_JIRA_COMPONENTS, OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS and OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS
+ * are used to map the values of the fields in the JIRA OBS project to the values used in the LOVE frontend.
+ * References (urls) are provided to get the full list of options for each field using the JIRA REST API.
+ * Some endpoints will need authentication on the rubinobs.atlassian.net site.
+ * For details on how to use the JIRA REST API, see:
+ * - https://developer.atlassian.com/cloud/jira/platform/rest/v3
+ * - https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/
+ */
+
+/**
+ * jira OBS project components field
+ * See https://rubinobs.atlassian.net/rest/api/latest/project/OBS
+ * for the full list of options
+ **/
 export const OLE_JIRA_COMPONENTS = {
-  AuxTel: 20710,
-  Calibrations: 20714,
-  'Environmental Monitoring Systems': 20711,
-  Facilities: 20712,
-  'IT Infrastricture': 20718,
-  MainTel: 20709,
-  'Observer Remark': 20717,
-  Other: 20713,
-  Unknown: 19507,
+  ATDome: 11002,
+  ATMCS: 11003,
+  AuxTel: 11004,
+  Calibrations: 11005,
+  DIMM: 11006,
+  'Environmental Monitoring Systems': 11007,
+  Facilities: 11008,
+  Facility: 11009,
+  Hardware: 11010,
+  'Hardware: ATSpectrograph': 11011,
+  'Hardware: LATISS': 11012,
+  'Hardware: MCS': 11013,
+  Infrastructure: 11014,
+  'IT Infrastructure': 11015,
+  Kubernetes: 11016,
+  LOVE: 11017,
+  MainTel: 11018,
+  MTMount: 11019,
+  'Observer Remark': 11020,
+  Other: 11021,
+  RubinTV: 11022,
+  SALScript: 11023,
+  Scheduler: 11024,
+  ScriptQueue: 11025,
+  'Software: Data Production': 11026,
+  'Software: LATISS': 11027,
+  'Software: Telescope': 11028,
+  TCS: 11029,
+  Unknown: 11030,
 };
 
-// jira OBS project customfield_17204
+/**
+ * jira OBS project customfield_10107
+ * See https://rubinobs.atlassian.net/rest/api/latest/field/customfield_10107/context/10368/option
+ * for the full list of options
+ **/
 export const OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS = {
   None: -1,
-  'CSC level': 16810,
-  'Component Level (EUI)': 16811,
-  Visualization: 16812,
-  Analysis: 16813,
-  Other: 16814,
-  'Camera Control Software': 16815,
-  TMA_CSC: 16860,
-  TMA_EUI: 16859,
-  TMA_HDD: 16861,
+  'CSC level': 10821,
+  'Component Level (EUI)': 10820,
+  Visualization: 10826,
+  Analysis: 10818,
+  Other: 10822,
+  'Camera Control Software': 10819,
+  TMA_CSC: 10823,
+  TMA_EUI: 10824,
+  TMA_HDD: 10825,
 };
 
-// jira OBS project customfield_17205
+/**
+ * jira OBS project customfield_10196
+ * See https://rubinobs.atlassian.net/rest/api/latest/field/customfield_10196/context/10368/option
+ * for the full list of options
+ **/
 export const OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS = {
   None: -1,
-  Mount: 16816,
-  Rotator: 16817,
-  Hexapod: 16818,
-  M2: 16819,
-  'Science Cameras': 16820,
-  M1M3: 16821,
-  Dome: 16822,
-  Utilities: 16825,
-  Calibration: 16826,
-  Other: 16827,
+  Mount: 11041,
+  Rotator: 11042,
+  Hexapod: 11043,
+  M2: 11044,
+  'Science Cameras': 11045,
+  M1M3: 11046,
+  Dome: 11047,
+  Utilities: 11048,
+  Calibration: 11049,
+  Other: 11050,
 };
 /*****************************************************************************/
 /**************************CSC Summary configurations*************************/
