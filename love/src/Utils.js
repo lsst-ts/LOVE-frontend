@@ -191,6 +191,26 @@ export default class ManagerInterface {
     });
   }
 
+  static getUsers() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}users/`;
+    return fetch(url, {
+      method: 'POST',
+      headers: ManagerInterface.getHeaders(),
+      body: JSON.stringify({
+        actuator_id,
+        start_date,
+        end_date,
+        efd_instance,
+      }),
+    }).then((response) => {
+      return checkJSONResponse(response);
+    });
+  }
+
   static getXMLMetadata() {
     const token = ManagerInterface.getToken();
     if (token === null) {

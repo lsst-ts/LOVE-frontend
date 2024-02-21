@@ -1,0 +1,109 @@
+.tabs {
+  display: flex;
+}
+
+.tabs > * {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 0 0.5em;
+  cursor: pointer;
+  height: 3em;
+  background-color: var(--second-secondary-background-color);
+  border: 1px solid var(--secondary-font-dimmed-color);
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+}
+
+.tabs > :first-child {
+  margin-left: 2em;
+}
+
+.tabs > *:not(:last-child) {
+  margin-right: 2em;
+}
+
+.selectedTab {
+  background-color: red;
+}
+
+.content {
+  background-color: var(--second-secondary-background-color);
+  border: 1px solid var(--second-senary-background-dimmed-color);
+  border-radius: 0.5em;
+  padding: var(--content-padding);
+  text-align: left;
+}
+
+.select {
+  background-color: var(--second-secondary-background-color);
+  color: var(--base-font-color);
+  border-radius: 0.2em;
+}
+
+.form {
+  padding: var(--content-padding);
+  background-color: var(--second-tertiary-background-color);
+}
+
+.progressBar {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--content-padding);
+}
+
+.progressBar > .step {
+  width: 33%;
+  height: 1em;
+  background-color: gray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progressBar > .step:not(:last-child) {
+  border-right: 1px lightgray solid;
+}
+
+.progressBar > .step > :first-child {
+  background-color: var(--quinary-background-color);
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progressBar > .step.selectedStep > :first-child {
+  background-color: var(--primary-active-hover-background-color);
+}
+
+.currentStatusText {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.currentStatusText > :first-child {
+  color: var(--primary-active-hover-background-color);
+  font-weight: bold;
+}
+
+.inputField {
+  display: flex;
+  align-items: center;
+}
+
+.inputField > :first-child {
+  white-space: nowrap;
+  margin-right: var(--small-padding);
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--content-padding);
+}

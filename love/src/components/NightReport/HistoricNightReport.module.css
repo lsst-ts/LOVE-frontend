@@ -1,0 +1,55 @@
+.container {
+  padding: var(--content-padding);
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--content-padding);
+}
+
+.report {
+  text-align: left;
+  background-color: var(--second-tertiary-background-color);
+  padding: 1em;
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    'metadata telescope-status'
+    'summary summary'
+    'participants participants';
+}
+
+.reportMetadata {
+  grid-area: metadata;
+  display: grid;
+  grid-template-columns: minmax(min-content, auto) 1fr;
+  margin-bottom: var(--small-padding);
+}
+
+.reportMetadata > :nth-child(odd) {
+  white-space: nowrap;
+  margin-right: var(--small-padding);
+}
+
+.reportTelescopeStatus {
+  grid-area: telescope-status;
+  background-color: var(--second-quaternary-background-color);
+  margin-bottom: var(--small-padding);
+}
+
+.reportSummary {
+  grid-area: summary;
+  background-color: var(--second-quaternary-background-color);
+  padding: var(--small-padding);
+  margin-bottom: var(--small-padding);
+}
+
+.reportParticipants {
+  grid-area: participants;
+}
+
+.report:not(:last-child) {
+  margin-bottom: var(--small-padding);
+}
