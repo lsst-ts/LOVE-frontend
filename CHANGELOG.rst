@@ -2,6 +2,12 @@
 Version History
 ===============
 
+v5.29.1
+-------
+
+* Update package.json version to v5.29.1 `<https://github.com/lsst-ts/LOVE-frontend/pull/610>`_
+* Update OLE JIRA fields ids `<https://github.com/lsst-ts/LOVE-frontend/pull/609>`_
+
 v5.29.0
 -------
 
