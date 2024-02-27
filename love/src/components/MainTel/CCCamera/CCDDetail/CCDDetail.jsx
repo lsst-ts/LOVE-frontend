@@ -113,13 +113,14 @@ class CCDDetail extends Component {
         {plots.map((p, i) => (
           <div ref={this.refs[i]} className={styles.plot}>
             <PlotContainer
+              height={150}
+              width={240}
               inputs={p}
               containerNode={this.refs[i]}
               xAxisTitle="Time"
               yAxisTitle="Value"
               legendPosition="bottom"
             />
-            <div>Plot</div>
           </div>
         ))}
       </div>

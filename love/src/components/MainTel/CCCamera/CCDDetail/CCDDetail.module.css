@@ -27,8 +27,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   display: grid;
   grid-template-columns: repeat(2, minmax(300px, 1fr));
   grid-template-rows: repeat(3, 200px);
-  gap: 1em;
   overflow: hidden;
+  padding: 2em;
 }
 
 .plot {

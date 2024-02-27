@@ -18,6 +18,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 .container {
+  padding: 2em;
   height: 100%;
   aspect-ratio: 1 / 1;
 }
@@ -38,7 +39,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .divContainerRebsPlot {
   display: grid;
-  margin-left: 4em;
 }
 
 .plot {
@@ -50,11 +50,5 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   display: grid;
   gap: 1em;
   overflow: hidden;
-}
-
-.plotRebs {
-  border: 1px solid transparent;
-  width: 100%;
-  overflow: hidden;
-  max-height: 1000px;
+  margin-left: 1em;
 }

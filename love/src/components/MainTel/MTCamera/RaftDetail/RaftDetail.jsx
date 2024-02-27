@@ -31,6 +31,50 @@ const COLOR_MAPPING = {
   3: 'var(--status-alert-dimmed-color-3)',
 };
 
+function getRebPlots(index) {
+  return {
+    hVBiasSwitch: {
+      type: 'line',
+      values: [
+        {
+          category: 'telemetry',
+          csc: 'CCCamera',
+          salindex: 0,
+          topic: 'focal_plane_Reb',
+          item: 'hVBiasSwitch',
+          accessor: (x) => x[index],
+        },
+      ],
+    },
+    anaV: {
+      type: 'line',
+      values: [
+        {
+          category: 'telemetry',
+          csc: 'CCCamera',
+          salindex: 0,
+          topic: 'focal_plane_Reb',
+          item: 'anaV',
+          accessor: (x) => x[index],
+        },
+      ],
+    },
+    power: {
+      type: 'line',
+      values: [
+        {
+          category: 'telemetry',
+          csc: 'CCCamera',
+          salindex: 0,
+          topic: 'focal_plane_Reb',
+          item: 'power',
+          accessor: (x) => x[index],
+        },
+      ],
+    },
+  };
+}
+
 class RaftDetail extends Component {
   constructor(props) {
     super(props);
@@ -55,13 +99,17 @@ class RaftDetail extends Component {
       const ccdIndex = c.id - 1;
       plots.push({
         [`CCD${c.id}`]: {
-          category: 'telemetry',
-          csc: 'MTCamera',
-          salindex: 0,
-          topic: 'focal_plane_Ccd',
-          item: selectedCCDVar,
           type: 'line',
-          accessor: (x) => x[ccdIndex],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'MTCamera',
+              salindex: 0,
+              topic: 'focal_plane_Ccd',
+              item: selectedCCDVar,
+              accessor: (x) => x[ccdIndex],
+            },
+          ],
         },
       });
     });
@@ -85,8 +133,8 @@ class RaftDetail extends Component {
           >
             <PlotContainer
               memorySize={50}
-              height={100}
-              width={300}
+              height={170}
+              width={180}
               inputs={p}
               xAxisTitle="Time"
               yAxisTitle={`${selectedCCDVar} - ${raft.ccds[i].id}`}
@@ -99,53 +147,23 @@ class RaftDetail extends Component {
   }
 
   renderRebsPlots() {
-    const {
-      raft,
-      selectedReb,
-      selectedRebVar,
-      selectedCCD,
-      selectedCCDVar,
-      setSelectedCCD,
-      setHoveredCCD,
-      setHoveredReb,
-    } = this.props;
-    const plots = [];
-    raft.rebs.forEach((r) => {
-      const rebIndex = r.id - 1;
-      plots.push({
-        [`REB${r.id}`]: {
-          category: 'telemetry',
-          csc: 'MTCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: selectedRebVar,
-          type: 'line',
-          accessor: (x) => x[rebIndex],
-        },
-      });
-    });
+    const { raft } = this.props;
 
     return (
       <div className={styles.rebsContainer}>
-        {plots.map((p, i) => (
-          <div
-            key={`r${i}`}
-            ref={this.rebsRefs[i]}
-            style={{ border: selectedReb?.id === raft.rebs[i].id ? '2px solid white' : `` }}
-            className={styles.plot}
-            onClick={() => {
-              setSelectedCCD(raft.ccds[i]);
-            }}
-          >
-            <PlotContainer
-              memorySize={50}
-              height={100}
-              width={300}
-              inputs={p}
-              xAxisTitle="Time"
-              yAxisTitle={`Value-${i}`}
-              legendPosition="bottom"
-            />
+        {raft.rebs?.map((r, i) => (
+          <div className={styles.plotsContainerRebs}>
+            <div key={'reb' + i} ref={this.rebsRefs[i]} className={styles.plot}>
+              <PlotContainer
+                memorySize={50}
+                height={200}
+                width={500}
+                inputs={getRebPlots(i)}
+                xAxisTitle=""
+                yAxisTitle=""
+                legendPosition="bottom"
+              />
+            </div>
           </div>
         ))}
       </div>

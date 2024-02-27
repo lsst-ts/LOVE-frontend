@@ -30,6 +30,53 @@ const COLOR_MAPPING = {
   3: 'var(--status-alert-dimmed-color-3)',
 };
 
+function getRebPlots(index) {
+  return {
+    hVBiasSwitch: {
+      type: 'line',
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'CCCamera',
+          salindex: 0,
+          topic: 'focal_plane_Reb',
+          item: 'hVBiasSwitch',
+          accessor: (x) => x[index],
+        },
+      ],
+    },
+    anaV: {
+      type: 'line',
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'CCCamera',
+          salindex: 0,
+          topic: 'focal_plane_Reb',
+          item: 'anaV',
+          accessor: (x) => x[index],
+        },
+      ],
+    },
+    power: {
+      type: 'line',
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'CCCamera',
+          salindex: 0,
+          topic: 'focal_plane_Reb',
+          item: 'power',
+          accessor: (x) => x[index],
+        },
+      ],
+    },
+  };
+}
+
 class RaftDetail extends Component {
   constructor(props) {
     super(props);
@@ -176,11 +223,6 @@ class RaftDetail extends Component {
       React.createRef(),
     ];
     this.rebsRefs = [React.createRef(), React.createRef(), React.createRef()];
-    this.state = {
-      plotsRebs0: plotsRebs0,
-      plotsRebs1: plotsRebs1,
-      plotsRebs2: plotsRebs2,
-    };
   }
 
   renderCCDsPlots() {
@@ -224,12 +266,12 @@ class RaftDetail extends Component {
           >
             <PlotContainer
               memorySize={50}
-              height={100}
-              width={300}
+              height={150}
+              width={180}
               inputs={p}
               xAxisTitle="Time"
               yAxisTitle={`${selectedCCDVar} - ${raft.ccds[i].id}`}
-              legendPosition="bottom"
+              legendPosition="right"
             />
           </div>
         ))}
@@ -238,56 +280,25 @@ class RaftDetail extends Component {
   }
 
   renderRebsPlots() {
+    const { raft } = this.props;
+
     return (
       <div className={styles.divContainerRebsPlot}>
-        <div className={styles.plotsContainerRebs}>
-          {this.state.plotsRebs0.map((p, i) => (
-            <div key={p} ref={this.rebsRefs[i]} className={styles.plotRebs}>
+        {raft.rebs?.map((r, i) => (
+          <div className={styles.plotsContainerRebs}>
+            <div key={'reb' + i} ref={this.rebsRefs[i]} className={styles.plot}>
               <PlotContainer
                 memorySize={50}
-                height={350}
+                height={200}
                 width={500}
-                inputs={p}
-                xAxisTitle="Time"
+                inputs={getRebPlots(i)}
+                xAxisTitle=""
                 yAxisTitle=""
-                legendPosition="right"
+                legendPosition="bottom"
               />
             </div>
-          ))}
-          <div>REB1</div>
-        </div>
-        <div className={styles.plotsContainerRebs}>
-          {this.state.plotsRebs1.map((p, i) => (
-            <div key={p} ref={this.rebsRefs[i]} className={styles.plotRebs}>
-              <PlotContainer
-                memorySize={50}
-                height={350}
-                width={500}
-                inputs={p}
-                xAxisTitle="Time"
-                yAxisTitle=""
-                legendPosition="right"
-              />
-            </div>
-          ))}
-          <div>REB2</div>
-        </div>
-        <div className={styles.plotsContainerRebs}>
-          {this.state.plotsRebs2.map((p, i) => (
-            <div key={p} ref={this.rebsRefs[i]} className={styles.plotRebs}>
-              <PlotContainer
-                memorySize={50}
-                height={350}
-                width={500}
-                inputs={p}
-                xAxisTitle="Time"
-                yAxisTitle=""
-                legendPosition="right"
-              />
-            </div>
-          ))}
-          <div>REB3</div>
-        </div>
+          </div>
+        ))}
       </div>
     );
   }

@@ -40,68 +40,92 @@ class CCDDetail extends Component {
     const plots = [
       {
         gDV: {
-          category: 'telemetry',
-          csc: 'MTCamera',
-          salindex: 0,
-          topic: 'focal_plane_Ccd',
-          item: 'gDV',
           type: 'line',
-          accessor: (x) => x,
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'MTCamera',
+              salindex: 0,
+              topic: 'focal_plane_Ccd',
+              item: 'gDV',
+              accessor: (x) => x,
+            },
+          ],
         },
       },
       {
         oDI: {
-          category: 'telemetry',
-          csc: 'MTCamera',
-          salindex: 0,
-          topic: 'focal_plane_Ccd',
-          item: 'oDI',
           type: 'line',
-          accessor: (x) => x,
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'MTCamera',
+              salindex: 0,
+              topic: 'focal_plane_Ccd',
+              item: 'oDI',
+              accessor: (x) => x,
+            },
+          ],
         },
       },
       {
         oDV: {
-          category: 'telemetry',
-          csc: 'MTCamera',
-          salindex: 0,
-          topic: 'focal_plane_Ccd',
-          item: 'oDV',
           type: 'line',
-          accessor: (x) => x,
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'MTCamera',
+              salindex: 0,
+              topic: 'focal_plane_Ccd',
+              item: 'oDV',
+              accessor: (x) => x,
+            },
+          ],
         },
       },
       {
         oGV: {
-          category: 'telemetry',
-          csc: 'MTCamera',
-          salindex: 0,
-          topic: 'focal_plane_Ccd',
-          item: 'oGV',
           type: 'line',
-          accessor: (x) => x,
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'MTCamera',
+              salindex: 0,
+              topic: 'focal_plane_Ccd',
+              item: 'oGV',
+              accessor: (x) => x,
+            },
+          ],
         },
       },
       {
         rDV: {
-          category: 'telemetry',
-          csc: 'MTCamera',
-          salindex: 0,
-          topic: 'focal_plane_Ccd',
-          item: 'rDV',
           type: 'line',
-          accessor: (x) => x,
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'MTCamera',
+              salindex: 0,
+              topic: 'focal_plane_Ccd',
+              item: 'rDV',
+              accessor: (x) => x,
+            },
+          ],
         },
       },
       {
         temp: {
-          category: 'telemetry',
-          csc: 'MTCamera',
-          salindex: 0,
-          topic: 'focal_plane_Ccd',
-          item: 'temp',
           type: 'line',
-          accessor: (x) => x,
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'MTCamera',
+              salindex: 0,
+              topic: 'focal_plane_Ccd',
+              item: 'temp',
+              accessor: (x) => x,
+            },
+          ],
         },
       },
     ];
@@ -111,13 +135,14 @@ class CCDDetail extends Component {
         {plots.map((p, i) => (
           <div ref={this.refs[i]} className={styles.plot}>
             <PlotContainer
+              height={150}
+              width={200}
               inputs={p}
               containerNode={this.refs[i]}
               xAxisTitle="Time"
               yAxisTitle="Value"
               legendPosition="bottom"
             />
-            <div>Plot</div>
           </div>
         ))}
       </div>
