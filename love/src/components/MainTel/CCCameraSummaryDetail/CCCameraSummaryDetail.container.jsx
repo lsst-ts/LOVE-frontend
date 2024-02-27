@@ -84,10 +84,10 @@ const mapStateToProps = (state) => {
   const endOfImageTelemetry = getCCEndOfImageTelemetry(state);
   return {
     ...summaryStatus,
-    ...startIntegration,
-    ...startReadout,
-    ...endReadout,
-    ...endOfImageTelemetry,
+    startIntegration,
+    startReadout,
+    endReadout,
+    endOfImageTelemetry,
   };
 };
 
@@ -98,7 +98,7 @@ const mapDispatchToProps = (dispatch) => {
     'event-CCCamera-0-calibrationDetailedState',
     'event-CCCamera-0-offlineDetailedState',
     'event-CCCamera-0-imageReadinessDetailedState',
-    'event-CCTCamera-0-shutterDetailedState',
+    'event-CCCamera-0-shutterDetailedState',
     'event-CCCamera-0-filterChangerDetailedState',
     'event-CCCamera-0-raftsDetailedState',
     'event-CCCamera-0-startIntegration',
