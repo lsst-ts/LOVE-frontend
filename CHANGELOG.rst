@@ -2,6 +2,13 @@
 Version History
 ===============
 
+v5.29.2
+-------
+
+* Update package.json version to v5.29.2 `<https://github.com/lsst-ts/LOVE-frontend/pull/613>`_
+* Fix getFilesURLs function to properly use JIRA_TICKETS_BASE_URL constant `<https://github.com/lsst-ts/LOVE-frontend/pull/614>`_
+* Update OLE_JIRA_COMPONENTS fields ids `<https://github.com/lsst-ts/LOVE-frontend/pull/612>`_
+
 v5.29.1
 -------
 

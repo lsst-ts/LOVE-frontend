@@ -1605,7 +1605,7 @@ export function getFileURL(urls) {
  */
 export function getFilesURLs(urls) {
   if (!urls) return [];
-  const filtered = urls.filter((url) => !url.includes('jira'));
+  const filtered = urls.filter((url) => !url.includes(JIRA_TICKETS_BASE_URL));
   return filtered;
 }
 
