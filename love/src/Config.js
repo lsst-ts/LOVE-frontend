@@ -445,7 +445,7 @@ export const OLE_JIRA_COMPONENTS = {
 
 /**
  * jira OBS project customfield_10107
- * See https://rubinobs.atlassian.net/rest/api/latest/field/customfield_10107/context/10368/option
+ * See https://rubinobs.atlassian.net/rest/api/latest/field/customfield_10107/context/10246/option
  * for the full list of options
  **/
 export const OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS = {
