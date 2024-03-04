@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.29.2
+-------
+
+* Update OLE_JIRA_COMPONENTS fields ids `<https://github.com/lsst-ts/LOVE-frontend/pull/612>`_
+
 v5.29.1
 -------
 
