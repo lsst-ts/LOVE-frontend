@@ -85,6 +85,8 @@ export default function (state = initialState, action) {
         return {
           ...state,
           username: action.username,
+          first_name: action.first_name,
+          last_name: action.last_name,
           token: action.token,
           status: tokenStates.RECEIVED,
           permissions: initialState.permissions,
