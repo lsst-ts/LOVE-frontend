@@ -196,16 +196,10 @@ export default class ManagerInterface {
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
-    const url = `${this.getApiBaseUrl()}users/`;
+    const url = `${this.getApiBaseUrl()}user/`;
     return fetch(url, {
-      method: 'POST',
+      method: 'GET',
       headers: ManagerInterface.getHeaders(),
-      body: JSON.stringify({
-        actuator_id,
-        start_date,
-        end_date,
-        efd_instance,
-      }),
     }).then((response) => {
       return checkJSONResponse(response);
     });

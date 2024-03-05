@@ -7,6 +7,8 @@ import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import styles from './CreateNightReport.module.css';
 
+const MULTI_SELECT_OPTION_LENGHT = 50;
+
 function AuxTelForm() {
   const observersFieldRef = useRef();
   const [currentStep, setCurrentStep] = useState(1);
@@ -17,10 +19,9 @@ function AuxTelForm() {
   const [confluenceURL, setConfluenceURL] = useState('');
 
   useEffect(() => {
-    // ManagerInterface.getUsers().then((users) => {
-    //   setUserOptions(users.map((u) => u.username));
-    // });
-    setUserOptions(['user1', 'user2', 'user3', 'user4', 'user5']);
+    ManagerInterface.getUsers().then((users) => {
+      setUserOptions(users.map((u) => `${u.first_name} ${u.last_name}`));
+    });
   }, []);
 
   const handleSent = (event) => {
@@ -78,7 +79,9 @@ function AuxTelForm() {
         onSelect={setSelectedUsers}
         onRemove={setSelectedUsers}
         placeholder="Select users that participated on the report."
-        selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
+        selectedValueDecorator={(v) =>
+          v.length > MULTI_SELECT_OPTION_LENGHT ? `...${v.slice(-MULTI_SELECT_OPTION_LENGHT)}` : v
+        }
       />
       <div>Summary</div>
       <TextArea value={summary} callback={setSummary} />
@@ -110,10 +113,9 @@ function SimonyiForm() {
   const [confluenceURL, setConfluenceURL] = useState('');
 
   useEffect(() => {
-    // ManagerInterface.getUsers().then((users) => {
-    //   setUserOptions(users.map((u) => u.username));
-    // });
-    setUserOptions(['user1', 'user2', 'user3', 'user4', 'user5']);
+    ManagerInterface.getUsers().then((users) => {
+      setUserOptions(users.map((u) => `${u.first_name} ${u.last_name}`));
+    });
   }, []);
 
   const handleSent = (event) => {
