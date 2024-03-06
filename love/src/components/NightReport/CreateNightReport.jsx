@@ -30,8 +30,7 @@ function AuxTelForm() {
           setCurrentStep(3);
         }
         setCurrentStep(2);
-
-        // setSelectedUsers(report.observers);
+        setSelectedUsers(report.observers_crew);
         setSummary(report.summary);
         setTelescopeStatus(report.telescope_status);
         setConfluenceURL(report.confluence_url);
@@ -47,6 +46,17 @@ function AuxTelForm() {
 
   const handleSave = (event) => {
     event.preventDefault();
+    if (currentStep === 1) {
+      ManagerInterface.saveCurrentNightReport('AuxTel', summary, telescopeStatus, confluenceURL, selectedUsers).then(
+        (resp) => {
+          if (resp) {
+            setCurrentStep(2);
+          }
+        },
+      );
+    } else {
+      console.log('Update report');
+    }
   };
 
   const getCurrentStatusText = () => {
@@ -106,7 +116,7 @@ function AuxTelForm() {
       <TextArea value={telescopeStatus} callback={setTelescopeStatus} className={styles.reportTelescopeStatus} />
       <div className={styles.inputField}>
         <div>Confluence URL</div>
-        <Input value={confluenceURL} onChange={setConfluenceURL} />
+        <Input value={confluenceURL} onChange={(e) => setConfluenceURL(e.target.value)} />
       </div>
       <div className={styles.buttons}>
         <Button onClick={handleSave} disabled={!isAbleToSave()}>
