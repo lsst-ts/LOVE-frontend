@@ -13,6 +13,7 @@
   border: 1px solid var(--secondary-font-dimmed-color);
   border-top-left-radius: 0.5em;
   border-top-right-radius: 0.5em;
+  margin-bottom: -1px;
 }
 
 .tabs > :first-child {
@@ -24,7 +25,8 @@
 }
 
 .selectedTab {
-  background-color: red;
+  border-bottom-color: var(--second-secondary-background-color);
+  z-index: 1;
 }
 
 .content {
@@ -46,25 +48,29 @@
   background-color: var(--second-tertiary-background-color);
 }
 
+.form > *:not(:last-child, .progressBar) {
+  margin-bottom: var(--small-padding);
+}
+
 .progressBar {
   width: 80%;
-  margin: 0 auto;
   display: flex;
   align-items: center;
-  margin-bottom: var(--content-padding);
+  margin: var(--content-padding) auto;
 }
 
 .progressBar > .step {
   width: 33%;
   height: 1em;
-  background-color: gray;
+  background-color: var(--quinary-background-color);
   display: flex;
   align-items: center;
   justify-content: center;
+  color: white;
 }
 
 .progressBar > .step:not(:last-child) {
-  border-right: 1px lightgray solid;
+  border-right: 1px var(--primary-active-hover-background-color) solid;
 }
 
 .progressBar > .step > :first-child {
@@ -77,8 +83,21 @@
   justify-content: center;
 }
 
+.progressBar > .step.selectedStep,
 .progressBar > .step.selectedStep > :first-child {
+  /* color: var(--quinary-background-color); */
   background-color: var(--primary-active-hover-background-color);
+  animation: mymove 1s infinite;
+  animation-direction: alternate;
+}
+
+@keyframes mymove {
+  from {
+    background-color: var(--primary-active-hover-background-color);
+  }
+  to {
+    background-color: var(--quinary-background-color);
+  }
 }
 
 .currentStatusText {
@@ -106,4 +125,12 @@
   display: flex;
   justify-content: space-between;
   margin-top: var(--content-padding);
+}
+
+.reportSummary {
+  min-height: 16ch;
+}
+
+.reportTelescopeStatus {
+  min-height: 10ch;
 }

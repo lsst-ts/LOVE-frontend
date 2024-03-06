@@ -51,10 +51,10 @@ function AuxTelForm() {
 
   const getCurrentStatusText = () => {
     if (currentStep === 1) {
-      return ['Not saved', 'The report has not been saved yet.'];
+      return ['Not saved', 'Today report has not been drafted yet.'];
     }
     if (currentStep === 2) {
-      return ['Saved', 'The report has been saved.'];
+      return ['Saved', 'The report draft has been saved.'];
     }
     if (currentStep === 3) {
       return ['Sent', 'The report has been sent.'];
@@ -101,9 +101,9 @@ function AuxTelForm() {
         }
       />
       <div>Summary</div>
-      <TextArea value={summary} callback={setSummary} />
+      <TextArea value={summary} callback={setSummary} className={styles.reportSummary} />
       <div>Telescope Status</div>
-      <TextArea value={telescopeStatus} callback={setTelescopeStatus} />
+      <TextArea value={telescopeStatus} callback={setTelescopeStatus} className={styles.reportTelescopeStatus} />
       <div className={styles.inputField}>
         <div>Confluence URL</div>
         <Input value={confluenceURL} onChange={setConfluenceURL} />

@@ -43,7 +43,7 @@
   grid-area: summary;
   background-color: var(--second-quaternary-background-color);
   padding: var(--small-padding);
-  margin-bottom: var(--small-padding);
+  margin: var(--small-padding) 0;
 }
 
 .reportParticipants {
