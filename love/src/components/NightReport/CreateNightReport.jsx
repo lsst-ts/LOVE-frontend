@@ -22,6 +22,23 @@ function AuxTelForm() {
     ManagerInterface.getUsers().then((users) => {
       setUserOptions(users.map((u) => `${u.first_name} ${u.last_name}`));
     });
+
+    ManagerInterface.getCurrentNightReport().then((reports) => {
+      if (reports.length > 0) {
+        const report = reports[0];
+        if (report.status === 'sent') {
+          setCurrentStep(3);
+        }
+        setCurrentStep(2);
+
+        // setSelectedUsers(report.observers);
+        setSummary(report.summary);
+        setTelescopeStatus(report.telescope_status);
+        setConfluenceURL(report.confluence_url);
+      } else {
+        setCurrentStep(1);
+      }
+    });
   }, []);
 
   const handleSent = (event) => {
@@ -89,7 +106,7 @@ function AuxTelForm() {
       <TextArea value={telescopeStatus} callback={setTelescopeStatus} />
       <div className={styles.inputField}>
         <div>Confluence URL</div>
-        <Input />
+        <Input value={confluenceURL} onChange={setConfluenceURL} />
       </div>
       <div className={styles.buttons}>
         <Button onClick={handleSave} disabled={!isAbleToSave()}>

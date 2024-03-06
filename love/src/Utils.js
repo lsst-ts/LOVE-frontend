@@ -1041,6 +1041,26 @@ export default class ManagerInterface {
     });
   }
 
+  static getCurrentNightReport() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const currentDate = Moment().utc();
+    const currentObsDayInt = parseInt(getObsDayFromDate(currentDate), 10);
+
+    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/?min_day_obs=${currentObsDayInt}&max_day_obs=${
+      currentObsDayInt + 1
+    }`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      return checkJSONResponse(response);
+    });
+  }
+
   static getListImageTags() {
     const token = ManagerInterface.getToken();
     if (token === null) {
@@ -1959,7 +1979,9 @@ export function simpleHtmlTokenizer(html) {
  * Function to get the OBS day from a date
  * If the date is after 12:00 UTC, the day is the same day
  * If the date is before 12:00 UTC, the day is the previous day
- * @param {object} date date, as a Moment object, to be parsed
+ * @param {object} date UTC date, it can be:
+ * - string in ISO format with the Z suffix
+ * - moment date object in UTC
  * @returns {string} OBS day in format YYYYMMDD
  */
 export function getObsDayFromDate(date) {
