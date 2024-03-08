@@ -1092,6 +1092,46 @@ export default class ManagerInterface {
     });
   }
 
+  static updateCurrentNightReport(nightreport_id, summary, telescope_status, confluence_url, observers_crew) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/${nightreport_id}/`;
+    return fetch(url, {
+      method: 'PUT',
+      headers: ManagerInterface.getHeaders(),
+      body: JSON.stringify({
+        summary,
+        telescope_status,
+        confluence_url,
+        observers_crew,
+      }),
+    }).then((response) => {
+      return checkJSONResponse(response, () => {
+        toast.success('Report updated succesfully.');
+      });
+    });
+  }
+
+  static sendCurrentNightReport(report_id) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const url = `${this.getApiBaseUrl()}ole/nightreport/send/${report_id}/`;
+    return fetch(url, {
+      method: 'POST',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      return checkJSONResponse(response, () => {
+        toast.success('Report sent succesfully.');
+      });
+    });
+  }
+
   /**************************************************/
 
   static getListImageTags() {

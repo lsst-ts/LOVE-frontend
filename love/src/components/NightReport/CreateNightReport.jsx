@@ -9,14 +9,21 @@ import styles from './CreateNightReport.module.css';
 
 const MULTI_SELECT_OPTION_LENGHT = 50;
 
+const STEPS = {
+  NOTSAVED: 1,
+  SAVED: 2,
+  SENT: 3,
+};
+
 function AuxTelForm() {
   const observersFieldRef = useRef();
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(STEPS.NOTSAVED);
   const [userOptions, setUserOptions] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [summary, setSummary] = useState('');
   const [telescopeStatus, setTelescopeStatus] = useState('');
   const [confluenceURL, setConfluenceURL] = useState('');
+  const [reportID, setReportID] = useState();
 
   useEffect(() => {
     ManagerInterface.getUsers().then((users) => {
@@ -26,47 +33,55 @@ function AuxTelForm() {
     ManagerInterface.getCurrentNightReport().then((reports) => {
       if (reports.length > 0) {
         const report = reports[0];
-        if (report.status === 'sent') {
-          setCurrentStep(3);
+        if (report.date_sent) {
+          setCurrentStep(STEPS.SENT);
+        } else {
+          setCurrentStep(STEPS.SAVED);
         }
-        setCurrentStep(2);
+
+        setReportID(report.id);
         setSelectedUsers(report.observers_crew);
         setSummary(report.summary);
         setTelescopeStatus(report.telescope_status);
         setConfluenceURL(report.confluence_url);
-      } else {
-        setCurrentStep(1);
       }
     });
   }, []);
 
   const handleSent = (event) => {
     event.preventDefault();
+    if (currentStep === STEPS.SAVED) {
+      ManagerInterface.sendCurrentNightReport(reportID).then((resp) => {
+        if (resp) {
+          setCurrentStep(STEPS.SENT);
+        }
+      });
+    }
   };
 
   const handleSave = (event) => {
     event.preventDefault();
-    if (currentStep === 1) {
+    if (currentStep === STEPS.NOTSAVED) {
       ManagerInterface.saveCurrentNightReport('AuxTel', summary, telescopeStatus, confluenceURL, selectedUsers).then(
         (resp) => {
           if (resp) {
-            setCurrentStep(2);
+            setCurrentStep(STEPS.SAVED);
           }
         },
       );
     } else {
-      console.log('Update report');
+      ManagerInterface.updateCurrentNightReport(reportID, summary, telescopeStatus, confluenceURL, selectedUsers);
     }
   };
 
   const getCurrentStatusText = () => {
-    if (currentStep === 1) {
+    if (currentStep === STEPS.NOTSAVED) {
       return ['Not saved', 'Today report has not been drafted yet.'];
     }
-    if (currentStep === 2) {
+    if (currentStep === STEPS.SAVED) {
       return ['Saved', 'The report draft has been saved.'];
     }
-    if (currentStep === 3) {
+    if (currentStep === STEPS.SENT) {
       return ['Sent', 'The report has been sent.'];
     }
   };
@@ -74,11 +89,15 @@ function AuxTelForm() {
   const currentStatusText = getCurrentStatusText();
 
   const isAbleToSave = () => {
-    return currentStep === 1 || currentStep === 2;
+    return currentStep === STEPS.NOTSAVED || currentStep === STEPS.SAVED;
   };
 
   const isAbleToSend = () => {
-    return currentStep === 2;
+    return currentStep === STEPS.SAVED;
+  };
+
+  const isEditDisabled = () => {
+    return currentStep === STEPS.SENT;
   };
 
   return (
@@ -100,6 +119,7 @@ function AuxTelForm() {
       </div>
       <div>Observers</div>
       <MultiSelect
+        disable={isEditDisabled()}
         innerRef={observersFieldRef}
         options={userOptions}
         selectedValues={selectedUsers}
@@ -111,12 +131,17 @@ function AuxTelForm() {
         }
       />
       <div>Summary</div>
-      <TextArea value={summary} callback={setSummary} className={styles.reportSummary} />
+      <TextArea readOnly={isEditDisabled()} value={summary} callback={setSummary} className={styles.reportSummary} />
       <div>Telescope Status</div>
-      <TextArea value={telescopeStatus} callback={setTelescopeStatus} className={styles.reportTelescopeStatus} />
+      <TextArea
+        readOnly={isEditDisabled()}
+        value={telescopeStatus}
+        callback={setTelescopeStatus}
+        className={styles.reportTelescopeStatus}
+      />
       <div className={styles.inputField}>
         <div>Confluence URL</div>
-        <Input value={confluenceURL} onChange={(e) => setConfluenceURL(e.target.value)} />
+        <Input disabled={isEditDisabled()} value={confluenceURL} onChange={(e) => setConfluenceURL(e.target.value)} />
       </div>
       <div className={styles.buttons}>
         <Button onClick={handleSave} disabled={!isAbleToSave()}>
