@@ -1041,7 +1041,7 @@ export default class ManagerInterface {
     });
   }
 
-  static getCurrentNightReport() {
+  static getCurrentNightReport(telescope) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
@@ -1050,7 +1050,7 @@ export default class ManagerInterface {
     const currentDate = Moment().utc();
     const currentObsDayInt = parseInt(getObsDayFromDate(currentDate), 10);
 
-    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/?min_day_obs=${currentObsDayInt}&max_day_obs=${
+    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/?telescopes=${telescope}&min_day_obs=${currentObsDayInt}&max_day_obs=${
       currentObsDayInt + 1
     }`;
     return fetch(url, {
