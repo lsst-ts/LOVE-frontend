@@ -40,9 +40,11 @@ const RichTextEditor = forwardRef(
     const [isControlPressed, setIsControlPressed] = useState(false);
     const reactQuillRef = useRef(null);
 
-    const handleChange = (value) => {
-      setValue(value);
-      onChange(value);
+    const handleChange = (value, delta, source, editor) => {
+      if (source === 'user') {
+        setValue(value);
+        onChange(value);
+      }
     };
 
     const handleKeyDown = (event) => {
