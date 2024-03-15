@@ -254,7 +254,10 @@ export default class Exposure extends Component {
           const files = getFilesURLs(lastMessage?.urls);
           return (
             <>
-              <div className={styles.wikiMarkupText} dangerouslySetInnerHTML={{ __html: parsedValue }} />
+              <div
+                className={['ql-editor', styles.wikiMarkupText].join(' ')}
+                dangerouslySetInnerHTML={{ __html: parsedValue }}
+              />
               {files.length > 0 && (
                 <h3>
                   Attachments:{' '}

@@ -19,7 +19,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { useState, useEffect, useRef, memo, forwardRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
-import ReactQuill from 'react-quill';
+import ReactQuill, { Quill } from 'react-quill';
 import styles from './RichTextEditor.module.css';
 import 'react-quill/dist/quill.snow.css';
 
@@ -29,8 +29,9 @@ const modules = {
     ['link'],
     // TODO: DM-41265
     // ['bold', 'italic', 'underline', 'strike'],
-    // [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-    // ['clean'],
+    // [{ list: 'ordered' }, { list: 'bullet' }],
+    [{ indent: '-1' }, { indent: '+1' }],
+    ['clean'],
   ],
 };
 
@@ -101,9 +102,9 @@ const RichTextEditor = forwardRef(
         <ReactQuill
           ref={reactQuillRef}
           modules={modules}
-          formats={['header', 'link']}
+          formats={['header', 'link', 'indent']}
           theme="snow"
-          value={value}
+          defaultValue={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           onKeyUp={handleKeyUp}
