@@ -1723,48 +1723,52 @@ export function htmlToJiraMarkdown(html) {
   });
 
   // Parse indentations
-  markdown = markdown.replace(/<p class="ql-indent-1">(.*)<\/p>/g, (match, p1) => {
+  // We need to ensure the following regex to be greedy to avoid parsing
+  // multiples <p> tags followed by anothers.
+  markdown = markdown.replace(/<p class="ql-indent-1">(.*?)<\/p>/g, (match, p1) => {
     return `\t${p1}\r\n`;
   });
-  markdown = markdown.replace(/<p class="ql-indent-2">(.*)<\/p>/g, (match, p1) => {
+  markdown = markdown.replace(/<p class="ql-indent-2">(.*?)<\/p>/g, (match, p1) => {
     return `\t\t${p1}\r\n`;
   });
-  markdown = markdown.replace(/<p class="ql-indent-3">(.*)<\/p>/g, (match, p1) => {
+  markdown = markdown.replace(/<p class="ql-indent-3">(.*?)<\/p>/g, (match, p1) => {
     return `\t\t\t${p1}\r\n`;
   });
-  markdown = markdown.replace(/<p class="ql-indent-4">(.*)<\/p>/g, (match, p1) => {
+  markdown = markdown.replace(/<p class="ql-indent-4">(.*?)<\/p>/g, (match, p1) => {
     return `\t\t\t\t${p1}\r\n`;
   });
-  markdown = markdown.replace(/<p class="ql-indent-5">(.*)<\/p>/g, (match, p1) => {
+  markdown = markdown.replace(/<p class="ql-indent-5">(.*?)<\/p>/g, (match, p1) => {
     return `\t\t\t\t\t${p1}\r\n`;
   });
-  markdown = markdown.replace(/<p class="ql-indent-6">(.*)<\/p>/g, (match, p1) => {
+  markdown = markdown.replace(/<p class="ql-indent-6">(.*?)<\/p>/g, (match, p1) => {
     return `\t\t\t\t\t\t${p1}\r\n`;
   });
-  markdown = markdown.replace(/<p class="ql-indent-7">(.*)<\/p>/g, (match, p1) => {
+  markdown = markdown.replace(/<p class="ql-indent-7">(.*?)<\/p>/g, (match, p1) => {
     return `\t\t\t\t\t\t\t${p1}\r\n`;
   });
-  markdown = markdown.replace(/<p class="ql-indent-8">(.*)<\/p>/g, (match, p1) => {
+  markdown = markdown.replace(/<p class="ql-indent-8">(.*?)<\/p>/g, (match, p1) => {
     return `\t\t\t\t\t\t\t\t${p1}\r\n`;
   });
 
   // Parse headings
-  markdown = markdown.replace(/<h1>(.*)<\/h1>/g, (match, p1) => {
+  // We need to ensure the following regex to be greedy to avoid parsing
+  // multiples <h*> tags followed by anothers.
+  markdown = markdown.replace(/<h1>(.*?)<\/h1>/g, (match, p1) => {
     return `h1. ${p1}\r\n`;
   });
-  markdown = markdown.replace(/<h2>(.*)<\/h2>/g, (match, p1) => {
+  markdown = markdown.replace(/<h2>(.*?)<\/h2>/g, (match, p1) => {
     return `h2. ${p1}\r\n`;
   });
-  markdown = markdown.replace(/<h3>(.*)<\/h3>/g, (match, p1) => {
+  markdown = markdown.replace(/<h3>(.*?)<\/h3>/g, (match, p1) => {
     return `h3. ${p1}\r\n`;
   });
-  markdown = markdown.replace(/<h4>(.*)<\/h4>/g, (match, p1) => {
+  markdown = markdown.replace(/<h4>(.*?)<\/h4>/g, (match, p1) => {
     return `h4. ${p1}\r\n`;
   });
-  markdown = markdown.replace(/<h5>(.*)<\/h5>/g, (match, p1) => {
+  markdown = markdown.replace(/<h5>(.*?)<\/h5>/g, (match, p1) => {
     return `h5. ${p1}\r\n`;
   });
-  markdown = markdown.replace(/<h6>(.*)<\/h6>/g, (match, p1) => {
+  markdown = markdown.replace(/<h6>(.*?)<\/h6>/g, (match, p1) => {
     return `h6. ${p1}\r\n`;
   });
 

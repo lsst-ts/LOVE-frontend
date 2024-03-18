@@ -29,6 +29,24 @@ describe('htmlToJiraMarkdown', () => {
     expect(htmlToJiraMarkdown(input)).toEqual(expectedOutput);
   });
 
+  it('should handle indentations', () => {
+    const input =
+      '<p>This is a string with mixed content</p><h1>This is a heading.</h1><p>This is a <a href="http://google.com/" rel="noopener noreferrer" target="_blank">link</a>.</p><p class="ql-indent-1">This is an indented line.</p><p class="ql-indent-2">This is a double indented line.</p>';
+    const expectedOutput =
+      'This is a string with mixed content\r\nh1. This is a heading.\r\nThis is a [link|http://google.com/].\r\n\tThis is an indented line.\r\n\t\tThis is a double indented line.\r\n';
+    expect(htmlToJiraMarkdown(input)).toEqual(expectedOutput);
+  });
+
+  it('should handle multiple headings of the same type', () => {
+    // This test is used to verify that the regex is not greedy and that it will match each heading separately.
+    // The previous test was failing because the regex was greedy and was matching both headings as a single match.
+    const input =
+      '<h1>This is a heading.</h1><h1>This is another heading.</h1><h2>This is a subheading.</h2><h2>This is another subheading.</h2>';
+    const expectedOutput =
+      'h1. This is a heading.\r\nh1. This is another heading.\r\nh2. This is a subheading.\r\nh2. This is another subheading.\r\n';
+    expect(htmlToJiraMarkdown(input)).toEqual(expectedOutput);
+  });
+
   it('should strip &bnsp; from the output', () => {
     const input = '<p>This&nbsp;is&nbsp;a&nbsp;string&nbsp;with&nbsp;mixed&nbsp;content</p>';
     const expectedOutput = 'This is a string with mixed content\r\n';
