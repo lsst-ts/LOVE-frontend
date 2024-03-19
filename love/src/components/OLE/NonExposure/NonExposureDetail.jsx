@@ -219,7 +219,7 @@ export default class NonExposureDetail extends Component {
               </div>
               <br></br>
               <div
-                className={styles.wikiMarkupText}
+                className={['ql-editor', styles.wikiMarkupText].join(' ')}
                 dangerouslySetInnerHTML={{
                   __html: jiraMarkdownToHtml(logDetail.message_text),
                 }}

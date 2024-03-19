@@ -501,11 +501,8 @@ th.tableHead {
   margin-bottom: var(--small-padding);
 }
 
-/* Following is related to the use of the RichTextEditor component */
 .wikiMarkupText {
-  white-space: pre-wrap;
-  text-align: left;
-  overflow-x: auto;
+  padding: 0;
   position: relative;
 }
 

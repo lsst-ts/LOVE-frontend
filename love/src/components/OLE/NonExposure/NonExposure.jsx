@@ -192,7 +192,7 @@ export default class NonExposure extends Component {
         ),
         type: 'string',
         className: styles.tableHead,
-        render: (value) => getObsDayFromDate(moment(value)),
+        render: (value) => getObsDayFromDate(moment(value + 'Z')),
       },
       {
         field: 'level',
@@ -218,7 +218,10 @@ export default class NonExposure extends Component {
           const parsedValue = jiraMarkdownToHtml(value);
           return (
             <>
-              <div className={styles.wikiMarkupText} dangerouslySetInnerHTML={{ __html: parsedValue }} />
+              <div
+                className={['ql-editor', styles.wikiMarkupText].join(' ')}
+                dangerouslySetInnerHTML={{ __html: parsedValue }}
+              />
               {value.length > 500 && <input className={styles.expandBtn} type="checkbox" />}
               {files.length > 0 && (
                 <h3>
