@@ -192,7 +192,7 @@ export default class NonExposure extends Component {
         ),
         type: 'string',
         className: styles.tableHead,
-        render: (value) => getObsDayFromDate(moment(value)),
+        render: (value) => getObsDayFromDate(moment(value + 'Z')),
       },
       {
         field: 'level',
