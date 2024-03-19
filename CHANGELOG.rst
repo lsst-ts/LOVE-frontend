@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.29.3
+-------
+
+* Fix day obs calculation on NonExposure `<https://github.com/lsst-ts/LOVE-frontend/pull/616>`_
+
 v5.29.2
 -------
 
