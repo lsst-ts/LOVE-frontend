@@ -5,6 +5,7 @@ Version History
 v5.29.3
 -------
 
+* Update package.json version to v5.29.3 `<https://github.com/lsst-ts/LOVE-frontend/pull/618>`_
 * Fixes for RichTextEditor and parsing functions `<https://github.com/lsst-ts/LOVE-frontend/pull/617>`_
 * Fix day obs calculation on NonExposure `<https://github.com/lsst-ts/LOVE-frontend/pull/616>`_
 
