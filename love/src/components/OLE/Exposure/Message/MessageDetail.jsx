@@ -110,7 +110,7 @@ export default class MessageDetail extends Component {
             <span>wrote:</span>
           </div>
           <div
-            className={styles.wikiMarkupText}
+            className={['ql-editor', styles.wikiMarkupText].join(' ')}
             dangerouslySetInnerHTML={{
               __html: jiraMarkdownToHtml(message.message_text),
             }}
