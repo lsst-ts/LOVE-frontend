@@ -1132,6 +1132,21 @@ export default class ManagerInterface {
     });
   }
 
+  static getHistoricNightReports(day_obs_start, day_obs_end, telescope) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/?telescopes=${telescope}&min_day_obs=${day_obs_start}&max_day_obs=${day_obs_end}`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      return checkJSONResponse(response);
+    });
+  }
+
   /**************************************************/
 
   static getListImageTags() {

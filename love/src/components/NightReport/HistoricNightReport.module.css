@@ -2,10 +2,12 @@
   padding: var(--content-padding);
 }
 
-.filters {
+.filters,
+.refresh {
   display: flex;
   align-items: center;
   margin-bottom: var(--content-padding);
+  gap: var(--small-padding);
 }
 
 .report {
@@ -19,6 +21,7 @@
     'metadata telescope-status'
     'summary summary'
     'participants participants';
+  border-radius: 0.5em;
 }
 
 .reportMetadata {
@@ -37,13 +40,16 @@
   grid-area: telescope-status;
   background-color: var(--second-quaternary-background-color);
   margin-bottom: var(--small-padding);
+  padding: var(--content-padding);
+  border-radius: 0.5em;
 }
 
 .reportSummary {
   grid-area: summary;
   background-color: var(--second-quaternary-background-color);
-  padding: var(--small-padding);
   margin: var(--small-padding) 0;
+  padding: var(--content-padding);
+  border-radius: 0.5em;
 }
 
 .reportParticipants {
@@ -52,4 +58,21 @@
 
 .report:not(:last-child) {
   margin-bottom: var(--small-padding);
+}
+
+.label {
+  color: var(--secondary-font-color);
+  font-weight: bold;
+}
+
+.value {
+  color: var(--base-font-color);
+}
+
+.value a {
+  color: var(--base-font-color);
+}
+
+.value a:hover {
+  color: var(--secondary-font-color);
 }
