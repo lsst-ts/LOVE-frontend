@@ -27,7 +27,7 @@ const getCurrentStatusText = (currentStep) => {
   }
 };
 
-function ProgressBarSection({ currentStep, currentStatusText }) {
+function ProgressBarSection({ currentStep, currentStatusText, changesNotSaved }) {
   return (
     <>
       <div className={styles.progressBar}>
@@ -45,6 +45,9 @@ function ProgressBarSection({ currentStep, currentStatusText }) {
         <div>{currentStatusText[0]}</div>
         <div>{currentStatusText[1]}</div>
       </div>
+      {changesNotSaved && (
+        <div className={styles.changesNotSaved}>Changes on the current draft have not been saved</div>
+      )}
     </>
   );
 }
@@ -110,6 +113,7 @@ function AuxTelForm() {
   const [telescopeStatus, setTelescopeStatus] = useState('');
   const [confluenceURL, setConfluenceURL] = useState('');
   const [reportID, setReportID] = useState();
+  const [changesNotSaved, setChangesNotSaved] = useState(false);
 
   useEffect(() => {
     ManagerInterface.getUsers().then((users) => {
@@ -152,11 +156,18 @@ function AuxTelForm() {
         (resp) => {
           if (resp) {
             setCurrentStep(STEPS.SAVED);
+            setChangesNotSaved(false);
           }
         },
       );
     } else {
-      ManagerInterface.updateCurrentNightReport(reportID, summary, telescopeStatus, confluenceURL, selectedUsers);
+      ManagerInterface.updateCurrentNightReport(reportID, summary, telescopeStatus, confluenceURL, selectedUsers).then(
+        (resp) => {
+          if (resp) {
+            setChangesNotSaved(false);
+          }
+        },
+      );
     }
   };
 
@@ -165,37 +176,61 @@ function AuxTelForm() {
   };
 
   const isAbleToSend = () => {
-    return currentStep === STEPS.SAVED;
+    return currentStep === STEPS.SAVED && !changesNotSaved;
   };
 
   const isEditDisabled = () => {
     return currentStep === STEPS.SENT;
   };
 
+  const handleSelectedUsersChange = (newSelectedUsers) => {
+    setSelectedUsers(newSelectedUsers);
+    setChangesNotSaved(true);
+  };
+
+  const handleSummaryChange = (newSummary) => {
+    setSummary(newSummary);
+    setChangesNotSaved(true);
+  };
+
+  const handleTelescopeStatusChange = (newTelescopeStatus) => {
+    setTelescopeStatus(newTelescopeStatus);
+    setChangesNotSaved(true);
+  };
+
+  const handleConfluenceURLChange = (newConfluenceURL) => {
+    setConfluenceURL(newConfluenceURL);
+    setChangesNotSaved(true);
+  };
+
   return (
     <form className={styles.form}>
-      <ProgressBarSection currentStep={currentStep} currentStatusText={getCurrentStatusText(currentStep)} />
+      <ProgressBarSection
+        currentStep={currentStep}
+        currentStatusText={getCurrentStatusText(currentStep)}
+        changesNotSaved={changesNotSaved}
+      />
 
       <ObserversField
         isEditDisabled={isEditDisabled()}
         observersFieldRef={observersFieldRef}
         userOptions={userOptions}
         selectedUsers={selectedUsers}
-        setSelectedUsers={setSelectedUsers}
+        setSelectedUsers={handleSelectedUsersChange}
       />
 
-      <SummaryField isEditDisabled={isEditDisabled()} summary={summary} setSummary={setSummary} />
+      <SummaryField isEditDisabled={isEditDisabled()} summary={summary} setSummary={handleSummaryChange} />
 
       <TelescopeStatusField
         isEditDisabled={isEditDisabled()}
         telescopeStatus={telescopeStatus}
-        setTelescopeStatus={setTelescopeStatus}
+        setTelescopeStatus={handleTelescopeStatusChange}
       />
 
       <ConfluenceURLField
         isEditDisabled={isEditDisabled()}
         confluenceURL={confluenceURL}
-        setConfluenceURL={setConfluenceURL}
+        setConfluenceURL={handleConfluenceURLChange}
       />
 
       <div className={styles.buttons}>
@@ -219,6 +254,7 @@ function SimonyiForm() {
   const [telescopeStatus, setTelescopeStatus] = useState('');
   const [confluenceURL, setConfluenceURL] = useState('');
   const [reportID, setReportID] = useState();
+  const [changesNotSaved, setChangesNotSaved] = useState(false);
 
   useEffect(() => {
     ManagerInterface.getUsers().then((users) => {
@@ -261,11 +297,18 @@ function SimonyiForm() {
         (resp) => {
           if (resp) {
             setCurrentStep(STEPS.SAVED);
+            setChangesNotSaved(false);
           }
         },
       );
     } else {
-      ManagerInterface.updateCurrentNightReport(reportID, summary, telescopeStatus, confluenceURL, selectedUsers);
+      ManagerInterface.updateCurrentNightReport(reportID, summary, telescopeStatus, confluenceURL, selectedUsers).then(
+        (resp) => {
+          if (resp) {
+            setChangesNotSaved(false);
+          }
+        },
+      );
     }
   };
 
@@ -274,37 +317,61 @@ function SimonyiForm() {
   };
 
   const isAbleToSend = () => {
-    return currentStep === STEPS.SAVED;
+    return currentStep === STEPS.SAVED && !changesNotSaved;
   };
 
   const isEditDisabled = () => {
     return currentStep === STEPS.SENT;
   };
 
+  const handleSelectedUsersChange = (newSelectedUsers) => {
+    setSelectedUsers(newSelectedUsers);
+    setChangesNotSaved(true);
+  };
+
+  const handleSummaryChange = (newSummary) => {
+    setSummary(newSummary);
+    setChangesNotSaved(true);
+  };
+
+  const handleTelescopeStatusChange = (newTelescopeStatus) => {
+    setTelescopeStatus(newTelescopeStatus);
+    setChangesNotSaved(true);
+  };
+
+  const handleConfluenceURLChange = (newConfluenceURL) => {
+    setConfluenceURL(newConfluenceURL);
+    setChangesNotSaved(true);
+  };
+
   return (
     <form className={styles.form}>
-      <ProgressBarSection currentStep={currentStep} currentStatusText={getCurrentStatusText(currentStep)} />
+      <ProgressBarSection
+        currentStep={currentStep}
+        currentStatusText={getCurrentStatusText(currentStep)}
+        changesNotSaved={changesNotSaved}
+      />
 
       <ObserversField
         isEditDisabled={isEditDisabled()}
         observersFieldRef={observersFieldRef}
         userOptions={userOptions}
         selectedUsers={selectedUsers}
-        setSelectedUsers={setSelectedUsers}
+        setSelectedUsers={handleSelectedUsersChange}
       />
 
-      <SummaryField isEditDisabled={isEditDisabled()} summary={summary} setSummary={setSummary} />
+      <SummaryField isEditDisabled={isEditDisabled()} summary={summary} setSummary={handleSummaryChange} />
 
       <TelescopeStatusField
         isEditDisabled={isEditDisabled()}
         telescopeStatus={telescopeStatus}
-        setTelescopeStatus={setTelescopeStatus}
+        setTelescopeStatus={handleTelescopeStatusChange}
       />
 
       <ConfluenceURLField
         isEditDisabled={isEditDisabled()}
         confluenceURL={confluenceURL}
-        setConfluenceURL={setConfluenceURL}
+        setConfluenceURL={handleConfluenceURLChange}
       />
 
       <div className={styles.buttons}>
