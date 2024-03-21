@@ -24,6 +24,8 @@ export const getToken = (state) => state.auth.token;
 
 export const getUsername = (state) => state.auth.username;
 
+export const getUserFullName = (state) => `${state.auth.first_name} ${state.auth.last_name}`;
+
 export const getTaiToUtc = (state) => state.time.server_time.tai_to_utc;
 
 export const getServerTimeRequest = (state) => state.time.request_time;

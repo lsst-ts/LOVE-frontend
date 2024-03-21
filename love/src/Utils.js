@@ -191,6 +191,20 @@ export default class ManagerInterface {
     });
   }
 
+  static getUsers() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}user/`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      return checkJSONResponse(response);
+    });
+  }
+
   static getXMLMetadata() {
     const token = ManagerInterface.getToken();
     if (token === null) {
@@ -1026,6 +1040,114 @@ export default class ManagerInterface {
       });
     });
   }
+
+  static getCurrentNightReport(telescope) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const currentDate = Moment().utc();
+    const currentObsDayInt = parseInt(getObsDayFromDate(currentDate), 10);
+
+    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/?telescopes=${telescope}&min_day_obs=${currentObsDayInt}&max_day_obs=${
+      currentObsDayInt + 1
+    }`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      return checkJSONResponse(response);
+    });
+  }
+
+  static saveCurrentNightReport(telescope, summary, telescope_status, confluence_url, observers_crew) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/`;
+    return fetch(url, {
+      method: 'POST',
+      headers: ManagerInterface.getHeaders(),
+      body: JSON.stringify({
+        telescope,
+        summary,
+        telescope_status,
+        confluence_url,
+        observers_crew,
+      }),
+    }).then((response) => {
+      if (response.status === 422) {
+        return response.json().then((resp) => {
+          toast.error(resp.detail);
+          return false;
+        });
+      }
+
+      return checkJSONResponse(response, () => {
+        toast.success('Report saved succesfully.');
+      });
+    });
+  }
+
+  static updateCurrentNightReport(nightreport_id, summary, telescope_status, confluence_url, observers_crew) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/${nightreport_id}/`;
+    return fetch(url, {
+      method: 'PUT',
+      headers: ManagerInterface.getHeaders(),
+      body: JSON.stringify({
+        summary,
+        telescope_status,
+        confluence_url,
+        observers_crew,
+      }),
+    }).then((response) => {
+      return checkJSONResponse(response, () => {
+        toast.success('Report updated succesfully.');
+      });
+    });
+  }
+
+  static sendCurrentNightReport(report_id) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const url = `${this.getApiBaseUrl()}ole/nightreport/send/${report_id}/`;
+    return fetch(url, {
+      method: 'POST',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      return checkJSONResponse(response, () => {
+        toast.success('Report sent succesfully.');
+      });
+    });
+  }
+
+  static getHistoricNightReports(day_obs_start, day_obs_end, telescope) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/?telescopes=${telescope}&min_day_obs=${day_obs_start}&max_day_obs=${day_obs_end}`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      return checkJSONResponse(response);
+    });
+  }
+
+  /**************************************************/
 
   static getListImageTags() {
     const token = ManagerInterface.getToken();
@@ -1945,7 +2067,9 @@ export function simpleHtmlTokenizer(html) {
  * Function to get the OBS day from a date
  * If the date is after 12:00 UTC, the day is the same day
  * If the date is before 12:00 UTC, the day is the previous day
- * @param {object} date date, as a Moment object, to be parsed
+ * @param {object} date UTC date, it can be:
+ * - string in ISO format with the Z suffix
+ * - moment date object in UTC
  * @returns {string} OBS day in format YYYYMMDD
  */
 export function getObsDayFromDate(date) {

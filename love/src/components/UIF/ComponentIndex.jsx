@@ -372,6 +372,26 @@ export const observatoryIndex = {
       },
     },
   },
+  CreateNightReport: {
+    component: require('../NightReport/CreateNightReport.container').default,
+    schema: {
+      ...require('../NightReport/CreateNightReport.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../NightReport/CreateNightReport.container').schema.props,
+      },
+    },
+  },
+  HistoricNightReport: {
+    component: require('../NightReport/HistoricNightReport.container').default,
+    schema: {
+      ...require('../NightReport/HistoricNightReport.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../NightReport/HistoricNightReport.container').schema.props,
+      },
+    },
+  },
   ObservatorySummary: {
     component: require('../ObservatorySummary/ObservatorySummary.container').default,
     schema: {

@@ -25,7 +25,7 @@ export class WindDirection extends Component {
   render() {
     const { windSpeed, windDirection } = this.props;
     const minSpeed = 0;
-    const maxSpeed = 30;
+    const maxSpeed = 5;
     const currentSpeed = windSpeed;
     const maxArrowHeight = 680;
     const arrowHeight = (currentSpeed / maxSpeed) * maxArrowHeight;

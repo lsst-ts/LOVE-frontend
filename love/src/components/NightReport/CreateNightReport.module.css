@@ -1,0 +1,141 @@
+.tabs {
+  display: flex;
+}
+
+.tabs > * {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 0 0.5em;
+  cursor: pointer;
+  height: 3em;
+  background-color: var(--second-secondary-background-color);
+  border: 1px solid var(--secondary-font-dimmed-color);
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+  margin-bottom: -1px;
+}
+
+.tabs > :first-child {
+  margin-left: 2em;
+}
+
+.tabs > *:not(:last-child) {
+  margin-right: 2em;
+}
+
+.selectedTab {
+  border-bottom-color: var(--second-secondary-background-color);
+  z-index: 1;
+}
+
+.content {
+  background-color: var(--second-secondary-background-color);
+  border: 1px solid var(--second-senary-background-dimmed-color);
+  border-radius: 0.5em;
+  padding: var(--content-padding);
+  text-align: left;
+}
+
+.select {
+  background-color: var(--second-secondary-background-color);
+  color: var(--base-font-color);
+  border-radius: 0.2em;
+}
+
+.form {
+  padding: var(--content-padding);
+  background-color: var(--second-tertiary-background-color);
+}
+
+.form > *:not(:last-child, .progressBar) {
+  margin-bottom: var(--small-padding);
+}
+
+.progressBar {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  margin: var(--content-padding) auto;
+}
+
+.progressBar > .step {
+  width: 33%;
+  height: 1em;
+  background-color: var(--quinary-background-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.progressBar > .step:not(:last-child) {
+  border-right: 1px var(--primary-active-hover-background-color) solid;
+}
+
+.progressBar > .step > :first-child {
+  background-color: var(--quinary-background-color);
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progressBar > .step.selectedStep,
+.progressBar > .step.selectedStep > :first-child {
+  /* color: var(--quinary-background-color); */
+  background-color: var(--primary-active-hover-background-color);
+  animation: mymove 1s infinite;
+  animation-direction: alternate;
+}
+
+@keyframes mymove {
+  from {
+    background-color: var(--primary-active-hover-background-color);
+  }
+  to {
+    background-color: var(--quinary-background-color);
+  }
+}
+
+.currentStatusText,
+.changesNotSaved {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.changesNotSaved {
+  color: var(--status-alert-color);
+}
+
+.currentStatusText > :first-child {
+  color: var(--primary-active-hover-background-color);
+  font-weight: bold;
+}
+
+.inputField {
+  display: flex;
+  align-items: center;
+}
+
+.inputField > :first-child {
+  white-space: nowrap;
+  margin-right: var(--small-padding);
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--content-padding);
+}
+
+.reportSummary {
+  min-height: 16ch;
+}
+
+.reportTelescopeStatus {
+  min-height: 10ch;
+}
