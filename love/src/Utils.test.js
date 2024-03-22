@@ -1,4 +1,4 @@
-import { htmlToJiraMarkdown, jiraMarkdownToHtml } from './Utils';
+import { htmlToJiraMarkdown, jiraMarkdownToHtml, convertJiraTicketNamesToHyperlinks } from './Utils';
 import { JIRA_TICKETS_BASE_URL } from './Config';
 
 describe('htmlToJiraMarkdown', () => {
@@ -23,22 +23,6 @@ describe('htmlToJiraMarkdown', () => {
       'This is a string with mixed content\r\n' +
       'h1. This is a heading.\r\n' +
       'This is a [link|http://google.com/].\r\n';
-    expect(htmlToJiraMarkdown(input)).toEqual(expectedOutput);
-  });
-
-  it('should convert Jira tickets to links', () => {
-    const input =
-      '<p>This is a string with mixed content</p>' +
-      '<h1>This is a heading.</h1>' +
-      '<p>This is an already formatted link <a href="https://jira.lsstcorp.org/browse/DM-41184" rel="noopener noreferrer" target="_blank">DM-41184</a>.</p>' +
-      '<p>This is a ticket name not yet formatted DM-41184.</p>' +
-      '<p>This is an already parsed link [DM-41184|https://jira.lsstcorp.org/browse/DM-41184].</p>';
-    const expectedOutput =
-      'This is a string with mixed content\r\n' +
-      'h1. This is a heading.\r\n' +
-      'This is an already formatted link [DM-41184|https://jira.lsstcorp.org/browse/DM-41184].\r\n' +
-      `This is a ticket name not yet formatted [DM-41184|${JIRA_TICKETS_BASE_URL}/DM-41184].\r\n` +
-      'This is an already parsed link [DM-41184|https://jira.lsstcorp.org/browse/DM-41184].\r\n';
     expect(htmlToJiraMarkdown(input)).toEqual(expectedOutput);
   });
 
@@ -142,5 +126,19 @@ describe('jiraMarkdownToHtml', () => {
       '<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;a&nbsp;double&nbsp;indented&nbsp;line.</p>' +
       '<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;a&nbsp;triple&nbsp;indented&nbsp;line.</p>';
     expect(jiraMarkdownToHtml(input, options)).toEqual(expectedOutput);
+  });
+});
+
+describe('convertJiraTicketNamesToHyperlinks', () => {
+  it('should convert Jira tickets to hyperlinks', () => {
+    const input =
+      'This is a string with mixed content.\r\n' +
+      'This is a ticket name not yet formatted DM-41184.\r\n' +
+      'This is an already parsed link [DM-41184|https://jira.lsstcorp.org/browse/DM-41184].\r\n';
+    const expectedOutput =
+      'This is a string with mixed content.\r\n' +
+      `This is a ticket name not yet formatted [DM-41184|${JIRA_TICKETS_BASE_URL}/DM-41184].\r\n` +
+      'This is an already parsed link [DM-41184|https://jira.lsstcorp.org/browse/DM-41184].\r\n';
+    expect(convertJiraTicketNamesToHyperlinks(input)).toEqual(expectedOutput);
   });
 });
