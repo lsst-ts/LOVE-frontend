@@ -1,4 +1,5 @@
 import { htmlToJiraMarkdown, jiraMarkdownToHtml } from './Utils';
+import { JIRA_TICKETS_BASE_URL } from './Config';
 
 describe('htmlToJiraMarkdown', () => {
   it('should handle links', () => {
@@ -36,7 +37,7 @@ describe('htmlToJiraMarkdown', () => {
       'This is a string with mixed content\r\n' +
       'h1. This is a heading.\r\n' +
       'This is an already formatted link [DM-41184|https://jira.lsstcorp.org/browse/DM-41184].\r\n' +
-      'This is a ticket name not yet formatted [DM-41184|https://jira.lsstcorp.org/browse/DM-41184].\r\n' +
+      `This is a ticket name not yet formatted [DM-41184|${JIRA_TICKETS_BASE_URL}/DM-41184].\r\n` +
       'This is an already parsed link [DM-41184|https://jira.lsstcorp.org/browse/DM-41184].\r\n';
     expect(htmlToJiraMarkdown(input)).toEqual(expectedOutput);
   });
