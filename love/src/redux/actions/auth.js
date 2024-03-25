@@ -45,9 +45,11 @@ import { receiveServerTime, clockStart, clockStop } from './time';
 
 export const requestToken = (username, password) => ({ type: REQUEST_TOKEN, username, password });
 
-export const receiveToken = (username, token, permissions) => ({
+export const receiveToken = (user, token, permissions) => ({
   type: RECEIVE_TOKEN,
-  username,
+  username: user.username,
+  first_name: user.first_name,
+  last_name: user.last_name,
   token,
   permissions,
 });
@@ -133,10 +135,10 @@ function doMarkErrorToken() {
   };
 }
 
-export function doReceiveToken(username, token, permissions, time_data, request_time, config) {
+export function doReceiveToken(user, token, permissions, time_data, request_time, config) {
   return (dispatch, getState) => {
     const oldToken = getToken(getState());
-    dispatch(receiveToken(username, token, permissions));
+    dispatch(receiveToken(user, token, permissions));
     dispatch(receiveServerTime(time_data, request_time));
     if (config) {
       dispatch(receiveConfig(config));
@@ -203,13 +205,9 @@ export function fetchToken(username, password) {
       })
       .then((response) => {
         if (response) {
-          const { token, time_data, permissions, config } = response;
-          let username = '';
-          if (response.user) {
-            username = response.user.username;
-          }
+          const { token, time_data, permissions, config, user } = response;
           if (token !== undefined && token !== null) {
-            dispatch(doReceiveToken(username, token, permissions, time_data, request_time, config));
+            dispatch(doReceiveToken(user, token, permissions, time_data, request_time, config));
             dispatch(requestViews());
           }
         }
@@ -288,13 +286,10 @@ export function validateToken() {
       }
 
       return response.json().then((resp) => {
-        let username = '';
-        const { user } = resp;
-        if (user) {
-          ({ username } = user);
+        if (resp) {
+          const { permissions, time_data, config, user } = resp;
+          dispatch(doReceiveToken(user, token, permissions, time_data, request_time, config));
         }
-        const { permissions, time_data, config } = resp;
-        dispatch(doReceiveToken(username, token, permissions, time_data, request_time, config));
         return Promise.resolve();
       });
     });
@@ -337,17 +332,10 @@ export function swapUser(username, password) {
       })
       .then((response) => {
         if (response) {
-          const { token } = response;
-          let username = '';
-          if (response.user) {
-            username = response.user.username;
-          }
-          const { time_data } = response;
-          const { permissions } = response;
-          const { config } = response;
+          const { token, time_data, permissions, config, user } = response;
           if (token !== undefined && token !== null) {
             dispatch(receiveSwapToken);
-            dispatch(doReceiveToken(username, token, permissions, time_data, request_time, config));
+            dispatch(doReceiveToken(user, token, permissions, time_data, request_time, config));
           }
         }
       })

@@ -61,6 +61,12 @@ export const EUIs = {
   ATDOME: 'https://atmcs-dev.cp.lsst.org',
 };
 
+// URL for TimesSquare Night Report > Obs tickets report
+// ready to be used by replacing the {DAY} with the desired date in 'YYYY-MM-DD' format
+export const TIMES_SQUARE_OBS_TICKETS_REPORT_URL =
+  'https://usdf-rsp-dev.slac.stanford.edu/times-square/github/lsst-sqre/times-square-usdf/\
+night-reports/obs-tickets?start={DAY}&duration=1&ts_hide_code=1';
+
 // Types of sorting
 export const SORT_ASCENDING = 'ascending';
 export const SORT_DESCENDING = 'descending';
