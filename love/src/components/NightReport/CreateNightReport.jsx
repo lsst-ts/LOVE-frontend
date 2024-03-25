@@ -155,6 +155,7 @@ function AuxTelForm() {
       ManagerInterface.saveCurrentNightReport('AuxTel', summary, telescopeStatus, confluenceURL, selectedUsers).then(
         (resp) => {
           if (resp) {
+            setReportID(resp.id);
             setCurrentStep(STEPS.SAVED);
             setChangesNotSaved(false);
           }
@@ -164,6 +165,7 @@ function AuxTelForm() {
       ManagerInterface.updateCurrentNightReport(reportID, summary, telescopeStatus, confluenceURL, selectedUsers).then(
         (resp) => {
           if (resp) {
+            setReportID(resp.id);
             setChangesNotSaved(false);
           }
         },
@@ -296,6 +298,7 @@ function SimonyiForm() {
       ManagerInterface.saveCurrentNightReport('Simonyi', summary, telescopeStatus, confluenceURL, selectedUsers).then(
         (resp) => {
           if (resp) {
+            setReportID(resp.id);
             setCurrentStep(STEPS.SAVED);
             setChangesNotSaved(false);
           }
@@ -305,6 +308,7 @@ function SimonyiForm() {
       ManagerInterface.updateCurrentNightReport(reportID, summary, telescopeStatus, confluenceURL, selectedUsers).then(
         (resp) => {
           if (resp) {
+            setReportID(resp.id);
             setChangesNotSaved(false);
           }
         },
