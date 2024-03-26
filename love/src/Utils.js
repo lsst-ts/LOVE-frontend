@@ -43,6 +43,17 @@ if (Array.prototype.flat === undefined) {
 }
 
 /**
+ * Applies a series of functions to a value, passing the result of each function as the argument to the next function.
+ *
+ * @param {...Function} fns - The functions to be applied.
+ * @returns {Function} A new function that applies the given functions in sequence.
+ */
+export const pipe =
+  (...fns) =>
+  (x) =>
+    fns.reduce((v, f) => f(v), x);
+
+/**
    MIT License
 Copyright (c) Luke Edwards <luke.edwards05@gmail.com> (lukeed.com)
 
@@ -1911,15 +1922,6 @@ export function htmlToJiraMarkdown(html) {
     return `{code}${p1}{code}`;
   });
 
-  // Parse Jira tickets names
-  // At this point, hyperlinks have been already parsed.
-  // The following regex allows us to parse Jira tickets names that are not hyperlinks
-  const jiraTicketRegexString = `(?<!\\[[^\\]]*)(${AUTO_HYPERLINK_JIRA_PROJECTS.join('|')})+-\\d+\\b`;
-  const jiraTicketRegex = new RegExp(jiraTicketRegexString, 'g');
-  markdown = markdown.replace(jiraTicketRegex, (match) => {
-    return `[${match}|${JIRA_TICKETS_BASE_URL}/${match}]`;
-  });
-
   // TODO: DM-41265
   // markdown = markdown.replace(/<ul>|<\/ul>|<ol>|<\/ol>|<li>/g, '');
   // markdown = markdown.replace(/<\/li>/g, '\n');
@@ -2033,6 +2035,25 @@ export function jiraMarkdownToHtml(markdown, options = { codeFriendly: true }) {
   html = html.replace(/\r\n\r\n/g, '<br>');
 
   return html;
+}
+
+/**
+ * Converts Jira ticket names to hyperlinks.
+ * Jira ticket names are expected to be in the format <JIRA_PROJECT>-<NUMBER>.
+ * The JIRA_PROJECT is expected to be one of the projects defined in the AUTO_HYPERLINK_JIRA_PROJECTS constant.
+ * This function only conver Jira ticket names that are not hyperlinks.
+ * THE INPUT TEXT MUST BE IN MARKDOWN FORMAT.
+ * @param {string} markdown - The text in markdown format containing Jira ticket names.
+ * @returns {string} - The text with Jira ticket names converted to hyperlinks in markdown format.
+ */
+export function convertJiraTicketNamesToHyperlinks(markdown) {
+  // The following regex matches Jira tickets that are not inside markdown hyperlinks
+  // by using a negative lookbehind assertion.
+  const jiraTicketRegexString = `(?<!\\[[^\\]]*)(${AUTO_HYPERLINK_JIRA_PROJECTS.join('|')})+-\\d+\\b`;
+  const jiraTicketRegex = new RegExp(jiraTicketRegexString, 'g');
+  return markdown.replace(jiraTicketRegex, (match) => {
+    return `[${match}|${JIRA_TICKETS_BASE_URL}/${match}]`;
+  });
 }
 
 /**

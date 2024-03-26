@@ -38,6 +38,8 @@ import ManagerInterface, {
   jiraMarkdownToHtml,
   getObsDayFromDate,
   formatOLETimeOfIncident,
+  pipe,
+  convertJiraTicketNamesToHyperlinks,
 } from 'Utils';
 
 import OrderableTable from 'components/GeneralPurpose/OrderableTable/OrderableTable';
@@ -215,7 +217,8 @@ export default class NonExposure extends Component {
         className: styles.tableHead,
         render: (value, row) => {
           const files = getFilesURLs(row.urls);
-          const parsedValue = jiraMarkdownToHtml(value);
+          // We ensure to convert Jira ticket names to hyperlinks before converting the markdown to html
+          const parsedValue = pipe(convertJiraTicketNamesToHyperlinks, jiraMarkdownToHtml)(value);
           return (
             <>
               <div
