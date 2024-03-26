@@ -1917,7 +1917,7 @@ export function htmlToJiraMarkdown(html) {
   const jiraTicketRegexString = `(?<!\\[[^\\]]*)(${AUTO_HYPERLINK_JIRA_PROJECTS.join('|')})+-\\d+\\b`;
   const jiraTicketRegex = new RegExp(jiraTicketRegexString, 'g');
   markdown = markdown.replace(jiraTicketRegex, (match) => {
-    return `[${match}|https://jira.lsstcorp.org/browse/${match}]`;
+    return `[${match}|${JIRA_TICKETS_BASE_URL}/${match}]`;
   });
 
   // TODO: DM-41265
