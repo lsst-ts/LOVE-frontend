@@ -114,6 +114,10 @@ function AuxTelForm() {
   const [confluenceURL, setConfluenceURL] = useState('');
   const [reportID, setReportID] = useState();
   const [changesNotSaved, setChangesNotSaved] = useState(false);
+  const [loading, setLoading] = useState({
+    save: false,
+    send: false,
+  });
 
   useEffect(() => {
     ManagerInterface.getUsers().then((users) => {
@@ -141,10 +145,12 @@ function AuxTelForm() {
   const handleSent = (event) => {
     event.preventDefault();
     if (currentStep === STEPS.SAVED) {
+      setLoading({ ...loading, send: true });
       ManagerInterface.sendCurrentNightReport(reportID).then((resp) => {
         if (resp) {
           setCurrentStep(STEPS.SENT);
         }
+        setLoading({ ...loading, send: false });
       });
     }
   };
@@ -152,6 +158,7 @@ function AuxTelForm() {
   const handleSave = (event) => {
     event.preventDefault();
     if (currentStep === STEPS.NOTSAVED) {
+      setLoading({ ...loading, save: true });
       ManagerInterface.saveCurrentNightReport('AuxTel', summary, telescopeStatus, confluenceURL, selectedUsers).then(
         (resp) => {
           if (resp) {
@@ -159,26 +166,29 @@ function AuxTelForm() {
             setCurrentStep(STEPS.SAVED);
             setChangesNotSaved(false);
           }
+          setLoading({ ...loading, save: false });
         },
       );
     } else {
+      setLoading({ ...loading, save: true });
       ManagerInterface.updateCurrentNightReport(reportID, summary, telescopeStatus, confluenceURL, selectedUsers).then(
         (resp) => {
           if (resp) {
             setReportID(resp.id);
             setChangesNotSaved(false);
           }
+          setLoading({ ...loading, save: false });
         },
       );
     }
   };
 
   const isAbleToSave = () => {
-    return currentStep === STEPS.NOTSAVED || currentStep === STEPS.SAVED;
+    return (currentStep === STEPS.NOTSAVED || currentStep === STEPS.SAVED) && !(loading.save || loading.send);
   };
 
   const isAbleToSend = () => {
-    return currentStep === STEPS.SAVED && !changesNotSaved;
+    return currentStep === STEPS.SAVED && !changesNotSaved && !loading.send && selectedUsers.length > 0;
   };
 
   const isEditDisabled = () => {
@@ -237,10 +247,10 @@ function AuxTelForm() {
 
       <div className={styles.buttons}>
         <Button onClick={handleSave} disabled={!isAbleToSave()}>
-          Save
+          {loading.save ? 'Saving...' : 'Save'}
         </Button>
         <Button onClick={handleSent} disabled={!isAbleToSend()}>
-          Send
+          {loading.send ? 'Sending...' : 'Send'}
         </Button>
       </div>
     </form>
@@ -257,6 +267,10 @@ function SimonyiForm() {
   const [confluenceURL, setConfluenceURL] = useState('');
   const [reportID, setReportID] = useState();
   const [changesNotSaved, setChangesNotSaved] = useState(false);
+  const [loading, setLoading] = useState({
+    save: false,
+    send: false,
+  });
 
   useEffect(() => {
     ManagerInterface.getUsers().then((users) => {
@@ -284,10 +298,12 @@ function SimonyiForm() {
   const handleSent = (event) => {
     event.preventDefault();
     if (currentStep === STEPS.SAVED) {
+      setLoading({ ...loading, send: true });
       ManagerInterface.sendCurrentNightReport(reportID).then((resp) => {
         if (resp) {
           setCurrentStep(STEPS.SENT);
         }
+        setLoading({ ...loading, send: false });
       });
     }
   };
@@ -295,6 +311,7 @@ function SimonyiForm() {
   const handleSave = (event) => {
     event.preventDefault();
     if (currentStep === STEPS.NOTSAVED) {
+      setLoading({ ...loading, save: true });
       ManagerInterface.saveCurrentNightReport('Simonyi', summary, telescopeStatus, confluenceURL, selectedUsers).then(
         (resp) => {
           if (resp) {
@@ -302,26 +319,29 @@ function SimonyiForm() {
             setCurrentStep(STEPS.SAVED);
             setChangesNotSaved(false);
           }
+          setLoading({ ...loading, save: false });
         },
       );
     } else {
+      setLoading({ ...loading, save: true });
       ManagerInterface.updateCurrentNightReport(reportID, summary, telescopeStatus, confluenceURL, selectedUsers).then(
         (resp) => {
           if (resp) {
             setReportID(resp.id);
             setChangesNotSaved(false);
           }
+          setLoading({ ...loading, save: false });
         },
       );
     }
   };
 
   const isAbleToSave = () => {
-    return currentStep === STEPS.NOTSAVED || currentStep === STEPS.SAVED;
+    return (currentStep === STEPS.NOTSAVED || currentStep === STEPS.SAVED) && !(loading.save || loading.send);
   };
 
   const isAbleToSend = () => {
-    return currentStep === STEPS.SAVED && !changesNotSaved;
+    return currentStep === STEPS.SAVED && !changesNotSaved && !loading.send && selectedUsers.length > 0;
   };
 
   const isEditDisabled = () => {
@@ -380,10 +400,10 @@ function SimonyiForm() {
 
       <div className={styles.buttons}>
         <Button onClick={handleSave} disabled={!isAbleToSave()}>
-          Save
+          {loading.save ? 'Saving...' : 'Save'}
         </Button>
         <Button onClick={handleSent} disabled={!isAbleToSend()}>
-          Send
+          {loading.send ? 'Sending...' : 'Send'}
         </Button>
       </div>
     </form>

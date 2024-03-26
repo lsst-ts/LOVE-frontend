@@ -133,9 +133,9 @@
 }
 
 .reportSummary {
-  min-height: 16ch;
+  min-height: 20em;
 }
 
 .reportTelescopeStatus {
-  min-height: 10ch;
+  min-height: 5em;
 }
