@@ -37,13 +37,11 @@ const modules = {
 
 const RichTextEditor = forwardRef(
   ({ defaultValue, className, onChange = () => {}, onKeyCombination = () => {} }, ref) => {
-    const [value, setValue] = useState(defaultValue);
     const [isControlPressed, setIsControlPressed] = useState(false);
     const reactQuillRef = useRef(null);
 
     const handleChange = (value, delta, source, editor) => {
       if (source === 'user') {
-        setValue(value);
         onChange(value);
       }
     };
@@ -70,11 +68,15 @@ const RichTextEditor = forwardRef(
       }
     };
 
-    useImperativeHandle(ref, () => ({
-      cleanContent() {
-        setValue('');
-      },
-    }));
+    useImperativeHandle(ref, () => {
+      const quillRef = reactQuillRef.current.getEditor();
+      return {
+        cleanContent() {
+          quillRef.setContents([]);
+          onChange('');
+        },
+      };
+    });
 
     const attachQuillRefs = () => {
       if (typeof reactQuillRef?.current?.getEditor !== 'function') return;
@@ -104,7 +106,7 @@ const RichTextEditor = forwardRef(
           modules={modules}
           formats={['header', 'link', 'indent']}
           theme="snow"
-          defaultValue={value}
+          defaultValue={defaultValue}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           onKeyUp={handleKeyUp}

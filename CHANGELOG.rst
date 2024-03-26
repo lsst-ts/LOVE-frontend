@@ -5,6 +5,10 @@ Version History
 v5.30.0
 -------
 
+* Update package.json version to v5.30.0 `<https://github.com/lsst-ts/LOVE-frontend/pull/624>`_
+* Fix the feature to convert Jira ticket names into hyperlinks `<https://github.com/lsst-ts/LOVE-frontend/pull/623>`_
+* Fix content cleaning on RichTextEditor `<https://github.com/lsst-ts/LOVE-frontend/pull/622>`_
+* Update missing reference to the jira service `<https://github.com/lsst-ts/LOVE-frontend/pull/621>`_
 * Add Night Report implementation `<https://github.com/lsst-ts/LOVE-frontend/pull/619>`_
 
 v5.29.3
