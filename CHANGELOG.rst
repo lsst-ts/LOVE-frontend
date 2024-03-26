@@ -5,6 +5,7 @@ Version History
 v5.30.0
 -------
 
+* Fix content cleaning on RichTextEditor `<https://github.com/lsst-ts/LOVE-frontend/pull/622>`_
 * Update missing reference to the jira service `<https://github.com/lsst-ts/LOVE-frontend/pull/621>`_
 * Add Night Report implementation `<https://github.com/lsst-ts/LOVE-frontend/pull/619>`_
 
