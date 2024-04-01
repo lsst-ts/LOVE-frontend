@@ -2103,6 +2103,17 @@ export function getObsDayFromDate(date) {
 }
 
 /**
+ * Converts the given OBS day (YYYYMMDD) to ISO format (YYYY-MM-DD).
+ *
+ * @param {number} obsDay - The OBS day to convert as an interger.
+ * @returns {string} The OBS day in ISO format.
+ */
+export function getObsDayISO(obsDay) {
+  const obsDayString = obsDay.toString();
+  return `${obsDayString.substring(0, 4)}-${obsDayString.substring(4, 6)}-${obsDayString.substring(6, 8)}`;
+}
+
+/**
  * Function to truncate date ISO string to minutes
  * @param {string} date date, as a ISO string, to be truncated
  * @returns {string} truncated date in format YYYY-MM-DDTHH:mm

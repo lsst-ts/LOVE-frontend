@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import Moment from 'moment';
-import ManagerInterface, { getObsDayFromDate } from 'Utils';
-import { TIMES_SQUARE_OBS_TICKETS_REPORT_URL } from 'Config';
+import ManagerInterface, { getObsDayISO } from 'Utils';
 import Button from 'components/GeneralPurpose/Button/Button';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Select from 'components/GeneralPurpose/Select/Select';
@@ -67,14 +65,17 @@ function Report(data, index) {
  * @returns {Array} - The formatted array of reports.
  */
 function formatReports(reports) {
-  return reports.map((report) => ({
-    ...report,
-    rolex_url: `${window.location.origin}/rolex?log_date=${report.date_added.split('T')[0]}`,
-    obs_fault_url: TIMES_SQUARE_OBS_TICKETS_REPORT_URL.replace('{DAY}', report.date_added.split('T')[0]),
-  }));
+  return reports.map((report) => {
+    const dayObsIso = getObsDayISO(report.day_obs);
+    return {
+      ...report,
+      rolex_url: `${window.location.origin}/rolex?log_date=${dayObsIso}`,
+      obs_fault_url: 'https://rubinobs.atlassian.net/jira/software/c/projects/OBS/boards/232',
+    };
+  });
 }
 
-function HistoricNightReport(props) {
+function HistoricNightReport() {
   const [dateStart, setDateStart] = useState(Moment());
   const [dateEnd, setDateEnd] = useState(Moment());
   const [selectedTelescope, setSelectedTelescope] = useState(TELESCOPES.auxtel);
