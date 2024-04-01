@@ -478,8 +478,12 @@ function NightReport(props) {
         </div>
       </div>
       <div className={styles.content}>
-        {selectedTab == 'auxtel' && <AuxTelForm />}
-        {selectedTab == 'simonyi' && <SimonyiForm />}
+        <div style={{ display: selectedTab === 'auxtel' ? 'block' : 'none' }}>
+          <AuxTelForm />
+        </div>
+        <div style={{ display: selectedTab === 'simonyi' ? 'block' : 'none' }}>
+          <SimonyiForm />
+        </div>
       </div>
     </div>
   );
