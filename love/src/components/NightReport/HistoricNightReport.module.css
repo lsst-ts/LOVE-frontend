@@ -15,7 +15,7 @@
   background-color: var(--second-tertiary-background-color);
   padding: 1em;
   display: grid;
-  grid-template-columns: 4fr 1fr;
+  grid-template-columns: 2fr 1fr;
   grid-template-rows: auto;
   grid-template-areas:
     'metadata telescope-status'
@@ -28,6 +28,7 @@
   grid-area: metadata;
   display: grid;
   grid-template-columns: minmax(min-content, auto) 1fr;
+  row-gap: var(--small-padding);
   margin-bottom: var(--small-padding);
 }
 
@@ -42,6 +43,7 @@
   margin-bottom: var(--small-padding);
   padding: var(--content-padding);
   border-radius: 0.5em;
+  white-space: pre-wrap;
 }
 
 .reportSummary {
@@ -50,6 +52,7 @@
   margin: var(--small-padding) 0;
   padding: var(--content-padding);
   border-radius: 0.5em;
+  white-space: pre-wrap;
 }
 
 .reportParticipants {

@@ -11,15 +11,29 @@ const TELESCOPES = {
   auxtel: 'AuxTel',
 };
 
+const REPORT_STATUSES = {
+  sent: 'Sent',
+  draft: 'Draft',
+};
+
 function Report(data, index) {
-  const status = data.date_sent ? 'Sent' : 'Draft';
+  const isReportAlreadySent = data.date_sent ? true : false;
   return (
     <div key={index} className={styles.report}>
       <div className={styles.reportMetadata}>
         <div className={styles.label}>Observation day</div>
         <div className={styles.value}>{data.day_obs}</div>
         <div className={styles.label}>Status</div>
-        <div className={styles.value}>{status}</div>
+        <div
+          className={styles.value}
+          title={
+            isReportAlreadySent
+              ? `Report sent on ${data.date_sent}`
+              : `Report not sent yet. Last update: ${data.date_added}`
+          }
+        >
+          {isReportAlreadySent ? REPORT_STATUSES.sent : REPORT_STATUSES.draft}
+        </div>
         <div className={styles.label}>Obs fault report</div>
         <div className={styles.value}>
           <a href={data.obs_fault_url} target="_blank" rel="noreferrer">
@@ -76,7 +90,7 @@ function formatReports(reports) {
 }
 
 function HistoricNightReport() {
-  const [dateStart, setDateStart] = useState(Moment());
+  const [dateStart, setDateStart] = useState(Moment().subtract(1, 'days'));
   const [dateEnd, setDateEnd] = useState(Moment());
   const [selectedTelescope, setSelectedTelescope] = useState(TELESCOPES.auxtel);
   const [lastUpdated, setLastUpdated] = useState(new Date());
