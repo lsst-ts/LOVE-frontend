@@ -100,15 +100,10 @@
   }
 }
 
-.currentStatusText,
-.changesNotSaved {
+.currentStatusText {
   width: 80%;
   margin: 0 auto;
   text-align: center;
-}
-
-.changesNotSaved {
-  color: var(--status-alert-color);
 }
 
 .currentStatusText > :first-child {
@@ -119,6 +114,7 @@
 .inputField {
   display: flex;
   align-items: center;
+  margin-bottom: var(--small-padding);
 }
 
 .inputField > :first-child {

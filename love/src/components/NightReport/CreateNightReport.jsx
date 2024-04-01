@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import Moment from 'moment';
 import ManagerInterface from 'Utils';
+import Alert from 'components/GeneralPurpose/Alert/Alert';
 import Button from 'components/GeneralPurpose/Button/Button';
 import MultiSelect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
@@ -8,6 +10,8 @@ import Input from 'components/GeneralPurpose/Input/Input';
 import styles from './CreateNightReport.module.css';
 
 const MULTI_SELECT_OPTION_LENGHT = 50;
+const LAST_REFRESHED_WARNING_THRESHOLD = 180;
+const STATE_UPDATE_INTERVAL = 5000;
 
 const STEPS = {
   NOTSAVED: 1,
@@ -27,7 +31,7 @@ const getCurrentStatusText = (currentStep) => {
   }
 };
 
-function ProgressBarSection({ currentStep, currentStatusText, changesNotSaved }) {
+function ProgressBarSection({ currentStep, currentStatusText }) {
   return (
     <>
       <div className={styles.progressBar}>
@@ -45,9 +49,6 @@ function ProgressBarSection({ currentStep, currentStatusText, changesNotSaved })
         <div>{currentStatusText[0]}</div>
         <div>{currentStatusText[1]}</div>
       </div>
-      {changesNotSaved && (
-        <div className={styles.changesNotSaved}>Changes on the current draft have not been saved</div>
-      )}
     </>
   );
 }
@@ -104,6 +105,29 @@ function ConfluenceURLField({ isEditDisabled, confluenceURL, setConfluenceURL })
   );
 }
 
+function AlertsSection({ refreshWarningActive, changesNotSaved }) {
+  return (
+    <div className={styles.alerts}>
+      {refreshWarningActive && (
+        <Alert type="warning">
+          The page has not been refreshed in the last {parseInt(LAST_REFRESHED_WARNING_THRESHOLD / 60, 10)} hours.
+          Please{' '}
+          <a
+            href="#"
+            onClick={() => {
+              location.reload();
+            }}
+          >
+            refresh
+          </a>{' '}
+          the page to get the latest data and don't forget to backup your changes if needed.
+        </Alert>
+      )}
+      {changesNotSaved && <Alert type="error">Changes on the current draft have not been saved yet.</Alert>}
+    </div>
+  );
+}
+
 function AuxTelForm() {
   const observersFieldRef = useRef();
   const [currentStep, setCurrentStep] = useState(STEPS.NOTSAVED);
@@ -118,12 +142,16 @@ function AuxTelForm() {
     save: false,
     send: false,
   });
+  const [lastRefreshed, setLastRefreshed] = useState(Moment());
+  const [time, setTime] = useState(0);
 
   useEffect(() => {
+    // Query users
     ManagerInterface.getUsers().then((users) => {
       setUserOptions(users.map((u) => `${u.first_name} ${u.last_name}`));
     });
 
+    // Query current night report
     ManagerInterface.getCurrentNightReport('AuxTel').then((reports) => {
       if (reports.length > 0) {
         const report = reports[0];
@@ -140,6 +168,15 @@ function AuxTelForm() {
         setConfluenceURL(report.confluence_url);
       }
     });
+
+    // Set interval to trigger renders
+    const interval = setInterval(() => {
+      setTime((prevTime) => prevTime + 1);
+    }, STATE_UPDATE_INTERVAL);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   const handleSent = (event) => {
@@ -215,13 +252,11 @@ function AuxTelForm() {
     setChangesNotSaved(true);
   };
 
+  const refreshWarningActive = Moment().diff(lastRefreshed, 'minutes') > LAST_REFRESHED_WARNING_THRESHOLD;
+
   return (
     <form className={styles.form}>
-      <ProgressBarSection
-        currentStep={currentStep}
-        currentStatusText={getCurrentStatusText(currentStep)}
-        changesNotSaved={changesNotSaved}
-      />
+      <ProgressBarSection currentStep={currentStep} currentStatusText={getCurrentStatusText(currentStep)} />
 
       <ObserversField
         isEditDisabled={isEditDisabled()}
@@ -244,6 +279,8 @@ function AuxTelForm() {
         confluenceURL={confluenceURL}
         setConfluenceURL={handleConfluenceURLChange}
       />
+
+      <AlertsSection refreshWarningActive={refreshWarningActive} changesNotSaved={changesNotSaved} />
 
       <div className={styles.buttons}>
         <Button onClick={handleSave} disabled={!isAbleToSave()}>
@@ -271,12 +308,16 @@ function SimonyiForm() {
     save: false,
     send: false,
   });
+  const [lastRefreshed, setLastRefreshed] = useState(Moment());
+  const [time, setTime] = useState(0);
 
   useEffect(() => {
+    // Query users
     ManagerInterface.getUsers().then((users) => {
       setUserOptions(users.map((u) => `${u.first_name} ${u.last_name}`));
     });
 
+    // Query current night report
     ManagerInterface.getCurrentNightReport('Simonyi').then((reports) => {
       if (reports.length > 0) {
         const report = reports[0];
@@ -293,6 +334,15 @@ function SimonyiForm() {
         setConfluenceURL(report.confluence_url);
       }
     });
+
+    // Set interval to trigger renders
+    const interval = setInterval(() => {
+      setTime((prevTime) => prevTime + 1);
+    }, STATE_UPDATE_INTERVAL);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   const handleSent = (event) => {
@@ -368,6 +418,8 @@ function SimonyiForm() {
     setChangesNotSaved(true);
   };
 
+  const refreshWarningActive = Moment().diff(lastRefreshed, 'minutes') > LAST_REFRESHED_WARNING_THRESHOLD;
+
   return (
     <form className={styles.form}>
       <ProgressBarSection
@@ -397,6 +449,8 @@ function SimonyiForm() {
         confluenceURL={confluenceURL}
         setConfluenceURL={handleConfluenceURLChange}
       />
+
+      <AlertsSection refreshWarningActive={refreshWarningActive} changesNotSaved={changesNotSaved} />
 
       <div className={styles.buttons}>
         <Button onClick={handleSave} disabled={!isAbleToSave()}>
