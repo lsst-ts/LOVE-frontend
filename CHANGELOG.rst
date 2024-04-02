@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.30.1
+-------
+
+* Fix value of MTHexapod_logevent_compensatedPosition.w setting `<https://github.com/lsst-ts/LOVE-frontend/pull/626>`_
+
 v5.30.0
 -------
 
