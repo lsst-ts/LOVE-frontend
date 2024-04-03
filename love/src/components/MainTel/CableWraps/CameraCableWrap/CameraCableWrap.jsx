@@ -93,7 +93,7 @@ class CameraCableWrap extends Component {
     this.ccwArc = ccwArc;
 
     const theta = degrees(Math.PI / 2);
-    this.props.drawLimits(g, radio, theta, -theta);
+    this.props.drawLimits(g, radio, -theta, theta);
 
     this.background = this.g
       .append('path')
