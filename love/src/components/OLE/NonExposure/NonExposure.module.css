@@ -402,6 +402,11 @@ th.tableHead {
   font-weight: bold;
 }
 
+th.messageColumn,
+td.messageColumn {
+  max-width: 60em;
+}
+
 .iconFill {
   fill: var(--default-font-color);
 }

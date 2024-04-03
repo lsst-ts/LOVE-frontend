@@ -214,7 +214,7 @@ export default class NonExposure extends Component {
         field: 'message_text',
         title: 'Message',
         type: 'string',
-        className: styles.tableHead,
+        className: [styles.tableHead, styles.messageColumn].join(' '),
         render: (value, row) => {
           const files = getFilesURLs(row.urls);
           // We ensure to convert Jira ticket names to hyperlinks before converting the markdown to html
