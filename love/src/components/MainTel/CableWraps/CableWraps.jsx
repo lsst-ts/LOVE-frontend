@@ -21,7 +21,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 import { MAX_CCW_FOLLOWING_ERROR } from 'Constants';
-import { defaultNumberFormatter } from 'Utils';
+import { fixedFloat } from 'Utils';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import styles from './CableWraps.module.css';
 import CameraCableWrap from './CameraCableWrap/CameraCableWrap';
@@ -120,8 +120,8 @@ class CableWraps extends Component {
     const rotatorSummaryState = CSCDetail.states[this.props.rotatorSummaryState];
     const mountSummaryState = CSCDetail.states[this.props.mountSummaryState];
     const cameraCableWrapState = CSCDetail.states[this.props.cameraCableWrapState];
-    const rotatorPosition = defaultNumberFormatter(this.props.rotatorPosition ?? 0);
-    const ccwPosition = defaultNumberFormatter(this.props.ccwPosition ?? 0);
+    const rotatorPosition = fixedFloat(this.props.rotatorPosition ?? 0, 4);
+    const ccwPosition = fixedFloat(this.props.ccwPosition ?? 0, 4);
 
     return (
       <div className={styles.cableWrapsContainer}>
