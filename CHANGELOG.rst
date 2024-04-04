@@ -5,6 +5,7 @@ Version History
 v5.30.1
 -------
 
+* Adjust Auxtel Mount SummaryPanel component to start using ATPneumatics_mainAirSourcePressure topic `<https://github.com/lsst-ts/LOVE-frontend/pull/630>`_
 * Couple improvements for sizing big logs for the NonExposure component `<https://github.com/lsst-ts/LOVE-frontend/pull/629>`_
 * UI/UX Improvements for the night report feature `<https://github.com/lsst-ts/LOVE-frontend/pull/627>`_
 * Fix CameraCableWrap UI swapped limits and floating points `<https://github.com/lsst-ts/LOVE-frontend/pull/628>`_
