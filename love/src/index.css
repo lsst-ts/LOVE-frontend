@@ -375,3 +375,14 @@ body {
 .Toastify__toast.Toastify__toast--error .Toastify__progress-bar {
   background-color: var(--status-alert-color);
 }
+
+/* Quill */
+.ql-clipboard {
+  left: -100000px;
+  height: 1px;
+  overflow-y: hidden;
+  position: absolute;
+  top: 50%;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}

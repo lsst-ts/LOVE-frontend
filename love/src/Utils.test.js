@@ -72,13 +72,13 @@ describe('jiraMarkdownToHtml', () => {
   it('should handle links', () => {
     const input = 'This is a [link to site|https://example.com].\r\n';
     const expectedOutput =
-      '<p>This&nbsp;is&nbsp;a&nbsp;<a href="https://example.com" rel="noopener noreferrer" target="_blank">link&nbsp;to&nbsp;site</a>.</p>';
+      '<p>This is a <a href="https://example.com" rel="noopener noreferrer" target="_blank">link to site</a>.</p>';
     expect(jiraMarkdownToHtml(input, options)).toEqual(expectedOutput);
   });
 
   it('should handle headings', () => {
     const input = 'h1. This is a heading.\r\n';
-    const expectedOutput = '<p><h1>This&nbsp;is&nbsp;a&nbsp;heading.</h1></p>';
+    const expectedOutput = '<p><h1>This is a heading.</h1></p>';
     expect(jiraMarkdownToHtml(input, options)).toEqual(expectedOutput);
   });
 
@@ -88,9 +88,9 @@ describe('jiraMarkdownToHtml', () => {
       'h1. This is a heading.\r\n' +
       'This is a [link to site|http://google.com/].\r\n';
     const expectedOutput =
-      '<p>This&nbsp;is&nbsp;a&nbsp;string&nbsp;with&nbsp;mixed&nbsp;content</p>' +
-      '<p><h1>This&nbsp;is&nbsp;a&nbsp;heading.</h1></p>' +
-      '<p>This&nbsp;is&nbsp;a&nbsp;<a href="http://google.com/" rel="noopener noreferrer" target="_blank">link&nbsp;to&nbsp;site</a>.</p>';
+      '<p>This is a string with mixed content</p>' +
+      '<p><h1>This is a heading.</h1></p>' +
+      '<p>This is a <a href="http://google.com/" rel="noopener noreferrer" target="_blank">link to site</a>.</p>';
     expect(jiraMarkdownToHtml(input, options)).toEqual(expectedOutput);
   });
 
@@ -102,29 +102,30 @@ describe('jiraMarkdownToHtml', () => {
       '\t\tThis is a double indented line.\r\n' +
       '\t\t\tThis is a triple indented line.\r\n';
     const expectedOutput =
-      '<p>This&nbsp;is&nbsp;a&nbsp;string&nbsp;with&nbsp;mixed&nbsp;content</p>' +
-      '<p><h1>This&nbsp;is&nbsp;a&nbsp;heading.</h1></p>' +
-      '<p>This&nbsp;is&nbsp;a&nbsp;<a href="http://google.com/" rel="noopener noreferrer" target="_blank">link&nbsp;to&nbsp;site</a>.</p>' +
-      '<p class="ql-indent-1">This&nbsp;is&nbsp;an&nbsp;indented&nbsp;line.</p>' +
-      '<p class="ql-indent-2">This&nbsp;is&nbsp;a&nbsp;double&nbsp;indented&nbsp;line.</p>' +
-      '<p class="ql-indent-3">This&nbsp;is&nbsp;a&nbsp;triple&nbsp;indented&nbsp;line.</p>';
+      '<p>This is a string with mixed content</p>' +
+      '<p><h1>This is a heading.</h1></p>' +
+      '<p>This is a <a href="http://google.com/" rel="noopener noreferrer" target="_blank">link to site</a>.</p>' +
+      '<p class="ql-indent-1">This is an indented line.</p>' +
+      '<p class="ql-indent-2">This is a double indented line.</p>' +
+      '<p class="ql-indent-3">This is a triple indented line.</p>';
     expect(jiraMarkdownToHtml(input, options)).toEqual(expectedOutput);
   });
 
   it('should handle indentation with spaces', () => {
     const input =
       'This is a string with mixed content\r\n' +
-      'h1. This is a heading.\r\nThis is a [link to site|http://google.com/].\r\n' +
+      'h1. This is a heading.\r\n' +
+      'This is a [link to site|http://google.com/].\r\n' +
       '    This is an indented line.\r\n' +
       '        This is a double indented line.\r\n' +
       '            This is a triple indented line.\r\n';
     const expectedOutput =
-      '<p>This&nbsp;is&nbsp;a&nbsp;string&nbsp;with&nbsp;mixed&nbsp;content</p>' +
-      '<p><h1>This&nbsp;is&nbsp;a&nbsp;heading.</h1></p>' +
-      '<p>This&nbsp;is&nbsp;a&nbsp;<a href="http://google.com/" rel="noopener noreferrer" target="_blank">link&nbsp;to&nbsp;site</a>.</p>' +
-      '<p>&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;an&nbsp;indented&nbsp;line.</p>' +
-      '<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;a&nbsp;double&nbsp;indented&nbsp;line.</p>' +
-      '<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;a&nbsp;triple&nbsp;indented&nbsp;line.</p>';
+      '<p>This is a string with mixed content</p>' +
+      '<p><h1>This is a heading.</h1></p>' +
+      '<p>This is a <a href="http://google.com/" rel="noopener noreferrer" target="_blank">link to site</a>.</p>' +
+      '<p>    This is an indented line.</p>' +
+      '<p>        This is a double indented line.</p>' +
+      '<p>            This is a triple indented line.</p>';
     expect(jiraMarkdownToHtml(input, options)).toEqual(expectedOutput);
   });
 });
