@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import Moment from 'moment';
-import ManagerInterface, { getObsDayFromDate } from 'Utils';
-import { TIMES_SQUARE_OBS_TICKETS_REPORT_URL } from 'Config';
+import ManagerInterface, { getObsDayISO } from 'Utils';
 import Button from 'components/GeneralPurpose/Button/Button';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Select from 'components/GeneralPurpose/Select/Select';
@@ -13,15 +11,29 @@ const TELESCOPES = {
   auxtel: 'AuxTel',
 };
 
+const REPORT_STATUSES = {
+  sent: 'Sent',
+  draft: 'Draft',
+};
+
 function Report(data, index) {
-  const status = data.date_sent ? 'Sent' : 'Draft';
+  const isReportAlreadySent = data.date_sent ? true : false;
   return (
     <div key={index} className={styles.report}>
       <div className={styles.reportMetadata}>
         <div className={styles.label}>Observation day</div>
         <div className={styles.value}>{data.day_obs}</div>
         <div className={styles.label}>Status</div>
-        <div className={styles.value}>{status}</div>
+        <div
+          className={styles.value}
+          title={
+            isReportAlreadySent
+              ? `Report sent on ${data.date_sent}`
+              : `Report not sent yet. Last update: ${data.date_added}`
+          }
+        >
+          {isReportAlreadySent ? REPORT_STATUSES.sent : REPORT_STATUSES.draft}
+        </div>
         <div className={styles.label}>Obs fault report</div>
         <div className={styles.value}>
           <a href={data.obs_fault_url} target="_blank" rel="noreferrer">
@@ -67,15 +79,18 @@ function Report(data, index) {
  * @returns {Array} - The formatted array of reports.
  */
 function formatReports(reports) {
-  return reports.map((report) => ({
-    ...report,
-    rolex_url: `${window.location.origin}/rolex?log_date=${report.date_added.split('T')[0]}`,
-    obs_fault_url: TIMES_SQUARE_OBS_TICKETS_REPORT_URL.replace('{DAY}', report.date_added.split('T')[0]),
-  }));
+  return reports.map((report) => {
+    const dayObsIso = getObsDayISO(report.day_obs);
+    return {
+      ...report,
+      rolex_url: `${window.location.origin}/rolex?log_date=${dayObsIso}`,
+      obs_fault_url: 'https://rubinobs.atlassian.net/jira/software/c/projects/OBS/boards/232',
+    };
+  });
 }
 
-function HistoricNightReport(props) {
-  const [dateStart, setDateStart] = useState(Moment());
+function HistoricNightReport() {
+  const [dateStart, setDateStart] = useState(Moment().subtract(1, 'days'));
   const [dateEnd, setDateEnd] = useState(Moment());
   const [selectedTelescope, setSelectedTelescope] = useState(TELESCOPES.auxtel);
   const [lastUpdated, setLastUpdated] = useState(new Date());

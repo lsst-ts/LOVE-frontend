@@ -1,0 +1,41 @@
+.alert {
+  border-radius: 0.29rem;
+  padding: 1em;
+  margin-bottom: var(--small-padding);
+  animation: slideUp 0.5s ease-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.alert a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.alert-success {
+  background: var(--status-ok-dimmed-color-3);
+  color: var(--status-ok-color);
+}
+
+.alert-warning {
+  background: var(--status-warning-dimmed-color-3);
+  color: var(--status-warning-color);
+}
+
+.alert-info {
+  background: var(--status-running-dimmed-color-3);
+  color: var(--status-running-color);
+}
+
+.alert-error {
+  background: var(--status-alert-dimmed-color-3);
+  color: var(--status-alert-color);
+}

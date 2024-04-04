@@ -5,6 +5,7 @@ Version History
 v5.30.1
 -------
 
+* UI/UX Improvements for the night report feature `<https://github.com/lsst-ts/LOVE-frontend/pull/627>`_
 * Fix CameraCableWrap UI swapped limits and floating points `<https://github.com/lsst-ts/LOVE-frontend/pull/628>`_
 * Fix value of MTHexapod_logevent_compensatedPosition.w setting `<https://github.com/lsst-ts/LOVE-frontend/pull/626>`_
 

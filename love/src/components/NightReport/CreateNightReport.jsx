@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import Moment from 'moment';
 import ManagerInterface from 'Utils';
+import Alert from 'components/GeneralPurpose/Alert/Alert';
 import Button from 'components/GeneralPurpose/Button/Button';
 import MultiSelect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
@@ -8,6 +10,8 @@ import Input from 'components/GeneralPurpose/Input/Input';
 import styles from './CreateNightReport.module.css';
 
 const MULTI_SELECT_OPTION_LENGHT = 50;
+const LAST_REFRESHED_WARNING_THRESHOLD = 180;
+const STATE_UPDATE_INTERVAL = 5000;
 
 const STEPS = {
   NOTSAVED: 1,
@@ -27,7 +31,7 @@ const getCurrentStatusText = (currentStep) => {
   }
 };
 
-function ProgressBarSection({ currentStep, currentStatusText, changesNotSaved }) {
+function ProgressBarSection({ currentStep, currentStatusText }) {
   return (
     <>
       <div className={styles.progressBar}>
@@ -45,9 +49,6 @@ function ProgressBarSection({ currentStep, currentStatusText, changesNotSaved })
         <div>{currentStatusText[0]}</div>
         <div>{currentStatusText[1]}</div>
       </div>
-      {changesNotSaved && (
-        <div className={styles.changesNotSaved}>Changes on the current draft have not been saved</div>
-      )}
     </>
   );
 }
@@ -104,6 +105,29 @@ function ConfluenceURLField({ isEditDisabled, confluenceURL, setConfluenceURL })
   );
 }
 
+function AlertsSection({ refreshWarningActive, changesNotSaved }) {
+  return (
+    <div className={styles.alerts}>
+      {refreshWarningActive && (
+        <Alert type="warning">
+          The page has not been refreshed in the last {parseInt(LAST_REFRESHED_WARNING_THRESHOLD / 60, 10)} hours.
+          Please{' '}
+          <a
+            href="#"
+            onClick={() => {
+              location.reload();
+            }}
+          >
+            refresh
+          </a>{' '}
+          the page to get the latest data and don't forget to backup your changes if needed.
+        </Alert>
+      )}
+      {changesNotSaved && <Alert type="error">Changes on the current draft have not been saved yet.</Alert>}
+    </div>
+  );
+}
+
 function AuxTelForm() {
   const observersFieldRef = useRef();
   const [currentStep, setCurrentStep] = useState(STEPS.NOTSAVED);
@@ -114,12 +138,20 @@ function AuxTelForm() {
   const [confluenceURL, setConfluenceURL] = useState('');
   const [reportID, setReportID] = useState();
   const [changesNotSaved, setChangesNotSaved] = useState(false);
+  const [loading, setLoading] = useState({
+    save: false,
+    send: false,
+  });
+  const [lastRefreshed, setLastRefreshed] = useState(Moment());
+  const [time, setTime] = useState(0);
 
   useEffect(() => {
+    // Query users
     ManagerInterface.getUsers().then((users) => {
       setUserOptions(users.map((u) => `${u.first_name} ${u.last_name}`));
     });
 
+    // Query current night report
     ManagerInterface.getCurrentNightReport('AuxTel').then((reports) => {
       if (reports.length > 0) {
         const report = reports[0];
@@ -136,15 +168,26 @@ function AuxTelForm() {
         setConfluenceURL(report.confluence_url);
       }
     });
+
+    // Set interval to trigger renders
+    const interval = setInterval(() => {
+      setTime((prevTime) => prevTime + 1);
+    }, STATE_UPDATE_INTERVAL);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   const handleSent = (event) => {
     event.preventDefault();
     if (currentStep === STEPS.SAVED) {
+      setLoading({ ...loading, send: true });
       ManagerInterface.sendCurrentNightReport(reportID).then((resp) => {
         if (resp) {
           setCurrentStep(STEPS.SENT);
         }
+        setLoading({ ...loading, send: false });
       });
     }
   };
@@ -152,31 +195,37 @@ function AuxTelForm() {
   const handleSave = (event) => {
     event.preventDefault();
     if (currentStep === STEPS.NOTSAVED) {
+      setLoading({ ...loading, save: true });
       ManagerInterface.saveCurrentNightReport('AuxTel', summary, telescopeStatus, confluenceURL, selectedUsers).then(
         (resp) => {
           if (resp) {
+            setReportID(resp.id);
             setCurrentStep(STEPS.SAVED);
             setChangesNotSaved(false);
           }
+          setLoading({ ...loading, save: false });
         },
       );
     } else {
+      setLoading({ ...loading, save: true });
       ManagerInterface.updateCurrentNightReport(reportID, summary, telescopeStatus, confluenceURL, selectedUsers).then(
         (resp) => {
           if (resp) {
+            setReportID(resp.id);
             setChangesNotSaved(false);
           }
+          setLoading({ ...loading, save: false });
         },
       );
     }
   };
 
   const isAbleToSave = () => {
-    return currentStep === STEPS.NOTSAVED || currentStep === STEPS.SAVED;
+    return (currentStep === STEPS.NOTSAVED || currentStep === STEPS.SAVED) && !(loading.save || loading.send);
   };
 
   const isAbleToSend = () => {
-    return currentStep === STEPS.SAVED && !changesNotSaved;
+    return currentStep === STEPS.SAVED && !changesNotSaved && !loading.send && selectedUsers.length > 0;
   };
 
   const isEditDisabled = () => {
@@ -203,13 +252,11 @@ function AuxTelForm() {
     setChangesNotSaved(true);
   };
 
+  const refreshWarningActive = Moment().diff(lastRefreshed, 'minutes') > LAST_REFRESHED_WARNING_THRESHOLD;
+
   return (
     <form className={styles.form}>
-      <ProgressBarSection
-        currentStep={currentStep}
-        currentStatusText={getCurrentStatusText(currentStep)}
-        changesNotSaved={changesNotSaved}
-      />
+      <ProgressBarSection currentStep={currentStep} currentStatusText={getCurrentStatusText(currentStep)} />
 
       <ObserversField
         isEditDisabled={isEditDisabled()}
@@ -233,12 +280,14 @@ function AuxTelForm() {
         setConfluenceURL={handleConfluenceURLChange}
       />
 
+      <AlertsSection refreshWarningActive={refreshWarningActive} changesNotSaved={changesNotSaved} />
+
       <div className={styles.buttons}>
         <Button onClick={handleSave} disabled={!isAbleToSave()}>
-          Save
+          {loading.save ? 'Saving...' : 'Save'}
         </Button>
         <Button onClick={handleSent} disabled={!isAbleToSend()}>
-          Send
+          {loading.send ? 'Sending...' : 'Send'}
         </Button>
       </div>
     </form>
@@ -255,12 +304,20 @@ function SimonyiForm() {
   const [confluenceURL, setConfluenceURL] = useState('');
   const [reportID, setReportID] = useState();
   const [changesNotSaved, setChangesNotSaved] = useState(false);
+  const [loading, setLoading] = useState({
+    save: false,
+    send: false,
+  });
+  const [lastRefreshed, setLastRefreshed] = useState(Moment());
+  const [time, setTime] = useState(0);
 
   useEffect(() => {
+    // Query users
     ManagerInterface.getUsers().then((users) => {
       setUserOptions(users.map((u) => `${u.first_name} ${u.last_name}`));
     });
 
+    // Query current night report
     ManagerInterface.getCurrentNightReport('Simonyi').then((reports) => {
       if (reports.length > 0) {
         const report = reports[0];
@@ -277,15 +334,26 @@ function SimonyiForm() {
         setConfluenceURL(report.confluence_url);
       }
     });
+
+    // Set interval to trigger renders
+    const interval = setInterval(() => {
+      setTime((prevTime) => prevTime + 1);
+    }, STATE_UPDATE_INTERVAL);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   const handleSent = (event) => {
     event.preventDefault();
     if (currentStep === STEPS.SAVED) {
+      setLoading({ ...loading, send: true });
       ManagerInterface.sendCurrentNightReport(reportID).then((resp) => {
         if (resp) {
           setCurrentStep(STEPS.SENT);
         }
+        setLoading({ ...loading, send: false });
       });
     }
   };
@@ -293,31 +361,37 @@ function SimonyiForm() {
   const handleSave = (event) => {
     event.preventDefault();
     if (currentStep === STEPS.NOTSAVED) {
+      setLoading({ ...loading, save: true });
       ManagerInterface.saveCurrentNightReport('Simonyi', summary, telescopeStatus, confluenceURL, selectedUsers).then(
         (resp) => {
           if (resp) {
+            setReportID(resp.id);
             setCurrentStep(STEPS.SAVED);
             setChangesNotSaved(false);
           }
+          setLoading({ ...loading, save: false });
         },
       );
     } else {
+      setLoading({ ...loading, save: true });
       ManagerInterface.updateCurrentNightReport(reportID, summary, telescopeStatus, confluenceURL, selectedUsers).then(
         (resp) => {
           if (resp) {
+            setReportID(resp.id);
             setChangesNotSaved(false);
           }
+          setLoading({ ...loading, save: false });
         },
       );
     }
   };
 
   const isAbleToSave = () => {
-    return currentStep === STEPS.NOTSAVED || currentStep === STEPS.SAVED;
+    return (currentStep === STEPS.NOTSAVED || currentStep === STEPS.SAVED) && !(loading.save || loading.send);
   };
 
   const isAbleToSend = () => {
-    return currentStep === STEPS.SAVED && !changesNotSaved;
+    return currentStep === STEPS.SAVED && !changesNotSaved && !loading.send && selectedUsers.length > 0;
   };
 
   const isEditDisabled = () => {
@@ -343,6 +417,8 @@ function SimonyiForm() {
     setConfluenceURL(newConfluenceURL);
     setChangesNotSaved(true);
   };
+
+  const refreshWarningActive = Moment().diff(lastRefreshed, 'minutes') > LAST_REFRESHED_WARNING_THRESHOLD;
 
   return (
     <form className={styles.form}>
@@ -374,12 +450,14 @@ function SimonyiForm() {
         setConfluenceURL={handleConfluenceURLChange}
       />
 
+      <AlertsSection refreshWarningActive={refreshWarningActive} changesNotSaved={changesNotSaved} />
+
       <div className={styles.buttons}>
         <Button onClick={handleSave} disabled={!isAbleToSave()}>
-          Save
+          {loading.save ? 'Saving...' : 'Save'}
         </Button>
         <Button onClick={handleSent} disabled={!isAbleToSend()}>
-          Send
+          {loading.send ? 'Sending...' : 'Send'}
         </Button>
       </div>
     </form>
@@ -400,8 +478,12 @@ function NightReport(props) {
         </div>
       </div>
       <div className={styles.content}>
-        {selectedTab == 'auxtel' && <AuxTelForm />}
-        {selectedTab == 'simonyi' && <SimonyiForm />}
+        <div style={{ display: selectedTab === 'auxtel' ? 'block' : 'none' }}>
+          <AuxTelForm />
+        </div>
+        <div style={{ display: selectedTab === 'simonyi' ? 'block' : 'none' }}>
+          <SimonyiForm />
+        </div>
       </div>
     </div>
   );
