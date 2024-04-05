@@ -1415,7 +1415,7 @@ export const defaultNumberFormatter = (value, precision = 4) => {
 };
 
 /**
- * Converts a timestamp into  "YYYY/MM/DD HH:MM:SS  <location>" formatted string
+ * Convert a timestamp into  "YYYY/MM/DD HH:MM:SS  <location>" formatted string
  * @param {date-able} timestamp if float it must be in milliseconds
  * @param {string} location optional location to append to the timestamp, TAI by default
  * @returns {string} "YYYY/MM/DD HH:MM:SS  <location>" formatted string
@@ -1426,7 +1426,7 @@ export const formatTimestamp = (timestamp, location = 'TAI') => {
 };
 
 /**
- * Converts a timestamp into  "YYYY-MM-DD HH:MM:SS" formatted string
+ * Convert a timestamp into  "YYYY-MM-DD HH:MM:SS" formatted string
  * @param {date-able} timestamp if float it must be in milliseconds
  * @returns {string} "YYYY-MM-DD HH:MM:SS" formatted string
  */
@@ -1436,7 +1436,7 @@ export const parseForPlotTimestamp = (timestamp) => {
 };
 
 /**
- * Converts a timestamp into  "YYYY/MM/DD HH:MM:SS  <location>" formatted string
+ * Convert a timestamp into  "YYYY/MM/DD HH:MM:SS  <location>" formatted string
  * @param {date-able} timestamp if float it must be in milliseconds
  * @param {string} location optional location to append to the timestamp, empty by default
  * @returns {string} ISO time string
@@ -1447,7 +1447,7 @@ export const isoTimestamp = (timestamp, location = null) => {
 };
 
 /**
- * Converts seconds to a human readable difference like 'a few seconds ago'
+ * Convert seconds to a human readable difference like 'a few seconds ago'
  * @param {date-able} timestamp if float it must be in milliseconds
  * @param {number} taiToUtc difference in seconds between TAI and UTC timestamps
  * @returns {string} human readable time
@@ -1460,7 +1460,7 @@ export const relativeTime = (timestamp, taiToUtc) => {
 };
 
 /**
- * Converts seconds to digital format as '00:00:00'
+ * Convert seconds to digital format as '00:00:00'
  * @param {number} time seconds to be converted
  * @returns {string} seconds in digitial format
  */
@@ -1475,7 +1475,7 @@ export const formatSecondsToDigital = (time) => {
 };
 
 /**
- * Function to converts digital format '00:00:00' to seconds
+ * Function to convert digital format '00:00:00' to seconds
  * @param {string} time in digital format
  * @returns {number} digital time in seconds
  */
@@ -1927,9 +1927,7 @@ export function htmlToJiraMarkdown(html) {
   // markdown = markdown.replace(/<\/li>/g, '\n');
 
   // Parse &nbsp;
-  // Ensure to remove special &nbsp; characters
-  // Added either by a copied and pasted text from an user
-  // or by the html2jiraMarkdown function.
+  // Ensure to remove special &nbsp; characters if present
   markdown = markdown.replace(/&nbsp;/g, ' ');
 
   // Parse rest of stuff
@@ -2019,18 +2017,6 @@ export function jiraMarkdownToHtml(markdown, options = { codeFriendly: true }) {
     return `<p>${p2}</p>`;
   });
 
-  // Parse white spaces
-  // This is done to avoid white spaces being stripped by Quill,
-  // by adding non-breaking spaces. This doesn't add non-breaking
-  // spaces inside html tags to avoid breaking the html structure.
-  // Special characters are removed then on the htmlToJiraMarkdown
-  // function.
-  // This is a workaround for an issue with Quill JS. See:
-  // https://github.com/quilljs/quill/issues/1751
-  html = html.replace(/>([^<]+)</g, function (match) {
-    return match.replace(/ /g, '&nbsp;');
-  });
-
   // Parse empty line
   html = html.replace(/\r\n\r\n/g, '<br>');
 
@@ -2038,7 +2024,7 @@ export function jiraMarkdownToHtml(markdown, options = { codeFriendly: true }) {
 }
 
 /**
- * Converts Jira ticket names to hyperlinks.
+ * Convert Jira ticket names to hyperlinks.
  * Jira ticket names are expected to be in the format <JIRA_PROJECT>-<NUMBER>.
  * The JIRA_PROJECT is expected to be one of the projects defined in the AUTO_HYPERLINK_JIRA_PROJECTS constant.
  * This function only conver Jira ticket names that are not hyperlinks.
@@ -2100,6 +2086,17 @@ export function getObsDayFromDate(date) {
     return utcDate.format(ISO_INTEGER_DATE_FORMAT);
   }
   return utcDate.subtract(1, 'day').format(ISO_INTEGER_DATE_FORMAT);
+}
+
+/**
+ * Convert the given OBS day (YYYYMMDD) to ISO format (YYYY-MM-DD).
+ *
+ * @param {number} obsDay - The OBS day to convert as an interger.
+ * @returns {string} The OBS day in ISO format.
+ */
+export function getObsDayISO(obsDay) {
+  const obsDayString = obsDay.toString();
+  return `${obsDayString.substring(0, 4)}-${obsDayString.substring(4, 6)}-${obsDayString.substring(6, 8)}`;
 }
 
 /**

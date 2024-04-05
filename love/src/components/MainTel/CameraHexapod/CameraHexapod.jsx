@@ -265,7 +265,7 @@ class CameraHexapod extends Component {
     dataHexapod[2].z = this.props.hexapodCompensationOffsetZ;
     dataHexapod[2].u = this.props.hexapodCompensationOffsetU;
     dataHexapod[2].v = this.props.hexapodCompensationOffsetV;
-    dataHexapod[2].w = this.props.hexapodCompensationOffsetZ;
+    dataHexapod[2].w = this.props.hexapodCompensationOffsetW;
 
     const compensation = this.props.hexapodCompensationMode;
     const newDataHexapod = dataHexapod.filter((val, index) => index !== 2 || (index === 2 && compensation === true));

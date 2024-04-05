@@ -56,6 +56,7 @@ export default class SummaryTable extends Component {
     dropoutDoorState: PropTypes.number,
     mainDoorState: PropTypes.number,
     mountTrackingState: PropTypes.number,
+    systemAirPressure: PropTypes.number,
   };
 
   static defaultProps = {};
@@ -224,33 +225,18 @@ export default class SummaryTable extends Component {
           <StatusText status={stateToStyleMount[instrumentState]}>{instrumentState}</StatusText>
         </Value>
 
-        <Label>Cell load</Label>
-        <Value>{this.props.loadCell}</Value>
+        <Label>Total Air Pressure</Label>
+        <Value>{this.props.systemAirPressure}</Value>
         <Row>
           <Limits
-            lowerLimit={this.props.cellLoadMin}
-            upperLimit={this.props.cellLoadMax}
-            currentValue={this.props.loadCell.value}
+            lowerLimit={ATPneumaticsLimits.mainAirSourcePressure.min}
+            upperLimit={ATPneumaticsLimits.mainAirSourcePressure.max}
+            currentValue={this.props.systemAirPressure.value}
             targetValue="Unknown"
             height={30}
             displayLabels={true}
-            displayLabelsUnit=" kg"
-            limitWarning={4.2}
-          />
-        </Row>
-
-        <Label>M1 Air pressure</Label>
-        <Value>{this.props.m1AirPressure}</Value>
-        <Row>
-          <Limits
-            lowerLimit={this.props.pressureMin}
-            upperLimit={this.props.pressureMax}
-            currentValue={this.props.m1AirPressure.value}
-            targetValue={this.props.m1SetPressure}
-            height={30}
-            displayLabels={true}
             displayLabelsUnit=" Pa"
-            limitWarning={5000}
+            limitWarning={7000}
           />
         </Row>
 

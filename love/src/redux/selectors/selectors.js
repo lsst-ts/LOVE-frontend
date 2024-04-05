@@ -628,8 +628,7 @@ export const getMountSubscriptions = (index) => {
     `event-ATPneumatics-${index}-instrumentState`,
     `event-ATPneumatics-${index}-m1CoverLimitSwitches`,
     `event-ATPneumatics-${index}-m1VentsLimitSwitches`,
-    `telemetry-ATPneumatics-${index}-loadCell`,
-    `telemetry-ATPneumatics-${index}-m1AirPressure`,
+    `telemetry-ATPneumatics-${index}-mainAirSourcePressure`,
     // ATMCS
     `event-ATMCS-${index}-m3InPosition`,
     `event-ATMCS-${index}-m3State`,
@@ -671,8 +670,10 @@ export const getMountState = (state, index) => {
   const hexapodReadyForCommand = mountData[`event-ATPneumatics-${index}-readyForCommand`];
   const m1VentsLimitSwitches = mountData[`event-ATPneumatics-${index}-m1VentsLimitSwitches`];
   const m1CoverLimitSwitches = mountData[`event-ATPneumatics-${index}-m1CoverLimitSwitches`];
+  const systemAirPressure = mountData[`telemetry-ATPneumatics-${index}-mainAirSourcePressure`];
   const correctionOffsets = mountData[`event-ATAOS-${index}-correctionOffsets`];
   const correctionEnabled = mountData[`event-ATAOS-${index}-correctionEnabled`];
+
   return {
     // ATHexapod
     hexapodInPosition: hexapodInPosition ? hexapodInPosition[hexapodInPosition.length - 1].inPosition.value : 0,
@@ -693,12 +694,7 @@ export const getMountState = (state, index) => {
     instrumentState: instrumentState ? instrumentState[instrumentState.length - 1].state.value : 0,
     m1CoverLimitSwitches: m1CoverLimitSwitches ? m1CoverLimitSwitches[m1CoverLimitSwitches.length - 1] : {},
     m1VentsLimitSwitches: m1VentsLimitSwitches ? m1VentsLimitSwitches[m1VentsLimitSwitches.length - 1] : {},
-    loadCell: mountData[`telemetry-ATPneumatics-${index}-loadCell`]
-      ? mountData[`telemetry-ATPneumatics-${index}-loadCell`].cellLoad
-      : 'Unknown',
-    m1AirPressure: mountData[`telemetry-ATPneumatics-${index}-m1AirPressure`]
-      ? mountData[`telemetry-ATPneumatics-${index}-m1AirPressure`].pressure
-      : 'Unknown',
+    systemAirPressure: systemAirPressure?.pressure ?? {},
     // ATMCS
     m3InPosition: m3InPosition ? m3InPosition[m3InPosition.length - 1].inPosition.value : 0,
     nasmyth1RotatorInPosition: nasmyth1RotatorInPosition
