@@ -1927,9 +1927,7 @@ export function htmlToJiraMarkdown(html) {
   // markdown = markdown.replace(/<\/li>/g, '\n');
 
   // Parse &nbsp;
-  // Ensure to remove special &nbsp; characters
-  // Added either by a copied and pasted text from an user
-  // or by the html2jiraMarkdown function.
+  // Ensure to remove special &nbsp; characters if present
   markdown = markdown.replace(/&nbsp;/g, ' ');
 
   // Parse rest of stuff
@@ -2017,18 +2015,6 @@ export function jiraMarkdownToHtml(markdown, options = { codeFriendly: true }) {
 
     // Otherwise return the line as a paragraph
     return `<p>${p2}</p>`;
-  });
-
-  // Parse white spaces
-  // This is done to avoid white spaces being stripped by Quill,
-  // by adding non-breaking spaces. This doesn't add non-breaking
-  // spaces inside html tags to avoid breaking the html structure.
-  // Special characters are removed then on the htmlToJiraMarkdown
-  // function.
-  // This is a workaround for an issue with Quill JS. See:
-  // https://github.com/quilljs/quill/issues/1751
-  html = html.replace(/>([^<]+)</g, function (match) {
-    return match.replace(/ /g, '&nbsp;');
   });
 
   // Parse empty line
