@@ -111,13 +111,10 @@ export const MTMountLimits = {
 };
 
 export const ATPneumaticsLimits = {
-  cellLoad: {
-    min: 3.83,
-    max: 117.8,
-  },
-  pressure: {
-    min: 47160.14,
-    max: 182159.49,
+  mainAirSourcePressure: {
+    /* Measured in Pa */
+    min: 275790,
+    max: 413000,
   },
 };
 
