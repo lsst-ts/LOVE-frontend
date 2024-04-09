@@ -222,7 +222,17 @@ class RaftDetail extends Component {
       React.createRef(),
       React.createRef(),
     ];
-    this.rebsRefs = [React.createRef(), React.createRef(), React.createRef()];
+    this.rebsRefs = [
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+    ];
   }
 
   renderCCDsPlots() {
@@ -281,22 +291,73 @@ class RaftDetail extends Component {
 
   renderRebsPlots() {
     const { raft } = this.props;
+    const plots = [];
+    raft.rebs?.forEach((r) => {
+      const rebIndex = r.id - 1;
+      plots.push(
+        {
+          [`REB${r.id}`]: {
+            type: 'line',
+            values: [
+              {
+                variable: 'y',
+                category: 'telemetry',
+                csc: 'CCCamera',
+                salindex: 0,
+                topic: 'focal_plane_Reb',
+                item: 'hVBiasSwitch',
+                accessor: (x) => x[rebIndex],
+              },
+            ],
+          },
+        },
+        {
+          [`REB${r.id}`]: {
+            type: 'line',
+            values: [
+              {
+                variable: 'y',
+                category: 'telemetry',
+                csc: 'CCCamera',
+                salindex: 0,
+                topic: 'focal_plane_Reb',
+                item: 'anaV',
+                accessor: (x) => x[rebIndex],
+              },
+            ],
+          },
+        },
+        {
+          [`REB${r.id}`]: {
+            type: 'line',
+            values: [
+              {
+                variable: 'y',
+                category: 'telemetry',
+                csc: 'CCCamera',
+                salindex: 0,
+                topic: 'focal_plane_Reb',
+                item: 'power',
+                accessor: (x) => x[rebIndex],
+              },
+            ],
+          },
+        },
+      );
+    });
 
     return (
-      <div className={styles.divContainerRebsPlot}>
-        {raft.rebs?.map((r, i) => (
-          <div className={styles.plotsContainerRebs}>
-            <div key={'reb' + i} ref={this.rebsRefs[i]} className={styles.plot}>
-              <PlotContainer
-                memorySize={50}
-                height={200}
-                width={500}
-                inputs={getRebPlots(i)}
-                xAxisTitle=""
-                yAxisTitle=""
-                legendPosition="bottom"
-              />
-            </div>
+      <div className={styles.rebsContainer}>
+        {plots.map((p, i) => (
+          <div key={`r${i}`} ref={this.rebsRefs[i]} className={styles.plot}>
+            <PlotContainer
+              memorySize={50}
+              height={150}
+              width={180}
+              inputs={p}
+              xAxisTitle="Time"
+              legendPosition="right"
+            />
           </div>
         ))}
       </div>
@@ -325,7 +386,9 @@ class RaftDetail extends Component {
       </div>
     ) : (
       <div className={styles.container}>
+        <h1>CCDs</h1>
         {this.renderCCDsPlots()}
+        <h1>Rebs</h1>
         {this.renderRebsPlots()}
       </div>
     );
