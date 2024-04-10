@@ -84,7 +84,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
-    'event-Heartbeat-0-stream',
     'event-MTM2-0-commandableByDDS',
     'event-MTM2-0-forceBalanceSystemStatus',
     'event-MTM2-0-inclinationTelemetrySource',
