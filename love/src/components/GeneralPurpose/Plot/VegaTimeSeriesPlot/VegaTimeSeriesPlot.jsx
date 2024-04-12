@@ -186,7 +186,6 @@ class VegaTimeseriesPlot extends Component {
 
   makeAxisTitle = (title, units) => {
     return `${title} ${units ? `[${units}]` : ''}`;
-    // return `${title.toUpperCase()} ${units ? `[${units}]` : ''}`;
   };
 
   makeStyleEncoding = () => {
@@ -1062,18 +1061,12 @@ class VegaTimeseriesPlot extends Component {
                 title: namesUnits,
                 offset: 45,
               },
-              scale: {
-                // domain: [-1, 10],
-                // rangeMin: 0,
-              },
+              scale: {},
             },
             y2: {
               field: 'y2',
               type: 'quantitative',
-              scale: {
-                // domain: [-1, 10],
-                // rangeMin: 0,
-              },
+              scale: {},
             },
             fill: styleEncoding.color,
             fillOpacity: {
@@ -1394,7 +1387,7 @@ class VegaTimeseriesPlot extends Component {
   };
 
   render() {
-    const { layers } = this.props;
+    const { layers, className } = this.props;
     const vegaSpec = this.getVegaSpec();
     return (
       <VegaLite
@@ -1404,7 +1397,7 @@ class VegaTimeseriesPlot extends Component {
         renderer="svg"
         spec={vegaSpec}
         data={layers}
-        className={[styles.plotContainer, this.props.className].join(' ')}
+        className={[styles.plotContainer, className].join(' ')}
         actions={false}
       />
     );
