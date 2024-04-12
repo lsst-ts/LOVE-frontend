@@ -68,11 +68,6 @@ class VegaTimeseriesPlot extends Component {
     /** Height of the plot in pixels */
     height: PropTypes.number,
 
-    /** Node to be used to track width and height.
-     *  Use this instead of props.width and props.height for responsive plots.
-     *  Will be ignored if both props.width and props.height are provided */
-    containerNode: PropTypes.node,
-
     /** Object with data separated on different keys to be plotted in different layers.
      * Passed directly as <VegaLite data={layers} ...>
      */
@@ -179,6 +174,8 @@ class VegaTimeseriesPlot extends Component {
   };
 
   static defaultProps = {
+    width: 500,
+    height: 240,
     layers: {},
     temporalXAxis: true,
     className: '',
@@ -191,13 +188,10 @@ class VegaTimeseriesPlot extends Component {
 
   constructor(props) {
     super(props);
-    this.resizeObserver = undefined;
     this.state = {
-      containerWidth: props.width ?? 400,
-      containerHeight: props.height ?? 240,
       spec: {
-        width: props.width !== undefined && props.height !== undefined ? props.width : 500,
-        height: this.props.width !== undefined && this.props.height !== undefined ? props.height : 240,
+        width: props.width,
+        height: props.height,
         autosize: {
           type: 'fit',
           contains: 'padding',
@@ -1401,12 +1395,8 @@ class VegaTimeseriesPlot extends Component {
 
     this.setState({
       spec: {
-        width:
-          this.props.width !== undefined && this.props.width !== null ? this.props.width : this.state.containerWidth,
-        height:
-          this.props.height !== undefined && this.props.height !== null // && this.state.containerHeight < this.props.height
-            ? this.props.height
-            : this.state.containerHeight,
+        width: this.props.width,
+        height: this.props.height,
         autosize: {
           type: 'fit',
           contains: 'padding',
@@ -1469,9 +1459,6 @@ class VegaTimeseriesPlot extends Component {
   };
 
   shouldComponentUpdate = (prevProps, prevState) => {
-    if (prevProps.containerNode !== this.props.containerNode) {
-      return true;
-    }
     if (this.props.width !== prevProps.width || this.props.height !== prevProps.height) {
       return true;
     }
@@ -1506,12 +1493,6 @@ class VegaTimeseriesPlot extends Component {
 
     if (!isEqual(prevProps.layers, this.props.layers)) {
       this.updateSpec();
-    }
-  };
-
-  componentWillUnmount = () => {
-    if (this.resizeObserver) {
-      this.resizeObserver.disconnect();
     }
   };
 
