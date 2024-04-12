@@ -19,7 +19,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import { Component } from 'react';
 import { VegaLite } from 'react-vega';
-import isEqual from 'lodash/isEqual';
 import styles from './VegaTimeSeriesPlot.module.css';
 import PropTypes from 'prop-types';
 
@@ -184,65 +183,6 @@ class VegaTimeseriesPlot extends Component {
     scaleIndependent: false,
     scaleDomain: {},
   };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      spec: {
-        width: props.width,
-        height: props.height,
-        autosize: {
-          type: 'fit',
-          contains: 'padding',
-        },
-        config: {
-          background: null,
-          title: { color: '#ddd' },
-          style: {
-            'guide-label': {
-              fill: '#ddd',
-            },
-            'guide-title': {
-              fill: '#ddd',
-            },
-          },
-          axis: {
-            domainColor: '#626262',
-            gridColor: '#424242',
-            tickColor: null,
-            domain: true,
-            /* domainColor: '#000',
-            tickColor: '#000' */
-          },
-          axisX: {
-            titlePadding: 16,
-            titleFontWeight: 750,
-            // labelAngle: -45,
-            labelFontWeight: 750,
-            tickCount: 5,
-          },
-          axisY: { minExtent: 30 },
-          view: {
-            strokeWidth: 1,
-            step: 23,
-          },
-        },
-        encoding: {
-          x: {
-            field: 'x',
-            type: props.temporalXAxis ? 'temporal' : 'quantitative',
-            timeUnit: props.temporalXAxisFormat,
-            axis: {
-              title: this.makeAxisTitle(props.xAxisTitle, undefined),
-              format: props.temporalXAxisFormat,
-            },
-            scale: props.xDomain ? { domain: props.xDomain } : { type: 'utc' },
-          },
-        },
-        layer: [],
-      },
-    };
-  }
 
   makeAxisTitle = (title, units) => {
     return `${title} ${units ? `[${units}]` : ''}`;
@@ -1376,119 +1316,93 @@ class VegaTimeseriesPlot extends Component {
     };
   };
 
-  updateSpec = () => {
+  getVegaSpec = () => {
+    const { layers, width, height, scaleIndependent, temporalXAxis, xAxisTitle, temporalXAxisFormat, xDomain } =
+      this.props;
     const layer = [];
-    if (this.props.layers.heatmaps) layer.push(this.makeHeatmapLayer('heatmaps'));
-    if (this.props.layers.areas) layer.push(this.makeAreaLayer('areas'));
-    if (this.props.layers.spreads) layer.push(this.makeSpreadLayer('spreads'));
-    if (this.props.layers.rects) layer.push(this.makeRectLayer('rects'));
-    if (this.props.layers.bars) layer.push(this.makeBarLayer('bars'));
-    if (this.props.layers.bigotes) layer.push(this.makeBigoteLayer('bigotes'));
-    if (this.props.layers.pointLines) layer.push(this.makePointsLayer('pointLines'));
-    if (this.props.layers.lines) layer.push(this.makeLineLayer('lines'));
-    if (this.props.layers.arrows) layer.push(this.makeArrowLayer('arrows'));
+    if (layers.heatmaps) layer.push(this.makeHeatmapLayer('heatmaps'));
+    if (layers.areas) layer.push(this.makeAreaLayer('areas'));
+    if (layers.spreads) layer.push(this.makeSpreadLayer('spreads'));
+    if (layers.rects) layer.push(this.makeRectLayer('rects'));
+    if (layers.bars) layer.push(this.makeBarLayer('bars'));
+    if (layers.bigotes) layer.push(this.makeBigoteLayer('bigotes'));
+    if (layers.pointLines) layer.push(this.makePointsLayer('pointLines'));
+    if (layers.lines) layer.push(this.makeLineLayer('lines'));
+    if (layers.arrows) layer.push(this.makeArrowLayer('arrows'));
 
     if (layer.length === 0) {
       layer.push(this.makeLineLayer('lines'));
     }
 
-    this.setState({
-      spec: {
-        width: this.props.width,
-        height: this.props.height,
-        autosize: {
-          type: 'fit',
-          contains: 'padding',
-        },
-        config: {
-          background: null,
-          title: { color: '#ddd' },
-          style: {
-            'guide-label': {
-              fill: '#ddd',
-            },
-            'guide-title': {
-              fill: '#ddd',
-            },
+    return {
+      width: width,
+      height: height,
+      autosize: {
+        type: 'fit',
+        contains: 'padding',
+      },
+      config: {
+        background: null,
+        title: { color: '#ddd' },
+        style: {
+          'guide-label': {
+            fill: '#ddd',
           },
-          axis: {
-            domainColor: '#626262',
-            gridColor: '#424242',
-            tickColor: null,
-          },
-          axisX: {
-            titlePadding: 16,
-            titleFontWeight: 750,
-            labelFontWeight: 750,
-            tickCount: 5,
-          },
-          legend: {
-            gradientLength: this.props.height - 45,
-            gradientHorizontalMaxLength: this.props.height - 45,
-            gradientVerticalMaxLength: this.props.height - 45,
+          'guide-title': {
+            fill: '#ddd',
           },
         },
-        transform: [
-          {
-            calculate: 'datetime(datum.x)',
-            as: 'convertedDatetime',
-          },
-        ],
-        encoding: {
-          x: {
-            field: 'x',
-            type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-            axis: {
-              title: this.makeAxisTitle(this.props.xAxisTitle, undefined),
-              format: this.props.temporalXAxisFormat,
-            },
-            scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
-          },
+        axis: {
+          domainColor: '#626262',
+          gridColor: '#424242',
+          tickColor: null,
         },
-        layer: [...layer],
-        resolve: {
-          scale: this.props.scaleIndependent ? { y: 'independent' } : {},
+        axisX: {
+          titlePadding: 16,
+          titleFontWeight: 750,
+          labelFontWeight: 750,
+          tickCount: 5,
+        },
+        legend: {
+          gradientLength: height - 45,
+          gradientHorizontalMaxLength: height - 45,
+          gradientVerticalMaxLength: height - 45,
         },
       },
-    });
-  };
-
-  componentDidMount = () => {
-    this.updateSpec();
-  };
-
-  componentDidUpdate = (prevProps) => {
-    let updateSpec = false;
-    if (
-      this.props.width !== undefined &&
-      this.props.height !== undefined &&
-      (this.props.width !== prevProps.width || this.props.height !== prevProps.height)
-    ) {
-      updateSpec = true;
-    }
-
-    if (this.props.units?.x !== prevProps.units?.x || this.props.units?.y !== prevProps.units?.y) {
-      updateSpec = true;
-    }
-
-    if (!isEqual(prevProps.layers, this.props.layers)) {
-      updateSpec = true;
-    }
-
-    if (updateSpec) {
-      this.updateSpec();
-    }
+      transform: [
+        {
+          calculate: 'datetime(datum.x)',
+          as: 'convertedDatetime',
+        },
+      ],
+      encoding: {
+        x: {
+          field: 'x',
+          type: temporalXAxis ? 'temporal' : 'quantitative',
+          axis: {
+            title: this.makeAxisTitle(xAxisTitle, undefined),
+            format: temporalXAxisFormat,
+          },
+          scale: xDomain ? { domain: xDomain } : { type: 'utc' },
+        },
+      },
+      layer: [...layer],
+      resolve: {
+        scale: scaleIndependent ? { y: 'independent' } : {},
+      },
+    };
   };
 
   render() {
     const { layers } = this.props;
+    const vegaSpec = this.getVegaSpec();
     return (
       <VegaLite
         style={{
           display: 'flex',
         }}
         renderer="svg"
-        spec={this.state.spec}
+        spec={vegaSpec}
         data={layers}
         className={[styles.plotContainer, this.props.className].join(' ')}
         actions={false}
