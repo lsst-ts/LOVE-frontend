@@ -188,9 +188,16 @@ class VegaTimeseriesPlot extends Component {
     return `${title} ${units ? `[${units}]` : ''}`;
   };
 
+  /**
+   * Generates the style encoding dictionary to be used
+   * by the functions to make layers, such as makeLineLayer.
+   * It reads the marksStyles prop and generates the style encoding object.
+   * @returns {Object} The style encoding object.
+   */
   makeStyleEncoding = () => {
-    const marksStyles = this.props.marksStyles.filter((l) => l.name !== '' && !l.labelOnly);
-    const names = marksStyles.map((style) => style.name);
+    const { marksStyles } = this.props;
+    const filteredMarksStyles = marksStyles.filter((l) => l.name !== '' && !l.labelOnly);
+    const names = filteredMarksStyles.map((style) => style.name);
 
     return {
       fill: {
@@ -198,7 +205,7 @@ class VegaTimeseriesPlot extends Component {
         type: 'nominal',
         scale: {
           domain: names,
-          range: marksStyles.map((style) => {
+          range: filteredMarksStyles.map((style) => {
             if (style.filled !== undefined && !style.filled) {
               return 'none';
             }
@@ -212,7 +219,7 @@ class VegaTimeseriesPlot extends Component {
         type: 'nominal',
         scale: {
           domain: names,
-          range: marksStyles.map((style) => style.shape ?? SHAPES[0]),
+          range: filteredMarksStyles.map((style) => style.shape ?? SHAPES[0]),
         },
         legend: null,
       },
@@ -221,7 +228,7 @@ class VegaTimeseriesPlot extends Component {
         type: 'nominal',
         scale: {
           domain: names,
-          range: marksStyles.map((style) => style.color ?? COLORS[0]),
+          range: filteredMarksStyles.map((style) => style.color ?? COLORS[0]),
         },
         legend: null,
       },
@@ -230,7 +237,7 @@ class VegaTimeseriesPlot extends Component {
         type: 'nominal',
         scale: {
           domain: names,
-          range: marksStyles.map((style) => style.color ?? COLORS[0]),
+          range: filteredMarksStyles.map((style) => style.color ?? COLORS[0]),
         },
         legend: null,
       },
@@ -239,7 +246,7 @@ class VegaTimeseriesPlot extends Component {
         type: 'nominal',
         scale: {
           domain: names,
-          range: marksStyles.map((style) => style.dash ?? DASHES[0]),
+          range: filteredMarksStyles.map((style) => style.dash ?? DASHES[0]),
         },
         legend: null,
       },
