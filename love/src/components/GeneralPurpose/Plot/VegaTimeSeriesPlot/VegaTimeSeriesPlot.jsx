@@ -17,12 +17,11 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { VegaLite } from 'react-vega';
 import isEqual from 'lodash/isEqual';
 import styles from './VegaTimeSeriesPlot.module.css';
 import PropTypes from 'prop-types';
-import { field } from 'vega';
 
 export const SHAPES = [
   'circle',
@@ -1488,10 +1487,6 @@ class VegaTimeseriesPlot extends Component {
     }
 
     if (updateSpec) {
-      this.updateSpec();
-    }
-
-    if (!isEqual(prevProps.layers, this.props.layers)) {
       this.updateSpec();
     }
   };
