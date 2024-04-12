@@ -1457,17 +1457,6 @@ class VegaTimeseriesPlot extends Component {
     this.updateSpec();
   };
 
-  shouldComponentUpdate = (prevProps, prevState) => {
-    if (this.props.width !== prevProps.width || this.props.height !== prevProps.height) {
-      return true;
-    }
-
-    if (this.props.units?.x !== prevProps.units?.x || this.props.units?.y !== prevProps.units?.y) {
-      return true;
-    }
-    return prevState !== this.state || JSON.stringify(this.props.layers) !== JSON.stringify(prevProps.layers);
-  };
-
   componentDidUpdate = (prevProps) => {
     let updateSpec = false;
     if (
