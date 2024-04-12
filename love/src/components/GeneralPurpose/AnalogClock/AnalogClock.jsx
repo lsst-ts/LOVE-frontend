@@ -17,24 +17,10 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AnalogClock.module.css';
-import { DateTime } from 'luxon';
 import { parseTimestamp } from '../../../Utils';
-
-/**
- * Component that displays time and optionally the date below
- */
-AnalogClock.propTypes = {
-  /** Date-able object or float, if float it must be in milliseconds */
-  timestamp: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-};
-
-AnalogClock.defaultProps = {
-  timestamp: DateTime.local(),
-  showDate: true,
-};
 
 const renderMarkers = () => {
   const markers = [];
@@ -81,7 +67,7 @@ const renderMarkers = () => {
   return markers;
 };
 
-export default function AnalogClock({ timestamp }) {
+const AnalogClock = memo(function AnalogClock({ timestamp }) {
   const t = parseTimestamp(timestamp);
   const markers = renderMarkers();
   const second = t.second;
@@ -117,4 +103,14 @@ export default function AnalogClock({ timestamp }) {
       </g>
     </svg>
   );
-}
+});
+
+/**
+ * Component that displays time and optionally the date below
+ */
+AnalogClock.propTypes = {
+  /** Date-able object or float, if float it must be in milliseconds */
+  timestamp: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+};
+
+export default AnalogClock;
