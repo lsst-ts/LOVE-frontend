@@ -5,6 +5,7 @@ Version History
 v5.30.2
 -------
 
+* Remove unused heartbeats subscription on TMA, M2 and M2Table `<https://github.com/lsst-ts/LOVE-frontend/pull/633>`_
 * Memoize DigitalClock and AnalogClock components `<https://github.com/lsst-ts/LOVE-frontend/pull/632>`_
 
 v5.30.1
