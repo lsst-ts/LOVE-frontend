@@ -92,33 +92,6 @@ export const schema = {
       description: 'list of inputs',
       isPrivate: false,
       default: {
-        'Total cloud cover': {
-          type: 'line',
-          color: '#ff7f0e',
-          shape: 'circle',
-          filled: false,
-          dash: [4, 0],
-          values: [
-            {
-              variable: 'x',
-              category: 'telemetry',
-              csc: 'WeatherForecast',
-              salindex: 0,
-              topic: 'dailyTrend',
-              item: 'timestamp',
-              accessor: '(x) => x',
-            },
-            {
-              variable: 'y',
-              category: 'telemetry',
-              csc: 'WeatherForecast',
-              salindex: 0,
-              topic: 'dailyTrend',
-              item: 'totalCloudCoverMean',
-              accessor: '(x) => x',
-            },
-          ],
-        },
         'Total cloud cover spread': {
           type: 'spread',
           color: '#ff7f0e',
@@ -159,6 +132,7 @@ export const schema = {
           type: 'area',
           color: '#ff5f0e',
           dash: [8, 4],
+          orient: 'right',
           values: [
             {
               variable: 'x',

@@ -95,6 +95,8 @@ export const schema = {
           shape: 'circle',
           filled: false,
           dash: [8, 4],
+          orient: 'right',
+          offset: 45,
           values: [
             {
               variable: 'x',
@@ -131,6 +133,7 @@ export const schema = {
           shape: 'circle',
           filled: false,
           dash: [4, 0],
+          orient: 'left',
           values: [
             {
               variable: 'x',
@@ -167,6 +170,7 @@ export const schema = {
           shape: 'circle',
           filled: false,
           dash: [4, 0],
+          hideAxis: true,
           values: [
             {
               variable: 'x',
@@ -203,6 +207,7 @@ export const schema = {
           shape: 'circle',
           filled: false,
           dash: [4, 0],
+          orient: 'right',
           values: [
             {
               variable: 'x',

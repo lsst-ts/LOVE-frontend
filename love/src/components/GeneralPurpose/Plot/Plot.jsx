@@ -490,7 +490,9 @@ export default class Plot extends Component {
         ...(inputs[input].dash !== undefined ? { dash: inputs[input].dash } : {}),
         ...(inputs[input].shape !== undefined ? { shape: inputs[input].shape } : {}),
         ...(inputs[input].filled !== undefined ? { filled: inputs[input].filled } : {}),
-        ...(inputs[input].orient !== undefined ? { orient: inputs[input].orient } : { orient: 'right' }),
+        ...(inputs[input].orient !== undefined ? { orient: inputs[input].orient } : { orient: 'left' }),
+        ...(inputs[input].hideAxis !== undefined ? { hideAxis: inputs[input].hideAxis } : { hideAxis: false }),
+        ...(inputs[input].offset !== undefined ? { offset: inputs[input].offset } : { offset: 0 }),
       };
     });
 
