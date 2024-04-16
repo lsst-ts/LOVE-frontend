@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.30.2
+-------
+
+* Memoize DigitalClock and AnalogClock components `<https://github.com/lsst-ts/LOVE-frontend/pull/632>`_
+
 v5.30.1
 -------
 

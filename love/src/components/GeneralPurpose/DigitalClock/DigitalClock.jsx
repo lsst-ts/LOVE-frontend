@@ -17,28 +17,15 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 import styles from './DigitalClock.module.css';
-import { DateTime } from 'luxon';
 import { parseTimestamp } from '../../../Utils';
 
 /**
  * Component that displays time and optionally the date below
  */
-DigitalClock.propTypes = {
-  /** Date-able object or float, if float it must be in milliseconds */
-  timestamp: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-  /** Flag to hide or not the date, false by default */
-  hideDate: PropTypes.bool,
-};
-
-DigitalClock.defaultProps = {
-  timestamp: DateTime.local(),
-  hideDate: false,
-};
-
-export default function DigitalClock({ timestamp, hideDate }) {
+const DigitalClock = memo(function DigitalClock({ timestamp, hideDate }) {
   const t = timestamp === 0 ? 0 : parseTimestamp(timestamp);
   return (
     <div className={styles.container}>
@@ -46,4 +33,13 @@ export default function DigitalClock({ timestamp, hideDate }) {
       {!hideDate && <div className={styles.date}>{t ? t.toFormat('EEE, MMM dd yyyy') : '---'}</div>}
     </div>
   );
-}
+});
+
+DigitalClock.propTypes = {
+  /** Date-able object or float, if float it must be in milliseconds */
+  timestamp: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+  /** Flag to hide or not the date, false by default */
+  hideDate: PropTypes.bool,
+};
+
+export default DigitalClock;
