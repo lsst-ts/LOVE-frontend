@@ -77,7 +77,6 @@ const azimuthPlotInputs = {
     type: 'line',
     color: 'hsl(201, 70%, 40%)',
     dash: [4, 0],
-    orient: 'left',
     values: [
       {
         variable: 'y',
@@ -94,7 +93,6 @@ const azimuthPlotInputs = {
     type: 'line',
     color: 'hsl(201, 70%, 40%)',
     dash: [4, 1],
-    orient: 'left',
     values: [
       {
         variable: 'y',
@@ -111,7 +109,6 @@ const azimuthPlotInputs = {
     type: 'line',
     color: 'hsl(160, 70%, 40%)',
     dash: [4, 0],
-    orient: 'right',
     values: [
       {
         variable: 'y',
@@ -128,7 +125,6 @@ const azimuthPlotInputs = {
     type: 'line',
     color: 'hsl(160, 70%, 40%)',
     dash: [4, 1],
-    orient: 'right',
     values: [
       {
         variable: 'y',
@@ -148,7 +144,6 @@ const elevationPlotInputs = {
     type: 'line',
     color: 'hsl(201, 70%, 40%)',
     dash: [4, 0],
-    orient: 'left',
     values: [
       {
         variable: 'y',
@@ -165,7 +160,6 @@ const elevationPlotInputs = {
     type: 'line',
     color: 'white',
     dash: [4, 1],
-    orient: 'right',
     values: [
       {
         variable: 'y',

@@ -116,48 +116,13 @@ export const schema = {
             },
           ],
         },
-        'Temperature Spread': {
-          type: 'spread',
-          color: '#ff7bb5',
-          shape: 'circle',
-          filled: false,
-          dash: [4, 0],
-          values: [
-            {
-              variable: 'x',
-              category: 'telemetry',
-              csc: 'WeatherForecast',
-              salindex: 0,
-              topic: 'dailyTrend',
-              item: 'timestamp',
-              accessor: '(x) => x',
-            },
-            {
-              variable: 'base',
-              category: 'telemetry',
-              csc: 'WeatherForecast',
-              salindex: 0,
-              topic: 'dailyTrend',
-              item: 'temperatureMean',
-              accessor: '(x) => x',
-            },
-            {
-              variable: 'delta',
-              category: 'telemetry',
-              csc: 'WeatherForecast',
-              salindex: 0,
-              topic: 'dailyTrend',
-              item: 'temperatureSpread',
-              accessor: '(x) => x',
-            },
-          ],
-        },
         'Temperature Min/Max': {
           type: 'area',
           color: '#ff7bb5',
           shape: 'circle',
           filled: false,
           dash: [8, 4],
+          orient: 'right',
           values: [
             {
               variable: 'x',
@@ -194,6 +159,7 @@ export const schema = {
           shape: 'circle',
           filled: false,
           dash: [4, 0],
+          offset: 100,
           values: [
             {
               variable: 'x',
@@ -221,6 +187,8 @@ export const schema = {
           shape: 'circle',
           filled: false,
           dash: [4, 2],
+          orient: 'right',
+          offset: 45,
           values: [
             {
               variable: 'x',

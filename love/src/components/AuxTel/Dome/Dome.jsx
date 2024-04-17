@@ -75,11 +75,6 @@ export default class Dome extends Component {
     'Mount elevation': {
       type: 'line',
       color: 'hsl(201, 70%, 40%)',
-      orient: 'left',
-      scaleDomain: {
-        domainMax: 200,
-        domainMin: 100,
-      },
       values: [
         {
           variable: 'y',
@@ -96,7 +91,6 @@ export default class Dome extends Component {
       type: 'line',
       color: 'white',
       dash: [4, 1],
-      orient: 'right',
       values: [
         {
           variable: 'y',
@@ -116,7 +110,6 @@ export default class Dome extends Component {
       type: 'line',
       color: 'hsl(201, 70%, 40%)',
       dash: [4, 0],
-      orient: 'left',
       values: [
         {
           variable: 'y',
@@ -133,7 +126,6 @@ export default class Dome extends Component {
       type: 'line',
       color: 'hsl(201, 70%, 40%)',
       dash: [4, 1],
-      orient: 'left',
       values: [
         {
           variable: 'y',
@@ -150,7 +142,6 @@ export default class Dome extends Component {
       type: 'line',
       color: 'hsl(160, 70%, 40%)',
       dash: [4, 0],
-      orient: 'right',
       values: [
         {
           variable: 'y',
@@ -166,7 +157,6 @@ export default class Dome extends Component {
     'Mount Target': {
       type: 'line',
       color: 'hsl(160, 70%, 40%)',
-      orient: 'right',
       dash: [4, 1],
       values: [
         {
@@ -260,6 +250,7 @@ export default class Dome extends Component {
       domainMax: 360,
       domainMin: 0,
     };
+
     const elScaleDomain = {
       domainMax: 90,
       domainMin: 0,
@@ -270,6 +261,7 @@ export default class Dome extends Component {
       isLive: this.state.isLive,
       historicalData: this.state.historicalData,
     };
+
     return (
       <div className={styles.domeContainer}>
         <div className={styles.topRow}>
@@ -404,9 +396,7 @@ export default class Dome extends Component {
                 inputs={this.azimuthPlotInputs}
                 containerNode={this.azimuthPlotRef}
                 xAxisTitle="Time"
-                yAxisTitle="Azimuth"
                 timeSeriesControlsProps={timeSeriesControlsProps}
-                maxHeight={250}
                 scaleDomain={azScaleDomain}
               />
             </div>
@@ -421,7 +411,6 @@ export default class Dome extends Component {
                 xAxisTitle="Time"
                 yAxisTitle="Elevation"
                 timeSeriesControlsProps={timeSeriesControlsProps}
-                maxHeight={250}
                 scaleDomain={elScaleDomain}
               />
             </div>

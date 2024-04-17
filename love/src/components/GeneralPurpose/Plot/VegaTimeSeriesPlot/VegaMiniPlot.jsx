@@ -17,13 +17,13 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
+import { PureComponent } from 'react';
 import { VegaLite } from 'react-vega';
 import PropTypes from 'prop-types';
 
 import { SHAPES, COLORS, DASHES } from './VegaTimeSeriesPlot';
 
-class VegaLegendMiniPlot extends React.PureComponent {
+class VegaLegendMiniPlot extends PureComponent {
   static defaultProps = {
     shape: SHAPES[0],
     filled: true,
@@ -813,6 +813,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
       ...rectSpec,
       ...heatmapSpec,
     };
+    console.log('Render VegaLegendMiniPlot');
 
     return (
       <VegaLite
