@@ -19,6 +19,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import { Component } from 'react';
 import { VegaLite } from 'react-vega';
+import { isEqual } from 'lodash';
 import styles from './VegaTimeSeriesPlot.module.css';
 import PropTypes from 'prop-types';
 
@@ -185,6 +186,7 @@ class VegaTimeseriesPlot extends Component {
     width: 400,
     height: 240,
     layers: {},
+    marksStyles: [],
     xAxisTitle: 'time',
     temporalXAxis: true,
     temporalXAxisFormat: '%H:%M:%S',
@@ -1273,6 +1275,45 @@ class VegaTimeseriesPlot extends Component {
       },
     };
   };
+
+  /** We are explicitly defining the shouldComponentUpdate method to avoid unnecessary re-renders.
+   * This is because the VegaLite component is not a PureComponent and will re-render every time
+   * the parent component re-renders, even if the props have not changed.
+   * This method will compare the props that are relevant to the plot and return true if they have changed.
+   * The layers prop is compared using the isEqual function from lodash to compare the content of the object because
+   * the VegaLite component will re-render if the object reference changes, which happens every time the parent component re-renders.
+   * @param {object} nextProps - The next props object.
+   * @returns {boolean} - Whether the component should update or not.
+   */
+  shouldComponentUpdate(nextProps) {
+    const {
+      className,
+      width,
+      height,
+      layers,
+      marksStyles,
+      xAxisTitle,
+      temporalXAxis,
+      temporalXAxisFormat,
+      scaleIndependent,
+      scaleDomain,
+    } = this.props;
+    if (
+      className !== nextProps.className ||
+      width !== nextProps.width ||
+      height !== nextProps.height ||
+      !isEqual(layers, nextProps.layers) ||
+      !isEqual(marksStyles, nextProps.marksStyles) ||
+      xAxisTitle !== nextProps.xAxisTitle ||
+      temporalXAxis !== nextProps.temporalXAxis ||
+      temporalXAxisFormat !== nextProps.temporalXAxisFormat ||
+      scaleIndependent !== nextProps.scaleIndependent ||
+      !isEqual(scaleDomain, nextProps.scaleDomain)
+    ) {
+      return true;
+    }
+    return false;
+  }
 
   render() {
     const { layers, className } = this.props;
