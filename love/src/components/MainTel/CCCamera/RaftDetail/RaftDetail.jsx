@@ -36,96 +36,134 @@ class RaftDetail extends Component {
     const plotsRebs0 = [
       {
         hVBiasSwitch: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'hVBiasSwitch',
           type: 'line',
-          accessor: (x) => x[0],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Reb',
+              item: 'hVBiasSwitch',
+              accessor: (x) => x[0],
+            },
+          ],
         },
         anaV: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'anaV',
           type: 'line',
-          accessor: (x) => x[0],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Reb',
+              item: 'anaV',
+              accessor: (x) => x[0],
+            },
+          ],
         },
         power: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'power',
           type: 'line',
-          accessor: (x) => x[0],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Reb',
+              item: 'power',
+              accessor: (x) => x[0],
+            },
+          ],
         },
       },
     ];
     const plotsRebs1 = [
       {
         hVBiasSwitch: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'hVBiasSwitch',
           type: 'line',
-          accessor: (x) => x[1],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Reb',
+              item: 'hVBiasSwitch',
+              accessor: (x) => x[1],
+            },
+          ],
         },
         anaV: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'anaV',
           type: 'line',
-          accessor: (x) => x[1],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Reb',
+              item: 'anaV',
+              accessor: (x) => x[1],
+            },
+          ],
         },
         power: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'power',
           type: 'line',
-          accessor: (x) => x[1],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Reb',
+              item: 'power',
+              accessor: (x) => x[1],
+            },
+          ],
         },
       },
     ];
+
     const plotsRebs2 = [
       {
         hVBiasSwitch: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'hVBiasSwitch',
           type: 'line',
-          accessor: (x) => x[2],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Reb',
+              item: 'hVBiasSwitch',
+              accessor: (x) => x[2],
+            },
+          ],
         },
         anaV: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'anaV',
           type: 'line',
-          accessor: (x) => x[2],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Reb',
+              item: 'anaV',
+              accessor: (x) => x[2],
+            },
+          ],
         },
         power: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'power',
           type: 'line',
-          accessor: (x) => x[2],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Reb',
+              item: 'power',
+              accessor: (x) => x[2],
+            },
+          ],
         },
       },
     ];
+
     this.CCDsrefs = [
       React.createRef(),
       React.createRef(),
@@ -152,13 +190,17 @@ class RaftDetail extends Component {
       const ccdIndex = c.id - 1;
       plots.push({
         [`CCD${c.id}`]: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Ccd',
-          item: selectedCCDVar,
           type: 'line',
-          accessor: (x) => x[ccdIndex],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Ccd',
+              item: selectedCCDVar,
+              accessor: (x) => x[ccdIndex],
+            },
+          ],
         },
       });
     });
