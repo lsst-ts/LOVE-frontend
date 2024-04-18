@@ -5,6 +5,7 @@ Version History
 v5.30.2
 -------
 
+* Adjustments for ComCam and MTCamera component `<https://github.com/lsst-ts/LOVE-frontend/pull/635>`_
 * Refactor Plot components `<https://github.com/lsst-ts/LOVE-frontend/pull/634>`_
 * Remove unused heartbeats subscription on TMA, M2 and M2Table `<https://github.com/lsst-ts/LOVE-frontend/pull/633>`_
 * Memoize DigitalClock and AnalogClock components `<https://github.com/lsst-ts/LOVE-frontend/pull/632>`_

@@ -69,6 +69,14 @@ export default class CCCamera extends Component {
     ccCameraFilterChangerDetailedState: PropTypes.number,
     /** Enumeration of valid substates */
     ccCameraRaftsDetailedState: PropTypes.number,
+    /** Start integration data */
+    startIntegration: PropTypes.object,
+    /** Start readout data */
+    startReadout: PropTypes.object,
+    /** End readout data */
+    endReadout: PropTypes.object,
+    /** End of image telemetry data */
+    endOfImageTelemetry: PropTypes.object,
   };
 
   static defaultProps = {
@@ -80,6 +88,10 @@ export default class CCCamera extends Component {
     ccCameraShutterDetailedState: 0,
     ccCameraFilterChangerDetailedState: 0,
     ccCameraRaftsDetailedState: 0,
+    startIntegration: {},
+    startReadout: {},
+    endReadout: {},
+    endOfImageTelemetry: {},
   };
 
   constructor(props) {
@@ -148,20 +160,20 @@ export default class CCCamera extends Component {
     }
 
     imageSequence.name = 'test';
-    imageSequence.imagesInSequence = stream.imagesInSequence.value;
-    imageSequence.images[stream.imageName.value] = {
+    imageSequence.imagesInSequence = stream.imagesInSequence;
+    imageSequence.images[stream.imageName] = {
       state: cameraState,
-      imageIndex: stream.imageIndex.value,
-      source: stream.imageSource.value,
-      controller: stream.imageController.value,
-      timeStamp: stream.timestampAcquisitionStart.value,
-      exposureTime: stream.exposureTime?.value ?? 0,
-      tag: stream.imageTag?.value ?? '-',
-      obsDate: stream.timestampDateObs?.value ?? '-',
-      endObsDate: stream.timestampDateEnd?.value ?? '-',
-      darkTime: stream.darkTime?.value ?? '-',
-      emulatedImage: stream.emulatedImage?.value ?? '-',
-      shutterOpenTime: stream.measuredShutterOpenTime?.value ?? '-',
+      imageIndex: stream.imageIndex,
+      source: stream.imageSource,
+      controller: stream.imageController,
+      timeStamp: stream.timestampAcquisitionStart,
+      exposureTime: stream.exposureTime ?? 0,
+      tag: stream.imageTag ?? '-',
+      obsDate: stream.timestampDateObs ?? '-',
+      endObsDate: stream.timestampDateEnd ?? '-',
+      darkTime: stream.darkTime ?? '-',
+      emulatedImage: stream.emulatedImage ?? '-',
+      shutterOpenTime: stream.measuredShutterOpenTime ?? '-',
     };
 
     this.setState({ imageSequence });

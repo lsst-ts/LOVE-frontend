@@ -1597,18 +1597,18 @@ export const getCCStartIntegration = (state) => {
   const subscriptions = ['event-CCCamera-0-startIntegration'];
   const startIntegrationData = getStreamsData(state, subscriptions);
   return {
-    imagesInSequenceInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imagesInSequence.value ?? 0,
-    imageNameInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageName.value ?? '',
-    imageIndexInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageIndex.value ?? 0,
-    imageSourceInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageSource.value ?? '',
-    imageControllerInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageController.value ?? '',
-    imageDateInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageDate.value ?? '',
-    imageNumberInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageNumber.value ?? 0,
-    timestampAcquisitionStartInt:
+    imagesInSequence: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imagesInSequence.value ?? 0,
+    imageName: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageName.value ?? '',
+    imageIndex: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageIndex.value ?? 0,
+    imageSource: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageSource.value ?? '',
+    imageController: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageController.value ?? '',
+    imageDate: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageDate.value ?? '',
+    imageNumber: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.imageNumber.value ?? 0,
+    timestampAcquisitionStart:
       startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.timestampAcquisitionStart.value ?? 0,
-    exposureTimeInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.exposureTime.value ?? '',
-    modeInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.mode.value ?? '',
-    timeoutInt: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.timeout.value ?? 0,
+    exposureTime: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.exposureTime.value ?? '',
+    mode: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.mode.value ?? '',
+    timeout: startIntegrationData['event-CCCamera-0-startIntegration']?.[0]?.timeout.value ?? 0,
   };
 };
 
