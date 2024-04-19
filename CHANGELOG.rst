@@ -5,6 +5,7 @@ Version History
 v5.30.2
 -------
 
+* Refactor the ExposureAdd component and fix issue with submit button being disabled `<https://github.com/lsst-ts/LOVE-frontend/pull/636>`_
 * Bump express from 4.18.2 to 4.19.2 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/625>`_
 * Bump webpack-dev-middleware from 5.3.3 to 5.3.4 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/620>`_
 * Bump follow-redirects from 1.15.5 to 1.15.6 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/615>`_
