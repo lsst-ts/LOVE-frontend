@@ -30,7 +30,6 @@ import RichTextEditor from 'components/GeneralPurpose/RichTextEditor/RichTextEdi
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
-import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import MultiFileUploader from 'components/GeneralPurpose/MultiFileUploader/MultiFileUploader';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
@@ -58,14 +57,6 @@ class ExposureAdd extends Component {
   };
 
   static defaultProps = {
-    exposure: {
-      obs_id: undefined,
-      instrument: undefined,
-      observation_type: undefined,
-      observation_reason: undefined,
-      timespan_begin: undefined,
-      timespan_end: undefined,
-    },
     newMessage: {
       obs_id: [],
       instrument: undefined,
@@ -118,6 +109,10 @@ class ExposureAdd extends Component {
     return exposureFlagStateToStyle[flag] ? exposureFlagStateToStyle[flag] : 'unknown';
   }
 
+  /**
+   * Resets the form by resetting the values of MultiSelect components and RichTextEditor component.
+   * Also sets the state of `newMessage` to the default value.
+   */
   cleanForm() {
     // Reset MultiSelect components value
     this.multiselectImageTagsComponentRef.current?.resetSelectedValues();
@@ -127,6 +122,46 @@ class ExposureAdd extends Component {
     this.setState({ newMessage: ExposureAdd.defaultProps.newMessage });
   }
 
+  /**
+   * Queries the exposure tags and updates the component state with the retrieved data.
+   */
+  queryExposureTags() {
+    ManagerInterface.getListImageTags().then((data) => {
+      this.setState({
+        imageTags: data.map((tag) => ({ name: tag.label, id: tag.key })),
+      });
+    });
+  }
+
+  /**
+   * Queries the exposure instruments and updates the component state with the retrieved data.
+   */
+  queryInstruments() {
+    ManagerInterface.getListExposureInstruments().then((data) => {
+      const registryMap = {};
+      Object.entries(data).forEach(([key, value]) => {
+        value.forEach((instrument) => {
+          if (!instrument) return;
+          registryMap[instrument] = key;
+        });
+      });
+
+      const instrumentsArray = Object.values(data)
+        .map((arr) => arr[0])
+        .filter((instrument) => instrument);
+
+      this.setState({
+        instruments: instrumentsArray,
+        selectedInstrument: instrumentsArray[0],
+        registryMap: registryMap,
+      });
+    });
+  }
+
+  /**
+   * Queries exposures based on selected instrument, start and end dates, and registry.
+   * Updates the component state with the retrieved data.
+   */
   queryExposures() {
     const { selectedInstrument, selectedDayExposureStart, selectedDayExposureEnd, registryMap } = this.state;
     const startObsDay = Moment(selectedDayExposureStart).format(ISO_INTEGER_DATE_FORMAT);
@@ -150,18 +185,13 @@ class ExposureAdd extends Component {
     });
   }
 
+  /**
+   * Saves the exposure log to the DB with the payload from the form.
+   */
   saveMessage() {
     const { exposure, isLogCreate, isMenu } = this.props;
     const payload = { ...this.state.newMessage };
     payload['request_type'] = 'exposure';
-
-    // If exposure is not empty, then we are adding a log
-    // to a specific exposure
-    if (exposure.obs_id) {
-      payload['obs_id'] = [exposure['obs_id']];
-      payload['instrument'] = exposure['instrument'];
-      payload['day_obs'] = exposure['day_obs'];
-    }
 
     if (payload['tags']) {
       payload['tags'] = payload['tags'].map((tag) => tag.id);
@@ -183,6 +213,9 @@ class ExposureAdd extends Component {
     });
   }
 
+  /**
+   * Deletes a message and updates the component state accordingly.
+   */
   deleteMessage() {
     const { newMessage } = this.state;
     if (newMessage?.id) {
@@ -298,7 +331,7 @@ class ExposureAdd extends Component {
         displayValue="name"
         onSelect={setNewMessageTags}
         onRemove={setNewMessageTags}
-        placeholder="Select one or several tags"
+        placeholder="Select zero or more tags"
         selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
       />
     );
@@ -449,57 +482,46 @@ class ExposureAdd extends Component {
   }
 
   componentDidMount() {
-    ManagerInterface.getListExposureInstruments().then((data) => {
-      const registryMap = {};
-      Object.entries(data).forEach(([key, value]) => {
-        value.forEach((instrument) => {
-          if (!instrument) return;
-          registryMap[instrument] = key;
-        });
-      });
-      const instrumentsArray = Object.values(data)
-        .map((arr) => arr[0])
-        .filter((instrument) => instrument);
-      this.setState({
-        instruments: instrumentsArray,
-        selectedInstrument: instrumentsArray[0],
-        registryMap: registryMap,
-      });
-    });
-    ManagerInterface.getListImageTags().then((data) => {
-      this.setState({
-        imageTags: data.map((tag) => ({ name: tag.label, id: tag.key })),
-      });
-    });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.selectedInstrument && prevState.selectedInstrument !== this.state.selectedInstrument) {
+    // If exposure is not empty, then we are adding a log
+    // to a specific exposure selected from the Exposure (parent) component
+    if (this.props.exposure) {
       this.setState((state) => ({
-        newMessage: { ...state.newMessage, instrument: state.selectedInstrument },
+        newMessage: {
+          ...state.newMessage,
+          obs_id: [this.props.exposure.obs_id],
+          instrument: this.props.exposure.instrument,
+        },
       }));
     }
 
-    if (
-      prevState.selectedInstrument !== this.state.selectedInstrument ||
-      (this.state.selectedDayExposureStart &&
-        !Moment(this.state.selectedDayExposureStart).isSame(prevState.selectedDayExposureStart)) ||
-      (this.state.selectedDayExposureEnd &&
-        !Moment(this.state.selectedDayExposureEnd).isSame(prevState.selectedDayExposureEnd))
-    ) {
-      this.setState(
-        {
+    this.queryInstruments();
+    this.queryExposureTags();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!this.props.exposure) {
+      // If exposure is empty, then we are setting the newMessage.instrument
+      // to the selectedInstrument in case it was changed
+      if (this.state.selectedInstrument && prevState.selectedInstrument !== this.state.selectedInstrument) {
+        this.setState((state) => ({
           observationIds: [],
-        },
-        () => {
-          this.queryExposures();
-        },
-      );
+          newMessage: { ...state.newMessage, instrument: this.state.selectedInstrument },
+        }));
+      }
+    }
+
+    // If the selected instrument, start or end date changes, then we query the exposures
+    if (
+      (this.state.selectedInstrument && prevState.selectedInstrument !== this.state.selectedInstrument) ||
+      this.state.selectedDayExposureStart !== prevState.selectedDayExposureStart ||
+      this.state.selectedDayExposureEnd !== prevState.selectedDayExposureEnd
+    ) {
+      this.queryExposures();
     }
 
     if (this.state.newMessage) {
       const { jira, jira_new, jira_issue_title, jira_issue_id } = this.state.newMessage;
-
+      // Check if the jira fields are filled correctly
       if (
         prevState.newMessage?.jira !== jira ||
         prevState.newMessage?.jira_new !== jira_new ||
@@ -562,8 +584,8 @@ class ExposureAdd extends Component {
                 <span className={styles.value}>{this.renderImageTagsSelect()}</span>
               </div>
             ) : (
-              <div className={[styles.header, !this.props.exposure.obs_id ? styles.inline : ''].join(' ')}>
-                {this.props.exposure.obs_id ? (
+              <div className={[styles.header, !this.props.exposure?.obs_id ? styles.inline : ''].join(' ')}>
+                {this.props.exposure?.obs_id ? (
                   <span>{this.props.exposure.obs_id}</span>
                 ) : (
                   <>
@@ -594,10 +616,10 @@ class ExposureAdd extends Component {
                         <DeleteIcon className={styles.icon} />
                       </Button>
                     </span>
-                    <span className={styles.floatRight}>[{this.props.exposure.observation_type}]</span>
+                    <span className={styles.floatRight}>[{this.props.exposure?.observation_type}]</span>
                   </>
                 ) : (
-                  this.props.exposure.observation_type && (
+                  this.props.exposure?.observation_type && (
                     <>
                       <span className={styles.floatRight}>
                         <Button
@@ -632,12 +654,6 @@ class ExposureAdd extends Component {
                 <span className={styles.title}>Message</span>
               </div>
 
-              {/* <TextArea
-                value={newMessage?.message_text}
-                callback={(event) =>
-                  this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, message_text: event } }))
-                }
-              /> */}
               <RichTextEditor
                 ref={this.richTextEditorRef}
                 className={styles.textArea}
