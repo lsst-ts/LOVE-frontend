@@ -110,8 +110,8 @@ class ExposureAdd extends Component {
   }
 
   /**
-   * Resets the form by resetting the values of MultiSelect components and RichTextEditor component.
-   * Also sets the state of `newMessage` to the default value.
+   * Reset the form by resetting the values of MultiSelect components and RichTextEditor component.
+   * Also set the state of `newMessage` to the default value.
    */
   cleanForm() {
     // Reset MultiSelect components value
@@ -123,7 +123,7 @@ class ExposureAdd extends Component {
   }
 
   /**
-   * Queries the exposure tags and updates the component state with the retrieved data.
+   * Query the exposure tags and updates the component state with the retrieved data.
    */
   queryExposureTags() {
     ManagerInterface.getListImageTags().then((data) => {
@@ -134,7 +134,7 @@ class ExposureAdd extends Component {
   }
 
   /**
-   * Queries the exposure instruments and updates the component state with the retrieved data.
+   * Query the exposure instruments and updates the component state with the retrieved data.
    */
   queryInstruments() {
     ManagerInterface.getListExposureInstruments().then((data) => {
@@ -159,8 +159,8 @@ class ExposureAdd extends Component {
   }
 
   /**
-   * Queries exposures based on selected instrument, start and end dates, and registry.
-   * Updates the component state with the retrieved data.
+   * Query exposures based on selected instrument, start and end dates, and registry.
+   * Update the component state with the retrieved data.
    */
   queryExposures() {
     const { selectedInstrument, selectedDayExposureStart, selectedDayExposureEnd, registryMap } = this.state;
@@ -186,7 +186,7 @@ class ExposureAdd extends Component {
   }
 
   /**
-   * Saves the exposure log to the DB with the payload from the form.
+   * Save the exposure log to the DB with the payload from the form.
    */
   saveMessage() {
     const { exposure, isLogCreate, isMenu } = this.props;
@@ -214,7 +214,7 @@ class ExposureAdd extends Component {
   }
 
   /**
-   * Deletes a message and updates the component state accordingly.
+   * Delete a message and updates the component state accordingly.
    */
   deleteMessage() {
     const { newMessage } = this.state;
@@ -482,7 +482,7 @@ class ExposureAdd extends Component {
   }
 
   componentDidMount() {
-    // If exposure is not empty, then we are adding a log
+    // If exposure is not empty, then add a log
     // to a specific exposure selected from the Exposure (parent) component
     if (this.props.exposure) {
       this.setState((state) => ({
@@ -500,7 +500,7 @@ class ExposureAdd extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (!this.props.exposure) {
-      // If exposure is empty, then we are setting the newMessage.instrument
+      // If exposure is empty, then set the newMessage.instrument
       // to the selectedInstrument in case it was changed
       if (this.state.selectedInstrument && prevState.selectedInstrument !== this.state.selectedInstrument) {
         this.setState((state) => ({
@@ -510,7 +510,7 @@ class ExposureAdd extends Component {
       }
     }
 
-    // If the selected instrument, start or end date changes, then we query the exposures
+    // If the selected instrument, start or end date changes, then query the exposures
     if (
       (this.state.selectedInstrument && prevState.selectedInstrument !== this.state.selectedInstrument) ||
       this.state.selectedDayExposureStart !== prevState.selectedDayExposureStart ||
