@@ -109,7 +109,7 @@ export default class Exposure extends Component {
       updatingExposures: false,
       updatingLogs: false,
       lastUpdated: null,
-      selected: {},
+      selected: null,
       selectedMessages: [],
       exposurelogs: [],
       exposureTypes: [],
