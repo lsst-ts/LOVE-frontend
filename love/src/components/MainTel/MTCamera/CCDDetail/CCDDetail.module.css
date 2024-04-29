@@ -29,7 +29,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   grid-template-rows: repeat(3, 200px);
   gap: 1em;
   overflow: hidden;
-  margin-left: 3em;
 }
 
 .plot {

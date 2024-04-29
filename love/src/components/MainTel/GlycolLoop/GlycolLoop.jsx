@@ -124,10 +124,8 @@ export default class GlycolLoop extends Component {
     'TS2-MC': {
       type: 'line',
       color: '#ff7bb5',
-      orient: 'left',
       values: [
         {
-          variable: 'y',
           category: 'telemetry',
           csc: 'MTM1M3TS',
           salindex: '0',
@@ -138,26 +136,34 @@ export default class GlycolLoop extends Component {
       ],
     },
     'TS3-MC': {
-      category: 'telemetry',
-      csc: 'MTM1M3TS',
-      salindex: '0',
-      topic: 'glycolLoopTemperature',
-      item: 'insideCellTemperature2',
       type: 'line',
-      accessor: (x) => x,
       color: '#97e54f',
       dash: [4, 1],
+      values: [
+        {
+          category: 'telemetry',
+          csc: 'MTM1M3TS',
+          salindex: '0',
+          topic: 'glycolLoopTemperature',
+          item: 'insideCellTemperature2',
+          accessor: (x) => x,
+        },
+      ],
     },
     'TS4-MC': {
-      category: 'telemetry',
-      csc: 'MTM1M3TS',
-      salindex: '0',
-      topic: 'glycolLoopTemperature',
-      item: 'insideCellTemperature3',
       type: 'line',
-      accessor: (x) => x,
       color: '#a9a5ff',
       dash: [4, 1],
+      values: [
+        {
+          category: 'telemetry',
+          csc: 'MTM1M3TS',
+          salindex: '0',
+          topic: 'glycolLoopTemperature',
+          item: 'insideCellTemperature3',
+          accessor: (x) => x,
+        },
+      ],
     },
   };
 
@@ -165,10 +171,8 @@ export default class GlycolLoop extends Component {
     'TS5-G': {
       type: 'line',
       color: '#ff7bb5',
-      orient: 'left',
       values: [
         {
-          variable: 'y',
           category: 'telemetry',
           csc: 'MTM1M3TS',
           salindex: '0',
@@ -181,11 +185,9 @@ export default class GlycolLoop extends Component {
     'TS6-G': {
       type: 'line',
       color: '#97e54f',
-      orient: 'left',
       dash: [4, 1],
       values: [
         {
-          variable: 'y',
           category: 'telemetry',
           csc: 'MTM1M3TS',
           salindex: '0',
@@ -196,25 +198,33 @@ export default class GlycolLoop extends Component {
       ],
     },
     'TS7-G': {
-      category: 'telemetry',
-      csc: 'MTM1M3TS',
-      salindex: 0,
-      topic: 'glycolLoopTemperature',
-      item: 'mirrorCoolantSupplyTemperature',
       type: 'line',
-      accessor: (x) => x,
       color: '#a9a5ff',
+      values: [
+        {
+          category: 'telemetry',
+          csc: 'MTM1M3TS',
+          salindex: 0,
+          topic: 'glycolLoopTemperature',
+          item: 'mirrorCoolantSupplyTemperature',
+          accessor: (x) => x,
+        },
+      ],
     },
     'TS8-G': {
-      category: 'telemetry',
-      csc: 'MTM1M3TS',
-      salindex: 0,
-      topic: 'glycolLoopTemperature',
-      item: 'mirrorCoolantReturnTemperature',
       type: 'line',
-      accessor: (x) => x,
       color: '#00b7ff',
       dash: [4, 1],
+      values: [
+        {
+          category: 'telemetry',
+          csc: 'MTM1M3TS',
+          salindex: 0,
+          topic: 'glycolLoopTemperature',
+          item: 'mirrorCoolantReturnTemperature',
+          accessor: (x) => x,
+        },
+      ],
     },
   };
 

@@ -17,12 +17,12 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
+import { memo } from 'react';
 import PropType from 'prop-types';
 import styles from './VegaLegend.module.css';
 import VegaMiniPlot from './VegaMiniPlot';
 
-const VegaLegend = function ({ gridData, marksStyles, listData }) {
+const VegaLegend = ({ gridData = [[]], marksStyles = [], listData = [] }) => {
   if (listData.length > 0) {
     return (
       <div className={styles.autoGrid}>
@@ -38,7 +38,7 @@ const VegaLegend = function ({ gridData, marksStyles, listData }) {
       </div>
     );
   }
-  // const nrows = gridData.length;
+
   const ncols = gridData.reduce((prevMax, row) => Math.max(row.length, prevMax), 0);
   const filledGridData = gridData.map((row) => {
     if (row.length === ncols) {
@@ -76,13 +76,10 @@ const VegaLegend = function ({ gridData, marksStyles, listData }) {
   );
 };
 
-VegaLegend.defaultProps = {
-  gridData: [[]],
-  listData: [],
-  marksStyles: [],
-};
-
 VegaLegend.propTypes = {
+  /** Data to be displayed in the legend
+   * if listData is not provided
+   */
   gridData: PropType.arrayOf(
     PropType.arrayOf(
       PropType.shape({
@@ -91,6 +88,16 @@ VegaLegend.propTypes = {
       }),
     ),
   ),
+  /** Styles for the marks */
+  marksStyles: PropType.arrayOf(
+    PropType.shape({
+      name: PropType.string,
+      label: PropType.node,
+      color: PropType.string,
+      markType: PropType.string,
+    }),
+  ),
+  /** Data to be displayed in the legend */
   listData: PropType.arrayOf(
     PropType.shape({
       name: PropType.string,
@@ -99,4 +106,4 @@ VegaLegend.propTypes = {
   ),
 };
 
-export default VegaLegend;
+export default memo(VegaLegend);

@@ -64,7 +64,6 @@ const mapDispatchToProps = (dispatch) => {
     'telemetry-MTM2-0-netMomentsTotal',
     'telemetry-MTM2-0-position',
     'telemetry-MTM2-0-positionIMS',
-    'event-Heartbeat-0-stream',
   ];
   return {
     subscriptions,

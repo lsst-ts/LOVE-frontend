@@ -30,102 +30,187 @@ const COLOR_MAPPING = {
   3: 'var(--status-alert-dimmed-color-3)',
 };
 
+function getRebPlots(index) {
+  return {
+    hVBiasSwitch: {
+      type: 'line',
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'CCCamera',
+          salindex: 0,
+          topic: 'focal_plane_Reb',
+          item: 'hVBiasSwitch',
+          accessor: (x) => x[index],
+        },
+      ],
+    },
+    anaV: {
+      type: 'line',
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'CCCamera',
+          salindex: 0,
+          topic: 'focal_plane_Reb',
+          item: 'anaV',
+          accessor: (x) => x[index],
+        },
+      ],
+    },
+    power: {
+      type: 'line',
+      values: [
+        {
+          variable: 'y',
+          category: 'telemetry',
+          csc: 'CCCamera',
+          salindex: 0,
+          topic: 'focal_plane_Reb',
+          item: 'power',
+          accessor: (x) => x[index],
+        },
+      ],
+    },
+  };
+}
+
 class RaftDetail extends Component {
   constructor(props) {
     super(props);
     const plotsRebs0 = [
       {
         hVBiasSwitch: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'hVBiasSwitch',
           type: 'line',
-          accessor: (x) => x[0],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Reb',
+              item: 'hVBiasSwitch',
+              accessor: (x) => x[0],
+            },
+          ],
         },
         anaV: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'anaV',
           type: 'line',
-          accessor: (x) => x[0],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Reb',
+              item: 'anaV',
+              accessor: (x) => x[0],
+            },
+          ],
         },
         power: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'power',
           type: 'line',
-          accessor: (x) => x[0],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Reb',
+              item: 'power',
+              accessor: (x) => x[0],
+            },
+          ],
         },
       },
     ];
     const plotsRebs1 = [
       {
         hVBiasSwitch: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'hVBiasSwitch',
           type: 'line',
-          accessor: (x) => x[1],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Reb',
+              item: 'hVBiasSwitch',
+              accessor: (x) => x[1],
+            },
+          ],
         },
         anaV: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'anaV',
           type: 'line',
-          accessor: (x) => x[1],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Reb',
+              item: 'anaV',
+              accessor: (x) => x[1],
+            },
+          ],
         },
         power: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'power',
           type: 'line',
-          accessor: (x) => x[1],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Reb',
+              item: 'power',
+              accessor: (x) => x[1],
+            },
+          ],
         },
       },
     ];
+
     const plotsRebs2 = [
       {
         hVBiasSwitch: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'hVBiasSwitch',
           type: 'line',
-          accessor: (x) => x[2],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Reb',
+              item: 'hVBiasSwitch',
+              accessor: (x) => x[2],
+            },
+          ],
         },
         anaV: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'anaV',
           type: 'line',
-          accessor: (x) => x[2],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Reb',
+              item: 'anaV',
+              accessor: (x) => x[2],
+            },
+          ],
         },
         power: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'power',
           type: 'line',
-          accessor: (x) => x[2],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Reb',
+              item: 'power',
+              accessor: (x) => x[2],
+            },
+          ],
         },
       },
     ];
+
     this.CCDsrefs = [
       React.createRef(),
       React.createRef(),
@@ -137,12 +222,17 @@ class RaftDetail extends Component {
       React.createRef(),
       React.createRef(),
     ];
-    this.rebsRefs = [React.createRef(), React.createRef(), React.createRef()];
-    this.state = {
-      plotsRebs0: plotsRebs0,
-      plotsRebs1: plotsRebs1,
-      plotsRebs2: plotsRebs2,
-    };
+    this.rebsRefs = [
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+    ];
   }
 
   renderCCDsPlots() {
@@ -152,13 +242,17 @@ class RaftDetail extends Component {
       const ccdIndex = c.id - 1;
       plots.push({
         [`CCD${c.id}`]: {
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Ccd',
-          item: selectedCCDVar,
           type: 'line',
-          accessor: (x) => x[ccdIndex],
+          values: [
+            {
+              category: 'telemetry',
+              csc: 'CCCamera',
+              salindex: 0,
+              topic: 'focal_plane_Ccd',
+              item: selectedCCDVar,
+              accessor: (x) => x[ccdIndex],
+            },
+          ],
         },
       });
     });
@@ -182,12 +276,12 @@ class RaftDetail extends Component {
           >
             <PlotContainer
               memorySize={50}
-              height={100}
-              width={300}
+              height={150}
+              width={180}
               inputs={p}
               xAxisTitle="Time"
               yAxisTitle={`${selectedCCDVar} - ${raft.ccds[i].id}`}
-              legendPosition="bottom"
+              legendPosition="right"
             />
           </div>
         ))}
@@ -196,56 +290,76 @@ class RaftDetail extends Component {
   }
 
   renderRebsPlots() {
+    const { raft } = this.props;
+    const plots = [];
+    raft.rebs?.forEach((r) => {
+      const rebIndex = r.id - 1;
+      plots.push(
+        {
+          [`REB${r.id}`]: {
+            type: 'line',
+            values: [
+              {
+                variable: 'y',
+                category: 'telemetry',
+                csc: 'CCCamera',
+                salindex: 0,
+                topic: 'focal_plane_Reb',
+                item: 'hVBiasSwitch',
+                accessor: (x) => x[rebIndex],
+              },
+            ],
+          },
+        },
+        {
+          [`REB${r.id}`]: {
+            type: 'line',
+            values: [
+              {
+                variable: 'y',
+                category: 'telemetry',
+                csc: 'CCCamera',
+                salindex: 0,
+                topic: 'focal_plane_Reb',
+                item: 'anaV',
+                accessor: (x) => x[rebIndex],
+              },
+            ],
+          },
+        },
+        {
+          [`REB${r.id}`]: {
+            type: 'line',
+            values: [
+              {
+                variable: 'y',
+                category: 'telemetry',
+                csc: 'CCCamera',
+                salindex: 0,
+                topic: 'focal_plane_Reb',
+                item: 'power',
+                accessor: (x) => x[rebIndex],
+              },
+            ],
+          },
+        },
+      );
+    });
+
     return (
-      <div className={styles.divContainerRebsPlot}>
-        <div className={styles.plotsContainerRebs}>
-          {this.state.plotsRebs0.map((p, i) => (
-            <div key={p} ref={this.rebsRefs[i]} className={styles.plotRebs}>
-              <PlotContainer
-                memorySize={50}
-                height={350}
-                width={500}
-                inputs={p}
-                xAxisTitle="Time"
-                yAxisTitle=""
-                legendPosition="right"
-              />
-            </div>
-          ))}
-          <div>REB1</div>
-        </div>
-        <div className={styles.plotsContainerRebs}>
-          {this.state.plotsRebs1.map((p, i) => (
-            <div key={p} ref={this.rebsRefs[i]} className={styles.plotRebs}>
-              <PlotContainer
-                memorySize={50}
-                height={350}
-                width={500}
-                inputs={p}
-                xAxisTitle="Time"
-                yAxisTitle=""
-                legendPosition="right"
-              />
-            </div>
-          ))}
-          <div>REB2</div>
-        </div>
-        <div className={styles.plotsContainerRebs}>
-          {this.state.plotsRebs2.map((p, i) => (
-            <div key={p} ref={this.rebsRefs[i]} className={styles.plotRebs}>
-              <PlotContainer
-                memorySize={50}
-                height={350}
-                width={500}
-                inputs={p}
-                xAxisTitle="Time"
-                yAxisTitle=""
-                legendPosition="right"
-              />
-            </div>
-          ))}
-          <div>REB3</div>
-        </div>
+      <div className={styles.rebsContainer}>
+        {plots.map((p, i) => (
+          <div key={`r${i}`} ref={this.rebsRefs[i]} className={styles.plot}>
+            <PlotContainer
+              memorySize={50}
+              height={150}
+              width={180}
+              inputs={p}
+              xAxisTitle="Time"
+              legendPosition="right"
+            />
+          </div>
+        ))}
       </div>
     );
   }
@@ -272,7 +386,9 @@ class RaftDetail extends Component {
       </div>
     ) : (
       <div className={styles.container}>
+        <h1>CCDs</h1>
         {this.renderCCDsPlots()}
+        <h1>Rebs</h1>
         {this.renderRebsPlots()}
       </div>
     );

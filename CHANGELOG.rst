@@ -2,6 +2,20 @@
 Version History
 ===============
 
+v5.30.2
+-------
+
+* Update package.json version to v5.30.2 `<https://github.com/lsst-ts/LOVE-frontend/pull/637>`_
+* Refactor the ExposureAdd component and fix issue with submit button being disabled `<https://github.com/lsst-ts/LOVE-frontend/pull/636>`_
+* Bump express from 4.18.2 to 4.19.2 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/625>`_
+* Bump webpack-dev-middleware from 5.3.3 to 5.3.4 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/620>`_
+* Bump follow-redirects from 1.15.5 to 1.15.6 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/615>`_
+* Bump es5-ext from 0.10.62 to 0.10.64 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/611>`_
+* Adjustments for ComCam and MTCamera component `<https://github.com/lsst-ts/LOVE-frontend/pull/635>`_
+* Refactor Plot components `<https://github.com/lsst-ts/LOVE-frontend/pull/634>`_
+* Remove unused heartbeats subscription on TMA, M2 and M2Table `<https://github.com/lsst-ts/LOVE-frontend/pull/633>`_
+* Memoize DigitalClock and AnalogClock components `<https://github.com/lsst-ts/LOVE-frontend/pull/632>`_
+
 v5.30.1
 -------
 
