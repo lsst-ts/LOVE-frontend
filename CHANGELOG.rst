@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v5.30.3
+-------
+
+* Refactor ScriptQueueState payload into several `<https://github.com/lsst-ts/LOVE-frontend/pull/639>`_
+
 v5.30.2
 -------
 
