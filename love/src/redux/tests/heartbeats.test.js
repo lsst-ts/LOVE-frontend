@@ -30,7 +30,7 @@ import {
   getCSCHeartbeats,
   getCSCHeartbeat,
 } from '../selectors';
-import * as mockData from './mock';
+import { ScriptsStateData } from './mock';
 import { HEARTBEAT_COMPONENTS } from '../../Config';
 
 let store;
@@ -251,7 +251,7 @@ it(`GIVEN 3 script heartbeats in the State,
 
   let expectedState = [];
   // Act:
-  server.send(mockData.ScriptQueueData);
+  server.send(ScriptsStateData);
   // Assert:
   expectedState = [mockHeartbeats[0], mockHeartbeats[2]];
   const heartbeatsState = getScriptHeartbeats(store.getState(), 1);
