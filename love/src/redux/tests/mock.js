@@ -17,18 +17,47 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-export const ScriptQueueData = {
+export const ScriptQueueStateData = {
   category: 'event',
   data: [
     {
       csc: 'ScriptQueueState',
       salindex: 1,
       data: {
-        stream: {
-          max_lost_heartbeats: 5,
-          heartbeat_timeout: 15,
+        stateStream: {
+          // max_lost_heartbeats: 5,
+          // heartbeat_timeout: 15,
+          enabled: true,
+          running: true,
+        },
+      },
+    },
+  ],
+};
+
+export const AvailableScriptsStateData = {
+  category: 'event',
+  data: [
+    {
+      csc: 'ScriptQueueState',
+      salindex: 1,
+      data: {
+        availableScriptsStream: {
           available_scripts: [],
-          state: 'Running',
+        },
+      },
+    },
+  ],
+};
+
+export const ScriptsStateData = {
+  category: 'event',
+  data: [
+    {
+      csc: 'ScriptQueueState',
+      salindex: 1,
+      data: {
+        scriptsStream: {
           finished_scripts: [
             {
               index: 100001,
@@ -67,23 +96,25 @@ export const ScriptQueueData = {
               timestampRunStart: 0.0,
             },
           ],
-          current: {
-            index: 100000,
-            script_state: 'RUNNING',
-            process_state: 'RUNNING',
-            elapsed_time: 0,
-            expected_duration: 3600.0,
-            type: 'standard',
-            path: 'script1',
-            lost_heartbeats: 0,
-            setup: true,
-            last_heartbeat_timestamp: 1562278041.481556,
-            timestampConfigureEnd: 1562275970.2090635,
-            timestampConfigureStart: 1562275970.099327,
-            timestampProcessEnd: 0.0,
-            timestampProcessStart: 1562275966.864108,
-            timestampRunStart: 1562275970.2094963,
-          },
+          current_scripts: [
+            {
+              index: 100000,
+              script_state: 'RUNNING',
+              process_state: 'RUNNING',
+              elapsed_time: 0,
+              expected_duration: 3600.0,
+              type: 'standard',
+              path: 'script1',
+              lost_heartbeats: 0,
+              setup: true,
+              last_heartbeat_timestamp: 1562278041.481556,
+              timestampConfigureEnd: 1562275970.2090635,
+              timestampConfigureStart: 1562275970.099327,
+              timestampProcessEnd: 0.0,
+              timestampProcessStart: 1562275966.864108,
+              timestampRunStart: 1562275970.2094963,
+            },
+          ],
         },
       },
     },

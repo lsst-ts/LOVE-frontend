@@ -121,7 +121,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const subscriptions = [
-    `event-ScriptQueueState-${ownProps.salindex}-stream`,
+    `event-ScriptQueueState-${ownProps.salindex}-stateStream`,
+    `event-ScriptQueueState-${ownProps.salindex}-scriptsStream`,
+    `event-ScriptQueueState-${ownProps.salindex}-availableScriptsStream`,
     `event-ScriptQueue-${ownProps.salindex}-summaryState`,
     `event-ScriptHeartbeats-${ownProps.salindex}-stream`,
     `event-ScriptQueue-${ownProps.salindex}-authList`,
