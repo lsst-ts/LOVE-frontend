@@ -30,11 +30,8 @@ import LoginContainer from './components/Login/Login.container';
 import PrivateRoute from './components/GeneralPurpose/PrivateRoute/PrivateRoute';
 import ScriptQueueContainer from './components/ScriptQueue/ScriptQueue.container';
 import Panel from './components/GeneralPurpose/Panel/Panel';
-
 import TelemetryLogContainer from './components/TelemetryLog/TelemetryLog.container';
 import CSCSummaryContainer from './components/CSCSummary/CSCSummary.container';
-import UserAuthListContainer from './components/AuthList/UserAuthList/UserAuthList.container';
-import AdminAuthListContainer from './components/AuthList/AdminAuthList/AdminAuthList.container';
 import AuxTel from './components/AuxTel/AuxTel';
 import CameraContainer from './components/AuxTel/Camera/Camera.container';
 import DomeContainer from './components/AuxTel/Dome/Dome.container';
@@ -110,12 +107,6 @@ class App extends Component {
               path="/csc-summary"
               render={() => <CSCSummaryContainer expandHeight />}
             />
-            <PrivateRoute
-              token={this.props.token}
-              path="/auth-list"
-              render={() => <UserAuthListContainer expandHeight />}
-            />
-            <PrivateRoute token={this.props.token} path="/auth-list-admin" render={() => <AdminAuthListContainer />} />
             <PrivateRoute token={this.props.token} path="/aux-tel" component={AuxTel} />
             <PrivateRoute token={this.props.token} path="/auxiliary-telescope" component={AuxTel} />
             <PrivateRoute token={this.props.token} path="/aux-tel-camera" render={() => <CameraContainer />} />
