@@ -57,8 +57,6 @@ export const getClock = (state) => ({ ...state.time.clock });
 
 export const getPermCmdExec = (state) => state.auth.permissions.cmd_exec;
 
-export const getPermAuthlistAdministrator = (state) => state.auth.permissions.authlist_admin;
-
 export const getTokenStatus = (state) => state.auth.status;
 
 export const getTokenSwapStatus = (state) => state.auth.swapStatus;
@@ -2443,11 +2441,6 @@ export const getDMFlowState = (state) => {
     oodsState: 0,
     usdfState: 0,
   };
-};
-
-export const getAuthlistState = (state, subscriptions) => {
-  const authlistData = getStreamsData(state, subscriptions);
-  return authlistData;
 };
 
 export const getKey = (dict, key, def) => {

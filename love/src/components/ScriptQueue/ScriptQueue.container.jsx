@@ -27,7 +27,6 @@ import {
   getPermCmdExec,
   getLastSALCommand,
   getUsername,
-  getAuthlistState,
   getEfdConfig,
 } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
@@ -66,7 +65,6 @@ const ScriptQueueContainer = ({
   salindex,
   fit,
   embedded,
-  authlist,
   efdConfig,
   ...props
 }) => {
@@ -92,7 +90,6 @@ const ScriptQueueContainer = ({
       fit={fit}
       embedded={embedded}
       running={queueState.running}
-      authlist={authlist}
       efdConfig={efdConfig}
     />
   );
@@ -105,7 +102,6 @@ const mapStateToProps = (state, ownProps) => {
   const commandExecutePermission = getPermCmdExec(state);
   const lastSALCommand = getLastSALCommand(state);
   const username = getUsername(state);
-  const authlist = getAuthlistState(state, [`event-ScriptQueue-${ownProps.salindex}-authList`]);
   const efdConfig = getEfdConfig(state);
   return {
     queueState,
@@ -114,7 +110,6 @@ const mapStateToProps = (state, ownProps) => {
     commandExecutePermission,
     lastSALCommand,
     username,
-    authlist,
     efdConfig,
   };
 };
@@ -126,7 +121,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     `event-ScriptQueueState-${ownProps.salindex}-availableScriptsStream`,
     `event-ScriptQueue-${ownProps.salindex}-summaryState`,
     `event-ScriptHeartbeats-${ownProps.salindex}-stream`,
-    `event-ScriptQueue-${ownProps.salindex}-authList`,
   ];
   return {
     subscriptions,
