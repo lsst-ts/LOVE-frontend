@@ -1,0 +1,231 @@
+.container {
+  height: 100%;
+  text-align: left;
+  color: var(--base-font-color);
+  --status-color: var(--base-font-color);
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: var(--small-padding);
+  margin-bottom: var(--small-padding);
+}
+
+.filters > span {
+  cursor: pointer;
+}
+
+.testPlayer {
+  height: calc(100% - 84px);
+  display: grid;
+  column-gap: var(--small-padding);
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: 100% 100%;
+}
+
+.testPlayer > .testCases,
+.testPlayer > .testExecution {
+  background-color: var(--second-quaternary-background-color);
+  overflow-y: scroll;
+}
+
+.testCases > .testCase {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--small-padding);
+  border-top: 1px solid var(--second-tertiary-background-color);
+  border-bottom: 1px solid var(--second-tertiary-background-color);
+  border-left: 4px solid var(--status-color);
+}
+
+.testCases > .testCase:hover {
+  background-color: var(--second-tertiary-background-color);
+}
+
+.testCaseAssignee {
+  border-radius: 50%;
+  background-color: orange;
+  color: black;
+  padding: 0.5em;
+  width: 20px;
+  height: 20px;
+}
+
+.testCases > .testCase.passed,
+.statusLabel.passed {
+  --status-color: green;
+}
+
+.testCases > .testCase.failed,
+.statusLabel.failed {
+  --status-color: red;
+}
+
+.testExecution .testCaseDetails {
+  padding: var(--small-padding) var(--content-padding);
+}
+
+.testExecution .testCaseDetails .testCaseHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--content-padding);
+}
+
+.testExecution .testCaseDetails .testCaseHeader .testCaseTitle {
+  flex-grow: 1;
+  margin-right: var(--content-padding);
+}
+
+.testExecution .testCaseDetails .testCaseHeader .testCaseTitle > :first-child {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.testExecution .testCaseDetails .testCaseHeader .testCaseStatus {
+  display: flex;
+  align-items: self-start;
+  gap: var(--small-padding);
+}
+
+.testCaseExecutedTime {
+  background-color: var(--second-senary-background-dimmed-color);
+  padding: 0.5em;
+}
+
+.testCaseSectionTitle,
+.testCycleSectionTitle {
+  font-size: 1em;
+  font-weight: bold;
+  border-bottom: 1px solid var(--second-tertiary-background-color);
+  margin-bottom: var(--small-padding);
+}
+
+.testCaseSectionTitle + div,
+.testCycleSectionTitle + div {
+  margin-bottom: var(--content-padding);
+}
+
+.testCaseExecution {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.testCaseExecutionField {
+  display: flex;
+  align-items: center;
+  width: 50%;
+}
+
+.testCaseExecutionField > :first-child {
+  width: 10em;
+}
+
+.testCaseExecutionField > :nth-child(2) {
+  flex-grow: 1;
+}
+
+.testCaseStep {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: var(--small-padding) var(--content-padding);
+  background-color: var(--quaternary-background-color);
+  margin-bottom: var(--content-padding);
+  border-left: 4px solid var(--status-color);
+  border-top-left-radius: 0.5em;
+  border-bottom-left-radius: 0.5em;
+}
+
+.stepNumber {
+  font-size: 3em;
+  width: 1em;
+  text-align: center;
+}
+
+.stepFields {
+  padding-left: var(--small-padding);
+}
+
+.stepFields .fontHighligthed {
+  font-size: 1.2em;
+}
+
+.stepStatus {
+  position: absolute;
+  top: var(--small-padding);
+  right: var(--content-padding);
+}
+
+.stepField {
+  margin-bottom: var(--small-padding);
+}
+
+.statusLabel {
+  font-weight: bold;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  background-color: var(--status-color);
+}
+
+.fontHighligthed {
+  font-weight: bold;
+  color: var(--highlighted-font-color);
+}
+
+.testCycleDetailsContainer {
+  padding: var(--small-padding) var(--content-padding);
+  margin-bottom: var(--small-padding);
+  background-color: var(--second-quaternary-background-color);
+}
+
+.testCycleDetailsContainer > .testCycleHeader:has(~ .testCycleDetails:not(.hideDetails)) {
+  margin-bottom: var(--small-padding);
+}
+
+.testCycleDetailsContainer > .testCycleHeader > .testCycleTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.testCycleDetailsFields {
+  display: flex;
+  justify-content: space-between;
+}
+
+.testCycleDetailsShowBtn {
+  /* float: right; */
+  cursor: pointer;
+}
+
+.testCycleDetailsShowBtn.hideDetails {
+  transform: rotate(180deg);
+}
+
+.testCycleMainDetails {
+  margin-bottom: var(--content-padding);
+}
+
+.testCycleDetails.hideDetails {
+  display: none;
+}
+
+.testCycleExtraFields {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.testCycleExtraFields > .testCycleField {
+  display: flex;
+  align-items: center;
+  width: 50%;
+}
+
+.testCycleExtraFields > .testCycleField > :first-child {
+  width: 20em;
+}
