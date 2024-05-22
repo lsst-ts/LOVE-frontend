@@ -372,6 +372,16 @@ export const observatoryIndex = {
       },
     },
   },
+  NightPlanning: {
+    component: require('../NightPlanning/NightPlanning.container').default,
+    schema: {
+      ...require('../NightPlanning/NightPlanning.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../NightPlanning/NightPlanning.container').schema.props,
+      },
+    },
+  },
   ObservatorySummary: {
     component: require('../ObservatorySummary/ObservatorySummary.container').default,
     schema: {
