@@ -2,9 +2,10 @@
 Version History
 ===============
 
-v5.30.3
--------
+v6.0.0
+------
 
+* Remove Authorize CSC components and references `<https://github.com/lsst-ts/LOVE-frontend/pull/640>`_
 * Refactor ScriptQueueState payload into several `<https://github.com/lsst-ts/LOVE-frontend/pull/639>`_
 
 v5.30.2

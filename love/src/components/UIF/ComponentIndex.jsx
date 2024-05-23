@@ -178,26 +178,6 @@ export const observatoryIndex = {
       },
     },
   },
-  SummaryAuthList: {
-    component: require('../AuthList/SummaryAuthList/SummaryAuthList.container').default,
-    schema: {
-      ...require('../AuthList/SummaryAuthList/SummaryAuthList.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../AuthList/SummaryAuthList/SummaryAuthList.container').schema.props,
-      },
-    },
-  },
-  AdminAuthList: {
-    component: require('../AuthList/AdminAuthList/AdminAuthList.container').default,
-    schema: {
-      ...require('../AuthList/AdminAuthList/AdminAuthList.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../AuthList/AdminAuthList/AdminAuthList.container').schema.props,
-      },
-    },
-  },
   Scheduler: {
     component: require('../Scheduler/Scheduler.container').default,
     schema: {

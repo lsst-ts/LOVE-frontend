@@ -679,110 +679,6 @@ export default class ManagerInterface {
     });
   }
 
-  // Authlist APIs
-  static getAuthListRequests() {
-    const token = ManagerInterface.getToken();
-    if (token === null) {
-      return new Promise((resolve) => resolve(false));
-    }
-    const url = `${this.getApiBaseUrl()}authlistrequest/`;
-    return fetch(url, {
-      method: 'GET',
-      headers: ManagerInterface.getHeaders(),
-    }).then((response) => {
-      if (response.status >= 500) {
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      return response.json().then((resp) => {
-        return resp;
-      });
-    });
-  }
-
-  static requestAuthListAuthorization(
-    username,
-    cscsToChange,
-    authorizedUsers,
-    nonAuthorizedCSCs,
-    message = null,
-    duration = null,
-  ) {
-    const token = ManagerInterface.getToken();
-    if (token === null) {
-      return new Promise((resolve) => resolve(false));
-    }
-
-    const { host } = window.location;
-    const url = `${this.getApiBaseUrl()}authlistrequest/`;
-    return fetch(url, {
-      method: 'POST',
-      headers: ManagerInterface.getHeaders(),
-      body: JSON.stringify({
-        cscs_to_change: cscsToChange,
-        authorized_users: authorizedUsers,
-        unauthorized_cscs: nonAuthorizedCSCs,
-        requested_by: `${username}@${host}`,
-        message,
-        duration,
-      }),
-    }).then((response) => {
-      if (response.status >= 500) {
-        toast.error('Error communicating with the server.');
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      if (response.status >= 400 && response.status < 500) {
-        toast.error('Unable to save request.');
-        return false;
-      }
-      return response.json().then((resp) => {
-        toast.success('Request received.');
-        return resp;
-      });
-    });
-  }
-
-  static setAuthListRequestStatus(authRequestId, status, message = null, duration = null) {
-    const token = ManagerInterface.getToken();
-    if (token === null) {
-      return new Promise((resolve) => resolve(false));
-    }
-    const url = `${this.getApiBaseUrl()}authlistrequest/${authRequestId}/`;
-    return fetch(url, {
-      method: 'PATCH',
-      headers: ManagerInterface.getHeaders(),
-      body: JSON.stringify({
-        status,
-        message,
-        duration,
-      }),
-    }).then((response) => {
-      if (response.status >= 500) {
-        toast.error('Error communicating with the server.');
-        return false;
-      }
-      if (response.status === 401) {
-        ManagerInterface.removeToken();
-        return false;
-      }
-      if (response.status >= 400 && response.status < 500) {
-        toast.error('Unable to save request.');
-        return false;
-      }
-      return response.json().then((resp) => {
-        toast.success('Request updated.');
-        return resp;
-      });
-    });
-  }
-
   // OLE APIs
   static getListExposureLogs(instrument, minObsDay, maxObsDay, registry = 1) {
     const token = ManagerInterface.getToken();
@@ -1655,18 +1551,6 @@ export function calculateTimeoutToNow(startDate, shift = 0) {
   const diff = Moment.duration(Moment().diff(startDate));
   const secondsLeft = shift - diff.asSeconds();
   return secondsLeft > 0 ? parseInt(secondsLeft, 10) : 0;
-}
-
-/**
- * Function used to check if an entity is present in some parameter of the authlist event.
- * @param {object} authlist the authlist object with params: authorizedUsers & nonAuthorizedCSCs
- * @param {entity} string entity to be checked on authlist, can take two formats: <user@host> or <CSC:salindex>
- * @returns {object} object with two boolean parameters: inAuthorizedUsers and inNonAuthorizedCSCs
- */
-export function checkAuthlist(authlist, entity) {
-  const inAuthorizedUsers = authlist?.authorizedUsers?.value?.includes(entity);
-  const inNonAuthorizedCSCs = authlist?.nonAuthorizedCSCs?.value?.includes(entity);
-  return { inAuthorizedUsers, inNonAuthorizedCSCs };
 }
 
 /**
