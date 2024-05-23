@@ -506,11 +506,15 @@ it('Append readout parameters to image', async () => {
 
 it('Should extract the ScriptQueue state correctly with a selector', async () => {
   // Arrange
-
   const scriptQueueStateStream = {
-    stream: {
-      max_lost_heartbeats: 5,
-      heartbeat_timeout: 15,
+    stateStream: {
+      enabled: true,
+      running: true,
+    },
+  };
+
+  const availableScriptsStateStream = {
+    availableScriptsStream: {
       available_scripts: [
         {
           type: 'standard',
@@ -549,8 +553,11 @@ it('Should extract the ScriptQueue state correctly with a selector', async () =>
           path: 'subdir/script6',
         },
       ],
-      // state: 'Running',
-      running: true,
+    },
+  };
+
+  const scriptsStateStream = {
+    scriptsStream: {
       finished_scripts: [
         {
           index: 100000,
@@ -606,27 +613,35 @@ it('Should extract the ScriptQueue state correctly with a selector', async () =>
           timestampRunStart: 0.0,
         },
       ],
-      current: {
-        index: 100001,
-        script_state: 'RUNNING',
-        process_state: 'RUNNING',
-        elapsed_time: 0,
-        expected_duration: 3600.0,
-        type: 'standard',
-        path: 'script1',
-        lost_heartbeats: 0,
-        setup: true,
-        last_heartbeat_timestamp: 1562085754.886316,
-        timestampConfigureEnd: 1562079405.1839786,
-        timestampConfigureStart: 1562079405.0609376,
-        timestampProcessEnd: 0.0,
-        timestampProcessStart: 1562079401.4940698,
-        timestampRunStart: 1562083005.9092648,
-      },
+      // The ScriptQueue CSC will be extended to support multiple
+      // current scripts in the future. For now, only one is supported.
+      // See: DM-44198.
+      current_scripts: [
+        {
+          index: 100001,
+          script_state: 'RUNNING',
+          process_state: 'RUNNING',
+          elapsed_time: 0,
+          expected_duration: 3600.0,
+          type: 'standard',
+          path: 'script1',
+          lost_heartbeats: 0,
+          setup: true,
+          last_heartbeat_timestamp: 1562085754.886316,
+          timestampConfigureEnd: 1562079405.1839786,
+          timestampConfigureStart: 1562079405.0609376,
+          timestampProcessEnd: 0.0,
+          timestampProcessStart: 1562079401.4940698,
+          timestampRunStart: 1562083005.9092648,
+        },
+      ],
     },
   };
 
-  await store.dispatch(addGroup('event-ScriptQueueState-1-stream'));
+  await store.dispatch(addGroup('event-ScriptQueueState-1-stateStream'));
+  await store.dispatch(addGroup('event-ScriptQueueState-1-availableScriptsStream'));
+  await store.dispatch(addGroup('event-ScriptQueueState-1-scriptsStream'));
+
   server.send({
     category: 'event',
     data: [
@@ -637,14 +652,39 @@ it('Should extract the ScriptQueue state correctly with a selector', async () =>
       },
     ],
   });
+
+  server.send({
+    category: 'event',
+    data: [
+      {
+        csc: 'ScriptQueueState',
+        salindex: 1,
+        data: availableScriptsStateStream,
+      },
+    ],
+  });
+
+  server.send({
+    category: 'event',
+    data: [
+      {
+        csc: 'ScriptQueueState',
+        salindex: 1,
+        data: scriptsStateStream,
+      },
+    ],
+  });
   // Act
   const streamData = getScriptQueueState(store.getState(), 1);
   const expectedData = {
-    state: scriptQueueStateStream.stream.running ? 'Running' : 'Stopped',
-    availableScriptList: scriptQueueStateStream.stream.available_scripts,
-    waitingScriptList: scriptQueueStateStream.stream.waiting_scripts,
-    current: scriptQueueStateStream.stream.current,
-    finishedScriptList: scriptQueueStateStream.stream.finished_scripts,
+    state: scriptQueueStateStream.stateStream.running ? 'Running' : 'Stopped',
+    availableScriptList: availableScriptsStateStream.availableScriptsStream.available_scripts,
+    waitingScriptList: scriptsStateStream.scriptsStream.waiting_scripts,
+    // The ScriptQueue CSC will be extended to support multiple
+    // current scripts in the future. For now, only one is supported.
+    // See: DM-44198.
+    current: scriptsStateStream.scriptsStream.current_scripts[0],
+    finishedScriptList: scriptsStateStream.scriptsStream.finished_scripts,
   };
 
   // Assert

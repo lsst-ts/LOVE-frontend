@@ -258,8 +258,8 @@ export const openWebsocketConnection = () => {
           }
 
           if (data.data[0].csc === 'ScriptQueueState') {
-            if (stream.stream.finished_scripts) {
-              const finishedIndices = stream.stream.finished_scripts.map((script) => script.index);
+            if (stream.scriptsStream?.finished_scripts) {
+              const finishedIndices = stream.scriptsStream.finished_scripts.map((script) => script.index);
               dispatch(removeScriptsHeartbeats(finishedIndices));
             }
           }
