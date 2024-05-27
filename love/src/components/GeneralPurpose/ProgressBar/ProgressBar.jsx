@@ -3,7 +3,7 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the LSST Project (https://www.lsst.org).
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,16 +17,24 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useRef } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styles from './ProgressBar.module.css';
 
-const ProgressBar = ({ targetValue, completed, hideCompleted = false, height = 20 }) => {
-  const ref = useRef(null);
+const ProgressBar = ({ targetValue, completed, title, hideCompleted = false, height = 20 }) => {
+  const [width, setWidth] = useState(0);
+
+  const measuredRef = useCallback((node) => {
+    if (node !== null) {
+      setWidth(node.getBoundingClientRect().width);
+    }
+  }, []);
+
   const padding = 4;
-  const width = ref.current?.clientWidth ?? 0;
-  const targetValuePixels = ((width - 2 * padding) * targetValue) / 100;
+  const targetValuePixels = Math.ceil(((width - 2 * padding) * targetValue) / 100);
   const completedValue = completed.toString().padStart(3, '0');
+
+  const titleHtml = title ?? `${Math.floor(completed)}/100`;
 
   return (
     <div className={styles.parentDiv}>
@@ -37,8 +45,9 @@ const ProgressBar = ({ targetValue, completed, hideCompleted = false, height = 2
       ) : (
         <></>
       )}
-      <div ref={ref} className={styles.containerStyles} style={{ height: `${height}px` }}>
+      <div ref={measuredRef} className={styles.containerStyles} style={{ height: `${height}px` }}>
         <svg width={width > 0 ? width - 2 * padding : 0} height={height} className={styles.progressCommandedLine}>
+          <title>{titleHtml}</title>
           {targetValue ? (
             <line
               className={styles.targetValueLine}
@@ -58,11 +67,13 @@ const ProgressBar = ({ targetValue, completed, hideCompleted = false, height = 2
 };
 
 ProgressBar.propTypes = {
-  /** Target value */
-  targetValue: PropTypes.number,
-  /** Completed value */
-  completed: PropTypes.number,
-  /** Hide completed value */
+  /** Expected value to reach */
+  targetValue: PropTypes.number.isRequired,
+  /** Value already completed */
+  completed: PropTypes.number.isRequired,
+  /** Title of the progress bar */
+  title: PropTypes.string,
+  /** Whether to hide the completed value label */
   hideCompleted: PropTypes.bool,
   /** Height of the progress bar */
   height: PropTypes.number,
