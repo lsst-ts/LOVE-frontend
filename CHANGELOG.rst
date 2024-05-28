@@ -5,6 +5,7 @@ Version History
 v6.0.0
 ------
 
+* Update package.json version to v6.0.0 `<https://github.com/lsst-ts/LOVE-frontend/pull/641>`_
 * Remove Authorize CSC components and references `<https://github.com/lsst-ts/LOVE-frontend/pull/640>`_
 * Refactor ScriptQueueState payload into several `<https://github.com/lsst-ts/LOVE-frontend/pull/639>`_
 
