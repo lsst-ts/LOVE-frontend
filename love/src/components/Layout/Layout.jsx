@@ -254,6 +254,11 @@ class Layout extends Component {
     if (this.state.heartbeatStatus?.[managerKey] === 'alert' && prevState.heartbeatStatus?.[managerKey] !== 'alert') {
       this.props.resetSubscriptions();
     }
+
+    // Update the title of the page
+    if (this.state.title !== prevState.title) {
+      document.title = this.state.title ? `LOVE - ${this.state.title}` : 'LOVE';
+    }
   };
 
   moveCustomTopbar = () => {
