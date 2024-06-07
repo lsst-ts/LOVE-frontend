@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.0.1
+------
+
+* Update CSC hierarchy by removing Archiver references and adding missing CSCs `<https://github.com/lsst-ts/LOVE-frontend/pull/642>`_
+
 v6.0.0
 ------
 
