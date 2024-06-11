@@ -1,0 +1,46 @@
+.container {
+  display: flex;
+  background-color: var(--secondary-background-dimmed-color);
+  height: 100%;
+}
+
+.controlers {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.controlers > :first-child {
+  flex-grow: 1;
+}
+
+.controlers > :not(:first-child) {
+  width: 50%;
+}
+
+.controlers > :not(:first-child) > button {
+  width: 100%;
+}
+
+.options {
+  max-height: calc(100% - 65px);
+  overflow-y: auto;
+}
+
+td.checkboxHeader {
+  padding: 0;
+  user-select: none;
+}
+
+th.checkboxHeader {
+  text-align: center;
+  /* For resetting SimpleTable border-radius */
+  border-top-left-radius: 0;
+}
+
+.checkboxWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
