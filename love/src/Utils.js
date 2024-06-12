@@ -42,6 +42,28 @@ if (Array.prototype.flat === undefined) {
   });
 }
 
+/* Backwards compatibility of Set.difference */
+if (!Set.prototype.difference) {
+  Set.prototype.difference = function (otherSet) {
+    let _difference = new Set(this);
+    for (let elem of otherSet) {
+      _difference.delete(elem);
+    }
+    return _difference;
+  };
+}
+
+/* Backwards compatibility of Set.union */
+if (!Set.prototype.union) {
+  Set.prototype.union = function (otherSet) {
+    let _union = new Set(this);
+    for (let elem of otherSet) {
+      _union.add(elem);
+    }
+    return _union;
+  };
+}
+
 /**
  * Applies a series of functions to a value, passing the result of each function as the argument to the next function.
  *
