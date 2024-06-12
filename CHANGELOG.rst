@@ -5,6 +5,7 @@ Version History
 v6.1.0
 ------
 
+* Add new BulkSelect component and hook it up to the ExposureAdd one `<https://github.com/lsst-ts/LOVE-frontend/pull/645>`_
 * Add dashboard name to page title `<https://github.com/lsst-ts/LOVE-frontend/pull/644>`_
 * Fix Weatherforecast last 48 hours feature `<https://github.com/lsst-ts/LOVE-frontend/pull/643>`_
 * Update CSC hierarchy by removing Archiver references and adding missing CSCs `<https://github.com/lsst-ts/LOVE-frontend/pull/642>`_
