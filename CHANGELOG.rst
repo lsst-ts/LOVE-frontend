@@ -5,6 +5,7 @@ Version History
 v6.1.0
 ------
 
+* Update package.json version to v6.1.0 `<https://github.com/lsst-ts/LOVE-frontend/pull/646>`_
 * Add new BulkSelect component and hook it up to the ExposureAdd one `<https://github.com/lsst-ts/LOVE-frontend/pull/645>`_
 * Add dashboard name to page title `<https://github.com/lsst-ts/LOVE-frontend/pull/644>`_
 * Fix Weatherforecast last 48 hours feature `<https://github.com/lsst-ts/LOVE-frontend/pull/643>`_
