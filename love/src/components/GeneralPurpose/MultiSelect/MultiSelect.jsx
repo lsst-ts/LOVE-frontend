@@ -32,6 +32,7 @@ const MultiSelect = ({
 }) => {
   return (
     <ReactMultiselect
+      key={crypto.randomUUID()}
       ref={innerRef}
       isObject={false}
       className={[styles.dropDownClassName, className].join(' ')}

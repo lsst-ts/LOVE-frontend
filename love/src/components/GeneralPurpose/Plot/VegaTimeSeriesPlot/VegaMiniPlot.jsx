@@ -813,7 +813,6 @@ class VegaLegendMiniPlot extends PureComponent {
       ...rectSpec,
       ...heatmapSpec,
     };
-    console.log('Render VegaLegendMiniPlot');
 
     return (
       <VegaLite

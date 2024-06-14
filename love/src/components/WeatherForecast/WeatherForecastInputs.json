@@ -586,7 +586,7 @@
     "cloudComplement": {
       "Total cloud cover spread": {
         "type": "spread",
-        "color": "#ff7f0e",
+        "color": "#ff7f0e60",
         "shape": "circle",
         "filled": false,
         "dash": [4, 0],
@@ -621,11 +621,12 @@
         ]
       },
       "Total cloud cover": {
-        "type": "pointLine",
-        "color": "#ffd300",
+        "type": "line",
+        "color": "#ff7f0e",
         "shape": "circle",
         "filled": false,
-        "dash": [4, 0],
+        "dash": [8, 4],
+        "orient": "right",
         "values": [
           {
             "variable": "x",
@@ -649,12 +650,14 @@
       }
     },
     "wind": {
-      "Wind direction": {
+      "Wind Speed": {
         "type": "arrow",
-        "color": "#4682b4",
+        "color": "#4662b4",
         "shape": "circle",
         "filled": false,
         "dash": [4, 0],
+        "orient": "right",
+        "offset": 45,
         "values": [
           {
             "variable": "x",
@@ -685,39 +688,13 @@
           }
         ]
       },
-      "Wind speed Min/Max": {
-        "type": "line",
-        "color": "#4662b4",
-        "shape": "circle",
-        "filled": false,
-        "dash": [4, 0],
-        "values": [
-          {
-            "variable": "x",
-            "category": "telemetry",
-            "csc": "WeatherForecast",
-            "salindex": 0,
-            "topic": "hourlyTrend",
-            "item": "timestamp",
-            "accessor": "(x) => x"
-          },
-          {
-            "variable": "y",
-            "category": "telemetry",
-            "csc": "WeatherForecast",
-            "salindex": 0,
-            "topic": "hourlyTrend",
-            "item": "windspeed",
-            "accessor": "(x) => x"
-          }
-        ]
-      },
       "Windspeed spread": {
         "type": "spread",
         "color": "#4682b4",
         "shape": "circle",
         "filled": false,
         "dash": [4, 0],
+        "orient": "left",
         "values": [
           {
             "variable": "x",
@@ -754,6 +731,7 @@
         "shape": "circle",
         "filled": false,
         "dash": [4, 0],
+        "orient": "right",
         "values": [
           {
             "variable": "x",
@@ -777,12 +755,13 @@
       }
     },
     "temperature": {
-      "Temperature": {
+      "Temp.": {
         "type": "line",
         "color": "#ff7bb5",
         "shape": "circle",
         "filled": false,
         "dash": [4, 0],
+        "orient": "right",
         "values": [
           {
             "variable": "x",
@@ -804,7 +783,7 @@
           }
         ]
       },
-      "Temp. Spread": {
+      "Temperature Spread": {
         "type": "spread",
         "color": "#ff7bb5",
         "shape": "circle",
@@ -846,6 +825,7 @@
         "shape": "circle",
         "filled": false,
         "dash": [4, 0],
+        "orient": "right",
         "values": [
           {
             "variable": "x",
@@ -875,6 +855,7 @@
         "shape": "circle",
         "filled": false,
         "dash": [4, 0],
+        "orient": "right",
         "values": [
           {
             "variable": "x",
@@ -898,7 +879,7 @@
       },
       "Precipitation": {
         "type": "bigote",
-        "color": "#bcddf7",
+        "color": "#4682b4",
         "shape": "circle",
         "filled": false,
         "dash": [4, 0],
@@ -947,6 +928,8 @@
         "shape": "square",
         "filled": true,
         "dash": [4, 0],
+        "orient": "right",
+        "offset": 45,
         "values": [
           {
             "variable": "x",

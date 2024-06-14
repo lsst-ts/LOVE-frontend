@@ -255,7 +255,7 @@ const Plot = ({
         }
       }
 
-      const inputData = [];
+      let inputData = [];
       Object.entries(newValue.values).forEach((entry) => {
         const input = Object.assign({}, entry[1]);
         input['units'] = newValue.units;

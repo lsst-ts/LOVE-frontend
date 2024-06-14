@@ -77,10 +77,10 @@ SimpleTable.propTypes = {
       render: PropTypes.func,
       /** className to be applied to the whole column */
       className: PropTypes.string,
-    }),
+    }).isRequired,
   ),
   /** Rows to be rendered in the table */
-  data: PropTypes.arrayOf(PropTypes.object),
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default SimpleTable;

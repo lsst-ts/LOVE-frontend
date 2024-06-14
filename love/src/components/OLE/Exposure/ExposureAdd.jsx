@@ -22,6 +22,7 @@ import PropTypes from 'prop-types';
 import lodash from 'lodash';
 import Moment from 'moment';
 import MultiSelect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
+import BulkSelect from 'components/GeneralPurpose/BulkSelect/BulkSelect';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
@@ -98,11 +99,14 @@ class ExposureAdd extends Component {
       updatingExposures: false,
       savingLog: false,
       jiraIssueError: false,
+      formHeight: null,
+      showBulkSelector: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.multiselectImageTagsComponentRef = React.createRef();
     this.multiselectExposuresComponentRef = React.createRef();
     this.richTextEditorRef = React.createRef();
+    this.formRef = React.createRef();
   }
 
   statusFlag(flag) {
@@ -115,11 +119,19 @@ class ExposureAdd extends Component {
    */
   cleanForm() {
     // Reset MultiSelect components value
-    this.multiselectImageTagsComponentRef.current?.resetSelectedValues();
-    this.multiselectExposuresComponentRef.current?.resetSelectedValues();
+    this.cleanTagsMultiSelection();
+    this.cleanExposuresMultiSelection();
     // Reset RichTextEditor component value
     this.richTextEditorRef.current?.cleanContent();
     this.setState({ newMessage: ExposureAdd.defaultProps.newMessage });
+  }
+
+  cleanTagsMultiSelection() {
+    this.multiselectImageTagsComponentRef.current?.resetSelectedValues();
+  }
+
+  cleanExposuresMultiSelection() {
+    this.multiselectExposuresComponentRef.current?.resetSelectedValues();
   }
 
   /**
@@ -265,6 +277,12 @@ class ExposureAdd extends Component {
     );
   }
 
+  setNewMessageObsId = (selectedOptions) => {
+    this.setState((prevState) => ({
+      newMessage: { ...prevState.newMessage, obs_id: selectedOptions },
+    }));
+  };
+
   renderInstrumentsSelect() {
     const { instruments, selectedInstrument } = this.state;
     return (
@@ -338,24 +356,31 @@ class ExposureAdd extends Component {
   }
 
   renderExposuresSelect() {
-    const { observationIds, newMessage } = this.state;
+    const { observationIds, newMessage, showBulkSelector } = this.state;
 
-    const setNewMessageObsId = (selectedOptions) => {
+    const toggleBulkSelector = () => {
       this.setState((prevState) => ({
-        newMessage: { ...prevState.newMessage, obs_id: selectedOptions },
+        showBulkSelector: !prevState.showBulkSelector,
       }));
     };
 
     return (
-      <MultiSelect
-        innerRef={this.multiselectExposuresComponentRef}
-        options={observationIds}
-        selectedValues={newMessage.obs_id}
-        onSelect={setNewMessageObsId}
-        onRemove={setNewMessageObsId}
-        placeholder="Select one or several observations"
-        selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
-      />
+      <>
+        <MultiSelect
+          className={styles.exposuresMultiSelect}
+          innerRef={this.multiselectExposuresComponentRef}
+          options={observationIds}
+          selectedValues={newMessage.obs_id}
+          onSelect={this.setNewMessageObsId}
+          onRemove={this.setNewMessageObsId}
+          placeholder="Select one or several observations"
+          selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
+          disable={showBulkSelector}
+        />
+        <Button size="extra-small" onClick={toggleBulkSelector}>
+          {showBulkSelector ? 'Hide' : 'Show'} bulk selector
+        </Button>
+      </>
     );
   }
 
@@ -496,6 +521,20 @@ class ExposureAdd extends Component {
 
     this.queryInstruments();
     this.queryExposureTags();
+
+    // Create resizeObserver to observe the form node
+    // and update the formHeight state accordingly.
+    // This will be used to set the height of the exposures
+    // bulk selector component.
+    const resizeObserver = new ResizeObserver((entries) => {
+      window.requestAnimationFrame(() => {
+        const form = entries[0];
+        this.setState({ formHeight: form.contentRect.height });
+      });
+    });
+    // The first children of the form node will be observed
+    // as it controls the height of the form.
+    resizeObserver.observe(this.formRef?.current?.children[0]);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -544,11 +583,17 @@ class ExposureAdd extends Component {
 
   render() {
     const { isLogCreate, isMenu, back, view } = this.props;
-    const { newMessage, confirmationModalShown, confirmationModalText, savingLog, jiraIssueError } = this.state;
-
+    const {
+      newMessage,
+      confirmationModalShown,
+      confirmationModalText,
+      observationIds,
+      savingLog,
+      formHeight,
+      showBulkSelector,
+    } = this.state;
     const filesUrls = getFilesURLs(newMessage?.urls);
     const htmlMessage = jiraMarkdownToHtml(newMessage?.message_text);
-
     return (
       <>
         {back && !isMenu && (
@@ -563,205 +608,213 @@ class ExposureAdd extends Component {
             </Button>
           </div>
         )}
+        <div className={styles.formWrapper}>
+          <div style={{ height: formHeight }} className={showBulkSelector ? styles.bulkSelectorShown : ''}>
+            <BulkSelect
+              options={observationIds}
+              selectedOptions={newMessage.obs_id}
+              onSelect={this.setNewMessageObsId}
+            />
+          </div>
+          <form ref={this.formRef} onSubmit={this.handleSubmit}>
+            <div id={this.id} className={isMenu ? styles.detailContainerMenu : styles.detailContainer}>
+              {isMenu ? (
+                <div className={styles.headerMenu}>
+                  <span className={[styles.label, styles.paddingTop].join(' ')}>Instruments</span>
+                  <span className={styles.value}>{this.renderInstrumentsSelect()}</span>
 
-        <form onSubmit={this.handleSubmit}>
-          <div id={this.id} className={isMenu ? styles.detailContainerMenu : styles.detailContainer}>
-            {isMenu ? (
-              <div className={isMenu ? styles.headerMenu : styles.header}>
-                <span className={[styles.label, styles.paddingTop].join(' ')}>Instruments</span>
-                <span className={styles.value}>{this.renderInstrumentsSelect()}</span>
+                  <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. day</span>
+                  <span className={styles.value}>{this.renderDateTimeRangeSelect()}</span>
 
-                <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. day</span>
-                <span className={styles.value}>{this.renderDateTimeRangeSelect()}</span>
+                  <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
+                  <span className={[styles.value, styles.obsIdSelector].join(' ')}>
+                    {this.renderRefreshLogsButton()}
+                    {this.renderExposuresSelect()}
+                  </span>
 
-                <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
-                <span className={[styles.value, styles.obsIdSelector].join(' ')}>
-                  {this.renderExposuresSelect()}
-                  {this.renderRefreshLogsButton()}
-                </span>
+                  <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
+                  <span className={styles.value}>{this.renderImageTagsSelect()}</span>
+                </div>
+              ) : (
+                <div className={[styles.header, !this.props.exposure?.obs_id ? styles.inline : ''].join(' ')}>
+                  {this.props.exposure?.obs_id ? (
+                    <span>{this.props.exposure.obs_id}</span>
+                  ) : (
+                    <>
+                      <span className={[styles.label, styles.paddingTop].join(' ')}>Instruments</span>
+                      <span className={styles.value}>{this.renderInstrumentsSelect()}</span>
 
-                <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
-                <span className={styles.value}>{this.renderImageTagsSelect()}</span>
-              </div>
-            ) : (
-              <div className={[styles.header, !this.props.exposure?.obs_id ? styles.inline : ''].join(' ')}>
-                {this.props.exposure?.obs_id ? (
-                  <span>{this.props.exposure.obs_id}</span>
-                ) : (
-                  <>
-                    <span className={[styles.label, styles.paddingTop].join(' ')}>Instruments</span>
-                    <span className={styles.value}>{this.renderInstrumentsSelect()}</span>
+                      {this.renderDateTimeRangeSelect()}
 
-                    {this.renderDateTimeRangeSelect()}
+                      <span className={styles.label}>Obs. Id</span>
+                      <span className={styles.obsIdSelector}>
+                        {this.renderRefreshLogsButton()}
+                        {this.renderExposuresSelect()}
+                      </span>
+                    </>
+                  )}
 
-                    <span className={styles.label}>Obs. Id</span>
-                    <span className={[styles.value, styles.obsIdSelector].join(' ')}>
-                      {this.renderExposuresSelect()}
-                      {this.renderRefreshLogsButton()}
-                    </span>
-                  </>
-                )}
-
-                {newMessage?.id ? (
-                  <>
-                    <span className={styles.floatRight}>
-                      <Button
-                        className={styles.iconBtn}
-                        title="Delete"
-                        onClick={() => {
-                          this.confirmDelete();
-                        }}
-                        status="transparent"
-                      >
-                        <DeleteIcon className={styles.icon} />
-                      </Button>
-                    </span>
-                    <span className={styles.floatRight}>[{this.props.exposure?.observation_type}]</span>
-                  </>
-                ) : (
-                  this.props.exposure?.observation_type && (
+                  {newMessage?.id ? (
                     <>
                       <span className={styles.floatRight}>
                         <Button
                           className={styles.iconBtn}
-                          title="View"
+                          title="Delete"
                           onClick={() => {
-                            view(true);
+                            this.confirmDelete();
                           }}
                           status="transparent"
                         >
-                          <CloseIcon className={styles.icon} />
+                          <DeleteIcon className={styles.icon} />
                         </Button>
                       </span>
-                      <span className={styles.floatRight}>[{this.props.exposure.observation_type}]</span>
+                      <span className={styles.floatRight}>[{this.props.exposure?.observation_type}]</span>
                     </>
-                  )
-                )}
-              </div>
-            )}
-
-            {!isMenu && (
-              <div className={[styles.header, styles.inline].join(' ')}>
-                <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
-                <span className={styles.value} style={{ flex: 1 }}>
-                  {this.renderImageTagsSelect()}
-                </span>
-              </div>
-            )}
-
-            <div className={isMenu ? styles.contentMenu : styles.content}>
-              <div className={styles.mb1}>
-                <span className={styles.title}>Message</span>
-              </div>
-
-              <RichTextEditor
-                ref={this.richTextEditorRef}
-                className={styles.textArea}
-                defaultValue={htmlMessage}
-                onChange={(value) => {
-                  const parsedValue = htmlToJiraMarkdown(value);
-                  this.setState((prevState) => ({
-                    newMessage: { ...prevState.newMessage, message_text: parsedValue },
-                  }));
-                }}
-                onKeyCombination={(combination) => {
-                  if (combination === 'ctrl+enter') {
-                    if (!this.isSubmitDisabled()) {
-                      this.handleSubmit();
-                    }
-                  }
-                }}
-              />
-            </div>
-
-            <div className={isMenu ? styles.footerMenu : styles.footer}>
-              <div>
-                {!isLogCreate && !isMenu && (
-                  <div className={styles.attachedFiles}>
-                    <div className={styles.label}>Files Attached:</div>
-                    <div>
-                      {filesUrls.length > 0
-                        ? filesUrls.map((fileurl) => (
-                            <div key={fileurl} className={styles.buttonWraper}>
-                              <Button
-                                className={styles.fileButton}
-                                title={fileurl}
-                                onClick={() => openInNewTab(fileurl)}
-                                status="default"
-                              >
-                                <DownloadIcon className={styles.downloadIcon} />
-                                {getFilename(fileurl)}
-                              </Button>
-                            </div>
-                          ))
-                        : 'no files attached'}
-                    </div>
-                  </div>
-                )}
-
-                <div className={styles.toAttachFiles}>
-                  <MultiFileUploader
-                    values={newMessage?.file}
-                    handleFiles={(files) =>
-                      this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: files } }))
-                    }
-                    handleDelete={(file) => {
-                      const files = { ...newMessage?.file };
-                      delete files[file];
-                      this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: files } }));
-                    }}
-                    handleDeleteAll={() =>
-                      this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: undefined } }))
-                    }
-                  />
-                </div>
-
-                <div className={styles.flag}>
-                  <span className={styles.label}>Exposure Flag</span>
-                  <Select
-                    value={newMessage?.exposure_flag}
-                    onChange={(event) =>
-                      this.setState((prevState) => ({
-                        newMessage: { ...prevState.newMessage, exposure_flag: event.value },
-                      }))
-                    }
-                    options={EXPOSURE_FLAG_OPTIONS}
-                    className={[styles.select, styles.capitalize].join(' ')}
-                    small
-                  />
-                  <FlagIcon
-                    title={newMessage?.exposure_flag}
-                    status={this.statusFlag(newMessage?.exposure_flag)}
-                    className={styles.iconFlag}
-                  />
-                </div>
-
-                {this.renderJiraFields()}
-              </div>
-
-              <div className={isMenu ? styles.footerRightMenu : styles.footerRight}>
-                <Button disabled={this.isSubmitDisabled()} type="submit">
-                  {savingLog ? (
-                    <SpinnerIcon className={styles.spinnerIcon} />
                   ) : (
-                    <span className={styles.title}>Save</span>
+                    this.props.exposure?.observation_type && (
+                      <>
+                        <span className={styles.floatRight}>
+                          <Button
+                            className={styles.iconBtn}
+                            title="View"
+                            onClick={() => {
+                              view(true);
+                            }}
+                            status="transparent"
+                          >
+                            <CloseIcon className={styles.icon} />
+                          </Button>
+                        </span>
+                        <span className={styles.floatRight}>[{this.props.exposure.observation_type}]</span>
+                      </>
+                    )
                   )}
-                </Button>
-              </div>
-            </div>
+                </div>
+              )}
 
-            <Modal
-              displayTopBar={false}
-              isOpen={!!confirmationModalShown}
-              onRequestClose={() => this.setState({ confirmationModalShown: false })}
-              parentSelector={() => document.querySelector(`#${this.id}`)}
-              size={50}
-            >
-              <p style={{ textAlign: 'center' }}>{confirmationModalText}</p>
-              {this.renderModalFooter()}
-            </Modal>
-          </div>
-        </form>
+              {!isMenu && (
+                <div className={[styles.header, styles.inline].join(' ')}>
+                  <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
+                  <span className={styles.value} style={{ flex: 1 }}>
+                    {this.renderImageTagsSelect()}
+                  </span>
+                </div>
+              )}
+
+              <div className={isMenu ? styles.contentMenu : styles.content}>
+                <div className={styles.mb1}>
+                  <span className={styles.title}>Message</span>
+                </div>
+
+                <RichTextEditor
+                  ref={this.richTextEditorRef}
+                  className={styles.textArea}
+                  defaultValue={htmlMessage}
+                  onChange={(value) => {
+                    const parsedValue = htmlToJiraMarkdown(value);
+                    this.setState((prevState) => ({
+                      newMessage: { ...prevState.newMessage, message_text: parsedValue },
+                    }));
+                  }}
+                  onKeyCombination={(combination) => {
+                    if (combination === 'ctrl+enter') {
+                      if (!this.isSubmitDisabled()) {
+                        this.handleSubmit();
+                      }
+                    }
+                  }}
+                />
+              </div>
+
+              <div className={isMenu ? styles.footerMenu : styles.footer}>
+                <div>
+                  {!isLogCreate && !isMenu && (
+                    <div className={styles.attachedFiles}>
+                      <div className={styles.label}>Files Attached:</div>
+                      <div>
+                        {filesUrls.length > 0
+                          ? filesUrls.map((fileurl) => (
+                              <div key={fileurl} className={styles.buttonWraper}>
+                                <Button
+                                  className={styles.fileButton}
+                                  title={fileurl}
+                                  onClick={() => openInNewTab(fileurl)}
+                                  status="default"
+                                >
+                                  <DownloadIcon className={styles.downloadIcon} />
+                                  {getFilename(fileurl)}
+                                </Button>
+                              </div>
+                            ))
+                          : 'no files attached'}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className={styles.toAttachFiles}>
+                    <MultiFileUploader
+                      values={newMessage?.file}
+                      handleFiles={(files) =>
+                        this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: files } }))
+                      }
+                      handleDelete={(file) => {
+                        const files = { ...newMessage?.file };
+                        delete files[file];
+                        this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: files } }));
+                      }}
+                      handleDeleteAll={() =>
+                        this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: undefined } }))
+                      }
+                    />
+                  </div>
+
+                  <div className={styles.flag}>
+                    <span className={styles.label}>Exposure Flag</span>
+                    <Select
+                      value={newMessage?.exposure_flag}
+                      onChange={(event) =>
+                        this.setState((prevState) => ({
+                          newMessage: { ...prevState.newMessage, exposure_flag: event.value },
+                        }))
+                      }
+                      options={EXPOSURE_FLAG_OPTIONS}
+                      className={[styles.select, styles.capitalize].join(' ')}
+                      small
+                    />
+                    <FlagIcon
+                      title={newMessage?.exposure_flag}
+                      status={this.statusFlag(newMessage?.exposure_flag)}
+                      className={styles.iconFlag}
+                    />
+                  </div>
+
+                  {this.renderJiraFields()}
+                </div>
+
+                <div className={isMenu ? styles.footerRightMenu : styles.footerRight}>
+                  <Button disabled={this.isSubmitDisabled()} type="submit">
+                    {savingLog ? (
+                      <SpinnerIcon className={styles.spinnerIcon} />
+                    ) : (
+                      <span className={styles.title}>Save</span>
+                    )}
+                  </Button>
+                </div>
+              </div>
+
+              <Modal
+                displayTopBar={false}
+                isOpen={!!confirmationModalShown}
+                onRequestClose={() => this.setState({ confirmationModalShown: false })}
+                parentSelector={() => document.querySelector(`#${this.id}`)}
+                size={50}
+              >
+                <p style={{ textAlign: 'center' }}>{confirmationModalText}</p>
+                {this.renderModalFooter()}
+              </Modal>
+            </div>
+          </form>
+        </div>
       </>
     );
   }
