@@ -1,3 +1,7 @@
+:root {
+  --svg-icon-size: 1.5em;
+}
+
 .container {
   height: 100%;
   text-align: left;
@@ -26,8 +30,9 @@
 
 .testPlayer > .testCases,
 .testPlayer > .testExecution {
-  background-color: var(--second-quaternary-background-color);
-  overflow-y: scroll;
+  background-color: var(--second-tertiary-background-color);
+  overflow-y: auto;
+  border-radius: var(--border-radius-small);
 }
 
 .testCases > .testCase {
@@ -36,13 +41,13 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--small-padding);
-  border-top: 1px solid var(--second-tertiary-background-color);
-  border-bottom: 1px solid var(--second-tertiary-background-color);
+  border-top: 1px solid var(--second-secondary-background-color);
+  border-bottom: 1px solid var(--second-secondary-background-color);
   border-left: 4px solid var(--status-color);
 }
 
 .testCases > .testCase:hover {
-  background-color: var(--second-tertiary-background-color);
+  background-color: var(--second-secondary-background-color);
 }
 
 .testCaseAssignee {
@@ -146,6 +151,7 @@
 }
 
 .stepFields {
+  flex-grow: 1;
   padding-left: var(--small-padding);
 }
 
@@ -160,6 +166,58 @@
 }
 
 .stepField {
+  margin-bottom: var(--small-padding);
+}
+
+.stepField > .stepSalScript {
+  display: flex;
+  align-items: center;
+  gap: var(--small-padding);
+}
+
+.stepField > .stepSalScript .runScriptButton {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  padding-left: var(--small-padding);
+  overflow: hidden;
+}
+
+.stepField > .stepSalScript .runScriptButton > :nth-child(2) {
+  background-color: var(--commandable-background);
+  padding: var(--small-padding);
+  height: var(--svg-icon-size);
+  width: var(--svg-icon-size);
+  margin-left: var(--small-padding);
+}
+
+.stepField.stepSalScriptConfig > :last-child {
+  white-space: pre-wrap;
+  padding: var(--small-padding);
+  margin-bottom: var(--small-padding);
+  background-color: var(--second-primary-background-color);
+  border: 1px solid var(--secondary-font-color);
+  border-radius: var(--border-radius-small);
+}
+
+.stepField.stepSalScriptConfig .stepFieldLabel {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--small-padding);
+}
+
+.stepField.stepSalScriptConfig .stepFieldLabel > :nth-child(2) {
+  display: flex;
+  margin: 0 var(--small-padding);
+}
+
+.stepField.stepSalScriptConfig .stepFieldLabel svg {
+  height: var(--svg-icon-size);
+  width: var(--svg-icon-size);
+}
+
+.stepField.stepSalScriptConfig .stepSalScriptConfigError {
+  color: var(--status-alert-color);
   margin-bottom: var(--small-padding);
 }
 
@@ -178,7 +236,8 @@
 .testCycleDetailsContainer {
   padding: var(--small-padding) var(--content-padding);
   margin-bottom: var(--small-padding);
-  background-color: var(--second-quaternary-background-color);
+  background-color: var(--second-tertiary-background-color);
+  border-radius: var(--border-radius-small);
 }
 
 .testCycleDetailsContainer > .testCycleHeader:has(~ .testCycleDetails:not(.hideDetails)) {

@@ -2632,6 +2632,7 @@ export const getScriptQueueState = (state, salindex) => {
   const scriptQueueData = getStreamData(state, `event-ScriptQueueState-${salindex}-stateStream`);
   const scriptsData = getStreamData(state, `event-ScriptQueueState-${salindex}-scriptsStream`);
   const availableScriptsData = getStreamData(state, `event-ScriptQueueState-${salindex}-availableScriptsStream`);
+
   const runningState = getKey(scriptQueueData, 'running', undefined);
   let runningLabel = 'Unknown';
   if (runningState !== undefined) {
@@ -2647,6 +2648,20 @@ export const getScriptQueueState = (state, salindex) => {
     current: getKey(scriptsData, 'current_scripts', ['None'])[0],
     finishedScriptList: getKey(scriptsData, 'finished_scripts', undefined),
   };
+};
+
+export const getScriptQueueOn = (state, salindex) => {
+  const scriptQueueData = getStreamData(state, `event-ScriptQueueState-${salindex}-stateStream`);
+  return scriptQueueData?.enabled && scriptQueueData?.running;
+};
+
+export const getScriptSchema = (state, scriptQueueSalIndex, scriptPath) => {
+  const availableScriptsData = getStreamData(
+    state,
+    `event-ScriptQueueState-${scriptQueueSalIndex}-availableScriptsStream`,
+  );
+  const availableScripts = availableScriptsData?.available_scripts ?? [];
+  return availableScripts.find((script) => script.path === scriptPath)?.configSchema;
 };
 
 /**

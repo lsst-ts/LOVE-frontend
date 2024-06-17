@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import ProgressBar from 'components/GeneralPurpose/ProgressBar/ProgressBar';
-import { formatSecondsToDigital } from 'Utils';
+import LaunchScriptIcon from 'components/icons/ScriptQueue/LaunchScriptIcon/LaunchScriptIcon';
+import ErrorIcon from 'components/icons/ErrorIcon/ErrorIcon';
+import {
+  SCRIPTQUEUE_SCRIPT_LOCATION,
+  SCRIPTQUEUE_EMPTY_SCHEMA_STRING,
+  SCRIPT_SCHEMA_VALIDATION_ERROR_TITLES_MAPPING,
+} from 'Config';
+import ManagerInterface, { formatSecondsToDigital, parseScriptSchemaError } from 'Utils';
 import styles from './NightPlanning.module.css';
+
+const RUN_SCRIPT_LOG_LEVEL = 10;
 
 const dummyTestCycles = [
   'BLOCK-R17 - TestCycle AuxTel 1',
@@ -91,8 +101,10 @@ const dummyTestExecution = {
       test_data: 'None',
       expected_result: 'Script completes without error. All ATSpectrograph components are enabled.',
       sal_script: 'auxtel/enable_latiss.py',
-      is_external: true,
-      script_configuration: '',
+      is_external: false,
+      // script_configuration: 'atcamera: null\natoods: null\natspectrograph: null\nignore: []',
+      script_configuration: 'atcamera: null\natoods: null\natspectrograph: null\nignore: [',
+      // script_configuration: 'asdf',
       actual_result: 'None',
     },
     {
@@ -188,6 +200,15 @@ const statusToStyle = {
   FAILED: styles.failed,
 };
 
+const getScriptQueueSalindexFromScriptPath = (scriptPath) => {
+  if (scriptPath.includes('maintel')) {
+    return 2;
+  } else if (scriptPath.includes('auxtel')) {
+    return 1;
+  }
+  return 0;
+};
+
 function StatusLabel({ status }) {
   const statusStyle = statusToStyle[status];
   return <div className={[styles.statusLabel, statusStyle].join(' ')}>{status}</div>;
@@ -273,7 +294,42 @@ function TestCaseStep({
   is_external,
   script_configuration,
   actual_result,
+  queueOn,
+  scriptSchema,
+  commandExecutePermission,
+  launchScript,
 }) {
+  const [scriptSchemaError, setScriptSchemaError] = useState('');
+
+  useEffect(() => {
+    if (scriptSchema?.includes(SCRIPTQUEUE_EMPTY_SCHEMA_STRING)) {
+      setScriptSchemaError('');
+    } else if (!scriptSchema) {
+      setScriptSchemaError('WAITING FOR SCHEMA: schema not yet loaded');
+    } else {
+      ManagerInterface.requestConfigValidation(script_configuration, scriptSchema)
+        .then((r) => {
+          if (!r.ok) {
+            return {
+              title: SCRIPT_SCHEMA_VALIDATION_ERROR_TITLES_MAPPING.SERVER_ERROR,
+              error: {
+                message: 'Unkown error validating json schema on the server',
+              },
+            };
+          }
+          return r.json();
+        })
+        .then((r) => {
+          const parsedError = parseScriptSchemaError(r);
+          if (r.error) {
+            setScriptSchemaError(`${parsedError.title}: ${parsedError.message}`);
+          } else {
+            setScriptSchemaError('');
+          }
+        });
+    }
+  }, [script_configuration, scriptSchema]);
+
   return (
     <div className={styles.testCaseStep}>
       <div className={styles.stepStatus}>
@@ -295,14 +351,34 @@ function TestCaseStep({
         </div>
         <div className={styles.stepField}>
           <div>SAL Script Name</div>
-          <div className={styles.fontHighligthed}>{sal_script}</div>
+          <div className={[styles.fontHighligthed, styles.stepSalScript].join(' ')}>
+            {sal_script}
+            {commandExecutePermission && !scriptSchemaError && (
+              <Button
+                className={styles.runScriptButton}
+                size="extra-small"
+                title={queueOn ? 'Run script' : 'Script queue is off'}
+                onClick={launchScript}
+                disabled={!queueOn}
+              >
+                <span>Run script</span>
+                <span>
+                  <LaunchScriptIcon />
+                </span>
+              </Button>
+            )}
+          </div>
         </div>
         <div className={styles.stepField}>
           <div>External</div>
           <div className={styles.fontHighligthed}>{is_external ? 'Yes' : 'No'}</div>
         </div>
-        <div className={styles.stepField}>
-          <div>Script Configuration</div>
+        <div className={[styles.stepField, styles.stepSalScriptConfig].join(' ')}>
+          <div className={styles.stepFieldLabel}>
+            <span>Script Configuration</span>
+            {scriptSchemaError && <ErrorIcon />}
+          </div>
+          <div className={styles.stepSalScriptConfigError}>{scriptSchemaError}</div>
           <div className={styles.fontHighligthed}>{script_configuration || 'None'}</div>
         </div>
         <div className={styles.stepField}>
@@ -331,8 +407,18 @@ TestCaseStep.propTypes = {
   sal_script: PropTypes.string,
   /** If the script is external */
   is_external: PropTypes.bool,
+  /** Configuration of the script */
+  script_configuration: PropTypes.string,
   /** Actual result of the step */
   actual_result: PropTypes.string,
+  /** If the queue is ready to receive commands */
+  queueOn: PropTypes.bool,
+  /** The schema of the script */
+  scriptSchema: PropTypes.string,
+  /** Command execute permission */
+  commandExecutePermission: PropTypes.bool,
+  /** Function to launch the script */
+  launchScript: PropTypes.func,
 };
 
 function TestExecutionDetails({
@@ -353,6 +439,11 @@ function TestExecutionDetails({
   issues,
   attachments,
   steps,
+  username,
+  commandExecutePermission,
+  getScriptQueueOn,
+  getScriptSchema,
+  requestSALCommand,
 }) {
   const digitalExecutedTime = formatSecondsToDigital(executed_time);
   const executedTimeProgress = (executed_time / estimated_time) * 100;
@@ -434,9 +525,39 @@ function TestExecutionDetails({
       </div>
       <div className={styles.testCaseSectionTitle}>Test Script</div>
       <div>
-        {steps.map((step, i) => (
-          <TestCaseStep position={i + 1} {...step} />
-        ))}
+        {steps.map((step, i) => {
+          const fullScriptPath = 'data/scripts/' + step.sal_script;
+          const queueIndex = getScriptQueueSalindexFromScriptPath(step.sal_script);
+          const isQueueOn = getScriptQueueOn(queueIndex);
+          const scriptSchema = getScriptSchema(queueIndex, fullScriptPath);
+          const launchScript = () => {
+            if (!isQueueOn) return;
+            const params = {
+              isStandard: !step.is_external,
+              path: fullScriptPath,
+              config: step.script_configuration,
+              descr: `description\n\n-------\nSent by ${username}`,
+              location: SCRIPTQUEUE_SCRIPT_LOCATION.FIRST,
+              logLevel: RUN_SCRIPT_LOG_LEVEL,
+            };
+            requestSALCommand({
+              cmd: 'cmd_add',
+              component: 'ScriptQueue',
+              salindex: queueIndex,
+              params,
+            });
+          };
+          return (
+            <TestCaseStep
+              queueOn={isQueueOn}
+              scriptSchema={scriptSchema}
+              commandExecutePermission={commandExecutePermission}
+              launchScript={launchScript}
+              position={i + 1}
+              {...step}
+            />
+          );
+        })}
       </div>
     </div>
   );
@@ -500,6 +621,16 @@ TestExecutionDetails.propTypes = {
       actual_result: PropTypes.string,
     }),
   ),
+  /** Command execute permission */
+  commandExecutePermission: PropTypes.bool,
+  /** Function to check if the specified queue
+   * is ready to receive commands
+   */
+  getScriptQueueOn: PropTypes.func,
+  /** Function to get the schema of a script */
+  getScriptSchema: PropTypes.func,
+  /** Function to request a SAL command */
+  requestSALCommand: PropTypes.func,
 };
 
 function TestCase({ id, version, status, title, assignee, environment }) {
@@ -541,8 +672,23 @@ TestCase.propTypes = {
   environment: PropTypes.string,
 };
 
-function NightPlanning(props) {
+function NightPlanning({
+  username,
+  commandExecutePermission,
+  getScriptQueueOn,
+  getScriptSchema,
+  subscribeToStreams,
+  unsubscribeToStreams,
+  requestSALCommand,
+}) {
   const [selectedTestCycle, setSelectedTestCycle] = useState(dummyTestCycles[0]);
+
+  useEffect(() => {
+    subscribeToStreams();
+    return () => {
+      unsubscribeToStreams();
+    };
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -564,13 +710,37 @@ function NightPlanning(props) {
           ))}
         </div>
         <div className={styles.testExecution}>
-          <TestExecutionDetails {...dummyTestExecution} />
+          <TestExecutionDetails
+            username={username}
+            commandExecutePermission={commandExecutePermission}
+            getScriptQueueOn={getScriptQueueOn}
+            getScriptSchema={getScriptSchema}
+            requestSALCommand={requestSALCommand}
+            {...dummyTestExecution}
+          />
         </div>
       </div>
     </div>
   );
 }
 
-NightPlanning.propTypes = {};
+NightPlanning.propTypes = {
+  /** Username of the user */
+  username: PropTypes.string,
+  /** Command execute permission */
+  commandExecutePermission: PropTypes.bool,
+  /** Function to check if the specified queue
+   * is ready to receive commands
+   */
+  getScriptQueueOn: PropTypes.func,
+  /** Function to get the schema of a script */
+  getScriptSchema: PropTypes.func,
+  /** Function to subscribe to the streams */
+  subscribeToStreams: PropTypes.func,
+  /** Function to unsubscribe to the streams */
+  unsubscribeToStreams: PropTypes.func,
+  /** Function to request a SAL command */
+  requestSALCommand: PropTypes.func,
+};
 
 export default NightPlanning;
