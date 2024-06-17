@@ -17,8 +17,9 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { addGroup, removeGroup, requestSALCommand } from 'redux/actions/ws';
+import { getUsername, getPermCmdExec, getScriptQueueOn, getScriptSchema } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
-import { addGroup, removeGroup } from 'redux/actions/ws';
 import NightPlanning from './NightPlanning';
 
 export const schema = {
@@ -40,17 +41,31 @@ export const schema = {
   },
 };
 
-const NightPlanningContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
+const NightPlanningContainer = (props) => {
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
-  return (
-    <NightPlanning subscribeToStreams={subscribeToStreams} unsubscribeToStreams={unsubscribeToStreams} {...props} />
-  );
+  return <NightPlanning {...props} />;
+};
+
+const mapStateToProps = (state, ownProps) => {
+  const username = getUsername(state);
+  const commandExecutePermission = getPermCmdExec(state);
+  return {
+    username,
+    commandExecutePermission,
+    getScriptQueueOn: (index) => getScriptQueueOn(state, index),
+    getScriptSchema: (scriptQueueIndex, scriptPath) => getScriptSchema(state, scriptQueueIndex, scriptPath),
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  const subscriptions = [];
+  const subscriptions = [
+    `event-ScriptQueueState-1-stateStream`,
+    `event-ScriptQueueState-1-availableScriptsStream`,
+    `event-ScriptQueueState-2-stateStream`,
+    `event-ScriptQueueState-2-availableScriptsStream`,
+  ];
   return {
     subscriptions,
     subscribeToStreams: () => {
@@ -59,7 +74,10 @@ const mapDispatchToProps = (dispatch) => {
     unsubscribeToStreams: () => {
       subscriptions.forEach((s) => dispatch(removeGroup(s)));
     },
+    requestSALCommand: (cmd) => {
+      return dispatch(requestSALCommand(cmd));
+    },
   };
 };
 
-export default connect(null, mapDispatchToProps)(NightPlanningContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(NightPlanningContainer);
