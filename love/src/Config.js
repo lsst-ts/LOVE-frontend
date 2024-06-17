@@ -118,6 +118,12 @@ export const SCRIPTQUEUE_SCRIPT_LOCATION = {
   AFTER: 4,
 };
 
+export const SCRIPT_SCHEMA_VALIDATION_ERROR_TITLES_MAPPING = {
+  SERVER_ERROR: 'SERVER ERROR',
+  INVALID_YAML: 'INVALID CONFIG YAML',
+  PARSE_ERROR: 'ERROR WHILE PARSING YAML STRING',
+};
+
 /*****************************************************************************/
 /****************************Limits configurations****************************/
 /*****************************************************************************/
