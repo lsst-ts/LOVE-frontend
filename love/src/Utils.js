@@ -21,12 +21,14 @@ import html2canvas from 'html2canvas';
 import { DateTime } from 'luxon';
 import { toast } from 'react-toastify';
 import Moment from 'moment';
+import yaml from 'js-yaml';
 import {
   WEBSOCKET_SIMULATION,
   SUBPATH,
   ISO_INTEGER_DATE_FORMAT,
   AUTO_HYPERLINK_JIRA_PROJECTS,
   JIRA_TICKETS_BASE_URL,
+  SCRIPT_SCHEMA_VALIDATION_ERROR_TITLES_MAPPING,
 } from 'Config.js';
 
 /* Backwards compatibility of Array.flat */
@@ -2093,4 +2095,32 @@ export function checkJSONResponse(response, onSuccess) {
 export function formatOLETimeOfIncident(dateStart, dateEnd) {
   if (dateStart === dateEnd) return truncateISODateToMinutes(dateStart);
   return `${truncateISODateToMinutes(dateStart)} - ${truncateISODateToMinutes(dateEnd)}`;
+}
+
+/**
+ * Parse script schema validation errors returned from the
+ * ManagerInterface.requestConfigValidation promise
+ * @param {object} error error object returned from the requestConfigValidation promise
+ * it must have at least a title and another error object with respective properties.
+ * @returns {object} parsed error object with title and message
+ */
+export function parseScriptSchemaError(error) {
+  let message = '';
+  if (error.title === SCRIPT_SCHEMA_VALIDATION_ERROR_TITLES_MAPPING.PARSE_ERROR) {
+    message = `${error.error.problem}\n ${yaml.dump({
+      line: error.error.problem_mark?.line,
+      column: error.error.problem_mark?.column,
+      pointer: error.error.problem_mark?.pointer,
+      index: error.error.problem_mark?.index,
+    })}`;
+  } else if (error.title === SCRIPT_SCHEMA_VALIDATION_ERROR_TITLES_MAPPING.INVALID_YAML) {
+    message = error.error.message;
+  } else if (error.title === SCRIPT_SCHEMA_VALIDATION_ERROR_TITLES_MAPPING.SERVER_ERROR) {
+    message = error.error.message;
+  }
+
+  return {
+    title: error.title,
+    message: message,
+  };
 }
