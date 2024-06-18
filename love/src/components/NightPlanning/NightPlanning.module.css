@@ -221,6 +221,20 @@
   margin-bottom: var(--small-padding);
 }
 
+.stepField.stepActualResult :last-child {
+  display: flex;
+  gap: var(--small-padding);
+}
+
+.stepField.stepActualResult :last-child textarea {
+  min-height: 5em;
+}
+
+.stepField.stepActualResult .saveActualResultButton {
+  display: flex;
+  align-items: center;
+}
+
 .statusLabel {
   font-weight: bold;
   padding: 0.5em;
