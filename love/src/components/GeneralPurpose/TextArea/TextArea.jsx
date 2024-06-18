@@ -21,22 +21,11 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './TextArea.module.css';
 
-function TextArea({ value, className, callback, ...otherProps }) {
-  const [content, setContent] = useState(value ?? '');
-
-  useEffect(() => {
-    setContent(value ?? '');
-  }, [value]);
-
-  const onChange = (e) => {
-    setContent(e.target.value);
-    callback(e.target.value);
-  };
-
+function TextArea({ value, callback, className, ...otherProps }) {
   return (
     <textarea
-      value={content}
-      onChange={onChange}
+      value={value}
+      onChange={(e) => callback(e.target.value)}
       className={[styles.textarea, className].join(' ')}
       {...otherProps}
     ></textarea>
@@ -45,11 +34,11 @@ function TextArea({ value, className, callback, ...otherProps }) {
 
 TextArea.propTypes = {
   /** Value of the text area */
-  value: PropTypes.string,
+  value: PropTypes.string.isRequired,
+  /** Callback function to be called when the text area changes */
+  callback: PropTypes.func.isRequired,
   /** Class name for the text area */
   className: PropTypes.string,
-  /** Callback function to be called when the text area changes */
-  callback: PropTypes.func,
 };
 
 export default TextArea;
