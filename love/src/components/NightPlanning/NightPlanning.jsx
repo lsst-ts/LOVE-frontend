@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import ProgressBar from 'components/GeneralPurpose/ProgressBar/ProgressBar';
+import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import LaunchScriptIcon from 'components/icons/ScriptQueue/LaunchScriptIcon/LaunchScriptIcon';
 import ErrorIcon from 'components/icons/ErrorIcon/ErrorIcon';
 import {
@@ -300,6 +301,7 @@ function TestCaseStep({
   launchScript,
 }) {
   const [scriptSchemaError, setScriptSchemaError] = useState('');
+  const [actualResult, setActualResult] = useState(actual_result);
 
   useEffect(() => {
     if (scriptSchema?.includes(SCRIPTQUEUE_EMPTY_SCHEMA_STRING)) {
@@ -329,6 +331,20 @@ function TestCaseStep({
         });
     }
   }, [script_configuration, scriptSchema]);
+
+  const updateActualResult = () => {
+    const payload = {
+      request_type: 'narrative',
+      level: 0,
+      is_human: true,
+      date_begin: new Date().toISOString().slice(0, -1),
+      date_end: new Date().toISOString().slice(0, -1),
+      message_text: actualResult,
+    };
+    ManagerInterface.createMessageNarrativeLogs(payload).then((r) => {
+      console.log(r);
+    });
+  };
 
   return (
     <div className={styles.testCaseStep}>
@@ -381,9 +397,19 @@ function TestCaseStep({
           <div className={styles.stepSalScriptConfigError}>{scriptSchemaError}</div>
           <div className={styles.fontHighligthed}>{script_configuration || 'None'}</div>
         </div>
-        <div className={styles.stepField}>
+        <div className={[styles.stepField, styles.stepActualResult].join(' ')}>
           <div>Actual Result</div>
-          <div className={styles.fontHighligthed}>{actual_result}</div>
+          <div className={styles.fontHighligthed}>
+            <TextArea value={actualResult} callback={setActualResult} />
+            <Button
+              className={styles.saveActualResultButton}
+              size="extra-small"
+              title="Save actual result"
+              onClick={updateActualResult}
+            >
+              Save
+            </Button>
+          </div>
         </div>
       </div>
     </div>
