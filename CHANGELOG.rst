@@ -5,6 +5,7 @@ Version History
 v6.1.1
 ------
 
+* Bump braces from 3.0.2 to 3.0.3 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/647>`_
 * Bump ejs from 3.1.9 to 3.1.10 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/638>`_
 
 v6.1.0
