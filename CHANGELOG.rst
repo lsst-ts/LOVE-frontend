@@ -5,6 +5,7 @@ Version History
 v6.1.1
 ------
 
+* Update package.json version to v6.1.1 `<https://github.com/lsst-ts/LOVE-frontend/pull/650>`_
 * Rename Confluence URL to Night Plan URL on the CreateNightReport component `<https://github.com/lsst-ts/LOVE-frontend/pull/649>`_
 * Bump ws from 7.5.9 to 7.5.10 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/648>`_
 * Bump braces from 3.0.2 to 3.0.3 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/647>`_
