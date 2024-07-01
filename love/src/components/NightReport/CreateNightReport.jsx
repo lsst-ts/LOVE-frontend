@@ -99,7 +99,7 @@ function TelescopeStatusField({ isEditDisabled, telescopeStatus, setTelescopeSta
 function ConfluenceURLField({ isEditDisabled, confluenceURL, setConfluenceURL }) {
   return (
     <div className={styles.inputField}>
-      <div>Confluence URL</div>
+      <div>Night Plan URL</div>
       <Input disabled={isEditDisabled} value={confluenceURL} onChange={(e) => setConfluenceURL(e.target.value)} />
     </div>
   );
