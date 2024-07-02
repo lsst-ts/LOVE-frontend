@@ -70,6 +70,8 @@ export default class CSCExpanded extends PureComponent {
     configurationsAvailable: PropTypes.object,
     /** CSC Log Level stream */
     cscLogLevelData: PropTypes.object,
+    /** Simulation Mode stream */
+    simulationMode: PropTypes.object,
     /** Function to subscribe to streams */
     subscribeToStreams: PropTypes.func,
     /** Function to unsubscribe to streams */
@@ -84,16 +86,12 @@ export default class CSCExpanded extends PureComponent {
     name: '',
     salindex: undefined,
     group: '',
-    onCSCClick: () => 0,
-    clearCSCErrorCodes: () => 0,
-    clearCSCLogMessages: () => 0,
-    requestSALCommand: () => 0,
-    summaryStateData: undefined,
-    softwareVersions: undefined,
-    configurationsAvailable: undefined,
+    onCSCClick: () => {},
+    clearCSCErrorCodes: () => {},
+    clearCSCLogMessages: () => {},
+    requestSALCommand: () => {},
     logMessageData: [],
     errorCodeData: [],
-    cscLogLevelData: undefined,
   };
 
   componentDidMount = () => {
@@ -228,8 +226,9 @@ export default class CSCExpanded extends PureComponent {
       summaryStateData,
       softwareVersions,
       configurationsAvailable: configurationsAvailableData,
-      cscLogLevelData,
       configurationApplied: configurationAppliedData,
+      cscLogLevelData,
+      simulationMode,
       heartbeatData,
       logMessageData,
       errorCodeData,
@@ -287,6 +286,7 @@ export default class CSCExpanded extends PureComponent {
       heartbeatTitle += `Last seen: ${timeDiffText}`;
     }
 
+    const isSimulated = simulationMode?.mode.value > 0;
     return (
       <div className={styles.CSCGroupContainer}>
         <div className={styles.CSCExpandedContainer}>
@@ -304,7 +304,12 @@ export default class CSCExpanded extends PureComponent {
                     <span> &#62; </span>
                   </>
                 )}
-                {!hideTitle && <span>{cscText(name, salindex)}</span>}
+                {!hideTitle && (
+                  <>
+                    <span>{cscText(name, salindex)}</span>
+                    {isSimulated ? <span className={styles.simulatedLabel}> (SIMULATED)</span> : ''}
+                  </>
+                )}
               </div>
               {displaySummaryState && (
                 <div className={[styles.stateContainer].join(' ')}>

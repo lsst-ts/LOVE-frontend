@@ -92,6 +92,7 @@ const CSCDetailContainer = ({
   serverTime,
   embedded,
   withWarning,
+  simulationMode,
   isRaw,
   subscriptions,
 }) => {
@@ -112,6 +113,7 @@ const CSCDetailContainer = ({
       embedded={embedded}
       withWarning={withWarning}
       serverTime={serverTime}
+      simulationMode={simulationMode}
     />
   );
 };
@@ -121,6 +123,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     `event-${ownProps.name}-${ownProps.salindex}-summaryState`,
     `event-${ownProps.name}-${ownProps.salindex}-logMessage`,
     `event-${ownProps.name}-${ownProps.salindex}-errorCode`,
+    `event-${ownProps.name}-${ownProps.salindex}-simulationMode`,
     `event-Heartbeat-0-stream`,
   ];
   return {
@@ -139,9 +142,11 @@ const mapStateToProps = (state, ownProps) => {
   const withWarning = getCSCWithWarning(state, ownProps.name, ownProps.salindex);
   const heartbeatData = getCSCHeartbeat(state, ownProps.name, ownProps.salindex);
   const summaryStateData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-summaryState`)?.[0];
+  const simulationMode = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-simulationMode`)?.[0];
 
   return {
     summaryStateData,
+    simulationMode,
     heartbeatData,
     withWarning,
     serverTime,

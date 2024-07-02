@@ -85,6 +85,7 @@ const CSCExpandedContainer = ({
   subscribeToStreams,
   unsubscribeToStreams,
   heartbeatData,
+  simulationMode,
   displaySummaryState = true,
   hideTitle = false,
 }) => {
@@ -107,6 +108,7 @@ const CSCExpandedContainer = ({
       logMessageData={logMessageData}
       heartbeatData={heartbeatData}
       clearCSCLogMessages={clearCSCLogMessages}
+      simulationMode={simulationMode}
       displaySummaryState={displaySummaryState}
       hideTitle={hideTitle}
     />
@@ -124,6 +126,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(addGroup(`event-${cscName}-${index}-softwareVersions`));
       dispatch(addGroup(`event-${cscName}-${index}-configurationsAvailable`));
       dispatch(addGroup(`event-${cscName}-${index}-configurationApplied`));
+      dispatch(addGroup(`event-${cscName}-${index}-simulationMode`));
     },
     unsubscribeToStreams: (cscName, index) => {
       dispatch(removeGroup('event-Heartbeat-0-stream'));
@@ -134,6 +137,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(removeGroup(`event-${cscName}-${index}-softwareVersions`));
       dispatch(removeGroup(`event-${cscName}-${index}-configurationsAvailable`));
       dispatch(removeGroup(`event-${cscName}-${index}-configurationApplied`));
+      dispatch(removeGroup(`event-${cscName}-${index}-simulationMode`));
     },
     clearCSCLogMessages: (csc, salindex) => {
       dispatch(removeCSCLogMessages(csc, salindex));
@@ -152,29 +156,30 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  let summaryStateData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-summaryState`);
-  let heartbeatData = getCSCHeartbeat(state, ownProps.name, ownProps.salindex);
-  let softwareVersions = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-softwareVersions`);
-  let configurationsAvailable = getStreamData(
+  const heartbeatData = getCSCHeartbeat(state, ownProps.name, ownProps.salindex);
+  const logMessageData = getCSCLogMessages(state, ownProps.name, ownProps.salindex);
+  const errorCodeData = getCSCErrorCodeData(state, ownProps.name, ownProps.salindex);
+
+  const summaryStateData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-summaryState`);
+  const softwareVersions = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-softwareVersions`);
+  const configurationsAvailable = getStreamData(
     state,
     `event-${ownProps.name}-${ownProps.salindex}-configurationsAvailable`,
   );
-  let configurationApplied = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-configurationApplied`);
-  let cscLogLevelData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-logLevel`);
-
-  const logMessageData = getCSCLogMessages(state, ownProps.name, ownProps.salindex);
-  const errorCodeData = getCSCErrorCodeData(state, ownProps.name, ownProps.salindex);
-  summaryStateData = summaryStateData ? summaryStateData : {};
+  const configurationApplied = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-configurationApplied`);
+  const cscLogLevelData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-logLevel`);
+  const simulationMode = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-simulationMode`);
 
   return {
-    summaryStateData: summaryStateData ? summaryStateData?.[0] : undefined,
-    softwareVersions: softwareVersions ? softwareVersions?.[0] : undefined,
-    configurationsAvailable: configurationsAvailable ? configurationsAvailable?.[0] : undefined,
-    configurationApplied: configurationApplied ? configurationApplied?.[0] : undefined,
-    cscLogLevelData: cscLogLevelData ? cscLogLevelData?.[0] : undefined,
     heartbeatData,
     logMessageData,
     errorCodeData,
+    summaryStateData: summaryStateData?.[0],
+    softwareVersions: softwareVersions?.[0],
+    configurationsAvailable: configurationsAvailable?.[0],
+    configurationApplied: configurationApplied?.[0],
+    cscLogLevelData: cscLogLevelData?.[0],
+    simulationMode: simulationMode?.[0],
   };
 };
 

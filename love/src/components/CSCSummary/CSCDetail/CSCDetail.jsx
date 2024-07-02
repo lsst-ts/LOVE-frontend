@@ -55,6 +55,8 @@ export default class CSCDetail extends Component {
     withWarning: PropTypes.bool,
     /** Server time object */
     serverTime: PropTypes.object,
+    /** Simulation Mode stream */
+    simulationMode: PropTypes.object,
   };
 
   static defaultProps = {
@@ -129,6 +131,7 @@ export default class CSCDetail extends Component {
       hasHeartbeat,
       withWarning,
       serverTime,
+      simulationMode,
     } = this.props;
     let heartbeatStatus = 'unknown';
     let nLost = 0;
@@ -172,10 +175,15 @@ export default class CSCDetail extends Component {
     }
 
     const heartbeatIsOk = heartbeatStatus === 'ok';
+    const isSimulated = simulationMode?.mode.value > 0;
     return (
       <div
         onClick={() => onCSCClick({ group: group, csc: name, salindex: salindex })}
-        className={[styles.CSCDetailContainer, embedded ? styles.minWidth : ''].join(' ')}
+        className={[
+          styles.CSCDetailContainer,
+          embedded ? styles.minWidth : '',
+          isSimulated ? styles.simulated : '',
+        ].join(' ')}
       >
         <div className={[styles.summaryStateSection, summaryState.class].join(' ')}>
           <span className={styles.summaryState} title={summaryState.userReadable}>
@@ -188,7 +196,10 @@ export default class CSCDetail extends Component {
           </div>
         </div>
 
-        <div className={[styles.nameSection, stateClass].join(' ')} title={name + '.' + salindex}>
+        <div
+          className={[styles.nameSection, stateClass].join(' ')}
+          title={name + '.' + salindex + (isSimulated ? ' (SIMULATED)' : '')}
+        >
           {cscText(name, salindex)}
         </div>
 
