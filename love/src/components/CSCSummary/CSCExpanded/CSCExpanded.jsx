@@ -256,7 +256,6 @@ export default class CSCExpanded extends PureComponent {
     const configurationVersion = configurationAppliedData?.version.value;
     const configurationUrl = configurationAppliedData?.url.value;
     const configurationSchemaVersion = configurationAppliedData?.schemaVersion.value;
-    const configurationOtherInfo = configurationAppliedData?.otherInfo.value.replaceAll(',', ', ');
 
     const configurationsAvailableMenuOptions =
       configurationsAvailable?.length > 0 ? ['', ...configurationsAvailable] : null;
@@ -347,9 +346,6 @@ export default class CSCExpanded extends PureComponent {
                       {configurationUrl}
                     </a>
                   </div>
-                  {/* <div className={styles.titlePadding}>
-                    Configurations applied other info: {configurationOtherInfo}
-                  </div> */}
                 </div>
               </div>
             </div>
