@@ -39,22 +39,45 @@ export default class CSCExpanded extends PureComponent {
   }
 
   static propTypes = {
+    /** Name of the CSC */
     name: PropTypes.string,
+    /** Index of the CSC */
     salindex: PropTypes.number,
+    /** Belonging group of the CSC */
     group: PropTypes.string,
+    /** Function to execute when the CSC is clicked
+     * It will be called with an object containing the following keys:
+     * - group: The group of the CSC
+     * - csc: The name of the CSC
+     * - salindex: The index of the CSC
+     */
     onCSCClick: PropTypes.func,
+    /** Function to clear the error codes */
     clearCSCErrorCodes: PropTypes.func,
+    /** Function to clear the log messages */
     clearCSCLogMessages: PropTypes.func,
+    /** Function to send SAL commands */
     requestSALCommand: PropTypes.func,
+    /** Summary State stream */
     summaryStateData: PropTypes.object,
+    /** Log Messages array */
     logMessageData: PropTypes.array,
+    /** Error code array */
     errorCodeData: PropTypes.array,
+    /** Software versions stream */
     softwareVersions: PropTypes.object,
+    /** Configuration applied stream */
     configurationsAvailable: PropTypes.object,
+    /** CSC Log Level stream */
+    cscLogLevelData: PropTypes.object,
+    /** Function to subscribe to streams */
     subscribeToStreams: PropTypes.func,
+    /** Function to unsubscribe to streams */
     unsubscribeToStreams: PropTypes.func,
-    summaryStateCommand: PropTypes.string,
-    cscLogLevelData: PropTypes.number,
+    /** Whether to display the summary state */
+    displaySummaryState: PropTypes.bool,
+    /** Whether to display the title of  */
+    hideTitle: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -70,7 +93,6 @@ export default class CSCExpanded extends PureComponent {
     configurationsAvailable: undefined,
     logMessageData: [],
     errorCodeData: [],
-    summaryStateCommand: undefined,
     cscLogLevelData: undefined,
   };
 
