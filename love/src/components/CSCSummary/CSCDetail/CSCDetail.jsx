@@ -64,6 +64,8 @@ export default class CSCDetail extends Component {
     subscribeToStreams: () => {},
     unsubscribeToStreams: () => {},
     embedded: false,
+    hasHeartbeat: true,
+    withWarning: false,
   };
 
   static states = {
@@ -139,7 +141,8 @@ export default class CSCDetail extends Component {
       else timeDiff = Math.ceil(serverTime.tai * 1000 - heartbeatData.last_heartbeat_timestamp);
       heartbeatStatus = heartbeatData.lost > 0 || timeDiff < 0 ? 'alert' : 'ok';
     }
-    if (hasHeartbeat === false) {
+
+    if (!hasHeartbeat) {
       heartbeatStatus = 'ok';
     }
 
@@ -150,17 +153,25 @@ export default class CSCDetail extends Component {
     }
 
     let title = `${cscText(name, salindex)} heartbeat\nLost: ${nLost}\n`;
-
     if (timeDiff === null) {
       title += `${timeDiffText}`;
     } else {
       title += timeDiff < 0 ? `Last seen: ${timeDiffText}` : `${timeDiffText}`;
     }
+
     const summaryStateValue = summaryStateData ? summaryStateData.summaryState.value : 0;
     const summaryState = CSCDetail.states[summaryStateValue];
-    let stateClass = heartbeatStatus === 'alert' ? styles.alert : summaryState.class;
-    if (heartbeatStatus === 'unknown') stateClass = CSCDetail.states[0].class;
-    if (summaryState.name === 'UNKNOWN') stateClass = CSCDetail.states[0].class;
+
+    const summaryStateIsUnknown = summaryState === 'UNKNOWN';
+    let stateClass = summaryState.class;
+    if (heartbeatStatus === 'alert' && !summaryStateIsUnknown) {
+      stateClass = styles.alert;
+    }
+    if (heartbeatStatus === 'unknown' && !summaryStateIsUnknown) {
+      stateClass = styles.unknown;
+    }
+
+    const heartbeatIsOk = heartbeatStatus === 'ok';
     return (
       <div
         onClick={() => onCSCClick({ group: group, csc: name, salindex: salindex })}
@@ -172,16 +183,8 @@ export default class CSCDetail extends Component {
           </span>
         </div>
         <div className={[styles.heartbeatSection, stateClass].join(' ')}>
-          <div
-            className={[
-              styles.heartbeatIconWrapper,
-              heartbeatStatus === 'ok' && hasHeartbeat !== false ? styles.hidden : '',
-            ].join(' ')}
-          >
-            <HeartbeatIcon
-              status={heartbeatStatus === 'alert' || hasHeartbeat === false ? 'unknown' : heartbeatStatus}
-              title={title}
-            />
+          <div className={[styles.heartbeatIconWrapper, !hasHeartbeat || heartbeatIsOk ? styles.hidden : ''].join(' ')}>
+            <HeartbeatIcon status={heartbeatStatus} title={title} />
           </div>
         </div>
 
@@ -190,7 +193,7 @@ export default class CSCDetail extends Component {
         </div>
 
         <div className={[styles.warningIconSection, stateClass].join(' ')}>
-          <div className={[styles.warningIconWrapper, withWarning !== true ? styles.hidden : ''].join(' ')}>
+          <div className={[styles.warningIconWrapper, !withWarning ? styles.hidden : ''].join(' ')}>
             <WarningIcon title="warning" />
           </div>
         </div>
