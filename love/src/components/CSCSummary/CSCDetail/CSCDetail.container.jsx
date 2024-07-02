@@ -135,16 +135,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const withWarning = getCSCWithWarning(state, ownProps.name, ownProps.salindex);
-  let summaryStateData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-summaryState`);
-  let heartbeatData = getCSCHeartbeat(state, ownProps.name, ownProps.salindex);
   const serverTime = getServerTime(state);
-  if (!summaryStateData) {
-    summaryStateData = {};
-  }
+  const withWarning = getCSCWithWarning(state, ownProps.name, ownProps.salindex);
+  const heartbeatData = getCSCHeartbeat(state, ownProps.name, ownProps.salindex);
+  const summaryStateData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-summaryState`)?.[0];
 
   return {
-    summaryStateData: summaryStateData[0],
+    summaryStateData,
     heartbeatData,
     withWarning,
     serverTime,
