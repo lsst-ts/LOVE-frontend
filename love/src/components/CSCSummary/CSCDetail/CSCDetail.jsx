@@ -26,23 +26,41 @@ import styles from './CSCDetail.module.css';
 
 export default class CSCDetail extends Component {
   static propTypes = {
+    /** Name of the CSC */
     name: PropTypes.string,
+    /** Belonging group of the CSC */
     group: PropTypes.string,
+    /** Index of the CSC */
     salindex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    /** Function to execute when the CSC is clicked
+     * It will be called with an object containing the following keys:
+     * - group: The group of the CSC
+     * - csc: The name of the CSC
+     * - salindex: The index of the CSC
+     */
     onCSCClick: PropTypes.func,
+    /** Heartbeat stream */
     heartbeatData: PropTypes.object,
+    /** Summary State stream */
     summaryStateData: PropTypes.object,
+    /** Function to subscribe to streams */
     subscribeToStreams: PropTypes.func,
+    /** Function to unsubscribe to streams */
     unsubscribeToStreams: PropTypes.func,
+    /** Whereas to apply a minWidth */
     embedded: PropTypes.bool,
+    /** Make heartbeat display optional  */
+    hasHeartbeat: PropTypes.bool,
+    /** Whereas to show a warning icon */
+    withWarning: PropTypes.bool,
+    /** Server time object */
+    serverTime: PropTypes.object,
   };
 
   static defaultProps = {
     name: '',
     group: '',
-    onCSCClick: () => 0,
-    heartbeatData: null,
-    summaryStateData: undefined,
+    onCSCClick: () => {},
     subscribeToStreams: () => {},
     unsubscribeToStreams: () => {},
     embedded: false,
