@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.2.0
+------
+
+* Add visual cue on CSCDetail and CSCExpanded to identify CSCs on simulation mode `<https://github.com/lsst-ts/LOVE-frontend/pull/651>`_
+
 v6.1.1
 ------
 
