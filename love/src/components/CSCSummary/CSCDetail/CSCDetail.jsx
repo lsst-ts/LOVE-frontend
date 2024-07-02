@@ -29,30 +29,23 @@ export default class CSCDetail extends Component {
     name: PropTypes.string,
     group: PropTypes.string,
     salindex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    data: PropTypes.object,
     onCSCClick: PropTypes.func,
     heartbeatData: PropTypes.object,
     summaryStateData: PropTypes.object,
     subscribeToStreams: PropTypes.func,
     unsubscribeToStreams: PropTypes.func,
     embedded: PropTypes.bool,
-    /* Whether the component should subscribe to streams*/
-    shouldSubscribe: PropTypes.bool,
-    isRaw: PropTypes.bool,
   };
 
   static defaultProps = {
     name: '',
     group: '',
-    data: {},
     onCSCClick: () => 0,
     heartbeatData: null,
     summaryStateData: undefined,
     subscribeToStreams: () => {},
     unsubscribeToStreams: () => {},
     embedded: false,
-    shouldSubscribe: true,
-    isRaw: false,
   };
 
   static states = {
