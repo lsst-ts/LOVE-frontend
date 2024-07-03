@@ -289,12 +289,7 @@ body {
   --breakpoint-md: 768px;
   --breakpoint-lg: 992px;
   --breakpoint-xl: 1200px;
-}
-
-@media (min-width: 3800px) {
-  :root {
-    font-size: 24px;
-  }
+  --breakpoint-xxl: 3800px;
 }
 
 /* width */

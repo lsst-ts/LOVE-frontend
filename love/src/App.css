@@ -22,15 +22,15 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   font-size: 1rem;
 }
 
-@media (min-width: 1240px) {
+@media only screen and (max-width: 480px) {
   .App {
-    font-size: 14px;
+    font-size: 0.8rem;
   }
 }
 
-@media (min-width: 3840px) {
+@media only screen and (min-width: 3800px) {
   .App {
-    font-size: 20px;
+    font-size: 1.8rem;
   }
 }
 
