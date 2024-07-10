@@ -5,6 +5,7 @@ Version History
 v6.2.0
 ------
 
+* Update package.json version to v6.2.0 `<https://github.com/lsst-ts/LOVE-frontend/pull/652>`_
 * Fix observers dropdown on the NightReport component `<https://github.com/lsst-ts/LOVE-frontend/pull/655>`_
 * Fix M1M3 force dropdown selection behavior `<https://github.com/lsst-ts/LOVE-frontend/pull/654>`_
 * Adjust polling rate for external services queries `<https://github.com/lsst-ts/LOVE-frontend/pull/653>`_
