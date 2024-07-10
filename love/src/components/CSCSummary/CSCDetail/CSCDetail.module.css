@@ -141,3 +141,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .hidden {
   display: none;
 }
+
+.simulated {
+  border: 0.2em dashed var(--info-background-color);
+}

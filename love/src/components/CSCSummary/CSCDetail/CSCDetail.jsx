@@ -26,33 +26,48 @@ import styles from './CSCDetail.module.css';
 
 export default class CSCDetail extends Component {
   static propTypes = {
+    /** Name of the CSC */
     name: PropTypes.string,
+    /** Belonging group of the CSC */
     group: PropTypes.string,
+    /** Index of the CSC */
     salindex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    data: PropTypes.object,
+    /** Function to execute when the CSC is clicked
+     * It will be called with an object containing the following keys:
+     * - group: The group of the CSC
+     * - csc: The name of the CSC
+     * - salindex: The index of the CSC
+     */
     onCSCClick: PropTypes.func,
+    /** Heartbeat stream */
     heartbeatData: PropTypes.object,
+    /** Summary State stream */
     summaryStateData: PropTypes.object,
+    /** Function to subscribe to streams */
     subscribeToStreams: PropTypes.func,
+    /** Function to unsubscribe to streams */
     unsubscribeToStreams: PropTypes.func,
+    /** Whereas to apply a minWidth */
     embedded: PropTypes.bool,
-    /* Whether the component should subscribe to streams*/
-    shouldSubscribe: PropTypes.bool,
-    isRaw: PropTypes.bool,
+    /** Make heartbeat display optional  */
+    hasHeartbeat: PropTypes.bool,
+    /** Whereas to show a warning icon */
+    withWarning: PropTypes.bool,
+    /** Server time object */
+    serverTime: PropTypes.object,
+    /** Simulation Mode stream */
+    simulationMode: PropTypes.object,
   };
 
   static defaultProps = {
     name: '',
     group: '',
-    data: {},
-    onCSCClick: () => 0,
-    heartbeatData: null,
-    summaryStateData: undefined,
+    onCSCClick: () => {},
     subscribeToStreams: () => {},
     unsubscribeToStreams: () => {},
     embedded: false,
-    shouldSubscribe: true,
-    isRaw: false,
+    hasHeartbeat: true,
+    withWarning: false,
   };
 
   static states = {
@@ -95,27 +110,42 @@ export default class CSCDetail extends Component {
   };
 
   componentDidMount = () => {
-    this.props.subscribeToStreams(this.props.name, this.props.salindex);
+    const { name, salindex, subscribeToStreams } = this.props;
+    subscribeToStreams(name, salindex);
   };
 
   componentWillUnmount = () => {
-    this.props.unsubscribeToStreams(this.props.name, this.props.salindex);
+    const { name, salindex, unsubscribeToStreams } = this.props;
+    unsubscribeToStreams(name, salindex);
   };
 
   render() {
-    const { props } = this;
+    const {
+      group,
+      name,
+      salindex,
+      summaryStateData,
+      heartbeatData,
+      onCSCClick,
+      embedded,
+      hasHeartbeat,
+      withWarning,
+      serverTime,
+      simulationMode,
+    } = this.props;
     let heartbeatStatus = 'unknown';
     let nLost = 0;
     let timeDiff = null;
     let timeDiffText = 'No heartbeat from producer.';
 
-    if (this.props.heartbeatData) {
-      nLost = this.props.heartbeatData.lost;
-      if (this.props.heartbeatData.last_heartbeat_timestamp === -1) timeDiff = -1;
-      else timeDiff = Math.ceil(props.serverTime.tai * 1000 - this.props.heartbeatData.last_heartbeat_timestamp);
-      heartbeatStatus = this.props.heartbeatData.lost > 0 || timeDiff < 0 ? 'alert' : 'ok';
+    if (heartbeatData) {
+      nLost = heartbeatData.lost;
+      if (heartbeatData.last_heartbeat_timestamp === -1) timeDiff = -1;
+      else timeDiff = Math.ceil(serverTime.tai * 1000 - heartbeatData.last_heartbeat_timestamp);
+      heartbeatStatus = heartbeatData.lost > 0 || timeDiff < 0 ? 'alert' : 'ok';
     }
-    if (props.hasHeartbeat === false) {
+
+    if (!hasHeartbeat) {
       heartbeatStatus = 'ok';
     }
 
@@ -125,22 +155,35 @@ export default class CSCDetail extends Component {
       timeDiffText = timeDiff < 0 ? 'Stale' : `${timeDiff} seconds ago`;
     }
 
-    let title = `${cscText(this.props.name, this.props.salindex)} heartbeat\nLost: ${nLost}\n`;
-
+    let title = `${cscText(name, salindex)} heartbeat\nLost: ${nLost}\n`;
     if (timeDiff === null) {
       title += `${timeDiffText}`;
     } else {
       title += timeDiff < 0 ? `Last seen: ${timeDiffText}` : `${timeDiffText}`;
     }
-    const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value : 0;
+
+    const summaryStateValue = summaryStateData ? summaryStateData.summaryState.value : 0;
     const summaryState = CSCDetail.states[summaryStateValue];
-    let stateClass = heartbeatStatus === 'alert' ? styles.alert : summaryState.class;
-    if (heartbeatStatus === 'unknown') stateClass = CSCDetail.states[0].class;
-    if (summaryState.name === 'UNKNOWN') stateClass = CSCDetail.states[0].class;
+
+    const summaryStateIsUnknown = summaryState === 'UNKNOWN';
+    let stateClass = summaryState.class;
+    if (heartbeatStatus === 'alert' && !summaryStateIsUnknown) {
+      stateClass = styles.alert;
+    }
+    if (heartbeatStatus === 'unknown' && !summaryStateIsUnknown) {
+      stateClass = styles.unknown;
+    }
+
+    const heartbeatIsOk = heartbeatStatus === 'ok';
+    const isSimulated = simulationMode?.mode.value > 0;
     return (
       <div
-        onClick={() => this.props.onCSCClick({ group: props.group, csc: props.name, salindex: props.salindex })}
-        className={[styles.CSCDetailContainer, this.props.embedded ? styles.minWidth : ''].join(' ')}
+        onClick={() => onCSCClick({ group: group, csc: name, salindex: salindex })}
+        className={[
+          styles.CSCDetailContainer,
+          embedded ? styles.minWidth : '',
+          isSimulated ? styles.simulated : '',
+        ].join(' ')}
       >
         <div className={[styles.summaryStateSection, summaryState.class].join(' ')}>
           <span className={styles.summaryState} title={summaryState.userReadable}>
@@ -148,25 +191,20 @@ export default class CSCDetail extends Component {
           </span>
         </div>
         <div className={[styles.heartbeatSection, stateClass].join(' ')}>
-          <div
-            className={[
-              styles.heartbeatIconWrapper,
-              heartbeatStatus === 'ok' && props.hasHeartbeat !== false ? styles.hidden : '',
-            ].join(' ')}
-          >
-            <HeartbeatIcon
-              status={heartbeatStatus === 'alert' || props.hasHeartbeat === false ? 'unknown' : heartbeatStatus}
-              title={title}
-            />
+          <div className={[styles.heartbeatIconWrapper, !hasHeartbeat || heartbeatIsOk ? styles.hidden : ''].join(' ')}>
+            <HeartbeatIcon status={heartbeatStatus} title={title} />
           </div>
         </div>
 
-        <div className={[styles.nameSection, stateClass].join(' ')} title={this.props.name + '.' + this.props.salindex}>
-          {cscText(this.props.name, this.props.salindex)}
+        <div
+          className={[styles.nameSection, stateClass].join(' ')}
+          title={name + '.' + salindex + (isSimulated ? ' (SIMULATED)' : '')}
+        >
+          {cscText(name, salindex)}
         </div>
 
         <div className={[styles.warningIconSection, stateClass].join(' ')}>
-          <div className={[styles.warningIconWrapper, props.withWarning !== true ? styles.hidden : ''].join(' ')}>
+          <div className={[styles.warningIconWrapper, !withWarning ? styles.hidden : ''].join(' ')}>
             <WarningIcon title="warning" />
           </div>
         </div>

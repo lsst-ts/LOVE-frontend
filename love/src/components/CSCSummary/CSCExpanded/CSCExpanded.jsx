@@ -39,53 +39,76 @@ export default class CSCExpanded extends PureComponent {
   }
 
   static propTypes = {
+    /** Name of the CSC */
     name: PropTypes.string,
+    /** Index of the CSC */
     salindex: PropTypes.number,
+    /** Belonging group of the CSC */
     group: PropTypes.string,
+    /** Function to execute when the CSC is clicked
+     * It will be called with an object containing the following keys:
+     * - group: The group of the CSC
+     * - csc: The name of the CSC
+     * - salindex: The index of the CSC
+     */
     onCSCClick: PropTypes.func,
+    /** Function to clear the error codes */
     clearCSCErrorCodes: PropTypes.func,
+    /** Function to clear the log messages */
     clearCSCLogMessages: PropTypes.func,
+    /** Function to send SAL commands */
     requestSALCommand: PropTypes.func,
+    /** Summary State stream */
     summaryStateData: PropTypes.object,
+    /** Log Messages array */
     logMessageData: PropTypes.array,
+    /** Error code array */
     errorCodeData: PropTypes.array,
+    /** Software versions stream */
     softwareVersions: PropTypes.object,
+    /** Configuration applied stream */
     configurationsAvailable: PropTypes.object,
+    /** CSC Log Level stream */
+    cscLogLevelData: PropTypes.object,
+    /** Simulation Mode stream */
+    simulationMode: PropTypes.object,
+    /** Function to subscribe to streams */
     subscribeToStreams: PropTypes.func,
+    /** Function to unsubscribe to streams */
     unsubscribeToStreams: PropTypes.func,
-    summaryStateCommand: PropTypes.string,
-    cscLogLevelData: PropTypes.number,
+    /** Whether to display the summary state */
+    displaySummaryState: PropTypes.bool,
+    /** Whether to display the title of  */
+    hideTitle: PropTypes.bool,
   };
 
   static defaultProps = {
     name: '',
     salindex: undefined,
     group: '',
-    onCSCClick: () => 0,
-    clearCSCErrorCodes: () => 0,
-    clearCSCLogMessages: () => 0,
-    requestSALCommand: () => 0,
-    summaryStateData: undefined,
-    softwareVersions: undefined,
-    configurationsAvailable: undefined,
+    onCSCClick: () => {},
+    clearCSCErrorCodes: () => {},
+    clearCSCLogMessages: () => {},
+    requestSALCommand: () => {},
     logMessageData: [],
     errorCodeData: [],
-    summaryStateCommand: undefined,
-    cscLogLevelData: undefined,
   };
 
   componentDidMount = () => {
-    this.props.subscribeToStreams(this.props.name, this.props.salindex);
+    const { name, salindex, subscribeToStreams } = this.props;
+    subscribeToStreams(name, salindex);
   };
 
   componentWillUnmount = () => {
-    this.props.unsubscribeToStreams(this.props.name, this.props.salindex);
+    const { name, salindex, unsubscribeToStreams } = this.props;
+    unsubscribeToStreams(name, salindex);
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (prevProps.name !== this.props.name || prevProps.salindex !== this.props.salindex) {
-      this.props.unsubscribeToStreams(prevProps.name, prevProps.salindex);
-      this.props.subscribeToStreams(this.props.name, this.props.salindex);
+    const { name, salindex, subscribeToStreams, unsubscribeToStreams } = this.props;
+    if (prevProps.name !== name || prevProps.salindex !== salindex) {
+      unsubscribeToStreams(prevProps.name, prevProps.salindex);
+      subscribeToStreams(name, salindex);
     }
   };
 
@@ -174,68 +197,80 @@ export default class CSCExpanded extends PureComponent {
   }
 
   sendSummaryStateCommand(event) {
-    this.props.requestSALCommand({
-      cmd: `cmd_${this.state.summaryStateCommand}`,
-      csc: this.props.name,
-      salindex: this.props.salindex,
-      params:
-        this.state.summaryStateCommand === 'start'
-          ? {
-              configurationOverride: this.state.configurationOverride,
-            }
-          : {},
+    const { name, salindex, requestSALCommand } = this.props;
+    const { summaryStateCommand, configurationOverride } = this.state;
+    requestSALCommand({
+      cmd: `cmd_${summaryStateCommand}`,
+      csc: name,
+      salindex: salindex,
+      params: summaryStateCommand === 'start' ? { configurationOverride } : {},
     });
   }
 
   sendSetLogLevel(event) {
-    this.props.requestSALCommand({
+    const { name, salindex, requestSALCommand } = this.props;
+    const { logLevel } = this.state;
+    requestSALCommand({
       cmd: 'cmd_setLogLevel',
-      csc: this.props.name,
-      salindex: this.props.salindex,
-      params: {
-        level: this.state.logLevel,
-      },
+      csc: name,
+      salindex: salindex,
+      params: { level: logLevel },
     });
   }
 
   render() {
-    const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value : 0;
-    const cscVersion = this.props.softwareVersions ? this.props.softwareVersions.cscVersion.value : 'Unknown';
-    const xmlVersion = this.props.softwareVersions ? this.props.softwareVersions.xmlVersion.value : 'Unknown';
-    const salVersion = this.props.softwareVersions ? this.props.softwareVersions.salVersion.value : 'Unknown';
-    const openSpliceVersion = this.props.softwareVersions
-      ? this.props.softwareVersions.openSpliceVersion.value
-      : 'Unknown';
-    const configurationsAvailable = this.props.configurationsAvailable
-      ? this.props.configurationsAvailable.overrides.value.split(',')
+    const {
+      group,
+      name,
+      salindex,
+      summaryStateData,
+      softwareVersions,
+      configurationsAvailable: configurationsAvailableData,
+      configurationApplied: configurationAppliedData,
+      cscLogLevelData,
+      simulationMode,
+      heartbeatData,
+      logMessageData,
+      errorCodeData,
+      onCSCClick,
+      clearCSCErrorCodes,
+      clearCSCLogMessages,
+      displaySummaryState,
+      hideTitle,
+    } = this.props;
+    const { summaryStateCommand } = this.state;
+
+    const summaryStateValue = summaryStateData ? summaryStateData.summaryState.value : 0;
+    const cscVersion = softwareVersions ? softwareVersions.cscVersion.value : 'Unknown';
+    const xmlVersion = softwareVersions ? softwareVersions.xmlVersion.value : 'Unknown';
+    const salVersion = softwareVersions ? softwareVersions.salVersion.value : 'Unknown';
+    const openSpliceVersion = softwareVersions ? softwareVersions.openSpliceVersion.value : 'Unknown';
+    const configurationsAvailable = configurationsAvailableData
+      ? configurationsAvailableData.overrides.value.split(',')
       : null;
     const summaryState = CSCExpanded.states[summaryStateValue];
-    const cscLogLevel = this.props.cscLogLevelData ? this.props.cscLogLevelData.level.value : null;
+    const cscLogLevel = cscLogLevelData ? cscLogLevelData.level.value : null;
 
-    const configurationApplied = this.props.configurationApplied?.configurations.value;
-    const configurationVersion = this.props.configurationApplied?.version.value;
-    const configurationUrl = this.props.configurationApplied?.url.value;
-    const configurationSchemaVersion = this.props.configurationApplied?.schemaVersion.value;
-    const configurationOtherInfo = this.props.configurationApplied?.otherInfo.value.replaceAll(',', ', ');
+    const configurationApplied = configurationAppliedData?.configurations.value;
+    const configurationVersion = configurationAppliedData?.version.value;
+    const configurationUrl = configurationAppliedData?.url.value;
+    const configurationSchemaVersion = configurationAppliedData?.schemaVersion.value;
 
     const configurationsAvailableMenuOptions =
-      configurationsAvailable !== null && configurationsAvailable.length > 0
-        ? [...[''], ...configurationsAvailable]
-        : null;
+      configurationsAvailable?.length > 0 ? ['', ...configurationsAvailable] : null;
 
     let heartbeatStatus = 'unknown';
     let nLost = 0;
     let timeDiff = -1;
-    if (this.props.heartbeatData) {
-      nLost = this.props.heartbeatData.lost;
-      if (this.props.heartbeatData.last_heartbeat_timestamp < 0) timeDiff = -1;
-      if (this.props.heartbeatData.last_heartbeat_timestamp === -2) timeDiff = -2;
-      else timeDiff = Math.ceil(new Date().getTime() / 1000 - this.props.heartbeatData.last_heartbeat_timestamp);
-      heartbeatStatus = this.props.heartbeatData.lost > 0 || timeDiff < 0 ? 'alert' : 'ok';
+    if (heartbeatData) {
+      nLost = heartbeatData.lost;
+      if (heartbeatData.last_heartbeat_timestamp < 0) timeDiff = -1;
+      if (heartbeatData.last_heartbeat_timestamp === -2) timeDiff = -2;
+      else timeDiff = Math.ceil(new Date().getTime() / 1000 - heartbeatData.last_heartbeat_timestamp);
+      heartbeatStatus = heartbeatData.lost > 0 || timeDiff < 0 ? 'alert' : 'ok';
     }
 
     let timeDiffText = 'Unknown';
-
     if (timeDiff === -2) {
       timeDiffText = 'No heartbeat event in Remote.';
     } else if (timeDiff === -1) {
@@ -244,40 +279,39 @@ export default class CSCExpanded extends PureComponent {
       timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
     }
 
-    let heartbeatTitle = `${cscText(this.props.name, this.props.salindex)} heartbeat\nLost: ${nLost}\n`;
-
+    let heartbeatTitle = `${cscText(name, salindex)} heartbeat\nLost: ${nLost}\n`;
     if (timeDiff === -2) {
       heartbeatTitle += `${timeDiffText}`;
     } else {
       heartbeatTitle += `Last seen: ${timeDiffText}`;
     }
 
+    const isSimulated = simulationMode?.mode.value > 0;
     return (
       <div className={styles.CSCGroupContainer}>
         <div className={styles.CSCExpandedContainer}>
           <div className={styles.topBarContainerWrapper}>
             <div className={styles.topBarContainer}>
               <div className={styles.breadcrumContainer}>
-                {this.props.group && (
+                {group && (
                   <>
-                    <div
-                      className={styles.backArrowIconWrapper}
-                      onClick={() => this.props.onCSCClick({ group: this.props.group })}
-                    >
+                    <div className={styles.backArrowIconWrapper} onClick={() => onCSCClick({ group: group })}>
                       <BackArrowIcon />
                     </div>
-                    <span
-                      className={styles.breadcrumbGroup}
-                      onClick={() => this.props.onCSCClick({ group: this.props.group, csc: 'all' })}
-                    >
-                      {this.props.group}
+                    <span className={styles.breadcrumbGroup} onClick={() => onCSCClick({ group: group, csc: 'all' })}>
+                      {group}
                     </span>
                     <span> &#62; </span>
                   </>
                 )}
-                {!this.props.hideTitle && <span>{cscText(this.props.name, this.props.salindex)}</span>}
+                {!hideTitle && (
+                  <>
+                    <span>{cscText(name, salindex)}</span>
+                    {isSimulated ? <span className={styles.simulatedLabel}> (SIMULATED)</span> : ''}
+                  </>
+                )}
               </div>
-              {this.props.displaySummaryState && (
+              {displaySummaryState && (
                 <div className={[styles.stateContainer].join(' ')}>
                   <div>
                     <span
@@ -294,7 +328,7 @@ export default class CSCExpanded extends PureComponent {
               )}
             </div>
           </div>
-          {this.props.name !== 'Script' && (
+          {name !== 'Script' && (
             <div className={styles.topBarContainerWrapper}>
               <div className={styles.topBarContainer}>
                 <div className={styles.breadcrumContainer}>
@@ -306,7 +340,7 @@ export default class CSCExpanded extends PureComponent {
               </div>
             </div>
           )}
-          {this.props.name !== 'Script' && this.props.configurationApplied && (
+          {name !== 'Script' && configurationApplied && (
             <div className={styles.topBarContainerWrapper}>
               <div className={styles.topBarContainer}>
                 <div className={styles.breadcrumContainer}>
@@ -317,14 +351,11 @@ export default class CSCExpanded extends PureComponent {
                       {configurationUrl}
                     </a>
                   </div>
-                  {/* <div className={styles.titlePadding}>
-                    Configurations applied other info: {configurationOtherInfo}
-                  </div> */}
                 </div>
               </div>
             </div>
           )}
-          {this.props.name !== 'Script' && (
+          {name !== 'Script' && (
             <div className={styles.topBarContainerWrapper}>
               <div className={styles.topBarContainer}>
                 <div className={styles.breadcrumContainer}>
@@ -336,7 +367,7 @@ export default class CSCExpanded extends PureComponent {
                     placeholder="Select state"
                   />
                 </div>
-                {configurationsAvailableMenuOptions !== null && this.state.summaryStateCommand === 'start' && (
+                {configurationsAvailableMenuOptions !== null && summaryStateCommand === 'start' && (
                   <div className={styles.breadcrumContainer}>
                     <div className={styles.titlePadding}>Configurations available:</div>
                     <Select
@@ -354,7 +385,7 @@ export default class CSCExpanded extends PureComponent {
                     status="info"
                     shape="rounder"
                     padding="30px"
-                    disabled={this.state.summaryStateCommand === null}
+                    disabled={summaryStateCommand === null}
                     onClick={(event) => {
                       this.sendSummaryStateCommand(event);
                     }}
@@ -367,7 +398,7 @@ export default class CSCExpanded extends PureComponent {
             </div>
           )}
 
-          {this.state.summaryStateCommand !== null && (
+          {summaryStateCommand !== null && (
             <div className={styles.topBarContainerWrapper}>
               <div className={styles.topBarContainer}>
                 <div className={styles.breadcrumContainer}>
@@ -376,7 +407,7 @@ export default class CSCExpanded extends PureComponent {
                       <span className={styles.warningIcon}>
                         <WarningIcon></WarningIcon>
                       </span>
-                      <span>CSC must be in {CSCExpanded.validState[this.state.summaryStateCommand]}.</span>
+                      <span>CSC must be in {CSCExpanded.validState[summaryStateCommand]}.</span>
                     </span>
                   </div>
                 </div>
@@ -384,7 +415,7 @@ export default class CSCExpanded extends PureComponent {
             </div>
           )}
 
-          {(cscLogLevel !== null || this.props.name === 'Script') && (
+          {(cscLogLevel !== null || name === 'Script') && (
             <div className={styles.topBarContainerWrapper}>
               <div className={styles.topBarContainer}>
                 <div className={styles.breadcrumContainer}>
@@ -423,21 +454,18 @@ export default class CSCExpanded extends PureComponent {
             </div>
           )}
 
-          {this.props.errorCodeData.length > 0 && (
+          {errorCodeData.length > 0 && (
             <div className={[styles.logContainer, styles.errorCodeContainer].join(' ')}>
               <div className={styles.logContainerTopBar}>
                 <div>ERROR CODE</div>
                 <div>
-                  <Button
-                    size="extra-small"
-                    onClick={() => this.props.clearCSCErrorCodes(this.props.name, this.props.salindex)}
-                  >
+                  <Button size="extra-small" onClick={() => clearCSCErrorCodes(name, salindex)}>
                     CLEAR
                   </Button>
                 </div>
               </div>
               <div className={[styles.log, styles.messageLogContent].join(' ')}>
-                {this.props.errorCodeData.map((msg, index) => {
+                {errorCodeData.map((msg, index) => {
                   return (
                     <div key={`${msg.private_rcvStamp.value}-${index}`} className={styles.logMessage}>
                       <div className={styles.errorCode} title={`Error code ${msg.errorCode.value}`}>
@@ -458,8 +486,8 @@ export default class CSCExpanded extends PureComponent {
           )}
 
           <LogMessageDisplay
-            logMessageData={this.props.logMessageData}
-            clearCSCLogMessages={() => this.props.clearCSCLogMessages(this.props.name, this.props.salindex)}
+            logMessageData={logMessageData}
+            clearCSCLogMessages={() => clearCSCLogMessages(name, salindex)}
           />
         </div>
       </div>
