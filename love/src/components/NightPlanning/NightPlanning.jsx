@@ -303,6 +303,8 @@ function TestCaseStep({
   const [scriptSchemaError, setScriptSchemaError] = useState('');
   const [actualResult, setActualResult] = useState(actual_result);
 
+  console.log(scriptSchema);
+
   useEffect(() => {
     if (scriptSchema?.includes(SCRIPTQUEUE_EMPTY_SCHEMA_STRING)) {
       setScriptSchemaError('');
@@ -552,7 +554,7 @@ function TestExecutionDetails({
       <div className={styles.testCaseSectionTitle}>Test Script</div>
       <div>
         {steps.map((step, i) => {
-          const fullScriptPath = 'data/scripts/' + step.sal_script;
+          const fullScriptPath = /* 'data/scripts/' + */ step.sal_script;
           const queueIndex = getScriptQueueSalindexFromScriptPath(step.sal_script);
           const isQueueOn = getScriptQueueOn(queueIndex);
           const scriptSchema = getScriptSchema(queueIndex, fullScriptPath);
