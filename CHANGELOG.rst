@@ -5,6 +5,7 @@ Version History
 v6.2.0
 ------
 
+* Adjust polling rate for external services queries `<https://github.com/lsst-ts/LOVE-frontend/pull/653>`_
 * Add visual cue on CSCDetail and CSCExpanded to identify CSCs on simulation mode `<https://github.com/lsst-ts/LOVE-frontend/pull/651>`_
 
 v6.1.1
