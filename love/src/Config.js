@@ -26,6 +26,9 @@ export const SUBPATH = process.env.PUBLIC_URL ?? '';
 // Commands Configurations
 export const hasCommandPrivileges = true;
 
+// Time rate for polling external APIs
+export const POLLING_RATE_MS = 10000;
+
 // LOVE components to monitor heartbeats
 export const HEARTBEAT_COMPONENTS = {
   MANAGER: 'Manager',
