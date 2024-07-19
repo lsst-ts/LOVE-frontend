@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import ManagerInterface from 'Utils';
@@ -230,10 +230,10 @@ function AuxTelForm() {
     return currentStep === STEPS.SENT;
   };
 
-  const handleSelectedUsersChange = (newSelectedUsers) => {
+  const handleSelectedUsersChange = useCallback((newSelectedUsers) => {
     setSelectedUsers(newSelectedUsers);
     setChangesNotSaved(true);
-  };
+  }, []);
 
   const handleSummaryChange = (newSummary) => {
     setSummary(newSummary);
@@ -394,10 +394,10 @@ function SimonyiForm() {
     return currentStep === STEPS.SENT;
   };
 
-  const handleSelectedUsersChange = (newSelectedUsers) => {
+  const handleSelectedUsersChange = useCallback((newSelectedUsers) => {
     setSelectedUsers(newSelectedUsers);
     setChangesNotSaved(true);
-  };
+  }, []);
 
   const handleSummaryChange = (newSummary) => {
     setSummary(newSummary);
