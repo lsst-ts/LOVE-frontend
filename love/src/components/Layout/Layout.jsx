@@ -36,7 +36,7 @@ import ManagerInterface, {
   parseTimestamp,
   formatTimestamp,
 } from 'Utils';
-import { severityEnum } from 'Config';
+import { severityEnum, POLLING_RATE_MS } from 'Config';
 
 import { viewsStates, modes } from '../../redux/reducers/uif';
 import { tokenSwapStates } from '../../redux/reducers/auth';
@@ -167,15 +167,19 @@ class Layout extends Component {
 
     this.heartbeatInterval = setInterval(() => {
       this.checkHeartbeat();
+    }, 3000);
+
+    this.externalServicesInterval = setInterval(() => {
       this.checkEfdStatus();
       this.checkSALStatus();
-    }, 3000);
+    }, POLLING_RATE_MS);
   };
 
   componentWillUnmount = () => {
     document.removeEventListener('mousedown', this.handleClick, false);
     window.removeEventListener('resize', this.handleResize);
     window.clearInterval(this.heartbeatInterval);
+    window.clearInterval(this.externalServicesInterval);
     this.props.unsubscribeToStreams();
     this.props.stopControlLocationLoop();
   };
