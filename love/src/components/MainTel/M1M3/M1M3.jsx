@@ -61,8 +61,8 @@ export default class M1M3 extends Component {
       colormap: () => '#fff',
       width: 480,
       zoomLevel: 1,
-      selectedForceInput: '',
-      selectedForceParameter: '',
+      selectedForceInput: null,
+      selectedForceParameter: null,
       showActuatorsID: true,
       showHardpoints: true,
       actuatorsForce: [],
@@ -354,6 +354,7 @@ export default class M1M3 extends Component {
     const filteredParameters = M1M3ActuatorForces[force];
     this.setState({
       selectedForceInput: force,
+      selectedForceParameter: null,
       forceParameters: filteredParameters,
     });
   };
@@ -544,7 +545,7 @@ export default class M1M3 extends Component {
               <span>Select force input:</span>
               <Select
                 options={forceInputs}
-                option={null}
+                option={this.state.selectedForceInput}
                 onChange={(selection) => this.forceInputSelected(selection)}
               />
             </div>
@@ -552,7 +553,7 @@ export default class M1M3 extends Component {
               <span>Select force parameter:</span>
               <Select
                 options={forceParameters}
-                option={null}
+                option={this.state.selectedForceParameter}
                 onChange={(selection) => this.forceParameterSelected(selection)}
               />
             </div>
