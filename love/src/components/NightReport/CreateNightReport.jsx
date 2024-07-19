@@ -53,13 +53,12 @@ function ProgressBarSection({ currentStep, currentStatusText }) {
   );
 }
 
-function ObserversField({ isEditDisabled, observersFieldRef, userOptions, selectedUsers, setSelectedUsers }) {
+function ObserversField({ isEditDisabled, userOptions, selectedUsers, setSelectedUsers }) {
   return (
     <>
       <div>Observers</div>
       <MultiSelect
         disable={isEditDisabled}
-        innerRef={observersFieldRef}
         options={userOptions}
         selectedValues={selectedUsers}
         onSelect={setSelectedUsers}
@@ -129,7 +128,6 @@ function AlertsSection({ refreshWarningActive, changesNotSaved }) {
 }
 
 function AuxTelForm() {
-  const observersFieldRef = useRef();
   const [currentStep, setCurrentStep] = useState(STEPS.NOTSAVED);
   const [userOptions, setUserOptions] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -260,7 +258,6 @@ function AuxTelForm() {
 
       <ObserversField
         isEditDisabled={isEditDisabled()}
-        observersFieldRef={observersFieldRef}
         userOptions={userOptions}
         selectedUsers={selectedUsers}
         setSelectedUsers={handleSelectedUsersChange}
@@ -295,7 +292,6 @@ function AuxTelForm() {
 }
 
 function SimonyiForm() {
-  const observersFieldRef = useRef();
   const [currentStep, setCurrentStep] = useState(STEPS.NOTSAVED);
   const [userOptions, setUserOptions] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -430,7 +426,6 @@ function SimonyiForm() {
 
       <ObserversField
         isEditDisabled={isEditDisabled()}
-        observersFieldRef={observersFieldRef}
         userOptions={userOptions}
         selectedUsers={selectedUsers}
         setSelectedUsers={handleSelectedUsersChange}
