@@ -54,6 +54,10 @@ function ProgressBarSection({ currentStep, currentStatusText }) {
 }
 
 function ObserversField({ isEditDisabled, userOptions, selectedUsers, setSelectedUsers }) {
+  const memoizedSelectedValueDecorator = useCallback(
+    (v) => (v.length > MULTI_SELECT_OPTION_LENGHT ? `...${v.slice(-MULTI_SELECT_OPTION_LENGHT)}` : v),
+    [],
+  );
   return (
     <>
       <div>Observers</div>
@@ -64,9 +68,7 @@ function ObserversField({ isEditDisabled, userOptions, selectedUsers, setSelecte
         onSelect={setSelectedUsers}
         onRemove={setSelectedUsers}
         placeholder="Select users that participated on the report."
-        selectedValueDecorator={(v) =>
-          v.length > MULTI_SELECT_OPTION_LENGHT ? `...${v.slice(-MULTI_SELECT_OPTION_LENGHT)}` : v
-        }
+        selectedValueDecorator={memoizedSelectedValueDecorator}
       />
     </>
   );
