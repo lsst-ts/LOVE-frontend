@@ -16,186 +16,6 @@ import styles from './NightPlanning.module.css';
 
 const RUN_SCRIPT_LOG_LEVEL = 10;
 
-const dummyTestCycles = [
-  'BLOCK-R17 - TestCycle AuxTel 1',
-  'BLOCK-R18 - TestCycle AuxTel 2',
-  'BLOCK-R19 - TestCycle AuxTel 3',
-  'BLOCK-R20 - TestCycle AuxTel 4',
-];
-
-const dummyTestCases = [
-  {
-    id: 'BLOCK-T17',
-    version: '1.0',
-    status: 'PASSED',
-    title: 'AuxTel Daytime Checkouts',
-    assignee: 'Bruno Quint',
-    environment: '2. Late Afternoon',
-  },
-  {
-    id: 'BLOCK-T18',
-    version: '1.0',
-    status: 'PASSED',
-    title: 'AuxTel Daytime Checkouts',
-    assignee: 'Bruno Quint',
-    environment: '2. Late Afternoon',
-  },
-  {
-    id: 'BLOCK-T19',
-    version: '1.0',
-    status: 'FAILED',
-    title: 'AuxTel Daytime Checkouts',
-    assignee: 'Bruno Quint',
-    environment: '2. Late Afternoon',
-  },
-  {
-    id: 'BLOCK-T20',
-    version: '1.0',
-    status: 'PASSED',
-    title: 'AuxTel Daytime Checkouts',
-    assignee: 'Bruno Quint',
-    environment: '3. Early Night',
-  },
-  {
-    id: 'BLOCK-T21',
-    version: '1.0',
-    status: 'PASSED',
-    title: 'AuxTel Daytime Checkouts',
-    assignee: 'Bruno Quint',
-    environment: '3. Early Night',
-  },
-  {
-    id: 'BLOCK-T22',
-    version: '1.0',
-    status: 'FAILED',
-    title: 'AuxTel Daytime Checkouts',
-    assignee: 'Bruno Quint',
-    environment: '3. Early Night',
-  },
-];
-
-const dummyTestExecution = {
-  id: 'BLOCK-T17',
-  version: '1.0',
-  title: 'AuxTel Daytime Checkouts',
-  status: 'PASSED',
-  environment: '2. Late Afternoon',
-  release_version: 'None',
-  executed_by: 'Bruno Quint',
-  executed_time: 15,
-  iteration: 'None',
-  assignee: 'Bruno Quint',
-  estimated_time: 1200,
-  objective: 'Complete AuxTel Daytime Checkouts',
-  precondition: 'AuxTel is in a good state',
-  comment: 'All tests passed successfully',
-  issues: [
-    // { id: "BLOCK-T17", title: "AuxTel Daytime Checkouts", status: "PASSED" },
-  ],
-  attachments: [
-    // { title: "AuxTel Daytime Checkouts", url: "http://example.com" },
-  ],
-  steps: [
-    {
-      title: 'Enable LATISS',
-      status: 'NOT EXECUTED',
-      test_data: 'None',
-      expected_result: 'Script completes without error. All ATSpectrograph components are enabled.',
-      sal_script: 'auxtel/enable_latiss.py',
-      is_external: false,
-      // script_configuration: 'atcamera: null\natoods: null\natspectrograph: null\nignore: []',
-      script_configuration: 'atcamera: null\natoods: null\natspectrograph: null\nignore: [',
-      // script_configuration: 'asdf',
-      actual_result: 'None',
-    },
-    {
-      title: 'Run LATISS checkouts',
-      status: 'NOT EXECUTED',
-      test_data: 'None',
-      expected_result: 'Script completes without error.',
-      sal_script: 'auxtel/daytime_checkout/latiss_checkout.py',
-      is_external: false,
-      script_configuration: '',
-      actual_result: 'None',
-    },
-    {
-      title: 'Enable ATCS.',
-      status: 'NOT EXECUTED',
-      test_data: 'None',
-      expected_result: 'Script completes without error. All AuxTel components are in enabled mode.',
-      sal_script: 'auxtel/enable_atcs.py',
-      is_external: false,
-      script_configuration: '',
-      actual_result: 'None',
-    },
-    {
-      title: 'ATPneumatics Checkout',
-      status: 'NOT EXECUTED',
-      test_data: 'None',
-      expected_result: 'Script completes without error.',
-      sal_script: 'auxtel/daytime_checkout/atpneumatics_checkout.py',
-      is_external: false,
-      script_configuration: '',
-      actual_result: 'None',
-    },
-  ],
-};
-
-const dummyTestCycleDetails = {
-  id: 'BLOCK-R17',
-  title: 'TestCycle AuxTel 1',
-  description: 'Complete AuxTel Checkouts',
-  folder: 'None',
-  status: 'NOT EXECUTED',
-  release_version: 'None',
-  iteration: 'None',
-  owner: 'Bruno Quint',
-  planned_start_date: '2024-04-22',
-  planned_end_date: '2024-04-23',
-  extra_fields: [
-    {
-      title: 'TMA walk around done',
-      type: 'checkbox',
-      value: true,
-    },
-    {
-      title: 'TMA walk around - performed by',
-      type: 'text',
-      value: 'Bruno Quint',
-    },
-    {
-      title: 'TMA walk around done - comments',
-      type: 'text',
-      value: 'No comments',
-    },
-    {
-      title: 'TMA ready for use?',
-      type: 'checkbox',
-      value: true,
-    },
-    {
-      title: 'End of Night - TMA El position',
-      type: 'text',
-      value: 'Zenith',
-    },
-    {
-      title: 'End of Night - TMA Az position',
-      type: 'text',
-      value: '0°',
-    },
-    {
-      title: 'End of Night - OSS Power Status',
-      type: 'text',
-      value: 'Zenith',
-    },
-    {
-      title: 'End of Night - Power Supply Status',
-      type: 'text',
-      value: 'Zenith',
-    },
-  ],
-};
-
 const statusToStyle = {
   PASSED: styles.passed,
   FAILED: styles.failed,
@@ -278,7 +98,7 @@ function TestCycleDetails({
         </div>
         <div className={styles.testCycleSectionTitle}>More information</div>
         <div className={styles.testCycleExtraFields}>
-          {extra_fields.map((field) => renderTestCycleDetailField(field))}
+          {extra_fields?.map((field) => renderTestCycleDetailField(field))}
         </div>
       </div>
     </div>
@@ -531,7 +351,7 @@ function TestExecutionDetails({
       <div className={styles.fontHighligthed}>{comment}</div>
       <div className={styles.testCaseSectionTitle}>Issues</div>
       <div className={styles.fontHighligthed}>
-        {issues.length > 0
+        {issues?.length > 0
           ? issues.map((issue) => (
               <div>
                 {issue.id} {issue.title} {issue.status}
@@ -541,7 +361,7 @@ function TestExecutionDetails({
       </div>
       <div className={styles.testCaseSectionTitle}>Attachments</div>
       <div className={styles.fontHighligthed}>
-        {attachments.length > 0
+        {attachments?.length > 0
           ? attachments.map((attachment) => (
               <div>
                 {attachment.title} {attachment.url}
@@ -551,8 +371,8 @@ function TestExecutionDetails({
       </div>
       <div className={styles.testCaseSectionTitle}>Test Script</div>
       <div>
-        {steps.map((step, i) => {
-          const fullScriptPath = 'data/scripts/' + step.sal_script;
+        {steps?.map((step, i) => {
+          const fullScriptPath = /* 'data/scripts/' + */ step.sal_script;
           const queueIndex = getScriptQueueSalindexFromScriptPath(step.sal_script);
           const isQueueOn = getScriptQueueOn(queueIndex);
           const scriptSchema = getScriptSchema(queueIndex, fullScriptPath);
@@ -707,32 +527,56 @@ function NightPlanning({
   unsubscribeToStreams,
   requestSALCommand,
 }) {
-  const [selectedTestCycle, setSelectedTestCycle] = useState(dummyTestCycles[0]);
+  const [selectedTestCycle, setSelectedTestCycle] = useState();
+  const [selectedTestCase, setSelectedTestCase] = useState();
+  const [testCyclesData, setTestCyclesData] = useState([]);
+  const [testCycleData, setTestCycleData] = useState({});
+  const [testCasesData, setTestCasesData] = useState([]);
+  const [testExecutionData, setTestExecutionData] = useState({});
 
   useEffect(() => {
+    // Subscribe to the streams
     subscribeToStreams();
+
+    // Query night plans
+    ManagerInterface.getNightPlanTestCycles().then(setTestCyclesData);
+
     return () => {
+      // Unsubscribe to the streams when the component unmounts
       unsubscribeToStreams();
     };
   }, []);
+
+  useEffect(() => {
+    // Query night plan data
+    ManagerInterface.getNightPlanTestCycle(selectedTestCycle).then(setTestCycleData);
+    ManagerInterface.getNightPlanTestCases(selectedTestCycle).then(setTestCasesData);
+  }, [selectedTestCycle]);
+
+  useEffect(() => {
+    // Query test case data
+    ManagerInterface.getNightPlanTestCaseExecution(selectedTestCase).then(setTestExecutionData);
+  }, [selectedTestCase]);
 
   return (
     <div className={styles.container}>
       <div className={styles.filters}>
         <Select
-          options={dummyTestCycles}
+          options={testCyclesData}
           onChange={({ value }) => setSelectedTestCycle(value)}
           value={selectedTestCycle}
           placeholder="Select a test cycle"
         />
       </div>
       <div className={styles.testDetails}>
-        <TestCycleDetails {...dummyTestCycleDetails} />
+        <TestCycleDetails {...testCycleData} />
       </div>
       <div className={styles.testPlayer}>
         <div className={styles.testCases}>
-          {dummyTestCases.map((testCase) => (
-            <TestCase key={testCase.id} {...testCase} />
+          {testCasesData?.map((testCase) => (
+            <div key={testCase.id} onClick={() => setSelectedTestCase(testCase.id)}>
+              <TestCase {...testCase} />
+            </div>
           ))}
         </div>
         <div className={styles.testExecution}>
@@ -742,7 +586,7 @@ function NightPlanning({
             getScriptQueueOn={getScriptQueueOn}
             getScriptSchema={getScriptSchema}
             requestSALCommand={requestSALCommand}
-            {...dummyTestExecution}
+            {...testExecutionData}
           />
         </div>
       </div>

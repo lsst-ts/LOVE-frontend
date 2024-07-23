@@ -1081,6 +1081,133 @@ export default class ManagerInterface {
     });
   }
 
+  static getNightPlanTestCycles() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const url = `${this.getApiBaseUrl()}planning-tool/test-cycles`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      return checkJSONResponse(response);
+    });
+  }
+
+  static getNightPlanTestCycle(test_cycle_id) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const url = `${this.getApiBaseUrl()}planning-tool/test-cycles/${test_cycle_id}/`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      return checkJSONResponse(response);
+    });
+  }
+
+  static getNightPlanTestCases(test_cycle_id) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const url = `${this.getApiBaseUrl()}planning-tool/test-cycles/${test_cycle_id}/test-cases/`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      return checkJSONResponse(response);
+    });
+  }
+
+  static getNightPlanTestCaseExecution(test_execution_id) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const dummyTestExecution = {
+      id: 'BLOCK-T17',
+      version: '1.0',
+      title: 'AuxTel Daytime Checkouts',
+      status: 'PASSED',
+      environment: '2. Late Afternoon',
+      release_version: 'None',
+      executed_by: 'Bruno Quint',
+      executed_time: 15,
+      iteration: 'None',
+      assignee: 'Bruno Quint',
+      estimated_time: 1200,
+      objective: 'Complete AuxTel Daytime Checkouts',
+      precondition: 'AuxTel is in a good state',
+      comment: 'All tests passed successfully',
+      issues: [
+        // { id: "BLOCK-T17", title: "AuxTel Daytime Checkouts", status: "PASSED" },
+      ],
+      attachments: [
+        // { title: "AuxTel Daytime Checkouts", url: "http://example.com" },
+      ],
+      steps: [
+        {
+          title: 'Enable LATISS',
+          status: 'NOT EXECUTED',
+          test_data: 'None',
+          expected_result: 'Script completes without error. All ATSpectrograph components are enabled.',
+          sal_script: 'auxtel/enable_latiss.py',
+          is_external: false,
+          // script_configuration: 'atcamera: null\natoods: null\natspectrograph: null\nignore: []',
+          script_configuration: 'atcamera: null\natoods: null\natspectrograph: null\nignore: [',
+          // script_configuration: 'asdf',
+          actual_result: 'None',
+        },
+        {
+          title: 'Run LATISS checkouts',
+          status: 'NOT EXECUTED',
+          test_data: 'None',
+          expected_result: 'Script completes without error.',
+          sal_script: 'auxtel/daytime_checkout/latiss_checkout.py',
+          is_external: false,
+          script_configuration: '',
+          actual_result: 'None',
+        },
+        {
+          title: 'Enable ATCS.',
+          status: 'NOT EXECUTED',
+          test_data: 'None',
+          expected_result: 'Script completes without error. All AuxTel components are in enabled mode.',
+          sal_script: 'auxtel/enable_atcs.py',
+          is_external: false,
+          script_configuration: '',
+          actual_result: 'None',
+        },
+        {
+          title: 'ATPneumatics Checkout',
+          status: 'NOT EXECUTED',
+          test_data: 'None',
+          expected_result: 'Script completes without error.',
+          sal_script: 'auxtel/daytime_checkout/atpneumatics_checkout.py',
+          is_external: false,
+          script_configuration: '',
+          actual_result: 'None',
+        },
+      ],
+    };
+
+    const url = `${this.getApiBaseUrl()}planning-tool/test-executions/${test_execution_id}/`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      return checkJSONResponse(response);
+    });
+  }
+
   /**************************************************/
 
   static getListImageTags() {
