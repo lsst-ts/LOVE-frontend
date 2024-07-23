@@ -294,3 +294,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .preText {
   white-space: pre-wrap;
 }
+
+.simulatedLabel {
+  font-weight: bold;
+  color: var(--info-background-color);
+}

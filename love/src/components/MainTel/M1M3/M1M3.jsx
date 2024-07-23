@@ -61,8 +61,8 @@ export default class M1M3 extends Component {
       colormap: () => '#fff',
       width: 480,
       zoomLevel: 1,
-      selectedForceInput: '',
-      selectedForceParameter: '',
+      selectedForceInput: null,
+      selectedForceParameter: null,
       showActuatorsID: true,
       showHardpoints: true,
       actuatorsForce: [],
@@ -354,6 +354,7 @@ export default class M1M3 extends Component {
     const filteredParameters = M1M3ActuatorForces[force];
     this.setState({
       selectedForceInput: force,
+      selectedForceParameter: null,
       forceParameters: filteredParameters,
     });
   };
@@ -487,27 +488,35 @@ export default class M1M3 extends Component {
   };
 
   render() {
+    const { summaryState, detailedState, alignment } = this.props;
+
     const {
+      actuators,
       actuatorsForce,
       zoomLevel,
       showActuatorsID,
       showHardpoints,
       forceParameters,
+      selectedForceInput,
       selectedForceParameter,
       selectedActuatorId,
       selectedHardpointId,
+      xRadius,
+      yRadius,
+      maxRadius,
+      width,
     } = this.state;
 
-    const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
+    const scale = (Math.max(xRadius, yRadius) * width) / 65000;
     const margin = 60;
 
-    const summaryStateName = summaryStateMap[this.props.summaryState];
+    const summaryStateName = summaryStateMap[summaryState];
     const summaryStateStatus = summaryStateToStyle[summaryStateName];
 
-    const detailedStateName = m1m3DetailedStateMap[this.props.detailedState];
+    const detailedStateName = m1m3DetailedStateMap[detailedState];
     const detailedStateStatus = m1m3DetailedStateToStyle[detailedStateName];
 
-    const alignedStateName = alignedStateMap[this.props.alignment];
+    const alignedStateName = alignedStateMap[alignment];
     const alignedStateStatus = alignedStateToStyle[alignedStateName];
 
     const maxForce = defaultNumberFormatter(Math.max(...actuatorsForce));
@@ -544,7 +553,7 @@ export default class M1M3 extends Component {
               <span>Select force input:</span>
               <Select
                 options={forceInputs}
-                option={null}
+                option={selectedForceInput}
                 onChange={(selection) => this.forceInputSelected(selection)}
               />
             </div>
@@ -552,20 +561,20 @@ export default class M1M3 extends Component {
               <span>Select force parameter:</span>
               <Select
                 options={forceParameters}
-                option={null}
+                option={selectedForceParameter}
                 onChange={(selection) => this.forceParameterSelected(selection)}
               />
             </div>
             <div className={styles.control}>
               <span>Show actuators ID:</span>
               <div className={styles.toggleContainer}>
-                <Toggle labels={['No', 'Yes']} toggled={this.state.showActuatorsID} onToggle={this.toggleActuatorsID} />
+                <Toggle labels={['No', 'Yes']} toggled={showActuatorsID} onToggle={this.toggleActuatorsID} />
               </div>
             </div>
             <div className={styles.control}>
               <span>Show hardpoints:</span>
               <div className={styles.toggleContainer}>
-                <Toggle labels={['No', 'Yes']} toggled={this.state.showHardpoints} onToggle={this.toggleHardpoints} />
+                <Toggle labels={['No', 'Yes']} toggled={showHardpoints} onToggle={this.toggleHardpoints} />
               </div>
             </div>
           </div>
@@ -622,48 +631,48 @@ export default class M1M3 extends Component {
             )}
             <svg
               className={styles.svgContainer}
-              viewBox={`0 0 ${this.state.width} ${this.state.width}`}
+              viewBox={`0 0 ${width} ${width}`}
               onMouseEnter={this.disableScroll}
               onMouseLeave={this.enableScroll}
             >
               <circle
                 id="background-circle"
-                className={this.state.actuators.length > 0 ? styles.circleOverlay : styles.circleOverlayDisabled}
-                cx={this.state.width / 2}
-                cy={this.state.width / 2}
+                className={actuators.length > 0 ? styles.circleOverlay : styles.circleOverlayDisabled}
+                cx={width / 2}
+                cy={width / 2}
                 key={'background'}
-                r={this.state.width / 2 - 30}
+                r={width / 2 - 30}
               />
 
               <circle
                 id={this.uniqueCircleOverlay}
-                className={this.state.actuators.length > 0 ? styles.cursorMove : styles.circleOverlayDisabled}
-                cx={this.state.width / 2}
-                cy={this.state.width / 2}
+                className={actuators.length > 0 ? styles.cursorMove : styles.circleOverlayDisabled}
+                cx={width / 2}
+                cy={width / 2}
                 key={'overlay'}
                 fill={'none'}
-                r={this.state.width / 2 - 30}
+                r={width / 2 - 30}
                 pointerEvents="all"
                 onMouseEnter={this.enableScroll}
                 onMouseLeave={this.disableScroll}
               />
 
               <g id={this.uniqueScatter} className={styles.scatter}>
-                {this.state.actuators.map((act, i) => {
+                {actuators.map((act, i) => {
                   return (
                     <g key={act.id} className={styles.actuator} onClick={() => this.actuatorSelected(act.id)}>
                       <circle
-                        cx={(act.position[0] + this.state.xRadius) * scale + margin}
-                        cy={(act.position[1] + this.state.yRadius) * scale + margin}
+                        cx={(act.position[0] + xRadius) * scale + margin}
+                        cy={(act.position[1] + yRadius) * scale + margin}
                         key={act.id}
                         fill={this.fillActuator(i)}
                         stroke={this.strokeActuatorSelected(act.id)}
-                        r={(this.state.maxRadius * scale) / 21}
+                        r={(maxRadius * scale) / 21}
                         pointerEvents="all"
                       />
                       <text
-                        x={(act.position[0] + this.state.xRadius) * scale + margin}
-                        y={(act.position[1] + this.state.yRadius) * scale + margin}
+                        x={(act.position[0] + xRadius) * scale + margin}
+                        y={(act.position[1] + yRadius) * scale + margin}
                         textAnchor="middle"
                         alignmentBaseline="middle"
                         fill={this.fillActuatorSelected(act.id)}
@@ -680,8 +689,8 @@ export default class M1M3 extends Component {
                     <circle
                       key={hardpoint.id}
                       className={showHardpoints ? styles.circleHardpointActuator : styles.hidden}
-                      cx={(hardpoint.actuator.position[0] + this.state.xRadius) * scale + margin}
-                      cy={(hardpoint.actuator.position[1] + this.state.yRadius) * scale + margin}
+                      cx={(hardpoint.actuator.position[0] + xRadius) * scale + margin}
+                      cy={(hardpoint.actuator.position[1] + yRadius) * scale + margin}
                       fill="none"
                       stroke={showHardpoints ? this.strokeHardpointActuatorSelected(hardpoint.id) : 'none'}
                       r={50 * scale}
@@ -693,24 +702,24 @@ export default class M1M3 extends Component {
 
               <circle
                 className={styles.borderCircleOverlay}
-                cx={this.state.width / 2}
-                cy={this.state.width / 2}
+                cx={width / 2}
+                cy={width / 2}
                 fill={'none'}
-                r={this.state.width / 2 - 30}
+                r={width / 2 - 30}
               />
 
               <circle
                 className={styles.hiddenCircleOverlay}
-                cx={this.state.width / 2}
-                cy={this.state.width / 2}
+                cx={width / 2}
+                cy={width / 2}
                 fill={'none'}
-                r={this.state.width * 0.7}
+                r={width * 0.7}
               />
 
               <g id="doors" className={styles.doors}>
                 <title>M1M3 Entrance</title>
-                <rect x={this.state.width / 2 - 15} y={margin / 2 - 8} width={30} height={20} />
-                <foreignObject x={this.state.width / 2 - 15} y={margin / 2 - 8} width={30} height={20}>
+                <rect x={width / 2 - 15} y={margin / 2 - 8} width={30} height={20} />
+                <foreignObject x={width / 2 - 15} y={margin / 2 - 8} width={30} height={20}>
                   <ArrowIcon style={styles.arrowIcon} active={true} />
                 </foreignObject>
               </g>
@@ -718,7 +727,7 @@ export default class M1M3 extends Component {
               <g id="plot-axis">
                 <text
                   className={styles.axisLabel}
-                  x={this.state.width / 2 - 5}
+                  x={width / 2 - 5}
                   y={margin / 2 - 15}
                   textAnchor="middle"
                   alignmentBaseline="middle"
@@ -727,8 +736,8 @@ export default class M1M3 extends Component {
                 </text>
                 <text
                   className={styles.axisLabel}
-                  x={this.state.width - 12}
-                  y={this.state.width / 2 - 5}
+                  x={width - 12}
+                  y={width / 2 - 5}
                   textAnchor="middle"
                   alignmentBaseline="middle"
                 >
@@ -736,8 +745,8 @@ export default class M1M3 extends Component {
                 </text>
                 <text
                   className={styles.axisLabel}
-                  x={this.state.width / 2 - 5}
-                  y={this.state.width - margin / 2 + 16}
+                  x={width / 2 - 5}
+                  y={width - margin / 2 + 16}
                   textAnchor="middle"
                   alignmentBaseline="middle"
                 >
@@ -746,7 +755,7 @@ export default class M1M3 extends Component {
                 <text
                   className={styles.axisLabel}
                   x={12}
-                  y={this.state.width / 2 - 5}
+                  y={width / 2 - 5}
                   textAnchor="middle"
                   alignmentBaseline="middle"
                 >
