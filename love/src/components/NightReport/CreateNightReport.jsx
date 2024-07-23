@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import ManagerInterface from 'Utils';
@@ -9,7 +9,7 @@ import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import styles from './CreateNightReport.module.css';
 
-const MULTI_SELECT_OPTION_LENGHT = 50;
+const MULTI_SELECT_OPTION_LENGTH = 50;
 const LAST_REFRESHED_WARNING_THRESHOLD = 180;
 const STATE_UPDATE_INTERVAL = 5000;
 
@@ -53,21 +53,22 @@ function ProgressBarSection({ currentStep, currentStatusText }) {
   );
 }
 
-function ObserversField({ isEditDisabled, observersFieldRef, userOptions, selectedUsers, setSelectedUsers }) {
+function ObserversField({ isEditDisabled, userOptions, selectedUsers, setSelectedUsers }) {
+  const memoizedSelectedValueDecorator = useCallback(
+    (v) => (v.length > MULTI_SELECT_OPTION_LENGTH ? `...${v.slice(-MULTI_SELECT_OPTION_LENGTH)}` : v),
+    [],
+  );
   return (
     <>
       <div>Observers</div>
       <MultiSelect
         disable={isEditDisabled}
-        innerRef={observersFieldRef}
         options={userOptions}
         selectedValues={selectedUsers}
         onSelect={setSelectedUsers}
         onRemove={setSelectedUsers}
         placeholder="Select users that participated on the report."
-        selectedValueDecorator={(v) =>
-          v.length > MULTI_SELECT_OPTION_LENGHT ? `...${v.slice(-MULTI_SELECT_OPTION_LENGHT)}` : v
-        }
+        selectedValueDecorator={memoizedSelectedValueDecorator}
       />
     </>
   );
@@ -129,7 +130,6 @@ function AlertsSection({ refreshWarningActive, changesNotSaved }) {
 }
 
 function AuxTelForm() {
-  const observersFieldRef = useRef();
   const [currentStep, setCurrentStep] = useState(STEPS.NOTSAVED);
   const [userOptions, setUserOptions] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -232,10 +232,10 @@ function AuxTelForm() {
     return currentStep === STEPS.SENT;
   };
 
-  const handleSelectedUsersChange = (newSelectedUsers) => {
+  const handleSelectedUsersChange = useCallback((newSelectedUsers) => {
     setSelectedUsers(newSelectedUsers);
     setChangesNotSaved(true);
-  };
+  }, []);
 
   const handleSummaryChange = (newSummary) => {
     setSummary(newSummary);
@@ -260,7 +260,6 @@ function AuxTelForm() {
 
       <ObserversField
         isEditDisabled={isEditDisabled()}
-        observersFieldRef={observersFieldRef}
         userOptions={userOptions}
         selectedUsers={selectedUsers}
         setSelectedUsers={handleSelectedUsersChange}
@@ -295,7 +294,6 @@ function AuxTelForm() {
 }
 
 function SimonyiForm() {
-  const observersFieldRef = useRef();
   const [currentStep, setCurrentStep] = useState(STEPS.NOTSAVED);
   const [userOptions, setUserOptions] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -398,10 +396,10 @@ function SimonyiForm() {
     return currentStep === STEPS.SENT;
   };
 
-  const handleSelectedUsersChange = (newSelectedUsers) => {
+  const handleSelectedUsersChange = useCallback((newSelectedUsers) => {
     setSelectedUsers(newSelectedUsers);
     setChangesNotSaved(true);
-  };
+  }, []);
 
   const handleSummaryChange = (newSummary) => {
     setSummary(newSummary);
@@ -430,7 +428,6 @@ function SimonyiForm() {
 
       <ObserversField
         isEditDisabled={isEditDisabled()}
-        observersFieldRef={observersFieldRef}
         userOptions={userOptions}
         selectedUsers={selectedUsers}
         setSelectedUsers={handleSelectedUsersChange}
