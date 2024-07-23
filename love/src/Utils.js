@@ -1078,6 +1078,250 @@ export default class ManagerInterface {
     });
   }
 
+  static getNightPlanTestCycles() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const dummyTestCycles = [
+      'BLOCK-R17 - TestCycle AuxTel 1',
+      'BLOCK-R18 - TestCycle AuxTel 2',
+      'BLOCK-R19 - TestCycle AuxTel 3',
+      'BLOCK-R20 - TestCycle AuxTel 4',
+    ];
+
+    const url = `${this.getApiBaseUrl()}planning-tool/test-cycles/`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      // return checkJSONResponse(response);
+      return dummyTestCycles;
+    });
+  }
+
+  static getNightPlanTestCycle(test_cycle_id) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const dummyTestCycleDetails = {
+      id: 'BLOCK-R17',
+      title: 'TestCycle AuxTel 1',
+      description: 'Complete AuxTel Checkouts',
+      folder: 'None',
+      status: 'NOT EXECUTED',
+      release_version: 'None',
+      iteration: 'None',
+      owner: 'Bruno Quint',
+      planned_start_date: '2024-04-22',
+      planned_end_date: '2024-04-23',
+      extra_fields: [
+        {
+          title: 'TMA walk around done',
+          type: 'checkbox',
+          value: true,
+        },
+        {
+          title: 'TMA walk around - performed by',
+          type: 'text',
+          value: 'Bruno Quint',
+        },
+        {
+          title: 'TMA walk around done - comments',
+          type: 'text',
+          value: 'No comments',
+        },
+        {
+          title: 'TMA ready for use?',
+          type: 'checkbox',
+          value: true,
+        },
+        {
+          title: 'End of Night - TMA El position',
+          type: 'text',
+          value: 'Zenith',
+        },
+        {
+          title: 'End of Night - TMA Az position',
+          type: 'text',
+          value: '0°',
+        },
+        {
+          title: 'End of Night - OSS Power Status',
+          type: 'text',
+          value: 'Zenith',
+        },
+        {
+          title: 'End of Night - Power Supply Status',
+          type: 'text',
+          value: 'Zenith',
+        },
+      ],
+    };
+
+    const url = `${this.getApiBaseUrl()}planning-tool/test-cycles/${test_cycle_id}/`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      // return checkJSONResponse(response);
+      return dummyTestCycleDetails;
+    });
+  }
+
+  static getNightPlanTestCases(test_cycle_id) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const dummyTestCases = [
+      {
+        id: 'BLOCK-T17',
+        version: '1.0',
+        status: 'PASSED',
+        title: 'AuxTel Daytime Checkouts',
+        assignee: 'Bruno Quint',
+        environment: '2. Late Afternoon',
+      },
+      {
+        id: 'BLOCK-T18',
+        version: '1.0',
+        status: 'PASSED',
+        title: 'AuxTel Daytime Checkouts',
+        assignee: 'Bruno Quint',
+        environment: '2. Late Afternoon',
+      },
+      {
+        id: 'BLOCK-T19',
+        version: '1.0',
+        status: 'FAILED',
+        title: 'AuxTel Daytime Checkouts',
+        assignee: 'Bruno Quint',
+        environment: '2. Late Afternoon',
+      },
+      {
+        id: 'BLOCK-T20',
+        version: '1.0',
+        status: 'PASSED',
+        title: 'AuxTel Daytime Checkouts',
+        assignee: 'Bruno Quint',
+        environment: '3. Early Night',
+      },
+      {
+        id: 'BLOCK-T21',
+        version: '1.0',
+        status: 'PASSED',
+        title: 'AuxTel Daytime Checkouts',
+        assignee: 'Bruno Quint',
+        environment: '3. Early Night',
+      },
+      {
+        id: 'BLOCK-T22',
+        version: '1.0',
+        status: 'FAILED',
+        title: 'AuxTel Daytime Checkouts',
+        assignee: 'Bruno Quint',
+        environment: '3. Early Night',
+      },
+    ];
+
+    const url = `${this.getApiBaseUrl()}planning-tool/test-cycles/${test_cycle_id}/test-cases/`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      // return checkJSONResponse(response);
+      return dummyTestCases;
+    });
+  }
+
+  static getNightPlanTestCaseExecution(test_cycle_id, test_case_id) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const dummyTestExecution = {
+      id: 'BLOCK-T17',
+      version: '1.0',
+      title: 'AuxTel Daytime Checkouts',
+      status: 'PASSED',
+      environment: '2. Late Afternoon',
+      release_version: 'None',
+      executed_by: 'Bruno Quint',
+      executed_time: 15,
+      iteration: 'None',
+      assignee: 'Bruno Quint',
+      estimated_time: 1200,
+      objective: 'Complete AuxTel Daytime Checkouts',
+      precondition: 'AuxTel is in a good state',
+      comment: 'All tests passed successfully',
+      issues: [
+        // { id: "BLOCK-T17", title: "AuxTel Daytime Checkouts", status: "PASSED" },
+      ],
+      attachments: [
+        // { title: "AuxTel Daytime Checkouts", url: "http://example.com" },
+      ],
+      steps: [
+        {
+          title: 'Enable LATISS',
+          status: 'NOT EXECUTED',
+          test_data: 'None',
+          expected_result: 'Script completes without error. All ATSpectrograph components are enabled.',
+          sal_script: 'auxtel/enable_latiss.py',
+          is_external: false,
+          // script_configuration: 'atcamera: null\natoods: null\natspectrograph: null\nignore: []',
+          script_configuration: 'atcamera: null\natoods: null\natspectrograph: null\nignore: [',
+          // script_configuration: 'asdf',
+          actual_result: 'None',
+        },
+        {
+          title: 'Run LATISS checkouts',
+          status: 'NOT EXECUTED',
+          test_data: 'None',
+          expected_result: 'Script completes without error.',
+          sal_script: 'auxtel/daytime_checkout/latiss_checkout.py',
+          is_external: false,
+          script_configuration: '',
+          actual_result: 'None',
+        },
+        {
+          title: 'Enable ATCS.',
+          status: 'NOT EXECUTED',
+          test_data: 'None',
+          expected_result: 'Script completes without error. All AuxTel components are in enabled mode.',
+          sal_script: 'auxtel/enable_atcs.py',
+          is_external: false,
+          script_configuration: '',
+          actual_result: 'None',
+        },
+        {
+          title: 'ATPneumatics Checkout',
+          status: 'NOT EXECUTED',
+          test_data: 'None',
+          expected_result: 'Script completes without error.',
+          sal_script: 'auxtel/daytime_checkout/atpneumatics_checkout.py',
+          is_external: false,
+          script_configuration: '',
+          actual_result: 'None',
+        },
+      ],
+    };
+
+    const url = `${this.getApiBaseUrl()}planning-tool/test-cycles/${test_cycle_id}/test-cases/${test_case_id}/last-execution/`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      // return checkJSONResponse(response);
+      return dummyTestExecution;
+    });
+  }
+
   /**************************************************/
 
   static getListImageTags() {

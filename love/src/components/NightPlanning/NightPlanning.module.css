@@ -35,7 +35,7 @@
   border-radius: var(--border-radius-small);
 }
 
-.testCases > .testCase {
+.testCases .testCase {
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -46,7 +46,7 @@
   border-left: 4px solid var(--status-color);
 }
 
-.testCases > .testCase:hover {
+.testCases .testCase:hover {
   background-color: var(--second-secondary-background-color);
 }
 
@@ -59,12 +59,12 @@
   height: 20px;
 }
 
-.testCases > .testCase.passed,
+.testCases .testCase.passed,
 .statusLabel.passed {
   --status-color: green;
 }
 
-.testCases > .testCase.failed,
+.testCases .testCase.failed,
 .statusLabel.failed {
   --status-color: red;
 }
