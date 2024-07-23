@@ -9,7 +9,7 @@ import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import styles from './CreateNightReport.module.css';
 
-const MULTI_SELECT_OPTION_LENGHT = 50;
+const MULTI_SELECT_OPTION_LENGTH = 50;
 const LAST_REFRESHED_WARNING_THRESHOLD = 180;
 const STATE_UPDATE_INTERVAL = 5000;
 
@@ -55,7 +55,7 @@ function ProgressBarSection({ currentStep, currentStatusText }) {
 
 function ObserversField({ isEditDisabled, userOptions, selectedUsers, setSelectedUsers }) {
   const memoizedSelectedValueDecorator = useCallback(
-    (v) => (v.length > MULTI_SELECT_OPTION_LENGHT ? `...${v.slice(-MULTI_SELECT_OPTION_LENGHT)}` : v),
+    (v) => (v.length > MULTI_SELECT_OPTION_LENGTH ? `...${v.slice(-MULTI_SELECT_OPTION_LENGTH)}` : v),
     [],
   );
   return (
