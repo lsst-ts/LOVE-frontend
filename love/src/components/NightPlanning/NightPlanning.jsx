@@ -592,7 +592,11 @@ function NightPlanning({
       <div className={styles.testPlayer}>
         <div className={styles.testCases}>
           {testCasesData?.map((testCase) => (
-            <div key={testCase.id} onClick={() => setSelectedTestCase(testCase.id)}>
+            <div
+              key={testCase.id}
+              className={selectedTestCase === testCase.id ? styles.selectedTestCase : ''}
+              onClick={() => setSelectedTestCase(testCase.id)}
+            >
               <TestCase {...testCase} />
             </div>
           ))}

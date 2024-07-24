@@ -50,6 +50,10 @@
   background-color: var(--second-secondary-background-color);
 }
 
+.testCases .selectedTestCase .testCase {
+  background-color: var(--second-secondary-background-color);
+}
+
 .testCaseAssignee {
   border-radius: 50%;
   background-color: orange;
