@@ -20,7 +20,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React from 'react';
 import { connect } from 'react-redux';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
-import { getDomeState, getATMCSState } from 'redux/selectors';
+import { getDomeState, getATMCSState, getAuxiliaryTelescopeState } from 'redux/selectors';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 import { EUIs } from 'Config';
 import Dome from './Dome';
@@ -87,6 +87,9 @@ const DomeContainer = ({
   controls,
   atDomeTracking,
   targetName,
+  telescopeRA,
+  telescopeDec,
+  telescopeRotator,
   ...props
 }) => {
   if (props.isRaw) {
@@ -130,6 +133,9 @@ const DomeContainer = ({
       ATMCSSummaryState={ATMCSSummaryState}
       atDomeTracking={atDomeTracking}
       targetName={targetName}
+      telescopeRA={telescopeRA}
+      telescopeDec={telescopeDec}
+      telescopeRotator={telescopeRotator}
     />
   );
 };
@@ -137,7 +143,8 @@ const DomeContainer = ({
 const mapStateToProps = (state) => {
   const domeState = getDomeState(state);
   const mountState = getATMCSState(state);
-  return { ...domeState, ...mountState };
+  const telescopeState = getAuxiliaryTelescopeState(state);
+  return { ...domeState, ...mountState, ...telescopeState };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -145,6 +152,7 @@ const mapDispatchToProps = (dispatch) => {
     'telemetry-ATDome-0-position',
     'telemetry-ATMCS-0-mount_AzEl_Encoders',
     'telemetry-ATMCS-0-mount_Nasmyth_Encoders',
+    'telemetry-Scheduler-2-observatoryState',
     'event-ATDome-0-azimuthState',
     'event-ATDome-0-azimuthCommandedState',
     'event-ATDome-0-dropoutDoorState',

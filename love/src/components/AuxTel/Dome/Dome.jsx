@@ -113,6 +113,12 @@ export default class Dome extends Component {
     atDomeTracking: PropTypes.bool,
     /** Target name */
     targetName: PropTypes.string,
+    /** Telescope RA */
+    telescopeRA: PropTypes.number,
+    /** Telescope Dec */
+    telescopeDec: PropTypes.number,
+    /** Rotator position */
+    telescopeRotator: PropTypes.number,
   };
 
   static defaultProps = {
@@ -308,6 +314,9 @@ export default class Dome extends Component {
       ATMCSSummaryState,
       atDomeTracking,
       targetName,
+      telescopeRA,
+      telescopeDec,
+      telescopeRotator,
     } = this.props;
 
     const { timeWindow, isLive, historicalData } = this.state;
@@ -356,7 +365,6 @@ export default class Dome extends Component {
                 targetValue={targetElevation}
               />
             </div>
-
             <Azimuth
               className={styles.svgAzimuth}
               width={width}
@@ -402,7 +410,21 @@ export default class Dome extends Component {
               title="Difference between telescope and dome azimuth, multiplied by cos(telescope altitude)"
             >
               <span>Vignetting distance: </span>
-              <span className={styles.value}>{vignettingDistance}º</span>
+              <span className={styles.value}>{vignettingDistance}°</span>
+              <div
+                title="The following parameters requires the Scheduler:2 CSC to be active"
+                className={styles.telescopeParametersContainer}
+              >
+                <div>
+                  Telescope RA: <span className={styles.value}>{telescopeRA}°</span>
+                </div>
+                <div>
+                  Telescope Dec: <span className={styles.value}>{telescopeDec}°</span>
+                </div>
+                <div>
+                  Rotator position: <span className={styles.value}>{telescopeRotator}°</span>
+                </div>
+              </div>
             </div>
           </div>
           <DomeSummaryTable
