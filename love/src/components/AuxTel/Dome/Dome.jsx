@@ -19,7 +19,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ManagerInterface, { fixedFloat, parseCommanderData } from 'Utils';
+import ManagerInterface, { fixedFloat, parseCommanderData, degreesToHMS, degreesToDMS } from 'Utils';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import TimeSeriesControls from 'components/GeneralPurpose/Plot/TimeSeriesControls/TimeSeriesControls';
 import Elevation from 'components/GeneralPurpose/Elevation/Elevation';
@@ -317,6 +317,7 @@ export default class Dome extends Component {
       telescopeRA,
       telescopeDec,
       telescopeRotator,
+      raDecHourFormat,
     } = this.props;
 
     const { timeWindow, isLive, historicalData } = this.state;
@@ -342,6 +343,9 @@ export default class Dome extends Component {
       isLive: isLive,
       historicalData: historicalData,
     };
+
+    const parsedTelescopeRA = raDecHourFormat ? degreesToHMS(telescopeRA) : `${telescopeRA}°`;
+    const parsedTelescopeDec = raDecHourFormat ? degreesToDMS(telescopeDec) : `${telescopeDec}°`;
 
     return (
       <div className={styles.domeContainer}>
@@ -416,10 +420,10 @@ export default class Dome extends Component {
                 className={styles.telescopeParametersContainer}
               >
                 <div>
-                  Telescope RA: <span className={styles.value}>{telescopeRA}°</span>
+                  Telescope RA: <span className={styles.value}>{parsedTelescopeRA}</span>
                 </div>
                 <div>
-                  Telescope Dec: <span className={styles.value}>{telescopeDec}°</span>
+                  Telescope Dec: <span className={styles.value}>{parsedTelescopeDec}</span>
                 </div>
                 <div>
                   Rotator position: <span className={styles.value}>{telescopeRotator}°</span>

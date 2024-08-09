@@ -47,6 +47,12 @@ export const schema = {
       isPrivate: false,
       default: EUIs.ATDOME,
     },
+    raDecHourFormat: {
+      type: 'boolean',
+      description: 'Whether to display the RA and DEC in hour format',
+      isPrivate: false,
+      default: false,
+    },
   },
 };
 
@@ -90,6 +96,7 @@ const DomeContainer = ({
   telescopeRA,
   telescopeDec,
   telescopeRotator,
+  raDecHourFormat,
   ...props
 }) => {
   if (props.isRaw) {
@@ -136,6 +143,7 @@ const DomeContainer = ({
       telescopeRA={telescopeRA}
       telescopeDec={telescopeDec}
       telescopeRotator={telescopeRotator}
+      raDecHourFormat={raDecHourFormat}
     />
   );
 };
