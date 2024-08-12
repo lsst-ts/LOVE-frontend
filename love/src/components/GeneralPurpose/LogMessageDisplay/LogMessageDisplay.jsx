@@ -19,13 +19,13 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { useState, memo } from 'react';
 import PropTypes from 'prop-types';
-import DebugIcon from '../../icons/CSCExpanded/DebugIcon/DebugIcon';
-import InfoIcon from '../../icons/CSCExpanded/InfoIcon/InfoIcon';
-import WarningIcon from '../../icons/CSCExpanded/WarningIcon/WarningIcon';
-import ErrorIcon from '../../icons/CSCExpanded/ErrorIcon/ErrorIcon';
-import Button from '../../GeneralPurpose/Button/Button';
+import Button from 'components/GeneralPurpose/Button/Button';
+import DebugIcon from 'components/icons/CSCExpanded/DebugIcon/DebugIcon';
+import InfoIcon from 'components/icons/CSCExpanded/InfoIcon/InfoIcon';
+import WarningIcon from 'components/icons/CSCExpanded/WarningIcon/WarningIcon';
+import ErrorIcon from 'components/icons/CSCExpanded/ErrorIcon/ErrorIcon';
 import styles from './LogMessageDisplay.module.css';
-import { formatTimestamp } from '../../../Utils';
+import { formatTimestamp } from 'Utils';
 
 function LogMessageDisplay({ logMessageData, clearCSCLogMessages }) {
   const [messageFilters, setMessageFilters] = useState({
