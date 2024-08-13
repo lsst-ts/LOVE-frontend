@@ -19,11 +19,11 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React from 'react';
 import { connect } from 'react-redux';
-import Dome from './Dome';
-import { getDomeState, getATMCSState } from '../../../redux/selectors';
-import { addGroup, removeGroup } from '../../../redux/actions/ws';
-import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+import { getDomeState, getATMCSState, getAuxiliaryTelescopeState } from 'redux/selectors';
+import { addGroup, removeGroup } from 'redux/actions/ws';
 import { EUIs } from 'Config';
+import Dome from './Dome';
 
 export const schema = {
   description: 'Summary view of the ATDome. Contains general information about the dome and mount state',
@@ -46,6 +46,12 @@ export const schema = {
       description: 'Whether the component has a EUI link',
       isPrivate: false,
       default: EUIs.ATDOME,
+    },
+    raDecHourFormat: {
+      type: 'boolean',
+      description: 'Whether to display the RA and DEC in hour format',
+      isPrivate: false,
+      default: false,
     },
   },
 };
@@ -87,6 +93,10 @@ const DomeContainer = ({
   controls,
   atDomeTracking,
   targetName,
+  telescopeRA,
+  telescopeDec,
+  telescopeRotator,
+  raDecHourFormat,
   ...props
 }) => {
   if (props.isRaw) {
@@ -130,6 +140,10 @@ const DomeContainer = ({
       ATMCSSummaryState={ATMCSSummaryState}
       atDomeTracking={atDomeTracking}
       targetName={targetName}
+      telescopeRA={telescopeRA}
+      telescopeDec={telescopeDec}
+      telescopeRotator={telescopeRotator}
+      raDecHourFormat={raDecHourFormat}
     />
   );
 };
@@ -137,19 +151,21 @@ const DomeContainer = ({
 const mapStateToProps = (state) => {
   const domeState = getDomeState(state);
   const mountState = getATMCSState(state);
-  return { ...domeState, ...mountState };
+  const telescopeState = getAuxiliaryTelescopeState(state);
+  return { ...domeState, ...mountState, ...telescopeState };
 };
 
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
     'telemetry-ATDome-0-position',
+    'telemetry-ATMCS-0-mount_AzEl_Encoders',
+    'telemetry-ATMCS-0-mount_Nasmyth_Encoders',
+    'telemetry-Scheduler-2-observatoryState',
     'event-ATDome-0-azimuthState',
     'event-ATDome-0-azimuthCommandedState',
     'event-ATDome-0-dropoutDoorState',
     'event-ATDome-0-mainDoorState',
     'event-ATDome-0-allAxesInPosition',
-    'telemetry-ATMCS-0-mount_AzEl_Encoders',
-    'telemetry-ATMCS-0-mount_Nasmyth_Encoders',
     'event-ATMCS-0-atMountState',
     'event-ATMCS-0-target',
     'event-ATMCS-0-allAxesInPosition',

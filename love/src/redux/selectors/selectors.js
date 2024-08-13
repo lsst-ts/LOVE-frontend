@@ -613,6 +613,16 @@ export const getATMCSState = (state) => {
   };
 };
 
+export const getAuxiliaryTelescopeState = (state) => {
+  const subscriptions = ['telemetry-Scheduler-2-observatoryState'];
+  const data = getStreamsData(state, subscriptions);
+  return {
+    telescopeRA: data['telemetry-Scheduler-2-observatoryState']?.ra?.value ?? 0,
+    telescopeDec: data['telemetry-Scheduler-2-observatoryState']?.declination?.value ?? 0,
+    telescopeRotator: data['telemetry-Scheduler-2-observatoryState']?.telescopeRotator?.value ?? 0,
+  };
+};
+
 export const getMountSubscriptions = (index) => {
   return [
     // ATHexapod

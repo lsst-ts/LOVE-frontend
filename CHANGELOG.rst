@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.3.0
+------
+
+* Add RA, Dec and Rotator parameters to the ATDome component `<https://github.com/lsst-ts/LOVE-frontend/pull/656>`_
+
 v6.2.0
 ------
 
