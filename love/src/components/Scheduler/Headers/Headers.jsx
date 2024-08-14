@@ -160,12 +160,10 @@ export default class Headers extends Component {
     return (
       <div className={styles.container}>
         <div className={styles.leftDivs}>
-          <div className={styles.headersLeft}>
+          <div>
             <SummaryPanel className={styles.summaryPanel1}>
-              <Title className={styles.sumState}>Summary State</Title>
-              <Value>
-                <StatusText status={summaryStateToStyle[schedulerSummaryState]}>{schedulerSummaryState}</StatusText>
-              </Value>
+              <Title>Summary State</Title>
+              <StatusText status={summaryStateToStyle[schedulerSummaryState]}>{schedulerSummaryState}</StatusText>
               <GearIcon className={styles.gearIcon} onClick={() => this.toggleSchedulerCmdOptions()} />
               {showOptions && (
                 <div className={styles.cmdOptions}>
@@ -186,11 +184,9 @@ export default class Headers extends Component {
                   )}
                 </div>
               )}
-              <Value>
-                <StatusText status={schedulerDetailedStateToStyle[schedulerDetailedState]}>
-                  {schedulerDetailedState}
-                </StatusText>
-              </Value>
+              <StatusText status={schedulerDetailedStateToStyle[schedulerDetailedState]}>
+                {schedulerDetailedState}
+              </StatusText>
             </SummaryPanel>
           </div>
           <div className={styles.headersCenter}>
