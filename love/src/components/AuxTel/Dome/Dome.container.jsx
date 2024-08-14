@@ -78,6 +78,14 @@ const DomeContainer = ({
   m3State,
   minEl,
   maxEl,
+  minAz,
+  maxAz,
+  minNas1,
+  maxNas1,
+  minNas2,
+  maxNas2,
+  minM3,
+  maxM3,
   timeAzLim,
   timeRotLim,
   timeUnobservable,
@@ -123,6 +131,14 @@ const DomeContainer = ({
       m3State={m3State}
       minEl={minEl}
       maxEl={maxEl}
+      minAz={minAz}
+      maxAz={maxAz}
+      minNas1={minNas1}
+      maxNas1={maxNas1}
+      minNas2={minNas2}
+      maxNas2={maxNas2}
+      minM3={minM3}
+      maxM3={maxM3}
       timeAzLim={timeAzLim}
       timeRotLim={timeRotLim}
       timeUnobservable={timeUnobservable}
