@@ -89,6 +89,9 @@ export default class ExposureDetail extends Component {
       payload['tags'] = payload['tags'].map((tag) => tag.id);
     }
 
+    // Transform &amp; back to '&'. This is a workaround due to Quill editor encoding '&'.}
+    payload['message_text'] = payload['message_text'].replace(/&amp;/g, '&');
+
     ManagerInterface.updateMessageExposureLogs(message.id, payload).then((response) => {
       if (response) {
         this.setState((state) => {

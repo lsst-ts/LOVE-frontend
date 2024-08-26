@@ -5,6 +5,7 @@ Version History
 v6.3.0
 ------
 
+* Fix ampersand being parsed to html encoding by QuillJS `<https://github.com/lsst-ts/LOVE-frontend/pull/660>`_
 * Fix ATDome Nasmyth value display `<https://github.com/lsst-ts/LOVE-frontend/pull/659>`_
 * Fix GearIcon rendering on the Scheduler component `<https://github.com/lsst-ts/LOVE-frontend/pull/658>`_
 * Extend size of individual log message display `<https://github.com/lsst-ts/LOVE-frontend/pull/657>`_
