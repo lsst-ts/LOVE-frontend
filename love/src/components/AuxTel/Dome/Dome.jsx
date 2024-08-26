@@ -69,20 +69,12 @@ export default class Dome extends Component {
     targetNasmyth2: PropTypes.number,
     /** M3 state */
     m3State: PropTypes.string,
-    /** Min elevation */
-    minEl: PropTypes.number,
-    /** Min azimuth */
-    minAz: PropTypes.number,
     /** Min nasmyth1 */
     minNas1: PropTypes.number,
     /** Min nasmyth2 */
     minNas2: PropTypes.number,
     /** Min M3 */
     minM3: PropTypes.number,
-    /** Max elevation */
-    maxEl: PropTypes.number,
-    /** Max azimuth */
-    maxAz: PropTypes.number,
     /** Max nasmyth1 */
     maxNas1: PropTypes.number,
     /** Max nasmyth2 */
@@ -292,13 +284,9 @@ export default class Dome extends Component {
       targetNasmyth1,
       targetNasmyth2,
       m3State,
-      // minEl,
-      minAz,
       minNas1,
       minNas2,
       minM3,
-      // maxEl,
-      maxAz,
       maxNas1,
       maxNas2,
       maxM3,
@@ -459,12 +447,12 @@ export default class Dome extends Component {
             timeUnobservable={timeUnobservable}
             timeElHighLimit={timeElHighLimit}
             maxEl={85}
-            maxAz={maxAz}
+            maxAz={360}
             maxNas1={maxNas1}
             maxNas2={maxNas2}
             maxM3={maxM3}
             minEl={5}
-            minAz={minAz}
+            minAz={0}
             minNas1={minNas1}
             minNas2={minNas2}
             minM3={minM3}
