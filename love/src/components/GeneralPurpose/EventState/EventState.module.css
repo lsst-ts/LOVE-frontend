@@ -1,0 +1,35 @@
+.alert {
+  background: var(--status-alert-color);
+  color: var(--second-tertiary-background-color);
+  /* color: var(--status-alert-color);
+  background: var(--status-alert-dimmed-color-2); */
+}
+
+.ok {
+  background: var(--status-ok-color);
+  color: var(--second-tertiary-background-color);
+  /* color: var(--status-ok-color);
+  background: var(--status-ok-dimmed-color-2); */
+}
+
+.warning {
+  /* background: var(--status-warning-color); */
+  /* color: var(--second-tertiary-background-color); */
+  color: var(--status-warning-color);
+  background: var(--status-warning-dimmed-color-2);
+}
+
+.unknown {
+  background: var(--status-disabled-dimmed-color-2);
+  color: var(--second-quinary-background-color);
+}
+
+.offline {
+  background: var(--status-disabled-dimmed-color-2);
+  color: var(--secondary-font-color);
+}
+
+.disabled {
+  background: var(--primary-background-color);
+  color: var(--base-font-color);
+}

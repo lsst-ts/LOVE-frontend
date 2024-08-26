@@ -763,6 +763,16 @@ export const utilitiesIndex = {
       },
     },
   },
+  EventState: {
+    component: require('../GeneralPurpose/EventState/EventState.container').default,
+    schema: {
+      ...require('../GeneralPurpose/EventState/EventState.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../GeneralPurpose/EventState/EventState.container').schema.props,
+      },
+    },
+  },
 };
 
 export const internalIndex = {
