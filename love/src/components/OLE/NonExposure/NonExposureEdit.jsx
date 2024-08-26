@@ -227,6 +227,9 @@ class NonExposureEdit extends Component {
     payload['date_begin'] = beginDateISO.substring(0, beginDateISO.length - 1); // remove Zone due to backend standard
     payload['date_end'] = endDateISO.substring(0, endDateISO.length - 1); // remove Zone due to backend standard
 
+    // Transform &amp; back to '&'. This is a workaround due to Quill editor encoding '&'.}
+    payload['message_text'] = payload['message_text'].replace(/&amp;/g, '&');
+
     // Clean null and empty values to avoid API errors
     Object.keys(payload).forEach((key) => {
       if (payload[key] === null || (Array.isArray(payload[key]) && payload[key].length === 0)) {

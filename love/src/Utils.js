@@ -1552,6 +1552,37 @@ export function degrees(radians) {
 }
 
 /**
+ * Function to transform degress to Right Ascension hour format
+ * e.g. 180.55 -> 12:02:12
+ * @param {number} degrees degrees to be transformed
+ * @returns {string} Right Ascension hour format
+ */
+export function degreesToHMS(degrees) {
+  const h = Math.floor(degrees / 15);
+  const m = Math.floor((degrees % 15) * 4);
+  const s = Math.floor(((degrees % 15) * 4 - m) * 60);
+  return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+}
+
+/**
+ * Function to transform degress to Declination hour format
+ * e.g. 180.55 -> +180:02:12
+ * @param {number} degrees degrees to be transformed
+ * @returns {string} Declination hour format
+ */
+export function degreesToDMS(degrees) {
+  const d = Math.floor(degrees);
+  const m = Math.floor((degrees % 1) * 4);
+  const s = Math.floor(((degrees % 1) * 4 - m) * 60);
+  const hourFormat =
+    `${Math.sign(degrees) >= 0 ? '+' : '-'}` +
+    `${d.toString().padStart(2, '0')}` +
+    `:${m.toString().padStart(2, '0')}` +
+    `:${s.toString().padStart(2, '0')}`;
+  return hourFormat;
+}
+
+/**
  * Function to pase a number or string to float with fixed decimal points
  * as specified by the points param
  * @param {string|number} x value to be parsed to float

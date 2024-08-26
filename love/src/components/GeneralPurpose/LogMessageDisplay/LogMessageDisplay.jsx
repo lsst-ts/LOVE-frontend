@@ -17,15 +17,42 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useState, memo } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
-import DebugIcon from '../../icons/CSCExpanded/DebugIcon/DebugIcon';
-import InfoIcon from '../../icons/CSCExpanded/InfoIcon/InfoIcon';
-import WarningIcon from '../../icons/CSCExpanded/WarningIcon/WarningIcon';
-import ErrorIcon from '../../icons/CSCExpanded/ErrorIcon/ErrorIcon';
-import Button from '../../GeneralPurpose/Button/Button';
+import Button from 'components/GeneralPurpose/Button/Button';
+import DebugIcon from 'components/icons/CSCExpanded/DebugIcon/DebugIcon';
+import InfoIcon from 'components/icons/CSCExpanded/InfoIcon/InfoIcon';
+import WarningIcon from 'components/icons/CSCExpanded/WarningIcon/WarningIcon';
+import ErrorIcon from 'components/icons/CSCExpanded/ErrorIcon/ErrorIcon';
+import CopyIcon from 'components/icons/CopyIcon/CopyIcon';
 import styles from './LogMessageDisplay.module.css';
-import { formatTimestamp } from '../../../Utils';
+import { formatTimestamp, copyToClipboard } from 'Utils';
+
+function CopyToClipboard({ text }) {
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    let timeout;
+    if (copied) {
+      timeout = setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    }
+    return () => clearTimeout(timeout);
+  }, [copied]);
+
+  const handleCopyToClipboard = () => {
+    copyToClipboard(text);
+    setCopied(true);
+  };
+
+  return (
+    <div className={styles.copyToClipboardBtn} onClick={handleCopyToClipboard}>
+      {copied && <span>Copied to clipboard</span>}
+      <CopyIcon title="Copy to clipboard" />
+    </div>
+  );
+}
 
 function LogMessageDisplay({ logMessageData, clearCSCLogMessages }) {
   const [messageFilters, setMessageFilters] = useState({
@@ -40,6 +67,7 @@ function LogMessageDisplay({ logMessageData, clearCSCLogMessages }) {
     filters[key].value = value;
     setMessageFilters({ ...filters });
   };
+
   return (
     <div className={[styles.logContainer, styles.messageLogContainer].join(' ')}>
       <div className={styles.logContainerTopBar}>
@@ -77,6 +105,9 @@ function LogMessageDisplay({ logMessageData, clearCSCLogMessages }) {
               if (msg.level.value === 20) icon = <InfoIcon title="Information" />;
               if (msg.level.value === 30) icon = <WarningIcon title="Warning" />;
               if (msg.level.value === 40) icon = <ErrorIcon title="Error" />;
+
+              const copyToClipboardText =
+                msg.message?.value + (msg.traceback?.value ? '\n\n' + msg.traceback?.value : '');
               return (
                 <div key={`${msg.private_rcvStamp.value}-${msg.level.value}-${index}`} className={styles.logMessage}>
                   <div className={styles.messageIcon}>{icon}</div>
@@ -86,6 +117,7 @@ function LogMessageDisplay({ logMessageData, clearCSCLogMessages }) {
                     </div>
                     <div className={styles.messageText}>
                       {msg.ScriptID && <div className={styles.scriptID}>Script {msg.ScriptID?.value}</div>}
+                      <CopyToClipboard text={copyToClipboardText} />
                       <pre className={styles.preText}>{msg.message?.value}</pre>
                     </div>
                     <pre className={styles.preText}>{msg.traceback.value}</pre>

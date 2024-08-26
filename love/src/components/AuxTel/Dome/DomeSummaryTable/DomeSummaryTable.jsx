@@ -98,12 +98,10 @@ export default class DomeSummaryTable extends Component {
       maxAz,
       maxNas1,
       maxNas2,
-      maxM3,
       minEl,
       minAz,
       minNas1,
       minNas2,
-      minM3,
       atDomeSummaryState,
       ATMCSSummaryState,
       domeTracking,
@@ -127,15 +125,15 @@ export default class DomeSummaryTable extends Component {
       m3State === 1
         ? {
             name: '(1)',
-            current: Math.abs(currentPointing.nasmyth1),
-            target: Math.abs(targetPointing.nasmyth1),
+            current: currentPointing.nasmyth1,
+            target: targetPointing.nasmyth1,
             minRot: minNas1,
             maxRot: maxNas1,
           }
         : {
             name: '(2)',
-            current: Math.abs(currentPointing.nasmyth2),
-            target: Math.abs(targetPointing.nasmyth2),
+            current: currentPointing.nasmyth2,
+            target: targetPointing.nasmyth2,
             minRot: minNas2,
             maxRot: maxNas2,
           };
@@ -196,22 +194,6 @@ export default class DomeSummaryTable extends Component {
         <Value>
           <CurrentTargetValue currentValue={domeAz.current} targetValue={domeAz.target} isChanging={true} />
         </Value>
-        {/* <span className={[styles.subRow, styles.wide].join(' ')} title={`Time to limit: ${2} min`}>
-          <span>
-            <Limits
-              lowerLimit={0}
-              upperLimit={360}
-              currentValue={domeAz.current}
-              targetValue={domeAz.target}
-              height={30}
-              displayLabels={false}
-            />
-          </span>
-          <span>
-            <span>Time to limit: </span>
-            <span className={styles.highlight}>2 min</span>
-          </span>
-        </span> */}
         {/* Mount */}
         <Title>ATMCS CSC</Title>
         <Value>

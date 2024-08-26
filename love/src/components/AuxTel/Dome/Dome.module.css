@@ -30,8 +30,9 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   align-self: center;
   flex-wrap: wrap;
   position: relative;
-  width: 70%;
+  width: 100%;
   max-width: 700px;
+  container-type: inline-size;
 }
 
 .skymapGridContainer svg {
@@ -47,7 +48,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .topRow {
   display: grid;
   justify-items: center;
-  row-gap: 2em;
+  column-gap: 5em;
   padding: 1em 0;
   grid-template-columns: minmax(0, 1fr) minmax(22em, 24em);
 }
@@ -134,12 +135,19 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .vignettingDistanceContainer {
   position: absolute;
   left: 50%;
-  bottom: 0%;
+  bottom: calc(var(--content-padding) * -1);
   transform: translate(-50%, 0);
 }
 
 .vignettingDistanceContainer .value {
   color: var(--base-font-color);
+}
+
+.telescopeParametersContainer {
+  display: flex;
+  gap: var(--content-padding);
+  white-space: nowrap;
+  font-size: var(--font-size-larger);
 }
 
 .innerDome {
@@ -167,4 +175,14 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .azimuthPlot,
 .elevationPlot {
   height: 18em;
+}
+
+@container (width < 600px) {
+  .vignettingDistanceContainer {
+    bottom: -90px;
+  }
+  .telescopeParametersContainer {
+    flex-direction: column;
+    gap: 0;
+  }
 }

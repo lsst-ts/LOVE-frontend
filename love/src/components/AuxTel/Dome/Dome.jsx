@@ -18,30 +18,99 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
-import ManagerInterface, { fixedFloat, parseCommanderData } from 'Utils';
-// import SkymapGrid from '../Skymap/SkymapGrid';
+import PropTypes from 'prop-types';
+import ManagerInterface, { fixedFloat, parseCommanderData, degreesToHMS, degreesToDMS } from 'Utils';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import TimeSeriesControls from 'components/GeneralPurpose/Plot/TimeSeriesControls/TimeSeriesControls';
-import DomeTopView from './DomeTopView';
+import Elevation from 'components/GeneralPurpose/Elevation/Elevation';
+import Azimuth from 'components/GeneralPurpose/Azimuth/Azimuth';
+import WindRose from 'components/icons/WindRose/WindRose';
 import DomePointing from './DomePointing';
 import DomeShutter from './DomeShutter';
 import MountTopView from './MountTopView';
-import Elevation from 'components/GeneralPurpose/Elevation/Elevation';
-import Azimuth from 'components/GeneralPurpose/Azimuth/Azimuth';
-
-import WindRose from '../../icons/WindRose/WindRose';
 import DomeSummaryTable from './DomeSummaryTable/DomeSummaryTable';
-
 import styles from './Dome.module.css';
 
 export default class Dome extends Component {
   static propTypes = {
-    // raftsDetailedState: PropTypes.string,
-    // imageReadinessDetailedState: PropTypes.string,
-    // calibrationDetailedState: PropTypes.string,
-    // shutterDetailedState: PropTypes.string,
-    // imageSequence: PropTypes.object,
+    /** Width for the diferent SVG components */
+    width: PropTypes.number,
+    /** Height for the diferent SVG components */
+    height: PropTypes.number,
+    /** Dropout door opening percentage */
+    dropoutDoorOpeningPercentage: PropTypes.number,
+    /** Main door opening percentage */
+    mainDoorOpeningPercentage: PropTypes.number,
+    /** Azimuth position */
+    azimuthPosition: PropTypes.number,
+    /** Azimuth state */
+    azimuthState: PropTypes.string,
+    /** Azimuth commanded */
+    azimuthCommanded: PropTypes.number,
+    /** Dome in position */
+    domeInPosition: PropTypes.bool,
+    /** Dropout door state */
+    dropoutDoorState: PropTypes.string,
+    /** Main door state */
+    mainDoorState: PropTypes.string,
+    /** AT mount state */
+    atMountState: PropTypes.string,
+    /** Mount in position */
+    mountInPosition: PropTypes.bool,
+    /** Track ID */
+    trackID: PropTypes.number,
+    /** Target azimuth */
+    targetAzimuth: PropTypes.number,
+    /** Target elevation */
+    targetElevation: PropTypes.number,
+    /** Target nasmyth1 */
+    targetNasmyth1: PropTypes.number,
+    /** Target nasmyth2 */
+    targetNasmyth2: PropTypes.number,
+    /** M3 state */
+    m3State: PropTypes.string,
+    /** Min nasmyth1 */
+    minNas1: PropTypes.number,
+    /** Min nasmyth2 */
+    minNas2: PropTypes.number,
+    /** Min M3 */
+    minM3: PropTypes.number,
+    /** Max nasmyth1 */
+    maxNas1: PropTypes.number,
+    /** Max nasmyth2 */
+    maxNas2: PropTypes.number,
+    /** Max M3 */
+    maxM3: PropTypes.number,
+    /** Time azimuth limit */
+    timeAzLim: PropTypes.number,
+    /** Time rotation limit */
+    timeRotLim: PropTypes.number,
+    /** Time unobservable */
+    timeUnobservable: PropTypes.number,
+    /** Time elevation high limit */
+    timeElHighLimit: PropTypes.number,
+    /** Current pointing azimuth */
+    currentPointingAz: PropTypes.number,
+    /** Current pointing elevation */
+    currentPointingEl: PropTypes.number,
+    /** Current pointing nasmyth1 */
+    currentPointingNasmyth1: PropTypes.number,
+    /** Current pointing nasmyth2 */
+    currentPointingNasmyth2: PropTypes.number,
+    /** AT dome summary state */
+    atDomeSummaryState: PropTypes.string,
+    /** ATMCS summary state */
+    ATMCSSummaryState: PropTypes.string,
+    /** AT dome tracking */
+    atDomeTracking: PropTypes.bool,
+    /** Target name */
+    targetName: PropTypes.string,
+    /** Telescope RA */
+    telescopeRA: PropTypes.number,
+    /** Telescope Dec */
+    telescopeDec: PropTypes.number,
+    /** Rotator position */
+    telescopeRotator: PropTypes.number,
   };
 
   static defaultProps = {
@@ -196,10 +265,9 @@ export default class Dome extends Component {
   };
 
   render() {
-    const width = this.props.width;
-    const height = this.props.height;
-
     const {
+      width,
+      height,
       dropoutDoorOpeningPercentage,
       mainDoorOpeningPercentage,
       azimuthPosition,
@@ -216,13 +284,9 @@ export default class Dome extends Component {
       targetNasmyth1,
       targetNasmyth2,
       m3State,
-      minEl,
-      minAz,
       minNas1,
       minNas2,
       minM3,
-      maxEl,
-      maxAz,
       maxNas1,
       maxNas2,
       maxM3,
@@ -238,7 +302,13 @@ export default class Dome extends Component {
       ATMCSSummaryState,
       atDomeTracking,
       targetName,
+      telescopeRA,
+      telescopeDec,
+      telescopeRotator,
+      raDecHourFormat,
     } = this.props;
+
+    const { timeWindow, isLive, historicalData } = this.state;
 
     const isProjected = true;
     let azDiff = Math.abs(azimuthPosition - currentPointingAz);
@@ -257,16 +327,18 @@ export default class Dome extends Component {
     };
 
     const timeSeriesControlsProps = {
-      timeWindow: this.state.timeWindow,
-      isLive: this.state.isLive,
-      historicalData: this.state.historicalData,
+      timeWindow: timeWindow,
+      isLive: isLive,
+      historicalData: historicalData,
     };
+
+    const parsedTelescopeRA = raDecHourFormat ? degreesToHMS(telescopeRA) : `${telescopeRA}°`;
+    const parsedTelescopeDec = raDecHourFormat ? degreesToDMS(telescopeDec) : `${telescopeDec}°`;
 
     return (
       <div className={styles.domeContainer}>
         <div className={styles.topRow}>
           <div className={styles.skymapGridContainer}>
-            {/* <SkymapGrid width={width} height={height} isProjected={isProjected} /> */}
             <div className={styles.windRoseContainer}>
               <WindRose />
             </div>
@@ -285,7 +357,6 @@ export default class Dome extends Component {
                 targetValue={targetElevation}
               />
             </div>
-
             <Azimuth
               className={styles.svgAzimuth}
               width={width}
@@ -331,7 +402,21 @@ export default class Dome extends Component {
               title="Difference between telescope and dome azimuth, multiplied by cos(telescope altitude)"
             >
               <span>Vignetting distance: </span>
-              <span className={styles.value}>{vignettingDistance}º</span>
+              <span className={styles.value}>{vignettingDistance}°</span>
+              <div
+                title="The following parameters requires the Scheduler:2 CSC to be active"
+                className={styles.telescopeParametersContainer}
+              >
+                <div>
+                  Telescope RA: <span className={styles.value}>{parsedTelescopeRA}</span>
+                </div>
+                <div>
+                  Telescope Dec: <span className={styles.value}>{parsedTelescopeDec}</span>
+                </div>
+                <div>
+                  Rotator position: <span className={styles.value}>{telescopeRotator}°</span>
+                </div>
+              </div>
             </div>
           </div>
           <DomeSummaryTable
@@ -362,12 +447,12 @@ export default class Dome extends Component {
             timeUnobservable={timeUnobservable}
             timeElHighLimit={timeElHighLimit}
             maxEl={85}
-            maxAz={maxAz}
+            maxAz={360}
             maxNas1={maxNas1}
             maxNas2={maxNas2}
             maxM3={maxM3}
             minEl={5}
-            minAz={minAz}
+            minAz={0}
             minNas1={minNas1}
             minNas2={minNas2}
             minM3={minM3}

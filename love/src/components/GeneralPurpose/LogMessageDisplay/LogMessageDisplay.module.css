@@ -20,7 +20,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .log {
   background: var(--second-tertiary-background-color);
   border-radius: 5px;
-  overflow-y: scroll;
 }
 
 .logContainerTopBar {
@@ -73,6 +72,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 }
 
 .messageText {
+  position: relative;
   max-width: 50vw;
   padding-bottom: 0.5em;
 }
@@ -100,4 +100,24 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .preText {
   white-space: pre-wrap;
+}
+
+.copyToClipboardBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--small-padding);
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.copyToClipboardBtn > svg {
+  cursor: pointer;
+  width: 1em;
+  height: 1em;
+}
+
+.copyToClipboardBtn:hover > svg {
+  fill: var(--default-active-background-color);
+  stroke: var(--default-active-background-color);
 }
