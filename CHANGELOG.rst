@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.3.1
+------
+
+* Refactor M2 Selector component to fix axial and tangent actuators coordinate system `<https://github.com/lsst-ts/LOVE-frontend/pull/665>`_
+
 v6.3.0
 ------
 
