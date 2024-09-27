@@ -21,7 +21,8 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 import { uniqueId } from 'lodash';
-import { M2ActuatorPositions, M2ActuatorTangentPositions } from 'Config';
+import { M2ActuatorPositions, M2ActuatorTangentAngles } from 'Config';
+import { radians } from 'Utils';
 import ForceGradient from '../ForceGradient/ForceGradient';
 import Button from 'components/GeneralPurpose/Button/Button';
 import styles from './Selector.module.css';
@@ -80,7 +81,6 @@ export default class Selector extends Component {
     super(props);
     this.state = {
       actuators: [],
-      actuatorsTangent: [],
       xRadius: 0,
       yRadius: 0,
       maxRadius: 0,
@@ -91,6 +91,7 @@ export default class Selector extends Component {
     this.uniqueCircleOverlay = uniqueId('m2-selector-circle-overlay-');
     this.uniqueScatter = uniqueId('m2-selector-scatter-');
     this.uniqueMirrorHole = uniqueId('m2-selector-mirror-hole-');
+    this.uniqueAxes = uniqueId('m2-selector-axes-');
 
     this.zoom = null;
   }
@@ -120,18 +121,6 @@ export default class Selector extends Component {
       });
     });
   };
-
-  /* static getActuatorsPositions = (ids, positions) => {
-    console.log('getActuatorsPositions(', ids, positions);
-    const { xPosition, yPosition, zPosition } = positions;
-    // const positionsArray = M2.zip([xPosition, yPosition, zPosition]);
-    const positionsArray = M2.zip([
-      xPosition.map((x) => x * 39),
-      yPosition.map((y) => y * 39),
-      zPosition.map((z) => z * 39),
-    ]);
-    return positionsArray.map((position, i) => ({ id: ids[i], position }));
-  }; */
 
   strokeActuatorSelected = (id) => {
     if (this.props.selectedActuator === id) return 'white';
@@ -200,6 +189,7 @@ export default class Selector extends Component {
     let yMin = Infinity;
     let xMin = Infinity;
     let maxRadius = 0;
+
     M2ActuatorPositions.forEach((act) => {
       if (xMax < act.position[0]) xMax = act.position[0];
       if (xMin > act.position[0]) xMin = act.position[0];
@@ -209,22 +199,15 @@ export default class Selector extends Component {
         maxRadius = Math.floor(Math.sqrt(act.position[0] * act.position[0] + act.position[1] * act.position[1]));
       }
     });
-    /* console.log(M2ActuatorPositions);
-    console.log(xMin, xMax, yMin, yMax, maxRadius); */
+
     xMin = -150;
     xMax = 160;
     yMin = -150;
     yMax = 160;
     maxRadius = 160;
 
-    // Using SAL info
-    // ManagerInterface.getTopicData('event-telemetry').then((data) => {
-    //   this.setState({ optionsTree: data.MTM1M3.event_data });
-    // });
-
     this.setState({
       actuators: M2ActuatorPositions,
-      actuatorsTangent: M2ActuatorTangentPositions,
       xRadius: (xMax - xMin) / 2,
       yRadius: (yMax - yMin) / 2,
       maxRadius,
@@ -259,6 +242,7 @@ export default class Selector extends Component {
 
     d3.select(`#${this.uniqueScatter}`).attr('transform', event.transform);
     d3.select(`#${this.uniqueMirrorHole}`).attr('transform', event.transform);
+    d3.select(`#${this.uniqueAxes}`).attr('transform', event.transform);
     this.setState({
       zoomLevel: event.transform.k,
     });
@@ -312,8 +296,9 @@ export default class Selector extends Component {
               actuatorSelect,
               selectedActuator,
             )}
+            {this.getAxis()}
           </g>
-          {this.getAxis(margin, actuatorSelect)}
+
           {this.getTangentActuators(
             showActuatorsID,
             showMeasuredForce,
@@ -339,11 +324,13 @@ export default class Selector extends Component {
     return (
       <g id={this.uniqueScatter} className={styles.scatter}>
         {this.state.actuators.map((act) => {
+          const positionX = (act.position[0] + this.state.xRadius) * scale + margin;
+          const positionY = (-act.position[1] + this.state.yRadius) * scale + margin;
           return (
             <g key={act.id} className={styles.actuator} onClick={() => actuatorSelect(act.id)}>
               <circle
-                cx={(act.position[0] + this.state.xRadius) * scale + margin}
-                cy={(act.position[1] + this.state.yRadius) * scale + margin}
+                cx={positionX}
+                cy={positionY}
                 key={act.id}
                 fill={showMeasuredForce ? this.getActuator(act.id)?.colorForceMeasured : 'gray'}
                 stroke={
@@ -358,8 +345,8 @@ export default class Selector extends Component {
                 pointerEvents="all"
               />
               <text
-                x={(act.position[0] + this.state.xRadius) * scale + margin}
-                y={(act.position[1] + this.state.yRadius) * scale + margin}
+                x={positionX}
+                y={positionY}
                 textAnchor="middle"
                 alignmentBaseline="middle"
                 className={selectedActuator === act.id || (zoomLevel > 1 && showActuatorsID) ? '' : styles.hidden}
@@ -384,70 +371,62 @@ export default class Selector extends Component {
     const x0 = this.state.width / 2;
     const y0 = this.state.width / 2;
 
+    const circleRadius = this.state.width / 2;
+
+    const rectangleWidth = 20;
+    const rectangleHeight = 60;
+
+    const svgPadding = 16;
+    const commandedStrokeWidth = 4;
+
     return (
-      <g id="tangent-actuators">
-        {this.state.actuatorsTangent.map((act) => {
-          const x1 = x0 + act.position[0];
-          const y1 = y0 + act.position[1];
-
-          const x2 = x0 + act.position[2];
-          const y2 = y0 + act.position[3];
-
-          let x3 = x0 + act.position[2] * 1.1;
-          let y3 = y0 + act.position[3] * 1.1;
-
-          let x4 = x0 + act.position[0] * 1.1;
-          let y4 = y0 + act.position[1] * 1.1;
-
-          const centerX1 = (x1 + x2) / 2;
-          const centerY1 = (y1 + y2) / 2;
-
-          const centerX2 = (x3 + x4) / 2;
-          const centerY2 = (y3 + y4) / 2;
-
-          const difX1 = centerX1 - x1;
-          const difY1 = centerY1 - y1;
-
-          x4 = centerX2 - difX1;
-          y4 = centerY2 - difY1;
-
-          x3 = centerX2 + difX1;
-          y3 = centerY2 + difY1;
-
-          const centerX = (centerX1 + centerX2) / 2;
-          const centerY = (centerY1 + centerY2) / 2;
-
+      <g id="tangent-actuators" transform={`translate(${x0}, ${y0}) scale(1, -1)`}>
+        {M2ActuatorTangentAngles.map((degrees, i) => {
+          const actuatorID = i + 1;
+          const currentForceColor = showMeasuredForce
+            ? this.getActuatorTangent(actuatorID)?.colorForceMeasured
+            : 'gray';
+          const commandedForceColor =
+            selectedActuatorTangent === actuatorID
+              ? this.strokeActuatorTangentSelected(actuatorID)
+              : showCommandedForce
+              ? this.getActuatorTangent(actuatorID)?.colorForceApplied
+              : 'none';
           return (
-            <g key={act.id} className={styles.actuatorTangent} onClick={() => actuatorTangentSelect(act.id)}>
-              <path
-                d={`
-                M ${x1} ${y1}
-                L ${x2} ${y2}
-                L ${x3} ${y3}
-                L ${x4} ${y4}
-                z
-              `}
-                strokeWidth={act.id === selectedActuatorTangent ? 6 : 4}
-                fill={showMeasuredForce ? this.getActuatorTangent(act.id)?.colorForceMeasured : 'gray'}
-                stroke={
-                  selectedActuatorTangent === act.id
-                    ? this.strokeActuatorTangentSelected(act.id)
-                    : showCommandedForce
-                    ? this.getActuatorTangent(act.id)?.colorForceApplied
-                    : 'none'
-                }
+            <g
+              key={actuatorID}
+              onClick={() => actuatorTangentSelect(actuatorID)}
+              className={styles.actuatorTangent}
+              transform={`rotate(${degrees})`}
+            >
+              <rect
+                fill={currentForceColor}
+                stroke={commandedForceColor}
+                strokeWidth={commandedStrokeWidth}
+                width={rectangleWidth}
+                height={rectangleHeight}
+                x={circleRadius - svgPadding - rectangleWidth / 2}
+                y={-rectangleHeight / 2}
               />
-              <text
-                x={centerX}
-                y={centerY}
-                textAnchor="middle"
-                alignmentBaseline="middle"
-                className={showActuatorsID || selectedActuatorTangent === act.id ? '' : styles.hidden}
-                pointerEvents="none"
-              >
-                {act.id}
-              </text>
             </g>
+          );
+        })}
+        {M2ActuatorTangentAngles.map((degrees, i) => {
+          const actuatorID = i + 1;
+          const positionX = Math.cos(radians(degrees)) * (circleRadius - svgPadding);
+          const positionY = -Math.sin(radians(degrees)) * (circleRadius - svgPadding);
+          return (
+            <text
+              x={positionX}
+              y={positionY}
+              textAnchor="middle"
+              alignmentBaseline="middle"
+              className={showActuatorsID || selectedActuatorTangent === actuatorID ? '' : styles.hidden}
+              pointerEvents="none"
+              transform={`scale(1,-1)`}
+            >
+              {actuatorID}
+            </text>
           );
         })}
       </g>
@@ -492,7 +471,7 @@ export default class Selector extends Component {
     );
   }
 
-  getAxis(margin, actuatorSelect) {
+  getAxis() {
     return (
       <>
         <circle
@@ -502,21 +481,11 @@ export default class Selector extends Component {
           fill={'none'}
           r={this.state.width / 2 - 30}
         />
-
-        {/* <circle
-          className={styles.hiddenCircleOverlay}
-          cx={this.state.width / 2}
-          cy={this.state.width / 2}
-          fill={'none'}
-          r={this.state.width / 2 + 50}
-          onClick={() => actuatorSelect(null)}
-        /> */}
-
-        <g id="plot-axis">
+        <g id={this.uniqueAxes}>
           <text
             className={styles.axisLabel}
-            x={this.state.width / 2 - 5}
-            y={margin / 2 - 12}
+            x={this.state.width / 2}
+            y={this.state.width / 2 - 50}
             textAnchor="middle"
             alignmentBaseline="middle"
           >
@@ -524,8 +493,8 @@ export default class Selector extends Component {
           </text>
           <text
             className={styles.axisLabel}
-            x={this.state.width - 12}
-            y={this.state.width / 2 - 5}
+            x={this.state.width / 2 + 50}
+            y={this.state.width / 2}
             textAnchor="middle"
             alignmentBaseline="middle"
           >
@@ -533,8 +502,8 @@ export default class Selector extends Component {
           </text>
           <text
             className={styles.axisLabel}
-            x={this.state.width / 2 - 5}
-            y={this.state.width - margin / 2 + 16}
+            x={this.state.width / 2}
+            y={this.state.width / 2 + 50}
             textAnchor="middle"
             alignmentBaseline="middle"
           >
@@ -542,8 +511,8 @@ export default class Selector extends Component {
           </text>
           <text
             className={styles.axisLabel}
-            x={12}
-            y={this.state.width / 2 - 5}
+            x={this.state.width / 2 - 50}
+            y={this.state.width / 2}
             textAnchor="middle"
             alignmentBaseline="middle"
           >
