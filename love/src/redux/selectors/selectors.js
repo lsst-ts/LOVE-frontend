@@ -972,9 +972,6 @@ export const getHexapodStatus = (state, salindex) => {
     hexapodControllerState: hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`][0].controllerState.value
       : 0,
-    hexapodControllerStateOfflineSubstate: hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`]
-      ? hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`][0].offlineSubstate.value
-      : 0,
     hexapodConstrollerStateEnabledSubstate: hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`][0].enabledSubstate.value
       : 0,

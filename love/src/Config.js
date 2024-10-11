@@ -1526,11 +1526,6 @@ export const hexapodControllerStateMap = {
   4: 'FAULT',
 };
 
-export const hexapodControllerStateOfflineSubStateMap = {
-  0: 'PUBLISH ONLY',
-  1: 'AVAILABLE',
-};
-
 export const hexapodControllerStateEnabledSubstateMap = {
   0: 'STATIONARY',
   1: 'MOVING POINT TO POINT',
