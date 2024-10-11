@@ -1845,7 +1845,7 @@ export function htmlToJiraMarkdown(html) {
 
   // Parse links
   markdown = markdown.replace(
-    /<a href="(.*)" rel="noopener noreferrer" target="_blank">(.*)<\/a>/g,
+    /<a href="([^"]*)" rel="noopener noreferrer" target="_blank">([^<]*)<\/a>/g,
     (match, p1, p2) => {
       return `[${p2}|${p1}]`;
     },
