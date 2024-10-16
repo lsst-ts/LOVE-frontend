@@ -3,8 +3,10 @@ import { JIRA_TICKETS_BASE_URL } from './Config';
 
 describe('htmlToJiraMarkdown', () => {
   it('should handle links', () => {
-    const input = '<p>This is a <a href="https://example.com" rel="noopener noreferrer" target="_blank">link</a>.</p>';
-    const expectedOutput = 'This is a [link|https://example.com].\r\n';
+    const input =
+      '<p>This is a <a href="https://example.com" rel="noopener noreferrer" target="_blank">link</a>' +
+      ' and this is another <a href="https://example2.com" rel="noopener noreferrer" target="_blank">link</a>.</p>';
+    const expectedOutput = 'This is a [link|https://example.com] and this is another [link|https://example2.com].\r\n';
     expect(htmlToJiraMarkdown(input)).toEqual(expectedOutput);
   });
 
