@@ -26,16 +26,15 @@ import {
   summaryStateToStyle,
   M1M3ActuatorPositions,
   M1M3ActuatorForces,
+  M1M3ActuatorForcesTopics,
   m1m3DetailedStateMap,
   m1m3DetailedStateToStyle,
   m1m3HardpointActuatorMotionStateMap,
   M1M3HardpointPositions,
-  M1M3XActuatorsMapping,
-  M1M3YActuatorsMapping,
-  M1M3ZActuatorsMapping,
-  M1M3SActuatorsMapping,
+  M1M3ActuatorForceParametersAxisMapping,
   alignedStateMap,
   alignedStateToStyle,
+  mirrorsForceGradientcolors as colors,
 } from 'Config';
 import ArrowIcon from 'components/icons/ArrowIcon/ArrowIcon';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
@@ -45,7 +44,6 @@ import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Title from 'components/GeneralPurpose/SummaryPanel/Title';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
-import CSCDetailStyles from './CSCDetail.module.css';
 import styles from './M1M3.module.css';
 
 const FORCE_GRADIENT_WIDTH = 200;
@@ -149,7 +147,6 @@ export default class M1M3 extends Component {
 
   static getActuatorsPositions = (ids, positions) => {
     const { xPosition, yPosition, zPosition } = positions;
-    // const positionsArray = M1M3.zip([xPosition, yPosition, zPosition]);
     const positionsArray = M1M3.zip([
       xPosition.map((x) => x * 39),
       yPosition.map((x) => x * -39),
@@ -159,17 +156,12 @@ export default class M1M3 extends Component {
   };
 
   preventDefault(e) {
-    e = e || window.event;
-    if (e.preventDefault) {
-      e.preventDefault();
-    }
+    if (e.preventDefault) e.preventDefault();
     e.returnValue = false;
   }
 
   disableScroll = () => {
-    document.addEventListener('wheel', this.preventDefault, {
-      passive: false,
-    });
+    document.addEventListener('wheel', this.preventDefault, { passive: false });
   };
 
   enableScroll = () => {
@@ -177,24 +169,21 @@ export default class M1M3 extends Component {
   };
 
   createColorScale = (values) => {
-    const colours = ['#2c7bb6', '#00a6ca', '#00ccbc', '#90eb9d', '#ffff8c', '#f9d057', '#f29e2e', '#e76818', '#d7191c'];
-    const colourRange = d3.range(0, 1, 1.0 / (colours.length - 1));
-    colourRange.push(1);
-
-    const colorScale = d3.scaleLinear().domain(colourRange).range(colours).interpolate(d3.interpolateHcl);
-
+    const colorRange = d3.range(0, 1, 1.0 / (colors.length - 1));
+    colorRange.push(1);
+    const colorScale = d3.scaleLinear().domain(colorRange).range(colors).interpolate(d3.interpolateHcl);
     const colorInterpolate = d3.scaleLinear().domain(d3.extent(values)).range([0, 1]);
 
     this.setState({
       colormap: (val) => colorScale(colorInterpolate(val)),
     });
 
-    //Create the gradient
     const svg = d3
       .select(`#${this.uniqueGradient} svg`)
       .attr('width', FORCE_GRADIENT_WIDTH)
       .attr('height', FORCE_GRADIENT_HEIGHT)
       .html('');
+
     svg
       .append('defs')
       .append('linearGradient')
@@ -204,7 +193,7 @@ export default class M1M3 extends Component {
       .attr('x2', '100%')
       .attr('y2', '0%')
       .selectAll('stop')
-      .data(colours)
+      .data(colors)
       .enter()
       .append('stop')
       .attr('offset', (d, i) => i / (colorScale.range().length - 1))
@@ -253,19 +242,10 @@ export default class M1M3 extends Component {
   };
 
   getActuatorForceByParameter(forceParameter, index) {
+    if (!forceParameter) return NaN;
     const { actuatorsForce } = this.state;
-    if (forceParameter === 'xForces') {
-      return actuatorsForce[M1M3XActuatorsMapping[index]];
-    }
-    if (forceParameter === 'yForces') {
-      return actuatorsForce[M1M3YActuatorsMapping[index]];
-    }
-    if (forceParameter === 'zForces' || forceParameter === 'primaryCylinderForces') {
-      return actuatorsForce[M1M3ZActuatorsMapping[index]];
-    }
-    if (forceParameter === 'secondaryCylinderForces') {
-      return actuatorsForce[M1M3SActuatorsMapping[index]];
-    }
+    const actuatorsMapping = M1M3ActuatorForceParametersAxisMapping[forceParameter];
+    return actuatorsForce[actuatorsMapping[index]];
   }
 
   getActuator = (id) => {
@@ -297,6 +277,7 @@ export default class M1M3 extends Component {
         displacementLVDT: { value: 'None' },
         breakawayPressure: { value: 'None' },
       };
+
     const {
       hardpointIlcState,
       hardpointIlcUniqueId,
@@ -308,6 +289,7 @@ export default class M1M3 extends Component {
       hardpointMinorRevision,
       hardpointMayorRevision,
     } = this.props;
+
     const hardpointIndex = hardpointReferenceId.indexOf(id);
 
     const hardpoint = {
@@ -416,7 +398,8 @@ export default class M1M3 extends Component {
       this.state.selectedForceParameter !== prevState.selectedForceParameter ||
       !isEqual(this.props[this.state.selectedForceInput], prevProps[this.state.selectedForceInput])
     ) {
-      const forceData = this.props[this.state.selectedForceInput]?.[this.state.selectedForceParameter]?.value ?? [];
+      const forceTopic = M1M3ActuatorForcesTopics[this.state.selectedForceInput];
+      const forceData = this.props[forceTopic]?.[this.state.selectedForceParameter]?.value ?? [];
       this.setState({ actuatorsForce: forceData });
     }
 
@@ -439,7 +422,6 @@ export default class M1M3 extends Component {
       !isEqual(prevProps.actuatorReferenceId, actuatorReferenceId)
     ) {
       const actuators = M1M3.getActuatorsPositions(actuatorReferenceId, { xPosition, yPosition, zPosition });
-      // const actuators = M1M3ActuatorPositions; // Old implementation
 
       let yMax = -Infinity;
       let xMax = -Infinity;

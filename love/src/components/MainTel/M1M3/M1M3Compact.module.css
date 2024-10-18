@@ -1,0 +1,58 @@
+.container {
+  padding: var(--content-padding);
+  display: flex;
+  height: calc(100% - 30px);
+}
+
+.actuatorId {
+  font-size: 0.5em;
+}
+
+.actuatorForce {
+  font-size: 0.3em;
+}
+
+.circleOverlay {
+  fill: var(--overlay-background-color);
+}
+
+.borderCircleOverlay {
+  stroke: var(--tertiary-background-color); /*#2d3d4e;*/
+  stroke-width: 5px;
+}
+
+.hiddenCircleOverlay {
+  stroke: var(--second-primary-background-color);
+  stroke-width: 250px;
+}
+
+.forceGradientContainer {
+  display: flex;
+  gap: var(--small-padding);
+}
+
+.forceGradientLimits {
+  font-size: 0.2em;
+  fill: white;
+}
+
+.forceGradient,
+.forceGradientLimits {
+  height: 100%;
+}
+
+.forcesSelector {
+  display: flex;
+  background: var(--second-quaternary-background-dimmed-color);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.forcesSelector > * {
+  padding: var(--content-padding);
+  overflow-y: auto;
+}
+
+.forcesSelector > :first-child {
+  border-right: 1px solid var(--second-primary-background-color);
+}
