@@ -2125,3 +2125,12 @@ export function formatOLETimeOfIncident(dateStart, dateEnd) {
   if (dateStart === dateEnd) return truncateISODateToMinutes(dateStart);
   return `${truncateISODateToMinutes(dateStart)} - ${truncateISODateToMinutes(dateEnd)}`;
 }
+
+/**
+ * Function to swap values per keys in a object
+ * @param {object} obj object to be swapped
+ * @returns {object} object with swapped keys and values
+ */
+export function swapKeysAndValues(obj) {
+  return Object.fromEntries(Object.entries(obj).map(([key, value]) => [value, key]));
+}
