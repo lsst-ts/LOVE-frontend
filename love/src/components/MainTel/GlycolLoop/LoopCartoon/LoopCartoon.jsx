@@ -46,8 +46,6 @@ export default class LoopCartoon extends Component {
     maxTemperatureLimit: PropTypes.number,
     /** Array of 9 step hexcolor gradient */
     colours: PropTypes.array,
-    /** Glycol Loop svg height, hopefully in em */
-    height: PropTypes.string,
     /** Array of 9 step hexcolor gradient */
     rotation: PropTypes.bool,
     /** Array of 9 step hexcolor gradient */
@@ -66,7 +64,6 @@ export default class LoopCartoon extends Component {
     minTemperatureLimit: -15,
     maxTemperatureLimit: 15,
     colours: [],
-    height: '54em',
     rotation: true,
     direction: true,
   };
@@ -88,7 +85,7 @@ export default class LoopCartoon extends Component {
     //we check if the value escapes the range, so we can clip it.
     if (value >= maxValue) {
       return [colorArray[8], 8];
-    } else if (value <= minValue) {
+    } else if (value <= minValue || value === 'NaN') {
       return [colorArray[0], 1];
     } else {
       //first we get the weight of the value (0.0 - 1.0) and get the gradient stop it corresponds to
@@ -247,6 +244,14 @@ export default class LoopCartoon extends Component {
     }
   };
 
+  getTempText = (temp) => {
+    if (temp !== 'NaN') {
+      return `${fixedFloat(temp, 2)} °C`;
+    } else {
+      return '--';
+    }
+  };
+
   //This compromises the svg
   getSvg = () => {
     const {
@@ -261,7 +266,6 @@ export default class LoopCartoon extends Component {
       minTemperatureLimit,
       maxTemperatureLimit,
       colours,
-      height,
       rotation,
       direction,
     } = this.props;
@@ -277,7 +281,7 @@ export default class LoopCartoon extends Component {
 
     return (
       <>
-        <svg className={styles.svgContainer} viewBox="0 0 425.25 851.69" height={height}>
+        <svg className={styles.svgContainer} viewBox="0 0 425.25 851.69" height={'100%'}>
           <defs>
             <linearGradient
               id="gradChillTs5"
@@ -418,7 +422,7 @@ export default class LoopCartoon extends Component {
                 <tspan>TS7-G</tspan>
               </text>
               <text className={styles.cls2} transform="translate(267.53 450.74)">
-                <tspan>{fixedFloat(ts7, 2)} ºC</tspan>
+                <tspan>{this.getTempText(ts7)}</tspan>
               </text>
             </g>
             <g>
@@ -426,7 +430,7 @@ export default class LoopCartoon extends Component {
                 <tspan>TS8-G</tspan>
               </text>
               <text className={styles.cls2} transform="translate(107.66 450.74)">
-                <tspan>{fixedFloat(ts8, 2)} ºC</tspan>
+                <tspan>{this.getTempText(ts8)}</tspan>
               </text>
             </g>
             <g>
@@ -434,7 +438,7 @@ export default class LoopCartoon extends Component {
                 <tspan>TS5-G</tspan>
               </text>
               <text className={styles.cls2} transform="translate(266.13 638.76)">
-                <tspan>{fixedFloat(ts5, 2)} ºC</tspan>
+                <tspan>{this.getTempText(ts5)}</tspan>
               </text>
             </g>
             <g>
@@ -442,7 +446,7 @@ export default class LoopCartoon extends Component {
                 <tspan>TS6-G</tspan>
               </text>
               <text className={styles.cls2} transform="translate(108.41 638.76)">
-                <tspan>{fixedFloat(ts6, 2)} ºC</tspan>
+                <tspan>{this.getTempText(ts6)}</tspan>
               </text>
             </g>
             <g>
@@ -450,7 +454,7 @@ export default class LoopCartoon extends Component {
                 <tspan>TS2-MC</tspan>
               </text>
               <text className={styles.cls2} transform="translate(323.25 314.45)">
-                <tspan>{fixedFloat(ts2, 2)} ºC</tspan>
+                <tspan>{this.getTempText(ts2)}</tspan>
               </text>
             </g>
             <g>
@@ -458,7 +462,7 @@ export default class LoopCartoon extends Component {
                 <tspan>TS4-MC</tspan>
               </text>
               <text className={styles.cls2} transform="translate(50.45 314.45)">
-                <tspan>{fixedFloat(ts4, 2)} ºC</tspan>
+                <tspan>{this.getTempText(ts4)}</tspan>
               </text>
             </g>
             <g>
@@ -466,7 +470,7 @@ export default class LoopCartoon extends Component {
                 <tspan>TS3-MC</tspan>
               </text>
               <text className={styles.cls2} transform="translate(190.07 68.75)">
-                <tspan>{fixedFloat(ts3, 2)} ºC</tspan>
+                <tspan>{this.getTempText(ts3)}</tspan>
               </text>
             </g>
             <circle className={styles.cls19} fill={ts1Hex} cx="212.63" cy="212.63" r="25" />
@@ -475,7 +479,7 @@ export default class LoopCartoon extends Component {
                 <tspan>TS1-A</tspan>
               </text>
               <text className={styles.cls2} transform="translate(190.2 285.19)">
-                <tspan>{fixedFloat(ts1, 2)} ºC</tspan>
+                <tspan>{this.getTempText(ts1)}</tspan>
               </text>
             </g>
           </g>

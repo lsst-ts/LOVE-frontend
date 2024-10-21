@@ -29,9 +29,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .contentWrapper {
   display: grid;
-  justify-content: flex-start;
-  grid-template-columns: 1fr 1fr;
-  align-items: start;
+  grid-template-columns: 1fr 3fr;
   gap: 1em;
 }
 
@@ -41,6 +39,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .cartoonContainer {
   height: 700px;
+  display: flex;
 }
 
 .drivesContainer {
@@ -48,15 +47,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   border-radius: 5px;
   background: var(--second-secondary-background-color);
 }
-
-.rightRow {
-  display: grid;
-  justify-content: flex-start;
-  grid-template-columns: 1fr 1fr;
-  align-items: start;
-  gap: 1em;
-}
-
 .plotContainer {
   display: grid;
   grid-template-rows: min-content minmax(auto, 18em);
