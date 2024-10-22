@@ -275,6 +275,7 @@ export default class GlycolLoop extends Component {
       width,
       COLOURS,
       valvePosition,
+      rawValvePosition,
     } = this.props;
 
     const tempsArray = [
@@ -329,7 +330,7 @@ export default class GlycolLoop extends Component {
           </div>
           <div>
             <div>
-              <Mixing value={valvePosition} />
+              <Mixing value={valvePosition} rawValue={rawValvePosition} />
             </div>
             <div>
               <div className={styles.plotContainer}>

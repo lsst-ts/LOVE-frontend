@@ -27,20 +27,25 @@ export default class Mixing extends Component {
   static propTypes = {
     /** Value of valve position for see in progress bar. */
     value: PropTypes.number,
+    /** Raw value of valve position in Voltage. */
+    rawValue: PropTypes.number,
   };
   static defaultProps = {
     value: 0,
+    rawValue: 0,
   };
 
   render() {
-    const { value } = this.props;
+    const { value, rawValue } = this.props;
     return (
       <>
-        <div className={styles.containerTop}>
-          <span className={styles.title}>Mixing Value</span>
-          <div>
-            <span className={styles.label}>Valve Position </span>
-            <span className={styles.value}>{`${defaultNumberFormatter(value, 1)}%`}</span>
+        <div>
+          <div className={styles.title}>Mixing Value</div>
+          <div className={styles.containerValues}>
+            <div className={styles.label}>Valve Position </div>
+            <div className={styles.value}>{`${defaultNumberFormatter(value, 2)}%`}</div>
+            <div className={styles.label}>Valve Raw Position </div>
+            <div className={styles.value}>{`${defaultNumberFormatter(rawValue, 2)} V`}</div>
           </div>
         </div>
         <div>
