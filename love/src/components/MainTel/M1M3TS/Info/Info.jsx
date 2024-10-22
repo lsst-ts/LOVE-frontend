@@ -98,7 +98,11 @@ export default class Info extends Component {
     } = this.props;
 
     const fcuIndex = M1M3TSFanCoilPositions.findIndex((fcu) => fcu.id === id);
-    const sensorIndex = sensorReferenceId.indexOf(fcuIndex);
+    const sensorIndex = sensorReferenceId[fcuIndex];
+
+    const absoluteValue = defaultNumberFormatter(absoluteTemperature[sensorIndex], 4) ?? 0;
+    const differentialValue = defaultNumberFormatter(differentialTemperature[sensorIndex], 4) ?? 0;
+    const fanRPMValue = defaultNumberFormatter(fanRPM[sensorIndex], 4) ?? 0;
 
     // const enabledData = enabled[sensorIndex];
     // const enabledState = m1m3tsEnabledStateMap[enabledData];
@@ -117,11 +121,9 @@ export default class Info extends Component {
     const sensor = {
       index: sensorIndex,
       name: `FCU${String(id).padStart(2, '0')}`,
-      absoluteTemperature: absoluteTemperature[sensorIndex] ?? 0,
-      differentialTemperature: differentialTemperature[sensorIndex] ?? 0,
-      fanRPM: fanRPM[sensorIndex] ?? 0,
-      fanBreaker: fanBreaker[sensorIndex] ?? false,
-      heaterDisabled: heaterDisabled[sensorIndex] ?? false,
+      absoluteTemperature: absoluteValue,
+      differentialTemperature: differentialValue,
+      fanRPM: fanRPMValue,
       state: {
         ilc: {
           name: ilcState,
@@ -147,12 +149,12 @@ export default class Info extends Component {
   };
 
   render() {
-    const selectedSensorID = this.props.selectedSensor ?? Info.defaultProps.selectedSensor;
-    let selectedSensorData = this.getSensor(selectedSensorID);
+    const { selectedSensor } = this.props;
+    const selectedSensorData = this.getSensor(selectedSensor ?? Info.defaultProps.selectedSensor);
 
     return (
       <SummaryPanel className={styles.info}>
-        {selectedSensorID ? (
+        {selectedSensor ? (
           <>
             <Title>{selectedSensorData.name}</Title>
             <Value>
@@ -174,13 +176,13 @@ export default class Info extends Component {
             </Value>
 
             <Label>Absolute Temperature</Label>
-            <Value>{`${defaultNumberFormatter(selectedSensorData.absoluteTemperature)} C°`}</Value>
+            <Value>{`${selectedSensorData.absoluteTemperature} C°`}</Value>
 
             <Label>Differential Temperature</Label>
-            <Value>{`${defaultNumberFormatter(selectedSensorData.differentialTemperature)} C°`}</Value>
+            <Value>{`${selectedSensorData.differentialTemperature} C°`}</Value>
 
             <Label>Fan</Label>
-            <Value>{`${defaultNumberFormatter(selectedSensorData.fanRPM)} RPM`}</Value>
+            <Value>{`${selectedSensorData.fanRPM} RPM`}</Value>
 
             {selectedSensorData.warnings.length > 0 && (
               <>

@@ -21,11 +21,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 import { uniqueId } from 'lodash';
-import TemperatureGradiant from '../Temperature/TemperatureGradiant';
 import { M1M3TSFanCoilPositions } from 'Config';
 import Button from 'components/GeneralPurpose/Button/Button';
 import styles from './Selector.module.css';
-import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
+
+const colors = ['#d7191c', '#e76818', '#f29e2e', '#f9d057', '#ffff8c', '#90eb9d', '#00ccbc', '#00a6ca', '#2c7bb6'];
+const colorRange = [...d3.range(0, 1, 1.0 / (colors.length - 1)), 1];
+const colorScale = d3.scaleLinear().domain(colorRange).range(colors).interpolate(d3.interpolateHcl);
 
 export default class Selector extends Component {
   static propTypes = {
@@ -119,7 +121,7 @@ export default class Selector extends Component {
       .scaleLinear()
       .domain(d3.extent([minTemperatureLimit, maxTemperatureLimit]))
       .range([0, 1]);
-    return TemperatureGradiant.COLOR_SCALE(1 - colorInterpolate(value));
+    return colorScale(1 - colorInterpolate(value));
   };
 
   getThermalWarnings = (sensorIndex) => {
@@ -174,15 +176,19 @@ export default class Selector extends Component {
     }
     const { sensorReferenceId, differentialTemperature, absoluteTemperature } = this.props;
 
-    const sensorIndex = sensorReferenceId.indexOf(id) >= 0 ? sensorReferenceId.indexOf(id) : undefined;
+    const fcuIndex = M1M3TSFanCoilPositions.findIndex((fcu) => fcu.id === id);
+    const sensorIndex = sensorReferenceId[fcuIndex];
+
+    const differentialValue = differentialTemperature[sensorIndex] ?? 0;
+    const absoluteValue = absoluteTemperature[sensorIndex] ?? 0;
     const warning = this.getThermalWarnings(sensorIndex);
 
     const sensor = {
       id,
-      differentialTemperature: differentialTemperature[sensorIndex ?? 0] ?? 0,
-      absoluteTemperature: absoluteTemperature[sensorIndex ?? 0] ?? 0,
-      colorDifferentialTemperature: this.getGradiantColorX(differentialTemperature[sensorIndex ?? 0]),
-      colorAbsoluteTemperature: this.getGradiantColorX(absoluteTemperature[sensorIndex ?? 0]),
+      differentialTemperature: differentialValue,
+      absoluteTemperature: absoluteValue,
+      colorDifferentialTemperature: this.getGradiantColorX(differentialValue),
+      colorAbsoluteTemperature: this.getGradiantColorX(absoluteValue),
       warning,
     };
     return sensor;
@@ -303,6 +309,7 @@ export default class Selector extends Component {
     return (
       <g id={this.uniqueScatter} className={styles.scatter}>
         {this.state.sensors.map((act) => {
+          const sensorData = this.getSensor(act.id);
           return (
             <g key={act.id} className={styles.sensor} onClick={() => sensorSelect(act.id)}>
               <circle
@@ -311,8 +318,8 @@ export default class Selector extends Component {
                 key={act.id}
                 fill={
                   showDifferentialTemp
-                    ? this.getSensor(act.id)?.colorDifferentialTemperature ?? 'gray'
-                    : this.getSensor(act.id)?.colorAbsoluteTemperature ?? 'gray'
+                    ? sensorData?.colorDifferentialTemperature ?? 'gray'
+                    : sensorData?.colorAbsoluteTemperature ?? 'gray'
                 }
                 stroke={selectedSensor === act.id ? this.strokeSensorSelected(act.id) : 'none'}
                 strokeWidth={act.id === selectedSensor ? 6 : 4}
@@ -329,7 +336,7 @@ export default class Selector extends Component {
               >
                 {act.id}
               </text>
-              {showWarning && this.getSensor(act.id)?.warning ? (
+              {showWarning && sensorData?.warning ? (
                 <g
                   transform-origin={`0% 0%`}
                   transform={`translate(${(act.position[0] + this.state.xRadius) * scale + margin} ${

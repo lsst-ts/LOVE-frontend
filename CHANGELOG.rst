@@ -5,6 +5,7 @@ Version History
 v6.3.1
 ------
 
+* Adjustments and fixes for M1M3TS components `<https://github.com/lsst-ts/LOVE-frontend/pull/669>`_
 * Fix links parsing on the htmlToJiraMarkdown function so it properly parse more than one link in the string `<https://github.com/lsst-ts/LOVE-frontend/pull/667>`_
 * Remove deprecated MTHexapod Offline controller state `<https://github.com/lsst-ts/LOVE-frontend/pull/668>`_
 * Refactor M2 Selector component to fix axial and tangent actuators coordinate system `<https://github.com/lsst-ts/LOVE-frontend/pull/665>`_
