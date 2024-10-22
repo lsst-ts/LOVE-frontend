@@ -17,66 +17,16 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-.title {
-  text-align: left;
-  font-weight: bold;
-  margin-bottom: 0.5em;
-  color: var(--base-font-color);
-}
-
-.temperatureGradientWrapper {
-  margin-bottom: 50px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-}
-
-.temperatureGradient {
-  display: flex;
-}
-
-.temperatureGradient > svg {
-  /* border-radius: 6em; */
-}
-
-.temperatureGradientLabels {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.temperatureGradientLabels > span {
-  margin-left: 1em;
-}
-
 .colorScaleSvg {
-  overflow: visible;
-  /*   width: 100%; */
+  margin-left: 1em;
+  margin-right: 0.5em;
 }
 
-.label {
-  font-size: var(--font-size-medium);
-  color: var(--secondary-font-color);
-  text-align: left;
-  white-space: pre;
+.colorScaleTextSvg {
+  fill: var(--highlighted-font-color);
 }
 
-.value {
-  color: var(--base-font-color);
-  text-align: right;
-}
-
-.container {
-  position: relative;
-  display: grid;
-  justify-content: flex-start;
-  grid-template-columns: 1fr 1.2fr;
-}
-
-.setpointLine {
-  stroke: white;
-  stroke-width: 2px;
-  stroke-dasharray: 4px;
-  stroke-opacity: 0.5px;
+.colorScaleSvg,
+.colorScaleTextSvg {
+  height: calc(100% - 4em);
 }

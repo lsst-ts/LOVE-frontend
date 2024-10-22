@@ -275,6 +275,7 @@ export default class GlycolLoop extends Component {
       width,
       COLOURS,
       valvePosition,
+      rawValvePosition,
     } = this.props;
 
     const tempsArray = [
@@ -289,12 +290,6 @@ export default class GlycolLoop extends Component {
 
     const minTemp = Math.floor(Math.min(...tempsArray));
     const maxTemp = Math.ceil(Math.max(...tempsArray));
-
-    const timeSeriesControlsProps = {
-      timeWindow: this.state.timeWindow,
-      isLive: this.state.isLive,
-      historicalData: this.state.historicalData,
-    };
 
     return (
       <>
@@ -315,7 +310,7 @@ export default class GlycolLoop extends Component {
           />
         </div>
         <div className={styles.contentWrapper}>
-          <div className={styles.cartoonContainer}>
+          <div style={{ height: '54em' }} className={styles.cartoonContainer}>
             <LoopCartoon
               ts1={aboveMirrorTemperature}
               ts2={tempsArray[0]}
@@ -328,19 +323,14 @@ export default class GlycolLoop extends Component {
               minTemperatureLimit={minTemp}
               maxTemperatureLimit={maxTemp}
               colours={COLOURS}
-              height={'54em'}
               rotation={forwardRotating}
               direction={forwardCommanded}
             />
+            <TemperatureGradient minTemperatureLimit={minTemp} maxTemperatureLimit={maxTemp} />
           </div>
           <div>
-            <div className={styles.rightRow}>
-              <div className={styles.mixingContainer}>
-                <Mixing value={valvePosition} />
-              </div>
-              <div className={styles.tempGradientContainer}>
-                <TemperatureGradient minTemperatureLimit={minTemp} maxTemperatureLimit={maxTemp} width={width} />
-              </div>
+            <div>
+              <Mixing value={valvePosition} rawValue={rawValvePosition} />
             </div>
             <div>
               <div className={styles.plotContainer}>

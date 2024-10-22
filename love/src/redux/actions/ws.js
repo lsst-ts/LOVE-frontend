@@ -209,13 +209,13 @@ export const openWebsocketConnection = () => {
       onmessage: (msg) => {
         if (!msg.data) return;
 
-        let data = {};
-        try {
-          data = JSON.parse(msg.data);
-        } catch (error) {
-          data = JSON.parse(msg.data.replace(/\bNaN\b/g, '"NaN"'));
-        }
+        let cleanMsgData = msg.data;
+        cleanMsgData = cleanMsgData.replace(/NaN/g, '"NaN"');
+        cleanMsgData = cleanMsgData.replace(/-?Infinity/g, (match) => {
+          return match === '-Infinity' ? '"-Infinity"' : '"Infinity"';
+        });
 
+        const data = JSON.parse(cleanMsgData);
         if (!data.category) {
           if (data.time_data) {
             dispatch(receiveServerTime(data.time_data, data.request_time));

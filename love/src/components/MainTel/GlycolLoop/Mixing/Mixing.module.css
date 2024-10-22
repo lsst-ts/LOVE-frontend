@@ -30,16 +30,9 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   padding-right: 0em;
 }
 
-.containerTop {
-  display: grid;
-  justify-content: flex-start;
-}
-
-.containerBottom {
-  margin-top: 8px;
-  display: grid;
-  grid-template-columns: auto auto;
-  column-gap: 30%;
+.containerValues {
+  display: flex;
+  gap: var(--small-padding);
 }
 
 .title {
@@ -47,9 +40,4 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   font-weight: bold;
   margin-bottom: 0.5em;
   color: var(--base-font-color);
-}
-
-.labelValue {
-  display: grid;
-  grid-template-columns: auto auto;
 }

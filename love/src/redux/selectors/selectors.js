@@ -270,6 +270,7 @@ export const getM1M3TSMixingState = (state) => {
   const m1m3tsData = getStreamsData(state, subscriptions);
   return {
     valvePosition: m1m3tsData['telemetry-MTM1M3TS-0-mixingValve']?.valvePosition?.value ?? 0,
+    rawValvePosition: m1m3tsData['telemetry-MTM1M3TS-0-mixingValve']?.rawValvePosition?.value ?? 0,
   };
 };
 
@@ -361,19 +362,12 @@ export const getM1M3TSThermalState = (state) => {
   return {
     ilcFCU: m1m3tsData['event-MTM1M3TS-0-enabledILC']?.[0].enabledFCU?.value ?? Array.from({ length: 96 }, () => false),
     // enabledFCU: m1m3tsData['event-MTM1M3TS-0-thermalSettings']?.[0].enabledFCU?.value ?? Array.from({length: 96}, () => false),
-    referenceId:
-      m1m3tsData['event-MTM1M3TS-0-thermalInfo']?.[0].referenceId?.value ?? Array.from({ length: 96 }).map((v, i) => i),
-    absoluteTemperature:
-      m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.absoluteTemperature?.value ??
-      Array.from({ length: 96 }, (i) => 0),
-    differentialTemperature:
-      m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.differentialTemperature?.value ??
-      Array.from({ length: 96 }, (i) => 0),
-    fanRPM: m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.fanRPM?.value ?? Array.from({ length: 96 }, (i) => 0),
-    fanBreaker:
-      m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.fanBreaker?.value ?? Array.from({ length: 96 }, () => false),
-    heaterDisabled:
-      m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.heaterDisabled?.value ?? Array.from({ length: 96 }, () => false),
+    referenceId: m1m3tsData['event-MTM1M3TS-0-thermalInfo']?.[0].referenceId?.value ?? [],
+    absoluteTemperature: m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.absoluteTemperature?.value ?? [],
+    differentialTemperature: m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.differentialTemperature?.value ?? [],
+    fanRPM: m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.fanRPM?.value ?? [],
+    fanBreaker: m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.fanBreaker?.value ?? [],
+    heaterDisabled: m1m3tsData['telemetry-MTM1M3TS-0-thermalData']?.heaterDisabled?.value ?? [],
   };
 };
 
@@ -971,9 +965,6 @@ export const getHexapodStatus = (state, salindex) => {
       : false,
     hexapodControllerState: hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`][0].controllerState.value
-      : 0,
-    hexapodControllerStateOfflineSubstate: hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`]
-      ? hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`][0].offlineSubstate.value
       : 0,
     hexapodConstrollerStateEnabledSubstate: hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`][0].enabledSubstate.value

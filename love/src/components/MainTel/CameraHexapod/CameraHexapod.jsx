@@ -34,13 +34,11 @@ import {
   hexapodCompensationModeStatetoStyle,
   hexapodInterlockStateMap,
   hexapodControllerStateMap,
-  hexapodControllerStateOfflineSubStateMap,
   hexapodControllerStateEnabledSubstateMap,
   hexapodMTInPositionStateMap,
   hexapodMTInPositionStatetoStyle,
   hexapodConnectedStateMap,
   hexapodConnectedStatetoStyle,
-  hexapodStatusStatetoStyle,
   hexapodControllerStatetoStyle,
 } from 'Config';
 
@@ -58,8 +56,6 @@ class CameraHexapod extends Component {
     hexapodConnected: PropTypes.bool,
     /** State reported by the controller */
     hexapodControllerState: PropTypes.number,
-    /** Substate in OFFLINE mode, an OfflineSubstate enumeration value */
-    hexapodControllerStateOfflineSubstate: PropTypes.number,
     /** Substate in ENABLED mode, an EnabledSubstate enumeration value */
     hexapodConstrollerStateEnabledSubstate: PropTypes.number,
     /** Application status. A bitmask of ApplicationStatus enumeration values */
@@ -109,7 +105,6 @@ class CameraHexapod extends Component {
     hexapodCompensationMode: false,
     hexapodConnected: false,
     hexapodControllerState: 0,
-    hexapodControllerStateOfflineSubstate: 0,
     hexapodConstrollerStateEnabledSubstate: 0,
     hexapodControllerStateApplicationStatus: 0,
     hexapodInPosition: false,
@@ -289,9 +284,6 @@ class CameraHexapod extends Component {
 
     // controllerState
     let controllerSubstate = '';
-    if (controllerState === 'Offline') {
-      controllerSubstate = hexapodControllerStateOfflineSubStateMap[this.props.hexapodControllerStateOfflineSubstate];
-    }
     if (controllerState === 'Enabled') {
       controllerSubstate = hexapodControllerStateEnabledSubstateMap[this.props.hexapodConstrollerStateEnabledSubstate];
     } else {

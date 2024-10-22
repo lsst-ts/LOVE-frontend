@@ -74,14 +74,14 @@ export default class M1M3TS extends Component {
     thermalWarnings: [],
     valvePosition: 0,
     minTemperatureLimit: 0,
-    maxTemperatureLimit: 1000,
+    maxTemperatureLimit: 10,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       showFcuIDs: true,
-      showDifferentialTemp: true,
+      showDifferentialTemp: false,
       showWarnings: true,
       selectedSensor: null,
     };
@@ -95,23 +95,14 @@ export default class M1M3TS extends Component {
     this.props.unsubscribeToStreams();
   }
 
-  arrayReferenceId = () => {
-    const array = [];
-    for (let i = 0; i < 96; i++) {
-      array.push(i + 1);
-    }
-    return array;
-  };
-
   render() {
-    // Summary
-    const { summaryState, fanHeaters, coolantPump } = this.props;
-
-    // Temperature
-    const { setpoint, minTemperatureLimit, maxTemperatureLimit } = this.props;
-
-    // Info
     const {
+      summaryState,
+      fanHeaters,
+      coolantPump,
+      setpoint,
+      minTemperatureLimit,
+      maxTemperatureLimit,
       referenceId,
       ilcFCU,
       // enabledFCU,
@@ -120,12 +111,10 @@ export default class M1M3TS extends Component {
       fanRPM,
       fanBreaker,
       heaterDisabled,
+      thermalWarnings,
+      valvePosition,
+      rawValvePosition,
     } = this.props;
-
-    const { thermalWarnings } = this.props;
-
-    // Mixing
-    const { valvePosition } = this.props;
 
     return (
       <div className={styles.container}>
@@ -168,7 +157,7 @@ export default class M1M3TS extends Component {
         </div>
 
         <div className={styles.mixingContainer}>
-          <Mixing value={valvePosition} />
+          <Mixing value={valvePosition} rawValue={rawValvePosition} />
         </div>
 
         <div className={styles.temperatureContainer}>
