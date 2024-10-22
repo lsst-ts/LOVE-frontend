@@ -5,6 +5,7 @@ Version History
 v6.3.1
 ------
 
+* Update package.json version to v6.3.1 `<https://github.com/lsst-ts/LOVE-frontend/pull/670>`_
 * Adjustments and fixes for M1M3TS components `<https://github.com/lsst-ts/LOVE-frontend/pull/669>`_
 * Fix links parsing on the htmlToJiraMarkdown function so it properly parse more than one link in the string `<https://github.com/lsst-ts/LOVE-frontend/pull/667>`_
 * Remove deprecated MTHexapod Offline controller state `<https://github.com/lsst-ts/LOVE-frontend/pull/668>`_
