@@ -121,22 +121,35 @@ export const getAlignmentState = (state) => {
 // MTM1M3 selectors
 export const getM1M3ActuatorsState = (state) => {
   const subscriptions = [
-    'telemetry-MTM1M3-0-forceActuatorData',
     'event-MTM1M3-0-forceActuatorInfo',
     'event-MTM1M3-0-forceActuatorState',
     'event-MTM1M3-0-enabledForceActuators',
   ];
   const m1m3Data = getStreamsData(state, subscriptions);
   return {
-    forceActuatorData: m1m3Data['telemetry-MTM1M3-0-forceActuatorData'] ?? {},
     xPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.xPosition?.value ?? [],
     yPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.yPosition?.value ?? [],
     zPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.zPosition?.value ?? [],
     actuatorReferenceId: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.referenceId?.value ?? [],
+    actuatorType: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.actuatorType?.value ?? [],
+    actuatorOrientation: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.actuatorOrientation?.value ?? [],
+    actuatorModbusSubnet: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.modbusSubnet?.value ?? [],
+    actuatorModbusAddress: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.modbusAddress?.value ?? [],
     actuatorIlcUniqueId: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.ilcUniqueId?.value ?? [],
-    actuatorIlcState: m1m3Data['event-MTM1M3-0-forceActuatorState']?.[0]?.ilcState?.value ?? [],
-    actuatorMinorRevision: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.minorRevision?.value ?? [],
+    actuatorIlcApplicationType: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.ilcApplicationType?.value ?? [],
+    actuatorIlcSelectedOptions: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.ilcSelectedOptions?.value ?? [],
+    actuatorNetworkNodeType: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.networkNodeType?.value ?? [],
     actuatorMayorRevision: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.majorRevision?.value ?? [],
+    actuatorMinorRevision: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.minorRevision?.value ?? [],
+    actuatorAdcScanRate: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.adcScanRate?.value ?? [],
+    actuatorMezzanineUniqueId: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.mezzanineUniqueId?.value ?? [],
+    actuatorMezzanineFirmwareType:
+      m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.mezzanineFirmwareType?.value ?? [],
+    actuatorMezzanineMajorRevision:
+      m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.mezzanineMajorRevision?.value ?? [],
+    actuatorMezzanineMinorRevision:
+      m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.mezzanineMinorRevision?.value ?? [],
+    actuatorIlcState: m1m3Data['event-MTM1M3-0-forceActuatorState']?.[0]?.ilcState?.value ?? [],
     actuatorEnabled: m1m3Data['event-MTM1M3-0-enabledForceActuators']?.[0]?.forceActuatorEnabled?.value ?? [],
   };
 };
@@ -237,34 +250,77 @@ export const getM1M3State = (state) => {
 
 export const getM1M3ActuatorForces = (state) => {
   const subscriptions = [
-    'telemetry-MTM1M3-0-appliedForces',
+    'telemetry-MTM1M3-0-forceActuatorData',
     'telemetry-MTM1M3-0-appliedAccelerationForces',
     'telemetry-MTM1M3-0-appliedAzimuthForces',
     'telemetry-MTM1M3-0-appliedBalanceForces',
     'telemetry-MTM1M3-0-appliedCylinderForces',
     'telemetry-MTM1M3-0-appliedElevationForces',
+    'telemetry-MTM1M3-0-appliedForces',
     'telemetry-MTM1M3-0-appliedThermalForces',
     'telemetry-MTM1M3-0-appliedVelocityForces',
+    'event-MTM1M3-0-enabledForceActuators',
+    'event-MTM1M3-0-forceActuatorInfo',
+    'event-MTM1M3-0-forceActuatorState',
     'event-MTM1M3-0-appliedActiveOpticForces',
     'event-MTM1M3-0-appliedOffsetForces',
     'event-MTM1M3-0-appliedStaticForces',
+    'event-MTM1M3-0-preclippedAccelerationForces',
+    'event-MTM1M3-0-preclippedActiveOpticForces',
+    'event-MTM1M3-0-preclippedAzimuthForces',
+    'event-MTM1M3-0-preclippedBalanceForces',
+    'event-MTM1M3-0-preclippedCylinderForces',
+    'event-MTM1M3-0-preclippedElevationForces',
+    'event-MTM1M3-0-preclippedForces',
+    'event-MTM1M3-0-preclippedOffsetForces',
+    'event-MTM1M3-0-preclippedStaticForces',
+    'event-MTM1M3-0-preclippedThermalForces',
+    'event-MTM1M3-0-preclippedVelocityForces',
+    'event-MTM1M3-0-raisingLoweringInfo',
+    'event-MTM1M3-0-forceActuatorWarning',
+    'event-MTM1M3-0-forceActuatorForceWarning',
+    'event-MTM1M3-0-forceActuatorFollowingErrorCounter',
+    'event-MTM1M3-0-forceSetpointWarning',
+    'event-MTM1M3-0-forceActuatorBumpTestStatus',
   ];
   const m1m3Data = getStreamsData(state, subscriptions);
   return {
-    appliedForces: m1m3Data['telemetry-MTM1M3-0-appliedForces'] ?? {},
-    appliedAccelerationForces: m1m3Data['telemetry-MTM1M3-0-appliedAccelerationForce'] ?? {},
+    forceActuatorData: m1m3Data['telemetry-MTM1M3-0-forceActuatorData'] ?? {},
+    appliedAccelerationForces: m1m3Data['telemetry-MTM1M3-0-appliedAccelerationForces'] ?? {},
     appliedAzimuthForces: m1m3Data['telemetry-MTM1M3-0-appliedAzimuthForces'] ?? {},
     appliedBalanceForces: m1m3Data['telemetry-MTM1M3-0-appliedBalanceForces'] ?? {},
     appliedCylinderForces: m1m3Data['telemetry-MTM1M3-0-appliedCylinderForces'] ?? {},
     appliedElevationForces: m1m3Data['telemetry-MTM1M3-0-appliedElevationForces'] ?? {},
+    appliedForces: m1m3Data['telemetry-MTM1M3-0-appliedForces'] ?? {},
     appliedThermalForces: m1m3Data['telemetry-MTM1M3-0-appliedThermalForces'] ?? {},
     appliedVelocityForces: m1m3Data['telemetry-MTM1M3-0-appliedVelocityForces'] ?? {},
+    enabledForceActuators: m1m3Data['event-MTM1M3-0-enabledForceActuators']?.[0] ?? {},
+    forceActuatorInfo: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0] ?? {},
+    forceActuatorState: m1m3Data['event-MTM1M3-0-forceActuatorState']?.[0] ?? {},
     appliedActiveOpticForces: m1m3Data['event-MTM1M3-0-appliedActiveOpticForces']?.[0] ?? {},
     appliedOffsetForces: m1m3Data['event-MTM1M3-0-appliedOffsetForces']?.[0] ?? {},
     appliedStaticForces: m1m3Data['event-MTM1M3-0-appliedStaticForces']?.[0] ?? {},
+    preclippedAccelerationForces: m1m3Data['event-MTM1M3-0-preclippedAccelerationForces']?.[0] ?? {},
+    preclippedActiveOpticForces: m1m3Data['event-MTM1M3-0-preclippedActiveOpticForces']?.[0] ?? {},
+    preclippedAzimuthForces: m1m3Data['event-MTM1M3-0-preclippedAzimuthForces']?.[0] ?? {},
+    preclippedBalanceForces: m1m3Data['event-MTM1M3-0-preclippedBalanceForces']?.[0] ?? {},
+    preclippedCylinderForces: m1m3Data['event-MTM1M3-0-preclippedCylinderForces']?.[0] ?? {},
+    preclippedElevationForces: m1m3Data['event-MTM1M3-0-preclippedElevationForces']?.[0] ?? {},
+    preclippedForces: m1m3Data['event-MTM1M3-0-preclippedForces']?.[0] ?? {},
+    preclippedOffsetForces: m1m3Data['event-MTM1M3-0-preclippedOffsetForces']?.[0] ?? {},
+    preclippedStaticForces: m1m3Data['event-MTM1M3-0-preclippedStaticForces']?.[0] ?? {},
+    preclippedThermalForces: m1m3Data['event-MTM1M3-0-preclippedThermalForces']?.[0] ?? {},
+    preclippedVelocityForces: m1m3Data['event-MTM1M3-0-preclippedVelocityForces']?.[0] ?? {},
+    raisingLoweringInfo: m1m3Data['event-MTM1M3-0-raisingLoweringInfo']?.[0] ?? {},
+    forceActuatorWarning: m1m3Data['event-MTM1M3-0-forceActuatorWarning']?.[0] ?? {},
+    forceActuatorForceWarning: m1m3Data['event-MTM1M3-0-forceActuatorForceWarning']?.[0] ?? {},
+    forceActuatorFollowingErrorCounter: m1m3Data['event-MTM1M3-0-forceActuatorFollowingErrorCounter']?.[0] ?? {},
+    forceSetpointWarning: m1m3Data['event-MTM1M3-0-forceSetpointWarning']?.[0] ?? {},
+    forceActuatorBumpTestStatus: m1m3Data['event-MTM1M3-0-forceActuatorBumpTestStatus']?.[0] ?? {},
   };
 };
 
+// MTM1M3TS selectors
 export const getM1M3TSMixingState = (state) => {
   const subscriptions = ['telemetry-MTM1M3TS-0-mixingValve'];
   const m1m3tsData = getStreamsData(state, subscriptions);
@@ -461,13 +517,11 @@ export const getM2Actuator = (state) => {
   ];
   const m2ActuatorsData = getStreamsData(state, subscriptions);
   return {
-    actuatorIlcState: m2ActuatorsData['telemetry-MTM2-0-ilcData']?.status?.value ?? Array(78).fill(0),
-    axialActuatorSteps: m2ActuatorsData['telemetry-MTM2-0-axialActuatorSteps']?.steps?.value ?? Array(72).fill(0),
-    axialEncoderPositions:
-      m2ActuatorsData['telemetry-MTM2-0-axialEncoderPositions']?.positions?.value ?? Array(72).fill(0),
-    tangentActuatorSteps: m2ActuatorsData['telemetry-MTM2-0-tangentActuatorSteps']?.steps?.value ?? Array(6).fill(0),
-    tangentEncoderPositions:
-      m2ActuatorsData['telemetry-MTM2-0-tangentEncoderPositions']?.positions?.value ?? Array(6).fill(0),
+    actuatorIlcState: m2ActuatorsData['telemetry-MTM2-0-ilcData']?.status?.value ?? [],
+    axialActuatorSteps: m2ActuatorsData['telemetry-MTM2-0-axialActuatorSteps']?.steps?.value ?? [],
+    axialEncoderPositions: m2ActuatorsData['telemetry-MTM2-0-axialEncoderPositions']?.positions?.value ?? [],
+    tangentActuatorSteps: m2ActuatorsData['telemetry-MTM2-0-tangentActuatorSteps']?.steps?.value ?? [],
+    tangentEncoderPositions: m2ActuatorsData['telemetry-MTM2-0-tangentEncoderPositions']?.positions?.value ?? [],
   };
 };
 
@@ -475,10 +529,10 @@ export const getM2ActuatorForce = (state) => {
   const subscriptions = ['telemetry-MTM2-0-axialForce', 'telemetry-MTM2-0-tangentForce'];
   const m2ActuatorsData = getStreamsData(state, subscriptions);
   return {
-    axialForceApplied: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.applied?.value ?? Array(72).fill(0),
-    axialForceMeasured: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.measured?.value ?? Array(72).fill(0),
-    tangentForceApplied: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.applied?.value ?? Array(6).fill(0),
-    tangentForceMeasured: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.measured?.value ?? Array(6).fill(0),
+    axialForceApplied: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.applied?.value ?? [],
+    axialForceMeasured: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.measured?.value ?? [],
+    tangentForceApplied: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.applied?.value ?? [],
+    tangentForceMeasured: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.measured?.value ?? [],
   };
 };
 
