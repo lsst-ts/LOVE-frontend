@@ -158,9 +158,7 @@ class ExposureAdd extends Component {
         });
       });
 
-      const instrumentsArray = Object.values(data)
-        .map((arr) => arr[0])
-        .filter((instrument) => instrument);
+      const instrumentsArray = Object.keys(registryMap);
 
       this.setState({
         instruments: instrumentsArray,
