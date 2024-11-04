@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.3.2
+------
+
+* Fix OLE exposure components to allow all instruments to be used queried. `<https://github.com/lsst-ts/LOVE-frontend/pull/672>`_
+
 v6.3.1
 ------
 
