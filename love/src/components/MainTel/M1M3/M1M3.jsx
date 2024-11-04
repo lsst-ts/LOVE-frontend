@@ -25,17 +25,15 @@ import {
   summaryStateMap,
   summaryStateToStyle,
   M1M3ActuatorPositions,
-  M1M3ActuatorForces,
+  M1M3ActuatorForcesOnly,
+  M1M3ActuatorForcesTopics,
   m1m3DetailedStateMap,
   m1m3DetailedStateToStyle,
-  m1m3HardpointActuatorMotionStateMap,
   M1M3HardpointPositions,
-  M1M3XActuatorsMapping,
-  M1M3YActuatorsMapping,
-  M1M3ZActuatorsMapping,
-  M1M3SActuatorsMapping,
+  M1M3ActuatorForceParametersAxisMapping,
   alignedStateMap,
   alignedStateToStyle,
+  mirrorsForceGradientcolors as colors,
 } from 'Config';
 import ArrowIcon from 'components/icons/ArrowIcon/ArrowIcon';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
@@ -44,12 +42,15 @@ import Select from 'components/GeneralPurpose/Select/Select';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Title from 'components/GeneralPurpose/SummaryPanel/Title';
-import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
-import CSCDetailStyles from './CSCDetail.module.css';
 import styles from './M1M3.module.css';
 
-const FORCE_GRADIENT_WIDTH = 200;
-const FORCE_GRADIENT_HEIGHT = 40;
+const FORCE_GRADIENT_WIDTH = 400;
+const FORCE_GRADIENT_HEIGHT = 20;
+
+const colorRange = d3.range(0, 1, 1.0 / (colors.length - 1));
+colorRange.push(1);
+const colorScale = d3.scaleLinear().domain(colorRange).range(colors).interpolate(d3.interpolateHcl);
+
 export default class M1M3 extends Component {
   constructor(props) {
     super(props);
@@ -58,7 +59,7 @@ export default class M1M3 extends Component {
       xRadius: 0,
       yRadius: 0,
       maxRadius: 0,
-      colormap: () => '#fff',
+      colormap: () => null,
       width: 480,
       zoomLevel: 1,
       selectedForceInput: null,
@@ -68,13 +69,11 @@ export default class M1M3 extends Component {
       actuatorsForce: [],
       selectedActuatorId: 0,
       selectedHardpointId: 0,
-      forceParameters: [],
     };
     this.uniqueGradient = uniqueId('m1m3-force-gradient-color-scale-');
     this.uniqueScatter = uniqueId('m1m3-scatter-');
     this.uniqueCircleOverlay = uniqueId('m1m3-circle-overlay-');
     this.uniqueForceGradient = uniqueId('m1m3-force-gradient');
-
     this.zoom = null;
   }
 
@@ -100,9 +99,20 @@ export default class M1M3 extends Component {
       fill: styles.fill_warning_summary,
     },
     4: {
-      name: 'OK',
+      name: 'FAULT',
       class: styles.alert_summary,
       fill: styles.fill_alert_summary,
+    },
+  };
+
+  static statesForceActuator = {
+    true: {
+      name: 'ENABLED',
+      class: styles.ok_detail,
+    },
+    false: {
+      name: 'DISABLED',
+      class: styles.offline_detail,
     },
   };
 
@@ -115,27 +125,33 @@ export default class M1M3 extends Component {
     },
     1: {
       name: 'CHASING',
-      userReadable: 'Disabled',
-      char: 'D',
-      class: styles.critical_detail,
+      userReadable: 'Chasing',
+      char: 'C',
+      class: styles.ok_detail,
     },
     2: {
       name: 'STEPPING',
-      userReadable: 'Enabled',
-      char: 'E',
+      userReadable: 'Stepping',
+      char: 'S',
       class: styles.ok_detail,
     },
     3: {
       name: 'QUICK POSITIONING',
-      userReadable: 'Fault',
-      char: 'F',
-      class: styles.alert_detail,
+      userReadable: 'Quick Positioning',
+      char: 'QP',
+      class: styles.ok_detail,
     },
     4: {
       name: 'FINE POSITIONING',
-      userReadable: 'Offline',
-      char: 'O',
-      class: styles.running_detail,
+      userReadable: 'Fine Positioning',
+      char: 'FP',
+      class: styles.ok_detail,
+    },
+    5: {
+      name: 'WAITING TENSION',
+      userReadable: 'Waiting Tension',
+      char: 'WT',
+      class: styles.warning_detail,
     },
   };
 
@@ -149,7 +165,6 @@ export default class M1M3 extends Component {
 
   static getActuatorsPositions = (ids, positions) => {
     const { xPosition, yPosition, zPosition } = positions;
-    // const positionsArray = M1M3.zip([xPosition, yPosition, zPosition]);
     const positionsArray = M1M3.zip([
       xPosition.map((x) => x * 39),
       yPosition.map((x) => x * -39),
@@ -159,17 +174,12 @@ export default class M1M3 extends Component {
   };
 
   preventDefault(e) {
-    e = e || window.event;
-    if (e.preventDefault) {
-      e.preventDefault();
-    }
+    if (e.preventDefault) e.preventDefault();
     e.returnValue = false;
   }
 
   disableScroll = () => {
-    document.addEventListener('wheel', this.preventDefault, {
-      passive: false,
-    });
+    document.addEventListener('wheel', this.preventDefault, { passive: false });
   };
 
   enableScroll = () => {
@@ -177,24 +187,14 @@ export default class M1M3 extends Component {
   };
 
   createColorScale = (values) => {
-    const colours = ['#2c7bb6', '#00a6ca', '#00ccbc', '#90eb9d', '#ffff8c', '#f9d057', '#f29e2e', '#e76818', '#d7191c'];
-    const colourRange = d3.range(0, 1, 1.0 / (colours.length - 1));
-    colourRange.push(1);
-
-    const colorScale = d3.scaleLinear().domain(colourRange).range(colours).interpolate(d3.interpolateHcl);
-
     const colorInterpolate = d3.scaleLinear().domain(d3.extent(values)).range([0, 1]);
 
     this.setState({
       colormap: (val) => colorScale(colorInterpolate(val)),
     });
 
-    //Create the gradient
-    const svg = d3
-      .select(`#${this.uniqueGradient} svg`)
-      .attr('width', FORCE_GRADIENT_WIDTH)
-      .attr('height', FORCE_GRADIENT_HEIGHT)
-      .html('');
+    const svg = d3.select(`#${this.uniqueGradient} svg`).html('');
+
     svg
       .append('defs')
       .append('linearGradient')
@@ -204,7 +204,7 @@ export default class M1M3 extends Component {
       .attr('x2', '100%')
       .attr('y2', '0%')
       .selectAll('stop')
-      .data(colours)
+      .data(colors)
       .enter()
       .append('stop')
       .attr('offset', (d, i) => i / (colorScale.range().length - 1))
@@ -253,50 +253,99 @@ export default class M1M3 extends Component {
   };
 
   getActuatorForceByParameter(forceParameter, index) {
+    if (!forceParameter) return NaN;
     const { actuatorsForce } = this.state;
-    if (forceParameter === 'xForces') {
-      return actuatorsForce[M1M3XActuatorsMapping[index]];
-    }
-    if (forceParameter === 'yForces') {
-      return actuatorsForce[M1M3YActuatorsMapping[index]];
-    }
-    if (forceParameter === 'zForces' || forceParameter === 'primaryCylinderForces') {
-      return actuatorsForce[M1M3ZActuatorsMapping[index]];
-    }
-    if (forceParameter === 'secondaryCylinderForces') {
-      return actuatorsForce[M1M3SActuatorsMapping[index]];
-    }
+    const actuatorsMapping = M1M3ActuatorForceParametersAxisMapping[forceParameter];
+    return actuatorsForce[actuatorsMapping[index]];
   }
 
   getActuator = (id) => {
-    if (id === 0) return { id: 'None', value: 'None', state: CSCDetail.states[0] };
-    const { actuatorIlcState, actuatorReferenceId, actuatorIlcUniqueId, actuatorMinorRevision, actuatorMayorRevision } =
-      this.props;
+    if (id === 0) {
+      return {
+        id: 'None',
+        forceValue: 'None',
+        type: 'None',
+        orientation: 'None',
+        modbusSubnet: 'None',
+        modbusAddress: 'None',
+        ilcUniqueId: 'None',
+        ilcApplicationType: 'None',
+        ilcSelectedOptions: 'None',
+        networkNodeType: 'None',
+        majorRevision: 'None',
+        minorRevision: 'None',
+        adcScanRate: 'None',
+        mezzanineUniqueId: 'None',
+        mezzanineFirmwareType: 'None',
+        mezzanineMajorRevision: 'None',
+        mezzanineMinorRevision: 'None',
+      };
+    }
+
+    const {
+      actuatorIlcState,
+      actuatorReferenceId,
+      actuatorType,
+      actuatorOrientation,
+      actuatorModbusSubnet,
+      actuatorModbusAddress,
+      actuatorIlcUniqueId,
+      actuatorIlcApplicationType,
+      actuatorIlcSelectedOptions,
+      actuatorNetworkNodeType,
+      actuatorMayorRevision,
+      actuatorMinorRevision,
+      actuatorAdcScanRate,
+      actuatorMezzanineUniqueId,
+      actuatorMezzanineFirmwareType,
+      actuatorMezzanineMajorRevision,
+      actuatorMezzanineMinorRevision,
+      actuatorEnabled,
+    } = this.props;
+
     const { selectedForceParameter } = this.state;
     const actuatorIndex = actuatorReferenceId.indexOf(id);
+    const actuatorforce = this.getActuatorForceByParameter(selectedForceParameter, actuatorIndex);
+
     const actuator = {
       id,
-      state: actuatorIlcState[actuatorIndex] ?? 'None',
-      value: this.getActuatorForceByParameter(selectedForceParameter, actuatorIndex) ?? 'None',
+      state: actuatorIlcState[actuatorIndex],
+      forceEnabled: actuatorEnabled[actuatorIndex],
+      forceValue: actuatorforce ?? 'None',
+      type: actuatorType[actuatorIndex] ?? 'None',
+      orientation: actuatorOrientation[actuatorIndex] ?? 'None',
+      modbusSubnet: actuatorModbusSubnet[actuatorIndex] ?? 'None',
+      modbusAddress: actuatorModbusAddress[actuatorIndex] ?? 'None',
       ilcUniqueId: actuatorIlcUniqueId[actuatorIndex] ?? 'None',
-      minorRevision: actuatorMinorRevision[actuatorIndex] ?? 'None',
+      ilcApplicationType: actuatorIlcApplicationType[actuatorIndex] ?? 'None',
+      ilcSelectedOptions: actuatorIlcSelectedOptions[actuatorIndex] ?? 'None',
+      networkNodeType: actuatorNetworkNodeType[actuatorIndex] ?? 'None',
       majorRevision: actuatorMayorRevision[actuatorIndex] ?? 'None',
+      minorRevision: actuatorMinorRevision[actuatorIndex] ?? 'None',
+      adcScanRate: actuatorAdcScanRate[actuatorIndex] ?? 'None',
+      mezzanineUniqueId: actuatorMezzanineUniqueId[actuatorIndex] ?? 'None',
+      mezzanineFirmwareType: actuatorMezzanineFirmwareType[actuatorIndex] ?? 'None',
+      mezzanineMajorRevision: actuatorMezzanineMajorRevision[actuatorIndex] ?? 'None',
+      mezzanineMinorRevision: actuatorMezzanineMinorRevision[actuatorIndex] ?? 'None',
     };
 
-    actuator.state = CSCDetail.states[actuator.state];
     return actuator;
   };
 
   getHardpoint = (id) => {
-    if (id === 0)
+    if (id === 0) {
       return {
         id: 'None',
-        ilcStatus: CSCDetail.states[0],
-        motionStatus: CSCDetail.states[0],
-        breakawayLVDT: { value: 'None' },
-        displacementLVDT: { value: 'None' },
-        breakawayPressure: { value: 'None' },
+        ilcUniqueId: 'None',
+        motionStatus: 'None',
+        breakawayLVDT: 'None',
+        displacementLVDT: 'None',
+        breakawayPressure: 'None',
+        majorRevision: 'None',
+        minorRevision: 'None',
       };
+    }
+
     const {
       hardpointIlcState,
       hardpointIlcUniqueId,
@@ -308,28 +357,21 @@ export default class M1M3 extends Component {
       hardpointMinorRevision,
       hardpointMayorRevision,
     } = this.props;
+
     const hardpointIndex = hardpointReferenceId.indexOf(id);
 
     const hardpoint = {
       id,
-      ilcStatus: hardpointIlcState[hardpointIndex] ?? 'None',
+      state: hardpointIlcState[hardpointIndex],
+      motionState: hardpointMotionState[hardpointIndex],
       ilcUniqueId: hardpointIlcUniqueId[hardpointIndex] ?? 'None',
-      motionStatus: hardpointMotionState[hardpointIndex] ?? 'None',
-      breakawayLVDT: { value: hardpointsBreakawayLVDT[hardpointIndex] ?? 'None' },
-      displacementLVDT: { value: hardpointsDisplacementLVDT[hardpointIndex] ?? 'None' },
-      breakawayPressure: { value: hardpointsBreakawayPressure[hardpointIndex] ?? 'None' },
-      minorRevision: hardpointMinorRevision[hardpointIndex] ?? 'None',
+      breakawayLVDT: hardpointsBreakawayLVDT[hardpointIndex] ?? 'None',
+      displacementLVDT: hardpointsDisplacementLVDT[hardpointIndex] ?? 'None',
+      breakawayPressure: hardpointsBreakawayPressure[hardpointIndex] ?? 'None',
       majorRevision: hardpointMayorRevision[hardpointIndex] ?? 'None',
+      minorRevision: hardpointMinorRevision[hardpointIndex] ?? 'None',
     };
 
-    hardpoint.ilcStatus = {
-      name: M1M3.statesIlc[hardpoint.ilcStatus].name,
-      class: M1M3.statesIlc[hardpoint.ilcStatus].class,
-    };
-    hardpoint.motionStatus = {
-      name: m1m3HardpointActuatorMotionStateMap[hardpoint.motionStatus],
-      class: M1M3.statesMotion[hardpoint.motionStatus].class,
-    };
     return hardpoint;
   };
 
@@ -346,23 +388,20 @@ export default class M1M3 extends Component {
   fillHardpoint = (id) => {
     const { hardpointIlcState, hardpointReferenceId } = this.props;
     const hardpointIndex = hardpointReferenceId.indexOf(id);
-    return M1M3.statesIlc[hardpointIlcState[hardpointIndex] ?? 0].fill;
+    const hardpointState = hardpointIlcState[hardpointIndex];
+    return M1M3.statesIlc[hardpointState]?.fill;
   };
 
-  forceInputSelected = (input) => {
-    const force = input.value;
-    const filteredParameters = M1M3ActuatorForces[force];
+  forceInputSelected = (value) => {
     this.setState({
-      selectedForceInput: force,
+      selectedForceInput: value,
       selectedForceParameter: null,
-      forceParameters: filteredParameters,
     });
   };
 
-  forceParameterSelected = (input) => {
-    const force = input.value;
+  forceParameterSelected = (value) => {
     this.setState({
-      selectedForceParameter: force,
+      selectedForceParameter: value,
     });
   };
 
@@ -380,6 +419,9 @@ export default class M1M3 extends Component {
 
   componentDidMount() {
     this.props.subscribeToStreams();
+
+    this.zoom = d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed);
+    d3.select(`#${this.uniqueCircleOverlay}`).call(this.zoom);
 
     let yMax = -Infinity;
     let xMax = -Infinity;
@@ -409,37 +451,32 @@ export default class M1M3 extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    this.zoom = d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed);
-    d3.select(`#${this.uniqueCircleOverlay}`).call(this.zoom);
+    const { xPosition, yPosition, zPosition, actuatorReferenceId } = this.props;
+    const { selectedForceInput, selectedForceParameter, actuatorsForce } = this.state;
 
+    const forceTopic = M1M3ActuatorForcesTopics[selectedForceInput];
     if (
-      this.state.selectedForceParameter !== prevState.selectedForceParameter ||
-      !isEqual(this.props[this.state.selectedForceInput], prevProps[this.state.selectedForceInput])
+      selectedForceParameter !== prevState.selectedForceParameter ||
+      !isEqual(
+        this.props[forceTopic]?.[selectedForceParameter]?.value,
+        prevProps[forceTopic]?.[selectedForceParameter]?.value,
+      )
     ) {
-      const forceData = this.props[this.state.selectedForceInput]?.[this.state.selectedForceParameter]?.value ?? [];
+      const forceData = this.props[forceTopic]?.[selectedForceParameter]?.value ?? [];
       this.setState({ actuatorsForce: forceData });
     }
 
-    if (!isEqual(this.state.actuators, prevState.actuators)) {
-      const data = this.state.actuators.map(
-        (act) => Math.sqrt(act.position[0] ** 2 + act.position[1] ** 2) / this.state.maxRadius,
-      );
-      this.createColorScale(data);
+    if (!isEqual(actuatorsForce, prevState.actuatorsForce)) {
+      this.createColorScale(actuatorsForce);
     }
 
-    if (!isEqual(this.state.actuatorsForce, prevState.actuatorsForce)) {
-      this.createColorScale(this.state.actuatorsForce);
-    }
-
-    const { xPosition, yPosition, zPosition, actuatorReferenceId } = this.props;
     if (
-      prevProps.xPosition !== xPosition ||
-      prevProps.yPosition !== yPosition ||
-      prevProps.zPosition !== zPosition ||
-      !isEqual(prevProps.actuatorReferenceId, actuatorReferenceId)
+      xPosition !== prevProps.xPosition ||
+      yPosition !== prevProps.yPosition ||
+      zPosition !== prevProps.zPosition ||
+      !isEqual(actuatorReferenceId, prevProps.actuatorReferenceId)
     ) {
       const actuators = M1M3.getActuatorsPositions(actuatorReferenceId, { xPosition, yPosition, zPosition });
-      // const actuators = M1M3ActuatorPositions; // Old implementation
 
       let yMax = -Infinity;
       let xMax = -Infinity;
@@ -496,7 +533,6 @@ export default class M1M3 extends Component {
       zoomLevel,
       showActuatorsID,
       showHardpoints,
-      forceParameters,
       selectedForceInput,
       selectedForceParameter,
       selectedActuatorId,
@@ -519,12 +555,21 @@ export default class M1M3 extends Component {
     const alignedStateName = alignedStateMap[alignment];
     const alignedStateStatus = alignedStateToStyle[alignedStateName];
 
-    const maxForce = defaultNumberFormatter(Math.max(...actuatorsForce));
-    const minForce = defaultNumberFormatter(Math.min(...actuatorsForce));
+    const maxForce = Math.max(...actuatorsForce);
+    const minForce = Math.min(...actuatorsForce);
+    const maxForceText = defaultNumberFormatter(maxForce, 2);
+    const minForceText = defaultNumberFormatter(minForce, 2);
 
     const selectedActuator = this.getActuator(selectedActuatorId);
     const selectedHardpoint = this.getHardpoint(selectedHardpointId);
-    const forceInputs = Object.keys(M1M3ActuatorForces);
+
+    const forceInputs = Object.keys(M1M3ActuatorForcesOnly);
+    const forceParameters = M1M3ActuatorForcesOnly[selectedForceInput];
+
+    const forcesAreSelected = selectedForceInput && selectedForceParameter;
+    const selectedForceText = forcesAreSelected ? `${selectedForceInput} - ${selectedForceParameter}` : '';
+    const showForceGradient =
+      forcesAreSelected && !isNaN(maxForce) && !isNaN(minForce) && isFinite(maxForce) && isFinite(minForce);
 
     return (
       <div className={styles.mirrorContainer}>
@@ -544,7 +589,6 @@ export default class M1M3 extends Component {
         </SummaryPanel>
 
         <SummaryPanel className={styles.summaryPanelControls}>
-          <h2 className={styles.title}>Actuators</h2>
           <div className={styles.controls}>
             <div
               style={{ width: '12em', paddingRight: '1em', borderRight: '1px solid gray' }}
@@ -554,7 +598,7 @@ export default class M1M3 extends Component {
               <Select
                 options={forceInputs}
                 option={selectedForceInput}
-                onChange={(selection) => this.forceInputSelected(selection)}
+                onChange={({ value }) => this.forceInputSelected(value)}
               />
             </div>
             <div className={styles.control}>
@@ -562,7 +606,7 @@ export default class M1M3 extends Component {
               <Select
                 options={forceParameters}
                 option={selectedForceParameter}
-                onChange={(selection) => this.forceParameterSelected(selection)}
+                onChange={({ value }) => this.forceParameterSelected(value)}
               />
             </div>
             <div className={styles.control}>
@@ -624,6 +668,17 @@ export default class M1M3 extends Component {
           </div>
 
           <div className={styles.gridWindowM1M3}>
+            {showForceGradient && (
+              <div className={styles.forceGradientWrapper}>
+                <div id={this.uniqueGradient}>
+                  <svg viewBox={`0 0 ${FORCE_GRADIENT_WIDTH} ${FORCE_GRADIENT_HEIGHT}`}></svg>
+                </div>
+                <div>
+                  <div>{minForceText} [N]</div>
+                  <div>{maxForceText} [N]</div>
+                </div>
+              </div>
+            )}
             {zoomLevel > 1 && (
               <div className={styles.zoomOut}>
                 <Button onClick={this.zoomOut}>Zoom out</Button>
@@ -766,43 +821,86 @@ export default class M1M3 extends Component {
           </div>
 
           <div className={styles.gridGroupGradiantInfo}>
-            <div className={styles.forceGradientWrapper}>
-              <span>Force</span>
-              <div id={this.uniqueGradient} className={styles.forceGradient}>
-                <div>{minForce} [N]</div>
-                <svg viewBox={`0 0 ${FORCE_GRADIENT_WIDTH} ${FORCE_GRADIENT_HEIGHT}`}></svg>
-                <div>{maxForce} [N]</div>
-              </div>
-            </div>
-
             <div className={styles.gridActuatorInfo}>
               <SummaryPanel className={styles.actuatorInfo}>
                 {selectedActuatorId !== 0 ? (
                   <>
                     <div className={styles.actuatorValue}>
                       <Title>Actuator {selectedActuator.id}</Title>
-                    </div>
-                    <div className={styles.actuatorValue}>
-                      <span>Actuator status:</span>
-                      <span className={[selectedActuator.state.class, styles.summaryState].join(' ')}>
-                        {selectedActuator.state.name}
+                      <span
+                        title={`ILC Status: ${selectedActuator.state}`}
+                        className={[M1M3.statesIlc[selectedActuator.state].class, styles.summaryState].join(' ')}
+                      >
+                        {M1M3.statesIlc[selectedActuator.state].name}
                       </span>
                     </div>
                     <div className={styles.actuatorValue}>
+                      <span>Force actuator state</span>
+                      <span>{selectedActuator.forceEnabled ? 'Enabled' : 'Disabled'}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
                       <span>Applied force:</span>
-                      <span>{defaultNumberFormatter(selectedActuator.value)}</span>
+                      <span title={selectedForceText}>{defaultNumberFormatter(selectedActuator.forceValue)} [N]</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Type:</span>
+                      <span>{selectedActuator.type}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Orientation:</span>
+                      <span>{selectedActuator.orientation}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Modbus subnet:</span>
+                      <span>{selectedActuator.modbusSubnet}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Modbus address:</span>
+                      <span>{selectedActuator.modbusAddress}</span>
                     </div>
                     <div className={styles.actuatorValue}>
                       <span>ILC unique id:</span>
                       <span>{selectedActuator.ilcUniqueId}</span>
                     </div>
                     <div className={styles.actuatorValue}>
-                      <span>Minor revision:</span>
-                      <span>{selectedActuator.minorRevision}</span>
+                      <span>ILC application type:</span>
+                      <span>{selectedActuator.ilcApplicationType}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>ILC selected options:</span>
+                      <span>{selectedActuator.ilcSelectedOptions}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Network node type:</span>
+                      <span>{selectedActuator.networkNodeType}</span>
                     </div>
                     <div className={styles.actuatorValue}>
                       <span>Major revision:</span>
                       <span>{selectedActuator.majorRevision}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Minor revision:</span>
+                      <span>{selectedActuator.minorRevision}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>ADC scan rate:</span>
+                      <span>{selectedActuator.adcScanRate}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Mezzanine unique id:</span>
+                      <span>{selectedActuator.mezzanineUniqueId}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Mezzanine firmware type:</span>
+                      <span>{selectedActuator.mezzanineFirmwareType}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Mezzanine major revision:</span>
+                      <span>{selectedActuator.mezzanineMajorRevision}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Mezzanine minor revision:</span>
+                      <span>{selectedActuator.mezzanineMinorRevision}</span>
                     </div>
                   </>
                 ) : (
@@ -817,11 +915,21 @@ export default class M1M3 extends Component {
                   <>
                     <div className={styles.actuatorValue}>
                       <Title>Hardpoint {selectedHardpoint.id}</Title>
+                      <span
+                        title={`ILC Status: ${selectedHardpoint.state}`}
+                        className={[M1M3.statesIlc[selectedHardpoint.state].class, styles.summaryState].join(' ')}
+                      >
+                        {M1M3.statesIlc[selectedHardpoint.state].name}
+                      </span>
                     </div>
                     <div className={styles.actuatorValue}>
-                      <span>ILC status:</span>
-                      <span className={[selectedHardpoint.ilcStatus.class, styles.summaryState].join(' ')}>
-                        {selectedHardpoint.ilcStatus.name}
+                      <span>Motion status:</span>
+                      <span
+                        className={[M1M3.statesMotion[selectedHardpoint.motionState].class, styles.detailState].join(
+                          ' ',
+                        )}
+                      >
+                        {M1M3.statesMotion[selectedHardpoint.motionState].name}
                       </span>
                     </div>
                     <div className={styles.actuatorValue}>
@@ -829,22 +937,16 @@ export default class M1M3 extends Component {
                       <span>{selectedHardpoint.ilcUniqueId}</span>
                     </div>
                     <div className={styles.actuatorValue}>
-                      <span>Motion status:</span>
-                      <span className={[selectedHardpoint.motionStatus.class, styles.detailState].join(' ')}>
-                        {selectedHardpoint.motionStatus.name}
-                      </span>
-                    </div>
-                    <div className={styles.actuatorValue}>
                       <span>Breakaway LVDT:</span>
-                      <span>{defaultNumberFormatter(selectedHardpoint.breakawayLVDT.value)}</span>
+                      <span>{defaultNumberFormatter(selectedHardpoint.breakawayLVDT)}</span>
                     </div>
                     <div className={styles.actuatorValue}>
                       <span>Displacement LVDT:</span>
-                      <span>{defaultNumberFormatter(selectedHardpoint.displacementLVDT.value)}</span>
+                      <span>{defaultNumberFormatter(selectedHardpoint.displacementLVDT)}</span>
                     </div>
                     <div className={styles.actuatorValue}>
                       <span>Breakaway Pressure:</span>
-                      <span>{defaultNumberFormatter(selectedHardpoint.breakawayPressure.value)}</span>
+                      <span>{defaultNumberFormatter(selectedHardpoint.breakawayPressure)}</span>
                     </div>
                     <div className={styles.actuatorValue}>
                       <span>Minor revision:</span>
