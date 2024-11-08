@@ -536,6 +536,26 @@ export const getM2ActuatorForce = (state) => {
   };
 };
 
+export const getM2ActuatorForceTopics = (state) => {
+  const subscriptions = [
+    'telemetry-MTM2-0-axialActuatorSteps',
+    'telemetry-MTM2-0-axialEncoderPositions',
+    'telemetry-MTM2-0-axialForce',
+    'telemetry-MTM2-0-tangentActuatorSteps',
+    'telemetry-MTM2-0-tangentEncoderPositions',
+    'telemetry-MTM2-0-tangentForce',
+  ];
+  const data = getStreamsData(state, subscriptions);
+  return {
+    axialActuatorSteps: data['telemetry-MTM2-0-axialActuatorSteps'] ?? {},
+    axialEncoderPositions: data['telemetry-MTM2-0-axialEncoderPositions'] ?? {},
+    axialForce: data['telemetry-MTM2-0-axialForce'] ?? {},
+    tangentActuatorSteps: data['telemetry-MTM2-0-tangentActuatorSteps'] ?? {},
+    tangentEncoderPositions: data['telemetry-MTM2-0-tangentEncoderPositions'] ?? {},
+    tangentForce: data['telemetry-MTM2-0-tangentForce'] ?? {},
+  };
+};
+
 export const getM2ActuatorTable = (state) => {
   const subscriptions = [
     'telemetry-MTM2-0-forceBalance',

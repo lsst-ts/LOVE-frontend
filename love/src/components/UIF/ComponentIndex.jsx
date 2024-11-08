@@ -548,6 +548,16 @@ export const mainIndex = {
       },
     },
   },
+  M2Compact: {
+    component: require('../MainTel/M2/M2Compact.container').default,
+    schema: {
+      ...require('../MainTel/M2/M2Compact.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/M2/M2Compact.container').schema.props,
+      },
+    },
+  },
   SimonyiDome: {
     component: require('../MainTel/MTDome/MTDome.container').default,
     schema: {

@@ -2901,8 +2901,46 @@ export const M1M3ActuatorForceParametersAxisMapping = {
 };
 
 /*****************************************************************************/
-/***************************MTM2 actuator positions***************************/
+/************************* MTM2 actuator and forces **************************/
 /*****************************************************************************/
+
+export const M2ActuatorForces = {
+  actuatorSteps: ['steps'],
+  encoderPositions: ['position'],
+  forces: ['lutGravity', 'lutTemperature', 'applied', 'measured', 'hardpointCorrection'],
+};
+
+export const M2ActuatorForcesTopics = {
+  actuatorSteps: ['axialActuatorSteps', 'tangentActuatorSteps'],
+  encoderPositions: ['axialEncoderPositions', 'tangentEncoderPositions'],
+  forces: ['axialForce', 'tangentForce'],
+};
+
+export const M2ActuatorForcesLabels = {
+  actuatorSteps: 'Actuator Steps',
+  encoderPositions: 'Encoder Positions',
+  forces: 'Forces',
+};
+
+export const M2ActuatorForceParametersValueTypes = {
+  steps: VALUE_TYPES.INTEGER,
+  position: VALUE_TYPES.FLOAT,
+  lutGravity: VALUE_TYPES.FLOAT,
+  lutTemperature: VALUE_TYPES.FLOAT,
+  applied: VALUE_TYPES.FLOAT,
+  measured: VALUE_TYPES.FLOAT,
+  hardpointCorrection: VALUE_TYPES.FLOAT,
+};
+
+export const M2ActuatorForceParametersValueUnits = {
+  steps: '',
+  position: 'µm',
+  lutGravity: 'N',
+  lutTemperature: 'N',
+  applied: 'N',
+  measured: 'N',
+  hardpointCorrection: 'N',
+};
 
 export const M2ActuatorPositionsAlpha = [
   { id: 1, position: [0, 1.601] },
