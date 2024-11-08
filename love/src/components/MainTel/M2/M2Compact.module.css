@@ -39,12 +39,16 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 }
 
 .forceGradientLimits {
-  font-size: 0.15em;
-  fill: var(--highlighted-font-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: var(--highlighted-font-color);
+  font-size: var(--font-size-large);
+  white-space: nowrap;
+  margin-right: var(--small-padding);
 }
 
-.forceGradient,
-.forceGradientLimits {
+.forceGradient {
   height: 100%;
 }
 

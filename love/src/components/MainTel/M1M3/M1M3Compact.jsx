@@ -55,7 +55,7 @@ function getColorMap(values) {
   return (value) => colorScale(colorInterpolate(value));
 }
 
-function LinearGradient({ forceData, bigNumbers, unit }) {
+function LinearGradient({ forceData, unit }) {
   const svgRef = useRef();
   const gradientId = uniqueId('m1m3-force-gradient-color-scale-');
 
@@ -100,20 +100,17 @@ function LinearGradient({ forceData, bigNumbers, unit }) {
         className={styles.forceGradient}
         viewBox={`0 0 ${FORCE_GRADIENT_WIDTH} ${FORCE_GRADIENT_HEIGHT}`}
       />
-      <svg
-        className={styles.forceGradientLimits}
-        viewBox={`0 0 ${FORCE_GRADIENT_WIDTH * (bigNumbers ? 4 : 2.2)} ${FORCE_GRADIENT_HEIGHT}`}
-      >
-        <text x={0} y={2}>
+      <div className={styles.forceGradientLimits}>
+        <span>
           {maxForce} {unitText}
-        </text>
-        <text x={0} y={FORCE_GRADIENT_HEIGHT / 2}>
+        </span>
+        <span>
           {midForce} {unitText}
-        </text>
-        <text x={0} y={FORCE_GRADIENT_HEIGHT - 1}>
+        </span>
+        <span>
           {minForce} {unitText}
-        </text>
-      </svg>
+        </span>
+      </div>
     </>
   );
 }
@@ -121,8 +118,6 @@ function LinearGradient({ forceData, bigNumbers, unit }) {
 LinearGradient.propTypes = {
   /** All force data values */
   forceData: PropTypes.array,
-  /** Whether the force data values are big numbers */
-  bigNumbers: PropTypes.bool,
   /** Force data values unit */
   unit: PropTypes.string,
 };
@@ -261,13 +256,7 @@ function M1M3Compact({
         </g>
       </svg>
       <div className={styles.forceGradientContainer}>
-        {showForceGradient && (
-          <LinearGradient
-            forceData={forceData}
-            bigNumbers={forceParameterHasBigNumbers}
-            unit={forceParameterValueUnit}
-          />
-        )}
+        {showForceGradient && <LinearGradient forceData={forceData} unit={forceParameterValueUnit} />}
       </div>
       {showForcesSelector && (
         <div className={[styles.forcesSelector, 'nonDraggable'].join(' ')}>

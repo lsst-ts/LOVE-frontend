@@ -113,20 +113,17 @@ function LinearGradient({ forceData, unit }) {
         className={styles.forceGradient}
         viewBox={`0 0 ${FORCE_GRADIENT_WIDTH} ${FORCE_GRADIENT_HEIGHT}`}
       />
-      <svg
-        className={styles.forceGradientLimits}
-        viewBox={`0 0 ${FORCE_GRADIENT_WIDTH * 2.2} ${FORCE_GRADIENT_HEIGHT}`}
-      >
-        <text x={0} y={2}>
+      <div className={styles.forceGradientLimits}>
+        <span>
           {maxForce} {unitText}
-        </text>
-        <text x={0} y={FORCE_GRADIENT_HEIGHT / 2}>
+        </span>
+        <span>
           {midForce} {unitText}
-        </text>
-        <text x={0} y={FORCE_GRADIENT_HEIGHT - 1}>
+        </span>
+        <span>
           {minForce} {unitText}
-        </text>
-      </svg>
+        </span>
+      </div>
     </>
   );
 }
