@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.4.0
+------
+
+* Add M1M3Compact and M2Compact components `<https://github.com/lsst-ts/LOVE-frontend/pull/673>`_
+
 v6.3.2
 ------
 
