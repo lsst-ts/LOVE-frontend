@@ -31,11 +31,11 @@ function ScriptConfig({ index, timestampProcessStart, timestampConfigureEnd, def
     const startDateIso = new Date(start * 1000).toISOString().slice(0, -1);
     const endDateIso = new Date(end * 1000).toISOString().slice(0, -1);
 
-    ManagerInterface.getEFDLogs(startDateIso, endDateIso, cscs, defaultEfdInstance, 'tai').then((res) => {
-      if (res) {
-        setAppliedConfiguration(res[`Script-${scriptIndex}-command_configure`][0]?.config);
-      }
-    });
+    // ManagerInterface.getEFDLogs(startDateIso, endDateIso, cscs, defaultEfdInstance, 'tai').then((res) => {
+    //   if (res) {
+    //     setAppliedConfiguration(res[`Script-${scriptIndex}-command_configure`][0]?.config);
+    //   }
+    // });
   }, []);
 
   useEffect(() => {

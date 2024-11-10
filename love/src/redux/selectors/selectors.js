@@ -2453,7 +2453,10 @@ export const getKey = (dict, key, def) => {
 
 export const getScriptQueueState = (state, salindex) => {
   const scriptQueueData = getStreamData(state, `event-ScriptQueueState-${salindex}-stateStream`);
-  const scriptsData = getStreamData(state, `event-ScriptQueueState-${salindex}-scriptsStream`);
+  // const scriptsData = getStreamData(state, `event-ScriptQueueState-${salindex}-scriptsStream`);
+  const currentScriptsData = getStreamData(state, `event-ScriptQueueState-${salindex}-currentScriptsStream`);
+  const waitingScriptsData = getStreamData(state, `event-ScriptQueueState-${salindex}-waitingScriptsStream`);
+  const finishedScriptsData = getStreamData(state, `event-ScriptQueueState-${salindex}-finishedScriptsStream`);
   const availableScriptsData = getStreamData(state, `event-ScriptQueueState-${salindex}-availableScriptsStream`);
   const runningState = getKey(scriptQueueData, 'running', undefined);
   let runningLabel = 'Unknown';
@@ -2462,13 +2465,13 @@ export const getScriptQueueState = (state, salindex) => {
   }
   return {
     state: runningLabel,
-    availableScriptList: getKey(availableScriptsData, 'available_scripts', undefined),
-    waitingScriptList: getKey(scriptsData, 'waiting_scripts', undefined),
     // The ScriptQueue CSC will be extended to support multiple
     // current scripts in the future. For now, only one is supported.
     // See: DM-44198.
-    current: getKey(scriptsData, 'current_scripts', ['None'])[0],
-    finishedScriptList: getKey(scriptsData, 'finished_scripts', undefined),
+    current: getKey(currentScriptsData, 'current_scripts', ['None'])[0],
+    waitingScriptList: getKey(waitingScriptsData, 'waiting_scripts', undefined),
+    finishedScriptList: getKey(finishedScriptsData, 'finished_scripts', undefined),
+    availableScriptList: getKey(availableScriptsData, 'available_scripts', undefined),
   };
 };
 
