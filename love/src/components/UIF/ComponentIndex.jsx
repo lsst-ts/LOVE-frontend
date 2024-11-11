@@ -508,6 +508,16 @@ export const mainIndex = {
       },
     },
   },
+  M1M3HardpointsDataTable: {
+    component: require('../MainTel/M1M3/M1M3HardpointsDataTable.container').default,
+    schema: {
+      ...require('../MainTel/M1M3/M1M3HardpointsDataTable.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/M1M3/M1M3HardpointsDataTable.container').schema.props,
+      },
+    },
+  },
   GlycolLoop: {
     component: require('../MainTel/GlycolLoop/GlycolLoop.container').default,
     schema: {

@@ -1,0 +1,7 @@
+.offWarning {
+  color: var(--status-ok-color);
+}
+
+.onWarning {
+  color: var(--status-alert-color);
+}

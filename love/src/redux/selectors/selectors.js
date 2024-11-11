@@ -185,6 +185,11 @@ export const getM1M3HardpointActuatorData = (state) => {
     hardpointsXRotation: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData']?.xRotation?.value ?? 0,
     hardpointsYRotation: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData']?.yRotation?.value ?? 0,
     hardpointsZRotation: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData']?.zRotation?.value ?? 0,
+    hardpointsStepsQueued: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData']?.stepsQueued?.value ?? [],
+    hardpointsStepsCommanded: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData']?.stepsCommanded?.value ?? [],
+    hardpointsEncoder: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData']?.encoder?.value ?? [],
+    hardpointsMeasuredForce: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData']?.measuredForce?.value ?? [],
+    hardpointsDisplacement: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData']?.displacement?.value ?? [],
   };
 };
 
@@ -208,7 +213,56 @@ export const getM1M3HardpointMonitorData = (state) => {
     hardpointsBreakawayLVDT: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.breakawayLVDT?.value ?? [],
     hardpointsDisplacementLVDT: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.displacementLVDT?.value ?? [],
     hardpointsBreakawayPressure: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.breakawayPressure?.value ?? [],
+    hardpointsPressureSensor1: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.pressureSensor1?.value ?? [],
+    hardpointsPressureSensor2: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.pressureSensor2?.value ?? [],
+    hardpointsPressureSensor3: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.pressureSensor3?.value ?? [],
     referenceHardpointId: [1, 2, 3, 4, 5, 6],
+  };
+};
+
+export const getM1M3HardpointActuatorWarningData = (state) => {
+  const subscriptions = ['event-MTM1M3-0-hardpointActuatorWarning'];
+  const m1m3Data = getStreamsData(state, subscriptions);
+  return {
+    hardpointsMajorFault: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.majorFault?.value ?? [],
+    hardpointsMinorFault: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.minorFault?.value ?? [],
+    hardpointsFaultOverride: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.faultOverride?.value ?? [],
+    hardpointsMainCalibrationError:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.mainCalibrationError?.value ?? [],
+    hardpointsBackupCalibrationError:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.backupCalibrationError?.value ?? [],
+    hardpointsLimitSwitch1Operated:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.limitSwitch1Operated?.value ?? [],
+    hardpointsLimitSwitch2Operated:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.limitSwitch2Operated?.value ?? [],
+    hardpointsLowProximityWarning:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.lowProximityWarning?.value ?? [],
+    hardpointsHighProximityWarning:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.highProximityWarning?.value ?? [],
+    hardpointsLowAirPressureFault:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.lowAirPressureFault?.value ?? [],
+    hardpointsHighAirPressureFault:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.highAirPressureFault?.value ?? [],
+    hardpointsUniqueIdCRCError: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.uniqueIdCRCError?.value ?? [],
+    hardpointsApplicationTypeMismatch:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.applicationTypeMismatch?.value ?? [],
+    hardpointsApplicationMissing:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.applicationMissing?.value ?? [],
+    hardpointsApplicationCRCMismatch:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.applicationCRCMismatch?.value ?? [],
+    hardpointsOneWireMissing: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.oneWireMissing?.value ?? [],
+    hardpointsOneWire1Mismatch: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.oneWire1Mismatch?.value ?? [],
+    hardpointsOneWire2Mismatch: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.oneWire2Mismatch?.value ?? [],
+    hardpointsWatchdogReset: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.watchdogReset?.value ?? [],
+    hardpointsBrownOut: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.brownOut?.value ?? [],
+    hardpointsEventTrapReset: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.eventTrapReset?.value ?? [],
+    hardpointsMotorDriverFault: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.motorDriverFault?.value ?? [],
+    hardpointsSsrPowerFault: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.ssrPowerFault?.value ?? [],
+    hardpointsAuxPowerFault: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.auxPowerFault?.value ?? [],
+    hardpointsSmcPowerFault: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.smcPowerFault?.value ?? [],
+    hardpointsIlcFault: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.ilcFault?.value ?? [],
+    hardpointsBroadcastCounterWarning:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.broadcastCounterWarning?.value ?? [],
   };
 };
 
