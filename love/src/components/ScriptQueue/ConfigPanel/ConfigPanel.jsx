@@ -695,6 +695,10 @@ export default class ConfigPanel extends Component {
       });
     }
 
+    if (this.props.configPanel?.configSchema !== prevProps.configPanel?.configSchema) {
+      this.validateConfig(this.state.value, true);
+    }
+
     if (this.state.value !== prevState.value) {
       this.validateConfig(this.state.value, true);
     }
