@@ -41,7 +41,10 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
+import Label from 'components/GeneralPurpose/SummaryPanel/Label';
+import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import Title from 'components/GeneralPurpose/SummaryPanel/Title';
+import ProgressBar from 'components/GeneralPurpose/ProgressBar/ProgressBar';
 import styles from './M1M3.module.css';
 
 const FORCE_GRADIENT_WIDTH = 400;
@@ -525,7 +528,7 @@ export default class M1M3 extends Component {
   };
 
   render() {
-    const { summaryState, detailedState, alignment } = this.props;
+    const { summaryState, detailedState, alignment, hardpointsBreakawayPressure, raisingLoweringInfo } = this.props;
 
     const {
       actuators,
@@ -571,6 +574,10 @@ export default class M1M3 extends Component {
     const showForceGradient =
       forcesAreSelected && !isNaN(maxForce) && !isNaN(minForce) && isFinite(maxForce) && isFinite(minForce);
 
+    const supportedWeight = raisingLoweringInfo?.weightSupportedPercent?.value ?? 0;
+    const minPressureBreakaway = Math.min(...hardpointsBreakawayPressure);
+    const maxPressureBreakaway = Math.max(...hardpointsBreakawayPressure);
+
     return (
       <div className={styles.mirrorContainer}>
         <SummaryPanel className={styles.summaryPanelStates}>
@@ -585,6 +592,22 @@ export default class M1M3 extends Component {
           <div className={styles.state}>
             <Title>M2 Alignement</Title>
             <StatusText status={alignedStateStatus}>{alignedStateName}</StatusText>
+          </div>
+        </SummaryPanel>
+
+        <SummaryPanel className={styles.summaryPanelMeasures}>
+          <div>
+            <Label>Weight Supported</Label>
+            <Value>{{ value: supportedWeight, units: '%' }}</Value>
+
+            <Label>Min Pressure</Label>
+            <Value>{{ value: minPressureBreakaway, units: 'kPa' }}</Value>
+
+            <Label>Max Pressure</Label>
+            <Value>{{ value: maxPressureBreakaway, units: 'kPa' }}</Value>
+          </div>
+          <div title={`Current Weight supported percent: ${supportedWeight}%`}>
+            <ProgressBar completed={supportedWeight} hideCompleted={true} />
           </div>
         </SummaryPanel>
 

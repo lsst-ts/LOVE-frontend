@@ -95,6 +95,7 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTM1M3-0-forceActuatorInfo',
     'event-MTM1M3-0-hardpointActuatorState',
     'event-MTM1M3-0-hardpointActuatorInfo',
+    'event-MTM1M3-0-hardpointMonitorInfo',
     'event-MTM1M3-0-appliedActiveOpticForces',
     'event-MTM1M3-0-appliedOffsetForces',
     'event-MTM1M3-0-appliedStaticForces',
@@ -110,6 +111,7 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTM1M3-0-preclippedStaticForces',
     'event-MTM1M3-0-preclippedThermalForces',
     'event-MTM1M3-0-preclippedVelocityForces',
+    'event-MTM1M3-0-raisingLoweringInfo',
   ];
   return {
     subscriptions,

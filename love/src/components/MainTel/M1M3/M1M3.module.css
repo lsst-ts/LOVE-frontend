@@ -108,6 +108,23 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   padding: 1em;
 }
 
+.summaryPanelMeasures {
+  max-width: 100%;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+}
+
+.summaryPanelMeasures > * {
+  flex-basis: 50%;
+}
+
+.summaryPanelMeasures > :first-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .summaryPanelControls > .title {
   text-align: left;
   margin: 0;
