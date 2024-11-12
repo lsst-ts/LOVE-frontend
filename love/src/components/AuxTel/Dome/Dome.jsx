@@ -101,8 +101,6 @@ export default class Dome extends Component {
     atDomeSummaryState: PropTypes.string,
     /** ATMCS summary state */
     ATMCSSummaryState: PropTypes.string,
-    /** AT dome tracking */
-    atDomeTracking: PropTypes.bool,
     /** Target name */
     targetName: PropTypes.string,
     /** Telescope RA */
@@ -300,7 +298,6 @@ export default class Dome extends Component {
       currentPointingNasmyth2,
       atDomeSummaryState,
       ATMCSSummaryState,
-      atDomeTracking,
       targetName,
       telescopeRA,
       telescopeDec,
@@ -458,7 +455,6 @@ export default class Dome extends Component {
             minM3={minM3}
             atDomeSummaryState={atDomeSummaryState}
             ATMCSSummaryState={ATMCSSummaryState}
-            domeTracking={atDomeTracking}
             targetName={targetName}
           />
         </div>

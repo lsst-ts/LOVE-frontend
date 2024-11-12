@@ -99,7 +99,6 @@ const DomeContainer = ({
   subscribeToStream,
   unsubscribeToStream,
   controls,
-  atDomeTracking,
   targetName,
   telescopeRA,
   telescopeDec,
@@ -154,7 +153,6 @@ const DomeContainer = ({
       controls={controls}
       atDomeSummaryState={atDomeSummaryState}
       ATMCSSummaryState={ATMCSSummaryState}
-      atDomeTracking={atDomeTracking}
       targetName={targetName}
       telescopeRA={telescopeRA}
       telescopeDec={telescopeDec}

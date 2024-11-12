@@ -548,7 +548,6 @@ export default class MTDome extends Component {
     const azimuthDomeTarget = this.props.azimuthDomeTarget;
     const azimuthDomeMotion = this.props.azimuthDomeMotion;
     const mtMountSummaryState = this.props.mtMountSummaryState;
-    const mtDomeTracking = this.props.mtDomeTracking;
 
     //domeAzimuth
     const positionActualDomeAz = this.props.positionActualDomeAz;
@@ -648,7 +647,6 @@ export default class MTDome extends Component {
                 positionCommandedShutter={positionCommandedShutter}
                 currentPointing={currentPointing}
                 targetPointing={targetPointing}
-                domeTracking={mtDomeTracking}
               />
             </div>
           </div>
