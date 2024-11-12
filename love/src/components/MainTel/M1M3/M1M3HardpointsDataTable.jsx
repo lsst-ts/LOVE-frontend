@@ -99,6 +99,7 @@ function transposeTelemetries(parameter, telemetryArray, renderFunction, unit = 
 }
 
 function M1M3HardpointsDataTable({
+  balanceForcesApplied,
   hardpointsStepsQueued,
   hardpointsStepsCommanded,
   hardpointsEncoder,
@@ -137,6 +138,14 @@ function M1M3HardpointsDataTable({
   hardpointsSmcPowerFault,
   hardpointsIlcFault,
   hardpointsBroadcastCounterWarning,
+  hardpointMeasuredForceWarningHigh,
+  hardpointMeasuredForceWarningLow,
+  hardpointMeasuredForceFaultHigh,
+  hardpointMeasuredForceFaultLow,
+  hardpointMeasuredForceFSBWarningHigh,
+  hardpointMeasuredForceFSBWarningLow,
+  hardpointBreakawayFaultLow,
+  hardpointBreakawayFaultHigh,
   subscribeToStreams,
   unsubscribeToStreams,
   ...props
@@ -145,6 +154,36 @@ function M1M3HardpointsDataTable({
     subscribeToStreams();
     return () => unsubscribeToStreams();
   }, []);
+
+  const renderMeasuredForces = (value) => {
+    let limitWarningHigh, limitWarningLow, limitFaultHigh, limitFaultLow;
+    if (balanceForcesApplied) {
+      limitWarningHigh = hardpointMeasuredForceFSBWarningHigh;
+      limitWarningLow = hardpointMeasuredForceFSBWarningLow;
+    }
+    limitFaultHigh = hardpointMeasuredForceFaultHigh;
+    limitFaultLow = hardpointMeasuredForceFaultLow;
+
+    let className;
+    if (value > limitFaultHigh || value < limitFaultLow) {
+      className = styles.overFaultThreshold;
+    } else if (value > limitWarningHigh || value < limitWarningLow) {
+      className = styles.overWarningThreshold;
+    } else {
+      className = styles.notOverThreshold;
+    }
+    return <span className={className}>{defaultNumberFormatter(value, 2)} [N]</span>;
+  };
+
+  const renderBreakawayPressures = (value) => {
+    let className;
+    if (value > hardpointBreakawayFaultHigh || value < hardpointBreakawayFaultLow) {
+      className = styles.overFaultThreshold;
+    } else {
+      className = styles.notOverThreshold;
+    }
+    return <span className={className}>{defaultNumberFormatter(value, 2)} [kPa]</span>;
+  };
 
   const renderNumbers = (value) => defaultNumberFormatter(value, 2);
   const renderBooleans = (value) => (
@@ -155,11 +194,11 @@ function M1M3HardpointsDataTable({
     transposeTelemetries('Steps queued', hardpointsStepsQueued, renderNumbers),
     transposeTelemetries('Steps commanded', hardpointsStepsCommanded, renderNumbers),
     transposeTelemetries('Encoder', hardpointsEncoder, renderNumbers),
-    transposeTelemetries('Measured force', hardpointsMeasuredForce, renderNumbers, 'N'),
+    transposeTelemetries('Measured force', hardpointsMeasuredForce, renderMeasuredForces),
     transposeTelemetries('Displacement', hardpointsDisplacement, renderNumbers, 'mm'),
     transposeTelemetries('Breakaway LVDT', hardpointsBreakawayLVDT, renderNumbers),
     transposeTelemetries('Displacement LVDT', hardpointsDisplacementLVDT, renderNumbers),
-    transposeTelemetries('Breakaway pressure', hardpointsBreakawayPressure, renderNumbers),
+    transposeTelemetries('Breakaway pressure', hardpointsBreakawayPressure, renderBreakawayPressures),
     transposeTelemetries('Pressure sensor 1', hardpointsPressureSensor1, renderNumbers),
     transposeTelemetries('Pressure sensor 2', hardpointsPressureSensor2, renderNumbers),
     transposeTelemetries('Pressure sensor 3', hardpointsPressureSensor3, renderNumbers),
@@ -192,7 +231,6 @@ function M1M3HardpointsDataTable({
     transposeTelemetries('Broadcast counter warning', hardpointsBroadcastCounterWarning, renderBooleans),
   ];
 
-  // console.log(data);
   return (
     <div className={styles.container}>
       <SimpleTable headers={getTableHeaders()} data={data} />

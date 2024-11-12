@@ -154,6 +154,15 @@ export const getM1M3ActuatorsState = (state) => {
   };
 };
 
+export const getM1M3ForceControllerState = (state) => {
+  const subscriptions = ['event-MTM1M3-0-forceControllerState'];
+  const m1m3Data = getStreamsData(state, subscriptions);
+  return {
+    balanceForcesApplied:
+      m1m3Data['event-MTM1M3-0-forceControllerState']?.[0]?.balanceForcesApplied?.value ?? undefined,
+  };
+};
+
 export const getM1M3ActuatorsData = (state) => {
   const subscriptions = ['telemetry-MTM1M3-0-forceActuatorData'];
   const m1m3Data = getStreamsData(state, subscriptions);
@@ -203,6 +212,29 @@ export const getM1M3HardpointActuatorState = (state) => {
     hardpointReferenceId: [1, 2, 3, 4, 5, 6],
     hardpointMinorRevision: m1m3Data['event-MTM1M3-0-hardpointActuatorInfo']?.[0]?.minorRevision?.value ?? [],
     hardpointMayorRevision: m1m3Data['event-MTM1M3-0-hardpointActuatorInfo']?.[0]?.majorRevision?.value ?? [],
+  };
+};
+
+export const getM1M3HardpointActuatorSettings = (state) => {
+  const subscriptions = ['event-MTM1M3-0-hardpointActuatorSettings'];
+  const m1m3Data = getStreamsData(state, subscriptions);
+  return {
+    hardpointMeasuredForceWarningHigh:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorSettings']?.[0]?.hardpointMeasuredForceWarningHigh?.value ?? 0,
+    hardpointMeasuredForceWarningLow:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorSettings']?.[0]?.hardpointMeasuredForceWarningLow?.value ?? 0,
+    hardpointMeasuredForceFaultHigh:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorSettings']?.[0]?.hardpointMeasuredForceFaultHigh?.value ?? 0,
+    hardpointMeasuredForceFaultLow:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorSettings']?.[0]?.hardpointMeasuredForceFaultLow?.value ?? 0,
+    hardpointMeasuredForceFSBWarningHigh:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorSettings']?.[0]?.hardpointMeasuredForceFSBWarningHigh?.value ?? 0,
+    hardpointMeasuredForceFSBWarningLow:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorSettings']?.[0]?.hardpointMeasuredForceFSBWarningLow?.value ?? 0,
+    hardpointBreakawayFaultLow:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorSettings']?.[0]?.hardpointBreakawayFaultLow?.value ?? 0,
+    hardpointBreakawayFaultHigh:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorSettings']?.[0]?.hardpointBreakawayFaultHigh?.value ?? 0,
   };
 };
 

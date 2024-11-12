@@ -21,7 +21,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 import {
+  getM1M3ForceControllerState,
   getM1M3HardpointActuatorData,
+  getM1M3HardpointActuatorSettings,
   getM1M3HardpointMonitorData,
   getM1M3HardpointActuatorWarningData,
 } from 'redux/selectors';
@@ -49,11 +51,15 @@ const M1M3HardpointsDataTableContainer = ({ ...props }) => {
 };
 
 const mapStateToProps = (state) => {
+  const m1m3ForceControllerState = getM1M3ForceControllerState(state);
   const m1m3HardpointActuatorData = getM1M3HardpointActuatorData(state);
+  const m1m3HardpointActuatorSettings = getM1M3HardpointActuatorSettings(state);
   const m1m3HardpointMonitorData = getM1M3HardpointMonitorData(state);
   const m1m3HardpointActuatorWarningData = getM1M3HardpointActuatorWarningData(state);
   return {
+    ...m1m3ForceControllerState,
     ...m1m3HardpointActuatorData,
+    ...m1m3HardpointActuatorSettings,
     ...m1m3HardpointMonitorData,
     ...m1m3HardpointActuatorWarningData,
   };
@@ -64,6 +70,8 @@ const mapDispatchToProps = (dispatch) => {
     'telemetry-MTM1M3-0-hardpointActuatorData',
     'telemetry-MTM1M3-0-hardpointMonitorData',
     'event-MTM1M3-0-hardpointActuatorWarning',
+    'event-MTM1M3-0-forceControllerState',
+    'event-MTM1M3-0-hardpointActuatorSettings',
   ];
   return {
     subscriptions,
