@@ -1,0 +1,67 @@
+/** 
+This file is part of LOVE-frontend.
+
+Developed for the LSST Telescope and Site Systems.
+This product includes software developed by the LSST Project
+ (https://www.lsst.org).
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+.container {
+  padding: var(--content-padding);
+  display: flex;
+  height: calc(100% - 30px);
+}
+
+.actuatorId {
+  font-size: 0.5em;
+}
+
+.actuatorForce {
+  font-size: 0.3em;
+}
+
+.forceGradientContainer {
+  display: flex;
+  gap: var(--small-padding);
+}
+
+.forceGradientLimits {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: var(--highlighted-font-color);
+  font-size: var(--font-size-large);
+  white-space: nowrap;
+  margin-right: var(--small-padding);
+}
+
+.forceGradient {
+  height: 100%;
+}
+
+.forcesSelector {
+  display: flex;
+  background: var(--second-quaternary-background-dimmed-color);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.forcesSelector > * {
+  padding: var(--content-padding);
+  overflow-y: auto;
+}
+
+.forcesSelector > :first-child {
+  border-right: 1px solid var(--second-primary-background-color);
+}

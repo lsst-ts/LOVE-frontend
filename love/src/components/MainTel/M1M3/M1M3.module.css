@@ -108,6 +108,23 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   padding: 1em;
 }
 
+.summaryPanelMeasures {
+  max-width: 100%;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+}
+
+.summaryPanelMeasures > * {
+  flex-basis: 50%;
+}
+
+.summaryPanelMeasures > :first-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .summaryPanelControls > .title {
   text-align: left;
   margin: 0;
@@ -198,40 +215,10 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   flex-direction: column;
 }
 
-.forceGradientWrapper {
-  margin-bottom: 32px;
+.forceGradientWrapper > :last-child {
   display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.forceGradientWrapper > span:first-child {
-  text-align: left;
-  font-weight: bold;
-  margin-bottom: 0.5em;
-}
-
-.forceGradient {
-  display: grid;
-  grid-template-columns: 7em 1fr 7em;
-}
-
-.forceGradient svg {
-  margin: 0 var(--small-padding);
-}
-
-.forceGradient :first-child {
-  justify-content: end;
-}
-
-.forceGradient :last-child {
-  justify-content: start;
-}
-
-.forceGradient :first-child,
-.forceGradient :last-child {
-  display: flex;
-  align-items: center;
+  justify-content: space-between;
+  color: var(--highlighted-font-color);
 }
 
 .gridActuatorInfo,
@@ -240,14 +227,15 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 }
 
 .actuatorInfo {
-  box-sizing: border-box;
-  width: 100%;
-  min-width: auto;
-  max-width: none;
   display: block;
   text-align: left;
-  padding: 1em;
-  margin-bottom: 1em;
+  padding: var(--content-padding);
+  margin-bottom: var(--content-padding);
+}
+
+.actuatorInfo > :first-child {
+  align-items: center;
+  margin-bottom: var(--small-padding);
 }
 
 .actuatorInfo h6 {
@@ -263,9 +251,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   flex-grow: 1;
 }
 
-.actuatorValue > .summaryState {
-  font-size: 0.8em;
-  line-height: 1.7em;
+.actuatorValue > :nth-child(2):not(.summaryState) {
+  color: var(--highlighted-font-color);
 }
 
 .forceSummary > * {
@@ -380,7 +367,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 }
 
 .plotSection {
-  margin: calc(var(--content-padding) * 2) var(--content-padding);
+  margin: var(--content-padding) 0;
   display: grid;
   grid-template-columns: 1fr 5fr 2fr;
   grid-auto-rows: minmax(100px, auto);
@@ -407,7 +394,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .zoomOut {
   position: absolute;
-  top: 1em;
+  top: 8em;
   right: 1em;
 }
 

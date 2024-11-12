@@ -99,6 +99,10 @@ export default class M2 extends Component {
       axialEncoderPositions,
       axialForceApplied,
       axialForceMeasured,
+      commandableByDDS,
+      forceBalanceSystemStatus,
+      inclinationTelemetrySource,
+      m2AssemblyInPosition,
       tangentActuatorSteps,
       tangentEncoderPositions,
       tangentForceApplied,
@@ -108,9 +112,9 @@ export default class M2 extends Component {
       alignment,
       powerType,
       powerState,
+      summaryState,
+      zenithAngleMeasured,
     } = this.props;
-    const { summaryState, commandableByDDS, forceBalanceSystemStatus, m2AssemblyInPosition } = this.props;
-    const { zenithAngleMeasured, inclinationTelemetrySource } = this.props;
 
     return (
       <div className={styles.container}>
