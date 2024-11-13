@@ -209,92 +209,99 @@ function M1M3Compact({
 
   return (
     <div className={styles.container}>
-      <svg viewBox={`0 0 ${width} ${height}`}>
-        <defs>
-          <pattern id="disabledPattern" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
-            <line x1="0" y1="0" x2="6" y2="6" stroke="var(--status-alert-color)" strokeWidth="0.2" />
-            <line x1="6" y1="0" x2="0" y2="6" stroke="var(--status-alert-color)" strokeWidth="0.2" />
-          </pattern>
-        </defs>
+      {!showForcesSelector && (
+        <div className={styles.selectedForce}>
+          Selected parameters: {selectedForce} - {selectedForceParameter}
+        </div>
+      )}
+      <div className={styles.diagrams}>
+        <svg viewBox={`0 0 ${width} ${height}`}>
+          <defs>
+            <pattern id="disabledPattern" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
+              <line x1="0" y1="0" x2="6" y2="6" stroke="var(--status-alert-color)" strokeWidth="0.2" />
+              <line x1="6" y1="0" x2="0" y2="6" stroke="var(--status-alert-color)" strokeWidth="0.2" />
+            </pattern>
+          </defs>
 
-        <g>
-          {actuators.map((act, i) => {
-            const actuatorForce = getActuatorForceByParameter(selectedForceParameter, i);
-            const actuatorForceText = defaultNumberFormatter(actuatorForce, 2);
-            return (
-              <g key={act.id}>
-                <circle
-                  cx={act.position[0] + xRadius + margin}
-                  cy={act.position[1] + yRadius + margin}
-                  fill={fillActuator(i)}
-                  stroke="black"
-                  r={maxRadius / 16}
-                />
-                <text
-                  className={styles.actuatorId}
-                  x={act.position[0] + xRadius + margin}
-                  y={act.position[1] + yRadius + margin}
-                  textAnchor="middle"
-                  alignmentBaseline="middle"
-                >
-                  {act.id}
-                </text>
-                {showActuatorsForces && forceParameterIsScalar && !forceParameterHasBigNumbers && (
+          <g>
+            {actuators.map((act, i) => {
+              const actuatorForce = getActuatorForceByParameter(selectedForceParameter, i);
+              const actuatorForceText = defaultNumberFormatter(actuatorForce, 2);
+              return (
+                <g key={act.id}>
+                  <circle
+                    cx={act.position[0] + xRadius + margin}
+                    cy={act.position[1] + yRadius + margin}
+                    fill={fillActuator(i)}
+                    stroke="black"
+                    r={maxRadius / 16}
+                  />
                   <text
-                    className={styles.actuatorForce}
+                    className={styles.actuatorId}
                     x={act.position[0] + xRadius + margin}
-                    y={act.position[1] + yRadius + margin + 5}
+                    y={act.position[1] + yRadius + margin}
                     textAnchor="middle"
                     alignmentBaseline="middle"
                   >
-                    {actuatorForceText}
+                    {act.id}
                   </text>
-                )}
-              </g>
-            );
-          })}
-        </g>
-      </svg>
-      <div className={styles.forceGradientContainer}>
-        {showForceGradient && <LinearGradient forceData={forceData} unit={forceParameterValueUnit} />}
-      </div>
-      {showForcesSelector && (
-        <div className={[styles.forcesSelector, 'nonDraggable'].join(' ')}>
-          <div>
-            {forceInputs.map((force) => (
-              <div key={force}>
-                <input
-                  type="radio"
-                  id={force}
-                  name="force"
-                  value={force}
-                  checked={selectedForce === force}
-                  onChange={() => {
-                    setSelectedForce(force);
-                    setSelectedForceParameter();
-                  }}
-                />
-                <label htmlFor={force}>{M1M3ActuatorForcesLabels[force]}</label>
-              </div>
-            ))}
-          </div>
-          <div>
-            {forceParameters.map((forceParameter) => (
-              <div key={forceParameter}>
-                <input
-                  type="radio"
-                  id={forceParameter}
-                  name="forceParameter"
-                  value={forceParameter}
-                  checked={selectedForceParameter === forceParameter}
-                  onChange={() => setSelectedForceParameter(forceParameter)}
-                />
-                <label htmlFor={forceParameter}>{forceParameter}</label>
-              </div>
-            ))}
-          </div>
+                  {showActuatorsForces && forceParameterIsScalar && !forceParameterHasBigNumbers && (
+                    <text
+                      className={styles.actuatorForce}
+                      x={act.position[0] + xRadius + margin}
+                      y={act.position[1] + yRadius + margin + 5}
+                      textAnchor="middle"
+                      alignmentBaseline="middle"
+                    >
+                      {actuatorForceText}
+                    </text>
+                  )}
+                </g>
+              );
+            })}
+          </g>
+        </svg>
+        <div className={styles.forceGradientContainer}>
+          {showForceGradient && <LinearGradient forceData={forceData} unit={forceParameterValueUnit} />}
         </div>
-      )}
+        {showForcesSelector && (
+          <div className={[styles.forcesSelector, 'nonDraggable'].join(' ')}>
+            <div>
+              {forceInputs.map((force) => (
+                <div key={force}>
+                  <input
+                    type="radio"
+                    id={force}
+                    name="force"
+                    value={force}
+                    checked={selectedForce === force}
+                    onChange={() => {
+                      setSelectedForce(force);
+                      setSelectedForceParameter();
+                    }}
+                  />
+                  <label htmlFor={force}>{M1M3ActuatorForcesLabels[force]}</label>
+                </div>
+              ))}
+            </div>
+            <div>
+              {forceParameters.map((forceParameter) => (
+                <div key={forceParameter}>
+                  <input
+                    type="radio"
+                    id={forceParameter}
+                    name="forceParameter"
+                    value={forceParameter}
+                    checked={selectedForceParameter === forceParameter}
+                    onChange={() => setSelectedForceParameter(forceParameter)}
+                  />
+                  <label htmlFor={forceParameter}>{forceParameter}</label>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

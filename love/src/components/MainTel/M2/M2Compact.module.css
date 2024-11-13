@@ -19,8 +19,24 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .container {
   padding: var(--content-padding);
-  display: flex;
   height: calc(100% - 30px);
+}
+
+.container:has(.selectedForce) {
+  height: calc(100% - 60px);
+}
+
+.container .diagrams {
+  display: flex;
+  height: 100%;
+}
+
+.selectedForce {
+  margin-bottom: var(--content-padding);
+  color: var(--highlighted-font-color);
+  font-weight: bold;
+  text-align: left;
+  font-size: var(--font-size-large);
 }
 
 .tangentActuators text,
