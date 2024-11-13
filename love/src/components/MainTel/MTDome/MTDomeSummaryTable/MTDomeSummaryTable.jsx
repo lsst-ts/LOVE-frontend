@@ -83,14 +83,26 @@ export default class MTDomeSummaryTable extends Component {
   };
 
   render() {
-    const trackID = this.props.trackID;
-    const mtDomeStatus = summaryStateMap[this.props.mtDomeSummaryState];
-    const modeDomeStatus = mtDomeModeStateMap[this.props.modeDomeStatus];
-    const azimuthDomeState = mtDomeAzimuthEnabledStateMap[this.props.azimuthDomeState];
-    const azimuthDomeMotion = mtdomeMotionStateMap[this.props.azimuthDomeMotion];
-    const mtMountStatus = summaryStateMap[this.props.mtMountSummaryState];
-    const domeActualAz = this.props.positionActualDomeAz;
-    const domeCommandedAz = this.props.positionCommandedDomeAz;
+    const {
+      trackId,
+      mtDomeSummaryState,
+      mtMountSummaryState,
+      azimuthDomeState,
+      azimuthDomeMotion,
+      modeDomeStatus,
+      positionActualDomeAz,
+      positionCommandedDomeAz,
+      currentPointing,
+      targetPointing,
+      positionActualShutter,
+      positionCommandedShutter,
+    } = this.props;
+
+    const mtDomeStatusText = summaryStateMap[mtDomeSummaryState];
+    const modeDomeStatusText = mtDomeModeStateMap[modeDomeStatus];
+    const azimuthDomeStateText = mtDomeAzimuthEnabledStateMap[azimuthDomeState];
+    const azimuthDomeMotionText = mtdomeMotionStateMap[azimuthDomeMotion];
+    const mtMountStatusText = summaryStateMap[mtMountSummaryState];
 
     const { az: mountActualAz, el: mountActualEl } = currentPointing;
     const { az: mountCommandedAz, el: mountCommandedEl } = targetPointing;
@@ -99,31 +111,37 @@ export default class MTDomeSummaryTable extends Component {
       <div className={styles.divSummary}>
         <SummaryPanel className={styles.summaryTable}>
           <Title>Track ID</Title>
-          <Value>{trackID?.toString()}</Value>
+          <Value>{trackId?.toString()}</Value>
           <Title>MTDome CSC</Title>
           <Value>
-            <StatusText status={summaryStateToStyle[mtDomeStatus]}>{mtDomeStatus}</StatusText>
+            <StatusText status={summaryStateToStyle[mtDomeStatusText]}>{mtDomeStatusText}</StatusText>
           </Value>
           <Label>Mode</Label>
           <Value>
-            <StatusText status={mtDomeModeStatetoStyle[modeDomeStatus]}>{modeDomeStatus}</StatusText>
+            <StatusText status={mtDomeModeStatetoStyle[modeDomeStatusText]}>{modeDomeStatusText}</StatusText>
           </Value>
           <Label>Az State</Label>
           <Value>
-            <StatusText status={mtDomeAzimuthEnabledStatetoStyle[azimuthDomeState]}>{azimuthDomeState}</StatusText>
+            <StatusText status={mtDomeAzimuthEnabledStatetoStyle[azimuthDomeStateText]}>
+              {azimuthDomeStateText}
+            </StatusText>
           </Value>
           <Label>Az Motion</Label>
           <Value>
-            <StatusText status={mtdomeMotionStatetoStyle[azimuthDomeMotion]}>{azimuthDomeMotion}</StatusText>
+            <StatusText status={mtdomeMotionStatetoStyle[azimuthDomeMotionText]}>{azimuthDomeMotionText}</StatusText>
           </Value>
           <Label>Az</Label>
           <Value>
-            <CurrentTargetValue currentValue={domeActualAz} targetValue={domeCommandedAz} isChanging={true} />
+            <CurrentTargetValue
+              currentValue={positionActualDomeAz}
+              targetValue={positionCommandedDomeAz}
+              isChanging={true}
+            />
           </Value>
 
           <Title>MTMount CSC</Title>
           <Value>
-            <StatusText status={summaryStateToStyle[mtMountStatus]}>{mtMountStatus}</StatusText>
+            <StatusText status={summaryStateToStyle[mtMountStatusText]}>{mtMountStatusText}</StatusText>
           </Value>
           <Label>Elevation</Label>
           <Value>
@@ -161,14 +179,8 @@ export default class MTDomeSummaryTable extends Component {
             <Label>Shutters</Label>
           </SummaryPanel>
           <div className={styles.divProgressBars}>
-            <ProgressBar
-              targetValue={this.props.positionCommandedShutter}
-              completed={this.props.positionActualShutter}
-            />
-            <ProgressBar
-              targetValue={this.props.positionCommandedShutter}
-              completed={this.props.positionActualShutter}
-            />
+            <ProgressBar targetValue={positionCommandedShutter} completed={positionActualShutter} />
+            <ProgressBar targetValue={positionCommandedShutter} completed={positionActualShutter} />
           </div>
         </SummaryPanel>
       </div>
