@@ -39,7 +39,7 @@ import {
   mtdomeMotionStateMap,
   mtdomeMotionStatetoStyle,
   MTMountLimits,
-} from '../../../../Config';
+} from 'Config';
 
 export default class MTDomeSummaryTable extends Component {
   static propTypes = {
@@ -108,6 +108,11 @@ export default class MTDomeSummaryTable extends Component {
 
     const { az: mountActualAz, el: mountActualEl } = currentPointing;
     const { az: mountCommandedAz, el: mountCommandedEl } = targetPointing;
+
+    const shutterPositionActual1 = Math.round(positionActualShutter[0] ?? 0);
+    const shutterPositionCommanded1 = Math.round(positionCommandedShutter[0] ?? 0);
+    const shutterPositionActual2 = Math.round(positionActualShutter[1] ?? 0);
+    const shutterPositionCommanded2 = Math.round(positionCommandedShutter[1] ?? 0);
 
     return (
       <div className={styles.divSummary}>
@@ -181,8 +186,8 @@ export default class MTDomeSummaryTable extends Component {
             <Label>Shutters</Label>
           </SummaryPanel>
           <div className={styles.divProgressBars}>
-            <ProgressBar targetValue={positionCommandedShutter} completed={positionActualShutter} />
-            <ProgressBar targetValue={positionCommandedShutter} completed={positionActualShutter} />
+            <ProgressBar targetValue={shutterPositionCommanded1} completed={shutterPositionActual1} />
+            <ProgressBar targetValue={shutterPositionCommanded2} completed={shutterPositionActual2} />
           </div>
         </SummaryPanel>
       </div>
