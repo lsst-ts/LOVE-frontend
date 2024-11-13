@@ -238,6 +238,105 @@ function M1M3HardpointsDataTable({
   );
 }
 
-M1M3HardpointsDataTable.propTypes = {};
+M1M3HardpointsDataTable.propTypes = {
+  /** If the balance forces are applied or not */
+  balanceForcesApplied: PropTypes.bool,
+  /** Number of steps queued */
+  hardpointsStepsQueued: PropTypes.arrayOf(PropTypes.number),
+  /** Number of steps commanded */
+  hardpointsStepsCommanded: PropTypes.arrayOf(PropTypes.number),
+  /** Encoder data */
+  hardpointsEncoder: PropTypes.arrayOf(PropTypes.number),
+  /** Measured force data */
+  hardpointsMeasuredForce: PropTypes.arrayOf(PropTypes.number),
+  /** Displacement data */
+  hardpointsDisplacement: PropTypes.arrayOf(PropTypes.number),
+  /** Breakaway LVDT data */
+  hardpointsBreakawayLVDT: PropTypes.arrayOf(PropTypes.number),
+  /** Displacement LVDT data */
+  hardpointsDisplacementLVDT: PropTypes.arrayOf(PropTypes.number),
+  /** Breakaway pressure data */
+  hardpointsBreakawayPressure: PropTypes.arrayOf(PropTypes.number),
+  /** Pressure sensor 1 data */
+  hardpointsPressureSensor1: PropTypes.arrayOf(PropTypes.number),
+  /** Pressure sensor 2 data */
+  hardpointsPressureSensor2: PropTypes.arrayOf(PropTypes.number),
+  /** Pressure sensor 3 data */
+  hardpointsPressureSensor3: PropTypes.arrayOf(PropTypes.number),
+  /** Major fault warning data */
+  hardpointsMajorFault: PropTypes.arrayOf(PropTypes.bool),
+  /** Minor fault warning data */
+  hardpointsMinorFault: PropTypes.arrayOf(PropTypes.bool),
+  /** Minor fault warning data */
+  hardpointsFaultOverride: PropTypes.arrayOf(PropTypes.bool),
+  /** Main calibration error warning data */
+  hardpointsMainCalibrationError: PropTypes.arrayOf(PropTypes.bool),
+  /** Backup calibration error warning data */
+  hardpointsBackupCalibrationError: PropTypes.arrayOf(PropTypes.bool),
+  /** Limit switch 1 operated warning data */
+  hardpointsLimitSwitch1Operated: PropTypes.arrayOf(PropTypes.bool),
+  /** Limit switch 2 operated warning data */
+  hardpointsLimitSwitch2Operated: PropTypes.arrayOf(PropTypes.bool),
+  /** Low proximity warning warning data */
+  hardpointsLowProximityWarning: PropTypes.arrayOf(PropTypes.bool),
+  /** High proximity warning warning data */
+  hardpointsHighProximityWarning: PropTypes.arrayOf(PropTypes.bool),
+  /** Low air pressure fault warning data */
+  hardpointsLowAirPressureFault: PropTypes.arrayOf(PropTypes.bool),
+  /** High air pressure fault warning data */
+  hardpointsHighAirPressureFault: PropTypes.arrayOf(PropTypes.bool),
+  /** Unique ID CRC error warning data */
+  hardpointsUniqueIdCRCError: PropTypes.arrayOf(PropTypes.bool),
+  /** Application type mismatch warning data */
+  hardpointsApplicationTypeMismatch: PropTypes.arrayOf(PropTypes.bool),
+  /** Application missing warning data */
+  hardpointsApplicationMissing: PropTypes.arrayOf(PropTypes.bool),
+  /** Application CRC mismatch warning data */
+  hardpointsApplicationCRCMismatch: PropTypes.arrayOf(PropTypes.bool),
+  /** One wire missing warning data */
+  hardpointsOneWireMissing: PropTypes.arrayOf(PropTypes.bool),
+  /** One wire 1 mismatch warning data */
+  hardpointsOneWire1Mismatch: PropTypes.arrayOf(PropTypes.bool),
+  /** One wire 2 mismatch warning data */
+  hardpointsOneWire2Mismatch: PropTypes.arrayOf(PropTypes.bool),
+  /** Watchdog reset warning data */
+  hardpointsWatchdogReset: PropTypes.arrayOf(PropTypes.bool),
+  /** Brown out warning data */
+  hardpointsBrownOut: PropTypes.arrayOf(PropTypes.bool),
+  /** Event trap reset warning data */
+  hardpointsEventTrapReset: PropTypes.arrayOf(PropTypes.bool),
+  /** Motor driver fault warning data */
+  hardpointsMotorDriverFault: PropTypes.arrayOf(PropTypes.bool),
+  /** SSR power fault warning data */
+  hardpointsSsrPowerFault: PropTypes.arrayOf(PropTypes.bool),
+  /** Aux power fault warning data */
+  hardpointsAuxPowerFault: PropTypes.arrayOf(PropTypes.bool),
+  /** SMC power fault warning data */
+  hardpointsSmcPowerFault: PropTypes.arrayOf(PropTypes.bool),
+  /** ILC fault warning data */
+  hardpointsIlcFault: PropTypes.arrayOf(PropTypes.bool),
+  /** Broadcast counter warning warning data */
+  hardpointsBroadcastCounterWarning: PropTypes.arrayOf(PropTypes.bool),
+  /** Measured force operational warning high limit */
+  hardpointMeasuredForceWarningHigh: PropTypes.number,
+  /** Measured force operational warning low limit */
+  hardpointMeasuredForceWarningLow: PropTypes.number,
+  /** Measured force operational fault high limit */
+  hardpointMeasuredForceFaultHigh: PropTypes.number,
+  /** Measured force operational fault low limit */
+  hardpointMeasuredForceFaultLow: PropTypes.number,
+  /** Measured force FSB warning high limit */
+  hardpointMeasuredForceFSBWarningHigh: PropTypes.number,
+  /** Measured force FSB warning low limit */
+  hardpointMeasuredForceFSBWarningLow: PropTypes.number,
+  /** Breakaway pressure operational fault low limit */
+  hardpointBreakawayFaultLow: PropTypes.number,
+  /** Breakaway pressure operational fault high limit */
+  hardpointBreakawayFaultHigh: PropTypes.number,
+  /** Function to subscribe to streams. */
+  subscribeToStreams: PropTypes.func.isRequired,
+  /** Function to unsubscribe to streams. */
+  unsubscribeToStreams: PropTypes.func.isRequired,
+};
 
 export default M1M3HardpointsDataTable;
