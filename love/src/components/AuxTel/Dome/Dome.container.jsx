@@ -100,9 +100,10 @@ const DomeContainer = ({
   unsubscribeToStream,
   controls,
   targetName,
-  telescopeRA,
-  telescopeDec,
-  telescopeRotator,
+  telescopeRAHour,
+  telescopeRADeg,
+  telescopeDecDeg,
+  telescopeRotatorRad,
   raDecHourFormat,
   ...props
 }) => {
@@ -154,9 +155,10 @@ const DomeContainer = ({
       atDomeSummaryState={atDomeSummaryState}
       ATMCSSummaryState={ATMCSSummaryState}
       targetName={targetName}
-      telescopeRA={telescopeRA}
-      telescopeDec={telescopeDec}
-      telescopeRotator={telescopeRotator}
+      telescopeRAHour={telescopeRAHour}
+      telescopeRADeg={telescopeRADeg}
+      telescopeDecDeg={telescopeDecDeg}
+      telescopeRotatorRad={telescopeRotatorRad}
       raDecHourFormat={raDecHourFormat}
     />
   );
@@ -175,6 +177,8 @@ const mapDispatchToProps = (dispatch) => {
     'telemetry-ATMCS-0-mount_AzEl_Encoders',
     'telemetry-ATMCS-0-mount_Nasmyth_Encoders',
     'telemetry-Scheduler-2-observatoryState',
+    'telemetry-ATPtg-0-mountStatus',
+    'telemetry-ATPtg-0-mountPosition',
     'event-ATDome-0-azimuthState',
     'event-ATDome-0-azimuthCommandedState',
     'event-ATDome-0-dropoutDoorState',
@@ -185,10 +189,10 @@ const mapDispatchToProps = (dispatch) => {
     'event-ATMCS-0-allAxesInPosition',
     'event-ATMCS-0-m3State',
     'event-ATMCS-0-positionLimits',
-    'event-ATPtg-1-timesOfLimits',
     'event-ATDome-0-summaryState',
     'event-ATMCS-0-summaryState',
-    `event-ATPtg-1-currentTarget`,
+    'event-ATPtg-0-timesOfLimits',
+    `event-ATPtg-0-currentTarget`,
   ];
   return {
     subscriptions,
