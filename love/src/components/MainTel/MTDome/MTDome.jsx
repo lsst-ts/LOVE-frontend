@@ -536,44 +536,39 @@ export default class MTDome extends Component {
   ];
 
   render() {
-    const isProjected = this.props.isProjected;
-    const width = this.props.width;
-    const height = this.props.height;
+    const {
+      isProjected,
+      width,
+      height,
+      trackId,
+      mtDomeSummaryState,
+      modeDomeStatus,
+      azimuthDomeState,
+      azimuthDomeTarget,
+      azimuthDomeMotion,
+      mtMountSummaryState,
+      positionActualDomeAz,
+      positionCommandedDomeAz,
+      positionActualLightWindScreen,
+      positionCommandedLightWindScreen,
+      positionActualShutter,
+      positionCommandedShutter,
+      actualPositionLouvers,
+      commandedPositionLouvers,
+      currentPointingAz,
+      currentPointingEl,
+      targetPointingAz,
+      targetPointingEl,
+    } = this.props;
 
-    //SummaryPanel
-    const trackID = this.props.trackId;
-    const mtDomeSummaryState = this.props.mtDomeSummaryState;
-    const modeDomeStatus = this.props.modeDomeStatus;
-    const azimuthDomeState = this.props.azimuthDomeState;
-    const azimuthDomeTarget = this.props.azimuthDomeTarget;
-    const azimuthDomeMotion = this.props.azimuthDomeMotion;
-    const mtMountSummaryState = this.props.mtMountSummaryState;
-
-    //domeAzimuth
-    const positionActualDomeAz = this.props.positionActualDomeAz;
-    const positionCommandedDomeAz = this.props.positionCommandedDomeAz;
-
-    //lightWindScreen
-    const positionActualLightWindScreen = this.props.positionActualLightWindScreen;
-    const positionCommandedLightWindScreen = this.props.positionCommandedLightWindScreen;
-
-    //apertureShutters
-    const positionActualShutter = this.props.positionActualShutter;
-    const positionCommandedShutter = this.props.positionCommandedShutter;
-
-    // Louvers
-    const actualPositionLouvers = this.props?.actualPositionLouvers;
-    const commandedPositionLouvers = this.props?.commandedPositionLouvers;
-
-    // pointing
     const currentPointing = {
-      az: this.props.currentPointingAz,
-      el: this.props.currentPointingEl,
+      az: currentPointingAz,
+      el: currentPointingEl,
     };
 
     const targetPointing = {
-      az: this.props.targetPointingAz,
-      el: this.props.targetPointingEl,
+      az: targetPointingAz,
+      el: targetPointingEl,
     };
 
     return (
@@ -632,7 +627,7 @@ export default class MTDome extends Component {
             </div>
             <div className={styles.divSummaryTable}>
               <MTDomeSummaryTable
-                trackID={trackID}
+                trackId={trackId}
                 mtDomeSummaryState={mtDomeSummaryState}
                 mtMountSummaryState={mtMountSummaryState}
                 modeDomeStatus={modeDomeStatus}
