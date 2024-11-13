@@ -45,26 +45,28 @@ export default class MTDomeSummaryTable extends Component {
   static propTypes = {
     /** Unique target identifier. Echoed from the trackTarget command */
     trackId: PropTypes.number,
-    /** High level state machine state identifier */
+    /** Summary state of the MTDome CSC */
     mtDomeSummaryState: PropTypes.number,
-    /** High level state machine state identifier */
+    /** Summary state of the MTMount CSC */
     mtMountSummaryState: PropTypes.number,
-    /** Enabled state; an EnabledState enum */
+    /** Azimuth dome state */
     azimuthDomeState: PropTypes.number,
-    /** The motion state; a MotionState enum */
+    /** Azimuth dome motion */
     azimuthDomeMotion: PropTypes.number,
-    /** Target position; nan for the crawlAz command */
-    azimuthDomeTarget: PropTypes.number,
-    /** Operational mode; an OperationalMode enum */
+    /** Operational dome mode */
     modeDomeStatus: PropTypes.number,
-    /** Position measured by the encoders */
-    currentPointingAz: PropTypes.number,
-    /** Position computed by the path generator */
-    targetPointingAz: PropTypes.number,
-    /** Position measured by the encoders */
-    currentPointingEl: PropTypes.number,
-    /** Position computed by the path generator */
-    targetPointingEl: PropTypes.number,
+    /** Actual dome azimuth position */
+    positionActualDomeAz: PropTypes.number,
+    /** Commanded dome azimuth position */
+    positionCommandedDomeAz: PropTypes.number,
+    /** Telescope current pointing */
+    currentPointing: PropTypes.object,
+    /** Telescope target pointing */
+    targetPointing: PropTypes.object,
+    /** Actual shutter position */
+    positionActualShutter: PropTypes.array,
+    /** Commanded shutter position */
+    positionCommandedShutter: PropTypes.array,
   };
 
   static defaultProps = {
@@ -73,13 +75,13 @@ export default class MTDomeSummaryTable extends Component {
     mtMountSummaryState: 0,
     azimuthDomeState: 0,
     azimuthDomeMotion: 0,
-    azimuthDomeTarget: 0,
-    elevationDomeTarget: 0,
     modeDomeStatus: 0,
-    currentPointingAz: 0,
-    targetPointingAz: 0,
-    currentPointingEl: 0,
-    targetPointingEl: 0,
+    positionActualDomeAz: 0,
+    positionCommandedDomeAz: 0,
+    currentPointing: { az: 0, el: 0 },
+    targetPointing: { az: 0, el: 0 },
+    positionActualShutter: [],
+    positionCommandedShutter: [],
   };
 
   render() {
