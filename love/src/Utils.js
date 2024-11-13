@@ -1575,10 +1575,10 @@ export function degreesToDMS(degrees) {
   const m = Math.floor((degrees % 1) * 4);
   const s = Math.floor(((degrees % 1) * 4 - m) * 60);
   const hourFormat =
-    `${Math.sign(degrees) >= 0 ? '+' : '-'}` +
-    `${d.toString().padStart(2, '0')}` +
-    `:${m.toString().padStart(2, '0')}` +
-    `:${s.toString().padStart(2, '0')}`;
+    `${Math.sign(degrees) >= 0 ? '+' : ''}` +
+    `${d.toString().padStart(2, '0')}°` +
+    ` ${m.toString().padStart(2, '0')}'` +
+    ` ${s.toString().padStart(2, '0')}"`;
   return hourFormat;
 }
 
