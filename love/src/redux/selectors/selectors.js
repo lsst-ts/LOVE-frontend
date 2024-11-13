@@ -1307,6 +1307,20 @@ export const getDomeStatus = (state) => {
   };
 };
 
+export const getMainTelescopeState = (state) => {
+  const subscriptions = [
+    'telemetry-MTPtg-0-mountStatus',
+    'telemetry-MTPtg-0-mountPosition'
+  ];
+  const data = getStreamsData(state, subscriptions);
+  return {
+    telescopeRAHour: data[`telemetry-MTPtg-0-mountStatus`]?.mountRA?.value ?? 0,
+    telescopeRADeg: data[`telemetry-MTPtg-0-mountPosition`]?.ra?.value ?? 0,
+    telescopeDecDeg: data[`telemetry-MTPtg-0-mountStatus`]?.mountDec?.value ?? 0,
+    telescopeRotatorRad: data[`telemetry-MTPtg-0-mountStatus`]?.mountRot?.value ?? 0,
+  };
+};
+
 // MTDome Power Draw
 export const getMtDomePowerDraw = (state) => {
   const subscriptions = [

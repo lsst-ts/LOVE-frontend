@@ -28,9 +28,8 @@ import Azimuth from 'components/GeneralPurpose/Azimuth/Azimuth';
 import Elevation from 'components/GeneralPurpose/Elevation/Elevation';
 import WindRose from '../../icons/WindRose/WindRose';
 import MTDomeSummaryTable from './MTDomeSummaryTable/MTDomeSummaryTable';
-import styles from './MTDome.module.css';
-
 import { MTDomeLouversMapAF, MTDomeLouversMapGN } from 'Config';
+import styles from './MTDome.module.css';
 
 const defaultValuesAF = {
   A1: '0',
@@ -218,6 +217,16 @@ export default class MTDome extends Component {
     targetPointingEl: PropTypes.number,
     /** High level state machine state identifier of the MTMount. */
     mtMountSummaryState: PropTypes.number,
+    /** Telescope current RA in hours */
+    telescopeRAHour: PropTypes.number,
+    /** Telescope current RA in degrees */
+    telescopeRADeg: PropTypes.number,
+    /** Telescope current Dec in degrees */
+    telescopeDecDeg: PropTypes.number,
+    /** Telescope rotator position in rad */
+    telescopeRotatorRad: PropTypes.number,
+    /** Whether to display the RA and DEC in hour format */
+    raDecHourFormat: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -559,6 +568,11 @@ export default class MTDome extends Component {
       currentPointingEl,
       targetPointingAz,
       targetPointingEl,
+      telescopeRAHour,
+      telescopeRADeg,
+      telescopeDecDeg,
+      telescopeRotatorRad,
+      raDecHourFormat,
     } = this.props;
 
     const currentPointing = {
@@ -642,6 +656,11 @@ export default class MTDome extends Component {
                 positionCommandedShutter={positionCommandedShutter}
                 currentPointing={currentPointing}
                 targetPointing={targetPointing}
+                telescopeRAHour={telescopeRAHour}
+                telescopeRADeg={telescopeRADeg}
+                telescopeDecDeg={telescopeDecDeg}
+                telescopeRotatorRad={telescopeRotatorRad}
+                raDecHourFormat={raDecHourFormat}
               />
             </div>
           </div>

@@ -27,6 +27,7 @@ import {
   getDomeAzimuth,
   getLightWindScreen,
   getPointingStatus,
+  getMainTelescopeState,
 } from '../../../redux/selectors';
 import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
@@ -46,6 +47,12 @@ export const schema = {
       description: "Whether to display controls to configure periods of time'",
       default: true,
       isPrivate: false,
+    },
+    raDecHourFormat: {
+      type: 'boolean',
+      description: 'Whether to display the RA and DEC in hour format',
+      isPrivate: false,
+      default: false,
     },
   },
 };
@@ -72,6 +79,11 @@ const MTDomeContainer = ({
   targetPointingAz,
   currentPointingEl,
   targetPointingEl,
+  telescopeRAHour,
+  telescopeRADeg,
+  telescopeDecDeg,
+  telescopeRotatorRad,
+  raDecHourFormat,
   ...props
 }) => {
   if (props.isRaw) {
@@ -100,6 +112,11 @@ const MTDomeContainer = ({
       targetPointingAz={targetPointingAz}
       currentPointingEl={currentPointingEl}
       targetPointingEl={targetPointingEl}
+      telescopeRAHour={telescopeRAHour}
+      telescopeRADeg={telescopeRADeg}
+      telescopeDecDeg={telescopeDecDeg}
+      telescopeRotatorRad={telescopeRotatorRad}
+      raDecHourFormat={raDecHourFormat}
     />
   );
 };
@@ -111,6 +128,7 @@ const mapStateToProps = (state) => {
   const lightWindScreenState = getLightWindScreen(state);
   const domeAzimuthState = getDomeAzimuth(state);
   const pointingState = getPointingStatus(state);
+  const telescopeState = getMainTelescopeState(state);
   return {
     ...domeState,
     ...louversState,
@@ -118,6 +136,7 @@ const mapStateToProps = (state) => {
     ...lightWindScreenState,
     ...domeAzimuthState,
     ...pointingState,
+    ...telescopeState,
   };
 };
 
@@ -129,6 +148,8 @@ const mapDispatchToProps = (dispatch) => {
     'telemetry-MTDome-0-louvers',
     'telemetry-MTMount-0-azimuth',
     'telemetry-MTMount-0-elevation',
+    'telemetry-MTPtg-0-mountStatus',
+    'telemetry-MTPtg-0-mountPosition',
     'event-MTDome-0-azEnabled',
     'event-MTDome-0-azMotion',
     'event-MTDome-0-azTarget',
@@ -136,6 +157,8 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTMount-0-target',
     'event-MTDome-0-summaryState',
     'event-MTMount-0-summaryState',
+    'event-MTPtg-0-currentTarget',
+
   ];
   return {
     subscriptions,
