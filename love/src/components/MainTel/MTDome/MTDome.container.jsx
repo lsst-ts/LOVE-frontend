@@ -79,6 +79,7 @@ const MTDomeContainer = ({
   targetPointingAz,
   currentPointingEl,
   targetPointingEl,
+  targetName,
   telescopeRAHour,
   telescopeRADeg,
   telescopeDecDeg,
@@ -112,6 +113,7 @@ const MTDomeContainer = ({
       targetPointingAz={targetPointingAz}
       currentPointingEl={currentPointingEl}
       targetPointingEl={targetPointingEl}
+      targetName={targetName}
       telescopeRAHour={telescopeRAHour}
       telescopeRADeg={telescopeRADeg}
       telescopeDecDeg={telescopeDecDeg}
@@ -158,7 +160,6 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTDome-0-summaryState',
     'event-MTMount-0-summaryState',
     'event-MTPtg-0-currentTarget',
-
   ];
   return {
     subscriptions,

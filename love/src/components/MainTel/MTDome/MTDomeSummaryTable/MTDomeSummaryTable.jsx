@@ -109,6 +109,7 @@ export default class MTDomeSummaryTable extends Component {
       targetPointing,
       positionActualShutter,
       positionCommandedShutter,
+      targetName,
       telescopeRAHour,
       telescopeRADeg,
       telescopeDecDeg,
@@ -129,7 +130,7 @@ export default class MTDomeSummaryTable extends Component {
     const shutterPositionCommanded1 = Math.round(positionCommandedShutter[0] ?? 0);
     const shutterPositionActual2 = Math.round(positionActualShutter[1] ?? 0);
     const shutterPositionCommanded2 = Math.round(positionCommandedShutter[1] ?? 0);
-    
+
     const parsedTelescopeRAHour = formatHoursToDigital(telescopeRAHour);
     const parsedTelescopeDecHour = degreesToDMS(telescopeDecDeg);
     const parsedTelescopeRADeg = defaultNumberFormatter(telescopeRADeg, 2) + '°';
@@ -143,6 +144,8 @@ export default class MTDomeSummaryTable extends Component {
         <SummaryPanel className={styles.summaryTable}>
           <Title>Track ID</Title>
           <Value>{trackId?.toString()}</Value>
+          <Label>Target Name</Label>
+          <Value>{targetName}</Value>
           <Label>Telescope RA</Label>
           <Value>{telescopeRAText}</Value>
           <Label>Telescope Dec</Label>

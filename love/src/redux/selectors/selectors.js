@@ -723,7 +723,6 @@ export const getATMCSState = (state) => {
     'event-ATMCS-0-positionLimits',
     'event-ATMCS-0-summaryState',
     'event-ATPtg-0-timesOfLimits',
-    `event-ATPtg-0-currentTarget`,
   ];
   const data = getStreamsData(state, subscriptions);
   const [minEl, minAz, minNas1, minNas2, minM3] = data['event-ATMCS-0-positionLimits']?.[0].minimum?.value ?? [
@@ -761,7 +760,6 @@ export const getATMCSState = (state) => {
     timeRotLim: data['event-ATPtg-0-timesOfLimits']?.[0].timeRotLim?.value ?? 0,
     timeUnobservable: data['event-ATPtg-0-timesOfLimits']?.[0].timeUnobservable?.value ?? 0,
     timeElHighLimit: data['event-ATPtg-0-timesOfLimits']?.[0].timeElHighLimit?.value ?? 0,
-    targetName: data[`event-ATPtg-0-currentTarget`]?.[0].targetName?.value ?? 'Unknown',
   };
 };
 
@@ -769,6 +767,7 @@ export const getAuxiliaryTelescopeState = (state) => {
   const subscriptions = [
     'telemetry-ATPtg-0-mountStatus',
     'telemetry-ATPtg-0-mountPosition',
+    'event-ATPtg-0-currentTarget',
   ];
   const data = getStreamsData(state, subscriptions);
   return {
@@ -776,6 +775,7 @@ export const getAuxiliaryTelescopeState = (state) => {
     telescopeRADeg: data['telemetry-ATPtg-0-mountPosition']?.ra?.value ?? 0,
     telescopeDecDeg: data['telemetry-ATPtg-0-mountStatus']?.mountDec?.value ?? 0,
     telescopeRotatorRad: data['telemetry-ATPtg-0-mountStatus']?.mountRot?.value ?? 0,
+    targetName: data['event-ATPtg-0-currentTarget']?.[0].targetName?.value ?? 'Unknown',
   };
 };
 
@@ -1310,14 +1310,16 @@ export const getDomeStatus = (state) => {
 export const getMainTelescopeState = (state) => {
   const subscriptions = [
     'telemetry-MTPtg-0-mountStatus',
-    'telemetry-MTPtg-0-mountPosition'
+    'telemetry-MTPtg-0-mountPosition',
+    'event-MTPtg-0-currentTarget',
   ];
   const data = getStreamsData(state, subscriptions);
   return {
-    telescopeRAHour: data[`telemetry-MTPtg-0-mountStatus`]?.mountRA?.value ?? 0,
-    telescopeRADeg: data[`telemetry-MTPtg-0-mountPosition`]?.ra?.value ?? 0,
-    telescopeDecDeg: data[`telemetry-MTPtg-0-mountStatus`]?.mountDec?.value ?? 0,
-    telescopeRotatorRad: data[`telemetry-MTPtg-0-mountStatus`]?.mountRot?.value ?? 0,
+    telescopeRAHour: data['telemetry-MTPtg-0-mountStatus']?.mountRA?.value ?? 0,
+    telescopeRADeg: data['telemetry-MTPtg-0-mountPosition']?.ra?.value ?? 0,
+    telescopeDecDeg: data['telemetry-MTPtg-0-mountStatus']?.mountDec?.value ?? 0,
+    telescopeRotatorRad: data['telemetry-MTPtg-0-mountStatus']?.mountRot?.value ?? 0,
+    targetName: data['event-MTPtg-0-currentTarget']?.[0].targetName?.value ?? 'Unknown',
   };
 };
 

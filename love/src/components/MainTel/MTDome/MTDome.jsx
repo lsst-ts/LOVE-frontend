@@ -568,6 +568,7 @@ export default class MTDome extends Component {
       currentPointingEl,
       targetPointingAz,
       targetPointingEl,
+      targetName,
       telescopeRAHour,
       telescopeRADeg,
       telescopeDecDeg,
@@ -656,6 +657,7 @@ export default class MTDome extends Component {
                 positionCommandedShutter={positionCommandedShutter}
                 currentPointing={currentPointing}
                 targetPointing={targetPointing}
+                targetName={targetName}
                 telescopeRAHour={telescopeRAHour}
                 telescopeRADeg={telescopeRADeg}
                 telescopeDecDeg={telescopeDecDeg}
