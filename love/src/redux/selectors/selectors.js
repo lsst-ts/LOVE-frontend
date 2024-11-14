@@ -121,23 +121,45 @@ export const getAlignmentState = (state) => {
 // MTM1M3 selectors
 export const getM1M3ActuatorsState = (state) => {
   const subscriptions = [
-    'telemetry-MTM1M3-0-forceActuatorData',
     'event-MTM1M3-0-forceActuatorInfo',
     'event-MTM1M3-0-forceActuatorState',
     'event-MTM1M3-0-enabledForceActuators',
   ];
   const m1m3Data = getStreamsData(state, subscriptions);
   return {
-    forceActuatorData: m1m3Data['telemetry-MTM1M3-0-forceActuatorData'] ?? {},
     xPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.xPosition?.value ?? [],
     yPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.yPosition?.value ?? [],
     zPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.zPosition?.value ?? [],
     actuatorReferenceId: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.referenceId?.value ?? [],
+    actuatorType: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.actuatorType?.value ?? [],
+    actuatorOrientation: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.actuatorOrientation?.value ?? [],
+    actuatorModbusSubnet: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.modbusSubnet?.value ?? [],
+    actuatorModbusAddress: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.modbusAddress?.value ?? [],
     actuatorIlcUniqueId: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.ilcUniqueId?.value ?? [],
-    actuatorIlcState: m1m3Data['event-MTM1M3-0-forceActuatorState']?.[0]?.ilcState?.value ?? [],
-    actuatorMinorRevision: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.minorRevision?.value ?? [],
+    actuatorIlcApplicationType: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.ilcApplicationType?.value ?? [],
+    actuatorIlcSelectedOptions: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.ilcSelectedOptions?.value ?? [],
+    actuatorNetworkNodeType: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.networkNodeType?.value ?? [],
     actuatorMayorRevision: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.majorRevision?.value ?? [],
+    actuatorMinorRevision: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.minorRevision?.value ?? [],
+    actuatorAdcScanRate: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.adcScanRate?.value ?? [],
+    actuatorMezzanineUniqueId: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.mezzanineUniqueId?.value ?? [],
+    actuatorMezzanineFirmwareType:
+      m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.mezzanineFirmwareType?.value ?? [],
+    actuatorMezzanineMajorRevision:
+      m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.mezzanineMajorRevision?.value ?? [],
+    actuatorMezzanineMinorRevision:
+      m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.mezzanineMinorRevision?.value ?? [],
+    actuatorIlcState: m1m3Data['event-MTM1M3-0-forceActuatorState']?.[0]?.ilcState?.value ?? [],
     actuatorEnabled: m1m3Data['event-MTM1M3-0-enabledForceActuators']?.[0]?.forceActuatorEnabled?.value ?? [],
+  };
+};
+
+export const getM1M3ForceControllerState = (state) => {
+  const subscriptions = ['event-MTM1M3-0-forceControllerState'];
+  const m1m3Data = getStreamsData(state, subscriptions);
+  return {
+    balanceForcesApplied:
+      m1m3Data['event-MTM1M3-0-forceControllerState']?.[0]?.balanceForcesApplied?.value ?? undefined,
   };
 };
 
@@ -172,6 +194,11 @@ export const getM1M3HardpointActuatorData = (state) => {
     hardpointsXRotation: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData']?.xRotation?.value ?? 0,
     hardpointsYRotation: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData']?.yRotation?.value ?? 0,
     hardpointsZRotation: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData']?.zRotation?.value ?? 0,
+    hardpointsStepsQueued: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData']?.stepsQueued?.value ?? [],
+    hardpointsStepsCommanded: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData']?.stepsCommanded?.value ?? [],
+    hardpointsEncoder: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData']?.encoder?.value ?? [],
+    hardpointsMeasuredForce: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData']?.measuredForce?.value ?? [],
+    hardpointsDisplacement: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData']?.displacement?.value ?? [],
   };
 };
 
@@ -188,6 +215,29 @@ export const getM1M3HardpointActuatorState = (state) => {
   };
 };
 
+export const getM1M3HardpointActuatorSettings = (state) => {
+  const subscriptions = ['event-MTM1M3-0-hardpointActuatorSettings'];
+  const m1m3Data = getStreamsData(state, subscriptions);
+  return {
+    hardpointMeasuredForceWarningHigh:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorSettings']?.[0]?.hardpointMeasuredForceWarningHigh?.value ?? 0,
+    hardpointMeasuredForceWarningLow:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorSettings']?.[0]?.hardpointMeasuredForceWarningLow?.value ?? 0,
+    hardpointMeasuredForceFaultHigh:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorSettings']?.[0]?.hardpointMeasuredForceFaultHigh?.value ?? 0,
+    hardpointMeasuredForceFaultLow:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorSettings']?.[0]?.hardpointMeasuredForceFaultLow?.value ?? 0,
+    hardpointMeasuredForceFSBWarningHigh:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorSettings']?.[0]?.hardpointMeasuredForceFSBWarningHigh?.value ?? 0,
+    hardpointMeasuredForceFSBWarningLow:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorSettings']?.[0]?.hardpointMeasuredForceFSBWarningLow?.value ?? 0,
+    hardpointBreakawayFaultLow:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorSettings']?.[0]?.hardpointBreakawayFaultLow?.value ?? 0,
+    hardpointBreakawayFaultHigh:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorSettings']?.[0]?.hardpointBreakawayFaultHigh?.value ?? 0,
+  };
+};
+
 export const getM1M3HardpointMonitorData = (state) => {
   const subscriptions = ['telemetry-MTM1M3-0-hardpointMonitorData'];
   const m1m3Data = getStreamsData(state, subscriptions);
@@ -195,7 +245,56 @@ export const getM1M3HardpointMonitorData = (state) => {
     hardpointsBreakawayLVDT: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.breakawayLVDT?.value ?? [],
     hardpointsDisplacementLVDT: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.displacementLVDT?.value ?? [],
     hardpointsBreakawayPressure: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.breakawayPressure?.value ?? [],
+    hardpointsPressureSensor1: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.pressureSensor1?.value ?? [],
+    hardpointsPressureSensor2: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.pressureSensor2?.value ?? [],
+    hardpointsPressureSensor3: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.pressureSensor3?.value ?? [],
     referenceHardpointId: [1, 2, 3, 4, 5, 6],
+  };
+};
+
+export const getM1M3HardpointActuatorWarningData = (state) => {
+  const subscriptions = ['event-MTM1M3-0-hardpointActuatorWarning'];
+  const m1m3Data = getStreamsData(state, subscriptions);
+  return {
+    hardpointsMajorFault: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.majorFault?.value ?? [],
+    hardpointsMinorFault: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.minorFault?.value ?? [],
+    hardpointsFaultOverride: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.faultOverride?.value ?? [],
+    hardpointsMainCalibrationError:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.mainCalibrationError?.value ?? [],
+    hardpointsBackupCalibrationError:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.backupCalibrationError?.value ?? [],
+    hardpointsLimitSwitch1Operated:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.limitSwitch1Operated?.value ?? [],
+    hardpointsLimitSwitch2Operated:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.limitSwitch2Operated?.value ?? [],
+    hardpointsLowProximityWarning:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.lowProximityWarning?.value ?? [],
+    hardpointsHighProximityWarning:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.highProximityWarning?.value ?? [],
+    hardpointsLowAirPressureFault:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.lowAirPressureFault?.value ?? [],
+    hardpointsHighAirPressureFault:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.highAirPressureFault?.value ?? [],
+    hardpointsUniqueIdCRCError: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.uniqueIdCRCError?.value ?? [],
+    hardpointsApplicationTypeMismatch:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.applicationTypeMismatch?.value ?? [],
+    hardpointsApplicationMissing:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.applicationMissing?.value ?? [],
+    hardpointsApplicationCRCMismatch:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.applicationCRCMismatch?.value ?? [],
+    hardpointsOneWireMissing: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.oneWireMissing?.value ?? [],
+    hardpointsOneWire1Mismatch: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.oneWire1Mismatch?.value ?? [],
+    hardpointsOneWire2Mismatch: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.oneWire2Mismatch?.value ?? [],
+    hardpointsWatchdogReset: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.watchdogReset?.value ?? [],
+    hardpointsBrownOut: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.brownOut?.value ?? [],
+    hardpointsEventTrapReset: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.eventTrapReset?.value ?? [],
+    hardpointsMotorDriverFault: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.motorDriverFault?.value ?? [],
+    hardpointsSsrPowerFault: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.ssrPowerFault?.value ?? [],
+    hardpointsAuxPowerFault: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.auxPowerFault?.value ?? [],
+    hardpointsSmcPowerFault: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.smcPowerFault?.value ?? [],
+    hardpointsIlcFault: m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.ilcFault?.value ?? [],
+    hardpointsBroadcastCounterWarning:
+      m1m3Data['event-MTM1M3-0-hardpointActuatorWarning']?.[0]?.broadcastCounterWarning?.value ?? [],
   };
 };
 
@@ -237,34 +336,77 @@ export const getM1M3State = (state) => {
 
 export const getM1M3ActuatorForces = (state) => {
   const subscriptions = [
-    'telemetry-MTM1M3-0-appliedForces',
+    'telemetry-MTM1M3-0-forceActuatorData',
     'telemetry-MTM1M3-0-appliedAccelerationForces',
     'telemetry-MTM1M3-0-appliedAzimuthForces',
     'telemetry-MTM1M3-0-appliedBalanceForces',
     'telemetry-MTM1M3-0-appliedCylinderForces',
     'telemetry-MTM1M3-0-appliedElevationForces',
+    'telemetry-MTM1M3-0-appliedForces',
     'telemetry-MTM1M3-0-appliedThermalForces',
     'telemetry-MTM1M3-0-appliedVelocityForces',
+    'event-MTM1M3-0-enabledForceActuators',
+    'event-MTM1M3-0-forceActuatorInfo',
+    'event-MTM1M3-0-forceActuatorState',
     'event-MTM1M3-0-appliedActiveOpticForces',
     'event-MTM1M3-0-appliedOffsetForces',
     'event-MTM1M3-0-appliedStaticForces',
+    'event-MTM1M3-0-preclippedAccelerationForces',
+    'event-MTM1M3-0-preclippedActiveOpticForces',
+    'event-MTM1M3-0-preclippedAzimuthForces',
+    'event-MTM1M3-0-preclippedBalanceForces',
+    'event-MTM1M3-0-preclippedCylinderForces',
+    'event-MTM1M3-0-preclippedElevationForces',
+    'event-MTM1M3-0-preclippedForces',
+    'event-MTM1M3-0-preclippedOffsetForces',
+    'event-MTM1M3-0-preclippedStaticForces',
+    'event-MTM1M3-0-preclippedThermalForces',
+    'event-MTM1M3-0-preclippedVelocityForces',
+    'event-MTM1M3-0-raisingLoweringInfo',
+    'event-MTM1M3-0-forceActuatorWarning',
+    'event-MTM1M3-0-forceActuatorForceWarning',
+    'event-MTM1M3-0-forceActuatorFollowingErrorCounter',
+    'event-MTM1M3-0-forceSetpointWarning',
+    'event-MTM1M3-0-forceActuatorBumpTestStatus',
   ];
   const m1m3Data = getStreamsData(state, subscriptions);
   return {
-    appliedForces: m1m3Data['telemetry-MTM1M3-0-appliedForces'] ?? {},
-    appliedAccelerationForces: m1m3Data['telemetry-MTM1M3-0-appliedAccelerationForce'] ?? {},
+    forceActuatorData: m1m3Data['telemetry-MTM1M3-0-forceActuatorData'] ?? {},
+    appliedAccelerationForces: m1m3Data['telemetry-MTM1M3-0-appliedAccelerationForces'] ?? {},
     appliedAzimuthForces: m1m3Data['telemetry-MTM1M3-0-appliedAzimuthForces'] ?? {},
     appliedBalanceForces: m1m3Data['telemetry-MTM1M3-0-appliedBalanceForces'] ?? {},
     appliedCylinderForces: m1m3Data['telemetry-MTM1M3-0-appliedCylinderForces'] ?? {},
     appliedElevationForces: m1m3Data['telemetry-MTM1M3-0-appliedElevationForces'] ?? {},
+    appliedForces: m1m3Data['telemetry-MTM1M3-0-appliedForces'] ?? {},
     appliedThermalForces: m1m3Data['telemetry-MTM1M3-0-appliedThermalForces'] ?? {},
     appliedVelocityForces: m1m3Data['telemetry-MTM1M3-0-appliedVelocityForces'] ?? {},
+    enabledForceActuators: m1m3Data['event-MTM1M3-0-enabledForceActuators']?.[0] ?? {},
+    forceActuatorInfo: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0] ?? {},
+    forceActuatorState: m1m3Data['event-MTM1M3-0-forceActuatorState']?.[0] ?? {},
     appliedActiveOpticForces: m1m3Data['event-MTM1M3-0-appliedActiveOpticForces']?.[0] ?? {},
     appliedOffsetForces: m1m3Data['event-MTM1M3-0-appliedOffsetForces']?.[0] ?? {},
     appliedStaticForces: m1m3Data['event-MTM1M3-0-appliedStaticForces']?.[0] ?? {},
+    preclippedAccelerationForces: m1m3Data['event-MTM1M3-0-preclippedAccelerationForces']?.[0] ?? {},
+    preclippedActiveOpticForces: m1m3Data['event-MTM1M3-0-preclippedActiveOpticForces']?.[0] ?? {},
+    preclippedAzimuthForces: m1m3Data['event-MTM1M3-0-preclippedAzimuthForces']?.[0] ?? {},
+    preclippedBalanceForces: m1m3Data['event-MTM1M3-0-preclippedBalanceForces']?.[0] ?? {},
+    preclippedCylinderForces: m1m3Data['event-MTM1M3-0-preclippedCylinderForces']?.[0] ?? {},
+    preclippedElevationForces: m1m3Data['event-MTM1M3-0-preclippedElevationForces']?.[0] ?? {},
+    preclippedForces: m1m3Data['event-MTM1M3-0-preclippedForces']?.[0] ?? {},
+    preclippedOffsetForces: m1m3Data['event-MTM1M3-0-preclippedOffsetForces']?.[0] ?? {},
+    preclippedStaticForces: m1m3Data['event-MTM1M3-0-preclippedStaticForces']?.[0] ?? {},
+    preclippedThermalForces: m1m3Data['event-MTM1M3-0-preclippedThermalForces']?.[0] ?? {},
+    preclippedVelocityForces: m1m3Data['event-MTM1M3-0-preclippedVelocityForces']?.[0] ?? {},
+    raisingLoweringInfo: m1m3Data['event-MTM1M3-0-raisingLoweringInfo']?.[0] ?? {},
+    forceActuatorWarning: m1m3Data['event-MTM1M3-0-forceActuatorWarning']?.[0] ?? {},
+    forceActuatorForceWarning: m1m3Data['event-MTM1M3-0-forceActuatorForceWarning']?.[0] ?? {},
+    forceActuatorFollowingErrorCounter: m1m3Data['event-MTM1M3-0-forceActuatorFollowingErrorCounter']?.[0] ?? {},
+    forceSetpointWarning: m1m3Data['event-MTM1M3-0-forceSetpointWarning']?.[0] ?? {},
+    forceActuatorBumpTestStatus: m1m3Data['event-MTM1M3-0-forceActuatorBumpTestStatus']?.[0] ?? {},
   };
 };
 
+// MTM1M3TS selectors
 export const getM1M3TSMixingState = (state) => {
   const subscriptions = ['telemetry-MTM1M3TS-0-mixingValve'];
   const m1m3tsData = getStreamsData(state, subscriptions);
@@ -461,13 +603,11 @@ export const getM2Actuator = (state) => {
   ];
   const m2ActuatorsData = getStreamsData(state, subscriptions);
   return {
-    actuatorIlcState: m2ActuatorsData['telemetry-MTM2-0-ilcData']?.status?.value ?? Array(78).fill(0),
-    axialActuatorSteps: m2ActuatorsData['telemetry-MTM2-0-axialActuatorSteps']?.steps?.value ?? Array(72).fill(0),
-    axialEncoderPositions:
-      m2ActuatorsData['telemetry-MTM2-0-axialEncoderPositions']?.positions?.value ?? Array(72).fill(0),
-    tangentActuatorSteps: m2ActuatorsData['telemetry-MTM2-0-tangentActuatorSteps']?.steps?.value ?? Array(6).fill(0),
-    tangentEncoderPositions:
-      m2ActuatorsData['telemetry-MTM2-0-tangentEncoderPositions']?.positions?.value ?? Array(6).fill(0),
+    actuatorIlcState: m2ActuatorsData['telemetry-MTM2-0-ilcData']?.status?.value ?? [],
+    axialActuatorSteps: m2ActuatorsData['telemetry-MTM2-0-axialActuatorSteps']?.steps?.value ?? [],
+    axialEncoderPositions: m2ActuatorsData['telemetry-MTM2-0-axialEncoderPositions']?.positions?.value ?? [],
+    tangentActuatorSteps: m2ActuatorsData['telemetry-MTM2-0-tangentActuatorSteps']?.steps?.value ?? [],
+    tangentEncoderPositions: m2ActuatorsData['telemetry-MTM2-0-tangentEncoderPositions']?.positions?.value ?? [],
   };
 };
 
@@ -475,10 +615,30 @@ export const getM2ActuatorForce = (state) => {
   const subscriptions = ['telemetry-MTM2-0-axialForce', 'telemetry-MTM2-0-tangentForce'];
   const m2ActuatorsData = getStreamsData(state, subscriptions);
   return {
-    axialForceApplied: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.applied?.value ?? Array(72).fill(0),
-    axialForceMeasured: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.measured?.value ?? Array(72).fill(0),
-    tangentForceApplied: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.applied?.value ?? Array(6).fill(0),
-    tangentForceMeasured: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.measured?.value ?? Array(6).fill(0),
+    axialForceApplied: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.applied?.value ?? [],
+    axialForceMeasured: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.measured?.value ?? [],
+    tangentForceApplied: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.applied?.value ?? [],
+    tangentForceMeasured: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.measured?.value ?? [],
+  };
+};
+
+export const getM2ActuatorForceTopics = (state) => {
+  const subscriptions = [
+    'telemetry-MTM2-0-axialActuatorSteps',
+    'telemetry-MTM2-0-axialEncoderPositions',
+    'telemetry-MTM2-0-axialForce',
+    'telemetry-MTM2-0-tangentActuatorSteps',
+    'telemetry-MTM2-0-tangentEncoderPositions',
+    'telemetry-MTM2-0-tangentForce',
+  ];
+  const data = getStreamsData(state, subscriptions);
+  return {
+    axialActuatorSteps: data['telemetry-MTM2-0-axialActuatorSteps'] ?? {},
+    axialEncoderPositions: data['telemetry-MTM2-0-axialEncoderPositions'] ?? {},
+    axialForce: data['telemetry-MTM2-0-axialForce'] ?? {},
+    tangentActuatorSteps: data['telemetry-MTM2-0-tangentActuatorSteps'] ?? {},
+    tangentEncoderPositions: data['telemetry-MTM2-0-tangentEncoderPositions'] ?? {},
+    tangentForce: data['telemetry-MTM2-0-tangentForce'] ?? {},
   };
 };
 
@@ -549,8 +709,6 @@ export const getDomeState = (state) => {
     dropoutDoorState: domeData['event-ATDome-0-dropoutDoorState']?.[0].state?.value ?? 0,
     mainDoorState: domeData['event-ATDome-0-mainDoorState']?.[0].state?.value ?? 0,
     atDomeSummaryState: domeData['event-ATDome-0-summaryState']?.[0].summaryState?.value ?? 0,
-    // TODO: The following parameter is missing a CSC, add it when it becomes available//
-    atDomeTracking: 0,
   };
 };
 
@@ -563,9 +721,8 @@ export const getATMCSState = (state) => {
     'event-ATMCS-0-allAxesInPosition',
     'event-ATMCS-0-m3State',
     'event-ATMCS-0-positionLimits',
-    'event-ATPtg-1-timesOfLimits',
     'event-ATMCS-0-summaryState',
-    `event-ATPtg-1-currentTarget`,
+    'event-ATPtg-0-timesOfLimits',
   ];
   const data = getStreamsData(state, subscriptions);
   const [minEl, minAz, minNas1, minNas2, minM3] = data['event-ATMCS-0-positionLimits']?.[0].minimum?.value ?? [
@@ -595,25 +752,30 @@ export const getATMCSState = (state) => {
     maxNas1,
     maxNas2,
     maxM3,
-    timeAzLim: data['event-ATPtg-1-timesOfLimits']?.[0].timeAzLim?.value ?? 0,
-    timeRotLim: data['event-ATPtg-1-timesOfLimits']?.[0].timeRotLim?.value ?? 0,
-    timeUnobservable: data['event-ATPtg-1-timesOfLimits']?.[0].timeUnobservable?.value ?? 0,
-    timeElHighLimit: data['event-ATPtg-1-timesOfLimits']?.[0].timeElHighLimit?.value ?? 0,
     currentPointingAz: data['telemetry-ATMCS-0-mount_AzEl_Encoders']?.azimuthCalculatedAngle?.value?.[0],
     currentPointingEl: data['telemetry-ATMCS-0-mount_AzEl_Encoders']?.elevationCalculatedAngle?.value?.[0],
     currentPointingNasmyth1: data['telemetry-ATMCS-0-mount_Nasmyth_Encoders']?.nasmyth1CalculatedAngle?.value?.[0],
     currentPointingNasmyth2: data['telemetry-ATMCS-0-mount_Nasmyth_Encoders']?.nasmyth2CalculatedAngle?.value?.[0],
-    targetName: data[`event-ATPtg-1-currentTarget`]?.[0].targetName?.value ?? 'Unknown',
+    timeAzLim: data['event-ATPtg-0-timesOfLimits']?.[0].timeAzLim?.value ?? 0,
+    timeRotLim: data['event-ATPtg-0-timesOfLimits']?.[0].timeRotLim?.value ?? 0,
+    timeUnobservable: data['event-ATPtg-0-timesOfLimits']?.[0].timeUnobservable?.value ?? 0,
+    timeElHighLimit: data['event-ATPtg-0-timesOfLimits']?.[0].timeElHighLimit?.value ?? 0,
   };
 };
 
 export const getAuxiliaryTelescopeState = (state) => {
-  const subscriptions = ['telemetry-Scheduler-2-observatoryState'];
+  const subscriptions = [
+    'telemetry-ATPtg-0-mountStatus',
+    'telemetry-ATPtg-0-mountPosition',
+    'event-ATPtg-0-currentTarget',
+  ];
   const data = getStreamsData(state, subscriptions);
   return {
-    telescopeRA: data['telemetry-Scheduler-2-observatoryState']?.ra?.value ?? 0,
-    telescopeDec: data['telemetry-Scheduler-2-observatoryState']?.declination?.value ?? 0,
-    telescopeRotator: data['telemetry-Scheduler-2-observatoryState']?.telescopeRotator?.value ?? 0,
+    telescopeRAHour: data['telemetry-ATPtg-0-mountStatus']?.mountRA?.value ?? 0,
+    telescopeRADeg: data['telemetry-ATPtg-0-mountPosition']?.ra?.value ?? 0,
+    telescopeDecDeg: data['telemetry-ATPtg-0-mountStatus']?.mountDec?.value ?? 0,
+    telescopeRotatorRad: data['telemetry-ATPtg-0-mountStatus']?.mountRot?.value ?? 0,
+    targetName: data['event-ATPtg-0-currentTarget']?.[0].targetName?.value ?? 'Unknown',
   };
 };
 
@@ -1142,8 +1304,22 @@ export const getDomeStatus = (state) => {
     azimuthDomeTarget: domeStatus['event-MTDome-0-azTarget']?.[0]?.position?.value ?? 0,
     modeDomeStatus: domeStatus['event-MTDome-0-operationalMode']?.[0]?.operationalMode?.value ?? 0,
     mtMountSummaryState: domeStatus['event-MTMount-0-summaryState']?.[0]?.summaryState?.value ?? 0,
-    // TODO: The following parameter is missing a CSC, add it when it becomes available//
-    mtDomeTracking: 0,
+  };
+};
+
+export const getMainTelescopeState = (state) => {
+  const subscriptions = [
+    'telemetry-MTPtg-0-mountStatus',
+    'telemetry-MTPtg-0-mountPosition',
+    'event-MTPtg-0-currentTarget',
+  ];
+  const data = getStreamsData(state, subscriptions);
+  return {
+    telescopeRAHour: data['telemetry-MTPtg-0-mountStatus']?.mountRA?.value ?? 0,
+    telescopeRADeg: data['telemetry-MTPtg-0-mountPosition']?.ra?.value ?? 0,
+    telescopeDecDeg: data['telemetry-MTPtg-0-mountStatus']?.mountDec?.value ?? 0,
+    telescopeRotatorRad: data['telemetry-MTPtg-0-mountStatus']?.mountRot?.value ?? 0,
+    targetName: data['event-MTPtg-0-currentTarget']?.[0].targetName?.value ?? 'Unknown',
   };
 };
 

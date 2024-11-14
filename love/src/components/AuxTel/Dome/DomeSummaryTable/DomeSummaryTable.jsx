@@ -18,10 +18,15 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { Component } from 'react';
-import styles from './DomeSummaryTable.module.css';
+import PropTypes from 'prop-types';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import CurrentTargetValue from 'components/GeneralPurpose/CurrentTargetValue/CurrentTargetValue';
-import PropTypes from 'prop-types';
+import Limits from 'components/GeneralPurpose/Limits/Limits';
+import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
+import Row from 'components/GeneralPurpose/SummaryPanel/Row';
+import Label from 'components/GeneralPurpose/SummaryPanel/Label';
+import Value from 'components/GeneralPurpose/SummaryPanel/Value';
+import Title from 'components/GeneralPurpose/SummaryPanel/Title';
 import {
   domeAzimuthStateMap,
   dropoutDoorStateMap,
@@ -30,17 +35,11 @@ import {
   stateToStyleDomeAndMount,
   summaryStateToStyle,
   summaryStateMap,
-  atDomeTrackingStateMap,
-  atDomeTrackingStatetoStyle,
-} from '../../../../Config';
-import Limits from 'components/GeneralPurpose/Limits/Limits';
-import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
-import Row from 'components/GeneralPurpose/SummaryPanel/Row';
-import Label from 'components/GeneralPurpose/SummaryPanel/Label';
-import Value from 'components/GeneralPurpose/SummaryPanel/Value';
-import Title from 'components/GeneralPurpose/SummaryPanel/Title';
-import { stateToStyleDome, stateToStyleMount } from '../../../../Config';
-import { fixedFloat } from 'Utils';
+  stateToStyleDome,
+  stateToStyleMount,
+} from 'Config';
+import { fixedFloat, degrees, degreesToDMS, defaultNumberFormatter, formatHoursToDigital } from 'Utils';
+import styles from './DomeSummaryTable.module.css';
 
 export default class DomeSummaryTable extends Component {
   static propTypes = {
@@ -68,6 +67,12 @@ export default class DomeSummaryTable extends Component {
     minM3: PropTypes.number,
     atDomeSummaryState: PropTypes.number,
     ATMCSSummaryState: PropTypes.number,
+    targetName: PropTypes.string,
+    telescopeRAHour: PropTypes.number,
+    telescopeRADeg: PropTypes.number,
+    telescopeDecDeg: PropTypes.number,
+    telescopeRotatorRad: PropTypes.number,
+    raDecHourFormat: PropTypes.bool,
   };
 
   static defaultProps = {};
@@ -104,8 +109,12 @@ export default class DomeSummaryTable extends Component {
       minNas2,
       atDomeSummaryState,
       ATMCSSummaryState,
-      domeTracking,
       targetName,
+      telescopeRAHour,
+      telescopeRADeg,
+      telescopeDecDeg,
+      telescopeRotatorRad,
+      raDecHourFormat,
     } = this.props;
 
     const azimuthStateValue = domeAzimuthStateMap[this.props.azimuthState];
@@ -141,13 +150,18 @@ export default class DomeSummaryTable extends Component {
     const atDomeSummaryStateValue = summaryStateMap[atDomeSummaryState];
     const ATMCSSummaryStateValue = summaryStateMap[ATMCSSummaryState];
 
-    const domeTrackingName = atDomeTrackingStateMap[domeTracking];
-    const domeTrackingStyle = atDomeTrackingStatetoStyle[domeTrackingName];
-
     let domeInPositionLabel = 'UNKNOWN';
     if (domeInPositionValue !== 0) domeInPositionLabel = domeInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
     let mountInPositionLabel = 'UNKNOWN';
     if (mountInPositionValue !== 0) mountInPositionLabel = mountInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
+
+    const parsedTelescopeRAHour = formatHoursToDigital(telescopeRAHour);
+    const parsedTelescopeDecHour = degreesToDMS(telescopeDecDeg);
+    const parsedTelescopeRADeg = defaultNumberFormatter(telescopeRADeg, 2) + '°';
+    const parsedTelescopeDecDeg = defaultNumberFormatter(telescopeDecDeg, 2) + '°';
+    const parsedTelescopeRotatorDeg = defaultNumberFormatter(degrees(telescopeRotatorRad), 2) + '°';
+    const telescopeRAText = raDecHourFormat ? parsedTelescopeRAHour : parsedTelescopeRADeg;
+    const telescopeDecText = raDecHourFormat ? parsedTelescopeDecHour : parsedTelescopeDecDeg;
 
     return (
       <SummaryPanel className={styles.summaryTable}>
@@ -155,6 +169,12 @@ export default class DomeSummaryTable extends Component {
         <Value>{this.props.trackID?.toString()}</Value>
         <Label>Target Name</Label>
         <Value>{targetName}</Value>
+        <Label>Telescope RA</Label>
+        <Value>{telescopeRAText}</Value>
+        <Label>Telescope Dec</Label>
+        <Value>{telescopeDecText}</Value>
+        <Label>Rotator</Label>
+        <Value>{parsedTelescopeRotatorDeg}</Value>
         {/* Dome */}
         <Title>ATDome CSC</Title>
         <Value>
@@ -167,10 +187,6 @@ export default class DomeSummaryTable extends Component {
           <StatusText title={domeInPositionValue} status={stateToStyleDome[domeInPositionLabel]} small>
             {domeInPositionLabel}
           </StatusText>
-        </Value>
-        <Label>Tracking</Label>
-        <Value>
-          <StatusText status={domeTrackingStyle}>{domeTrackingName}</StatusText>
         </Value>
         <Label>Azimuth</Label>
         <Value>

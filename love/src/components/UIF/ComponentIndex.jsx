@@ -498,6 +498,26 @@ export const mainIndex = {
       },
     },
   },
+  M1M3Compact: {
+    component: require('../MainTel/M1M3/M1M3Compact.container').default,
+    schema: {
+      ...require('../MainTel/M1M3/M1M3Compact.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/M1M3/M1M3Compact.container').schema.props,
+      },
+    },
+  },
+  M1M3HardpointsDataTable: {
+    component: require('../MainTel/M1M3/M1M3HardpointsDataTable.container').default,
+    schema: {
+      ...require('../MainTel/M1M3/M1M3HardpointsDataTable.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/M1M3/M1M3HardpointsDataTable.container').schema.props,
+      },
+    },
+  },
   GlycolLoop: {
     component: require('../MainTel/GlycolLoop/GlycolLoop.container').default,
     schema: {
@@ -535,6 +555,16 @@ export const mainIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../MainTel/M2/M2Table.container').schema.props,
+      },
+    },
+  },
+  M2Compact: {
+    component: require('../MainTel/M2/M2Compact.container').default,
+    schema: {
+      ...require('../MainTel/M2/M2Compact.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/M2/M2Compact.container').schema.props,
       },
     },
   },

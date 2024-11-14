@@ -28,9 +28,8 @@ import Azimuth from 'components/GeneralPurpose/Azimuth/Azimuth';
 import Elevation from 'components/GeneralPurpose/Elevation/Elevation';
 import WindRose from '../../icons/WindRose/WindRose';
 import MTDomeSummaryTable from './MTDomeSummaryTable/MTDomeSummaryTable';
-import styles from './MTDome.module.css';
-
 import { MTDomeLouversMapAF, MTDomeLouversMapGN } from 'Config';
+import styles from './MTDome.module.css';
 
 const defaultValuesAF = {
   A1: '0',
@@ -218,6 +217,16 @@ export default class MTDome extends Component {
     targetPointingEl: PropTypes.number,
     /** High level state machine state identifier of the MTMount. */
     mtMountSummaryState: PropTypes.number,
+    /** Telescope current RA in hours */
+    telescopeRAHour: PropTypes.number,
+    /** Telescope current RA in degrees */
+    telescopeRADeg: PropTypes.number,
+    /** Telescope current Dec in degrees */
+    telescopeDecDeg: PropTypes.number,
+    /** Telescope rotator position in rad */
+    telescopeRotatorRad: PropTypes.number,
+    /** Whether to display the RA and DEC in hour format */
+    raDecHourFormat: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -536,45 +545,45 @@ export default class MTDome extends Component {
   ];
 
   render() {
-    const isProjected = this.props.isProjected;
-    const width = this.props.width;
-    const height = this.props.height;
+    const {
+      isProjected,
+      width,
+      height,
+      trackId,
+      mtDomeSummaryState,
+      modeDomeStatus,
+      azimuthDomeState,
+      azimuthDomeTarget,
+      azimuthDomeMotion,
+      mtMountSummaryState,
+      positionActualDomeAz,
+      positionCommandedDomeAz,
+      positionActualLightWindScreen,
+      positionCommandedLightWindScreen,
+      positionActualShutter,
+      positionCommandedShutter,
+      actualPositionLouvers,
+      commandedPositionLouvers,
+      currentPointingAz,
+      currentPointingEl,
+      targetPointingAz,
+      targetPointingEl,
+      targetName,
+      telescopeRAHour,
+      telescopeRADeg,
+      telescopeDecDeg,
+      telescopeRotatorRad,
+      raDecHourFormat,
+    } = this.props;
 
-    //SummaryPanel
-    const trackID = this.props.trackId;
-    const mtDomeSummaryState = this.props.mtDomeSummaryState;
-    const modeDomeStatus = this.props.modeDomeStatus;
-    const azimuthDomeState = this.props.azimuthDomeState;
-    const azimuthDomeTarget = this.props.azimuthDomeTarget;
-    const azimuthDomeMotion = this.props.azimuthDomeMotion;
-    const mtMountSummaryState = this.props.mtMountSummaryState;
-    const mtDomeTracking = this.props.mtDomeTracking;
-
-    //domeAzimuth
-    const positionActualDomeAz = this.props.positionActualDomeAz;
-    const positionCommandedDomeAz = this.props.positionCommandedDomeAz;
-
-    //lightWindScreen
-    const positionActualLightWindScreen = this.props.positionActualLightWindScreen;
-    const positionCommandedLightWindScreen = this.props.positionCommandedLightWindScreen;
-
-    //apertureShutters
-    const positionActualShutter = this.props.positionActualShutter;
-    const positionCommandedShutter = this.props.positionCommandedShutter;
-
-    // Louvers
-    const actualPositionLouvers = this.props?.actualPositionLouvers;
-    const commandedPositionLouvers = this.props?.commandedPositionLouvers;
-
-    // pointing
     const currentPointing = {
-      az: this.props.currentPointingAz,
-      el: this.props.currentPointingEl,
+      az: currentPointingAz,
+      el: currentPointingEl,
     };
 
     const targetPointing = {
-      az: this.props.targetPointingAz,
-      el: this.props.targetPointingEl,
+      az: targetPointingAz,
+      el: targetPointingEl,
     };
 
     return (
@@ -633,7 +642,7 @@ export default class MTDome extends Component {
             </div>
             <div className={styles.divSummaryTable}>
               <MTDomeSummaryTable
-                trackID={trackID}
+                trackId={trackId}
                 mtDomeSummaryState={mtDomeSummaryState}
                 mtMountSummaryState={mtMountSummaryState}
                 modeDomeStatus={modeDomeStatus}
@@ -648,7 +657,12 @@ export default class MTDome extends Component {
                 positionCommandedShutter={positionCommandedShutter}
                 currentPointing={currentPointing}
                 targetPointing={targetPointing}
-                domeTracking={mtDomeTracking}
+                targetName={targetName}
+                telescopeRAHour={telescopeRAHour}
+                telescopeRADeg={telescopeRADeg}
+                telescopeDecDeg={telescopeDecDeg}
+                telescopeRotatorRad={telescopeRotatorRad}
+                raDecHourFormat={raDecHourFormat}
               />
             </div>
           </div>

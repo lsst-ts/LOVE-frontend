@@ -1,9 +1,9 @@
 /** 
 This file is part of LOVE-frontend.
 
-Copyright (c) 2023 Inria Chile.
-
-Developed by Inria Chile.
+Developed for the LSST Telescope and Site Systems.
+This product includes software developed by the LSST Project
+ (https://www.lsst.org).
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -20,27 +20,45 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import {
-  getM1M3State,
-  getM1M3ActuatorsState,
-  getM1M3ActuatorForces,
-  getM1M3HardpointMonitorData,
-  getM1M3HardpointActuatorState,
-  getAlignmentState,
-} from 'redux/selectors';
+import { getM1M3ActuatorForces, getM1M3ActuatorsState } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
-import M1M3 from './M1M3';
+import M1M3Compact from './M1M3Compact';
 import { EUIs } from 'Config';
 
 export const schema = {
-  description: 'View of M1M3 actuators',
+  description: 'View of M1M3 actuators in compact mode (only show forces on actuators)',
   defaultSize: [61, 32],
   props: {
     title: {
       type: 'string',
       description: 'Name diplayed in the title bar (if visible)',
       isPrivate: false,
-      default: 'M1M3',
+      default: 'M1M3Compact',
+    },
+    showForcesSelector: {
+      type: 'boolean',
+      description:
+        'Whether to show the forces selector. If false, preSelectedForce and preSelectedForceParameter will be used (see below).',
+      isPrivate: false,
+      default: true,
+    },
+    preSelectedForce: {
+      type: 'string',
+      description: 'The force to show by default',
+      isPrivate: false,
+      default: 'Preclipped Forces',
+    },
+    preSelectedForceParameter: {
+      type: 'string',
+      description: 'The force parameter to show by default',
+      isPrivate: false,
+      default: 'zForces',
+    },
+    showActuatorsForces: {
+      type: 'boolean',
+      description: 'Whether to show the actuators forces',
+      isPrivate: false,
+      default: true,
     },
     EUI: {
       type: 'boolean',
@@ -51,36 +69,25 @@ export const schema = {
   },
 };
 
-const M1M3Container = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
+const M1M3CompactContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
-  return <M1M3 subscribeToStreams={subscribeToStreams} unsubscribeToStreams={unsubscribeToStreams} {...props} />;
+  return <M1M3Compact subscribeToStreams={subscribeToStreams} unsubscribeToStreams={unsubscribeToStreams} {...props} />;
 };
 
 const mapStateToProps = (state) => {
-  const m1m3State = getM1M3State(state);
   const actuatorsState = getM1M3ActuatorsState(state);
   const actuatorsForces = getM1M3ActuatorForces(state);
-  const hardpointsMonitor = getM1M3HardpointMonitorData(state);
-  const hardpointsActuatorState = getM1M3HardpointActuatorState(state);
-  const alignmentState = getAlignmentState(state);
   return {
-    ...m1m3State,
     ...actuatorsState,
     ...actuatorsForces,
-    ...hardpointsMonitor,
-    ...hardpointsActuatorState,
-    ...alignmentState,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
     'telemetry-MTM1M3-0-forceActuatorData',
-    'telemetry-MTM1M3-0-hardpointActuatorData',
-    'telemetry-MTM1M3-0-hardpointMonitorData',
-    'telemetry-MTM1M3-0-imsData',
     'telemetry-MTM1M3-0-appliedAccelerationForces',
     'telemetry-MTM1M3-0-appliedAzimuthForces',
     'telemetry-MTM1M3-0-appliedBalanceForces',
@@ -89,13 +96,8 @@ const mapDispatchToProps = (dispatch) => {
     'telemetry-MTM1M3-0-appliedForces',
     'telemetry-MTM1M3-0-appliedThermalForces',
     'telemetry-MTM1M3-0-appliedVelocityForces',
-    'event-MTM1M3-0-summaryState',
-    'event-MTM1M3-0-detailedState',
     'event-MTM1M3-0-forceActuatorState',
     'event-MTM1M3-0-forceActuatorInfo',
-    'event-MTM1M3-0-hardpointActuatorState',
-    'event-MTM1M3-0-hardpointActuatorInfo',
-    'event-MTM1M3-0-hardpointMonitorInfo',
     'event-MTM1M3-0-appliedActiveOpticForces',
     'event-MTM1M3-0-appliedOffsetForces',
     'event-MTM1M3-0-appliedStaticForces',
@@ -112,6 +114,11 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTM1M3-0-preclippedThermalForces',
     'event-MTM1M3-0-preclippedVelocityForces',
     'event-MTM1M3-0-raisingLoweringInfo',
+    'event-MTM1M3-0-forceActuatorWarning',
+    'event-MTM1M3-0-forceActuatorForceWarning',
+    'event-MTM1M3-0-forceActuatorFollowingErrorCounter',
+    'event-MTM1M3-0-forceSetpointWarning',
+    'event-MTM1M3-0-forceActuatorBumpTestStatus',
   ];
   return {
     subscriptions,
@@ -123,4 +130,4 @@ const mapDispatchToProps = (dispatch) => {
     },
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(M1M3Container);
+export default connect(mapStateToProps, mapDispatchToProps)(M1M3CompactContainer);

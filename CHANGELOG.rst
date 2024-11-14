@@ -2,6 +2,15 @@
 Version History
 ===============
 
+v6.4.0
+------
+
+* Update package.json version to v6.4.0. `<https://github.com/lsst-ts/LOVE-frontend/pull/676>`_
+* Add RA and dec information on dome summary table components and a few other improvements. `<https://github.com/lsst-ts/LOVE-frontend/pull/675>`_
+* Add M1M3HardpointsDataTable component. `<https://github.com/lsst-ts/LOVE-frontend/pull/674>`_
+* Add M1M3Compact and M2Compact components. `<https://github.com/lsst-ts/LOVE-frontend/pull/673>`_
+* Fix OLE exposure components to allow all instruments to be used queried. `<https://github.com/lsst-ts/LOVE-frontend/pull/672>`_
+
 v6.3.1
 ------
 

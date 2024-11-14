@@ -26,3 +26,12 @@ export const IMAGE_STATES = {
   END_READOUT: 'END_READOUT',
   END_TELEMETRY: 'END_TELEMETRY',
 };
+
+export const VALUE_TYPES = {
+  BOOLEAN: 'boolean',
+  INTEGER: 'integer',
+  FLOAT: 'float',
+  STRING: 'string',
+  ARRAY: 'array',
+  OBJECT: 'object',
+};

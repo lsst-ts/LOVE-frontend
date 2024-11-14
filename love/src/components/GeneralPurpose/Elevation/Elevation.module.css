@@ -21,7 +21,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   overflow: visible;
 }
 
-svg text {
+.svgElevation text {
   padding: 4px;
 }
 
