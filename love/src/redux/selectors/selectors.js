@@ -709,8 +709,6 @@ export const getDomeState = (state) => {
     dropoutDoorState: domeData['event-ATDome-0-dropoutDoorState']?.[0].state?.value ?? 0,
     mainDoorState: domeData['event-ATDome-0-mainDoorState']?.[0].state?.value ?? 0,
     atDomeSummaryState: domeData['event-ATDome-0-summaryState']?.[0].summaryState?.value ?? 0,
-    // TODO: The following parameter is missing a CSC, add it when it becomes available//
-    atDomeTracking: 0,
   };
 };
 
@@ -723,9 +721,8 @@ export const getATMCSState = (state) => {
     'event-ATMCS-0-allAxesInPosition',
     'event-ATMCS-0-m3State',
     'event-ATMCS-0-positionLimits',
-    'event-ATPtg-1-timesOfLimits',
     'event-ATMCS-0-summaryState',
-    `event-ATPtg-1-currentTarget`,
+    'event-ATPtg-0-timesOfLimits',
   ];
   const data = getStreamsData(state, subscriptions);
   const [minEl, minAz, minNas1, minNas2, minM3] = data['event-ATMCS-0-positionLimits']?.[0].minimum?.value ?? [
@@ -755,25 +752,30 @@ export const getATMCSState = (state) => {
     maxNas1,
     maxNas2,
     maxM3,
-    timeAzLim: data['event-ATPtg-1-timesOfLimits']?.[0].timeAzLim?.value ?? 0,
-    timeRotLim: data['event-ATPtg-1-timesOfLimits']?.[0].timeRotLim?.value ?? 0,
-    timeUnobservable: data['event-ATPtg-1-timesOfLimits']?.[0].timeUnobservable?.value ?? 0,
-    timeElHighLimit: data['event-ATPtg-1-timesOfLimits']?.[0].timeElHighLimit?.value ?? 0,
     currentPointingAz: data['telemetry-ATMCS-0-mount_AzEl_Encoders']?.azimuthCalculatedAngle?.value?.[0],
     currentPointingEl: data['telemetry-ATMCS-0-mount_AzEl_Encoders']?.elevationCalculatedAngle?.value?.[0],
     currentPointingNasmyth1: data['telemetry-ATMCS-0-mount_Nasmyth_Encoders']?.nasmyth1CalculatedAngle?.value?.[0],
     currentPointingNasmyth2: data['telemetry-ATMCS-0-mount_Nasmyth_Encoders']?.nasmyth2CalculatedAngle?.value?.[0],
-    targetName: data[`event-ATPtg-1-currentTarget`]?.[0].targetName?.value ?? 'Unknown',
+    timeAzLim: data['event-ATPtg-0-timesOfLimits']?.[0].timeAzLim?.value ?? 0,
+    timeRotLim: data['event-ATPtg-0-timesOfLimits']?.[0].timeRotLim?.value ?? 0,
+    timeUnobservable: data['event-ATPtg-0-timesOfLimits']?.[0].timeUnobservable?.value ?? 0,
+    timeElHighLimit: data['event-ATPtg-0-timesOfLimits']?.[0].timeElHighLimit?.value ?? 0,
   };
 };
 
 export const getAuxiliaryTelescopeState = (state) => {
-  const subscriptions = ['telemetry-Scheduler-2-observatoryState'];
+  const subscriptions = [
+    'telemetry-ATPtg-0-mountStatus',
+    'telemetry-ATPtg-0-mountPosition',
+    'event-ATPtg-0-currentTarget',
+  ];
   const data = getStreamsData(state, subscriptions);
   return {
-    telescopeRA: data['telemetry-Scheduler-2-observatoryState']?.ra?.value ?? 0,
-    telescopeDec: data['telemetry-Scheduler-2-observatoryState']?.declination?.value ?? 0,
-    telescopeRotator: data['telemetry-Scheduler-2-observatoryState']?.telescopeRotator?.value ?? 0,
+    telescopeRAHour: data['telemetry-ATPtg-0-mountStatus']?.mountRA?.value ?? 0,
+    telescopeRADeg: data['telemetry-ATPtg-0-mountPosition']?.ra?.value ?? 0,
+    telescopeDecDeg: data['telemetry-ATPtg-0-mountStatus']?.mountDec?.value ?? 0,
+    telescopeRotatorRad: data['telemetry-ATPtg-0-mountStatus']?.mountRot?.value ?? 0,
+    targetName: data['event-ATPtg-0-currentTarget']?.[0].targetName?.value ?? 'Unknown',
   };
 };
 
@@ -1302,8 +1304,22 @@ export const getDomeStatus = (state) => {
     azimuthDomeTarget: domeStatus['event-MTDome-0-azTarget']?.[0]?.position?.value ?? 0,
     modeDomeStatus: domeStatus['event-MTDome-0-operationalMode']?.[0]?.operationalMode?.value ?? 0,
     mtMountSummaryState: domeStatus['event-MTMount-0-summaryState']?.[0]?.summaryState?.value ?? 0,
-    // TODO: The following parameter is missing a CSC, add it when it becomes available//
-    mtDomeTracking: 0,
+  };
+};
+
+export const getMainTelescopeState = (state) => {
+  const subscriptions = [
+    'telemetry-MTPtg-0-mountStatus',
+    'telemetry-MTPtg-0-mountPosition',
+    'event-MTPtg-0-currentTarget',
+  ];
+  const data = getStreamsData(state, subscriptions);
+  return {
+    telescopeRAHour: data['telemetry-MTPtg-0-mountStatus']?.mountRA?.value ?? 0,
+    telescopeRADeg: data['telemetry-MTPtg-0-mountPosition']?.ra?.value ?? 0,
+    telescopeDecDeg: data['telemetry-MTPtg-0-mountStatus']?.mountDec?.value ?? 0,
+    telescopeRotatorRad: data['telemetry-MTPtg-0-mountStatus']?.mountRot?.value ?? 0,
+    targetName: data['event-MTPtg-0-currentTarget']?.[0].targetName?.value ?? 'Unknown',
   };
 };
 

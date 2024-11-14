@@ -121,7 +121,7 @@ export const SCRIPTQUEUE_SCRIPT_LOCATION = {
 
 export const MTMountLimits = {
   elevation: {
-    min: 5,
+    min: 0,
     max: 90,
   },
   azimuth: {

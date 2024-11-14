@@ -1403,6 +1403,21 @@ export const formatDigitalToSeconds = (time) => {
 };
 
 /**
+ * Convert hours to digital format as '00:00:00'
+ * @param {number} time hours to be converted
+ * @returns {string} hours in digitial format
+ */
+export const formatHoursToDigital = (time) => {
+  const hours = Math.floor(time);
+  const minutes = Math.floor((time - hours) * 60);
+  const seconds = Math.floor(((time - hours) * 60 - minutes) * 60);
+  const hoursString = hours.toString().padStart(2, '0');
+  const minutesString = minutes.toString().padStart(2, '0');
+  const secondsString = seconds.toString().padStart(2, '0');
+  return `${hoursString}:${minutesString}:${secondsString}`;
+};
+
+/**
  * Function to calculate the difference between two dates in hours, using moment.js
  * @param {string} hour1 in format '00:00:00'
  * @param {string} hour2 in format '00:00:00'
@@ -1552,7 +1567,7 @@ export function degrees(radians) {
 }
 
 /**
- * Function to transform degress to Right Ascension hour format
+ * Function to transform degress to Right Ascension hour-minute-seconds format
  * e.g. 180.55 -> 12:02:12
  * @param {number} degrees degrees to be transformed
  * @returns {string} Right Ascension hour format
@@ -1565,20 +1580,21 @@ export function degreesToHMS(degrees) {
 }
 
 /**
- * Function to transform degress to Declination hour format
- * e.g. 180.55 -> +180:02:12
+ * Function to transform degress to Declination degree-minute-seconds format
+ * e.g. 180.55 -> +180° 02' 12"
  * @param {number} degrees degrees to be transformed
  * @returns {string} Declination hour format
  */
 export function degreesToDMS(degrees) {
-  const d = Math.floor(degrees);
-  const m = Math.floor((degrees % 1) * 4);
-  const s = Math.floor(((degrees % 1) * 4 - m) * 60);
+  const degreesAbsolute = Math.abs(degrees);
+  const d = Math.floor(degreesAbsolute);
+  const m = Math.floor((degreesAbsolute % 1) * 4);
+  const s = Math.floor(((degreesAbsolute % 1) * 4 - m) * 60);
   const hourFormat =
-    `${Math.sign(degrees) >= 0 ? '+' : '-'}` +
-    `${d.toString().padStart(2, '0')}` +
-    `:${m.toString().padStart(2, '0')}` +
-    `:${s.toString().padStart(2, '0')}`;
+    `${degrees >= 0 ? '+' : '-'}` +
+    `${d.toString().padStart(2, '0')}°` +
+    ` ${m.toString().padStart(2, '0')}'` +
+    ` ${s.toString().padStart(2, '0')}"`;
   return hourFormat;
 }
 

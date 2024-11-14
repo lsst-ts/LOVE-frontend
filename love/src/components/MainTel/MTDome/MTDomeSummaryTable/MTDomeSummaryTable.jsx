@@ -18,17 +18,16 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { Component } from 'react';
-import styles from './MTDomeSummaryTable.module.css';
-import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
-import CurrentTargetValue from '../../../GeneralPurpose/CurrentTargetValue/CurrentTargetValue';
 import PropTypes from 'prop-types';
-import Limits from '../../../GeneralPurpose/Limits/Limits';
-import SummaryPanel from '../../../GeneralPurpose/SummaryPanel/SummaryPanel';
-import Row from '../../../GeneralPurpose/SummaryPanel/Row';
-import Label from '../../../GeneralPurpose/SummaryPanel/Label';
-import Value from '../../../GeneralPurpose/SummaryPanel/Value';
-import Title from '../../../GeneralPurpose/SummaryPanel/Title';
-import ProgressBar from '../../../GeneralPurpose/ProgressBar/ProgressBar';
+import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
+import CurrentTargetValue from 'components/GeneralPurpose/CurrentTargetValue/CurrentTargetValue';
+import Limits from 'components/GeneralPurpose/Limits/Limits';
+import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
+import Row from 'components/GeneralPurpose/SummaryPanel/Row';
+import Label from 'components/GeneralPurpose/SummaryPanel/Label';
+import Value from 'components/GeneralPurpose/SummaryPanel/Value';
+import Title from 'components/GeneralPurpose/SummaryPanel/Title';
+import ProgressBar from 'components/GeneralPurpose/ProgressBar/ProgressBar';
 import {
   summaryStateMap,
   summaryStateToStyle,
@@ -39,34 +38,46 @@ import {
   mtdomeMotionStateMap,
   mtdomeMotionStatetoStyle,
   MTMountLimits,
-  mtDomeTrackingStateMap,
-  mtDomeTrackingStatetoStyle,
-} from '../../../../Config';
+} from 'Config';
+import { formatHoursToDigital, degreesToDMS, degrees, defaultNumberFormatter } from 'Utils';
+import styles from './MTDomeSummaryTable.module.css';
 
 export default class MTDomeSummaryTable extends Component {
   static propTypes = {
     /** Unique target identifier. Echoed from the trackTarget command */
     trackId: PropTypes.number,
-    /** High level state machine state identifier */
+    /** Summary state of the MTDome CSC */
     mtDomeSummaryState: PropTypes.number,
-    /** High level state machine state identifier */
+    /** Summary state of the MTMount CSC */
     mtMountSummaryState: PropTypes.number,
-    /** Enabled state; an EnabledState enum */
+    /** Azimuth dome state */
     azimuthDomeState: PropTypes.number,
-    /** The motion state; a MotionState enum */
+    /** Azimuth dome motion */
     azimuthDomeMotion: PropTypes.number,
-    /** Target position; nan for the crawlAz command */
-    azimuthDomeTarget: PropTypes.number,
-    /** Operational mode; an OperationalMode enum */
+    /** Operational dome mode */
     modeDomeStatus: PropTypes.number,
-    /** Position measured by the encoders */
-    currentPointingAz: PropTypes.number,
-    /** Position computed by the path generator */
-    targetPointingAz: PropTypes.number,
-    /** Position measured by the encoders */
-    currentPointingEl: PropTypes.number,
-    /** Position computed by the path generator */
-    targetPointingEl: PropTypes.number,
+    /** Actual dome azimuth position */
+    positionActualDomeAz: PropTypes.number,
+    /** Commanded dome azimuth position */
+    positionCommandedDomeAz: PropTypes.number,
+    /** Telescope current pointing */
+    currentPointing: PropTypes.object,
+    /** Telescope target pointing */
+    targetPointing: PropTypes.object,
+    /** Actual shutter position */
+    positionActualShutter: PropTypes.array,
+    /** Commanded shutter position */
+    positionCommandedShutter: PropTypes.array,
+    /** Telescope current RA in hours */
+    telescopeRAHour: PropTypes.number,
+    /** Telescope current RA in degrees */
+    telescopeRADeg: PropTypes.number,
+    /** Telescope current Dec in degrees */
+    telescopeDecDeg: PropTypes.number,
+    /** Telescope rotator position in rad */
+    telescopeRotatorRad: PropTypes.number,
+    /** Whether to display the RA and DEC in hour format */
+    raDecHourFormat: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -75,64 +86,102 @@ export default class MTDomeSummaryTable extends Component {
     mtMountSummaryState: 0,
     azimuthDomeState: 0,
     azimuthDomeMotion: 0,
-    azimuthDomeTarget: 0,
-    elevationDomeTarget: 0,
     modeDomeStatus: 0,
-    currentPointingAz: 0,
-    targetPointingAz: 0,
-    currentPointingEl: 0,
-    targetPointingEl: 0,
+    positionActualDomeAz: 0,
+    positionCommandedDomeAz: 0,
+    currentPointing: { az: 0, el: 0 },
+    targetPointing: { az: 0, el: 0 },
+    positionActualShutter: [],
+    positionCommandedShutter: [],
   };
 
   render() {
-    const trackID = this.props.trackID;
-    const mtDomeStatus = summaryStateMap[this.props.mtDomeSummaryState];
-    const modeDomeStatus = mtDomeModeStateMap[this.props.modeDomeStatus];
-    const azimuthDomeState = mtDomeAzimuthEnabledStateMap[this.props.azimuthDomeState];
-    const azimuthDomeMotion = mtdomeMotionStateMap[this.props.azimuthDomeMotion];
-    const mtMountStatus = summaryStateMap[this.props.mtMountSummaryState];
-    const mtDomeTrackingName = mtDomeTrackingStateMap[this.props.domeTracking];
-    const mtDomeTrackingStyle = mtDomeTrackingStatetoStyle[mtDomeTrackingName];
+    const {
+      trackId,
+      mtDomeSummaryState,
+      mtMountSummaryState,
+      azimuthDomeState,
+      azimuthDomeMotion,
+      modeDomeStatus,
+      positionActualDomeAz,
+      positionCommandedDomeAz,
+      currentPointing,
+      targetPointing,
+      positionActualShutter,
+      positionCommandedShutter,
+      targetName,
+      telescopeRAHour,
+      telescopeRADeg,
+      telescopeDecDeg,
+      telescopeRotatorRad,
+      raDecHourFormat,
+    } = this.props;
 
-    const domeActualAz = this.props.positionActualDomeAz;
-    const domeCommandedAz = this.props.positionCommandedDomeAz;
+    const mtDomeStatusText = summaryStateMap[mtDomeSummaryState];
+    const modeDomeStatusText = mtDomeModeStateMap[modeDomeStatus];
+    const azimuthDomeStateText = mtDomeAzimuthEnabledStateMap[azimuthDomeState];
+    const azimuthDomeMotionText = mtdomeMotionStateMap[azimuthDomeMotion];
+    const mtMountStatusText = summaryStateMap[mtMountSummaryState];
 
-    const { az: mountActualAz, el: mountActualEl } = this.props.currentPointing;
-    const { az: mountCommandedAz, el: mountCommandedEl } = this.props.targetPointing;
+    const { az: mountActualAz, el: mountActualEl } = currentPointing;
+    const { az: mountCommandedAz, el: mountCommandedEl } = targetPointing;
+
+    const shutterPositionActual1 = Math.round(positionActualShutter[0] ?? 0);
+    const shutterPositionCommanded1 = Math.round(positionCommandedShutter[0] ?? 0);
+    const shutterPositionActual2 = Math.round(positionActualShutter[1] ?? 0);
+    const shutterPositionCommanded2 = Math.round(positionCommandedShutter[1] ?? 0);
+
+    const parsedTelescopeRAHour = formatHoursToDigital(telescopeRAHour);
+    const parsedTelescopeDecHour = degreesToDMS(telescopeDecDeg);
+    const parsedTelescopeRADeg = defaultNumberFormatter(telescopeRADeg, 2) + '°';
+    const parsedTelescopeDecDeg = defaultNumberFormatter(telescopeDecDeg, 2) + '°';
+    const parsedTelescopeRotatorDeg = defaultNumberFormatter(degrees(telescopeRotatorRad), 2) + '°';
+    const telescopeRAText = raDecHourFormat ? parsedTelescopeRAHour : parsedTelescopeRADeg;
+    const telescopeDecText = raDecHourFormat ? parsedTelescopeDecHour : parsedTelescopeDecDeg;
 
     return (
       <div className={styles.divSummary}>
         <SummaryPanel className={styles.summaryTable}>
           <Title>Track ID</Title>
-          <Value>{trackID?.toString()}</Value>
+          <Value>{trackId?.toString()}</Value>
+          <Label>Target Name</Label>
+          <Value>{targetName}</Value>
+          <Label>Telescope RA</Label>
+          <Value>{telescopeRAText}</Value>
+          <Label>Telescope Dec</Label>
+          <Value>{telescopeDecText}</Value>
+          <Label>Rotator</Label>
+          <Value>{parsedTelescopeRotatorDeg}</Value>
           <Title>MTDome CSC</Title>
           <Value>
-            <StatusText status={summaryStateToStyle[mtDomeStatus]}>{mtDomeStatus}</StatusText>
+            <StatusText status={summaryStateToStyle[mtDomeStatusText]}>{mtDomeStatusText}</StatusText>
           </Value>
           <Label>Mode</Label>
           <Value>
-            <StatusText status={mtDomeModeStatetoStyle[modeDomeStatus]}>{modeDomeStatus}</StatusText>
-          </Value>
-          <Label>Tracking</Label>
-          <Value>
-            <StatusText status={mtDomeTrackingStyle}>{mtDomeTrackingName}</StatusText>
+            <StatusText status={mtDomeModeStatetoStyle[modeDomeStatusText]}>{modeDomeStatusText}</StatusText>
           </Value>
           <Label>Az State</Label>
           <Value>
-            <StatusText status={mtDomeAzimuthEnabledStatetoStyle[azimuthDomeState]}>{azimuthDomeState}</StatusText>
+            <StatusText status={mtDomeAzimuthEnabledStatetoStyle[azimuthDomeStateText]}>
+              {azimuthDomeStateText}
+            </StatusText>
           </Value>
           <Label>Az Motion</Label>
           <Value>
-            <StatusText status={mtdomeMotionStatetoStyle[azimuthDomeMotion]}>{azimuthDomeMotion}</StatusText>
+            <StatusText status={mtdomeMotionStatetoStyle[azimuthDomeMotionText]}>{azimuthDomeMotionText}</StatusText>
           </Value>
           <Label>Az</Label>
           <Value>
-            <CurrentTargetValue currentValue={domeActualAz} targetValue={domeCommandedAz} isChanging={true} />
+            <CurrentTargetValue
+              currentValue={positionActualDomeAz}
+              targetValue={positionCommandedDomeAz}
+              isChanging={true}
+            />
           </Value>
 
           <Title>MTMount CSC</Title>
           <Value>
-            <StatusText status={summaryStateToStyle[mtMountStatus]}>{mtMountStatus}</StatusText>
+            <StatusText status={summaryStateToStyle[mtMountStatusText]}>{mtMountStatusText}</StatusText>
           </Value>
           <Label>Elevation</Label>
           <Value>
@@ -166,18 +215,10 @@ export default class MTDomeSummaryTable extends Component {
           </Row>
         </SummaryPanel>
         <SummaryPanel className={styles.shutters}>
-          <SummaryPanel>
-            <Label>Shutters</Label>
-          </SummaryPanel>
+          <Title>Shutters</Title>
           <div className={styles.divProgressBars}>
-            <ProgressBar
-              targetValue={this.props.positionCommandedShutter}
-              completed={this.props.positionActualShutter}
-            />
-            <ProgressBar
-              targetValue={this.props.positionCommandedShutter}
-              completed={this.props.positionActualShutter}
-            />
+            <ProgressBar targetValue={shutterPositionCommanded1} completed={shutterPositionActual1} />
+            <ProgressBar targetValue={shutterPositionCommanded2} completed={shutterPositionActual2} />
           </div>
         </SummaryPanel>
       </div>

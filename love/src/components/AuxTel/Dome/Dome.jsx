@@ -101,16 +101,18 @@ export default class Dome extends Component {
     atDomeSummaryState: PropTypes.string,
     /** ATMCS summary state */
     ATMCSSummaryState: PropTypes.string,
-    /** AT dome tracking */
-    atDomeTracking: PropTypes.bool,
     /** Target name */
     targetName: PropTypes.string,
-    /** Telescope RA */
-    telescopeRA: PropTypes.number,
-    /** Telescope Dec */
-    telescopeDec: PropTypes.number,
-    /** Rotator position */
-    telescopeRotator: PropTypes.number,
+    /** Telescope current RA in hours */
+    telescopeRAHour: PropTypes.number,
+    /** Telescope current RA in degrees */
+    telescopeRADeg: PropTypes.number,
+    /** Telescope current Dec in degrees */
+    telescopeDecDeg: PropTypes.number,
+    /** Telescope rotator position in rad */
+    telescopeRotatorRad: PropTypes.number,
+    /** Whether to display the RA and DEC in hour format */
+    raDecHourFormat: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -300,11 +302,11 @@ export default class Dome extends Component {
       currentPointingNasmyth2,
       atDomeSummaryState,
       ATMCSSummaryState,
-      atDomeTracking,
       targetName,
-      telescopeRA,
-      telescopeDec,
-      telescopeRotator,
+      telescopeRAHour,
+      telescopeRADeg,
+      telescopeDecDeg,
+      telescopeRotatorRad,
       raDecHourFormat,
     } = this.props;
 
@@ -331,9 +333,6 @@ export default class Dome extends Component {
       isLive: isLive,
       historicalData: historicalData,
     };
-
-    const parsedTelescopeRA = raDecHourFormat ? degreesToHMS(telescopeRA) : `${telescopeRA}°`;
-    const parsedTelescopeDec = raDecHourFormat ? degreesToDMS(telescopeDec) : `${telescopeDec}°`;
 
     return (
       <div className={styles.domeContainer}>
@@ -403,20 +402,6 @@ export default class Dome extends Component {
             >
               <span>Vignetting distance: </span>
               <span className={styles.value}>{vignettingDistance}°</span>
-              <div
-                title="The following parameters requires the Scheduler:2 CSC to be active"
-                className={styles.telescopeParametersContainer}
-              >
-                <div>
-                  Telescope RA: <span className={styles.value}>{parsedTelescopeRA}</span>
-                </div>
-                <div>
-                  Telescope Dec: <span className={styles.value}>{parsedTelescopeDec}</span>
-                </div>
-                <div>
-                  Rotator position: <span className={styles.value}>{telescopeRotator}°</span>
-                </div>
-              </div>
             </div>
           </div>
           <DomeSummaryTable
@@ -458,8 +443,12 @@ export default class Dome extends Component {
             minM3={minM3}
             atDomeSummaryState={atDomeSummaryState}
             ATMCSSummaryState={ATMCSSummaryState}
-            domeTracking={atDomeTracking}
             targetName={targetName}
+            telescopeRAHour={telescopeRAHour}
+            telescopeRADeg={telescopeRADeg}
+            telescopeDecDeg={telescopeDecDeg}
+            telescopeRotatorRad={telescopeRotatorRad}
+            raDecHourFormat={raDecHourFormat}
           />
         </div>
         {this.props.controls && (

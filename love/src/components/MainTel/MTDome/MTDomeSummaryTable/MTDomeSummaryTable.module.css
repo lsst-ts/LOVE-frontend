@@ -25,22 +25,9 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   background-color: var(--second-quaternary-background-dimmed-color);
 }
 
-/* .summaryTable {
-  align-self: center;
-  grid-template-columns: 0.5fr 0.5fr;
-  padding: 20px;
-}
-
-.summaryState {
-  border-radius: 1rem;
-  font-weight: 550;
-  text-align: center;
-  display: inline-block;
-  width: 10em;
-} */
-
 .shutters {
   display: block;
+  padding: 0;
 }
 
 .divProgressBars {
