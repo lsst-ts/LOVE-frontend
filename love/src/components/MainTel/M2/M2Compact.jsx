@@ -280,50 +280,61 @@ function M2Compact({
 
   return (
     <div className={styles.container}>
-      <svg viewBox={`-20 -20 ${width + 48} ${height + 48}`}>
-        <AxialActuators forceData={forceDataAxial} showActuatorsForces={showActuatorsForces} colorMap={colorMap} />
-        <TangentActuators forceData={forceDataTangent} showActuatorsForces={showActuatorsForces} colorMap={colorMap} />
-      </svg>
-      <div className={styles.forceGradientContainer}>
-        <LinearGradient forceData={forceDataAll} unit={forceParameterValueUnit} />
-      </div>
-      {showForcesSelector && (
-        <div className={[styles.forcesSelector, 'nonDraggable'].join(' ')}>
-          <div>
-            {forceInputs.map((force) => (
-              <div key={force}>
-                <input
-                  type="radio"
-                  id={forceInputId + '-' + force}
-                  name={forceInputId}
-                  value={force}
-                  checked={selectedForce === force}
-                  onChange={() => {
-                    setSelectedForce(force);
-                    setSelectedForceParameter();
-                  }}
-                />
-                <label htmlFor={force}>{M2ActuatorForcesLabels[force]}</label>
-              </div>
-            ))}
-          </div>
-          <div>
-            {forceParameters.map((forceParameter) => (
-              <div key={forceParameter}>
-                <input
-                  type="radio"
-                  id={forceParameterId + '-' + forceParameter}
-                  name={forceParameterId}
-                  value={forceParameter}
-                  checked={selectedForceParameter === forceParameter}
-                  onChange={() => setSelectedForceParameter(forceParameter)}
-                />
-                <label htmlFor={forceParameter}>{forceParameter}</label>
-              </div>
-            ))}
-          </div>
+      {!showForcesSelector && (
+        <div className={styles.selectedForce}>
+          Selected parameters: {selectedForce} - {selectedForceParameter}
         </div>
       )}
+      <div className={styles.diagrams}>
+        <svg viewBox={`-20 -20 ${width + 48} ${height + 48}`}>
+          <AxialActuators forceData={forceDataAxial} showActuatorsForces={showActuatorsForces} colorMap={colorMap} />
+          <TangentActuators
+            forceData={forceDataTangent}
+            showActuatorsForces={showActuatorsForces}
+            colorMap={colorMap}
+          />
+        </svg>
+        <div className={styles.forceGradientContainer}>
+          <LinearGradient forceData={forceDataAll} unit={forceParameterValueUnit} />
+        </div>
+        {showForcesSelector && (
+          <div className={[styles.forcesSelector, 'nonDraggable'].join(' ')}>
+            <div>
+              {forceInputs.map((force) => (
+                <div key={force}>
+                  <input
+                    type="radio"
+                    id={forceInputId + '-' + force}
+                    name={forceInputId}
+                    value={force}
+                    checked={selectedForce === force}
+                    onChange={() => {
+                      setSelectedForce(force);
+                      setSelectedForceParameter();
+                    }}
+                  />
+                  <label htmlFor={force}>{M2ActuatorForcesLabels[force]}</label>
+                </div>
+              ))}
+            </div>
+            <div>
+              {forceParameters.map((forceParameter) => (
+                <div key={forceParameter}>
+                  <input
+                    type="radio"
+                    id={forceParameterId + '-' + forceParameter}
+                    name={forceParameterId}
+                    value={forceParameter}
+                    checked={selectedForceParameter === forceParameter}
+                    onChange={() => setSelectedForceParameter(forceParameter)}
+                  />
+                  <label htmlFor={forceParameter}>{forceParameter}</label>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

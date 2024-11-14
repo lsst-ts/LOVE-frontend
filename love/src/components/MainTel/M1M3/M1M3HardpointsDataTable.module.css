@@ -1,0 +1,19 @@
+.offWarning {
+  color: var(--status-ok-color);
+}
+
+.onWarning {
+  color: var(--status-alert-color);
+}
+
+.notOverThreshold {
+  color: var(--status-ok-color);
+}
+
+.overFaultThreshold {
+  color: var(--status-alert-color);
+}
+
+.overWarningThreshold {
+  color: var(--status-alert-color);
+}
