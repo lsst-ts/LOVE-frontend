@@ -215,9 +215,7 @@ export default class MTDomeSummaryTable extends Component {
           </Row>
         </SummaryPanel>
         <SummaryPanel className={styles.shutters}>
-          <SummaryPanel>
-            <Label>Shutters</Label>
-          </SummaryPanel>
+          <Title>Shutters</Title>
           <div className={styles.divProgressBars}>
             <ProgressBar targetValue={shutterPositionCommanded1} completed={shutterPositionActual1} />
             <ProgressBar targetValue={shutterPositionCommanded2} completed={shutterPositionActual2} />
