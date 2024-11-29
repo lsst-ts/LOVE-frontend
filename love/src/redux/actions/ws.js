@@ -421,7 +421,7 @@ export const updateLastSALCommandStatus = (status, statusCode, result) => {
  * via an HTTP request through the LOVE-manager.
  *
  */
-export const requestSALCommand = (data) => {
+export const requestSALCommand = (data, callback) => {
   return (dispatch, getState) => {
     const url = `${ManagerInterface.getApiBaseUrl()}cmd/`;
     const commandID = `${Date.now()}-${data.cmd}`;
@@ -455,6 +455,7 @@ export const requestSALCommand = (data) => {
         }));
       })
       .then(({ statusCode, data }) => {
+        if (callback) callback();
         dispatch(updateLastSALCommandStatus(SALCommandStatus.ACK, statusCode, data?.ack));
       });
   };
