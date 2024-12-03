@@ -2,6 +2,12 @@
 Version History
 ===============
 
+v6.4.1
+------
+
+* Update package.json version to v6.4.1. `<https://github.com/lsst-ts/LOVE-frontend/pull/679>`_
+* Show error details for requests to the LOVE-manager. `<https://github.com/lsst-ts/LOVE-frontend/pull/678>`_
+
 v6.4.0
 ------
 
