@@ -2105,7 +2105,8 @@ export function checkJSONResponse(response, onSuccess) {
   }
   if (response.status === 400) {
     return response.json().then((resp) => {
-      toast.error(resp.ack);
+      const errorMsg = resp.error ? `${resp.ack}: ${resp.error}` : resp.ack;
+      toast.error(errorMsg);
       return false;
     });
   }

@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.4.1
+------
+
+* Show error details for requests to the LOVE-manager. `<https://github.com/lsst-ts/LOVE-frontend/pull/678>`_
+
 v6.4.0
 ------
 
