@@ -502,6 +502,1789 @@ export const OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS = {
   Calibration: 11049,
   Other: 11050,
 };
+
+/**
+ * jira OBS project customfield_10476
+ * See https://rubinobs.atlassian.net/rest/api/latest/app/field/customfield_10476/context/configuration
+ * for the full list of options
+ **/
+export const OLE_OBS_SYSTEMS = {
+  Simonyi: {
+    id: '0',
+    children: ['15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27'],
+  },
+  LSSTCam: {
+    id: '29',
+    children: ['30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44'],
+  },
+  ComCam: {
+    id: '3',
+    children: ['45', '46', '47', '48', '49', '50', '51', '52', '130'],
+  },
+  'Simonyi Calibration': {
+    id: '4',
+    children: ['53', '54', '55', '56', '57', '58', '59', '129'],
+  },
+  AuxTel: {
+    id: '1',
+    children: ['60', '61', '62', '63', '64', '430', '128'],
+  },
+  LATISS: {
+    id: '5',
+    children: ['65', '66', '67', '68', '69', '70', '127'],
+  },
+  'AuxTel Calibration': {
+    id: '6',
+    children: ['71', '72', '73', '74', '75', '76', '77', '126'],
+  },
+  'Control and Monitoring Software': {
+    id: '8',
+    children: ['560', '78', '79', '80', '81', '82', '83', '84', '85', '86', '125'],
+  },
+  'Data Management': {
+    id: '10',
+    children: ['88', '89', '124'],
+  },
+  Facilities: {
+    id: '11',
+    children: ['91', '92', '93', '94', '95', '96', '97', '98', '99', '100', '101', '123'],
+  },
+  'IT Infrastructure': {
+    id: '12',
+    children: ['103', '104', '105', '106', '107', '122'],
+  },
+  'Environmental Awareness Systems': {
+    id: '13',
+    children: ['109', '110', '111', '112', '113', '114', '115', '116', '117', '118', '119', '120', '121'],
+    Other: {
+      id: '14',
+    },
+  },
+};
+
+export const OLE_OBS_SUBSYSTEMS = {
+  /** Simonyi System */
+  TMA: {
+    id: '15',
+    children: [
+      '131',
+      '132',
+      '133',
+      '134',
+      '135',
+      '136',
+      '137',
+      '138',
+      '139',
+      '140',
+      '141',
+      '142',
+      '143',
+      '144',
+      '145',
+      '146',
+      '147',
+      '148',
+      '149',
+      '150',
+      '151',
+      '152',
+      '153',
+      '154',
+      '155',
+      '156',
+    ],
+  },
+  'TMA Thermal System': {
+    id: '16',
+    children: ['157', '158', '159', '160', '161', '162', '163', '164', '165'],
+  },
+  Dome: {
+    id: '17',
+    children: ['167', '168', '169', '170', '171', '172', '173', '174', '175', '176', '177', '178', '179', '180'],
+  },
+  'M1M3 Support System': {
+    id: '18',
+    children: ['182', '183', '184', '185', '186', '187', '188', '189', '190', '191', '192', '193'],
+  },
+  'M1M3 Thermal System': {
+    id: '19',
+    children: ['194', '195', '196', '197', '198', '199'],
+  },
+  'M2 Systems': {
+    id: '20',
+    children: ['200', '201', '202', '203', '204', '205', '206', '207'],
+  },
+  Rotator: {
+    id: '21',
+    children: ['208', '209', '210', '211', '212'],
+  },
+  Hexapods: {
+    id: '22',
+    children: ['214', '215', '216', '217', '218', '219', '220', '221', '222', '223'],
+  },
+  'Star Trackers': {
+    id: '23',
+    children: [
+      '225',
+      '226',
+      '227',
+      '228',
+      '229',
+      '230',
+      '231',
+      '232',
+      '233',
+      '234',
+      '235',
+      '236',
+      '237',
+      '238',
+      '239',
+      '240',
+    ],
+  },
+  OCS: {
+    id: '24',
+    children: ['241', '242', '243', '244', '245', '246'],
+  },
+  'Cable Wraps': {
+    id: '25',
+    children: ['248', '249', '250', '251', '252', '253', '254', '255'],
+  },
+  OSS: {
+    id: '26',
+    children: ['257', '259', '260', '261', '262', '263', '264'],
+  },
+  'Laser Tracker': {
+    id: '27',
+    children: ['266', '267', '268', '270', '271'],
+  },
+  /** LSSTCam System */
+  'Focal Plane': {
+    id: '30',
+    children: ['272', '273', '274', '275', '276', '277'],
+  },
+  'Image Handlers': {
+    id: '31',
+    children: ['279', '280'],
+  },
+  Rebpower: {
+    id: '32',
+    children: ['281'],
+  },
+  Shutter: {
+    id: '33',
+    children: ['282', '283'],
+  },
+  'Filter Exchange': {
+    id: '34',
+    children: ['285', '286', '287'],
+  },
+  'Vacuum Systems': {
+    id: '35',
+    children: ['289', '290', '291', '292', '293', '296', '297', '298'],
+  },
+  Quadbox: {
+    id: '36',
+    children: ['299', '300', '301', '302', '303', '304', '305'],
+  },
+  'Utility Trunk': {
+    id: '37',
+    children: ['307', '308', '311'],
+  },
+  'Cryo Refrigeration': {
+    id: '38',
+    children: ['313', '314', '315', '317', '318', '319'],
+  },
+  'PCS Refrigerations': {
+    id: '39',
+    children: ['321', '322'],
+  },
+  'Camera Thermal System': {
+    id: '40',
+    children: ['324', '325', '326', '327'],
+  },
+  'Master Protection Module': {
+    id: '41',
+  },
+  Computing: {
+    id: '42',
+    children: ['329', '330', '331', '332', '333', '334', '335', '336', '337', '338', '339'],
+  },
+  'Web Services': {
+    id: '43',
+    children: ['341', '342'],
+  },
+  Other: {
+    id: '44',
+  },
+  /** ComCam System */
+  'Focal Plane': {
+    id: '45',
+    children: ['343', '344', '345', '346', '347'],
+  },
+  'Pathfinder Cryo System': {
+    id: '46',
+    children: ['348', '349', '350'],
+  },
+  'ComCam Vacuum System': {
+    id: '47',
+    children: ['351', '352', '353', '354', '355', '356'],
+  },
+  'Pathfinder Vacuum System': {
+    id: '48',
+    children: ['357', '358', '359', '360', '361', '362'],
+  },
+  'Optical System': {
+    id: '49',
+    children: ['363', '364', '365', '366', '367'],
+  },
+  'Utility Trunk': {
+    id: '50',
+    children: ['368', '369', '370', '371'],
+  },
+  Software: {
+    id: '51',
+    children: ['372', '373', '374', '375', '376', '377', '378'],
+  },
+  Computing: {
+    id: '52',
+    children: ['380', '381', '382', '383', '384', '385', '386', '387', '388'],
+  },
+  Other: {
+    id: '130',
+  },
+  /** Simonyi Calibration System */
+  'Collimated Beam Projector': {
+    id: '53',
+  },
+  'Flat Field Projector': {
+    id: '54',
+    children: ['389', '390'],
+  },
+  Reflector: {
+    id: '55',
+  },
+  'Tunable Laser': {
+    id: '56',
+    children: ['391', '392'],
+  },
+  'Fiber Spectrograph': {
+    id: '57',
+    children: ['393', '394'],
+  },
+  Electrometer: {
+    id: '58',
+    children: ['395', '397', '396'],
+  },
+  'Flat Field Screen': {
+    id: '59',
+  },
+  Other: {
+    id: '129',
+  },
+  /** AuxTel System */
+  Mount: {
+    id: '60',
+    children: ['398', '399', '400', '401', '402', '403', '404', '405'],
+  },
+  Dome: {
+    id: '61',
+    children: ['406', '407', '408', '409', '410', '411', '412', '414'],
+  },
+  'M1 Systems': {
+    id: '62',
+    children: ['415', '416', '417', '418', '419', '420', '421'],
+  },
+  'M2 Systems': {
+    id: '63',
+    children: ['422', '423', '424', '425'],
+  },
+  'M3 Systems': {
+    id: '64',
+    children: ['426', '427'],
+  },
+  OCS: {
+    id: '430',
+    children: ['432', '433', '434', '435', '436', '437', '438'],
+  },
+  Other: {
+    id: '128',
+  },
+  /** LATISS System */
+  'Focal Plane': {
+    id: '65',
+    children: ['439', '440'],
+  },
+  'Vacuum System': {
+    id: '66',
+    children: ['441', '442'],
+  },
+  Refrigeration: {
+    id: '67',
+    children: ['443'],
+  },
+  'Optical System': {
+    id: '68',
+    children: ['444', '445', '446', '447', '448', '449', '450'],
+  },
+  Software: {
+    id: '69',
+    children: ['451', '452', '453'],
+  },
+  Computing: {
+    id: '70',
+    children: ['454'],
+  },
+  Other: {
+    id: '127',
+  },
+  /** AuxTel Calibration System */
+  'Optical System': {
+    id: '71',
+    children: ['455', '456'],
+  },
+  'White Light': {
+    id: '72',
+    children: ['458', '459'],
+  },
+  Monochromator: {
+    id: '73',
+    children: ['460', '461'],
+  },
+  Electrometer: {
+    id: '74',
+    children: ['463', '464'],
+  },
+  'Fiber Spectrograph': {
+    id: '75',
+    children: ['466', '467', '468'],
+  },
+  MOSS: {
+    id: '76',
+  },
+  'Electronics Cabinet': {
+    id: '77',
+  },
+  Other: {
+    id: '126',
+  },
+  /** Control and Monitoring Software  System */
+  Middleware: {
+    id: '560',
+  },
+  LOVE: {
+    id: '78',
+  },
+  Scheduler: {
+    id: '79',
+    children: ['469', '470', '471'],
+  },
+  'Script Queue': {
+    id: '80',
+    children: ['472', '473', '474'],
+  },
+  'SAL Scripts': {
+    id: '81',
+    children: ['475', '476', '477'],
+  },
+  Nublado: {
+    id: '82',
+  },
+  Chronograf: {
+    id: '83',
+  },
+  'CCS Tools': {
+    id: '84',
+  },
+  RubinTV: {
+    id: '85',
+  },
+  Grafana: {
+    id: '86',
+  },
+  Other: {
+    id: '125',
+  },
+  /** Data Management System */
+  Pipelines: {
+    id: '88',
+    children: ['478', '479'],
+  },
+  'Data Transfer': {
+    id: '89',
+    children: ['481', '482', '483', '484'],
+  },
+  Other: {
+    id: '124',
+  },
+  /** Facilities System */
+  'Interlock Systems': {
+    id: '91',
+    children: ['485', '486', '487', '488', '489', '490', '491', '492', '493', '494'],
+  },
+  'Air Compressors': {
+    id: '92',
+    children: ['495', '496', '497', '498', '499'],
+  },
+  'Commercial Power': {
+    id: '93',
+    children: ['500', '501'],
+  },
+  Generators: {
+    id: '94',
+    children: ['502', '503', '504'],
+  },
+  'Electrical Power Monitor': {
+    id: '95',
+    children: ['505'],
+  },
+  UPSs: {
+    id: '96',
+    children: ['507', '508', '509'],
+  },
+  'Main Service Building WIFI Network': {
+    id: '97',
+    children: ['510'],
+  },
+  'Environmental Control System': {
+    id: '98',
+    children: ['511', '512', '513', '514', '515', '516', '518', '519', '520', '521', '522'],
+  },
+  'Summit Lodging': {
+    id: '99',
+    children: ['524', '525'],
+  },
+  'Summit Logistics': {
+    id: '100',
+    children: ['527', '528', '529', '530', '531', '532', '533', '534', '535', '536'],
+  },
+  PDUs: {
+    id: '101',
+    children: ['537', '538', '539', '540', '541', '542', '543'],
+  },
+  Other: {
+    id: '123',
+  },
+  /** IT Infrastructure System */
+  Network: {
+    id: '103',
+    children: ['544', '545', '546', '547', '548'],
+  },
+  Storage: {
+    id: '104',
+    children: ['549', '550'],
+  },
+  Infrastructure: {
+    id: '105',
+    children: ['552', '553', '554', '555'],
+  },
+  'Control Room Workstations': {
+    id: '106',
+    children: ['557', '558', '559'],
+  },
+  'Accounts and Access': {
+    id: '107',
+  },
+  Other: {
+    id: '122',
+  },
+  /** Environmental Awareness Systems System */
+  'DIMM 1': {
+    id: '109',
+  },
+  'DIMM 2': {
+    id: '110',
+  },
+  AllSkyCam: {
+    id: '111',
+  },
+  'Weather Station (ESS:301)': {
+    id: '112',
+  },
+  'Weather Forecast': {
+    id: '113',
+  },
+  EAS: {
+    id: '114',
+  },
+  'ESS: Index': {
+    id: '115',
+  },
+  'Vibration Monitoring System': {
+    id: '116',
+  },
+  'Earthquake Detection System': {
+    id: '117',
+  },
+  'Fire Alert System': {
+    id: '118',
+  },
+  'NVR Cameras': {
+    id: '119',
+  },
+  'Remote Microphone': {
+    id: '120',
+  },
+  Other: {
+    id: '121',
+  },
+};
+
+export const OLE_OBS_SUBSYSTEMS_COMPONENTS = {
+  /** TMA Subsystem */
+  'TMA El Drives': {
+    id: '131',
+  },
+  'TMA Az Drives': {
+    id: '132',
+  },
+  'TMA Az Encoders': {
+    id: '133',
+  },
+  'TMA El Encoders': {
+    id: '134',
+  },
+  'TMA Locking Pins': {
+    id: '135',
+  },
+  'TMA Mirror Covers': {
+    id: '136',
+  },
+  'TMA Capacitor Banks/Power Supply': {
+    id: '137',
+  },
+  'TMA El Brakes': {
+    id: '138',
+  },
+  'TMA Az Brakes': {
+    id: '139',
+  },
+  'TMA El Limit Switches': {
+    id: '140',
+  },
+  'TMA Az Limit Switches': {
+    id: '141',
+  },
+  'TMA Topple Blocks': {
+    id: '142',
+  },
+  'TMA Bosch Controller': {
+    id: '143',
+  },
+  'TMA Ethercat Drive Line': {
+    id: '144',
+  },
+  'TMA Ethercat I/O Line': {
+    id: '145',
+  },
+  'TMA PXI': {
+    id: '146',
+  },
+  'TMA Axes PXI': {
+    id: '147',
+  },
+  'TMA Aux PXI': {
+    id: '148',
+  },
+  'TMA Azimuth Cable Wrap': {
+    id: '149',
+  },
+  'TMA Az Cable Wrap Drives': {
+    id: '150',
+  },
+  'TMA Az Cable Wrap Limit Switches': {
+    id: '151',
+  },
+  'TMA El Cable Wrap': {
+    id: '152',
+  },
+  'TMA Deployable Platforms': {
+    id: '153',
+  },
+  'MTMount CSC': {
+    id: '154',
+  },
+  'TMA EUI': {
+    id: '155',
+  },
+  'TMA Control Software': {
+    id: '156',
+  },
+  /** TMA Thermal System Subsystem */
+  'TMA El Motor Thermal Control': {
+    id: '157',
+  },
+  'TMA Az Motor Thermal Control': {
+    id: '158',
+  },
+  'TMA Main Cabinet Thermal Control': {
+    id: '159',
+  },
+  'TMA Aux Cabinets Thermal Control': {
+    id: '160',
+  },
+  'TMA Top End Thermal Control': {
+    id: '161',
+  },
+  'Top End M2 Cabinet': {
+    id: '162',
+  },
+  'Top End Rotator Cabinet': {
+    id: '163',
+  },
+  'Top End CamHex Cabinet': {
+    id: '164',
+  },
+  'Top End Thermal Control Cabinet': {
+    id: '165',
+  },
+  /** Dome Subsystem */
+  'Dome Aperture Shutter': {
+    id: '167',
+  },
+  'Dome Light-Wind Screen': {
+    id: '168',
+  },
+  'Dome Louvers': {
+    id: '169',
+  },
+  'Dome Capacitor Bank': {
+    id: '170',
+  },
+  'Dome Az Drives': {
+    id: '171',
+  },
+  'Dome Az Encoder': {
+    id: '172',
+  },
+  'Dome Az Locking Pin': {
+    id: '173',
+  },
+  'Dome Aperture Shutter Locking Pins': {
+    id: '174',
+  },
+  'Dome Rear Access Door': {
+    id: '175',
+  },
+  'Dome Electronics': {
+    id: '176',
+  },
+  'MTDome CSC': {
+    id: '177',
+  },
+  'MTDomeTrajectory CSC': {
+    id: '178',
+  },
+  'Dome EUI': {
+    id: '179',
+  },
+  'Dome Wifi Network': {
+    id: '180',
+  },
+  /** M1M3 Support System Subsystem */
+  'MTM1M3 CSC': {
+    id: '182',
+  },
+  'M1M3 EUI': {
+    id: '183',
+  },
+  'M1M3 Low-level Control Software (cRIO)': {
+    id: '184',
+  },
+  'M1M3 Actuators': {
+    id: '185',
+  },
+  'M1M3 Hardpoints': {
+    id: '186',
+  },
+  'M1M3 Electronics': {
+    id: '187',
+  },
+  'M1M3 Coating': {
+    id: '188',
+  },
+  'M1M3 ILCs': {
+    id: '189',
+  },
+  'M1M3 Air Supply': {
+    id: '190',
+  },
+  'M1M3 IMS': {
+    id: '191',
+  },
+  'M1M3 DC Accelerometers': {
+    id: '192',
+  },
+  'M1M3 Gyroscope Sensors': {
+    id: '193',
+  },
+  /** M1M3 Thermal System Subsystem */
+  'M1M3TS Fan Coil Units': {
+    id: '194',
+  },
+  'M1M3TS Fans': {
+    id: '195',
+  },
+  'M1M3TS Heaters': {
+    id: '196',
+  },
+  'M1M3TS CSC': {
+    id: '197',
+  },
+  'M1M3TS Glycol Mixing Control': {
+    id: '198',
+  },
+  'M1M3TS Fan Coil Unit ILCs': {
+    id: '199',
+  },
+  /** M2 Systems Subsystem */
+  'M2 Axial Actuators': {
+    id: '200',
+  },
+  'M2 Tangent Links': {
+    id: '201',
+  },
+  'M2 Electronics': {
+    id: '202',
+  },
+  'M2 Coating': {
+    id: '203',
+  },
+  'M2 ILCs': {
+    id: '204',
+  },
+  'MTM2 CSC': {
+    id: '205',
+  },
+  'M2 EUI': {
+    id: '206',
+  },
+  'M2 Control Software': {
+    id: '207',
+  },
+  /** Rotator Subsystem */
+  'Rotator Drives': {
+    id: '208',
+  },
+  'Rotator Electronics': {
+    id: '209',
+  },
+  'MTRotator CSC': {
+    id: '210',
+  },
+  'MTRotator EUI': {
+    id: '211',
+  },
+  'MTRotator Control Software': {
+    id: '212',
+  },
+  /** Hexapods Subsystem */
+  'CamHex Actuators': {
+    id: '214',
+  },
+  'M2Hex Actuators': {
+    id: '215',
+  },
+  'CamHex Electronics': {
+    id: '216',
+  },
+  'M2Hex Electronics': {
+    id: '217',
+  },
+  'MTHexapod:1 CSC': {
+    id: '218',
+  },
+  'MTHexapod:2 CSC': {
+    id: '219',
+  },
+  'CamHex EUI': {
+    id: '220',
+  },
+  'M2Hex EUI': {
+    id: '221',
+  },
+  'CamHex Control Software': {
+    id: '222',
+  },
+  'M2Hex Control Software': {
+    id: '223',
+  },
+  /** Star Trackers Subsystem */
+  'WideTracker Sensor': {
+    id: '225',
+  },
+  'WideTracker Optics': {
+    id: '226',
+  },
+  'GenericCamera.101 CSC': {
+    id: '227',
+  },
+  'GCHeaderService.101 CSC': {
+    id: '228',
+  },
+  'WideTracker Control Software': {
+    id: '229',
+  },
+  'NarrowTracker Sensor': {
+    id: '230',
+  },
+  'NarrowTracker Optics': {
+    id: '231',
+  },
+  'GenericCamera.102 CSC': {
+    id: '232',
+  },
+  'GCHeaderService.102 CSC': {
+    id: '233',
+  },
+  'NarrowTracker Control Software': {
+    id: '234',
+  },
+  'FastTracker Sensor': {
+    id: '235',
+  },
+  'FastTracker Optics': {
+    id: '236',
+  },
+  'FastTracker Focuser Unit': {
+    id: '237',
+  },
+  'GenericCamera.103 CSC': {
+    id: '238',
+  },
+  'GCHeaderService.103 CSC': {
+    id: '239',
+  },
+  'FastTracker Control Software': {
+    id: '240',
+  },
+  /** OCS Subsystem */
+  'MTPtg CSC': {
+    id: '241',
+  },
+  'MTAOS CSC': {
+    id: '242',
+  },
+  'Simonyi SAL Scripts': {
+    id: '243',
+  },
+  'Simonyi ScriptQueue': {
+    id: '244',
+  },
+  'Simonyi Scheduler': {
+    id: '245',
+  },
+  'Simonyi OCPS': {
+    id: '246',
+  },
+  /** Cable Wraps Subsystem */
+  'TMA Az Drape': {
+    id: '248',
+  },
+  'TMA El Wrap': {
+    id: '249',
+  },
+  CCW: {
+    id: '250',
+  },
+  'CCW Drive': {
+    id: '251',
+  },
+  'CCW Limit Switches': {
+    id: '252',
+  },
+  'CCW-Camera Limit Switch (pull-string)': {
+    id: '253',
+  },
+  'CCW Control Software': {
+    id: '254',
+  },
+  'Pancake Cable Wrap Rotator': {
+    id: '255',
+  },
+  /** OSS Subsystem */
+  'OSS Sensors (Pressure, Flow, Temperature)': {
+    id: '257',
+  },
+  'OSS Pumps (main, booster)': {
+    id: '259',
+  },
+  'OSS Circulation System': {
+    id: '260',
+  },
+  'OSS Storage Tank': {
+    id: '261',
+  },
+  'Az Brake System': {
+    id: '262',
+  },
+  'El Brake System': {
+    id: '263',
+  },
+  'OSS Cooling System': {
+    id: '264',
+  },
+  /** Laser Tracker Subsystem */
+  'LaserTracker M2 SMR': {
+    id: '266',
+  },
+  'LaserTracker Camera SMRs': {
+    id: '267',
+  },
+  'LaserTracker CSC': {
+    id: '268',
+  },
+  'LaserTracker Power Supply': {
+    id: '270',
+  },
+  'LaserTracker T2SA': {
+    id: '271',
+  },
+  /** Focal Plane Subsystem */
+  'LSSTCam Science Sequencer': {
+    id: '272',
+  },
+  'LSSTCam Guider Sequencer': {
+    id: '273',
+  },
+  'LSSTCam ITL Voltage': {
+    id: '274',
+  },
+  'LSSTCam E2V Voltage': {
+    id: '275',
+  },
+  'LSSTCam DAQ': {
+    id: '276',
+  },
+  'LSSTCam RxxRebySzz': {
+    id: '277',
+  },
+  /** Image Handlers Subsystem */
+  'LSSTCam fits generation': {
+    id: '279',
+  },
+  'LSSTCam fits header': {
+    id: '280',
+  },
+  /** Rebpower Subsystem */
+  'LSSTCam RebPS/Pxx': {
+    id: '281',
+  },
+  /** Shutter Subsystem */
+  'LSSTCam Shutter1': {
+    id: '282',
+  },
+  'LSSTCam Shutter2': {
+    id: '283',
+  },
+  /** Filter Exchange Subsystem */
+  'LSSTCam Autochanger[12]': {
+    id: '285',
+  },
+  'LSSTCam Carousel': {
+    id: '286',
+  },
+  'LSSTCam Loader[12]': {
+    id: '287',
+  },
+  /** Vacuum Systems Subsystem */
+  'LSSTCam Cryostat Turbo Pump': {
+    id: '289',
+  },
+  'LSSTCam Cryostat Pump Cart': {
+    id: '290',
+  },
+  'LSSTCam Cryostat Ion Pump': {
+    id: '291',
+  },
+  'LSSTCam Cryostat Valves': {
+    id: '292',
+  },
+  'LSSTCam Hex (Head Exchanger Vacuum) Turbo Pump': {
+    id: '293',
+  },
+  'LSSTCam Hex Pump Cart': {
+    id: '296',
+  },
+  'LSSTCam Hex Ion Pump': {
+    id: '297',
+  },
+  'LSSTCam Hex Valves': {
+    id: '298',
+  },
+  /** Quadbox Subsystem */
+  'LSSTCam BFR': {
+    id: '299',
+  },
+  'LSSTCam REB Bulk PS': {
+    id: '300',
+  },
+  'LSSTCam HCUs': {
+    id: '301',
+  },
+  'LSTCam 5V Clean PDU': {
+    id: '302',
+  },
+  'LSSTCam 48V Dirty PDU': {
+    id: '303',
+  },
+  'LSSTCam 24V Clean PDU': {
+    id: '304',
+  },
+  'LSSTCam 24V Dirty PDU': {
+    id: '305',
+  },
+  /** Utility Trunk Subsystem */
+  'LSSTCam UT Cooling Control': {
+    id: '307',
+  },
+  'LSSTCam MPC Control': {
+    id: '308',
+  },
+  'LSSTCam VPC Control': {
+    id: '311',
+  },
+  /** Cryo Refrigeration Subsystem */
+  'LSSTCam Cryo1': {
+    id: '313',
+  },
+  'LSSTCam Cryo2': {
+    id: '314',
+  },
+  'LSSTCam Cryo3': {
+    id: '315',
+  },
+  'LSSTCam Cryo4': {
+    id: '317',
+  },
+  'LSSTCam Cryo5': {
+    id: '318',
+  },
+  'LSSTCam Cryo6': {
+    id: '319',
+  },
+  /** PCS Refrigerations Subsystem */
+  'LSSTCam Chiller 1': {
+    id: '321',
+  },
+  'LSSTCam Chiller 2': {
+    id: '322',
+  },
+  /** Camera Thermal System Subsystem */
+  'LSSTCam Cold +Y': {
+    id: '324',
+  },
+  'LSSTCam Cold Center': {
+    id: '325',
+  },
+  'LSSTCam Cold -Y ': {
+    id: '326',
+  },
+  'LSSTCam Cryo': {
+    id: '327',
+  },
+  /** Computing Subsystem */
+  'lsstcam-db01': {
+    id: '329',
+  },
+  'lssctam-dcxx': {
+    id: '330',
+  },
+  'lsstcam-mcm': {
+    id: '331',
+  },
+  'lsstcam-fcs': {
+    id: '332',
+  },
+  'lsstcam-pcs01': {
+    id: '333',
+  },
+  'lsstcam-pcs02': {
+    id: '334',
+  },
+  'lsstcam-quad': {
+    id: '335',
+  },
+  'lsstcam-rebps': {
+    id: '336',
+  },
+  'lsstcam-shutter01': {
+    id: '337',
+  },
+  'lsstcam-shutter02': {
+    id: '338',
+  },
+  'lsstcam-vac': {
+    id: '339',
+  },
+  /** Web Services Subsystem */
+  'Image Viewer': {
+    id: '341',
+  },
+  'Trending Viewer': {
+    id: '342',
+  },
+  /** Focal Plane Subsystem */
+  'ComCam REB Electronics': {
+    id: '343',
+  },
+  'ComCam REB Power Supply': {
+    id: '344',
+  },
+  'ComCam High-Voltage Bias': {
+    id: '345',
+  },
+  'ComCam Raft Sensor Assembly': {
+    id: '346',
+  },
+  'ComCam CCD Temperature Control': {
+    id: '347',
+  },
+  /** Pathfinder Cryo System Subsystem */
+  'Pathfinder Cryo Compressors': {
+    id: '348',
+  },
+  'Pathfinder Cryo Pressure Sensors': {
+    id: '349',
+  },
+  'Pathfinder Cryo Glycol Circulation': {
+    id: '350',
+  },
+  /** ComCam Vacuum System Subsystem */
+  'ComCam Ion Pump': {
+    id: '351',
+  },
+  'ComCam Turbo Pump': {
+    id: '352',
+  },
+  'ComCam Roughing Pump': {
+    id: '353',
+  },
+  'ComCam Cryotels': {
+    id: '354',
+  },
+  'ComCam RTD Sensors': {
+    id: '355',
+  },
+  'ComCam VQM Pressure Sensors': {
+    id: '356',
+  },
+  /** Pathfinder Vacuum System Subsystem */
+  'Pathfinder Ion Pump': {
+    id: '357',
+  },
+  'Pathfinder Turbo Pump': {
+    id: '358',
+  },
+  'Pathfinder Pump Cart': {
+    id: '359',
+  },
+  'Pathfinder RTD Sensors': {
+    id: '360',
+  },
+  'Pathfinder VQM Pressure Sensors': {
+    id: '361',
+  },
+  'Pathfinder Heat Exchangers': {
+    id: '362',
+  },
+  /** Optical System Subsystem */
+  'ComCam Lenses': {
+    id: '363',
+  },
+  'ComCam Filters': {
+    id: '364',
+  },
+  'ComCam L3 Air Knife': {
+    id: '365',
+  },
+  'ComCam L1/L2 Positive Pressure System': {
+    id: '366',
+  },
+  'ComCam Shutter': {
+    id: '367',
+  },
+  /** Utility Trunk Subsystem */
+  'ComCam BFR"': {
+    id: '368',
+  },
+  'ComCam PDUs': {
+    id: '369',
+  },
+  'ComCam PLC Protection Modules': {
+    id: '370',
+  },
+  'ComCam Bulk Purge Control System (Temperature, Tachometer, Flow)': {
+    id: '371',
+  },
+  /** Software Subsystem */
+  // ["372", "373", "374", "375", "376", "377", "378"]
+  'CCS Console': {
+    id: '372',
+  },
+  'CCS Database': {
+    id: '373',
+  },
+  'CCS Subsystems': {
+    id: '374',
+  },
+  'CCS Visualization': {
+    id: '375',
+  },
+  'ComCam Imaging Mode': {
+    id: '376',
+  },
+  'ComCam Guider Mode': {
+    id: '377',
+  },
+  'ComCam Stuttered Mode': {
+    id: '378',
+  },
+  /** Computing Subsystem */
+  'ComCam Data Ingestion': {
+    id: '380',
+  },
+  'ComCam Network Transfer': {
+    id: '381',
+  },
+  'CCCamera CSC': {
+    id: '382',
+  },
+  'CCOODS CSC': {
+    id: '383',
+  },
+  'CCHeaderService CSC': {
+    id: '384',
+  },
+  'ComCam HCUs': {
+    id: '385',
+  },
+  'ComCam Servers': {
+    id: '386',
+  },
+  'ComCam Network': {
+    id: '387',
+  },
+  'ComCam Data Trending': {
+    id: '388',
+  },
+  /** Flat Field Projector Subsystem */
+  LEDProjector: {
+    id: '389',
+  },
+  'LinearStage.101 (Zaber)': {
+    id: '390',
+  },
+  /** Tunable Laser Subsystem */
+  TunableLaser: {
+    id: '391',
+  },
+  interlock_monitor: {
+    id: '392',
+  },
+  /** Fiber Spectrograph Subsystem */
+  // ["393", "394"]
+  'FiberSpectrograph.1 (blue)': {
+    id: '393',
+  },
+  'FiberSpectrograph.2 (red)': {
+    id: '394',
+  },
+  /** Electrometer Subsystem */
+  'Electrometer.101': {
+    id: '395',
+  },
+  'Electrometer.103': {
+    id: '396',
+  },
+  'Electrometer.102': {
+    id: '397',
+  },
+  /** Mount Subsystem */
+  'AT El Drive': {
+    id: '398',
+  },
+  'AT Az Drive': {
+    id: '399',
+  },
+  'AT El Encoder': {
+    id: '400',
+  },
+  'AT El Limit Switch': {
+    id: '401',
+  },
+  'AT Az Limit Switch': {
+    id: '402',
+  },
+  'AT Az Encoder': {
+    id: '403',
+  },
+  'AT Mount EUI': {
+    id: '404',
+  },
+  'ATMCS CSC': {
+    id: '405',
+  },
+  /** Dome Subsystem */
+  'AT Upper Shutter': {
+    id: '406',
+  },
+  'AT Lower Shutter': {
+    id: '407',
+  },
+  'AT Vent Gates': {
+    id: '408',
+  },
+  'AT Exhaust Fan': {
+    id: '409',
+  },
+  'AT Azimuth Drives': {
+    id: '410',
+  },
+  'AT Dome EUI': {
+    id: '411',
+  },
+  'ATDome CSC': {
+    id: '412',
+  },
+  'ATDomeTrajectory CSC': {
+    id: '414',
+  },
+  /** M1 Systems Subsystem */
+  'AT M1 Mirror Covers': {
+    id: '415',
+  },
+  'AT M1 Support System': {
+    id: '416',
+  },
+  'AT M1 Coating': {
+    id: '417',
+  },
+  'AT M1 Actuators': {
+    id: '418',
+  },
+  'AT M1 Hardpoints': {
+    id: '419',
+  },
+  'ATAOS CSC': {
+    id: '420',
+  },
+  'ATPneumatics CSC': {
+    id: '421',
+  },
+  /** M2 Systems Subsystem */
+  'AT Hexapod': {
+    id: '422',
+  },
+  'AT M2 Coating': {
+    id: '423',
+  },
+  'ATAOS CSC': {
+    id: '424',
+  },
+  'ATHexapod CSC': {
+    id: '425',
+  },
+  /** M3 Systems Subsystem */
+  'AT Nasmyth 1': {
+    id: '426',
+  },
+  'AT Nasmyth 2': {
+    id: '427',
+  },
+  /** OCS Subsystem */
+  'ATPtg CSC': {
+    id: '432',
+  },
+  'ATAOS CSC': {
+    id: '433',
+  },
+  'ATMCS CSC': {
+    id: '434',
+  },
+  'AT SAL Scripts': {
+    id: '435',
+  },
+  'ATScriptQueue CSC': {
+    id: '436',
+  },
+  'ATScheduler CSC': {
+    id: '437',
+  },
+  'AT OCPS': {
+    id: '438',
+  },
+  /** Focal Plane Subsystem */
+  'LATISS Shutter': {
+    id: '439',
+  },
+  'LATISS Detector': {
+    id: '440',
+  },
+  /** Vacuum System Subsystem */
+  'LATISS Turbe Pump': {
+    id: '441',
+  },
+  'LATISS Ion Pump': {
+    id: '442',
+  },
+  /** Refrigeration Subsystem */
+  'LATISS Cooling System': {
+    id: '443',
+  },
+  /** Optical System Subsystem */
+  'LATISS Filters': {
+    id: '444',
+  },
+  'LATISS Gratings': {
+    id: '445',
+  },
+  'LATISS Shutter': {
+    id: '446',
+  },
+  'LATISS Filter Exchanger': {
+    id: '447',
+  },
+  'LATISS Filter Loader': {
+    id: '448',
+  },
+  'LATISS Carousel': {
+    id: '449',
+  },
+  'LATISS Rotator': {
+    id: '450',
+  },
+  /** Software Subsystem */
+  'ATCamera CSC': {
+    id: '451',
+  },
+  'ATHeaderService CSC': {
+    id: '452',
+  },
+  'ATSpectrograph CSC': {
+    id: '453',
+  },
+  /** Computing Subsystem */
+  'LATISS Network': {
+    id: '454',
+  },
+  /** Optical System Subsystem */
+  'Shutter System': {
+    id: '455',
+  },
+  Lens: {
+    id: '456',
+  },
+  /** White Light Subsystem */
+  'White Light Source': {
+    id: '458',
+  },
+  'ATWhiteLight CSC (includes chiller)': {
+    id: '459',
+  },
+  /** Monochromator Subsystem */
+  'AT Monochromator': {
+    id: '460',
+  },
+  'ATMonochromator CSC': {
+    id: '461',
+  },
+  /** Electrometer Subsystem */
+  Electrometer: {
+    id: '463',
+  },
+  'Electrometer.201 (CSC)': {
+    id: '464',
+  },
+  /** Fiber Spectrograph Subsystem */
+  FiberSpectrograph: {
+    id: '466',
+  },
+  'FiberSpectrograph.3 CSC': {
+    id: '467',
+  },
+  'Spectral Cal Lamp': {
+    id: '468',
+  },
+  /** Scheduler Subsystem */
+  'AT Scheduler CSC': {
+    id: '469',
+  },
+  'Simonyi Scheduler CSC': {
+    id: '470',
+  },
+  'OCS Scheduler CSC': {
+    id: '471',
+  },
+  /** Script Queue Subsystem */
+  'AT Script Queue': {
+    id: '472',
+  },
+  'Simonyi Script Queue': {
+    id: '473',
+  },
+  'OCS Script Queue': {
+    id: '474',
+  },
+  /** SAL Scripts Subsystem */
+  ts_standardscripts: {
+    id: '475',
+  },
+  ts_externalscripts: {
+    id: '476',
+  },
+  ts_observatory_control: {
+    id: '477',
+  },
+  /** Pipelines Subsystem */
+  'Rapid Analysis at Summit': {
+    id: '478',
+  },
+  'Rapid Analysis at USDF': {
+    id: '479',
+  },
+  /** Data Transfer Subsystem */
+  'Long Haul Network': {
+    id: '481',
+  },
+  'ATOODS CSC': {
+    id: '482',
+  },
+  'MTOODS CSC': {
+    id: '483',
+  },
+  'CCOODS CSC': {
+    id: '484',
+  },
+  /** Interlock Systems Subsystem */
+  'Global Interlock System': {
+    id: '485',
+  },
+  'Simonyi IS': {
+    id: '486',
+  },
+  'Dome IS': {
+    id: '487',
+  },
+  'AuxTel IS': {
+    id: '488',
+  },
+  'M1M3 IS': {
+    id: '489',
+  },
+  'M2CAM IS': {
+    id: '490',
+  },
+  'Simonyi ETPBs': {
+    id: '491',
+  },
+  'Calibrations IS': {
+    id: '492',
+  },
+  'GIS EUI': {
+    id: '493',
+  },
+  'IS CSC': {
+    id: '494',
+  },
+  /** Air Compressors Subsystem */
+  'Main Air Compressor 1': {
+    id: '495',
+  },
+  'Main Air Compressor 2': {
+    id: '496',
+  },
+  'Auxiliary Air Compressor': {
+    id: '497',
+  },
+  'AuxTel Air Compressor': {
+    id: '498',
+  },
+  'Air Compressor CSC': {
+    id: '499',
+  },
+  /** Commercial Power Subsystem */
+  'Commercial Grid Transformer': {
+    id: '500',
+  },
+  'Commercial Grid Power Lines': {
+    id: '501',
+  },
+  /** Generators Subsystem */
+  'Generator 1MWA': {
+    id: '502',
+  },
+  'Generator 750kWA': {
+    id: '503',
+  },
+  'Generator Transfer Switches': {
+    id: '504',
+  },
+  /** Electrical Power Monitor Subsystem */
+  'EPM CSC': {
+    id: '505',
+  },
+  /** UPSs Subsystem */
+  'Main UPS': {
+    id: '507',
+  },
+  'AuxTel UPS': {
+    id: '508',
+  },
+  'Computer Room UPS': {
+    id: '509',
+  },
+  /** Main Service Building WIFI Network Subsystem */
+  'Main Service Building Router': {
+    id: '510',
+  },
+  /** Environmental Control System Subsystem */
+  'Dome Air Handler Units': {
+    id: '511',
+  },
+  'Clean/White Room Air Handler Units': {
+    id: '512',
+  },
+  'Computer Room ACs (CRACs)': {
+    id: '513',
+  },
+  'OSS Chillers': {
+    id: '514',
+  },
+  'Ventilation Fans': {
+    id: '515',
+  },
+  'Downdraft Fan': {
+    id: '516',
+  },
+  'Glycol Chillers': {
+    id: '518',
+  },
+  'Glycol Sensors (Pressure, Flow, Temperature)': {
+    id: '519',
+  },
+  'Dynalene Chillers': {
+    id: '520',
+  },
+  'Dynalene Lines': {
+    id: '521',
+  },
+  'Dynalene Sensors (Pressure, Flow, Temperature)': {
+    id: '522',
+  },
+  /** Summit Lodging Subsystem */
+  'Hotel Rooms': {
+    id: '524',
+  },
+  'Hotel Network': {
+    id: '525',
+  },
+  /** Summit Logistics Subsystem */
+  'Control Room': {
+    id: '527',
+  },
+  'Offices L2': {
+    id: '528',
+  },
+  'Office Network': {
+    id: '529',
+  },
+  Bus: {
+    id: '530',
+  },
+  Minibus: {
+    id: '531',
+  },
+  Trucks: {
+    id: '532',
+  },
+  'Emergency Radios': {
+    id: '533',
+  },
+  Kitchen: {
+    id: '534',
+  },
+  Bathrooms: {
+    id: '535',
+  },
+  Coffee: {
+    id: '536',
+  },
+  /** PDUs Subsystem */
+  'ATMCS Cabinet PDU': {
+    id: '537',
+  },
+  'AT Camera Cabinet PDU 1': {
+    id: '538',
+  },
+  'AT Spectrograph Power Switch Cabinet PDU': {
+    id: '539',
+  },
+  'AT Dome Main Control Box PDU': {
+    id: '540',
+  },
+  'AT Illumintaion System PDU': {
+    id: '541',
+  },
+  'LATISS PDU': {
+    id: '542',
+  },
+  'Simonyi TEA PDU': {
+    id: '543',
+  },
+  /** Network Subsystem */
+  'Users Network': {
+    id: '544',
+  },
+  'Control Network': {
+    id: '545',
+  },
+  'Pixel Network': {
+    id: '546',
+  },
+  Internet: {
+    id: '547',
+  },
+  'Long Haul Network': {
+    id: '548',
+  },
+  /** Storage Subsystem */
+  'Summit ': {
+    id: '549',
+  },
+  Base: {
+    id: '550',
+  },
+  /** Infrastructure Subsystem */
+  Kubernetes: {
+    id: '552',
+  },
+  'LSSTCam IT Infrastructure': {
+    id: '553',
+  },
+  'AuxTel IT Infrastructure': {
+    id: '554',
+  },
+  'Simonyi IT Infrastructure': {
+    id: '555',
+  },
+  /** Control Room Workstations Subsystem */
+  Summit: {
+    id: '557',
+  },
+  Base: {
+    id: '558',
+  },
+  Tucson: {
+    id: '559',
+  },
+  Middleware: {
+    id: '560',
+  },
+};
+
 /*****************************************************************************/
 /**************************CSC Summary configurations*************************/
 /*****************************************************************************/
