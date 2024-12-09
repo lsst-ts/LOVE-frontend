@@ -34,12 +34,7 @@ import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import Select from 'components/GeneralPurpose/Select/Select';
-import {
-  OLE_JIRA_COMPONENTS,
-  OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS,
-  OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS,
-  iconLevelOLE,
-} from 'Config';
+import { OLE_OBS_SYSTEMS, OLE_OBS_SUBSYSTEMS, OLE_OBS_SUBSYSTEMS_COMPONENTS, iconLevelOLE } from 'Config';
 import ManagerInterface, {
   getFilesURLs,
   getLinkJira,
@@ -47,6 +42,7 @@ import ManagerInterface, {
   openInNewTab,
   htmlToJiraMarkdown,
   jiraMarkdownToHtml,
+  arrangeJiraOBSSystemsSubsystemsComponentsSelection,
 } from 'Utils';
 import styles from './NonExposure.module.css';
 
@@ -72,12 +68,12 @@ class NonExposureEdit extends Component {
       level: 0,
       date_begin: '',
       date_end: '',
+      systems: [],
+      systems_ids: [],
+      subsystems: [],
+      subsystems_ids: [],
       components: [],
       components_ids: [],
-      primary_software_components: ['None'],
-      primary_software_components_ids: OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS['None'],
-      primary_hardware_components: ['None'],
-      primary_hardware_components_ids: OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS['None'],
       salindex: 0,
       user: undefined,
       time_lost: 0,
@@ -115,7 +111,11 @@ class NonExposureEdit extends Component {
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.multiselectSystemsRef = React.createRef();
+    this.multiselectSubsystemsRef = React.createRef();
     this.multiselectComponentsRef = React.createRef();
+
     this.richTextEditorRef = React.createRef();
     this.id = lodash.uniqueId('nonexposure-edit-');
 
@@ -140,15 +140,33 @@ class NonExposureEdit extends Component {
     this.setState((prevState) => ({
       logEdit: {
         ...NonExposureEdit.defaultProps.logEdit,
-        components: prevState.logEdit.components,
+        systems: prevState.logEdit.systems,
+        systems_ids: prevState.logEdit.systems_ids,
       },
     }));
   }
 
+  clearSystemsInput() {
+    this.setState((prevState) => ({
+      logEdit: { ...prevState.logEdit, systems: [], systems_ids: [] },
+    }));
+
+    this.multiselectSystemsRef.current?.resetSelectedValues();
+  }
+
+  clearSubsystemsInput() {
+    this.setState((prevState) => ({
+      logEdit: { ...prevState.logEdit, subsystems: [], subsystems_ids: [] },
+    }));
+
+    this.multiselectSubsystemsRef.current?.resetSelectedValues();
+  }
+
   clearComponentsInput() {
     this.setState((prevState) => ({
-      logEdit: { ...prevState.logEdit, components: [] },
+      logEdit: { ...prevState.logEdit, components: [], components_ids: [] },
     }));
+
     this.multiselectComponentsRef.current?.resetSelectedValues();
   }
 
@@ -200,7 +218,6 @@ class NonExposureEdit extends Component {
     const dateBeginButtons = dateBeginElement?.querySelectorAll('button');
     const dateEndButtons = dateEndElement?.querySelectorAll('button');
 
-    // const clickEvent = new MouseEvent('click');
     const clickEvent = new Event('click', { bubbles: true });
 
     if (dateBeginButtons && dateBeginButtons.length > 0) {
@@ -215,7 +232,9 @@ class NonExposureEdit extends Component {
   }
 
   updateOrCreateMessageNarrativeLogs() {
-    const payload = { ...this.state.logEdit };
+    const { logEdit } = this.state;
+    const payload = { ...logEdit };
+
     const nowMoment = Moment();
     payload['request_type'] = 'narrative';
 
@@ -236,6 +255,29 @@ class NonExposureEdit extends Component {
         delete payload[key];
       }
     });
+
+    // Handle systems, subsystems and components for JIRA payload
+    const selection = arrangeJiraOBSSystemsSubsystemsComponentsSelection(
+      payload.systems_ids,
+      payload.subsystems_ids,
+      payload.components_ids,
+    );
+    payload['jira_obs_selection'] = selection;
+
+    // Transform keys to narrativelog format
+    // systems -> components
+    // subsystems -> primary_software_components
+    // components -> primary_hardware_components
+    payload['components'] = logEdit['systems'];
+    payload['primary_software_components'] = logEdit['subsystems'];
+    payload['primary_hardware_components'] = logEdit['components'];
+
+    // Avoid API confusion with other existent parameters
+    delete payload['systems'];
+    delete payload['subsystems'];
+    delete payload['systems_ids'];
+    delete payload['subsystems_ids'];
+    delete payload['components_ids'];
 
     this.setState({ savingLog: true });
     if (this.state.logEdit.id) {
@@ -372,22 +414,101 @@ class NonExposureEdit extends Component {
   renderComponentsFields() {
     const { logEdit } = this.state;
 
-    const componentOptions = Object.keys(OLE_JIRA_COMPONENTS).sort();
-    const primarySoftwareComponentOptions = Object.keys(OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS).sort();
-    const primaryHardwareComponentOptions = Object.keys(OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS).sort();
+    const systemOptions = Object.keys(OLE_OBS_SYSTEMS).sort();
+
+    const selectedSystems = logEdit?.systems;
+    const selectedSubsystems = logEdit?.subsystems;
+    const selectedComponents = logEdit?.components;
+
+    const availableSubsystemsIds = selectedSystems
+      .map((s) => {
+        return OLE_OBS_SYSTEMS[s].children;
+      })
+      .flat();
+    const subsystemOptions = Object.keys(OLE_OBS_SUBSYSTEMS)
+      .filter((ss) => {
+        return availableSubsystemsIds.includes(OLE_OBS_SUBSYSTEMS[ss].id);
+      })
+      .sort();
+
+    const availableComponentsIds = selectedSubsystems
+      .map((ss) => {
+        return OLE_OBS_SUBSYSTEMS[ss].children;
+      })
+      .flat();
+    const componentOptions = Object.keys(OLE_OBS_SUBSYSTEMS_COMPONENTS)
+      .filter((c) => {
+        return availableComponentsIds.includes(OLE_OBS_SUBSYSTEMS_COMPONENTS[c].id);
+      })
+      .sort();
+
+    const setLogEditSystems = (selectedOptions) => {
+      const systemsIds = selectedOptions.map((s) => OLE_OBS_SYSTEMS[s].id);
+      this.setState((prevState) => ({
+        logEdit: {
+          ...prevState.logEdit,
+          systems: selectedOptions,
+          systems_ids: systemsIds,
+        },
+      }));
+    };
+
+    const setLogEditSubsystems = (selectedOptions) => {
+      const subsystemsIds = selectedOptions.map((ss) => OLE_OBS_SUBSYSTEMS[ss].id);
+      this.setState((prevState) => ({
+        logEdit: {
+          ...prevState.logEdit,
+          subsystems: selectedOptions,
+          subsystems_ids: subsystemsIds,
+        },
+      }));
+    };
 
     const setLogEditComponents = (selectedOptions) => {
+      const componentsIds = selectedOptions.map((c) => OLE_OBS_SUBSYSTEMS_COMPONENTS[c].id);
       this.setState((prevState) => ({
         logEdit: {
           ...prevState.logEdit,
           components: selectedOptions,
-          components_ids: selectedOptions.map((component) => OLE_JIRA_COMPONENTS[component]),
+          components_ids: componentsIds,
         },
       }));
     };
 
     return (
       <>
+        <span className={styles.label}>Systems</span>
+        <span className={styles.value}>
+          <div className={styles.inputGroup}>
+            <Multiselect
+              innerRef={this.multiselectSystemsRef}
+              className={styles.select}
+              options={systemOptions}
+              selectedValues={selectedSystems}
+              onSelect={setLogEditSystems}
+              onRemove={setLogEditSystems}
+              placeholder="Select zero or more systems"
+              selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
+            />
+            <Button onClick={() => this.clearSystemsInput()}>Clear</Button>
+          </div>
+        </span>
+        <span className={styles.label}>Subsystems</span>
+        <span className={styles.value}>
+          <div className={styles.inputGroup}>
+            <Multiselect
+              innerRef={this.multiselectSubsystemsRef}
+              className={styles.select}
+              options={subsystemOptions}
+              selectedValues={selectedSubsystems}
+              onSelect={setLogEditSubsystems}
+              onRemove={setLogEditSubsystems}
+              placeholder="Select zero or more subsystems"
+              selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
+            />
+            <Button onClick={() => this.clearSubsystemsInput()}>Clear</Button>
+          </div>
+        </span>
         <span className={styles.label}>Components</span>
         <span className={styles.value}>
           <div className={styles.inputGroup}>
@@ -395,48 +516,14 @@ class NonExposureEdit extends Component {
               innerRef={this.multiselectComponentsRef}
               className={styles.select}
               options={componentOptions}
-              selectedValues={logEdit?.components}
+              selectedValues={selectedComponents}
               onSelect={setLogEditComponents}
               onRemove={setLogEditComponents}
-              placeholder="Select zero or several components"
+              placeholder="Select zero or more components"
               selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
             />
             <Button onClick={() => this.clearComponentsInput()}>Clear</Button>
           </div>
-        </span>
-        <span className={styles.label}>Primary Software Component</span>
-        <span className={styles.value}>
-          <Select
-            options={primarySoftwareComponentOptions}
-            option={logEdit?.primary_software_components[0]}
-            onChange={({ value }) => {
-              this.setState((prevState) => ({
-                logEdit: {
-                  ...prevState.logEdit,
-                  primary_software_components: [value],
-                  primary_software_components_ids: [OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS[value]],
-                },
-              }));
-            }}
-            className={styles.select}
-          />
-        </span>
-        <span className={styles.label}>Primary Hardware Component</span>
-        <span className={styles.value}>
-          <Select
-            options={primaryHardwareComponentOptions}
-            option={logEdit?.primary_hardware_components[0]}
-            onChange={({ value }) => {
-              this.setState((prevState) => ({
-                logEdit: {
-                  ...prevState.logEdit,
-                  primary_hardware_components: [value],
-                  primary_hardware_components_ids: [OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS[value]],
-                },
-              }));
-            }}
-            className={styles.select}
-          />
         </span>
       </>
     );
@@ -454,13 +541,7 @@ class NonExposureEdit extends Component {
         return (
           <div ref={ref} className={styles.timeOfIncidentInputContainer}>
             <input {...props} readOnly />
-            <Button
-              // ref={ref}
-              className={styles.clearDateIcon}
-              size="small"
-              title="Clear date"
-              onClick={clearDate}
-            >
+            <Button className={styles.clearDateIcon} size="small" title="Clear date" onClick={clearDate}>
               <CloseIcon title="Clear date" />
             </Button>
             <button className={styles.hiddenButtons} type="button" onClick={openCalendar} />

@@ -22,26 +22,6 @@ import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import { CSVLink } from 'react-csv';
-import {
-  TIME_FORMAT,
-  OLE_COMMENT_TYPE_OPTIONS,
-  OLE_JIRA_COMPONENTS,
-  iconLevelOLE,
-  ISO_INTEGER_DATE_FORMAT,
-  ISO_STRING_DATE_TIME_FORMAT,
-  LOG_REFRESH_INTERVAL_MS,
-} from 'Config';
-import ManagerInterface, {
-  formatSecondsToDigital,
-  getLinkJira,
-  getFilesURLs,
-  jiraMarkdownToHtml,
-  getObsDayFromDate,
-  formatOLETimeOfIncident,
-  pipe,
-  convertJiraTicketNamesToHyperlinks,
-} from 'Utils';
-
 import OrderableTable from 'components/GeneralPurpose/OrderableTable/OrderableTable';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Input from 'components/GeneralPurpose/Input/Input';
@@ -56,6 +36,26 @@ import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import Select from 'components/GeneralPurpose/Select/Select';
 import NonExposureDetail from './NonExposureDetail';
 import NonExposureEdit from './NonExposureEdit';
+import {
+  TIME_FORMAT,
+  OLE_COMMENT_TYPE_OPTIONS,
+  OLE_OBS_SYSTEMS,
+  iconLevelOLE,
+  ISO_INTEGER_DATE_FORMAT,
+  ISO_STRING_DATE_TIME_FORMAT,
+  LOG_REFRESH_INTERVAL_MS,
+} from 'Config';
+import { DEFAULT_OLE_SYSTEMS_FILTER_OPTION } from 'Constants';
+import ManagerInterface, {
+  formatSecondsToDigital,
+  getLinkJira,
+  getFilesURLs,
+  jiraMarkdownToHtml,
+  getObsDayFromDate,
+  formatOLETimeOfIncident,
+  pipe,
+  convertJiraTicketNamesToHyperlinks,
+} from 'Utils';
 import styles from './NonExposure.module.css';
 
 const moment = extendMoment(Moment);
@@ -75,10 +75,10 @@ export default class NonExposure extends Component {
     }),
     /** Function to handle the comment type filter */
     changeCommentTypeSelect: PropTypes.func,
-    /** Selected component of the component filter */
-    selectedComponent: PropTypes.string,
-    /** Function to handle the component filter */
-    changeComponentSelect: PropTypes.func,
+    /** Selected system of the systems filter */
+    selectedSystem: PropTypes.string,
+    /** Function to handle the systems filter */
+    changeSystemSelect: PropTypes.func,
     /** Selected obs time loss of the obs time loss filter */
     selectedObsTimeLoss: PropTypes.bool,
     /** Selected jira ticket of the jira ticket filter */
@@ -95,8 +95,8 @@ export default class NonExposure extends Component {
     changeDayNarrative: () => {},
     selectedCommentType: OLE_COMMENT_TYPE_OPTIONS[0],
     changeCommentTypeSelect: () => {},
-    selectedComponent: 'All components',
-    changeComponentSelect: () => {},
+    selectedSystem: DEFAULT_OLE_SYSTEMS_FILTER_OPTION,
+    changeSystemSelect: () => {},
     selectedObsTimeLoss: false,
     changeObsTimeLossSelect: () => {},
     selectedJiraTickets: false,
@@ -365,12 +365,12 @@ export default class NonExposure extends Component {
       selectedDayNarrativeStart,
       selectedDayNarrativeEnd,
       selectedCommentType,
-      selectedComponent,
+      selectedSystem,
       selectedObsTimeLoss,
       selectedJiraTickets,
       changeDayNarrative,
       changeCommentTypeSelect,
-      changeComponentSelect,
+      changeSystemSelect,
       changeObsTimeLossSelect,
       changeJiraTicketsSelect,
     } = this.props;
@@ -385,8 +385,9 @@ export default class NonExposure extends Component {
     }
 
     // Filter by component
-    if (selectedComponent !== 'All components') {
-      filteredData = filteredData.filter((log) => log.components?.includes(selectedComponent));
+    if (selectedSystem !== DEFAULT_OLE_SYSTEMS_FILTER_OPTION) {
+      // Note that the logs use the key 'components' instead of 'system'
+      filteredData = filteredData.filter((log) => log.components?.includes(selectedSystem));
     }
 
     // Filter by obs time loss
@@ -415,8 +416,11 @@ export default class NonExposure extends Component {
         'date_begin',
         'date_end',
         'time_lost',
+        // Systems
         'components',
+        // Subsystems
         'primary_software_components',
+        // Components
         'primary_hardware_components',
         'user_id',
       ];
@@ -430,7 +434,7 @@ export default class NonExposure extends Component {
       )}_to_${selectedDayNarrativeEnd.format(ISO_INTEGER_DATE_FORMAT)}.csv`;
     }
 
-    const componentOptions = ['All components', ...Object.keys(OLE_JIRA_COMPONENTS).sort()];
+    const systemOptions = [DEFAULT_OLE_SYSTEMS_FILTER_OPTION, ...Object.keys(OLE_OBS_SYSTEMS).sort()];
 
     const renderDateTimeInput = (props) => {
       return <input {...props} readOnly />;
@@ -513,9 +517,9 @@ export default class NonExposure extends Component {
           />
 
           <Select
-            options={componentOptions}
-            option={selectedComponent}
-            onChange={({ value }) => changeComponentSelect(value)}
+            options={systemOptions}
+            option={selectedSystem}
+            onChange={({ value }) => changeSystemSelect(value)}
             className={styles.selectComponent}
           />
 

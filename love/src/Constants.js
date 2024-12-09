@@ -35,3 +35,5 @@ export const VALUE_TYPES = {
   ARRAY: 'array',
   OBJECT: 'object',
 };
+
+export const DEFAULT_OLE_SYSTEMS_FILTER_OPTION = 'All systems';
