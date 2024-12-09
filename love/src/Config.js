@@ -405,6 +405,8 @@ export const OLE_COMMENT_TYPE_OPTIONS = [
   { label: 'Non urgent', value: 0 },
 ];
 
+export const OLE_DEFAULT_SYSTEMS_FILTER_OPTION = 'All systems';
+
 export const EXPOSURE_FLAG_OPTIONS = ['none', 'junk', 'questionable'];
 
 export const exposureFlagStateToStyle = {
