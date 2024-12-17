@@ -214,11 +214,11 @@ export default class NonExposure extends Component {
         render: (value) => this.getLevel(value),
       },
       {
-        field: 'components',
-        title: 'Components',
+        field: 'components_json',
+        title: 'Systems',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => value?.join(', '),
+        render: (value) => (value.systems ? value.systems.join(', ') : ''),
       },
       {
         field: 'message_text',
@@ -394,10 +394,10 @@ export default class NonExposure extends Component {
       filteredData = filteredData.filter((log) => log.level === selectedCommentType.value);
     }
 
-    // Filter by component
+    // Filter by system
     if (selectedSystem !== OLE_DEFAULT_SYSTEMS_FILTER_OPTION) {
-      // Note that the logs use the key 'components' instead of 'system'
-      filteredData = filteredData.filter((log) => log.components?.includes(selectedSystem));
+      // Note that systems come inside the components_json.systems field
+      filteredData = filteredData.filter((log) => log.components_json?.systems?.includes(selectedSystem));
     }
 
     // Filter by obs time loss
