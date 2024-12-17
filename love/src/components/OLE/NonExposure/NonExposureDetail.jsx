@@ -56,9 +56,7 @@ export default class NonExposureDetail extends Component {
       level: undefined,
       date_begin: undefined,
       date_end: undefined,
-      components: [],
-      primary_software_components: [],
-      primary_hardware_components: [],
+      components_json: {},
       user: undefined,
       time_lost: undefined,
       jira: undefined,
@@ -197,14 +195,22 @@ export default class NonExposureDetail extends Component {
               <span className={styles.value}>{firstLetterToUpperCase(logDetail.time_lost_type)}</span>
               <span className={styles.label}>Obs. Time Loss</span>
               <span className={styles.value}>{formatSecondsToDigital(logDetail.time_lost * 3600)}</span>
+              <span className={styles.label}>Systems</span>
+              <span className={styles.value}>
+                {logDetail.components_json?.systems?.length > 0 ? logDetail.components_json.systems.join(', ') : 'None'}
+              </span>
+              <span className={styles.label}>Subsystems</span>
+              <span className={styles.value}>
+                {logDetail.components_json?.subsystems?.length > 0
+                  ? logDetail.components_json.subsystems.join(', ')
+                  : 'None'}
+              </span>
               <span className={styles.label}>Components</span>
               <span className={styles.value}>
-                {logDetail.components?.length > 0 ? logDetail.components.join(', ') : 'None'}
+                {logDetail.components_json?.components?.length > 0
+                  ? logDetail.components_json.components.join(', ')
+                  : 'None'}
               </span>
-              <span className={styles.label}>Primary Software Component</span>
-              <span className={styles.value}>{logDetail.primary_software_components?.join(', ')}</span>
-              <span className={styles.label}>Primary Hardware Component</span>
-              <span className={styles.value}>{logDetail.primary_hardware_components?.join(', ')}</span>
               <span className={styles.label}>Type of observing time</span>
               <span className={styles.value}>{logDetail.category}</span>
             </div>
