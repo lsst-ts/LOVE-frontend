@@ -510,13 +510,23 @@ fieldset p {
 .refreshSchemaSection {
   display: flex;
   align-items: center;
-  margin-left: var(--content-padding);
   margin-bottom: var(--small-padding);
 }
 
-.refreshSchemaSection svg {
+.refreshSchemaSection button {
+  display: flex;
+  align-items: center;
+  margin-left: var(--content-padding);
+}
+
+.refreshSchemaSection button svg {
   width: 1.5em;
   height: 1.5em;
   margin-right: 0.5em;
   fill: var(--second-primary-background-color);
+}
+
+.refreshSchemaSection > svg {
+  width: 1.5em;
+  height: 1.5em;
 }

@@ -423,7 +423,7 @@ export default class ScriptQueue extends Component {
     this.closeConfigPanel();
   };
 
-  reloadSchema = (path, isStandard) => {
+  reloadSchema = (path, isStandard, callback) => {
     const payload = {
       component: 'ScriptQueue',
       salindex: this.props.salindex,
@@ -433,7 +433,7 @@ export default class ScriptQueue extends Component {
         isStandard,
       },
     };
-    this.props.requestSALCommand(payload);
+    this.props.requestSALCommand(payload, callback);
   };
 
   closeConfigPanel = () => {

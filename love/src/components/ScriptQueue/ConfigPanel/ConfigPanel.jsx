@@ -144,6 +144,7 @@ export default class ConfigPanel extends Component {
       formData: {},
       updatingScriptSchema: false,
       queueToTop: false,
+      updatingConfigScriptSchema: false,
     };
   }
 
@@ -465,10 +466,20 @@ export default class ConfigPanel extends Component {
   };
 
   onReloadSchema = () => {
+    if (!this.props.configPanel?.script) return;
+    this.setState({ updatingConfigScriptSchema: true });
     const { script } = this.props.configPanel ?? {};
     const path = script.path;
     const isStandard = script.type === 'standard';
-    this.props.reloadSchema(path, isStandard);
+    const schemaAlreadyPresent = this.props.configPanel?.configSchema !== '';
+    this.props.reloadSchema(path, isStandard, () => {
+      // If schema is already present rely on the callback to dismiss the spinner.
+      // This is a workaround to avoid having the spinner present for ever
+      // if the schema doesn't change after executing the reload.
+      if (schemaAlreadyPresent) {
+        this.setState({ updatingConfigScriptSchema: false });
+      }
+    });
   };
 
   startResizingWithMouse = (ev) => {
@@ -665,6 +676,21 @@ export default class ConfigPanel extends Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
+    if (this.props.configPanel?.name && this.props.configPanel?.name !== prevProps.configPanel?.name) {
+      // If there is a new script to configure, reload the schema in the case the schema is not already present
+      if (!this.props.configPanel.configSchema) {
+        this.onReloadSchema();
+      }
+    }
+
+    if (
+      prevState.updatingConfigScriptSchema &&
+      prevProps.configPanel?.configSchema !== this.props.configPanel?.configSchema
+    ) {
+      // If the schema was updated, change the state to dismiss the spinner
+      this.setState({ updatingConfigScriptSchema: false });
+    }
+
     if (
       this.props.configPanel?.script?.path &&
       prevProps.configPanel?.script?.path !== this.props.configPanel?.script?.path
@@ -695,7 +721,10 @@ export default class ConfigPanel extends Component {
       });
     }
 
-    if (this.state.value !== prevState.value) {
+    if (
+      this.state.value !== prevState.value ||
+      this.props.configPanel?.configSchema !== prevProps.configPanel?.configSchema
+    ) {
       this.validateConfig(this.state.value, true);
     }
 
@@ -814,16 +843,19 @@ export default class ConfigPanel extends Component {
               )}
 
               {showSchema && (
-                <Button
-                  title="Send command to reload schema"
-                  className={styles.refreshSchemaSection}
-                  onClick={this.onReloadSchema}
-                  size="extra-small"
-                  command
-                >
-                  <RefreshIcon />
-                  Reload schema
-                </Button>
+                <div className={styles.refreshSchemaSection}>
+                  <Button
+                    title="Send command to reload schema"
+                    onClick={this.onReloadSchema}
+                    size="extra-small"
+                    disabled={this.state.updatingConfigScriptSchema}
+                    command
+                  >
+                    <RefreshIcon />
+                    Reload schema
+                  </Button>
+                  {this.state.updatingConfigScriptSchema && <SpinnerIcon />}
+                </div>
               )}
 
               {showSchema && (
