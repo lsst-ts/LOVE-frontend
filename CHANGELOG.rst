@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.5.0
+------
+
+* Convert narrativelog date_begin and date_end TAI datetimes to UTC. `<https://github.com/lsst-ts/LOVE-frontend/pull/680>`_
+
 v6.4.1
 ------
 
