@@ -21,6 +21,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import { addGroup, removeGroup } from 'redux/actions/ws';
+import { getTaiToUtc } from 'redux/selectors';
 import OLE from './OLE';
 
 export const schema = {
@@ -62,6 +63,13 @@ const OLEContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) =>
   );
 };
 
+const mapStateToProps = (state) => {
+  const taiToUtc = getTaiToUtc(state);
+  return {
+    taiToUtc,
+  };
+};
+
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [];
   return {
@@ -75,4 +83,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(OLEContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(OLEContainer);

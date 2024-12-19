@@ -105,6 +105,7 @@ export default class OLE extends Component {
   }
 
   getComponent(clickNewLog, tab) {
+    const { taiToUtc } = this.props;
     if (clickNewLog === true) {
       if (tab === 'exposure') {
         return (
@@ -158,6 +159,7 @@ export default class OLE extends Component {
             changeObsTimeLossSelect={(value) => this.changeObsTimeLossSelect(value)}
             selectedJiraTickets={this.state.selectedJiraTickets}
             changeJiraTicketsSelect={(value) => this.changeJiraTicketsSelect(value)}
+            taiToUtc={taiToUtc}
           />
         );
       }

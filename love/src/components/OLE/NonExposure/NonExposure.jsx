@@ -87,6 +87,8 @@ export default class NonExposure extends Component {
     changeObsTimeLossSelect: PropTypes.func,
     /** Function to handle the jira ticket filter */
     changeJiraTicketsSelect: PropTypes.func,
+    /** Difference in seconds between UTC and TAI */
+    taiToUtc: PropTypes.number,
   };
 
   static defaultProps = {
@@ -160,24 +162,32 @@ export default class NonExposure extends Component {
   }
 
   getHeaders = () => {
+    const { taiToUtc } = this.props;
+
     return [
       {
         field: 'date_begin',
         title: 'Time of incident (UTC)',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => moment(value).format(ISO_STRING_DATE_TIME_FORMAT),
+        render: (value) => moment(value).add(taiToUtc, 'seconds').format(ISO_STRING_DATE_TIME_FORMAT),
       },
       {
         field: 'time_lost',
         title: 'Obs. Time Loss',
         type: 'string',
         className: styles.tableHead,
-        render: (value, row) => (
-          <span title={formatOLETimeOfIncident(row.date_begin + 'Z', row.date_end + 'Z') + ' (UTC)'}>
-            {formatSecondsToDigital(value * 3600)}
-          </span>
-        ),
+        render: (value, row) => {
+          const dateBeginUTC = moment(row.date_begin).add(taiToUtc, 'seconds');
+          const dateEndUTC = moment(row.date_end).add(taiToUtc, 'seconds');
+          const dateBeginUTCString = dateBeginUTC.format(ISO_STRING_DATE_TIME_FORMAT);
+          const dateEndUTCString = dateEndUTC.format(ISO_STRING_DATE_TIME_FORMAT);
+          return (
+            <span title={formatOLETimeOfIncident(dateBeginUTCString, dateEndUTCString) + ' (UTC)'}>
+              {formatSecondsToDigital(value * 3600)}
+            </span>
+          );
+        },
       },
       {
         field: 'date_begin',
