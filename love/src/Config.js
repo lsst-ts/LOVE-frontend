@@ -1754,7 +1754,7 @@ export const OLE_OBS_SUBSYSTEMS_COMPONENTS = {
   'CCCamera CSC': {
     id: '382',
   },
-  'CCOODS CSC': {
+  'C: CCOODS CSC': {
     id: '383',
   },
   'CCHeaderService CSC': {
@@ -1826,7 +1826,7 @@ export const OLE_OBS_SUBSYSTEMS_COMPONENTS = {
   'AT Mount EUI': {
     id: '404',
   },
-  'ATMCS CSC': {
+  'M: ATMCS CSC': {
     id: '405',
   },
   /** Dome Subsystem */
@@ -1870,7 +1870,7 @@ export const OLE_OBS_SUBSYSTEMS_COMPONENTS = {
   'AT M1 Hardpoints': {
     id: '419',
   },
-  'ATAOS CSC': {
+  'M1: ATAOS CSC': {
     id: '420',
   },
   'ATPneumatics CSC': {
@@ -1883,7 +1883,7 @@ export const OLE_OBS_SUBSYSTEMS_COMPONENTS = {
   'AT M2 Coating': {
     id: '423',
   },
-  'ATAOS CSC': {
+  'M2: ATAOS CSC': {
     id: '424',
   },
   'ATHexapod CSC': {
@@ -1900,10 +1900,10 @@ export const OLE_OBS_SUBSYSTEMS_COMPONENTS = {
   'ATPtg CSC': {
     id: '432',
   },
-  'ATAOS CSC': {
+  'OCS: ATAOS CSC': {
     id: '433',
   },
-  'ATMCS CSC': {
+  'OCS: ATMCS CSC': {
     id: '434',
   },
   'AT SAL Scripts': {
@@ -1919,7 +1919,7 @@ export const OLE_OBS_SUBSYSTEMS_COMPONENTS = {
     id: '438',
   },
   /** Focal Plane Subsystem */
-  'LATISS Shutter': {
+  'FP: LATISS Shutter': {
     id: '439',
   },
   'LATISS Detector': {
@@ -1943,7 +1943,7 @@ export const OLE_OBS_SUBSYSTEMS_COMPONENTS = {
   'LATISS Gratings': {
     id: '445',
   },
-  'LATISS Shutter': {
+  'OS: LATISS Shutter': {
     id: '446',
   },
   'LATISS Filter Exchanger': {
@@ -2048,7 +2048,7 @@ export const OLE_OBS_SUBSYSTEMS_COMPONENTS = {
     id: '479',
   },
   /** Data Transfer Subsystem */
-  'Long Haul Network': {
+  'DT: Long Haul Network': {
     id: '481',
   },
   'ATOODS CSC': {
@@ -2057,7 +2057,7 @@ export const OLE_OBS_SUBSYSTEMS_COMPONENTS = {
   'MTOODS CSC': {
     id: '483',
   },
-  'CCOODS CSC': {
+  'DT: CCOODS CSC': {
     id: '484',
   },
   /** Interlock Systems Subsystem */
@@ -2249,14 +2249,14 @@ export const OLE_OBS_SUBSYSTEMS_COMPONENTS = {
   Internet: {
     id: '547',
   },
-  'Long Haul Network': {
+  'N: Long Haul Network': {
     id: '548',
   },
   /** Storage Subsystem */
-  'Summit ': {
+  'S: Summit ': {
     id: '549',
   },
-  Base: {
+  'S: Base': {
     id: '550',
   },
   /** Infrastructure Subsystem */
@@ -2273,10 +2273,10 @@ export const OLE_OBS_SUBSYSTEMS_COMPONENTS = {
     id: '555',
   },
   /** Control Room Workstations Subsystem */
-  Summit: {
+  'CRW: Summit': {
     id: '557',
   },
-  Base: {
+  'CRW: Base': {
     id: '558',
   },
   Tucson: {
