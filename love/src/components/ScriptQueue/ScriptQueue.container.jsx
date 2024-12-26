@@ -130,11 +130,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     unsubscribeToStreams: () => {
       subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
     },
-    requestSALCommand: (cmd) => {
+    requestSALCommand: (cmd, callback) => {
       if (cmd.csc === 'Script') {
         return dispatch(requestSALCommand({ ...cmd, component: 'Script', salindex: 0 }));
       }
-      return dispatch(requestSALCommand({ ...cmd, component: 'ScriptQueue', salindex: ownProps.salindex }));
+      return dispatch(requestSALCommand({ ...cmd, component: 'ScriptQueue', salindex: ownProps.salindex }, callback));
     },
   };
 };

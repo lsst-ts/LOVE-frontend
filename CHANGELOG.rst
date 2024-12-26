@@ -2,6 +2,13 @@
 Version History
 ===============
 
+v6.5.0
+------
+
+* Update package.json version to v6.5.0. `<https://github.com/lsst-ts/LOVE-frontend/pull/682>`_
+* Convert narrativelog date_begin and date_end TAI datetimes to UTC. `<https://github.com/lsst-ts/LOVE-frontend/pull/681>`_
+* Extend ScriptQueue ConfigPanel component to load scripts schemas on demand. `<https://github.com/lsst-ts/LOVE-frontend/pull/680>`_
+
 v6.4.1
 ------
 
