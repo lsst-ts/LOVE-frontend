@@ -59,7 +59,6 @@ class TeknikerAdd extends Component {
       systems_ids: [],
       subsystems_ids: [],
       components_ids: [],
-      salindex: 0,
       user: undefined,
       time_lost: 0,
       jira: false,
