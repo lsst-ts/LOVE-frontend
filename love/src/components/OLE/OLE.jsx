@@ -38,6 +38,16 @@ export function getIconLevel(level) {
   return icon;
 }
 
+export function closeCalendar(ref) {
+  const buttons = ref?.querySelectorAll('button');
+  const clickEvent = new Event('click', { bubbles: true });
+  if (buttons && buttons.length > 0) {
+    // buttons[2] is the button to close the calendar
+    // hidden by default so it can only be clicked programatically
+    buttons[2].dispatchEvent(clickEvent);
+  }
+}
+
 export default class OLE extends Component {
   constructor(props) {
     super(props);
