@@ -47,7 +47,7 @@ import ManagerInterface, {
   validateComponentsJSON,
   getComponentsJSONIds,
 } from 'Utils';
-import { getIconLevel } from '../OLE';
+import { getIconLevel, closeCalendar } from '../OLE';
 import styles from './NonExposure.module.css';
 
 class NonExposureEdit extends Component {
@@ -209,23 +209,13 @@ class NonExposureEdit extends Component {
     }));
   }
 
-  closeCalendar(ref) {
-    const buttons = ref?.querySelectorAll('button');
-    const clickEvent = new Event('click', { bubbles: true });
-    if (buttons && buttons.length > 0) {
-      // buttons[2] is the button to close the calendar
-      // hidden by default so it can only be clicked programatically
-      buttons[2].dispatchEvent(clickEvent);
-    }
-  }
-
   updateDateBeginToNow() {
     this.setState(
       (prevState) => ({
         logEdit: { ...prevState.logEdit, date_begin: Moment() },
       }),
       () => {
-        this.closeCalendar(this.dateBeginInputRef?.current);
+        closeCalendar(this.dateBeginInputRef?.current);
       },
     );
   }
@@ -236,7 +226,7 @@ class NonExposureEdit extends Component {
         logEdit: { ...prevState.logEdit, date_end: Moment() },
       }),
       () => {
-        this.closeCalendar(this.dateEndInputRef?.current);
+        closeCalendar(this.dateEndInputRef?.current);
       },
     );
   }
