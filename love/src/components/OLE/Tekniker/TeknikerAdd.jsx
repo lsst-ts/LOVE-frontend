@@ -1,4 +1,4 @@
-import React, { Component, useCallback, memo } from 'react';
+import React, { Component, memo } from 'react';
 import PropTypes from 'prop-types';
 import lodash from 'lodash';
 import Moment from 'moment';
@@ -15,13 +15,17 @@ import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import Select from 'components/GeneralPurpose/Select/Select';
-import {
-  OLE_JIRA_COMPONENTS,
-  OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS,
-  OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS,
-  iconLevelOLE,
-} from 'Config';
-import ManagerInterface, { getFilesURLs, getLinkJira, getFilename, openInNewTab } from 'Utils';
+import { OLE_OBS_SYSTEMS, OLE_OBS_SUBSYSTEMS, OLE_OBS_SUBSYSTEMS_COMPONENTS, iconLevelOLE } from 'Config';
+import ManagerInterface, {
+  getFilesURLs,
+  getLinkJira,
+  getFilename,
+  openInNewTab,
+  arrangeJiraOBSSystemsSubsystemsComponentsSelection,
+  arrangeNarrativelogOBSSystemsSubsystemsComponents,
+  validateComponentsJSON,
+  getComponentsJSONIds,
+} from 'Utils';
 import styles from '../NonExposure/NonExposure.module.css';
 import customStyles from './Tekniker.module.css';
 
@@ -47,12 +51,14 @@ class TeknikerAdd extends Component {
       level: 0,
       date_begin: '',
       date_end: '',
-      components: [],
+      components_json: {
+        systems: [],
+        subsystems: [],
+        components: [],
+      },
+      systems_ids: [],
+      subsystems_ids: [],
       components_ids: [],
-      primary_software_components: ['None'],
-      primary_software_components_ids: OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS['None'],
-      primary_hardware_components: ['None'],
-      primary_hardware_components_ids: OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS['None'],
       salindex: 0,
       user: undefined,
       time_lost: 0,
@@ -83,15 +89,19 @@ class TeknikerAdd extends Component {
     logEdit['date_end'] = logEdit['date_end'] ? Moment(logEdit['date_end'] + 'Z') : '';
 
     this.state = {
-      logEdit,
+      logEdit: { ...TeknikerAdd.defaultProps.logEdit, ...logEdit },
       savingLog: false,
       datesAreValid: true,
       jiraIssueError: false,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.multiselectSystemsRef = React.createRef();
+    this.multiselectSubsystemsRef = React.createRef();
     this.multiselectComponentsRef = React.createRef();
-    this.id = lodash.uniqueId('nonexposure-edit-');
+
+    this.id = lodash.uniqueId('tekniker-add-');
 
     this.dateBeginInputRef = React.createRef();
     this.dateEndInputRef = React.createRef();
@@ -107,19 +117,70 @@ class TeknikerAdd extends Component {
     this.clearDates();
 
     // Reset logEdit values
-    // Keep previously saved components for persistence
+    // Keep previously saved systems for persistence
     this.setState((prevState) => ({
       logEdit: {
         ...TeknikerAdd.defaultProps.logEdit,
-        components: prevState.logEdit.components,
+        components_json: {
+          systems: prevState.logEdit.components_json.systems,
+          subsystems: [],
+          components: [],
+        },
+        systems_ids: prevState.logEdit.systems_ids,
+        subsystems_ids: [],
+        components_ids: [],
       },
     }));
   }
 
+  clearSystemsInput() {
+    this.setState((prevState) => ({
+      logEdit: {
+        ...prevState.logEdit,
+        components_json: {
+          systems: [],
+          subsystems: [],
+          components: [],
+        },
+        systems_ids: [],
+        subsystems_ids: [],
+        components_ids: [],
+      },
+    }));
+
+    this.multiselectSystemsRef.current?.resetSelectedValues();
+  }
+
+  clearSubsystemsInput() {
+    this.setState((prevState) => ({
+      logEdit: {
+        ...prevState.logEdit,
+        components_json: {
+          systems: prevState.logEdit.components_json.systems,
+          subsystems: [],
+          components: [],
+        },
+        subsystems_ids: [],
+        components_ids: [],
+      },
+    }));
+
+    this.multiselectSubsystemsRef.current?.resetSelectedValues();
+  }
+
   clearComponentsInput() {
     this.setState((prevState) => ({
-      logEdit: { ...prevState.logEdit, components: [] },
+      logEdit: {
+        ...prevState.logEdit,
+        components_json: {
+          systems: prevState.logEdit.components_json.systems,
+          subsystems: prevState.logEdit.components_json.subsystems,
+          components: [],
+        },
+        components_ids: [],
+      },
     }));
+
     this.multiselectComponentsRef.current?.resetSelectedValues();
   }
 
@@ -171,7 +232,6 @@ class TeknikerAdd extends Component {
     const dateBeginButtons = dateBeginElement?.querySelectorAll('button');
     const dateEndButtons = dateEndElement?.querySelectorAll('button');
 
-    // const clickEvent = new MouseEvent('click');
     const clickEvent = new Event('click', { bubbles: true });
 
     if (dateBeginButtons && dateBeginButtons.length > 0) {
@@ -201,7 +261,8 @@ class TeknikerAdd extends Component {
   }
 
   updateOrCreateMessageNarrativeLogs() {
-    const payload = { ...this.state.logEdit };
+    const { logEdit } = this.state;
+    const payload = { ...logEdit };
 
     const nowMoment = Moment();
     payload['request_type'] = 'narrative';
@@ -226,6 +287,31 @@ class TeknikerAdd extends Component {
       }
     });
 
+    // Handle systems, subsystems and components for JIRA payload
+    const selection = arrangeJiraOBSSystemsSubsystemsComponentsSelection(
+      payload.systems_ids,
+      payload.subsystems_ids,
+      payload.components_ids,
+    );
+    payload['jira_obs_selection'] = selection;
+
+    const componentsJSON = arrangeNarrativelogOBSSystemsSubsystemsComponents(
+      payload.systems_ids,
+      payload.subsystems_ids,
+      payload.components_ids,
+    );
+    payload['components_json'] = componentsJSON;
+
+    // Avoid API confusion with deprecated parameters
+    delete payload['components'];
+    delete payload['primary_software_components'];
+    delete payload['primary_hardware_components'];
+    delete payload['systems'];
+    delete payload['subsystems'];
+    delete payload['systems_ids'];
+    delete payload['subsystems_ids'];
+    delete payload['components_ids'];
+
     this.setState({ savingLog: true });
     if (this.state.logEdit.id) {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
@@ -248,8 +334,18 @@ class TeknikerAdd extends Component {
   }
 
   handleSubmit(event) {
-    event.preventDefault();
+    if (event) event.preventDefault();
     this.updateOrCreateMessageNarrativeLogs();
+  }
+
+  isSubmitDisabled() {
+    const { logEdit, datesAreValid, savingLog, jiraIssueError } = this.state;
+    return (
+      !datesAreValid ||
+      jiraIssueError ||
+      savingLog ||
+      (!logEdit?.tmaError?.trim() && !logEdit?.tmaSituation?.trim() && !logEdit?.tmaDescription?.trim())
+    );
   }
 
   handleTimeOfIncident(date, type) {
@@ -312,14 +408,13 @@ class TeknikerAdd extends Component {
   }
 
   renderCategoryField() {
-    const { category } = this.state.logEdit ?? {};
     return (
       <>
         <span className={styles.label}>Type of observing time</span>
         <span className={styles.value}>
           <Select
             options={['None', 'ENG', 'SCIENCE']}
-            option={category}
+            option={this.state.logEdit?.category}
             onChange={({ value }) => {
               this.setState((prevState) => ({
                 logEdit: { ...prevState.logEdit, category: value },
@@ -357,22 +452,127 @@ class TeknikerAdd extends Component {
   renderComponentsFields() {
     const { logEdit } = this.state;
 
-    const componentOptions = Object.keys(OLE_JIRA_COMPONENTS).sort();
-    const primarySoftwareComponentOptions = Object.keys(OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS).sort();
-    const primaryHardwareComponentOptions = Object.keys(OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS).sort();
+    const systemOptions = Object.keys(OLE_OBS_SYSTEMS).sort();
+
+    const selectedSystems = logEdit?.components_json?.systems;
+    const selectedSubsystems = logEdit?.components_json?.subsystems;
+    const selectedComponents = logEdit?.components_json?.components;
+
+    const availableSubsystemsIds =
+      selectedSystems
+        ?.map((s) => {
+          return OLE_OBS_SYSTEMS[s].children;
+        })
+        .flat() ?? [];
+    const subsystemOptions = Object.keys(OLE_OBS_SUBSYSTEMS)
+      .filter((ss) => {
+        return availableSubsystemsIds.includes(OLE_OBS_SUBSYSTEMS[ss].id);
+      })
+      .sort();
+
+    const availableComponentsIds =
+      selectedSubsystems
+        ?.map((ss) => {
+          return OLE_OBS_SUBSYSTEMS[ss].children;
+        })
+        .flat() ?? [];
+    const componentOptions = Object.keys(OLE_OBS_SUBSYSTEMS_COMPONENTS)
+      .filter((c) => {
+        return availableComponentsIds.includes(OLE_OBS_SUBSYSTEMS_COMPONENTS[c].id);
+      })
+      .sort();
+
+    const setLogEditSystems = (selectedOptions) => {
+      this.setState((prevState) => {
+        const validComponentsJSON = validateComponentsJSON({
+          ...prevState.logEdit.components_json,
+          systems: selectedOptions,
+        });
+        const componentsJSONIds = getComponentsJSONIds(validComponentsJSON);
+
+        return {
+          logEdit: {
+            ...prevState.logEdit,
+            components_json: validComponentsJSON,
+            systems_ids: componentsJSONIds.systemsIds,
+            subsystems_ids: componentsJSONIds.subsystemsIds,
+            components_ids: componentsJSONIds.componentsIds,
+          },
+        };
+      });
+    };
+
+    const setLogEditSubsystems = (selectedOptions) => {
+      this.setState((prevState) => {
+        const validComponentsJSON = validateComponentsJSON({
+          ...prevState.logEdit.components_json,
+          subsystems: selectedOptions,
+        });
+        const componentsJSONIds = getComponentsJSONIds(validComponentsJSON);
+
+        return {
+          logEdit: {
+            ...prevState.logEdit,
+            components_json: validComponentsJSON,
+            subsystems_ids: componentsJSONIds.subsystemsIds,
+            components_ids: componentsJSONIds.componentsIds,
+          },
+        };
+      });
+    };
 
     const setLogEditComponents = (selectedOptions) => {
-      this.setState((prevState) => ({
-        logEdit: {
-          ...prevState.logEdit,
+      this.setState((prevState) => {
+        const validComponentsJSON = validateComponentsJSON({
+          ...prevState.logEdit.components_json,
           components: selectedOptions,
-          components_ids: selectedOptions.map((component) => OLE_JIRA_COMPONENTS[component]),
-        },
-      }));
+        });
+        const componentsJSONIds = getComponentsJSONIds(validComponentsJSON);
+
+        return {
+          logEdit: {
+            ...prevState.logEdit,
+            components_json: validComponentsJSON,
+            components_ids: componentsJSONIds.componentsIds,
+          },
+        };
+      });
     };
 
     return (
       <>
+        <span className={styles.label}>Systems</span>
+        <span className={styles.value}>
+          <div className={styles.inputGroup}>
+            <Multiselect
+              innerRef={this.multiselectSystemsRef}
+              className={styles.select}
+              options={systemOptions}
+              selectedValues={selectedSystems}
+              onSelect={setLogEditSystems}
+              onRemove={setLogEditSystems}
+              placeholder="Select zero or more systems"
+              selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
+            />
+            <Button onClick={() => this.clearSystemsInput()}>Clear</Button>
+          </div>
+        </span>
+        <span className={styles.label}>Subsystems</span>
+        <span className={styles.value}>
+          <div className={styles.inputGroup}>
+            <Multiselect
+              innerRef={this.multiselectSubsystemsRef}
+              className={styles.select}
+              options={subsystemOptions}
+              selectedValues={selectedSubsystems}
+              onSelect={setLogEditSubsystems}
+              onRemove={setLogEditSubsystems}
+              placeholder="Select zero or more subsystems"
+              selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
+            />
+            <Button onClick={() => this.clearSubsystemsInput()}>Clear</Button>
+          </div>
+        </span>
         <span className={styles.label}>Components</span>
         <span className={styles.value}>
           <div className={styles.inputGroup}>
@@ -380,48 +580,14 @@ class TeknikerAdd extends Component {
               innerRef={this.multiselectComponentsRef}
               className={styles.select}
               options={componentOptions}
-              selectedValues={logEdit?.components}
+              selectedValues={selectedComponents}
               onSelect={setLogEditComponents}
               onRemove={setLogEditComponents}
-              placeholder="Select zero or several components"
+              placeholder="Select zero or more components"
               selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
             />
             <Button onClick={() => this.clearComponentsInput()}>Clear</Button>
           </div>
-        </span>
-        <span className={styles.label}>Primary Software Component</span>
-        <span className={styles.value}>
-          <Select
-            options={primarySoftwareComponentOptions}
-            option={logEdit?.primary_software_components[0]}
-            onChange={({ value }) => {
-              this.setState((prevState) => ({
-                logEdit: {
-                  ...prevState.logEdit,
-                  primary_software_components: [value],
-                  primary_software_components_ids: [OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS[value]],
-                },
-              }));
-            }}
-            className={styles.select}
-          />
-        </span>
-        <span className={styles.label}>Primary Hardware Component</span>
-        <span className={styles.value}>
-          <Select
-            options={primaryHardwareComponentOptions}
-            option={logEdit?.primary_hardware_components[0]}
-            onChange={({ value }) => {
-              this.setState((prevState) => ({
-                logEdit: {
-                  ...prevState.logEdit,
-                  primary_hardware_components: [value],
-                  primary_hardware_components_ids: [OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS[value]],
-                },
-              }));
-            }}
-            className={styles.select}
-          />
         </span>
       </>
     );
@@ -439,13 +605,7 @@ class TeknikerAdd extends Component {
         return (
           <div ref={ref} className={styles.timeOfIncidentInputContainer}>
             <input {...props} readOnly />
-            <Button
-              // ref={ref}
-              className={styles.clearDateIcon}
-              size="small"
-              title="Clear date"
-              onClick={clearDate}
-            >
+            <Button className={styles.clearDateIcon} size="small" title="Clear date" onClick={clearDate}>
               <CloseIcon title="Clear date" />
             </Button>
             <button className={styles.hiddenButtons} type="button" onClick={openCalendar} />
@@ -759,11 +919,11 @@ class TeknikerAdd extends Component {
   }
 
   renderSubmitButton() {
-    const { datesAreValid, savingLog, jiraIssueError } = this.state;
+    const { savingLog } = this.state;
 
     return (
       <>
-        <Button disabled={!datesAreValid || jiraIssueError} type="submit">
+        <Button disabled={this.isSubmitDisabled()} type="submit">
           {savingLog ? <SpinnerIcon className={styles.spinnerIcon} /> : <span className={styles.title}>Save</span>}
         </Button>
       </>
