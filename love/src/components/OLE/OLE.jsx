@@ -24,7 +24,7 @@ import Exposure from './Exposure/Exposure';
 import NonExposure from './NonExposure/NonExposure';
 import ExposureAdd from './Exposure/ExposureAdd';
 import NonExposureEdit from './NonExposure/NonExposureEdit';
-import { OLE_COMMENT_TYPE_OPTIONS, OLE_DEFAULT_SYSTEMS_FILTER_OPTION } from 'Config';
+import { OLE_COMMENT_TYPE_OPTIONS, OLE_DEFAULT_SYSTEMS_FILTER_OPTION, iconLevelOLE } from 'Config';
 import ManagerInterface from 'Utils';
 import styles from './OLE.module.css';
 
@@ -32,6 +32,11 @@ const tabs = [
   { name: 'Narrative Logs', value: 'non-exposure' },
   { name: 'Exposure Logs', value: 'exposure' },
 ];
+
+export function getIconLevel(level) {
+  const icon = iconLevelOLE[level >= 100 ? 'urgent' : 'info'];
+  return icon;
+}
 
 export default class OLE extends Component {
   constructor(props) {

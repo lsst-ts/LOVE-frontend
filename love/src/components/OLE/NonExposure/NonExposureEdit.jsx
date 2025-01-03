@@ -34,7 +34,7 @@ import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import Select from 'components/GeneralPurpose/Select/Select';
-import { OLE_OBS_SYSTEMS, OLE_OBS_SUBSYSTEMS, OLE_OBS_SUBSYSTEMS_COMPONENTS, iconLevelOLE } from 'Config';
+import { OLE_OBS_SYSTEMS, OLE_OBS_SUBSYSTEMS, OLE_OBS_SUBSYSTEMS_COMPONENTS } from 'Config';
 import ManagerInterface, {
   getFilesURLs,
   getLinkJira,
@@ -47,6 +47,7 @@ import ManagerInterface, {
   validateComponentsJSON,
   getComponentsJSONIds,
 } from 'Utils';
+import { getIconLevel } from '../OLE';
 import styles from './NonExposure.module.css';
 
 class NonExposureEdit extends Component {
@@ -125,11 +126,6 @@ class NonExposureEdit extends Component {
 
     this.dateBeginInputRef = React.createRef();
     this.dateEndInputRef = React.createRef();
-  }
-
-  getIconLevel(level) {
-    const icon = iconLevelOLE[level >= 100 ? 'urgent' : 'info'];
-    return icon;
   }
 
   cleanForm() {
@@ -444,7 +440,7 @@ class NonExposureEdit extends Component {
               }
             />
           </div>
-          <span className={styles.levelIcon}>{this.getIconLevel(this.state.logEdit.level)}</span>
+          <span className={styles.levelIcon}>{getIconLevel(this.state.logEdit.level)}</span>
         </span>
       </>
     );
