@@ -44,8 +44,7 @@ import ManagerInterface, {
   jiraMarkdownToHtml,
   arrangeJiraOBSSystemsSubsystemsComponentsSelection,
   arrangeNarrativelogOBSSystemsSubsystemsComponents,
-  validateComponentsJSON,
-  getComponentsJSONIds,
+  validateOBSSystemsSubsystemsComponentsIds,
 } from 'Utils';
 import { getIconLevel, closeCalendar } from '../OLE';
 import styles from './NonExposure.module.css';
@@ -72,11 +71,7 @@ class NonExposureEdit extends Component {
       level: 0,
       date_begin: '',
       date_end: '',
-      components_json: {
-        systems: [],
-        subsystems: [],
-        components: [],
-      },
+      components_json: {},
       systems_ids: [],
       subsystems_ids: [],
       components_ids: [],
@@ -140,11 +135,6 @@ class NonExposureEdit extends Component {
     this.setState((prevState) => ({
       logEdit: {
         ...NonExposureEdit.defaultProps.logEdit,
-        components_json: {
-          systems: prevState.logEdit.components_json.systems,
-          subsystems: [],
-          components: [],
-        },
         systems_ids: prevState.logEdit.systems_ids,
         subsystems_ids: [],
         components_ids: [],
@@ -156,11 +146,6 @@ class NonExposureEdit extends Component {
     this.setState((prevState) => ({
       logEdit: {
         ...prevState.logEdit,
-        components_json: {
-          systems: [],
-          subsystems: [],
-          components: [],
-        },
         systems_ids: [],
         subsystems_ids: [],
         components_ids: [],
@@ -174,11 +159,6 @@ class NonExposureEdit extends Component {
     this.setState((prevState) => ({
       logEdit: {
         ...prevState.logEdit,
-        components_json: {
-          systems: prevState.logEdit.components_json.systems,
-          subsystems: [],
-          components: [],
-        },
         subsystems_ids: [],
         components_ids: [],
       },
@@ -188,17 +168,14 @@ class NonExposureEdit extends Component {
   }
 
   clearComponentsInput() {
-    this.setState((prevState) => ({
-      logEdit: {
-        ...prevState.logEdit,
-        components_json: {
-          systems: prevState.logEdit.components_json.systems,
-          subsystems: prevState.logEdit.components_json.subsystems,
-          components: [],
+    this.setState((prevState) => {
+      return {
+        logEdit: {
+          ...prevState.logEdit,
+          components_ids: [],
         },
-        components_ids: [],
-      },
-    }));
+      };
+    });
 
     this.multiselectComponentsRef.current?.resetSelectedValues();
   }
@@ -439,11 +416,21 @@ class NonExposureEdit extends Component {
   renderComponentsFields() {
     const { logEdit } = this.state;
 
-    const systemOptions = Object.keys(OLE_OBS_SYSTEMS).sort();
+    const selectedSystemsIds = logEdit?.systems_ids;
+    const selectedSubsystemsIds = logEdit?.subsystems_ids;
+    const selectedComponentsIds = logEdit?.components_ids;
 
-    const selectedSystems = logEdit?.components_json?.systems;
-    const selectedSubsystems = logEdit?.components_json?.subsystems;
-    const selectedComponents = logEdit?.components_json?.components;
+    const selectedSystems = Object.keys(OLE_OBS_SYSTEMS).filter((s) =>
+      selectedSystemsIds?.includes(OLE_OBS_SYSTEMS[s].id),
+    );
+    const selectedSubsystems = Object.keys(OLE_OBS_SUBSYSTEMS).filter((ss) =>
+      selectedSubsystemsIds?.includes(OLE_OBS_SUBSYSTEMS[ss].id),
+    );
+    const selectedComponents = Object.keys(OLE_OBS_SUBSYSTEMS_COMPONENTS).filter((c) =>
+      selectedComponentsIds?.includes(OLE_OBS_SUBSYSTEMS_COMPONENTS[c].id),
+    );
+
+    const systemOptions = Object.keys(OLE_OBS_SYSTEMS).sort();
 
     const availableSubsystemsIds =
       selectedSystems
@@ -470,57 +457,57 @@ class NonExposureEdit extends Component {
       .sort();
 
     const setLogEditSystems = (selectedOptions) => {
+      const selectedSystemsIds = selectedOptions.map((s) => OLE_OBS_SYSTEMS[s].id);
       this.setState((prevState) => {
-        const validComponentsJSON = validateComponentsJSON({
-          ...prevState.logEdit.components_json,
-          systems: selectedOptions,
-        });
-        const componentsJSONIds = getComponentsJSONIds(validComponentsJSON);
+        const validComponentsIds = validateOBSSystemsSubsystemsComponentsIds(
+          selectedSystemsIds,
+          prevState.logEdit.subsystems_ids,
+          prevState.logEdit.components_ids,
+        );
 
         return {
           logEdit: {
             ...prevState.logEdit,
-            components_json: validComponentsJSON,
-            systems_ids: componentsJSONIds.systemsIds,
-            subsystems_ids: componentsJSONIds.subsystemsIds,
-            components_ids: componentsJSONIds.componentsIds,
+            systems_ids: validComponentsIds.systemsIds,
+            subsystems_ids: validComponentsIds.subsystemsIds,
+            components_ids: validComponentsIds.componentsIds,
           },
         };
       });
     };
 
     const setLogEditSubsystems = (selectedOptions) => {
+      const selectedSubsystemsIds = selectedOptions.map((ss) => OLE_OBS_SUBSYSTEMS[ss].id);
       this.setState((prevState) => {
-        const validComponentsJSON = validateComponentsJSON({
-          ...prevState.logEdit.components_json,
-          subsystems: selectedOptions,
-        });
-        const componentsJSONIds = getComponentsJSONIds(validComponentsJSON);
+        const validComponentsIds = validateOBSSystemsSubsystemsComponentsIds(
+          prevState.logEdit.systems_ids,
+          selectedSubsystemsIds,
+          prevState.logEdit.components_ids,
+        );
 
         return {
           logEdit: {
             ...prevState.logEdit,
-            components_json: validComponentsJSON,
-            subsystems_ids: componentsJSONIds.subsystemsIds,
-            components_ids: componentsJSONIds.componentsIds,
+            subsystems_ids: validComponentsIds.subsystemsIds,
+            components_ids: validComponentsIds.componentsIds,
           },
         };
       });
     };
 
     const setLogEditComponents = (selectedOptions) => {
+      const selectedComponentsIds = selectedOptions.map((c) => OLE_OBS_SUBSYSTEMS_COMPONENTS[c].id);
       this.setState((prevState) => {
-        const validComponentsJSON = validateComponentsJSON({
-          ...prevState.logEdit.components_json,
-          components: selectedOptions,
-        });
-        const componentsJSONIds = getComponentsJSONIds(validComponentsJSON);
+        const validComponentsIds = validateOBSSystemsSubsystemsComponentsIds(
+          prevState.logEdit.systems_ids,
+          prevState.logEdit.subsystems_ids,
+          selectedComponentsIds,
+        );
 
         return {
           logEdit: {
             ...prevState.logEdit,
-            components_json: validComponentsJSON,
-            components_ids: componentsJSONIds.componentsIds,
+            components_ids: validComponentsIds.componentsIds,
           },
         };
       });
@@ -528,7 +515,7 @@ class NonExposureEdit extends Component {
 
     return (
       <>
-        <span className={styles.label}>Systems</span>
+        <span className={styles.label}>System</span>
         <span className={styles.value}>
           <div className={styles.inputGroup}>
             <Multiselect

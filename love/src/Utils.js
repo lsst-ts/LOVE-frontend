@@ -2207,37 +2207,72 @@ export function arrangeJiraOBSSystemsSubsystemsComponentsSelection(systemsIds, s
  * @param {Array} componentsIds
  * @returns {string} JSON string with the selection payload which should be in the form of:
  * {
- *  systems: ["System-A", "System-B", ...],
- *  subsystems: ["Subsystem-A", "Subsystem-B", ...],
- *  components: ["Component-A", "Component-B", ...]
+ *  name: "System-A",
+ *  children: [
+ *    {
+ *      name: "Subsystem-A",
+ *      children: [
+ *        {
+ *          name: "Component-A",
+ *        },
+ *      ],
+ *    },
+ *    {
+ *      name: "Subsystem-B",
+ *      children: [
+ *        {
+ *          name: "Component-B",
+ *        },
+ *      ],
+ *    },
+ *  ],
  * }
  */
 export function arrangeNarrativelogOBSSystemsSubsystemsComponents(systemsIds, subsystemsIds, componentsIds) {
-  const systems = Object.entries(OLE_OBS_SYSTEMS)
+  const hierarchy = Object.entries(OLE_OBS_SYSTEMS)
     .filter(([k, s]) => systemsIds?.includes(s.id))
-    .map(([k, s]) => k);
-  const subsystems = Object.entries(OLE_OBS_SUBSYSTEMS)
-    .filter(([k, ss]) => subsystemsIds?.includes(ss.id))
-    .map(([k, ss]) => k);
-  const components = Object.entries(OLE_OBS_SUBSYSTEMS_COMPONENTS)
-    .filter(([k, c]) => componentsIds?.includes(c.id))
-    .map(([k, c]) => k);
+    .map(([k, s]) => {
+      const subsystems = Object.entries(OLE_OBS_SUBSYSTEMS)
+        .filter(([k, ss]) => subsystemsIds?.includes(ss.id))
+        .map(([k, ss]) => {
+          const components = Object.entries(OLE_OBS_SUBSYSTEMS_COMPONENTS)
+            .filter(([k, c]) => componentsIds?.includes(c.id))
+            .map(([k, c]) => ({ name: k }));
+          if (components.length === 0) return { name: k };
+          return { name: k, children: components };
+        });
+      if (subsystems.length === 0) return { name: k };
+      return { name: k, children: subsystems };
+    });
 
-  return JSON.stringify({ systems, subsystems, components });
+  // We assume that the hierarchy will always have a single root (system)
+  return JSON.stringify(hierarchy[0]);
 }
 
 /**
- * Function to validate the components JSON structure
- * in base to systems, subsystems and components dependencies
- * @param {object} componentsJSON
- * @returns {object} valid components JSON with filtered components in base to dependencies
+ * Function to validate the OBS System, Sub-System, and Component hierarchy for the narrativelog,
+ * in base to systems, subsystems and components dependencies.
+ * This function makes sure defined subsystems are children of selected systems
+ * and components are children of selected subsystems.
+ * @param {Array} systemsIds
+ * @param {Array} subsystemsIds
+ * @param {Array} componentsIds
+ * @returns {object} Object with valid ids for systems, subsystems and components.
+ * With the following structure:
+ * {
+ *  systemsIds: ["sid-1", "sid-2", ...],
+ *  subsystemsIds: ["ssid-1", "ssid-2", ...],
+ *  componentsIds: ["cid-1", "cid-2", ...],
+ * }
  */
-export function validateComponentsJSON(componentsJSON) {
-  const validComponentsJSON = { ...componentsJSON };
-
-  const selectedSystems = validComponentsJSON?.systems ?? [];
-  const selectedSubsystems = validComponentsJSON?.subsystems ?? [];
-  const selectedComponents = validComponentsJSON?.components ?? [];
+export function validateOBSSystemsSubsystemsComponentsIds(systemsIds, subsystemsIds, componentsIds) {
+  const selectedSystems = Object.keys(OLE_OBS_SYSTEMS).filter((s) => systemsIds?.includes(OLE_OBS_SYSTEMS[s].id));
+  const selectedSubsystems = Object.keys(OLE_OBS_SUBSYSTEMS).filter((ss) =>
+    subsystemsIds?.includes(OLE_OBS_SUBSYSTEMS[ss].id),
+  );
+  const selectedComponents = Object.keys(OLE_OBS_SUBSYSTEMS_COMPONENTS).filter((c) =>
+    componentsIds?.includes(OLE_OBS_SUBSYSTEMS_COMPONENTS[c].id),
+  );
 
   const availableSubsystemsIds =
     selectedSystems
@@ -2260,8 +2295,7 @@ export function validateComponentsJSON(componentsJSON) {
         return OLE_OBS_SUBSYSTEMS[ss].children;
       })
       .flat() ?? [];
-  
-  
+
   const filteredComponentOptions = Object.keys(OLE_OBS_SUBSYSTEMS_COMPONENTS)
     .filter((c) => {
       return availableComponentsIds.includes(OLE_OBS_SUBSYSTEMS_COMPONENTS[c].id);
@@ -2270,23 +2304,13 @@ export function validateComponentsJSON(componentsJSON) {
 
   const validComponents = selectedComponents.filter((c) => filteredComponentOptions.includes(c));
 
+  const validSystemsIds = selectedSystems.map((s) => OLE_OBS_SYSTEMS[s].id);
+  const validSubsystemsIds = validSubsystems.map((ss) => OLE_OBS_SUBSYSTEMS[ss].id);
+  const validComponentsIds = validComponents.map((c) => OLE_OBS_SUBSYSTEMS_COMPONENTS[c].id);
+
   return {
-    systems: selectedSystems,
-    subsystems: validSubsystems,
-    components: validComponents,
+    systemsIds: validSystemsIds,
+    subsystemsIds: validSubsystemsIds,
+    componentsIds: validComponentsIds,
   };
-}
-
-/**
- * Function to get systems_ids, subsystems_ids and components_ids
- * from the components JSON structure
- * @param {object} componentsJSON
- * @returns {object} object with systemsIds, subsystemsIds and componentsIds
- */
-export function getComponentsJSONIds(componentsJSON) {
-  const systemsIds = componentsJSON?.systems?.map((s) => OLE_OBS_SYSTEMS[s].id) ?? [];
-  const subsystemsIds = componentsJSON?.subsystems?.map((ss) => OLE_OBS_SUBSYSTEMS[ss].id) ?? [];
-  const componentsIds = componentsJSON?.components?.map((c) => OLE_OBS_SUBSYSTEMS_COMPONENTS[c].id) ?? [];
-
-  return { systemsIds, subsystemsIds, componentsIds };
 }
