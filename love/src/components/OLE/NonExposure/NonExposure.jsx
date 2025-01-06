@@ -215,10 +215,13 @@ export default class NonExposure extends Component {
       },
       {
         field: 'components_json',
-        title: 'Systems',
+        title: 'System',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => (value?.systems ? value.systems.join(', ') : ''),
+        render: (value) => {
+          const system = value.name;
+          return system;
+        },
       },
       {
         field: 'message_text',
