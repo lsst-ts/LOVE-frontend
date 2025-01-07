@@ -2229,17 +2229,26 @@ export function arrangeJiraOBSSystemsSubsystemsComponentsSelection(systemsIds, s
  * }
  */
 export function arrangeNarrativelogOBSSystemsSubsystemsComponents(systemsIds, subsystemsIds, componentsIds) {
+  const prefixPattern = /^[A-Z]+:\s*/;
   const hierarchy = Object.entries(OLE_OBS_SYSTEMS)
     .filter(([k, s]) => systemsIds?.includes(s.id))
     .map(([k, s]) => {
       const subsystems = Object.entries(OLE_OBS_SUBSYSTEMS)
         .filter(([k, ss]) => subsystemsIds?.includes(ss.id))
         .map(([k, ss]) => {
+          // Subsystems have a prefix to differentiate identical name ones
+          // Here we remove the prefix to make the hierarchy more readable
+          const ssName = k.replace(prefixPattern, '');
           const components = Object.entries(OLE_OBS_SUBSYSTEMS_COMPONENTS)
             .filter(([k, c]) => componentsIds?.includes(c.id))
-            .map(([k, c]) => ({ name: k }));
+            .map(([k, c]) => {
+              // Components have a prefix to differentiate identical name ones
+              // Here we remove the prefix to make the hierarchy more readable
+              const cName = k.replace(prefixPattern, '');
+              return { name: cName };
+            });
           if (components.length === 0) return { name: k };
-          return { name: k, children: components };
+          return { name: ssName, children: components };
         });
       if (subsystems.length === 0) return { name: k };
       return { name: k, children: subsystems };
