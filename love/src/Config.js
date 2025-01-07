@@ -601,7 +601,7 @@ export const OLE_OBS_SUBSYSTEMS = {
     id: '16',
     children: ['157', '158', '159', '160', '161', '162', '163', '164', '165'],
   },
-  Dome: {
+  'S: Dome': {
     id: '17',
     children: ['167', '168', '169', '170', '171', '172', '173', '174', '175', '176', '177', '178', '179', '180'],
   },
@@ -646,7 +646,7 @@ export const OLE_OBS_SUBSYSTEMS = {
       '240',
     ],
   },
-  OCS: {
+  'S: OCS': {
     id: '24',
     children: ['241', '242', '243', '244', '245', '246'],
   },
@@ -663,7 +663,7 @@ export const OLE_OBS_SUBSYSTEMS = {
     children: ['266', '267', '268', '270', '271'],
   },
   /** LSSTCam System */
-  'Focal Plane': {
+  'LC: Focal Plane': {
     id: '30',
     children: ['272', '273', '274', '275', '276', '277'],
   },
@@ -691,7 +691,7 @@ export const OLE_OBS_SUBSYSTEMS = {
     id: '36',
     children: ['299', '300', '301', '302', '303', '304', '305'],
   },
-  'Utility Trunk': {
+  'LC: Utility Trunk': {
     id: '37',
     children: ['307', '308', '311'],
   },
@@ -710,7 +710,7 @@ export const OLE_OBS_SUBSYSTEMS = {
   'Master Protection Module': {
     id: '41',
   },
-  Computing: {
+  'LC: Computing': {
     id: '42',
     children: ['329', '330', '331', '332', '333', '334', '335', '336', '337', '338', '339'],
   },
@@ -718,11 +718,11 @@ export const OLE_OBS_SUBSYSTEMS = {
     id: '43',
     children: ['341', '342'],
   },
-  Other: {
+  'LC: Other': {
     id: '44',
   },
   /** ComCam System */
-  'Focal Plane': {
+  'CC: Focal Plane': {
     id: '45',
     children: ['343', '344', '345', '346', '347'],
   },
@@ -738,23 +738,23 @@ export const OLE_OBS_SUBSYSTEMS = {
     id: '48',
     children: ['357', '358', '359', '360', '361', '362'],
   },
-  'Optical System': {
+  'CC: Optical System': {
     id: '49',
     children: ['363', '364', '365', '366', '367'],
   },
-  'Utility Trunk': {
+  'CC: Utility Trunk': {
     id: '50',
     children: ['368', '369', '370', '371'],
   },
-  Software: {
+  'CC: Software': {
     id: '51',
     children: ['372', '373', '374', '375', '376', '377', '378'],
   },
-  Computing: {
+  'CC: Computing': {
     id: '52',
     children: ['380', '381', '382', '383', '384', '385', '386', '387', '388'],
   },
-  Other: {
+  'CC: Other': {
     id: '130',
   },
   /** Simonyi Calibration System */
@@ -772,18 +772,18 @@ export const OLE_OBS_SUBSYSTEMS = {
     id: '56',
     children: ['391', '392'],
   },
-  'Fiber Spectrograph': {
+  'SC: Fiber Spectrograph': {
     id: '57',
     children: ['393', '394'],
   },
-  Electrometer: {
+  'SC: Electrometer': {
     id: '58',
     children: ['395', '397', '396'],
   },
   'Flat Field Screen': {
     id: '59',
   },
-  Other: {
+  'SC: Other': {
     id: '129',
   },
   /** AuxTel System */
@@ -791,7 +791,7 @@ export const OLE_OBS_SUBSYSTEMS = {
     id: '60',
     children: ['398', '399', '400', '401', '402', '403', '404', '405'],
   },
-  Dome: {
+  'AT: Dome': {
     id: '61',
     children: ['406', '407', '408', '409', '410', '411', '412', '414'],
   },
@@ -807,15 +807,15 @@ export const OLE_OBS_SUBSYSTEMS = {
     id: '64',
     children: ['426', '427'],
   },
-  OCS: {
+  'AT: OCS': {
     id: '430',
     children: ['432', '433', '434', '435', '436', '437', '438'],
   },
-  Other: {
+  'AT: Other': {
     id: '128',
   },
   /** LATISS System */
-  'Focal Plane': {
+  'L: Focal Plane': {
     id: '65',
     children: ['439', '440'],
   },
@@ -827,23 +827,23 @@ export const OLE_OBS_SUBSYSTEMS = {
     id: '67',
     children: ['443'],
   },
-  'Optical System': {
+  'L: Optical System': {
     id: '68',
     children: ['444', '445', '446', '447', '448', '449', '450'],
   },
-  Software: {
+  'L: Software': {
     id: '69',
     children: ['451', '452', '453'],
   },
-  Computing: {
+  'L: Computing': {
     id: '70',
     children: ['454'],
   },
-  Other: {
+  'L: Other': {
     id: '127',
   },
   /** AuxTel Calibration System */
-  'Optical System': {
+  'ATC: Optical System': {
     id: '71',
     children: ['455', '456'],
   },
@@ -855,11 +855,11 @@ export const OLE_OBS_SUBSYSTEMS = {
     id: '73',
     children: ['460', '461'],
   },
-  Electrometer: {
+  'ATC: Electrometer': {
     id: '74',
     children: ['463', '464'],
   },
-  'Fiber Spectrograph': {
+  'ATC: Fiber Spectrograph': {
     id: '75',
     children: ['466', '467', '468'],
   },
@@ -869,10 +869,10 @@ export const OLE_OBS_SUBSYSTEMS = {
   'Electronics Cabinet': {
     id: '77',
   },
-  Other: {
+  'ATC: Other': {
     id: '126',
   },
-  /** Control and Monitoring Software  System */
+  /** Control and Monitoring Software System */
   Middleware: {
     id: '560',
   },
@@ -906,7 +906,7 @@ export const OLE_OBS_SUBSYSTEMS = {
   Grafana: {
     id: '86',
   },
-  Other: {
+  'CMS: Other': {
     id: '125',
   },
   /** Data Management System */
@@ -918,7 +918,7 @@ export const OLE_OBS_SUBSYSTEMS = {
     id: '89',
     children: ['481', '482', '483', '484'],
   },
-  Other: {
+  'DT: Other': {
     id: '124',
   },
   /** Facilities System */
@@ -966,7 +966,7 @@ export const OLE_OBS_SUBSYSTEMS = {
     id: '101',
     children: ['537', '538', '539', '540', '541', '542', '543'],
   },
-  Other: {
+  'F: Other': {
     id: '123',
   },
   /** IT Infrastructure System */
@@ -989,7 +989,7 @@ export const OLE_OBS_SUBSYSTEMS = {
   'Accounts and Access': {
     id: '107',
   },
-  Other: {
+  'IT: Other': {
     id: '122',
   },
   /** Environmental Awareness Systems System */
@@ -1002,7 +1002,7 @@ export const OLE_OBS_SUBSYSTEMS = {
   AllSkyCam: {
     id: '111',
   },
-  'Weather Station (ESS:301)': {
+  'Weather Station': {
     id: '112',
   },
   'Weather Forecast': {
@@ -1011,7 +1011,7 @@ export const OLE_OBS_SUBSYSTEMS = {
   EAS: {
     id: '114',
   },
-  'ESS: Index': {
+  ESS: {
     id: '115',
   },
   'Vibration Monitoring System': {
@@ -1029,7 +1029,7 @@ export const OLE_OBS_SUBSYSTEMS = {
   'Remote Microphone': {
     id: '120',
   },
-  Other: {
+  'EAS: Other': {
     id: '121',
   },
 };
