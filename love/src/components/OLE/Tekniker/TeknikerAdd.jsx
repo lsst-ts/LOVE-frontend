@@ -97,6 +97,7 @@ class TeknikerAdd extends Component {
     this.multiselectComponentsRef = React.createRef();
 
     this.id = lodash.uniqueId('tekniker-add-');
+    this.multiselectSystemId = lodash.uniqueId('multiselect-systems-');
 
     this.dateBeginInputRef = React.createRef();
     this.dateEndInputRef = React.createRef();
@@ -336,6 +337,30 @@ class TeknikerAdd extends Component {
     }));
   }
 
+  // The following function is used to fix a bug with the ReactMultiselect component.
+  // When setting the singleSelect prop to true, clicks on the select box are dismissed.
+  // This function replaces the search box with a simple input box and removes the caret.
+  // Check: https://github.com/srigar/multiselect-react-dropdown/issues/262
+  fixSingleSelectBox = () => {
+    const { logEdit } = this.state;
+    const msParent = document.getElementById(this.multiselectSystemId);
+    const searchBox = msParent.getElementsByClassName('searchBox')[0];
+    const caret = msParent.getElementsByClassName('icon_down_dir')[0];
+
+    const newSearchBox = document.createElement('input');
+    newSearchBox.setAttribute('type', 'text');
+    newSearchBox.setAttribute('placeholder', 'Select zero or one system');
+
+    if (logEdit.systems_ids.length == 0) {
+      searchBox.replaceWith(newSearchBox);
+    }
+    caret.remove();
+  };
+
+  componentDidMount() {
+    this.fixSingleSelectBox();
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (
       prevState.logEdit?.date_begin !== this.state.logEdit?.date_begin ||
@@ -365,6 +390,8 @@ class TeknikerAdd extends Component {
         }
       }
     }
+
+    this.fixSingleSelectBox();
   }
 
   renderCategoryField() {
@@ -511,9 +538,9 @@ class TeknikerAdd extends Component {
 
     return (
       <>
-        <span className={styles.label}>Systems</span>
+        <span className={styles.label}>System</span>
         <span className={styles.value}>
-          <div className={styles.inputGroup}>
+          <div className={styles.inputGroup} id={this.multiselectSystemId}>
             <Multiselect
               innerRef={this.multiselectSystemsRef}
               className={styles.select}
@@ -521,8 +548,7 @@ class TeknikerAdd extends Component {
               selectedValues={selectedSystems}
               onSelect={setLogEditSystems}
               onRemove={setLogEditSystems}
-              placeholder="Select zero or more systems"
-              selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
+              singleSelect={true}
             />
             <Button onClick={() => this.clearSystemsInput()}>Clear</Button>
           </div>
