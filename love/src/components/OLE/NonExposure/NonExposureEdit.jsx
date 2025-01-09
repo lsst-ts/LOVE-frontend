@@ -45,6 +45,7 @@ import ManagerInterface, {
   arrangeJiraOBSSystemsSubsystemsComponentsSelection,
   arrangeNarrativelogOBSSystemsSubsystemsComponents,
   validateOBSSystemsSubsystemsComponentsIds,
+  getOBSSystemsSubsystemsComponentsIds,
 } from 'Utils';
 import { getIconLevel, closeCalendar } from '../OLE';
 import styles from './NonExposure.module.css';
@@ -71,7 +72,7 @@ class NonExposureEdit extends Component {
       level: 0,
       date_begin: '',
       date_end: '',
-      components_json: {},
+      components_json: undefined,
       systems_ids: [],
       subsystems_ids: [],
       components_ids: [],
@@ -102,6 +103,15 @@ class NonExposureEdit extends Component {
 
     logEdit['date_begin'] = logEdit['date_begin'] ? Moment(logEdit['date_begin'] + 'Z') : '';
     logEdit['date_end'] = logEdit['date_end'] ? Moment(logEdit['date_end'] + 'Z') : '';
+
+    if (logEdit['components_json']) {
+      const { systemsIds, subsystemsIds, componentsIds } = getOBSSystemsSubsystemsComponentsIds([
+        logEdit['components_json'],
+      ]);
+      logEdit['systems_ids'] = systemsIds;
+      logEdit['subsystems_ids'] = subsystemsIds;
+      logEdit['components_ids'] = componentsIds;
+    }
 
     this.state = {
       logEdit: { ...NonExposureEdit.defaultProps.logEdit, ...logEdit },

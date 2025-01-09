@@ -2255,7 +2255,7 @@ export function arrangeNarrativelogOBSSystemsSubsystemsComponents(systemsIds, su
     });
 
   // We assume that the hierarchy will always have a single root (system)
-  return JSON.stringify(hierarchy[0]);
+  return JSON.stringify(hierarchy[0] ?? {});
 }
 
 /**
@@ -2321,5 +2321,94 @@ export function validateOBSSystemsSubsystemsComponentsIds(systemsIds, subsystems
     systemsIds: validSystemsIds,
     subsystemsIds: validSubsystemsIds,
     componentsIds: validComponentsIds,
+  };
+}
+
+/**
+ * Function to get OBS systems, subsystems and components ids.
+ * @param {object} systemsHierarchy array of JSON objects with the components in the form of:
+ * [
+ *  {
+ *   name: "System-A",
+ *   children: [
+ *     {
+ *       name: "Subsystem-A",
+ *       children: [
+ *         {
+ *           name: "Component-A",
+ *         },
+ *       ],
+ *     },
+ *     {
+ *       name: "Subsystem-B",
+ *       children: [
+ *         {
+ *           name: "Component-B",
+ *         },
+ *       ],
+ *     },
+ *   ],
+ *  },
+ * ]
+ * @returns {object} Object with valid ids for systems, subsystems and components.
+ */
+export function getOBSSystemsSubsystemsComponentsIds(systemsHierarchy) {
+  const systemsIds = [];
+  const subsystemsIds = [];
+  const componentsIds = [];
+
+  const availableSystems = Object.entries(OLE_OBS_SYSTEMS).map(([sn, s]) => ({ name: sn, ...s }));
+
+  const systems = systemsHierarchy.map((sh) => {
+    const system = availableSystems.find((sa) => sa.name.includes(sh.name));
+    return { ...system, children: sh.children };
+  });
+
+  systems.forEach((system) => {
+    const systemName = system.name;
+    systemsIds.push(system.id);
+
+    if (system.children) {
+      const availableSubsystemsIds = OLE_OBS_SYSTEMS[systemName]?.children;
+      const availableSubsystems = Object.entries(OLE_OBS_SUBSYSTEMS)
+        .filter(([ssn, ss]) => {
+          return availableSubsystemsIds.includes(ss.id);
+        })
+        .map(([ssn, ss]) => ({ name: ssn, ...ss }));
+
+      const subsystems = system.children.map((ss) => {
+        const subsystem = availableSubsystems.find((ssa) => ssa.name.includes(ss.name));
+        return { ...subsystem, children: ss.children };
+      });
+
+      subsystems.forEach((subsystem) => {
+        const subsystemName = subsystem.name;
+        subsystemsIds.push(subsystem.id);
+
+        if (subsystem.children) {
+          const availableComponentsIds = OLE_OBS_SUBSYSTEMS[subsystemName]?.children;
+          const availableComponents = Object.entries(OLE_OBS_SUBSYSTEMS_COMPONENTS)
+            .filter(([cn, c]) => {
+              return availableComponentsIds.includes(c.id);
+            })
+            .map(([cn, c]) => ({ name: cn, ...c }));
+
+          const components = subsystem.children.map((c) => {
+            const component = availableComponents.find((ca) => ca.name.includes(c.name));
+            return { ...component };
+          });
+
+          components.forEach((component) => {
+            componentsIds.push(component.id);
+          });
+        }
+      });
+    }
+  });
+
+  return {
+    systemsIds,
+    subsystemsIds,
+    componentsIds,
   };
 }
