@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.6.0
+------
+
+* Extend LOVE Jira interface to comply with new OBS systems hierarchy. `<https://github.com/lsst-ts/LOVE-frontend/pull/683>`_
+
 v6.5.0
 ------
 
