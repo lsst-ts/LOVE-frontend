@@ -1,4 +1,4 @@
-import React, { Component, useCallback, memo } from 'react';
+import React, { Component, memo } from 'react';
 import PropTypes from 'prop-types';
 import lodash from 'lodash';
 import Moment from 'moment';
@@ -15,13 +15,17 @@ import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import Select from 'components/GeneralPurpose/Select/Select';
-import {
-  OLE_JIRA_COMPONENTS,
-  OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS,
-  OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS,
-  iconLevelOLE,
-} from 'Config';
-import ManagerInterface, { getFilesURLs, getLinkJira, getFilename, openInNewTab } from 'Utils';
+import { OLE_OBS_SYSTEMS, OLE_OBS_SUBSYSTEMS, OLE_OBS_SUBSYSTEMS_COMPONENTS } from 'Config';
+import ManagerInterface, {
+  getFilesURLs,
+  getLinkJira,
+  getFilename,
+  openInNewTab,
+  arrangeJiraOBSSystemsSubsystemsComponentsSelection,
+  arrangeNarrativelogOBSSystemsSubsystemsComponents,
+  validateOBSSystemsSubsystemsComponentsIds,
+} from 'Utils';
+import { getIconLevel, closeCalendar } from '../OLE';
 import styles from '../NonExposure/NonExposure.module.css';
 import customStyles from './Tekniker.module.css';
 
@@ -47,13 +51,10 @@ class TeknikerAdd extends Component {
       level: 0,
       date_begin: '',
       date_end: '',
-      components: [],
+      components_json: {},
+      systems_ids: [],
+      subsystems_ids: [],
       components_ids: [],
-      primary_software_components: ['None'],
-      primary_software_components_ids: OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS['None'],
-      primary_hardware_components: ['None'],
-      primary_hardware_components_ids: OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS['None'],
-      salindex: 0,
       user: undefined,
       time_lost: 0,
       jira: false,
@@ -83,23 +84,23 @@ class TeknikerAdd extends Component {
     logEdit['date_end'] = logEdit['date_end'] ? Moment(logEdit['date_end'] + 'Z') : '';
 
     this.state = {
-      logEdit,
+      logEdit: { ...TeknikerAdd.defaultProps.logEdit, ...logEdit },
       savingLog: false,
       datesAreValid: true,
       jiraIssueError: false,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.multiselectSystemsRef = React.createRef();
+    this.multiselectSubsystemsRef = React.createRef();
     this.multiselectComponentsRef = React.createRef();
-    this.id = lodash.uniqueId('nonexposure-edit-');
+
+    this.id = lodash.uniqueId('tekniker-add-');
+    this.multiselectSystemId = lodash.uniqueId('multiselect-systems-');
 
     this.dateBeginInputRef = React.createRef();
     this.dateEndInputRef = React.createRef();
-  }
-
-  getIconLevel(level) {
-    const icon = iconLevelOLE[level >= 100 ? 'urgent' : 'info'];
-    return icon;
   }
 
   cleanForm() {
@@ -107,19 +108,50 @@ class TeknikerAdd extends Component {
     this.clearDates();
 
     // Reset logEdit values
-    // Keep previously saved components for persistence
+    // Keep previously saved systems for persistence
     this.setState((prevState) => ({
       logEdit: {
         ...TeknikerAdd.defaultProps.logEdit,
-        components: prevState.logEdit.components,
+        systems_ids: prevState.logEdit.systems_ids,
+        subsystems_ids: [],
+        components_ids: [],
       },
     }));
   }
 
+  clearSystemsInput() {
+    this.setState((prevState) => ({
+      logEdit: {
+        ...prevState.logEdit,
+        systems_ids: [],
+        subsystems_ids: [],
+        components_ids: [],
+      },
+    }));
+
+    this.multiselectSystemsRef.current?.resetSelectedValues();
+  }
+
+  clearSubsystemsInput() {
+    this.setState((prevState) => ({
+      logEdit: {
+        ...prevState.logEdit,
+        subsystems_ids: [],
+        components_ids: [],
+      },
+    }));
+
+    this.multiselectSubsystemsRef.current?.resetSelectedValues();
+  }
+
   clearComponentsInput() {
     this.setState((prevState) => ({
-      logEdit: { ...prevState.logEdit, components: [] },
+      logEdit: {
+        ...prevState.logEdit,
+        components_ids: [],
+      },
     }));
+
     this.multiselectComponentsRef.current?.resetSelectedValues();
   }
 
@@ -129,23 +161,13 @@ class TeknikerAdd extends Component {
     }));
   }
 
-  closeCalendar(ref) {
-    const buttons = ref?.querySelectorAll('button');
-    const clickEvent = new Event('click', { bubbles: true });
-    if (buttons && buttons.length > 0) {
-      // buttons[2] is the button to close the calendar
-      // hidden by default so it can only be clicked programatically
-      buttons[2].dispatchEvent(clickEvent);
-    }
-  }
-
   updateDateBeginToNow() {
     this.setState(
       (prevState) => ({
         logEdit: { ...prevState.logEdit, date_begin: Moment() },
       }),
       () => {
-        this.closeCalendar(this.dateBeginInputRef?.current);
+        closeCalendar(this.dateBeginInputRef?.current);
       },
     );
   }
@@ -156,7 +178,7 @@ class TeknikerAdd extends Component {
         logEdit: { ...prevState.logEdit, date_end: Moment() },
       }),
       () => {
-        this.closeCalendar(this.dateEndInputRef?.current);
+        closeCalendar(this.dateEndInputRef?.current);
       },
     );
   }
@@ -171,7 +193,6 @@ class TeknikerAdd extends Component {
     const dateBeginButtons = dateBeginElement?.querySelectorAll('button');
     const dateEndButtons = dateEndElement?.querySelectorAll('button');
 
-    // const clickEvent = new MouseEvent('click');
     const clickEvent = new Event('click', { bubbles: true });
 
     if (dateBeginButtons && dateBeginButtons.length > 0) {
@@ -201,7 +222,8 @@ class TeknikerAdd extends Component {
   }
 
   updateOrCreateMessageNarrativeLogs() {
-    const payload = { ...this.state.logEdit };
+    const { logEdit } = this.state;
+    const payload = { ...logEdit };
 
     const nowMoment = Moment();
     payload['request_type'] = 'narrative';
@@ -226,6 +248,31 @@ class TeknikerAdd extends Component {
       }
     });
 
+    // Handle systems, subsystems and components for JIRA payload
+    const selection = arrangeJiraOBSSystemsSubsystemsComponentsSelection(
+      payload.systems_ids,
+      payload.subsystems_ids,
+      payload.components_ids,
+    );
+    payload['jira_obs_selection'] = selection;
+
+    const componentsJSON = arrangeNarrativelogOBSSystemsSubsystemsComponents(
+      payload.systems_ids,
+      payload.subsystems_ids,
+      payload.components_ids,
+    );
+    payload['components_json'] = componentsJSON;
+
+    // Avoid API confusion with deprecated parameters
+    delete payload['components'];
+    delete payload['primary_software_components'];
+    delete payload['primary_hardware_components'];
+    delete payload['systems'];
+    delete payload['subsystems'];
+    delete payload['systems_ids'];
+    delete payload['subsystems_ids'];
+    delete payload['components_ids'];
+
     this.setState({ savingLog: true });
     if (this.state.logEdit.id) {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
@@ -248,8 +295,18 @@ class TeknikerAdd extends Component {
   }
 
   handleSubmit(event) {
-    event.preventDefault();
+    if (event) event.preventDefault();
     this.updateOrCreateMessageNarrativeLogs();
+  }
+
+  isSubmitDisabled() {
+    const { logEdit, datesAreValid, savingLog, jiraIssueError } = this.state;
+    return (
+      !datesAreValid ||
+      jiraIssueError ||
+      savingLog ||
+      (!logEdit?.tmaError?.trim() && !logEdit?.tmaSituation?.trim() && !logEdit?.tmaDescription?.trim())
+    );
   }
 
   handleTimeOfIncident(date, type) {
@@ -278,6 +335,30 @@ class TeknikerAdd extends Component {
         time_lost: duration_hr.toFixed(2),
       },
     }));
+  }
+
+  // The following function is used to fix a bug with the ReactMultiselect component.
+  // When setting the singleSelect prop to true, clicks on the select box are dismissed.
+  // This function replaces the search box with a simple input box and removes the caret.
+  // Check: https://github.com/srigar/multiselect-react-dropdown/issues/262
+  fixSingleSelectBox = () => {
+    const { logEdit } = this.state;
+    const msParent = document.getElementById(this.multiselectSystemId);
+    const searchBox = msParent.getElementsByClassName('searchBox')[0];
+    const caret = msParent.getElementsByClassName('icon_down_dir')[0];
+
+    const newSearchBox = document.createElement('input');
+    newSearchBox.setAttribute('type', 'text');
+    newSearchBox.setAttribute('placeholder', 'Select zero or one system');
+
+    if (logEdit.systems_ids.length == 0) {
+      searchBox.replaceWith(newSearchBox);
+    }
+    caret.remove();
+  };
+
+  componentDidMount() {
+    this.fixSingleSelectBox();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -309,17 +390,18 @@ class TeknikerAdd extends Component {
         }
       }
     }
+
+    this.fixSingleSelectBox();
   }
 
   renderCategoryField() {
-    const { category } = this.state.logEdit ?? {};
     return (
       <>
         <span className={styles.label}>Type of observing time</span>
         <span className={styles.value}>
           <Select
             options={['None', 'ENG', 'SCIENCE']}
-            option={category}
+            option={this.state.logEdit?.category}
             onChange={({ value }) => {
               this.setState((prevState) => ({
                 logEdit: { ...prevState.logEdit, category: value },
@@ -348,7 +430,7 @@ class TeknikerAdd extends Component {
               }
             />
           </div>
-          <span className={styles.levelIcon}>{this.getIconLevel(this.state.logEdit.level)}</span>
+          <span className={styles.levelIcon}>{getIconLevel(this.state.logEdit.level)}</span>
         </span>
       </>
     );
@@ -357,22 +439,136 @@ class TeknikerAdd extends Component {
   renderComponentsFields() {
     const { logEdit } = this.state;
 
-    const componentOptions = Object.keys(OLE_JIRA_COMPONENTS).sort();
-    const primarySoftwareComponentOptions = Object.keys(OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS).sort();
-    const primaryHardwareComponentOptions = Object.keys(OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS).sort();
+    const selectedSystemsIds = logEdit?.systems_ids;
+    const selectedSubsystemsIds = logEdit?.subsystems_ids;
+    const selectedComponentsIds = logEdit?.components_ids;
+
+    const selectedSystems = Object.keys(OLE_OBS_SYSTEMS).filter((s) =>
+      selectedSystemsIds?.includes(OLE_OBS_SYSTEMS[s].id),
+    );
+    const selectedSubsystems = Object.keys(OLE_OBS_SUBSYSTEMS).filter((ss) =>
+      selectedSubsystemsIds?.includes(OLE_OBS_SUBSYSTEMS[ss].id),
+    );
+    const selectedComponents = Object.keys(OLE_OBS_SUBSYSTEMS_COMPONENTS).filter((c) =>
+      selectedComponentsIds?.includes(OLE_OBS_SUBSYSTEMS_COMPONENTS[c].id),
+    );
+
+    const systemOptions = Object.keys(OLE_OBS_SYSTEMS).sort();
+
+    const availableSubsystemsIds =
+      selectedSystems
+        ?.map((s) => {
+          return OLE_OBS_SYSTEMS[s].children;
+        })
+        .flat() ?? [];
+    const subsystemOptions = Object.keys(OLE_OBS_SUBSYSTEMS)
+      .filter((ss) => {
+        return availableSubsystemsIds.includes(OLE_OBS_SUBSYSTEMS[ss].id);
+      })
+      .sort();
+
+    const availableComponentsIds =
+      selectedSubsystems
+        ?.map((ss) => {
+          return OLE_OBS_SUBSYSTEMS[ss].children;
+        })
+        .flat() ?? [];
+    const componentOptions = Object.keys(OLE_OBS_SUBSYSTEMS_COMPONENTS)
+      .filter((c) => {
+        return availableComponentsIds.includes(OLE_OBS_SUBSYSTEMS_COMPONENTS[c].id);
+      })
+      .sort();
+
+    const setLogEditSystems = (selectedOptions) => {
+      const selectedSystemsIds = selectedOptions.map((s) => OLE_OBS_SYSTEMS[s].id);
+      this.setState((prevState) => {
+        const validComponentsIds = validateOBSSystemsSubsystemsComponentsIds(
+          selectedSystemsIds,
+          prevState.logEdit.subsystems_ids,
+          prevState.logEdit.components_ids,
+        );
+
+        return {
+          logEdit: {
+            ...prevState.logEdit,
+            systems_ids: validComponentsIds.systemsIds,
+            subsystems_ids: validComponentsIds.subsystemsIds,
+            components_ids: validComponentsIds.componentsIds,
+          },
+        };
+      });
+    };
+
+    const setLogEditSubsystems = (selectedOptions) => {
+      const selectedSubsystemsIds = selectedOptions.map((ss) => OLE_OBS_SUBSYSTEMS[ss].id);
+      this.setState((prevState) => {
+        const validComponentsIds = validateOBSSystemsSubsystemsComponentsIds(
+          prevState.logEdit.systems_ids,
+          selectedSubsystemsIds,
+          prevState.logEdit.components_ids,
+        );
+
+        return {
+          logEdit: {
+            ...prevState.logEdit,
+            subsystems_ids: validComponentsIds.subsystemsIds,
+            components_ids: validComponentsIds.componentsIds,
+          },
+        };
+      });
+    };
 
     const setLogEditComponents = (selectedOptions) => {
-      this.setState((prevState) => ({
-        logEdit: {
-          ...prevState.logEdit,
-          components: selectedOptions,
-          components_ids: selectedOptions.map((component) => OLE_JIRA_COMPONENTS[component]),
-        },
-      }));
+      const selectedComponentsIds = selectedOptions.map((c) => OLE_OBS_SUBSYSTEMS_COMPONENTS[c].id);
+      this.setState((prevState) => {
+        const validComponentsIds = validateOBSSystemsSubsystemsComponentsIds(
+          prevState.logEdit.systems_ids,
+          prevState.logEdit.subsystems_ids,
+          selectedComponentsIds,
+        );
+
+        return {
+          logEdit: {
+            ...prevState.logEdit,
+            components_ids: validComponentsIds.componentsIds,
+          },
+        };
+      });
     };
 
     return (
       <>
+        <span className={styles.label}>System</span>
+        <span className={styles.value}>
+          <div className={styles.inputGroup} id={this.multiselectSystemId}>
+            <Multiselect
+              innerRef={this.multiselectSystemsRef}
+              className={styles.select}
+              options={systemOptions}
+              selectedValues={selectedSystems}
+              onSelect={setLogEditSystems}
+              onRemove={setLogEditSystems}
+              singleSelect={true}
+            />
+            <Button onClick={() => this.clearSystemsInput()}>Clear</Button>
+          </div>
+        </span>
+        <span className={styles.label}>Subsystems</span>
+        <span className={styles.value}>
+          <div className={styles.inputGroup}>
+            <Multiselect
+              innerRef={this.multiselectSubsystemsRef}
+              className={styles.select}
+              options={subsystemOptions}
+              selectedValues={selectedSubsystems}
+              onSelect={setLogEditSubsystems}
+              onRemove={setLogEditSubsystems}
+              placeholder="Select zero or more subsystems"
+              selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
+            />
+            <Button onClick={() => this.clearSubsystemsInput()}>Clear</Button>
+          </div>
+        </span>
         <span className={styles.label}>Components</span>
         <span className={styles.value}>
           <div className={styles.inputGroup}>
@@ -380,48 +576,14 @@ class TeknikerAdd extends Component {
               innerRef={this.multiselectComponentsRef}
               className={styles.select}
               options={componentOptions}
-              selectedValues={logEdit?.components}
+              selectedValues={selectedComponents}
               onSelect={setLogEditComponents}
               onRemove={setLogEditComponents}
-              placeholder="Select zero or several components"
+              placeholder="Select zero or more components"
               selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
             />
             <Button onClick={() => this.clearComponentsInput()}>Clear</Button>
           </div>
-        </span>
-        <span className={styles.label}>Primary Software Component</span>
-        <span className={styles.value}>
-          <Select
-            options={primarySoftwareComponentOptions}
-            option={logEdit?.primary_software_components[0]}
-            onChange={({ value }) => {
-              this.setState((prevState) => ({
-                logEdit: {
-                  ...prevState.logEdit,
-                  primary_software_components: [value],
-                  primary_software_components_ids: [OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS[value]],
-                },
-              }));
-            }}
-            className={styles.select}
-          />
-        </span>
-        <span className={styles.label}>Primary Hardware Component</span>
-        <span className={styles.value}>
-          <Select
-            options={primaryHardwareComponentOptions}
-            option={logEdit?.primary_hardware_components[0]}
-            onChange={({ value }) => {
-              this.setState((prevState) => ({
-                logEdit: {
-                  ...prevState.logEdit,
-                  primary_hardware_components: [value],
-                  primary_hardware_components_ids: [OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS[value]],
-                },
-              }));
-            }}
-            className={styles.select}
-          />
         </span>
       </>
     );
@@ -439,13 +601,7 @@ class TeknikerAdd extends Component {
         return (
           <div ref={ref} className={styles.timeOfIncidentInputContainer}>
             <input {...props} readOnly />
-            <Button
-              // ref={ref}
-              className={styles.clearDateIcon}
-              size="small"
-              title="Clear date"
-              onClick={clearDate}
-            >
+            <Button className={styles.clearDateIcon} size="small" title="Clear date" onClick={clearDate}>
               <CloseIcon title="Clear date" />
             </Button>
             <button className={styles.hiddenButtons} type="button" onClick={openCalendar} />
@@ -759,11 +915,11 @@ class TeknikerAdd extends Component {
   }
 
   renderSubmitButton() {
-    const { datesAreValid, savingLog, jiraIssueError } = this.state;
+    const { savingLog } = this.state;
 
     return (
       <>
-        <Button disabled={!datesAreValid || jiraIssueError} type="submit">
+        <Button disabled={this.isSubmitDisabled()} type="submit">
           {savingLog ? <SpinnerIcon className={styles.spinnerIcon} /> : <span className={styles.title}>Save</span>}
         </Button>
       </>

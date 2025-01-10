@@ -20,18 +20,33 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React, { Component } from 'react';
 import Moment from 'moment';
 import Button from 'components/GeneralPurpose/Button/Button';
-import { OLE_COMMENT_TYPE_OPTIONS } from 'Config';
-import ManagerInterface from 'Utils';
 import Exposure from './Exposure/Exposure';
 import NonExposure from './NonExposure/NonExposure';
 import ExposureAdd from './Exposure/ExposureAdd';
 import NonExposureEdit from './NonExposure/NonExposureEdit';
+import { OLE_COMMENT_TYPE_OPTIONS, OLE_DEFAULT_SYSTEMS_FILTER_OPTION, iconLevelOLE } from 'Config';
+import ManagerInterface from 'Utils';
 import styles from './OLE.module.css';
 
 const tabs = [
   { name: 'Narrative Logs', value: 'non-exposure' },
   { name: 'Exposure Logs', value: 'exposure' },
 ];
+
+export function getIconLevel(level) {
+  const icon = iconLevelOLE[level >= 100 ? 'urgent' : 'info'];
+  return icon;
+}
+
+export function closeCalendar(ref) {
+  const buttons = ref?.querySelectorAll('button');
+  const clickEvent = new Event('click', { bubbles: true });
+  if (buttons && buttons.length > 0) {
+    // buttons[2] is the button to close the calendar
+    // hidden by default so it can only be clicked programatically
+    buttons[2].dispatchEvent(clickEvent);
+  }
+}
 
 export default class OLE extends Component {
   constructor(props) {
@@ -43,7 +58,7 @@ export default class OLE extends Component {
       selectedDayNarrativeStart: Moment().subtract(1, 'days'),
       selectedDayNarrativeEnd: Moment(),
       selectedCommentType: OLE_COMMENT_TYPE_OPTIONS[0],
-      selectedComponent: 'All components',
+      selectedSystem: OLE_DEFAULT_SYSTEMS_FILTER_OPTION,
       selectedObsTimeLoss: false,
       selectedJiraTickets: false,
       // Exposure filters
@@ -69,8 +84,8 @@ export default class OLE extends Component {
     this.setState({ selectedCommentType: value });
   }
 
-  changeComponentSelect(value) {
-    this.setState({ selectedComponent: value });
+  changeSystemSelect(value) {
+    this.setState({ selectedSystem: value });
   }
 
   changeObsTimeLossSelect(value) {
@@ -153,8 +168,8 @@ export default class OLE extends Component {
             changeDayNarrative={(day, type) => this.changeDayNarrative(day, type)}
             selectedCommentType={this.state.selectedCommentType}
             changeCommentTypeSelect={(value) => this.changeCommentTypeSelect(value)}
-            selectedComponent={this.state.selectedComponent}
-            changeComponentSelect={(value) => this.changeComponentSelect(value)}
+            selectedSystem={this.state.selectedSystem}
+            changeSystemSelect={(value) => this.changeSystemSelect(value)}
             selectedObsTimeLoss={this.state.selectedObsTimeLoss}
             changeObsTimeLossSelect={(value) => this.changeObsTimeLossSelect(value)}
             selectedJiraTickets={this.state.selectedJiraTickets}
