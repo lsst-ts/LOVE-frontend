@@ -21,6 +21,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getUsername, getAllAlarms, getTaiToUtc, getAllTime } from '../../redux/selectors';
 import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
+import { logAlarm } from '../../redux/actions/alarms';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import Watcher from './Watcher';
 // import mockAlarms from './AlarmsTable/mock'
@@ -138,6 +139,7 @@ const mapDispatchToProps = (dispatch) => {
         }),
       );
     },
+    logAlarm: (name) => dispatch(logAlarm(name)),
   };
 };
 
