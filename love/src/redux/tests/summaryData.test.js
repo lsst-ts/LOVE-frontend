@@ -20,18 +20,18 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import thunkMiddleware from 'redux-thunk';
-import rootReducer from '../reducers';
-import { addGroup } from '../actions/ws';
-import { doReceiveToken } from '../actions/auth';
-import { removeCSCLogMessages, removeCSCErrorCodeData } from '../actions/summaryData';
+import rootReducer from 'redux/reducers';
+import { addGroup } from 'redux/actions/ws';
+import { doReceiveToken } from 'redux/actions/auth';
+import { removeCSCLogMessages, removeCSCErrorCodeData } from 'redux/actions/summaryData';
 import {
   getCSCLogMessages,
   getCSCErrorCodeData,
   getAllStreamsAsDictionary,
   getGroupSortedErrorCodeData,
-} from '../selectors';
+} from 'redux/selectors';
+import { flatMap } from 'Utils';
 import * as mockData from './mock';
-import { flatMap } from '../../Utils';
 
 let store;
 let server;

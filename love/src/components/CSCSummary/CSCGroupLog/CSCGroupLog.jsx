@@ -19,11 +19,11 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './CSCGroupLog.module.css';
-import BackArrowIcon from '../../icons/BackArrowIcon/BackArrowIcon';
+import BackArrowIcon from 'components/icons/BackArrowIcon/BackArrowIcon';
+import Button from 'components/GeneralPurpose/Button/Button';
+import { formatTimestamp } from 'Utils';
 import CSCDetailContainer from '../CSCDetail/CSCDetail.container';
-import Button from '../../GeneralPurpose/Button/Button';
-import { formatTimestamp } from '../../../Utils';
+import styles from './CSCGroupLog.module.css';
 
 export default class CSCGroupLog extends Component {
   static propTypes = {

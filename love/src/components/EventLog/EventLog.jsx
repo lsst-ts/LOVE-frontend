@@ -19,16 +19,15 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import ManagerInterface, { formatTimestamp, getStringRegExp } from 'Utils';
 import EFDQuery from 'components/GeneralPurpose/EFDQuery/EFDQuery';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import { CardList, Card, Title, Separator } from 'components/GeneralPurpose/CardList/CardList';
+import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
+import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
+import ErrorIcon from 'components/icons/ErrorIcon/ErrorIcon';
+import TextField from 'components/TextField/TextField';
+import ManagerInterface, { formatTimestamp, getStringRegExp } from 'Utils';
 import styles from './EventLog.module.css';
-import InfoIcon from '../icons/InfoIcon/InfoIcon';
-import WarningIcon from '../icons/WarningIcon/WarningIcon';
-import ErrorIcon from '../icons/ErrorIcon/ErrorIcon';
-
-import TextField from '../TextField/TextField';
 
 export default class EventLog extends PureComponent {
   static propTypes = {

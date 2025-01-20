@@ -19,14 +19,14 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import HeartbeatIcon from 'components/icons/HeartbeatIcon/HeartbeatIcon';
+import BackArrowIcon from 'components/icons/BackArrowIcon/BackArrowIcon';
+import Button from 'components/GeneralPurpose/Button/Button';
+import LogMessageDisplay from 'components/GeneralPurpose/LogMessageDisplay/LogMessageDisplay';
+import Select from 'components/GeneralPurpose/Select/Select';
+import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
+import { cscText, formatTimestamp } from 'Utils';
 import styles from './CSCExpanded.module.css';
-import HeartbeatIcon from '../../icons/HeartbeatIcon/HeartbeatIcon';
-import BackArrowIcon from '../../icons/BackArrowIcon/BackArrowIcon';
-import Button from '../../GeneralPurpose/Button/Button';
-import LogMessageDisplay from '../../GeneralPurpose/LogMessageDisplay/LogMessageDisplay';
-import Select from '../../GeneralPurpose/Select/Select';
-import WarningIcon from '../../icons/WarningIcon/WarningIcon';
-import { cscText, formatTimestamp } from '../../../Utils';
 
 export default class CSCExpanded extends PureComponent {
   constructor(props) {
