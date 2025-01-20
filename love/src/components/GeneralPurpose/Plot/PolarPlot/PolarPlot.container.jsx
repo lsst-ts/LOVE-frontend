@@ -19,11 +19,12 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getStreamsData, getTaiToUtc } from 'redux/selectors/selectors';
-import _ from 'lodash';
-import PolarPlot from './PolarPlot';
+import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
 import ManagerInterface, { parseTimestamp, parsePlotInputsEFD, parseCommanderData } from 'Utils';
+import PolarPlot from './PolarPlot';
 
 const DATA_WINDOW = 10;
 
@@ -218,7 +219,7 @@ class PolarPlotContainer extends React.Component {
         const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
         const newValue = {
           name: inputName,
-          time: parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
+          time: parseTimestamp(streamValue[TOPIC_TIMESTAMP_ATTRIBUTE]?.value * 1000),
           value: accessorFunc(streamValue[item]?.value),
         };
 

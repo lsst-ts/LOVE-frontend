@@ -25,8 +25,9 @@ import InfoIcon from 'components/icons/CSCExpanded/InfoIcon/InfoIcon';
 import WarningIcon from 'components/icons/CSCExpanded/WarningIcon/WarningIcon';
 import ErrorIcon from 'components/icons/CSCExpanded/ErrorIcon/ErrorIcon';
 import CopyIcon from 'components/icons/CopyIcon/CopyIcon';
-import styles from './LogMessageDisplay.module.css';
+import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
 import { formatTimestamp, copyToClipboard } from 'Utils';
+import styles from './LogMessageDisplay.module.css';
 
 function CopyToClipboard({ text }) {
   const [copied, setCopied] = useState(false);
@@ -109,11 +110,14 @@ function LogMessageDisplay({ logMessageData, clearCSCLogMessages }) {
               const copyToClipboardText =
                 msg.message?.value + (msg.traceback?.value ? '\n\n' + msg.traceback?.value : '');
               return (
-                <div key={`${msg.private_rcvStamp.value}-${msg.level.value}-${index}`} className={styles.logMessage}>
+                <div
+                  key={`${msg[TOPIC_TIMESTAMP_ATTRIBUTE].value}-${msg.level.value}-${index}`}
+                  className={styles.logMessage}
+                >
                   <div className={styles.messageIcon}>{icon}</div>
                   <div className={styles.messageTextContainer}>
-                    <div className={styles.timestamp} title="private_rcvStamp">
-                      {formatTimestamp(msg.private_rcvStamp.value * 1000)}
+                    <div className={styles.timestamp} title={TOPIC_TIMESTAMP_ATTRIBUTE}>
+                      {formatTimestamp(msg[TOPIC_TIMESTAMP_ATTRIBUTE].value * 1000)}
                     </div>
                     <div className={styles.messageText}>
                       {msg.ScriptID && <div className={styles.scriptID}>Script {msg.ScriptID?.value}</div>}

@@ -21,15 +21,15 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import LogMessageDisplay from 'components/GeneralPurpose/LogMessageDisplay/LogMessageDisplay';
 import Button from 'components/GeneralPurpose/Button/Button';
+import RequeueIcon from 'components/icons/ScriptQueue/RequeueIcon/RequeueIcon';
+import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
 import ManagerInterface, { parseToSALFormat } from 'Utils';
-
-import styles from './FinishedScript.module.css';
-import scriptStyles from '../Scripts.module.css';
-import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
-import RequeueIcon from '../../../icons/ScriptQueue/RequeueIcon/RequeueIcon';
+import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import ScriptDetails from '../ScriptDetails';
 import ScriptConfig from '../ScriptConfig/ScriptConfig';
+import styles from './FinishedScript.module.css';
+import scriptStyles from '../Scripts.module.css';
 
 class FinishedScript extends React.Component {
   static propTypes = {
@@ -102,7 +102,7 @@ class FinishedScript extends React.Component {
     const cscs = {
       Script: {
         [scriptIndex]: {
-          logevent_logMessage: ['private_rcvStamp', 'level', 'message', 'traceback'],
+          logevent_logMessage: [TOPIC_TIMESTAMP_ATTRIBUTE, 'level', 'message', 'traceback'],
         },
       },
     };

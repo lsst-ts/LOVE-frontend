@@ -18,7 +18,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { createCachedSelector } from 're-reselect';
-import { flatMap, arrayRandomBoolean } from '../../Utils';
+import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
+import { flatMap, arrayRandomBoolean } from 'Utils';
 
 export const getToken = (state) => state.auth.token;
 
@@ -2795,7 +2796,7 @@ export const getGroupSortedErrorCodeData = (state, group) => {
   });
 
   const sorted = flatMapped.sort((msg1, msg2) => {
-    return msg1.private_rcvStamp.value > msg2.private_rcvStamp.value ? -1 : 1;
+    return msg1[TOPIC_TIMESTAMP_ATTRIBUTE].value > msg2[TOPIC_TIMESTAMP_ATTRIBUTE].value ? -1 : 1;
   });
 
   return sorted;
@@ -2822,7 +2823,7 @@ export const getGroupSortedLogMessageData = (state, group) => {
   });
 
   const sorted = flatMapped.sort((msg1, msg2) => {
-    return msg1.private_rcvStamp.value > msg2.private_rcvStamp.value ? -1 : 1;
+    return msg1[TOPIC_TIMESTAMP_ATTRIBUTE].value > msg2[TOPIC_TIMESTAMP_ATTRIBUTE].value ? -1 : 1;
   });
 
   return sorted;

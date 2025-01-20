@@ -2,6 +2,7 @@ import React, { memo, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import CopyIcon from 'components/icons/CopyIcon/CopyIcon';
+import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
 import ManagerInterface, { copyToClipboard } from 'Utils';
 import styles from './ScriptConfig.module.css';
 
@@ -22,7 +23,7 @@ function ScriptConfig({ index, timestampProcessStart, timestampConfigureEnd, def
     const cscs = {
       Script: {
         [scriptIndex]: {
-          command_configure: ['private_rcvStamp', 'config'],
+          command_configure: [TOPIC_TIMESTAMP_ATTRIBUTE, 'config'],
         },
       },
     };

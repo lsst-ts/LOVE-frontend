@@ -26,6 +26,7 @@ import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
 import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
 import ErrorIcon from 'components/icons/ErrorIcon/ErrorIcon';
 import TextField from 'components/TextField/TextField';
+import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
 import ManagerInterface, { formatTimestamp, getStringRegExp } from 'Utils';
 import styles from './EventLog.module.css';
 
@@ -95,8 +96,8 @@ export default class EventLog extends PureComponent {
     });
     cscList.forEach((obj) => {
       cscTopicDict[obj.name][obj.salindex] = {
-        logevent_logMessage: ['private_rcvStamp', 'level', 'message', 'traceback'],
-        logevent_errorCode: ['private_rcvStamp', 'errorCode', 'errorReport', 'traceback'],
+        logevent_logMessage: [TOPIC_TIMESTAMP_ATTRIBUTE, 'level', 'message', 'traceback'],
+        logevent_errorCode: [TOPIC_TIMESTAMP_ATTRIBUTE, 'errorCode', 'errorReport', 'traceback'],
       };
     });
     return cscTopicDict;
@@ -119,7 +120,7 @@ export default class EventLog extends PureComponent {
           errorReport: log.errorReport !== undefined ? { value: log.errorReport } : undefined,
           // shared parameters
           traceback: { value: log.traceback },
-          private_rcvStamp: { value: log.private_rcvStamp },
+          [TOPIC_TIMESTAMP_ATTRIBUTE]: { value: log[TOPIC_TIMESTAMP_ATTRIBUTE] },
         }),
       );
     });
@@ -156,7 +157,9 @@ export default class EventLog extends PureComponent {
       JSON.stringify(this.props.errorCodeData) !== JSON.stringify(prevProps.errorCodeData)
     ) {
       const eventData = [...this.props.logMessageData.slice(0, 100), ...this.props.errorCodeData.slice(0, 50)];
-      eventData.sort((a, b) => (a?.private_rcvStamp?.value > b?.private_rcvStamp?.value ? -1 : 1));
+      eventData.sort((a, b) =>
+        a?.[TOPIC_TIMESTAMP_ATTRIBUTE]?.value > b?.[TOPIC_TIMESTAMP_ATTRIBUTE]?.value ? -1 : 1,
+      );
       if (eventData.length !== 0) {
         this.setState({
           eventData,
@@ -170,7 +173,7 @@ export default class EventLog extends PureComponent {
     const filterResult = this.state.cscFilter === '' || this.state.cscRegExp.test(cscKey);
     return (
       filterResult && (
-        <Card key={`${msg.private_rcvStamp.value}-${index}`} className={styles.card}>
+        <Card key={`${msg[TOPIC_TIMESTAMP_ATTRIBUTE].value}-${index}`} className={styles.card}>
           <div className={styles.messageTextContainer}>
             <div className={styles.messageTopSection}>
               <div className={styles.cardTitleContainer}>
@@ -181,8 +184,8 @@ export default class EventLog extends PureComponent {
                 </span>
               </div>
 
-              <div className={styles.timestamp} title="private_rcvStamp">
-                {formatTimestamp(msg.private_rcvStamp.value * 1000)}
+              <div className={styles.timestamp} title={TOPIC_TIMESTAMP_ATTRIBUTE}>
+                {formatTimestamp(msg[TOPIC_TIMESTAMP_ATTRIBUTE].value * 1000)}
               </div>
             </div>
 
@@ -207,7 +210,7 @@ export default class EventLog extends PureComponent {
     return (
       filterResult &&
       this.state.messageFilters[value]?.value && (
-        <Card key={`${msg.private_rcvStamp.value}-${msg.level.value}-${index}`} className={styles.card}>
+        <Card key={`${msg[TOPIC_TIMESTAMP_ATTRIBUTE].value}-${msg.level.value}-${index}`} className={styles.card}>
           <div className={styles.messageTextContainer}>
             <div className={styles.messageTopSection}>
               <div className={styles.cardTitleContainer}>
@@ -219,8 +222,8 @@ export default class EventLog extends PureComponent {
                 </span>
               </div>
 
-              <div className={styles.timestamp} title="private_rcvStamp">
-                {formatTimestamp(msg.private_rcvStamp.value * 1000)}
+              <div className={styles.timestamp} title={TOPIC_TIMESTAMP_ATTRIBUTE}>
+                {formatTimestamp(msg[TOPIC_TIMESTAMP_ATTRIBUTE].value * 1000)}
               </div>
             </div>
             <Separator className={styles.innerSeparator} />

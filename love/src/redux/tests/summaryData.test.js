@@ -30,6 +30,7 @@ import {
   getAllStreamsAsDictionary,
   getGroupSortedErrorCodeData,
 } from 'redux/selectors';
+import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
 import { flatMap } from 'Utils';
 import * as mockData from './mock';
 
@@ -312,7 +313,7 @@ it('Should extract a sorted list of a subset of errorCode event data ', async ()
   });
 
   const sortedMessages = [...flat1, ...flat2].sort((msg1, msg2) => {
-    return msg1.private_rcvStamp.value > msg2.private_rcvStamp.value ? -1 : 1;
+    return msg1[TOPIC_TIMESTAMP_ATTRIBUTE].value > msg2[TOPIC_TIMESTAMP_ATTRIBUTE].value ? -1 : 1;
   });
 
   // Act

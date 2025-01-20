@@ -25,6 +25,7 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import LogMessageDisplay from 'components/GeneralPurpose/LogMessageDisplay/LogMessageDisplay';
 import Select from 'components/GeneralPurpose/Select/Select';
 import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
+import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
 import { cscText, formatTimestamp } from 'Utils';
 import styles from './CSCExpanded.module.css';
 
@@ -467,13 +468,13 @@ export default class CSCExpanded extends PureComponent {
               <div className={[styles.log, styles.messageLogContent].join(' ')}>
                 {errorCodeData.map((msg, index) => {
                   return (
-                    <div key={`${msg.private_rcvStamp.value}-${index}`} className={styles.logMessage}>
+                    <div key={`${msg[TOPIC_TIMESTAMP_ATTRIBUTE].value}-${index}`} className={styles.logMessage}>
                       <div className={styles.errorCode} title={`Error code ${msg.errorCode.value}`}>
                         {msg.errorCode.value}
                       </div>
                       <div className={styles.messageTextContainer}>
-                        <div className={styles.timestamp} title="private_rcvStamp">
-                          {formatTimestamp(msg.private_rcvStamp.value * 1000)}
+                        <div className={styles.timestamp} title={TOPIC_TIMESTAMP_ATTRIBUTE}>
+                          {formatTimestamp(msg[TOPIC_TIMESTAMP_ATTRIBUTE].value * 1000)}
                         </div>
                         <pre className={styles.preText}>{msg.errorReport.value}</pre>
                         <pre className={styles.preText}>{msg.traceback.value}</pre>
