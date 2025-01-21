@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.7.0
+------
+
+* Add a button to log alarms from the AlarmsList and AlarmsTable components. `<https://github.com/lsst-ts/LOVE-frontend/pull/684>`_
+
 v6.6.0
 ------
 

@@ -40,6 +40,7 @@ import {
   getControlLocation,
 } from '../../redux/selectors';
 import { logout, receiveConfig, requireSwapToken, cancelSwapToken } from '../../redux/actions/auth';
+import { logAlarm, ackAlarm } from '../../redux/actions/alarms';
 import { addGroup, removeGroup, requestSALCommand, resetSubscriptions } from '../../redux/actions/ws';
 import { fetchControlLocationLoopStart, fetchControlLocationLoopStop } from '../../redux/actions/observatoryState';
 import { clearViewToEdit } from '../../redux/actions/uif';
@@ -119,19 +120,9 @@ const mapDispatchToProps = (dispatch) => {
       subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
     },
     ackAlarm: (name, severity, acknowledgedBy) => {
-      return dispatch(
-        requestSALCommand({
-          cmd: 'cmd_acknowledge',
-          component: 'Watcher',
-          salindex: 0,
-          params: {
-            name,
-            severity,
-            acknowledgedBy,
-          },
-        }),
-      );
+      dispatch(ackAlarm(name, severity, acknowledgedBy));
     },
+    logAlarm: (name) => dispatch(logAlarm(name)),
     requireUserSwap: (bool) => {
       if (bool) dispatch(requireSwapToken);
       else dispatch(cancelSwapToken);

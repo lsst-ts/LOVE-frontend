@@ -44,6 +44,8 @@ export default class Watcher extends Component {
     muteAlarm: PropTypes.func,
     /** Function to dispatch an alarm unmute */
     unmuteAlarm: PropTypes.func,
+    /** Function to dispatch an alarm logging */
+    logAlarm: PropTypes.func,
     /** Function to subscribe to streams to receive the alarms */
     subscribeToStreams: PropTypes.func,
     /** Function to unsubscribe to streams to stop receiving the alarms */
@@ -196,6 +198,10 @@ export default class Watcher extends Component {
             unackAlarm={this.props.unackAlarm}
             muteAlarm={this.props.muteAlarm}
             unmuteAlarm={this.props.unmuteAlarm}
+            logAlarm={(name) => {
+              this.setState({ waiting: true });
+              this.props.logAlarm(name);
+            }}
             sortFunctions={this.state.selectedTab === 'unmuted' ? this.sortFunctions : this.mutedSortFunctions}
           />
         </div>

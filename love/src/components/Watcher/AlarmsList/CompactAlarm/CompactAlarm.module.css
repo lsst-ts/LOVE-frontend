@@ -106,6 +106,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .ackButtonContainer {
   display: flex;
+  gap: 0.5em;
   justify-content: center;
   padding-top: 0.5em;
 }

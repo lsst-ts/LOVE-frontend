@@ -18,6 +18,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import { RECEIVE_ALARM, RECEIVE_ALL_ALARMS } from './actionTypes';
+import { requestSALCommand } from './ws';
 
 export const receiveAlarm = (alarm) => {
   return {
@@ -30,5 +31,37 @@ export const receiveAllAlarms = (alarmsStream) => {
   return {
     type: RECEIVE_ALL_ALARMS,
     alarmsStream,
+  };
+};
+
+export const ackAlarm = (name, severity, acknowledgedBy) => {
+  return (dispatch) => {
+    dispatch(
+      requestSALCommand({
+        cmd: 'cmd_acknowledge',
+        component: 'Watcher',
+        salindex: 0,
+        params: {
+          name,
+          severity,
+          acknowledgedBy,
+        },
+      }),
+    );
+  };
+};
+
+export const logAlarm = (name) => {
+  return (dispatch) => {
+    dispatch(
+      requestSALCommand({
+        cmd: 'cmd_makeLogEntry',
+        component: 'Watcher',
+        salindex: 0,
+        params: {
+          name,
+        },
+      }),
+    );
   };
 };

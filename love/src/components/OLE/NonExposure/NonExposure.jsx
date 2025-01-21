@@ -332,7 +332,7 @@ export default class NonExposure extends Component {
     const csvData = data.map((row) => {
       const obsDay = getObsDayFromDate(moment(row.date_added + 'Z'));
       const escapedMessageText = row.message_text.replace(/"/g, '""');
-      const parsedLevel = OLE_COMMENT_TYPE_OPTIONS.find((option) => option.value === row.level).label;
+      const parsedLevel = OLE_COMMENT_TYPE_OPTIONS.find((option) => option.value === row.level)?.label ?? 'Undefined';
       return {
         ...row,
         obs_day: obsDay,

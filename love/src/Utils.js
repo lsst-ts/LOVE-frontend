@@ -1272,12 +1272,14 @@ export const getNotificationMessage = (salCommand) => {
     cmd_unacknowledge: 'unacknowledged',
     cmd_mute: 'muted',
     cmd_unmute: 'unmuted',
+    cmd_makeLogEntry: 'logged',
   };
 
   const watcherErrorCmds = {
     cmd_acknowledge: 'acknowledging',
     cmd_mute: 'muting',
     cmd_unmute: 'unmuting',
+    cmd_makeLogEntry: 'logging',
   };
 
   if (salCommand.status === 'REQUESTED') {

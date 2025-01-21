@@ -32,9 +32,11 @@ AlarmList.propTypes = {
   alarms: PropTypes.array,
   /** Function to dispatch an alarm acknowledgement */
   ackAlarm: PropTypes.func,
+  /** Function to dispatch an alarm logging */
+  logAlarm: PropTypes.func,
 };
 
-export default function AlarmList({ alarms, taiToUtc, ackAlarm, user }) {
+export default function AlarmList({ alarms, taiToUtc, ackAlarm, logAlarm, user }) {
   return (
     <div className={styles.alarmsContainer} title="Alarms">
       {alarms.length < 1 ? (
@@ -57,6 +59,7 @@ export default function AlarmList({ alarms, taiToUtc, ackAlarm, user }) {
                 severityUpdateTimestamp,
                 reason: alarm.reason?.value,
                 ackAlarm: ackAlarm,
+                logAlarm: logAlarm,
               };
 
               return <CompactAlarm key={alarm.name?.value} {...alarmProps}></CompactAlarm>;

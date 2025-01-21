@@ -583,6 +583,7 @@ class Layout extends Component {
           <AlarmsList
             alarms={filteredAlarms}
             ackAlarm={this.props.ackAlarm}
+            logAlarm={this.props.logAlarm}
             taiToUtc={this.props.taiToUtc}
             user={this.props.user}
           />

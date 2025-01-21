@@ -33,6 +33,7 @@ export default function CompactAlarm({
   reason,
   severityUpdateTimestamp,
   ackAlarm,
+  logAlarm,
 }) {
   const severityStatus = severityToStatus[severity];
   const maxSeverityStatus = severityToStatus[maxSeverity];
@@ -87,6 +88,18 @@ export default function CompactAlarm({
             }}
           >
             ACK
+          </Button>
+          <Button
+            title="Log alarm details to the Narrativelog"
+            status="info"
+            shape="rounder"
+            onClick={(event) => {
+              event.stopPropagation();
+              logAlarm(name);
+              event.nativeEvent.stopImmediatePropagation();
+            }}
+          >
+            LOG
           </Button>
         </div>
       </div>
