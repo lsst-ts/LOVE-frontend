@@ -766,13 +766,13 @@ export const getATMCSState = (state) => {
 export const getAuxiliaryTelescopeState = (state) => {
   const subscriptions = [
     'telemetry-ATPtg-0-mountStatus',
-    'telemetry-ATPtg-0-mountPosition',
+    'telemetry-ATPtg-0-mountPositions',
     'event-ATPtg-0-currentTarget',
   ];
   const data = getStreamsData(state, subscriptions);
   return {
     telescopeRAHour: data['telemetry-ATPtg-0-mountStatus']?.mountRA?.value ?? 0,
-    telescopeRADeg: data['telemetry-ATPtg-0-mountPosition']?.ra?.value ?? 0,
+    telescopeRADeg: data['telemetry-ATPtg-0-mountPositions']?.ra?.value[0] ?? 0,
     telescopeDecDeg: data['telemetry-ATPtg-0-mountStatus']?.mountDec?.value ?? 0,
     telescopeRotatorRad: data['telemetry-ATPtg-0-mountStatus']?.mountRot?.value ?? 0,
     targetName: data['event-ATPtg-0-currentTarget']?.[0].targetName?.value ?? 'Unknown',
