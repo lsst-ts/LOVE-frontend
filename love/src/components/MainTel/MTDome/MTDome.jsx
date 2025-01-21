@@ -223,8 +223,8 @@ export default class MTDome extends Component {
     telescopeRADeg: PropTypes.number,
     /** Telescope current Dec in degrees */
     telescopeDecDeg: PropTypes.number,
-    /** Telescope rotator position in rad */
-    telescopeRotatorRad: PropTypes.number,
+    /** Telescope rotator position in degrees */
+    telescopeRotatorDeg: PropTypes.number,
     /** Whether to display the RA and DEC in hour format */
     raDecHourFormat: PropTypes.bool,
   };
@@ -572,7 +572,7 @@ export default class MTDome extends Component {
       telescopeRAHour,
       telescopeRADeg,
       telescopeDecDeg,
-      telescopeRotatorRad,
+      telescopeRotatorDeg,
       raDecHourFormat,
     } = this.props;
 
@@ -661,7 +661,7 @@ export default class MTDome extends Component {
                 telescopeRAHour={telescopeRAHour}
                 telescopeRADeg={telescopeRADeg}
                 telescopeDecDeg={telescopeDecDeg}
-                telescopeRotatorRad={telescopeRotatorRad}
+                telescopeRotatorDeg={telescopeRotatorDeg}
                 raDecHourFormat={raDecHourFormat}
               />
             </div>

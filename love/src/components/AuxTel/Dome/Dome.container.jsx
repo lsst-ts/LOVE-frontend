@@ -103,7 +103,7 @@ const DomeContainer = ({
   telescopeRAHour,
   telescopeRADeg,
   telescopeDecDeg,
-  telescopeRotatorRad,
+  telescopeRotatorDeg,
   raDecHourFormat,
   ...props
 }) => {
@@ -158,7 +158,7 @@ const DomeContainer = ({
       telescopeRAHour={telescopeRAHour}
       telescopeRADeg={telescopeRADeg}
       telescopeDecDeg={telescopeDecDeg}
-      telescopeRotatorRad={telescopeRotatorRad}
+      telescopeRotatorDeg={telescopeRotatorDeg}
       raDecHourFormat={raDecHourFormat}
     />
   );
