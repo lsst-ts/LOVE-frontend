@@ -83,7 +83,7 @@ const MTDomeContainer = ({
   telescopeRAHour,
   telescopeRADeg,
   telescopeDecDeg,
-  telescopeRotatorRad,
+  telescopeRotatorDeg,
   raDecHourFormat,
   ...props
 }) => {
@@ -117,7 +117,7 @@ const MTDomeContainer = ({
       telescopeRAHour={telescopeRAHour}
       telescopeRADeg={telescopeRADeg}
       telescopeDecDeg={telescopeDecDeg}
-      telescopeRotatorRad={telescopeRotatorRad}
+      telescopeRotatorDeg={telescopeRotatorDeg}
       raDecHourFormat={raDecHourFormat}
     />
   );

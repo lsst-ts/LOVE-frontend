@@ -247,7 +247,8 @@ export default class AlarmsTable extends PureComponent {
 
                   return (
                     <>
-                      <td className={styles.ackButton} />
+                      <td className={styles.actionButton}></td>
+                      <td className={styles.actionButton}></td>
                       <ColumnHeader
                         {...defaultColumnProps}
                         className={styles.status}
@@ -304,7 +305,22 @@ export default class AlarmsTable extends PureComponent {
                         ].join(' ')}
                         onClick={() => this.clickGearIcon(key)}
                       >
-                        <td title={reasonStr} className={[styles.firstColumn, styles.ackButton].join(' ')}>
+                        <td title={reasonStr} className={[styles.firstColumn, styles.actionButton].join(' ')}>
+                          <div className={styles.statusWrapper}>
+                            <Button
+                              title="Log this alarm to the Narrativelog"
+                              status="info"
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                this.props.logAlarm(row.name.value);
+                              }}
+                              command
+                            >
+                              LOG
+                            </Button>
+                          </div>
+                        </td>
+                        <td title={reasonStr} className={[styles.firstColumn, styles.actionButton].join(' ')}>
                           {!isAcknowledged(row) ? (
                             <div className={styles.statusWrapper}>
                               <Button
@@ -374,7 +390,8 @@ export default class AlarmsTable extends PureComponent {
                             ' ',
                           )}
                         >
-                          <td colSpan={1} className={styles.ackButton}></td>
+                          <td colSpan={1} className={styles.actionButton}></td>
+                          <td colSpan={1} className={styles.actionButton}></td>
                           <td colSpan={4} className={styles.expandedRowContent}>
                             <DetailsPanel
                               alarm={row}

@@ -71,7 +71,7 @@ export default class DomeSummaryTable extends Component {
     telescopeRAHour: PropTypes.number,
     telescopeRADeg: PropTypes.number,
     telescopeDecDeg: PropTypes.number,
-    telescopeRotatorRad: PropTypes.number,
+    telescopeRotatorDeg: PropTypes.number,
     raDecHourFormat: PropTypes.bool,
   };
 
@@ -113,7 +113,7 @@ export default class DomeSummaryTable extends Component {
       telescopeRAHour,
       telescopeRADeg,
       telescopeDecDeg,
-      telescopeRotatorRad,
+      telescopeRotatorDeg,
       raDecHourFormat,
     } = this.props;
 
@@ -159,7 +159,7 @@ export default class DomeSummaryTable extends Component {
     const parsedTelescopeDecHour = degreesToDMS(telescopeDecDeg);
     const parsedTelescopeRADeg = defaultNumberFormatter(telescopeRADeg, 2) + '°';
     const parsedTelescopeDecDeg = defaultNumberFormatter(telescopeDecDeg, 2) + '°';
-    const parsedTelescopeRotatorDeg = defaultNumberFormatter(degrees(telescopeRotatorRad), 2) + '°';
+    const parsedTelescopeRotatorDeg = defaultNumberFormatter(telescopeRotatorDeg, 2) + '°';
     const telescopeRAText = raDecHourFormat ? parsedTelescopeRAHour : parsedTelescopeRADeg;
     const telescopeDecText = raDecHourFormat ? parsedTelescopeDecHour : parsedTelescopeDecDeg;
 
