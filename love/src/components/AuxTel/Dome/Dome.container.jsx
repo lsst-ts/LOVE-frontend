@@ -103,7 +103,7 @@ const DomeContainer = ({
   telescopeRAHour,
   telescopeRADeg,
   telescopeDecDeg,
-  telescopeRotatorRad,
+  telescopeRotatorDeg,
   raDecHourFormat,
   ...props
 }) => {
@@ -158,7 +158,7 @@ const DomeContainer = ({
       telescopeRAHour={telescopeRAHour}
       telescopeRADeg={telescopeRADeg}
       telescopeDecDeg={telescopeDecDeg}
-      telescopeRotatorRad={telescopeRotatorRad}
+      telescopeRotatorDeg={telescopeRotatorDeg}
       raDecHourFormat={raDecHourFormat}
     />
   );
@@ -178,7 +178,7 @@ const mapDispatchToProps = (dispatch) => {
     'telemetry-ATMCS-0-mount_Nasmyth_Encoders',
     'telemetry-Scheduler-2-observatoryState',
     'telemetry-ATPtg-0-mountStatus',
-    'telemetry-ATPtg-0-mountPosition',
+    'telemetry-ATPtg-0-mountPositions',
     'event-ATDome-0-azimuthState',
     'event-ATDome-0-azimuthCommandedState',
     'event-ATDome-0-dropoutDoorState',
