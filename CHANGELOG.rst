@@ -5,6 +5,7 @@ Version History
 v6.7.0
 ------
 
+* Update package.json version to v6.7.0. `<https://github.com/lsst-ts/LOVE-frontend/pull/686>`_
 * Fix telescope RA and Rotator display on DomeSummaryTable components. `<https://github.com/lsst-ts/LOVE-frontend/pull/685>`_
 * Add a button to log alarms from the AlarmsList and AlarmsTable components. `<https://github.com/lsst-ts/LOVE-frontend/pull/684>`_
 
