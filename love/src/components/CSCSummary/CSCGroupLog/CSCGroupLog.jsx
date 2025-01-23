@@ -19,11 +19,12 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './CSCGroupLog.module.css';
-import BackArrowIcon from '../../icons/BackArrowIcon/BackArrowIcon';
+import BackArrowIcon from 'components/icons/BackArrowIcon/BackArrowIcon';
+import Button from 'components/GeneralPurpose/Button/Button';
+import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
+import { formatTimestamp } from 'Utils';
 import CSCDetailContainer from '../CSCDetail/CSCDetail.container';
-import Button from '../../GeneralPurpose/Button/Button';
-import { formatTimestamp } from '../../../Utils';
+import styles from './CSCGroupLog.module.css';
 
 export default class CSCGroupLog extends Component {
   static propTypes = {
@@ -103,7 +104,7 @@ export default class CSCGroupLog extends Component {
             <div className={[styles.log, styles.messageLogContent].join(' ')}>
               {this.props.errorCodeData.map((msg, index) => {
                 return (
-                  <div key={`${msg.private_rcvStamp.value}-${index}`} className={styles.logMessage}>
+                  <div key={`${msg[TOPIC_TIMESTAMP_ATTRIBUTE].value}-${index}`} className={styles.logMessage}>
                     <div className={styles.errorCode} title={`Error code ${msg.errorCode.value}`}>
                       {msg.errorCode.value}
                     </div>
@@ -117,8 +118,8 @@ export default class CSCGroupLog extends Component {
                           onCSCClick={this.props.onCSCClick}
                           embedded={true}
                         />
-                        <div className={styles.timestamp} title="private_rcvStamp">
-                          {formatTimestamp(msg.private_rcvStamp.value * 1000)}
+                        <div className={styles.timestamp} title={TOPIC_TIMESTAMP_ATTRIBUTE}>
+                          {formatTimestamp(msg[TOPIC_TIMESTAMP_ATTRIBUTE].value * 1000)}
                         </div>
                       </div>
                       <div className={styles.messageText}>{msg.errorReport.value}</div>

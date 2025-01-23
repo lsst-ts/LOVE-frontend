@@ -21,6 +21,9 @@ import InfoIcon from 'components/icons/CSCExpanded/InfoIcon/InfoIcon';
 import WarningIcon from 'components/icons/CSCExpanded/WarningIcon/WarningIcon';
 import { VALUE_TYPES } from 'Constants';
 
+// SAL parameters
+export const TOPIC_TIMESTAMP_ATTRIBUTE = 'private_sndStamp';
+
 // Subpath
 export const SUBPATH = process.env.PUBLIC_URL ?? '';
 
