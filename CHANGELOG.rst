@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.7.1
+------
+
+* Refactor LOVE components to use private_sndStamp instead of deprecated private_rcvStamp `<https://github.com/lsst-ts/LOVE-frontend/pull/687>`_
+
 v6.7.0
 ------
 
