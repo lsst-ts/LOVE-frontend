@@ -2237,13 +2237,26 @@ export function checkJSONResponse(response, onSuccess) {
     toast.error('Error communicating with the server.');
     return false;
   }
-  if (response.status === 400) {
+
+  if (response.status === 400 || response.status === 403) {
     return response.json().then((resp) => {
-      const errorMsg = resp.error ? `${resp.ack}: ${resp.error}` : resp.ack;
-      toast.error(errorMsg);
-      return false;
+      if (resp.ack && resp.error) {
+        toast.error(`${resp.ack}: ${resp.error}`);
+        return false;
+      }
+
+      if (resp.ack) {
+        toast.error(resp.ack);
+        return false;
+      }
+
+      if (resp.error) {
+        toast.error(resp.error);
+        return false;
+      }
     });
   }
+
   if (response.status === 401) {
     ManagerInterface.removeToken();
     return false;
