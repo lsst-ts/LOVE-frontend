@@ -387,3 +387,34 @@ body {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
+
+/* Indeterminate progress bar animation */
+@keyframes indeterminate {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Indeterminate progress bar */
+.indeterminate {
+  /* background-color: var(--status-running-color); */
+  height: 0.3em;
+  position: relative;
+  overflow: hidden;
+}
+
+.indeterminate:after {
+  content: ' ';
+  position: absolute;
+  background-color: var(--status-running-color);
+  top: 0;
+  width: 68%;
+  height: 0.3em;
+  /* left: 0;
+  bottom: 0; */
+  will-change: left, right;
+  animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+}
