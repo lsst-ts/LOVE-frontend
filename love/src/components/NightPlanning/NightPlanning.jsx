@@ -16,37 +16,64 @@ import styles from './NightPlanning.module.css';
 
 const RUN_SCRIPT_LOG_LEVEL = 10;
 
-const statusToStyle = {
-  PASSED: styles.passed,
-  FAILED: styles.failed,
+const TEST_EXECUTION_STATUSES = {
+  NOT_EXECUTED: 'Not Executed',
+  IN_PROGRESS: 'In Progress',
+  PASS: 'Pass',
+  PASS_WITH_DEVIATION: 'Pass with Deviation',
+  FAIL: 'Fail',
+  SKIP: 'Skip',
+  BLOCKED: 'Blocked',
 };
 
-const getScriptQueueSalindexFromScriptPath = (scriptPath) => {
-  if (scriptPath.includes('maintel')) {
-    return 2;
-  } else if (scriptPath.includes('auxtel')) {
-    return 1;
-  }
-  return 0;
+const statusToStyle = {
+  [TEST_EXECUTION_STATUSES.NOT_EXECUTED]: styles.notExecuted,
+  [TEST_EXECUTION_STATUSES.IN_PROGRESS]: styles.inProgress,
+  [TEST_EXECUTION_STATUSES.PASS]: styles.passed,
+  [TEST_EXECUTION_STATUSES.PASS_WITH_DEVIATION]: styles.passedWithDeviation,
+  [TEST_EXECUTION_STATUSES.FAIL]: styles.failed,
+  [TEST_EXECUTION_STATUSES.SKIP]: styles.skipped,
+  [TEST_EXECUTION_STATUSES.BLOCKED]: styles.blocked,
 };
+
+function getScriptQueueSalindexFromScriptPath(scriptPath) {
+  return 1;
+  // if (scriptPath.includes('maintel')) {
+  //   return 2;
+  // } else if (scriptPath.includes('auxtel')) {
+  //   return 1;
+  // }
+  // return 0;
+}
+
+function validateScriptConfiguration(scriptConfig) {
+  if (scriptConfig === '(none)') {
+    return '';
+  }
+  return scriptConfig;
+}
+
+function stepIsScript(scriptPath) {
+  return scriptPath.includes('.py');
+}
 
 function StatusLabel({ status }) {
-  const statusStyle = statusToStyle[status];
-  return <div className={[styles.statusLabel, statusStyle].join(' ')}>{status}</div>;
+  const executionStatus = status ?? TEST_EXECUTION_STATUSES.NOT_EXECUTED;
+  const statusStyle = statusToStyle[executionStatus];
+  return <div className={[styles.statusLabel, statusStyle].join(' ')}>{executionStatus}</div>;
 }
 
 function TestCycleDetails({
-  id,
-  title,
+  isLoading,
+  cycleKey,
+  name,
   description,
   folder,
   status,
-  release_version,
-  iteration,
   owner,
-  planned_start_date,
-  planned_end_date,
-  extra_fields,
+  plannedStartDate,
+  plannedEndDate,
+  customFields,
 }) {
   const [showDetails, setShowDetails] = useState(false);
 
@@ -54,29 +81,46 @@ function TestCycleDetails({
     setShowDetails(!showDetails);
   };
 
-  const renderTestCycleDetailField = ({ value, title, type }) => {
+  const renderCustomField = (key, value, type) => {
     if (type === 'checkbox') {
       return (
         <div className={styles.testCycleField}>
-          <div>{title}</div>
-          <input type="checkbox" checked={value} readOnly={true} />
+          <div>{key}</div>
+          {/* <input type="checkbox" checked={value} readOnly={true} /> */}
+          <span>{value ? '✅️' : '❌'}</span>
         </div>
       );
     }
     return (
       <div className={styles.testCycleField}>
-        <div>{title}</div>
-        <div className={styles.fontHighligthed}>{value}</div>
+        <div>{key}</div>
+        <div className={styles.fontHighligthed}>{value || 'None'}</div>
       </div>
     );
   };
+
+  const parsedCustomFields = Object.entries(customFields || {}).map(([key, value]) => {
+    let fieldType = 'text';
+    if (typeof value === 'boolean') {
+      fieldType = 'checkbox';
+    }
+    return {
+      key,
+      value,
+      type: fieldType,
+    };
+  });
+
+  if (isLoading) {
+    return <div className={styles.testCycleDetailsContainer}>Loading...</div>;
+  }
 
   return (
     <div className={styles.testCycleDetailsContainer}>
       <div className={styles.testCycleHeader}>
         <div className={styles.testCycleTitle}>
           <div>
-            {id} - {title}
+            {cycleKey} - {name}
           </div>
           <div
             onClick={toggleShowDetails}
@@ -87,70 +131,112 @@ function TestCycleDetails({
         </div>
       </div>
       <div className={[styles.testCycleDetails, showDetails ? '' : styles.hideDetails].join(' ')}>
+        <hr></hr>
         <div className={styles.testCycleMainDetails}>
-          <div className={styles.fontHighligthed}>{description}</div>
-          <div>
+          <div className={styles.basicInformation}>
             <span>Owner: </span>
-            <span className={styles.fontHighligthed}>{owner}</span> ●<span> Planned Start Date: </span>
-            <span className={styles.fontHighligthed}>{planned_start_date}</span> ●<span> Planned End Date: </span>
-            <span className={styles.fontHighligthed}>{planned_end_date}</span>
+            <span className={styles.fontHighligthed}>{owner ?? 'None'}</span>
+            <span>● Planned Start Date: </span>
+            <span className={styles.fontHighligthed}>{plannedStartDate ?? 'None'}</span>
+            <span>● Planned End Date: </span>
+            <span className={styles.fontHighligthed}>{plannedEndDate ?? 'None'}</span>
           </div>
+          {description && (
+            <>
+              <hr></hr>
+              {/* <div className={styles.fontHighligthed}>{description}</div> */}
+              <div dangerouslySetInnerHTML={{ __html: description }} />
+            </>
+          )}
         </div>
-        <div className={styles.testCycleSectionTitle}>More information</div>
-        <div className={styles.testCycleExtraFields}>
-          {extra_fields?.map((field) => renderTestCycleDetailField(field))}
-        </div>
+        {customFields && (
+          <>
+            <hr></hr>
+            <div className={styles.testCycleSectionTitle}>More information</div>
+            <div className={styles.testCycleExtraFields}>
+              {parsedCustomFields.map(({ key, value, type }) => renderCustomField(key, value, type))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
 }
 
+TestCycleDetails.propTypes = {
+  /** If the test cycle details are loading */
+  isLoading: PropTypes.bool,
+  /** Key of the test cycle */
+  cycleKey: PropTypes.string,
+  /** Name of the test cycle */
+  name: PropTypes.string,
+  /** Description of the test cycle */
+  description: PropTypes.string,
+  /** Folder of the test cycle */
+  folder: PropTypes.string,
+  /** Status of the test cycle */
+  status: PropTypes.string,
+  /** Owner of the test cycle */
+  owner: PropTypes.string,
+  /** Planned start date of the test cycle */
+  plannedStartDate: PropTypes.string,
+  /** Planned end date of the test cycle */
+  plannedEndDate: PropTypes.string,
+  /** Custom fields of the test cycle */
+  customFields: PropTypes.object,
+};
+
 function TestCaseStep({
-  position,
-  title,
   status,
-  test_data,
-  expected_result,
-  sal_script,
-  is_external,
-  script_configuration,
-  actual_result,
+  description,
+  testData,
+  expectedResult,
+  salScript,
+  isExternal,
+  scriptConfiguration,
+  actualResult,
+  position,
   queueOn,
   scriptSchema,
   commandExecutePermission,
   launchScript,
+  loadScriptSchema,
 }) {
   const [scriptSchemaError, setScriptSchemaError] = useState('');
-  const [actualResult, setActualResult] = useState(actual_result);
+  const [actualResultState, setActualResultState] = useState(actualResult);
 
-  useEffect(() => {
-    if (scriptSchema?.includes(SCRIPTQUEUE_EMPTY_SCHEMA_STRING)) {
-      setScriptSchemaError('');
-    } else if (!scriptSchema) {
-      setScriptSchemaError('WAITING FOR SCHEMA: schema not yet loaded');
-    } else {
-      ManagerInterface.requestConfigValidation(script_configuration, scriptSchema)
-        .then((r) => {
-          if (!r.ok) {
-            return {
-              title: SCRIPT_SCHEMA_VALIDATION_ERROR_TITLES_MAPPING.SERVER_ERROR,
-              error: {
-                message: 'Unkown error validating json schema on the server',
-              },
-            };
-          }
-          return r.json();
-        })
-        .then((r) => {
-          const parsedError = parseScriptSchemaError(r);
-          if (r.error) {
-            setScriptSchemaError(`${parsedError.title}: ${parsedError.message}`);
-          } else {
-            setScriptSchemaError('');
-          }
-        });
-    }
-  }, [script_configuration, scriptSchema]);
+  const isScript = stepIsScript(salScript);
+
+  if (isScript) {
+    useEffect(() => {
+      if (scriptSchema?.includes(SCRIPTQUEUE_EMPTY_SCHEMA_STRING)) {
+        setScriptSchemaError('');
+      } else if (!scriptSchema) {
+        setScriptSchemaError('WAITING FOR SCHEMA: schema not yet loaded');
+      } else {
+        ManagerInterface.requestConfigValidation(scriptConfiguration, scriptSchema)
+          .then((r) => {
+            if (!r.ok) {
+              return {
+                title: SCRIPT_SCHEMA_VALIDATION_ERROR_TITLES_MAPPING.SERVER_ERROR,
+                error: {
+                  message: 'Unkown error validating json schema on the server',
+                },
+              };
+            }
+            return r.json();
+          })
+          .then((r) => {
+            const parsedError = parseScriptSchemaError(r);
+            if (r.error) {
+              setScriptSchemaError(`${parsedError.title}: ${parsedError.message}`);
+            } else {
+              setScriptSchemaError('');
+            }
+          });
+      }
+    }, [scriptConfiguration, scriptSchema]);
+  }
 
   const updateActualResult = () => {
     const payload = {
@@ -169,27 +255,29 @@ function TestCaseStep({
   return (
     <div className={styles.testCaseStep}>
       <div className={styles.stepStatus}>
-        <div>{status}</div>
+        <StatusLabel status={status} />
       </div>
       <div className={styles.stepNumber}>{position}</div>
       <div className={styles.stepFields}>
         <div className={styles.stepField}>
           <div>Step</div>
-          <div className={styles.fontHighligthed}>{title}</div>
+          {/* <div className={styles.fontHighligthed}>{description ?? 'None'}</div> */}
+          <div className={styles.fontHighligthed} dangerouslySetInnerHTML={{ __html: description ?? 'None' }} />
         </div>
         <div className={styles.stepField}>
           <div>Test Data</div>
-          <div className={styles.fontHighligthed}>{test_data}</div>
+          <div className={styles.fontHighligthed}>{testData ?? 'None'}</div>
         </div>
         <div className={styles.stepField}>
           <div>Expected Result</div>
-          <div className={styles.fontHighligthed}>{expected_result}</div>
+          {/* <div className={styles.fontHighligthed}>{expectedResult ?? 'None'}</div> */}
+          <div className={styles.fontHighligthed} dangerouslySetInnerHTML={{ __html: expectedResult ?? 'None' }} />
         </div>
         <div className={styles.stepField}>
           <div>SAL Script Name</div>
           <div className={[styles.fontHighligthed, styles.stepSalScript].join(' ')}>
-            {sal_script}
-            {commandExecutePermission && !scriptSchemaError && (
+            {salScript}
+            {isScript && commandExecutePermission && !scriptSchemaError && (
               <Button
                 className={styles.runScriptButton}
                 size="extra-small"
@@ -207,20 +295,30 @@ function TestCaseStep({
         </div>
         <div className={styles.stepField}>
           <div>External</div>
-          <div className={styles.fontHighligthed}>{is_external ? 'Yes' : 'No'}</div>
+          <div className={styles.fontHighligthed}>{isExternal ? 'Yes' : 'No'}</div>
         </div>
         <div className={[styles.stepField, styles.stepSalScriptConfig].join(' ')}>
           <div className={styles.stepFieldLabel}>
             <span>Script Configuration</span>
             {scriptSchemaError && <ErrorIcon />}
+            {scriptSchemaError.includes('WAITING FOR SCHEMA') && (
+              <Button
+                className={styles.requestSchemaButton}
+                size="extra-small"
+                title="Load script schema"
+                onClick={loadScriptSchema}
+              >
+                Load schema
+              </Button>
+            )}
           </div>
           <div className={styles.stepSalScriptConfigError}>{scriptSchemaError}</div>
-          <div className={styles.fontHighligthed}>{script_configuration || 'None'}</div>
+          <div className={styles.fontHighligthed}>{scriptConfiguration || 'None'}</div>
         </div>
         <div className={[styles.stepField, styles.stepActualResult].join(' ')}>
           <div>Actual Result</div>
           <div className={styles.fontHighligthed}>
-            <TextArea value={actualResult} callback={setActualResult} />
+            <TextArea value={actualResultState} callback={setActualResultState} />
             <Button
               className={styles.saveActualResultButton}
               size="extra-small"
@@ -268,47 +366,61 @@ TestCaseStep.propTypes = {
 };
 
 function TestExecutionDetails({
-  id,
+  isLoading,
   version,
-  title,
-  status,
+  testExecutionStatus,
   environment,
   release_version,
-  executed_by,
-  executed_time,
+  executedById,
   iteration,
-  assignee,
-  estimated_time,
-  objective,
-  precondition,
+  assignedToId,
+  executionTime,
+  estimatedTime,
   comment,
   issues,
   attachments,
-  steps,
+  testCaseData,
+  testStepsData,
   username,
   commandExecutePermission,
   getScriptQueueOn,
   getScriptSchema,
   requestSALCommand,
 }) {
-  const digitalExecutedTime = formatSecondsToDigital(executed_time);
-  const executedTimeProgress = (executed_time / estimated_time) * 100;
+  const executionTimeSeconds = executionTime ? executionTime / 1000 : 0;
+  const estimatedTimeSeconds = estimatedTime ? estimatedTime / 1000 : 0;
+
+  const digitalExecutedTime = executionTimeSeconds ? formatSecondsToDigital(executionTimeSeconds) : '00:00:00';
+  const executedTimeProgress =
+    executionTimeSeconds && estimatedTimeSeconds ? (executionTimeSeconds / estimatedTimeSeconds) * 100 : 0;
+
+  const testCaseKey = testCaseData?.key;
+  const testCaseName = testCaseData?.name;
+  const testCaseObjective = testCaseData?.objective;
+  const testCasePrecondition = testCaseData?.precondition;
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className={styles.testCaseDetails}>
       <div className={styles.testCaseHeader}>
         <div className={styles.testCaseTitle}>
           <div>
-            {id} ({version}) <span className={styles.fontHighligthed}>{title}</span>
+            {testCaseKey}
+            {version ? ` - (${version})` : ''}
+            <span className={styles.fontHighligthed}>{testCaseName}</span>
           </div>
           <ProgressBar
             completed={executedTimeProgress}
             targetValue={executedTimeProgress}
             hideCompleted={true}
-            title={`Executed ${executed_time}s of Estimated ${estimated_time}s`}
+            title={`Executed ${executionTimeSeconds}s of Estimated ${estimatedTimeSeconds}s`}
           />
         </div>
         <div className={styles.testCaseStatus}>
-          <StatusLabel status={status} />
+          <StatusLabel status={testExecutionStatus} />
           <div className={styles.testCaseExecutedTime}>{digitalExecutedTime}</div>
         </div>
       </div>
@@ -316,39 +428,41 @@ function TestExecutionDetails({
       <div className={styles.testCaseExecution}>
         <div className={styles.testCaseExecutionField}>
           <div>Environment:</div>
-          <div className={styles.fontHighligthed}>{environment}</div>
+          <div className={styles.fontHighligthed}>{environment ?? 'None'}</div>
         </div>
         <div className={styles.testCaseExecutionField}>
           <div>Iteration:</div>
-          <div className={styles.fontHighligthed}>{iteration}</div>
+          <div className={styles.fontHighligthed}>{iteration ?? 'None'}</div>
         </div>
         <div className={styles.testCaseExecutionField}>
           <div>Release Version:</div>
-          <div className={styles.fontHighligthed}>{release_version}</div>
+          <div className={styles.fontHighligthed}>{release_version ?? 'None'}</div>
         </div>
         <div className={styles.testCaseExecutionField}>
           <div>Assigned to:</div>
-          <div className={styles.fontHighligthed}>{assignee}</div>
+          <div className={styles.fontHighligthed}>{assignedToId ?? 'None'}</div>
         </div>
         <div className={styles.testCaseExecutionField}>
           <div>Executed By:</div>
-          <div className={styles.fontHighligthed}>{executed_by}</div>
+          <div className={styles.fontHighligthed}>{executedById ?? 'None'}</div>
         </div>
         <div className={styles.testCaseExecutionField}>
           <div>Estimated time:</div>
-          <div className={styles.fontHighligthed}>{estimated_time}s</div>
+          <div className={styles.fontHighligthed}>{estimatedTimeSeconds ? `${estimatedTimeSeconds}s` : 'None'}</div>
         </div>
         <div className={styles.testCaseExecutionField}>
           <div>Executed time:</div>
-          <div className={styles.fontHighligthed}>{executed_time}s</div>
+          <div className={styles.fontHighligthed}>{executionTimeSeconds ? `${executionTimeSeconds}s` : 'None'}</div>
         </div>
       </div>
       <div className={styles.testCaseSectionTitle}>Objective</div>
-      <div className={styles.fontHighligthed}>{objective}</div>
+      {/* <div className={styles.fontHighligthed}>{testCaseObjective ?? 'None'}</div> */}
+      <div className={styles.fontHighligthed} dangerouslySetInnerHTML={{ __html: testCaseObjective ?? 'None' }} />
       <div className={styles.testCaseSectionTitle}>Precondition</div>
-      <div className={styles.fontHighligthed}>{precondition}</div>
+      {/* <div className={styles.fontHighligthed}>{testCasePrecondition ?? 'None'}</div> */}
+      <div className={styles.fontHighligthed} dangerouslySetInnerHTML={{ __html: testCasePrecondition ?? 'None' }} />
       <div className={styles.testCaseSectionTitle}>Comment</div>
-      <div className={styles.fontHighligthed}>{comment}</div>
+      <div className={styles.fontHighligthed}>{comment ?? 'None'}</div>
       <div className={styles.testCaseSectionTitle}>Issues</div>
       <div className={styles.fontHighligthed}>
         {issues?.length > 0
@@ -370,16 +484,23 @@ function TestExecutionDetails({
           : 'None'}
       </div>
       <div className={styles.testCaseSectionTitle}>Test Script</div>
+      <hr />
       <div>
-        {steps?.map((step, i) => {
-          const fullScriptPath = /* 'data/scripts/' + */ step.sal_script;
-          const queueIndex = getScriptQueueSalindexFromScriptPath(step.sal_script);
+        {testStepsData?.map((step, i) => {
+          const stepCustomFields = step.customFields ?? {};
+          step['salScript'] = stepCustomFields['SAL Script Name'];
+          step['isExternal'] = stepCustomFields['External SAL Script?'];
+          step['scriptConfiguration'] = validateScriptConfiguration(stepCustomFields['SAL Script Configuration']);
+
+          const fullScriptPath = /* 'data/scripts/' + */ step.salScript;
+          const queueIndex = getScriptQueueSalindexFromScriptPath(step.salScript);
           const isQueueOn = getScriptQueueOn(queueIndex);
           const scriptSchema = getScriptSchema(queueIndex, fullScriptPath);
+
           const launchScript = () => {
             if (!isQueueOn) return;
             const params = {
-              isStandard: !step.is_external,
+              isStandard: !step.isExternal,
               path: fullScriptPath,
               config: step.script_configuration,
               descr: `description\n\n-------\nSent by ${username}`,
@@ -393,12 +514,28 @@ function TestExecutionDetails({
               params,
             });
           };
+
+          const loadScriptSchema = () => {
+            const payload = {
+              component: 'ScriptQueue',
+              salindex: queueIndex,
+              cmd: 'cmd_showSchema',
+              params: {
+                path: fullScriptPath,
+                isStandard: !step.isExternal,
+              },
+            };
+            requestSALCommand(payload);
+          };
+
           return (
             <TestCaseStep
+              key={i}
               queueOn={isQueueOn}
               scriptSchema={scriptSchema}
               commandExecutePermission={commandExecutePermission}
               launchScript={launchScript}
+              loadScriptSchema={loadScriptSchema}
               position={i + 1}
               {...step}
             />
@@ -417,7 +554,7 @@ TestExecutionDetails.propTypes = {
   /** Title of the test case */
   title: PropTypes.string,
   /** Status of the test case
-   * One of: PASSED, FAILED
+   * One of: PASSED, FAILED, NOT_EXECUTED
    */
   status: PropTypes.string,
   /** Environment of the test case */
@@ -479,9 +616,9 @@ TestExecutionDetails.propTypes = {
   requestSALCommand: PropTypes.func,
 };
 
-function TestCase({ id, version, status, title, assignee, environment }) {
-  const statusStyle = statusToStyle[status];
-  const assigneeInitials = assignee
+function TestCase({ caseKey, name, version, executionStatus, executionAssignee, executionEnvironment }) {
+  const statusStyle = statusToStyle[executionStatus];
+  const assigneeInitials = executionAssignee
     .split(' ')
     .map((name) => name[0])
     .join('');
@@ -490,11 +627,11 @@ function TestCase({ id, version, status, title, assignee, environment }) {
       <div className={styles.testCaseContent}>
         <div className={styles.testCaseTitle}>
           <strong>
-            {id} ({version})
+            {caseKey} ({version})
           </strong>{' '}
-          {title}
+          {name}
         </div>
-        <div className={styles.testCaseEnvironment}>{environment}</div>
+        <div className={styles.testCaseEnvironment}>{executionEnvironment}</div>
       </div>
       <div className={styles.testCaseAssignee}>{assigneeInitials}</div>
     </div>
@@ -502,20 +639,53 @@ function TestCase({ id, version, status, title, assignee, environment }) {
 }
 
 TestCase.propTypes = {
-  /** ID of the test case */
-  id: PropTypes.string,
+  /** Key of the test case */
+  caseKey: PropTypes.string,
+  /** Name of the test case */
+  name: PropTypes.string,
   /** Version of the test case */
   version: PropTypes.string,
-  /** Status of the test case
-   * One of: PASSED, FAILED
+  /** Status of the test execution of the test case
+   * One of: PASSED, FAILED, NOT_EXECUTED
    */
-  status: PropTypes.string,
-  /** Title of the test case */
-  title: PropTypes.string,
-  /** Assignee of the test case */
-  assignee: PropTypes.string,
-  /** Environment of the test case */
-  environment: PropTypes.string,
+  executionStatus: PropTypes.string,
+  /** Assignee of the test execution of the test case */
+  executionAssignee: PropTypes.string,
+  /** Environment of the test execution of the test case */
+  executionEnvironment: PropTypes.string,
+};
+
+function TestCases({ isLoading, testCasesData, setSelectedTestCase }) {
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  return (
+    <div>
+      {testCasesData?.map((testCase) => (
+        <div key={testCase.id} onClick={() => setSelectedTestCase(testCase.executionKey)}>
+          <TestCase caseKey={testCase.key} {...testCase} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+TestCases.propTypes = {
+  /** If the test cases are loading */
+  isLoading: PropTypes.bool,
+  /** Data of the test cases */
+  testCasesData: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      version: PropTypes.string,
+      status: PropTypes.string,
+      title: PropTypes.string,
+      assignee: PropTypes.string,
+      environment: PropTypes.string,
+    }),
+  ),
+  /** Function to set the selected test case */
+  setSelectedTestCase: PropTypes.func,
 };
 
 function NightPlanning({
@@ -533,13 +703,27 @@ function NightPlanning({
   const [testCycleData, setTestCycleData] = useState({});
   const [testCasesData, setTestCasesData] = useState([]);
   const [testExecutionData, setTestExecutionData] = useState({});
+  const [testCyclesLoading, setTestCyclesLoading] = useState(false);
+  const [testCycleLoading, setTestCycleLoading] = useState(false);
+  const [testCasesLoading, setTestCasesLoading] = useState(false);
+  const [testExecutionLoading, setTestExecutionLoading] = useState(false);
 
   useEffect(() => {
     // Subscribe to the streams
     subscribeToStreams();
 
     // Query night plans
-    ManagerInterface.getNightPlanTestCycles().then(setTestCyclesData);
+    setTestCyclesLoading(true);
+    ManagerInterface.getNightPlanTestCycles()
+      .then((data) => {
+        if (data) {
+          const sortedData = data.toSorted((a, b) => b.id - a.id);
+          setTestCyclesData(sortedData.map((c) => c.key));
+        }
+      })
+      .finally(() => {
+        setTestCyclesLoading(false);
+      });
 
     return () => {
       // Unsubscribe to the streams when the component unmounts
@@ -549,14 +733,33 @@ function NightPlanning({
 
   useEffect(() => {
     // Query night plan data
-    ManagerInterface.getNightPlanTestCycle(selectedTestCycle).then(setTestCycleData);
-    ManagerInterface.getNightPlanTestCases(selectedTestCycle).then(setTestCasesData);
+    if (!selectedTestCycle) return;
+    setTestCycleLoading(true);
+    setTestCasesLoading(true);
+    ManagerInterface.getNightPlanTestCycle(selectedTestCycle)
+      .then(setTestCycleData)
+      .finally(() => {
+        setTestCycleLoading(false);
+      });
+    ManagerInterface.getNightPlanTestCases(selectedTestCycle)
+      .then(setTestCasesData)
+      .finally(() => {
+        setTestCasesLoading(false);
+      });
   }, [selectedTestCycle]);
 
   useEffect(() => {
     // Query test case data
-    ManagerInterface.getNightPlanTestCaseExecution(selectedTestCase).then(setTestExecutionData);
+    if (!selectedTestCase) return;
+    setTestExecutionLoading(true);
+    ManagerInterface.getNightPlanTestCaseExecution(selectedTestCase)
+      .then(setTestExecutionData)
+      .finally(() => {
+        setTestExecutionLoading(false);
+      });
   }, [selectedTestCase]);
+
+  const testCycleSelectorIsDisabled = testCyclesLoading || testCycleLoading || testCasesLoading;
 
   return (
     <div className={styles.container}>
@@ -566,21 +769,24 @@ function NightPlanning({
           onChange={({ value }) => setSelectedTestCycle(value)}
           value={selectedTestCycle}
           placeholder="Select a test cycle"
+          disabled={testCycleSelectorIsDisabled}
         />
+        {testCyclesLoading && <div>Loading...</div>}
       </div>
       <div className={styles.testDetails}>
-        <TestCycleDetails {...testCycleData} />
+        <TestCycleDetails isLoading={testCycleLoading} cycleKey={testCycleData.key} {...testCycleData} />
       </div>
       <div className={styles.testPlayer}>
         <div className={styles.testCases}>
-          {testCasesData?.map((testCase) => (
-            <div key={testCase.id} onClick={() => setSelectedTestCase(testCase.id)}>
-              <TestCase {...testCase} />
-            </div>
-          ))}
+          <TestCases
+            isLoading={testCasesLoading}
+            testCasesData={testCasesData}
+            setSelectedTestCase={setSelectedTestCase}
+          />
         </div>
         <div className={styles.testExecution}>
           <TestExecutionDetails
+            isLoading={testExecutionLoading}
             username={username}
             commandExecutePermission={commandExecutePermission}
             getScriptQueueOn={getScriptQueueOn}

@@ -1,5 +1,5 @@
 :root {
-  --svg-icon-size: 1.5em;
+  --svg-icon-size: 1em;
 }
 
 .container {
@@ -59,14 +59,39 @@
   height: 20px;
 }
 
+.testCases .testCase.notExecuted,
+.statusLabel.notExecuted {
+  --status-color: gray;
+}
+
+.testCases .testCase.inProgress,
+.statusLabel.inProgress {
+  --status-color: yellow;
+}
+
 .testCases .testCase.passed,
 .statusLabel.passed {
   --status-color: green;
 }
 
+.testCases .testCase.passedWithDeviation,
+.statusLabel.passedWithDeviation {
+  --status-color: lightgreen;
+}
+
 .testCases .testCase.failed,
 .statusLabel.failed {
   --status-color: red;
+}
+
+.testCases .testCase.skipped,
+.statusLabel.skipped {
+  --status-color: purple;
+}
+
+.testCases .testCase.blocked,
+.statusLabel.blocked {
+  --status-color: blue;
 }
 
 .testExecution .testCaseDetails {
@@ -282,6 +307,11 @@
 
 .testCycleMainDetails {
   margin-bottom: var(--content-padding);
+}
+
+.testCycleMainDetails .basicInformation {
+  display: flex;
+  gap: var(--small-padding);
 }
 
 .testCycleDetails.hideDetails {
