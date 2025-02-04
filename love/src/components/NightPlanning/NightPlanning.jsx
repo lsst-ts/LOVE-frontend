@@ -6,6 +6,7 @@ import ProgressBar from 'components/GeneralPurpose/ProgressBar/ProgressBar';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import LaunchScriptIcon from 'components/icons/ScriptQueue/LaunchScriptIcon/LaunchScriptIcon';
 import ErrorIcon from 'components/icons/ErrorIcon/ErrorIcon';
+import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import {
   SCRIPTQUEUE_SCRIPT_LOCATION,
   SCRIPTQUEUE_EMPTY_SCHEMA_STRING,
@@ -112,7 +113,15 @@ function TestCycleDetails({
   });
 
   if (isLoading) {
-    return <div className={styles.testCycleDetailsContainer}>Loading...</div>;
+    return (
+      <div className={styles.testCycleDetailsContainer}>
+        <div className={styles.testCycleHeader}>
+          <div className={styles.testCycleTitle}>
+            <SpinnerIcon className={styles.spinnerIcon} />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -400,7 +409,7 @@ function TestExecutionDetails({
   const testCasePrecondition = testCaseData?.precondition;
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div title="Loading test execution..." className="indeterminate"></div>;
   }
 
   return (
@@ -410,7 +419,7 @@ function TestExecutionDetails({
           <div>
             {testCaseKey}
             {version ? ` - (${version})` : ''}
-            <span className={styles.fontHighligthed}>{testCaseName}</span>
+            <span className={styles.fontHighligthed}> - {testCaseName}</span>
           </div>
           <ProgressBar
             completed={executedTimeProgress}
@@ -657,16 +666,16 @@ TestCase.propTypes = {
 
 function TestCases({ isLoading, testCasesData, setSelectedTestCase }) {
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div title="Loading test cases..." className="indeterminate" />;
   }
   return (
-    <div>
+    <>
       {testCasesData?.map((testCase) => (
         <div key={testCase.id} onClick={() => setSelectedTestCase(testCase.executionKey)}>
           <TestCase caseKey={testCase.key} {...testCase} />
         </div>
       ))}
-    </div>
+    </>
   );
 }
 
@@ -759,6 +768,11 @@ function NightPlanning({
       });
   }, [selectedTestCase]);
 
+  const handleTestCaseClick = (testCaseKey) => {
+    if (testExecutionLoading) return;
+    setSelectedTestCase(testCaseKey);
+  };
+
   const testCycleSelectorIsDisabled = testCyclesLoading || testCycleLoading || testCasesLoading;
 
   return (
@@ -777,11 +791,12 @@ function NightPlanning({
         <TestCycleDetails isLoading={testCycleLoading} cycleKey={testCycleData.key} {...testCycleData} />
       </div>
       <div className={styles.testPlayer}>
-        <div className={styles.testCases}>
+        <div className={[styles.testCases, testExecutionLoading ? styles.executionLoading : ''].join(' ')}>
           <TestCases
             isLoading={testCasesLoading}
+            isLoadingExecution={testExecutionLoading}
             testCasesData={testCasesData}
-            setSelectedTestCase={setSelectedTestCase}
+            setSelectedTestCase={handleTestCaseClick}
           />
         </div>
         <div className={styles.testExecution}>

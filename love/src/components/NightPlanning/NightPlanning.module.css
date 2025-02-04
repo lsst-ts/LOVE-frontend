@@ -36,17 +36,19 @@
 }
 
 .testCases .testCase {
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: var(--small-padding);
-  border-top: 1px solid var(--second-secondary-background-color);
   border-bottom: 1px solid var(--second-secondary-background-color);
   border-left: 4px solid var(--status-color);
 }
 
-.testCases .testCase:hover {
+.testCases:not(.executionLoading) .testCase {
+  cursor: pointer;
+}
+
+.testCases:not(.executionLoading) .testCase:hover {
   background-color: var(--second-secondary-background-color);
 }
 
@@ -331,4 +333,8 @@
 
 .testCycleExtraFields > .testCycleField > :first-child {
   width: 20em;
+}
+
+.spinnerIcon {
+  height: 1.5em;
 }
