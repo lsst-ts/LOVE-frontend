@@ -1,0 +1,107 @@
+:root {
+  --boxesBackgroundColor: var(--second-quaternary-background-dimmed-color);
+}
+
+.highlight {
+  font-weight: bold;
+  color: var(--highlighted-font-color);
+}
+
+.highlightTitle {
+  font-weight: bold;
+}
+
+.bigger {
+  font-size: var(--font-size-larger);
+}
+
+.hvacStatusContainer {
+  display: flex;
+  gap: var(--content-padding);
+  align-items: center;
+  padding: var(--content-padding);
+  background-color: var(--second-quaternary-background-dimmed-color);
+  margin-bottom: var(--small-padding);
+}
+
+.hvacStatusContainer > *:not(:last-child) {
+  padding-right: var(--content-padding);
+  border-right: 1px solid var(--second-quaternary-background-color);
+}
+
+.summaryState {
+  display: flex;
+  gap: var(--content-padding);
+  align-items: center;
+}
+
+.summaryContainer {
+  margin-bottom: var(--small-padding);
+}
+
+.chillers {
+  display: flex;
+  gap: var(--content-padding);
+}
+
+.chillerInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--content-padding);
+}
+
+.devicesBoxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--small-padding);
+  margin-bottom: var(--small-padding);
+}
+
+.deviceBox {
+  flex: 1 0 10em;
+  background-color: var(--boxesBackgroundColor);
+  border-radius: 0.2em;
+  border: 0.2em solid var(--second-tertiary-background-color);
+  padding: var(--small-padding);
+}
+
+.mapContainer {
+  /* border: 1px solid red; */
+  position: relative;
+}
+
+.mapContainer .deviceOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.selectedRow {
+  color: var(--highlighted-font-color);
+  font-weight: bold;
+  background-color: var(--second-quaternary-background-dimmed-color) !important;
+}
+
+.devicesBoxes .selectDeviceButton {
+  height: 1em;
+  cursor: pointer;
+}
+
+.showMapButtonContainer {
+  display: flex;
+  padding: var(--small-padding);
+  justify-content: space-between;
+  background-color: var(--second-quaternary-background-dimmed-color);
+  margin-bottom: var(--small-padding);
+  cursor: pointer;
+}
+
+.showMapButtonContainer .hidden {
+  transform: rotate(180deg);
+}
+
+.heatWarning {
+  background-color: var(--status-alert-dimmed-color-2);
+}
