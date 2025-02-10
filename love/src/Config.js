@@ -21,6 +21,10 @@ import InfoIcon from 'components/icons/CSCExpanded/InfoIcon/InfoIcon';
 import WarningIcon from 'components/icons/CSCExpanded/WarningIcon/WarningIcon';
 import { VALUE_TYPES } from 'Constants';
 
+// Scripts empty schema value
+// When SAL scripts doesn't have a schema the following value is published instead
+export const EMPTY_SCHEMA = '# empty schema';
+
 // SAL parameters
 export const TOPIC_TIMESTAMP_ATTRIBUTE = 'private_sndStamp';
 
