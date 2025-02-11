@@ -18,6 +18,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup, requestSALCommand } from 'redux/actions/ws';
+import { getGlycolSystemData } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import GlycolSystem from './GlycolSystem';
 
@@ -48,7 +49,10 @@ const GlycolSystemContainer = (props) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  return {};
+  const glycolSystemData = getGlycolSystemData(state);
+  return {
+    ...glycolSystemData,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
