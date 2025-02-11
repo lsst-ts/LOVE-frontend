@@ -2233,6 +2233,94 @@ export const getDynaleneData = (state) => {
   };
 };
 
+export const getGlycolSystemData = (state) => {
+  const subscriptions = ['telemetry-HVAC-0-glycolSensor', 'telemetry-HVAC-0-dynaleneP05'];
+
+  const data = getStreamsData(state, subscriptions);
+  return {
+    glycolCH01flow: data['telemetry-HVAC-0-glycolSensor']?.supplyFlowChiller01?.value ?? undefined,
+    glycolCH01temperatureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyTempChiller01?.value ?? undefined,
+    glycolCH01temperatureOut: data['telemetry-HVAC-0-glycolSensor']?.retTempChiller01?.value ?? undefined,
+    glycolCH01pressureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyPressChiller01?.value ?? undefined,
+    glycolCH01pressureOut: data['telemetry-HVAC-0-glycolSensor']?.retPressChiller01?.value ?? undefined,
+    glycolCH02flow: data['telemetry-HVAC-0-glycolSensor']?.supplyFlowChiller02?.value ?? undefined,
+    glycolCH02temperatureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyTempChiller02?.value ?? undefined,
+    glycolCH02temperatureOut: data['telemetry-HVAC-0-glycolSensor']?.retTempChiller02?.value ?? undefined,
+    glycolCH02pressureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyPressChiller02?.value ?? undefined,
+    glycolCH02pressureOut: data['telemetry-HVAC-0-glycolSensor']?.retPressChiller02?.value ?? undefined,
+    glycolCH03flow: data['telemetry-HVAC-0-glycolSensor']?.supplyFlowChiller03?.value ?? undefined,
+    glycolCH03temperatureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyTempChiller03?.value ?? undefined,
+    glycolCH03temperatureOut: data['telemetry-HVAC-0-glycolSensor']?.retTempChiller03?.value ?? undefined,
+    glycolCH03pressureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyPressChiller03?.value ?? undefined,
+    glycolCH03pressureOut: data['telemetry-HVAC-0-glycolSensor']?.retPressChiller03?.value ?? undefined,
+    glycolOSSflow: data['telemetry-HVAC-0-glycolSensor']?.supplyFlowOss?.value ?? undefined,
+    glycolOSStemperatureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyTempOss?.value ?? undefined,
+    glycolOSStemperatureOut: data['telemetry-HVAC-0-glycolSensor']?.retTempOss?.value ?? undefined,
+    glycolOSSpressureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyPressOss?.value ?? undefined,
+    glycolOSSpressureOut: data['telemetry-HVAC-0-glycolSensor']?.retPressOss?.value ?? undefined,
+    glycolSLACflow: data['telemetry-HVAC-0-glycolSensor']?.supplyFlowSlac?.value ?? undefined,
+    glycolSLACtemperatureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyTempSlac?.value ?? undefined,
+    glycolSLACtemperatureOut: data['telemetry-HVAC-0-glycolSensor']?.retTempSlac?.value ?? undefined,
+    glycolSLACpressureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyPressSlac?.value ?? undefined,
+    glycolSLACpressureOut: data['telemetry-HVAC-0-glycolSensor']?.retPressSlac?.value ?? undefined,
+    glycoL2CRACSflow: data['telemetry-HVAC-0-glycolSensor']?.supplyFlowFloor2?.value ?? undefined,
+    glycoL2CRACStemperatureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyTempFloor2?.value ?? undefined,
+    glycoL2CRACStemperatureOut: data['telemetry-HVAC-0-glycolSensor']?.returnTempFloor2?.value ?? undefined,
+    glycoL2CRACSpressureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyPressFloor2?.value ?? undefined,
+    glycoL2CRACSpressureOut: data['telemetry-HVAC-0-glycolSensor']?.returnPressFloor2?.value ?? undefined,
+    glycoL2FCflow: data['telemetry-HVAC-0-glycolSensor']?.supplyFlowFC?.value ?? undefined,
+    glycoL2FCtemperatureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyTempFC?.value ?? undefined,
+    glycoL2FCtemperatureOut: data['telemetry-HVAC-0-glycolSensor']?.retTempFC?.value ?? undefined,
+    glycoL2FCpressureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyPressFC?.value ?? undefined,
+    glycoL2FCpressureOut: data['telemetry-HVAC-0-glycolSensor']?.retPressFC?.value ?? undefined,
+    glycolAHUCRflow: data['telemetry-HVAC-0-glycolSensor']?.supplyFlowCleanRoom?.value ?? undefined,
+    glycolAHUCRtemperatureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyTempCleanRoom?.value ?? undefined,
+    glycolAHUCRtemperatureOut: data['telemetry-HVAC-0-glycolSensor']?.returnTempCleanRoom?.value ?? undefined,
+    glycolAHUCRpressureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyPressCleanRoom?.value ?? undefined,
+    glycolAHUCRpressureOut: data['telemetry-HVAC-0-glycolSensor']?.returnPressCleanRoom?.value ?? undefined,
+    glycolAHUWRflow: data['telemetry-HVAC-0-glycolSensor']?.supplyFlowWhiteRoom?.value ?? undefined,
+    glycolAHUWRtemperatureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyTempWhiteRoom?.value ?? undefined,
+    glycolAHUWRtemperatureOut: data['telemetry-HVAC-0-glycolSensor']?.returnTempWhiteRoom?.value ?? undefined,
+    glycolAHUWRpressureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyPressWhiteRoom?.value ?? undefined,
+    glycolAHUWRpressureOut: data['telemetry-HVAC-0-glycolSensor']?.returnPressWhiteRoom?.value ?? undefined,
+    glycolDOMEAHU01flow: data['telemetry-HVAC-0-glycolSensor']?.supplyFlowAhuLower1?.value ?? undefined,
+    glycolDOMEAHU01temperatureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyTempAhuLower1?.value ?? undefined,
+    glycolDOMEAHU01temperatureOut: data['telemetry-HVAC-0-glycolSensor']?.returnTempAhuLower1?.value ?? undefined,
+    glycolDOMEAHU01pressureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyPressAhuLower1?.value ?? undefined,
+    glycolDOMEAHU01pressureOut: data['telemetry-HVAC-0-glycolSensor']?.returnPressAhuLower1?.value ?? undefined,
+    glycolDOMEAHU02flow: data['telemetry-HVAC-0-glycolSensor']?.supplyFlowAhuLower2?.value ?? undefined,
+    glycolDOMEAHU02temperatureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyTempAhuLower2?.value ?? undefined,
+    glycolDOMEAHU02temperatureOut: data['telemetry-HVAC-0-glycolSensor']?.returnTempAhuLower2?.value ?? undefined,
+    glycolDOMEAHU02pressureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyPressAhuLower2?.value ?? undefined,
+    glycolDOMEAHU02pressureOut: data['telemetry-HVAC-0-glycolSensor']?.returnPressAhuLower2?.value ?? undefined,
+    glycolDOMEAHU03flow: data['telemetry-HVAC-0-glycolSensor']?.supplyFlowAhuLower3?.value ?? undefined,
+    glycolDOMEAHU03temperatureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyTempAhuLower3?.value ?? undefined,
+    glycolDOMEAHU03temperatureOut: data['telemetry-HVAC-0-glycolSensor']?.returnTempAhuLower3?.value ?? undefined,
+    glycolDOMEAHU03pressureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyPressAhuLower3?.value ?? undefined,
+    glycolDOMEAHU03pressureOut: data['telemetry-HVAC-0-glycolSensor']?.returnPressAhuLower3?.value ?? undefined,
+    glycolDOMEAHU04flow: data['telemetry-HVAC-0-glycolSensor']?.supplyFlowAhuLower4?.value ?? undefined,
+    glycolDOMEAHU04temperatureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyTempAhuLower4?.value ?? undefined,
+    glycolDOMEAHU04temperatureOut: data['telemetry-HVAC-0-glycolSensor']?.returnTempAhuLower4?.value ?? undefined,
+    glycolDOMEAHU04pressureIn: data['telemetry-HVAC-0-glycolSensor']?.supplyPressAhuLower4?.value ?? undefined,
+    glycolDOMEAHU04pressureOut: data['telemetry-HVAC-0-glycolSensor']?.returnPressAhuLower4?.value ?? undefined,
+    glycolDynalene01flow: data['telemetry-HVAC-0-dynaleneP05']?.dynCH1supCGLYflow?.value ?? undefined, // dynCH01supFS01?
+    glycolDynalene01temperatureIn: data['telemetry-HVAC-0-dynaleneP05']?.dynCH01supCGLYtemp?.value ?? undefined, // dynCH01supTS05
+    glycolDynalene01temperatureOut: data['telemetry-HVAC-0-dynaleneP05']?.dynCH01retCGLYtemp?.value ?? undefined,
+    glycolDynalene01pressureIn: data['telemetry-HVAC-0-dynaleneP05']?.dynCH01supCGLYpres?.value ?? undefined, // dynCH01supPS11
+    glycolDynalene01pressureOut: data['telemetry-HVAC-0-dynaleneP05']?.dynCH01retCGLYpres?.value ?? undefined,
+    glycolDynalene02flow: data['telemetry-HVAC-0-dynaleneP05']?.dynCH2supGPGLYflow?.value ?? undefined, // dynCH02supFS02
+    glycolDynalene02temperatureIn: data['telemetry-HVAC-0-dynaleneP05']?.dynCH02supGPGLYtemp?.value ?? undefined, // dynCH02supTS07
+    glycolDynalene02temperatureOut: data['telemetry-HVAC-0-dynaleneP05']?.dynCH02retGPGLYtemp?.value ?? undefined,
+    glycolDynalene02pressureIn: data['telemetry-HVAC-0-dynaleneP05']?.dynCH02supGPGLYpres?.value ?? undefined, // dynCH02supPS13
+    glycolDynalene02pressureOut: data['telemetry-HVAC-0-dynaleneP05']?.dynCH02retGPGLYpres?.value ?? undefined,
+    glycolTMAflow: data['telemetry-HVAC-0-dynaleneP05']?.dynTMAsupFS03?.value ?? undefined,
+    glycolTMAtemperatureIn: data['telemetry-HVAC-0-dynaleneP05']?.dynTMAsupTS01?.value ?? undefined,
+    glycolTMAtemperatureOut: data['telemetry-HVAC-0-dynaleneP05']?.dynTMAretTS02?.value ?? undefined,
+    glycolTMApressureIn: data['telemetry-HVAC-0-dynaleneP05']?.dynTMAsupPS01?.value ?? undefined,
+    glycolTMApressureOut: data['telemetry-HVAC-0-dynaleneP05']?.dynTMAretPS02?.value ?? undefined,
+  };
+};
+
 /////////////////////////////////////////
 // F A C I L I T Y - S E L E C T O R S //
 /////////////////////////////////////////
