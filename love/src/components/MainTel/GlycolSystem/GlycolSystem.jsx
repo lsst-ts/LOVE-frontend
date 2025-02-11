@@ -17,7 +17,7 @@ const dummyGlycolTableData = [
     temperatureIn: 20,
     temperatureOut: 30,
     flowRate: 1,
-    heatExchange: 1000,
+    heatExchange: 50,
   },
   {
     device: 'Chiller 2',
@@ -26,7 +26,7 @@ const dummyGlycolTableData = [
     temperatureIn: 30,
     temperatureOut: 40,
     flowRate: 2,
-    heatExchange: 2000,
+    heatExchange: 50,
   },
   {
     device: 'Chiller 3',
@@ -35,7 +35,7 @@ const dummyGlycolTableData = [
     temperatureIn: 40,
     temperatureOut: 50,
     flowRate: 3,
-    heatExchange: 3000,
+    heatExchange: 50,
   },
   {
     device: 'OSS',
@@ -44,7 +44,7 @@ const dummyGlycolTableData = [
     temperatureIn: 50,
     temperatureOut: 60,
     flowRate: 4,
-    heatExchange: 4000,
+    heatExchange: 50,
   },
   {
     device: 'SLAC',
@@ -53,7 +53,7 @@ const dummyGlycolTableData = [
     temperatureIn: 60,
     temperatureOut: 70,
     flowRate: 5,
-    heatExchange: 5000,
+    heatExchange: 50,
   },
   {
     device: 'CRAC 1',
@@ -62,7 +62,7 @@ const dummyGlycolTableData = [
     temperatureIn: 70,
     temperatureOut: 80,
     flowRate: 6,
-    heatExchange: 6000,
+    heatExchange: 50,
   },
   {
     device: 'CRAC 2',
@@ -71,7 +71,7 @@ const dummyGlycolTableData = [
     temperatureIn: 80,
     temperatureOut: 90,
     flowRate: 7,
-    heatExchange: 7000,
+    heatExchange: 50,
   },
   {
     device: 'AHU CR',
@@ -80,7 +80,7 @@ const dummyGlycolTableData = [
     temperatureIn: 90,
     temperatureOut: 100,
     flowRate: 8,
-    heatExchange: 8000,
+    heatExchange: 50,
   },
   {
     device: 'AHU WR',
@@ -89,7 +89,7 @@ const dummyGlycolTableData = [
     temperatureIn: 100,
     temperatureOut: 110,
     flowRate: 9,
-    heatExchange: 9000,
+    heatExchange: 50,
   },
   {
     device: 'DOME AHU 1',
@@ -98,7 +98,7 @@ const dummyGlycolTableData = [
     temperatureIn: 130,
     temperatureOut: 140,
     flowRate: 12,
-    heatExchange: 12000,
+    heatExchange: 50,
   },
   {
     device: 'DOME AHU 2',
@@ -107,7 +107,7 @@ const dummyGlycolTableData = [
     temperatureIn: 130,
     temperatureOut: 140,
     flowRate: 12,
-    heatExchange: 12000,
+    heatExchange: 50,
   },
   {
     device: 'DOME AHU 3',
@@ -116,7 +116,7 @@ const dummyGlycolTableData = [
     temperatureIn: 130,
     temperatureOut: 140,
     flowRate: 12,
-    heatExchange: 12000,
+    heatExchange: 50,
   },
   {
     device: 'DOME AHU 4',
@@ -125,7 +125,7 @@ const dummyGlycolTableData = [
     temperatureIn: 130,
     temperatureOut: 140,
     flowRate: 12,
-    heatExchange: 12000,
+    heatExchange: 50,
   },
   {
     device: 'LOC 10',
@@ -134,7 +134,7 @@ const dummyGlycolTableData = [
     temperatureIn: 130,
     temperatureOut: 140,
     flowRate: 12,
-    heatExchange: 12000,
+    heatExchange: 50,
   },
   {
     device: 'Dynalene 1',
@@ -143,7 +143,7 @@ const dummyGlycolTableData = [
     temperatureIn: 110,
     temperatureOut: 120,
     flowRate: 10,
-    heatExchange: 10000,
+    heatExchange: 50,
   },
   {
     device: 'Dynalene 2',
@@ -152,7 +152,7 @@ const dummyGlycolTableData = [
     temperatureIn: 130,
     temperatureOut: 140,
     flowRate: 12,
-    heatExchange: 12000,
+    heatExchange: 50,
   },
   {
     device: 'TMA',
@@ -161,7 +161,7 @@ const dummyGlycolTableData = [
     temperatureIn: 120,
     temperatureOut: 130,
     flowRate: 11,
-    heatExchange: 11000,
+    heatExchange: 50,
   },
   {
     device: 'Cable Wrap',
@@ -170,7 +170,7 @@ const dummyGlycolTableData = [
     temperatureIn: 130,
     temperatureOut: 140,
     flowRate: 12,
-    heatExchange: 12000,
+    heatExchange: 50,
   },
 ];
 
@@ -214,6 +214,31 @@ const devicesCoordinatesMapping = {
   TMA: { x: 130, y: 160 },
   'LOC 10': { x: 130, y: 160 },
   'Cable Wrap': { x: 130, y: 160 },
+};
+
+const devicesHeatThresholds = {
+  'Chiller 1': 183,
+  'Chiller 2': 183,
+  'Chiller 3': 183,
+  OSS: 1000,
+  SLAC: 1000,
+  'L2 CRACS': 1000,
+  'L2 Fan Coils': 1000,
+  'AHU CR': 1000,
+  'AHU WR': 1000,
+  'DOME AHU 1': 1000,
+  'DOME AHU 2': 1000,
+  'DOME AHU 3': 1000,
+  'DOME AHU 4': 1000,
+  'Dynalene 1': 1000,
+  'Dynalene 2': 1000,
+  TMA: 1000,
+  'LOC 10': 1000,
+  'Cable Wrap': 1000,
+};
+
+const deviceHeatSurpassThreshold = (device, heat) => {
+  return heat >= devicesHeatThresholds[device];
 };
 
 function HVACStatus({ summaryState = 0 }) {
@@ -330,17 +355,18 @@ function GlycolSummary({ data, selectedDevice, selectDevice }) {
     },
   ];
 
-  const heatThreshold = 100;
-
   return (
     <div className={styles.summaryContainer}>
       <div className={styles.devicesBoxes}>
         {devicesHeats.map(({ device, heat }) => {
-          const overThreshold = heat >= heatThreshold;
+          const overThreshold = deviceHeatSurpassThreshold(device, heat);
           return (
-            <div key={device} className={[styles.deviceBox, overThreshold ? styles.heatWarning : ''].join(' ')}>
+            <div
+              key={device}
+              className={[styles.deviceBox, overThreshold ? styles.heatWarningBackground : ''].join(' ')}
+            >
               <div className={styles.highlight}>{device}</div>
-              <div className={[styles.highlight, styles.bigger].join(' ')}>{heat} W</div>
+              <div className={[styles.highlight, styles.bigger].join(' ')}>{heat} kW</div>
               <div title="Show device location" onClick={() => selectDevice(device)}>
                 <EyeIcon className={styles.selectDeviceButton} active={selectedDevice === device} />
               </div>
@@ -424,7 +450,11 @@ function GlycolTable({ data, device }) {
     },
     {
       field: 'heatExchange',
-      title: 'Heat Exchange (Q) [W]',
+      title: 'Heat Exchange (Q) [kW]',
+      render: (value, row) => {
+        const overThreshold = deviceHeatSurpassThreshold(row.device, value);
+        return <span className={overThreshold ? styles.heatWarningText : ''}>{value}</span>;
+      },
     },
   ];
 
