@@ -5,174 +5,139 @@ import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import EyeIcon from 'components/icons/EyeIcon/EyeIcon';
 import Map from 'components/MainTel/GlycolSystem/Map/Map';
 import { summaryStateMap, summaryStateToStyle } from 'Config';
+import { defaultNumberFormatter } from 'Utils';
 import styles from './GlycolSystem.module.css';
 
 const dummySummaryState = 2;
 
-const dummyGlycolTableData = [
-  {
-    device: 'Chiller 1',
-    pressureIn: 100,
-    pressureOut: 200,
-    temperatureIn: 20,
-    temperatureOut: 30,
-    flowRate: 1,
-    heatExchange: 50,
+const telemetriesMapping = {
+  'Chiller 1': {
+    flow: 'glycolCH01flow',
+    tempIn: 'glycolCH01temperatureIn',
+    tempOut: 'glycolCH01temperatureOut',
+    pressIn: 'glycolCH01pressureIn',
+    pressOut: 'glycolCH01pressureOut',
   },
-  {
-    device: 'Chiller 2',
-    pressureIn: 200,
-    pressureOut: 300,
-    temperatureIn: 30,
-    temperatureOut: 40,
-    flowRate: 2,
-    heatExchange: 50,
+  'Chiller 2': {
+    flow: 'glycolCH02flow',
+    tempIn: 'glycolCH02temperatureIn',
+    tempOut: 'glycolCH02temperatureOut',
+    pressIn: 'glycolCH02pressureIn',
+    pressOut: 'glycolCH02pressureOut',
   },
-  {
-    device: 'Chiller 3',
-    pressureIn: 300,
-    pressureOut: 400,
-    temperatureIn: 40,
-    temperatureOut: 50,
-    flowRate: 3,
-    heatExchange: 50,
+  'Chiller 3': {
+    flow: 'glycolCH03flow',
+    tempIn: 'glycolCH03temperatureIn',
+    tempOut: 'glycolCH03temperatureOut',
+    pressIn: 'glycolCH03pressureIn',
+    pressOut: 'glycolCH03pressureOut',
   },
-  {
-    device: 'OSS',
-    pressureIn: 400,
-    pressureOut: 500,
-    temperatureIn: 50,
-    temperatureOut: 60,
-    flowRate: 4,
-    heatExchange: 50,
+  OSS: {
+    flow: 'glycolOSSflow',
+    tempIn: 'glycolOSStemperatureIn',
+    tempOut: 'glycolOSStemperatureOut',
+    pressIn: 'glycolOSSpressureIn',
+    pressOut: 'glycolOSSpressureOut',
   },
-  {
-    device: 'SLAC',
-    pressureIn: 500,
-    pressureOut: 600,
-    temperatureIn: 60,
-    temperatureOut: 70,
-    flowRate: 5,
-    heatExchange: 50,
+  SLAC: {
+    flow: 'glycolSLACflow',
+    tempIn: 'glycolSLACtemperatureIn',
+    tempOut: 'glycolSLACtemperatureOut',
+    pressIn: 'glycolSLACpressureIn',
+    pressOut: 'glycolSLACpressureOut',
   },
-  {
-    device: 'CRAC 1',
-    pressureIn: 600,
-    pressureOut: 700,
-    temperatureIn: 70,
-    temperatureOut: 80,
-    flowRate: 6,
-    heatExchange: 50,
+  'L2 CRACS': {
+    flow: 'glycoL2CRACSflow',
+    tempIn: 'glycoL2CRACStemperatureIn',
+    tempOut: 'glycoL2CRACStemperatureOut',
+    pressIn: 'glycoL2CRACSpressureIn',
+    pressOut: 'glycoL2CRACSpressureOut',
   },
-  {
-    device: 'CRAC 2',
-    pressureIn: 700,
-    pressureOut: 800,
-    temperatureIn: 80,
-    temperatureOut: 90,
-    flowRate: 7,
-    heatExchange: 50,
+  'L2 Fan Coils': {
+    flow: 'glycoL2FCflow',
+    tempIn: 'glycoL2FCtemperatureIn',
+    tempOut: 'glycoL2FCtemperatureOut',
+    pressIn: 'glycoL2FCpressureIn',
+    pressOut: 'glycoL2FCpressureOut',
   },
-  {
-    device: 'AHU CR',
-    pressureIn: 800,
-    pressureOut: 900,
-    temperatureIn: 90,
-    temperatureOut: 100,
-    flowRate: 8,
-    heatExchange: 50,
+  'AHU CR': {
+    flow: 'glycolAHUCRflow',
+    tempIn: 'glycolAHUCRtemperatureIn',
+    tempOut: 'glycolAHUCRtemperatureOut',
+    pressIn: 'glycolAHUCRpressureIn',
+    pressOut: 'glycolAHUCRpressureOut',
   },
-  {
-    device: 'AHU WR',
-    pressureIn: 900,
-    pressureOut: 1000,
-    temperatureIn: 100,
-    temperatureOut: 110,
-    flowRate: 9,
-    heatExchange: 50,
+  'AHU WR': {
+    flow: 'glycolAHUWRflow',
+    tempIn: 'glycolAHUWRtemperatureIn',
+    tempOut: 'glycolAHUWRtemperatureOut',
+    pressIn: 'glycolAHUWRpressureIn',
+    pressOut: 'glycolAHUWRpressureOut',
   },
-  {
-    device: 'DOME AHU 1',
-    pressureIn: 1200,
-    pressureOut: 1300,
-    temperatureIn: 130,
-    temperatureOut: 140,
-    flowRate: 12,
-    heatExchange: 50,
+  'DOME AHU 1': {
+    flow: 'glycolDOMEAHU01flow',
+    tempIn: 'glycolDOMEAHU01temperatureIn',
+    tempOut: 'glycolDOMEAHU01temperatureOut',
+    pressIn: 'glycolDOMEAHU01pressureIn',
+    pressOut: 'glycolDOMEAHU01pressureOut',
   },
-  {
-    device: 'DOME AHU 2',
-    pressureIn: 1200,
-    pressureOut: 1300,
-    temperatureIn: 130,
-    temperatureOut: 140,
-    flowRate: 12,
-    heatExchange: 50,
+  'DOME AHU 2': {
+    flow: 'glycolDOMEAHU02flow',
+    tempIn: 'glycolDOMEAHU02temperatureIn',
+    tempOut: 'glycolDOMEAHU02temperatureOut',
+    pressIn: 'glycolDOMEAHU02pressureIn',
+    pressOut: 'glycolDOMEAHU02pressureOut',
   },
-  {
-    device: 'DOME AHU 3',
-    pressureIn: 1200,
-    pressureOut: 1300,
-    temperatureIn: 130,
-    temperatureOut: 140,
-    flowRate: 12,
-    heatExchange: 50,
+  'DOME AHU 3': {
+    flow: 'glycolDOMEAHU03flow',
+    tempIn: 'glycolDOMEAHU03temperatureIn',
+    tempOut: 'glycolDOMEAHU03temperatureOut',
+    pressIn: 'glycolDOMEAHU03pressureIn',
+    pressOut: 'glycolDOMEAHU03pressureOut',
   },
-  {
-    device: 'DOME AHU 4',
-    pressureIn: 1200,
-    pressureOut: 1300,
-    temperatureIn: 130,
-    temperatureOut: 140,
-    flowRate: 12,
-    heatExchange: 50,
+  'DOME AHU 4': {
+    flow: 'glycolDOMEAHU04flow',
+    tempIn: 'glycolDOMEAHU04temperatureIn',
+    tempOut: 'glycolDOMEAHU04temperatureOut',
+    pressIn: 'glycolDOMEAHU04pressureIn',
+    pressOut: 'glycolDOMEAHU04pressureOut',
   },
-  {
-    device: 'LOC 10',
-    pressureIn: 1200,
-    pressureOut: 1300,
-    temperatureIn: 130,
-    temperatureOut: 140,
-    flowRate: 12,
-    heatExchange: 50,
+  'Dynalene 1': {
+    flow: 'glycolDynalene01flow',
+    tempIn: 'glycolDynalene01temperatureIn',
+    tempOut: 'glycolDynalene01temperatureOut',
+    pressIn: 'glycolDynalene01pressureIn',
+    pressOut: 'glycolDynalene01pressureOut',
   },
-  {
-    device: 'Dynalene 1',
-    pressureIn: 1000,
-    pressureOut: 1100,
-    temperatureIn: 110,
-    temperatureOut: 120,
-    flowRate: 10,
-    heatExchange: 50,
+  'Dynalene 2': {
+    flow: 'glycolDynalene02flow',
+    tempIn: 'glycolDynalene02temperatureIn',
+    tempOut: 'glycolDynalene02temperatureOut',
+    pressIn: 'glycolDynalene02pressureIn',
+    pressOut: 'glycolDynalene02pressureOut',
   },
-  {
-    device: 'Dynalene 2',
-    pressureIn: 1200,
-    pressureOut: 1300,
-    temperatureIn: 130,
-    temperatureOut: 140,
-    flowRate: 12,
-    heatExchange: 50,
+  TMA: {
+    flow: 'glycolTMAflow',
+    tempIn: 'glycolTMAtemperatureIn',
+    tempOut: 'glycolTMAtemperatureOut',
+    pressIn: 'glycolTMApressureIn',
+    pressOut: 'glycolTMApressureOut',
   },
-  {
-    device: 'TMA',
-    pressureIn: 1100,
-    pressureOut: 1200,
-    temperatureIn: 120,
-    temperatureOut: 130,
-    flowRate: 11,
-    heatExchange: 50,
+  'LOC 10': {
+    flow: 'glycolLOC10flow',
+    tempIn: 'glycolLOC10temperatureIn',
+    tempOut: 'glycolLOC10temperatureOut',
+    pressIn: 'glycolLOC10pressureIn',
+    pressOut: 'glycolLOC10pressureOut',
   },
-  {
-    device: 'Cable Wrap',
-    pressureIn: 1200,
-    pressureOut: 1300,
-    temperatureIn: 130,
-    temperatureOut: 140,
-    flowRate: 12,
-    heatExchange: 50,
+  'Cable Wrap': {
+    flow: 'glycolCableWrapflow',
+    tempIn: 'glycolCableWraptemperatureIn',
+    tempOut: 'glycolCableWraptemperatureOut',
+    pressIn: 'glycolCableWrappressureIn',
+    pressOut: 'glycolCableWrappressureOut',
   },
-];
+};
 
 const devicesLevelMapping = {
   'Chiller 1': 1,
@@ -241,13 +206,51 @@ const deviceHeatSurpassThreshold = (device, heat) => {
   return heat >= devicesHeatThresholds[device];
 };
 
-function HVACStatus({ summaryState = 0 }) {
+/**
+ * Calculate heat exchange
+ * @param {number} flowRate
+ * @param {number} tempIn
+ * @param {number} tempOut
+ * @returns {number} Heat exchange in kW
+ * @returns {undefined} If any of the parameters is undefined
+ */
+const calculateHeatExchange = (flowRate, tempIn, tempOut) => {
+  if (flowRate === undefined || tempIn === undefined || tempOut === undefined) {
+    return;
+  }
+  // const cp = 3807; // EGW Sp. Heat
+  // const density = 1050; // EGW Density
+  // const vdot = (flowRate * 0.001) / 60; // L/min to m^3/s
+  // return (cp * density * vdot * (tempOut - tempIn)) / 1000;
+  return flowRate * 0.067 * (tempOut - tempIn);
+};
+
+function HVACStatus({ data = {}, summaryState = 0 }) {
   const stateName = summaryStateMap[summaryState];
   const stateStyle = summaryStateToStyle[stateName];
-  const LTChillerTotalHeat = 100;
+
+  const chiller1Heat = calculateHeatExchange(
+    data[telemetriesMapping['Chiller 1']?.flow],
+    data[telemetriesMapping['Chiller 1']?.tempIn],
+    data[telemetriesMapping['Chiller 1']?.tempOut],
+  );
+
+  const chiller2Heat = calculateHeatExchange(
+    data[telemetriesMapping['Chiller 2']?.flow],
+    data[telemetriesMapping['Chiller 2']?.tempIn],
+    data[telemetriesMapping['Chiller 2']?.tempOut],
+  );
+
+  const chiller3Heat = calculateHeatExchange(
+    data[telemetriesMapping['Chiller 3']?.flow],
+    data[telemetriesMapping['Chiller 3']?.tempIn],
+    data[telemetriesMapping['Chiller 3']?.tempOut],
+  );
+
+  const LTChillerTotalHeat = chiller1Heat + chiller2Heat;
   const LTChillerErrorHeat = 5;
-  const GPChillerTotalHeat = 200;
-  const GPChillerErrorHeat = 10;
+  const GPChillerTotalHeat = chiller3Heat;
+  const GPChillerErrorHeat = 5;
 
   const highLightBiggerClassName = [styles.highlight, styles.bigger].join(' ');
   return (
@@ -259,101 +262,45 @@ function HVACStatus({ summaryState = 0 }) {
       <div className={styles.chillerInfo}>
         <div className={styles.highlight}>LT Chiller</div>
         <div>Total</div>
-        <div className={highLightBiggerClassName}>{LTChillerTotalHeat} kW</div>
+        <div className={highLightBiggerClassName}>
+          {!isNaN(LTChillerTotalHeat) ? `${defaultNumberFormatter(LTChillerTotalHeat, 2)} kW` : '-'}
+        </div>
         <div>Error</div>
-        <div className={highLightBiggerClassName}>{LTChillerErrorHeat} %</div>
+        <div title="Total LT Chillers Capacity / Total LT Chillers Heat Exchange" className={highLightBiggerClassName}>
+          {!isNaN(LTChillerErrorHeat) ? `${defaultNumberFormatter(LTChillerErrorHeat, 2)} %` : '-'}
+        </div>
       </div>
       <div className={styles.chillerInfo}>
         <div className={styles.highlight}>GP Chiller</div>
         <div>Total</div>
-        <div className={highLightBiggerClassName}>{GPChillerTotalHeat} kW</div>
+        <div className={highLightBiggerClassName}>
+          {!isNaN(GPChillerTotalHeat) ? `${defaultNumberFormatter(GPChillerTotalHeat, 2)} kW` : '-'}
+        </div>
         <div>Error</div>
-        <div className={highLightBiggerClassName}>{GPChillerErrorHeat} %</div>
+        <div title="Total GP Chillers Capacity / Total GP Chillers Heat Exchange" className={highLightBiggerClassName}>
+          {!isNaN(GPChillerErrorHeat) ? `${defaultNumberFormatter(GPChillerErrorHeat, 2)} %` : '-'}
+        </div>
       </div>
     </div>
   );
 }
 
 HVACStatus.propTypes = {
+  /** Dict with telemetries parameters */
+  data: PropTypes.array,
   /** Summary state of the HVAC system */
   summaryState: PropTypes.number.isRequired,
 };
 
-function GlycolSummary({ data, selectedDevice, selectDevice }) {
-  const devicesHeats = [
-    {
-      device: 'Chiller 1',
-      heat: 10,
-    },
-    {
-      device: 'Chiller 2',
-      heat: 20,
-    },
-    {
-      device: 'Chiller 3',
-      heat: 30,
-    },
-    {
-      device: 'OSS',
-      heat: 40,
-    },
-    {
-      device: 'SLAC',
-      heat: 50,
-    },
-    {
-      device: 'CRAC 1',
-      heat: 50,
-    },
-    {
-      device: 'CRAC 2',
-      heat: 50,
-    },
-    {
-      device: 'AHU CR',
-      heat: 50,
-    },
-    {
-      device: 'AHU WR',
-      heat: 50,
-    },
-    {
-      device: 'DOME AHU 1',
-      heat: 50,
-    },
-    {
-      device: 'DOME AHU 2',
-      heat: 50,
-    },
-    {
-      device: 'DOME AHU 3',
-      heat: 50,
-    },
-    {
-      device: 'DOME AHU 4',
-      heat: 50,
-    },
-    {
-      device: 'Dynalene 1',
-      heat: 50,
-    },
-    {
-      device: 'Dynalene 2',
-      heat: 100,
-    },
-    {
-      device: 'TMA',
-      heat: 50,
-    },
-    {
-      device: 'LOC 10',
-      heat: 50,
-    },
-    {
-      device: 'Cable Wrap',
-      heat: 50,
-    },
-  ];
+function GlycolSummary({ data = {}, selectedDevice, selectDevice }) {
+  const devicesHeats = Object.keys(telemetriesMapping).map((device) => ({
+    device,
+    heat: calculateHeatExchange(
+      data[telemetriesMapping[device]?.flow],
+      data[telemetriesMapping[device]?.tempIn],
+      data[telemetriesMapping[device]?.tempOut],
+    ),
+  }));
 
   return (
     <div className={styles.summaryContainer}>
@@ -366,7 +313,9 @@ function GlycolSummary({ data, selectedDevice, selectDevice }) {
               className={[styles.deviceBox, overThreshold ? styles.heatWarningBackground : ''].join(' ')}
             >
               <div className={styles.highlightTitle}>{device}</div>
-              <div className={[styles.highlight, styles.bigger].join(' ')}>{heat} kW</div>
+              <div className={[styles.highlight, styles.bigger].join(' ')}>
+                {!isNaN(heat) ? `${defaultNumberFormatter(heat, 2)} kW` : '-'}
+              </div>
               <div title="Show device location" onClick={() => selectDevice(device)}>
                 <EyeIcon className={styles.selectDeviceButton} active={selectedDevice === device} />
               </div>
@@ -379,7 +328,7 @@ function GlycolSummary({ data, selectedDevice, selectDevice }) {
 }
 
 GlycolSummary.propTypes = {
-  /** Data to show in the summary */
+  /** Dict with telemetries parameters */
   data: PropTypes.array,
   /** Device selected */
   selectedDevice: PropTypes.string,
@@ -422,7 +371,7 @@ GlycolMap.propTypes = {
   device: PropTypes.string,
 };
 
-function GlycolTable({ data, device }) {
+function GlycolTable({ data = {}, device }) {
   const headers = [
     {
       field: 'device',
@@ -431,51 +380,73 @@ function GlycolTable({ data, device }) {
     {
       field: 'pressureIn',
       title: 'Pressure In [Pa]',
+      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value) : '-'),
     },
     {
       field: 'pressureOut',
       title: 'Pressure Out [Pa]',
+      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value) : '-'),
     },
     {
       field: 'temperatureIn',
       title: 'Temperature In [°C]',
+      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value) : '-'),
     },
     {
       field: 'temperatureOut',
       title: 'Temperature Out [°C]',
+      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value) : '-'),
     },
     {
       field: 'flowRate',
       title: 'Flow Rate [L/min]',
+      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value) : '-'),
     },
     {
       field: 'heatExchange',
       title: 'Heat Exchange (Q) [kW]',
       render: (value, row) => {
+        if (isNaN(value)) {
+          return '-';
+        }
         const overThreshold = deviceHeatSurpassThreshold(row.device, value);
-        return <span className={overThreshold ? styles.heatWarningText : ''}>{value}</span>;
+        return <span className={overThreshold ? styles.heatWarningText : ''}>{defaultNumberFormatter(value)}</span>;
       },
     },
   ];
 
-  const dataWithSelectedDevice = data.map((row) => {
+  const devicesData = Object.keys(telemetriesMapping).map((device) => ({
+    device,
+    pressureIn: data[telemetriesMapping[device]?.pressIn],
+    pressureOut: data[telemetriesMapping[device]?.pressOut],
+    temperatureIn: data[telemetriesMapping[device]?.tempIn],
+    temperatureOut: data[telemetriesMapping[device]?.tempOut],
+    flowRate: data[telemetriesMapping[device]?.flow],
+    heatExchange: calculateHeatExchange(
+      data[telemetriesMapping[device]?.flow],
+      data[telemetriesMapping[device]?.tempIn],
+      data[telemetriesMapping[device]?.tempOut],
+    ),
+  }));
+
+  const dataWithSelectedDevice = devicesData.map((row) => {
     return {
       ...row,
       rowClass: row.device === device ? styles.selectedRow : '',
     };
   });
 
-  return <SimpleTable headers={headers} data={device ? dataWithSelectedDevice : data} />;
+  return <SimpleTable headers={headers} data={device ? dataWithSelectedDevice : devicesData} />;
 }
 
 GlycolTable.propTypes = {
-  /** Data to show in the table */
+  /** Dict with telemetries parameters */
   data: PropTypes.array.isRequired,
   /** Device selected */
   device: PropTypes.string,
 };
 
-function GlycolSystem({ subscribeToStreams, unsubscribeToStreams }) {
+function GlycolSystem({ subscribeToStreams, unsubscribeToStreams, ...props }) {
   const [selectedDevice, setSelectedDevice] = useState();
 
   useEffect(() => {
@@ -487,10 +458,10 @@ function GlycolSystem({ subscribeToStreams, unsubscribeToStreams }) {
 
   return (
     <div className={styles.container}>
-      <HVACStatus summaryState={dummySummaryState} />
-      <GlycolSummary selectedDevice={selectedDevice} selectDevice={setSelectedDevice} />
+      <HVACStatus data={props} summaryState={dummySummaryState} />
+      <GlycolSummary data={props} selectedDevice={selectedDevice} selectDevice={setSelectedDevice} />
       {selectedDevice && <GlycolMap device={selectedDevice} />}
-      <GlycolTable data={dummyGlycolTableData} device={selectedDevice} />
+      <GlycolTable data={props} device={selectedDevice} />
     </div>
   );
 }
