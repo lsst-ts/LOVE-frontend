@@ -102,6 +102,10 @@
   transform: rotate(180deg);
 }
 
-.heatWarning {
+.heatWarningBackground {
   background-color: var(--status-alert-dimmed-color-2);
+}
+
+.heatWarningText {
+  color: var(--status-alert-color);
 }
