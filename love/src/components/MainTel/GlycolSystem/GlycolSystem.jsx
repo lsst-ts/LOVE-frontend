@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
+import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
+import { COLORS } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.jsx';
 import EyeIcon from 'components/icons/EyeIcon/EyeIcon';
 import Map from 'components/MainTel/GlycolSystem/Map/Map';
 import { summaryStateMap, summaryStateToStyle } from 'Config';
@@ -9,6 +11,54 @@ import { defaultNumberFormatter } from 'Utils';
 import styles from './GlycolSystem.module.css';
 
 const dummySummaryState = 2;
+
+const flowPlotInputs = {
+  CH01: {
+    type: 'line',
+    color: COLORS[0],
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'ATDome',
+        salindex: '0',
+        topic: 'position',
+        item: 'azimuthPosition',
+        accessor: '(x) => x',
+      },
+    ],
+  },
+  CH02: {
+    type: 'line',
+    color: COLORS[1],
+    values: [
+      {
+        variable: 'y',
+        category: 'event',
+        csc: 'ATDome',
+        salindex: '0',
+        topic: 'azimuthCommandedState',
+        item: 'azimuth',
+        accessor: '(x) => x',
+      },
+    ],
+  },
+  CH03: {
+    type: 'line',
+    color: COLORS[2],
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'ATMCS',
+        salindex: '0',
+        topic: 'mount_AzEl_Encoders',
+        item: 'azimuthCalculatedAngle',
+        accessor: '(x) => (x[0] < 0 ? x[0] + 360 : x[0])',
+      },
+    ],
+  },
+};
 
 const telemetriesMapping = {
   'Chiller 1': {
@@ -435,7 +485,11 @@ function GlycolTable({ data = {}, device }) {
     };
   });
 
-  return <SimpleTable headers={headers} data={device ? dataWithSelectedDevice : devicesData} />;
+  return (
+    <div className={styles.glycolTableContainer}>
+      <SimpleTable headers={headers} data={device ? dataWithSelectedDevice : devicesData} />
+    </div>
+  );
 }
 
 GlycolTable.propTypes = {
@@ -444,6 +498,43 @@ GlycolTable.propTypes = {
   /** Device selected */
   device: PropTypes.string,
 };
+
+function GlycolPlots({ data }) {
+  return (
+    <div className={styles.glycolPlotsContainer}>
+      <div className={styles.plotContainer}>
+        <div className={styles.highlight}>Glycol Temperature In</div>
+        <div className={styles.plot}>
+          <PlotContainer inputs={flowPlotInputs} controls={false} legendPosition="bottom" xAxisTitle="Time" />
+        </div>
+      </div>
+      <div className={styles.plotContainer}>
+        <div className={styles.highlight}>Glycol Temperature Out</div>
+        <div className={styles.plot}>
+          <PlotContainer inputs={flowPlotInputs} controls={false} legendPosition="bottom" xAxisTitle="Time" />
+        </div>
+      </div>
+      <div className={styles.plotContainer}>
+        <div className={styles.highlight}>Glycol Pressure In</div>
+        <div className={styles.plot}>
+          <PlotContainer inputs={flowPlotInputs} controls={false} legendPosition="bottom" xAxisTitle="Time" />
+        </div>
+      </div>
+      <div className={styles.plotContainer}>
+        <div className={styles.highlight}>Glycol Pressure Out</div>
+        <div className={styles.plot}>
+          <PlotContainer inputs={flowPlotInputs} controls={false} legendPosition="bottom" xAxisTitle="Time" />
+        </div>
+      </div>
+      <div className={styles.plotContainer}>
+        <div className={styles.highlight}>Glycol Flow</div>
+        <div className={styles.plot}>
+          <PlotContainer inputs={flowPlotInputs} controls={false} legendPosition="bottom" xAxisTitle="Time" />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function GlycolSystem({ subscribeToStreams, unsubscribeToStreams, ...props }) {
   const [selectedDevice, setSelectedDevice] = useState();
@@ -461,6 +552,7 @@ function GlycolSystem({ subscribeToStreams, unsubscribeToStreams, ...props }) {
       <GlycolSummary data={props} selectedDevice={selectedDevice} selectDevice={setSelectedDevice} />
       {selectedDevice && <GlycolMap device={selectedDevice} />}
       <GlycolTable data={props} device={selectedDevice} />
+      <GlycolPlots data={props} />
     </div>
   );
 }
