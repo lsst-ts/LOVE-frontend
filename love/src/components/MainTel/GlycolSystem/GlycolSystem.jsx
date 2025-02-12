@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
+import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
+import { COLORS } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.jsx';
 import EyeIcon from 'components/icons/EyeIcon/EyeIcon';
 import Map from 'components/MainTel/GlycolSystem/Map/Map';
 import { summaryStateMap, summaryStateToStyle } from 'Config';
@@ -9,6 +11,246 @@ import { defaultNumberFormatter } from 'Utils';
 import styles from './GlycolSystem.module.css';
 
 const dummySummaryState = 2;
+
+const flowPlotInputs = {
+  CH01: {
+    type: 'line',
+    color: COLORS[0],
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'HVAC',
+        salindex: '0',
+        topic: 'glycolSensor',
+        item: 'supplyFlowChiller01',
+        accessor: '(x) => x',
+      },
+    ],
+  },
+  CH02: {
+    type: 'line',
+    color: COLORS[1],
+    values: [
+      {
+        variable: 'y',
+        category: 'event',
+        csc: 'HVAC',
+        salindex: '0',
+        topic: 'glycolSensor',
+        item: 'supplyFlowChiller02',
+        accessor: '(x) => x',
+      },
+    ],
+  },
+  CH03: {
+    type: 'line',
+    color: COLORS[2],
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'HVAC',
+        salindex: '0',
+        topic: 'glycolSensor',
+        item: 'supplyFlowChiller03',
+        accessor: '(x) => x',
+      },
+    ],
+  },
+};
+
+const temperatureSupplyPlotInputs = {
+  CH01: {
+    type: 'line',
+    color: COLORS[0],
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'HVAC',
+        salindex: '0',
+        topic: 'glycolSensor',
+        item: 'supplyTempChiller01',
+        accessor: '(x) => x',
+      },
+    ],
+  },
+  CH02: {
+    type: 'line',
+    color: COLORS[1],
+    values: [
+      {
+        variable: 'y',
+        category: 'event',
+        csc: 'HVAC',
+        salindex: '0',
+        topic: 'glycolSensor',
+        item: 'supplyTempChiller02',
+        accessor: '(x) => x',
+      },
+    ],
+  },
+  CH03: {
+    type: 'line',
+    color: COLORS[2],
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'HVAC',
+        salindex: '0',
+        topic: 'glycolSensor',
+        item: 'supplyTempChiller03',
+        accessor: '(x) => x',
+      },
+    ],
+  },
+};
+
+const temperatureReturnPlotInputs = {
+  CH01: {
+    type: 'line',
+    color: COLORS[0],
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'HVAC',
+        salindex: '0',
+        topic: 'glycolSensor',
+        item: 'retTempChiller01',
+        accessor: '(x) => x',
+      },
+    ],
+  },
+  CH02: {
+    type: 'line',
+    color: COLORS[1],
+    values: [
+      {
+        variable: 'y',
+        category: 'event',
+        csc: 'HVAC',
+        salindex: '0',
+        topic: 'glycolSensor',
+        item: 'retTempChiller02',
+        accessor: '(x) => x',
+      },
+    ],
+  },
+  CH03: {
+    type: 'line',
+    color: COLORS[2],
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'HVAC',
+        salindex: '0',
+        topic: 'glycolSensor',
+        item: 'retTempChiller03',
+        accessor: '(x) => x',
+      },
+    ],
+  },
+};
+
+const pressureSupplyPlotInputs = {
+  CH01: {
+    type: 'line',
+    color: COLORS[0],
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'HVAC',
+        salindex: '0',
+        topic: 'glycolSensor',
+        item: 'supplyPressChiller01',
+        accessor: '(x) => x',
+      },
+    ],
+  },
+  CH02: {
+    type: 'line',
+    color: COLORS[1],
+    values: [
+      {
+        variable: 'y',
+        category: 'event',
+        csc: 'HVAC',
+        salindex: '0',
+        topic: 'glycolSensor',
+        item: 'supplyPressChiller02',
+        accessor: '(x) => x',
+      },
+    ],
+  },
+  CH03: {
+    type: 'line',
+    color: COLORS[2],
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'HVAC',
+        salindex: '0',
+        topic: 'glycolSensor',
+        item: 'supplyPressChiller03',
+        accessor: '(x) => x',
+      },
+    ],
+  },
+};
+
+const pressureReturnPlotInputs = {
+  CH01: {
+    type: 'line',
+    color: COLORS[0],
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'HVAC',
+        salindex: '0',
+        topic: 'glycolSensor',
+        item: 'retPressChiller01',
+        accessor: '(x) => x',
+      },
+    ],
+  },
+  CH02: {
+    type: 'line',
+    color: COLORS[1],
+    values: [
+      {
+        variable: 'y',
+        category: 'event',
+        csc: 'HVAC',
+        salindex: '0',
+        topic: 'glycolSensor',
+        item: 'retPressChiller02',
+        accessor: '(x) => x',
+      },
+    ],
+  },
+  CH03: {
+    type: 'line',
+    color: COLORS[2],
+    values: [
+      {
+        variable: 'y',
+        category: 'telemetry',
+        csc: 'HVAC',
+        salindex: '0',
+        topic: 'glycolSensor',
+        item: 'retPressChiller03',
+        accessor: '(x) => x',
+      },
+    ],
+  },
+};
 
 const telemetriesMapping = {
   'Chiller 1': {
@@ -436,7 +678,11 @@ function GlycolTable({ data = {}, device }) {
     };
   });
 
-  return <SimpleTable headers={headers} data={device ? dataWithSelectedDevice : devicesData} />;
+  return (
+    <div className={styles.glycolTableContainer}>
+      <SimpleTable headers={headers} data={device ? dataWithSelectedDevice : devicesData} />
+    </div>
+  );
 }
 
 GlycolTable.propTypes = {
@@ -445,6 +691,53 @@ GlycolTable.propTypes = {
   /** Device selected */
   device: PropTypes.string,
 };
+
+function GlycolPlots({ data }) {
+  return (
+    <div className={styles.glycolPlotsContainer}>
+      <div className={styles.plotContainer}>
+        <div className={styles.highlight}>Glycol Temperature In</div>
+        <div className={styles.plot}>
+          <PlotContainer
+            inputs={temperatureSupplyPlotInputs}
+            controls={false}
+            legendPosition="bottom"
+            xAxisTitle="Time"
+          />
+        </div>
+      </div>
+      <div className={styles.plotContainer}>
+        <div className={styles.highlight}>Glycol Temperature Out</div>
+        <div className={styles.plot}>
+          <PlotContainer
+            inputs={temperatureReturnPlotInputs}
+            controls={false}
+            legendPosition="bottom"
+            xAxisTitle="Time"
+          />
+        </div>
+      </div>
+      <div className={styles.plotContainer}>
+        <div className={styles.highlight}>Glycol Pressure In</div>
+        <div className={styles.plot}>
+          <PlotContainer inputs={pressureSupplyPlotInputs} controls={false} legendPosition="bottom" xAxisTitle="Time" />
+        </div>
+      </div>
+      <div className={styles.plotContainer}>
+        <div className={styles.highlight}>Glycol Pressure Out</div>
+        <div className={styles.plot}>
+          <PlotContainer inputs={pressureReturnPlotInputs} controls={false} legendPosition="bottom" xAxisTitle="Time" />
+        </div>
+      </div>
+      <div className={styles.plotContainer}>
+        <div className={styles.highlight}>Glycol Flow</div>
+        <div className={styles.plot}>
+          <PlotContainer inputs={flowPlotInputs} controls={false} legendPosition="bottom" xAxisTitle="Time" />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function GlycolSystem({ subscribeToStreams, unsubscribeToStreams, ...props }) {
   const [selectedDevice, setSelectedDevice] = useState();
@@ -462,6 +755,7 @@ function GlycolSystem({ subscribeToStreams, unsubscribeToStreams, ...props }) {
       <GlycolSummary data={props} selectedDevice={selectedDevice} selectDevice={setSelectedDevice} />
       {selectedDevice && <GlycolMap device={selectedDevice} />}
       <GlycolTable data={props} device={selectedDevice} />
+      <GlycolPlots data={props} />
     </div>
   );
 }
