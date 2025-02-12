@@ -15,6 +15,14 @@
   font-size: var(--font-size-larger);
 }
 
+.heatWarningBackground {
+  background-color: var(--status-alert-dimmed-color-2) !important;
+}
+
+.heatWarningText {
+  color: var(--status-alert-color);
+}
+
 .hvacStatusContainer {
   display: flex;
   gap: var(--content-padding);
@@ -102,10 +110,26 @@
   transform: rotate(180deg);
 }
 
-.heatWarningBackground {
-  background-color: var(--status-alert-dimmed-color-2);
+.glycolTableContainer {
+  margin-bottom: var(--small-padding);
 }
 
-.heatWarningText {
-  color: var(--status-alert-color);
+.glycolPlotsContainer {
+  display: flex;
+  gap: var(--small-padding);
+  flex-wrap: wrap;
+  margin-bottom: var(--small-padding);
+}
+
+.glycolPlotsContainer > * {
+  box-sizing: border-box;
+  flex: 1 1 calc(50% - var(--small-padding) * 3);
+  width: 100px;
+  padding: var(--small-padding);
+  border: 0.2em solid var(--second-tertiary-background-color);
+  border-radius: 0.25em;
+}
+
+.glycolPlotsContainer .plot {
+  height: 200px;
 }
