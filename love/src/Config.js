@@ -31,9 +31,6 @@ export const TOPIC_TIMESTAMP_ATTRIBUTE = 'private_sndStamp';
 // Subpath
 export const SUBPATH = process.env.PUBLIC_URL ?? '';
 
-// Commands Configurations
-export const hasCommandPrivileges = true;
-
 // Time rate for polling external APIs
 export const POLLING_RATE_MS = 10000;
 
