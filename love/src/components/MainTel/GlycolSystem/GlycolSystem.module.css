@@ -133,3 +133,28 @@
 .glycolPlotsContainer .plot {
   height: 200px;
 }
+
+.highlightFill {
+  --pulse-color-start: rgba(255, 255, 255, 0.2);
+  --pulse-color-mid: rgba(255, 255, 255, 0.5);
+  --pulse-color-end: rgba(255, 255, 255, 0.2);
+  animation: highlightPulse 2s infinite;
+}
+
+.highlightFill.alert {
+  --pulse-color-start: hsla(23, 99%, 44%, 0.2);
+  --pulse-color-mid: hsla(23, 99%, 44%, 0.5);
+  --pulse-color-end: hsla(23, 99%, 44%, 0.2);
+}
+
+@keyframes highlightPulse {
+  0% {
+    fill: var(--pulse-color-start);
+  }
+  50% {
+    fill: var(--pulse-color-mid);
+  }
+  100% {
+    fill: var(--pulse-color-end);
+  }
+}
