@@ -23,7 +23,6 @@ import styles from './WaitingScript.module.css';
 import scriptStyles from '../Scripts.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
-import { hasCommandPrivileges } from '../../../../Config';
 import HeartbeatIcon from '../../../icons/HeartbeatIcon/HeartbeatIcon';
 import StopIcon from '../../../icons/ScriptQueue/StopIcon/StopIcon';
 import MoveUpIcon from '../../../icons/ScriptQueue/MoveUpIcon/MoveUpIcon';
