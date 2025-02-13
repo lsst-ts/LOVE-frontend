@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { uniqueId } from 'lodash';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
@@ -444,6 +445,27 @@ const devicesHeatThresholds = {
   'Cable Wrap': 1000,
 };
 
+const devicesQuerySelectorMapping = {
+  'Chiller 1': '#Machines > :nth-child(3)',
+  'Chiller 2': '#Machines > :nth-child(2)',
+  'Chiller 3': '#Machines > :nth-child(1)',
+  OSS: '#Machines > :nth-child(4) > :first-child',
+  SLAC: '#Building > #camera-maintenance-room',
+  'L2 CRACS': '#Building #computer-room',
+  'L2 Fan Coils': '#Building #open-office-space',
+  'AHU CR': '#Building > #camera-maintenance-room',
+  'AHU WR': '#Building > #camera-maintenance-room',
+  'DOME AHU 1': '#Dome > #ahu-zone',
+  'DOME AHU 2': '#Dome > #ahu-zone',
+  'DOME AHU 3': '#Dome > #ahu-zone',
+  'DOME AHU 4': '#Dome > #ahu-zone',
+  'Dynalene 1': '#Dome > #underneath-tma',
+  'Dynalene 2': '#Dome > #underneath-tma',
+  TMA: '#Dome > #underneath-tma',
+  'LOC 10': '#Dome > #underneath-tma',
+  'Cable Wrap': '#Dome > #underneath-tma',
+};
+
 const deviceHeatSurpassThreshold = (device, heat) => {
   return heat >= devicesHeatThresholds[device];
 };
@@ -529,7 +551,7 @@ function HVACStatus({ data = {}, summaryState = 0 }) {
 
 HVACStatus.propTypes = {
   /** Dict with telemetries parameters */
-  data: PropTypes.array,
+  data: PropTypes.object,
   /** Summary state of the HVAC system */
   summaryState: PropTypes.number.isRequired,
 };
@@ -571,18 +593,45 @@ function GlycolSummary({ data = {}, selectedDevice, selectDevice }) {
 
 GlycolSummary.propTypes = {
   /** Dict with telemetries parameters */
-  data: PropTypes.array,
+  data: PropTypes.object,
   /** Device selected */
   selectedDevice: PropTypes.string,
   /** Function to select a device */
   selectDevice: PropTypes.func.isRequired,
 };
 
-function GlycolMap({ device }) {
+function GlycolMap({ data = {}, device }) {
   const [showMap, setShowMap] = useState(true);
+  const componentId = uniqueId('glycol-system-map-');
+
+  useEffect(() => {
+    const heat = calculateHeatExchange(
+      data[telemetriesMapping[device]?.flow],
+      data[telemetriesMapping[device]?.tempIn],
+      data[telemetriesMapping[device]?.tempOut],
+    );
+    const overThreshold = deviceHeatSurpassThreshold(device, heat);
+    const selector = '#' + componentId + ' ' + devicesQuerySelectorMapping[device];
+    const deviceDOMNodes = document.querySelectorAll(selector);
+    if (deviceDOMNodes) {
+      deviceDOMNodes.forEach((dom) => {
+        dom.classList.add(styles.highlightFill);
+
+        if (overThreshold) {
+          dom.classList.add(styles.alert);
+        }
+      });
+
+      return () => {
+        deviceDOMNodes.forEach((dom) => {
+          dom.classList.remove(styles.highlightFill);
+          dom.classList.remove(styles.alert);
+        });
+      };
+    }
+  }, [device, showMap]);
 
   const level = devicesLevelMapping[device];
-  const coordinates = devicesCoordinatesMapping[device];
 
   return (
     <>
@@ -597,11 +646,8 @@ function GlycolMap({ device }) {
         </div>
       )}
       {showMap && (
-        <div className={styles.mapContainer}>
+        <div id={componentId} className={styles.mapContainer}>
           <Map level={level} />
-          <svg className={styles.deviceOverlay} viewBox="0 0 882.42 461.23">
-            <rect x={coordinates.x} y={coordinates.y} width="64" height="64" fill="transparent" stroke="red" />
-          </svg>
         </div>
       )}
     </>
@@ -687,7 +733,7 @@ function GlycolTable({ data = {}, device }) {
 
 GlycolTable.propTypes = {
   /** Dict with telemetries parameters */
-  data: PropTypes.array.isRequired,
+  data: PropTypes.object.isRequired,
   /** Device selected */
   device: PropTypes.string,
 };
@@ -753,7 +799,7 @@ function GlycolSystem({ subscribeToStreams, unsubscribeToStreams, ...props }) {
     <div className={styles.container}>
       <HVACStatus data={props} summaryState={dummySummaryState} />
       <GlycolSummary data={props} selectedDevice={selectedDevice} selectDevice={setSelectedDevice} />
-      {selectedDevice && <GlycolMap device={selectedDevice} />}
+      {selectedDevice && <GlycolMap data={props} device={selectedDevice} />}
       <GlycolTable data={props} device={selectedDevice} />
       <GlycolPlots data={props} />
     </div>
