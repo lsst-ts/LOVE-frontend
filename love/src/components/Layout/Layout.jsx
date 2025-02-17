@@ -69,14 +69,12 @@ import CactusIcon from '../icons/CactusIcon/CactusIcon';
 import UnknownLocationIcon from '../icons/UnknownLocationIcon/UnknownLocationIcon';
 import BeachIcon from '../icons/BeachIcon/BeachIcon';
 import MountainIcon from '../icons/MountainIcon/MountainIcon';
-import OfficeIcon from '../icons/OfficeIcon/OfficeIcon';
 
 export const LAYOUT_CONTAINER_ID = 'layoutContainer';
 const BREAK_1 = 865;
 const BREAK_2 = 630;
 const BREAK_3 = 375;
 const urls = {
-  // '/': 'HOME',
   '/uif': 'AVAILABLE VIEWS',
 };
 
@@ -146,8 +144,8 @@ class Layout extends Component {
       tokenSwapRequested: false,
       isTakingScreenshot: false,
       isLightHidden: true,
-      efdStatus: { label: 'EFD Healthy status Unknown', style: 'invalid' },
-      salStatus: { label: 'SAL status Unknown', style: 'invalid' },
+      efdStatus: { label: 'EFD status unknown', style: 'invalid' },
+      salStatus: { label: 'SAL status unknown', style: 'invalid' },
       oleTabOpen: null,
     };
 
@@ -330,14 +328,8 @@ class Layout extends Component {
     return `LOVE ${component} heartbeat not seen since ${timeStatement}`;
   };
 
-  /** This will most likely parse a location telemetry to string * */
-  getObsLocation = () => {
-    return 'Unknown';
-  };
-
   /** Returns the corresponding svg based on Observatory Control Location * */
   getObsLocationIcon = (style) => {
-    const location = this.getObsLocation();
     const { controlLocation } = this.props.controlLocation;
 
     switch (controlLocation ? controlLocation.name : 'unknown') {
@@ -667,11 +659,6 @@ class Layout extends Component {
 
   renderMobileRightSideMenu = () => {
     const { controlLocation, lastUpdated } = this.props.controlLocation;
-    const filteredAlarms = this.props.alarms.filter((a) => {
-      return (
-        isActive(a) && !isAcknowledged(a) && !isMuted(a) && a.severity?.value >= this.state.minSeverityNotification
-      );
-    });
 
     const controlLocationName = controlLocation
       ? controlLocation.name.charAt(0).toUpperCase() + controlLocation.name.slice(1)
@@ -749,16 +736,6 @@ class Layout extends Component {
   };
 
   render() {
-    const { controlLocation, lastUpdated } = this.props.controlLocation;
-    const filteredAlarms = this.props.alarms.filter((a) => {
-      return (
-        isActive(a) && !isAcknowledged(a) && !isMuted(a) && a.severity?.value >= this.state.minSeverityNotification
-      );
-    });
-
-    const controlLocationName = controlLocation
-      ? controlLocation.name.charAt(0).toUpperCase() + controlLocation.name.slice(1)
-      : 'Unknown';
     return (
       <>
         <AlarmAudioContainer />
