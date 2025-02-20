@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.7.2
+------
+
+* Bump micromatch from 4.0.5 to 4.0.8 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/662>`_
+
 v6.7.1
 ------
 
