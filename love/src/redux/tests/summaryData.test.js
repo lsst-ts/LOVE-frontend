@@ -20,18 +20,19 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import thunkMiddleware from 'redux-thunk';
-import rootReducer from '../reducers';
-import { addGroup } from '../actions/ws';
-import { doReceiveToken } from '../actions/auth';
-import { removeCSCLogMessages, removeCSCErrorCodeData } from '../actions/summaryData';
+import rootReducer from 'redux/reducers';
+import { addGroup } from 'redux/actions/ws';
+import { doReceiveToken } from 'redux/actions/auth';
+import { removeCSCLogMessages, removeCSCErrorCodeData } from 'redux/actions/summaryData';
 import {
   getCSCLogMessages,
   getCSCErrorCodeData,
   getAllStreamsAsDictionary,
   getGroupSortedErrorCodeData,
-} from '../selectors';
+} from 'redux/selectors';
+import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
+import { flatMap } from 'Utils';
 import * as mockData from './mock';
-import { flatMap } from '../../Utils';
 
 let store;
 let server;
@@ -312,7 +313,7 @@ it('Should extract a sorted list of a subset of errorCode event data ', async ()
   });
 
   const sortedMessages = [...flat1, ...flat2].sort((msg1, msg2) => {
-    return msg1.private_rcvStamp.value > msg2.private_rcvStamp.value ? -1 : 1;
+    return msg1[TOPIC_TIMESTAMP_ATTRIBUTE].value > msg2[TOPIC_TIMESTAMP_ATTRIBUTE].value ? -1 : 1;
   });
 
   // Act

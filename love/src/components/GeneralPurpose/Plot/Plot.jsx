@@ -19,11 +19,12 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import Moment from 'moment';
+import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
+import ManagerInterface, { parseTimestamp, parsePlotInputsEFD, parseCommanderData } from 'Utils';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import VegaLegend from './VegaTimeSeriesPlot/VegaLegend';
-import Moment from 'moment';
-import ManagerInterface, { parseTimestamp, parsePlotInputsEFD, parseCommanderData } from 'Utils';
 import styles from './Plot.module.css';
 
 const DEFAULT_STYLES = [
@@ -197,7 +198,7 @@ const Plot = ({
 
       const newValue = {
         name: inputName,
-        x: parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
+        x: parseTimestamp(streamValue[TOPIC_TIMESTAMP_ATTRIBUTE]?.value * 1000),
         y: accessorFunc(streamValue[item]?.value),
       };
 
@@ -242,7 +243,7 @@ const Plot = ({
         }
 
         const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
-        newValue['x'] = parseTimestamp(streamValue.private_rcvStamp?.value * 1000);
+        newValue['x'] = parseTimestamp(streamValue[TOPIC_TIMESTAMP_ATTRIBUTE]?.value * 1000);
 
         const val = accessorFunc(streamValue[item]?.value);
         const units = streamValue[item]?.units;

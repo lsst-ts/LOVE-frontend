@@ -42,7 +42,7 @@ import RowExpansionIcon from 'components/icons/RowExpansionIcon/RowExpansionIcon
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import InfoPanel from 'components/GeneralPurpose/InfoPanel/InfoPanel';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
-import { SCRIPTQUEUE_SCRIPT_LOCATION } from 'Config';
+import { SCRIPTQUEUE_SCRIPT_LOCATION, EMPTY_SCHEMA } from 'Config';
 import ManagerInterface from 'Utils';
 
 import 'brace/mode/yaml';
@@ -291,6 +291,18 @@ export default class ConfigPanel extends Component {
             message: `Schema not yet loaded`,
           },
         ],
+      });
+      return;
+    }
+
+    /** Do nothing if script doesn't have a schema */
+    if (schema === EMPTY_SCHEMA) {
+      this.setState({
+        validationStatus: VALID,
+        autoFilledValue: '',
+        configErrors: [],
+        configErrorTitle: '',
+        formData: {},
       });
       return;
     }
@@ -592,12 +604,19 @@ export default class ConfigPanel extends Component {
       );
     }
 
+    const saveButtonDisabled = () => {
+      if (
+        [ERROR, VALIDATING, NEED_REVALIDATION, EMPTY, SERVER_ERROR].includes(validationStatus) ||
+        (!configurationSchemaChanged && !configurationNameChanged)
+      ) {
+        return true;
+      }
+      return;
+    };
+
     const buttonHtml = (
       <Button
-        disabled={
-          [ERROR, VALIDATING, NEED_REVALIDATION, EMPTY, SERVER_ERROR].includes(validationStatus) ||
-          (!configurationSchemaChanged && !configurationNameChanged)
-        }
+        disabled={saveButtonDisabled()}
         status="transparent"
         className={styles.saveConfigurationButton}
         onClick={(e) => {
@@ -636,36 +655,42 @@ export default class ConfigPanel extends Component {
   };
 
   saveNewScriptSchema = (scriptPath, scriptType, configName, configSchema) => {
+    const scriptSchema = this.props.configPanel.configSchema;
+
+    /** Do nothing if script doesn't have a schema */
+    if (scriptSchema === EMPTY_SCHEMA) return;
+
     const { configurationList } = this.state;
     this.setState({ updatingScriptSchema: true });
 
-    ManagerInterface.postScriptConfiguration(
-      scriptPath,
-      scriptType,
-      configName,
-      configSchema,
-      this.props.configPanel.configSchema,
-    ).then((res) => {
-      const newConfigurationList = [res, ...configurationList];
-      const options = newConfigurationList.map((conf) => ({ label: conf.config_name, value: conf.id }));
-      const newSelectedConfiguration = { label: res.config_name, value: res.id };
-      this.setState({
-        updatingScriptSchema: false,
-        configurationList: newConfigurationList,
-        configurationOptions: options,
-        selectedConfiguration: newSelectedConfiguration,
-        value: res?.config_schema ?? '',
-        inputConfigurationName: res?.config_name ?? '',
-        formData: yaml.load(res?.config_schema),
-      });
-    });
+    ManagerInterface.postScriptConfiguration(scriptPath, scriptType, configName, configSchema, scriptSchema).then(
+      (res) => {
+        const newConfigurationList = [res, ...configurationList];
+        const options = newConfigurationList.map((conf) => ({ label: conf.config_name, value: conf.id }));
+        const newSelectedConfiguration = { label: res.config_name, value: res.id };
+        this.setState({
+          updatingScriptSchema: false,
+          configurationList: newConfigurationList,
+          configurationOptions: options,
+          selectedConfiguration: newSelectedConfiguration,
+          value: res?.config_schema ?? '',
+          inputConfigurationName: res?.config_name ?? '',
+          formData: yaml.load(res?.config_schema),
+        });
+      },
+    );
   };
 
   updateScriptSchema = (id, configSchema) => {
+    const scriptSchema = this.props.configPanel.configSchema;
+
+    /** Do nothing if script doesn't have a schema */
+    if (scriptSchema === EMPTY_SCHEMA) return;
+
     const { configurationList } = this.state;
     this.setState({ updatingScriptSchema: true });
 
-    ManagerInterface.updateScriptSchema(id, configSchema, this.props.configPanel.configSchema).then((res) => {
+    ManagerInterface.updateScriptSchema(id, configSchema, scriptSchema).then((res) => {
       const newSelectedConfiguration = { label: res.config_name, value: res.id };
       this.setState({
         updatingScriptSchema: false,
@@ -743,6 +768,7 @@ export default class ConfigPanel extends Component {
     const scriptPath = this.props.configPanel?.script?.path ?? '';
     const isStandard = this.props.configPanel?.script ? this.props.configPanel.script?.type === 'standard' : false;
     const yamlSchema = this.props.configPanel?.configSchema ?? '';
+    const scriptSchemaIsEmpty = yamlSchema === EMPTY_SCHEMA;
 
     const sidePanelSize = {
       stacked: {
@@ -932,6 +958,7 @@ export default class ConfigPanel extends Component {
                   editorProps={{ $blockScrolling: true }}
                   fontSize={18}
                   tabSize={2}
+                  readOnly={scriptSchemaIsEmpty}
                   showPrintMargin={false}
                 />
               ) : (
