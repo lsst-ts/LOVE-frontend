@@ -5,6 +5,7 @@ Version History
 v6.7.1
 ------
 
+* Improve error handling for queries to get services status for SAL and EFD. `<https://github.com/lsst-ts/LOVE-frontend/pull/688>`_
 * Refactor LOVE components to use private_sndStamp instead of deprecated private_rcvStamp `<https://github.com/lsst-ts/LOVE-frontend/pull/687>`_
 
 v6.7.0
