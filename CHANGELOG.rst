@@ -5,6 +5,7 @@ Version History
 v6.7.2
 ------
 
+* Bump rollup from 2.79.1 to 2.79.2 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/666>`_
 * Bump micromatch from 4.0.5 to 4.0.8 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/662>`_
 
 v6.7.1
