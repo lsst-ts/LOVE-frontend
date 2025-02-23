@@ -5,6 +5,7 @@ Version History
 v6.7.2
 ------
 
+* Bump webpack from 5.88.2 to 5.98.0 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/690>`_
 * Bump cross-spawn from 7.0.3 to 7.0.6 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/677>`_
 * Bump http-proxy-middleware from 2.0.6 to 2.0.7 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/671>`_
 * Bump rollup from 2.79.1 to 2.79.2 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/666>`_
