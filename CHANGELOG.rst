@@ -5,6 +5,7 @@ Version History
 v6.7.2
 ------
 
+* Bump vega-selections from 5.4.1 to 5.5.0 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/695>`_
 * Bump express from 4.19.2 to 4.21.2 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/691>`_
 * Bump webpack from 5.88.2 to 5.98.0 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/690>`_
 * Bump cross-spawn from 7.0.3 to 7.0.6 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/677>`_
