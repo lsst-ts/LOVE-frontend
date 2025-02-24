@@ -5,6 +5,7 @@ Version History
 v6.7.2
 ------
 
+* Bump nanoid from 3.3.6 to 3.3.8 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/694>`_
 * Bump vega-selections from 5.4.1 to 5.5.0 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/695>`_
 * Bump express from 4.19.2 to 4.21.2 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/691>`_
 * Bump webpack from 5.88.2 to 5.98.0 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/690>`_
