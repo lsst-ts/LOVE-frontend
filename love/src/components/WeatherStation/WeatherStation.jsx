@@ -42,15 +42,6 @@ export default class WeatherStation extends Component {
       color: COLORS[1],
       values: [
         {
-          variable: 'x',
-          category: 'telemetry',
-          csc: 'ESS',
-          salindex: this.props.salindex,
-          topic: 'temperature',
-          item: 'timestamp',
-          accessor: '(x) => x',
-        },
-        {
           variable: 'y',
           category: 'telemetry',
           csc: 'ESS',
@@ -66,15 +57,6 @@ export default class WeatherStation extends Component {
       color: COLORS[2],
       orient: 'left',
       values: [
-        {
-          variable: 'x',
-          category: 'telemetry',
-          csc: 'ESS',
-          salindex: this.props.salindex,
-          topic: 'dewPoint',
-          item: 'timestamp',
-          accessor: '(x) => x',
-        },
         {
           variable: 'y',
           category: 'telemetry',
