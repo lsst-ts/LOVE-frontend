@@ -121,27 +121,21 @@ export default class Map extends Component {
     const { chiller01P01, chiller02P01, chiller03P01, status1, status2, warnings1, warnings2, errors1, errors2 } =
       this.props.HVACDataLevel1;
 
-    const { crack01P02, crack02P02 } = this.props.HVACDataLevel2;
-    const { manejadoraSblancaP04, manejadoraSlimpiaP04, vex04CargaP04, vex03LowerP04 } = this.props.HVACDataLevel4;
+    const { crac01P02, crac02P02 } = this.props.HVACDataLevel2;
+    const { whiteRoomAHU01P05, cleanRoomAHU01P05, loadingBayFan04P04, lowerDamperFan03P04 } = this.props.HVACDataLevel4;
+    const { dynaleneP05Events, lowerAHU01P05, lowerAHU02P05, lowerAHU03P05, lowerAHU04P05 } = this.props.HVACDataLevel5;
     const {
-      dynaleneP05Events,
-      manejadoraLower01P05,
-      manejadoraLower02P05,
-      manejadoraLower03P05,
-      manejadoraLower04P05,
-    } = this.props.HVACDataLevel5;
-    const {
-      vea01P05,
-      vea08P05,
-      vea09P05,
-      vea10P05,
-      vea11P05,
-      vea12P05,
-      vea13P05,
-      vea14P05,
-      vea15P05,
-      vea16P05,
-      vea17P05,
+      airInletFan01P05,
+      airInletFan08P05,
+      airInletFan09P05,
+      airInletFan10P05,
+      airInletFan11P05,
+      airInletFan12P05,
+      airInletFan13P05,
+      airInletFan14P05,
+      airInletFan15P05,
+      airInletFan16P05,
+      airInletFan17P05,
     } = this.props.HVACDataLevel5;
 
     const prevHVACDataLevel1 = prevProps.HVACDataLevel1;
@@ -150,18 +144,18 @@ export default class Map extends Component {
     const prevHVACDataLevel5 = prevProps.HVACDataLevel5;
 
     const alarms_1 = [
-      chiller01P01.alarmaGeneral ? chiller01P01.alarmaGeneral.value : null,
-      chiller01P01.compresor01Alarmado ? chiller01P01.compresor01Alarmado.value : null,
-      chiller01P01.compresor02Alarmado ? chiller01P01.compresor02Alarmado.value : null,
-      chiller01P01.compresor03Alarmado ? chiller01P01.compresor03Alarmado.value : null,
-      chiller02P01.alarmaGeneral ? chiller02P01.alarmaGeneral.value : null,
-      chiller02P01.compresor01Alarmado ? chiller02P01.compresor01Alarmado.value : null,
-      chiller02P01.compresor02Alarmado ? chiller02P01.compresor02Alarmado.value : null,
-      chiller02P01.compresor03Alarmado ? chiller02P01.compresor03Alarmado.value : null,
-      chiller03P01.alarmaGeneral ? chiller03P01.alarmaGeneral.value : null,
-      chiller03P01.compresor01Alarmado ? chiller03P01.compresor01Alarmado.value : null,
-      chiller03P01.compresor02Alarmado ? chiller03P01.compresor02Alarmado.value : null,
-      chiller03P01.compresor03Alarmado ? chiller03P01.compresor03Alarmado.value : null,
+      chiller01P01.generalAlarm ? chiller01P01.generalAlarm.value : null,
+      chiller01P01.compressor01Alarm ? chiller01P01.compressor01Alarm.value : null,
+      chiller01P01.compressor02Alarm ? chiller01P01.compressor02Alarm.value : null,
+      chiller01P01.compressor03Alarm ? chiller01P01.compressor03Alarm.value : null,
+      chiller02P01.generalAlarm ? chiller02P01.generalAlarm.value : null,
+      chiller02P01.compressor01Alarm ? chiller02P01.compressor01Alarm.value : null,
+      chiller02P01.compressor02Alarm ? chiller02P01.compressor02Alarm.value : null,
+      chiller02P01.compressor03Alarm ? chiller02P01.compressor03Alarm.value : null,
+      chiller03P01.generalAlarm ? chiller03P01.generalAlarm.value : null,
+      chiller03P01.compressor01Alarm ? chiller03P01.compressor01Alarm.value : null,
+      chiller03P01.compressor02Alarm ? chiller03P01.compressor02Alarm.value : null,
+      chiller03P01.compressor03Alarm ? chiller03P01.compressor03Alarm.value : null,
       status1.serviceRequired ? status1.serviceRequired.value : null,
       errors1.powerSupplyFailureE400 ? errors1.powerSupplyFailureE400.value : null,
       errors1.emergencyStopActivatedE401 ? errors1.emergencyStopActivatedE401.value : null,
@@ -276,18 +270,18 @@ export default class Map extends Component {
         errors2 ||
         status2 ||
         warnings2) &&
-      (prevHVACDataLevel1.chiller01P01?.alarmaGeneral?.value !== chiller01P01.alarmaGeneral?.value ||
-        prevHVACDataLevel1.chiller01P01?.compresor01Alarmado?.value !== chiller01P01.compresor01Alarmado?.value ||
-        prevHVACDataLevel1.chiller01P01?.compresor02Alarmado?.value !== chiller01P01.compresor02Alarmado?.value ||
-        prevHVACDataLevel1.chiller01P01?.compresor03Alarmado?.value !== chiller01P01.compresor03Alarmado?.value ||
-        prevHVACDataLevel1.chiller02P01?.alarmaGeneral?.value !== chiller02P01.alarmaGeneral?.value ||
-        prevHVACDataLevel1.chiller02P01?.compresor01Alarmado?.value !== chiller02P01.compresor01Alarmado?.value ||
-        prevHVACDataLevel1.chiller02P01?.compresor02Alarmado?.value !== chiller02P01.compresor02Alarmado?.value ||
-        prevHVACDataLevel1.chiller02P01?.compresor03Alarmado?.value !== chiller02P01.compresor03Alarmado?.value ||
-        prevHVACDataLevel1.chiller03P01?.alarmaGeneral?.value !== chiller03P01.alarmaGeneral?.value ||
-        prevHVACDataLevel1.chiller03P01?.compresor01Alarmado?.value !== chiller03P01.compresor01Alarmado?.value ||
-        prevHVACDataLevel1.chiller03P01?.compresor02Alarmado?.value !== chiller03P01.compresor02Alarmado?.value ||
-        prevHVACDataLevel1.chiller03P01?.compresor03Alarmado?.value !== chiller03P01.compresor03Alarmado?.value ||
+      (prevHVACDataLevel1.chiller01P01?.generalAlarm?.value !== chiller01P01.generalAlarm?.value ||
+        prevHVACDataLevel1.chiller01P01?.compressor01Alarm?.value !== chiller01P01.compressor01Alarm?.value ||
+        prevHVACDataLevel1.chiller01P01?.compressor02Alarm?.value !== chiller01P01.compressor02Alarm?.value ||
+        prevHVACDataLevel1.chiller01P01?.compressor03Alarm?.value !== chiller01P01.compressor03Alarm?.value ||
+        prevHVACDataLevel1.chiller02P01?.generalAlarm?.value !== chiller02P01.generalAlarm?.value ||
+        prevHVACDataLevel1.chiller02P01?.compressor01Alarm?.value !== chiller02P01.compressor01Alarm?.value ||
+        prevHVACDataLevel1.chiller02P01?.compressor02Alarm?.value !== chiller02P01.compressor02Alarm?.value ||
+        prevHVACDataLevel1.chiller02P01?.compressor03Alarm?.value !== chiller02P01.compressor03Alarm?.value ||
+        prevHVACDataLevel1.chiller03P01?.generalAlarm?.value !== chiller03P01.generalAlarm?.value ||
+        prevHVACDataLevel1.chiller03P01?.compressor01Alarm?.value !== chiller03P01.compressor01Alarm?.value ||
+        prevHVACDataLevel1.chiller03P01?.compressor02Alarm?.value !== chiller03P01.compressor02Alarm?.value ||
+        prevHVACDataLevel1.chiller03P01?.compressor03Alarm?.value !== chiller03P01.compressor03Alarm?.value ||
         prevHVACDataLevel1.status1?.serviceRequired?.value != status1.serviceRequired?.value ||
         prevHVACDataLevel1.errors1?.powerSupplyFailureE400?.value != errors1.powerSupplyFailureE400?.value ||
         prevHVACDataLevel1.errors1?.emergencyStopActivatedE401?.value != errors1.emergencyStopActivatedE401?.value ||
@@ -408,14 +402,14 @@ export default class Map extends Component {
     }
 
     const alarms_2 = [
-      crack01P02.estadoPresenciaAlarma ? crack01P02.estadoPresenciaAlarma.value : null,
-      crack02P02.estadoPresenciaAlarma ? crack02P02.estadoPresenciaAlarma.value : null,
+      crac01P02.alarmPresentState ? crac01P02.alarmPresentState.value : null,
+      crac02P02.alarmPresentState ? crac02P02.alarmPresentState.value : null,
     ];
 
     if (
-      (crack01P02 || crack01P02) &&
-      (prevHVACDataLevel2.crack01P02?.estadoPresenciaAlarma?.value !== crack01P02.estadoPresenciaAlarma?.value ||
-        prevHVACDataLevel2.crack02P02?.estadoPresenciaAlarma?.value !== crack02P02.estadoPresenciaAlarma?.value)
+      (crac01P02 || crac01P02) &&
+      (prevHVACDataLevel2.crac01P02?.alarmPresentState?.value !== crac01P02.alarmPresentState?.value ||
+        prevHVACDataLevel2.crac02P02?.alarmPresentState?.value !== crac02P02.alarmPresentState?.value)
     ) {
       const isAlarmed_2 = alarms_2.some((a) => {
         return a;
@@ -424,26 +418,26 @@ export default class Map extends Component {
     }
 
     const alarms_4 = [
-      manejadoraSblancaP04.alarmaGeneral ? manejadoraSblancaP04.alarmaGeneral.value : null,
-      manejadoraSblancaP04.alarmaFiltro ? manejadoraSblancaP04.alarmaFiltro.value : null,
-      manejadoraSblancaP04.resetAlarma ? manejadoraSblancaP04.resetAlarma.value : null,
-      manejadoraSlimpiaP04.alarmaGeneral ? manejadoraSlimpiaP04.alarmaGeneral.value : null,
-      manejadoraSlimpiaP04.alarmaFiltro ? manejadoraSlimpiaP04.alarmaFiltro.value : null,
-      manejadoraSlimpiaP04.resetAlarma ? manejadoraSlimpiaP04.resetAlarma.value : null,
-      vex04CargaP04.fallaTermica ? vex04CargaP04.fallaTermica.value : null,
-      vex03LowerP04.fallaTermica ? vex03LowerP04.fallaTermica.value : null,
+      whiteRoomAHU01P05.generalAlarm ? whiteRoomAHU01P05.generalAlarm.value : null,
+      whiteRoomAHU01P05.filterAlarm ? whiteRoomAHU01P05.filterAlarm.value : null,
+      whiteRoomAHU01P05.alarmReset ? whiteRoomAHU01P05.alarmReset.value : null,
+      cleanRoomAHU01P05.generalAlarm ? cleanRoomAHU01P05.generalAlarm.value : null,
+      cleanRoomAHU01P05.filterAlarm ? cleanRoomAHU01P05.filterAlarm.value : null,
+      cleanRoomAHU01P05.alarmReset ? cleanRoomAHU01P05.alarmReset.value : null,
+      loadingBayFan04P04.thermalFault ? loadingBayFan04P04.thermalFault.value : null,
+      lowerDamperFan03P04.thermalFault ? lowerDamperFan03P04.thermalFault.value : null,
     ];
 
     if (
-      (manejadoraSblancaP04 || manejadoraSlimpiaP04 || vex03LowerP04 || vex04CargaP04) &&
-      (prevHVACDataLevel4.manejadoraSblancaP04?.alarmaGeneral?.value !== manejadoraSblancaP04.alarmaGeneral?.value ||
-        prevHVACDataLevel4.manejadoraSblancaP04?.alarmaFiltro?.value !== manejadoraSblancaP04.alarmaFiltro?.value ||
-        prevHVACDataLevel4.manejadoraSblancaP04?.resetAlarma?.value !== manejadoraSblancaP04.resetAlarma?.value ||
-        prevHVACDataLevel4.manejadoraSlimpiaP04?.alarmaGeneral?.value !== manejadoraSlimpiaP04.alarmaGeneral?.value ||
-        prevHVACDataLevel4.manejadoraSlimpiaP04?.alarmaFiltro?.value !== manejadoraSlimpiaP04.alarmaFiltro?.value ||
-        prevHVACDataLevel4.manejadoraSlimpiaP04?.resetAlarma?.value !== manejadoraSlimpiaP04.resetAlarma?.value ||
-        prevHVACDataLevel4.vex03LowerP04?.fallaTermica?.value !== vex03LowerP04.fallaTermica?.value ||
-        prevHVACDataLevel4.vex04CargaP04?.fallaTermica?.value !== vex04CargaP04.fallaTermica?.value)
+      (whiteRoomAHU01P05 || cleanRoomAHU01P05 || lowerDamperFan03P04 || loadingBayFan04P04) &&
+      (prevHVACDataLevel4.whiteRoomAHU01P05?.generalAlarm?.value !== whiteRoomAHU01P05.generalAlarm?.value ||
+        prevHVACDataLevel4.whiteRoomAHU01P05?.filterAlarm?.value !== whiteRoomAHU01P05.filterAlarm?.value ||
+        prevHVACDataLevel4.whiteRoomAHU01P05?.alarmReset?.value !== whiteRoomAHU01P05.alarmReset?.value ||
+        prevHVACDataLevel4.cleanRoomAHU01P05?.generalAlarm?.value !== cleanRoomAHU01P05.generalAlarm?.value ||
+        prevHVACDataLevel4.cleanRoomAHU01P05?.filterAlarm?.value !== cleanRoomAHU01P05.filterAlarm?.value ||
+        prevHVACDataLevel4.cleanRoomAHU01P05?.alarmReset?.value !== cleanRoomAHU01P05.alarmReset?.value ||
+        prevHVACDataLevel4.lowerDamperFan03P04?.thermalFault?.value !== lowerDamperFan03P04.thermalFault?.value ||
+        prevHVACDataLevel4.loadingBayFan04P04?.thermalFault?.value !== loadingBayFan04P04.thermalFault?.value)
     ) {
       const isAlarmed_4 = alarms_4.some((a) => {
         return a;
@@ -458,48 +452,48 @@ export default class Map extends Component {
       dynaleneP05Events.dynTAalarm?.value,
       dynaleneP05Events.dynTMAalarm?.value,
       dynaleneP05Events?.dynaleneTankLevel?.value === 0,
-      manejadoraLower01P05.alarmaGeneral?.value,
-      manejadoraLower01P05.alarmaFiltro?.value,
-      manejadoraLower01P05.resetAlarma?.value,
-      manejadoraLower02P05.alarmaGeneral?.value,
-      manejadoraLower02P05.alarmaFiltro?.value,
-      manejadoraLower02P05.resetAlarma?.value,
-      manejadoraLower03P05.alarmaGeneral?.value,
-      manejadoraLower03P05.alarmaFiltro?.value,
-      manejadoraLower03P05.resetAlarma?.value,
-      manejadoraLower04P05.alarmaGeneral?.value,
-      manejadoraLower04P05.alarmaFiltro?.value,
-      manejadoraLower04P05.resetAlarma?.value,
-      vea01P05.fallaTermica?.value,
-      vea08P05.fallaTermica?.value,
-      vea09P05.fallaTermica?.value,
-      vea10P05.fallaTermica?.value,
-      vea11P05.fallaTermica?.value,
-      vea12P05.fallaTermica?.value,
-      vea13P05.fallaTermica?.value,
-      vea14P05.fallaTermica?.value,
-      vea15P05.fallaTermica?.value,
-      vea16P05.fallaTermica?.value,
-      vea17P05.fallaTermica?.value,
+      lowerAHU01P05.generalAlarm?.value,
+      lowerAHU01P05.filterAlarm?.value,
+      lowerAHU01P05.alarmReset?.value,
+      lowerAHU02P05.generalAlarm?.value,
+      lowerAHU02P05.filterAlarm?.value,
+      lowerAHU02P05.alarmReset?.value,
+      lowerAHU03P05.generalAlarm?.value,
+      lowerAHU03P05.filterAlarm?.value,
+      lowerAHU03P05.alarmReset?.value,
+      lowerAHU04P05.generalAlarm?.value,
+      lowerAHU04P05.filterAlarm?.value,
+      lowerAHU04P05.alarmReset?.value,
+      airInletFan01P05.thermalFault?.value,
+      airInletFan08P05.thermalFault?.value,
+      airInletFan09P05.thermalFault?.value,
+      airInletFan10P05.thermalFault?.value,
+      airInletFan11P05.thermalFault?.value,
+      airInletFan12P05.thermalFault?.value,
+      airInletFan13P05.thermalFault?.value,
+      airInletFan14P05.thermalFault?.value,
+      airInletFan15P05.thermalFault?.value,
+      airInletFan16P05.thermalFault?.value,
+      airInletFan17P05.thermalFault?.value,
     ];
 
     if (
       (dynaleneP05Events ||
-        manejadoraLower01P05 ||
-        manejadoraLower02P05 ||
-        manejadoraLower03P05 ||
-        manejadoraLower04P05 ||
-        vea01P05 ||
-        vea08P05 ||
-        vea09P05 ||
-        vea10P05 ||
-        vea11P05 ||
-        vea12P05 ||
-        vea13P05 ||
-        vea14P05 ||
-        vea15P05 ||
-        vea16P05 ||
-        vea17P05) &&
+        lowerAHU01P05 ||
+        lowerAHU02P05 ||
+        lowerAHU03P05 ||
+        lowerAHU04P05 ||
+        airInletFan01P05 ||
+        airInletFan08P05 ||
+        airInletFan09P05 ||
+        airInletFan10P05 ||
+        airInletFan11P05 ||
+        airInletFan12P05 ||
+        airInletFan13P05 ||
+        airInletFan14P05 ||
+        airInletFan15P05 ||
+        airInletFan16P05 ||
+        airInletFan17P05) &&
       (prevHVACDataLevel5.dynaleneP05Events?.dynMainGridAlarm?.value !== dynaleneP05Events?.dynMainGridAlarm?.value ||
         prevHVACDataLevel5.dynaleneP05Events?.dynMainGridFailureFlag?.value !==
           dynaleneP05Events?.dynMainGridFailureFlag?.value ||
@@ -511,29 +505,29 @@ export default class Map extends Component {
           dynaleneP05Events?.dynaleneTankLevel?.value ||
         prevHVACDataLevel5.dynaleneP05Events?.dynMainGridAlarm?.value !== dynaleneP05Events?.dynMainGridAlarm?.value ||
         prevHVACDataLevel5.dynaleneP05Events?.dynMainGridAlarm?.value !== dynaleneP05Events?.dynMainGridAlarm?.value ||
-        prevHVACDataLevel5.manejadoraLower01P05?.alarmaGeneral?.value !== manejadoraLower01P05.alarmaGeneral?.value ||
-        prevHVACDataLevel5.manejadoraLower01P05?.alarmaFiltro?.value !== manejadoraLower01P05.alarmaFiltro?.value ||
-        prevHVACDataLevel5.manejadoraLower01P05?.resetAlarma?.value !== manejadoraLower01P05.resetAlarma?.value ||
-        prevHVACDataLevel5.manejadoraLower02P05?.alarmaGeneral?.value !== manejadoraLower02P05.alarmaGeneral?.value ||
-        prevHVACDataLevel5.manejadoraLower02P05?.alarmaFiltro?.value !== manejadoraLower02P05.alarmaFiltro?.value ||
-        prevHVACDataLevel5.manejadoraLower02P05?.resetAlarma?.value !== manejadoraLower02P05.resetAlarma?.value ||
-        prevHVACDataLevel5.manejadoraLower03P05?.alarmaGeneral?.value !== manejadoraLower03P05.alarmaGeneral?.value ||
-        prevHVACDataLevel5.manejadoraLower03P05?.alarmaFiltro?.value !== manejadoraLower03P05.alarmaFiltro?.value ||
-        prevHVACDataLevel5.manejadoraLower03P05?.resetAlarma?.value !== manejadoraLower03P05.resetAlarma?.value ||
-        prevHVACDataLevel5.manejadoraLower04P05?.alarmaGeneral?.value !== manejadoraLower04P05.alarmaGeneral?.value ||
-        prevHVACDataLevel5.manejadoraLower04P05?.alarmaFiltro?.value !== manejadoraLower04P05.alarmaFiltro?.value ||
-        prevHVACDataLevel5.manejadoraLower04P05?.resetAlarma?.value !== manejadoraLower04P05.resetAlarma?.value ||
-        prevHVACDataLevel5.vea01P05?.fallaTermica?.value !== vea01P05.fallaTermica?.value ||
-        prevHVACDataLevel5.vea08P05?.fallaTermica?.value !== vea08P05.fallaTermica?.value ||
-        prevHVACDataLevel5.vea09P05?.fallaTermica?.value !== vea09P05.fallaTermica?.value ||
-        prevHVACDataLevel5.vea10P05?.fallaTermica?.value !== vea10P05.fallaTermica?.value ||
-        prevHVACDataLevel5.vea11P05?.fallaTermica?.value !== vea11P05.fallaTermica?.value ||
-        prevHVACDataLevel5.vea12P05?.fallaTermica?.value !== vea12P05.fallaTermica?.value ||
-        prevHVACDataLevel5.vea13P05?.fallaTermica?.value !== vea13P05.fallaTermica?.value ||
-        prevHVACDataLevel5.vea14P05?.fallaTermica?.value !== vea14P05.fallaTermica?.value ||
-        prevHVACDataLevel5.vea15P05?.fallaTermica?.value !== vea15P05.fallaTermica?.value ||
-        prevHVACDataLevel5.vea16P05?.fallaTermica?.value !== vea16P05.fallaTermica?.value ||
-        prevHVACDataLevel5.vea17P05?.fallaTermica?.value !== vea17P05.fallaTermica?.value)
+        prevHVACDataLevel5.lowerAHU01P05?.generalAlarm?.value !== lowerAHU01P05.generalAlarm?.value ||
+        prevHVACDataLevel5.lowerAHU01P05?.filterAlarm?.value !== lowerAHU01P05.filterAlarm?.value ||
+        prevHVACDataLevel5.lowerAHU01P05?.alarmReset?.value !== lowerAHU01P05.alarmReset?.value ||
+        prevHVACDataLevel5.lowerAHU02P05?.generalAlarm?.value !== lowerAHU02P05.generalAlarm?.value ||
+        prevHVACDataLevel5.lowerAHU02P05?.filterAlarm?.value !== lowerAHU02P05.filterAlarm?.value ||
+        prevHVACDataLevel5.lowerAHU02P05?.alarmReset?.value !== lowerAHU02P05.alarmReset?.value ||
+        prevHVACDataLevel5.lowerAHU03P05?.generalAlarm?.value !== lowerAHU03P05.generalAlarm?.value ||
+        prevHVACDataLevel5.lowerAHU03P05?.filterAlarm?.value !== lowerAHU03P05.filterAlarm?.value ||
+        prevHVACDataLevel5.lowerAHU03P05?.alarmReset?.value !== lowerAHU03P05.alarmReset?.value ||
+        prevHVACDataLevel5.lowerAHU04P05?.generalAlarm?.value !== lowerAHU04P05.generalAlarm?.value ||
+        prevHVACDataLevel5.lowerAHU04P05?.filterAlarm?.value !== lowerAHU04P05.filterAlarm?.value ||
+        prevHVACDataLevel5.lowerAHU04P05?.alarmReset?.value !== lowerAHU04P05.alarmReset?.value ||
+        prevHVACDataLevel5.airInletFan01P05?.thermalFault?.value !== airInletFan01P05.thermalFault?.value ||
+        prevHVACDataLevel5.airInletFan08P05?.thermalFault?.value !== airInletFan08P05.thermalFault?.value ||
+        prevHVACDataLevel5.airInletFan09P05?.thermalFault?.value !== airInletFan09P05.thermalFault?.value ||
+        prevHVACDataLevel5.airInletFan10P05?.thermalFault?.value !== airInletFan10P05.thermalFault?.value ||
+        prevHVACDataLevel5.airInletFan11P05?.thermalFault?.value !== airInletFan11P05.thermalFault?.value ||
+        prevHVACDataLevel5.airInletFan12P05?.thermalFault?.value !== airInletFan12P05.thermalFault?.value ||
+        prevHVACDataLevel5.airInletFan13P05?.thermalFault?.value !== airInletFan13P05.thermalFault?.value ||
+        prevHVACDataLevel5.airInletFan14P05?.thermalFault?.value !== airInletFan14P05.thermalFault?.value ||
+        prevHVACDataLevel5.airInletFan15P05?.thermalFault?.value !== airInletFan15P05.thermalFault?.value ||
+        prevHVACDataLevel5.airInletFan16P05?.thermalFault?.value !== airInletFan16P05.thermalFault?.value ||
+        prevHVACDataLevel5.airInletFan17P05?.thermalFault?.value !== airInletFan17P05.thermalFault?.value)
     ) {
       const isAlarmed_5 = alarms_5.some((a) => {
         return a;
