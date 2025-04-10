@@ -42,15 +42,6 @@ export default class WeatherStation extends Component {
       color: COLORS[1],
       values: [
         {
-          variable: 'x',
-          category: 'telemetry',
-          csc: 'ESS',
-          salindex: this.props.salindex,
-          topic: 'temperature',
-          item: 'timestamp',
-          accessor: '(x) => x',
-        },
-        {
           variable: 'y',
           category: 'telemetry',
           csc: 'ESS',
@@ -66,15 +57,6 @@ export default class WeatherStation extends Component {
       color: COLORS[2],
       orient: 'left',
       values: [
-        {
-          variable: 'x',
-          category: 'telemetry',
-          csc: 'ESS',
-          salindex: this.props.salindex,
-          topic: 'dewPoint',
-          item: 'timestamp',
-          accessor: '(x) => x',
-        },
         {
           variable: 'y',
           category: 'telemetry',
@@ -388,6 +370,36 @@ export default class WeatherStation extends Component {
         </div>
 
         <div className={styles.section}>
+          <div className={styles.sectionTitle}>Air pressure</div>
+          <div ref={this.pressurePlotRef} className={styles.plot}>
+            <PlotContainer
+              timeSeriesControlsProps={timeSeriesControlsProps}
+              inputs={this.pressurePlot}
+              containerNode={this.pressurePlotRef}
+              xAxisTitle="Time"
+              yAxisTitle="Air pressure"
+              legendPosition="bottom"
+              maxHeight={maxHeightPlot}
+            />
+          </div>
+        </div>
+
+        <div className={styles.section}>
+          <div className={styles.sectionTitle}>Solar radiation</div>
+          <div ref={this.solarPlotRef} className={styles.plot}>
+            <PlotContainer
+              timeSeriesControlsProps={timeSeriesControlsProps}
+              inputs={this.solarPlot}
+              containerNode={this.solarPlotRef}
+              xAxisTitle="Time"
+              yAxisTitle="Solar radiation"
+              legendPosition="bottom"
+              maxHeight={maxHeightPlot}
+            />
+          </div>
+        </div>
+
+        <div className={styles.section}>
           <div className={styles.sectionTitle}>Precipitation</div>
           <div ref={this.precipitationPlotRef} className={styles.plot}>
             <PlotContainer
@@ -411,36 +423,6 @@ export default class WeatherStation extends Component {
               containerNode={this.snowDepthPlotRef}
               xAxisTitle="Time"
               yAxisTitle="Snow depth"
-              legendPosition="bottom"
-              maxHeight={maxHeightPlot}
-            />
-          </div>
-        </div>
-
-        <div className={styles.section}>
-          <div className={styles.sectionTitle}>Solar radiation</div>
-          <div ref={this.solarPlotRef} className={styles.plot}>
-            <PlotContainer
-              timeSeriesControlsProps={timeSeriesControlsProps}
-              inputs={this.solarPlot}
-              containerNode={this.solarPlotRef}
-              xAxisTitle="Time"
-              yAxisTitle="Solar radiation"
-              legendPosition="bottom"
-              maxHeight={maxHeightPlot}
-            />
-          </div>
-        </div>
-
-        <div className={styles.section}>
-          <div className={styles.sectionTitle}>Air pressure</div>
-          <div ref={this.pressurePlotRef} className={styles.plot}>
-            <PlotContainer
-              timeSeriesControlsProps={timeSeriesControlsProps}
-              inputs={this.pressurePlot}
-              containerNode={this.pressurePlotRef}
-              xAxisTitle="Time"
-              yAxisTitle="Air pressure"
               legendPosition="bottom"
               maxHeight={maxHeightPlot}
             />
