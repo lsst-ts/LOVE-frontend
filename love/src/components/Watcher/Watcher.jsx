@@ -23,7 +23,7 @@ import { DateTime } from 'luxon';
 import MuteIcon from '../icons/MuteIcon/MuteIcon';
 import Badge from '../GeneralPurpose/Badge/Badge';
 import AlarmsTable from './AlarmsTable/AlarmsTable';
-import { isAcknowledged, isMuted } from './AlarmUtils';
+import { isAcknowledged, isMuted, isActive } from './AlarmUtils';
 import styles from './Watcher.module.css';
 
 const TIMEOUT = 10;
@@ -105,36 +105,23 @@ export default class Watcher extends Component {
   }
 
   render() {
+    const { alarms } = this.props;
     let alarmsToShow = [];
     let mutedAlarmsCount = 0;
     let unmutedAlarmsCount = 0;
     let inactiveAlarmsCount = 0;
     let unackUnmutedAlarmsCount = 0;
-    const now = DateTime.local().toSeconds() - this.props.taiToUtc;
 
-    this.props.alarms.forEach((alarm) => {
-      if (
-        alarm.severity.value <= 1 &&
-        alarm.maxSeverity.value <= 1 &&
-        alarm.timestampAcknowledged.value !== 0 &&
-        now - alarm.timestampAcknowledged.value >= TIMEOUT
-      ) {
-        return;
-      }
-
-      if (isMuted(alarm)) {
-        if (alarm.severity.value <= 1) {
-          // Inactive alarms
-          inactiveAlarmsCount += 1;
-          if (this.state.selectedTab === 'inactive') {
-            alarmsToShow.push(alarm);
-          }
-        } else {
-          // Muted alarms
-          mutedAlarmsCount += 1;
-          if (this.state.selectedTab === 'muted') {
-            alarmsToShow.push(alarm);
-          }
+    alarms.forEach((alarm) => {
+      if (!isActive(alarm)) {
+        inactiveAlarmsCount += 1;
+        if (this.state.selectedTab === 'inactive') {
+          alarmsToShow.push(alarm);
+        }
+      } else if (isMuted(alarm)) {
+        mutedAlarmsCount += 1;
+        if (this.state.selectedTab === 'muted') {
+          alarmsToShow.push(alarm);
         }
       } else {
         unmutedAlarmsCount += 1;
