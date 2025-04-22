@@ -25,7 +25,7 @@ import { throttle } from 'lodash';
 
 import { severityEnum, ALARM_SOUND_THROTLING_TIME_MS } from 'Config';
 
-import { isAcknowledged, isMuted, isCritical } from '../AlarmUtils';
+import { isAcknowledged, isMuted, isActive } from '../AlarmUtils';
 import newWarningFile from '../../../sounds/new_warning.mp3';
 import newSeriousFile from '../../../sounds/new_serious.mp3';
 import newCriticalFile from '../../../sounds/new_critical.mp3';
@@ -230,48 +230,33 @@ export default class AlarmAudio extends Component {
   checkAndNotifyAlarms = (newAlarms, oldAlarms) => {
     const newHighestAlarm = { severity: severityEnum.ok, type: 'new' };
     newAlarms.forEach((newAlarm) => {
-      const oldAlarm = oldAlarms.find((oldAlarm) => {
-        return oldAlarm.name.value === newAlarm.name.value;
-      });
+      // Evaluate alarm severity if it is active,
+      // not acknowledged, not muted and
+      // severity is greater than the current highest alarm
+      if (
+        isActive(newAlarm) &&
+        !isAcknowledged(newAlarm) &&
+        !isMuted(newAlarm) &&
+        newAlarm.severity.value > newHighestAlarm.severity
+      ) {
+        newHighestAlarm.severity = newAlarm.severity.value;
+        newHighestAlarm.type = 'new';
 
-      if (oldAlarm) {
-        // If alarm is acknowledged stop the critical sound
-        if (!isAcknowledged(oldAlarm) && isAcknowledged(newAlarm)) {
-          this.stopCriticals();
-        }
-        // If alarm is muted stop the critical sound
-        if (!isMuted(oldAlarm) && isMuted(newAlarm)) {
-          this.stopCriticals();
-        }
-      }
-
-      // If they are non-acked and non-muted
-      if (!isAcknowledged(newAlarm) && !isMuted(newAlarm)) {
-        if (newAlarm.severity.value > newHighestAlarm.severity) {
-          newHighestAlarm.severity = newAlarm.severity.value;
-          newHighestAlarm.type = 'new';
-        }
-
+        const oldAlarm = oldAlarms.find((oldAlarm) => {
+          return oldAlarm.name.value === newAlarm.name.value;
+        });
         if (oldAlarm) {
-          // If they are increased, play the "increased" sound
-          if (newAlarm.severity.value > oldAlarm.severity.value && newAlarm.severity.value > newHighestAlarm.severity) {
-            newHighestAlarm.severity = newAlarm.severity.value;
+          newHighestAlarm.type = 'still';
+
+          if (newAlarm.severity.value > oldAlarm.severity.value) {
+            // If the alarm increased its severity,
+            // play the "increased" sound
             newHighestAlarm.type = 'increased';
-          }
-
-          if (isAcknowledged(oldAlarm)) {
-            // If they are unacknowledged, play the "unacked" sound
+          } else if (isAcknowledged(oldAlarm)) {
+            // If the alarm got unacknowledged,
+            // play the "unacked" sound
             if (newAlarm.severity.value >= newHighestAlarm.severity) {
-              newHighestAlarm.severity = newAlarm.severity.value;
               newHighestAlarm.type = 'unacked';
-            }
-          }
-
-          if (!isAcknowledged(oldAlarm)) {
-            // If they are still critical, play the "still critical" sound
-            if (isCritical(newAlarm) && isCritical(oldAlarm)) {
-              newHighestAlarm.severity = newAlarm.severity.value;
-              newHighestAlarm.type = 'still';
             }
           }
         }
@@ -279,8 +264,10 @@ export default class AlarmAudio extends Component {
     });
 
     if (newHighestAlarm.severity >= this.state.minSeveritySound) {
-      this.stopCriticals();
+      this.stopAllSounds();
       this.playSound(newHighestAlarm.severity, newHighestAlarm.type);
+    } else if (newHighestAlarm.severity < this.state.minSeveritySound) {
+      this.stopAllSounds();
     }
   };
 
@@ -290,9 +277,6 @@ export default class AlarmAudio extends Component {
   throtCheckAndNotifyAlarms = throttle(this.checkAndNotifyAlarms, ALARM_SOUND_THROTLING_TIME_MS);
 
   playSound = (severity, type) => {
-    if (severity < this.state.minSeveritySound) {
-      return;
-    }
     if (severity === severityEnum.warning) {
       switch (type) {
         case 'new': {
@@ -369,9 +353,16 @@ export default class AlarmAudio extends Component {
     this.stillCriticalTimeoutRef = this.stillCriticalTimeout();
   };
 
-  stopCriticals = () => {
+  stopAllSounds = () => {
+    this.clearStillCriticalTimeout();
+    this.newWarningSound.stop();
+    this.newSeriousSound.stop();
     this.newCriticalSound.stop();
+    this.increasedWarningSound.stop();
+    this.increasedSeriousSound.stop();
     this.increasedCriticalSound.stop();
+    this.unackedWarningSound.stop();
+    this.unackedSeriousSound.stop();
     this.unackedCriticalSound.stop();
     this.stillCriticalSound.stop();
   };
