@@ -203,7 +203,7 @@ export default class AlarmAudio extends Component {
 
     if (this.props.alarms) {
       if (prevProps.alarms?.length === 0 && this.props.alarms?.length > 0) {
-        this.checkAndNotifyAlarms(this.props.alarms, prevProps.alarms);
+        this.throtCheckAndNotifyAlarms(this.props.alarms, prevProps.alarms);
       } else if (
         !isEqual(this.props.alarms, prevProps.alarms) ||
         this.state.minSeveritySound !== prevState.minSeveritySound
@@ -265,6 +265,7 @@ export default class AlarmAudio extends Component {
       this.stopAllSounds();
       this.playSound(newHighestAlarm.severity, newHighestAlarm.type);
     } else if (newHighestAlarm.severity < this.state.minSeveritySound) {
+      this.throtCheckAndNotifyAlarms.cancel();
       this.stopAllSounds();
     }
   };
