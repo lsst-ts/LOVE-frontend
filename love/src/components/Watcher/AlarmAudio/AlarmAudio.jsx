@@ -37,8 +37,6 @@ import unackedSeriousFile from '../../../sounds/unacked_serious.mp3';
 import unackedCriticalFile from '../../../sounds/unacked_critical.mp3';
 import stillCriticalFile from '../../../sounds/still_critical.mp3';
 
-const CRITICAL_ALARM_SOUND_TIME_MS = 3000;
-
 export default class AlarmAudio extends Component {
   static propTypes = {
     /** List of all the alarms that are displayed */
@@ -338,7 +336,7 @@ export default class AlarmAudio extends Component {
   stillCriticalTimeout = () => {
     return setTimeout(() => {
       this.stillCriticalSound.play();
-    }, ALARM_SOUND_THROTLING_TIME_MS - CRITICAL_ALARM_SOUND_TIME_MS);
+    }, ALARM_SOUND_THROTLING_TIME_MS);
   };
 
   clearStillCriticalTimeout = () => {
