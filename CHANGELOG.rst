@@ -2,6 +2,22 @@
 Version History
 ===============
 
+v6.7.2
+------
+
+* Update package.json version to v6.7.2. `<https://github.com/lsst-ts/LOVE-frontend/pull/701>`_
+* Refactor Watcher AlarmAudio component for a more reliable flow. `<https://github.com/lsst-ts/LOVE-frontend/pull/700>`_
+* Fix WeatherStation plots for temperature and dewpoint. `<https://github.com/lsst-ts/LOVE-frontend/pull/699>`_
+* Bump vega from 5.25.0 to 5.26.0 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/693>`_
+* Bump nanoid from 3.3.6 to 3.3.8 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/694>`_
+* Bump vega-selections from 5.4.1 to 5.5.0 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/695>`_
+* Bump express from 4.19.2 to 4.21.2 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/691>`_
+* Bump webpack from 5.88.2 to 5.98.0 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/690>`_
+* Bump cross-spawn from 7.0.3 to 7.0.6 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/677>`_
+* Bump http-proxy-middleware from 2.0.6 to 2.0.7 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/671>`_
+* Bump rollup from 2.79.1 to 2.79.2 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/666>`_
+* Bump micromatch from 4.0.5 to 4.0.8 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/662>`_
+
 v6.7.1
 ------
 
