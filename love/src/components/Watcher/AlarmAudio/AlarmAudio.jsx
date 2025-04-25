@@ -25,7 +25,7 @@ import { throttle } from 'lodash';
 
 import { severityEnum, ALARM_SOUND_THROTLING_TIME_MS } from 'Config';
 
-import { isAcknowledged, isMuted, isCritical } from '../AlarmUtils';
+import { isAcknowledged, isMuted, isActive } from '../AlarmUtils';
 import newWarningFile from '../../../sounds/new_warning.mp3';
 import newSeriousFile from '../../../sounds/new_serious.mp3';
 import newCriticalFile from '../../../sounds/new_critical.mp3';
@@ -36,8 +36,6 @@ import unackedWarningFile from '../../../sounds/unacked_warning.mp3';
 import unackedSeriousFile from '../../../sounds/unacked_serious.mp3';
 import unackedCriticalFile from '../../../sounds/unacked_critical.mp3';
 import stillCriticalFile from '../../../sounds/still_critical.mp3';
-
-const CRITICAL_ALARM_SOUND_TIME_MS = 3000;
 
 export default class AlarmAudio extends Component {
   static propTypes = {
@@ -67,9 +65,10 @@ export default class AlarmAudio extends Component {
       minSeveritySound: severityEnum.critical + 1,
     };
 
-    this.soundsStopped = false;
+    this.stillCriticalTimeoutRef = null;
 
     this.numCriticals = 0;
+
     this.newWarningSound = new Howl({
       src: [newWarningFile],
       onplayerror: () => {
@@ -79,6 +78,7 @@ export default class AlarmAudio extends Component {
         console.error('Error loading sound for warning alarm: ', newWarningFile);
       },
     });
+
     this.newSeriousSound = new Howl({
       src: [newSeriousFile],
       onplayerror: () => {
@@ -88,6 +88,7 @@ export default class AlarmAudio extends Component {
         console.error('Error loading sound for serious alarm: ', newSeriousFile);
       },
     });
+
     this.newCriticalSound = new Howl({
       src: [newCriticalFile],
       onplayerror: () => {
@@ -96,17 +97,11 @@ export default class AlarmAudio extends Component {
       onloaderror: () => {
         console.error('Error loading sound for critical alarm: ', newCriticalFile);
       },
-      onplay: () => {
-        this.soundsStopped = false;
-      },
       onend: () => {
-        setTimeout(() => {
-          if (!this.soundsStopped) {
-            this.newCriticalSound.play();
-          }
-        }, ALARM_SOUND_THROTLING_TIME_MS - CRITICAL_ALARM_SOUND_TIME_MS);
+        this.createStillCriticalTimeout();
       },
     });
+
     this.increasedWarningSound = new Howl({
       src: [increasedWarningFile],
       onplayerror: () => {
@@ -116,6 +111,7 @@ export default class AlarmAudio extends Component {
         console.error('Error loading sound for warning alarm: ', increasedWarningFile);
       },
     });
+
     this.increasedSeriousSound = new Howl({
       src: [increasedSeriousFile],
       onplayerror: () => {
@@ -125,6 +121,7 @@ export default class AlarmAudio extends Component {
         console.error('Error loading sound for serious alarm: ', increasedSeriousFile);
       },
     });
+
     this.increasedCriticalSound = new Howl({
       src: [increasedCriticalFile],
       onplayerror: () => {
@@ -133,17 +130,11 @@ export default class AlarmAudio extends Component {
       onloaderror: () => {
         console.error('Error loading sound for critical alarm: ', increasedCriticalFile);
       },
-      onplay: () => {
-        this.soundsStopped = false;
-      },
       onend: () => {
-        setTimeout(() => {
-          if (!this.soundsStopped) {
-            this.increasedCriticalSound.play();
-          }
-        }, ALARM_SOUND_THROTLING_TIME_MS - CRITICAL_ALARM_SOUND_TIME_MS);
+        this.createStillCriticalTimeout();
       },
     });
+
     this.unackedWarningSound = new Howl({
       src: [unackedWarningFile],
       onplayerror: () => {
@@ -153,6 +144,7 @@ export default class AlarmAudio extends Component {
         console.error('Error loading sound for warning alarm: ', unackedWarningFile);
       },
     });
+
     this.unackedSeriousSound = new Howl({
       src: [unackedSeriousFile],
       onplayerror: () => {
@@ -162,6 +154,7 @@ export default class AlarmAudio extends Component {
         console.error('Error loading sound for serious alarm: ', unackedSeriousFile);
       },
     });
+
     this.unackedCriticalSound = new Howl({
       src: [unackedCriticalFile],
       onplayerror: () => {
@@ -170,17 +163,11 @@ export default class AlarmAudio extends Component {
       onloaderror: () => {
         console.error('Error loading sound for critical alarm: ', unackedCriticalFile);
       },
-      onplay: () => {
-        this.soundsStopped = false;
-      },
       onend: () => {
-        setTimeout(() => {
-          if (!this.soundsStopped) {
-            this.unackedCriticalSound.play();
-          }
-        }, ALARM_SOUND_THROTLING_TIME_MS - CRITICAL_ALARM_SOUND_TIME_MS);
+        this.createStillCriticalTimeout();
       },
     });
+
     this.stillCriticalSound = new Howl({
       src: [stillCriticalFile],
       onplayerror: () => {
@@ -189,15 +176,8 @@ export default class AlarmAudio extends Component {
       onloaderror: () => {
         console.error('Error loading sound for critical alarm: ', stillCriticalFile);
       },
-      onplay: () => {
-        this.soundsStopped = false;
-      },
       onend: () => {
-        setTimeout(() => {
-          if (!this.soundsStopped) {
-            this.stillCriticalSound.play();
-          }
-        }, ALARM_SOUND_THROTLING_TIME_MS - CRITICAL_ALARM_SOUND_TIME_MS);
+        this.createStillCriticalTimeout();
       },
     });
   }
@@ -223,7 +203,7 @@ export default class AlarmAudio extends Component {
 
     if (this.props.alarms) {
       if (prevProps.alarms?.length === 0 && this.props.alarms?.length > 0) {
-        this.checkAndNotifyAlarms(this.props.alarms, prevProps.alarms);
+        this.throtCheckAndNotifyAlarms(this.props.alarms, prevProps.alarms);
       } else if (
         !isEqual(this.props.alarms, prevProps.alarms) ||
         this.state.minSeveritySound !== prevState.minSeveritySound
@@ -248,48 +228,33 @@ export default class AlarmAudio extends Component {
   checkAndNotifyAlarms = (newAlarms, oldAlarms) => {
     const newHighestAlarm = { severity: severityEnum.ok, type: 'new' };
     newAlarms.forEach((newAlarm) => {
-      const oldAlarm = oldAlarms.find((oldAlarm) => {
-        return oldAlarm.name.value === newAlarm.name.value;
-      });
+      // Evaluate alarm severity if it is active,
+      // not acknowledged, not muted and
+      // severity is greater than the current highest alarm
+      if (
+        isActive(newAlarm) &&
+        !isAcknowledged(newAlarm) &&
+        !isMuted(newAlarm) &&
+        newAlarm.severity.value > newHighestAlarm.severity
+      ) {
+        newHighestAlarm.severity = newAlarm.severity.value;
+        newHighestAlarm.type = 'new';
 
-      if (oldAlarm) {
-        // If alarm is acknowledged stop the critical sound
-        if (!isAcknowledged(oldAlarm) && isAcknowledged(newAlarm)) {
-          this.stopCriticals();
-        }
-        // If alarm is muted stop the critical sound
-        if (!isMuted(oldAlarm) && isMuted(newAlarm)) {
-          this.stopCriticals();
-        }
-      }
-
-      // If they are non-acked and non-muted
-      if (!isAcknowledged(newAlarm) && !isMuted(newAlarm)) {
-        if (newAlarm.severity.value > newHighestAlarm.severity) {
-          newHighestAlarm.severity = newAlarm.severity.value;
-          newHighestAlarm.type = 'new';
-        }
-
+        const oldAlarm = oldAlarms.find((oldAlarm) => {
+          return oldAlarm.name.value === newAlarm.name.value;
+        });
         if (oldAlarm) {
-          // If they are increased, play the "increased" sound
-          if (newAlarm.severity.value > oldAlarm.severity.value && newAlarm.severity.value > newHighestAlarm.severity) {
-            newHighestAlarm.severity = newAlarm.severity.value;
+          newHighestAlarm.type = 'still';
+
+          if (newAlarm.severity.value > oldAlarm.severity.value) {
+            // If the alarm increased its severity,
+            // play the "increased" sound
             newHighestAlarm.type = 'increased';
-          }
-
-          if (isAcknowledged(oldAlarm)) {
-            // If they are unacknowledged, play the "unacked" sound
+          } else if (isAcknowledged(oldAlarm)) {
+            // If the alarm got unacknowledged,
+            // play the "unacked" sound
             if (newAlarm.severity.value >= newHighestAlarm.severity) {
-              newHighestAlarm.severity = newAlarm.severity.value;
               newHighestAlarm.type = 'unacked';
-            }
-          }
-
-          if (!isAcknowledged(oldAlarm)) {
-            // If they are still critical, play the "still critical" sound
-            if (isCritical(newAlarm) && isCritical(oldAlarm)) {
-              newHighestAlarm.severity = newAlarm.severity.value;
-              newHighestAlarm.type = 'still';
             }
           }
         }
@@ -297,8 +262,11 @@ export default class AlarmAudio extends Component {
     });
 
     if (newHighestAlarm.severity >= this.state.minSeveritySound) {
-      this.stopCriticals();
+      this.stopAllSounds();
       this.playSound(newHighestAlarm.severity, newHighestAlarm.type);
+    } else if (newHighestAlarm.severity < this.state.minSeveritySound) {
+      this.throtCheckAndNotifyAlarms.cancel();
+      this.stopAllSounds();
     }
   };
 
@@ -308,9 +276,6 @@ export default class AlarmAudio extends Component {
   throtCheckAndNotifyAlarms = throttle(this.checkAndNotifyAlarms, ALARM_SOUND_THROTLING_TIME_MS);
 
   playSound = (severity, type) => {
-    if (severity < this.state.minSeveritySound) {
-      return;
-    }
     if (severity === severityEnum.warning) {
       switch (type) {
         case 'new': {
@@ -369,10 +334,34 @@ export default class AlarmAudio extends Component {
     }
   };
 
-  stopCriticals = () => {
-    this.soundsStopped = true;
+  stillCriticalTimeout = () => {
+    return setTimeout(() => {
+      this.stillCriticalSound.play();
+    }, ALARM_SOUND_THROTLING_TIME_MS);
+  };
+
+  clearStillCriticalTimeout = () => {
+    if (this.stillCriticalTimeoutRef) {
+      clearTimeout(this.stillCriticalTimeoutRef);
+      this.stillCriticalTimeoutRef = null;
+    }
+  };
+
+  createStillCriticalTimeout = () => {
+    this.clearStillCriticalTimeout();
+    this.stillCriticalTimeoutRef = this.stillCriticalTimeout();
+  };
+
+  stopAllSounds = () => {
+    this.clearStillCriticalTimeout();
+    this.newWarningSound.stop();
+    this.newSeriousSound.stop();
     this.newCriticalSound.stop();
+    this.increasedWarningSound.stop();
+    this.increasedSeriousSound.stop();
     this.increasedCriticalSound.stop();
+    this.unackedWarningSound.stop();
+    this.unackedSeriousSound.stop();
     this.unackedCriticalSound.stop();
     this.stillCriticalSound.stop();
   };

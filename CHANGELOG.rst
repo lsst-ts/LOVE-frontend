@@ -5,6 +5,7 @@ Version History
 v6.7.2
 ------
 
+* Refactor Watcher AlarmAudio component for a more reliable flow. `<https://github.com/lsst-ts/LOVE-frontend/pull/700>`_
 * Fix WeatherStation plots for temperature and dewpoint. `<https://github.com/lsst-ts/LOVE-frontend/pull/699>`_
 * Bump vega from 5.25.0 to 5.26.0 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/693>`_
 * Bump nanoid from 3.3.6 to 3.3.8 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/694>`_
