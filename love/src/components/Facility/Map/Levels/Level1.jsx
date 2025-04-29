@@ -22,6 +22,7 @@ import lodash, { isArray } from 'lodash';
 import PropTypes from 'prop-types';
 import styles from './Level1.module.css';
 import Device from '../Device.jsx';
+import { operatingModeStateMap } from 'Config';
 import * as d3 from 'd3';
 
 export default class Level1 extends Component {
@@ -318,10 +319,10 @@ export default class Level1 extends Component {
           }}
           parameters={{
             operationalMode: {
-              type: 'single',
+              type: 'text',
               name: 'Mode Operation',
               unit: null,
-              value: chiller01P01.operationalMode ? chiller01P01.operationalMode.value : null,
+              value: chiller01P01.operationalMode ? operatingModeStateMap[chiller01P01.operationalMode.value] : null,
             },
             workingCapacity: {
               type: 'single',
@@ -470,10 +471,10 @@ export default class Level1 extends Component {
           }}
           parameters={{
             operationalMode: {
-              type: 'single',
+              type: 'text',
               name: 'Mode Operation',
               unit: null,
-              value: chiller02P01.operationalMode ? chiller02P01.operationalMode.value : null,
+              value: chiller02P01.operationalMode ? operatingModeStateMap[chiller02P01.operationalMode.value] : null,
             },
             workingCapacity: {
               type: 'single',
@@ -622,10 +623,10 @@ export default class Level1 extends Component {
           }}
           parameters={{
             operationalMode: {
-              type: 'single',
+              type: 'text',
               name: 'Mode Operation',
               unit: null,
-              value: chiller03P01.operationalMode ? chiller03P01.operationalMode.value : null,
+              value: chiller03P01.operationalMode ? operatingModeStateMap[chiller03P01.operationalMode.value] : null,
             },
             workingCapacity: {
               type: 'single',
