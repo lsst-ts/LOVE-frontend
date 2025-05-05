@@ -156,3 +156,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .alarm {
   transition: all 0.25s;
 }
+.badge {
+  fill: var(--second-quaternary-background-dimmed-color);
+}

@@ -377,7 +377,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: '01',
                   state: null,
-                  unit: chiller01P01.waterEvaporatorReturnTemp ? 'ºC Impulse' : null,
+                  unit: chiller01P01.waterEvaporatorReturnTemp ? ' ºC Impulse' : null,
                   value: chiller01P01.waterEvaporatorSupplyTemp ? chiller01P01.waterEvaporatorSupplyTemp.value : null,
                 },
                 waterEvaporatorReturnTemp: {
@@ -385,7 +385,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: '02',
                   state: null,
-                  unit: chiller01P01.waterEvaporatorReturnTemp ? 'ºC Return' : null,
+                  unit: chiller01P01.waterEvaporatorReturnTemp ? ' ºC Return' : null,
                   value: chiller01P01.waterEvaporatorReturnTemp ? chiller01P01.waterEvaporatorReturnTemp.value : null,
                 },
               },

@@ -351,7 +351,7 @@ export default class Device extends Component {
             return (
               <React.Fragment>
                 <rect
-                  className={styles.statusDisabled}
+                  className={styles.badge}
                   width={40}
                   height={10}
                   rx={5}
