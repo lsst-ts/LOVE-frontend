@@ -132,7 +132,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 }
 
 .paramVal {
-  fill: var(--base-font-color);
+  fill: var(--highlighted-font-color);
+  font-weight: bold;
   font-size: 4px;
 }
 .insideContent {
