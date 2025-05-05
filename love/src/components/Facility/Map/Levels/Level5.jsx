@@ -216,31 +216,25 @@ export default class Level5 extends Component {
               unit: null,
               value: null,
               params: {
-                ambientTemperatureState: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Ambient',
-                  state: null,
-                  unit: lowerAHU01P05.ambientTemperatureState ? 'ºC' : null,
-                  value: lowerAHU01P05.ambientTemperatureState ? lowerAHU01P05.ambientTemperatureState.value : null,
-                },
-                antiFreezeTemperatureState: {
+                antiFreezeTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Anti-Freeze',
                   state: null,
-                  unit: lowerAHU01P05.antiFreezeTemperatureState ? 'ºC' : null,
-                  value: lowerAHU01P05.antiFreezeTemperatureState
-                    ? lowerAHU01P05.antiFreezeTemperatureState.value
-                    : null,
+                  unit: lowerAHU01P05.antiFreezeTemperature ? 'ºC' : null,
+                  value: lowerAHU01P05.antiFreezeTemperature ? lowerAHU01P05.antiFreezeTemperature.value : null,
                 },
-                externalTemperatureState: {
+                // TODO: change exteriorAmbienteTemperature -> externalAmbientTemperature after XML v23.2 release.
+                // see DM-50720.
+                exteriorAmbienteTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Exterior',
                   state: null,
-                  unit: lowerAHU01P05.externalTemperatureState ? 'ºC' : null,
-                  value: lowerAHU01P05.externalTemperatureState ? lowerAHU01P05.externalTemperatureState.value : null,
+                  unit: lowerAHU01P05.exteriorAmbienteTemperature ? 'ºC' : null,
+                  value: lowerAHU01P05.exteriorAmbienteTemperature
+                    ? lowerAHU01P05.exteriorAmbienteTemperature.value
+                    : null,
                 },
               },
             },
@@ -362,31 +356,25 @@ export default class Level5 extends Component {
               unit: null,
               value: null,
               params: {
-                ambientTemperatureState: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Ambient',
-                  state: null,
-                  unit: lowerAHU02P05.ambientTemperatureState ? 'ºC' : null,
-                  value: lowerAHU02P05.ambientTemperatureState ? lowerAHU02P05.ambientTemperatureState.value : null,
-                },
-                antiFreezeTemperatureState: {
+                antiFreezeTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Anti-Freeze',
                   state: null,
-                  unit: lowerAHU02P05.antiFreezeTemperatureState ? 'ºC' : null,
-                  value: lowerAHU02P05.antiFreezeTemperatureState
-                    ? lowerAHU02P05.antiFreezeTemperatureState.value
-                    : null,
+                  unit: lowerAHU02P05.antiFreezeTemperature ? 'ºC' : null,
+                  value: lowerAHU02P05.antiFreezeTemperature ? lowerAHU02P05.antiFreezeTemperature.value : null,
                 },
-                externalTemperatureState: {
+                // TODO: change exteriorAmbienteTemperature -> externalAmbientTemperature after XML v23.2 release.
+                // see DM-50720.
+                exteriorAmbienteTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Exterior',
                   state: null,
-                  unit: lowerAHU02P05.externalTemperatureState ? 'ºC' : null,
-                  value: lowerAHU02P05.externalTemperatureState ? lowerAHU02P05.externalTemperatureState.value : null,
+                  unit: lowerAHU02P05.exteriorAmbienteTemperature ? 'ºC' : null,
+                  value: lowerAHU02P05.exteriorAmbienteTemperature
+                    ? lowerAHU02P05.exteriorAmbienteTemperature.value
+                    : null,
                 },
               },
             },
@@ -508,31 +496,25 @@ export default class Level5 extends Component {
               unit: null,
               value: null,
               params: {
-                ambientTemperatureState: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Ambient',
-                  state: null,
-                  unit: lowerAHU03P05.ambientTemperatureState ? 'ºC' : null,
-                  value: lowerAHU03P05.ambientTemperatureState ? lowerAHU03P05.ambientTemperatureState.value : null,
-                },
-                antiFreezeTemperatureState: {
+                antiFreezeTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Anti-Freeze',
                   state: null,
-                  unit: lowerAHU03P05.antiFreezeTemperatureState ? 'ºC' : null,
-                  value: lowerAHU03P05.antiFreezeTemperatureState
-                    ? lowerAHU03P05.antiFreezeTemperatureState.value
-                    : null,
+                  unit: lowerAHU03P05.antiFreezeTemperature ? 'ºC' : null,
+                  value: lowerAHU03P05.antiFreezeTemperature ? lowerAHU03P05.antiFreezeTemperature.value : null,
                 },
-                externalTemperatureState: {
+                // TODO: change exteriorAmbienteTemperature -> externalAmbientTemperature after XML v23.2 release.
+                // see DM-50720.
+                exteriorAmbienteTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Exterior',
                   state: null,
-                  unit: lowerAHU03P05.externalTemperatureState ? 'ºC' : null,
-                  value: lowerAHU03P05.externalTemperatureState ? lowerAHU03P05.externalTemperatureState.value : null,
+                  unit: lowerAHU03P05.exteriorAmbienteTemperature ? 'ºC' : null,
+                  value: lowerAHU03P05.exteriorAmbienteTemperature
+                    ? lowerAHU03P05.exteriorAmbienteTemperature.value
+                    : null,
                 },
               },
             },
@@ -654,31 +636,25 @@ export default class Level5 extends Component {
               unit: null,
               value: null,
               params: {
-                ambientTemperatureState: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Ambient',
-                  state: null,
-                  unit: lowerAHU04P05.ambientTemperatureState ? 'ºC' : null,
-                  value: lowerAHU04P05.ambientTemperatureState ? lowerAHU04P05.ambientTemperatureState.value : null,
-                },
-                antiFreezeTemperatureState: {
+                antiFreezeTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Anti-Freeze',
                   state: null,
-                  unit: lowerAHU04P05.antiFreezeTemperatureState ? 'ºC' : null,
-                  value: lowerAHU04P05.antiFreezeTemperatureState
-                    ? lowerAHU04P05.antiFreezeTemperatureState.value
-                    : null,
+                  unit: lowerAHU04P05.antiFreezeTemperature ? 'ºC' : null,
+                  value: lowerAHU04P05.antiFreezeTemperature ? lowerAHU04P05.antiFreezeTemperature.value : null,
                 },
-                externalTemperatureState: {
+                // TODO: change exteriorAmbienteTemperature -> externalAmbientTemperature after XML v23.2 release.
+                // see DM-50720.
+                exteriorAmbienteTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Exterior',
                   state: null,
-                  unit: lowerAHU04P05.externalTemperatureState ? 'ºC' : null,
-                  value: lowerAHU04P05.externalTemperatureState ? lowerAHU04P05.externalTemperatureState.value : null,
+                  unit: lowerAHU04P05.exteriorAmbienteTemperature ? 'ºC' : null,
+                  value: lowerAHU04P05.exteriorAmbienteTemperature
+                    ? lowerAHU04P05.exteriorAmbienteTemperature.value
+                    : null,
                 },
               },
             },
