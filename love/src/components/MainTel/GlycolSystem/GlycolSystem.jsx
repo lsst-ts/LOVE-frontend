@@ -512,9 +512,7 @@ function HVACStatus({ data = {}, summaryState = 0 }) {
   );
 
   const LTChillerTotalHeat = chiller1Heat + chiller2Heat;
-  const LTChillerErrorHeat = 5;
   const GPChillerTotalHeat = chiller3Heat;
-  const GPChillerErrorHeat = 5;
 
   const highLightBiggerClassName = [styles.highlight, styles.bigger].join(' ');
   return (
@@ -529,20 +527,12 @@ function HVACStatus({ data = {}, summaryState = 0 }) {
         <div className={highLightBiggerClassName}>
           {!isNaN(LTChillerTotalHeat) ? `${defaultNumberFormatter(LTChillerTotalHeat, 2)} kW` : '-'}
         </div>
-        <div>Error</div>
-        <div title="Total LT Chillers Capacity / Total LT Chillers Heat Exchange" className={highLightBiggerClassName}>
-          {!isNaN(LTChillerErrorHeat) ? `${defaultNumberFormatter(LTChillerErrorHeat, 2)} %` : '-'}
-        </div>
       </div>
       <div className={styles.chillerInfo}>
         <div className={styles.highlight}>GP Chiller</div>
         <div>Total</div>
         <div className={highLightBiggerClassName}>
           {!isNaN(GPChillerTotalHeat) ? `${defaultNumberFormatter(GPChillerTotalHeat, 2)} kW` : '-'}
-        </div>
-        <div>Error</div>
-        <div title="Total GP Chillers Capacity / Total GP Chillers Heat Exchange" className={highLightBiggerClassName}>
-          {!isNaN(GPChillerErrorHeat) ? `${defaultNumberFormatter(GPChillerErrorHeat, 2)} %` : '-'}
         </div>
       </div>
     </div>
