@@ -658,12 +658,12 @@ function GlycolTable({ data = {}, device }) {
     {
       field: 'pressureIn',
       title: 'Pressure In [Pa]',
-      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value) : '-'),
+      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value, 0) : '-'),
     },
     {
       field: 'pressureOut',
       title: 'Pressure Out [Pa]',
-      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value) : '-'),
+      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value, 0) : '-'),
     },
     {
       field: 'temperatureIn',
