@@ -27,12 +27,9 @@ export default class Device extends Component {
   constructor(props) {
     super(props);
     this.id = lodash.uniqueId('Mask-');
-    this.id2 = lodash.uniqueId('');
     this.state = {
-      hidden: 1,
+      hidden: true,
     };
-
-    this.show = this.show.bind(this);
   }
 
   static propTypes = {
@@ -85,8 +82,10 @@ export default class Device extends Component {
     },
   };
 
-  show() {
-    this.state.hidden ? (this.state.hidden = 0) : (this.state.hidden = 1);
+  toggle() {
+    this.setState((prevSate) => ({
+      hidden: !prevSate.hidden,
+    }));
   }
 
   renderStates(ctx) {
@@ -178,7 +177,7 @@ export default class Device extends Component {
         id={this.id}
         transform={'translate(' + (this.props.width - 14) + ' 4)'}
         pointerEvents="all"
-        onMouseUp={(e) => this.show()}
+        onClick={(e) => this.toggle()}
       >
         <rect className={styles.arrowBg} width={10} height={10} />
         <polyline
@@ -351,7 +350,7 @@ export default class Device extends Component {
             return (
               <React.Fragment>
                 <rect
-                  className={styles.statusDisabled}
+                  className={styles.badge}
                   width={40}
                   height={10}
                   rx={5}

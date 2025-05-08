@@ -3524,6 +3524,27 @@ export const glycolLoopDeceleratingStateMap = {
   false: false,
 };
 
+// HVAC
+export const operatingModeStateMap = {
+  0: 'AUTO',
+  1: 'RECOVERY',
+  2: 'CHILLER_RECOVERY',
+  3: 'CHILLER',
+  4: 'HEATPUMP',
+  5: 'UNUSED_1',
+  6: 'UNUSED_2',
+  7: 'UNUSED_3',
+  8: 'CHILLER_FREE_COOLING',
+  9: 'UNUSED_4',
+  10: 'SUMMER_AUTO',
+  11: 'SUMMER_RECOVERY',
+  12: 'SUMMER_CHILLER_RECOVERY',
+  13: 'SUMMER_CHILLER',
+  14: 'WINTER_HEATPUMP',
+  15: 'WINTER_RECOVERY',
+  16: 'WINTER_AUTO',
+};
+
 /*****************************************************************************/
 /**************************MTM3 actuator and forces***************************/
 /*****************************************************************************/

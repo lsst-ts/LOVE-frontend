@@ -262,3 +262,15 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .cls17 {
   font-size: 4px;
 }
+.zoomOut {
+  cursor: pointer;
+}
+
+.zoomOutButton {
+  fill: var(--default-background-color);
+}
+
+.zoomOutText {
+  fill: var(--default-font-color);
+  font-size: 0.6em;
+}
