@@ -403,27 +403,6 @@ const devicesLevelMapping = {
   'Cable Wrap': 5,
 };
 
-const devicesCoordinatesMapping = {
-  'Chiller 1': { x: 810, y: 50 },
-  'Chiller 2': { x: 810, y: 110 },
-  'Chiller 3': { x: 810, y: 190 },
-  OSS: { x: 600, y: 190 },
-  SLAC: { x: 600, y: 120 },
-  'CRAC 1': { x: 635, y: 20 },
-  'CRAC 2': { x: 635, y: 80 },
-  'AHU CR': { x: 300, y: 80 },
-  'AHU WR': { x: 360, y: 50 },
-  'DOME AHU 1': { x: 20, y: 80 },
-  'DOME AHU 2': { x: 200, y: 60 },
-  'DOME AHU 3': { x: 25, y: 220 },
-  'DOME AHU 4': { x: 230, y: 220 },
-  'Dynalene 1': { x: 130, y: 160 },
-  'Dynalene 2': { x: 130, y: 160 },
-  TMA: { x: 130, y: 160 },
-  'LOC 10': { x: 130, y: 160 },
-  'Cable Wrap': { x: 130, y: 160 },
-};
-
 const devicesHeatThresholds = {
   'Chiller 1': 183,
   'Chiller 2': 183,
