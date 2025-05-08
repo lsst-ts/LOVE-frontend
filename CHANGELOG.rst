@@ -5,6 +5,7 @@ Version History
 v6.7.3
 ------
 
+* Fix state enumeration mapping for the MTDome_logevent_azEnabled topic. `<https://github.com/lsst-ts/LOVE-frontend/pull/708>`_
 * Fix MTDome shutter display. `<https://github.com/lsst-ts/LOVE-frontend/pull/706>`_
 * Improve AlarmAudio sound handling even more. `<https://github.com/lsst-ts/LOVE-frontend/pull/705>`_
 

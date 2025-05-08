@@ -3362,9 +3362,9 @@ export const mtDomeModeStateMap = {
 };
 
 export const mtDomeAzimuthEnabledStateMap = {
-  0: 'DISABLED',
-  1: 'ENABLED',
-  2: 'FAULT',
+  1: 'DISABLED',
+  2: 'ENABLED',
+  3: 'FAULT',
 };
 
 export const mtdomeMotionStateMap = {
