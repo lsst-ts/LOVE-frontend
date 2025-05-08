@@ -317,6 +317,13 @@ const telemetriesMapping = {
     pressIn: 'glycolAHUWRpressureIn',
     pressOut: 'glycolAHUWRpressureOut',
   },
+  'LOC 10': {
+    flow: 'glycolLOC10flow',
+    tempIn: 'glycolLOC10temperatureIn',
+    tempOut: 'glycolLOC10temperatureOut',
+    pressIn: 'glycolLOC10pressureIn',
+    pressOut: 'glycolLOC10pressureOut',
+  },
   'DOME AHU 1': {
     flow: 'glycolDOMEAHU01flow',
     tempIn: 'glycolDOMEAHU01temperatureIn',
@@ -345,6 +352,13 @@ const telemetriesMapping = {
     pressIn: 'glycolDOMEAHU04pressureIn',
     pressOut: 'glycolDOMEAHU04pressureOut',
   },
+  'Cable Wrap': {
+    flow: 'glycolCableWrapflow',
+    tempIn: 'glycolCableWraptemperatureIn',
+    tempOut: 'glycolCableWraptemperatureOut',
+    pressIn: 'glycolCableWrappressureIn',
+    pressOut: 'glycolCableWrappressureOut',
+  },
   'Dynalene 1': {
     flow: 'glycolDynalene01flow',
     tempIn: 'glycolDynalene01temperatureIn',
@@ -366,20 +380,27 @@ const telemetriesMapping = {
     pressIn: 'glycolTMApressureIn',
     pressOut: 'glycolTMApressureOut',
   },
-  'LOC 10': {
-    flow: 'glycolLOC10flow',
-    tempIn: 'glycolLOC10temperatureIn',
-    tempOut: 'glycolLOC10temperatureOut',
-    pressIn: 'glycolLOC10pressureIn',
-    pressOut: 'glycolLOC10pressureOut',
-  },
-  'Cable Wrap': {
-    flow: 'glycolCableWrapflow',
-    tempIn: 'glycolCableWraptemperatureIn',
-    tempOut: 'glycolCableWraptemperatureOut',
-    pressIn: 'glycolCableWrappressureIn',
-    pressOut: 'glycolCableWrappressureOut',
-  },
+};
+
+const devicesPipesMapping = {
+  'Chiller 1': 1,
+  'Chiller 2': 2,
+  'Chiller 3': 3,
+  OSS: 4,
+  MRCR: 5,
+  'L2 CRACS': 6,
+  'L2 Fan Coils': 7,
+  'AHU CR': 8,
+  'AHU WR': 9,
+  'LOC 10': 10,
+  'DOME AHU 1': 11,
+  'DOME AHU 2': 12,
+  'DOME AHU 3': 13,
+  'DOME AHU 4': 14,
+  'Cable Wrap': 15,
+  'Dynalene 1': 16,
+  'Dynalene 2': 17,
+  TMA: 18,
 };
 
 const devicesLevelMapping = {
@@ -392,15 +413,15 @@ const devicesLevelMapping = {
   'L2 Fan Coils': 2,
   'AHU CR': 4,
   'AHU WR': 4,
+  'LOC 10': 5,
   'DOME AHU 1': 5,
   'DOME AHU 2': 5,
   'DOME AHU 3': 5,
   'DOME AHU 4': 5,
+  'Cable Wrap': 5,
   'Dynalene 1': 5,
   'Dynalene 2': 5,
   TMA: 5,
-  'LOC 10': 5,
-  'Cable Wrap': 5,
 };
 
 const devicesHeatThresholds = {
@@ -413,15 +434,15 @@ const devicesHeatThresholds = {
   'L2 Fan Coils': 1000,
   'AHU CR': 1000,
   'AHU WR': 1000,
+  'LOC 10': 1000,
   'DOME AHU 1': 1000,
   'DOME AHU 2': 1000,
   'DOME AHU 3': 1000,
   'DOME AHU 4': 1000,
+  'Cable Wrap': 1000,
   'Dynalene 1': 1000,
   'Dynalene 2': 1000,
   TMA: 1000,
-  'LOC 10': 1000,
-  'Cable Wrap': 1000,
 };
 
 const devicesQuerySelectorMapping = {
@@ -434,15 +455,15 @@ const devicesQuerySelectorMapping = {
   'L2 Fan Coils': '#Building #open-office-space',
   'AHU CR': '#Building > #camera-maintenance-room',
   'AHU WR': '#Building > #camera-maintenance-room',
+  'LOC 10': '#Dome > #underneath-tma',
   'DOME AHU 1': '#Dome > #ahu-zone',
   'DOME AHU 2': '#Dome > #ahu-zone',
   'DOME AHU 3': '#Dome > #ahu-zone',
   'DOME AHU 4': '#Dome > #ahu-zone',
+  'Cable Wrap': '#Dome > #underneath-tma',
   'Dynalene 1': '#Dome > #underneath-tma',
   'Dynalene 2': '#Dome > #underneath-tma',
   TMA: '#Dome > #underneath-tma',
-  'LOC 10': '#Dome > #underneath-tma',
-  'Cable Wrap': '#Dome > #underneath-tma',
 };
 
 const deviceHeatSurpassThreshold = (device, heat) => {
@@ -631,6 +652,10 @@ GlycolMap.propTypes = {
 function GlycolTable({ data = {}, device }) {
   const headers = [
     {
+      field: 'number',
+      title: '#',
+    },
+    {
       field: 'device',
       title: 'Device',
     },
@@ -673,6 +698,7 @@ function GlycolTable({ data = {}, device }) {
   ];
 
   const devicesData = Object.keys(telemetriesMapping).map((device) => ({
+    number: devicesPipesMapping[device],
     device,
     pressureIn: data[telemetriesMapping[device]?.pressIn],
     pressureOut: data[telemetriesMapping[device]?.pressOut],
