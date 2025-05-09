@@ -95,6 +95,9 @@ export default class AlarmAudio extends Component {
       onloaderror: () => {
         console.error('Error loading sound for critical alarm: ', newCriticalFile);
       },
+      onend: () => {
+        this.createStillCriticalTimeout();
+      },
     });
 
     this.increasedWarningSound = new Howl({
@@ -124,6 +127,9 @@ export default class AlarmAudio extends Component {
       },
       onloaderror: () => {
         console.error('Error loading sound for critical alarm: ', increasedCriticalFile);
+      },
+      onend: () => {
+        this.createStillCriticalTimeout();
       },
     });
 
@@ -155,6 +161,9 @@ export default class AlarmAudio extends Component {
       onloaderror: () => {
         console.error('Error loading sound for critical alarm: ', unackedCriticalFile);
       },
+      onend: () => {
+        this.createStillCriticalTimeout();
+      },
     });
 
     this.stillCriticalSound = new Howl({
@@ -164,6 +173,9 @@ export default class AlarmAudio extends Component {
       },
       onloaderror: () => {
         console.error('Error loading sound for critical alarm: ', stillCriticalFile);
+      },
+      onend: () => {
+        this.createStillCriticalTimeout();
       },
     });
   }
@@ -326,7 +338,26 @@ export default class AlarmAudio extends Component {
     }
   };
 
+  stillCriticalTimeout = () => {
+    return setTimeout(() => {
+      this.stillCriticalSound.play();
+    }, ALARM_SOUND_THROTLING_TIME_MS);
+  };
+
+  clearStillCriticalTimeout = () => {
+    if (this.stillCriticalTimeoutRef) {
+      clearTimeout(this.stillCriticalTimeoutRef);
+      this.stillCriticalTimeoutRef = null;
+    }
+  };
+
+  createStillCriticalTimeout = () => {
+    this.clearStillCriticalTimeout();
+    this.stillCriticalTimeoutRef = this.stillCriticalTimeout();
+  };
+
   stopAllSounds = () => {
+    this.clearStillCriticalTimeout();
     this.newWarningSound.stop();
     this.newSeriousSound.stop();
     this.newCriticalSound.stop();
