@@ -62,7 +62,7 @@
 }
 
 .devicesBoxes > * {
-  flex: 1 0 100px;
+  flex: 1 0 120px;
   background-color: var(--boxesBackgroundColor);
   border-radius: 0.2em;
   padding: var(--small-padding);
