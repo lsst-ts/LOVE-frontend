@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { uniqueId } from 'lodash';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import { COLORS } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.jsx';
+import TrendValue from 'components/GeneralPurpose/TrendValue/TrendValue';
 import EyeIcon from 'components/icons/EyeIcon/EyeIcon';
 import Map from 'components/MainTel/GlycolSystem/Map/Map';
 import { summaryStateMap, summaryStateToStyle } from 'Config';
@@ -490,6 +491,12 @@ const calculateHeatExchange = (flowRate, tempIn, tempOut) => {
 };
 
 function HVACStatus({ data = {}, summaryState = 0 }) {
+  const prevData = useRef();
+
+  useEffect(() => {
+    prevData.current = data;
+  }, [data]);
+
   const stateName = summaryStateMap[summaryState];
   const stateStyle = summaryStateToStyle[stateName];
 
@@ -498,21 +505,47 @@ function HVACStatus({ data = {}, summaryState = 0 }) {
     data[telemetriesMapping['Chiller 1']?.tempIn],
     data[telemetriesMapping['Chiller 1']?.tempOut],
   );
+  const prevChiller1Heat = prevData.current
+    ? calculateHeatExchange(
+        prevData.current[telemetriesMapping['Chiller 1']?.flow],
+        prevData.current[telemetriesMapping['Chiller 1']?.tempIn],
+        prevData.current[telemetriesMapping['Chiller 1']?.tempOut],
+      )
+    : 0;
 
   const chiller2Heat = calculateHeatExchange(
     data[telemetriesMapping['Chiller 2']?.flow],
     data[telemetriesMapping['Chiller 2']?.tempIn],
     data[telemetriesMapping['Chiller 2']?.tempOut],
   );
+  const prevChiller2Heat = prevData.current
+    ? calculateHeatExchange(
+        prevData.current[telemetriesMapping['Chiller 2']?.flow],
+        prevData.current[telemetriesMapping['Chiller 2']?.tempIn],
+        prevData.current[telemetriesMapping['Chiller 2']?.tempOut],
+      )
+    : 0;
 
   const chiller3Heat = calculateHeatExchange(
     data[telemetriesMapping['Chiller 3']?.flow],
     data[telemetriesMapping['Chiller 3']?.tempIn],
     data[telemetriesMapping['Chiller 3']?.tempOut],
   );
+  const prevChiller3Heat = prevData.current
+    ? calculateHeatExchange(
+        prevData.current[telemetriesMapping['Chiller 3']?.flow],
+        prevData.current[telemetriesMapping['Chiller 3']?.tempIn],
+        prevData.current[telemetriesMapping['Chiller 3']?.tempOut],
+      )
+    : 0;
 
   const LTChillerTotalHeat = chiller1Heat + chiller2Heat;
+  const prevLTChillerTotalHeat = prevChiller1Heat + prevChiller2Heat;
   const GPChillerTotalHeat = chiller3Heat;
+  const prevGPChillerTotalHeat = prevChiller3Heat;
+
+  const heatChangeLTChiller = LTChillerTotalHeat - prevLTChillerTotalHeat;
+  const heatChangeGPChiller = GPChillerTotalHeat - prevGPChillerTotalHeat;
 
   const highLightBiggerClassName = [styles.highlight, styles.bigger].join(' ');
   return (
@@ -525,14 +558,28 @@ function HVACStatus({ data = {}, summaryState = 0 }) {
         <div className={styles.highlight}>LT Chiller</div>
         <div>Total</div>
         <div className={highLightBiggerClassName}>
-          {!isNaN(LTChillerTotalHeat) ? `${defaultNumberFormatter(LTChillerTotalHeat, 2)} kW` : '-'}
+          {!isNaN(LTChillerTotalHeat) ? (
+            <TrendValue change={heatChangeLTChiller}>{`${defaultNumberFormatter(
+              LTChillerTotalHeat,
+              2,
+            )} kW`}</TrendValue>
+          ) : (
+            '-'
+          )}
         </div>
       </div>
       <div className={styles.chillerInfo}>
         <div className={styles.highlight}>GP Chiller</div>
         <div>Total</div>
         <div className={highLightBiggerClassName}>
-          {!isNaN(GPChillerTotalHeat) ? `${defaultNumberFormatter(GPChillerTotalHeat, 2)} kW` : '-'}
+          {!isNaN(GPChillerTotalHeat) ? (
+            <TrendValue change={heatChangeGPChiller}>{`${defaultNumberFormatter(
+              GPChillerTotalHeat,
+              2,
+            )} kW`}</TrendValue>
+          ) : (
+            '-'
+          )}
         </div>
       </div>
     </div>
@@ -547,6 +594,12 @@ HVACStatus.propTypes = {
 };
 
 function GlycolSummary({ data = {}, selectedDevice, selectDevice }) {
+  const prevData = useRef();
+
+  useEffect(() => {
+    prevData.current = data;
+  }, [data]);
+
   const devicesHeats = Object.keys(telemetriesMapping).map((device) => ({
     device,
     heat: calculateHeatExchange(
@@ -554,13 +607,23 @@ function GlycolSummary({ data = {}, selectedDevice, selectDevice }) {
       data[telemetriesMapping[device]?.tempIn],
       data[telemetriesMapping[device]?.tempOut],
     ),
+    prevHeat: prevData.current
+      ? calculateHeatExchange(
+          prevData.current[telemetriesMapping[device]?.flow],
+          prevData.current[telemetriesMapping[device]?.tempIn],
+          prevData.current[telemetriesMapping[device]?.tempOut],
+        )
+      : 0,
   }));
 
   return (
     <div className={styles.summaryContainer}>
       <div className={styles.devicesBoxes}>
-        {devicesHeats.map(({ device, heat }) => {
+        {devicesHeats.map(({ device, heat, prevHeat }) => {
           const overThreshold = deviceHeatSurpassThreshold(device, heat);
+          const roundedHeat = Math.round(heat * 100) / 100;
+          const roundedPrevHeat = Math.round(prevHeat * 100) / 100;
+          const heatChange = roundedHeat - roundedPrevHeat;
           return (
             <div
               key={device}
@@ -568,7 +631,11 @@ function GlycolSummary({ data = {}, selectedDevice, selectDevice }) {
             >
               <div className={styles.highlight}>{device}</div>
               <div className={[styles.highlight, styles.bigger].join(' ')}>
-                {!isNaN(heat) ? `${defaultNumberFormatter(heat, 2)} kW` : '-'}
+                {!isNaN(heat) ? (
+                  <TrendValue change={heatChange}>{`${defaultNumberFormatter(heat, 2)} kW`}</TrendValue>
+                ) : (
+                  '-'
+                )}
               </div>
               <div title="Show device location" onClick={() => selectDevice(device)}>
                 <EyeIcon className={styles.selectDeviceButton} active={selectedDevice === device} />
