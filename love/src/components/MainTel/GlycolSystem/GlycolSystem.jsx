@@ -728,28 +728,28 @@ function GlycolTable({ data = {}, device }) {
     },
     {
       field: 'pressureIn',
-      title: 'Pressure In [Pa]',
-      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value, 0) : '-'),
+      title: 'Pressure In [Bar]',
+      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value / 100000, 2) : '-'),
     },
     {
       field: 'pressureOut',
-      title: 'Pressure Out [Pa]',
-      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value, 0) : '-'),
+      title: 'Pressure Out [Bar]',
+      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value / 100000, 2) : '-'),
     },
     {
       field: 'temperatureIn',
       title: 'Temperature In [°C]',
-      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value) : '-'),
+      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value, 2) : '-'),
     },
     {
       field: 'temperatureOut',
       title: 'Temperature Out [°C]',
-      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value) : '-'),
+      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value, 2) : '-'),
     },
     {
       field: 'flowRate',
       title: 'Flow Rate [L/min]',
-      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value) : '-'),
+      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value, 2) : '-'),
     },
     {
       field: 'heatExchange',
