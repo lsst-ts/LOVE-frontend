@@ -1,0 +1,13 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.increased {
+  color: green;
+}
+
+.decreased {
+  color: red;
+}
