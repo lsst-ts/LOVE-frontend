@@ -91,14 +91,16 @@ export default class MTDomeShutter extends Component {
     // The display considers left and right shutters as seen from above the dome.
     const leftShutterPositionActual = Math.abs(positionActualShutter[1]);
     const rightShutterPositionActual = Math.abs(positionActualShutter[0]);
-    const leftShutterPositionActualPixels = Math.floor(leftShutterPositionActual * widthShutterInPixels);
-    const rightShutterPositionActualPixels = Math.floor(rightShutterPositionActual * widthShutterInPixels);
+    const leftShutterPositionActualPixels = Math.floor((leftShutterPositionActual * widthShutterInPixels) / 100);
+    const rightShutterPositionActualPixels = Math.floor((rightShutterPositionActual * widthShutterInPixels) / 100);
 
     // The display considers left and right shutters as seen from above the dome.
     const leftShutterPositionCommanded = Math.abs(positionCommandedShutter[1]);
     const rightShutterPositionCommanded = Math.abs(positionCommandedShutter[0]);
-    const leftShutterPositionCommandedPixels = Math.floor(leftShutterPositionCommanded * widthShutterInPixels);
-    const rightShutterPositionCommandedPixels = Math.floor(rightShutterPositionCommanded * widthShutterInPixels);
+    const leftShutterPositionCommandedPixels = Math.floor((leftShutterPositionCommanded * widthShutterInPixels) / 100);
+    const rightShutterPositionCommandedPixels = Math.floor(
+      (rightShutterPositionCommanded * widthShutterInPixels) / 100,
+    );
 
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 235 235">
