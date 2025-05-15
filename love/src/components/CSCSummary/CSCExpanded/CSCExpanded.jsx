@@ -169,11 +169,21 @@ export default class CSCExpanded extends PureComponent {
   };
 
   static validState = {
+    enterControl: 'OFFLINE',
     start: 'STANDBY',
     enable: 'DISABLED',
     disable: 'ENABLED',
     standby: 'DISABLED or FAULT',
+    exitControl: 'STANDBY',
   };
+
+  setListOfStateTransitionCommands(name) {
+    let commands = ['start', 'enable', 'disable', 'standby', 'exitControl'];
+    if (name.search(/[A-Z]{2}Camera/) != -1) {
+      commands.unshift('enterControl');
+    }
+    return commands;
+  }
 
   setSummaryStateCommand(option) {
     const { configurationOverride } = this.state;
@@ -362,7 +372,7 @@ export default class CSCExpanded extends PureComponent {
                 <div className={styles.breadcrumContainer}>
                   <div className={styles.titlePadding}>Select State transition Command:</div>
                   <Select
-                    options={['start', 'enable', 'disable', 'standby']}
+                    options={this.setListOfStateTransitionCommands(name)}
                     onChange={(option) => this.setSummaryStateCommand(option.value)}
                     value=""
                     placeholder="Select state"
