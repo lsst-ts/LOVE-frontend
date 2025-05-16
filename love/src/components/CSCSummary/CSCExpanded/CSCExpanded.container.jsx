@@ -76,6 +76,7 @@ const CSCExpandedContainer = ({
   clearCSCLogMessages,
   requestSALCommand,
   summaryStateData,
+  offlineDetailedStateData,
   softwareVersions,
   cscLogLevelData,
   configurationsAvailable,
@@ -99,6 +100,7 @@ const CSCExpandedContainer = ({
       requestSALCommand={requestSALCommand}
       errorCodeData={errorCodeData}
       summaryStateData={summaryStateData}
+      offlineDetailedStateData={offlineDetailedStateData}
       softwareVersions={softwareVersions}
       cscLogLevelData={cscLogLevelData}
       configurationsAvailable={configurationsAvailable}
@@ -127,6 +129,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(addGroup(`event-${cscName}-${index}-configurationsAvailable`));
       dispatch(addGroup(`event-${cscName}-${index}-configurationApplied`));
       dispatch(addGroup(`event-${cscName}-${index}-simulationMode`));
+      dispatch(addGroup(`event-${cscName}-${index}-offlineDetailedState`));
     },
     unsubscribeToStreams: (cscName, index) => {
       dispatch(removeGroup('event-Heartbeat-0-stream'));
@@ -138,6 +141,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(removeGroup(`event-${cscName}-${index}-configurationsAvailable`));
       dispatch(removeGroup(`event-${cscName}-${index}-configurationApplied`));
       dispatch(removeGroup(`event-${cscName}-${index}-simulationMode`));
+      dispatch(removeGroup(`event-${cscName}-${index}-offlineDetailedState`));
     },
     clearCSCLogMessages: (csc, salindex) => {
       dispatch(removeCSCLogMessages(csc, salindex));
@@ -169,6 +173,10 @@ const mapStateToProps = (state, ownProps) => {
   const configurationApplied = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-configurationApplied`);
   const cscLogLevelData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-logLevel`);
   const simulationMode = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-simulationMode`);
+  const offlineDetailedStateData = getStreamData(
+    state,
+    `event-${ownProps.name}-${ownProps.salindex}-offlineDetailedState`,
+  );
 
   return {
     heartbeatData,
@@ -180,6 +188,7 @@ const mapStateToProps = (state, ownProps) => {
     configurationApplied: configurationApplied?.[0],
     cscLogLevelData: cscLogLevelData?.[0],
     simulationMode: simulationMode?.[0],
+    offlineDetailedStateData: offlineDetailedStateData?.[0],
   };
 };
 
