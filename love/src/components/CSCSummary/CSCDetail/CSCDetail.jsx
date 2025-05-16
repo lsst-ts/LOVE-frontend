@@ -109,6 +109,27 @@ export default class CSCDetail extends Component {
     },
   };
 
+  static bigCameraOfflineDetailedStates = {
+    0: {
+      name: 'UNKNOWN',
+      userReadable: 'Unknown',
+      char: 'U',
+      class: styles.unknown,
+    },
+    1: {
+      name: 'OFFLINE_AVAILABLE',
+      userReadable: 'Available',
+      char: 'A',
+      class: styles.ok_nobg,
+    },
+    2: {
+      name: 'OFFLINE_PUBLISH_ONLY',
+      userReadable: 'Publish Only',
+      char: 'P',
+      class: styles.warning_nobg,
+    },
+  };
+
   componentDidMount = () => {
     const { name, salindex, subscribeToStreams } = this.props;
     subscribeToStreams(name, salindex);
@@ -132,6 +153,7 @@ export default class CSCDetail extends Component {
       withWarning,
       serverTime,
       simulationMode,
+      offlineDetailedStateData,
     } = this.props;
     let heartbeatStatus = 'unknown';
     let nLost = 0;
@@ -174,6 +196,11 @@ export default class CSCDetail extends Component {
       stateClass = styles.unknown;
     }
 
+    const isBigCamera = name.search(/[A-Z]{2}Camera/) != -1;
+    const offlineDetailedStateValue = offlineDetailedStateData ? offlineDetailedStateData.substate.value : 0;
+    const isOffline = summaryState.name === 'OFFLINE';
+    const bigCameraOfflineDetailedState = CSCDetail.bigCameraOfflineDetailedStates[offlineDetailedStateValue];
+
     const heartbeatIsOk = heartbeatStatus === 'ok';
     const isSimulated = simulationMode?.mode.value > 0;
     return (
@@ -186,8 +213,21 @@ export default class CSCDetail extends Component {
         ].join(' ')}
       >
         <div className={[styles.summaryStateSection, summaryState.class].join(' ')}>
-          <span className={styles.summaryState} title={summaryState.userReadable}>
+          <span
+            className={styles.summaryState}
+            title={[
+              summaryState.userReadable,
+              isBigCamera && isOffline ? `(${bigCameraOfflineDetailedState.userReadable})` : '',
+            ].join(' ')}
+          >
             {summaryState.char}
+            {isBigCamera && isOffline ? (
+              <sup className={[styles.superscript, bigCameraOfflineDetailedState.class].join(' ')}>
+                {bigCameraOfflineDetailedState.char}
+              </sup>
+            ) : (
+              ''
+            )}
           </span>
         </div>
         <div className={[styles.heartbeatSection, stateClass].join(' ')}>

@@ -152,6 +152,27 @@ export default class CSCExpanded extends PureComponent {
     },
   };
 
+  static bigCameraOfflineDetailedStates = {
+    0: {
+      name: 'UNKNOWN',
+      userReadable: 'Unknown',
+      char: 'U',
+      class: styles.unknown,
+    },
+    1: {
+      name: 'AVAILABLE',
+      userReadable: 'Offline Available',
+      char: 'A',
+      class: styles.ok,
+    },
+    2: {
+      name: 'PUBLISH_ONLY',
+      userReadable: 'Offline Publish Only',
+      char: 'P',
+      class: styles.warning,
+    },
+  };
+
   static validLogLevel = {
     DEBUG: 10,
     INFO: 20,
@@ -235,6 +256,7 @@ export default class CSCExpanded extends PureComponent {
       name,
       salindex,
       summaryStateData,
+      offlineDetailedStateData,
       softwareVersions,
       configurationsAvailable: configurationsAvailableData,
       configurationApplied: configurationAppliedData,
@@ -297,7 +319,13 @@ export default class CSCExpanded extends PureComponent {
       heartbeatTitle += `Last seen: ${timeDiffText}`;
     }
 
+    const isBigCamera = name.search(/[A-Z]{2}Camera/) != -1;
+    const offlineDetailedStateValue = offlineDetailedStateData ? offlineDetailedStateData.substate.value : 0;
+    const isOffline = summaryState.name === 'OFFLINE';
+    const bigCameraOfflineDetailedState = CSCExpanded.bigCameraOfflineDetailedStates[offlineDetailedStateValue];
+
     const isSimulated = simulationMode?.mode.value > 0;
+
     return (
       <div className={styles.CSCGroupContainer}>
         <div className={styles.CSCExpandedContainer}>
@@ -332,6 +360,16 @@ export default class CSCExpanded extends PureComponent {
                       {summaryState.name}
                     </span>
                   </div>
+                  {isBigCamera && isOffline && (
+                    <div>
+                      <span
+                        className={[styles.summaryState, bigCameraOfflineDetailedState.class].join(' ')}
+                        title={bigCameraOfflineDetailedState.userReadable}
+                      >
+                        {bigCameraOfflineDetailedState.name}
+                      </span>
+                    </div>
+                  )}
                   <div className={styles.heartbeatIconWrapper}>
                     <HeartbeatIcon className={styles.heartbeatIcon} status={heartbeatStatus} title={heartbeatTitle} />
                   </div>
