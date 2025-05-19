@@ -120,13 +120,13 @@ export default class CSCDetail extends Component {
       name: 'OFFLINE_AVAILABLE',
       userReadable: 'Available',
       char: 'A',
-      class: styles.ok_nobg,
+      class: styles.okNoBackground,
     },
     2: {
       name: 'OFFLINE_PUBLISH_ONLY',
       userReadable: 'Publish Only',
       char: 'P',
-      class: styles.warning_nobg,
+      class: styles.warningNoBackground,
     },
   };
 

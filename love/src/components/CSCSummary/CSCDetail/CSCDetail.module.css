@@ -123,7 +123,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   background: var(--status-ok-dimmed-color-2); */
 }
 
-.ok_nobg {
+.okNoBackground {
   color: var(--status-ok-color);
 }
 
@@ -134,7 +134,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   background: var(--status-warning-dimmed-color-2);
 }
 
-.warning_nobg {
+.warningNoBackground {
   color: var(--status-warning-color);
 }
 
