@@ -93,6 +93,7 @@ const CSCDetailContainer = ({
   embedded,
   withWarning,
   simulationMode,
+  offlineDetailedStateData,
   isRaw,
   subscriptions,
 }) => {
@@ -114,6 +115,7 @@ const CSCDetailContainer = ({
       withWarning={withWarning}
       serverTime={serverTime}
       simulationMode={simulationMode}
+      offlineDetailedStateData={offlineDetailedStateData}
     />
   );
 };
@@ -125,6 +127,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     `event-${ownProps.name}-${ownProps.salindex}-errorCode`,
     `event-${ownProps.name}-${ownProps.salindex}-simulationMode`,
     `event-Heartbeat-0-stream`,
+    `event-${ownProps.name}-${ownProps.salindex}-offlineDetailedState`,
   ];
   return {
     subscriptions,
@@ -143,6 +146,10 @@ const mapStateToProps = (state, ownProps) => {
   const heartbeatData = getCSCHeartbeat(state, ownProps.name, ownProps.salindex);
   const summaryStateData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-summaryState`)?.[0];
   const simulationMode = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-simulationMode`)?.[0];
+  const offlineDetailedStateData = getStreamData(
+    state,
+    `event-${ownProps.name}-${ownProps.salindex}-offlineDetailedState`,
+  )?.[0];
 
   return {
     summaryStateData,
@@ -150,6 +157,7 @@ const mapStateToProps = (state, ownProps) => {
     heartbeatData,
     withWarning,
     serverTime,
+    offlineDetailedStateData,
   };
 };
 
