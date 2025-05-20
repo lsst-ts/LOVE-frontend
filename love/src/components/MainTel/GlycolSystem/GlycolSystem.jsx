@@ -728,22 +728,22 @@ function GlycolTable({ data = {}, device }) {
     },
     {
       field: 'pressureIn',
-      title: 'Pressure In [Bar]',
+      title: 'Pressure Supply [Bar]',
       render: (value) => (!isNaN(value) ? defaultNumberFormatter(value / 100000, 2) : '-'),
     },
     {
       field: 'pressureOut',
-      title: 'Pressure Out [Bar]',
+      title: 'Pressure Return [Bar]',
       render: (value) => (!isNaN(value) ? defaultNumberFormatter(value / 100000, 2) : '-'),
     },
     {
       field: 'temperatureIn',
-      title: 'Temperature In [°C]',
+      title: 'Temperature Supply [°C]',
       render: (value) => (!isNaN(value) ? defaultNumberFormatter(value, 2) : '-'),
     },
     {
       field: 'temperatureOut',
-      title: 'Temperature Out [°C]',
+      title: 'Temperature Return [°C]',
       render: (value) => (!isNaN(value) ? defaultNumberFormatter(value, 2) : '-'),
     },
     {
