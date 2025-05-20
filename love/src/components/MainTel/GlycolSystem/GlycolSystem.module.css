@@ -23,6 +23,11 @@
   color: var(--status-alert-color);
 }
 
+.temperatureDiffWarning,
+.pressureDiffWarning {
+  color: var(--status-alert-color);
+}
+
 .hvacStatusContainer {
   display: flex;
   gap: var(--content-padding);
