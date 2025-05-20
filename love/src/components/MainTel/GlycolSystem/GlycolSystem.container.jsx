@@ -38,6 +38,12 @@ export const schema = {
       isPrivate: true,
       default: true,
     },
+    showTableDifferences: {
+      type: 'boolean',
+      description: 'Whether to show the Temperature and Pressure differences in the table for glycol measurements.',
+      isPrivate: false,
+      default: true,
+    },
   },
 };
 
