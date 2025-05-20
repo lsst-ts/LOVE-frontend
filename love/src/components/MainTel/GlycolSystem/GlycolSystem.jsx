@@ -716,7 +716,7 @@ GlycolMap.propTypes = {
   device: PropTypes.string,
 };
 
-function GlycolTable({ data = {}, device }) {
+function GlycolTable({ data = {}, device, showTableDifferences }) {
   const headers = [
     {
       field: 'number',
@@ -736,6 +736,15 @@ function GlycolTable({ data = {}, device }) {
       title: 'Pressure Return [Bar]',
       render: (value) => (!isNaN(value) ? defaultNumberFormatter(value / 100000, 2) : '-'),
     },
+    ...(showTableDifferences
+      ? [
+          {
+            field: 'pressureDiff',
+            title: 'Pressure Diff [Bar]',
+            render: (value) => (!isNaN(value) ? defaultNumberFormatter(value / 100000, 2) : '-'),
+          },
+        ]
+      : []),
     {
       field: 'temperatureIn',
       title: 'Temperature Supply [°C]',
@@ -746,6 +755,15 @@ function GlycolTable({ data = {}, device }) {
       title: 'Temperature Return [°C]',
       render: (value) => (!isNaN(value) ? defaultNumberFormatter(value, 2) : '-'),
     },
+    ...(showTableDifferences
+      ? [
+          {
+            field: 'temperatureDiff',
+            title: 'Temperature Diff [°C]',
+            render: (value) => (!isNaN(value) ? defaultNumberFormatter(value, 2) : '-'),
+          },
+        ]
+      : []),
     {
       field: 'flowRate',
       title: 'Flow Rate [L/min]',
@@ -769,8 +787,10 @@ function GlycolTable({ data = {}, device }) {
     device,
     pressureIn: data[telemetriesMapping[device]?.pressIn],
     pressureOut: data[telemetriesMapping[device]?.pressOut],
+    pressureDiff: data[telemetriesMapping[device]?.pressIn] - data[telemetriesMapping[device]?.pressOut],
     temperatureIn: data[telemetriesMapping[device]?.tempIn],
     temperatureOut: data[telemetriesMapping[device]?.tempOut],
+    temperatureDiff: data[telemetriesMapping[device]?.tempIn] - data[telemetriesMapping[device]?.tempOut],
     flowRate: data[telemetriesMapping[device]?.flow],
     heatExchange: calculateHeatExchange(
       data[telemetriesMapping[device]?.flow],
@@ -798,6 +818,10 @@ GlycolTable.propTypes = {
   data: PropTypes.object.isRequired,
   /** Device selected */
   device: PropTypes.string,
+  /** Show table differences
+   * If true, it will show the difference between supply and return pressure and temperature
+   */
+  showTableDifferences: PropTypes.bool,
 };
 
 function GlycolPlots({ data }) {
@@ -847,7 +871,7 @@ function GlycolPlots({ data }) {
   );
 }
 
-function GlycolSystem({ subscribeToStreams, unsubscribeToStreams, ...props }) {
+function GlycolSystem({ subscribeToStreams, unsubscribeToStreams, showTableDifferences, ...props }) {
   const [selectedDevice, setSelectedDevice] = useState();
 
   useEffect(() => {
@@ -862,7 +886,7 @@ function GlycolSystem({ subscribeToStreams, unsubscribeToStreams, ...props }) {
       <HVACStatus data={props} summaryState={dummySummaryState} />
       <GlycolSummary data={props} selectedDevice={selectedDevice} selectDevice={setSelectedDevice} />
       {selectedDevice && <GlycolMap data={props} device={selectedDevice} />}
-      <GlycolTable data={props} device={selectedDevice} />
+      <GlycolTable data={props} device={selectedDevice} showTableDifferences={showTableDifferences} />
       <GlycolPlots data={props} />
     </div>
   );
