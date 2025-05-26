@@ -552,8 +552,32 @@ function HVACStatus({ data = {}, summaryState = 0 }) {
   const GPChillerTotalHeat = chiller3Heat;
   const prevGPChillerTotalHeat = prevChiller3Heat;
 
+  let devicesTotalHeat = 0;
+  let prevDevicesTotalHeat = 0;
+  Object.keys(telemetriesMapping).forEach((device) => {
+    if (device === 'Chiller 1' || device === 'Chiller 2' || device === 'Chiller 3') {
+      return;
+    }
+    const heat = calculateHeatExchange(
+      data[telemetriesMapping[device]?.flow],
+      data[telemetriesMapping[device]?.tempIn],
+      data[telemetriesMapping[device]?.tempOut],
+    );
+    const prevHeat = prevData.current
+      ? calculateHeatExchange(
+          prevData.current[telemetriesMapping[device]?.flow],
+          prevData.current[telemetriesMapping[device]?.tempIn],
+          prevData.current[telemetriesMapping[device]?.tempOut],
+        )
+      : 0;
+
+    devicesTotalHeat += heat;
+    prevDevicesTotalHeat += prevHeat;
+  });
+
   const heatChangeLTChiller = LTChillerTotalHeat - prevLTChillerTotalHeat;
   const heatChangeGPChiller = GPChillerTotalHeat - prevGPChillerTotalHeat;
+  const heatChangeDevices = devicesTotalHeat - prevDevicesTotalHeat;
 
   const highLightBiggerClassName = [styles.highlight, styles.bigger].join(' ');
   return (
@@ -585,6 +609,17 @@ function HVACStatus({ data = {}, summaryState = 0 }) {
               GPChillerTotalHeat,
               2,
             )} kW`}</TrendValue>
+          ) : (
+            '-'
+          )}
+        </div>
+      </div>
+      <div className={styles.chillerInfo}>
+        <div className={styles.highlight}>Devices</div>
+        <div>Total</div>
+        <div className={highLightBiggerClassName}>
+          {!isNaN(devicesTotalHeat) ? (
+            <TrendValue change={heatChangeDevices}>{`${defaultNumberFormatter(devicesTotalHeat, 2)} kW`}</TrendValue>
           ) : (
             '-'
           )}
