@@ -19,22 +19,15 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .timeseriesControlsContainer {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: left;
-  margin-top: 1.5em;
+  gap: var(--content-padding);
+  margin: var(--small-padding) 0;
 }
 
 .gearIconContainer {
   width: 40px;
   margin: 0em 3em;
   cursor: pointer;
-}
-
-.switchContainer {
-  margin-left: 4em;
-  margin-right: 4em;
-  margin-bottom: 1em;
 }
 
 input:checked + .slider {
@@ -67,11 +60,6 @@ input:checked + .slider:before {
 .modeSelection {
   user-select: none;
   cursor: pointer;
-}
-
-.queryInputs {
-  display: flex;
-  align-items: center;
 }
 
 .efdClients {
