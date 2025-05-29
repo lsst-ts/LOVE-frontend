@@ -72,6 +72,13 @@ export const EUIs = {
   ATDOME: 'https://atmcs-dev.cp.lsst.org',
 };
 
+// EFD instances
+export const EFD_INSTANCES = {
+  'summit-lsp.lsst.codes': 'summit_efd',
+  'base-lsp.lsst.codes': 'base_efd',
+  'tucson-teststand.lsst.codes': 'tucson_teststand_efd',
+};
+
 // URL for TimesSquare Night Report > Obs tickets report
 // ready to be used by replacing the {DAY} with the desired date in 'YYYY-MM-DD' format
 export const TIMES_SQUARE_OBS_TICKETS_REPORT_URL =

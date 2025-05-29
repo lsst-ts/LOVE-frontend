@@ -20,7 +20,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
-import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
+import { toast } from 'react-toastify';
+import { TOPIC_TIMESTAMP_ATTRIBUTE, EFD_INSTANCES } from 'Config';
 import ManagerInterface, { parseTimestamp, parsePlotInputsEFD, parseCommanderData } from 'Utils';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
@@ -85,7 +86,6 @@ const Plot = ({
   maxHeight = 240,
   containerNode,
   timeSeriesControlsProps,
-  efdConfigFile,
   isForecast = false,
   sliceSize = 1800,
   sliceInvert = false,
@@ -100,8 +100,6 @@ const Plot = ({
   const [isLive, setIsLive] = useState(timeSeriesControlsProps?.isLive ?? true);
   const [timeWindow, setTimeWindow] = useState(timeSeriesControlsProps?.timeWindow ?? 60);
   const [historicalData, setHistoricalData] = useState(timeSeriesControlsProps?.historicalData ?? []);
-  const [efdClients, setEfdClients] = useState([]);
-  const [selectedEfdClient, setSelectedEfdClient] = useState(efdConfigFile?.defaultEfdInstance);
   const [plotWidth, setPlotWidth] = useState(width);
   const [plotHeight, setPlotHeight] = useState(height);
 
@@ -115,17 +113,20 @@ const Plot = ({
    *
    * Notes:
    * - The query is done for all inputs in props.inputs
-   * - The query is done to the specified EFD instance on the efdConfigFile prop
    */
   const memoizedHandleHistoricalData = useCallback(
     (startDate, timeWindow) => {
+      const efdInstance = EFD_INSTANCES[window.location.hostname];
+      if (!efdInstance) {
+        toast.error('EFD instance not found for this hostname');
+        return;
+      }
+      const parsedDate = startDate.utc().format('YYYY-MM-DDTHH:mm:ss');
       const cscs = parsePlotInputsEFD(inputs);
-      const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
-      ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min', selectedEfdClient).then((data) => {
+      ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min', efdInstance).then((data) => {
         if (!data) return;
         const parsedData = parseCommanderData(data);
-        const parsedDataKeys = Object.keys(parsedData);
-        parsedDataKeys.forEach((key) => {
+        Object.keys(parsedData).forEach((key) => {
           if (key.includes('logevent_')) {
             parsedData[key.replace('logevent_', '')] = parsedData[key];
             delete parsedData[key];
@@ -134,7 +135,7 @@ const Plot = ({
         setHistoricalData(parsedData);
       });
     },
-    [inputs, selectedEfdClient],
+    [inputs],
   );
 
   /** Get data for the plot, based on the inputs
@@ -146,7 +147,7 @@ const Plot = ({
    * - If isLive is false, the data is filtered based on the historicalData
    */
   const memoizedGetRangedData = useCallback(
-    (data) => {
+    (dataArray) => {
       let filteredData;
       const topics = getTopicItemPair(inputs);
       const parsedHistoricalData = Object.keys(topics).flatMap((key) => {
@@ -156,13 +157,15 @@ const Plot = ({
       if (!isLive) {
         filteredData = parsedHistoricalData;
       } else {
-        if (!data) return [];
-        const joinedData = parsedHistoricalData.concat(data);
+        if ((!dataArray || dataArray.length == 0) && (!parsedHistoricalData || parsedHistoricalData.length == 0)) {
+          return [];
+        }
+        const joinedData = parsedHistoricalData.concat(dataArray ?? []);
         filteredData = joinedData.filter((val) => {
           const currentSeconds = new Date().getTime() / 1000;
           const timemillis = val.x?.ts ?? val.x;
           const dataSeconds = timemillis / 1000 + taiToUtc;
-          if (currentSeconds - timeWindow * 60 <= dataSeconds) return true;
+          if (dataSeconds >= currentSeconds - (timeWindow * 60) / 2) return true;
           return false;
         });
       }
@@ -305,9 +308,8 @@ const Plot = ({
   useEffect(() => {
     subscribeToStreams();
 
-    // Query for available EFD clients
-    ManagerInterface.getEFDClients().then(({ instances }) => setEfdClients(instances));
-
+    const currentDate = Moment().subtract(timeWindow / 2, 'minutes');
+    memoizedHandleHistoricalData(currentDate, timeWindow);
     return () => {
       unsubscribeToStreams();
       if (resizeObserver) {
@@ -344,7 +346,7 @@ const Plot = ({
     if (isForecast) {
       inputData = getForecastData(inputName, data[inputName]);
     } else {
-      inputData = memoizedGetRangedData(data[inputName], timeWindow);
+      inputData = memoizedGetRangedData(data[inputName]);
     }
     layers[layerName] = [...(layers[layerName] ?? []), ...inputData];
   }
@@ -381,14 +383,11 @@ const Plot = ({
       {controls && (
         <div className={styles.controlsContainer} ref={timeSeriesControlRef}>
           <TimeSeriesControls
-            setTimeWindow={setTimeWindow}
-            timeWindow={timeWindow}
-            setLiveMode={setIsLive}
             isLive={isLive}
+            setLiveMode={setIsLive}
+            timeWindow={timeWindow}
+            setTimeWindow={setTimeWindow}
             setHistoricalData={memoizedHandleHistoricalData}
-            efdClients={efdClients}
-            selectedEfdClient={selectedEfdClient}
-            setEfdClient={setSelectedEfdClient}
           />
         </div>
       )}
@@ -462,8 +461,6 @@ Plot.propTypes = {
   containerNode: PropTypes.instanceOf(Element),
   /** Object with the configuration of the timeSeriesControls */
   timeSeriesControlsProps: PropTypes.object,
-  /** Object with the configuration of the efd */
-  efdConfigFile: PropTypes.object,
   /** In the weatherforecast telemetries is received data in one array with time and value.
    * In other telemetries, the data is received one to one */
   isForecast: PropTypes.bool,
