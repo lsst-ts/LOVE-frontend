@@ -19,30 +19,22 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .datesContainer {
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--small-padding);
 }
 
-.fromDateContainer {
-  display: flex;
-  padding: 0em 1em;
-  margin-bottom: 0.5em;
-}
-
+.fromDateContainer,
 .toDateContainer {
   display: flex;
-  padding: 0em 1em;
-  margin-bottom: 0.5em;
+  gap: var(--small-padding);
+  align-items: center;
 }
 
-.toDateContainer > span {
-  margin-left: 0.5em;
+.infoIcon {
+  display: flex;
+  align-items: center;
 }
 
-.queryButton {
-  margin-bottom: 1em;
-}
-
-.datetimeDescription {
-  padding: 0em 0.6em;
+.infoIcon svg {
+  height: 1em;
 }
