@@ -1537,9 +1537,10 @@ export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y') => {
       const formattedPropertyKey = propertyKey.replace(/[\d\.]+$/, '');
       newTopicData[formattedPropertyKey] = propertyDataArray.map((dataPoint) => {
         const tsString = dataPoint?.ts.split(' ').join('T');
+        const parsedTsString = parseTimestamp(tsString);
         return {
           units: { y: dataPoint?.units },
-          [tsLabel]: parseTimestamp(tsString),
+          [tsLabel]: parsedTsString,
           [valueLabel]: dataPoint?.value,
         };
       });
