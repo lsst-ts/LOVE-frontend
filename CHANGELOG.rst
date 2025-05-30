@@ -5,6 +5,7 @@ Version History
 v6.7.3
 ------
 
+* Move current script configuration to the top in the current script details section. `<https://github.com/lsst-ts/LOVE-frontend/pull/712>`_
 * Add exitControl for all CSCs and enterControl to XXCamera CSCs in expanded view. `<https://github.com/lsst-ts/LOVE-frontend/pull/711>`_
 * Add Offline detailed stated for big cameras in CSC detailed and expanded views. `<https://github.com/lsst-ts/LOVE-frontend/pull/711>`_
 * Fix MTDomeShutter component interpreting MTDome_apertureShutter value erroneously. `<https://github.com/lsst-ts/LOVE-frontend/pull/710>`_
