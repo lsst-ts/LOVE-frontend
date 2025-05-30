@@ -30,6 +30,7 @@ import {
   OLE_OBS_SYSTEMS,
   OLE_OBS_SUBSYSTEMS,
   OLE_OBS_SUBSYSTEMS_COMPONENTS,
+  EFD_INSTANCES,
 } from 'Config.js';
 
 /* Backwards compatibility of Array.flat */
@@ -2410,4 +2411,19 @@ export function getOBSSystemsSubsystemsComponentsIds(systemsHierarchy) {
     subsystemsIds,
     componentsIds,
   };
+}
+
+/**
+ * Retrieves the EFD instance associated with the current hostname.
+ * If no instance is found for the hostname, an error toast is displayed.
+ *
+ * @returns {string|null} The EFD instance for the current hostname, or null if not found.
+ */
+export function getEFDInstanceForHost() {
+  const efdInstance = EFD_INSTANCES[window.location.hostname];
+  if (!efdInstance) {
+    toast.error('EFD instance not found for this hostname');
+    return null;
+  }
+  return efdInstance;
 }
