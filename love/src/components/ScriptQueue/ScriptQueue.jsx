@@ -732,8 +732,8 @@ export default class ScriptQueue extends Component {
             ref={this.currentScriptDetailsContainer}
           >
             <div className={styles.currentScriptDescription}>
-              <ScriptDetails {...current} />
               <ScriptConfig {...current} defaultEfdInstance={this.props.efdConfig?.defaultEfdInstance} />
+              <ScriptDetails {...current} />
             </div>
             <div className={styles.currentScriptLogs}>
               <CSCExpandedContainer
