@@ -21,8 +21,8 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { toast } from 'react-toastify';
-import { TOPIC_TIMESTAMP_ATTRIBUTE, EFD_INSTANCES } from 'Config';
-import ManagerInterface, { parseTimestamp, parsePlotInputsEFD, parseCommanderData } from 'Utils';
+import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
+import ManagerInterface, { parseTimestamp, parsePlotInputsEFD, parseCommanderData, getEFDInstanceForHost } from 'Utils';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import VegaLegend from './VegaTimeSeriesPlot/VegaLegend';
@@ -116,9 +116,8 @@ const Plot = ({
    */
   const memoizedHandleHistoricalData = useCallback(
     (startDate, timeWindow) => {
-      const efdInstance = EFD_INSTANCES[window.location.hostname];
+      const efdInstance = getEFDInstanceForHost();
       if (!efdInstance) {
-        toast.error('EFD instance not found for this hostname');
         return;
       }
       const parsedDate = startDate.utc().format('YYYY-MM-DDTHH:mm:ss');

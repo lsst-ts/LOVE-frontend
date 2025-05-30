@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import CopyIcon from 'components/icons/CopyIcon/CopyIcon';
 import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
-import ManagerInterface, { copyToClipboard } from 'Utils';
+import ManagerInterface, { copyToClipboard, getEFDInstanceForHost } from 'Utils';
 import styles from './ScriptConfig.module.css';
 
-function ScriptConfig({ index, timestampProcessStart, timestampConfigureEnd, defaultEfdInstance = 'summit_efd' }) {
+function ScriptConfig({ index, timestampProcessStart, timestampConfigureEnd }) {
   const [coppiedToClipboard, setCoppiedToClipboard] = useState(false);
   const [appliedConfiguration, setAppliedConfiguration] = useState('');
 
@@ -20,6 +20,11 @@ function ScriptConfig({ index, timestampProcessStart, timestampConfigureEnd, def
   }, []);
 
   const getAppliedConfiguration = useCallback((scriptIndex, start, end) => {
+    const efdInstance = getEFDInstanceForHost();
+    if (!efdInstance) {
+      return;
+    }
+
     const cscs = {
       Script: {
         [scriptIndex]: {
@@ -31,8 +36,7 @@ function ScriptConfig({ index, timestampProcessStart, timestampConfigureEnd, def
     // Convert to ISO format and remove Z at the end
     const startDateIso = new Date(start * 1000).toISOString().slice(0, -1);
     const endDateIso = new Date(end * 1000).toISOString().slice(0, -1);
-
-    ManagerInterface.getEFDLogs(startDateIso, endDateIso, cscs, defaultEfdInstance, 'tai').then((res) => {
+    ManagerInterface.getEFDLogs(startDateIso, endDateIso, cscs, efdInstance, 'tai').then((res) => {
       if (res) {
         setAppliedConfiguration(res[`Script-${scriptIndex}-command_configure`][0]?.config);
       }
@@ -79,8 +83,6 @@ ScriptConfig.propTypes = {
   timestampProcessStart: PropTypes.number.isRequired,
   /** Timestamp when the configuration was applied */
   timestampConfigureEnd: PropTypes.number.isRequired,
-  /** Default EFD instance */
-  defaultEfdInstance: PropTypes.string,
 };
 
 export default memo(ScriptConfig);

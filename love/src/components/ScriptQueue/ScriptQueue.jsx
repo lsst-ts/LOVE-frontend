@@ -733,7 +733,7 @@ export default class ScriptQueue extends Component {
           >
             <div className={styles.currentScriptDescription}>
               <ScriptDetails {...current} />
-              <ScriptConfig {...current} defaultEfdInstance={this.props.efdConfig?.defaultEfdInstance} />
+              <ScriptConfig {...current} />
             </div>
             <div className={styles.currentScriptLogs}>
               <CSCExpandedContainer
@@ -950,7 +950,6 @@ export default class ScriptQueue extends Component {
                             requeueScript={this.requeueScript}
                             commandExecutePermission={this.props.commandExecutePermission}
                             onClick={() => this.onShowScriptDetails(script)}
-                            efdConfig={this.props.efdConfig}
                           />
                         </div>
                       </DraggableScript>
