@@ -22,12 +22,18 @@ import PropTypes from 'prop-types';
 import { fixedFloat } from 'Utils';
 import styles from './MTDome.module.css';
 
-const widthShutters = [-50, 50];
+const widthShutterInPixels = 50;
 export default class MTDomeShutter extends Component {
   static propTypes = {
-    /** Measured position of the aperture shutter (percent open) */
-    positionActualShutter: PropTypes.number,
-    /** Commanded position of the aperture shutter (percent open) */
+    /** Measured position of the aperture shutters (percent open)
+     * The first element is the left shutter, the second is the right shutter
+     * as seen from the inside of the dome
+     */
+    positionActualShutter: PropTypes.arrayOf(PropTypes.number),
+    /** Commanded position of the aperture shutters (percent open)
+     * The first element is the left shutter, the second is the right shutter
+     * as seen from the inside of the dome
+     */
     positionCommandedShutter: PropTypes.number,
     /** Measured azimuth axis position */
     positionActualDomeAz: PropTypes.number,
@@ -81,6 +87,20 @@ export default class MTDomeShutter extends Component {
       positionActualShutter,
       positionCommandedShutter,
     } = this.props;
+
+    // The display considers left and right shutters as seen from above the dome.
+    const leftShutterPositionActual = Math.abs(positionActualShutter[1]);
+    const rightShutterPositionActual = Math.abs(positionActualShutter[0]);
+    const leftShutterPositionActualPixels = Math.floor((leftShutterPositionActual * widthShutterInPixels) / 100);
+    const rightShutterPositionActualPixels = Math.floor((rightShutterPositionActual * widthShutterInPixels) / 100);
+
+    // The display considers left and right shutters as seen from above the dome.
+    const leftShutterPositionCommanded = Math.abs(positionCommandedShutter[1]);
+    const rightShutterPositionCommanded = Math.abs(positionCommandedShutter[0]);
+    const leftShutterPositionCommandedPixels = Math.floor((leftShutterPositionCommanded * widthShutterInPixels) / 100);
+    const rightShutterPositionCommandedPixels = Math.floor(
+      (rightShutterPositionCommanded * widthShutterInPixels) / 100,
+    );
 
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 235 235">
@@ -141,7 +161,7 @@ export default class MTDomeShutter extends Component {
             className={styles.shutterCommanded}
             style={{
               transformOrigin: `50% 50%`,
-              transform: `translate(${(positionCommandedShutter * widthShutters[1]) / 100}px, 0)`,
+              transform: `translate(${rightShutterPositionCommandedPixels}px, 0)`,
             }}
           >
             <polygon
@@ -154,13 +174,12 @@ export default class MTDomeShutter extends Component {
             />
             <rect className={styles.shutterCommanded} x="151.53" y="188.53" width="50.27" height="12.97" />
           </g>
-
           {/* Shutter commanded left */}
           <g
             className={styles.shutterCommanded}
             style={{
               transformOrigin: `50% 50%`,
-              transform: `translate(${(positionCommandedShutter * widthShutters[0]) / 100}px, 0)`,
+              transform: `translate(${-leftShutterPositionCommandedPixels}px, 0)`,
             }}
           >
             <polygon
@@ -178,7 +197,7 @@ export default class MTDomeShutter extends Component {
             className={styles.shutter}
             style={{
               transformOrigin: `50% 50%`,
-              transform: `translate(${(positionActualShutter * widthShutters[1]) / 100}px, 0)`,
+              transform: `translate(${rightShutterPositionActualPixels}px, 0)`,
             }}
           >
             <polygon
@@ -196,7 +215,7 @@ export default class MTDomeShutter extends Component {
             className={styles.shutter}
             style={{
               transformOrigin: `50% 50%`,
-              transform: `translate(${(positionActualShutter * widthShutters[0]) / 100}px, 0)`,
+              transform: `translate(${-leftShutterPositionActualPixels}px, 0)`,
             }}
           >
             <polygon

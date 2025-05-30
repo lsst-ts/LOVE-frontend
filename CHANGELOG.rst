@@ -2,6 +2,20 @@
 Version History
 ===============
 
+v6.7.3
+------
+
+* Update package.json version to v6.7.3. `<https://github.com/lsst-ts/LOVE-frontend/pull/714>`_
+* Move current script configuration to the top in the current script details section. `<https://github.com/lsst-ts/LOVE-frontend/pull/712>`_
+* Add exitControl for all CSCs and enterControl to XXCamera CSCs in expanded view. `<https://github.com/lsst-ts/LOVE-frontend/pull/711>`_
+* Add Offline detailed stated for big cameras in CSC detailed and expanded views. `<https://github.com/lsst-ts/LOVE-frontend/pull/711>`_
+* Fix MTDomeShutter component interpreting MTDome_apertureShutter value erroneously. `<https://github.com/lsst-ts/LOVE-frontend/pull/710>`_
+* Roll back critical alarm loop for Watcher alarm sounds. `<https://github.com/lsst-ts/LOVE-frontend/pull/709>`_
+* Fix HVAC Facility Map display after XML 23 changes. `<https://github.com/lsst-ts/LOVE-frontend/pull/707>`_
+* Fix state enumeration mapping for the MTDome_logevent_azEnabled topic. `<https://github.com/lsst-ts/LOVE-frontend/pull/708>`_
+* Fix MTDome shutter display. `<https://github.com/lsst-ts/LOVE-frontend/pull/706>`_
+* Improve AlarmAudio sound handling even more. `<https://github.com/lsst-ts/LOVE-frontend/pull/705>`_
+
 v6.7.2
 ------
 

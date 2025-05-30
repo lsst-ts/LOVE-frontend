@@ -106,27 +106,27 @@ export default class Level5 extends Component {
     const {
       dynaleneP05Events,
       dynaleneP05,
-      manejadoraLower01P05,
-      manejadoraLower02P05,
-      manejadoraLower03P05,
-      manejadoraLower04P05,
-      vea01P05,
-      vea08P05,
-      vea09P05,
-      vea10P05,
-      vea11P05,
-      vea12P05,
-      vea13P05,
-      vea14P05,
-      vea15P05,
-      vea16P05,
-      vea17P05,
+      lowerAHU01P05,
+      lowerAHU02P05,
+      lowerAHU03P05,
+      lowerAHU04P05,
+      airInletFan01P05,
+      airInletFan08P05,
+      airInletFan09P05,
+      airInletFan10P05,
+      airInletFan11P05,
+      airInletFan12P05,
+      airInletFan13P05,
+      airInletFan14P05,
+      airInletFan15P05,
+      airInletFan16P05,
+      airInletFan17P05,
     } = this.props.HVACData;
 
     return (
       <React.Fragment>
         <Device
-          title={'Manejadora Lower 01'}
+          title={'Dome AHU 01'}
           id={401}
           width={108}
           height={130}
@@ -136,89 +136,77 @@ export default class Level5 extends Component {
           alarms={{
             alarm1: {
               name: 'General',
-              state: manejadoraLower01P05.alarmaGeneral ? manejadoraLower01P05.alarmaGeneral.value : null,
+              state: lowerAHU01P05.generalAlarm ? lowerAHU01P05.generalAlarm.value : null,
             },
             alarm2: {
               name: 'Filtro',
-              state: manejadoraLower01P05.alarmaFiltro ? manejadoraLower01P05.alarmaFiltro.value : null,
+              state: lowerAHU01P05.filterAlarm ? lowerAHU01P05.filterAlarm.value : null,
             },
             alarm3: {
               name: 'Reset',
-              state: manejadoraLower01P05.resetAlarma ? manejadoraLower01P05.resetAlarma.value : null,
+              state: lowerAHU01P05.alarmReset ? lowerAHU01P05.alarmReset.value : null,
             },
           }}
           states={{
-            command: manejadoraLower01P05.comandoEncendido ? manejadoraLower01P05.comandoEncendido.value : null,
-            working: manejadoraLower01P05.estadoFuncionamiento ? manejadoraLower01P05.estadoFuncionamiento.value : null,
-            unit: manejadoraLower01P05.estadoUnidad ? manejadoraLower01P05.estadoUnidad.value : null,
-            switch: manejadoraLower01P05.estadoSelector ? manejadoraLower01P05.estadoSelector.value : null,
+            command: lowerAHU01P05.switchedOn ? lowerAHU01P05.switchedOn.value : null,
+            working: lowerAHU01P05.workingState ? lowerAHU01P05.workingState.value : null,
+            unit: lowerAHU01P05.unitState ? lowerAHU01P05.unitState.value : null,
+            switch: lowerAHU01P05.selectorState ? lowerAHU01P05.selectorState.value : null,
           }}
           parameters={{
-            estadoDamper: {
+            damperstate: {
               type: 'status',
               name: 'Damper',
               unit: null,
-              value: manejadoraLower01P05.estadoDamper ? manejadoraLower01P05.estadoDamper.value : null,
+              value: lowerAHU01P05.damperstate ? lowerAHU01P05.damperstate.value : null,
             },
-            caudalVentiladorImpulsion: {
+            supplyFanCapacity: {
               type: 'single',
-              name: 'Yield Fan Impulse',
-              unit: manejadoraLower01P05.caudalVentiladorImpulsion
-                ? manejadoraLower01P05.caudalVentiladorImpulsion.units
-                : null,
-              value: manejadoraLower01P05.caudalVentiladorImpulsion
-                ? manejadoraLower01P05.caudalVentiladorImpulsion.value
-                : null,
+              name: 'Supply Fan Capacity',
+              unit: lowerAHU01P05.supplyFanCapacity ? lowerAHU01P05.supplyFanCapacity.units : null,
+              value: lowerAHU01P05.supplyFanCapacity ? lowerAHU01P05.supplyFanCapacity.value : null,
             },
-            estadoValvula: {
+            valveState: {
               type: 'single',
               name: 'State Valve',
-              unit: manejadoraLower01P05.estadoValvula ? manejadoraLower01P05.estadoValvula.units : null,
-              value: manejadoraLower01P05.estadoValvula ? manejadoraLower01P05.estadoValvula.value : null,
+              unit: lowerAHU01P05.valveState ? lowerAHU01P05.valveState.units : null,
+              value: lowerAHU01P05.valveState ? lowerAHU01P05.valveState.value : null,
             },
-            horometro: {
+            hourMeasure: {
               type: 'single',
               name: 'HOROMETRO',
-              unit: manejadoraLower01P05.horometro ? manejadoraLower01P05.horometro.units : null,
-              value: manejadoraLower01P05.horometro ? manejadoraLower01P05.horometro.value : null,
+              unit: lowerAHU01P05.hourMeasure ? lowerAHU01P05.hourMeasure.units : null,
+              value: lowerAHU01P05.hourMeasure ? lowerAHU01P05.hourMeasure.value : null,
             },
             setpoint: {
               type: 'group',
               name: 'Setpoint',
-              unit: manejadoraLower01P05.valorConsigna ? 'ºC' : null,
-              value: manejadoraLower01P05.valorConsigna ? manejadoraLower01P05.valorConsigna.value : null,
+              unit: lowerAHU01P05.roomSetpoint ? 'ºC' : null,
+              value: lowerAHU01P05.roomSetpoint ? lowerAHU01P05.roomSetpoint.value : null,
               params: {
-                setpointTrabajo: {
+                workingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Work',
                   state: null,
-                  unit: manejadoraLower01P05.setpointTrabajo ? 'ºC' : null,
-                  value: manejadoraLower01P05.setpointTrabajo ? manejadoraLower01P05.setpointTrabajo.value : null,
+                  unit: lowerAHU01P05.workingSetpoint ? 'ºC' : null,
+                  value: lowerAHU01P05.workingSetpoint ? lowerAHU01P05.workingSetpoint.value : null,
                 },
-                setpointVentiladorMax: {
+                maxFanSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Fan Max',
                   state: null,
-                  unit: manejadoraLower01P05.setpointVentiladorMax
-                    ? manejadoraLower01P05.setpointVentiladorMax.units
-                    : null,
-                  value: manejadoraLower01P05.setpointVentiladorMax
-                    ? manejadoraLower01P05.setpointVentiladorMax.value
-                    : null,
+                  unit: lowerAHU01P05.maxFanSetpoint ? lowerAHU01P05.maxFanSetpoint.units : null,
+                  value: lowerAHU01P05.maxFanSetpoint ? lowerAHU01P05.maxFanSetpoint.value : null,
                 },
-                setpointVentiladorMin: {
+                minFanSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Fan Min',
                   state: null,
-                  unit: manejadoraLower01P05.setpointVentiladorMin
-                    ? manejadoraLower01P05.setpointVentiladorMin.units
-                    : null,
-                  value: manejadoraLower01P05.setpointVentiladorMin
-                    ? manejadoraLower01P05.setpointVentiladorMin.value
-                    : null,
+                  unit: lowerAHU01P05.minFanSetpoint ? lowerAHU01P05.minFanSetpoint.units : null,
+                  value: lowerAHU01P05.minFanSetpoint ? lowerAHU01P05.minFanSetpoint.value : null,
                 },
               },
             },
@@ -228,34 +216,24 @@ export default class Level5 extends Component {
               unit: null,
               value: null,
               params: {
-                estadoTemperaturaAmbiente: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Ambient',
-                  state: null,
-                  unit: manejadoraLower01P05.estadoTemperaturaAmbiente ? 'ºC' : null,
-                  value: manejadoraLower01P05.estadoTemperaturaAmbiente
-                    ? manejadoraLower01P05.estadoTemperaturaAmbiente.value
-                    : null,
-                },
-                estadoTemperaturaAnticongelante: {
+                antiFreezeTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Anti-Freeze',
                   state: null,
-                  unit: manejadoraLower01P05.estadoTemperaturaAnticongelante ? 'ºC' : null,
-                  value: manejadoraLower01P05.estadoTemperaturaAnticongelante
-                    ? manejadoraLower01P05.estadoTemperaturaAnticongelante.value
-                    : null,
+                  unit: lowerAHU01P05.antiFreezeTemperature ? 'ºC' : null,
+                  value: lowerAHU01P05.antiFreezeTemperature ? lowerAHU01P05.antiFreezeTemperature.value : null,
                 },
-                estadoTemperaturaExterior: {
+                // TODO: change exteriorAmbienteTemperature -> externalAmbientTemperature after XML v23.2 release.
+                // see DM-50720.
+                exteriorAmbienteTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Exterior',
                   state: null,
-                  unit: manejadoraLower01P05.estadoTemperaturaExterior ? 'ºC' : null,
-                  value: manejadoraLower01P05.estadoTemperaturaExterior
-                    ? manejadoraLower01P05.estadoTemperaturaExterior.value
+                  unit: lowerAHU01P05.exteriorAmbienteTemperature ? 'ºC' : null,
+                  value: lowerAHU01P05.exteriorAmbienteTemperature
+                    ? lowerAHU01P05.exteriorAmbienteTemperature.value
                     : null,
                 },
               },
@@ -266,19 +244,19 @@ export default class Level5 extends Component {
               unit: null,
               value: null,
               params: {
-                calefaccionEtapa01: {
+                stageHeating01: {
                   type: 'box',
                   alarm: 0,
                   name: '01',
-                  state: manejadoraLower01P05.calefaccionEtapa01 ? manejadoraLower01P05.calefaccionEtapa01.value : null,
+                  state: lowerAHU01P05.stageHeating01 ? lowerAHU01P05.stageHeating01.value : null,
                   unit: null,
                   value: null,
                 },
-                calefaccionEtapa02: {
+                stageHeating02: {
                   type: 'box',
                   alarm: 0,
                   name: '02',
-                  state: manejadoraLower01P05.calefaccionEtapa02 ? manejadoraLower01P05.calefaccionEtapa02.value : null,
+                  state: lowerAHU01P05.stageHeating02 ? lowerAHU01P05.stageHeating02.value : null,
                   unit: null,
                   value: null,
                 },
@@ -288,7 +266,7 @@ export default class Level5 extends Component {
         />
 
         <Device
-          title={'Manejadora Lower 02'}
+          title={'Dome AHU 02'}
           id={402}
           width={108}
           height={130}
@@ -298,89 +276,77 @@ export default class Level5 extends Component {
           alarms={{
             alarm1: {
               name: 'General',
-              state: manejadoraLower02P05.alarmaFiltro ? manejadoraLower02P05.alarmaFiltro.value : null,
+              state: lowerAHU02P05.filterAlarm ? lowerAHU02P05.filterAlarm.value : null,
             },
             alarm2: {
               name: 'Filtro',
-              state: manejadoraLower02P05.alarmaFiltro ? manejadoraLower02P05.alarmaFiltro.value : null,
+              state: lowerAHU02P05.filterAlarm ? lowerAHU02P05.filterAlarm.value : null,
             },
             alarm3: {
               name: 'Reset',
-              state: manejadoraLower02P05.alarmaFiltro ? manejadoraLower02P05.alarmaFiltro.value : null,
+              state: lowerAHU02P05.filterAlarm ? lowerAHU02P05.filterAlarm.value : null,
             },
           }}
           states={{
-            command: manejadoraLower02P05.comandoEncendido ? manejadoraLower02P05.comandoEncendido.value : null,
-            working: manejadoraLower02P05.estadoFuncionamiento ? manejadoraLower02P05.estadoFuncionamiento.value : null,
-            unit: manejadoraLower02P05.estadoUnidad ? manejadoraLower02P05.estadoUnidad.value : null,
-            switch: manejadoraLower02P05.estadoSelector ? manejadoraLower02P05.estadoSelector.value : null,
+            command: lowerAHU02P05.switchedOn ? lowerAHU02P05.switchedOn.value : null,
+            working: lowerAHU02P05.workingState ? lowerAHU02P05.workingState.value : null,
+            unit: lowerAHU02P05.unitState ? lowerAHU02P05.unitState.value : null,
+            switch: lowerAHU02P05.selectorState ? lowerAHU02P05.selectorState.value : null,
           }}
           parameters={{
-            estadoDamper: {
+            damperstate: {
               type: 'status',
               name: 'Damper',
               unit: null,
-              value: manejadoraLower02P05.estadoDamper ? manejadoraLower02P05.estadoDamper.value : null,
+              value: lowerAHU02P05.damperstate ? lowerAHU02P05.damperstate.value : null,
             },
-            caudalVentiladorImpulsion: {
+            supplyFanCapacity: {
               type: 'single',
               name: 'Yield Fan Impulse',
-              unit: manejadoraLower02P05.caudalVentiladorImpulsion
-                ? manejadoraLower02P05.caudalVentiladorImpulsion.units
-                : null,
-              value: manejadoraLower02P05.caudalVentiladorImpulsion
-                ? manejadoraLower02P05.caudalVentiladorImpulsion.value
-                : null,
+              unit: lowerAHU02P05.supplyFanCapacity ? lowerAHU02P05.supplyFanCapacity.units : null,
+              value: lowerAHU02P05.supplyFanCapacity ? lowerAHU02P05.supplyFanCapacity.value : null,
             },
-            estadoValvula: {
+            valveState: {
               type: 'single',
               name: 'State Valve',
-              unit: manejadoraLower02P05.estadoValvula ? manejadoraLower02P05.estadoValvula.units : null,
-              value: manejadoraLower02P05.estadoValvula ? manejadoraLower02P05.estadoValvula.value : null,
+              unit: lowerAHU02P05.valveState ? lowerAHU02P05.valveState.units : null,
+              value: lowerAHU02P05.valveState ? lowerAHU02P05.valveState.value : null,
             },
-            horometro: {
+            hourMeasure: {
               type: 'single',
               name: 'HOROMETRO',
-              unit: manejadoraLower02P05.horometro ? manejadoraLower02P05.horometro.units : null,
-              value: manejadoraLower02P05.horometro ? manejadoraLower02P05.horometro.value : null,
+              unit: lowerAHU02P05.hourMeasure ? lowerAHU02P05.hourMeasure.units : null,
+              value: lowerAHU02P05.hourMeasure ? lowerAHU02P05.hourMeasure.value : null,
             },
             setpoint: {
               type: 'group',
               name: 'Setpoint',
-              unit: manejadoraLower02P05.valorConsigna ? 'ºC' : null,
-              value: manejadoraLower02P05.valorConsigna ? manejadoraLower02P05.valorConsigna.value : null,
+              unit: lowerAHU02P05.roomSetpoint ? 'ºC' : null,
+              value: lowerAHU02P05.roomSetpoint ? lowerAHU02P05.roomSetpoint.value : null,
               params: {
-                setpointTrabajo: {
+                workingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Work',
                   state: null,
-                  unit: manejadoraLower02P05.setpointTrabajo ? 'ºC' : null,
-                  value: manejadoraLower02P05.setpointTrabajo ? manejadoraLower02P05.setpointTrabajo.value : null,
+                  unit: lowerAHU02P05.workingSetpoint ? 'ºC' : null,
+                  value: lowerAHU02P05.workingSetpoint ? lowerAHU02P05.workingSetpoint.value : null,
                 },
-                setpointVentiladorMax: {
+                maxFanSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Fan Max',
                   state: null,
-                  unit: manejadoraLower02P05.setpointVentiladorMax
-                    ? manejadoraLower02P05.setpointVentiladorMax.units
-                    : null,
-                  value: manejadoraLower02P05.setpointVentiladorMax
-                    ? manejadoraLower02P05.setpointVentiladorMax.value
-                    : null,
+                  unit: lowerAHU02P05.maxFanSetpoint ? lowerAHU02P05.maxFanSetpoint.units : null,
+                  value: lowerAHU02P05.maxFanSetpoint ? lowerAHU02P05.maxFanSetpoint.value : null,
                 },
-                setpointVentiladorMin: {
+                minFanSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Fan Min',
                   state: null,
-                  unit: manejadoraLower02P05.setpointVentiladorMin
-                    ? manejadoraLower02P05.setpointVentiladorMin.units
-                    : null,
-                  value: manejadoraLower02P05.setpointVentiladorMin
-                    ? manejadoraLower02P05.setpointVentiladorMin.value
-                    : null,
+                  unit: lowerAHU02P05.minFanSetpoint ? lowerAHU02P05.minFanSetpoint.units : null,
+                  value: lowerAHU02P05.minFanSetpoint ? lowerAHU02P05.minFanSetpoint.value : null,
                 },
               },
             },
@@ -390,34 +356,24 @@ export default class Level5 extends Component {
               unit: null,
               value: null,
               params: {
-                estadoTemperaturaAmbiente: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Ambient',
-                  state: null,
-                  unit: manejadoraLower02P05.estadoTemperaturaAmbiente ? 'ºC' : null,
-                  value: manejadoraLower02P05.estadoTemperaturaAmbiente
-                    ? manejadoraLower02P05.estadoTemperaturaAmbiente.value
-                    : null,
-                },
-                estadoTemperaturaAnticongelante: {
+                antiFreezeTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Anti-Freeze',
                   state: null,
-                  unit: manejadoraLower02P05.estadoTemperaturaAnticongelante ? 'ºC' : null,
-                  value: manejadoraLower02P05.estadoTemperaturaAnticongelante
-                    ? manejadoraLower02P05.estadoTemperaturaAnticongelante.value
-                    : null,
+                  unit: lowerAHU02P05.antiFreezeTemperature ? 'ºC' : null,
+                  value: lowerAHU02P05.antiFreezeTemperature ? lowerAHU02P05.antiFreezeTemperature.value : null,
                 },
-                estadoTemperaturaExterior: {
+                // TODO: change exteriorAmbienteTemperature -> externalAmbientTemperature after XML v23.2 release.
+                // see DM-50720.
+                exteriorAmbienteTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Exterior',
                   state: null,
-                  unit: manejadoraLower02P05.estadoTemperaturaExterior ? 'ºC' : null,
-                  value: manejadoraLower02P05.estadoTemperaturaExterior
-                    ? manejadoraLower02P05.estadoTemperaturaExterior.value
+                  unit: lowerAHU02P05.exteriorAmbienteTemperature ? 'ºC' : null,
+                  value: lowerAHU02P05.exteriorAmbienteTemperature
+                    ? lowerAHU02P05.exteriorAmbienteTemperature.value
                     : null,
                 },
               },
@@ -428,19 +384,19 @@ export default class Level5 extends Component {
               unit: null,
               value: null,
               params: {
-                calefaccionEtapa01: {
+                stageHeating01: {
                   type: 'box',
                   alarm: 0,
                   name: '01',
-                  state: manejadoraLower02P05.calefaccionEtapa01 ? manejadoraLower02P05.calefaccionEtapa01.value : null,
+                  state: lowerAHU02P05.stageHeating01 ? lowerAHU02P05.stageHeating01.value : null,
                   unit: null,
                   value: null,
                 },
-                calefaccionEtapa02: {
+                stageHeating02: {
                   type: 'box',
                   alarm: 0,
                   name: '02',
-                  state: manejadoraLower02P05.calefaccionEtapa02 ? manejadoraLower02P05.calefaccionEtapa02.value : null,
+                  state: lowerAHU02P05.stageHeating02 ? lowerAHU02P05.stageHeating02.value : null,
                   unit: null,
                   value: null,
                 },
@@ -450,7 +406,7 @@ export default class Level5 extends Component {
         />
 
         <Device
-          title={'Manejadora Lower 03'}
+          title={'Dome AHU 03'}
           id={403}
           width={108}
           height={130}
@@ -460,89 +416,77 @@ export default class Level5 extends Component {
           alarms={{
             alarm1: {
               name: 'General',
-              state: manejadoraLower03P05.alarmaFiltro ? manejadoraLower03P05.alarmaFiltro.value : null,
+              state: lowerAHU03P05.filterAlarm ? lowerAHU03P05.filterAlarm.value : null,
             },
             alarm2: {
               name: 'Filtro',
-              state: manejadoraLower03P05.alarmaFiltro ? manejadoraLower03P05.alarmaFiltro.value : null,
+              state: lowerAHU03P05.filterAlarm ? lowerAHU03P05.filterAlarm.value : null,
             },
             alarm3: {
               name: 'Reset',
-              state: manejadoraLower03P05.alarmaFiltro ? manejadoraLower03P05.alarmaFiltro.value : null,
+              state: lowerAHU03P05.filterAlarm ? lowerAHU03P05.filterAlarm.value : null,
             },
           }}
           states={{
-            command: manejadoraLower03P05.comandoEncendido ? manejadoraLower03P05.comandoEncendido.value : null,
-            working: manejadoraLower03P05.estadoFuncionamiento ? manejadoraLower03P05.estadoFuncionamiento.value : null,
-            unit: manejadoraLower03P05.estadoUnidad ? manejadoraLower03P05.estadoUnidad.value : null,
-            switch: manejadoraLower03P05.estadoSelector ? manejadoraLower03P05.estadoSelector.value : null,
+            command: lowerAHU03P05.switchedOn ? lowerAHU03P05.switchedOn.value : null,
+            working: lowerAHU03P05.workingState ? lowerAHU03P05.workingState.value : null,
+            unit: lowerAHU03P05.unitState ? lowerAHU03P05.unitState.value : null,
+            switch: lowerAHU03P05.selectorState ? lowerAHU03P05.selectorState.value : null,
           }}
           parameters={{
-            estadoDamper: {
+            damperstate: {
               type: 'status',
               name: 'Damper',
               unit: null,
-              value: manejadoraLower03P05.estadoDamper ? manejadoraLower03P05.estadoDamper.value : null,
+              value: lowerAHU03P05.damperstate ? lowerAHU03P05.damperstate.value : null,
             },
-            caudalVentiladorImpulsion: {
+            supplyFanCapacity: {
               type: 'single',
               name: 'Yield Fan Impulse',
-              unit: manejadoraLower03P05.caudalVentiladorImpulsion
-                ? manejadoraLower03P05.caudalVentiladorImpulsion.units
-                : null,
-              value: manejadoraLower03P05.caudalVentiladorImpulsion
-                ? manejadoraLower03P05.caudalVentiladorImpulsion.value
-                : null,
+              unit: lowerAHU03P05.supplyFanCapacity ? lowerAHU03P05.supplyFanCapacity.units : null,
+              value: lowerAHU03P05.supplyFanCapacity ? lowerAHU03P05.supplyFanCapacity.value : null,
             },
-            estadoValvula: {
+            valveState: {
               type: 'single',
               name: 'State Valve',
-              unit: manejadoraLower03P05.estadoValvula ? manejadoraLower03P05.estadoValvula.units : null,
-              value: manejadoraLower03P05.estadoValvula ? manejadoraLower03P05.estadoValvula.value : null,
+              unit: lowerAHU03P05.valveState ? lowerAHU03P05.valveState.units : null,
+              value: lowerAHU03P05.valveState ? lowerAHU03P05.valveState.value : null,
             },
-            horometro: {
+            hourMeasure: {
               type: 'single',
               name: 'HOROMETRO',
-              unit: manejadoraLower03P05.horometro ? manejadoraLower03P05.horometro.units : null,
-              value: manejadoraLower03P05.horometro ? manejadoraLower03P05.horometro.value : null,
+              unit: lowerAHU03P05.hourMeasure ? lowerAHU03P05.hourMeasure.units : null,
+              value: lowerAHU03P05.hourMeasure ? lowerAHU03P05.hourMeasure.value : null,
             },
             setpoint: {
               type: 'group',
               name: 'Setpoint',
-              unit: manejadoraLower03P05.valorConsigna ? 'ºC' : null,
-              value: manejadoraLower03P05.valorConsigna ? manejadoraLower03P05.valorConsigna.value : null,
+              unit: lowerAHU03P05.roomSetpoint ? 'ºC' : null,
+              value: lowerAHU03P05.roomSetpoint ? lowerAHU03P05.roomSetpoint.value : null,
               params: {
-                setpointTrabajo: {
+                workingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Work',
                   state: null,
-                  unit: manejadoraLower03P05.setpointTrabajo ? 'ºC' : null,
-                  value: manejadoraLower03P05.setpointTrabajo ? manejadoraLower03P05.setpointTrabajo.value : null,
+                  unit: lowerAHU03P05.workingSetpoint ? 'ºC' : null,
+                  value: lowerAHU03P05.workingSetpoint ? lowerAHU03P05.workingSetpoint.value : null,
                 },
-                setpointVentiladorMax: {
+                maxFanSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Fan Max',
                   state: null,
-                  unit: manejadoraLower03P05.setpointVentiladorMax
-                    ? manejadoraLower03P05.setpointVentiladorMax.units
-                    : null,
-                  value: manejadoraLower03P05.setpointVentiladorMax
-                    ? manejadoraLower03P05.setpointVentiladorMax.value
-                    : null,
+                  unit: lowerAHU03P05.maxFanSetpoint ? lowerAHU03P05.maxFanSetpoint.units : null,
+                  value: lowerAHU03P05.maxFanSetpoint ? lowerAHU03P05.maxFanSetpoint.value : null,
                 },
-                setpointVentiladorMin: {
+                minFanSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Fan Min',
                   state: null,
-                  unit: manejadoraLower03P05.setpointVentiladorMin
-                    ? manejadoraLower03P05.setpointVentiladorMin.units
-                    : null,
-                  value: manejadoraLower03P05.setpointVentiladorMin
-                    ? manejadoraLower03P05.setpointVentiladorMin.value
-                    : null,
+                  unit: lowerAHU03P05.minFanSetpoint ? lowerAHU03P05.minFanSetpoint.units : null,
+                  value: lowerAHU03P05.minFanSetpoint ? lowerAHU03P05.minFanSetpoint.value : null,
                 },
               },
             },
@@ -552,34 +496,24 @@ export default class Level5 extends Component {
               unit: null,
               value: null,
               params: {
-                estadoTemperaturaAmbiente: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Ambient',
-                  state: null,
-                  unit: manejadoraLower03P05.estadoTemperaturaAmbiente ? 'ºC' : null,
-                  value: manejadoraLower03P05.estadoTemperaturaAmbiente
-                    ? manejadoraLower03P05.estadoTemperaturaAmbiente.value
-                    : null,
-                },
-                estadoTemperaturaAnticongelante: {
+                antiFreezeTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Anti-Freeze',
                   state: null,
-                  unit: manejadoraLower03P05.estadoTemperaturaAnticongelante ? 'ºC' : null,
-                  value: manejadoraLower03P05.estadoTemperaturaAnticongelante
-                    ? manejadoraLower03P05.estadoTemperaturaAnticongelante.value
-                    : null,
+                  unit: lowerAHU03P05.antiFreezeTemperature ? 'ºC' : null,
+                  value: lowerAHU03P05.antiFreezeTemperature ? lowerAHU03P05.antiFreezeTemperature.value : null,
                 },
-                estadoTemperaturaExterior: {
+                // TODO: change exteriorAmbienteTemperature -> externalAmbientTemperature after XML v23.2 release.
+                // see DM-50720.
+                exteriorAmbienteTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Exterior',
                   state: null,
-                  unit: manejadoraLower03P05.estadoTemperaturaExterior ? 'ºC' : null,
-                  value: manejadoraLower03P05.estadoTemperaturaExterior
-                    ? manejadoraLower03P05.estadoTemperaturaExterior.value
+                  unit: lowerAHU03P05.exteriorAmbienteTemperature ? 'ºC' : null,
+                  value: lowerAHU03P05.exteriorAmbienteTemperature
+                    ? lowerAHU03P05.exteriorAmbienteTemperature.value
                     : null,
                 },
               },
@@ -590,19 +524,19 @@ export default class Level5 extends Component {
               unit: null,
               value: null,
               params: {
-                calefaccionEtapa01: {
+                stageHeating01: {
                   type: 'box',
                   alarm: 0,
                   name: '01',
-                  state: manejadoraLower03P05.calefaccionEtapa01 ? manejadoraLower03P05.calefaccionEtapa01.value : null,
+                  state: lowerAHU03P05.stageHeating01 ? lowerAHU03P05.stageHeating01.value : null,
                   unit: null,
                   value: null,
                 },
-                calefaccionEtapa02: {
+                stageHeating02: {
                   type: 'box',
                   alarm: 0,
                   name: '02',
-                  state: manejadoraLower03P05.calefaccionEtapa02 ? manejadoraLower03P05.calefaccionEtapa02.value : null,
+                  state: lowerAHU03P05.stageHeating02 ? lowerAHU03P05.stageHeating02.value : null,
                   unit: null,
                   value: null,
                 },
@@ -612,7 +546,7 @@ export default class Level5 extends Component {
         />
 
         <Device
-          title={'Manejadora Lower 04'}
+          title={'Dome AHU 04'}
           id={404}
           width={108}
           height={130}
@@ -622,89 +556,77 @@ export default class Level5 extends Component {
           alarms={{
             alarm1: {
               name: 'General',
-              state: manejadoraLower04P05.alarmaFiltro ? manejadoraLower04P05.alarmaFiltro.value : null,
+              state: lowerAHU04P05.filterAlarm ? lowerAHU04P05.filterAlarm.value : null,
             },
             alarm2: {
               name: 'Filtro',
-              state: manejadoraLower04P05.alarmaFiltro ? manejadoraLower04P05.alarmaFiltro.value : null,
+              state: lowerAHU04P05.filterAlarm ? lowerAHU04P05.filterAlarm.value : null,
             },
             alarm3: {
               name: 'Reset',
-              state: manejadoraLower04P05.alarmaFiltro ? manejadoraLower04P05.alarmaFiltro.value : null,
+              state: lowerAHU04P05.filterAlarm ? lowerAHU04P05.filterAlarm.value : null,
             },
           }}
           states={{
-            command: manejadoraLower04P05.comandoEncendido ? manejadoraLower04P05.comandoEncendido.value : null,
-            working: manejadoraLower04P05.estadoFuncionamiento ? manejadoraLower04P05.estadoFuncionamiento.value : null,
-            unit: manejadoraLower04P05.estadoUnidad ? manejadoraLower04P05.estadoUnidad.value : null,
-            switch: manejadoraLower04P05.estadoSelector ? manejadoraLower04P05.estadoSelector.value : null,
+            command: lowerAHU04P05.switchedOn ? lowerAHU04P05.switchedOn.value : null,
+            working: lowerAHU04P05.workingState ? lowerAHU04P05.workingState.value : null,
+            unit: lowerAHU04P05.unitState ? lowerAHU04P05.unitState.value : null,
+            switch: lowerAHU04P05.selectorState ? lowerAHU04P05.selectorState.value : null,
           }}
           parameters={{
-            estadoDamper: {
+            damperstate: {
               type: 'status',
               name: 'Damper',
               unit: null,
-              value: manejadoraLower04P05.estadoDamper ? manejadoraLower04P05.estadoDamper.value : null,
+              value: lowerAHU04P05.damperstate ? lowerAHU04P05.damperstate.value : null,
             },
-            caudalVentiladorImpulsion: {
+            supplyFanCapacity: {
               type: 'single',
               name: 'Yield Fan Impulse',
-              unit: manejadoraLower04P05.caudalVentiladorImpulsion
-                ? manejadoraLower04P05.caudalVentiladorImpulsion.units
-                : null,
-              value: manejadoraLower04P05.caudalVentiladorImpulsion
-                ? manejadoraLower04P05.caudalVentiladorImpulsion.value
-                : null,
+              unit: lowerAHU04P05.supplyFanCapacity ? lowerAHU04P05.supplyFanCapacity.units : null,
+              value: lowerAHU04P05.supplyFanCapacity ? lowerAHU04P05.supplyFanCapacity.value : null,
             },
-            estadoValvula: {
+            valveState: {
               type: 'single',
               name: 'State Valve',
-              unit: manejadoraLower04P05.estadoValvula ? manejadoraLower04P05.estadoValvula.units : null,
-              value: manejadoraLower04P05.estadoValvula ? manejadoraLower04P05.estadoValvula.value : null,
+              unit: lowerAHU04P05.valveState ? lowerAHU04P05.valveState.units : null,
+              value: lowerAHU04P05.valveState ? lowerAHU04P05.valveState.value : null,
             },
-            horometro: {
+            hourMeasure: {
               type: 'single',
               name: 'HOROMETRO',
-              unit: manejadoraLower04P05.horometro ? manejadoraLower04P05.horometro.units : null,
-              value: manejadoraLower04P05.horometro ? manejadoraLower04P05.horometro.value : null,
+              unit: lowerAHU04P05.hourMeasure ? lowerAHU04P05.hourMeasure.units : null,
+              value: lowerAHU04P05.hourMeasure ? lowerAHU04P05.hourMeasure.value : null,
             },
             setpoint: {
               type: 'group',
               name: 'Setpoint',
-              unit: manejadoraLower04P05.valorConsigna ? 'ºC' : null,
-              value: manejadoraLower04P05.valorConsigna ? manejadoraLower04P05.valorConsigna.value : null,
+              unit: lowerAHU04P05.roomSetpoint ? 'ºC' : null,
+              value: lowerAHU04P05.roomSetpoint ? lowerAHU04P05.roomSetpoint.value : null,
               params: {
-                setpointTrabajo: {
+                workingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Work',
                   state: null,
-                  unit: manejadoraLower04P05.setpointTrabajo ? 'ºC' : null,
-                  value: manejadoraLower04P05.setpointTrabajo ? manejadoraLower04P05.setpointTrabajo.value : null,
+                  unit: lowerAHU04P05.workingSetpoint ? 'ºC' : null,
+                  value: lowerAHU04P05.workingSetpoint ? lowerAHU04P05.workingSetpoint.value : null,
                 },
-                setpointVentiladorMax: {
+                maxFanSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Fan Max',
                   state: null,
-                  unit: manejadoraLower04P05.setpointVentiladorMax
-                    ? manejadoraLower04P05.setpointVentiladorMax.units
-                    : null,
-                  value: manejadoraLower04P05.setpointVentiladorMax
-                    ? manejadoraLower04P05.setpointVentiladorMax.value
-                    : null,
+                  unit: lowerAHU04P05.maxFanSetpoint ? lowerAHU04P05.maxFanSetpoint.units : null,
+                  value: lowerAHU04P05.maxFanSetpoint ? lowerAHU04P05.maxFanSetpoint.value : null,
                 },
-                setpointVentiladorMin: {
+                minFanSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Fan Min',
                   state: null,
-                  unit: manejadoraLower04P05.setpointVentiladorMin
-                    ? manejadoraLower04P05.setpointVentiladorMin.units
-                    : null,
-                  value: manejadoraLower04P05.setpointVentiladorMin
-                    ? manejadoraLower04P05.setpointVentiladorMin.value
-                    : null,
+                  unit: lowerAHU04P05.minFanSetpoint ? lowerAHU04P05.minFanSetpoint.units : null,
+                  value: lowerAHU04P05.minFanSetpoint ? lowerAHU04P05.minFanSetpoint.value : null,
                 },
               },
             },
@@ -714,34 +636,24 @@ export default class Level5 extends Component {
               unit: null,
               value: null,
               params: {
-                estadoTemperaturaAmbiente: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Ambient',
-                  state: null,
-                  unit: manejadoraLower04P05.estadoTemperaturaAmbiente ? 'ºC' : null,
-                  value: manejadoraLower04P05.estadoTemperaturaAmbiente
-                    ? manejadoraLower04P05.estadoTemperaturaAmbiente.value
-                    : null,
-                },
-                estadoTemperaturaAnticongelante: {
+                antiFreezeTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Anti-Freeze',
                   state: null,
-                  unit: manejadoraLower04P05.estadoTemperaturaAnticongelante ? 'ºC' : null,
-                  value: manejadoraLower04P05.estadoTemperaturaAnticongelante
-                    ? manejadoraLower04P05.estadoTemperaturaAnticongelante.value
-                    : null,
+                  unit: lowerAHU04P05.antiFreezeTemperature ? 'ºC' : null,
+                  value: lowerAHU04P05.antiFreezeTemperature ? lowerAHU04P05.antiFreezeTemperature.value : null,
                 },
-                estadoTemperaturaExterior: {
+                // TODO: change exteriorAmbienteTemperature -> externalAmbientTemperature after XML v23.2 release.
+                // see DM-50720.
+                exteriorAmbienteTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Exterior',
                   state: null,
-                  unit: manejadoraLower04P05.estadoTemperaturaExterior ? 'ºC' : null,
-                  value: manejadoraLower04P05.estadoTemperaturaExterior
-                    ? manejadoraLower04P05.estadoTemperaturaExterior.value
+                  unit: lowerAHU04P05.exteriorAmbienteTemperature ? 'ºC' : null,
+                  value: lowerAHU04P05.exteriorAmbienteTemperature
+                    ? lowerAHU04P05.exteriorAmbienteTemperature.value
                     : null,
                 },
               },
@@ -752,19 +664,19 @@ export default class Level5 extends Component {
               unit: null,
               value: null,
               params: {
-                calefaccionEtapa01: {
+                stageHeating01: {
                   type: 'box',
                   alarm: 0,
                   name: '01',
-                  state: manejadoraLower04P05.calefaccionEtapa01 ? manejadoraLower04P05.calefaccionEtapa01.value : null,
+                  state: lowerAHU04P05.stageHeating01 ? lowerAHU04P05.stageHeating01.value : null,
                   unit: null,
                   value: null,
                 },
-                calefaccionEtapa02: {
+                stageHeating02: {
                   type: 'box',
                   alarm: 0,
                   name: '02',
-                  state: manejadoraLower04P05.calefaccionEtapa02 ? manejadoraLower04P05.calefaccionEtapa02.value : null,
+                  state: lowerAHU04P05.stageHeating02 ? lowerAHU04P05.stageHeating02.value : null,
                   unit: null,
                   value: null,
                 },
@@ -784,14 +696,14 @@ export default class Level5 extends Component {
           alarms={{
             alarm1: {
               name: 'Thermal Error',
-              state: vea01P05.fallaTermica ? vea01P05.fallaTermica.value : null,
+              state: airInletFan01P05.thermalFault ? airInletFan01P05.thermalFault.value : null,
             },
           }}
           states={{
-            command: vea01P05.comandoEncendido ? vea01P05.comandoEncendido.value : null,
-            working: vea01P05.estadoFuncionamiento ? vea01P05.estadoFuncionamiento.value : null,
-            unit: vea01P05.estadoUnidad ? vea01P05.estadoUnidad.value : null,
-            switch: vea01P05.estadoSelector ? vea01P05.estadoSelector.value : null,
+            command: airInletFan01P05.switchedOn ? airInletFan01P05.switchedOn.value : null,
+            working: airInletFan01P05.workingState ? airInletFan01P05.workingState.value : null,
+            unit: airInletFan01P05.unitState ? airInletFan01P05.unitState.value : null,
+            switch: airInletFan01P05.selectorState ? airInletFan01P05.selectorState.value : null,
           }}
         />
 
@@ -806,14 +718,14 @@ export default class Level5 extends Component {
           alarms={{
             alarm1: {
               name: 'Thermal Error',
-              state: vea08P05.fallaTermica ? vea08P05.fallaTermica.value : null,
+              state: airInletFan08P05.thermalFault ? airInletFan08P05.thermalFault.value : null,
             },
           }}
           states={{
-            command: vea08P05.comandoEncendido ? vea08P05.comandoEncendido.value : null,
-            working: vea08P05.estadoFuncionamiento ? vea08P05.estadoFuncionamiento.value : null,
-            unit: vea08P05.estadoUnidad ? vea08P05.estadoUnidad.value : null,
-            switch: vea08P05.estadoSelector ? vea08P05.estadoSelector.value : null,
+            command: airInletFan08P05.switchedOn ? airInletFan08P05.switchedOn.value : null,
+            working: airInletFan08P05.workingState ? airInletFan08P05.workingState.value : null,
+            unit: airInletFan08P05.unitState ? airInletFan08P05.unitState.value : null,
+            switch: airInletFan08P05.selectorState ? airInletFan08P05.selectorState.value : null,
           }}
         />
 
@@ -828,14 +740,14 @@ export default class Level5 extends Component {
           alarms={{
             alarm1: {
               name: 'Thermal Error',
-              state: vea09P05.fallaTermica ? vea09P05.fallaTermica.value : null,
+              state: airInletFan09P05.thermalFault ? airInletFan09P05.thermalFault.value : null,
             },
           }}
           states={{
-            command: vea09P05.comandoEncendido ? vea09P05.comandoEncendido.value : null,
-            working: vea09P05.estadoFuncionamiento ? vea09P05.estadoFuncionamiento.value : null,
-            unit: vea09P05.estadoUnidad ? vea09P05.estadoUnidad.value : null,
-            switch: vea09P05.estadoSelector ? vea09P05.estadoSelector.value : null,
+            command: airInletFan09P05.switchedOn ? airInletFan09P05.switchedOn.value : null,
+            working: airInletFan09P05.workingState ? airInletFan09P05.workingState.value : null,
+            unit: airInletFan09P05.unitState ? airInletFan09P05.unitState.value : null,
+            switch: airInletFan09P05.selectorState ? airInletFan09P05.selectorState.value : null,
           }}
         />
 
@@ -850,14 +762,14 @@ export default class Level5 extends Component {
           alarms={{
             alarm1: {
               name: 'Thermal Error',
-              state: vea10P05.fallaTermica ? vea10P05.fallaTermica.value : null,
+              state: airInletFan10P05.thermalFault ? airInletFan10P05.thermalFault.value : null,
             },
           }}
           states={{
-            command: vea10P05.comandoEncendido ? vea10P05.comandoEncendido.value : null,
-            working: vea10P05.estadoFuncionamiento ? vea10P05.estadoFuncionamiento.value : null,
-            unit: vea10P05.estadoUnidad ? vea10P05.estadoUnidad.value : null,
-            switch: vea10P05.estadoSelector ? vea10P05.estadoSelector.value : null,
+            command: airInletFan10P05.switchedOn ? airInletFan10P05.switchedOn.value : null,
+            working: airInletFan10P05.workingState ? airInletFan10P05.workingState.value : null,
+            unit: airInletFan10P05.unitState ? airInletFan10P05.unitState.value : null,
+            switch: airInletFan10P05.selectorState ? airInletFan10P05.selectorState.value : null,
           }}
         />
 
@@ -872,14 +784,14 @@ export default class Level5 extends Component {
           alarms={{
             alarm1: {
               name: 'Thermal Error',
-              state: vea11P05.fallaTermica ? vea11P05.fallaTermica.value : null,
+              state: airInletFan11P05.thermalFault ? airInletFan11P05.thermalFault.value : null,
             },
           }}
           states={{
-            command: vea11P05.comandoEncendido ? vea11P05.comandoEncendido.value : null,
-            working: vea11P05.estadoFuncionamiento ? vea11P05.estadoFuncionamiento.value : null,
-            unit: vea11P05.estadoUnidad ? vea11P05.estadoUnidad.value : null,
-            switch: vea11P05.estadoSelector ? vea11P05.estadoSelector.value : null,
+            command: airInletFan11P05.switchedOn ? airInletFan11P05.switchedOn.value : null,
+            working: airInletFan11P05.workingState ? airInletFan11P05.workingState.value : null,
+            unit: airInletFan11P05.unitState ? airInletFan11P05.unitState.value : null,
+            switch: airInletFan11P05.selectorState ? airInletFan11P05.selectorState.value : null,
           }}
         />
 
@@ -894,14 +806,14 @@ export default class Level5 extends Component {
           alarms={{
             alarm1: {
               name: 'Thermal Error',
-              state: vea12P05.fallaTermica ? vea12P05.fallaTermica.value : null,
+              state: airInletFan12P05.thermalFault ? airInletFan12P05.thermalFault.value : null,
             },
           }}
           states={{
-            command: vea12P05.comandoEncendido ? vea12P05.comandoEncendido.value : null,
-            working: vea12P05.estadoFuncionamiento ? vea12P05.estadoFuncionamiento.value : null,
-            unit: vea12P05.estadoUnidad ? vea12P05.estadoUnidad.value : null,
-            switch: vea12P05.estadoSelector ? vea12P05.estadoSelector.value : null,
+            command: airInletFan12P05.switchedOn ? airInletFan12P05.switchedOn.value : null,
+            working: airInletFan12P05.workingState ? airInletFan12P05.workingState.value : null,
+            unit: airInletFan12P05.unitState ? airInletFan12P05.unitState.value : null,
+            switch: airInletFan12P05.selectorState ? airInletFan12P05.selectorState.value : null,
           }}
         />
 
@@ -916,14 +828,14 @@ export default class Level5 extends Component {
           alarms={{
             alarm1: {
               name: 'Thermal Error',
-              state: vea13P05.fallaTermica ? vea13P05.fallaTermica.value : null,
+              state: airInletFan13P05.thermalFault ? airInletFan13P05.thermalFault.value : null,
             },
           }}
           states={{
-            command: vea13P05.comandoEncendido ? vea13P05.comandoEncendido.value : null,
-            working: vea13P05.estadoFuncionamiento ? vea13P05.estadoFuncionamiento.value : null,
-            unit: vea13P05.estadoUnidad ? vea13P05.estadoUnidad.value : null,
-            switch: vea13P05.estadoSelector ? vea13P05.estadoSelector.value : null,
+            command: airInletFan13P05.switchedOn ? airInletFan13P05.switchedOn.value : null,
+            working: airInletFan13P05.workingState ? airInletFan13P05.workingState.value : null,
+            unit: airInletFan13P05.unitState ? airInletFan13P05.unitState.value : null,
+            switch: airInletFan13P05.selectorState ? airInletFan13P05.selectorState.value : null,
           }}
         />
 
@@ -938,14 +850,14 @@ export default class Level5 extends Component {
           alarms={{
             alarm1: {
               name: 'Thermal Error',
-              state: vea14P05.fallaTermica ? vea14P05.fallaTermica.value : null,
+              state: airInletFan14P05.thermalFault ? airInletFan14P05.thermalFault.value : null,
             },
           }}
           states={{
-            command: vea14P05.comandoEncendido ? vea14P05.comandoEncendido.value : null,
-            working: vea14P05.estadoFuncionamiento ? vea14P05.estadoFuncionamiento.value : null,
-            unit: vea14P05.estadoUnidad ? vea14P05.estadoUnidad.value : null,
-            switch: vea14P05.estadoSelector ? vea14P05.estadoSelector.value : null,
+            command: airInletFan14P05.switchedOn ? airInletFan14P05.switchedOn.value : null,
+            working: airInletFan14P05.workingState ? airInletFan14P05.workingState.value : null,
+            unit: airInletFan14P05.unitState ? airInletFan14P05.unitState.value : null,
+            switch: airInletFan14P05.selectorState ? airInletFan14P05.selectorState.value : null,
           }}
         />
 
@@ -960,14 +872,14 @@ export default class Level5 extends Component {
           alarms={{
             alarm1: {
               name: 'Thermal Error',
-              state: vea15P05.fallaTermica ? vea15P05.fallaTermica.value : null,
+              state: airInletFan15P05.thermalFault ? airInletFan15P05.thermalFault.value : null,
             },
           }}
           states={{
-            command: vea15P05.comandoEncendido ? vea15P05.comandoEncendido.value : null,
-            working: vea15P05.estadoFuncionamiento ? vea15P05.estadoFuncionamiento.value : null,
-            unit: vea15P05.estadoUnidad ? vea15P05.estadoUnidad.value : null,
-            switch: vea15P05.estadoSelector ? vea15P05.estadoSelector.value : null,
+            command: airInletFan15P05.switchedOn ? airInletFan15P05.switchedOn.value : null,
+            working: airInletFan15P05.workingState ? airInletFan15P05.workingState.value : null,
+            unit: airInletFan15P05.unitState ? airInletFan15P05.unitState.value : null,
+            switch: airInletFan15P05.selectorState ? airInletFan15P05.selectorState.value : null,
           }}
         />
 
@@ -982,14 +894,14 @@ export default class Level5 extends Component {
           alarms={{
             alarm1: {
               name: 'Thermal Error',
-              state: vea16P05.fallaTermica ? vea16P05.fallaTermica.value : null,
+              state: airInletFan16P05.thermalFault ? airInletFan16P05.thermalFault.value : null,
             },
           }}
           states={{
-            command: vea16P05.comandoEncendido ? vea16P05.comandoEncendido.value : null,
-            working: vea16P05.estadoFuncionamiento ? vea16P05.estadoFuncionamiento.value : null,
-            unit: vea16P05.estadoUnidad ? vea16P05.estadoUnidad.value : null,
-            switch: vea16P05.estadoSelector ? vea16P05.estadoSelector.value : null,
+            command: airInletFan16P05.switchedOn ? airInletFan16P05.switchedOn.value : null,
+            working: airInletFan16P05.workingState ? airInletFan16P05.workingState.value : null,
+            unit: airInletFan16P05.unitState ? airInletFan16P05.unitState.value : null,
+            switch: airInletFan16P05.selectorState ? airInletFan16P05.selectorState.value : null,
           }}
         />
 
@@ -1004,14 +916,14 @@ export default class Level5 extends Component {
           alarms={{
             alarm1: {
               name: 'Thermal Error',
-              state: vea17P05.fallaTermica ? vea17P05.fallaTermica.value : null,
+              state: airInletFan17P05.thermalFault ? airInletFan17P05.thermalFault.value : null,
             },
           }}
           states={{
-            command: vea17P05.comandoEncendido ? vea17P05.comandoEncendido.value : null,
-            working: vea17P05.estadoFuncionamiento ? vea17P05.estadoFuncionamiento.value : null,
-            unit: vea17P05.estadoUnidad ? vea17P05.estadoUnidad.value : null,
-            switch: vea17P05.estadoSelector ? vea17P05.estadoSelector.value : null,
+            command: airInletFan17P05.switchedOn ? airInletFan17P05.switchedOn.value : null,
+            working: airInletFan17P05.workingState ? airInletFan17P05.workingState.value : null,
+            unit: airInletFan17P05.unitState ? airInletFan17P05.unitState.value : null,
+            switch: airInletFan17P05.selectorState ? airInletFan17P05.selectorState.value : null,
           }}
         />
 

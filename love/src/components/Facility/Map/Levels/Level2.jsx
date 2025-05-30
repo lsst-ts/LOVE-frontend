@@ -79,8 +79,8 @@ export default class Level2 extends Component {
 
   getDevices() {
     const {
-      crack01P02,
-      crack02P02,
+      crac01P02,
+      crac02P02,
       fancoil01P02,
       fancoil02P02,
       fancoil03P02,
@@ -99,48 +99,48 @@ export default class Level2 extends Component {
       <React.Fragment>
         <Device
           title={'Fancoil 02'}
-          temp={fancoil02P02.temperaturaSala ? fancoil02P02.temperaturaSala.value : null}
+          temp={fancoil02P02.roomTemperature ? fancoil02P02.roomTemperature.value : null}
           width={84}
           height={112}
           posX={620}
           posY={146}
           collapsible={true}
           states={{
-            command: fancoil02P02.comandoEncendido ? fancoil02P02.comandoEncendido.value : null,
-            working: fancoil02P02.estadoFuncionamiento ? fancoil02P02.estadoFuncionamiento.value : null,
-            unit: fancoil02P02.estadoUnidad ? fancoil02P02.estadoUnidad.value : null,
-            switch: fancoil02P02.estadoSelector ? fancoil02P02.estadoSelector.value : null,
+            command: fancoil02P02.switchedOn ? fancoil02P02.switchedOn.value : null,
+            working: fancoil02P02.workingState ? fancoil02P02.workingState.value : null,
+            unit: fancoil02P02.unitState ? fancoil02P02.unitState.value : null,
+            switch: fancoil02P02.selectorState ? fancoil02P02.selectorState.value : null,
           }}
           parameters={{
-            estadoCalefactor: {
+            heatingState: {
               type: 'status',
               name: 'Heater',
               unit: null,
-              value: fancoil02P02.estadoCalefactor ? fancoil02P02.estadoCalefactor.value : null,
+              value: fancoil02P02.heatingState ? fancoil02P02.heatingState.value : null,
             },
-            estadoOperacion: {
+            operationalState: {
               type: 'status',
               name: 'Operation',
               unit: null,
-              value: fancoil02P02.estadoOperacion ? fancoil02P02.estadoOperacion.value : null,
+              value: fancoil02P02.operationalState ? fancoil02P02.operationalState.value : null,
             },
-            estadoVentilador: {
+            fanState: {
               type: 'status',
               name: 'Fan',
               unit: null,
-              value: fancoil02P02.estadoVentilador ? fancoil02P02.estadoVentilador.value : null,
+              value: fancoil02P02.fanState ? fancoil02P02.fanState.value : null,
             },
-            aperturaValvulaFrio: {
+            coldValveOpening: {
               type: 'single',
               name: 'Opening Valve Cold',
-              unit: fancoil02P02.aperturaValvulaFrio ? fancoil02P02.aperturaValvulaFrio.units : null,
-              value: fancoil02P02.aperturaValvulaFrio ? fancoil02P02.aperturaValvulaFrio.value : null,
+              unit: fancoil02P02.coldValveOpening ? fancoil02P02.coldValveOpening.units : null,
+              value: fancoil02P02.coldValveOpening ? fancoil02P02.coldValveOpening.value : null,
             },
-            temperaturaSala: {
+            roomTemperature: {
               type: 'single',
               name: 'Temperature Room',
-              unit: fancoil02P02.temperaturaSala ? 'ºC' : null,
-              value: fancoil02P02.temperaturaSala ? fancoil02P02.temperaturaSala.value : null,
+              unit: fancoil02P02.roomTemperature ? 'ºC' : null,
+              value: fancoil02P02.roomTemperature ? fancoil02P02.roomTemperature.value : null,
             },
             setpointDay: {
               type: 'group',
@@ -148,21 +148,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingDay: {
+                dayCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil02P02.setpointCoolingDay ? 'ºC' : null,
-                  value: fancoil02P02.setpointCoolingDay ? fancoil02P02.setpointCoolingDay.value : null,
+                  unit: fancoil02P02.dayCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil02P02.dayCoolingSetpoint ? fancoil02P02.dayCoolingSetpoint.value : null,
                 },
-                setpointHeatingDay: {
+                dayHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil02P02.setpointHeatingDay ? 'ºC' : null,
-                  value: fancoil02P02.setpointHeatingDay ? fancoil02P02.setpointHeatingDay.value : null,
+                  unit: fancoil02P02.dayHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil02P02.dayHeatingSetpoint ? fancoil02P02.dayHeatingSetpoint.value : null,
                 },
               },
             },
@@ -172,21 +172,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingNight: {
+                nightCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil02P02.setpointCoolingNight ? 'ºC' : null,
-                  value: fancoil02P02.setpointCoolingNight ? fancoil02P02.setpointCoolingNight.value : null,
+                  unit: fancoil02P02.nightCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil02P02.nightCoolingSetpoint ? fancoil02P02.nightCoolingSetpoint.value : null,
                 },
-                setpointHeatingNight: {
+                nightHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil02P02.setpointHeatingNight ? 'ºC' : null,
-                  value: fancoil02P02.setpointHeatingNight ? fancoil02P02.setpointHeatingNight.value : null,
+                  unit: fancoil02P02.nightHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil02P02.nightHeatingSetpoint ? fancoil02P02.nightHeatingSetpoint.value : null,
                 },
               },
             },
@@ -195,48 +195,48 @@ export default class Level2 extends Component {
 
         <Device
           title={'Fancoil 01'}
-          temp={fancoil01P02.temperaturaSala ? fancoil01P02.temperaturaSala.value : null}
+          temp={fancoil01P02.roomTemperature ? fancoil01P02.roomTemperature.value : null}
           width={84}
           height={112}
           posX={632}
           posY={92}
           collapsible={true}
           states={{
-            command: fancoil01P02.comandoEncendido ? fancoil01P02.comandoEncendido.value : null,
-            working: fancoil01P02.estadoFuncionamiento ? fancoil01P02.estadoFuncionamiento.value : null,
-            unit: fancoil01P02.estadoUnidad ? fancoil01P02.estadoUnidad.value : null,
-            switch: fancoil01P02.estadoSelector ? fancoil01P02.estadoSelector.value : null,
+            command: fancoil01P02.switchedOn ? fancoil01P02.switchedOn.value : null,
+            working: fancoil01P02.workingState ? fancoil01P02.workingState.value : null,
+            unit: fancoil01P02.unitState ? fancoil01P02.unitState.value : null,
+            switch: fancoil01P02.selectorState ? fancoil01P02.selectorState.value : null,
           }}
           parameters={{
-            estadoCalefactor: {
+            heatingState: {
               type: 'status',
               name: 'Heater',
               unit: null,
-              value: fancoil01P02.estadoCalefactor ? fancoil01P02.estadoCalefactor.value : null,
+              value: fancoil01P02.heatingState ? fancoil01P02.heatingState.value : null,
             },
-            estadoOperacion: {
+            operationalState: {
               type: 'status',
               name: 'Operation',
               unit: null,
-              value: fancoil01P02.estadoOperacion ? fancoil01P02.estadoOperacion.value : null,
+              value: fancoil01P02.operationalState ? fancoil01P02.operationalState.value : null,
             },
-            estadoVentilador: {
+            fanState: {
               type: 'status',
               name: 'Fan',
               unit: null,
-              value: fancoil01P02.estadoVentilador ? fancoil01P02.estadoVentilador.value : null,
+              value: fancoil01P02.fanState ? fancoil01P02.fanState.value : null,
             },
-            aperturaValvulaFrio: {
+            coldValveOpening: {
               type: 'single',
               name: 'Opening Valve Cold',
-              unit: fancoil01P02.aperturaValvulaFrio ? fancoil01P02.aperturaValvulaFrio.units : null,
-              value: fancoil01P02.aperturaValvulaFrio ? fancoil01P02.aperturaValvulaFrio.value : null,
+              unit: fancoil01P02.coldValveOpening ? fancoil01P02.coldValveOpening.units : null,
+              value: fancoil01P02.coldValveOpening ? fancoil01P02.coldValveOpening.value : null,
             },
-            temperaturaSala: {
+            roomTemperature: {
               type: 'single',
               name: 'Temperature Room',
-              unit: fancoil01P02.temperaturaSala ? 'ºC' : null,
-              value: fancoil01P02.temperaturaSala ? fancoil01P02.temperaturaSala.value : null,
+              unit: fancoil01P02.roomTemperature ? 'ºC' : null,
+              value: fancoil01P02.roomTemperature ? fancoil01P02.roomTemperature.value : null,
             },
             setpointDay: {
               type: 'group',
@@ -244,21 +244,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingDay: {
+                dayCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil01P02.setpointCoolingDay ? 'ºC' : null,
-                  value: fancoil01P02.setpointCoolingDay ? fancoil01P02.setpointCoolingDay.value : null,
+                  unit: fancoil01P02.dayCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil01P02.dayCoolingSetpoint ? fancoil01P02.dayCoolingSetpoint.value : null,
                 },
-                setpointHeatingDay: {
+                dayHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil01P02.setpointHeatingDay ? 'ºC' : null,
-                  value: fancoil01P02.setpointHeatingDay ? fancoil01P02.setpointHeatingDay.value : null,
+                  unit: fancoil01P02.dayHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil01P02.dayHeatingSetpoint ? fancoil01P02.dayHeatingSetpoint.value : null,
                 },
               },
             },
@@ -268,21 +268,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingNight: {
+                nightCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil01P02.setpointCoolingNight ? 'ºC' : null,
-                  value: fancoil01P02.setpointCoolingNight ? fancoil01P02.setpointCoolingNight.value : null,
+                  unit: fancoil01P02.nightCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil01P02.nightCoolingSetpoint ? fancoil01P02.nightCoolingSetpoint.value : null,
                 },
-                setpointHeatingNight: {
+                nightHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil01P02.setpointHeatingNight ? 'ºC' : null,
-                  value: fancoil01P02.setpointHeatingNight ? fancoil01P02.setpointHeatingNight.value : null,
+                  unit: fancoil01P02.nightHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil01P02.nightHeatingSetpoint ? fancoil01P02.nightHeatingSetpoint.value : null,
                 },
               },
             },
@@ -299,57 +299,57 @@ export default class Level2 extends Component {
           alarms={{
             alarm1: {
               name: 'State Presense',
-              state: crack02P02.estadoPresenciaAlarma ? crack02P02.estadoPresenciaAlarma.value : null,
+              state: crac02P02.alarmPresentState ? crac02P02.alarmPresentState.value : null,
             },
           }}
           states={{
-            command: crack02P02.comandoEncendido ? crack02P02.comandoEncendido.value : null,
-            working: crack02P02.estadoFuncionamiento ? crack02P02.estadoFuncionamiento.value : null,
-            unit: crack02P02.estadoUnidad ? crack02P02.estadoUnidad.value : null,
-            switch: crack02P02.estadoSelector ? crack02P02.estadoSelector.value : null,
+            command: crac02P02.switchedOn ? crac02P02.switchedOn.value : null,
+            working: crac02P02.workingState ? crac02P02.workingState.value : null,
+            unit: crac02P02.unitState ? crac02P02.unitState.value : null,
+            switch: crac02P02.selectorState ? crac02P02.selectorState.value : null,
           }}
           parameters={{
-            modoOperacionUnidad: {
+            unitOperationalMode: {
               type: 'single',
               name: 'Mode of Operation',
               unit: null,
-              value: crack02P02.modoOperacionUnidad ? crack02P02.modoOperacionUnidad.value : null,
+              value: crac02P02.unitOperationalMode ? crac02P02.unitOperationalMode.value : null,
             },
-            aperturaValvula: {
+            valveOpening: {
               type: 'single',
               name: 'Opening Valve',
-              unit: crack02P02.aperturaValvula ? crack02P02.aperturaValvula.units : null,
-              value: crack02P02.aperturaValvula ? crack02P02.aperturaValvula.value : null,
+              unit: crac02P02.valveOpening ? crac02P02.valveOpening.units : null,
+              value: crac02P02.valveOpening ? crac02P02.valveOpening.value : null,
             },
-            humedadSala: {
+            roomHumidity: {
               type: 'single',
               name: 'Room Humidity',
-              unit: crack02P02.humedadSala ? crack02P02.humedadSala.units : null,
-              value: crack02P02.humedadSala ? crack02P02.humedadSala.value : null,
+              unit: crac02P02.roomHumidity ? crac02P02.roomHumidity.units : null,
+              value: crac02P02.roomHumidity ? crac02P02.roomHumidity.value : null,
             },
-            horometro: {
+            hourMeasure: {
               type: 'single',
               name: 'HOROMETRO',
-              unit: crack02P02.horometro ? crack02P02.horometro.units : null,
-              value: crack02P02.horometro ? crack02P02.horometro.value : null,
+              unit: crac02P02.hourMeasure ? crac02P02.hourMeasure.units : null,
+              value: crac02P02.hourMeasure ? crac02P02.hourMeasure.value : null,
             },
-            numeroCircuitos: {
+            numberOfCircuits: {
               type: 'single',
               name: 'Number Circuits',
               unit: null,
-              value: crack02P02.numeroCircuitos ? crack02P02.numeroCircuitos.value : null,
+              value: crac02P02.numberOfCircuits ? crac02P02.numberOfCircuits.value : null,
             },
-            requerimientoHumidificador: {
+            humidifierRequirement: {
               type: 'single',
               name: 'Requirement Humidifier',
-              unit: crack02P02.requerimientoHumidificador ? crack02P02.requerimientoHumidificador.units : null,
-              value: crack02P02.requerimientoHumidificador ? crack02P02.requerimientoHumidificador.value : null,
+              unit: crac02P02.humidifierRequirement ? crac02P02.humidifierRequirement.units : null,
+              value: crac02P02.humidifierRequirement ? crac02P02.humidifierRequirement.value : null,
             },
-            setpointActivo: {
+            activeSetpoint: {
               type: 'single',
               name: 'Setpoint Active',
-              unit: crack02P02.setpointActivo ? 'ºC' : null,
-              value: crack02P02.setpointActivo ? crack02P02.setpointActivo.value : null,
+              unit: crac02P02.activeSetpoint ? 'ºC' : null,
+              value: crac02P02.activeSetpoint ? crac02P02.activeSetpoint.value : null,
             },
             setpoint: {
               type: 'group',
@@ -357,37 +357,37 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCooling: {
+                coolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: crack02P02.setpointCooling ? 'ºC' : null,
-                  value: crack02P02.setpointCooling ? crack02P02.setpointCooling.value : null,
+                  unit: crac02P02.coolingSetpoint ? 'ºC' : null,
+                  value: crac02P02.coolingSetpoint ? crac02P02.coolingSetpoint.value : null,
                 },
-                setpointHeating: {
+                heatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: crack02P02.setpointHeating ? 'ºC' : null,
-                  value: crack02P02.setpointHeating ? crack02P02.setpointHeating.value : null,
+                  unit: crac02P02.heatingSetpoint ? 'ºC' : null,
+                  value: crac02P02.heatingSetpoint ? crac02P02.heatingSetpoint.value : null,
                 },
-                setpointHumidificador: {
+                humidifierSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Humidifier',
                   state: null,
-                  unit: crack02P02.setpointHumidificador ? '%' : null,
-                  value: crack02P02.setpointHumidificador ? crack02P02.setpointHumidificador.value : null,
+                  unit: crac02P02.humidifierSetpoint ? '%' : null,
+                  value: crac02P02.humidifierSetpoint ? crac02P02.humidifierSetpoint.value : null,
                 },
-                setpointDeshumidificador: {
+                dehumidifierSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Dehumidifier',
                   state: null,
-                  unit: crack02P02.setpointDeshumidificador ? '%' : null,
-                  value: crack02P02.setpointDeshumidificador ? crack02P02.setpointDeshumidificador.value : null,
+                  unit: crac02P02.dehumidifierSetpoint ? '%' : null,
+                  value: crac02P02.dehumidifierSetpoint ? crac02P02.dehumidifierSetpoint.value : null,
                 },
               },
             },
@@ -397,21 +397,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                temperaturaInyeccion: {
+                supplyTemperature: {
                   type: 'badge',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: crack02P02.temperaturaInyeccion ? 'ºC Injection' : null,
-                  value: crack02P02.temperaturaInyeccion ? crack02P02.temperaturaInyeccion.value : null,
+                  unit: crac02P02.supplyTemperature ? 'ºC Injection' : null,
+                  value: crac02P02.supplyTemperature ? crac02P02.supplyTemperature.value : null,
                 },
-                temperaturaRetorno: {
+                returnTemperature: {
                   type: 'badge',
                   alarm: null,
                   name: '02',
                   state: null,
-                  unit: crack02P02.temperaturaRetorno ? '% Return' : null,
-                  value: crack02P02.temperaturaRetorno ? crack02P02.temperaturaRetorno.value : null,
+                  unit: crac02P02.returnTemperature ? '% Return' : null,
+                  value: crac02P02.returnTemperature ? crac02P02.returnTemperature.value : null,
                 },
               },
             },
@@ -428,57 +428,57 @@ export default class Level2 extends Component {
           alarms={{
             alarm1: {
               name: 'State Presense',
-              state: crack01P02.estadoPresenciaAlarma ? crack01P02.estadoPresenciaAlarma.value : null,
+              state: crac01P02.alarmPresentState ? crac01P02.alarmPresentState.value : null,
             },
           }}
           states={{
-            command: crack01P02.comandoEncendido ? crack01P02.comandoEncendido.value : null,
-            working: crack01P02.estadoFuncionamiento ? crack01P02.estadoFuncionamiento.value : null,
-            unit: crack01P02.estadoUnidad ? crack01P02.estadoUnidad.value : null,
-            switch: crack01P02.estadoSelector ? crack01P02.estadoSelector.value : null,
+            command: crac01P02.switchedOn ? crac01P02.switchedOn.value : null,
+            working: crac01P02.workingState ? crac01P02.workingState.value : null,
+            unit: crac01P02.unitState ? crac01P02.unitState.value : null,
+            switch: crac01P02.selectorState ? crac01P02.selectorState.value : null,
           }}
           parameters={{
-            modoOperacionUnidad: {
+            unitOperationalMode: {
               type: 'single',
               name: 'Mode of Operation',
               unit: null,
-              value: crack01P02.modoOperacionUnidad ? crack01P02.modoOperacionUnidad.value : null,
+              value: crac01P02.unitOperationalMode ? crac01P02.unitOperationalMode.value : null,
             },
-            aperturaValvula: {
+            valveOpening: {
               type: 'single',
               name: 'Opening Valve',
-              unit: crack01P02.aperturaValvula ? crack01P02.aperturaValvula.units : null,
-              value: crack01P02.aperturaValvula ? crack01P02.aperturaValvula.value : null,
+              unit: crac01P02.valveOpening ? crac01P02.valveOpening.units : null,
+              value: crac01P02.valveOpening ? crac01P02.valveOpening.value : null,
             },
-            humedadSala: {
+            roomHumidity: {
               type: 'single',
               name: 'Room Humidity',
-              unit: crack01P02.humedadSala ? crack01P02.humedadSala.units : null,
-              value: crack01P02.humedadSala ? crack01P02.humedadSala.value : null,
+              unit: crac01P02.roomHumidity ? crac01P02.roomHumidity.units : null,
+              value: crac01P02.roomHumidity ? crac01P02.roomHumidity.value : null,
             },
-            horometro: {
+            hourMeasure: {
               type: 'single',
               name: 'HOROMETRO',
-              unit: crack01P02.horometro ? crack01P02.horometro.units : null,
-              value: crack01P02.horometro ? crack01P02.horometro.value : null,
+              unit: crac01P02.hourMeasure ? crac01P02.hourMeasure.units : null,
+              value: crac01P02.hourMeasure ? crac01P02.hourMeasure.value : null,
             },
-            numeroCircuitos: {
+            numberOfCircuits: {
               type: 'single',
               name: 'Number Circuits',
               unit: null,
-              value: crack01P02.numeroCircuitos ? crack01P02.numeroCircuitos.value : null,
+              value: crac01P02.numberOfCircuits ? crac01P02.numberOfCircuits.value : null,
             },
-            requerimientoHumidificador: {
+            humidifierRequirement: {
               type: 'single',
               name: 'Requirement Humidifier',
-              unit: crack01P02.requerimientoHumidificador ? crack01P02.requerimientoHumidificador.units : null,
-              value: crack01P02.requerimientoHumidificador ? crack01P02.requerimientoHumidificador.value : null,
+              unit: crac01P02.humidifierRequirement ? crac01P02.humidifierRequirement.units : null,
+              value: crac01P02.humidifierRequirement ? crac01P02.humidifierRequirement.value : null,
             },
-            setpointActivo: {
+            activeSetpoint: {
               type: 'single',
               name: 'Setpoint Active',
-              unit: crack01P02.setpointActivo ? 'ºC' : null,
-              value: crack01P02.setpointActivo ? crack01P02.setpointActivo.value : null,
+              unit: crac01P02.activeSetpoint ? 'ºC' : null,
+              value: crac01P02.activeSetpoint ? crac01P02.activeSetpoint.value : null,
             },
             setpoint: {
               type: 'group',
@@ -486,37 +486,37 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCooling: {
+                coolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: crack01P02.setpointCooling ? 'ºC' : null,
-                  value: crack01P02.setpointCooling ? crack01P02.setpointCooling.value : null,
+                  unit: crac01P02.coolingSetpoint ? 'ºC' : null,
+                  value: crac01P02.coolingSetpoint ? crac01P02.coolingSetpoint.value : null,
                 },
-                setpointHeating: {
+                heatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: crack01P02.setpointHeating ? 'ºC' : null,
-                  value: crack01P02.setpointHeating ? crack01P02.setpointHeating.value : null,
+                  unit: crac01P02.heatingSetpoint ? 'ºC' : null,
+                  value: crac01P02.heatingSetpoint ? crac01P02.heatingSetpoint.value : null,
                 },
-                setpointHumidificador: {
+                humidifierSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Humidifier',
                   state: null,
-                  unit: crack01P02.setpointHumidificador ? '%' : null,
-                  value: crack01P02.setpointHumidificador ? crack01P02.setpointHumidificador.value : null,
+                  unit: crac01P02.humidifierSetpoint ? '%' : null,
+                  value: crac01P02.humidifierSetpoint ? crac01P02.humidifierSetpoint.value : null,
                 },
-                setpointDeshumidificador: {
+                dehumidifierSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Dehumidifier',
                   state: null,
-                  unit: crack01P02.setpointDeshumidificador ? '%' : null,
-                  value: crack01P02.setpointDeshumidificador ? crack01P02.setpointDeshumidificador.value : null,
+                  unit: crac01P02.dehumidifierSetpoint ? '%' : null,
+                  value: crac01P02.dehumidifierSetpoint ? crac01P02.dehumidifierSetpoint.value : null,
                 },
               },
             },
@@ -526,21 +526,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                temperaturaInyeccion: {
+                supplyTemperature: {
                   type: 'badge',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: crack01P02.temperaturaInyeccion ? 'ºC Injection' : null,
-                  value: crack01P02.temperaturaInyeccion ? crack01P02.temperaturaInyeccion.value : null,
+                  unit: crac01P02.supplyTemperature ? 'ºC Injection' : null,
+                  value: crac01P02.supplyTemperature ? crac01P02.supplyTemperature.value : null,
                 },
-                temperaturaRetorno: {
+                returnTemperature: {
                   type: 'badge',
                   alarm: null,
                   name: '02',
                   state: null,
-                  unit: crack01P02.temperaturaRetorno ? '% Return' : null,
-                  value: crack01P02.temperaturaRetorno ? crack01P02.temperaturaRetorno.value : null,
+                  unit: crac01P02.returnTemperature ? '% Return' : null,
+                  value: crac01P02.returnTemperature ? crac01P02.returnTemperature.value : null,
                 },
               },
             },
@@ -549,7 +549,7 @@ export default class Level2 extends Component {
 
         <Device
           title={'Fancoil 05'}
-          temp={fancoil05P02.temperaturaSala ? fancoil05P02.temperaturaSala.value : null}
+          temp={fancoil05P02.roomTemperature ? fancoil05P02.roomTemperature.value : null}
           width={84}
           height={112}
           posX={800}
@@ -557,41 +557,41 @@ export default class Level2 extends Component {
           alarm={0}
           collapsible={true}
           states={{
-            command: fancoil05P02.comandoEncendido ? fancoil05P02.comandoEncendido.value : null,
-            working: fancoil05P02.estadoFuncionamiento ? fancoil05P02.estadoFuncionamiento.value : null,
-            unit: fancoil05P02.estadoUnidad ? fancoil05P02.estadoUnidad.value : null,
-            switch: fancoil05P02.estadoSelector ? fancoil05P02.estadoSelector.value : null,
+            command: fancoil05P02.switchedOn ? fancoil05P02.switchedOn.value : null,
+            working: fancoil05P02.workingState ? fancoil05P02.workingState.value : null,
+            unit: fancoil05P02.unitState ? fancoil05P02.unitState.value : null,
+            switch: fancoil05P02.selectorState ? fancoil05P02.selectorState.value : null,
           }}
           parameters={{
-            estadoCalefactor: {
+            heatingState: {
               type: 'status',
               name: 'Heater',
               unit: null,
-              value: fancoil05P02.estadoCalefactor ? fancoil05P02.estadoCalefactor.value : null,
+              value: fancoil05P02.heatingState ? fancoil05P02.heatingState.value : null,
             },
-            estadoOperacion: {
+            operationalState: {
               type: 'status',
               name: 'Operation',
               unit: null,
-              value: fancoil05P02.estadoOperacion ? fancoil05P02.estadoOperacion.value : null,
+              value: fancoil05P02.operationalState ? fancoil05P02.operationalState.value : null,
             },
-            estadoVentilador: {
+            fanState: {
               type: 'status',
               name: 'Fan',
               unit: null,
-              value: fancoil05P02.estadoVentilador ? fancoil05P02.estadoVentilador.value : null,
+              value: fancoil05P02.fanState ? fancoil05P02.fanState.value : null,
             },
-            aperturaValvulaFrio: {
+            coldValveOpening: {
               type: 'single',
               name: 'Opening Valve Cold',
-              unit: fancoil05P02.aperturaValvulaFrio ? fancoil05P02.aperturaValvulaFrio.units : null,
-              value: fancoil05P02.aperturaValvulaFrio ? fancoil05P02.aperturaValvulaFrio.value : null,
+              unit: fancoil05P02.coldValveOpening ? fancoil05P02.coldValveOpening.units : null,
+              value: fancoil05P02.coldValveOpening ? fancoil05P02.coldValveOpening.value : null,
             },
-            temperaturaSala: {
+            roomTemperature: {
               type: 'single',
               name: 'Temperature Room',
-              unit: fancoil05P02.temperaturaSala ? 'ºC' : null,
-              value: fancoil05P02.temperaturaSala ? fancoil05P02.temperaturaSala.value : null,
+              unit: fancoil05P02.roomTemperature ? 'ºC' : null,
+              value: fancoil05P02.roomTemperature ? fancoil05P02.roomTemperature.value : null,
             },
             setpointDay: {
               type: 'group',
@@ -599,21 +599,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingDay: {
+                dayCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil05P02.setpointCoolingDay ? 'ºC' : null,
-                  value: fancoil05P02.setpointCoolingDay ? fancoil05P02.setpointCoolingDay.value : null,
+                  unit: fancoil05P02.dayCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil05P02.dayCoolingSetpoint ? fancoil05P02.dayCoolingSetpoint.value : null,
                 },
-                setpointHeatingDay: {
+                dayHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil05P02.setpointHeatingDay ? 'ºC' : null,
-                  value: fancoil05P02.setpointHeatingDay ? fancoil05P02.setpointHeatingDay.value : null,
+                  unit: fancoil05P02.dayHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil05P02.dayHeatingSetpoint ? fancoil05P02.dayHeatingSetpoint.value : null,
                 },
               },
             },
@@ -623,21 +623,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingNight: {
+                nightCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil05P02.setpointCoolingNight ? 'ºC' : null,
-                  value: fancoil05P02.setpointCoolingNight ? fancoil05P02.setpointCoolingNight.value : null,
+                  unit: fancoil05P02.nightCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil05P02.nightCoolingSetpoint ? fancoil05P02.nightCoolingSetpoint.value : null,
                 },
-                setpointHeatingNight: {
+                nightHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil05P02.setpointHeatingNight ? 'ºC' : null,
-                  value: fancoil05P02.setpointHeatingNight ? fancoil05P02.setpointHeatingNight.value : null,
+                  unit: fancoil05P02.nightHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil05P02.nightHeatingSetpoint ? fancoil05P02.nightHeatingSetpoint.value : null,
                 },
               },
             },
@@ -646,7 +646,7 @@ export default class Level2 extends Component {
 
         <Device
           title={'Fancoil 08'}
-          temp={fancoil08P02.temperaturaSala ? fancoil08P02.temperaturaSala.value : null}
+          temp={fancoil08P02.roomTemperature ? fancoil08P02.roomTemperature.value : null}
           width={84}
           height={112}
           posX={800}
@@ -654,41 +654,41 @@ export default class Level2 extends Component {
           alarm={0}
           collapsible={true}
           states={{
-            command: fancoil08P02.comandoEncendido ? fancoil08P02.comandoEncendido.value : null,
-            working: fancoil08P02.estadoFuncionamiento ? fancoil08P02.estadoFuncionamiento.value : null,
-            unit: fancoil08P02.estadoUnidad ? fancoil08P02.estadoUnidad.value : null,
-            switch: fancoil08P02.estadoSelector ? fancoil08P02.estadoSelector.value : null,
+            command: fancoil08P02.switchedOn ? fancoil08P02.switchedOn.value : null,
+            working: fancoil08P02.workingState ? fancoil08P02.workingState.value : null,
+            unit: fancoil08P02.unitState ? fancoil08P02.unitState.value : null,
+            switch: fancoil08P02.selectorState ? fancoil08P02.selectorState.value : null,
           }}
           parameters={{
-            estadoCalefactor: {
+            heatingState: {
               type: 'status',
               name: 'Heater',
               unit: null,
-              value: fancoil08P02.estadoCalefactor ? fancoil08P02.estadoCalefactor.value : null,
+              value: fancoil08P02.heatingState ? fancoil08P02.heatingState.value : null,
             },
-            estadoOperacion: {
+            operationalState: {
               type: 'status',
               name: 'Operation',
               unit: null,
-              value: fancoil08P02.estadoOperacion ? fancoil08P02.estadoOperacion.value : null,
+              value: fancoil08P02.operationalState ? fancoil08P02.operationalState.value : null,
             },
-            estadoVentilador: {
+            fanState: {
               type: 'status',
               name: 'Fan',
               unit: null,
-              value: fancoil08P02.estadoVentilador ? fancoil08P02.estadoVentilador.value : null,
+              value: fancoil08P02.fanState ? fancoil08P02.fanState.value : null,
             },
-            aperturaValvulaFrio: {
+            coldValveOpening: {
               type: 'single',
               name: 'Opening Valve Cold',
-              unit: fancoil08P02.aperturaValvulaFrio ? fancoil08P02.aperturaValvulaFrio.units : null,
-              value: fancoil08P02.aperturaValvulaFrio ? fancoil08P02.aperturaValvulaFrio.value : null,
+              unit: fancoil08P02.coldValveOpening ? fancoil08P02.coldValveOpening.units : null,
+              value: fancoil08P02.coldValveOpening ? fancoil08P02.coldValveOpening.value : null,
             },
-            temperaturaSala: {
+            roomTemperature: {
               type: 'single',
               name: 'Temperature Room',
-              unit: fancoil08P02.temperaturaSala ? 'ºC' : null,
-              value: fancoil08P02.temperaturaSala ? fancoil08P02.temperaturaSala.value : null,
+              unit: fancoil08P02.roomTemperature ? 'ºC' : null,
+              value: fancoil08P02.roomTemperature ? fancoil08P02.roomTemperature.value : null,
             },
             setpointDay: {
               type: 'group',
@@ -696,21 +696,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingDay: {
+                dayCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil08P02.setpointCoolingDay ? 'ºC' : null,
-                  value: fancoil08P02.setpointCoolingDay ? fancoil08P02.setpointCoolingDay.value : null,
+                  unit: fancoil08P02.dayCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil08P02.dayCoolingSetpoint ? fancoil08P02.dayCoolingSetpoint.value : null,
                 },
-                setpointHeatingDay: {
+                dayHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil08P02.setpointHeatingDay ? 'ºC' : null,
-                  value: fancoil08P02.setpointHeatingDay ? fancoil08P02.setpointHeatingDay.value : null,
+                  unit: fancoil08P02.dayHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil08P02.dayHeatingSetpoint ? fancoil08P02.dayHeatingSetpoint.value : null,
                 },
               },
             },
@@ -720,21 +720,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingNight: {
+                nightCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil08P02.setpointCoolingNight ? 'ºC' : null,
-                  value: fancoil08P02.setpointCoolingNight ? fancoil08P02.setpointCoolingNight.value : null,
+                  unit: fancoil08P02.nightCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil08P02.nightCoolingSetpoint ? fancoil08P02.nightCoolingSetpoint.value : null,
                 },
-                setpointHeatingNight: {
+                nightHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil08P02.setpointHeatingNight ? 'ºC' : null,
-                  value: fancoil08P02.setpointHeatingNight ? fancoil08P02.setpointHeatingNight.value : null,
+                  unit: fancoil08P02.nightHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil08P02.nightHeatingSetpoint ? fancoil08P02.nightHeatingSetpoint.value : null,
                 },
               },
             },
@@ -743,7 +743,7 @@ export default class Level2 extends Component {
 
         <Device
           title={'Fancoil 07'}
-          temp={fancoil07P02.temperaturaSala ? fancoil07P02.temperaturaSala.value : null}
+          temp={fancoil07P02.roomTemperature ? fancoil07P02.roomTemperature.value : null}
           width={84}
           height={122}
           posX={800}
@@ -751,41 +751,41 @@ export default class Level2 extends Component {
           alarm={0}
           collapsible={true}
           states={{
-            command: fancoil07P02.comandoEncendido ? fancoil07P02.comandoEncendido.value : null,
-            working: fancoil07P02.estadoFuncionamiento ? fancoil07P02.estadoFuncionamiento.value : null,
-            unit: fancoil07P02.estadoUnidad ? fancoil07P02.estadoUnidad.value : null,
-            switch: fancoil07P02.estadoSelector ? fancoil07P02.estadoSelector.value : null,
+            command: fancoil07P02.switchedOn ? fancoil07P02.switchedOn.value : null,
+            working: fancoil07P02.workingState ? fancoil07P02.workingState.value : null,
+            unit: fancoil07P02.unitState ? fancoil07P02.unitState.value : null,
+            switch: fancoil07P02.selectorState ? fancoil07P02.selectorState.value : null,
           }}
           parameters={{
-            estadoCalefactor: {
+            heatingState: {
               type: 'status',
               name: 'Heater',
               unit: null,
-              value: fancoil07P02.estadoCalefactor ? fancoil07P02.estadoCalefactor.value : null,
+              value: fancoil07P02.heatingState ? fancoil07P02.heatingState.value : null,
             },
-            estadoOperacion: {
+            operationalState: {
               type: 'status',
               name: 'Operation',
               unit: null,
-              value: fancoil07P02.estadoOperacion ? fancoil07P02.estadoOperacion.value : null,
+              value: fancoil07P02.operationalState ? fancoil07P02.operationalState.value : null,
             },
-            estadoVentilador: {
+            fanState: {
               type: 'status',
               name: 'Fan',
               unit: null,
-              value: fancoil07P02.estadoVentilador ? fancoil07P02.estadoVentilador.value : null,
+              value: fancoil07P02.fanState ? fancoil07P02.fanState.value : null,
             },
-            aperturaValvulaFrio: {
+            coldValveOpening: {
               type: 'single',
               name: 'Opening Valve Cold',
-              unit: fancoil07P02.aperturaValvulaFrio ? fancoil07P02.aperturaValvulaFrio.units : null,
-              value: fancoil07P02.aperturaValvulaFrio ? fancoil07P02.aperturaValvulaFrio.value : null,
+              unit: fancoil07P02.coldValveOpening ? fancoil07P02.coldValveOpening.units : null,
+              value: fancoil07P02.coldValveOpening ? fancoil07P02.coldValveOpening.value : null,
             },
-            temperaturaSala: {
+            roomTemperature: {
               type: 'single',
               name: 'Temperature Room',
-              unit: fancoil07P02.temperaturaSala ? 'ºC' : null,
-              value: fancoil07P02.temperaturaSala ? fancoil07P02.temperaturaSala.value : null,
+              unit: fancoil07P02.roomTemperature ? 'ºC' : null,
+              value: fancoil07P02.roomTemperature ? fancoil07P02.roomTemperature.value : null,
             },
             setpointDay: {
               type: 'group',
@@ -793,21 +793,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingDay: {
+                dayCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil07P02.setpointCoolingDay ? 'ºC' : null,
-                  value: fancoil07P02.setpointCoolingDay ? fancoil07P02.setpointCoolingDay.value : null,
+                  unit: fancoil07P02.dayCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil07P02.dayCoolingSetpoint ? fancoil07P02.dayCoolingSetpoint.value : null,
                 },
-                setpointHeatingDay: {
+                dayHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil07P02.setpointHeatingDay ? 'ºC' : null,
-                  value: fancoil07P02.setpointHeatingDay ? fancoil07P02.setpointHeatingDay.value : null,
+                  unit: fancoil07P02.dayHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil07P02.dayHeatingSetpoint ? fancoil07P02.dayHeatingSetpoint.value : null,
                 },
               },
             },
@@ -817,21 +817,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingNight: {
+                nightCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil07P02.setpointCoolingNight ? 'ºC' : null,
-                  value: fancoil07P02.setpointCoolingNight ? fancoil07P02.setpointCoolingNight.value : null,
+                  unit: fancoil07P02.nightCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil07P02.nightCoolingSetpoint ? fancoil07P02.nightCoolingSetpoint.value : null,
                 },
-                setpointHeatingNight: {
+                nightHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil07P02.setpointHeatingNight ? 'ºC' : null,
-                  value: fancoil07P02.setpointHeatingNight ? fancoil07P02.setpointHeatingNight.value : null,
+                  unit: fancoil07P02.nightHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil07P02.nightHeatingSetpoint ? fancoil07P02.nightHeatingSetpoint.value : null,
                 },
               },
             },
@@ -840,7 +840,7 @@ export default class Level2 extends Component {
 
         <Device
           title={'Fancoil 03'}
-          temp={fancoil03P02.temperaturaSala ? fancoil03P02.temperaturaSala.value : null}
+          temp={fancoil03P02.roomTemperature ? fancoil03P02.roomTemperature.value : null}
           width={84}
           height={112}
           posX={682}
@@ -848,41 +848,41 @@ export default class Level2 extends Component {
           alarm={0}
           collapsible={true}
           states={{
-            command: fancoil03P02.comandoEncendido ? fancoil03P02.comandoEncendido.value : null,
-            working: fancoil03P02.estadoFuncionamiento ? fancoil03P02.estadoFuncionamiento.value : null,
-            unit: fancoil03P02.estadoUnidad ? fancoil03P02.estadoUnidad.value : null,
-            switch: fancoil03P02.estadoSelector ? fancoil03P02.estadoSelector.value : null,
+            command: fancoil03P02.switchedOn ? fancoil03P02.switchedOn.value : null,
+            working: fancoil03P02.workingState ? fancoil03P02.workingState.value : null,
+            unit: fancoil03P02.unitState ? fancoil03P02.unitState.value : null,
+            switch: fancoil03P02.selectorState ? fancoil03P02.selectorState.value : null,
           }}
           parameters={{
-            estadoCalefactor: {
+            heatingState: {
               type: 'status',
               name: 'Heater',
               unit: null,
-              value: fancoil03P02.estadoCalefactor ? fancoil03P02.estadoCalefactor.value : null,
+              value: fancoil03P02.heatingState ? fancoil03P02.heatingState.value : null,
             },
-            estadoOperacion: {
+            operationalState: {
               type: 'status',
               name: 'Operation',
               unit: null,
-              value: fancoil03P02.estadoOperacion ? fancoil03P02.estadoOperacion.value : null,
+              value: fancoil03P02.operationalState ? fancoil03P02.operationalState.value : null,
             },
-            estadoVentilador: {
+            fanState: {
               type: 'status',
               name: 'Fan',
               unit: null,
-              value: fancoil03P02.estadoVentilador ? fancoil03P02.estadoVentilador.value : null,
+              value: fancoil03P02.fanState ? fancoil03P02.fanState.value : null,
             },
-            aperturaValvulaFrio: {
+            coldValveOpening: {
               type: 'single',
               name: 'Opening Valve Cold',
-              unit: fancoil03P02.aperturaValvulaFrio ? fancoil03P02.aperturaValvulaFrio.units : null,
-              value: fancoil03P02.aperturaValvulaFrio ? fancoil03P02.aperturaValvulaFrio.value : null,
+              unit: fancoil03P02.coldValveOpening ? fancoil03P02.coldValveOpening.units : null,
+              value: fancoil03P02.coldValveOpening ? fancoil03P02.coldValveOpening.value : null,
             },
-            temperaturaSala: {
+            roomTemperature: {
               type: 'single',
               name: 'Temperature Room',
-              unit: fancoil03P02.temperaturaSala ? 'ºC' : null,
-              value: fancoil03P02.temperaturaSala ? fancoil03P02.temperaturaSala.value : null,
+              unit: fancoil03P02.roomTemperature ? 'ºC' : null,
+              value: fancoil03P02.roomTemperature ? fancoil03P02.roomTemperature.value : null,
             },
             setpointDay: {
               type: 'group',
@@ -890,21 +890,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingDay: {
+                dayCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil03P02.setpointCoolingDay ? 'ºC' : null,
-                  value: fancoil03P02.setpointCoolingDay ? fancoil03P02.setpointCoolingDay.value : null,
+                  unit: fancoil03P02.dayCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil03P02.dayCoolingSetpoint ? fancoil03P02.dayCoolingSetpoint.value : null,
                 },
-                setpointHeatingDay: {
+                dayHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil03P02.setpointHeatingDay ? 'ºC' : null,
-                  value: fancoil03P02.setpointHeatingDay ? fancoil03P02.setpointHeatingDay.value : null,
+                  unit: fancoil03P02.dayHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil03P02.dayHeatingSetpoint ? fancoil03P02.dayHeatingSetpoint.value : null,
                 },
               },
             },
@@ -914,21 +914,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingNight: {
+                nightCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil03P02.setpointCoolingNight ? 'ºC' : null,
-                  value: fancoil03P02.setpointCoolingNight ? fancoil03P02.setpointCoolingNight.value : null,
+                  unit: fancoil03P02.nightCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil03P02.nightCoolingSetpoint ? fancoil03P02.nightCoolingSetpoint.value : null,
                 },
-                setpointHeatingNight: {
+                nightHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil03P02.setpointHeatingNight ? 'ºC' : null,
-                  value: fancoil03P02.setpointHeatingNight ? fancoil03P02.setpointHeatingNight.value : null,
+                  unit: fancoil03P02.nightHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil03P02.nightHeatingSetpoint ? fancoil03P02.nightHeatingSetpoint.value : null,
                 },
               },
             },
@@ -937,7 +937,7 @@ export default class Level2 extends Component {
 
         <Device
           title={'Fancoil 04'}
-          temp={fancoil04P02.temperaturaSala ? fancoil04P02.temperaturaSala.value : null}
+          temp={fancoil04P02.roomTemperature ? fancoil04P02.roomTemperature.value : null}
           width={84}
           height={112}
           posX={736}
@@ -945,41 +945,41 @@ export default class Level2 extends Component {
           alarm={0}
           collapsible={true}
           states={{
-            command: fancoil04P02.comandoEncendido ? fancoil04P02.comandoEncendido.value : null,
-            working: fancoil04P02.estadoFuncionamiento ? fancoil04P02.estadoFuncionamiento.value : null,
-            unit: fancoil04P02.estadoUnidad ? fancoil04P02.estadoUnidad.value : null,
-            switch: fancoil04P02.estadoSelector ? fancoil04P02.estadoSelector.value : null,
+            command: fancoil04P02.switchedOn ? fancoil04P02.switchedOn.value : null,
+            working: fancoil04P02.workingState ? fancoil04P02.workingState.value : null,
+            unit: fancoil04P02.unitState ? fancoil04P02.unitState.value : null,
+            switch: fancoil04P02.selectorState ? fancoil04P02.selectorState.value : null,
           }}
           parameters={{
-            estadoCalefactor: {
+            heatingState: {
               type: 'status',
               name: 'Heater',
               unit: null,
-              value: fancoil04P02.estadoCalefactor ? fancoil04P02.estadoCalefactor.value : null,
+              value: fancoil04P02.heatingState ? fancoil04P02.heatingState.value : null,
             },
-            estadoOperacion: {
+            operationalState: {
               type: 'status',
               name: 'Operation',
               unit: null,
-              value: fancoil04P02.estadoOperacion ? fancoil04P02.estadoOperacion.value : null,
+              value: fancoil04P02.operationalState ? fancoil04P02.operationalState.value : null,
             },
-            estadoVentilador: {
+            fanState: {
               type: 'status',
               name: 'Fan',
               unit: null,
-              value: fancoil04P02.estadoVentilador ? fancoil04P02.estadoVentilador.value : null,
+              value: fancoil04P02.fanState ? fancoil04P02.fanState.value : null,
             },
-            aperturaValvulaFrio: {
+            coldValveOpening: {
               type: 'single',
               name: 'Opening Valve Cold',
-              unit: fancoil04P02.aperturaValvulaFrio ? fancoil04P02.aperturaValvulaFrio.units : null,
-              value: fancoil04P02.aperturaValvulaFrio ? fancoil04P02.aperturaValvulaFrio.value : null,
+              unit: fancoil04P02.coldValveOpening ? fancoil04P02.coldValveOpening.units : null,
+              value: fancoil04P02.coldValveOpening ? fancoil04P02.coldValveOpening.value : null,
             },
-            temperaturaSala: {
+            roomTemperature: {
               type: 'single',
               name: 'Temperature Room',
-              unit: fancoil04P02.temperaturaSala ? 'ºC' : null,
-              value: fancoil04P02.temperaturaSala ? fancoil04P02.temperaturaSala.value : null,
+              unit: fancoil04P02.roomTemperature ? 'ºC' : null,
+              value: fancoil04P02.roomTemperature ? fancoil04P02.roomTemperature.value : null,
             },
             setpointDay: {
               type: 'group',
@@ -987,21 +987,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingDay: {
+                dayCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil04P02.setpointCoolingDay ? 'ºC' : null,
-                  value: fancoil04P02.setpointCoolingDay ? fancoil04P02.setpointCoolingDay.value : null,
+                  unit: fancoil04P02.dayCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil04P02.dayCoolingSetpoint ? fancoil04P02.dayCoolingSetpoint.value : null,
                 },
-                setpointHeatingDay: {
+                dayHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil04P02.setpointHeatingDay ? 'ºC' : null,
-                  value: fancoil04P02.setpointHeatingDay ? fancoil04P02.setpointHeatingDay.value : null,
+                  unit: fancoil04P02.dayHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil04P02.dayHeatingSetpoint ? fancoil04P02.dayHeatingSetpoint.value : null,
                 },
               },
             },
@@ -1011,21 +1011,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingNight: {
+                nightCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil04P02.setpointCoolingNight ? 'ºC' : null,
-                  value: fancoil04P02.setpointCoolingNight ? fancoil04P02.setpointCoolingNight.value : null,
+                  unit: fancoil04P02.nightCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil04P02.nightCoolingSetpoint ? fancoil04P02.nightCoolingSetpoint.value : null,
                 },
-                setpointHeatingNight: {
+                nightHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil04P02.setpointHeatingNight ? 'ºC' : null,
-                  value: fancoil04P02.setpointHeatingNight ? fancoil04P02.setpointHeatingNight.value : null,
+                  unit: fancoil04P02.nightHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil04P02.nightHeatingSetpoint ? fancoil04P02.nightHeatingSetpoint.value : null,
                 },
               },
             },
@@ -1034,7 +1034,7 @@ export default class Level2 extends Component {
 
         <Device
           title={'Fancoil 10'}
-          temp={fancoil10P02.temperaturaSala ? fancoil10P02.temperaturaSala.value : null}
+          temp={fancoil10P02.roomTemperature ? fancoil10P02.roomTemperature.value : null}
           width={84}
           height={112}
           posX={692}
@@ -1042,41 +1042,41 @@ export default class Level2 extends Component {
           alarm={0}
           collapsible={true}
           states={{
-            command: fancoil10P02.comandoEncendido ? fancoil10P02.comandoEncendido.value : null,
-            working: fancoil10P02.estadoFuncionamiento ? fancoil10P02.estadoFuncionamiento.value : null,
-            unit: fancoil10P02.estadoUnidad ? fancoil10P02.estadoUnidad.value : null,
-            switch: fancoil10P02.estadoSelector ? fancoil10P02.estadoSelector.value : null,
+            command: fancoil10P02.switchedOn ? fancoil10P02.switchedOn.value : null,
+            working: fancoil10P02.workingState ? fancoil10P02.workingState.value : null,
+            unit: fancoil10P02.unitState ? fancoil10P02.unitState.value : null,
+            switch: fancoil10P02.selectorState ? fancoil10P02.selectorState.value : null,
           }}
           parameters={{
-            estadoCalefactor: {
+            heatingState: {
               type: 'status',
               name: 'Heater',
               unit: null,
-              value: fancoil10P02.estadoCalefactor ? fancoil10P02.estadoCalefactor.value : null,
+              value: fancoil10P02.heatingState ? fancoil10P02.heatingState.value : null,
             },
-            estadoOperacion: {
+            operationalState: {
               type: 'status',
               name: 'Operation',
               unit: null,
-              value: fancoil10P02.estadoOperacion ? fancoil10P02.estadoOperacion.value : null,
+              value: fancoil10P02.operationalState ? fancoil10P02.operationalState.value : null,
             },
-            estadoVentilador: {
+            fanState: {
               type: 'status',
               name: 'Fan',
               unit: null,
-              value: fancoil10P02.estadoVentilador ? fancoil10P02.estadoVentilador.value : null,
+              value: fancoil10P02.fanState ? fancoil10P02.fanState.value : null,
             },
-            aperturaValvulaFrio: {
+            coldValveOpening: {
               type: 'single',
               name: 'Opening Valve Cold',
-              unit: fancoil10P02.aperturaValvulaFrio ? fancoil10P02.aperturaValvulaFrio.units : null,
-              value: fancoil10P02.aperturaValvulaFrio ? fancoil10P02.aperturaValvulaFrio.value : null,
+              unit: fancoil10P02.coldValveOpening ? fancoil10P02.coldValveOpening.units : null,
+              value: fancoil10P02.coldValveOpening ? fancoil10P02.coldValveOpening.value : null,
             },
-            temperaturaSala: {
+            roomTemperature: {
               type: 'single',
               name: 'Temperature Room',
-              unit: fancoil10P02.temperaturaSala ? 'ºC' : null,
-              value: fancoil10P02.temperaturaSala ? fancoil10P02.temperaturaSala.value : null,
+              unit: fancoil10P02.roomTemperature ? 'ºC' : null,
+              value: fancoil10P02.roomTemperature ? fancoil10P02.roomTemperature.value : null,
             },
             setpointDay: {
               type: 'group',
@@ -1084,21 +1084,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingDay: {
+                dayCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil10P02.setpointCoolingDay ? 'ºC' : null,
-                  value: fancoil10P02.setpointCoolingDay ? fancoil10P02.setpointCoolingDay.value : null,
+                  unit: fancoil10P02.dayCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil10P02.dayCoolingSetpoint ? fancoil10P02.dayCoolingSetpoint.value : null,
                 },
-                setpointHeatingDay: {
+                dayHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil10P02.setpointHeatingDay ? 'ºC' : null,
-                  value: fancoil10P02.setpointHeatingDay ? fancoil10P02.setpointHeatingDay.value : null,
+                  unit: fancoil10P02.dayHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil10P02.dayHeatingSetpoint ? fancoil10P02.dayHeatingSetpoint.value : null,
                 },
               },
             },
@@ -1108,21 +1108,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingNight: {
+                nightCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil10P02.setpointCoolingNight ? 'ºC' : null,
-                  value: fancoil10P02.setpointCoolingNight ? fancoil10P02.setpointCoolingNight.value : null,
+                  unit: fancoil10P02.nightCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil10P02.nightCoolingSetpoint ? fancoil10P02.nightCoolingSetpoint.value : null,
                 },
-                setpointHeatingNight: {
+                nightHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil10P02.setpointHeatingNight ? 'ºC' : null,
-                  value: fancoil10P02.setpointHeatingNight ? fancoil10P02.setpointHeatingNight.value : null,
+                  unit: fancoil10P02.nightHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil10P02.nightHeatingSetpoint ? fancoil10P02.nightHeatingSetpoint.value : null,
                 },
               },
             },
@@ -1131,7 +1131,7 @@ export default class Level2 extends Component {
 
         <Device
           title={'Fancoil 11'}
-          temp={fancoil11P02.temperaturaSala ? fancoil11P02.temperaturaSala.value : null}
+          temp={fancoil11P02.roomTemperature ? fancoil11P02.roomTemperature.value : null}
           width={84}
           height={112}
           posX={742}
@@ -1139,41 +1139,41 @@ export default class Level2 extends Component {
           alarm={0}
           collapsible={true}
           states={{
-            command: fancoil11P02.comandoEncendido ? fancoil11P02.comandoEncendido.value : null,
-            working: fancoil11P02.estadoFuncionamiento ? fancoil11P02.estadoFuncionamiento.value : null,
-            unit: fancoil11P02.estadoUnidad ? fancoil11P02.estadoUnidad.value : null,
-            switch: fancoil11P02.estadoSelector ? fancoil11P02.estadoSelector.value : null,
+            command: fancoil11P02.switchedOn ? fancoil11P02.switchedOn.value : null,
+            working: fancoil11P02.workingState ? fancoil11P02.workingState.value : null,
+            unit: fancoil11P02.unitState ? fancoil11P02.unitState.value : null,
+            switch: fancoil11P02.selectorState ? fancoil11P02.selectorState.value : null,
           }}
           parameters={{
-            estadoCalefactor: {
+            heatingState: {
               type: 'status',
               name: 'Heater',
               unit: null,
-              value: fancoil11P02.estadoCalefactor ? fancoil11P02.estadoCalefactor.value : null,
+              value: fancoil11P02.heatingState ? fancoil11P02.heatingState.value : null,
             },
-            estadoOperacion: {
+            operationalState: {
               type: 'status',
               name: 'Operation',
               unit: null,
-              value: fancoil11P02.estadoOperacion ? fancoil11P02.estadoOperacion.value : null,
+              value: fancoil11P02.operationalState ? fancoil11P02.operationalState.value : null,
             },
-            estadoVentilador: {
+            fanState: {
               type: 'status',
               name: 'Fan',
               unit: null,
-              value: fancoil11P02.estadoVentilador ? fancoil11P02.estadoVentilador.value : null,
+              value: fancoil11P02.fanState ? fancoil11P02.fanState.value : null,
             },
-            aperturaValvulaFrio: {
+            coldValveOpening: {
               type: 'single',
               name: 'Opening Valve Cold',
-              unit: fancoil11P02.aperturaValvulaFrio ? fancoil11P02.aperturaValvulaFrio.units : null,
-              value: fancoil11P02.aperturaValvulaFrio ? fancoil11P02.aperturaValvulaFrio.value : null,
+              unit: fancoil11P02.coldValveOpening ? fancoil11P02.coldValveOpening.units : null,
+              value: fancoil11P02.coldValveOpening ? fancoil11P02.coldValveOpening.value : null,
             },
-            temperaturaSala: {
+            roomTemperature: {
               type: 'single',
               name: 'Temperature Room',
-              unit: fancoil11P02.temperaturaSala ? 'ºC' : null,
-              value: fancoil11P02.temperaturaSala ? fancoil11P02.temperaturaSala.value : null,
+              unit: fancoil11P02.roomTemperature ? 'ºC' : null,
+              value: fancoil11P02.roomTemperature ? fancoil11P02.roomTemperature.value : null,
             },
             setpointDay: {
               type: 'group',
@@ -1181,21 +1181,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingDay: {
+                dayCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil11P02.setpointCoolingDay ? 'ºC' : null,
-                  value: fancoil11P02.setpointCoolingDay ? fancoil11P02.setpointCoolingDay.value : null,
+                  unit: fancoil11P02.dayCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil11P02.dayCoolingSetpoint ? fancoil11P02.dayCoolingSetpoint.value : null,
                 },
-                setpointHeatingDay: {
+                dayHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil11P02.setpointHeatingDay ? 'ºC' : null,
-                  value: fancoil11P02.setpointHeatingDay ? fancoil11P02.setpointHeatingDay.value : null,
+                  unit: fancoil11P02.dayHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil11P02.dayHeatingSetpoint ? fancoil11P02.dayHeatingSetpoint.value : null,
                 },
               },
             },
@@ -1205,21 +1205,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingNight: {
+                nightCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil11P02.setpointCoolingNight ? 'ºC' : null,
-                  value: fancoil11P02.setpointCoolingNight ? fancoil11P02.setpointCoolingNight.value : null,
+                  unit: fancoil11P02.nightCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil11P02.nightCoolingSetpoint ? fancoil11P02.nightCoolingSetpoint.value : null,
                 },
-                setpointHeatingNight: {
+                nightHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil11P02.setpointHeatingNight ? 'ºC' : null,
-                  value: fancoil11P02.setpointHeatingNight ? fancoil11P02.setpointHeatingNight.value : null,
+                  unit: fancoil11P02.nightHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil11P02.nightHeatingSetpoint ? fancoil11P02.nightHeatingSetpoint.value : null,
                 },
               },
             },
@@ -1228,7 +1228,7 @@ export default class Level2 extends Component {
 
         <Device
           title={'Fancoil 06'}
-          temp={fancoil06P02.temperaturaSala ? fancoil06P02.temperaturaSala.value : null}
+          temp={fancoil06P02.roomTemperature ? fancoil06P02.roomTemperature.value : null}
           width={84}
           height={112}
           posX={800}
@@ -1236,41 +1236,41 @@ export default class Level2 extends Component {
           alarm={0}
           collapsible={true}
           states={{
-            command: fancoil06P02.comandoEncendido ? fancoil06P02.comandoEncendido.value : null,
-            working: fancoil06P02.estadoFuncionamiento ? fancoil06P02.estadoFuncionamiento.value : null,
-            unit: fancoil06P02.estadoUnidad ? fancoil06P02.estadoUnidad.value : null,
-            switch: fancoil06P02.estadoSelector ? fancoil06P02.estadoSelector.value : null,
+            command: fancoil06P02.switchedOn ? fancoil06P02.switchedOn.value : null,
+            working: fancoil06P02.workingState ? fancoil06P02.workingState.value : null,
+            unit: fancoil06P02.unitState ? fancoil06P02.unitState.value : null,
+            switch: fancoil06P02.selectorState ? fancoil06P02.selectorState.value : null,
           }}
           parameters={{
-            estadoCalefactor: {
+            heatingState: {
               type: 'status',
               name: 'Heater',
               unit: null,
-              value: fancoil06P02.estadoCalefactor ? fancoil06P02.estadoCalefactor.value : null,
+              value: fancoil06P02.heatingState ? fancoil06P02.heatingState.value : null,
             },
-            estadoOperacion: {
+            operationalState: {
               type: 'status',
               name: 'Operation',
               unit: null,
-              value: fancoil06P02.estadoOperacion ? fancoil06P02.estadoOperacion.value : null,
+              value: fancoil06P02.operationalState ? fancoil06P02.operationalState.value : null,
             },
-            estadoVentilador: {
+            fanState: {
               type: 'status',
               name: 'Fan',
               unit: null,
-              value: fancoil06P02.estadoVentilador ? fancoil06P02.estadoVentilador.value : null,
+              value: fancoil06P02.fanState ? fancoil06P02.fanState.value : null,
             },
-            aperturaValvulaFrio: {
+            coldValveOpening: {
               type: 'single',
               name: 'Opening Valve Cold',
-              unit: fancoil06P02.aperturaValvulaFrio ? fancoil06P02.aperturaValvulaFrio.units : null,
-              value: fancoil06P02.aperturaValvulaFrio ? fancoil06P02.aperturaValvulaFrio.value : null,
+              unit: fancoil06P02.coldValveOpening ? fancoil06P02.coldValveOpening.units : null,
+              value: fancoil06P02.coldValveOpening ? fancoil06P02.coldValveOpening.value : null,
             },
-            temperaturaSala: {
+            roomTemperature: {
               type: 'single',
               name: 'Temperature Room',
-              unit: fancoil06P02.temperaturaSala ? 'ºC' : null,
-              value: fancoil06P02.temperaturaSala ? fancoil06P02.temperaturaSala.value : null,
+              unit: fancoil06P02.roomTemperature ? 'ºC' : null,
+              value: fancoil06P02.roomTemperature ? fancoil06P02.roomTemperature.value : null,
             },
             setpointDay: {
               type: 'group',
@@ -1278,21 +1278,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingDay: {
+                dayCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil06P02.setpointCoolingDay ? 'ºC' : null,
-                  value: fancoil06P02.setpointCoolingDay ? fancoil06P02.setpointCoolingDay.value : null,
+                  unit: fancoil06P02.dayCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil06P02.dayCoolingSetpoint ? fancoil06P02.dayCoolingSetpoint.value : null,
                 },
-                setpointHeatingDay: {
+                dayHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil06P02.setpointHeatingDay ? 'ºC' : null,
-                  value: fancoil06P02.setpointHeatingDay ? fancoil06P02.setpointHeatingDay.value : null,
+                  unit: fancoil06P02.dayHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil06P02.dayHeatingSetpoint ? fancoil06P02.dayHeatingSetpoint.value : null,
                 },
               },
             },
@@ -1302,21 +1302,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingNight: {
+                nightCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil06P02.setpointCoolingNight ? 'ºC' : null,
-                  value: fancoil06P02.setpointCoolingNight ? fancoil06P02.setpointCoolingNight.value : null,
+                  unit: fancoil06P02.nightCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil06P02.nightCoolingSetpoint ? fancoil06P02.nightCoolingSetpoint.value : null,
                 },
-                setpointHeatingNight: {
+                nightHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil06P02.setpointHeatingNight ? 'ºC' : null,
-                  value: fancoil06P02.setpointHeatingNight ? fancoil06P02.setpointHeatingNight.value : null,
+                  unit: fancoil06P02.nightHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil06P02.nightHeatingSetpoint ? fancoil06P02.nightHeatingSetpoint.value : null,
                 },
               },
             },
@@ -1325,7 +1325,7 @@ export default class Level2 extends Component {
 
         <Device
           title={'Fancoil 09'}
-          temp={fancoil09P02.temperaturaSala ? fancoil09P02.temperaturaSala.value : null}
+          temp={fancoil09P02.roomTemperature ? fancoil09P02.roomTemperature.value : null}
           width={84}
           height={112}
           posX={800}
@@ -1333,41 +1333,41 @@ export default class Level2 extends Component {
           alarm={0}
           collapsible={true}
           states={{
-            command: fancoil09P02.comandoEncendido ? fancoil09P02.comandoEncendido.value : null,
-            working: fancoil09P02.estadoFuncionamiento ? fancoil09P02.estadoFuncionamiento.value : null,
-            unit: fancoil09P02.estadoUnidad ? fancoil09P02.estadoUnidad.value : null,
-            switch: fancoil09P02.estadoSelector ? fancoil09P02.estadoSelector.value : null,
+            command: fancoil09P02.switchedOn ? fancoil09P02.switchedOn.value : null,
+            working: fancoil09P02.workingState ? fancoil09P02.workingState.value : null,
+            unit: fancoil09P02.unitState ? fancoil09P02.unitState.value : null,
+            switch: fancoil09P02.selectorState ? fancoil09P02.selectorState.value : null,
           }}
           parameters={{
-            estadoCalefactor: {
+            heatingState: {
               type: 'status',
               name: 'Heater',
               unit: null,
-              value: fancoil09P02.estadoCalefactor ? fancoil09P02.estadoCalefactor.value : null,
+              value: fancoil09P02.heatingState ? fancoil09P02.heatingState.value : null,
             },
-            estadoOperacion: {
+            operationalState: {
               type: 'status',
               name: 'Operation',
               unit: null,
-              value: fancoil09P02.estadoOperacion ? fancoil09P02.estadoOperacion.value : null,
+              value: fancoil09P02.operationalState ? fancoil09P02.operationalState.value : null,
             },
-            estadoVentilador: {
+            fanState: {
               type: 'status',
               name: 'Fan',
               unit: null,
-              value: fancoil09P02.estadoVentilador ? fancoil09P02.estadoVentilador.value : null,
+              value: fancoil09P02.fanState ? fancoil09P02.fanState.value : null,
             },
-            aperturaValvulaFrio: {
+            coldValveOpening: {
               type: 'single',
               name: 'Opening Valve Cold',
-              unit: fancoil09P02.aperturaValvulaFrio ? fancoil09P02.aperturaValvulaFrio.units : null,
-              value: fancoil09P02.aperturaValvulaFrio ? fancoil09P02.aperturaValvulaFrio.value : null,
+              unit: fancoil09P02.coldValveOpening ? fancoil09P02.coldValveOpening.units : null,
+              value: fancoil09P02.coldValveOpening ? fancoil09P02.coldValveOpening.value : null,
             },
-            temperaturaSala: {
+            roomTemperature: {
               type: 'single',
               name: 'Temperature Room',
-              unit: fancoil09P02.temperaturaSala ? 'ºC' : null,
-              value: fancoil09P02.temperaturaSala ? fancoil09P02.temperaturaSala.value : null,
+              unit: fancoil09P02.roomTemperature ? 'ºC' : null,
+              value: fancoil09P02.roomTemperature ? fancoil09P02.roomTemperature.value : null,
             },
             setpointDay: {
               type: 'group',
@@ -1375,21 +1375,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingDay: {
+                dayCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil09P02.setpointCoolingDay ? 'ºC' : null,
-                  value: fancoil09P02.setpointCoolingDay ? fancoil09P02.setpointCoolingDay.value : null,
+                  unit: fancoil09P02.dayCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil09P02.dayCoolingSetpoint ? fancoil09P02.dayCoolingSetpoint.value : null,
                 },
-                setpointHeatingDay: {
+                dayHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil09P02.setpointHeatingDay ? 'ºC' : null,
-                  value: fancoil09P02.setpointHeatingDay ? fancoil09P02.setpointHeatingDay.value : null,
+                  unit: fancoil09P02.dayHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil09P02.dayHeatingSetpoint ? fancoil09P02.dayHeatingSetpoint.value : null,
                 },
               },
             },
@@ -1399,21 +1399,21 @@ export default class Level2 extends Component {
               unit: null,
               value: null,
               params: {
-                setpointCoolingNight: {
+                nightCoolingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: fancoil09P02.setpointCoolingNight ? 'ºC' : null,
-                  value: fancoil09P02.setpointCoolingNight ? fancoil09P02.setpointCoolingNight.value : null,
+                  unit: fancoil09P02.nightCoolingSetpoint ? 'ºC' : null,
+                  value: fancoil09P02.nightCoolingSetpoint ? fancoil09P02.nightCoolingSetpoint.value : null,
                 },
-                setpointHeatingNight: {
+                nightHeatingSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: fancoil09P02.setpointHeatingNight ? 'ºC' : null,
-                  value: fancoil09P02.setpointHeatingNight ? fancoil09P02.setpointHeatingNight.value : null,
+                  unit: fancoil09P02.nightHeatingSetpoint ? 'ºC' : null,
+                  value: fancoil09P02.nightHeatingSetpoint ? fancoil09P02.nightHeatingSetpoint.value : null,
                 },
               },
             },

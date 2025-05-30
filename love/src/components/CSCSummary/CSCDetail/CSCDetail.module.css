@@ -72,6 +72,13 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   text-align: center;
 }
 
+.superscript {
+  user-select: none;
+  text-align: left;
+  vertical-align: top;
+  font-size: 50%;
+}
+
 .heartbeatIconWrapper {
   width: 1.6em;
 }
@@ -116,11 +123,19 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   background: var(--status-ok-dimmed-color-2); */
 }
 
+.okNoBackground {
+  color: var(--status-ok-color);
+}
+
 .warning {
   /* background: var(--status-warning-color); */
   /* color: var(--second-tertiary-background-color); */
   color: var(--status-warning-color);
   background: var(--status-warning-dimmed-color-2);
+}
+
+.warningNoBackground {
+  color: var(--status-warning-color);
 }
 
 .unknown {
