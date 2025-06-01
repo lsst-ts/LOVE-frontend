@@ -20,9 +20,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
-import { toast } from 'react-toastify';
 import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
-import ManagerInterface, { parseTimestamp, parsePlotInputsEFD, parseCommanderData, getEFDInstanceForHost } from 'Utils';
+import { parseTimestamp, handlePlotHistoricalData } from 'Utils';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import VegaLegend from './VegaTimeSeriesPlot/VegaLegend';
@@ -93,6 +92,7 @@ const Plot = ({
   scaleIndependent = false,
   scaleDomain,
   taiToUtc = 37,
+  topicsFieldsInfo,
   subscribeToStreams,
   unsubscribeToStreams,
 }) => {
@@ -108,34 +108,29 @@ const Plot = ({
   let resizeObserver = undefined;
 
   /** Queries the EFD for timeseries
-   * @param {Moment} startDate - Start date of the query
-   * @param {number} timeWindow - Time window in minutes
-   *
-   * Notes:
-   * - The query is done for all inputs in props.inputs
+   * @param {Moment} startDate - Start date of the query.
+   * @param {number} timeWindow - Time window in minutes.
    */
   const memoizedHandleHistoricalData = useCallback(
     (startDate, timeWindow) => {
-      const efdInstance = getEFDInstanceForHost();
-      if (!efdInstance) {
-        return;
-      }
-      const parsedDate = startDate.utc().format('YYYY-MM-DDTHH:mm:ss');
-      const cscs = parsePlotInputsEFD(inputs);
-      ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min', efdInstance).then((data) => {
-        if (!data) return;
-        const parsedData = parseCommanderData(data);
-        Object.keys(parsedData).forEach((key) => {
-          if (key.includes('logevent_')) {
-            parsedData[key.replace('logevent_', '')] = parsedData[key];
-            delete parsedData[key];
-          }
-        });
-        setHistoricalData(parsedData);
-      });
+      return handlePlotHistoricalData(startDate, timeWindow, inputs, topicsFieldsInfo, setHistoricalData);
     },
-    [inputs],
+    [inputs, topicsFieldsInfo, setHistoricalData],
   );
+
+  /** Effect to handle historical data when the component mounts */
+  useEffect(() => {
+    if (
+      historicalData.length === 0 &&
+      inputs &&
+      Object.keys(inputs).length > 0 &&
+      topicsFieldsInfo &&
+      Object.keys(topicsFieldsInfo).length > 0
+    ) {
+      const currentDate = Moment().subtract(timeWindow / 2, 'minutes');
+      memoizedHandleHistoricalData(currentDate, timeWindow);
+    }
+  }, [JSON.stringify(inputs.values), topicsFieldsInfo, setHistoricalData]);
 
   /** Get data for the plot, based on the inputs
    * @param {object} data - Data to be filtered
@@ -151,7 +146,16 @@ const Plot = ({
       const topics = getTopicItemPair(inputs);
       const parsedHistoricalData = Object.keys(topics).flatMap((key) => {
         const [topicName, property] = topics[key];
-        return (historicalData[topicName]?.[property] ?? []).map((dp) => ({ name: key, ...dp }));
+        const inputConfig = inputs[key];
+        // Usual telemetries only contains 1 value, hence we can use the first element of the array
+        const { accessor } = inputConfig.values[0];
+        /* eslint no-eval: 0 */
+        const accessorFunc = eval(accessor);
+        return (historicalData[topicName]?.[property] ?? []).map((dataPoint) => ({
+          ...dataPoint,
+          name: key,
+          y: accessorFunc(dataPoint.y),
+        }));
       });
       if (!isLive) {
         filteredData = parsedHistoricalData;
@@ -306,9 +310,6 @@ const Plot = ({
 
   useEffect(() => {
     subscribeToStreams();
-
-    const currentDate = Moment().subtract(timeWindow / 2, 'minutes');
-    memoizedHandleHistoricalData(currentDate, timeWindow);
     return () => {
       unsubscribeToStreams();
       if (resizeObserver) {
