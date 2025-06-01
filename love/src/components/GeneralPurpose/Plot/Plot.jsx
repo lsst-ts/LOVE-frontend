@@ -105,9 +105,9 @@ const Plot = ({
 
   const timeSeriesControlRef = useRef();
   const legendRef = useRef();
-  let resizeObserver = undefined;
+  const resizeObserver = useRef();
 
-  /** Queries the EFD for timeseries
+  /** Queries the EFD for timeserresizeObserveries
    * @param {Moment} startDate - Start date of the query.
    * @param {number} timeWindow - Time window in minutes.
    */
@@ -290,40 +290,44 @@ const Plot = ({
 
   const setResizeObserver = () => {
     if (!(containerNode instanceof Element)) return;
-
-    resizeObserver = new ResizeObserver((entries) => {
-      // We wrap it in requestAnimationFrame to avoid this error - ResizeObserver loop limit exceeded
+    const resizeHandler = (entries) => {
       window.requestAnimationFrame(() => {
         const container = entries[0];
         const diffControlHeight = timeSeriesControlRef.current?.offsetHeight ?? 0;
-        const diffLegendHeight = (legendPosition === 'bottom' && legendRef.current?.offsetHeight) ?? 0;
-        const diffLegendWidth = (legendPosition === 'right' && legendRef.current?.offsetWidth) ?? 0;
+        const diffAxisXTitleHeight = xAxisTitle !== '' ? 14 : 0;
+        const diffLegendHeight =
+          ((legendPosition === '' || legendPosition === 'bottom') && legendRef.current?.offsetHeight) || 0;
+        const diffLegendWidth = (legendPosition === 'right' && legendRef.current?.offsetWidth) || 0;
 
-        /** Subtract 16 to height and width to
-          avoid bug with resizing. TODO: DM-41914 */
-        setPlotHeight(container.contentRect.height - diffControlHeight - diffLegendHeight - 16);
-        setPlotWidth(container.contentRect.width - diffLegendWidth - 16);
+        setPlotHeight(container.contentRect.height - diffControlHeight - diffAxisXTitleHeight - diffLegendHeight);
+        setPlotWidth(container.contentRect.width - diffLegendWidth);
       });
-    });
-    resizeObserver.observe(containerNode);
+    };
+
+    resizeObserver.current = new ResizeObserver(resizeHandler);
+    resizeObserver.current.observe(containerNode);
   };
+
+  /**
+   * Set resize observer if containerNode is defined and width and height are not defined.
+   */
+  useEffect(() => {
+    if (width === undefined && height === undefined && containerNode) {
+      setResizeObserver();
+    }
+    return () => {
+      if (resizeObserver.current) {
+        resizeObserver.current.disconnect();
+      }
+    };
+  }, [containerNode, width, height, timeSeriesControlRef.current, legendRef.current, legendPosition, xAxisTitle]);
 
   useEffect(() => {
     subscribeToStreams();
     return () => {
       unsubscribeToStreams();
-      if (resizeObserver) {
-        resizeObserver.disconnect();
-      }
     };
   }, []);
-
-  useEffect(() => {
-    // Set resize observer if containerNode is defined and width and height are not
-    if (width === undefined && height === undefined && containerNode) {
-      setResizeObserver();
-    }
-  }, [containerNode, width, height]);
 
   useEffect(() => {
     if (isForecast) {
@@ -394,7 +398,6 @@ const Plot = ({
       {legendPosition === 'right' ? (
         <div className={styles.containerFlexRow}>
           <VegaTimeseriesPlot
-            className={styles.plot}
             width={plotWidth}
             height={plotHeight}
             layers={layers}
@@ -413,7 +416,6 @@ const Plot = ({
         <div className={styles.containerFlexCol} style={maxHeight ? { maxHeight: maxHeight } : {}}>
           <div>
             <VegaTimeseriesPlot
-              className={styles.plot}
               width={plotWidth}
               height={plotHeight}
               layers={layers}
