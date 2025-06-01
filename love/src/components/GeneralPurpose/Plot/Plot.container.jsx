@@ -17,11 +17,10 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getStreamsData, getEfdConfig, getTaiToUtc } from 'redux/selectors';
+import { getStreamsData, getEfdConfig, getTaiToUtc, getTopicsFieldsInfo } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import Plot from './Plot';
 
@@ -227,12 +226,12 @@ const mapStateToProps = (state, ownProps) => {
   const groupNames = getGroupNames(inputs);
   const streams = getStreamsData(state, groupNames);
   const taiToUtc = getTaiToUtc(state);
-  const efdConfigFile = getEfdConfig(state);
+  const topicsFieldsInfo = getTopicsFieldsInfo(state);
   return {
     inputs,
     streams,
     taiToUtc,
-    efdConfigFile,
+    topicsFieldsInfo,
   };
 };
 
