@@ -338,25 +338,33 @@ const Plot = ({
   }, [inputs, streams, sliceSize, sliceInvert, sizeLimit, isForecast]);
 
   const layerTypes = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads', 'bigotes', 'rects', 'heatmaps'];
-  const layers = {};
-  for (const [inputName, inputConfig] of Object.entries(inputs)) {
-    const { type } = inputConfig;
-    const layerName = type + 's';
-    if (!layerTypes.includes(layerName)) {
-      continue;
-    }
+  const dataLengthsHash = useMemo(() => {
+    return Object.entries(data)
+      .map(([key, value]) => `${key}:${value.length}`)
+      .join('|');
+  }, [data]);
+  const layers = useMemo(() => {
+    const layers = {};
+    for (const [inputName, inputConfig] of Object.entries(inputs)) {
+      const { type } = inputConfig;
+      const layerName = type + 's';
+      if (!layerTypes.includes(layerName)) {
+        continue;
+      }
 
-    let inputData;
-    if (isForecast) {
-      inputData = getForecastData(inputName, data[inputName]);
-    } else {
-      inputData = memoizedGetRangedData(data[inputName]);
+      let inputData;
+      if (isForecast) {
+        inputData = getForecastData(inputName, data[inputName]);
+      } else {
+        inputData = memoizedGetRangedData(data[inputName]);
+      }
+      layers[layerName] = [...(layers[layerName] ?? []), ...inputData];
     }
-    layers[layerName] = [...(layers[layerName] ?? []), ...inputData];
-  }
+    return layers;
+  }, [inputs, dataLengthsHash, memoizedGetRangedData]);
 
   const memoizedLegend = useMemo(() => {
-    return Object.keys(inputs).map((inputName, index) => {
+    return Object.keys(inputs).map((inputName) => {
       return {
         label: inputName,
         name: inputName,
