@@ -168,7 +168,7 @@ const Plot = ({
           const currentSeconds = new Date().getTime() / 1000;
           const timemillis = val.x?.ts ?? val.x;
           const dataSeconds = timemillis / 1000 + taiToUtc;
-          if (dataSeconds >= currentSeconds - (timeWindow * 60) / 2) return true;
+          if (dataSeconds >= currentSeconds - timeWindow * 60) return true;
           return false;
         });
       }
