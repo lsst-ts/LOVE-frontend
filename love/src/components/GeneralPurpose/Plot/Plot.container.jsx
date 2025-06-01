@@ -20,7 +20,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getStreamsData, getEfdConfig, getTaiToUtc, getTopicsFieldsInfo } from 'redux/selectors';
+import { getStreamsData, getTaiToUtc, getTopicsFieldsInfo } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import Plot from './Plot';
 
@@ -143,12 +143,11 @@ export const schema = {
 const PlotContainer = ({ subscriptions, subscribeToStreams, unsubscribeToStreams, ...props }) => {
   /**
    * The containerNode prop is a React ref (with the current parameter).
-   * It is used to get the parent node of the plot.
-   * - If no containerNode is passed as a prop,
-   *  the Plot component will be wrapped on a div.
-   *  The parent node of that div will be used as the containerNode.
-   *  It is taken this case will only happen when adding a plot directly from the UI framework.
-   * - If a containerNode is passed as a prop, it will be used instead by calling containerNode.current.
+   * It is used to get the parent node of the plot. If no containerNode is passed as a prop,
+   *  the Plot component will be wrapped on a div. The parent node of that div will
+   *  be used as the containerNode. Note this case will only happen when adding a plot directly
+   *  from the UI framework. If a containerNode is passed as a prop, it will be
+   *  used instead by calling containerNode.current.
    *
    * It is mandatory to call containerNode.current on this component and not on the parent ones.
    * This is because when calling containerNode.current on the parent component, the ref is not yet
@@ -170,13 +169,13 @@ const PlotContainer = ({ subscriptions, subscribeToStreams, unsubscribeToStreams
   if (!containerNode) {
     const containerRef = React.useRef(null);
     return (
-      <div ref={containerRef}>
+      <div style={{ height: '100%', overflow: 'hidden' }} ref={containerRef}>
         <Plot
           {...props}
           subscriptions={subscriptions}
           subscribeToStreams={subscribeToStreams}
           unsubscribeToStreams={unsubscribeToStreams}
-          containerNode={containerRef?.current?.parentNode}
+          containerNode={containerRef?.current}
         />
       </div>
     );
