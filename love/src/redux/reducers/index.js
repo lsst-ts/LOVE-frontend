@@ -28,6 +28,7 @@ import observingLogs from './observingLogs';
 import time from './time';
 import uif from './uif';
 import observatoryState from './observatoryState';
+import salinfo from './salinfo';
 import { UPDATE_EDITED_VIEW } from '../actions/actionTypes';
 
 export default combineReducers({
@@ -43,4 +44,5 @@ export default combineReducers({
   observingLogs,
   time,
   observatoryState,
+  salinfo,
 });
