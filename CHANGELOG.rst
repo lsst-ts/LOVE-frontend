@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.7.4
+------
+
+* Refactor and improve EFD interface for different components. `<https://github.com/lsst-ts/LOVE-frontend/pull/713>`_
+
 v6.7.3
 ------
 
