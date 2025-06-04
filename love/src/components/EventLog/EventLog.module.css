@@ -276,14 +276,13 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   padding-top: 0.5em;
 }
 
-.efdSelector {
-  margin-right: 1rem;
-}
-
-.efd > * {
-  display: inline;
-}
-
 .timeRange > div {
   display: inline-flex;
+}
+
+.efdSelector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--content-padding);
 }

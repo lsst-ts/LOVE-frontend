@@ -386,3 +386,7 @@ body {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
+
+.rdtPicker {
+  min-width: 14em;
+}

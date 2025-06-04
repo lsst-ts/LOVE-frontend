@@ -26,8 +26,8 @@ import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
 import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
 import ErrorIcon from 'components/icons/ErrorIcon/ErrorIcon';
 import TextField from 'components/TextField/TextField';
-import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
-import ManagerInterface, { formatTimestamp, getStringRegExp } from 'Utils';
+import { ISO_STRING_DATE_TIME_FORMAT, TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
+import ManagerInterface, { formatTimestamp, getStringRegExp, getEFDInstanceForHost } from 'Utils';
 import styles from './EventLog.module.css';
 
 export default class EventLog extends PureComponent {
@@ -124,7 +124,24 @@ export default class EventLog extends PureComponent {
         }),
       );
     });
+    queryData.sort((a, b) => {
+      return a[TOPIC_TIMESTAMP_ATTRIBUTE].value > b[TOPIC_TIMESTAMP_ATTRIBUTE].value ? -1 : 1;
+    });
     this.setState({ queryData });
+  };
+
+  efdManagerInterface = (startDate, endDate) => {
+    const cscInputs = this.setEFDLogsCSCs();
+    const efdInstance = getEFDInstanceForHost();
+    if (!efdInstance) {
+      return;
+    }
+
+    const parsedStartDate = startDate.format(ISO_STRING_DATE_TIME_FORMAT);
+    const parsedEndDate = endDate.format(ISO_STRING_DATE_TIME_FORMAT);
+    return ManagerInterface.getEFDLogs(parsedStartDate, parsedEndDate, cscInputs, efdInstance).then((response) => {
+      this.efdLogsResponse(response);
+    });
   };
 
   changeCSCFilter = (event) => {
@@ -288,23 +305,15 @@ export default class EventLog extends PureComponent {
               </div>
             </div>
           </div>
-          <div className={styles.efd}>
-            <div className={styles.efdSelector}>
-              <div style={{ display: 'inline-block' }}>
-                <Toggle toggled={!this.state.efdEnabled} onToggle={(event) => this.setState({ efdEnabled: !event })} />
-              </div>
-            </div>
-            {this.state.efdEnabled && (
-              <EFDQuery
-                onResponse={(response) => this.efdLogsResponse(response)}
-                managerInterface={(start_date, end_date, efd_instance) =>
-                  ManagerInterface.getEFDLogs(start_date, end_date, this.setEFDLogsCSCs(), efd_instance)
-                }
-              />
-            )}
+          <div className={styles.efdSelector}>
+            <Toggle
+              toggled={this.state.efdEnabled}
+              labels={['Live', 'Historical']}
+              onToggle={(event) => this.setState({ efdEnabled: event })}
+            />
+            {this.state.efdEnabled && <EFDQuery managerInterface={this.efdManagerInterface} />}
           </div>
           <Separator className={styles.separator} />
-
           {this.state.efdEnabled
             ? this.state.queryData.map((msg, index) => {
                 return msg.errorCode !== undefined
