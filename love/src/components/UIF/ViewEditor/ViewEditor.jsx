@@ -387,6 +387,37 @@ class ViewEditor extends Component {
     });
   };
 
+  onComponentDuplicate = (component) => {
+    const parsedLayout = { ...this.getEditedViewLayout() };
+    let startingIndex = 0;
+    Object.keys(parsedLayout.content).forEach((compKey) => {
+      startingIndex = Math.max(parsedLayout.content[compKey].properties.i, startingIndex);
+    });
+    startingIndex += 1;
+
+    const additionalContent = {};
+    additionalContent[`newPanel-${startingIndex}`] = {
+      ...component,
+      config: {
+        ...component.config,
+        title: `${component.config.title} copy`,
+      },
+      properties: {
+        ...component.properties,
+        y: component.properties.y + 10, // Offset to avoid overlapping
+        i: startingIndex,
+      },
+    };
+
+    parsedLayout.content = {
+      ...parsedLayout.content,
+      ...additionalContent,
+    };
+    this.updateEditedViewLayout(parsedLayout);
+    const layoutElement = document.getElementById(LAYOUT_CONTAINER_ID);
+    setTimeout(() => layoutElement.scrollTo({ top: layoutElement?.scrollHeight ?? 0, behavior: 'smooth' }), 0);
+  };
+
   save = () => {
     this.saveBackendView(null);
   };
@@ -641,6 +672,7 @@ class ViewEditor extends Component {
               onLayoutChange={this.confirmLayoutChange}
               onComponentDelete={this.onComponentDelete}
               onComponentConfig={this.onComponentConfig}
+              onComponentDuplicate={this.onComponentDuplicate}
               isEditable={true}
               deviceWidth={this.state.device.value}
               id={this.state.id}

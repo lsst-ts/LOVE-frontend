@@ -26,6 +26,7 @@ import componentIndex from './ComponentIndex';
 import Button from '../GeneralPurpose/Button/Button';
 import GearIcon from '../icons/GearIcon/GearIcon';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon.jsx';
+import CopyIcon from 'components/icons/CopyIcon/CopyIcon';
 import ErrorBoundary from '../GeneralPurpose/ErrorBoundary/ErrorBoundary';
 import Panel from '../GeneralPurpose/Panel/Panel';
 import DashedBox from '../GeneralPurpose/DashedBox/DashedBox';
@@ -188,6 +189,15 @@ class CustomView extends Component {
         ].join(' ')}
       >
         <div className={styles.editableComponentActions}>
+          <Button
+            onClick={() => this.props.onComponentDuplicate(component)}
+            title="Duplicate"
+            className={styles.iconButton}
+          >
+            <div className={styles.gearIconWrapper}>
+              <CopyIcon title="Duplicate" className={styles.icon} />
+            </div>
+          </Button>
           <Button
             onClick={() => this.props.onComponentConfig(component)}
             title="Configure"
