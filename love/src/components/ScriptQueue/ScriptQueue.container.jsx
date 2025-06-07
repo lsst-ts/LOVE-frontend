@@ -27,7 +27,6 @@ import {
   getPermCmdExec,
   getLastSALCommand,
   getUsername,
-  getEfdConfig,
 } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import ScriptQueue from './ScriptQueue';
@@ -65,7 +64,6 @@ const ScriptQueueContainer = ({
   salindex,
   fit,
   embedded,
-  efdConfig,
   ...props
 }) => {
   if (props.isRaw) {
@@ -90,7 +88,6 @@ const ScriptQueueContainer = ({
       fit={fit}
       embedded={embedded}
       running={queueState.running}
-      efdConfig={efdConfig}
     />
   );
 };
@@ -102,7 +99,6 @@ const mapStateToProps = (state, ownProps) => {
   const commandExecutePermission = getPermCmdExec(state);
   const lastSALCommand = getLastSALCommand(state);
   const username = getUsername(state);
-  const efdConfig = getEfdConfig(state);
   return {
     queueState,
     scriptHeartbeats,
@@ -110,7 +106,6 @@ const mapStateToProps = (state, ownProps) => {
     commandExecutePermission,
     lastSALCommand,
     username,
-    efdConfig,
   };
 };
 

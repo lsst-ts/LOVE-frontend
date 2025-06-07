@@ -74,6 +74,8 @@ export const getSubscription = (state, groupName) => {
 
 export const getSubscriptions = (state) => state.ws.subscriptions;
 
+export const getTopicsFieldsInfo = (state) => state.salinfo.topicsFieldsInfo;
+
 export const getStreamsData = (state, groupNames) => {
   if (state.ws === undefined) return undefined;
 

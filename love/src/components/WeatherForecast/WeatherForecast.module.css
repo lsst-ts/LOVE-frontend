@@ -18,131 +18,36 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 .container {
-  display: grid;
-  width: 100%;
-  overflow: hidden;
-  column-gap: 1rem;
-  row-gap: 1rem;
-  grid-auto-flow: row dense;
-}
-
-.section {
-  display: grid;
-  grid-template-rows: min-content 1fr;
-  grid-template-columns: 1fr;
-  width: 100%;
-  min-width: 28.57rem;
-  overflow: hidden;
-  border: 2px solid var(--second-tertiary-background-color);
-  border-radius: 5px;
-  box-sizing: border-box;
-  padding: 0.5em;
+  display: flex;
+  flex-direction: column;
+  gap: var(--content-padding);
 }
 
 .sectionTitle {
-  grid-column: 1 / -1;
   color: var(--base-font-color);
   font-size: var(--font-size-large);
-  padding: 0.5rem;
-}
-
-.doubleSection {
-  display: grid;
-  grid-template-rows: min-content 1fr;
-  grid-template-columns: 1fr 1fr;
-  grid-column: 1 / span 2;
-  width: 100%;
-  border: 2px solid var(--second-tertiary-background-color);
-  border-radius: 5px;
-  box-sizing: border-box;
-  padding: 0.5rem;
+  padding: var(--small-padding);
 }
 
 .fullSection {
-  display: grid;
-  grid-column: 1 / -1;
-  grid-template-rows: 2fr;
-  grid-template-columns: 8fr;
-  width: 100%;
   border: 2px solid var(--second-tertiary-background-color);
-  border-radius: 5px;
-  box-sizing: border-box;
-  padding: 0.5rem;
+  border-radius: 0.25em;
 }
 
 .fullSectionPlot {
-  display: grid;
-  grid-template-rows: min-content minmax(auto, 19em);
-  grid-template-columns: 1fr;
   border: 2px solid var(--second-tertiary-background-color);
-  border-radius: 5px;
-  box-sizing: border-box;
-  padding: 0.5rem;
-}
-
-.doubleSectionSimple {
-  display: grid;
-  grid-template-rows: min-content 1fr;
-  grid-template-columns: 1fr 1fr;
-  grid-column: 1 / span 2;
-  width: 100%;
+  border-radius: 0.25em;
   overflow: hidden;
-  box-sizing: border-box;
-  padding: 0.5rem;
-  text-align: left;
 }
 
-.windPlotContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  grid-column: 1 / span 2;
-}
-
-.windPlotSection {
-  display: grid;
-  grid-template-rows: min-content 1fr;
-  grid-template-columns: 1fr 1fr;
-  grid-column: 1 / span 1;
-  grid-row: auto / span 2;
-  width: 100%;
-  overflow: hidden;
-  border: 2px solid var(--second-tertiary-background-color);
-  border-radius: 5px;
-  box-sizing: border-box;
-  padding: 0.5rem;
-}
-
-.windPlotSection .sectionTitle {
-  grid-column: 1 / span 2;
-}
-
-.windPlotFullWidth {
-  flex-grow: 0.75;
-}
-
-.timeSeriesControls {
-  border-radius: 0px;
-  grid-column: 1 / span 2;
-  display: grid;
-  justify-items: left;
-  align-items: left;
-}
-
-.iconWrapper {
-  display: flex;
-  max-width: 3rem;
-  max-height: 3rem;
-  padding: 0.5rem;
-  margin: auto;
+.fullSectionPlot > :nth-child(2) {
+  min-height: 15em;
 }
 
 .weatherForecastControls {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: left;
-  margin-top: 1rem;
+  gap: var(--content-padding);
 }
 
 .title {
@@ -152,17 +57,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 }
 
 .weatherForecastState {
-  margin-left: 1rem;
-  margin-right: 1rem;
-  border-radius: 1rem;
-  font-weight: 700;
-  text-align: center;
-  width: 8em;
-  margin-bottom: 2px;
-}
-
-.toggleContainer {
-  display: flex;
+  padding: 0 var(--small-padding);
+  border-radius: 1em;
 }
 
 /* state classes */

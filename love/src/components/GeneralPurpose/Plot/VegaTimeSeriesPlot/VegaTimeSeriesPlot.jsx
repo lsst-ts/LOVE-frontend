@@ -1320,9 +1320,6 @@ class VegaTimeseriesPlot extends Component {
     const vegaSpec = this.getVegaSpec();
     return (
       <VegaLite
-        style={{
-          display: 'flex',
-        }}
         renderer="svg"
         spec={vegaSpec}
         data={layers}

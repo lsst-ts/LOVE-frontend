@@ -24,12 +24,14 @@ import Moment from 'moment';
 import {
   WEBSOCKET_SIMULATION,
   SUBPATH,
+  ISO_STRING_DATE_TIME_FORMAT,
   ISO_INTEGER_DATE_FORMAT,
   AUTO_HYPERLINK_JIRA_PROJECTS,
   JIRA_TICKETS_BASE_URL,
   OLE_OBS_SYSTEMS,
   OLE_OBS_SUBSYSTEMS,
   OLE_OBS_SUBSYSTEMS_COMPONENTS,
+  EFD_INSTANCES,
 } from 'Config.js';
 
 /* Backwards compatibility of Array.flat */
@@ -1470,86 +1472,6 @@ export const takeScreenshot = (callback) => {
 };
 
 /**
- * Parse plot inputs and convert them to a format the EFD API understands.
- * The transformation is done from:
- * [
- *   {name: {csc, salindex, topic, item}}
- * ]
- * to:
- * {
- *   csc: {
- *     index: {
- *       topic: [item]
- *     }
- *   }
- * }
- */
-export const parsePlotInputsEFD = (inputs) => {
-  const parsedInputs = {};
-  Object.values(inputs).forEach((input) => {
-    Object.values(input.values).forEach((value) => {
-      // EFD receives topic names of events with the logevent_ prefix
-      const topicName = value.category === 'telemetry' ? value.topic : `logevent_${value.topic}`;
-
-      // Check if the cscDict exists, if not create it
-      if (!parsedInputs[value.csc]) {
-        parsedInputs[value.csc] = {};
-      }
-
-      // Check if the indexDict exists, if not create it
-      if (!parsedInputs[value.csc][value.salindex]) {
-        parsedInputs[value.csc][value.salindex] = {};
-      }
-      // Check if the topicDict exists, if not create it
-      if (!parsedInputs[value.csc][value.salindex][topicName]) {
-        parsedInputs[value.csc][value.salindex][topicName] = [];
-      }
-
-      //  Array index is used for queries to the EFD (influx)
-      parsedInputs[value.csc][value.salindex][topicName].push(`${value.item}${value.isArray ? value.arrayIndex : ''}`);
-    });
-  });
-  return parsedInputs;
-};
-
-/**
- * Reformat data coming from the commander, from:
- * {
- *   "csc-index-topic": {
- *     "item":[{"ts":"2021-01-26 19:15:00+00:00","value":6.9}]
- *   }
- * }
- * to:
- * {
- *   "csc-index-topic": {
- *     "item": [{<tsLabel>:"2021-01-26 19:15:00+00:00",<valueLabel>:6.9}]
- *   }
- * }
- */
-export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y') => {
-  const newData = {};
-  Object.keys(data).forEach((topicKey) => {
-    const topicData = data[topicKey];
-    const newTopicData = {};
-    Object.keys(topicData).forEach((propertyKey) => {
-      const propertyDataArray = topicData[propertyKey];
-      // Next line was added to support EFD Querying for Array type items (influx)
-      const formattedPropertyKey = propertyKey.replace(/[\d\.]+$/, '');
-      newTopicData[formattedPropertyKey] = propertyDataArray.map((dataPoint) => {
-        const tsString = dataPoint?.ts.split(' ').join('T');
-        return {
-          units: { y: dataPoint?.units },
-          [tsLabel]: parseTimestamp(tsString),
-          [valueLabel]: dataPoint?.value,
-        };
-      });
-    });
-    newData[topicKey] = newTopicData;
-  });
-  return newData;
-};
-
-/**
  * Function to transform degrees to radians
  * @param {number} degrees degrees to be transformed
  * @returns {number} radians equivalent
@@ -2409,4 +2331,165 @@ export function getOBSSystemsSubsystemsComponentsIds(systemsHierarchy) {
     subsystemsIds,
     componentsIds,
   };
+}
+
+/**
+ * Retrieves the EFD instance associated with the current hostname.
+ * If no instance is found for the hostname, an error toast is displayed.
+ *
+ * @returns {string|null} The EFD instance for the current hostname, or null if not found.
+ */
+export function getEFDInstanceForHost() {
+  const efdInstance = EFD_INSTANCES[window.location.hostname];
+  if (!efdInstance) {
+    toast.error('EFD instance not found for this hostname');
+    return null;
+  }
+  return efdInstance;
+}
+
+/**
+ * Parse plot inputs and convert them to a format the EFD API understands.
+ * The transformation is done from:
+ * [
+ *   {name: {csc, salindex, topic, item}}
+ * ]
+ * to:
+ * {
+ *   csc: {
+ *     index: {
+ *       topic: [item]
+ *     }
+ *   }
+ * }
+ */
+export const parsePlotInputsEFD = (inputs) => {
+  const parsedInputs = {};
+  Object.values(inputs).forEach((input) => {
+    Object.values(input.values).forEach((value) => {
+      // EFD receives topic names of events with the logevent_ prefix
+      const topicName = value.category === 'telemetry' ? value.topic : `logevent_${value.topic}`;
+
+      // Check if the cscDict exists, if not create it
+      if (!parsedInputs[value.csc]) {
+        parsedInputs[value.csc] = {};
+      }
+
+      // Check if the indexDict exists, if not create it
+      if (!parsedInputs[value.csc][value.salindex]) {
+        parsedInputs[value.csc][value.salindex] = {};
+      }
+      // Check if the topicDict exists, if not create it
+      if (!parsedInputs[value.csc][value.salindex][topicName]) {
+        parsedInputs[value.csc][value.salindex][topicName] = [];
+      }
+
+      //  Array index is used for queries to the EFD (influx)
+      parsedInputs[value.csc][value.salindex][topicName].push(`${value.item}${value.isArray ? value.arrayIndex : ''}`);
+    });
+  });
+  return parsedInputs;
+};
+
+/**
+ * Reformat data coming from the commander, from:
+ * {
+ *   "csc-index-topic": {
+ *     "item":[{"ts":"2021-01-26 19:15:00+00:00","value":6.9}]
+ *   }
+ * }
+ * to:
+ * {
+ *   "csc-index-topic": {
+ *     "item": [{<tsLabel>:"2021-01-26 19:15:00+00:00",<valueLabel>:6.9}]
+ *   }
+ * }
+ *
+ */
+export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y') => {
+  const newData = {};
+  Object.keys(data).forEach((topicKey) => {
+    const topicData = data[topicKey];
+    const newTopicData = {};
+    Object.keys(topicData).forEach((propertyKey) => {
+      const propertyDataArray = topicData[propertyKey];
+      newTopicData[propertyKey] = propertyDataArray.map((dataPoint) => {
+        const tsString = dataPoint?.ts.split(' ').join('T');
+        const parsedTsString = parseTimestamp(tsString);
+        return {
+          units: { y: dataPoint?.units },
+          [tsLabel]: parsedTsString,
+          [valueLabel]: dataPoint?.value,
+        };
+      });
+    });
+    newData[topicKey] = newTopicData;
+  });
+  return newData;
+};
+
+/**
+ * Handles the retrieval and processing of historical plot data from the EFD.
+ * This function queries the EFD for historical data based on the provided inputs, processes the data to handle
+ * Influx DB array fields and log events and format the payload as the Plot component expects.
+ * Finally updates the historical data state using the provided callback function.
+ *
+ * See also:
+ * `getEFDInstanceForHost`, which retrieves the EFD instance for the current hostname.
+ * `parsePlotInputsEFD`, which transforms the Plot inputs into a format suitable for querying the EFD.
+ * `ManagerInterface.getEFDTimeseries`, which queries the EFD for historical data.
+ * `parseCommanderData`, which reformats the data coming from the commander.
+ *
+ * @param {Object} startDate - The start date for the historical data query, expected to be a moment.js object.
+ * @param {number} timeWindow - The time window (in minutes) for the historical data query.
+ * @param {Object} inputs - An object of inputs configurations for the Plot component.
+ * @param {Object} salFieldsInfo - An object containing information about the SAL fields.
+ * @param {Function} setHistoricalData - A callback function to set the processed historical data. A setState function is expected.
+ *
+ * @returns {void} This function does not return a value.
+ */
+export function handlePlotHistoricalData(startDate, timeWindow, inputs, salFieldsInfo, setHistoricalData) {
+  const efdInstance = getEFDInstanceForHost();
+  if (!efdInstance) {
+    return;
+  }
+  const parsedDate = startDate.utc().format(ISO_STRING_DATE_TIME_FORMAT);
+  const cscs = parsePlotInputsEFD(inputs);
+  const tsLabel = 'x';
+  const valueLabel = 'y';
+  ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min', efdInstance).then((data) => {
+    if (!data) return;
+    const parsedData = parseCommanderData(data, tsLabel, valueLabel);
+    Object.keys(parsedData).forEach((key) => {
+      const topicData = parsedData[key];
+      const csc = key.split('-')[0];
+      const topic = key.split('-')[2];
+      const isEvent = key.includes('logevent_');
+      Object.keys(topicData).forEach((efdItemKey) => {
+        const efdItemData = topicData[efdItemKey];
+        const itemKey = efdItemKey.replace(/[\d]+$/, '');
+        const itemData = topicData[itemKey];
+        const itemMetadata = salFieldsInfo[csc]?.[isEvent ? 'event_data' : 'telemetry_data']?.[topic]?.[itemKey];
+        const itemIsArray = itemMetadata?.count > 1;
+        if (itemIsArray) {
+          if (!itemData) {
+            topicData[itemKey] = efdItemData.map((dataPoint) => ({
+              ...dataPoint,
+              [valueLabel]: [],
+            }));
+          }
+          const itemIndex = parseInt(efdItemKey.match(/[\d]+$/)[0], 10);
+          topicData[itemKey].forEach((dataPoint, index) => {
+            dataPoint[valueLabel][itemIndex] = efdItemData[index]?.[valueLabel];
+          });
+          delete topicData[efdItemKey];
+        }
+      });
+      if (isEvent) {
+        parsedData[key.replace('logevent_', '')] = parsedData[key];
+        delete parsedData[key];
+      }
+    });
+    setHistoricalData(parsedData);
+  });
 }

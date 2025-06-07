@@ -17,24 +17,20 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-.datesContainer {
-  display: flex;
-  align-items: center;
-  gap: var(--small-padding);
-}
+import ManagerInterface from 'Utils';
+import { UPDATE_TOPICS_FIELDS_INFO } from './actionTypes';
 
-.fromDateContainer,
-.toDateContainer {
-  display: flex;
-  gap: var(--small-padding);
-  align-items: center;
-}
-
-.infoIcon {
-  display: flex;
-  align-items: center;
-}
-
-.infoIcon svg {
-  height: 1em;
+export function queryTopicsFieldsInfo() {
+  return (dispatch) => {
+    ManagerInterface.getTopicData('event-telemetry')
+      .then((data) => {
+        dispatch({
+          type: UPDATE_TOPICS_FIELDS_INFO,
+          data,
+        });
+      })
+      .catch((error) => {
+        console.error('Error fetching topics fields info:', error);
+      });
+  };
 }

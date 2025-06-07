@@ -62,7 +62,7 @@ export default class TimeWindow extends PureComponent {
     ];
     return (
       <div className={styles.timeWindowOptionsContainer}>
-        <span className={styles.timeWindowTitle}>Time window: </span>
+        <span>Time window:</span>
         {timewindowPresets.map((preset) => {
           const [duration, label] = preset;
           return (

@@ -171,6 +171,8 @@ class Layout extends Component {
       this.checkEfdStatus();
       this.checkSALStatus();
     }, POLLING_RATE_MS);
+
+    this.props.queryTopicsFieldsInfo();
   };
 
   componentWillUnmount = () => {

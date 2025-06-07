@@ -23,7 +23,7 @@ import LogMessageDisplay from 'components/GeneralPurpose/LogMessageDisplay/LogMe
 import Button from 'components/GeneralPurpose/Button/Button';
 import RequeueIcon from 'components/icons/ScriptQueue/RequeueIcon/RequeueIcon';
 import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
-import ManagerInterface, { parseToSALFormat } from 'Utils';
+import ManagerInterface, { parseToSALFormat, getEFDInstanceForHost } from 'Utils';
 import { getStatusStyle } from '../Scripts';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import ScriptDetails from '../ScriptDetails';
@@ -97,7 +97,11 @@ class FinishedScript extends React.Component {
 
   queryLogs = () => {
     const { index: scriptIndex, timestampProcessStart, timestampProcessEnd } = this.props;
-    const efdInstance = this.props.efdConfig?.defaultEfdInstance ?? 'summit_efd';
+
+    const efdInstance = getEFDInstanceForHost();
+    if (!efdInstance) {
+      return;
+    }
 
     const cscs = {
       Script: {
@@ -112,9 +116,11 @@ class FinishedScript extends React.Component {
     const endDateIso = new Date(timestampProcessEnd * 1000).toISOString().slice(0, -1);
     ManagerInterface.getEFDLogs(startDateIso, endDateIso, cscs, efdInstance, 'tai').then((res) => {
       if (res) {
-        this.setState({
-          logs: res[`Script-${scriptIndex}-logevent_logMessage`].map(parseToSALFormat),
+        const logs = res[`Script-${scriptIndex}-logevent_logMessage`].map(parseToSALFormat);
+        logs.sort((a, b) => {
+          return a[TOPIC_TIMESTAMP_ATTRIBUTE].value > b[TOPIC_TIMESTAMP_ATTRIBUTE].value ? -1 : 1;
         });
+        this.setState({ logs });
       }
     });
   };

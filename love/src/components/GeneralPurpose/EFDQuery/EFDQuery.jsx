@@ -17,76 +17,61 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo, memo } from 'react';
 import PropTypes from 'prop-types';
-import ManagerInterface from 'Utils';
 import moment from 'moment';
-import Select from 'components/GeneralPurpose/Select/Select';
 import Button from 'components/GeneralPurpose/Button/Button';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import styles from './EFDQuery.module.css';
 
-const EFDQuery = ({ efdConfigFile = null, onResponse = () => {}, managerInterface = () => Promise.resolve() }) => {
-  const [efdInstances, setEFDInstance] = useState([]);
-  const [selectedEFDInstance, setSelectedEFDInstance] = useState(null);
+const EFDQuery = ({ managerInterface = () => Promise.resolve() }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-
-  useEffect(() => {
-    ManagerInterface.getEFDClients().then(({ instances }) => {
-      setEFDInstance(instances);
-      const { defaultEfdInstance } = efdConfigFile ?? {};
-      if (defaultEfdInstance) {
-        setSelectedEFDInstance(defaultEfdInstance);
-      }
-    });
-  }, []);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleDateTimeChange = (date, type) => {
     if (type === 'start') setStartDate(date);
     else if (type === 'end') setEndDate(date);
   };
 
+  const mountDate = useMemo(() => {
+    const now = moment().utc();
+    const yesterday = moment().utc().subtract(1, 'day');
+    return {
+      startDate: yesterday,
+      endDate: now,
+    };
+  }, []);
+
   const queryEFD = () => {
-    managerInterface(startDate, endDate, selectedEFDInstance).then((response) => {
-      onResponse(response);
+    setIsLoading(true);
+    managerInterface(startDate, endDate).finally(() => {
+      setIsLoading(false);
     });
   };
 
   return (
     <div className={styles.queryContainer}>
-      <div className={styles.instanceSelector}>
-        <Select
-          options={efdInstances}
-          option={selectedEFDInstance}
-          onChange={({ value }) => setSelectedEFDInstance(value)}
-          className={styles.efdInstances}
-          placeholder="Select EFD Instance"
-        />
-      </div>
-      <div className={styles.timeRangeSelector}>
-        <DateTimeRange
-          onChange={handleDateTimeChange}
-          label="From"
-          startDate={new Date(Date.now() - 24 * 60 * 60 * 1000)}
-          endDate={new Date()}
-          startDateProps={{ isValidDate: (current) => current.isBefore(moment()) }}
-          endDateProps={{ isValidDate: (current) => current.isBefore(moment()) }}
-        />
-      </div>
-      <div className={styles.confirmButton}>
-        <Button disabled={!selectedEFDInstance} className={styles.actionButton} onClick={() => queryEFD()}>
-          Query
-        </Button>
-      </div>
+      <DateTimeRange
+        onChange={handleDateTimeChange}
+        label="From (UTC)"
+        startDate={mountDate.startDate}
+        endDate={mountDate.endDate}
+        startDateProps={{ isValidDate: (current) => current.isBefore(moment()) }}
+        endDateProps={{ isValidDate: (current) => current.isBefore(moment()) }}
+      />
+      <Button disabled={isLoading} className={styles.actionButton} onClick={() => queryEFD()}>
+        Query
+      </Button>
     </div>
   );
 };
 
 EFDQuery.propTypes = {
-  efdConfigFile: PropTypes.string,
-  onResponse: PropTypes.func.isRequired,
+  /** Function to interact with the manager interface
+   * The component expects a function that takes two parameters: startDate and endDate,
+   */
   managerInterface: PropTypes.func.isRequired,
 };
 
-export default EFDQuery;
+export default memo(EFDQuery);

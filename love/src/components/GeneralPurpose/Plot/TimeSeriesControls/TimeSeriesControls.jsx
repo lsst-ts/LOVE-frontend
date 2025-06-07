@@ -20,30 +20,34 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import Select from 'components/GeneralPurpose/Select/Select';
+import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import DateSelection from './DateSelection/DateSelection';
 import TimeWindow from './TimeWindow/TimeWindow';
-import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import styles from './TimeSeriesControls.module.css';
 
 export default class TimeSeriesControls extends Component {
   static propTypes = {
-    /** Display time window in live mode if true, otherwise display date selection */
-    liveMode: PropTypes.bool,
+    /** Wether the live mode is active or not
+     * If true, then the controls will show the time window selector
+     * If false, then the controls will show the date selection inputs
+     */
+    isLive: PropTypes.bool,
+    /** Function to change to live mode */
+    setLiveMode: PropTypes.func,
+    /** Time window to look back in minutes */
+    timeWindow: PropTypes.number,
     /** Function to be called when changing the time window */
     setTimeWindow: PropTypes.func.isRequired,
-    isLive: PropTypes.bool,
-    setLiveMode: PropTypes.func,
-    timeWindow: PropTypes.number,
+    /** Function to set historical data */
     setHistoricalData: PropTypes.func,
-    efdClients: PropTypes.array,
-    selectedEfdClient: PropTypes.string,
-    setEfdClient: PropTypes.func,
-    goBack: PropTypes.func,
   };
 
   static defaultProps = {
     liveMode: true,
+    setLiveMode: () => {},
+    timeWindow: 60,
+    setTimeWindow: () => {},
+    setHistoricalData: () => {},
   };
 
   constructor(props) {
@@ -54,46 +58,24 @@ export default class TimeSeriesControls extends Component {
     };
   }
 
-  handleChangeChk = () => {
-    if (this.props.isLive) this.props.setLiveMode(false);
-    else this.props.setLiveMode(true);
-  };
-
   componentDidMount() {
-    this.setState({ dateSelectorDates: [moment().subtract(1, 'h'), moment()] });
+    this.setState({ dateSelectorDates: [moment().subtract(30, 'minutes'), moment()] });
   }
 
   render() {
+    const { isLive, setLiveMode, timeWindow, setTimeWindow, setHistoricalData } = this.props;
+    const { dateSelectorDates } = this.state;
+
     return (
       <div ref={this.containerRef} className={styles.timeseriesControlsContainer}>
         <div className={styles.switchContainer}>
-          <Toggle
-            labels={['Live', 'Query']}
-            toggled={!this.props.isLive}
-            onToggle={(show) => this.props.setLiveMode(!show)}
-          />
+          <Toggle labels={['Live', 'Historical']} toggled={!isLive} onToggle={(show) => setLiveMode(!show)} />
         </div>
-        {this.props.isLive ? (
-          <TimeWindow setTimeWindow={this.props.setTimeWindow} timeWindow={this.props.timeWindow} />
+        {isLive ? (
+          <TimeWindow setTimeWindow={setTimeWindow} timeWindow={timeWindow} />
         ) : (
-          <div className={styles.queryInputs}>
-            <Select
-              options={this.props.efdClients}
-              option={this.props.selectedEfdClient}
-              onChange={({ value }) => this.props.setEfdClient(value)}
-              className={styles.efdClients}
-              placeholder="Select EFD Client"
-            />
-            <DateSelection
-              dateSelectorDates={this.state.dateSelectorDates}
-              setHistoricalData={this.props.setHistoricalData}
-              submitDisabled={!this.props.selectedEfdClient}
-            />
-          </div>
+          <DateSelection dateSelectorDates={dateSelectorDates} setHistoricalData={setHistoricalData} />
         )}
-        {/* <div onClick={this.props.goBack} className={styles.gearIconContainer}>
-          <GearIcon active />
-        </div> */}
       </div>
     );
   }
