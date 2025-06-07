@@ -67,6 +67,8 @@ export default class AlarmAudio extends Component {
 
     this.numCriticals = 0;
 
+    this.stillCriticalTimeoutRef = null;
+
     this.newWarningSound = new Howl({
       src: [newWarningFile],
       onplayerror: () => {
@@ -186,6 +188,7 @@ export default class AlarmAudio extends Component {
 
   componentWillUnmount = () => {
     this.props.unsubscribeToStreams();
+    this.stopAllSounds();
   };
 
   componentDidUpdate = (prevProps, prevState) => {

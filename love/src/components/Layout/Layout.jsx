@@ -78,6 +78,9 @@ const urls = {
   '/uif': 'AVAILABLE VIEWS',
 };
 
+const CHANNEL_NAME = 'tab-sync';
+const ELECTION_TIMEOUT_MS = 300;
+
 class Layout extends Component {
   static propTypes = {
     /** Name of the current user */
@@ -147,9 +150,13 @@ class Layout extends Component {
       efdStatus: { label: 'EFD status unknown', style: 'invalid' },
       salStatus: { label: 'SAL status unknown', style: 'invalid' },
       oleTabOpen: null,
+      isMasterAudio: null,
     };
 
     this.requestToastID = null;
+    this.tabId = crypto.randomUUID();
+    this.channelRef = null;
+    this.electionTimer = null;
   }
 
   UNSAFE_componentWillMount = () => {
@@ -159,6 +166,7 @@ class Layout extends Component {
   };
 
   componentDidMount = () => {
+    console.log('Layout tab id:', this.tabId);
     this.moveCustomTopbar();
     this.props.subscribeToStreams();
     this.props.startControlLocationLoop();
@@ -171,13 +179,29 @@ class Layout extends Component {
       this.checkEfdStatus();
       this.checkSALStatus();
     }, POLLING_RATE_MS);
+
+    this.props.queryTopicsFieldsInfo();
+
+    this.channelRef = new BroadcastChannel(CHANNEL_NAME);
+    this.channelRef.addEventListener('message', this.handleMessage);
+    window.addEventListener('beforeunload', this.handleUnload);
+    this.startElection();
   };
 
   componentWillUnmount = () => {
     document.removeEventListener('mousedown', this.handleClick, false);
     window.removeEventListener('resize', this.handleResize);
-    window.clearInterval(this.heartbeatInterval);
-    window.clearInterval(this.externalServicesInterval);
+    window.removeEventListener('beforeunload', this.handleUnload);
+
+    if (this.channelRef) {
+      this.channelRef.removeEventListener('message', this.handleMessage);
+      this.channelRef.close();
+    }
+
+    if (this.electionTimer) clearTimeout(this.electionTimer);
+    if (this.heartbeatInterval) clearInterval(this.heartbeatInterval);
+    if (this.externalServicesInterval) clearInterval(this.externalServicesInterval);
+
     this.props.unsubscribeToStreams();
     this.props.stopControlLocationLoop();
   };
@@ -261,6 +285,22 @@ class Layout extends Component {
     if (this.state.title !== prevState.title) {
       document.title = this.state.title ? `LOVE - ${this.state.title}` : 'LOVE';
     }
+  };
+
+  becomeMasterAudio = () => {
+    console.log('Become master audio');
+    if (this.state.isMasterAudio) return; // already master
+    this.channelRef.postMessage({ type: 'master', id: this.tabId });
+    this.setState({ isMasterAudio: true });
+  };
+
+  startElection = () => {
+    // cancel any pending timer first
+    if (this.electionTimer) clearTimeout(this.electionTimer);
+    // Say *hello* to probe for an existing master
+    this.channelRef.postMessage({ type: 'hello', id: this.tabId });
+    // Elect ourselves if nobody answers in time
+    this.electionTimer = setTimeout(this.becomeMasterAudio, ELECTION_TIMEOUT_MS);
   };
 
   moveCustomTopbar = () => {
@@ -369,6 +409,44 @@ class Layout extends Component {
       viewOnNotch: BREAK_2 < innerWidth,
       toolbarOverflow: innerWidth < BREAK_1,
     });
+  };
+
+  handleMessage = (event) => {
+    const msg = event.data;
+    if (!msg || msg.id === this.tabId) return; // ignore self
+    console.log(`Received message from tab ${msg.id}:`, msg);
+    switch (msg.type) {
+      case 'master': {
+        // Someone claimed mastership. End the election and register as secondary.
+        if (this.electionTimer) clearTimeout(this.electionTimer);
+        this.setState({ isMasterAudio: false });
+        break;
+      }
+      case 'hello': {
+        // A newcomer is asking. If tab is master, confirm.
+        if (this.state.isMasterAudio) {
+          this.channelRef.postMessage({ type: 'master', id: this.tabId });
+        }
+        break;
+      }
+      case 'goodbye': {
+        // The current master is leaving – trigger a new election *if* we're not master.
+        this.startElection();
+        break;
+      }
+      default:
+        break; // ignore unknown types for forward compatibility
+    }
+  };
+
+  handleUnload = () => {
+    if (this.channelRef) {
+      if (this.state.isMasterAudio) {
+        // Notify others so they can re‑elect fast
+        this.channelRef.postMessage({ type: 'goodbye', id: this.tabId });
+      }
+      this.channelRef.close();
+    }
   };
 
   createNewView = () => {
@@ -569,7 +647,7 @@ class Layout extends Component {
         <DropdownMenu className={styles.settingsDropdown}>
           <Button className={styles.iconBtn} title="View notifications" onClick={() => {}} status="transparent">
             <IconBadge content={filteredAlarms.length ?? ''} display={filteredAlarms?.length > 0}>
-              <NotificationIcon className={styles.icon} />
+              <NotificationIcon className={styles.icon} active={this.state.isMasterAudio} />
             </IconBadge>
           </Button>
           <AlarmsList
@@ -645,6 +723,9 @@ class Layout extends Component {
               requireUserSwap={() => {
                 this.setState({ tokenSwapRequested: true });
                 this.props.requireUserSwap(true);
+              }}
+              setAudioMasterTab={() => {
+                this.becomeMasterAudio();
               }}
               onXMLClick={() => this.setState({ isXMLModalOpen: true })}
               onConfigClick={() => this.setState({ isConfigModalOpen: true })}
@@ -738,7 +819,7 @@ class Layout extends Component {
   render() {
     return (
       <>
-        <AlarmAudioContainer />
+        {this.state.isMasterAudio && <AlarmAudioContainer />}
         <div className={styles.hidden}>
           <div id="customTopbar" />
         </div>

@@ -20,3 +20,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .path {
   fill: var(--secondary-font-color);
 }
+
+.active .path {
+  fill: var(--status-warning-color);
+}
