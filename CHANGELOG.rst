@@ -2,6 +2,12 @@
 Version History
 ===============
 
+v6.7.4
+------
+
+* Add tab synchronization to avoid having multiple Watcher audio alarms active when having multiple tabs open. `<https://github.com/lsst-ts/LOVE-frontend/pull/715>`_
+* Refactor and improve EFD interface for different components. `<https://github.com/lsst-ts/LOVE-frontend/pull/713>`_
+
 v6.7.3
 ------
 

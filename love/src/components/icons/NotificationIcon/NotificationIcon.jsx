@@ -21,8 +21,9 @@ import React from 'react';
 import styles from './NotificationIcon.module.css';
 
 function NotificationIcon(props) {
+  const { className, ...rest } = props;
   return (
-    <svg viewBox="0 0 31.9 39.2" {...props}>
+    <svg className={[className, props.active ? styles.active : ''].join(' ')} viewBox="0 0 31.9 39.2" {...rest}>
       <path
         className={styles.path}
         d="M15.48,37.18c2.74,0,4.96-2.22,4.96-4.96h-9.92C10.52,34.96,12.74,37.18,15.48,37.18z"

@@ -44,6 +44,8 @@ UserDetails.propTypes = {
   logout: PropTypes.func,
   /** Callback to execute when clicking on the user swap menu element */
   requireUserSwap: PropTypes.func,
+  /* Callback to execute when clicking on the audio master tab menu element */
+  setAudioMasterTab: PropTypes.func,
   /** Callback to execute when clicking on the take screenshot menu element */
   takeScreenshot: PropTypes.func,
   /** Callback to execute when clicking on the About menu element */
@@ -61,6 +63,7 @@ export default function UserDetails({
   onEmergencyContactsClick,
   logout,
   requireUserSwap,
+  setAudioMasterTab,
   takeScreenshot,
   onAboutClick,
 }) {
@@ -110,6 +113,13 @@ export default function UserDetails({
       <div className={dividerClassName}></div>
       <div className={[menuElementClassName, styles.menuElement].join(' ')} title="User swap" onClick={requireUserSwap}>
         User swap
+      </div>
+      <div
+        className={[menuElementClassName, styles.menuElement].join(' ')}
+        title="Set audio master tab"
+        onClick={setAudioMasterTab}
+      >
+        Set audio master tab
       </div>
       <div className={[menuElementClassName, styles.menuElement].join(' ')} title="Logout" onClick={logout}>
         Logout
