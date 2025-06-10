@@ -15,11 +15,15 @@
   background-color: var(--second-tertiary-background-color);
   padding: 1em;
   display: grid;
+  row-gap: var(--content-padding);
+  column-gap: var(--content-padding);
   grid-template-columns: 2fr 1fr;
   grid-template-rows: auto;
   grid-template-areas:
     'metadata telescope-status'
-    'summary summary'
+    'summary summary-weather'
+    'summary-maintel summary-maintel'
+    'summary-auxtel summary-auxtel'
     'participants participants';
   border-radius: 0.5em;
 }
@@ -37,10 +41,12 @@
   margin-right: var(--small-padding);
 }
 
-.reportTelescopeStatus {
-  grid-area: telescope-status;
+.reportSummary,
+.reportSummaryWeather,
+.reportSummaryMaintel,
+.reportSummaryAuxtel {
   background-color: var(--second-quaternary-background-color);
-  margin-bottom: var(--small-padding);
+  /* margin: var(--small-padding) 0; */
   padding: var(--content-padding);
   border-radius: 0.5em;
   white-space: pre-wrap;
@@ -48,11 +54,18 @@
 
 .reportSummary {
   grid-area: summary;
-  background-color: var(--second-quaternary-background-color);
-  margin: var(--small-padding) 0;
-  padding: var(--content-padding);
-  border-radius: 0.5em;
-  white-space: pre-wrap;
+}
+
+.reportSummaryWeather {
+  grid-area: summary-weather;
+}
+
+.reportSummaryMaintel {
+  grid-area: summary-maintel;
+}
+
+.reportSummaryAuxtel {
+  grid-area: summary-auxtel;
 }
 
 .reportParticipants {

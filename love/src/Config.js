@@ -2301,6 +2301,32 @@ export const OLE_OBS_SUBSYSTEMS_COMPONENTS = {
   },
 };
 
+export const NIGHTREPORT_CSCS_TO_REPORT = [
+  'MTMount:0',
+  'MTM1M3:0',
+  'MTAOS:0',
+  'MTM2:0',
+  'MTDome:0',
+  'MTDomeTrajectory:0',
+  'MTHexapod:1',
+  'MTHexapod:2',
+  'MTRotator:0',
+  'MTPtg:0',
+  'MTM1M3TS:0',
+  'MTCamera:0',
+  'ATMCS:0',
+  'ATPtg:0',
+  'ATDome:0',
+  'ATDomeTrajectory:0',
+  'ATAOS:0',
+  'ATPneumatics:0',
+  'ATHexapod:0',
+  'ATCamera:0',
+  'ATOODS:0',
+  'ATHeaderService:0',
+  'ATSpectrograph:0',
+];
+
 /*****************************************************************************/
 /**************************CSC Summary configurations*************************/
 /*****************************************************************************/
