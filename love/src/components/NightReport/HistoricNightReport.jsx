@@ -6,11 +6,6 @@ import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange
 import Select from 'components/GeneralPurpose/Select/Select';
 import styles from './HistoricNightReport.module.css';
 
-const TELESCOPES = {
-  simonyi: 'Simonyi',
-  auxtel: 'AuxTel',
-};
-
 const REPORT_STATUSES = {
   sent: 'Sent',
   draft: 'Draft',
@@ -53,13 +48,21 @@ function Report(data, index) {
           </a>
         </div>
       </div>
-      <div className={styles.reportTelescopeStatus}>
-        <div className={styles.label}>Telescope Status</div>
-        <div className={styles.value}>{data.telescope_status}</div>
-      </div>
       <div className={styles.reportSummary}>
         <div className={styles.label}>Summary</div>
         <div className={styles.value}>{data.summary}</div>
+      </div>
+      <div className={styles.reportSummaryWeather}>
+        <div className={styles.label}>Weather Summary</div>
+        <div className={styles.value}>{data.weather}</div>
+      </div>
+      <div className={styles.reportSummaryMaintel}>
+        <div className={styles.label}>Simonyi Summary</div>
+        <div className={styles.value}>{data.maintel_summary}</div>
+      </div>
+      <div className={styles.reportSummaryAuxtel}>
+        <div className={styles.label}>Auxtel Summary</div>
+        <div className={styles.value}>{data.auxtel_summary}</div>
       </div>
       <div className={styles.reportParticipants}>
         <div className={styles.label}>Participants</div>
@@ -92,7 +95,6 @@ function formatReports(reports) {
 function HistoricNightReport() {
   const [dateStart, setDateStart] = useState(Moment().subtract(1, 'days'));
   const [dateEnd, setDateEnd] = useState(Moment());
-  const [selectedTelescope, setSelectedTelescope] = useState(TELESCOPES.auxtel);
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -105,7 +107,7 @@ function HistoricNightReport() {
     setLoading(true);
     const dayObsStart = dateStart.format('YYYYMMDD');
     const dayObsEnd = Moment(dateEnd).add(1, 'd').format('YYYYMMDD');
-    ManagerInterface.getHistoricNightReports(dayObsStart, dayObsEnd, selectedTelescope).then((data) => {
+    ManagerInterface.getHistoricNightReports(dayObsStart, dayObsEnd).then((data) => {
       if (data) {
         setReports(formatReports(data));
         setLastUpdated(new Date());
@@ -138,14 +140,6 @@ function HistoricNightReport() {
             maxDate: Moment(),
           }}
           onChange={handleDateChange}
-        />
-        <Select
-          value={selectedTelescope}
-          onChange={({ value }) => setSelectedTelescope(value)}
-          options={[
-            { value: TELESCOPES.simonyi, label: 'Simonyi' },
-            { value: TELESCOPES.auxtel, label: 'Auxtel' },
-          ]}
         />
       </div>
       <div className={styles.refresh}>

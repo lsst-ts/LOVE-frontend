@@ -505,6 +505,26 @@ export default class ManagerInterface {
     });
   }
 
+  static getEFDMostRecentTimeseries(cscs, num, time_cut, efd_instance) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}efd/top_timeseries`;
+    return fetch(url, {
+      method: 'POST',
+      headers: ManagerInterface.getHeaders(),
+      body: JSON.stringify({
+        cscs,
+        num,
+        time_cut,
+        efd_instance,
+      }),
+    }).then((response) => {
+      return checkJSONResponse(response);
+    });
+  }
+
   static getEFDLogs(start_date, end_date, cscs, efd_instance, scale = 'utc') {
     const token = ManagerInterface.getToken();
     if (token === null) {
@@ -971,7 +991,7 @@ export default class ManagerInterface {
     });
   }
 
-  static getCurrentNightReport(telescope) {
+  static getCurrentNightReport() {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
@@ -980,7 +1000,7 @@ export default class ManagerInterface {
     const currentDate = Moment().utc();
     const currentObsDayInt = parseInt(getObsDayFromDate(currentDate), 10);
 
-    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/?telescopes=${telescope}&min_day_obs=${currentObsDayInt}&max_day_obs=${
+    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/?min_day_obs=${currentObsDayInt}&max_day_obs=${
       currentObsDayInt + 1
     }`;
     return fetch(url, {
@@ -991,7 +1011,7 @@ export default class ManagerInterface {
     });
   }
 
-  static saveCurrentNightReport(telescope, summary, telescope_status, confluence_url, observers_crew) {
+  static saveCurrentNightReport(summary, weather, maintel_summary, auxtel_summary, confluence_url, observers_crew) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
@@ -1002,9 +1022,10 @@ export default class ManagerInterface {
       method: 'POST',
       headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
-        telescope,
         summary,
-        telescope_status,
+        weather,
+        maintel_summary,
+        auxtel_summary,
         confluence_url,
         observers_crew,
       }),
@@ -1022,7 +1043,15 @@ export default class ManagerInterface {
     });
   }
 
-  static updateCurrentNightReport(nightreport_id, summary, telescope_status, confluence_url, observers_crew) {
+  static updateCurrentNightReport(
+    nightreport_id,
+    summary,
+    weather,
+    maintel_summary,
+    auxtel_summary,
+    confluence_url,
+    observers_crew,
+  ) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
@@ -1034,7 +1063,9 @@ export default class ManagerInterface {
       headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
         summary,
-        telescope_status,
+        weather,
+        maintel_summary,
+        auxtel_summary,
         confluence_url,
         observers_crew,
       }),
@@ -1062,13 +1093,13 @@ export default class ManagerInterface {
     });
   }
 
-  static getHistoricNightReports(day_obs_start, day_obs_end, telescope) {
+  static getHistoricNightReports(day_obs_start, day_obs_end) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
 
-    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/?telescopes=${telescope}&min_day_obs=${day_obs_start}&max_day_obs=${day_obs_end}`;
+    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/?min_day_obs=${day_obs_start}&max_day_obs=${day_obs_end}`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
@@ -1182,6 +1213,30 @@ export default class ManagerInterface {
           toast.error(resp.title);
           return false;
         });
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  // Jira APIs
+  static getJiraOBSTickets(obsDay) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}jira/report/OBS/?day_obs=${obsDay}`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401) {
+        ManagerInterface.removeToken();
+        return false;
       }
       return response.json().then((resp) => {
         return resp;
