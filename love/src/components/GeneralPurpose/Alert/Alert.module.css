@@ -1,7 +1,6 @@
 .alert {
   border-radius: 0.29rem;
   padding: 1em;
-  margin-bottom: var(--small-padding);
   animation: slideUp 0.5s ease-out;
   animation-fill-mode: forwards;
 }

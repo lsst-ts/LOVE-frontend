@@ -96,7 +96,7 @@ const mapDispatchToProps = (dispatch) => {
     'event-CCCamera-0-summaryState',
     'event-CCCamera-0-ccsCommandState',
     'event-CCCamera-0-calibrationDetailedState',
-    'event-CCCamera-0-offlineDetailedState',
+    // 'event-CCCamera-0-offlineDetailedState',
     'event-CCCamera-0-imageReadinessDetailedState',
     'event-CCCamera-0-shutterDetailedState',
     'event-CCCamera-0-filterChangerDetailedState',
