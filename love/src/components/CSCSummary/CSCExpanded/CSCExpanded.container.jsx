@@ -129,7 +129,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(addGroup(`event-${cscName}-${index}-configurationsAvailable`));
       dispatch(addGroup(`event-${cscName}-${index}-configurationApplied`));
       dispatch(addGroup(`event-${cscName}-${index}-simulationMode`));
-      dispatch(addGroup(`event-${cscName}-${index}-offlineDetailedState`));
+      // dispatch(addGroup(`event-${cscName}-${index}-offlineDetailedState`));
     },
     unsubscribeToStreams: (cscName, index) => {
       dispatch(removeGroup('event-Heartbeat-0-stream'));
@@ -141,7 +141,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(removeGroup(`event-${cscName}-${index}-configurationsAvailable`));
       dispatch(removeGroup(`event-${cscName}-${index}-configurationApplied`));
       dispatch(removeGroup(`event-${cscName}-${index}-simulationMode`));
-      dispatch(removeGroup(`event-${cscName}-${index}-offlineDetailedState`));
+      // dispatch(removeGroup(`event-${cscName}-${index}-offlineDetailedState`));
     },
     clearCSCLogMessages: (csc, salindex) => {
       dispatch(removeCSCLogMessages(csc, salindex));

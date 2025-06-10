@@ -503,6 +503,35 @@ export default class ManagerInterface {
     });
   }
 
+  static getEFDMostRecentTimeseries(cscs, num, time_cut, efd_instance) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}efd/top_timeseries`;
+    return fetch(url, {
+      method: 'POST',
+      headers: ManagerInterface.getHeaders(),
+      body: JSON.stringify({
+        cscs,
+        num,
+        time_cut,
+        efd_instance,
+      }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
   static getEFDLogs(start_date, end_date, cscs, efd_instance, scale = 'utc') {
     const token = ManagerInterface.getToken();
     if (token === null) {
@@ -1180,6 +1209,30 @@ export default class ManagerInterface {
           toast.error(resp.title);
           return false;
         });
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  // Jira APIs
+  static getJiraOBSTickets(obsDay) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}jira/report/OBS/?day_obs=${obsDay}`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401) {
+        ManagerInterface.removeToken();
+        return false;
       }
       return response.json().then((resp) => {
         return resp;

@@ -1,40 +1,75 @@
-.tabs {
+.container {
   display: flex;
-}
-
-.tabs > * {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  padding: 0 0.5em;
-  cursor: pointer;
-  height: 3em;
-  background-color: var(--second-secondary-background-color);
-  border: 1px solid var(--secondary-font-dimmed-color);
-  border-top-left-radius: 0.5em;
-  border-top-right-radius: 0.5em;
-  margin-bottom: -1px;
-}
-
-.tabs > :first-child {
-  margin-left: 2em;
-}
-
-.tabs > *:not(:last-child) {
-  margin-right: 2em;
-}
-
-.selectedTab {
-  border-bottom-color: var(--second-secondary-background-color);
-  z-index: 1;
-}
-
-.content {
   background-color: var(--second-secondary-background-color);
   border: 1px solid var(--second-senary-background-dimmed-color);
   border-radius: 0.5em;
-  padding: var(--content-padding);
+  overflow: hidden;
   text-align: left;
+}
+
+.container > * {
+  flex: 1;
+}
+
+.observatoryDataContainer {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: var(--content-padding);
+}
+
+.titleField {
+  text-align: left;
+}
+
+.titleField h1 {
+  margin: var(--small-padding) 0;
+}
+
+.telescopeStatesContainer {
+  display: flex;
+  gap: var(--content-padding);
+}
+
+.telescopeData {
+  display: flex;
+  flex-direction: column;
+  gap: var(--small-padding);
+}
+
+.telescopeDataParam {
+  min-width: 15em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--small-padding);
+}
+
+.telescopeDataParamInput {
+  width: 5em;
+}
+
+.telescopeDataParamInput,
+.timeLossFieldInput {
+  background: var(--secondary-background-dimmed-color);
+  text-align: right;
+}
+
+.timeLossField {
+  display: flex;
+  align-items: end;
+  gap: var(--small-padding);
+}
+
+.timeLossFieldInput {
+  width: 4em;
+}
+
+.timeLossFieldHint {
+  height: 1em;
+  width: 1em;
+  align-self: center;
+  cursor: pointer;
 }
 
 .select {
@@ -43,13 +78,14 @@
   border-radius: 0.2em;
 }
 
-.form {
-  padding: var(--content-padding);
-  background-color: var(--second-tertiary-background-color);
+.formContainer {
+  min-width: 45em;
 }
 
-.form > *:not(:last-child, .progressBar) {
-  margin-bottom: var(--small-padding);
+.formContainer,
+.observatoryDataContainer {
+  padding: var(--content-padding);
+  background-color: var(--second-tertiary-background-color);
 }
 
 .progressBar {
@@ -128,10 +164,89 @@
   margin-top: var(--content-padding);
 }
 
-.reportSummary {
-  min-height: 20em;
+.reportSummary,
+.reportWeather {
+  min-height: 6em;
+}
+
+.reportSummaryTitle,
+.reportWeatherTitle,
+.reportTelescopeStatusTitle,
+.reportObserversTitle,
+.telescopeStatesContainerTitle,
+.reportObsTicketsTitle,
+.cscStatesTitle {
+  font-weight: bold;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: var(--small-padding);
+}
+
+.reportWeatherTitle > :first-child,
+.reportObsTicketsTitle > :first-child {
+  display: flex;
+  align-items: center;
+  gap: var(--small-padding);
+}
+
+.reportWeatherTitle > :first-child button,
+.reportObsTicketsTitle > :first-child button {
+  padding: 0.25em var(--small-padding);
+  display: flex;
+  align-items: center;
+}
+
+.refreshIcon {
+  width: 1em;
+  height: 1em;
 }
 
 .reportTelescopeStatus {
-  min-height: 5em;
+  min-height: 10em;
+}
+
+.alerts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--small-padding);
+}
+
+.alerts:has(*) {
+  margin-top: var(--content-padding);
+}
+
+.obsTicketsTableWrapper {
+  max-height: 13.5em;
+  overflow-y: auto;
+}
+
+.obsTicketsTableWrapper > table {
+  table-layout: fixed;
+  border-radius: 0.25em;
+  border: none;
+  overflow: hidden;
+}
+
+.obsTicketsTableWrapper > table td {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.cscStates {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11em, 1fr));
+  row-gap: var(--small-padding);
+  column-gap: calc(var(--content-padding) * 4);
+}
+
+.cscState {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cscState > :last-child {
+  width: 1em;
+  height: 1em;
 }
