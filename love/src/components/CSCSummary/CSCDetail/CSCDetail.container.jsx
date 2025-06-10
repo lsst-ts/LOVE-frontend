@@ -127,7 +127,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     `event-${ownProps.name}-${ownProps.salindex}-errorCode`,
     `event-${ownProps.name}-${ownProps.salindex}-simulationMode`,
     `event-Heartbeat-0-stream`,
-    `event-${ownProps.name}-${ownProps.salindex}-offlineDetailedState`,
+    // `event-${ownProps.name}-${ownProps.salindex}-offlineDetailedState`,
   ];
   return {
     subscriptions,
