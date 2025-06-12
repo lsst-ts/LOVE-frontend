@@ -1,9 +1,7 @@
 /** 
 This file is part of LOVE-frontend.
 
-Copyright (c) 2023 Inria Chile.
-
-Developed by Inria Chile.
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,24 +15,20 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-.datesContainer {
-  display: flex;
-  align-items: center;
-  gap: var(--small-padding);
-}
+import ManagerInterface from 'Utils';
+import { UPDATE_TOPICS_FIELDS_INFO } from './actionTypes';
 
-.fromDateContainer,
-.toDateContainer {
-  display: flex;
-  gap: var(--small-padding);
-  align-items: center;
-}
-
-.infoIcon {
-  display: flex;
-  align-items: center;
-}
-
-.infoIcon svg {
-  height: 1em;
+export function queryTopicsFieldsInfo() {
+  return (dispatch) => {
+    ManagerInterface.getTopicData('event-telemetry')
+      .then((data) => {
+        dispatch({
+          type: UPDATE_TOPICS_FIELDS_INFO,
+          data,
+        });
+      })
+      .catch((error) => {
+        console.error('Error fetching topics fields info:', error);
+      });
+  };
 }

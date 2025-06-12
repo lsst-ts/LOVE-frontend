@@ -43,6 +43,7 @@ import { logout, receiveConfig, requireSwapToken, cancelSwapToken } from '../../
 import { logAlarm, ackAlarm } from '../../redux/actions/alarms';
 import { addGroup, removeGroup, requestSALCommand, resetSubscriptions } from '../../redux/actions/ws';
 import { fetchControlLocationLoopStart, fetchControlLocationLoopStop } from '../../redux/actions/observatoryState';
+import { queryTopicsFieldsInfo } from '../../redux/actions/salinfo';
 import { clearViewToEdit } from '../../redux/actions/uif';
 import Layout from './Layout';
 
@@ -134,6 +135,7 @@ const mapDispatchToProps = (dispatch) => {
     stopControlLocationLoop: () => {
       dispatch(fetchControlLocationLoopStop());
     },
+    queryTopicsFieldsInfo: () => dispatch(queryTopicsFieldsInfo()),
   };
 };
 

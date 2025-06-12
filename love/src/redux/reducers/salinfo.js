@@ -1,9 +1,7 @@
 /** 
 This file is part of LOVE-frontend.
 
-Copyright (c) 2023 Inria Chile.
-
-Developed by Inria Chile.
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,24 +15,21 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-.datesContainer {
-  display: flex;
-  align-items: center;
-  gap: var(--small-padding);
-}
+import { UPDATE_TOPICS_FIELDS_INFO } from '../actions/actionTypes';
 
-.fromDateContainer,
-.toDateContainer {
-  display: flex;
-  gap: var(--small-padding);
-  align-items: center;
-}
+const initialState = {
+  topicsFieldsInfo: {},
+};
 
-.infoIcon {
-  display: flex;
-  align-items: center;
-}
-
-.infoIcon svg {
-  height: 1em;
+export default function (state = initialState, action) {
+  switch (action.type) {
+    case UPDATE_TOPICS_FIELDS_INFO: {
+      return {
+        ...state,
+        topicsFieldsInfo: action.data,
+      };
+    }
+    default:
+      return state;
+  }
 }
