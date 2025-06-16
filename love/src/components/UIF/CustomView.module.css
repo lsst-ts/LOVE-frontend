@@ -90,14 +90,11 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .editable:hover .editableComponentActions {
   position: absolute;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-column-gap: 0.2em;
   top: 0.1em;
   right: 0.2em;
-  padding-right: 0.5em;
-  box-sizing: border-box;
-  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: var(--small-padding);
 }
 
 .gearIconWrapper {
