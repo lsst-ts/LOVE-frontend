@@ -5,6 +5,7 @@ Version History
 v6.7.4
 ------
 
+* Refactor AvailableScript to avoid using isCompact property by relaying just in CSS styles for script name triming. `<https://github.com/lsst-ts/LOVE-frontend/pull/716>`_
 * Refactor and improve EFD interface for different components. `<https://github.com/lsst-ts/LOVE-frontend/pull/713>`_
 
 v6.7.3
