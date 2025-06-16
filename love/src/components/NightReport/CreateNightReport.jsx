@@ -81,6 +81,7 @@ function ObserversField({ isEditDisabled, userOptions, selectedUsers, setSelecte
         <div>Observers</div>
       </div>
       <MultiSelect
+        className={styles.reportObservers}
         disable={isEditDisabled}
         options={userOptions}
         selectedValues={selectedUsers}
@@ -235,7 +236,12 @@ function ConfluenceURLField({ isEditDisabled, confluenceURL, setConfluenceURL })
   return (
     <div className={styles.inputField}>
       <div>Night Plan URL</div>
-      <Input disabled={isEditDisabled} value={confluenceURL} onChange={(e) => setConfluenceURL(e.target.value)} />
+      <Input
+        className={styles.urlField}
+        disabled={isEditDisabled}
+        value={confluenceURL}
+        onChange={(e) => setConfluenceURL(e.target.value)}
+      />
     </div>
   );
 }
@@ -430,13 +436,6 @@ function ObservatoryForm({ report, setReport }) {
         setAuxtelStatus={handleAuxtelStatusChange}
       />
 
-      <ObserversField
-        isEditDisabled={isEditDisabled()}
-        userOptions={userOptions}
-        selectedUsers={selectedUsers}
-        setSelectedUsers={handleSelectedUsersChange}
-      />
-
       <AlertsSection refreshWarningActive={refreshWarningActive} changesNotSaved={changesNotSaved} />
 
       <div className={styles.buttons}>
@@ -454,7 +453,6 @@ function ObservatoryForm({ report, setReport }) {
 function ObservatoryData({ report, observatoryState, cscStates }) {
   return (
     <div className={styles.observatoryDataContainer}>
-      <ConfluenceURLField />
       <TelescopesStates report={report} observatoryState={observatoryState} />
       <JiraOBSTicketsTable report={report} />
       {/* <CSCStates report={{...report, date_sent: '2025-06-04T00:00:00'}} cscs={cscStates} /> */}
