@@ -167,6 +167,10 @@
   margin-top: var(--content-padding);
 }
 
+.reportObservers {
+  margin-bottom: var(--small-padding);
+}
+
 .reportSummary,
 .reportWeather {
   min-height: 6em;
@@ -198,6 +202,10 @@
   padding: 0.25em var(--small-padding);
   display: flex;
   align-items: center;
+}
+
+.urlField {
+  background: var(--secondary-background-dimmed-color);
 }
 
 .refreshIcon {
