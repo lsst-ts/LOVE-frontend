@@ -37,8 +37,6 @@ export default class AvailableScript extends PureComponent {
     state: PropTypes.string,
     /** Function called when launching the script configuration panel */
     launchScriptConfig: PropTypes.func,
-    /** True if the script is displayed in compact view */
-    isCompact: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -48,7 +46,6 @@ export default class AvailableScript extends PureComponent {
     estimatedTime: 0,
     state: 'Unknown',
     onLaunch: () => 0,
-    isCompact: false,
   };
 
   constructor(props) {
@@ -70,15 +67,7 @@ export default class AvailableScript extends PureComponent {
       <div className={scriptStyles.scriptContainer}>
         <div className={styles.availableScriptContainer}>
           <div className={scriptStyles.pathTextContainer} title={path}>
-            {(() => {
-              if (!this.props.isCompact) {
-                return <span className={scriptStyles.pathText}>{fileFolder}</span>;
-              }
-              if (fileFolder !== '') {
-                return <span className={scriptStyles.pathText}>.../</span>;
-              }
-              return null;
-            })()}
+            <span className={scriptStyles.pathText}>{fileFolder}</span>
             <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
             <span className={scriptStyles.pathText}>{fileExtension}</span>
           </div>
