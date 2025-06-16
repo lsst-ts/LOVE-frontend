@@ -2,9 +2,10 @@
 Version History
 ===============
 
-v6.7.4
+v6.8.0
 ------
 
+* Add option to duplicate components to the UI framework. `<https://github.com/lsst-ts/LOVE-frontend/pull/717>`_
 * Refactor and improve EFD interface for different components. `<https://github.com/lsst-ts/LOVE-frontend/pull/713>`_
 
 v6.7.3
