@@ -24,7 +24,10 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   align-items: flex-end;
 }
 
-.estimatedTimeLabel {
+.availableScriptContainer > div {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  direction: rtl;
 }
 
 .estimatedTimeValue {
