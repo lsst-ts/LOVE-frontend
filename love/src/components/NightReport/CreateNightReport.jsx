@@ -2,18 +2,24 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import ManagerInterface from 'Utils';
-import { ISO_STRING_DATE_TIME_FORMAT, TIME_FORMAT } from 'Config';
+import {
+  ISO_STRING_DATE_TIME_FORMAT,
+  TIME_FORMAT,
+  mtMountDeployableMotionStateMap,
+  mtMountPowerStateMap,
+  atPneumaticsMirrorCoverStateMap,
+} from 'Config';
 import Alert from 'components/GeneralPurpose/Alert/Alert';
 import Button from 'components/GeneralPurpose/Button/Button';
 import MultiSelect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import RefreshIcon from 'components/icons/RefreshIcon/RefreshIcon';
+import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import TimeLossField from './TimeLossField';
 import TelescopesStates from './TelescopesStates';
 import JiraOBSTicketsTable from './JiraOBSTicketsTable';
 import CSCStates from './CSCStates';
-
 import styles from './CreateNightReport.module.css';
 
 const MULTI_SELECT_OPTION_LENGTH = 50;
@@ -269,7 +275,7 @@ function AlertsSection({ refreshWarningActive, changesNotSaved }) {
   );
 }
 
-function ObservatoryForm({ report, setReport }) {
+function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
   const [currentStep, setCurrentStep] = useState(STEPS.NOTSAVED);
   const [userOptions, setUserOptions] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -327,7 +333,25 @@ function ObservatoryForm({ report, setReport }) {
     event.preventDefault();
     if (currentStep === STEPS.SAVED) {
       setLoading({ ...loading, send: true });
-      ManagerInterface.sendCurrentNightReport(reportID).then((resp) => {
+
+      const parsedObservatoryState = {
+        ...observatoryState,
+        simonyiMirrorCoversState:
+          mtMountDeployableMotionStateMap[observatoryState.simonyiMirrorCoversState] ?? 'UNKNOWN',
+        simonyiOilSupplySystemState: mtMountPowerStateMap[observatoryState.simonyiOilSupplySystemState] ?? 'UNKNOWN',
+        simonyiPowerSupplySystemState:
+          mtMountPowerStateMap[observatoryState.simonyiPowerSupplySystemState] ?? 'UNKNOWN',
+        simonyiLockingPinsSystemState:
+          mtMountPowerStateMap[observatoryState.simonyiLockingPinsSystemState] ?? 'UNKNOWN',
+        auxtelMirrorCoversState: atPneumaticsMirrorCoverStateMap[observatoryState.auxtelMirrorCoversState] ?? 'UNKNOWN',
+      };
+      const parsedCSCStates = Object.keys(cscStates).reduce((acc, csc) => {
+        const state = cscStates[csc];
+        acc[csc] = CSCDetail.states[state ?? 0].name;
+        return acc;
+      }, {});
+
+      ManagerInterface.sendCurrentNightReport(reportID, parsedObservatoryState, parsedCSCStates).then((resp) => {
         if (resp) {
           setCurrentStep(STEPS.SENT);
         }
@@ -472,7 +496,12 @@ function NightReport({ observatoryState, cscStates, subscribeToStreams, unsubscr
 
   return (
     <div className={styles.container}>
-      <ObservatoryForm report={report} setReport={setReport} />
+      <ObservatoryForm
+        report={report}
+        setReport={setReport}
+        observatoryState={observatoryState}
+        cscStates={cscStates}
+      />
       <ObservatoryData report={report} observatoryState={observatoryState} cscStates={cscStates} />
     </div>
   );
