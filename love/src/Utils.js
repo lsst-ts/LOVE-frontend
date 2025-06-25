@@ -998,11 +998,12 @@ export default class ManagerInterface {
     }
 
     const currentDate = Moment().utc();
-    const currentObsDayInt = parseInt(getObsDayFromDate(currentDate), 10);
+    const nextDayDate = Moment(currentDate).add(1, 'day').utc();
+    const currentObsDay = getObsDayFromDate(currentDate);
+    const nextObsDay = getObsDayFromDate(nextDayDate);
 
-    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/?min_day_obs=${currentObsDayInt}&max_day_obs=${
-      currentObsDayInt + 1
-    }`;
+    const url =
+      `${this.getApiBaseUrl()}ole/nightreport/reports/?` + `min_day_obs=${currentObsDay}&max_day_obs=${nextObsDay}`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
@@ -1076,7 +1077,7 @@ export default class ManagerInterface {
     });
   }
 
-  static sendCurrentNightReport(report_id) {
+  static sendCurrentNightReport(report_id, observatory_status, cscs_status) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
@@ -1086,6 +1087,10 @@ export default class ManagerInterface {
     return fetch(url, {
       method: 'POST',
       headers: ManagerInterface.getHeaders(),
+      body: JSON.stringify({
+        observatory_status,
+        cscs_status,
+      }),
     }).then((response) => {
       return checkJSONResponse(response, () => {
         toast.success('Report sent succesfully.');
