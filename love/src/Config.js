@@ -2565,6 +2565,20 @@ export const stateToStyleLightpath = {
   'UNKNOWN POSITION': 'invalid',
 };
 
+// ATPneumatics
+export const stateToStyleATPneumaticsMirrorCoverState = {
+  DISABLED: 'invalid',
+  ENABLED: 'ok',
+  FAULT: 'alert',
+  OFFLINE: 'alert',
+  STANDBY: 'warning',
+  CLOSED: 'ok',
+  OPENED: 'ok',
+  'IN MOTION': 'warning',
+  INVALID: 'invalid',
+  UNKNOWN: 'invalid',
+};
+
 // CCCAmera
 export const ccCameraImageReadinessDetailedStateToStyle = {
   READY: 'ok',
@@ -2688,6 +2702,7 @@ export const stateToStyleDomeAndMount = {
   'MOVING CCW': 'warning',
 };
 
+// MTMount
 export const stateToStyleMTMountCommander = {
   NONE: 'invalid',
   CSC: 'ok',
@@ -2717,6 +2732,24 @@ export const stateToStyleMTMountAxisMotionState = {
   JOGGING: 'warning',
   TRACKING: 'warning',
   TRACKING_PAUSED: 'warning',
+  UNKNOWN: 'invalid',
+};
+
+export const stateToStyleMTMountDeployableMotionState = {
+  RETRACTED: 'ok',
+  DEPLOYED: 'ok',
+  RETRACTING: 'warning',
+  DEPLOYING: 'warning',
+  LOST: 'alert',
+  UNKNOWN: 'invalid',
+};
+
+export const stateToStyleMTMountElevationLockingPinMotionState = {
+  LOCKED: 'ok',
+  TEST: 'ok',
+  UNLOCKED: 'warning',
+  MOVING: 'warning',
+  MISMATCH: 'alert',
   UNKNOWN: 'invalid',
 };
 
@@ -3021,6 +3054,20 @@ export const cameraStates = {
   },
 };
 
+// ATPneumatics
+export const atPneumaticsMirrorCoverStateMap = {
+  1: 'DISABLED',
+  2: 'ENABLED',
+  3: 'FAULT',
+  4: 'OFFLINE',
+  5: 'STANDBY',
+  6: 'CLOSED',
+  7: 'OPENED',
+  8: 'IN MOTION',
+  9: 'INVALID',
+  0: 'UNKNOWN',
+};
+
 // CCCAmera
 export const ccCameraImageReadinessDetailedStateMap = {
   1: 'READY',
@@ -3197,20 +3244,6 @@ export const ccCameraRaftDetailedStateMap = {
   0: 'UNKNOWN',
 };
 
-// ATPneumatics
-export const m1CoverStateStateMap = {
-  1: 'DISABLED',
-  2: 'ENABLED',
-  3: 'FAULT',
-  4: 'OFFLINE',
-  5: 'STANDBY',
-  6: 'CLOSED',
-  7: 'OPENED',
-  8: 'IN MOTION',
-  9: 'INVALID',
-  0: 'UNKNOWN',
-};
-
 export const mainValveStateMap = {
   1: 'OPEN',
   2: 'CLOSED',
@@ -3292,6 +3325,7 @@ export const motorDriveStateMap = {
   true: 'ENABLED',
 };
 
+// MTMount
 export const mtMountCommanderStateMap = {
   0: 'NONE',
   1: 'CSC',
@@ -3324,12 +3358,20 @@ export const mtMountAxisMotionStateMap = {
   undefined: 'UNKNOWN',
 };
 
-export const mtMountMirrorCoversStateMap = {
+export const mtMountDeployableMotionStateMap = {
   0: 'RETRACTED',
   1: 'DEPLOYED',
   2: 'RETRACTING',
   3: 'DEPLOYING',
   4: 'LOST',
+};
+
+export const mtMountElevationLockingPinMotionStateMap = {
+  0: 'LOCKED',
+  1: 'TEST',
+  2: 'UNLOCKED',
+  3: 'MOVING',
+  4: 'MISMATCH',
 };
 
 export const stateToStyleMTMountMirrorCoversState = {
