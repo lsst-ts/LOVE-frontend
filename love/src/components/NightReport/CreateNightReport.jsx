@@ -189,6 +189,7 @@ function WeatherField({ report, weather, setWeather }) {
         <TimeLossField
           timeLoss={timeLoss}
           hint="Time loss calculated in base to the weather conditions reported in the narrativelog."
+          label="Weather time loss"
         />
       </div>
       <TextArea readOnly={isEditDisabled()} value={weather} callback={setWeather} className={styles.reportWeather} />
