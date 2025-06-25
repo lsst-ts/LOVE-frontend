@@ -5,10 +5,10 @@ import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
 
 import styles from './CreateNightReport.module.css';
 
-function TimeLossField({ timeLoss, hint }) {
+function TimeLossField({ timeLoss, hint, label = 'Time Loss' }) {
   return (
     <div className={styles.timeLossField}>
-      <div>Time Loss</div>
+      <div>{label}</div>
       <Input className={styles.timeLossFieldInput} type="text" value={`${timeLoss} h`} readOnly={true} />
       {hint && (
         <div className={styles.timeLossFieldHint}>
@@ -24,6 +24,8 @@ TimeLossField.propTypes = {
   timeLoss: PropTypes.number.isRequired,
   /** Optional hint to display additional information */
   hint: PropTypes.string,
+  /** Optional label for the field */
+  label: PropTypes.string,
 };
 
 export default TimeLossField;
