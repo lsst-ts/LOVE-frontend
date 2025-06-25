@@ -2,9 +2,17 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import ManagerInterface, { defaultNumberFormatter, getEFDInstanceForHost } from 'Utils';
-import { ISO_STRING_DATE_TIME_FORMAT } from 'Config';
+import {
+  ISO_STRING_DATE_TIME_FORMAT,
+  mtMountDeployableMotionStateMap,
+  mtMountPowerStateMap,
+  atPneumaticsMirrorCoverStateMap,
+  stateToStyleMTMountDeployableMotionState,
+  stateToStyleMTMountPowerState,
+  stateToStyleATPneumaticsMirrorCoverState,
+} from 'Config';
 import Input from 'components/GeneralPurpose/Input/Input';
-import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
+import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 
 import styles from './CreateNightReport.module.css';
 
@@ -35,58 +43,6 @@ const efdTelemetriesStateMapping = {
   'ATMCS-0-mount_AzEl_Encoders': 'auxtelAzimuth',
   'ATDome-0-position': 'auxtelDomeAzimuth',
   'ATPneumatics-0-logevent_m1CoverState': 'auxtelMirrorCoversState',
-};
-
-// True means open
-const MT_MIRROR_COVERS_STATUS_MAP = {
-  0: true, // RETRACTED
-  1: false, // DEPLOYED
-  2: false, // RETRACTING
-  3: false, // DEPLOYING
-  4: false, // LOST
-};
-
-// True means ON
-const MT_OSS_STATUS_MAP = {
-  0: false, // OFF
-  1: true, // ON
-  2: false, // FAULT
-  3: false, // TURNING_ON
-  4: false, // TURNING_OFF
-  15: false, // UNKNOWN
-};
-
-// True means ON
-const MT_PS_STATUS_MAP = {
-  0: false, // OFF
-  1: true, // ON
-  2: false, // FAULT
-  3: false, // TURNING_ON
-  4: false, // TURNING_OFF
-  15: false, // UNKNOWN
-};
-
-// True means ON
-const MT_LOCKING_PINS_STATUS_MAP = {
-  0: false, // OFF
-  1: true, // ON
-  2: false, // FAULT
-  3: false, // TURNING_ON
-  4: false, // TURNING_OFF
-  15: false, // UNKNOWN
-};
-
-// True means open
-const AT_MIRROR_COVERS_STATUS_MAP = {
-  1: false, // DISABLED
-  2: false, // ENABLED
-  3: false, // FAULT
-  4: false, // OFFLINE
-  5: false, // STANDBY
-  6: false, // CLOSED
-  7: true, // OPENED
-  8: false, // INMOTION
-  9: false, // INVALID
 };
 
 function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
@@ -137,21 +93,21 @@ function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
     }
   }, [report?.date_sent]);
 
-  const simonyiMirrorCoverState = observatoryState?.simonyiMirrorCoversMotionState
-    ? MT_MIRROR_COVERS_STATUS_MAP[observatoryState?.simonyiMirrorCoversMotionState]
-    : false;
-  const simonyiOilSupplySystemState = observatoryState?.simonyiOilSupplySystemState
-    ? MT_OSS_STATUS_MAP[observatoryState?.simonyiOilSupplySystemState]
-    : false;
-  const simonyiPowerSupplySystemState = observatoryState?.simonyiPowerSupplySystemState
-    ? MT_PS_STATUS_MAP[observatoryState?.simonyiPowerSupplySystemState]
-    : false;
-  const simonyiLockingPinsSystemState = observatoryState?.simonyiLockingPinsSystemState
-    ? MT_LOCKING_PINS_STATUS_MAP[observatoryState?.simonyiLockingPinsSystemState]
-    : false;
-  const auxtelMirrorCoverState = observatoryState?.auxtelMirrorCoversMotionState
-    ? AT_MIRROR_COVERS_STATUS_MAP[observatoryState?.auxtelMirrorCoversMotionState]
-    : false;
+  const simonyiMirrorCoverState =
+    mtMountDeployableMotionStateMap[observatoryState.simonyiMirrorCoversState] ?? 'UNKNOWN';
+  const simonyiOilSupplySystemState = mtMountPowerStateMap[observatoryState.simonyiOilSupplySystemState] ?? 'UNKNOWN';
+  const simonyiPowerSupplySystemState =
+    mtMountPowerStateMap[observatoryState.simonyiPowerSupplySystemState] ?? 'UNKNOWN';
+  const simonyiLockingPinsSystemState =
+    mtMountPowerStateMap[observatoryState.simonyiLockingPinsSystemState] ?? 'UNKNOWN';
+  const auxtelMirrorCoverState = atPneumaticsMirrorCoverStateMap[observatoryState.auxtelMirrorCoversState] ?? 'UNKNOWN';
+
+  const simonyiMirrorCoverStateStyle = stateToStyleMTMountDeployableMotionState[simonyiMirrorCoverState];
+  const simonyiOilSupplySystemStateStyle = stateToStyleMTMountPowerState[simonyiOilSupplySystemState];
+  const simonyiPowerSupplySystemStateStyle = stateToStyleMTMountPowerState[simonyiPowerSupplySystemState];
+  const simonyiLockingPinsSystemStateStyle = stateToStyleMTMountPowerState[simonyiLockingPinsSystemState];
+  const auxtelMirrorCoverStateStyle = stateToStyleATPneumaticsMirrorCoverState[auxtelMirrorCoverState];
+
   return (
     <div className={styles.telescopeStatesContainer}>
       <div>
@@ -195,19 +151,27 @@ function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
           </div>
           <div className={styles.telescopeDataParam}>
             <div>Mirror Covers</div>
-            <Toggle labels={['Off', 'On']} toggled={simonyiMirrorCoverState} />
+            <StatusText status={simonyiMirrorCoverStateStyle} title="Simonyi mirror covers">
+              {simonyiMirrorCoverState}
+            </StatusText>
           </div>
           <div className={styles.telescopeDataParam}>
             <div>OSS</div>
-            <Toggle labels={['Off', 'On']} toggled={simonyiOilSupplySystemState} />
+            <StatusText status={simonyiOilSupplySystemStateStyle} title="Simonyi oil supply system">
+              {simonyiOilSupplySystemState}
+            </StatusText>
           </div>
           <div className={styles.telescopeDataParam}>
             <div>Power Supply</div>
-            <Toggle labels={['Off', 'On']} toggled={simonyiPowerSupplySystemState} />
+            <StatusText status={simonyiPowerSupplySystemStateStyle} title="Simonyi power supply system">
+              {simonyiPowerSupplySystemState}
+            </StatusText>
           </div>
           <div className={styles.telescopeDataParam}>
             <div>Locking Pins</div>
-            <Toggle labels={['Off', 'On']} toggled={simonyiLockingPinsSystemState} />
+            <StatusText status={simonyiLockingPinsSystemStateStyle} title="Simonyi locking pins system">
+              {simonyiLockingPinsSystemState}
+            </StatusText>
           </div>
         </div>
       </div>
@@ -243,7 +207,9 @@ function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
           </div>
           <div className={styles.telescopeDataParam}>
             <div>Mirror Covers</div>
-            <Toggle labels={['Off', 'On']} toggled={auxtelMirrorCoverState} />
+            <StatusText status={auxtelMirrorCoverStateStyle} title="AuxTel mirror covers">
+              {auxtelMirrorCoverState}
+            </StatusText>
           </div>
         </div>
       </div>
