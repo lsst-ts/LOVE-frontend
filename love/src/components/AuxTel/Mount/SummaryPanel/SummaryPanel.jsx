@@ -24,7 +24,7 @@ import {
   m3RotatorStateMap,
   m3PortSelectedStateMap,
   m3InPositionStateMap,
-  m1CoverStateStateMap,
+  atPneumaticsMirrorCoverStateMap,
   mainValveStateMap,
   instrumentStateMap,
   nasmythRotatorInPositionStateMap,
@@ -83,7 +83,7 @@ export default class SummaryTable extends Component {
     const m3InPositionText = m3InPositionStateMap[m3InPositionState];
 
     //ATPneumatics
-    const m1CoverState = m1CoverStateStateMap[this.props.m1CoverState] || m1CoverStateStateMap[0];
+    const m1CoverState = atPneumaticsMirrorCoverStateMap[this.props.m1CoverState] || atPneumaticsMirrorCoverStateMap[0];
     const mainValveState = mainValveStateMap[this.props.mainValveStateMap] || mainValveStateMap[0];
     const instrumentState = instrumentStateMap[this.props.instrumentStateMap] || instrumentStateMap[0];
 
