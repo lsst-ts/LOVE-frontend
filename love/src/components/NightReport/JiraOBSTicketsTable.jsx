@@ -141,7 +141,7 @@ function JiraOBSTicketsTable({ report }) {
             <RefreshIcon title="Refresh tickets" className={styles.refreshIcon} />
           </Button>
         </div>
-        <TimeLossField timeLoss={calculatedTimeLoss} />
+        <TimeLossField timeLoss={calculatedTimeLoss} label="Fault time loss" />
       </div>
       <div className={styles.obsTicketsTableWrapper}>
         {tickets && tickets.length > 0 ? (
