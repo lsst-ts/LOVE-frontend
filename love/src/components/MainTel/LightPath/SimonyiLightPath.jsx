@@ -20,7 +20,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  mtMountMirrorCoversStateMap,
+  mtMountDeployableMotionStateMap,
   stateToStyleMTMountMirrorCoversState,
   hexapodMTInPositionStateMap,
   hexapodMTInPositionStatetoStyle,
@@ -261,7 +261,7 @@ export default class SimonyiLightPath extends Component {
 
   drawM1M3Cover = (props) => {
     const mirrorCoverState = Math.max(...props.mirrorCoversState);
-    const mirrorCoversValue = mtMountMirrorCoversStateMap[mirrorCoverState];
+    const mirrorCoversValue = mtMountDeployableMotionStateMap[mirrorCoverState];
     const mirrorCoverStyle = stateToStyleMTMountMirrorCoversState[mirrorCoversValue];
 
     let mirrorWidth = 150;
@@ -305,7 +305,7 @@ export default class SimonyiLightPath extends Component {
 
   drawM1M3CoverInfo = () => {
     const index = [0, 1, 2, 3];
-    const mirrorCoversValue = this.props.mirrorCoversState.map((state) => mtMountMirrorCoversStateMap[state]);
+    const mirrorCoversValue = this.props.mirrorCoversState.map((state) => mtMountDeployableMotionStateMap[state]);
     const mirrorCoversState = mirrorCoversValue.map((value) => stateToStyleMTMountMirrorCoversState[value]);
     return (
       <InfoPanel title="Mirror Covers" className={this.state.showM1M3CoverInfo === false ? styles.hide : styles.show}>
