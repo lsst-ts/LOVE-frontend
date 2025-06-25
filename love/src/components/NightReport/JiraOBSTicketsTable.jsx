@@ -138,10 +138,10 @@ function JiraOBSTicketsTable({ report }) {
             }}
             disabled={isEditDisabled() || loading}
           >
-            <RefreshIcon title="Refresh tickets" className={styles.refreshIcon} />
+            <RefreshIcon title="Refresh tickets and fault time loss" className={styles.refreshIcon} />
           </Button>
         </div>
-        <TimeLossField timeLoss={calculatedTimeLoss} />
+        <TimeLossField timeLoss={calculatedTimeLoss} label="Fault time loss" />
       </div>
       <div className={styles.obsTicketsTableWrapper}>
         {tickets && tickets.length > 0 ? (
