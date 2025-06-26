@@ -2025,6 +2025,25 @@ export function getObsDayFromDate(date) {
 }
 
 /**
+ * Calculates the start of the observation day based on the given date.
+ * The observation day starts at 12:00 UTC. If the given date's UTC hour is
+ * greater than or equal to 12, the start of the observation day is set to
+ * 12:00 UTC of the same day. Otherwise, it is set to 12:00 UTC of the previous day.
+ *
+ * @param {Date | string | number} date - The input date, which can be a Date object,
+ * a string, or a timestamp.
+ * @returns {Moment} A Moment object representing the start of the observation day in UTC.
+ */
+export function getObsDayStartFromDate(date) {
+  const utcDate = Moment(date).utc();
+  if (utcDate.hour() >= 12) {
+    return utcDate.clone().set({ hour: 12, minute: 0, second: 0, millisecond: 0 });
+  } else {
+    return utcDate.clone().subtract(1, 'day').set({ hour: 12, minute: 0, second: 0, millisecond: 0 });
+  }
+}
+
+/**
  * Convert the given OBS day (YYYYMMDD) to ISO format (YYYY-MM-DD).
  *
  * @param {number} obsDay - The OBS day to convert as an interger.

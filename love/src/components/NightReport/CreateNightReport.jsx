@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
-import ManagerInterface from 'Utils';
+import ManagerInterface, { getObsDayStartFromDate } from 'Utils';
 import {
   ISO_STRING_DATE_TIME_FORMAT,
   TIME_FORMAT,
@@ -123,22 +123,7 @@ function WeatherField({ report, weather, setWeather }) {
 
   const queryNarrativelogs = (date) => {
     setLoading(true);
-    let fromDateTime = null;
-    if (date.hour() >= 12) {
-      fromDateTime = date.set({
-        hour: 12,
-        minute: 0,
-        second: 0,
-        millisecond: 0,
-      });
-    } else {
-      fromDateTime = date.clone().subtract(1, 'day').set({
-        hour: 12,
-        minute: 0,
-        second: 0,
-        millisecond: 0,
-      });
-    }
+    const fromDateTime = getObsDayStartFromDate(date);
     const toDateTime = fromDateTime.clone().add(1, 'day');
     const formattedFromDateTime = fromDateTime.format(ISO_STRING_DATE_TIME_FORMAT);
     const formattedToDateTime = toDateTime.format(ISO_STRING_DATE_TIME_FORMAT);
