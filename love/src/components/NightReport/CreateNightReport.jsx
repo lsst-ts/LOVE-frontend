@@ -278,6 +278,22 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
   });
   const [lastRefreshed, setLastRefreshed] = useState(Moment());
 
+  const updateReport = (report) => {
+    setReport(report);
+    if (report.date_sent) {
+      setCurrentStep(STEPS.SENT);
+    } else {
+      setCurrentStep(STEPS.SAVED);
+    }
+    setReportID(report.id);
+    setSelectedUsers(report.observers_crew);
+    setSummary(report.summary);
+    setWeather(report.weather);
+    setSimonyiStatus(report.maintel_summary);
+    setAuxtelStatus(report.auxtel_summary);
+    setConfluenceURL(report.confluence_url);
+  };
+
   useEffect(() => {
     // Query users
     ManagerInterface.getUsers().then((users) => {
@@ -287,21 +303,7 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
     // Query current night report
     ManagerInterface.getCurrentNightReport().then((reports) => {
       if (reports.length > 0) {
-        const report = reports[0];
-        setReport(report);
-
-        if (report.date_sent) {
-          setCurrentStep(STEPS.SENT);
-        } else {
-          setCurrentStep(STEPS.SAVED);
-        }
-        setReportID(report.id);
-        setSelectedUsers(report.observers_crew);
-        setSummary(report.summary);
-        setWeather(report.weather);
-        setSimonyiStatus(report.maintel_summary);
-        setAuxtelStatus(report.auxtel_summary);
-        setConfluenceURL(report.confluence_url);
+        updateReport(reports[0]);
       }
     });
 
@@ -343,9 +345,9 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
         return acc;
       }, {});
 
-      ManagerInterface.sendCurrentNightReport(reportID, parsedObservatoryState, parsedCSCStates).then((resp) => {
-        if (resp) {
-          setCurrentStep(STEPS.SENT);
+      ManagerInterface.sendCurrentNightReport(reportID, parsedObservatoryState, parsedCSCStates).then((report) => {
+        if (report) {
+          updateReport(report);
         }
         setLoading({ ...loading, send: false });
       });
@@ -363,14 +365,16 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
         auxtelStatus,
         confluenceURL,
         selectedUsers,
-      ).then((resp) => {
-        if (resp) {
-          setReportID(resp.id);
-          setCurrentStep(STEPS.SAVED);
-          setChangesNotSaved(false);
-        }
-        setLoading({ ...loading, save: false });
-      });
+      )
+        .then((report) => {
+          if (report) {
+            updateReport(report);
+            setChangesNotSaved(false);
+          }
+        })
+        .finally(() => {
+          setLoading({ ...loading, save: false });
+        });
     } else {
       setLoading({ ...loading, save: true });
       ManagerInterface.updateCurrentNightReport(
@@ -381,13 +385,16 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
         auxtelStatus,
         confluenceURL,
         selectedUsers,
-      ).then((resp) => {
-        if (resp) {
-          setReportID(resp.id);
-          setChangesNotSaved(false);
-        }
-        setLoading({ ...loading, save: false });
-      });
+      )
+        .then((report) => {
+          if (report) {
+            updateReport(report);
+            setChangesNotSaved(false);
+          }
+        })
+        .finally(() => {
+          setLoading({ ...loading, save: false });
+        });
     }
   };
 
