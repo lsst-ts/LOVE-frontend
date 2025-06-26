@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
-import ManagerInterface, { getObsDayStartFromDate } from 'Utils';
+import ManagerInterface, { fixedFloat, getObsDayStartFromDate } from 'Utils';
 import {
   ISO_STRING_DATE_TIME_FORMAT,
   TIME_FORMAT,
@@ -321,7 +321,10 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
       setLoading({ ...loading, send: true });
 
       const parsedObservatoryState = {
-        ...observatoryState,
+        simonyiAzimuth: fixedFloat(observatoryState.simonyiAzimuth, 2),
+        simonyiElevation: fixedFloat(observatoryState.simonyiElevation, 2),
+        simonyiDomeAzimuth: fixedFloat(observatoryState.simonyiDomeAzimuth, 2),
+        simonyiRotator: fixedFloat(Math.abs(observatoryState.simonyiRotator, 2)),
         simonyiMirrorCoversState:
           mtMountDeployableMotionStateMap[observatoryState.simonyiMirrorCoversState] ?? 'UNKNOWN',
         simonyiOilSupplySystemState: mtMountPowerStateMap[observatoryState.simonyiOilSupplySystemState] ?? 'UNKNOWN',
@@ -329,6 +332,9 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
           mtMountPowerStateMap[observatoryState.simonyiPowerSupplySystemState] ?? 'UNKNOWN',
         simonyiLockingPinsSystemState:
           mtMountPowerStateMap[observatoryState.simonyiLockingPinsSystemState] ?? 'UNKNOWN',
+        auxtelAzimuth: fixedFloat(observatoryState.auxtelAzimuth, 2),
+        auxtelElevation: fixedFloat(observatoryState.auxtelElevation, 2),
+        auxtelDomeAzimuth: fixedFloat(observatoryState.auxtelDomeAzimuth, 2),
         auxtelMirrorCoversState: atPneumaticsMirrorCoverStateMap[observatoryState.auxtelMirrorCoversState] ?? 'UNKNOWN',
       };
       const parsedCSCStates = Object.keys(cscStates).reduce((acc, csc) => {
