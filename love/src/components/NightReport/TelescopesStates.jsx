@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
-import ManagerInterface, { defaultNumberFormatter, getEFDInstanceForHost } from 'Utils';
+import ManagerInterface, { fixedFloat, getEFDInstanceForHost } from 'Utils';
 import {
   ISO_STRING_DATE_TIME_FORMAT,
   mtMountDeployableMotionStateMap,
@@ -120,7 +120,7 @@ function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
             <Input
               className={styles.telescopeDataParamInput}
               type="text"
-              value={defaultNumberFormatter(observatoryState?.simonyiAzimuth, 2) + '°'}
+              value={fixedFloat(observatoryState?.simonyiAzimuth, 2) + '°'}
               readOnly={true}
             />
           </div>
@@ -129,7 +129,7 @@ function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
             <Input
               className={styles.telescopeDataParamInput}
               type="text"
-              value={defaultNumberFormatter(observatoryState?.simonyiElevation, 2) + '°'}
+              value={fixedFloat(observatoryState?.simonyiElevation, 2) + '°'}
               readOnly={true}
             />
           </div>
@@ -138,7 +138,7 @@ function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
             <Input
               className={styles.telescopeDataParamInput}
               type="text"
-              value={defaultNumberFormatter(observatoryState?.simonyiDomeAzimuth, 2) + '°'}
+              value={fixedFloat(observatoryState?.simonyiDomeAzimuth, 2) + '°'}
               readOnly={true}
             />
           </div>
@@ -147,7 +147,7 @@ function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
             <Input
               className={styles.telescopeDataParamInput}
               type="text"
-              value={defaultNumberFormatter(observatoryState?.simonyiRotator, 2) + '°'}
+              value={fixedFloat(observatoryState?.simonyiRotator, 2) + '°'}
               readOnly={true}
             />
           </div>
@@ -185,7 +185,7 @@ function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
             <Input
               className={styles.telescopeDataParamInput}
               type="text"
-              value={defaultNumberFormatter(observatoryState?.auxtelAzimuth, 2) + '°'}
+              value={fixedFloat(observatoryState?.auxtelAzimuth, 2) + '°'}
               readOnly={true}
             />
           </div>
@@ -194,7 +194,7 @@ function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
             <Input
               className={styles.telescopeDataParamInput}
               type="text"
-              value={defaultNumberFormatter(observatoryState?.auxtelElevation, 2) + '°'}
+              value={fixedFloat(observatoryState?.auxtelElevation, 2) + '°'}
               readOnly={true}
             />
           </div>
@@ -203,7 +203,7 @@ function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
             <Input
               className={styles.telescopeDataParamInput}
               type="text"
-              value={defaultNumberFormatter(observatoryState?.auxtelDomeAzimuth, 2) + '°'}
+              value={fixedFloat(observatoryState?.auxtelDomeAzimuth, 2) + '°'}
               readOnly={true}
             />
           </div>
