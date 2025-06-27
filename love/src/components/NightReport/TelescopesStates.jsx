@@ -9,6 +9,8 @@ import {
   atPneumaticsMirrorCoverStateMap,
   stateToStyleMTMountDeployableMotionState,
   stateToStyleMTMountPowerState,
+  mtMountElevationLockingPinMotionStateMap,
+  stateToStyleMTMountElevationLockingPinMotionState,
   stateToStyleATPneumaticsMirrorCoverState,
 } from 'Config';
 import Input from 'components/GeneralPurpose/Input/Input';
@@ -101,13 +103,14 @@ function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
   const simonyiPowerSupplySystemState =
     mtMountPowerStateMap[observatoryState.simonyiPowerSupplySystemState] ?? 'UNKNOWN';
   const simonyiLockingPinsSystemState =
-    mtMountPowerStateMap[observatoryState.simonyiLockingPinsSystemState] ?? 'UNKNOWN';
+    mtMountElevationLockingPinMotionStateMap[observatoryState.simonyiLockingPinsSystemState] ?? 'UNKNOWN';
   const auxtelMirrorCoverState = atPneumaticsMirrorCoverStateMap[observatoryState.auxtelMirrorCoversState] ?? 'UNKNOWN';
 
   const simonyiMirrorCoverStateStyle = stateToStyleMTMountDeployableMotionState[simonyiMirrorCoverState];
   const simonyiOilSupplySystemStateStyle = stateToStyleMTMountPowerState[simonyiOilSupplySystemState];
   const simonyiPowerSupplySystemStateStyle = stateToStyleMTMountPowerState[simonyiPowerSupplySystemState];
-  const simonyiLockingPinsSystemStateStyle = stateToStyleMTMountPowerState[simonyiLockingPinsSystemState];
+  const simonyiLockingPinsSystemStateStyle =
+    stateToStyleMTMountElevationLockingPinMotionState[simonyiLockingPinsSystemState];
   const auxtelMirrorCoverStateStyle = stateToStyleATPneumaticsMirrorCoverState[auxtelMirrorCoverState];
 
   return (
