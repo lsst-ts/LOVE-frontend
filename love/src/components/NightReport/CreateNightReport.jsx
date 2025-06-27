@@ -7,6 +7,7 @@ import {
   TIME_FORMAT,
   mtMountDeployableMotionStateMap,
   mtMountPowerStateMap,
+  mtMountElevationLockingPinMotionStateMap,
   atPneumaticsMirrorCoverStateMap,
 } from 'Config';
 import Alert from 'components/GeneralPurpose/Alert/Alert';
@@ -333,7 +334,7 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
         simonyiPowerSupplySystemState:
           mtMountPowerStateMap[observatoryState.simonyiPowerSupplySystemState] ?? 'UNKNOWN',
         simonyiLockingPinsSystemState:
-          mtMountPowerStateMap[observatoryState.simonyiLockingPinsSystemState] ?? 'UNKNOWN',
+          mtMountElevationLockingPinMotionStateMap[observatoryState.simonyiLockingPinsSystemState] ?? 'UNKNOWN',
         auxtelAzimuth: fixedFloat(observatoryState.auxtelAzimuth, 2),
         auxtelElevation: fixedFloat(observatoryState.auxtelElevation, 2),
         auxtelDomeAzimuth: fixedFloat(observatoryState.auxtelDomeAzimuth, 2),
