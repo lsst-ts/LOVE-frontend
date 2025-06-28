@@ -22,7 +22,7 @@ import {
   m3RotatorStateMap,
   m3PortSelectedStateMap,
   m3InPositionStateMap,
-  m1CoverStateStateMap,
+  atPneumaticsMirrorCoverStateMap,
   nasmythRotatorInPositionStateMap,
   hexapodInPositionStateMap,
   stateToStyleMount,
@@ -117,7 +117,7 @@ export default class LightPath extends Component {
   drawM1Cover = (props) => {
     const m1CoverState = props.m1CoverState;
     //ATPneumatics
-    const m1CoverStateText = m1CoverStateStateMap[props.m1CoverState];
+    const m1CoverStateText = atPneumaticsMirrorCoverStateMap[props.m1CoverState];
     const m1CoverLimitSwitches = props.m1CoverLimitSwitches;
     const getLimitSwitchStatus = (number) => {
       if (

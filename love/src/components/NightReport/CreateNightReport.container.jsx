@@ -19,6 +19,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import { addGroup, removeGroup } from 'redux/actions/ws';
+import { getSummaryStateValue, getNightreportObservatoryState } from 'redux/selectors/selectors';
+import { NIGHTREPORT_CSCS_TO_REPORT } from 'Config';
 import CreateNightReport from './CreateNightReport';
 
 export const schema = {
@@ -35,7 +37,7 @@ export const schema = {
       type: 'boolean',
       description: 'Whether the component has a raw mode version',
       isPrivate: true,
-      default: false,
+      default: true,
     },
   },
 };
@@ -49,8 +51,41 @@ const CreateNightReportContainer = ({ subscribeToStreams, unsubscribeToStreams, 
   );
 };
 
+const mapStateToProps = (state) => {
+  const cscStates = NIGHTREPORT_CSCS_TO_REPORT.reduce((acc, cscIndex) => {
+    const [csc, index] = cscIndex.split(':');
+    const key = `event-${csc}-${index}-summaryState`;
+    acc[cscIndex] = getSummaryStateValue(state, key);
+    return acc;
+  }, {});
+  const observatoryState = getNightreportObservatoryState(state);
+  return {
+    cscStates,
+    observatoryState,
+  };
+};
+
 const mapDispatchToProps = (dispatch) => {
-  const subscriptions = [];
+  const subscriptionsSummaryState = NIGHTREPORT_CSCS_TO_REPORT.map((cscIndex) => {
+    const [csc, index] = cscIndex.split(':');
+    return `event-${csc}-${index}-summaryState`;
+  });
+
+  const subscriptionsObservatoryState = [
+    'telemetry-MTMount-0-azimuth',
+    'telemetry-MTMount-0-elevation',
+    'telemetry-MTDome-0-azimuth',
+    'telemetry-MTRotator-0-rotation',
+    'telemetry-ATMCS-0-mount_AzEl_Encoders',
+    'telemetry-ATDome-0-position',
+    'event-MTMount-0-mirrorCoversMotionState',
+    'event-MTMount-0-oilSupplySystemState',
+    'event-MTMount-0-mainAxesPowerSupplySystemState',
+    'event-MTMount-0-elevationLockingPinMotionState',
+    'event-ATPneumatics-0-m1CoverState',
+  ];
+
+  const subscriptions = [...subscriptionsSummaryState, ...subscriptionsObservatoryState];
   return {
     subscriptions,
     subscribeToStreams: () => {
@@ -62,4 +97,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(CreateNightReportContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateNightReportContainer);

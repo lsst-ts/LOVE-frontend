@@ -21,7 +21,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { closestEquivalentAngle, fixedFloat } from 'Utils';
 import WindRose from '../../../icons/WindRose/WindRose';
-import { mtMountMirrorCoversStateMap, stateToStyleMTMountMirrorCoversState } from 'Config';
+import { mtMountDeployableMotionStateMap, stateToStyleMTMountMirrorCoversState } from 'Config';
 import InfoPanel from 'components/GeneralPurpose/InfoPanel/InfoPanel';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Label from 'components/GeneralPurpose/SummaryPanel/Label';
@@ -85,7 +85,7 @@ export default class MirrorCovers extends Component {
 
   getInfoMirrorCover() {
     const index = [0, 1, 2, 3];
-    const mirrorCoversValue = this.props.mirrorCoversState.map((state) => mtMountMirrorCoversStateMap[state]);
+    const mirrorCoversValue = this.props.mirrorCoversState.map((state) => mtMountDeployableMotionStateMap[state]);
     const mirrorCoversState = mirrorCoversValue.map((value) => stateToStyleMTMountMirrorCoversState[value]);
     return (
       <InfoPanel title="Mirror Covers" className={this.state.showMirrorCoverInfo === false ? styles.hide : styles.show}>
@@ -117,7 +117,7 @@ export default class MirrorCovers extends Component {
         //'ok': styles.ok,
         //'warning': styles.warning,
         alert: styles.alert, // Only this representation for the color in mirror cover
-      }[stateToStyleMTMountMirrorCoversState[mtMountMirrorCoversStateMap[state]]];
+      }[stateToStyleMTMountMirrorCoversState[mtMountDeployableMotionStateMap[state]]];
     });
 
     const equivalentAzimuthActual = closestEquivalentAngle(
