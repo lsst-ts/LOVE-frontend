@@ -17,17 +17,21 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+.windroseBackground {
+  fill: var(--second-secondary-background-color);
+  stroke: var(--tertiary-font-color);
+}
+
 .arrowIconContainer {
-  overflow: visible !important;
   transform-origin: center;
   transform-box: fill-box;
 }
 
-.cardinalPoints {
-  font: bold 56px sans-serif;
-  fill: white;
+.arrowIconContainer svg {
+  fill: var(--highlighted-font-color);
 }
 
-.svgContainer {
-  overflow: visible;
+.cardinalPoints {
+  font-size: 10px;
+  fill: white;
 }
