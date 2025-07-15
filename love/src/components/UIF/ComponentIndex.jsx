@@ -198,6 +198,16 @@ export const observatoryIndex = {
       },
     },
   },
+  WindDirection: {
+    component: require('../EnvironmentSummary/Cartoons/WindDirection.container').default,
+    schema: {
+      ...require('../EnvironmentSummary/Cartoons/WindDirection.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../EnvironmentSummary/Cartoons/WindDirection.container').schema.props,
+      },
+    },
+  },
   GIS: {
     component: require('../GIS/GIS.container').default,
     schema: {
