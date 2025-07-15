@@ -24,8 +24,8 @@ import CSCStates from './CSCStates';
 import styles from './CreateNightReport.module.css';
 
 const MULTI_SELECT_OPTION_LENGTH = 50;
-const LAST_REFRESHED_WARNING_THRESHOLD_MINUTES = 1;
-const STATE_UPDATE_INTERVAL_MS = 5000;
+const LAST_REFRESHED_WARNING_THRESHOLD_MINUTES = 60;
+const LAST_REFRESHED_WARNING_CHECK_INTERVAL_MS = 10000; // 1 minute
 const NARRATIVE_LOGS_POLLING_INTERVAL_MS = 30000; // 30 seconds
 
 const STEPS = {
@@ -240,12 +240,13 @@ function ConfluenceURLField({ isEditDisabled, confluenceURL, setConfluenceURL })
 }
 
 function AlertsSection({ refreshWarningActive, changesNotSaved }) {
+  const refreshedWarningThresholdHours = parseInt(LAST_REFRESHED_WARNING_THRESHOLD_MINUTES / 60, 10);
   return (
     <div className={styles.alerts}>
       {refreshWarningActive && (
         <Alert type="warning">
-          The page has not been refreshed in the last {parseInt(LAST_REFRESHED_WARNING_THRESHOLD_MINUTES / 60, 10)}{' '}
-          hours. Please{' '}
+          The page has not been refreshed in the last {refreshedWarningThresholdHours}{' '}
+          {refreshedWarningThresholdHours > 1 ? 'hours' : 'hour'} and someone could have done changes. Please{' '}
           <a
             href="#"
             onClick={() => {
@@ -278,6 +279,7 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
     send: false,
   });
   const [lastRefreshed, setLastRefreshed] = useState(Moment());
+  const [refreshWarningActive, setRefreshWarningActive] = useState(false);
 
   const updateReport = (report) => {
     setReport(report);
@@ -310,8 +312,9 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
 
     // Set interval to trigger renders
     const interval = setInterval(() => {
-      setLastRefreshed(Moment());
-    }, STATE_UPDATE_INTERVAL_MS);
+      const warningActive = Moment().diff(lastRefreshed, 'minutes') > LAST_REFRESHED_WARNING_THRESHOLD_MINUTES;
+      setRefreshWarningActive(warningActive);
+    }, LAST_REFRESHED_WARNING_CHECK_INTERVAL_MS);
 
     return () => {
       clearInterval(interval);
@@ -427,11 +430,11 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
 
   const handleSelectedUsersChangeCallback = useCallback(handleSelectedUsersChange, []);
 
-  const refreshWarningActive = Moment().diff(lastRefreshed, 'minutes') > LAST_REFRESHED_WARNING_THRESHOLD_MINUTES;
-
   return (
     <form className={styles.formContainer}>
       <ProgressBarSection currentStep={currentStep} currentStatusText={getCurrentStatusText(currentStep)} />
+
+      <AlertsSection refreshWarningActive={refreshWarningActive} changesNotSaved={changesNotSaved} />
 
       <TitleField />
 
@@ -459,8 +462,6 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
         auxtelStatus={auxtelStatus}
         setAuxtelStatus={handleAuxtelStatusChange}
       />
-
-      <AlertsSection refreshWarningActive={refreshWarningActive} changesNotSaved={changesNotSaved} />
 
       <div className={styles.buttons}>
         <Button onClick={handleSave} disabled={!isAbleToSave()}>
