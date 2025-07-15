@@ -19,45 +19,49 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ArrowIcon from 'components/icons/ArrowIcon/ArrowIcon';
 import styles from './WindDirection.module.css';
 
-export class WindDirection extends Component {
-  render() {
-    const { windSpeedPercent, windDirection } = this.props;
-    const arrowHeight = windSpeedPercent * 100;
+function WindDirection({ windSpeedPercent, windDirection, subscribeToStreams, unsubscribeToStreams }) {
+  const arrowHeight = windSpeedPercent * 100;
 
-    return (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox={`-50 -50 100 100`}>
-        <circle cx={0} cy={0} r={50} className={styles.windroseBackground} />
-        <text x={0} y={-50} textAnchor="middle" alignmentBaseline="hanging" className={styles.cardinalPoints}>
-          {'N'}
-        </text>
-        <text x={0} y={50} textAnchor="middle" alignmentBaseline="baseline" className={styles.cardinalPoints}>
-          {'S'}
-        </text>
-        <text x={-50} y={0} textAnchor="start" alignmentBaseline="middle" className={styles.cardinalPoints}>
-          {'W'}
-        </text>
-        <text x={50} y={0} textAnchor="end" alignmentBaseline="middle" className={styles.cardinalPoints}>
-          {'E'}
-        </text>
+  useEffect(() => {
+    subscribeToStreams?.();
+    return () => {
+      unsubscribeToStreams?.();
+    };
+  }, []);
 
-        <foreignObject
-          height={arrowHeight}
-          width={arrowHeight}
-          x={-arrowHeight / 2}
-          y={-arrowHeight / 2}
-          className={styles.arrowIconContainer}
-          transform={`rotate(${windDirection})`}
-        >
-          <ArrowIcon up={true} />
-        </foreignObject>
-      </svg>
-    );
-  }
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox={`-50 -50 100 100`}>
+      <circle cx={0} cy={0} r={50} className={styles.windroseBackground} />
+      <text x={0} y={-50} textAnchor="middle" alignmentBaseline="hanging" className={styles.cardinalPoints}>
+        {'N'}
+      </text>
+      <text x={0} y={50} textAnchor="middle" alignmentBaseline="baseline" className={styles.cardinalPoints}>
+        {'S'}
+      </text>
+      <text x={-50} y={0} textAnchor="start" alignmentBaseline="middle" className={styles.cardinalPoints}>
+        {'W'}
+      </text>
+      <text x={50} y={0} textAnchor="end" alignmentBaseline="middle" className={styles.cardinalPoints}>
+        {'E'}
+      </text>
+
+      <foreignObject
+        height={arrowHeight}
+        width={arrowHeight}
+        x={-arrowHeight / 2}
+        y={-arrowHeight / 2}
+        className={styles.arrowIconContainer}
+        transform={`rotate(${windDirection})`}
+      >
+        <ArrowIcon up={true} />
+      </foreignObject>
+    </svg>
+  );
 }
 
 WindDirection.propTypes = {
