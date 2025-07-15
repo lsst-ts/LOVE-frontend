@@ -21,6 +21,9 @@ import InfoIcon from 'components/icons/CSCExpanded/InfoIcon/InfoIcon';
 import WarningIcon from 'components/icons/CSCExpanded/WarningIcon/WarningIcon';
 import { VALUE_TYPES } from 'Constants';
 
+// Cerro Pachon max wind speed
+export const MAX_WIND_SPEED_MS = 30; // m/s
+
 // Scripts empty schema value
 // When SAL scripts doesn't have a schema the following value is published instead
 export const EMPTY_SCHEMA = '# empty schema';
