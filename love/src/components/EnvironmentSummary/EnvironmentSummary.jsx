@@ -25,6 +25,7 @@ import SimonyiTelescope from './Cartoons/SimonyiTelescope';
 import AuxTelescope from './Cartoons/AuxTelescope';
 import WindDirection from './Cartoons/WindDirection';
 import WeatherForecastIcon from 'components/icons/WeatherForecastIcon/WeatherForecastIcon';
+import { MAX_WIND_SPEED_MS } from 'Config';
 import { defaultNumberFormatter } from 'Utils';
 import Summary from './Summary/Summary';
 
@@ -191,6 +192,8 @@ export default class EnvironmentSummary extends Component {
       seeing,
     } = this.props;
 
+    const windSpeedPercent = windSpeed / MAX_WIND_SPEED_MS;
+
     return (
       <div>
         <div className={styles.summaryContainer}>
@@ -209,7 +212,7 @@ export default class EnvironmentSummary extends Component {
         </div>
         <div className={styles.container}>
           <div className={styles.windDirection}>
-            <WindDirection windDirection={windDirection} windSpeed={windSpeed} />
+            <WindDirection windDirection={windDirection} windSpeedPercent={windSpeedPercent} />
             <div className={styles.windDirectionDetail}>
               <span>Direction: {defaultNumberFormatter(windDirection, 2)}°</span>
               <span>Speed: {defaultNumberFormatter(windSpeed, 2)} m/s</span>
