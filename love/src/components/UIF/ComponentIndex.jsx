@@ -143,7 +143,7 @@ export const observatoryIndex = {
     schema: {
       ...require('../CSCSummary/CSCSummaryIcon/CSCSummaryIcon.container').schema,
       props: {
-        ...defaultSchemaProps,
+        // ...defaultSchemaProps, // This component does not use defaultSchemaProps
         ...require('../CSCSummary/CSCSummaryIcon/CSCSummaryIcon.container').schema.props,
       },
     },
