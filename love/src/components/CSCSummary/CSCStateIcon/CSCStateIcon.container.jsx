@@ -16,25 +16,37 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React from 'react';
-import CSCSummaryIcon from './CSCSummaryIcon';
+import CSCStateIcon from './CSCStateIcon';
 
 export const schema = {
-  description: 'CSC summary icon component',
-  defaultSize: [77, 32],
+  description: 'CSC state icon component',
+  defaultSize: [77, 32],  // Default size for the icon
   props: {
-    title: {
+    cscName: {
       type: 'string',
-      description: 'Name displayed in the title bar (if visible)',
+      description: 'Name of the CSC to monitor',
       isPrivate: false,
-      default: 'CSC Summary Icon',
+      default: 'Test',
+    },
+    salindex: {
+      type: 'number',
+      description: 'Salindex of the CSC',
+      isPrivate: false,
+      default: 1,
+    },
+    hasHeartbeat: {
+      type: 'boolean',
+      description: 'Whether the CSC produces heartbeat',
+      isPrivate: false,
+      default: true,
     },
   },
 };
 
-const CSCSummaryIconContainer = () => {
+const CSCStateIconContainer = ( cscName, salindex, hasHeartbeat) => {
   return (
-    <CSCSummaryIcon />
+    <CSCStateIcon cscName={cscName} salindex={salindex} hasHeartbeat={hasHeartbeat} />
   );
 };
 
-export default CSCSummaryIconContainer;
+export default CSCStateIconContainer;
