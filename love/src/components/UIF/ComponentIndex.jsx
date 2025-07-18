@@ -138,6 +138,16 @@ export const observatoryIndex = {
       },
     },
   },
+  CSCStateIcon: {
+    component: require('../CSCSummary/CSCStateIcon/CSCStateIcon.container').default,
+    schema: {
+      ...require('../CSCSummary/CSCStateIcon/CSCStateIcon.container').schema,
+      props: {
+        // ...defaultSchemaProps, // This component does not use defaultSchemaProps
+        ...require('../CSCSummary/CSCStateIcon/CSCStateIcon.container').schema.props,
+      },
+    },
+  },
   Watcher: {
     component: require('../Watcher/Watcher.container').default,
     schema: {

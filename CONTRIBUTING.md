@@ -35,6 +35,26 @@ if (props.isRaw) {
 }
 ```
 
+### Adding a Container component to the components index
+
+In order to allow users to use your component, you need to add it to the components index. This is done in the `love/src/components/UIF/ComponentIndex.jsx` file. You should import your component and add it to the most relevant section. For example, the ScriptQueue component is part of the Observatory index:
+
+```javascript
+export const observatoryIndex = {
+  ...,
+  ScriptQueue: {
+    component: require('../ScriptQueue/ScriptQueue.container').default,
+    schema: {
+      ...require('../ScriptQueue/ScriptQueue.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../ScriptQueue/ScriptQueue.container').schema.props,
+      },
+    },
+  },
+  ...
+```
+
 ## Editing the documentation
 
 The documentation is done with `styleguide`. Its source code is located under `love/docsrc` and compiled to `docs/` according to the configuration file located at `love/styleguide.config.js`.
