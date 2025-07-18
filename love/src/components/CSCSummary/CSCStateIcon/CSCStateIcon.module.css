@@ -1,8 +1,14 @@
-.container {
+.csc-state-icon-container {
   background-color: #0F2029;
   color: white;
-  height: 32px;
-  width: 444px;
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto auto; /* Or specify widths like 1fr 1fr */
+}
+
+.csc-state-icon-container > div {
+  display: inline-block;
 }
 
 .status_square {
