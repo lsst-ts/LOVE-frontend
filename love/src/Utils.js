@@ -505,6 +505,26 @@ export default class ManagerInterface {
     });
   }
 
+  static getEFDMostRecentTimeseries(cscs, num, time_cut, efd_instance) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}efd/top_timeseries`;
+    return fetch(url, {
+      method: 'POST',
+      headers: ManagerInterface.getHeaders(),
+      body: JSON.stringify({
+        cscs,
+        num,
+        time_cut,
+        efd_instance,
+      }),
+    }).then((response) => {
+      return checkJSONResponse(response);
+    });
+  }
+
   static getEFDLogs(start_date, end_date, cscs, efd_instance, scale = 'utc') {
     const token = ManagerInterface.getToken();
     if (token === null) {
@@ -971,18 +991,19 @@ export default class ManagerInterface {
     });
   }
 
-  static getCurrentNightReport(telescope) {
+  static getCurrentNightReport() {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
 
     const currentDate = Moment().utc();
-    const currentObsDayInt = parseInt(getObsDayFromDate(currentDate), 10);
+    const nextDayDate = Moment(currentDate).add(1, 'day').utc();
+    const currentObsDay = getObsDayFromDate(currentDate);
+    const nextObsDay = getObsDayFromDate(nextDayDate);
 
-    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/?telescopes=${telescope}&min_day_obs=${currentObsDayInt}&max_day_obs=${
-      currentObsDayInt + 1
-    }`;
+    const url =
+      `${this.getApiBaseUrl()}ole/nightreport/reports/?` + `min_day_obs=${currentObsDay}&max_day_obs=${nextObsDay}`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
@@ -991,7 +1012,7 @@ export default class ManagerInterface {
     });
   }
 
-  static saveCurrentNightReport(telescope, summary, telescope_status, confluence_url, observers_crew) {
+  static saveCurrentNightReport(summary, weather, maintel_summary, auxtel_summary, confluence_url, observers_crew) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
@@ -1002,9 +1023,10 @@ export default class ManagerInterface {
       method: 'POST',
       headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
-        telescope,
         summary,
-        telescope_status,
+        weather,
+        maintel_summary,
+        auxtel_summary,
         confluence_url,
         observers_crew,
       }),
@@ -1022,7 +1044,15 @@ export default class ManagerInterface {
     });
   }
 
-  static updateCurrentNightReport(nightreport_id, summary, telescope_status, confluence_url, observers_crew) {
+  static updateCurrentNightReport(
+    nightreport_id,
+    summary,
+    weather,
+    maintel_summary,
+    auxtel_summary,
+    confluence_url,
+    observers_crew,
+  ) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
@@ -1034,7 +1064,9 @@ export default class ManagerInterface {
       headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
         summary,
-        telescope_status,
+        weather,
+        maintel_summary,
+        auxtel_summary,
         confluence_url,
         observers_crew,
       }),
@@ -1045,7 +1077,7 @@ export default class ManagerInterface {
     });
   }
 
-  static sendCurrentNightReport(report_id) {
+  static sendCurrentNightReport(report_id, observatory_status, cscs_status) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
@@ -1055,6 +1087,10 @@ export default class ManagerInterface {
     return fetch(url, {
       method: 'POST',
       headers: ManagerInterface.getHeaders(),
+      body: JSON.stringify({
+        observatory_status,
+        cscs_status,
+      }),
     }).then((response) => {
       return checkJSONResponse(response, () => {
         toast.success('Report sent succesfully.');
@@ -1062,13 +1098,13 @@ export default class ManagerInterface {
     });
   }
 
-  static getHistoricNightReports(day_obs_start, day_obs_end, telescope) {
+  static getHistoricNightReports(day_obs_start, day_obs_end) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
 
-    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/?telescopes=${telescope}&min_day_obs=${day_obs_start}&max_day_obs=${day_obs_end}`;
+    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/?min_day_obs=${day_obs_start}&max_day_obs=${day_obs_end}`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
@@ -1182,6 +1218,30 @@ export default class ManagerInterface {
           toast.error(resp.title);
           return false;
         });
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  // Jira APIs
+  static getJiraOBSTickets(obsDay) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}jira/report/OBS/?day_obs=${obsDay}`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401) {
+        ManagerInterface.removeToken();
+        return false;
       }
       return response.json().then((resp) => {
         return resp;
@@ -1962,6 +2022,25 @@ export function getObsDayFromDate(date) {
     return utcDate.format(ISO_INTEGER_DATE_FORMAT);
   }
   return utcDate.subtract(1, 'day').format(ISO_INTEGER_DATE_FORMAT);
+}
+
+/**
+ * Calculates the start of the observation day based on the given date.
+ * The observation day starts at 12:00 UTC. If the given date's UTC hour is
+ * greater than or equal to 12, the start of the observation day is set to
+ * 12:00 UTC of the same day. Otherwise, it is set to 12:00 UTC of the previous day.
+ *
+ * @param {Date | string | number} date - The input date, which can be a Date object,
+ * a string, or a timestamp.
+ * @returns {Moment} A Moment object representing the start of the observation day in UTC.
+ */
+export function getObsDayStartFromDate(date) {
+  const utcDate = Moment(date).utc();
+  if (utcDate.hour() >= 12) {
+    return utcDate.clone().set({ hour: 12, minute: 0, second: 0, millisecond: 0 });
+  } else {
+    return utcDate.clone().subtract(1, 'day').set({ hour: 12, minute: 0, second: 0, millisecond: 0 });
+  }
 }
 
 /**
