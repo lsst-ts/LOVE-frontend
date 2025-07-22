@@ -74,6 +74,8 @@ export const getSubscription = (state, groupName) => {
 
 export const getSubscriptions = (state) => state.ws.subscriptions;
 
+export const getTopicsFieldsInfo = (state) => state.salinfo.topicsFieldsInfo;
+
 export const getStreamsData = (state, groupNames) => {
   if (state.ws === undefined) return undefined;
 
@@ -2613,11 +2615,46 @@ export const getESSstate = (state, salindex) => {
   };
 };
 
+// DM selectors
 export const getDMFlowState = (state) => {
   return {
     dmFlowState: 0,
     oodsState: 0,
     usdfState: 0,
+  };
+};
+
+// Nightreport selectors
+export const getNightreportObservatoryState = (state) => {
+  const subscriptions = [
+    'telemetry-MTMount-0-azimuth',
+    'telemetry-MTMount-0-elevation',
+    'telemetry-MTDome-0-azimuth',
+    'telemetry-MTRotator-0-rotation',
+    'telemetry-ATMCS-0-mount_AzEl_Encoders',
+    'telemetry-ATDome-0-position',
+    'event-MTMount-0-mirrorCoversMotionState',
+    'event-MTMount-0-oilSupplySystemState',
+    'event-MTMount-0-mainAxesPowerSupplySystemState',
+    'event-MTMount-0-elevationLockingPinMotionState',
+    'event-ATPneumatics-0-m1CoverState',
+  ];
+  const streamData = getStreamsData(state, subscriptions);
+  return {
+    simonyiAzimuth: streamData['telemetry-MTMount-0-azimuth']?.actualPosition.value ?? 0.0,
+    simonyiElevation: streamData['telemetry-MTMount-0-elevation']?.actualPosition.value ?? 0.0,
+    simonyiDomeAzimuth: streamData['telemetry-MTDome-0-azimuth']?.positionActual.value ?? 0.0,
+    simonyiRotator: streamData['telemetry-MTRotator-0-rotation']?.actualPosition.value ?? 0.0,
+    simonyiMirrorCoversState: streamData['event-MTMount-0-mirrorCoversMotionState']?.[0]?.state.value ?? null,
+    simonyiOilSupplySystemState: streamData['event-MTMount-0-oilSupplySystemState']?.[0]?.powerState.value ?? null,
+    simonyiPowerSupplySystemState:
+      streamData['event-MTMount-0-mainAxesPowerSupplySystemState']?.[0]?.powerState.value ?? null,
+    simonyiLockingPinsSystemState:
+      streamData['event-MTMount-0-elevationLockingPinMotionState']?.[0]?.state.value ?? null,
+    auxtelAzimuth: streamData['telemetry-ATMCS-0-mount_AzEl_Encoders']?.azimuthCalculatedAngle?.value[0] ?? 0.0,
+    auxtelElevation: streamData['telemetry-ATMCS-0-mount_AzEl_Encoders']?.elevationCalculatedAngle?.value[0] ?? 0.0,
+    auxtelDomeAzimuth: streamData['telemetry-ATDome-0-position']?.azimuthPosition?.value ?? 0.0,
+    auxtelMirrorCoversState: streamData['event-ATPneumatics-0-m1CoverState']?.[0]?.state.value ?? null,
   };
 };
 

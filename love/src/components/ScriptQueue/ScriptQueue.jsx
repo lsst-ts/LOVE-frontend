@@ -587,7 +587,6 @@ export default class ScriptQueue extends Component {
           script={script}
           commandExecutePermission={this.props.commandExecutePermission}
           {...script}
-          isCompact={this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible}
         />
       </DraggableScript>
     );
@@ -732,7 +731,7 @@ export default class ScriptQueue extends Component {
             ref={this.currentScriptDetailsContainer}
           >
             <div className={styles.currentScriptDescription}>
-              <ScriptConfig {...current} defaultEfdInstance={this.props.efdConfig?.defaultEfdInstance} />
+              <ScriptConfig {...current} />
               <ScriptDetails {...current} />
             </div>
             <div className={styles.currentScriptLogs}>
@@ -950,7 +949,6 @@ export default class ScriptQueue extends Component {
                             requeueScript={this.requeueScript}
                             commandExecutePermission={this.props.commandExecutePermission}
                             onClick={() => this.onShowScriptDetails(script)}
-                            efdConfig={this.props.efdConfig}
                           />
                         </div>
                       </DraggableScript>

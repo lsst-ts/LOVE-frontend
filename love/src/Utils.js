@@ -24,12 +24,14 @@ import Moment from 'moment';
 import {
   WEBSOCKET_SIMULATION,
   SUBPATH,
+  ISO_STRING_DATE_TIME_FORMAT,
   ISO_INTEGER_DATE_FORMAT,
   AUTO_HYPERLINK_JIRA_PROJECTS,
   JIRA_TICKETS_BASE_URL,
   OLE_OBS_SYSTEMS,
   OLE_OBS_SUBSYSTEMS,
   OLE_OBS_SUBSYSTEMS_COMPONENTS,
+  EFD_INSTANCES,
 } from 'Config.js';
 
 /* Backwards compatibility of Array.flat */
@@ -503,6 +505,26 @@ export default class ManagerInterface {
     });
   }
 
+  static getEFDMostRecentTimeseries(cscs, num, time_cut, efd_instance) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}efd/top_timeseries`;
+    return fetch(url, {
+      method: 'POST',
+      headers: ManagerInterface.getHeaders(),
+      body: JSON.stringify({
+        cscs,
+        num,
+        time_cut,
+        efd_instance,
+      }),
+    }).then((response) => {
+      return checkJSONResponse(response);
+    });
+  }
+
   static getEFDLogs(start_date, end_date, cscs, efd_instance, scale = 'utc') {
     const token = ManagerInterface.getToken();
     if (token === null) {
@@ -969,18 +991,19 @@ export default class ManagerInterface {
     });
   }
 
-  static getCurrentNightReport(telescope) {
+  static getCurrentNightReport() {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
 
     const currentDate = Moment().utc();
-    const currentObsDayInt = parseInt(getObsDayFromDate(currentDate), 10);
+    const nextDayDate = Moment(currentDate).add(1, 'day').utc();
+    const currentObsDay = getObsDayFromDate(currentDate);
+    const nextObsDay = getObsDayFromDate(nextDayDate);
 
-    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/?telescopes=${telescope}&min_day_obs=${currentObsDayInt}&max_day_obs=${
-      currentObsDayInt + 1
-    }`;
+    const url =
+      `${this.getApiBaseUrl()}ole/nightreport/reports/?` + `min_day_obs=${currentObsDay}&max_day_obs=${nextObsDay}`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
@@ -989,7 +1012,7 @@ export default class ManagerInterface {
     });
   }
 
-  static saveCurrentNightReport(telescope, summary, telescope_status, confluence_url, observers_crew) {
+  static saveCurrentNightReport(summary, weather, maintel_summary, auxtel_summary, confluence_url, observers_crew) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
@@ -1000,9 +1023,10 @@ export default class ManagerInterface {
       method: 'POST',
       headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
-        telescope,
         summary,
-        telescope_status,
+        weather,
+        maintel_summary,
+        auxtel_summary,
         confluence_url,
         observers_crew,
       }),
@@ -1020,7 +1044,15 @@ export default class ManagerInterface {
     });
   }
 
-  static updateCurrentNightReport(nightreport_id, summary, telescope_status, confluence_url, observers_crew) {
+  static updateCurrentNightReport(
+    nightreport_id,
+    summary,
+    weather,
+    maintel_summary,
+    auxtel_summary,
+    confluence_url,
+    observers_crew,
+  ) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
@@ -1032,7 +1064,9 @@ export default class ManagerInterface {
       headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
         summary,
-        telescope_status,
+        weather,
+        maintel_summary,
+        auxtel_summary,
         confluence_url,
         observers_crew,
       }),
@@ -1043,7 +1077,7 @@ export default class ManagerInterface {
     });
   }
 
-  static sendCurrentNightReport(report_id) {
+  static sendCurrentNightReport(report_id, observatory_status, cscs_status) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
@@ -1053,6 +1087,10 @@ export default class ManagerInterface {
     return fetch(url, {
       method: 'POST',
       headers: ManagerInterface.getHeaders(),
+      body: JSON.stringify({
+        observatory_status,
+        cscs_status,
+      }),
     }).then((response) => {
       return checkJSONResponse(response, () => {
         toast.success('Report sent succesfully.');
@@ -1060,13 +1098,13 @@ export default class ManagerInterface {
     });
   }
 
-  static getHistoricNightReports(day_obs_start, day_obs_end, telescope) {
+  static getHistoricNightReports(day_obs_start, day_obs_end) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
 
-    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/?telescopes=${telescope}&min_day_obs=${day_obs_start}&max_day_obs=${day_obs_end}`;
+    const url = `${this.getApiBaseUrl()}ole/nightreport/reports/?min_day_obs=${day_obs_start}&max_day_obs=${day_obs_end}`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
@@ -1180,6 +1218,30 @@ export default class ManagerInterface {
           toast.error(resp.title);
           return false;
         });
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  // Jira APIs
+  static getJiraOBSTickets(obsDay) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}jira/report/OBS/?day_obs=${obsDay}`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401) {
+        ManagerInterface.removeToken();
+        return false;
       }
       return response.json().then((resp) => {
         return resp;
@@ -1467,86 +1529,6 @@ export const takeScreenshot = (callback) => {
   }).then((canvas) => {
     callback(canvas.toDataURL('image/png'));
   });
-};
-
-/**
- * Parse plot inputs and convert them to a format the EFD API understands.
- * The transformation is done from:
- * [
- *   {name: {csc, salindex, topic, item}}
- * ]
- * to:
- * {
- *   csc: {
- *     index: {
- *       topic: [item]
- *     }
- *   }
- * }
- */
-export const parsePlotInputsEFD = (inputs) => {
-  const parsedInputs = {};
-  Object.values(inputs).forEach((input) => {
-    Object.values(input.values).forEach((value) => {
-      // EFD receives topic names of events with the logevent_ prefix
-      const topicName = value.category === 'telemetry' ? value.topic : `logevent_${value.topic}`;
-
-      // Check if the cscDict exists, if not create it
-      if (!parsedInputs[value.csc]) {
-        parsedInputs[value.csc] = {};
-      }
-
-      // Check if the indexDict exists, if not create it
-      if (!parsedInputs[value.csc][value.salindex]) {
-        parsedInputs[value.csc][value.salindex] = {};
-      }
-      // Check if the topicDict exists, if not create it
-      if (!parsedInputs[value.csc][value.salindex][topicName]) {
-        parsedInputs[value.csc][value.salindex][topicName] = [];
-      }
-
-      //  Array index is used for queries to the EFD (influx)
-      parsedInputs[value.csc][value.salindex][topicName].push(`${value.item}${value.isArray ? value.arrayIndex : ''}`);
-    });
-  });
-  return parsedInputs;
-};
-
-/**
- * Reformat data coming from the commander, from:
- * {
- *   "csc-index-topic": {
- *     "item":[{"ts":"2021-01-26 19:15:00+00:00","value":6.9}]
- *   }
- * }
- * to:
- * {
- *   "csc-index-topic": {
- *     "item": [{<tsLabel>:"2021-01-26 19:15:00+00:00",<valueLabel>:6.9}]
- *   }
- * }
- */
-export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y') => {
-  const newData = {};
-  Object.keys(data).forEach((topicKey) => {
-    const topicData = data[topicKey];
-    const newTopicData = {};
-    Object.keys(topicData).forEach((propertyKey) => {
-      const propertyDataArray = topicData[propertyKey];
-      // Next line was added to support EFD Querying for Array type items (influx)
-      const formattedPropertyKey = propertyKey.replace(/[\d\.]+$/, '');
-      newTopicData[formattedPropertyKey] = propertyDataArray.map((dataPoint) => {
-        const tsString = dataPoint?.ts.split(' ').join('T');
-        return {
-          units: { y: dataPoint?.units },
-          [tsLabel]: parseTimestamp(tsString),
-          [valueLabel]: dataPoint?.value,
-        };
-      });
-    });
-    newData[topicKey] = newTopicData;
-  });
-  return newData;
 };
 
 /**
@@ -2043,6 +2025,25 @@ export function getObsDayFromDate(date) {
 }
 
 /**
+ * Calculates the start of the observation day based on the given date.
+ * The observation day starts at 12:00 UTC. If the given date's UTC hour is
+ * greater than or equal to 12, the start of the observation day is set to
+ * 12:00 UTC of the same day. Otherwise, it is set to 12:00 UTC of the previous day.
+ *
+ * @param {Date | string | number} date - The input date, which can be a Date object,
+ * a string, or a timestamp.
+ * @returns {Moment} A Moment object representing the start of the observation day in UTC.
+ */
+export function getObsDayStartFromDate(date) {
+  const utcDate = Moment(date).utc();
+  if (utcDate.hour() >= 12) {
+    return utcDate.clone().set({ hour: 12, minute: 0, second: 0, millisecond: 0 });
+  } else {
+    return utcDate.clone().subtract(1, 'day').set({ hour: 12, minute: 0, second: 0, millisecond: 0 });
+  }
+}
+
+/**
  * Convert the given OBS day (YYYYMMDD) to ISO format (YYYY-MM-DD).
  *
  * @param {number} obsDay - The OBS day to convert as an interger.
@@ -2409,4 +2410,165 @@ export function getOBSSystemsSubsystemsComponentsIds(systemsHierarchy) {
     subsystemsIds,
     componentsIds,
   };
+}
+
+/**
+ * Retrieves the EFD instance associated with the current hostname.
+ * If no instance is found for the hostname, an error toast is displayed.
+ *
+ * @returns {string|null} The EFD instance for the current hostname, or null if not found.
+ */
+export function getEFDInstanceForHost() {
+  const efdInstance = EFD_INSTANCES[window.location.hostname];
+  if (!efdInstance) {
+    toast.error('EFD instance not found for this hostname');
+    return null;
+  }
+  return efdInstance;
+}
+
+/**
+ * Parse plot inputs and convert them to a format the EFD API understands.
+ * The transformation is done from:
+ * [
+ *   {name: {csc, salindex, topic, item}}
+ * ]
+ * to:
+ * {
+ *   csc: {
+ *     index: {
+ *       topic: [item]
+ *     }
+ *   }
+ * }
+ */
+export const parsePlotInputsEFD = (inputs) => {
+  const parsedInputs = {};
+  Object.values(inputs).forEach((input) => {
+    Object.values(input.values).forEach((value) => {
+      // EFD receives topic names of events with the logevent_ prefix
+      const topicName = value.category === 'telemetry' ? value.topic : `logevent_${value.topic}`;
+
+      // Check if the cscDict exists, if not create it
+      if (!parsedInputs[value.csc]) {
+        parsedInputs[value.csc] = {};
+      }
+
+      // Check if the indexDict exists, if not create it
+      if (!parsedInputs[value.csc][value.salindex]) {
+        parsedInputs[value.csc][value.salindex] = {};
+      }
+      // Check if the topicDict exists, if not create it
+      if (!parsedInputs[value.csc][value.salindex][topicName]) {
+        parsedInputs[value.csc][value.salindex][topicName] = [];
+      }
+
+      //  Array index is used for queries to the EFD (influx)
+      parsedInputs[value.csc][value.salindex][topicName].push(`${value.item}${value.isArray ? value.arrayIndex : ''}`);
+    });
+  });
+  return parsedInputs;
+};
+
+/**
+ * Reformat data coming from the commander, from:
+ * {
+ *   "csc-index-topic": {
+ *     "item":[{"ts":"2021-01-26 19:15:00+00:00","value":6.9}]
+ *   }
+ * }
+ * to:
+ * {
+ *   "csc-index-topic": {
+ *     "item": [{<tsLabel>:"2021-01-26 19:15:00+00:00",<valueLabel>:6.9}]
+ *   }
+ * }
+ *
+ */
+export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y') => {
+  const newData = {};
+  Object.keys(data).forEach((topicKey) => {
+    const topicData = data[topicKey];
+    const newTopicData = {};
+    Object.keys(topicData).forEach((propertyKey) => {
+      const propertyDataArray = topicData[propertyKey];
+      newTopicData[propertyKey] = propertyDataArray.map((dataPoint) => {
+        const tsString = dataPoint?.ts.split(' ').join('T');
+        const parsedTsString = parseTimestamp(tsString);
+        return {
+          units: { y: dataPoint?.units },
+          [tsLabel]: parsedTsString,
+          [valueLabel]: dataPoint?.value,
+        };
+      });
+    });
+    newData[topicKey] = newTopicData;
+  });
+  return newData;
+};
+
+/**
+ * Handles the retrieval and processing of historical plot data from the EFD.
+ * This function queries the EFD for historical data based on the provided inputs, processes the data to handle
+ * Influx DB array fields and log events and format the payload as the Plot component expects.
+ * Finally updates the historical data state using the provided callback function.
+ *
+ * See also:
+ * `getEFDInstanceForHost`, which retrieves the EFD instance for the current hostname.
+ * `parsePlotInputsEFD`, which transforms the Plot inputs into a format suitable for querying the EFD.
+ * `ManagerInterface.getEFDTimeseries`, which queries the EFD for historical data.
+ * `parseCommanderData`, which reformats the data coming from the commander.
+ *
+ * @param {Object} startDate - The start date for the historical data query, expected to be a moment.js object.
+ * @param {number} timeWindow - The time window (in minutes) for the historical data query.
+ * @param {Object} inputs - An object of inputs configurations for the Plot component.
+ * @param {Object} salFieldsInfo - An object containing information about the SAL fields.
+ * @param {Function} setHistoricalData - A callback function to set the processed historical data. A setState function is expected.
+ *
+ * @returns {void} This function does not return a value.
+ */
+export function handlePlotHistoricalData(startDate, timeWindow, inputs, salFieldsInfo, setHistoricalData) {
+  const efdInstance = getEFDInstanceForHost();
+  if (!efdInstance) {
+    return;
+  }
+  const parsedDate = startDate.utc().format(ISO_STRING_DATE_TIME_FORMAT);
+  const cscs = parsePlotInputsEFD(inputs);
+  const tsLabel = 'x';
+  const valueLabel = 'y';
+  ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min', efdInstance).then((data) => {
+    if (!data) return;
+    const parsedData = parseCommanderData(data, tsLabel, valueLabel);
+    Object.keys(parsedData).forEach((key) => {
+      const topicData = parsedData[key];
+      const csc = key.split('-')[0];
+      const topic = key.split('-')[2];
+      const isEvent = key.includes('logevent_');
+      Object.keys(topicData).forEach((efdItemKey) => {
+        const efdItemData = topicData[efdItemKey];
+        const itemKey = efdItemKey.replace(/[\d]+$/, '');
+        const itemData = topicData[itemKey];
+        const itemMetadata = salFieldsInfo[csc]?.[isEvent ? 'event_data' : 'telemetry_data']?.[topic]?.[itemKey];
+        const itemIsArray = itemMetadata?.count > 1;
+        if (itemIsArray) {
+          if (!itemData) {
+            topicData[itemKey] = efdItemData.map((dataPoint) => ({
+              ...dataPoint,
+              [valueLabel]: [],
+            }));
+          }
+          const itemIndex = parseInt(efdItemKey.match(/[\d]+$/)[0], 10);
+          topicData[itemKey].forEach((dataPoint, index) => {
+            dataPoint[valueLabel][itemIndex] = efdItemData[index]?.[valueLabel];
+          });
+          delete topicData[efdItemKey];
+        }
+      });
+      if (isEvent) {
+        parsedData[key.replace('logevent_', '')] = parsedData[key];
+        delete parsedData[key];
+      }
+    });
+    setHistoricalData(parsedData);
+  });
 }

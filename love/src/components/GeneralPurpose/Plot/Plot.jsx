@@ -21,7 +21,7 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
-import ManagerInterface, { parseTimestamp, parsePlotInputsEFD, parseCommanderData } from 'Utils';
+import { parseTimestamp, handlePlotHistoricalData } from 'Utils';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import VegaLegend from './VegaTimeSeriesPlot/VegaLegend';
@@ -85,7 +85,6 @@ const Plot = ({
   maxHeight = 240,
   containerNode,
   timeSeriesControlsProps,
-  efdConfigFile,
   isForecast = false,
   sliceSize = 1800,
   sliceInvert = false,
@@ -93,6 +92,7 @@ const Plot = ({
   scaleIndependent = false,
   scaleDomain,
   taiToUtc = 37,
+  topicsFieldsInfo,
   subscribeToStreams,
   unsubscribeToStreams,
 }) => {
@@ -100,42 +100,37 @@ const Plot = ({
   const [isLive, setIsLive] = useState(timeSeriesControlsProps?.isLive ?? true);
   const [timeWindow, setTimeWindow] = useState(timeSeriesControlsProps?.timeWindow ?? 60);
   const [historicalData, setHistoricalData] = useState(timeSeriesControlsProps?.historicalData ?? []);
-  const [efdClients, setEfdClients] = useState([]);
-  const [selectedEfdClient, setSelectedEfdClient] = useState(efdConfigFile?.defaultEfdInstance);
   const [plotWidth, setPlotWidth] = useState(width);
   const [plotHeight, setPlotHeight] = useState(height);
 
   const timeSeriesControlRef = useRef();
   const legendRef = useRef();
-  let resizeObserver = undefined;
+  const resizeObserver = useRef();
 
-  /** Queries the EFD for timeseries
-   * @param {Moment} startDate - Start date of the query
-   * @param {number} timeWindow - Time window in minutes
-   *
-   * Notes:
-   * - The query is done for all inputs in props.inputs
-   * - The query is done to the specified EFD instance on the efdConfigFile prop
+  /** Queries the EFD for timeserresizeObserveries
+   * @param {Moment} startDate - Start date of the query.
+   * @param {number} timeWindow - Time window in minutes.
    */
   const memoizedHandleHistoricalData = useCallback(
     (startDate, timeWindow) => {
-      const cscs = parsePlotInputsEFD(inputs);
-      const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
-      ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min', selectedEfdClient).then((data) => {
-        if (!data) return;
-        const parsedData = parseCommanderData(data);
-        const parsedDataKeys = Object.keys(parsedData);
-        parsedDataKeys.forEach((key) => {
-          if (key.includes('logevent_')) {
-            parsedData[key.replace('logevent_', '')] = parsedData[key];
-            delete parsedData[key];
-          }
-        });
-        setHistoricalData(parsedData);
-      });
+      return handlePlotHistoricalData(startDate, timeWindow, inputs, topicsFieldsInfo, setHistoricalData);
     },
-    [inputs, selectedEfdClient],
+    [inputs, topicsFieldsInfo, setHistoricalData],
   );
+
+  /** Effect to handle historical data when the component mounts */
+  useEffect(() => {
+    if (
+      historicalData.length === 0 &&
+      inputs &&
+      Object.keys(inputs).length > 0 &&
+      topicsFieldsInfo &&
+      Object.keys(topicsFieldsInfo).length > 0
+    ) {
+      const currentDate = Moment().subtract(timeWindow / 2, 'minutes');
+      memoizedHandleHistoricalData(currentDate, timeWindow);
+    }
+  }, [JSON.stringify(inputs.values), topicsFieldsInfo, setHistoricalData]);
 
   /** Get data for the plot, based on the inputs
    * @param {object} data - Data to be filtered
@@ -146,23 +141,34 @@ const Plot = ({
    * - If isLive is false, the data is filtered based on the historicalData
    */
   const memoizedGetRangedData = useCallback(
-    (data) => {
+    (dataArray) => {
       let filteredData;
       const topics = getTopicItemPair(inputs);
       const parsedHistoricalData = Object.keys(topics).flatMap((key) => {
         const [topicName, property] = topics[key];
-        return (historicalData[topicName]?.[property] ?? []).map((dp) => ({ name: key, ...dp }));
+        const inputConfig = inputs[key];
+        // Usual telemetries only contains 1 value, hence we can use the first element of the array
+        const { accessor } = inputConfig.values[0];
+        /* eslint no-eval: 0 */
+        const accessorFunc = eval(accessor);
+        return (historicalData[topicName]?.[property] ?? []).map((dataPoint) => ({
+          ...dataPoint,
+          name: key,
+          y: accessorFunc(dataPoint.y),
+        }));
       });
       if (!isLive) {
         filteredData = parsedHistoricalData;
       } else {
-        if (!data) return [];
-        const joinedData = parsedHistoricalData.concat(data);
+        if ((!dataArray || dataArray.length == 0) && (!parsedHistoricalData || parsedHistoricalData.length == 0)) {
+          return [];
+        }
+        const joinedData = parsedHistoricalData.concat(dataArray ?? []);
         filteredData = joinedData.filter((val) => {
           const currentSeconds = new Date().getTime() / 1000;
           const timemillis = val.x?.ts ?? val.x;
           const dataSeconds = timemillis / 1000 + taiToUtc;
-          if (currentSeconds - timeWindow * 60 <= dataSeconds) return true;
+          if (dataSeconds >= currentSeconds - timeWindow * 60) return true;
           return false;
         });
       }
@@ -284,44 +290,44 @@ const Plot = ({
 
   const setResizeObserver = () => {
     if (!(containerNode instanceof Element)) return;
-
-    resizeObserver = new ResizeObserver((entries) => {
-      // We wrap it in requestAnimationFrame to avoid this error - ResizeObserver loop limit exceeded
+    const resizeHandler = (entries) => {
       window.requestAnimationFrame(() => {
         const container = entries[0];
         const diffControlHeight = timeSeriesControlRef.current?.offsetHeight ?? 0;
-        const diffLegendHeight = (legendPosition === 'bottom' && legendRef.current?.offsetHeight) ?? 0;
-        const diffLegendWidth = (legendPosition === 'right' && legendRef.current?.offsetWidth) ?? 0;
+        const diffAxisXTitleHeight = xAxisTitle !== '' ? 14 : 0;
+        const diffLegendHeight =
+          ((legendPosition === '' || legendPosition === 'bottom') && legendRef.current?.offsetHeight) || 0;
+        const diffLegendWidth = (legendPosition === 'right' && legendRef.current?.offsetWidth) || 0;
 
-        /** Subtract 16 to height and width to
-          avoid bug with resizing. TODO: DM-41914 */
-        setPlotHeight(container.contentRect.height - diffControlHeight - diffLegendHeight - 16);
-        setPlotWidth(container.contentRect.width - diffLegendWidth - 16);
+        setPlotHeight(container.contentRect.height - diffControlHeight - diffAxisXTitleHeight - diffLegendHeight);
+        setPlotWidth(container.contentRect.width - diffLegendWidth);
       });
-    });
-    resizeObserver.observe(containerNode);
+    };
+
+    resizeObserver.current = new ResizeObserver(resizeHandler);
+    resizeObserver.current.observe(containerNode);
   };
 
+  /**
+   * Set resize observer if containerNode is defined and width and height are not defined.
+   */
   useEffect(() => {
-    subscribeToStreams();
-
-    // Query for available EFD clients
-    ManagerInterface.getEFDClients().then(({ instances }) => setEfdClients(instances));
-
-    return () => {
-      unsubscribeToStreams();
-      if (resizeObserver) {
-        resizeObserver.disconnect();
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    // Set resize observer if containerNode is defined and width and height are not
     if (width === undefined && height === undefined && containerNode) {
       setResizeObserver();
     }
-  }, [containerNode, width, height]);
+    return () => {
+      if (resizeObserver.current) {
+        resizeObserver.current.disconnect();
+      }
+    };
+  }, [containerNode, width, height, timeSeriesControlRef.current, legendRef.current, legendPosition, xAxisTitle]);
+
+  useEffect(() => {
+    subscribeToStreams();
+    return () => {
+      unsubscribeToStreams();
+    };
+  }, []);
 
   useEffect(() => {
     if (isForecast) {
@@ -332,25 +338,33 @@ const Plot = ({
   }, [inputs, streams, sliceSize, sliceInvert, sizeLimit, isForecast]);
 
   const layerTypes = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads', 'bigotes', 'rects', 'heatmaps'];
-  const layers = {};
-  for (const [inputName, inputConfig] of Object.entries(inputs)) {
-    const { type } = inputConfig;
-    const layerName = type + 's';
-    if (!layerTypes.includes(layerName)) {
-      continue;
-    }
+  const dataLengthsHash = useMemo(() => {
+    return Object.entries(data)
+      .map(([key, value]) => `${key}:${value.length}`)
+      .join('|');
+  }, [data]);
+  const layers = useMemo(() => {
+    const layers = {};
+    for (const [inputName, inputConfig] of Object.entries(inputs)) {
+      const { type } = inputConfig;
+      const layerName = type + 's';
+      if (!layerTypes.includes(layerName)) {
+        continue;
+      }
 
-    let inputData;
-    if (isForecast) {
-      inputData = getForecastData(inputName, data[inputName]);
-    } else {
-      inputData = memoizedGetRangedData(data[inputName], timeWindow);
+      let inputData;
+      if (isForecast) {
+        inputData = getForecastData(inputName, data[inputName]);
+      } else {
+        inputData = memoizedGetRangedData(data[inputName]);
+      }
+      layers[layerName] = [...(layers[layerName] ?? []), ...inputData];
     }
-    layers[layerName] = [...(layers[layerName] ?? []), ...inputData];
-  }
+    return layers;
+  }, [inputs, dataLengthsHash, memoizedGetRangedData]);
 
   const memoizedLegend = useMemo(() => {
-    return Object.keys(inputs).map((inputName, index) => {
+    return Object.keys(inputs).map((inputName) => {
       return {
         label: inputName,
         name: inputName,
@@ -381,21 +395,17 @@ const Plot = ({
       {controls && (
         <div className={styles.controlsContainer} ref={timeSeriesControlRef}>
           <TimeSeriesControls
-            setTimeWindow={setTimeWindow}
-            timeWindow={timeWindow}
-            setLiveMode={setIsLive}
             isLive={isLive}
+            setLiveMode={setIsLive}
+            timeWindow={timeWindow}
+            setTimeWindow={setTimeWindow}
             setHistoricalData={memoizedHandleHistoricalData}
-            efdClients={efdClients}
-            selectedEfdClient={selectedEfdClient}
-            setEfdClient={setSelectedEfdClient}
           />
         </div>
       )}
       {legendPosition === 'right' ? (
         <div className={styles.containerFlexRow}>
           <VegaTimeseriesPlot
-            className={styles.plot}
             width={plotWidth}
             height={plotHeight}
             layers={layers}
@@ -414,7 +424,6 @@ const Plot = ({
         <div className={styles.containerFlexCol} style={maxHeight ? { maxHeight: maxHeight } : {}}>
           <div>
             <VegaTimeseriesPlot
-              className={styles.plot}
               width={plotWidth}
               height={plotHeight}
               layers={layers}
@@ -462,8 +471,6 @@ Plot.propTypes = {
   containerNode: PropTypes.instanceOf(Element),
   /** Object with the configuration of the timeSeriesControls */
   timeSeriesControlsProps: PropTypes.object,
-  /** Object with the configuration of the efd */
-  efdConfigFile: PropTypes.object,
   /** In the weatherforecast telemetries is received data in one array with time and value.
    * In other telemetries, the data is received one to one */
   isForecast: PropTypes.bool,

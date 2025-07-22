@@ -22,21 +22,37 @@ import PropTypes from 'prop-types';
 import Datetime from 'react-datetime';
 import moment from 'moment';
 import TextField from 'components/TextField/TextField';
+import Button from 'components/GeneralPurpose/Button/Button';
+import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
 import styles from './DateSelection.module.css';
 
+const MAX_TIME_WINDOW = 60; // Maximum time window in minutes
+const TIME_WINDOW_TOOLTIP =
+  'The time window will be set at the middle of the selected UTC date time.' +
+  ' E.g. if you select a date of 2025-01-01 12:00:00 UTC and a time window of 60 minutes,' +
+  ' the time window will be set from 2025-01-01 11:30:00 UTC to 2025-01-01 12:30:00 UTC.' +
+  ` Note the maximum time window is ${MAX_TIME_WINDOW} minutes.`;
 export default class DateSelection extends PureComponent {
   static propTypes = {
+    /** Function to set historical data */
     setHistoricalData: PropTypes.func,
+    /** Array of dates for the date selector */
     dateSelectorDates: PropTypes.array,
+    /** Whether the submit button should be disabled */
     submitDisabled: PropTypes.bool,
   };
 
-  constructor() {
-    super();
+  static defaultProps = {
+    setHistoricalData: () => {},
+    dateSelectorDates: [null, null],
+    submitDisabled: false,
+  };
+
+  constructor(props) {
+    super(props);
     this.state = {
-      startDate: null,
-      endDate: null,
-      timeWindow: 60,
+      startDate: props.dateSelectorDates[0],
+      timeWindow: MAX_TIME_WINDOW,
     };
   }
 
@@ -54,42 +70,37 @@ export default class DateSelection extends PureComponent {
 
   onTimeWindowChange = (minutes) => {
     this.setState({
-      timeWindow: minutes <= 60 ? minutes : 60,
+      timeWindow: minutes <= MAX_TIME_WINDOW ? minutes : MAX_TIME_WINDOW,
     });
   };
 
   onSubmitQuery = () => {
     const { startDate, timeWindow } = this.state;
-    this.props.setHistoricalData?.(startDate, timeWindow);
+    this.props.setHistoricalData(startDate, timeWindow);
   };
 
-  componentDidMount() {
-    this.setState({
-      startDate: this.props?.dateSelectorDates?.[0],
-      endDate: this.props?.dateSelectorDates?.[1],
-    });
-  }
-
   render() {
+    const { dateSelectorDates, submitDisabled } = this.props;
     const { timeWindow } = this.state;
     const currentMoment = moment();
     return (
       <div className={styles.datesContainer}>
         <div className={styles.fromDateContainer}>
-          <span className={styles.datetimeDescription}>From:</span>
+          <span>From (UTC):</span>
           <div className={styles.datetimeContainer}>
             <Datetime
               inputProps={{ placeholder: 'Click to set initial date', readOnly: true }}
-              onChange={(date) => this.onDateSelected(date, true)}
+              onChange={this.onDateSelected}
               initialViewMode="time"
-              initialValue={this.props?.dateSelectorDates?.[0]}
+              initialValue={dateSelectorDates[0]}
               isValidDate={(currentDate) => currentDate.isBefore(currentMoment)}
               dateFormat="YYYY/MM/DD"
+              utc={true}
             />
           </div>
         </div>
         <div className={styles.toDateContainer}>
-          <span className={styles.datetimeDescription}>Time window:</span>
+          <span>Time window:</span>
           <div className={styles.datetimeContainer}>
             <TextField
               className={styles.customTimeWindowInput}
@@ -100,10 +111,13 @@ export default class DateSelection extends PureComponent {
             />
           </div>
           <span>minutes</span>
+          <div className={styles.infoIcon}>
+            <InfoIcon title={TIME_WINDOW_TOOLTIP} />
+          </div>
         </div>
-        <button disabled={this.props.submitDisabled} className={styles.queryButton} onClick={this.onSubmitQuery}>
+        <Button disabled={submitDisabled} onClick={this.onSubmitQuery}>
           Submit
-        </button>
+        </Button>
       </div>
     );
   }

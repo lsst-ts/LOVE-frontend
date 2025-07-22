@@ -19,46 +19,20 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .timeWindowOptionsContainer {
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 1em;
-}
-
-.timeWindowOption {
-  padding: 0 0.5em;
-  display: flex;
   align-items: center;
-}
-
-.timeWindowOption label {
-  height: 1em;
-  line-height: 1.4em;
-}
-
-.timeWindowOption span {
-  height: 1em;
-  line-height: 1.4em;
-}
-
-.timeWindowTitle {
-  font-size: var(--font-size-larger);
+  gap: var(--small-padding);
 }
 
 .customTimeWindowInput {
-  width: 2.14rem;
+  width: 2em;
   text-align: right;
-  padding: 0rem 0.21rem;
+  padding: 0 0.25em;
 }
 
 .customTimeWindowContainer {
   display: none;
-  padding-top: 0.29rem;
 }
 
 .customVisible {
   display: inline-block;
-}
-
-.timeWindowOption label {
-  /* background: var(--tertiary-background-color); */
 }
