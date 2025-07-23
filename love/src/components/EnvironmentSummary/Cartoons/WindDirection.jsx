@@ -56,7 +56,7 @@ function WindDirection({ windSpeedPercent, windDirection, subscribeToStreams, un
         x={-arrowHeight / 2}
         y={-arrowHeight / 2}
         className={styles.arrowIconContainer}
-        transform={`rotate(${windDirection})`}
+        transform={`rotate(${windDirection + 180})`}
       >
         <ArrowIcon up={true} />
       </foreignObject>
