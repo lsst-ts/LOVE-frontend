@@ -5,6 +5,7 @@ Version History
 v6.8.1
 ------
 
+* Refactor WindDirection and make it available as an independent component. `<https://github.com/lsst-ts/LOVE-frontend/pull/722>`_
 * Add dependabot github workflow for better CI handling. `<https://github.com/lsst-ts/LOVE-frontend/pull/724>`_
 * Bump form-data from 3.0.1 to 3.0.4 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/723>`_
 * Bump @babel/helpers from 7.22.5 to 7.27.0 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/704>`_
