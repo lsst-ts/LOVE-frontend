@@ -212,7 +212,7 @@ export default class EnvironmentSummary extends Component {
         </div>
         <div className={styles.container}>
           <div className={styles.windDirection}>
-            <WindDirection windDirection={windDirection} windSpeedPercent={windSpeedPercent} />
+            <WindDirection windDirection={windDirection} windSpeed={windSpeed} />
             <div className={styles.windDirectionDetail}>
               <span>Direction: {defaultNumberFormatter(windDirection, 2)}°</span>
               <span>Speed: {defaultNumberFormatter(windSpeed, 2)} m/s</span>

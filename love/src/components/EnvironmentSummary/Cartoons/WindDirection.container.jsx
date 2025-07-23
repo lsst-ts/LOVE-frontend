@@ -19,8 +19,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import WindDirection from './WindDirection';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import { getWindDirectionState } from 'redux/selectors';
+import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+import { MAX_WIND_SPEED_MS } from 'Config';
 
 export const schema = {
   description: 'Wind direction component.',
@@ -36,7 +37,13 @@ export const schema = {
       type: 'number',
       description: 'Maximum wind speed in m/s',
       isPrivate: false,
-      default: 30,
+      default: MAX_WIND_SPEED_MS,
+    },
+    showValues: {
+      type: 'boolean',
+      description: 'Show wind speed and direction values',
+      isPrivate: false,
+      default: true,
     },
   },
 };
@@ -48,11 +55,11 @@ const WindDirectionContainer = ({ ...props }) => {
   return <WindDirection {...props} />;
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const windDirectionState = getWindDirectionState(state);
-  const windSpeedPercent = windDirectionState.speed / ownProps.maxWindSpeed;
+  const windSpeed = windDirectionState.speed;
   const windDirection = windDirectionState.direction;
-  return { windSpeedPercent, windDirection };
+  return { windSpeed, windDirection };
 };
 
 const mapDispatchToProps = (dispatch) => {
