@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.8.1
+------
+
+* Bump prismjs from 1.29.0 to 1.30.0 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/696>`_
+
 v6.8.0
 ------
 
