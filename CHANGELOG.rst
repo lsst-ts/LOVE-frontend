@@ -5,6 +5,7 @@ Version History
 v6.8.1
 ------
 
+* Bump @babel/helpers from 7.22.5 to 7.27.0 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/704>`_
 * Bump @babel/runtime from 7.22.5 to 7.27.0 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/703>`_
 * Bump http-proxy-middleware from 2.0.7 to 2.0.9 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/702>`_
 * Bump vega from 5.26.0 to 5.32.0 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/698>`_
