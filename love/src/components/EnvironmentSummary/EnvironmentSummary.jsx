@@ -25,6 +25,7 @@ import SimonyiTelescope from './Cartoons/SimonyiTelescope';
 import AuxTelescope from './Cartoons/AuxTelescope';
 import WindDirection from './Cartoons/WindDirection';
 import WeatherForecastIcon from 'components/icons/WeatherForecastIcon/WeatherForecastIcon';
+import { MAX_WIND_SPEED_MS } from 'Config';
 import { defaultNumberFormatter } from 'Utils';
 import Summary from './Summary/Summary';
 
@@ -190,6 +191,8 @@ export default class EnvironmentSummary extends Component {
       humidity,
       seeing,
     } = this.props;
+
+    const windSpeedPercent = windSpeed / MAX_WIND_SPEED_MS;
 
     return (
       <div>

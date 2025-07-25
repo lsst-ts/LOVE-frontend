@@ -2568,6 +2568,15 @@ export const getObservatoryState = (state) => {
   };
 };
 
+export const getWindDirectionState = (state) => {
+  const subscriptions = ['telemetry-ESS-301-airFlow'];
+  const streams = getStreamsData(state, subscriptions);
+  return {
+    direction: streams['telemetry-ESS-301-airFlow']?.direction?.value ?? 0.0,
+    speed: streams['telemetry-ESS-301-airFlow']?.speed?.value ?? 0.0,
+  };
+};
+
 export const getESSsubscription = (salindex) => {
   return [
     `event-ESS-${salindex}-highElectricField`,

@@ -1,0 +1,7 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/love"
+    schedule:
+      interval: "weekly"
+    rebase-strategy: "lazy"
