@@ -1,0 +1,32 @@
+.csc-state-icon-container {
+  background-color: #0F2029;
+  color: white;
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto auto; /* Or specify widths like 1fr 1fr */
+}
+
+.csc-state-icon-container > div {
+  display: inline-block;
+}
+
+.status_square {
+  background-color: gray;
+  border-radius: 5px;
+  color: white;
+  font-family: sans-serif;
+  font-size: 18px;
+  height: 28px;
+  width: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter 0.5s ease, box-shadow 0.5s ease;
+}
+
+.status_square:hover {
+  filter: brightness(115%);
+  box-shadow: 0 0 10px black;
+  cursor: pointer;
+}
