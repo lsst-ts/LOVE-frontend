@@ -17,17 +17,46 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+.container > .values {
+  background: var(--second-quaternary-background-dimmed-color);
+  padding: var(--small-padding);
+  border-radius: 0.5em;
+  display: flex;
+  gap: var(--small-padding) var(--content-padding);
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-bottom: var(--small-padding);
+  min-width: 15em;
+}
+
+.container > .values .label {
+  margin-right: var(--content-padding);
+}
+
+.container > .values .value {
+  color: var(--highlighted-font-color);
+}
+
+.container > .values .label,
+.container > .values .value {
+  text-wrap: nowrap;
+}
+
+.windroseBackground {
+  fill: var(--second-secondary-background-color);
+  stroke: var(--tertiary-font-color);
+}
+
 .arrowIconContainer {
-  overflow: visible !important;
   transform-origin: center;
   transform-box: fill-box;
 }
 
-.cardinalPoints {
-  font: bold 56px sans-serif;
-  fill: white;
+.arrowIconContainer svg {
+  fill: var(--highlighted-font-color);
 }
 
-.svgContainer {
-  overflow: visible;
+.cardinalPoints {
+  font-size: 10px;
+  fill: white;
 }
