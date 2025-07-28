@@ -2471,16 +2471,31 @@ export const parsePlotInputsEFD = (inputs) => {
 };
 
 /**
- * Reformat data coming from the commander, from:
+ * Reformat data coming from the commander to a format that the Plot component expects.
+ *
+ * Input format:
  * {
  *   "csc-index-topic": {
- *     "item":[{"ts":"2021-01-26 19:15:00+00:00","value":6.9}]
+ *     "item": [
+ *       {
+ *         "ts": "2021-01-26 19:15:00+00:00",
+ *         "value": 6.9,
+ *         "units": "deg"
+ *       },
+ *     ],
  *   }
  * }
- * to:
+ *
+ * Output format:
  * {
  *   "csc-index-topic": {
- *     "item": [{<tsLabel>:"2021-01-26 19:15:00+00:00",<valueLabel>:6.9}]
+ *     "item": [
+ *       {
+ *         <tsLabel>: "2021-01-26 19:15:00+00:00",
+ *         <valueLabel>: 6.9,
+ *         "units": { y: "deg" }
+ *       }
+ *     ]
  *   }
  * }
  *
