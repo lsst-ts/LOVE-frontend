@@ -22,34 +22,11 @@ import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { ISO_STRING_DATE_TIME_FORMAT, TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
 import ManagerInterface, { getEFDInstanceForHost, parseCommanderData, parsePlotInputsEFD, parseTimestamp } from 'Utils';
+import { defaultStyles } from './Plot.container';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import VegaLegend from './VegaTimeSeriesPlot/VegaLegend';
 import styles from './Plot.module.css';
-
-const DEFAULT_STYLES = [
-  {
-    color: '#ff7bb5',
-    shape: 'circle',
-    filled: false,
-    orient: 'left',
-    dash: [4, 0],
-  },
-  {
-    color: '#00b7ff',
-    shape: 'square',
-    filled: true,
-    orient: 'left',
-    dash: [4, 0],
-  },
-  {
-    color: '#97e54f',
-    shape: 'diamond',
-    filled: true,
-    orient: 'right',
-    dash: [4, 0],
-  },
-];
 
 const LAYER_TYPES = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads', 'bigotes', 'rects', 'heatmaps'];
 
@@ -164,7 +141,7 @@ const Plot = ({
     return Object.keys(inputs).map((inputName, index) => {
       return {
         name: inputName,
-        ...DEFAULT_STYLES[index % DEFAULT_STYLES.length],
+        ...defaultStyles[index % defaultStyles.length],
         ...(inputs[inputName].type !== undefined ? { markType: inputs[inputName].type } : {}),
         ...(inputs[inputName].color !== undefined ? { color: inputs[inputName].color } : {}),
         ...(inputs[inputName].dash !== undefined ? { dash: inputs[inputName].dash } : {}),
