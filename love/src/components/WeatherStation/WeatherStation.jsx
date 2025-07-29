@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -19,12 +21,10 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ManagerInterface, { parseCommanderData, fixedFloat } from 'Utils';
-import { DATE_TIME_FORMAT } from 'Config';
+import { fixedFloat } from 'Utils';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import PolarPlotContainer from 'components/GeneralPurpose/Plot/PolarPlot/PolarPlot.container';
 import { COLORS } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot';
-import TimeSeriesControls from 'components/GeneralPurpose/Plot/TimeSeriesControls/TimeSeriesControls';
 import CurrentValues from './CurrentValues/CurrentValues';
 import styles from './WeatherStation.module.css';
 
@@ -48,6 +48,8 @@ export default class WeatherStation extends Component {
           salindex: this.props.salindex,
           topic: 'temperature',
           item: 'temperatureItem',
+          isArray: true,
+          arrayIndex: 0,
           accessor: '(x) => x[0]',
         },
       ],
@@ -100,6 +102,8 @@ export default class WeatherStation extends Component {
           salindex: this.props.salindex,
           topic: 'pressure',
           item: 'pressureItem',
+          isArray: true,
+          arrayIndex: 0,
           accessor: '(x) => x[0]',
         },
       ],
@@ -207,12 +211,6 @@ export default class WeatherStation extends Component {
     this.pressurePlotRef = React.createRef();
     this.precipitationPlotRef = React.createRef();
     this.snowDepthPlotRef = React.createRef();
-
-    this.state = {
-      isLive: true,
-      timeWindow: 60,
-      historicalData: [],
-    };
   }
 
   componentDidMount = () => {
@@ -223,57 +221,12 @@ export default class WeatherStation extends Component {
     this.props.unsubscribeToStreams();
   };
 
-  setHistoricalData = (startDate, timeWindow) => {
-    const cscs = {
-      WeatherStation: {
-        1: {
-          airTemperature: ['avg1M'],
-          soilTemperature: ['avg1M'],
-          dewPoint: ['avg1M'],
-          relativeHumidity: ['avg1M'],
-          airPressure: ['paAvg1M'],
-          solarNetRadiation: ['avg1M'],
-          precipitation: ['prSum1M'],
-          snowDepth: ['avg1M'],
-          windSpeed: ['avg2M'],
-          windGustDirection: ['value10M'],
-          windDirection: ['avg2M'],
-        },
-      },
-    };
-    const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
-    // historicalData
-    ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min').then((data) => {
-      const polarData = Object.keys(data)
-        .filter((key) => key.includes('wind'))
-        .reduce((obj, key) => {
-          obj[key] = data[key];
-          return obj;
-        }, {});
-      const plotData = Object.keys(data)
-        .filter((key) => !key.includes('wind'))
-        .reduce((obj, key) => {
-          obj[key] = data[key];
-          return obj;
-        }, {});
-      const parsedPolarData = parseCommanderData(polarData, 'time', 'value');
-      const parsedPlotData = parseCommanderData(plotData, 'x', 'y');
-      this.setState({ historicalData: { ...parsedPolarData, ...parsedPlotData } });
-    });
-  };
-
   render() {
     const currentTemperature = fixedFloat(this.props.temperature?.temperatureItem?.value[0], 2);
     const currentHumidity = fixedFloat(this.props.relativeHumidity?.relativeHumidityItem?.value, 2);
     const currentPressure = fixedFloat(this.props.pressure?.pressureItem?.value[0], 2);
     const currentWindSpeed = fixedFloat(this.props.airFlow?.speed?.value, 2);
     const currentWindSpeedUnits = this.props.airFlow?.speed?.units;
-
-    const timeSeriesControlsProps = {
-      timeWindow: this.state.timeWindow,
-      isLive: this.state.isLive,
-      historicalData: this.state.historicalData,
-    };
 
     const maxHeightPlot = 220;
 
@@ -287,47 +240,11 @@ export default class WeatherStation extends Component {
           currentWindSpeedUnits={currentWindSpeedUnits}
         />
 
-        {this.props.controls && (
-          <div className={styles.fullSection}>
-            <div className={styles.sectionTitle}>Timeseries Controls</div>
-            <div className={styles.timeSeriesControls}>
-              <TimeSeriesControls
-                setTimeWindow={(timeWindow) => this.setState({ timeWindow })}
-                timeWindow={this.state.timeWindow}
-                setLiveMode={(isLive) => this.setState({ isLive })}
-                isLive={this.state.isLive}
-                setHistoricalData={this.setHistoricalData}
-              />
-            </div>
-            {this.props.controls && (
-              <div className={styles.timeSeriesControls}>
-                {this.state.isLive && (
-                  <span>
-                    Displaying last{' '}
-                    <strong>{this.state.timeWindow != 1 ? this.state.timeWindow + ' minutes' : 'minute'}</strong> of
-                    data
-                  </span>
-                )}
-                {!this.state.isLive && (
-                  <span>
-                    Displaying data from <strong>{this.state.historicalData?.[0]?.format(DATE_TIME_FORMAT)}</strong> to{' '}
-                    <strong>{this.state.historicalData?.[1]?.format(DATE_TIME_FORMAT)}</strong>
-                  </span>
-                )}
-              </div>
-            )}
-          </div>
-        )}
-
         <div className={styles.windPlotSection}>
           <div className={styles.sectionTitle}>Wind</div>
           <div ref={this.windDirectionPlotRef} className={styles.windPlotContainer}>
             <div className={styles.windPlotFullWidth}>
-              <PolarPlotContainer
-                timeSeriesControlsProps={timeSeriesControlsProps}
-                containerNode={this.windDirectionPlotRef}
-                {...this.windPlot}
-              />
+              <PolarPlotContainer containerNode={this.windDirectionPlotRef} {...this.windPlot} />
             </div>
           </div>
         </div>
@@ -336,7 +253,6 @@ export default class WeatherStation extends Component {
           <div className={styles.sectionTitle}>Temperature</div>
           <div ref={this.temperaturePlotRef} className={styles.plot}>
             <PlotContainer
-              timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.temperaturePlot}
               containerNode={this.temperaturePlotRef}
               xAxisTitle="Time"
@@ -354,7 +270,6 @@ export default class WeatherStation extends Component {
           <div className={styles.sectionTitle}>Humidity</div>
           <div ref={this.humidityPlotRef} className={styles.plot}>
             <PlotContainer
-              timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.humidityPlot}
               containerNode={this.humidityPlotRef}
               xAxisTitle="Time"
@@ -373,7 +288,6 @@ export default class WeatherStation extends Component {
           <div className={styles.sectionTitle}>Air pressure</div>
           <div ref={this.pressurePlotRef} className={styles.plot}>
             <PlotContainer
-              timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.pressurePlot}
               containerNode={this.pressurePlotRef}
               xAxisTitle="Time"
@@ -388,7 +302,6 @@ export default class WeatherStation extends Component {
           <div className={styles.sectionTitle}>Solar radiation</div>
           <div ref={this.solarPlotRef} className={styles.plot}>
             <PlotContainer
-              timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.solarPlot}
               containerNode={this.solarPlotRef}
               xAxisTitle="Time"
@@ -403,7 +316,6 @@ export default class WeatherStation extends Component {
           <div className={styles.sectionTitle}>Precipitation</div>
           <div ref={this.precipitationPlotRef} className={styles.plot}>
             <PlotContainer
-              timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.precipitationPlot}
               containerNode={this.precipitationPlotRef}
               xAxisTitle="Time"
@@ -418,7 +330,6 @@ export default class WeatherStation extends Component {
           <div className={styles.sectionTitle}>Snow Depth</div>
           <div ref={this.snowDepthPlotRef} className={styles.plot}>
             <PlotContainer
-              timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.snowDepthPlot}
               containerNode={this.snowDepthPlotRef}
               xAxisTitle="Time"
