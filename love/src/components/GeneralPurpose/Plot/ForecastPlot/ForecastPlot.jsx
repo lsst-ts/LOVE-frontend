@@ -1,9 +1,7 @@
 /** 
 This file is part of LOVE-frontend.
 
-Copyright (c) 2023 Inria Chile.
-
-Developed by Inria Chile.
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,63 +15,87 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import Moment from 'moment';
-import { ISO_STRING_DATE_TIME_FORMAT, TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
-import ManagerInterface, { getEFDInstanceForHost, parseCommanderData, parsePlotInputsEFD, parseTimestamp } from 'Utils';
-import { defaultStyles } from './Plot.container';
-import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
-import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
-import VegaLegend from './VegaTimeSeriesPlot/VegaLegend';
-import styles from './Plot.module.css';
+import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
+import { parseTimestamp } from 'Utils';
+import VegaTimeseriesPlot from '../VegaTimeSeriesPlot/VegaTimeSeriesPlot';
+import VegaLegend from '../VegaTimeSeriesPlot/VegaLegend';
+import styles from './ForecastPlot.module.css';
+
+const DEFAULT_STYLES = [
+  {
+    color: '#ff7bb5',
+    shape: 'circle',
+    filled: false,
+    orient: 'left',
+    dash: [4, 0],
+  },
+  {
+    color: '#00b7ff',
+    shape: 'square',
+    filled: true,
+    orient: 'left',
+    dash: [4, 0],
+  },
+  {
+    color: '#97e54f',
+    shape: 'diamond',
+    filled: true,
+    orient: 'right',
+    dash: [4, 0],
+  },
+];
 
 const LAYER_TYPES = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads', 'bigotes', 'rects', 'heatmaps'];
 
-/** Get pairs containing topic and item names of the form
- * [csc-index-topic, item], based on the inputs
- * @param {object} inputs - Object containing the inputs
+/**
+ * Slices the input data array based on the specified parameters.
+ * This function is used to limit the amount of data displayed in the plot.
+ *
+ * @param {Object} inputData - The input data array to be sliced.
+ * @param {number} sliceSize - The maximum size of the data slice.
+ * @param {boolean} sliceInvert - Whether to invert the slice order.
+ * @param {number} sizeLimit - The maximum size limit for the data.
  */
-const getTopicItemPair = (inputs) => {
-  const topics = {};
-  Object.keys(inputs).forEach((inputKey) => {
-    const input = inputs[inputKey];
-    Object.values(input.values).forEach((value) => {
-      topics[inputKey] = [`${value.csc}-${value.salindex}-${value.topic}`, value.item];
-    });
-  });
-  return topics;
+const sliceInputData = (inputData, sliceSize, sliceInvert, sizeLimit) => {
+  if (inputData.length > sliceSize) {
+    if (sliceInvert) {
+      if (inputData.length > sizeLimit) {
+        return inputData.slice(-1 * sizeLimit).slice(0, sliceSize);
+      } else {
+        return inputData.slice(0, sliceSize);
+      }
+    } else {
+      return inputData.slice(-1 * sliceSize);
+    }
+  }
+  return inputData;
 };
 
-const Plot = ({
+const ForecastPlot = ({
   xAxisTitle = 'Time',
   temporalXAxis = true,
   temporalXAxisFormat = '%H:%M',
   legendPosition = 'right',
-  controls = false,
   inputs = {},
   streams = {},
   width,
   height,
   maxHeight = 240,
   containerNode,
-  timeSeriesControlsProps,
+  sliceSize = 1800,
+  sliceInvert = false,
   sizeLimit = 1800,
   scaleIndependent = false,
   scaleDomain,
-  taiToUtc = 37,
-  topicsFieldsInfo,
   subscribeToStreams,
   unsubscribeToStreams,
 }) => {
   const [liveData, setLiveData] = useState({});
-  const [isLive, setIsLive] = useState(timeSeriesControlsProps?.isLive ?? true);
-  const [timeWindow, setTimeWindow] = useState(timeSeriesControlsProps?.timeWindow ?? 60);
-  const [historicalData, setHistoricalData] = useState(timeSeriesControlsProps?.historicalData ?? []);
   const [plotWidth, setPlotWidth] = useState(width);
   const [plotHeight, setPlotHeight] = useState(height);
 
-  const timeSeriesControlRef = useRef();
   const legendRef = useRef();
   const resizeObserver = useRef();
 
@@ -89,13 +111,12 @@ const Plot = ({
     const resizeHandler = (entries) => {
       window.requestAnimationFrame(() => {
         const container = entries[0];
-        const diffControlHeight = timeSeriesControlRef.current?.offsetHeight ?? 0;
         const diffAxisXTitleHeight = xAxisTitle !== '' ? 14 : 0;
         const diffLegendHeight =
           ((legendPosition === '' || legendPosition === 'bottom') && legendRef.current?.offsetHeight) || 0;
         const diffLegendWidth = (legendPosition === 'right' && legendRef.current?.offsetWidth) || 0;
 
-        setPlotHeight(container.contentRect.height - diffControlHeight - diffAxisXTitleHeight - diffLegendHeight);
+        setPlotHeight(container.contentRect.height - diffAxisXTitleHeight - diffLegendHeight);
         setPlotWidth(container.contentRect.width - diffLegendWidth);
       });
     };
@@ -116,7 +137,7 @@ const Plot = ({
         resizeObserver.current.disconnect();
       }
     };
-  }, [containerNode, width, height, timeSeriesControlRef.current, legendRef.current, legendPosition, xAxisTitle]);
+  }, [containerNode, width, height, legendRef.current, legendPosition, xAxisTitle]);
 
   const memoizedLegend = useMemo(() => {
     return Object.keys(inputs).map((inputName) => {
@@ -132,7 +153,7 @@ const Plot = ({
     return Object.keys(inputs).map((inputName, index) => {
       return {
         name: inputName,
-        ...defaultStyles[index % defaultStyles.length],
+        ...DEFAULT_STYLES[index % DEFAULT_STYLES.length],
         ...(inputs[inputName].type !== undefined ? { markType: inputs[inputName].type } : {}),
         ...(inputs[inputName].color !== undefined ? { color: inputs[inputName].color } : {}),
         ...(inputs[inputName].dash !== undefined ? { dash: inputs[inputName].dash } : {}),
@@ -145,111 +166,52 @@ const Plot = ({
     });
   }, [inputs]);
 
-  /** Queries the EFD for timeseries data based on the start date and time window.
-   * @param {Moment} startDate - Start date of the query.
-   * @param {number} timeWindow - Time window in minutes.
-   */
-  const handleHistoricalData = (startDate, timeWindow) => {
-    const efdInstance = getEFDInstanceForHost();
-    if (!efdInstance) {
-      return;
-    }
-    const parsedDate = startDate.utc().format(ISO_STRING_DATE_TIME_FORMAT);
-    const cscs = parsePlotInputsEFD(inputs);
-    const tsLabel = 'x';
-    const valueLabel = 'y';
-    ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min', efdInstance).then((data) => {
-      if (!data) return;
-      const parsedData = parseCommanderData(data, tsLabel, valueLabel, topicsFieldsInfo);
-      setHistoricalData(parsedData);
-    });
-  };
-
-  /** Effect to handle historical data when the component mounts */
-  useEffect(() => {
-    if (
-      historicalData.length === 0 &&
-      inputs &&
-      Object.keys(inputs).length > 0 &&
-      topicsFieldsInfo &&
-      Object.keys(topicsFieldsInfo).length > 0
-    ) {
-      const currentDate = Moment().subtract(timeWindow / 2, 'minutes');
-      handleHistoricalData(currentDate, timeWindow);
-    }
-  }, [inputs, topicsFieldsInfo]);
-
-  /** Get data for the plot, based on the inputs
-   * @param {object} dataArray - Data to be filtered
-   * @param {number} timeWindow - Time window in minutes
-   *
-   * Notes:
-   * - If isLive is true, the data is filtered based on the timeWindow
-   * - If isLive is false, the data is filtered based on the historicalData
-   */
-  const mergeLiveAndHistoricalData = (dataArray) => {
-    let filteredData;
-    const topics = getTopicItemPair(inputs);
-    const parsedHistoricalData = Object.keys(topics).flatMap((key) => {
-      const [topicName, property] = topics[key];
-      const inputConfig = inputs[key];
-      const { accessor } = inputConfig.values[0];
-      const accessorFunc = eval(accessor);
-      return (historicalData[topicName]?.[property] ?? []).map((dataPoint) => ({
-        ...dataPoint,
-        name: key,
-        y: accessorFunc(dataPoint.y),
-      }));
-    });
-    if (!isLive) {
-      filteredData = parsedHistoricalData;
-    } else {
-      const joinedData = (parsedHistoricalData ?? []).concat(dataArray ?? []);
-      filteredData = joinedData.filter((val) => {
-        const currentSeconds = new Date().getTime() / 1000;
-        const timemillis = val.x?.ts ?? val.x;
-        const dataSeconds = timemillis / 1000 + taiToUtc;
-        if (dataSeconds >= currentSeconds - timeWindow * 60) return true;
-        return false;
-      });
-    }
-    return filteredData;
-  };
-
   /** Effect to parse inputs and streams data */
   useEffect(() => {
     const newData = {};
     for (const [inputName, inputConfig] of Object.entries(inputs)) {
-      const inputData = [...(liveData[inputName] ?? [])];
-      const lastValue = inputData.length > 0 ? inputData[inputData.length - 1] : null;
-      const { category, csc, salindex, topic, item, accessor } = inputConfig.values[0];
-      const accessorFunc = eval(accessor);
-
-      const streamName = `${category}-${csc}-${salindex}-${topic}`;
-      if (!streams[streamName]?.[item]) {
-        continue;
-      }
-
-      const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
-
       const newValue = {
         name: inputName,
-        x: parseTimestamp(streamValue[TOPIC_TIMESTAMP_ATTRIBUTE]?.value * 1000),
-        y: accessorFunc(streamValue[item]?.value),
+        values: [],
+        units: {},
       };
 
-      if (lastValue?.x?.ts !== newValue.x?.ts && newValue.x) {
-        inputData.push(newValue);
+      for (const value of Object.values(inputConfig.values)) {
+        const { category, csc, salindex, topic, item, accessor, variable = 'y' } = value;
+        const accessorFunc = eval(accessor);
+
+        const streamName = `${category}-${csc}-${salindex}-${topic}`;
+        if (!streams[streamName]?.[item]) {
+          continue;
+        }
+
+        const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
+        const values = accessorFunc(streamValue[item]?.value);
+        const units = streamValue[item]?.units;
+
+        newValue['x'] = parseTimestamp(streamValue[TOPIC_TIMESTAMP_ATTRIBUTE]?.value * 1000);
+        newValue['units'][variable] = units;
+
+        for (let i = 0; i < values.length; i++) {
+          newValue.values[i] = {
+            ...(newValue.values[i] ?? {}),
+            [variable]: values[i],
+          };
+        }
       }
 
-      if (inputData.length > sizeLimit) {
-        newData[inputName] = inputData.slice(-1 * sizeLimit);
-      } else {
-        newData[inputName] = inputData;
-      }
+      const inputData = [];
+      Object.entries(newValue.values).forEach((entry) => {
+        const input = { ...entry[1] };
+        input['units'] = newValue.units;
+        input['x'] = parseTimestamp(input['x'] * 1000);
+        inputData.push(input);
+      });
+
+      newData[inputName] = sliceInputData(inputData, sliceSize, sliceInvert, sizeLimit);
     }
     setLiveData(newData);
-  }, [inputs, streams, sizeLimit]);
+  }, [inputs, streams, sliceSize, sliceInvert, sizeLimit]);
 
   const dataLengthsHash = useMemo(() => {
     return Object.entries(liveData)
@@ -266,7 +228,10 @@ const Plot = ({
         continue;
       }
 
-      let inputData = mergeLiveAndHistoricalData(liveData[inputName]);
+      const inputData = (liveData[inputName] ?? []).map((d) => ({
+        name: inputName,
+        ...d,
+      }));
       layers[layerName] = [...(layers[layerName] ?? []), ...inputData];
     }
     return layers;
@@ -274,17 +239,6 @@ const Plot = ({
 
   return (
     <>
-      {controls && (
-        <div className={styles.controlsContainer} ref={timeSeriesControlRef}>
-          <TimeSeriesControls
-            isLive={isLive}
-            setLiveMode={setIsLive}
-            timeWindow={timeWindow}
-            setTimeWindow={setTimeWindow}
-            setHistoricalData={handleHistoricalData}
-          />
-        </div>
-      )}
       {legendPosition === 'right' ? (
         <div className={styles.containerFlexRow}>
           <VegaTimeseriesPlot
@@ -326,7 +280,7 @@ const Plot = ({
   );
 };
 
-Plot.propTypes = {
+ForecastPlot.propTypes = {
   /** Title of the x axis */
   xAxisTitle: PropTypes.string,
   /** Title of the y axis */
@@ -337,8 +291,6 @@ Plot.propTypes = {
   temporalXAxisFormat: PropTypes.string,
   /** Position of the legends: right or bottom */
   legendPosition: PropTypes.string,
-  /** If true, controls to configure the time window will be rendered */
-  controls: PropTypes.bool,
   /** Inputs for the plot */
   inputs: PropTypes.object,
   /** Width of the plot in pixels */
@@ -351,8 +303,11 @@ Plot.propTypes = {
    *  Use this instead of props.width and props.height for responsive plots.
    *  Will be ignored if both props.width and props.height are provided */
   containerNode: PropTypes.instanceOf(Element),
-  /** Object with the configuration of the timeSeriesControls */
-  timeSeriesControlsProps: PropTypes.object,
+  /** Size of the slice array, when receive more the historical data that the window time for the visualization */
+  sliceSize: PropTypes.number,
+  /** In weatherforecast for the hourly telemetry, receive 14 days to the future, but It's necessary the firts 48 hours.
+   * Used for the correctly operation of array between daily and hourly telemetry */
+  sliceInvert: PropTypes.bool,
   /** Size array of telemetry of the weatherforecast, It's needed for the correctly slice */
   sizeLimit: PropTypes.number,
   /** Used for the multi axis when the scale of data is difference, for example the units data is percent and milimeters */
@@ -370,4 +325,4 @@ Plot.propTypes = {
   unsubscribeToStreams: PropTypes.func,
 };
 
-export default Plot;
+export default ForecastPlot;

@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -36,7 +38,7 @@ export const schema = {
     },
     controls: {
       type: 'boolean',
-      description: "Whether to display controls to configure periods of time'",
+      description: 'Whether to display controls to configure periods of time',
       default: true,
       isPrivate: false,
     },
@@ -48,31 +50,31 @@ export const schema = {
     },
     infoHeader: {
       type: 'boolean',
-      description: "Whether to display info header'",
+      description: 'Whether to display info header',
       default: true,
       isPrivate: false,
     },
     cloud: {
       type: 'boolean',
-      description: "Whether to display plot of cloud'",
+      description: 'Whether to display plot of cloud',
       default: true,
       isPrivate: false,
     },
     wind: {
       type: 'boolean',
-      description: "Whether to display plot of wind'",
+      description: 'Whether to display plot of wind',
       default: true,
       isPrivate: false,
     },
     temperature: {
       type: 'boolean',
-      description: "Whether to display plot of temperature'",
+      description: 'Whether to display plot of temperature',
       default: true,
       isPrivate: false,
     },
     rain: {
       type: 'boolean',
-      description: "Whether to display  plot of precipitation'",
+      description: 'Whether to display  plot of precipitation',
       default: true,
       isPrivate: false,
     },

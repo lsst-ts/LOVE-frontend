@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -16,13 +18,6 @@ This program is distributed in the hope that it will be useful,but WITHOUT ANY
 You should have received a copy of the GNU General Public License along with 
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
-
-import React from 'react';
-import { connect } from 'react-redux';
-import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getStreamsData, getEfdConfig, getTaiToUtc } from 'redux/selectors';
-import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
-import Plot from 'components/GeneralPurpose/Plot/Plot';
 
 export const schema = {
   description: 'View of Precipitation Plot of Weather Forecast',
@@ -63,13 +58,6 @@ export const schema = {
       type: 'string',
       description: "Format the time, for example the daily use '%Y-%m-%d' and hourly '%d, %H:%M'",
       default: '%Y-%m-%d',
-      isPrivate: false,
-    },
-    isForecast: {
-      type: 'boolean',
-      description:
-        'When is the Weather Forecast, the telemetries receive all data of the interval, and this case, the data its diference process',
-      default: true,
       isPrivate: false,
     },
     scaleIndependent: {
@@ -216,77 +204,3 @@ export const schema = {
     },
   },
 };
-
-const containerRef = React.createRef();
-
-const RainPlotContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
-  const { containerNode } = props;
-  if (props.isRaw) {
-    return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
-  }
-  if (!props.containerNode) {
-    return (
-      <div ref={containerRef}>
-        <Plot
-          subscribeToStreams={subscribeToStreams}
-          unsubscribeToStreams={unsubscribeToStreams}
-          {...props}
-          containerNode={containerRef?.current?.parentNode}
-        />
-      </div>
-    );
-  } else {
-    return (
-      <Plot
-        subscribeToStreams={subscribeToStreams}
-        unsubscribeToStreams={unsubscribeToStreams}
-        {...props}
-        containerNode={containerNode}
-      />
-    );
-  }
-};
-
-const getGroupNames = (inputs) => {
-  const inputsMap = Object.values(inputs).map((inputConfig) => {
-    if (inputConfig.values) {
-      const values = Object.values(inputConfig.values).map((value) => {
-        return `${value?.category}-${value?.csc}-${value?.salindex}-${value?.topic}`;
-      });
-      return values;
-    } else {
-      return `${inputConfig?.category}-${inputConfig?.csc}-${inputConfig?.salindex}-${inputConfig?.topic}`;
-    }
-  });
-  return [...new Set(inputsMap.flat())];
-};
-
-const mapStateToProps = (state, ownProps) => {
-  const inputs = ownProps.inputs || schema.props.inputs.default;
-  const subscriptions = getGroupNames(inputs);
-  const streams = getStreamsData(state, subscriptions);
-  const taiToUtc = getTaiToUtc(state);
-  const efdConfigFile = getEfdConfig(state);
-  return {
-    inputs,
-    streams,
-    taiToUtc,
-    efdConfigFile,
-  };
-};
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-  const inputs = ownProps.inputs || schema.props.inputs.default;
-  const subscriptions = getGroupNames(inputs);
-
-  return {
-    subscriptions,
-    subscribeToStreams: () => {
-      subscriptions.forEach((s) => dispatch(addGroup(s)));
-    },
-    unsubscribeToStreams: () => {
-      subscriptions.forEach((s) => dispatch(removeGroup(s)));
-    },
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(RainPlotContainer);

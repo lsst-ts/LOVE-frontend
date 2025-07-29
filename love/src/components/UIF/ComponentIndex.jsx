@@ -279,7 +279,7 @@ export const observatoryIndex = {
     },
   },
   WindPlotForecast: {
-    component: require('../WeatherForecast/PlotsContainer/WindPlot.container').default,
+    component: require('../GeneralPurpose/Plot/ForecastPlot/ForecastPlot.container').default,
     schema: {
       ...require('../WeatherForecast/PlotsContainer/WindPlot.container').schema,
       props: {
@@ -289,7 +289,7 @@ export const observatoryIndex = {
     },
   },
   TemperaturePlotForecast: {
-    component: require('../WeatherForecast/PlotsContainer/TemperaturePlot.container').default,
+    component: require('../GeneralPurpose/Plot/ForecastPlot/ForecastPlot.container').default,
     schema: {
       ...require('../WeatherForecast/PlotsContainer/TemperaturePlot.container').schema,
       props: {
@@ -299,7 +299,7 @@ export const observatoryIndex = {
     },
   },
   RainPlotForecast: {
-    component: require('../WeatherForecast/PlotsContainer/RainPlot.container').default,
+    component: require('../GeneralPurpose/Plot/ForecastPlot/ForecastPlot.container').default,
     schema: {
       ...require('../WeatherForecast/PlotsContainer/RainPlot.container').schema,
       props: {
@@ -309,7 +309,7 @@ export const observatoryIndex = {
     },
   },
   CloudPlotForecast: {
-    component: require('../WeatherForecast/PlotsContainer/CloudPlot.container').default,
+    component: require('../GeneralPurpose/Plot/ForecastPlot/ForecastPlot.container').default,
     schema: {
       ...require('../WeatherForecast/PlotsContainer/CloudPlot.container').schema,
       props: {
