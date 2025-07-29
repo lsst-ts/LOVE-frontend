@@ -20,8 +20,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
-import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
-import { parseTimestamp, handlePlotHistoricalData } from 'Utils';
+import { ISO_STRING_DATE_TIME_FORMAT, TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
+import ManagerInterface, { getEFDInstanceForHost, parseCommanderData, parsePlotInputsEFD, parseTimestamp } from 'Utils';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import VegaLegend from './VegaTimeSeriesPlot/VegaLegend';
@@ -50,6 +50,8 @@ const DEFAULT_STYLES = [
     dash: [4, 0],
   },
 ];
+
+const LAYER_TYPES = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads', 'bigotes', 'rects', 'heatmaps'];
 
 /** Get pairs containing topic and item names of the form
  * [csc-index-topic, item], based on the inputs
@@ -96,7 +98,7 @@ const Plot = ({
   subscribeToStreams,
   unsubscribeToStreams,
 }) => {
-  const [data, setData] = useState({});
+  const [liveData, setLiveData] = useState({});
   const [isLive, setIsLive] = useState(timeSeriesControlsProps?.isLive ?? true);
   const [timeWindow, setTimeWindow] = useState(timeSeriesControlsProps?.timeWindow ?? 60);
   const [historicalData, setHistoricalData] = useState(timeSeriesControlsProps?.historicalData ?? []);
@@ -107,16 +109,93 @@ const Plot = ({
   const legendRef = useRef();
   const resizeObserver = useRef();
 
-  /** Queries the EFD for timeserresizeObserveries
+  useEffect(() => {
+    subscribeToStreams();
+    return () => {
+      unsubscribeToStreams();
+    };
+  }, []);
+
+  const setResizeObserver = () => {
+    if (!(containerNode instanceof Element)) return;
+    const resizeHandler = (entries) => {
+      window.requestAnimationFrame(() => {
+        const container = entries[0];
+        const diffControlHeight = timeSeriesControlRef.current?.offsetHeight ?? 0;
+        const diffAxisXTitleHeight = xAxisTitle !== '' ? 14 : 0;
+        const diffLegendHeight =
+          ((legendPosition === '' || legendPosition === 'bottom') && legendRef.current?.offsetHeight) || 0;
+        const diffLegendWidth = (legendPosition === 'right' && legendRef.current?.offsetWidth) || 0;
+
+        setPlotHeight(container.contentRect.height - diffControlHeight - diffAxisXTitleHeight - diffLegendHeight);
+        setPlotWidth(container.contentRect.width - diffLegendWidth);
+      });
+    };
+
+    resizeObserver.current = new ResizeObserver(resizeHandler);
+    resizeObserver.current.observe(containerNode);
+  };
+
+  /**
+   * Set resize observer if containerNode is defined and width and height are not defined.
+   */
+  useEffect(() => {
+    if (width === undefined && height === undefined && containerNode) {
+      setResizeObserver();
+    }
+    return () => {
+      if (resizeObserver.current) {
+        resizeObserver.current.disconnect();
+      }
+    };
+  }, [containerNode, width, height, timeSeriesControlRef.current, legendRef.current, legendPosition, xAxisTitle]);
+
+  const memoizedLegend = useMemo(() => {
+    return Object.keys(inputs).map((inputName) => {
+      return {
+        label: inputName,
+        name: inputName,
+        markType: inputs[inputName].type,
+      };
+    });
+  }, [inputs]);
+
+  const memoizedMarksStyles = useMemo(() => {
+    return Object.keys(inputs).map((inputName, index) => {
+      return {
+        name: inputName,
+        ...DEFAULT_STYLES[index % DEFAULT_STYLES.length],
+        ...(inputs[inputName].type !== undefined ? { markType: inputs[inputName].type } : {}),
+        ...(inputs[inputName].color !== undefined ? { color: inputs[inputName].color } : {}),
+        ...(inputs[inputName].dash !== undefined ? { dash: inputs[inputName].dash } : {}),
+        ...(inputs[inputName].shape !== undefined ? { shape: inputs[inputName].shape } : {}),
+        ...(inputs[inputName].filled !== undefined ? { filled: inputs[inputName].filled } : {}),
+        ...(inputs[inputName].orient !== undefined ? { orient: inputs[inputName].orient } : { orient: 'left' }),
+        ...(inputs[inputName].hideAxis !== undefined ? { hideAxis: inputs[inputName].hideAxis } : { hideAxis: false }),
+        ...(inputs[inputName].offset !== undefined ? { offset: inputs[inputName].offset } : { offset: 0 }),
+      };
+    });
+  }, [inputs]);
+
+  /** Queries the EFD for timeseries data based on the start date and time window.
    * @param {Moment} startDate - Start date of the query.
    * @param {number} timeWindow - Time window in minutes.
    */
-  const memoizedHandleHistoricalData = useCallback(
-    (startDate, timeWindow) => {
-      return handlePlotHistoricalData(startDate, timeWindow, inputs, topicsFieldsInfo, setHistoricalData);
-    },
-    [inputs, topicsFieldsInfo, setHistoricalData],
-  );
+  const handleHistoricalData = (startDate, timeWindow) => {
+    const efdInstance = getEFDInstanceForHost();
+    if (!efdInstance) {
+      return;
+    }
+    const parsedDate = startDate.utc().format(ISO_STRING_DATE_TIME_FORMAT);
+    const cscs = parsePlotInputsEFD(inputs);
+    const tsLabel = 'x';
+    const valueLabel = 'y';
+    ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min', efdInstance).then((data) => {
+      if (!data) return;
+      const parsedData = parseCommanderData(data, tsLabel, valueLabel, topicsFieldsInfo);
+      setHistoricalData(parsedData);
+    });
+  };
 
   /** Effect to handle historical data when the component mounts */
   useEffect(() => {
@@ -128,54 +207,46 @@ const Plot = ({
       Object.keys(topicsFieldsInfo).length > 0
     ) {
       const currentDate = Moment().subtract(timeWindow / 2, 'minutes');
-      memoizedHandleHistoricalData(currentDate, timeWindow);
+      handleHistoricalData(currentDate, timeWindow);
     }
-  }, [JSON.stringify(inputs.values), topicsFieldsInfo, setHistoricalData]);
+  }, [inputs, topicsFieldsInfo]);
 
   /** Get data for the plot, based on the inputs
-   * @param {object} data - Data to be filtered
+   * @param {object} dataArray - Data to be filtered
    * @param {number} timeWindow - Time window in minutes
    *
    * Notes:
    * - If isLive is true, the data is filtered based on the timeWindow
    * - If isLive is false, the data is filtered based on the historicalData
    */
-  const memoizedGetRangedData = useCallback(
-    (dataArray) => {
-      let filteredData;
-      const topics = getTopicItemPair(inputs);
-      const parsedHistoricalData = Object.keys(topics).flatMap((key) => {
-        const [topicName, property] = topics[key];
-        const inputConfig = inputs[key];
-        // Usual telemetries only contains 1 value, hence we can use the first element of the array
-        const { accessor } = inputConfig.values[0];
-        /* eslint no-eval: 0 */
-        const accessorFunc = eval(accessor);
-        return (historicalData[topicName]?.[property] ?? []).map((dataPoint) => ({
-          ...dataPoint,
-          name: key,
-          y: accessorFunc(dataPoint.y),
-        }));
+  const mergeLiveAndHistoricalData = (dataArray) => {
+    let filteredData;
+    const topics = getTopicItemPair(inputs);
+    const parsedHistoricalData = Object.keys(topics).flatMap((key) => {
+      const [topicName, property] = topics[key];
+      const inputConfig = inputs[key];
+      const { accessor } = inputConfig.values[0];
+      const accessorFunc = eval(accessor);
+      return (historicalData[topicName]?.[property] ?? []).map((dataPoint) => ({
+        ...dataPoint,
+        name: key,
+        y: accessorFunc(dataPoint.y),
+      }));
+    });
+    if (!isLive) {
+      filteredData = parsedHistoricalData;
+    } else {
+      const joinedData = (parsedHistoricalData ?? []).concat(dataArray ?? []);
+      filteredData = joinedData.filter((val) => {
+        const currentSeconds = new Date().getTime() / 1000;
+        const timemillis = val.x?.ts ?? val.x;
+        const dataSeconds = timemillis / 1000 + taiToUtc;
+        if (dataSeconds >= currentSeconds - timeWindow * 60) return true;
+        return false;
       });
-      if (!isLive) {
-        filteredData = parsedHistoricalData;
-      } else {
-        if ((!dataArray || dataArray.length == 0) && (!parsedHistoricalData || parsedHistoricalData.length == 0)) {
-          return [];
-        }
-        const joinedData = parsedHistoricalData.concat(dataArray ?? []);
-        filteredData = joinedData.filter((val) => {
-          const currentSeconds = new Date().getTime() / 1000;
-          const timemillis = val.x?.ts ?? val.x;
-          const dataSeconds = timemillis / 1000 + taiToUtc;
-          if (dataSeconds >= currentSeconds - timeWindow * 60) return true;
-          return false;
-        });
-      }
-      return filteredData;
-    },
-    [inputs, historicalData, isLive, timeWindow, taiToUtc],
-  );
+    }
+    return filteredData;
+  };
 
   /** Parse inputs and streams to generate data to be plotted
    *
@@ -187,7 +258,7 @@ const Plot = ({
   const parseInputsStreams = () => {
     const newData = {};
     for (const [inputName, inputConfig] of Object.entries(inputs)) {
-      const inputData = [...(data[inputName] ?? [])];
+      const inputData = [...(liveData[inputName] ?? [])];
       const lastValue = inputData.length > 0 ? inputData[inputData.length - 1] : null;
 
       // Usual telemetries only contains 1 value, hence we can use the first element of the array
@@ -218,7 +289,7 @@ const Plot = ({
         newData[inputName] = inputData;
       }
     }
-    setData(newData);
+    setLiveData(newData);
   };
 
   /** Parse inputs and streams to generate data to be plotted
@@ -285,49 +356,8 @@ const Plot = ({
       }
       newData[inputName] = inputData;
     }
-    setData(newData);
+    setLiveData(newData);
   };
-
-  const setResizeObserver = () => {
-    if (!(containerNode instanceof Element)) return;
-    const resizeHandler = (entries) => {
-      window.requestAnimationFrame(() => {
-        const container = entries[0];
-        const diffControlHeight = timeSeriesControlRef.current?.offsetHeight ?? 0;
-        const diffAxisXTitleHeight = xAxisTitle !== '' ? 14 : 0;
-        const diffLegendHeight =
-          ((legendPosition === '' || legendPosition === 'bottom') && legendRef.current?.offsetHeight) || 0;
-        const diffLegendWidth = (legendPosition === 'right' && legendRef.current?.offsetWidth) || 0;
-
-        setPlotHeight(container.contentRect.height - diffControlHeight - diffAxisXTitleHeight - diffLegendHeight);
-        setPlotWidth(container.contentRect.width - diffLegendWidth);
-      });
-    };
-
-    resizeObserver.current = new ResizeObserver(resizeHandler);
-    resizeObserver.current.observe(containerNode);
-  };
-
-  /**
-   * Set resize observer if containerNode is defined and width and height are not defined.
-   */
-  useEffect(() => {
-    if (width === undefined && height === undefined && containerNode) {
-      setResizeObserver();
-    }
-    return () => {
-      if (resizeObserver.current) {
-        resizeObserver.current.disconnect();
-      }
-    };
-  }, [containerNode, width, height, timeSeriesControlRef.current, legendRef.current, legendPosition, xAxisTitle]);
-
-  useEffect(() => {
-    subscribeToStreams();
-    return () => {
-      unsubscribeToStreams();
-    };
-  }, []);
 
   useEffect(() => {
     if (isForecast) {
@@ -337,58 +367,31 @@ const Plot = ({
     }
   }, [inputs, streams, sliceSize, sliceInvert, sizeLimit, isForecast]);
 
-  const layerTypes = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads', 'bigotes', 'rects', 'heatmaps'];
   const dataLengthsHash = useMemo(() => {
-    return Object.entries(data)
+    return Object.entries(liveData)
       .map(([key, value]) => `${key}:${value.length}`)
       .join('|');
-  }, [data]);
+  }, [liveData]);
+
   const layers = useMemo(() => {
     const layers = {};
     for (const [inputName, inputConfig] of Object.entries(inputs)) {
       const { type } = inputConfig;
       const layerName = type + 's';
-      if (!layerTypes.includes(layerName)) {
+      if (!LAYER_TYPES.includes(layerName)) {
         continue;
       }
 
       let inputData;
       if (isForecast) {
-        inputData = getForecastData(inputName, data[inputName]);
+        inputData = getForecastData(inputName, liveData[inputName]);
       } else {
-        inputData = memoizedGetRangedData(data[inputName]);
+        inputData = mergeLiveAndHistoricalData(liveData[inputName]);
       }
       layers[layerName] = [...(layers[layerName] ?? []), ...inputData];
     }
     return layers;
-  }, [inputs, dataLengthsHash, memoizedGetRangedData]);
-
-  const memoizedLegend = useMemo(() => {
-    return Object.keys(inputs).map((inputName) => {
-      return {
-        label: inputName,
-        name: inputName,
-        markType: inputs[inputName].type,
-      };
-    });
-  }, [inputs]);
-
-  const memoizedMarksStyles = useMemo(() => {
-    return Object.keys(inputs).map((inputName, index) => {
-      return {
-        name: inputName,
-        ...DEFAULT_STYLES[index % DEFAULT_STYLES.length],
-        ...(inputs[inputName].type !== undefined ? { markType: inputs[inputName].type } : {}),
-        ...(inputs[inputName].color !== undefined ? { color: inputs[inputName].color } : {}),
-        ...(inputs[inputName].dash !== undefined ? { dash: inputs[inputName].dash } : {}),
-        ...(inputs[inputName].shape !== undefined ? { shape: inputs[inputName].shape } : {}),
-        ...(inputs[inputName].filled !== undefined ? { filled: inputs[inputName].filled } : {}),
-        ...(inputs[inputName].orient !== undefined ? { orient: inputs[inputName].orient } : { orient: 'left' }),
-        ...(inputs[inputName].hideAxis !== undefined ? { hideAxis: inputs[inputName].hideAxis } : { hideAxis: false }),
-        ...(inputs[inputName].offset !== undefined ? { offset: inputs[inputName].offset } : { offset: 0 }),
-      };
-    });
-  }, [inputs]);
+  }, [dataLengthsHash, inputs, isForecast]);
 
   return (
     <>
@@ -399,7 +402,7 @@ const Plot = ({
             setLiveMode={setIsLive}
             timeWindow={timeWindow}
             setTimeWindow={setTimeWindow}
-            setHistoricalData={memoizedHandleHistoricalData}
+            setHistoricalData={handleHistoricalData}
           />
         </div>
       )}

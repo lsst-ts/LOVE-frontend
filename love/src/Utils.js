@@ -24,7 +24,6 @@ import Moment from 'moment';
 import {
   WEBSOCKET_SIMULATION,
   SUBPATH,
-  ISO_STRING_DATE_TIME_FORMAT,
   ISO_INTEGER_DATE_FORMAT,
   AUTO_HYPERLINK_JIRA_PROJECTS,
   JIRA_TICKETS_BASE_URL,
@@ -2430,6 +2429,7 @@ export function getEFDInstanceForHost() {
 /**
  * Parse plot inputs and convert them to a format the EFD API understands.
  * The transformation is done from:
+ *
  * [
  *   {name: {csc, salindex, topic, item}}
  * ]
@@ -2471,119 +2471,121 @@ export const parsePlotInputsEFD = (inputs) => {
 };
 
 /**
- * Reformat data coming from the commander to a format that the Plot component expects.
+ * Reformats data from the commander into a structure compatible with the Plot component.
+ *
+ * This function processes the response received from the commander when querying the EFD endpoint.
+ * It handles the InfluxDB array fields format (items with suffixes like
+ * `arrayItem0`, `arrayItem1`, etc.) by grouping their values.
+ * Topic names from InfluxDB also contain the `logevent_` prefix
+ * for log events, which is removed in the output.
+ * It converts timestamps to the required format.
  *
  * Input format:
  * {
- *   "csc-index-topic": {
+ *   "csc-index-topicA": {
  *     "item": [
  *       {
  *         "ts": "2021-01-26 19:15:00+00:00",
- *         "value": 6.9,
- *         "units": "deg"
- *       },
+ *         "value": 3.14
+ *       }
  *     ],
+ *     "arrayItem0": [
+ *       {
+ *         "ts": "2021-01-26 19:15:00+00:00",
+ *         "value": 0.0
+ *       }
+ *     ],
+ *     "arrayItem1": [
+ *       {
+ *         "ts": "2021-01-26 19:15:00+00:00",
+ *         "value": 1.0
+ *       }
+ *     ],
+ *    "arrayItem9": [
+ *       {
+ *         "ts": "2021-01-26 19:15:00+00:00",
+ *         "value": 9.0
+ *       }
+ *     ]
+ *   },
+ *   "csc-index-logevent_topicB": {
+ *     "item": [
+ *       {
+ *         "ts": "2021-01-26 19:15:00+00:00",
+ *         "value": 2.71
+ *       }
+ *     ]
  *   }
  * }
  *
  * Output format:
  * {
- *   "csc-index-topic": {
+ *   "csc-index-topicA": {
  *     "item": [
  *       {
  *         <tsLabel>: "2021-01-26 19:15:00+00:00",
- *         <valueLabel>: 6.9,
- *         "units": { y: "deg" }
+ *         <valueLabel>: 3.14
+ *       }
+ *     ],
+ *     "arrayItem": [
+ *       {
+ *         <tsLabel>: "2021-01-26 19:15:00+00:00",
+ *         <valueLabel>: [0.0, 1.0, empty x 7, 9.0]
+ *       }
+ *     ]
+ *   },
+ *   "csc-index-topicB": {
+ *     "item": [
+ *       {
+ *         <tsLabel>: "2021-01-26 19:15:00+00:00",
+ *         <valueLabel>: 2.71
  *       }
  *     ]
  *   }
  * }
  *
  */
-export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y') => {
+export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y', salFieldsInfo = {}) => {
   const newData = {};
-  Object.keys(data).forEach((topicKey) => {
-    const topicData = data[topicKey];
-    const newTopicData = {};
-    Object.keys(topicData).forEach((propertyKey) => {
-      const propertyDataArray = topicData[propertyKey];
-      newTopicData[propertyKey] = propertyDataArray.map((dataPoint) => {
-        const tsString = dataPoint?.ts.split(' ').join('T');
-        const parsedTsString = parseTimestamp(tsString);
-        return {
-          units: { y: dataPoint?.units },
-          [tsLabel]: parsedTsString,
-          [valueLabel]: dataPoint?.value,
-        };
-      });
+  Object.entries(data).forEach(([efdTopicKey, efdTopicData]) => {
+    const csc = efdTopicKey.split('-')[0];
+    const topic = efdTopicKey.split('-')[2];
+    const isEvent = efdTopicKey.includes('logevent_');
+    const topicKey = efdTopicKey.replace('logevent_', '');
+    newData[topicKey] = {};
+    Object.entries(efdTopicData).forEach(([efdItemKey, efdItemData]) => {
+      const itemKey = efdItemKey.replace(/[\d]+$/, '');
+      const itemMetadata = salFieldsInfo[csc]?.[isEvent ? 'event_data' : 'telemetry_data']?.[topic]?.[itemKey];
+      const itemIsArray = itemMetadata?.count > 1;
+
+      if (itemIsArray) {
+        // If the item is an array initialize its data points with empty arrays
+        if (!newData[topicKey][itemKey]) {
+          newData[topicKey][itemKey] = efdItemData.map((dataPoint) => {
+            const tsString = dataPoint?.ts.split(' ').join('T');
+            const parsedTsString = parseTimestamp(tsString);
+            return {
+              [tsLabel]: parsedTsString,
+              [valueLabel]: [],
+            };
+          });
+        }
+
+        const itemIndex = parseInt(efdItemKey.match(/[\d]+$/)[0], 10);
+        newData[topicKey][itemKey].forEach((dataPoint, index) => {
+          dataPoint[valueLabel][itemIndex] = efdItemData[index]?.value;
+        });
+      } else {
+        newData[topicKey][efdItemKey] = efdItemData?.map((dataPoint) => {
+          const tsString = dataPoint?.ts.split(' ').join('T');
+          const parsedTsString = parseTimestamp(tsString);
+          return {
+            [tsLabel]: parsedTsString,
+            [valueLabel]: dataPoint?.value,
+          };
+        });
+      }
     });
-    newData[topicKey] = newTopicData;
   });
   return newData;
 };
-
-/**
- * Handles the retrieval and processing of historical plot data from the EFD.
- * This function queries the EFD for historical data based on the provided inputs, processes the data to handle
- * Influx DB array fields and log events and format the payload as the Plot component expects.
- * Finally updates the historical data state using the provided callback function.
- *
- * See also:
- * `getEFDInstanceForHost`, which retrieves the EFD instance for the current hostname.
- * `parsePlotInputsEFD`, which transforms the Plot inputs into a format suitable for querying the EFD.
- * `ManagerInterface.getEFDTimeseries`, which queries the EFD for historical data.
- * `parseCommanderData`, which reformats the data coming from the commander.
- *
- * @param {Object} startDate - The start date for the historical data query, expected to be a moment.js object.
- * @param {number} timeWindow - The time window (in minutes) for the historical data query.
- * @param {Object} inputs - An object of inputs configurations for the Plot component.
- * @param {Object} salFieldsInfo - An object containing information about the SAL fields.
- * @param {Function} setHistoricalData - A callback function to set the processed historical data. A setState function is expected.
- *
- * @returns {void} This function does not return a value.
- */
-export function handlePlotHistoricalData(startDate, timeWindow, inputs, salFieldsInfo, setHistoricalData) {
-  const efdInstance = getEFDInstanceForHost();
-  if (!efdInstance) {
-    return;
-  }
-  const parsedDate = startDate.utc().format(ISO_STRING_DATE_TIME_FORMAT);
-  const cscs = parsePlotInputsEFD(inputs);
-  const tsLabel = 'x';
-  const valueLabel = 'y';
-  ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min', efdInstance).then((data) => {
-    if (!data) return;
-    const parsedData = parseCommanderData(data, tsLabel, valueLabel);
-    Object.keys(parsedData).forEach((key) => {
-      const topicData = parsedData[key];
-      const csc = key.split('-')[0];
-      const topic = key.split('-')[2];
-      const isEvent = key.includes('logevent_');
-      Object.keys(topicData).forEach((efdItemKey) => {
-        const efdItemData = topicData[efdItemKey];
-        const itemKey = efdItemKey.replace(/[\d]+$/, '');
-        const itemData = topicData[itemKey];
-        const itemMetadata = salFieldsInfo[csc]?.[isEvent ? 'event_data' : 'telemetry_data']?.[topic]?.[itemKey];
-        const itemIsArray = itemMetadata?.count > 1;
-        if (itemIsArray) {
-          if (!itemData) {
-            topicData[itemKey] = efdItemData.map((dataPoint) => ({
-              ...dataPoint,
-              [valueLabel]: [],
-            }));
-          }
-          const itemIndex = parseInt(efdItemKey.match(/[\d]+$/)[0], 10);
-          topicData[itemKey].forEach((dataPoint, index) => {
-            dataPoint[valueLabel][itemIndex] = efdItemData[index]?.[valueLabel];
-          });
-          delete topicData[efdItemKey];
-        }
-      });
-      if (isEvent) {
-        parsedData[key.replace('logevent_', '')] = parsedData[key];
-        delete parsedData[key];
-      }
-    });
-    setHistoricalData(parsedData);
-  });
-}
