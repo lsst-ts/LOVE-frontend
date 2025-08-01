@@ -34,17 +34,66 @@ const observatoryStateTelemetriesMapping = {
 };
 
 const efdTelemetriesStateMapping = {
-  'MTMount-0-azimuth': 'simonyiAzimuth',
-  'MTMount-0-elevation': 'simonyiElevation',
-  'MTDome-0-azimuth': 'simonyiDomeAzimuth',
-  'MTRotator-0-rotation': 'simonyiRotator',
-  'MTMount-0-logevent_mirrorCoversMotionState': 'simonyiMirrorCoversState',
-  'MTMount-0-logevent_oilSupplySystemState': 'simonyiOilSupplySystemState',
-  'MTMount-0-logevent_mainAxesPowerSupplySystemState': 'simonyiPowerSupplySystemState',
-  'MTMount-0-logevent_elevationLockingPinMotionState': 'simonyiLockingPinsSystemState',
-  'ATMCS-0-mount_AzEl_Encoders': 'auxtelAzimuth',
-  'ATDome-0-position': 'auxtelDomeAzimuth',
-  'ATPneumatics-0-logevent_m1CoverState': 'auxtelMirrorCoversState',
+  'MTMount-0-azimuth': ['simonyiAzimuth'],
+  'MTMount-0-elevation': ['simonyiElevation'],
+  'MTDome-0-azimuth': ['simonyiDomeAzimuth'],
+  'MTRotator-0-rotation': ['simonyiRotator'],
+  'MTMount-0-logevent_mirrorCoversMotionState': ['simonyiMirrorCoversState'],
+  'MTMount-0-logevent_oilSupplySystemState': ['simonyiOilSupplySystemState'],
+  'MTMount-0-logevent_mainAxesPowerSupplySystemState': ['simonyiPowerSupplySystemState'],
+  'MTMount-0-logevent_elevationLockingPinMotionState': ['simonyiLockingPinsSystemState'],
+  'ATMCS-0-mount_AzEl_Encoders': ['auxtelAzimuth', 'auxtelElevation'],
+  'ATDome-0-position': ['auxtelDomeAzimuth'],
+  'ATPneumatics-0-logevent_m1CoverState': ['auxtelMirrorCoversState'],
+};
+
+/**
+ * Parses telescope state values from an EFD response object.
+ *
+ * Input format:
+ * {
+ *   "MTMount-0-azimuth": {
+ *     "actualPosition": [
+ *       {
+ *         "ts": "2025-08-30 21:00:00+00:00",
+ *         "value": 3.14
+ *       }
+ *     ]
+ *   },
+ *   "MTMount-0-elevation": {
+ *     "simonyiElevation": [
+ *       {
+ *         "ts": "2025-08-30 21:00:00+00:00",
+ *         "value": 2.71
+ *       }
+ *     ]
+ *   },
+ *  ...
+ * }
+ *
+ * Output format:
+ * {
+ *  "simonyiAzimuth": 3.14,
+ *  "simonyiElevation": 2.71,
+ *  ...
+ * }
+ *
+ * @param {Object} efdResponse - The EFD response object containing telemetry data, keyed by <CSC-saldindex-topicName>.
+ * @returns {Object} An object mapping each state variable name to its extracted value from the EFD response.
+ */
+const parseTelescopesStatesFromEFD = (efdResponse) => {
+  return Object.entries(efdResponse).reduce((acc, [topic, topicData]) => {
+    const stateVarNames = efdTelemetriesStateMapping[topic];
+    stateVarNames.forEach((stateVarName) => {
+      const topicTokens = observatoryStateTelemetriesMapping[stateVarName].split('-');
+      const item = topicTokens[4];
+      const arrayIndex = topicTokens[5] ?? '';
+      const itemName = `${item}${arrayIndex}`;
+      const newValue = topicData[itemName]?.[0].value;
+      acc[stateVarName] = newValue;
+    });
+    return acc;
+  }, {});
 };
 
 function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
@@ -80,17 +129,7 @@ function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
       if (!efdInstance) return;
       ManagerInterface.getEFDMostRecentTimeseries(cscsPayload, 1, timeCutdate, efdInstance).then((efdResponse) => {
         if (efdResponse) {
-          const newObservatoryState = {};
-          Object.keys(efdResponse).forEach((topic) => {
-            const topicData = efdResponse[topic];
-            const stateVarName = efdTelemetriesStateMapping[topic];
-            const topicTokens = observatoryStateTelemetriesMapping[stateVarName].split('-');
-            const item = topicTokens[4];
-            const arrayIndex = topicTokens[5] ?? '';
-            const itemName = `${item}${arrayIndex}`;
-            const newValue = topicData[itemName]?.[0].value;
-            newObservatoryState[stateVarName] = newValue;
-          });
+          const newObservatoryState = parseTelescopesStatesFromEFD(efdResponse);
           setObservatoryState(newObservatoryState);
         }
       });
