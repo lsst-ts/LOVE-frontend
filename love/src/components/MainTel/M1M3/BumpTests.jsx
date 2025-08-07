@@ -13,7 +13,7 @@ import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 
 import styles from './BumpTests.module.css';
 
-const AVAILABLE_EFD_CLIENTS = ['usdf_efd', 'summit_efd'];
+const AVAILABLE_EFD_CLIENTS = ['usdf_efd', 'summit_efd', 'base_efd', 'tucson_efd'];
 const AVAILABLE_ACTUATORS = [
   '101',
   '102',
@@ -209,6 +209,12 @@ function BumpTests(props) {
         render: (value) => moment(value).format(ISO_STRING_DATE_TIME_FORMAT),
       },
       {
+        field: 'result',
+        title: 'Status',
+        type: 'string',
+        render: (value) => (value ? <span title="Passed">✅️</span> : <span title="Not passed">❌</span>),
+      },
+      {
         field: 'url',
         title: 'Chronograf link',
         type: 'string',
@@ -244,7 +250,11 @@ function BumpTests(props) {
     ManagerInterface.getReportsM1M3BumpTests(parsedActuatorId, parsedStartDate, parsedEndDate, efdClient).then(
       (response) => {
         if (response) {
-          const primaryData = response.primary.map((item) => ({ ...item, type: 'primary', actuator_id: actuatorId }));
+          const primaryData = response.primary.map((item) => ({
+            ...item,
+            type: 'primary',
+            actuator_id: actuatorId,
+          }));
           const secondaryData = response.secondary.map((item) => ({
             ...item,
             type: 'secondary',
