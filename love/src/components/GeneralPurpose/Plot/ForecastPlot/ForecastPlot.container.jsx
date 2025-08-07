@@ -1,10 +1,6 @@
 /** 
 This file is part of LOVE-frontend.
 
-Copyright (c) 2023 Inria Chile.
-
-Developed by Inria Chile and the Telescope and Site Software team.
-
 Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
@@ -22,9 +18,9 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getStreamsData, getTaiToUtc, getTopicsFieldsInfo } from 'redux/selectors';
+import { getStreamsData, getTaiToUtc } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
-import Plot from './Plot';
+import ForecastPlot from './ForecastPlot';
 
 export const defaultStyles = [
   {
@@ -51,7 +47,7 @@ export const defaultStyles = [
 ];
 
 export const schema = {
-  description: 'Time series plot for any data stream coming from SAL',
+  description: 'Time series plot for any data stream coming from the WeatherForecast CSC.',
   defaultSize: [60, 30],
   props: {
     titleBar: {
@@ -72,37 +68,133 @@ export const schema = {
       description: 'list of inputs',
       isPrivate: false,
       default: {
-        'ATMCS Elevation': {
+        Temperature: {
           type: 'line',
-          ...defaultStyles[0],
+          color: '#ff7bb5',
+          shape: 'circle',
+          filled: false,
+          dash: [4, 0],
           values: [
+            {
+              variable: 'x',
+              category: 'telemetry',
+              csc: 'WeatherForecast',
+              salindex: 0,
+              topic: 'dailyTrend',
+              item: 'timestamp',
+              accessor: '(x) => x',
+            },
             {
               variable: 'y',
               category: 'telemetry',
-              csc: 'ATMCS',
-              salindex: '0',
-              topic: 'mount_AzEl_Encoders',
-              item: 'elevationCalculatedAngle',
-              accessor: '(x) => x[0]',
-              isArray: true,
-              arrayIndex: 0,
+              csc: 'WeatherForecast',
+              salindex: 0,
+              topic: 'dailyTrend',
+              item: 'temperatureMean',
+              accessor: '(x) => x',
             },
           ],
         },
-        'ATMCS Azimuth': {
-          type: 'line',
-          ...defaultStyles[1],
+        'Temperature Min/Max': {
+          type: 'area',
+          color: '#ff7bb5',
+          shape: 'circle',
+          filled: false,
+          dash: [8, 4],
+          orient: 'right',
           values: [
+            {
+              variable: 'x',
+              category: 'telemetry',
+              csc: 'WeatherForecast',
+              salindex: 0,
+              topic: 'dailyTrend',
+              item: 'timestamp',
+              accessor: '(x) => x',
+            },
             {
               variable: 'y',
               category: 'telemetry',
-              csc: 'ATMCS',
-              salindex: '0',
-              topic: 'mount_AzEl_Encoders',
-              item: 'azimuthCalculatedAngle',
-              accessor: '(x) => x[0]',
-              isArray: true,
-              arrayIndex: 0,
+              csc: 'WeatherForecast',
+              salindex: 0,
+              topic: 'dailyTrend',
+              item: 'temperatureMin',
+              accessor: '(x) => x',
+            },
+            {
+              variable: 'y2',
+              category: 'telemetry',
+              csc: 'WeatherForecast',
+              salindex: 0,
+              topic: 'dailyTrend',
+              item: 'temperatureMax',
+              accessor: '(x) => x',
+            },
+          ],
+        },
+        'Dew Point Temp': {
+          type: 'line',
+          color: '#e77bff',
+          shape: 'circle',
+          filled: false,
+          dash: [4, 0],
+          offset: 100,
+          values: [
+            {
+              variable: 'x',
+              category: 'telemetry',
+              csc: 'WeatherForecast',
+              salindex: 0,
+              topic: 'dailyTrend',
+              item: 'timestamp',
+              accessor: '(x) => x',
+            },
+            {
+              variable: 'y',
+              category: 'telemetry',
+              csc: 'WeatherForecast',
+              salindex: 0,
+              topic: 'dailyTrend',
+              item: 'dewPointTemperatureMean',
+              accessor: '(x) => x',
+            },
+          ],
+        },
+        'Dew Point Temp Min/Max': {
+          type: 'area',
+          color: '#e77bff',
+          shape: 'circle',
+          filled: false,
+          dash: [4, 2],
+          orient: 'right',
+          offset: 45,
+          values: [
+            {
+              variable: 'x',
+              category: 'telemetry',
+              csc: 'WeatherForecast',
+              salindex: 0,
+              topic: 'dailyTrend',
+              item: 'timestamp',
+              accessor: '(x) => x',
+            },
+            {
+              variable: 'y',
+              category: 'telemetry',
+              csc: 'WeatherForecast',
+              salindex: 0,
+              topic: 'dailyTrend',
+              item: 'dewPointTemperatureMin',
+              accessor: '(x) => x',
+            },
+            {
+              variable: 'y2',
+              category: 'telemetry',
+              csc: 'WeatherForecast',
+              salindex: 0,
+              topic: 'dailyTrend',
+              item: 'dewPointTemperatureMax',
+              accessor: '(x) => x',
             },
           ],
         },
@@ -127,12 +219,6 @@ export const schema = {
       default: 'right',
       isPrivate: false,
     },
-    controls: {
-      type: 'boolean',
-      description: "Whether to display controls to configure periods of time'",
-      default: true,
-      isPrivate: false,
-    },
     hasRawMode: {
       type: 'boolean',
       description: 'Whether the component has a raw mode version',
@@ -142,13 +228,13 @@ export const schema = {
   },
 };
 
-const PlotContainer = ({ containerNode, ...props }) => {
+const ForecastPlotContainer = ({ containerNode, ...props }) => {
   /**
    * The containerNode prop is a React ref (with the current parameter).
    * It is used to get the parent node of the plot. If no containerNode is passed as a prop,
    * the Plot component will be wrapped on a div and that node will
    * be used as the containerNode. Note this case will only happen when adding a plot directly
-   * from the UI framework. Other components using the PlotContainer component
+   * from the UI framework. Other components using the ForecastPlotContainer component
    * should ALWAYS pass containerNode as a prop. Also due to the way CSS works, the parent
    * node of the plot must have a height defined and its overflow should be `hidden`,
    * otherwise the plot will not be rendered correctly.
@@ -171,11 +257,11 @@ const PlotContainer = ({ containerNode, ...props }) => {
     const containerRef = React.useRef(null);
     return (
       <div style={{ height: '100%', overflow: 'hidden' }} ref={containerRef}>
-        <Plot containerNode={containerRef?.current} {...props} />
+        <ForecastPlot containerNode={containerRef?.current} {...props} />
       </div>
     );
   } else {
-    return <Plot containerNode={containerNode.current} {...props} />;
+    return <ForecastPlot containerNode={containerNode.current} {...props} />;
   }
 };
 
@@ -211,14 +297,10 @@ const mapStateToProps = (state, ownProps) => {
   const inputs = ownProps.inputs || schema.props.inputs.default;
   const groupNames = getGroupNames(inputs);
   const streams = getStreamsData(state, groupNames);
-  const taiToUtc = getTaiToUtc(state);
-  const topicsFieldsInfo = getTopicsFieldsInfo(state);
   return {
     inputs,
     streams,
-    taiToUtc,
-    topicsFieldsInfo,
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlotContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(ForecastPlotContainer);

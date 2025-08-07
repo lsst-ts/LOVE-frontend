@@ -5,6 +5,7 @@ Version History
 v6.8.2
 ------
 
+* Remove custom weather forecast logic from generic plot components. `<https://github.com/lsst-ts/LOVE-frontend/pull/727>`_
 * Fix TelescopesStates component to properly set the observatoryState from EFD response. `<https://github.com/lsst-ts/LOVE-frontend/pull/726>`_
 
 v6.8.1
