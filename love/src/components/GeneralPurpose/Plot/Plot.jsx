@@ -253,9 +253,9 @@ const Plot = ({
     setLiveData(newData);
   }, [inputs, streams, sizeLimit]);
 
-  const dataLengthsHash = useMemo(() => {
+  const dataLastTimestampHash = useMemo(() => {
     return Object.entries(liveData)
-      .map(([key, value]) => `${key}:${value.length}`)
+      .map(([key, value]) => `${key}:${value.length > 1 ? value[value.length - 1].x.ts : 0}`)
       .join('|');
   }, [liveData]);
 
@@ -267,12 +267,11 @@ const Plot = ({
       if (!LAYER_TYPES.includes(layerName)) {
         continue;
       }
-
       const inputData = mergeLiveAndHistoricalData(inputName);
       layers[layerName] = [...(layers[layerName] ?? []), ...inputData];
     }
     return layers;
-  }, [dataLengthsHash, inputs]);
+  }, [dataLastTimestampHash, inputs]);
 
   return (
     <>
