@@ -180,31 +180,29 @@ const Plot = ({
   }, [inputs, topicsFieldsInfo]);
 
   /** Get data for the plot, based on the inputs
-   * @param {object} dataArray - Data to be filtered
-   * @param {number} timeWindow - Time window in minutes
+   * @param {string} inputName - Input name present in both historicalData and liveData
    *
-   * Notes:
-   * - If isLive is true, the data is filtered based on the timeWindow
-   * - If isLive is false, the data is filtered based on the historicalData
+   * This function merges live and historical data for a given input.
+   * It filters the data based on the current time window and
+   * limits the size of the data to a specified size limit.
    */
-  const mergeLiveAndHistoricalData = (dataArray) => {
+  const mergeLiveAndHistoricalData = (inputName) => {
     let filteredData;
     const topics = getTopicItemPair(inputs);
-    const parsedHistoricalData = Object.keys(topics).flatMap((key) => {
-      const [topicName, property] = topics[key];
-      const inputConfig = inputs[key];
-      const { accessor } = inputConfig.values[0];
-      const accessorFunc = eval(accessor);
-      return (historicalData[topicName]?.[property] ?? []).map((dataPoint) => ({
-        ...dataPoint,
-        name: key,
-        y: accessorFunc(dataPoint.y),
-      }));
-    });
+    const [topicName, property] = topics[inputName];
+    const inputConfig = inputs[inputName];
+    const { accessor } = inputConfig.values[0];
+    const accessorFunc = eval(accessor);
+    const parsedHistoricalData = (historicalData[topicName]?.[property] ?? []).map((dataPoint) => ({
+      ...dataPoint,
+      name: inputName,
+      y: accessorFunc(dataPoint.y),
+    }));
+
     if (!isLive) {
       filteredData = parsedHistoricalData;
     } else {
-      const joinedData = (parsedHistoricalData ?? []).concat(dataArray ?? []);
+      const joinedData = (parsedHistoricalData ?? []).concat(liveData[inputName] ?? []);
       filteredData = joinedData.filter((val) => {
         const currentSeconds = new Date().getTime() / 1000;
         const timemillis = val.x?.ts ?? val.x;
@@ -212,6 +210,10 @@ const Plot = ({
         if (dataSeconds >= currentSeconds - timeWindow * 60) return true;
         return false;
       });
+    }
+
+    if (filteredData.length > sizeLimit) {
+      filteredData = filteredData.slice(-1 * sizeLimit);
     }
     return filteredData;
   };
@@ -266,7 +268,7 @@ const Plot = ({
         continue;
       }
 
-      let inputData = mergeLiveAndHistoricalData(liveData[inputName]);
+      const inputData = mergeLiveAndHistoricalData(inputName);
       layers[layerName] = [...(layers[layerName] ?? []), ...inputData];
     }
     return layers;
