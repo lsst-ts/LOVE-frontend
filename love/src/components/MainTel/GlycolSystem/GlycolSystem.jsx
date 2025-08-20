@@ -346,34 +346,34 @@ const telemetriesMapping = {
     pressIn: 'glycolDOMEAHU04pressureIn',
     pressOut: 'glycolDOMEAHU04pressureOut',
   },
-  'Cable Wrap': {
-    flow: 'glycolCableWrapflow',
-    tempIn: 'glycolCableWraptemperatureIn',
-    tempOut: 'glycolCableWraptemperatureOut',
-    pressIn: 'glycolCableWrappressureIn',
-    pressOut: 'glycolCableWrappressureOut',
-  },
-  'Dynalene 1': {
-    flow: 'glycolDynalene01flow',
-    tempIn: 'glycolDynalene01temperatureIn',
-    tempOut: 'glycolDynalene01temperatureOut',
-    pressIn: 'glycolDynalene01pressureIn',
-    pressOut: 'glycolDynalene01pressureOut',
-  },
-  'Dynalene 2': {
-    flow: 'glycolDynalene02flow',
-    tempIn: 'glycolDynalene02temperatureIn',
-    tempOut: 'glycolDynalene02temperatureOut',
-    pressIn: 'glycolDynalene02pressureIn',
-    pressOut: 'glycolDynalene02pressureOut',
-  },
-  TMA: {
-    flow: 'glycolTMAflow',
-    tempIn: 'glycolTMAtemperatureIn',
-    tempOut: 'glycolTMAtemperatureOut',
-    pressIn: 'glycolTMApressureIn',
-    pressOut: 'glycolTMApressureOut',
-  },
+  // 'Cable Wrap': {
+  //   flow: 'glycolCableWrapflow',
+  //   tempIn: 'glycolCableWraptemperatureIn',
+  //   tempOut: 'glycolCableWraptemperatureOut',
+  //   pressIn: 'glycolCableWrappressureIn',
+  //   pressOut: 'glycolCableWrappressureOut',
+  // },
+  // 'Dynalene 1': {
+  //   flow: 'glycolDynalene01flow',
+  //   tempIn: 'glycolDynalene01temperatureIn',
+  //   tempOut: 'glycolDynalene01temperatureOut',
+  //   pressIn: 'glycolDynalene01pressureIn',
+  //   pressOut: 'glycolDynalene01pressureOut',
+  // },
+  // 'Dynalene 2': {
+  //   flow: 'glycolDynalene02flow',
+  //   tempIn: 'glycolDynalene02temperatureIn',
+  //   tempOut: 'glycolDynalene02temperatureOut',
+  //   pressIn: 'glycolDynalene02pressureIn',
+  //   pressOut: 'glycolDynalene02pressureOut',
+  // },
+  // TMA: {
+  //   flow: 'glycolTMAflow',
+  //   tempIn: 'glycolTMAtemperatureIn',
+  //   tempOut: 'glycolTMAtemperatureOut',
+  //   pressIn: 'glycolTMApressureIn',
+  //   pressOut: 'glycolTMApressureOut',
+  // },
 };
 
 const devicesPipesMapping = {
@@ -390,10 +390,10 @@ const devicesPipesMapping = {
   'DOME AHU 2': 12,
   'DOME AHU 3': 13,
   'DOME AHU 4': 14,
-  'Cable Wrap': 15,
-  'Dynalene 1': 16,
-  'Dynalene 2': 17,
-  TMA: 18,
+  // 'Cable Wrap': 15,
+  // 'Dynalene 1': 16,
+  // 'Dynalene 2': 17,
+  // TMA: 18,
 };
 
 const devicesLevelMapping = {
@@ -410,10 +410,10 @@ const devicesLevelMapping = {
   'DOME AHU 2': 5,
   'DOME AHU 3': 5,
   'DOME AHU 4': 5,
-  'Cable Wrap': 5,
-  'Dynalene 1': 5,
-  'Dynalene 2': 5,
-  TMA: 5,
+  // 'Cable Wrap': 5,
+  // 'Dynalene 1': 5,
+  // 'Dynalene 2': 5,
+  // TMA: 5,
 };
 
 const devicesHeatThresholds = {
@@ -430,10 +430,10 @@ const devicesHeatThresholds = {
   'DOME AHU 2': 1000,
   'DOME AHU 3': 1000,
   'DOME AHU 4': 1000,
-  'Cable Wrap': 1000,
-  'Dynalene 1': 1000,
-  'Dynalene 2': 1000,
-  TMA: 1000,
+  // 'Cable Wrap': 1000,
+  // 'Dynalene 1': 1000,
+  // 'Dynalene 2': 1000,
+  // TMA: 1000,
 };
 
 const devicesQuerySelectorMapping = {
@@ -450,10 +450,10 @@ const devicesQuerySelectorMapping = {
   'DOME AHU 2': '#Dome > #ahu-zone',
   'DOME AHU 3': '#Dome > #ahu-zone',
   'DOME AHU 4': '#Dome > #ahu-zone',
-  'Cable Wrap': '#Dome > #underneath-tma',
-  'Dynalene 1': '#Dome > #underneath-tma',
-  'Dynalene 2': '#Dome > #underneath-tma',
-  TMA: '#Dome > #underneath-tma',
+  // 'Cable Wrap': '#Dome > #underneath-tma',
+  // 'Dynalene 1': '#Dome > #underneath-tma',
+  // 'Dynalene 2': '#Dome > #underneath-tma',
+  // TMA: '#Dome > #underneath-tma',
 };
 
 const deviceHeatSurpassThreshold = (device, heat) => {
@@ -875,6 +875,12 @@ GlycolTable.propTypes = {
 function GlycolPlots({ data }) {
   return (
     <div className={styles.glycolPlotsContainer}>
+      <div className={[styles.plotContainer, styles.wide].join(' ')}>
+        <div className={styles.highlight}>Glycol Flow</div>
+        <div className={styles.plot}>
+          <PlotContainer inputs={flowPlotInputs} controls={false} legendPosition="bottom" xAxisTitle="Time" />
+        </div>
+      </div>
       <div className={styles.plotContainer}>
         <div className={styles.highlight}>Glycol Temperature In</div>
         <div className={styles.plot}>
@@ -907,12 +913,6 @@ function GlycolPlots({ data }) {
         <div className={styles.highlight}>Glycol Pressure Out</div>
         <div className={styles.plot}>
           <PlotContainer inputs={pressureReturnPlotInputs} controls={false} legendPosition="bottom" xAxisTitle="Time" />
-        </div>
-      </div>
-      <div className={styles.plotContainer}>
-        <div className={styles.highlight}>Glycol Flow</div>
-        <div className={styles.plot}>
-          <PlotContainer inputs={flowPlotInputs} controls={false} legendPosition="bottom" xAxisTitle="Time" />
         </div>
       </div>
     </div>
