@@ -135,6 +135,10 @@
   border-radius: 0.25em;
 }
 
+.plotContainer.wide {
+  flex: 1 1 100%;
+}
+
 .glycolPlotsContainer .plot {
   height: 200px;
 }
