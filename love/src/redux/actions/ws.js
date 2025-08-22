@@ -31,6 +31,7 @@ import {
   UPDATE_LAST_SAL_COMMAND,
   UPDATE_LAST_SAL_COMMAND_STATUS,
   SEND_ACTION,
+  UPDATE_NIGHT_REPORT_DATA,
 } from './actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
 import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } from './camera';
@@ -44,6 +45,7 @@ import { receiveLogMessageData, receiveErrorCodeData } from './summaryData';
 import { receiveAlarm, receiveAllAlarms } from './alarms';
 import { receiveServerTime } from './time';
 import { receiveObservingLog } from './observingLogs';
+import { updateNightReport } from './nightReport';
 import { getConnectionStatus, getTokenStatus, getToken, getSubscriptions, getSubscription } from '../selectors';
 import { tokenStates } from '../reducers/auth';
 
@@ -271,6 +273,11 @@ export const openWebsocketConnection = () => {
           if (data.data[0].csc === 'Watcher') {
             if (stream.alarm) dispatch(receiveAlarm(stream.alarm[0]));
             else if (stream.stream) dispatch(receiveAllAlarms(stream.stream.alarms));
+          }
+
+          if (data.data[0].csc === 'LOVE' && data.data[0].data.nightReportUpdates) {
+            const report = data.data[0].data.nightReportUpdates;
+            dispatch(updateNightReport(report));
           }
 
           if (data.data[0].data.logMessage) {
@@ -564,5 +571,34 @@ export const sendAction = (action) => {
       type: SEND_ACTION,
       action,
     });
+  };
+};
+
+/**
+ * Send custom event data
+ */
+export const sendEvent = (csc, salindex, stream, data) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const connectionStatus = getConnectionStatus(state);
+    if (connectionStatus !== connectionStates.OPEN) {
+      return false;
+    }
+
+    const eventObject = {
+      csc,
+      salindex,
+      data: {
+        [stream]: {
+          ...data,
+        },
+      },
+    };
+
+    socket.json({
+      category: 'event',
+      data: [eventObject],
+    });
+    return true;
   };
 };

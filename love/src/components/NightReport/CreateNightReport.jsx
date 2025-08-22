@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import debounce from 'lodash.debounce';
+import isEqual from 'lodash/isEqual';
 import Moment from 'moment';
 import ManagerInterface, { fixedFloat, getObsDayStartFromDate } from 'Utils';
 import {
@@ -32,6 +34,13 @@ const STEPS = {
   NOTSAVED: 1,
   SAVED: 2,
   SENT: 3,
+};
+
+// Add new alert types for night report conflicts
+const CONFLICT_ALERT_TYPES = {
+  REPORT_CREATED: 'REPORT_CREATED',
+  REPORT_UPDATED: 'REPORT_UPDATED',
+  REPORT_SENT: 'REPORT_SENT',
 };
 
 const getCurrentStatusText = (currentStep) => {
@@ -239,86 +248,85 @@ function ConfluenceURLField({ isEditDisabled, confluenceURL, setConfluenceURL })
   );
 }
 
-function AlertsSection({ refreshWarningActive, changesNotSaved }) {
+function AlertsSection({ refreshWarningActive, changesNotSaved, conflictAlert, onConflictResolution }) {
   const refreshedWarningThresholdHours = parseInt(LAST_REFRESHED_WARNING_THRESHOLD_MINUTES / 60, 10);
+
   return (
     <div className={styles.alerts}>
       {refreshWarningActive && (
         <Alert type="warning">
           The page has not been refreshed in the last {refreshedWarningThresholdHours}{' '}
           {refreshedWarningThresholdHours > 1 ? 'hours' : 'hour'} and someone could have done changes. Please{' '}
-          <a
-            href="#"
-            onClick={() => {
-              location.reload();
-            }}
-          >
+          <a href="#" onClick={() => location.reload()}>
             refresh
           </a>{' '}
           the page to get the latest data and don't forget to backup your changes if needed.
         </Alert>
       )}
+
       {changesNotSaved && <Alert type="error">Changes on the current draft have not been saved yet.</Alert>}
+
+      {conflictAlert && (
+        <Alert type="warning">
+          <div>
+            <div>{conflictAlert.message}</div>
+            <div style={{ marginTop: 'var(--small-padding)', display: 'flex', gap: 'var(--small-padding)' }}>
+              <Button size="small" onClick={() => onConflictResolution('accept_remote')}>
+                Accept Their Changes
+              </Button>
+              <Button size="small" onClick={() => onConflictResolution('keep_local')}>
+                Keep My Changes
+              </Button>
+              <Button size="small" onClick={() => onConflictResolution('refresh')}>
+                Refresh Page
+              </Button>
+            </div>
+          </div>
+        </Alert>
+      )}
     </div>
   );
 }
 
-function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
+function ObservatoryForm({ report, setReport, broadcastNightReport, observatoryState, cscStates }) {
   const [currentStep, setCurrentStep] = useState(STEPS.NOTSAVED);
   const [userOptions, setUserOptions] = useState([]);
-  const [selectedUsers, setSelectedUsers] = useState([]);
-  const [summary, setSummary] = useState('');
-  const [weather, setWeather] = useState('');
-  const [simonyiStatus, setSimonyiStatus] = useState('');
-  const [auxtelStatus, setAuxtelStatus] = useState('');
-  const [confluenceURL, setConfluenceURL] = useState('');
-  const [reportID, setReportID] = useState();
-  const [changesNotSaved, setChangesNotSaved] = useState(false);
-  const [loading, setLoading] = useState({
-    save: false,
-    send: false,
-  });
-  const [lastRefreshed, setLastRefreshed] = useState(Moment());
-  const [refreshWarningActive, setRefreshWarningActive] = useState(false);
+  const [loading, setLoading] = useState({ save: false, send: false });
+  const [storedReport, setStoredReport] = useState();
+
+  const debouncedBroadcastNightreport = useCallback(
+    debounce((report) => {
+      broadcastNightReport(report);
+    }, 1000),
+    [],
+  );
 
   const updateReport = (report) => {
     setReport(report);
+    debouncedBroadcastNightreport(report);
     if (report.date_sent) {
       setCurrentStep(STEPS.SENT);
     } else {
       setCurrentStep(STEPS.SAVED);
     }
-    setReportID(report.id);
-    setSelectedUsers(report.observers_crew);
-    setSummary(report.summary);
-    setWeather(report.weather);
-    setSimonyiStatus(report.maintel_summary);
-    setAuxtelStatus(report.auxtel_summary);
-    setConfluenceURL(report.confluence_url);
   };
 
   useEffect(() => {
-    // Query users
     ManagerInterface.getUsers().then((users) => {
       setUserOptions(users.map((u) => `${u.first_name} ${u.last_name}`));
     });
 
-    // Query current night report
-    ManagerInterface.getCurrentNightReport().then((reports) => {
-      if (reports.length > 0) {
-        updateReport(reports[0]);
-      }
-    });
-
-    // Set interval to trigger renders
-    const interval = setInterval(() => {
-      const warningActive = Moment().diff(lastRefreshed, 'minutes') > LAST_REFRESHED_WARNING_THRESHOLD_MINUTES;
-      setRefreshWarningActive(warningActive);
-    }, LAST_REFRESHED_WARNING_CHECK_INTERVAL_MS);
-
-    return () => {
-      clearInterval(interval);
-    };
+    setLoading({ ...loading, save: true });
+    ManagerInterface.getCurrentNightReport()
+      .then((reports) => {
+        if (reports.length > 0) {
+          updateReport(reports[0]);
+          setStoredReport(reports[0]);
+        }
+      })
+      .finally(() => {
+        setLoading({ ...loading, save: false });
+      });
   }, []);
 
   const handleSent = (event) => {
@@ -352,6 +360,7 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
       ManagerInterface.sendCurrentNightReport(reportID, parsedObservatoryState, parsedCSCStates).then((report) => {
         if (report) {
           updateReport(report);
+          setStoredReport(report);
         }
         setLoading({ ...loading, send: false });
       });
@@ -363,17 +372,18 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
     if (currentStep === STEPS.NOTSAVED) {
       setLoading({ ...loading, save: true });
       ManagerInterface.saveCurrentNightReport(
-        summary,
-        weather,
-        simonyiStatus,
-        auxtelStatus,
-        confluenceURL,
-        selectedUsers,
+        report.summary,
+        report.weather,
+        report.maintel_summary,
+        report.auxtel_summary,
+        report.confluence_url,
+        report.observers_crew,
       )
         .then((report) => {
+          console.log('Report saved:', report);
           if (report) {
             updateReport(report);
-            setChangesNotSaved(false);
+            setStoredReport(report);
           }
         })
         .finally(() => {
@@ -382,18 +392,18 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
     } else {
       setLoading({ ...loading, save: true });
       ManagerInterface.updateCurrentNightReport(
-        reportID,
-        summary,
-        weather,
-        simonyiStatus,
-        auxtelStatus,
-        confluenceURL,
-        selectedUsers,
+        report.id,
+        report.summary,
+        report.weather,
+        report.maintel_summary,
+        report.auxtel_summary,
+        report.confluence_url,
+        report.observers_crew,
       )
         .then((report) => {
           if (report) {
             updateReport(report);
-            setChangesNotSaved(false);
+            setStoredReport(report);
           }
         })
         .finally(() => {
@@ -402,31 +412,38 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
     }
   };
 
+  const hasReportChanged = () => {
+    return !isEqual(report, storedReport);
+  };
+
   const isAbleToSave = () => {
     return (currentStep === STEPS.NOTSAVED || currentStep === STEPS.SAVED) && !(loading.save || loading.send);
   };
 
   const isAbleToSend = () => {
-    return currentStep === STEPS.SAVED && !changesNotSaved && !loading.send && selectedUsers.length > 0;
+    return currentStep === STEPS.SAVED && !hasReportChanged() && !loading.send && report.observers_crew?.length > 0;
   };
 
   const isEditDisabled = () => {
     return currentStep === STEPS.SENT;
   };
 
-  const handleFieldChange = (setState) => {
+  const handleFieldChange = (field) => {
     return (newValue) => {
-      setState(newValue);
-      setChangesNotSaved(true);
+      const newReport = {
+        ...report,
+        [field]: newValue,
+      };
+      updateReport(newReport);
     };
   };
 
-  const handleConfluenceURLChange = handleFieldChange(setConfluenceURL);
-  const handleSelectedUsersChange = handleFieldChange(setSelectedUsers);
-  const handleSummaryChange = handleFieldChange(setSummary);
-  const handleWeatherChange = handleFieldChange(setWeather);
-  const handleSimonyiStatusChange = handleFieldChange(setSimonyiStatus);
-  const handleAuxtelStatusChange = handleFieldChange(setAuxtelStatus);
+  const handleConfluenceURLChange = handleFieldChange('confluence_url');
+  const handleSelectedUsersChange = handleFieldChange('observers_crew');
+  const handleSummaryChange = handleFieldChange('summary');
+  const handleWeatherChange = handleFieldChange('weather');
+  const handleSimonyiStatusChange = handleFieldChange('maintel_summary');
+  const handleAuxtelStatusChange = handleFieldChange('auxtel_summary');
 
   const handleSelectedUsersChangeCallback = useCallback(handleSelectedUsersChange, []);
 
@@ -434,33 +451,37 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
     <form className={styles.formContainer}>
       <ProgressBarSection currentStep={currentStep} currentStatusText={getCurrentStatusText(currentStep)} />
 
-      <AlertsSection refreshWarningActive={refreshWarningActive} changesNotSaved={changesNotSaved} />
+      <AlertsSection
+        changesNotSaved={hasReportChanged()}
+        // conflictAlert={conflictAlert}
+        // onConflictResolution={handleConflictResolution}
+      />
 
       <TitleField />
 
-      <ConfluenceURLField confluenceURL={confluenceURL} setConfluenceURL={handleConfluenceURLChange} />
+      <ConfluenceURLField confluenceURL={report.confluence_url} setConfluenceURL={handleConfluenceURLChange} />
 
       <ObserversField
         isEditDisabled={isEditDisabled()}
         userOptions={userOptions}
-        selectedUsers={selectedUsers}
+        selectedUsers={report.observers_crew}
         setSelectedUsers={handleSelectedUsersChangeCallback}
       />
 
-      <SummaryField isEditDisabled={isEditDisabled()} summary={summary} setSummary={handleSummaryChange} />
+      <SummaryField summary={report.summary} setSummary={handleSummaryChange} isEditDisabled={isEditDisabled()} />
 
-      <WeatherField report={report} weather={weather} setWeather={handleWeatherChange} />
+      <WeatherField report={report} weather={report.weather} setWeather={handleWeatherChange} />
 
       <SimonyiStatusField
-        isEditDisabled={isEditDisabled()}
-        simonyiStatus={simonyiStatus}
+        simonyiStatus={report.maintel_summary}
         setSimonyiStatus={handleSimonyiStatusChange}
+        isEditDisabled={isEditDisabled()}
       />
 
       <AuxTelStatusField
-        isEditDisabled={isEditDisabled()}
-        auxtelStatus={auxtelStatus}
+        auxtelStatus={report.auxtel_summary}
         setAuxtelStatus={handleAuxtelStatusChange}
+        isEditDisabled={isEditDisabled()}
       />
 
       <div className={styles.buttons}>
@@ -485,9 +506,15 @@ function ObservatoryData({ report, observatoryState, cscStates }) {
   );
 }
 
-function NightReport({ observatoryState, cscStates, subscribeToStreams, unsubscribeToStreams }) {
-  const [report, setReport] = useState({});
-
+function NightReport({
+  nightReportState,
+  updateNightReport,
+  broadcastNightReport,
+  observatoryState,
+  cscStates,
+  subscribeToStreams,
+  unsubscribeToStreams,
+}) {
   useEffect(() => {
     subscribeToStreams();
     return () => {
@@ -498,17 +525,24 @@ function NightReport({ observatoryState, cscStates, subscribeToStreams, unsubscr
   return (
     <div className={styles.container}>
       <ObservatoryForm
-        report={report}
-        setReport={setReport}
+        report={nightReportState}
+        setReport={updateNightReport}
+        broadcastNightReport={broadcastNightReport}
         observatoryState={observatoryState}
         cscStates={cscStates}
       />
-      <ObservatoryData report={report} observatoryState={observatoryState} cscStates={cscStates} />
+      <ObservatoryData report={nightReportState} observatoryState={observatoryState} cscStates={cscStates} />
     </div>
   );
 }
 
 NightReport.propTypes = {
+  /** Object containing the current state of the night report */
+  nightReportState: PropTypes.object.isRequired,
+  /** Function to update the night report state */
+  updateNightReport: PropTypes.func.isRequired,
+  /** Function to broadcast the night report */
+  broadcastNightReport: PropTypes.func.isRequired,
   /** Object containing the current state of the observatory */
   observatoryState: PropTypes.object.isRequired,
   /** Object containing the current states of the CSCS */
