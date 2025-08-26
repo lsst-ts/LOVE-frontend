@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
-import ManagerInterface, { getObsDayFromDate } from 'Utils';
+import ManagerInterface, { getObsDayFromDate, isNightReportOld, getCutDateFromNightReport } from 'Utils';
 import { JIRA_TICKETS_BASE_URL, TIME_FORMAT } from 'Config';
 import Button from 'components/GeneralPurpose/Button/Button';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import RefreshIcon from 'components/icons/RefreshIcon/RefreshIcon';
+import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import TimeLossField from './TimeLossField';
 
 import styles from './CreateNightReport.module.css';
@@ -51,14 +52,19 @@ function JiraOBSTicketsTable({ report }) {
   const [lastUpdated, setLastUpdated] = useState();
   const obsTicketsPollingRef = useRef(null);
 
+  const isReportOld = isNightReportOld(report);
+
   const isEditDisabled = () => {
-    return report.date_sent ? true : false;
+    if (isReportOld) {
+      return true;
+    }
+    return false;
   };
 
   const queryTickets = (date) => {
     setLoading(true);
-    const currentObsDay = getObsDayFromDate(date);
-    ManagerInterface.getJiraOBSTickets(currentObsDay)
+    const obsDay = getObsDayFromDate(date);
+    ManagerInterface.getJiraOBSTickets(obsDay)
       .then((tickets) => {
         if (tickets) {
           setObsTickets(tickets);
@@ -74,24 +80,30 @@ function JiraOBSTicketsTable({ report }) {
   };
 
   useEffect(() => {
-    obsTicketsPollingRef.current = setInterval(() => {
+    if (!isReportOld) {
       queryTickets(Moment());
-    }, OBS_TICKETS_POLLING_INTERVAL_MS);
-    queryTickets(Moment());
-
-    return () => {
-      clearInterval(obsTicketsPollingRef.current);
-      obsTicketsPollingRef.current = null;
-    };
+      obsTicketsPollingRef.current = setInterval(() => {
+        queryTickets(Moment());
+      }, OBS_TICKETS_POLLING_INTERVAL_MS);
+      return () => {
+        if (obsTicketsPollingRef.current) {
+          clearInterval(obsTicketsPollingRef.current);
+          obsTicketsPollingRef.current = null;
+        }
+      };
+    }
   }, []);
 
   useEffect(() => {
-    if (report?.date_sent) {
-      queryTickets(Moment(report.date_sent));
-      clearInterval(obsTicketsPollingRef.current);
-      obsTicketsPollingRef.current = null;
+    if (report && isReportOld) {
+      const cutDate = getCutDateFromNightReport(report);
+      queryTickets(cutDate);
+      if (obsTicketsPollingRef.current) {
+        clearInterval(obsTicketsPollingRef.current);
+        obsTicketsPollingRef.current = null;
+      }
     }
-  }, [report?.date_sent]);
+  }, [report?.date_sent, report?.id]);
 
   const calculatedTimeLoss = tickets.reduce((acc, ticket) => {
     if (ticket.time_lost) {
@@ -143,13 +155,17 @@ function JiraOBSTicketsTable({ report }) {
         </div>
         <TimeLossField timeLoss={calculatedTimeLoss} label="Fault time loss" />
       </div>
-      <div className={styles.obsTicketsTableWrapper}>
-        {tickets && tickets.length > 0 ? (
-          <SimpleTable headers={tableHeaders} data={tickets} />
-        ) : (
-          <div>No tickets found.</div>
-        )}
-      </div>
+      {loading ? (
+        <SpinnerIcon className={styles.spinner} />
+      ) : (
+        <div className={styles.obsTicketsTableWrapper}>
+          {tickets && tickets.length > 0 ? (
+            <SimpleTable headers={tableHeaders} data={tickets} />
+          ) : (
+            <div>No tickets found.</div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

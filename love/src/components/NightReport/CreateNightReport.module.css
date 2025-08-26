@@ -267,3 +267,14 @@
   width: 1em;
   height: 1em;
 }
+
+.select {
+  white-space: nowrap;
+  flex: 0 0 200px;
+  border: 1px solid var(--second-senary-background-dimmed-color);
+}
+
+.spinner {
+  height: 1.5em;
+  width: 1.5em;
+}

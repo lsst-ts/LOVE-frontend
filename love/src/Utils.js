@@ -990,19 +990,18 @@ export default class ManagerInterface {
     });
   }
 
-  static getCurrentNightReport() {
+  static getLastNightReports({ min_day_obs, limit = 7 }) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
 
-    const currentDate = Moment().utc();
-    const nextDayDate = Moment(currentDate).add(1, 'day').utc();
-    const currentObsDay = getObsDayFromDate(currentDate);
-    const nextObsDay = getObsDayFromDate(nextDayDate);
-
     const url =
-      `${this.getApiBaseUrl()}ole/nightreport/reports/?` + `min_day_obs=${currentObsDay}&max_day_obs=${nextObsDay}`;
+      `${this.getApiBaseUrl()}ole/nightreport/reports` +
+      `?order_by=-date_added` +
+      `&limit=${limit}` +
+      (min_day_obs ? `&min_day_obs=${min_day_obs}` : '');
+
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
@@ -2043,6 +2042,18 @@ export function getObsDayStartFromDate(date) {
 }
 
 /**
+ * Returns a Moment object representing the end of the given observation day.
+ * The end is defined as 11:59:59.999 (noon) on the day after the provided obsDay.
+ *
+ * @param {string|number} obsDay - The observation day in 'YYYYMMDD' format.
+ * @returns {Object} Moment object set to 11:59:59.999 on the next day.
+ */
+export function getObsDayEnd(obsDay) {
+  const utcDate = Moment(obsDay.toString(), 'YYYYMMDD').utc();
+  return utcDate.add(1, 'day').set({ hour: 11, minute: 59, second: 59, millisecond: 999 });
+}
+
+/**
  * Convert the given OBS day (YYYYMMDD) to ISO format (YYYY-MM-DD).
  *
  * @param {number} obsDay - The OBS day to convert as an interger.
@@ -2589,3 +2600,55 @@ export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y', salFie
   });
   return newData;
 };
+
+/**
+ * Determines if a night report is considered old.
+ *
+ * A report is considered old if its `day_obs` property does not match the current observing day,
+ * or if it has a `date_sent` property.
+ *
+ * If the report parameter is not provided, the function returns false.
+ *
+ * @param {Object} [report] - The night report object to check (optional).
+ * @param {number} report.day_obs - The observing day of the report.
+ * @param {string|Date} report.date_sent - The date the report was sent.
+ * @returns {boolean} Returns true if the report is old, otherwise false.
+ */
+export function isNightReportOld(report) {
+  if (!report) return false;
+
+  const currentObsDay = parseInt(getObsDayFromDate(Moment(), 10));
+  return !!(report.day_obs !== currentObsDay || report.date_sent);
+}
+
+/**
+ * Get the cut date from a night report.
+ *
+ * If the report was sent during its corresponding observing day,
+ * the cut date is the the sent date of the report.
+ *
+ * If the report has not been sent yet or was sent
+ * after its corresponding observing day, the cut date is the end of its
+ * observing day, i.e. 11:59:59 UTC of the next calendar day.
+ *
+ * If the report parameter is not provided, the function returns null.
+ *
+ * @param {object} report
+ * @param {number} report.day_obs - The observing day of the report.
+ * @param {string|Date} report.date_sent - The date the report was sent.
+ * @returns {Object|null} Moment object representing the cut date in UTC, or null if no report is provided.
+ */
+export function getCutDateFromNightReport(report) {
+  if (!report) return null;
+
+  const obsDayEnd = getObsDayEnd(report.day_obs);
+  if (report.date_sent) {
+    const sentDate = Moment(report.date_sent + 'Z');
+
+    if (sentDate.isAfter(obsDayEnd)) {
+      return obsDayEnd;
+    }
+    return sentDate;
+  }
+  return obsDayEnd;
+}

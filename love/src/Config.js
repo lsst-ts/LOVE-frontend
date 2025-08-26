@@ -82,6 +82,12 @@ export const EFD_INSTANCES = {
   'tucson-teststand.lsst.codes': 'tucson_teststand_efd',
 };
 
+export const EFD_RETENTION_DAYS_PER_INSTANCE = {
+  summit_efd: 30,
+  base_efd: 7,
+  tucson_teststand_efd: 7,
+};
+
 // URL for TimesSquare Night Report > Obs tickets report
 // ready to be used by replacing the {DAY} with the desired date in 'YYYY-MM-DD' format
 export const TIMES_SQUARE_OBS_TICKETS_REPORT_URL =

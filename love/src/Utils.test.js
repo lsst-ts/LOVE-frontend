@@ -1,5 +1,86 @@
-import { htmlToJiraMarkdown, jiraMarkdownToHtml, convertJiraTicketNamesToHyperlinks } from './Utils';
+import Moment from 'moment';
+import {
+  htmlToJiraMarkdown,
+  jiraMarkdownToHtml,
+  convertJiraTicketNamesToHyperlinks,
+  getObsDayFromDate,
+  getObsDayEnd,
+  isNightReportOld,
+  getCutDateFromNightReport,
+} from './Utils';
 import { JIRA_TICKETS_BASE_URL } from './Config';
+
+describe('getObsDayEnd', () => {
+  it('should return the next calendar day at 11:59:59 UTC after the specified obs day', () => {
+    const obsday = 20250910;
+    const obsDayEnd = getObsDayEnd(obsday);
+    expect(obsDayEnd.format('YYYY-MM-DD HH:mm:ss')).toBe('2025-09-11 11:59:59');
+  });
+});
+
+describe('getCutDateFromNightReport', () => {
+  it('should return null if report is null or undefined', () => {
+    expect(getCutDateFromNightReport(null)).toBe(null);
+    expect(getCutDateFromNightReport(undefined)).toBe(null);
+  });
+
+  if (
+    ('should return the report date_sent if is present and was sent on its corresponding obs day',
+    () => {
+      const report = {
+        day_obs: 20250910,
+        date_sent: '2025-09-11T11:30:00.000000',
+      };
+      const cutDate = getCutDateFromNightReport(report);
+      expect(cutDate).not.toBe(null);
+      expect(cutDate.format('YYYY-MM-DD HH:mm:ss')).toBe('2025-09-11 11:30:00');
+    })
+  );
+
+  if (
+    ('should return the end of the obs day if the report has not been sent yet',
+    () => {
+      const report = {
+        day_obs: 20250910,
+        date_sent: null,
+      };
+      const cutDate = getCutDateFromNightReport(report);
+      expect(cutDate).not.toBe(null);
+      expect(cutDate.format('YYYY-MM-DD HH:mm:ss')).toBe('2025-09-11 11:59:59');
+    })
+  );
+
+  it('should return the end of the obs day if the report was sent on a different day than its corresponding obs day', () => {
+    const report = {
+      day_obs: 20250910,
+      date_sent: '2025-09-12T11:30:00.000000',
+    };
+    const cutDate = getCutDateFromNightReport(report);
+    expect(cutDate).not.toBe(null);
+    expect(cutDate.format('YYYY-MM-DD HH:mm:ss')).toBe('2025-09-11 11:59:59');
+  });
+});
+
+describe('isNightReportOld', () => {
+  it('should return false if report is null or undefined', () => {
+    expect(isNightReportOld(null)).toBe(false);
+    expect(isNightReportOld(undefined)).toBe(false);
+  });
+
+  it('should return false if report.day_obs is equals to the current day obs', () => {
+    const currentObsDay = parseInt(getObsDayFromDate(Moment(), 10));
+    expect(isNightReportOld({ day_obs: currentObsDay })).toBe(false);
+  });
+
+  if (
+    (`should return true if report.day_obs is equals to the current day obs
+and report.date_sent is truthy `,
+    () => {
+      const currentObsDay = parseInt(getObsDayFromDate(Moment(), 10));
+      expect(isNightReportOld({ day_obs: currentObsDay, date_sent: Moment().toISOString() })).toBe(true);
+    })
+  );
+});
 
 describe('htmlToJiraMarkdown', () => {
   it('should handle links', () => {

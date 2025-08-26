@@ -1,36 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
-import ManagerInterface, { getEFDInstanceForHost } from 'Utils';
+import ManagerInterface, { getEFDInstanceForHost, isNightReportOld, getCutDateFromNightReport } from 'Utils';
 import { ISO_STRING_DATE_TIME_FORMAT } from 'Config';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
+import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 
 import styles from './CreateNightReport.module.css';
 
 function CSCStates({ report, cscs: cscsProp }) {
   const [cscs, setCscs] = useState(cscsProp);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (!report?.date_sent) {
-      setCscs(cscsProp);
-    }
-  }, [cscsProp, report?.date_sent]);
+  const isReportOld = isNightReportOld(report);
 
-  useEffect(() => {
-    if (report?.date_sent) {
-      const timeCutdate = Moment(report.date_sent).format(ISO_STRING_DATE_TIME_FORMAT);
-      const cscsPayload = {};
-      Object.keys(cscs).forEach((cscName) => {
-        const [csc, index] = cscName.split(':');
-        cscsPayload[csc] = {
-          [index]: {
-            logevent_summaryState: ['summaryState'],
-          },
-        };
-      });
-      const efdInstance = getEFDInstanceForHost();
-      if (!efdInstance) return;
-      ManagerInterface.getEFDMostRecentTimeseries(cscsPayload, 1, timeCutdate, efdInstance).then((efdResponse) => {
+  const fetchHistoricalData = () => {
+    const cutDate = getCutDateFromNightReport(report);
+    const timeCutdate = Moment(cutDate).format(ISO_STRING_DATE_TIME_FORMAT);
+    const cscsPayload = {};
+    Object.keys(cscs).forEach((cscName) => {
+      const [csc, index] = cscName.split(':');
+      cscsPayload[csc] = {
+        [index]: {
+          logevent_summaryState: ['summaryState'],
+        },
+      };
+    });
+    const efdInstance = getEFDInstanceForHost();
+    if (!efdInstance) return;
+
+    setLoading(true);
+    ManagerInterface.getEFDMostRecentTimeseries(cscsPayload, 1, timeCutdate, efdInstance)
+      .then((efdResponse) => {
         if (efdResponse) {
           const newCscs = {};
           Object.keys(efdResponse).forEach((topic) => {
@@ -41,27 +42,45 @@ function CSCStates({ report, cscs: cscsProp }) {
           });
           setCscs(newCscs);
         }
+      })
+      .finally(() => {
+        setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    if (!isReportOld) {
+      setCscs(cscsProp);
     }
-  }, [report?.date_sent]);
+  }, [cscsProp, isReportOld]);
+
+  useEffect(() => {
+    if (report && isReportOld) {
+      fetchHistoricalData();
+    }
+  }, [report?.date_sent, report?.id]);
 
   return (
     <div className={styles.cscStatesContainer}>
       <div className={styles.cscStatesTitle}>
         <div>CSCs States</div>
       </div>
-      <div className={styles.cscStates}>
-        {Object.keys(cscs).map((cscNameIndex) => {
-          const cscState = cscs[cscNameIndex];
-          const stateObject = CSCDetail.states[cscState ?? 0];
-          return (
-            <div key={cscNameIndex} className={styles.cscState}>
-              <div className={styles.cscName}>{cscNameIndex}</div>
-              <div title={stateObject.name} className={stateObject.class}></div>
-            </div>
-          );
-        })}
-      </div>
+      {loading ? (
+        <SpinnerIcon className={styles.spinner} />
+      ) : (
+        <div className={styles.cscStates}>
+          {Object.keys(cscs).map((cscNameIndex) => {
+            const cscState = cscs[cscNameIndex];
+            const stateObject = CSCDetail.states[cscState ?? 0];
+            return (
+              <div key={cscNameIndex} className={styles.cscState}>
+                <div className={styles.cscName}>{cscNameIndex}</div>
+                <div title={stateObject.name} className={stateObject.class}></div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
