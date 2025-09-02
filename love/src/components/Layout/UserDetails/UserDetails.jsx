@@ -34,8 +34,6 @@ UserDetails.propTypes = {
   menuElementClassName: PropTypes.string,
   /** Classname to add ot the diveiders */
   dividerClassName: PropTypes.string,
-  /** Callback to execute when clicking on the XML menu element */
-  onXMLClick: PropTypes.func,
   /** Callback to execute when clicking on the Config file menu element */
   onConfigClick: PropTypes.func,
   /** Callback to execute when clicking on the Emergency contact menu element */
@@ -56,7 +54,6 @@ export default function UserDetails({
   execPermission,
   menuElementClassName,
   dividerClassName,
-  onXMLClick,
   onConfigClick,
   onEmergencyContactsClick,
   logout,
@@ -93,12 +90,6 @@ export default function UserDetails({
         <div className={styles.smallIconRow}>
           <EmergencyContactIcon active={false} className={styles.paddedIcon} />
           <span>Emergency contacts </span>
-        </div>
-      </div>
-      <div className={[menuElementClassName, styles.menuElement].join(' ')} onClick={onXMLClick}>
-        <div className={styles.smallIconRow}>
-          <ScriptIcon active={false} className={styles.paddedIcon} />
-          <span>XML versions </span>
         </div>
       </div>
       <div className={[menuElementClassName, styles.menuElement].join(' ')} onClick={onConfigClick}>

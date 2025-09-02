@@ -58,7 +58,6 @@ import AlarmAudioContainer from '../Watcher/AlarmAudio/AlarmAudio.container';
 import AlarmsList from '../Watcher/AlarmsList/AlarmsList';
 import { isAcknowledged, isMuted, isActive } from '../Watcher/AlarmUtils';
 import Modal from '../GeneralPurpose/Modal/Modal';
-import XMLTable from './XMLTable/XMLTable';
 import ConfigPanel from './ConfigPanel/ConfigPanel';
 import EmergencyContactsPanel from './EmergencyContactsPanel/EmergencyContactsPanel';
 import AboutPanel from './AboutPanel/AboutPanel';
@@ -137,7 +136,6 @@ class Layout extends Component {
       heartbeatStatus: {},
       heartbeatInfo: {},
       hovered: false, // true if leftTopbar is being hovered
-      isXMLModalOpen: false,
       isConfigModalOpen: false,
       isEmergencyContactsModalOpen: false,
       isAboutModalOpen: false,
@@ -648,7 +646,6 @@ class Layout extends Component {
                 this.setState({ tokenSwapRequested: true });
                 this.props.requireUserSwap(true);
               }}
-              onXMLClick={() => this.setState({ isXMLModalOpen: true })}
               onConfigClick={() => this.setState({ isConfigModalOpen: true })}
               onEmergencyContactsClick={() => this.setState({ isEmergencyContactsModalOpen: true })}
               onAboutClick={() => this.setState({ isAboutModalOpen: true })}
@@ -726,7 +723,6 @@ class Layout extends Component {
                 this.setState({ tokenSwapRequested: true });
                 this.props.requireUserSwap(true);
               }}
-              onXMLClick={() => this.setState({ isXMLModalOpen: true })}
               onConfigClick={() => this.setState({ isConfigModalOpen: true })}
               onEmergencyContactsClick={() => this.setState({ isEmergencyContactsModalOpen: true })}
               onAboutClick={() => this.setState({ isAboutModalOpen: true })}
@@ -872,13 +868,6 @@ class Layout extends Component {
           <InriaLogo className={styles.logoInria} title="Love" />
         </div>
 
-        <Modal
-          isOpen={this.state.isXMLModalOpen}
-          onRequestClose={() => this.setState({ isXMLModalOpen: false })}
-          contentLabel="XML versions modal"
-        >
-          <XMLTable />
-        </Modal>
         <Modal
           isOpen={this.state.isConfigModalOpen}
           onRequestClose={() => this.setState({ isConfigModalOpen: false })}
