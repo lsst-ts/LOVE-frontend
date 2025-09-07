@@ -277,7 +277,6 @@ export default class CSCExpanded extends PureComponent {
     const cscVersion = softwareVersions ? softwareVersions.cscVersion.value : 'Unknown';
     const xmlVersion = softwareVersions ? softwareVersions.xmlVersion.value : 'Unknown';
     const salVersion = softwareVersions ? softwareVersions.salVersion.value : 'Unknown';
-    const openSpliceVersion = softwareVersions ? softwareVersions.openSpliceVersion.value : 'Unknown';
     const configurationsAvailable = configurationsAvailableData
       ? configurationsAvailableData.overrides.value.split(',')
       : null;
@@ -382,8 +381,7 @@ export default class CSCExpanded extends PureComponent {
               <div className={styles.topBarContainer}>
                 <div className={styles.breadcrumContainer}>
                   <div className={styles.titlePadding}>
-                    Software Versions: csc={cscVersion}, xml={xmlVersion}, sal={salVersion}, openSplice=
-                    {openSpliceVersion}
+                    Software Versions: csc={cscVersion}, xml={xmlVersion}, sal={salVersion}
                   </div>
                 </div>
               </div>
