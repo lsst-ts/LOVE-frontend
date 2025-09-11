@@ -8,43 +8,9 @@ import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import RefreshIcon from 'components/icons/RefreshIcon/RefreshIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import TimeLossField from './TimeLossField';
-
 import styles from './CreateNightReport.module.css';
 
 const OBS_TICKETS_POLLING_INTERVAL_MS = 30000; // 30 seconds
-
-// const dummyJiraTickets = [
-//   {
-//     key: 'OBS-1027',
-//     systems: 'Simonyi',
-//     summary: 'park_dome script stalls and does not engage brakes',
-//     time_lost: 0.5,
-//   },
-//   {
-//     key: 'OBS-1026',
-//     systems: 'Simonyi',
-//     summary: "Rotator position \"unknown format code 'f' for object of type 'str'\"",
-//     time_lost: 0.5,
-//   },
-//   {
-//     key: 'OBS-1025',
-//     systems: 'Simonyi',
-//     summary: 'Mount stopped tracking causing MTRotator and MTPtg to fault',
-//     time_lost: 0.5,
-//   },
-//   {
-//     key: 'OBS-1024',
-//     systems: 'Simonyi',
-//     summary: 'TMA - Axes Home Status not displaying properly in Simonyi Integrated Telemetry dashboard',
-//     time_lost: 0.5,
-//   },
-//   {
-//     key: 'OBS-1023',
-//     systems: 'AuxTel',
-//     summary: 'Axes Home Status not displaying properly in AuxTel Integrated Telemetry dashboard',
-//     time_lost: 0.5,
-//   },
-// ];
 
 function JiraOBSTicketsTable({ report }) {
   const [tickets, setObsTickets] = useState([]);
@@ -74,9 +40,6 @@ function JiraOBSTicketsTable({ report }) {
       .finally(() => {
         setLoading(false);
       });
-    // setObsTickets(dummyJiraTickets);
-    // setLastUpdated(Moment());
-    // setLoading(false);
   };
 
   useEffect(() => {
