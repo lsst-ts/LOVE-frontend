@@ -120,6 +120,7 @@ export default function (state = initialState, action) {
       return { ...state, currentWorkspace: action.workspace.id, views: action.workspace.views };
     }
     case UPDATE_EDITED_VIEW: {
+      console.log('UPDATE_EDITED_VIEW', action.view);
       return {
         ...state,
         editedViewCurrent: rfdc()(action.view),

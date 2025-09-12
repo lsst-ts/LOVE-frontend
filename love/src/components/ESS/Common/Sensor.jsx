@@ -43,13 +43,13 @@ const Sensor = (props) => {
       position={[props.position.x, props.position.z, props.position.y]}
     >
       {(isSelected || hovered) && (
-        <mesh scale={hovered ? [2.3, 2.3, 2.3] : [1.3, 1.3, 1.3]}>
+        <mesh scale={hovered ? [4.3, 4.3, 4.3] : [2.3, 2.3, 2.3]}>
           <sphereGeometry args={[0.15, 64, 64]} />
           <meshBasicMaterial color={hovered ? props.color : 0xffffff} side={THREE.BackSide} />
         </mesh>
       )}
       <mesh scale={hovered ? [2, 2, 2] : [1, 1, 1]}>
-        <sphereGeometry args={[0.15, 32, 32]} />
+        <sphereGeometry args={[0.3, 32, 32]} />
         <meshBasicMaterial color={hovered ? 0xffffff : props.color} />
       </mesh>
     </group>

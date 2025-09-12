@@ -330,8 +330,6 @@ const Plot = ({
 Plot.propTypes = {
   /** Title of the x axis */
   xAxisTitle: PropTypes.string,
-  /** Title of the y axis */
-  yAxisTitle: PropTypes.string,
   /** If true, x axis labels will be rendered as timestamps */
   temporalXAxis: PropTypes.bool,
   /** If temporalXAxis is true, this string will be used to format the x axis labels */

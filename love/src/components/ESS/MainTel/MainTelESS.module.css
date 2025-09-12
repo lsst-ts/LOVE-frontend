@@ -18,13 +18,11 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 .sceneAndInfoPlotsContainer {
+  height: 100%;
   display: grid;
-  grid-template-columns: 9fr 3fr;
-  grid-auto-rows: auto;
-  gap: 5px;
-  width: 98%;
-  height: 98%;
-  margin: 15px;
+  grid-template-columns: 6fr 3fr;
+  grid-template-rows: 100%;
+  gap: var(--content-padding);
 }
 
 .sceneContainer {
@@ -33,25 +31,21 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 }
 
 .infoAndPlotsContainer {
-  display: grid;
-  grid-gap: 5px;
-  grid-auto-columns: auto;
-  height: 95%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--content-padding);
 }
 
 .infoContainer {
 }
 
-.tempContainer {
-}
-
+.tempContainer,
 .plotsContainer {
-  width: 100%;
+  background: var(--second-quaternary-background-dimmed-color);
+  border-radius: 1em;
+  padding: var(--content-padding);
 }
 
-.title {
-  text-align: left;
-  font-weight: bold;
-  margin-bottom: 0.5em;
-  color: var(--base-font-color);
+.plots {
+  height: 17em;
 }
