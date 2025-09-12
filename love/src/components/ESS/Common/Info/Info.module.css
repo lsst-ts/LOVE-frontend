@@ -1,0 +1,7 @@
+.summaryPanel {
+  max-width: none;
+  grid-template-columns: 1fr 2fr;
+  grid-row-gap: var(--content-padding);
+  border-radius: 1em;
+  padding: var(--content-padding);
+}

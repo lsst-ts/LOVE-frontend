@@ -17,11 +17,13 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useMemo, useRef, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import * as d3 from 'd3';
 import * as THREE from 'three';
+import { UNITS_MAPPING } from 'Config';
+
 import Scene from './Scene/Scene';
 import Info from '../Common/Info/Info';
 import Gradiant from '../Common/Gradiant/Gradiant';
@@ -29,38 +31,51 @@ import Gradiant from '../Common/Gradiant/Gradiant';
 import { Sensors } from '../Common/Sensors';
 import { Louvers } from './Scene/Louvers';
 import { Shutter } from './Scene/Shutter';
+import Simonyi from './Scene/Simonyi';
 
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import styles from './MainTelESS.module.css';
 
-const getBasePlot = (salindex, topic, item, indexArr = undefined) => {
-  const config = {};
-  const accessor = indexArr !== undefined ? `(x) => x[${indexArr}]` : '(x) => x';
-  config[`${topic}`] = {
-    type: 'line',
-    // 'color': '#ff7f0e',
-    dash: [4, 0],
-    values: [
-      {
-        variable: 'x',
-        category: 'telemetry',
-        csc: 'ESS',
-        salindex: salindex,
-        topic: topic,
-        item: 'timestamp',
-        accessor: accessor,
-      },
-      {
-        variable: 'y',
-        category: 'telemetry',
-        csc: 'ESS',
-        salindex: salindex,
-        topic: topic,
-        item: item,
-        accessor: accessor,
-      },
-    ],
+const parseTelemetrySubscription = (configTelemetry) => {
+  if (!configTelemetry) return null;
+  const tokens = configTelemetry.split('-');
+  return `${tokens[2]}-${tokens[0]}-${tokens[1]}-${tokens[3]}-${tokens[4]}`;
+};
+
+const parsePlotInput = (configTelemetry) => {
+  if (!configTelemetry) return null;
+  const telemetryTokens = configTelemetry?.split('-');
+  const topicCSC = telemetryTokens[0];
+  const salindex = telemetryTokens[1];
+  const topicType = telemetryTokens[2];
+  const topicName = telemetryTokens[3];
+  const topicItem = telemetryTokens[4];
+  const arrayIndex = telemetryTokens[5];
+  const isArray = arrayIndex >= 0;
+  const accessor = isArray ? `(x) => x[${arrayIndex}]` : '(x) => x';
+
+  const title = isArray ? `${topicItem}[${arrayIndex}]` : topicItem;
+
+  const config = {
+    [title]: {
+      type: 'line',
+      dash: [4, 0],
+      values: [
+        {
+          variable: 'y',
+          category: topicType,
+          csc: topicCSC,
+          salindex: salindex,
+          topic: topicName,
+          item: topicItem,
+          isArray: isArray,
+          arrayIndex: arrayIndex,
+          accessor: accessor,
+        },
+      ],
+    },
   };
+
   return config;
 };
 
@@ -96,157 +111,238 @@ const prevParseToArraySensors = (prevParse, option) => {
   return sorted;
 };
 
-const MainTelESS = (props) => {
-  const [selectedSensor, setSelectedSensor] = useState(0);
-  const [selectedSensorData, setSelectedSensorData] = useState({});
+const MainTelESS = ({
+  devices,
+  deviceData,
+  percentOpenLouvers,
+  percentOpenShutter,
+  positionActualDomeAz,
+  minGradiantLimit,
+  maxGradiantLimit,
+  initialCameraPosition,
+  subscribeToStreams,
+  unsubscribeToStreams,
+  ...props
+}) => {
+  const [selectedSensor, setSelectedSensor] = useState();
   const [inputsPlot, setInputsPlot] = useState({});
-  const [prevParseSensors, setPrevParseSensors] = useState({});
-  const [sensors, setSensors] = useState([]);
 
   const plotRef = useRef();
   useEffect(() => {
-    props.subscribeToStreams();
+    subscribeToStreams();
     return () => {
-      props.unsubscribeToStreams();
+      unsubscribeToStreams();
     };
   }, []);
 
-  useEffect(() => {
-    const option = props.option;
-    props[option].forEach((parse) => {
-      if (!prevParseSensors[option]) {
-        const opt = {};
-        opt[option] = {};
-        setPrevParseSensors({ ...prevParseSensors, ...opt });
-      }
-      if (prevParseSensors[option] && !prevParseSensors[option][parse.sensorName]) {
-        const opt = {};
-        opt[option] = prevParseSensors[option];
-        opt[option][parse.sensorName] = {};
-        setPrevParseSensors({ ...prevParseSensors, ...opt });
-      }
-      if (prevParseSensors[option] && prevParseSensors[option][parse.sensorName]) {
-        const opt = {};
-        opt[option] = prevParseSensors[option];
-        opt[option][parse.sensorName] = prevParseSensors[option][parse.sensorName];
-        opt[option][parse.sensorName][parse.indexArr] = parse;
-        setPrevParseSensors({ ...prevParseSensors, ...opt });
-      }
-    });
-    setSensors(prevParseToArraySensors(prevParseSensors, option));
-    return () => {};
-  }, [props.option, props[props.option]]);
+  const inclination = -45;
+  // const radius = 8.4 / 2;
+  // const scale = 1.3;
+  // // const xOffset = 0;
+  // // const yOffset = -1.7;
+  // // const zOffset = 6;
+  const xOffset = 0;
+  const yOffset = -1;
+  const zOffset = 6.5;
+  // const mirrorBorderPoint1 = {
+  //   x: 0,
+  //   y: -Math.cos(THREE.MathUtils.degToRad(inclination)) * radius * scale + yOffset,
+  //   z: Math.sin(THREE.MathUtils.degToRad(inclination)) * radius * scale + zOffset,
+  // }
+  // const mirrorBorderPoint2 = {
+  //   x: Math.cos(THREE.MathUtils.degToRad(inclination)) * radius * scale + xOffset,
+  //   y: 0 + yOffset,
+  //   z: -Math.sin(THREE.MathUtils.degToRad(inclination)) * radius * scale + zOffset,
+  // }
+  // const mirrorBorderPoint3 = {
+  //   x: 0,
+  //   y: Math.cos(THREE.MathUtils.degToRad(inclination)) * radius * scale + yOffset,
+  //   z: -Math.sin(THREE.MathUtils.degToRad(inclination)) * radius * scale + zOffset,
+  // }
+  // const mirrorBorderPoint4 = {
+  //   x: -Math.cos(THREE.MathUtils.degToRad(inclination)) * radius * scale + xOffset,
+  //   y: 0 + yOffset,
+  //   z: -Math.sin(THREE.MathUtils.degToRad(inclination)) * radius * scale + zOffset,
+  // }
+  // console.log(mirrorBorderPoint1);
 
-  const {
-    minGradiantLimit,
-    maxGradiantLimit,
-    percentOpenLouvers,
-    percentOpenShutter,
-    positionActualDomeAz,
-    initialCameraPosition,
-  } = props;
+  const R = (8.4 / 2) * 1.3; // radius * scale
+  const alpha = THREE.MathUtils.degToRad(inclination);
 
-  const option = props.option ?? 'temperature';
+  const center = new THREE.Vector3(xOffset, yOffset, zOffset);
+
+  // rotate the whole circle by alpha about X (change Euler to tilt about Y/Z if wanted)
+  const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(alpha, 0, 0, 'XYZ'));
+
+  const thetas = [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2];
+
+  const points = thetas.map((t) => {
+    const v = new THREE.Vector3(R * Math.cos(t), R * Math.sin(t), 0);
+    v.applyQuaternion(q).add(center);
+    return { xPosition: v.x, yPosition: v.y, zPosition: v.z };
+  });
+  // const sensors = [
+  //   {
+  //     xPosition: 0.5,
+  //     yPosition: 4,
+  //     zPosition: 14,
+  //   },
+  //   {
+  //     xPosition: 0.5,
+  //     yPosition: 3,
+  //     zPosition: 13,
+  //   },
+  //   {
+  //     xPosition: 2.5,
+  //     yPosition: 1.5,
+  //     zPosition: 16.5,
+  //   },
+  //   {
+  //     xPosition: 3,
+  //     yPosition: 1.5,
+  //     zPosition: 16,
+  //   },
+  //   {
+  //     xPosition: 4.5,
+  //     yPosition: 2.0,
+  //     zPosition: 15.2,
+  //   },
+  //   {
+  //     xPosition: 6.2,
+  //     yPosition: -3,
+  //     zPosition: 11,
+  //   },
+  //   ...points,
+  // ];
+
+  // const positions = [];
+  // for (let i = 0; i < sensors.length; i++) {
+  //   positions.push({
+  //     x: sensors[i].xPosition,
+  //     y: sensors[i].yPosition,
+  //     z: sensors[i].zPosition,
+  //   });
+  // }
+
   const positions = [];
-  for (let i = 0; i < sensors.length; i++) {
+  for (let i = 0; i < devices.length; i++) {
     positions.push({
-      x: sensors[i].xPosition,
-      y: sensors[i].yPosition,
-      z: sensors[i].zPosition,
+      x: devices[i].position[0],
+      y: devices[i].position[1],
+      z: devices[i].position[2],
     });
   }
-  const referenceIds = Array.from({ length: sensors.length })
-    .fill(0)
-    .map((_, index) => index + 1);
   const louversIds = Array.from({ length: 34 })
     .fill(0)
     .map((_, index) => index + 1);
 
-  const items = {
-    temperature: 'temperature',
-    relativeHumidity: 'relativeHumidity',
-    airFlow: 'speed',
-    airTurbulence: 'speedMagnitude',
+  const handleSelectedSensor = (deviceIndex) => {
+    const device = devices[deviceIndex];
+    console.log(device);
+    // const selectedSensorData = {
+    //   sensorId: sensorId,
+    //   telemetry: sensors[index].telemetry,
+    //   sensorName: sensors[index].sensorName,
+    //   numChannels: sensors[index].numChannels,
+    //   indexArr: sensors[index].indexArr,
+    //   value: sensors[index].value,
+    //   speed: sensors[index].speed,
+    //   direction: sensors[index].direction,
+    //   location: sensors[index].location,
+    //   position: {
+    //     x: sensors[index].xPosition,
+    //     y: sensors[index].yPosition,
+    //     z: sensors[index].zPosition,
+    //   },
+    // };
+    setSelectedSensor(deviceIndex);
+
+    // const telemetry = selectedSensorData?.telemetry ?? 'telemetry-ESS-1-temperature';
+    // const indexArr = selectedSensorData?.indexArr !== undefined ? selectedSensorData?.indexArr : undefined;
+    // const [_category, _csc, salindex, _topic] = telemetry.split('-');
+    // setInputsPlot(getBasePlot(salindex, topic, item, indexArr));
   };
-  const setSensor = (sensorId) => {
-    const index = referenceIds.indexOf(sensorId);
-    const selectedSensorData = {
-      sensorId: sensorId,
-      telemetry: sensors[index].telemetry,
-      sensorName: sensors[index].sensorName,
-      numChannels: sensors[index].numChannels,
-      indexArr: sensors[index].indexArr,
-      value: sensors[index].value,
-      speed: sensors[index].speed,
-      direction: sensors[index].direction,
-      location: sensors[index].location,
-      position: {
-        x: sensors[index].xPosition,
-        y: sensors[index].yPosition,
-        z: sensors[index].zPosition,
-      },
+
+  // const values = sensors.map((sensor) => (!Number.isNaN(+sensor.value) ? +sensor.value : 0)) ?? [];
+
+  const deviceReading = (telemetry) => {
+    if (!telemetry) return null;
+    const subscription = parseTelemetrySubscription(telemetry);
+    const telemetryTokens = telemetry?.split('-');
+
+    const topicItem = telemetryTokens[4];
+    const itemData = deviceData?.[subscription]?.[topicItem];
+    const arrayIndex = telemetryTokens[5];
+
+    return {
+      value: arrayIndex >= 0 ? itemData?.value[arrayIndex] : itemData?.value,
+      units: UNITS_MAPPING[itemData?.units],
     };
-    setSelectedSensor(sensorId);
-    setSelectedSensorData(selectedSensorData);
-    const telemetry = selectedSensorData?.telemetry ?? 'telemetry-ESS-1-temperature';
-    const indexArr = selectedSensorData?.indexArr !== undefined ? selectedSensorData?.indexArr : undefined;
-    const [_category, _csc, salindex, _topic] = telemetry.split('-');
-
-    const topic = option;
-    const item = items[option] ?? option;
-    setInputsPlot(getBasePlot(salindex, topic, item, indexArr));
   };
 
-  const values = sensors.map((sensor) => (!Number.isNaN(+sensor.value) ? +sensor.value : 0)) ?? [];
-  const speeds = sensors.map((sensor) => sensor.speed) ?? [];
-  const directions = sensors.map((sensor) => sensor.direction) ?? [];
+  const selectedDevice = devices[selectedSensor];
+  const selectedDeviceData = {
+    ...selectedDevice,
+    payload: deviceReading(selectedDevice?.telemetry),
+  };
+  // console.log(selectedDeviceData);
+
+  const values = devices.map((device) => {
+    const reading = deviceReading(device?.telemetry);
+    return reading?.value ?? 0;
+  });
+
+  const plotInput = useMemo(() => parsePlotInput(selectedDevice?.telemetry), [selectedDevice?.telemetry]);
 
   return (
     <div className={styles.sceneAndInfoPlotsContainer}>
       <div className={styles.sceneContainer}>
         <Scene initialCameraPosition={initialCameraPosition}>
-          <group rotation-y={THREE.MathUtils.degToRad(90 - positionActualDomeAz)}>
+          {/* <group rotation-y={THREE.MathUtils.degToRad(90 - positionActualDomeAz)}>
             <Louvers ids={louversIds} percentOpen={percentOpenLouvers} />
-
             <Shutter name={'shutter 0'} position={{ x: 0, y: -3.3, z: 7 }} openPercent={percentOpenShutter[0] ?? 0} />
-
             <Shutter name={'shutter 1'} position={{ x: 0, y: 3.3, z: 7 }} openPercent={percentOpenShutter[1] ?? 0} />
-          </group>
+          </group> */}
           <Sensors
             selectedSensor={selectedSensor}
-            setSensor={(id) => setSensor(id)}
+            setSensor={(id) => handleSelectedSensor(id)}
             positions={positions}
             values={values}
-            speeds={speeds}
-            directions={directions}
             getGradiantColorX={(val) => getGradiantColorX(val, minGradiantLimit, maxGradiantLimit)}
           />
+          <Suspense fallback={null}>
+            <Simonyi />
+          </Suspense>
         </Scene>
       </div>
-
       <div className={styles.infoAndPlotsContainer}>
         <div className={styles.infoContainer}>
-          <Info sensor={selectedSensorData} />
+          <Info sensor={selectedDeviceData} />
         </div>
-
-        <div className={styles.tempContainer}>
-          <Gradiant
-            sensorReferenceId={referenceIds}
-            selectedId={selectedSensor}
-            setpoint={selectedSensorData?.value}
-            absoluteGradiant={values}
-            minGradiantLimit={minGradiantLimit}
-            maxGradiantLimit={maxGradiantLimit}
-            option={option}
-          />
-        </div>
-
-        <div className={styles.plotsContainer}>
-          <div className={styles.title}>Plot</div>
-          <div className={styles.plots} ref={plotRef}>
-            <PlotContainer containerNode={plotRef} xAxisTitle="Time" legendPosition="bottom" inputs={inputsPlot} />
-          </div>
-        </div>
+        {selectedSensor !== undefined && (
+          <>
+            <div className={styles.tempContainer}>
+              <Gradiant
+                selectedId={selectedSensor}
+                value={selectedDeviceData?.payload?.value}
+                minGradiantLimit={minGradiantLimit}
+                maxGradiantLimit={maxGradiantLimit}
+                title={selectedDevice?.telemetry}
+              />
+            </div>
+            <div className={styles.plotsContainer}>
+              <div className={styles.plots} ref={plotRef}>
+                <PlotContainer
+                  key={selectedSensor}
+                  containerNode={plotRef}
+                  xAxisTitle="Time"
+                  legendPosition="bottom"
+                  inputs={plotInput}
+                />
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
@@ -312,28 +408,30 @@ MainTelESS.propTypes = {
   positionActualDomeAz: PropTypes.number,
 };
 
-MainTelESS.defaultProps = {
-  temperature: [],
-  relativeHumidity: [],
-  airFlow: [],
-  airTurbulence: [],
-  minGradiantLimit: -20,
-  maxGradiantLimit: 40,
-  option: 'temperature',
-  percentOpenLouvers: [],
-  percentOpenShutter: [],
-  positionActualDomeAz: 0,
-};
+// MainTelESS.defaultProps = {
+//   temperature: [],
+//   relativeHumidity: [],
+//   airFlow: [],
+//   airTurbulence: [],
+//   minGradiantLimit: -20,
+//   maxGradiantLimit: 40,
+//   option: 'temperature',
+//   percentOpenLouvers: [],
+//   percentOpenShutter: [],
+//   positionActualDomeAz: 0,
+// };
 
-const comparator = (prevProps, nextProps) => {
-  return (
-    isEqual(prevProps.subscriptions, nextProps.subscriptions) &&
-    isEqual(prevProps.percentOpenLouvers, nextProps.percentOpenLouvers) &&
-    isEqual(prevProps.percentOpenShutter, nextProps.percentOpenShutter) &&
-    prevProps.positionActualDomeAz === nextProps.positionActualDomeAz &&
-    prevProps.option === nextProps.option &&
-    isEqual(prevProps[nextProps.option], nextProps[nextProps.option])
-  );
-};
+// const comparator = (prevProps, nextProps) => {
+//   return (
+//     isEqual(prevProps.subscriptions, nextProps.subscriptions) &&
+//     isEqual(prevProps.percentOpenLouvers, nextProps.percentOpenLouvers) &&
+//     isEqual(prevProps.percentOpenShutter, nextProps.percentOpenShutter) &&
+//     prevProps.positionActualDomeAz === nextProps.positionActualDomeAz &&
+//     prevProps.option === nextProps.option &&
+//     isEqual(prevProps[nextProps.option], nextProps[nextProps.option])
+//   );
+// };
 
-export default React.memo(MainTelESS, comparator);
+// export default React.memo(MainTelESS, comparator);
+
+export default MainTelESS;

@@ -26,7 +26,6 @@ import 'brace/theme/solarized_dark';
 import { Rnd } from 'react-rnd';
 import { toast } from 'react-toastify';
 import { withRouter, Prompt } from 'react-router-dom';
-// import queryString from 'query-string';
 import { editViewStates, viewsStates, modes } from '../../../redux/reducers/uif';
 import Button from '../../GeneralPurpose/Button/Button';
 import Input from '../../GeneralPurpose/Input/Input';

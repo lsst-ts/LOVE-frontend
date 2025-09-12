@@ -26,29 +26,24 @@ import styles from './Gradiant.module.css';
 
 export default class Gradiant extends Component {
   static propTypes = {
-    /** Array for the identify of the position in array with an index */
-    sensorReferenceId: PropTypes.arrayOf(PropTypes.number),
-    /** Thermal status response data. Absolute temperature. */
-    absoluteGradiant: PropTypes.arrayOf(PropTypes.number),
     /** Id of sensor selected */
     selectedId: PropTypes.number,
-    /** Applied setpoint. */
-    setpoint: PropTypes.number,
+    /** Reading of the sensor */
+    value: PropTypes.number,
     /** Number of the minimum force limit, used for the gradiant color */
     minGradiantLimit: PropTypes.number,
     /** Number of the maximum force limit, used for the gradiant color */
     maxGradiantLimit: PropTypes.number,
-    option: PropTypes.string,
+    /** Title for the gradient */
+    title: PropTypes.string,
   };
 
   static defaultProps = {
-    sensorReferenceId: [],
-    absoluteGradiant: [],
     selectedId: undefined,
-    setpoint: 0,
+    value: 0,
     minGradiantLimit: -6000,
     maxGradiantLimit: 6000,
-    option: 'temperature',
+    title: 'temperature',
   };
 
   static COLOURS_INV = [
@@ -82,37 +77,31 @@ export default class Gradiant extends Component {
   }
 
   getUnit() {
-    return {
-      temperature: 'C°',
-      relativeHumidity: '%',
-      airFlow: 'm/s',
-      airTurbulence: 'm/s',
-    }[this.props.option ?? 'temperature'];
+    return '°C';
   }
 
   getSensor = (id) => {
-    if (id === 0 || id === null || id === undefined) return { id: undefined };
-    const { sensorReferenceId, absoluteGradiant } = this.props;
-    const sensorIndex = sensorReferenceId.indexOf(id);
-
+    if (id === null || id === undefined) return { id: undefined };
+    const { value, title } = this.props;
     const sensor = {
       id: `${String(id).padStart(3, '0')}`,
-      absolute: absoluteGradiant[sensorIndex] ?? 0,
-      unit: this.props.option,
+      value: value,
+      unit: title,
     };
     return sensor;
   };
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.absoluteGradiant !== this.props.absoluteGradiant) {
-      this.createColorScale();
-      const sensor = this.getSensor(this.props.selectedId ?? Gradiant.defaultProps.selectedId);
-      this.setGradiant(sensor, this.props.minGradiantLimit, this.maxGradiantLimit);
-    }
+  componentDidMount() {
+    const { selectedId } = this.props;
+    this.createColorScale();
+    const sensor = this.getSensor(selectedId);
+    this.setGradiant(sensor);
+  }
 
-    if (prevProps.selectedId !== this.props.selectedId) {
-      const sensor = this.getSensor(this.props.selectedId ?? Gradiant.defaultProps.selectedId);
-      this.setGradiant(sensor, this.props.minGradiantLimit, this.maxGradiantLimit);
+  componentDidUpdate(prevProps) {
+    if (prevProps.selectedId !== this.props.selectedId || prevProps.value !== this.props.value) {
+      const sensor = this.getSensor(this.props.selectedId);
+      this.setGradiant(sensor);
     }
   }
 
@@ -163,14 +152,14 @@ export default class Gradiant extends Component {
   }
 
   setGradiant = (sensor) => {
-    const { minGradiantLimit, maxGradiantLimit, setpoint, showDifferentialTemp } = this.props;
+    const { minGradiantLimit, maxGradiantLimit, showDifferentialTemp } = this.props;
 
     const svg = d3.select(`#${this.uniqueColorScale} svg`);
     const absoluteText = d3.select(`#${this.uniqueColorScale} svg #absolute-text`);
     const absoluteLine = d3.select(`#${this.uniqueColorScale} svg #absolute-line`);
 
     const absoluteGradiantX = Gradiant.getGradiantPositionX(
-      sensor.absolute,
+      sensor.value,
       minGradiantLimit,
       maxGradiantLimit,
       this.state.width,
@@ -199,29 +188,25 @@ export default class Gradiant extends Component {
         .attr('y', -10)
         .attr('fill', !showDifferentialTemp ? 'white' : 'var(--base-font-color)')
         .style('font-size', '1em');
-      /* .style('font-weight', !showDifferentialTemp ? '600' : 'normal'); */
 
       if (absoluteGradiantX > (this.state.width * 3) / 4) {
         textAbsolute.attr('text-anchor', 'end');
       }
-      textAbsolute.append('tspan').attr('x', absoluteGradiantX).attr('y', -30).text(sensor.id);
+      // textAbsolute.append('tspan').attr('x', absoluteGradiantX).attr('y', -30).text(sensor.id);
       textAbsolute
         .append('tspan')
         .attr('x', absoluteGradiantX)
         .attr('y', -15)
-        .text(`${defaultNumberFormatter(sensor.absolute, 2)} ${this.getUnit()}`);
+        .text(`${defaultNumberFormatter(sensor.value, 2)} ${this.getUnit()}`);
     }
   };
 
   render() {
-    const { maxGradiantLimit, minGradiantLimit } = this.props;
+    const { title, maxGradiantLimit, minGradiantLimit } = this.props;
     return (
       <div>
         <div className={styles.container}>
-          <span className={styles.title}>
-            {this.props.option?.charAt(0).toUpperCase() + this.props.option?.slice(1)}
-          </span>
-          <span className={styles.value}></span>
+          <span className={styles.title}>{title}</span>
         </div>
 
         <div className={styles.temperatureGradientWrapper}>

@@ -99,27 +99,29 @@ const Scene = (props) => {
   );
 };
 
-Scene.propTypes = {
-  initialCameraPosition: PropTypes.shape({
-    x: PropTypes.number,
-    y: PropTypes.number,
-    z: PropTypes.number,
-  }),
-};
+// Scene.propTypes = {
+//   initialCameraPosition: PropTypes.shape({
+//     x: PropTypes.number,
+//     y: PropTypes.number,
+//     z: PropTypes.number,
+//   }),
+// };
 
-Scene.defaultProps = {
-  initialCameraPosition: {
-    x: INITIAL_CAMERA_POSITION[0],
-    y: INITIAL_CAMERA_POSITION[2],
-    z: INITIAL_CAMERA_POSITION[1],
-  },
-};
+// Scene.defaultProps = {
+//   initialCameraPosition: {
+//     x: INITIAL_CAMERA_POSITION[0],
+//     y: INITIAL_CAMERA_POSITION[2],
+//     z: INITIAL_CAMERA_POSITION[1],
+//   },
+// };
 
-const comparator = (prevProps, nextProps) => {
-  return (
-    isEqual(prevProps.initialCameraPosition, nextProps.initialCameraPosition) &&
-    isEqual(prevProps.children, nextProps.children)
-  );
-};
+// const comparator = (prevProps, nextProps) => {
+//   return (
+//     isEqual(prevProps.initialCameraPosition, nextProps.initialCameraPosition) &&
+//     isEqual(prevProps.children, nextProps.children)
+//   );
+// };
 
-export default React.memo(Scene, comparator);
+// export default React.memo(Scene, comparator);
+
+export default Scene;

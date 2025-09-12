@@ -23,7 +23,7 @@ import Vector from './Vector';
 import Sensor from './Sensor';
 
 export function Sensors(props) {
-  const { selectedSensor, setSensor, positions, values, speeds, directions, getGradiantColorX } = props;
+  const { selectedSensor, setSensor, positions, values, getGradiantColorX } = props;
 
   const RGBToHex = (rgb) => {
     // Choose correct separator
@@ -45,16 +45,15 @@ export function Sensors(props) {
 
   const sensors = positions.map((position, index) => {
     const value = values[index] ?? 0;
-    const speed = speeds[index] ?? undefined;
-    const direction = directions[index] ?? undefined;
     const rgb = getGradiantColorX && value ? getGradiantColorX(value) ?? 'rgb(255, 255, 255)' : 'rgb(255, 255, 255)';
     const hex = RGBToHex(rgb);
+    // const hex = '#ff0000';
     return {
       position: position,
-      id: index + 1,
+      id: index,
       color: hex,
-      speed: speed,
-      direction: direction,
+      // speed: speed,
+      // direction: direction,
     };
   });
 
