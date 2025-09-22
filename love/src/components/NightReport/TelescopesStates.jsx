@@ -109,6 +109,7 @@ function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
   const isReportOld = isNightReportOld(report);
 
   const fetchHistoricalData = () => {
+    setObservatoryState({});
     const cutDate = getCutDateFromNightReport(report);
     const timeCutdate = Moment(cutDate).format(ISO_STRING_DATE_TIME_FORMAT);
     const cscsPayload = {};

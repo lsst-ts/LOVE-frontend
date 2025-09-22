@@ -2,11 +2,18 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import ManagerInterface, { getEFDInstanceForHost, isNightReportOld, getCutDateFromNightReport } from 'Utils';
-import { ISO_STRING_DATE_TIME_FORMAT } from 'Config';
+import { ISO_STRING_DATE_TIME_FORMAT, NIGHTREPORT_CSCS_TO_REPORT } from 'Config';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 
 import styles from './CreateNightReport.module.css';
+
+function getEmptyCscStates() {
+  return NIGHTREPORT_CSCS_TO_REPORT.reduce((acc, cscIndex) => {
+    acc[cscIndex] = 0;
+    return acc;
+  }, {});
+}
 
 function CSCStates({ report, cscs: cscsProp }) {
   const [cscs, setCscs] = useState(cscsProp);
@@ -15,6 +22,7 @@ function CSCStates({ report, cscs: cscsProp }) {
   const isReportOld = isNightReportOld(report);
 
   const fetchHistoricalData = () => {
+    setCscs(getEmptyCscStates());
     const cutDate = getCutDateFromNightReport(report);
     const timeCutdate = Moment(cutDate).format(ISO_STRING_DATE_TIME_FORMAT);
     const cscsPayload = {};

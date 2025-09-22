@@ -29,6 +29,7 @@ function JiraOBSTicketsTable({ report }) {
 
   const queryTickets = (date) => {
     setLoading(true);
+    setObsTickets([]);
     const obsDay = getObsDayFromDate(date);
     ManagerInterface.getJiraOBSTickets(obsDay)
       .then((tickets) => {
