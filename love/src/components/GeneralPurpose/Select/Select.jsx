@@ -17,35 +17,58 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
+import React, { memo } from 'react';
+import PropTypes from 'prop-types';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import styles from './Select.module.css';
 
-const Select = ({ options = [], small = false, onChange = () => {}, option = undefined, ...props }) => {
-  const {
-    className: propsClassName,
-    controlClassName: propsControlClassName,
-    menuClassName: propsMenuClassName,
-    arrowClassName: propsArrowClassName,
-    // placeholderClassName: propsPlaceholderClassName,
-    ...otherProps
-  } = props;
-
+const Select = ({
+  option,
+  className: propsClassName,
+  controlClassName: propsControlClassName,
+  menuClassName: propsMenuClassName,
+  arrowClassName: propsArrowClassName,
+  options = [],
+  small = false,
+  onChange = () => {},
+  ...otherProps
+}) => {
   return (
     <Dropdown
-      className={[styles.dropDownClassName, propsClassName].join(' ')}
-      controlClassName={[styles.dropDownControlClassName, small ? styles.small : '', propsControlClassName].join(' ')}
-      menuClassName={[styles.dropDownMenuClassName, propsMenuClassName].join(' ')}
-      arrowClassName={[styles.arrowClassName, propsArrowClassName].join(' ')}
+      className={[styles.dropDownClassName, propsClassName ?? ''].join(' ')}
+      controlClassName={[styles.dropDownControlClassName, small ? styles.small : '', propsControlClassName ?? ''].join(
+        ' ',
+      )}
+      menuClassName={[styles.dropDownMenuClassName, propsMenuClassName ?? ''].join(' ')}
+      arrowClassName={[styles.arrowClassName, propsArrowClassName ?? ''].join(' ')}
       placeholderClassName={option ? null : styles.dropDownPlaceHolderClassName}
-      options={options}
-      onChange={onChange}
-      value={option}
       placeholder="Select an option"
+      options={options}
+      value={option}
+      onChange={onChange}
       {...otherProps}
     />
   );
 };
 
-export default Select;
+Select.propTypes = {
+  /** Currently selected option */
+  option: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  /** Additional class name for the component */
+  className: PropTypes.string,
+  /** Additional class name for the control */
+  controlClassName: PropTypes.string,
+  /** Additional class name for the menu */
+  menuClassName: PropTypes.string,
+  /** Additional class name for the arrow */
+  arrowClassName: PropTypes.string,
+  /** Options to display in the select */
+  options: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.object])),
+  /** Whether to use a smaller size */
+  small: PropTypes.bool,
+  /** Callback when an option is selected */
+  onChange: PropTypes.func,
+};
+
+export default memo(Select);

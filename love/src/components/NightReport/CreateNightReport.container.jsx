@@ -39,16 +39,27 @@ export const schema = {
       isPrivate: true,
       default: true,
     },
+    allowSendingOldReports: {
+      type: 'boolean',
+      description:
+        'Whether the user can edit and send not sent reports for past days.' +
+        ' If true a dropdown to select the day will be shown at the top of the component' +
+        ' and the user will be able to select an obs day to edit and send.' +
+        ' As this feature queries the EFD, the oldest obs day able to be selected' +
+        ' depends on the EFD data retention policy.' +
+        ' For past reports, the EFD queries will define a timestamp cutoff at' +
+        ' the end of the selected obs day, i.e. 12 UTC of the next calendar day.',
+      isPrivate: false,
+      default: false,
+    },
   },
 };
 
-const CreateNightReportContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
+const CreateNightReportContainer = ({ ...props }) => {
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
-  return (
-    <CreateNightReport subscribeToStreams={subscribeToStreams} unsubscribeToStreams={unsubscribeToStreams} {...props} />
-  );
+  return <CreateNightReport {...props} />;
 };
 
 const mapStateToProps = (state) => {
