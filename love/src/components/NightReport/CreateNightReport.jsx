@@ -286,33 +286,18 @@ function AlertsSection({ refreshWarningActive, changesNotSaved }) {
   );
 }
 
-function ObservatoryForm({
-  report: propsReport,
-  observatoryState,
-  cscStates,
-  handleReportUpdate,
-  loading: propsLoading,
-}) {
-  const [currentStep, setCurrentStep] = useState(STEPS.NOTSAVED);
+function getReportStatusStep(report) {
+  if (report?.date_sent) {
+    return STEPS.SENT;
+  }
+  if (report) {
+    return STEPS.SAVED;
+  }
+  return STEPS.NOTSAVED;
+}
+
+function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpdate, loading: propsLoading }) {
   const [userOptions, setUserOptions] = useState([]);
-  const [report, setReport] = useState();
-
-  const updateReport = (report) => {
-    handleReportUpdate(report);
-    setReport(report);
-    if (report?.date_sent) {
-      setCurrentStep(STEPS.SENT);
-    } else if (report) {
-      setCurrentStep(STEPS.SAVED);
-    } else {
-      setCurrentStep(STEPS.NOTSAVED);
-    }
-  };
-
-  useEffect(() => {
-    updateReport(propsReport);
-  }, [propsReport]);
-
   const [changesNotSaved, setChangesNotSaved] = useState(false);
   const [loading, setLoading] = useState({
     save: false,
@@ -320,6 +305,12 @@ function ObservatoryForm({
   });
   const [lastRefreshed, setLastRefreshed] = useState(Moment());
   const [refreshWarningActive, setRefreshWarningActive] = useState(false);
+
+  const currentStep = getReportStatusStep(report);
+
+  const updateReport = (report) => {
+    handleReportUpdate(report);
+  };
 
   const selectedUsers = useMemo(() => report?.observers_crew ?? [], [report]);
 
@@ -434,7 +425,7 @@ function ObservatoryForm({
   };
 
   const handleFieldChange = (newValue) => {
-    setReport((prev) => ({ ...prev, ...newValue }));
+    updateReport({ ...report, ...newValue });
     setChangesNotSaved(true);
   };
 
@@ -591,13 +582,19 @@ function NightReport({
       )}
       <div className={styles.container}>
         <ObservatoryForm
+          key={'ObservatoryForm-' + selectedReport?.id}
           report={selectedReport}
           observatoryState={observatoryState}
           cscStates={cscStates}
           handleReportUpdate={handleReportUpdate}
           loading={loading}
         />
-        <ObservatoryData report={selectedReport} observatoryState={observatoryState} cscStates={cscStates} />
+        <ObservatoryData
+          key={'ObservatoryData-' + selectedReport?.id}
+          report={selectedReport}
+          observatoryState={observatoryState}
+          cscStates={cscStates}
+        />
       </div>
     </>
   );

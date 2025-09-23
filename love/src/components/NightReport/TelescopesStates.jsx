@@ -103,13 +103,13 @@ const parseTelescopesStatesFromEFD = (efdResponse) => {
 };
 
 function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
-  const [observatoryState, setObservatoryState] = useState(observatoryStateProp);
+  const [historicalData, setHistoricalData] = useState();
   const [loading, setLoading] = useState(false);
 
   const isReportOld = isNightReportOld(report);
+  const observatoryState = historicalData ?? observatoryStateProp;
 
   const fetchHistoricalData = () => {
-    setObservatoryState({});
     const cutDate = getCutDateFromNightReport(report);
     const timeCutdate = cutDate.utc().format(ISO_STRING_DATE_TIME_FORMAT);
     const cscsPayload = {};
@@ -137,7 +137,7 @@ function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
       .then((efdResponse) => {
         if (efdResponse) {
           const newObservatoryState = parseTelescopesStatesFromEFD(efdResponse);
-          setObservatoryState(newObservatoryState);
+          setHistoricalData(newObservatoryState);
         }
       })
       .finally(() => {
@@ -146,16 +146,10 @@ function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
   };
 
   useEffect(() => {
-    if (!isReportOld) {
-      setObservatoryState(observatoryStateProp);
-    }
-  }, [observatoryStateProp, isReportOld]);
-
-  useEffect(() => {
     if (report && isReportOld) {
       fetchHistoricalData();
     }
-  }, [report?.date_sent, report?.id]);
+  }, [report?.id, isReportOld]);
 
   const simonyiMirrorCoverState =
     mtMountDeployableMotionStateMap[observatoryState.simonyiMirrorCoversState] ?? 'UNKNOWN';
