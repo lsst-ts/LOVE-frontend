@@ -111,7 +111,7 @@ function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
   const fetchHistoricalData = () => {
     setObservatoryState({});
     const cutDate = getCutDateFromNightReport(report);
-    const timeCutdate = Moment(cutDate).format(ISO_STRING_DATE_TIME_FORMAT);
+    const timeCutdate = cutDate.utc().format(ISO_STRING_DATE_TIME_FORMAT);
     const cscsPayload = {};
     Object.values(observatoryStateTelemetriesMapping).forEach((topic) => {
       const topicTokens = topic.split('-');
