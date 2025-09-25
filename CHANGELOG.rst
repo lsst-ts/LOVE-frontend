@@ -5,6 +5,7 @@ Version History
 v6.9.0
 ------
 
+* Update Jenkins pipeline. `<https://github.com/lsst-ts/LOVE-frontend/pull/733>`_
 * Extend the CreateNightReport component to allow editing and sending not sent reports. `<https://github.com/lsst-ts/LOVE-frontend/pull/731>`_
 * Remove deprecated XML user menu. `<https://github.com/lsst-ts/LOVE-frontend/pull/729>`_
 * Remove deprecated openSplice version from CSCExpanded. `<https://github.com/lsst-ts/LOVE-frontend/pull/730>`_

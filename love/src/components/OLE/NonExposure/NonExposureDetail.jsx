@@ -138,15 +138,9 @@ export default class NonExposureDetail extends Component {
 
     const obsSystem = logDetail.components_json?.name ?? 'None';
     const allSubsystems = logDetail.components_json?.children?.length > 0 ? logDetail.components_json.children : [];
-    const obsSubsystems =
-      allSubsystems.length > 0
-        ? allSubsystems.map((ss) => ss.name).join(', ')
-        : 'None';
-    const allComponents = allSubsystems.length > 0 ? allSubsystems.map((ss) => (ss.children ?? [])).flat() : [];
-    const obsComponents =
-      allComponents.length > 0
-        ? allComponents.map((c) => c.name).join(', ')
-        : 'None';
+    const obsSubsystems = allSubsystems.length > 0 ? allSubsystems.map((ss) => ss.name).join(', ') : 'None';
+    const allComponents = allSubsystems.length > 0 ? allSubsystems.map((ss) => ss.children ?? []).flat() : [];
+    const obsComponents = allComponents.length > 0 ? allComponents.map((c) => c.name).join(', ') : 'None';
 
     return (
       <>

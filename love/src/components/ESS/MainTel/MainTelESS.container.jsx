@@ -122,8 +122,8 @@ const parse = (streams, option) => {
 };
 
 /**
- * 
- * @param {array} streams 
+ *
+ * @param {array} streams
  * @returns array with the data separate parse of the temperature telemetry
  */
 const parseTemperature = (streams) => {
@@ -159,8 +159,8 @@ const parseTemperature = (streams) => {
 };
 
 /**
- * 
- * @param {array} streams 
+ *
+ * @param {array} streams
  * @returns array with the data separate parse of the relativeHumidity telemetry
  */
 const parseHumidity = (streams) => {
@@ -191,8 +191,8 @@ const parseHumidity = (streams) => {
 };
 
 /**
- * 
- * @param {array} streams 
+ *
+ * @param {array} streams
  * @returns array with the data separate parse of the speed telemetry
  */
 const parseAirflow = (streams) => {
@@ -225,8 +225,8 @@ const parseAirflow = (streams) => {
 };
 
 /**
- * 
- * @param {array} streams 
+ *
+ * @param {array} streams
  * @returns array with the data separate parse of the speedMagnitud telemetry
  */
 const parseAirTurbulence = (streams) => {
