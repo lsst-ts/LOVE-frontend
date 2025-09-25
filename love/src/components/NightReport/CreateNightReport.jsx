@@ -454,7 +454,11 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
 
       <TitleField report={report} />
 
-      <ConfluenceURLField confluenceURL={report?.confluence_url} setConfluenceURL={handleConfluenceURLChange} />
+      <ConfluenceURLField
+        isEditDisabled={isEditDisabled()}
+        confluenceURL={report?.confluence_url}
+        setConfluenceURL={handleConfluenceURLChange}
+      />
 
       <ObserversField
         isEditDisabled={isEditDisabled()}
