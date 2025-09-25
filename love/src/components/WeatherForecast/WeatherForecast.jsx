@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -21,27 +23,36 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import styles from './WeatherForecast.module.css';
-import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
+import ForecastPlotContainer from 'components/GeneralPurpose/Plot/ForecastPlot/ForecastPlot.container';
 import InfoHeaderContainer from './InfoHeader/InfoHeader.container';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import WEATHER from './WeatherForecastInputs.json';
 
 export default class WeatherForecast extends Component {
   static propTypes = {
-    subscribeToStreams: PropTypes.func,
-    unsubscribeToStreams: PropTypes.func,
     /* Weather stream data */
     weather: PropTypes.object,
+    /* Whether to display info header */
     infoHeader: PropTypes.bool,
+    /* Whether to display plot of cloud */
     cloud: PropTypes.bool,
+    /* Whether to display plot of wind */
     wind: PropTypes.bool,
+    /* Whether to display plot of temperature */
     temperature: PropTypes.bool,
+    /* Whether to display plot of precipitation */
+    cloudComplement: PropTypes.bool,
+    /* Whether to display plot of precipitation */
     rain: PropTypes.bool,
+    /* Function to subscribe to streams */
+    subscribeToStreams: PropTypes.func,
+    /* Function to unsubscribe from streams */
+    unsubscribeToStreams: PropTypes.func,
   };
 
   static defaultProps = {
-    subscribeToStreams: () => undefined,
-    unsubscribeToStreams: () => undefined,
+    subscribeToStreams: () => {},
+    unsubscribeToStreams: () => {},
     weather: WEATHER,
   };
 
@@ -152,7 +163,7 @@ export default class WeatherForecast extends Component {
           <div className={styles.fullSectionPlot}>
             <div className={styles.sectionTitle}>Clouds</div>
             <div ref={this.cloudPlotRef} className={styles.plot}>
-              <PlotContainer
+              <ForecastPlotContainer
                 containerNode={this.cloudPlotRef}
                 xAxisTitle="Time"
                 yAxisTitle=""
@@ -162,7 +173,6 @@ export default class WeatherForecast extends Component {
                 sliceInvert={this.state.sliceInvert}
                 sizeLimit={this.state.sizeLimit}
                 temporalXAxisFormat={this.state.temporalXAxisFormat}
-                isForecast={true}
                 scaleDomain={{ domainMin: 0, domainMax: 100 }}
                 maxHeight={130}
               />
@@ -174,7 +184,7 @@ export default class WeatherForecast extends Component {
           <div className={styles.fullSectionPlot}>
             <div></div>
             <div ref={this.cloudComplementPlotRef} className={styles.plot}>
-              <PlotContainer
+              <ForecastPlotContainer
                 containerNode={this.cloudComplementPlotRef}
                 xAxisTitle="Time"
                 yAxisTitle="Cloud"
@@ -184,7 +194,6 @@ export default class WeatherForecast extends Component {
                 sliceInvert={this.state.sliceInvert}
                 sizeLimit={this.state.sizeLimit}
                 temporalXAxisFormat={this.state.temporalXAxisFormat}
-                isForecast={true}
                 scaleDomain={{ domainMin: 0, domainMax: 100 }}
                 scaleIndependent={true}
               />
@@ -196,7 +205,7 @@ export default class WeatherForecast extends Component {
           <div className={styles.fullSectionPlot}>
             <div className={styles.sectionTitle}>Wind</div>
             <div ref={this.windPlotRef} className={styles.plot}>
-              <PlotContainer
+              <ForecastPlotContainer
                 containerNode={this.windPlotRef}
                 xAxisTitle="Time"
                 yAxisTitle=""
@@ -206,7 +215,6 @@ export default class WeatherForecast extends Component {
                 sliceInvert={this.state.sliceInvert}
                 sizeLimit={this.state.sizeLimit}
                 temporalXAxisFormat={this.state.temporalXAxisFormat}
-                isForecast={true}
               />
             </div>
           </div>
@@ -216,7 +224,7 @@ export default class WeatherForecast extends Component {
           <div className={styles.fullSectionPlot}>
             <div className={styles.sectionTitle}>Temperature</div>
             <div ref={this.temperaturePlotRef} className={styles.plot}>
-              <PlotContainer
+              <ForecastPlotContainer
                 containerNode={this.temperaturePlotRef}
                 xAxisTitle="Time"
                 yAxisTitle="Temperature"
@@ -226,7 +234,6 @@ export default class WeatherForecast extends Component {
                 sliceInvert={this.state.sliceInvert}
                 sizeLimit={this.state.sizeLimit}
                 temporalXAxisFormat={this.state.temporalXAxisFormat}
-                isForecast={true}
               />
             </div>
           </div>
@@ -236,7 +243,7 @@ export default class WeatherForecast extends Component {
           <div className={styles.fullSectionPlot}>
             <div className={styles.sectionTitle}>Rain</div>
             <div ref={this.rainPlotRef} className={styles.plot}>
-              <PlotContainer
+              <ForecastPlotContainer
                 containerNode={this.rainPlotRef}
                 xAxisTitle="Time"
                 yAxisTitle=""
@@ -246,7 +253,6 @@ export default class WeatherForecast extends Component {
                 sliceInvert={this.state.sliceInvert}
                 sizeLimit={this.state.sizeLimit}
                 temporalXAxisFormat={this.state.temporalXAxisFormat}
-                isForecast={true}
                 scaleIndependent={true}
                 scaleDomain={{ domainMin: 0, domainMax: 100 }}
               />

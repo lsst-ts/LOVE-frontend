@@ -24,7 +24,6 @@ import Moment from 'moment';
 import {
   WEBSOCKET_SIMULATION,
   SUBPATH,
-  ISO_STRING_DATE_TIME_FORMAT,
   ISO_INTEGER_DATE_FORMAT,
   AUTO_HYPERLINK_JIRA_PROJECTS,
   JIRA_TICKETS_BASE_URL,
@@ -991,19 +990,18 @@ export default class ManagerInterface {
     });
   }
 
-  static getCurrentNightReport() {
+  static getLastNightReports({ min_day_obs, limit = 7 }) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
 
-    const currentDate = Moment().utc();
-    const nextDayDate = Moment(currentDate).add(1, 'day').utc();
-    const currentObsDay = getObsDayFromDate(currentDate);
-    const nextObsDay = getObsDayFromDate(nextDayDate);
-
     const url =
-      `${this.getApiBaseUrl()}ole/nightreport/reports/?` + `min_day_obs=${currentObsDay}&max_day_obs=${nextObsDay}`;
+      `${this.getApiBaseUrl()}ole/nightreport/reports` +
+      `?order_by=-date_added` +
+      `&limit=${limit}` +
+      (min_day_obs ? `&min_day_obs=${min_day_obs}` : '');
+
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
@@ -2044,6 +2042,18 @@ export function getObsDayStartFromDate(date) {
 }
 
 /**
+ * Returns a Moment object representing the end of the given observation day.
+ * The end is defined as 11:59:59.999 (noon) on the day after the provided obsDay.
+ *
+ * @param {string|number} obsDay - The observation day in 'YYYYMMDD' format.
+ * @returns {Object} Moment object set to 11:59:59.999 on the next day.
+ */
+export function getObsDayEnd(obsDay) {
+  const utcDate = Moment(obsDay.toString(), 'YYYYMMDD').utc();
+  return utcDate.add(1, 'day').set({ hour: 11, minute: 59, second: 59, millisecond: 999 });
+}
+
+/**
  * Convert the given OBS day (YYYYMMDD) to ISO format (YYYY-MM-DD).
  *
  * @param {number} obsDay - The OBS day to convert as an interger.
@@ -2430,6 +2440,7 @@ export function getEFDInstanceForHost() {
 /**
  * Parse plot inputs and convert them to a format the EFD API understands.
  * The transformation is done from:
+ *
  * [
  *   {name: {csc, salindex, topic, item}}
  * ]
@@ -2471,104 +2482,173 @@ export const parsePlotInputsEFD = (inputs) => {
 };
 
 /**
- * Reformat data coming from the commander, from:
+ * Reformats data from the commander into a structure compatible with the Plot component.
+ *
+ * This function processes the response received from the commander when querying the EFD endpoint.
+ * It handles the InfluxDB array fields format (items with suffixes like
+ * `arrayItem0`, `arrayItem1`, etc.) by grouping their values.
+ * Topic names from InfluxDB also contain the `logevent_` prefix
+ * for log events, which is removed in the output.
+ * It converts timestamps to the required format.
+ *
+ * Input format:
  * {
- *   "csc-index-topic": {
- *     "item":[{"ts":"2021-01-26 19:15:00+00:00","value":6.9}]
+ *   "csc-index-topicA": {
+ *     "item": [
+ *       {
+ *         "ts": "2021-01-26 19:15:00+00:00",
+ *         "value": 3.14
+ *       }
+ *     ],
+ *     "arrayItem0": [
+ *       {
+ *         "ts": "2021-01-26 19:15:00+00:00",
+ *         "value": 0.0
+ *       }
+ *     ],
+ *     "arrayItem1": [
+ *       {
+ *         "ts": "2021-01-26 19:15:00+00:00",
+ *         "value": 1.0
+ *       }
+ *     ],
+ *    "arrayItem9": [
+ *       {
+ *         "ts": "2021-01-26 19:15:00+00:00",
+ *         "value": 9.0
+ *       }
+ *     ]
+ *   },
+ *   "csc-index-logevent_topicB": {
+ *     "item": [
+ *       {
+ *         "ts": "2021-01-26 19:15:00+00:00",
+ *         "value": 2.71
+ *       }
+ *     ]
  *   }
  * }
- * to:
+ *
+ * Output format:
  * {
- *   "csc-index-topic": {
- *     "item": [{<tsLabel>:"2021-01-26 19:15:00+00:00",<valueLabel>:6.9}]
+ *   "csc-index-topicA": {
+ *     "item": [
+ *       {
+ *         <tsLabel>: "2021-01-26 19:15:00+00:00",
+ *         <valueLabel>: 3.14
+ *       }
+ *     ],
+ *     "arrayItem": [
+ *       {
+ *         <tsLabel>: "2021-01-26 19:15:00+00:00",
+ *         <valueLabel>: [0.0, 1.0, empty x 7, 9.0]
+ *       }
+ *     ]
+ *   },
+ *   "csc-index-topicB": {
+ *     "item": [
+ *       {
+ *         <tsLabel>: "2021-01-26 19:15:00+00:00",
+ *         <valueLabel>: 2.71
+ *       }
+ *     ]
  *   }
  * }
  *
  */
-export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y') => {
+export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y', salFieldsInfo = {}) => {
   const newData = {};
-  Object.keys(data).forEach((topicKey) => {
-    const topicData = data[topicKey];
-    const newTopicData = {};
-    Object.keys(topicData).forEach((propertyKey) => {
-      const propertyDataArray = topicData[propertyKey];
-      newTopicData[propertyKey] = propertyDataArray.map((dataPoint) => {
-        const tsString = dataPoint?.ts.split(' ').join('T');
-        const parsedTsString = parseTimestamp(tsString);
-        return {
-          units: { y: dataPoint?.units },
-          [tsLabel]: parsedTsString,
-          [valueLabel]: dataPoint?.value,
-        };
-      });
+  Object.entries(data).forEach(([efdTopicKey, efdTopicData]) => {
+    const csc = efdTopicKey.split('-')[0];
+    const topic = efdTopicKey.split('-')[2];
+    const isEvent = efdTopicKey.includes('logevent_');
+    const topicKey = efdTopicKey.replace('logevent_', '');
+    newData[topicKey] = {};
+    Object.entries(efdTopicData).forEach(([efdItemKey, efdItemData]) => {
+      const itemKey = efdItemKey.replace(/[\d]+$/, '');
+      const itemMetadata = salFieldsInfo[csc]?.[isEvent ? 'event_data' : 'telemetry_data']?.[topic]?.[itemKey];
+      const itemIsArray = itemMetadata?.count > 1;
+
+      if (itemIsArray) {
+        // If the item is an array initialize its data points with empty arrays
+        if (!newData[topicKey][itemKey]) {
+          newData[topicKey][itemKey] = efdItemData.map((dataPoint) => {
+            const tsString = dataPoint?.ts.split(' ').join('T');
+            const parsedTsString = parseTimestamp(tsString);
+            return {
+              [tsLabel]: parsedTsString,
+              [valueLabel]: [],
+            };
+          });
+        }
+
+        const itemIndex = parseInt(efdItemKey.match(/[\d]+$/)[0], 10);
+        newData[topicKey][itemKey].forEach((dataPoint, index) => {
+          dataPoint[valueLabel][itemIndex] = efdItemData[index]?.value;
+        });
+      } else {
+        newData[topicKey][efdItemKey] = efdItemData?.map((dataPoint) => {
+          const tsString = dataPoint?.ts.split(' ').join('T');
+          const parsedTsString = parseTimestamp(tsString);
+          return {
+            [tsLabel]: parsedTsString,
+            [valueLabel]: dataPoint?.value,
+          };
+        });
+      }
     });
-    newData[topicKey] = newTopicData;
   });
   return newData;
 };
 
 /**
- * Handles the retrieval and processing of historical plot data from the EFD.
- * This function queries the EFD for historical data based on the provided inputs, processes the data to handle
- * Influx DB array fields and log events and format the payload as the Plot component expects.
- * Finally updates the historical data state using the provided callback function.
+ * Determines if a night report is considered old.
  *
- * See also:
- * `getEFDInstanceForHost`, which retrieves the EFD instance for the current hostname.
- * `parsePlotInputsEFD`, which transforms the Plot inputs into a format suitable for querying the EFD.
- * `ManagerInterface.getEFDTimeseries`, which queries the EFD for historical data.
- * `parseCommanderData`, which reformats the data coming from the commander.
+ * A report is considered old if its `day_obs` property does not match the current observing day,
+ * or if it has a `date_sent` property.
  *
- * @param {Object} startDate - The start date for the historical data query, expected to be a moment.js object.
- * @param {number} timeWindow - The time window (in minutes) for the historical data query.
- * @param {Object} inputs - An object of inputs configurations for the Plot component.
- * @param {Object} salFieldsInfo - An object containing information about the SAL fields.
- * @param {Function} setHistoricalData - A callback function to set the processed historical data. A setState function is expected.
+ * If the report parameter is not provided, the function returns false.
  *
- * @returns {void} This function does not return a value.
+ * @param {Object} [report] - The night report object to check (optional).
+ * @param {number} report.day_obs - The observing day of the report.
+ * @param {string|Date} report.date_sent - The date the report was sent.
+ * @returns {boolean} Returns true if the report is old, otherwise false.
  */
-export function handlePlotHistoricalData(startDate, timeWindow, inputs, salFieldsInfo, setHistoricalData) {
-  const efdInstance = getEFDInstanceForHost();
-  if (!efdInstance) {
-    return;
+export function isNightReportOld(report) {
+  if (!report) return false;
+
+  const currentObsDay = parseInt(getObsDayFromDate(Moment(), 10));
+  return !!(report.day_obs !== currentObsDay || report.date_sent);
+}
+
+/**
+ * Get the cut date from a night report.
+ *
+ * If the report was sent during its corresponding observing day,
+ * the cut date is the the sent date of the report.
+ *
+ * If the report has not been sent yet or was sent
+ * after its corresponding observing day, the cut date is the end of its
+ * observing day, i.e. 11:59:59 UTC of the next calendar day.
+ *
+ * If the report parameter is not provided, the function returns null.
+ *
+ * @param {object} report
+ * @param {number} report.day_obs - The observing day of the report.
+ * @param {string|Date} report.date_sent - The date the report was sent.
+ * @returns {Object|null} Moment object representing the cut date in UTC, or null if no report is provided.
+ */
+export function getCutDateFromNightReport(report) {
+  if (!report) return null;
+
+  const obsDayEnd = getObsDayEnd(report.day_obs);
+  if (report.date_sent) {
+    const sentDate = Moment(report.date_sent + 'Z');
+
+    if (sentDate.isAfter(obsDayEnd)) {
+      return obsDayEnd;
+    }
+    return sentDate;
   }
-  const parsedDate = startDate.utc().format(ISO_STRING_DATE_TIME_FORMAT);
-  const cscs = parsePlotInputsEFD(inputs);
-  const tsLabel = 'x';
-  const valueLabel = 'y';
-  ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min', efdInstance).then((data) => {
-    if (!data) return;
-    const parsedData = parseCommanderData(data, tsLabel, valueLabel);
-    Object.keys(parsedData).forEach((key) => {
-      const topicData = parsedData[key];
-      const csc = key.split('-')[0];
-      const topic = key.split('-')[2];
-      const isEvent = key.includes('logevent_');
-      Object.keys(topicData).forEach((efdItemKey) => {
-        const efdItemData = topicData[efdItemKey];
-        const itemKey = efdItemKey.replace(/[\d]+$/, '');
-        const itemData = topicData[itemKey];
-        const itemMetadata = salFieldsInfo[csc]?.[isEvent ? 'event_data' : 'telemetry_data']?.[topic]?.[itemKey];
-        const itemIsArray = itemMetadata?.count > 1;
-        if (itemIsArray) {
-          if (!itemData) {
-            topicData[itemKey] = efdItemData.map((dataPoint) => ({
-              ...dataPoint,
-              [valueLabel]: [],
-            }));
-          }
-          const itemIndex = parseInt(efdItemKey.match(/[\d]+$/)[0], 10);
-          topicData[itemKey].forEach((dataPoint, index) => {
-            dataPoint[valueLabel][itemIndex] = efdItemData[index]?.[valueLabel];
-          });
-          delete topicData[efdItemKey];
-        }
-      });
-      if (isEvent) {
-        parsedData[key.replace('logevent_', '')] = parsedData[key];
-        delete parsedData[key];
-      }
-    });
-    setHistoricalData(parsedData);
-  });
+  return obsDayEnd;
 }

@@ -1,10 +1,19 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
-import ManagerInterface, { fixedFloat, getObsDayStartFromDate } from 'Utils';
+import ManagerInterface, {
+  fixedFloat,
+  getObsDayFromDate,
+  getObsDayStartFromDate,
+  getObsDayISO,
+  getEFDInstanceForHost,
+  isNightReportOld,
+  getCutDateFromNightReport,
+} from 'Utils';
 import {
   ISO_STRING_DATE_TIME_FORMAT,
   TIME_FORMAT,
+  EFD_RETENTION_DAYS_PER_INSTANCE,
   mtMountDeployableMotionStateMap,
   mtMountPowerStateMap,
   mtMountElevationLockingPinMotionStateMap,
@@ -13,6 +22,7 @@ import {
 import Alert from 'components/GeneralPurpose/Alert/Alert';
 import Button from 'components/GeneralPurpose/Button/Button';
 import MultiSelect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
+import Select from 'components/GeneralPurpose/Select/Select';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import RefreshIcon from 'components/icons/RefreshIcon/RefreshIcon';
@@ -68,8 +78,9 @@ function ProgressBarSection({ currentStep, currentStatusText }) {
   );
 }
 
-function TitleField() {
-  const formattedDate = Moment().format('YYYY-MM-DD');
+function TitleField({ report }) {
+  const currentObsDay = parseInt(getObsDayFromDate(Moment()), 10);
+  const formattedDate = getObsDayISO(report?.day_obs ?? currentObsDay);
   return (
     <div className={styles.titleField}>
       <h1>Rubin Observatory Night Report {formattedDate}</h1>
@@ -112,14 +123,16 @@ function SummaryField({ isEditDisabled, summary, setSummary }) {
   );
 }
 
-function WeatherField({ report, weather, setWeather }) {
+function WeatherField({ report, setWeather }) {
   const [timeLoss, setTimeLoss] = useState(0);
   const [loading, setLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState();
   const narrativelogsPollingRef = useRef(null);
 
+  const isReportOld = isNightReportOld(report);
+
   const isEditDisabled = () => {
-    return report.date_sent ? true : false;
+    return report?.date_sent ? true : false;
   };
 
   const queryNarrativelogs = (date) => {
@@ -147,24 +160,29 @@ function WeatherField({ report, weather, setWeather }) {
   };
 
   useEffect(() => {
-    narrativelogsPollingRef.current = setInterval(() => {
+    if (!isReportOld) {
+      narrativelogsPollingRef.current = setInterval(() => {
+        queryNarrativelogs(Moment());
+      }, NARRATIVE_LOGS_POLLING_INTERVAL_MS);
       queryNarrativelogs(Moment());
-    }, NARRATIVE_LOGS_POLLING_INTERVAL_MS);
-    queryNarrativelogs(Moment());
 
-    return () => {
-      clearInterval(narrativelogsPollingRef.current);
-      narrativelogsPollingRef.current = null;
-    };
+      return () => {
+        clearInterval(narrativelogsPollingRef.current);
+        narrativelogsPollingRef.current = null;
+      };
+    }
   }, []);
 
   useEffect(() => {
-    if (report?.date_sent) {
-      queryNarrativelogs(Moment(report.date_sent));
-      clearInterval(narrativelogsPollingRef.current);
-      narrativelogsPollingRef.current = null;
+    if (report && isReportOld) {
+      const cutDate = getCutDateFromNightReport(report);
+      queryNarrativelogs(cutDate);
+      if (narrativelogsPollingRef.current) {
+        clearInterval(narrativelogsPollingRef.current);
+        narrativelogsPollingRef.current = null;
+      }
     }
-  }, [report?.date_sent]);
+  }, [report?.date_sent, report?.id]);
 
   return (
     <>
@@ -188,7 +206,12 @@ function WeatherField({ report, weather, setWeather }) {
           label="Weather time loss"
         />
       </div>
-      <TextArea readOnly={isEditDisabled()} value={weather} callback={setWeather} className={styles.reportWeather} />
+      <TextArea
+        readOnly={isEditDisabled()}
+        value={report?.weather}
+        callback={setWeather}
+        className={styles.reportWeather}
+      />
     </>
   );
 }
@@ -263,16 +286,18 @@ function AlertsSection({ refreshWarningActive, changesNotSaved }) {
   );
 }
 
-function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
-  const [currentStep, setCurrentStep] = useState(STEPS.NOTSAVED);
+function getReportStatusStep(report) {
+  if (report?.date_sent) {
+    return STEPS.SENT;
+  }
+  if (report) {
+    return STEPS.SAVED;
+  }
+  return STEPS.NOTSAVED;
+}
+
+function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpdate, loading: propsLoading }) {
   const [userOptions, setUserOptions] = useState([]);
-  const [selectedUsers, setSelectedUsers] = useState([]);
-  const [summary, setSummary] = useState('');
-  const [weather, setWeather] = useState('');
-  const [simonyiStatus, setSimonyiStatus] = useState('');
-  const [auxtelStatus, setAuxtelStatus] = useState('');
-  const [confluenceURL, setConfluenceURL] = useState('');
-  const [reportID, setReportID] = useState();
   const [changesNotSaved, setChangesNotSaved] = useState(false);
   const [loading, setLoading] = useState({
     save: false,
@@ -281,33 +306,18 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
   const [lastRefreshed, setLastRefreshed] = useState(Moment());
   const [refreshWarningActive, setRefreshWarningActive] = useState(false);
 
+  const currentStep = getReportStatusStep(report);
+
   const updateReport = (report) => {
-    setReport(report);
-    if (report.date_sent) {
-      setCurrentStep(STEPS.SENT);
-    } else {
-      setCurrentStep(STEPS.SAVED);
-    }
-    setReportID(report.id);
-    setSelectedUsers(report.observers_crew);
-    setSummary(report.summary);
-    setWeather(report.weather);
-    setSimonyiStatus(report.maintel_summary);
-    setAuxtelStatus(report.auxtel_summary);
-    setConfluenceURL(report.confluence_url);
+    handleReportUpdate(report);
   };
+
+  const selectedUsers = useMemo(() => report?.observers_crew ?? [], [report]);
 
   useEffect(() => {
     // Query users
     ManagerInterface.getUsers().then((users) => {
       setUserOptions(users.map((u) => `${u.first_name} ${u.last_name}`));
-    });
-
-    // Query current night report
-    ManagerInterface.getCurrentNightReport().then((reports) => {
-      if (reports.length > 0) {
-        updateReport(reports[0]);
-      }
     });
 
     // Set interval to trigger renders
@@ -349,7 +359,7 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
         return acc;
       }, {});
 
-      ManagerInterface.sendCurrentNightReport(reportID, parsedObservatoryState, parsedCSCStates).then((report) => {
+      ManagerInterface.sendCurrentNightReport(report.id, parsedObservatoryState, parsedCSCStates).then((report) => {
         if (report) {
           updateReport(report);
         }
@@ -363,11 +373,11 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
     if (currentStep === STEPS.NOTSAVED) {
       setLoading({ ...loading, save: true });
       ManagerInterface.saveCurrentNightReport(
-        summary,
-        weather,
-        simonyiStatus,
-        auxtelStatus,
-        confluenceURL,
+        report.summary ?? '',
+        report.weather ?? '',
+        report.maintel_summary ?? '',
+        report.auxtel_summary ?? '',
+        report.confluence_url ?? '',
         selectedUsers,
       )
         .then((report) => {
@@ -382,12 +392,12 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
     } else {
       setLoading({ ...loading, save: true });
       ManagerInterface.updateCurrentNightReport(
-        reportID,
-        summary,
-        weather,
-        simonyiStatus,
-        auxtelStatus,
-        confluenceURL,
+        report.id,
+        report.summary ?? '',
+        report.weather ?? '',
+        report.maintel_summary ?? '',
+        report.auxtel_summary ?? '',
+        report.confluence_url ?? '',
         selectedUsers,
       )
         .then((report) => {
@@ -411,57 +421,69 @@ function ObservatoryForm({ report, setReport, observatoryState, cscStates }) {
   };
 
   const isEditDisabled = () => {
-    return currentStep === STEPS.SENT;
+    return currentStep === STEPS.SENT || propsLoading;
   };
 
-  const handleFieldChange = (setState) => {
-    return (newValue) => {
-      setState(newValue);
-      setChangesNotSaved(true);
-    };
+  const handleFieldChange = (newValue) => {
+    updateReport({ ...report, ...newValue });
+    setChangesNotSaved(true);
   };
 
-  const handleConfluenceURLChange = handleFieldChange(setConfluenceURL);
-  const handleSelectedUsersChange = handleFieldChange(setSelectedUsers);
-  const handleSummaryChange = handleFieldChange(setSummary);
-  const handleWeatherChange = handleFieldChange(setWeather);
-  const handleSimonyiStatusChange = handleFieldChange(setSimonyiStatus);
-  const handleAuxtelStatusChange = handleFieldChange(setAuxtelStatus);
-
-  const handleSelectedUsersChangeCallback = useCallback(handleSelectedUsersChange, []);
+  const handleConfluenceURLChange = useCallback((value) => {
+    handleFieldChange({ confluence_url: value });
+  }, []);
+  const handleSelectedUsersChange = useCallback((value) => {
+    handleFieldChange({ observers_crew: value });
+  }, []);
+  const handleSummaryChange = useCallback((value) => {
+    handleFieldChange({ summary: value });
+  }, []);
+  const handleWeatherChange = useCallback((value) => {
+    handleFieldChange({ weather: value });
+  }, []);
+  const handleSimonyiStatusChange = useCallback((value) => {
+    handleFieldChange({ maintel_summary: value });
+  }, []);
+  const handleAuxtelStatusChange = useCallback((value) => {
+    handleFieldChange({ auxtel_summary: value });
+  }, []);
 
   return (
     <form className={styles.formContainer}>
       <ProgressBarSection currentStep={currentStep} currentStatusText={getCurrentStatusText(currentStep)} />
 
-      <AlertsSection refreshWarningActive={refreshWarningActive} changesNotSaved={changesNotSaved} />
+      <TitleField report={report} />
 
-      <TitleField />
-
-      <ConfluenceURLField confluenceURL={confluenceURL} setConfluenceURL={handleConfluenceURLChange} />
+      <ConfluenceURLField
+        isEditDisabled={isEditDisabled()}
+        confluenceURL={report?.confluence_url}
+        setConfluenceURL={handleConfluenceURLChange}
+      />
 
       <ObserversField
         isEditDisabled={isEditDisabled()}
         userOptions={userOptions}
         selectedUsers={selectedUsers}
-        setSelectedUsers={handleSelectedUsersChangeCallback}
+        setSelectedUsers={handleSelectedUsersChange}
       />
 
-      <SummaryField isEditDisabled={isEditDisabled()} summary={summary} setSummary={handleSummaryChange} />
+      <SummaryField isEditDisabled={isEditDisabled()} summary={report?.summary} setSummary={handleSummaryChange} />
 
-      <WeatherField report={report} weather={weather} setWeather={handleWeatherChange} />
+      <WeatherField report={report} setWeather={handleWeatherChange} />
 
       <SimonyiStatusField
         isEditDisabled={isEditDisabled()}
-        simonyiStatus={simonyiStatus}
+        simonyiStatus={report?.maintel_summary}
         setSimonyiStatus={handleSimonyiStatusChange}
       />
 
       <AuxTelStatusField
         isEditDisabled={isEditDisabled()}
-        auxtelStatus={auxtelStatus}
+        auxtelStatus={report?.auxtel_summary}
         setAuxtelStatus={handleAuxtelStatusChange}
       />
+
+      <AlertsSection refreshWarningActive={refreshWarningActive} changesNotSaved={changesNotSaved} />
 
       <div className={styles.buttons}>
         <Button onClick={handleSave} disabled={!isAbleToSave()}>
@@ -485,26 +507,100 @@ function ObservatoryData({ report, observatoryState, cscStates }) {
   );
 }
 
-function NightReport({ observatoryState, cscStates, subscribeToStreams, unsubscribeToStreams }) {
-  const [report, setReport] = useState({});
+function NightReport({
+  observatoryState,
+  cscStates,
+  subscribeToStreams,
+  unsubscribeToStreams,
+  allowSendingOldReports,
+}) {
+  const [reports, setReports] = useState([]);
+  const [selectedReport, setSelectedReport] = useState();
+  const [loading, setLoading] = useState(false);
+
+  const efdInstanceRef = useRef();
+
+  const currentObsDay = parseInt(getObsDayFromDate(Moment()), 10);
 
   useEffect(() => {
     subscribeToStreams();
+
+    // We define the reports limit based on the EFD instance retention days
+    // as EFD data is queried when editing old reports.
+    efdInstanceRef.current = getEFDInstanceForHost();
+    const efdRetentionDays = efdInstanceRef.current ? EFD_RETENTION_DAYS_PER_INSTANCE[efdInstanceRef.current] : 7;
+    const oldestObsDayWithEFDData = parseInt(getObsDayFromDate(Moment().subtract(efdRetentionDays, 'days')), 10);
+
+    setLoading(true);
+    ManagerInterface.getLastNightReports({
+      min_day_obs: oldestObsDayWithEFDData,
+      limit: efdRetentionDays,
+    })
+      .then((reports) => {
+        if (reports.length > 0) {
+          setReports(reports);
+          const lastReport = reports.length > 0 ? reports[0] : null;
+          setSelectedReport(lastReport?.day_obs === currentObsDay ? lastReport : null);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+
     return () => {
       unsubscribeToStreams();
+      efdInstanceRef.current = null;
     };
   }, []);
 
+  const handleReportUpdate = useCallback((report) => {
+    if (report) {
+      setReports((prevReports) => {
+        return prevReports.map((r) => (r.day_obs === report.day_obs ? report : r));
+      });
+    }
+  }, []);
+
+  const handleObsDayChange = (value) => {
+    const report = reports.find((r) => r.day_obs == value);
+    setSelectedReport(report);
+  };
+
+  const reportOptions = reports.sort((a, b) => b.day_obs - a.day_obs).map(({ day_obs }) => day_obs.toString());
+
+  if (!reportOptions.includes(currentObsDay.toString())) {
+    reportOptions.unshift(currentObsDay.toString());
+  }
+
   return (
-    <div className={styles.container}>
-      <ObservatoryForm
-        report={report}
-        setReport={setReport}
-        observatoryState={observatoryState}
-        cscStates={cscStates}
-      />
-      <ObservatoryData report={report} observatoryState={observatoryState} cscStates={cscStates} />
-    </div>
+    <>
+      {allowSendingOldReports && (
+        <div>
+          <Select
+            className={styles.select}
+            options={reportOptions}
+            onChange={({ value }) => handleObsDayChange(value)}
+            option={(selectedReport?.day_obs ?? currentObsDay)?.toString()}
+          />
+        </div>
+      )}
+      <div className={styles.container}>
+        <ObservatoryForm
+          key={'ObservatoryForm-' + selectedReport?.id}
+          report={selectedReport}
+          observatoryState={observatoryState}
+          cscStates={cscStates}
+          handleReportUpdate={handleReportUpdate}
+          loading={loading}
+        />
+        <ObservatoryData
+          key={'ObservatoryData-' + selectedReport?.id}
+          report={selectedReport}
+          observatoryState={observatoryState}
+          cscStates={cscStates}
+        />
+      </div>
+    </>
   );
 }
 
@@ -517,6 +613,8 @@ NightReport.propTypes = {
   subscribeToStreams: PropTypes.func.isRequired,
   /** Function to unsubscribe to streams */
   unsubscribeToStreams: PropTypes.func.isRequired,
+  /** Where to allow sending old reports */
+  allowSendingOldReports: PropTypes.bool,
 };
 
 export default NightReport;

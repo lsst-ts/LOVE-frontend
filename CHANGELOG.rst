@@ -2,6 +2,19 @@
 Version History
 ===============
 
+v6.9.0
+------
+
+* Update package.json version to v6.9.0. `<https://github.com/lsst-ts/LOVE-frontend/pull/734>`_
+* Extra tweaks to components of CreateNightReport. `<https://github.com/lsst-ts/LOVE-frontend/pull/732>`_
+* Update Jenkins pipeline. `<https://github.com/lsst-ts/LOVE-frontend/pull/733>`_
+* Extend the CreateNightReport component to allow editing and sending not sent reports. `<https://github.com/lsst-ts/LOVE-frontend/pull/731>`_
+* Remove deprecated XML user menu. `<https://github.com/lsst-ts/LOVE-frontend/pull/729>`_
+* Remove deprecated openSplice version from CSCExpanded. `<https://github.com/lsst-ts/LOVE-frontend/pull/730>`_
+* Include bump test status result on BumpTests component. `<https://github.com/lsst-ts/LOVE-frontend/pull/728>`_
+* Remove custom weather forecast logic from generic plot components. `<https://github.com/lsst-ts/LOVE-frontend/pull/727>`_
+* Fix TelescopesStates component to properly set the observatoryState from EFD response. `<https://github.com/lsst-ts/LOVE-frontend/pull/726>`_
+
 v6.8.1
 ------
 
