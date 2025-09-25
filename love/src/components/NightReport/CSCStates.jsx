@@ -8,23 +8,16 @@ import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 
 import styles from './CreateNightReport.module.css';
 
-function getEmptyCscStates() {
-  return NIGHTREPORT_CSCS_TO_REPORT.reduce((acc, cscIndex) => {
-    acc[cscIndex] = 0;
-    return acc;
-  }, {});
-}
-
 function CSCStates({ report, cscs: cscsProp }) {
-  const [cscs, setCscs] = useState(cscsProp);
+  const [historicalData, setHistoricalData] = useState();
   const [loading, setLoading] = useState(false);
 
   const isReportOld = isNightReportOld(report);
+  const cscs = historicalData ?? cscsProp;
 
   const fetchHistoricalData = () => {
-    setCscs(getEmptyCscStates());
     const cutDate = getCutDateFromNightReport(report);
-    const timeCutdate = Moment(cutDate).format(ISO_STRING_DATE_TIME_FORMAT);
+    const timeCutdate = cutDate.utc().format(ISO_STRING_DATE_TIME_FORMAT);
     const cscsPayload = {};
     Object.keys(cscs).forEach((cscName) => {
       const [csc, index] = cscName.split(':');
@@ -48,7 +41,7 @@ function CSCStates({ report, cscs: cscsProp }) {
             const cscData = efdResponse[topic];
             newCscs[cscName] = cscData.summaryState?.[0]?.value ?? 0;
           });
-          setCscs(newCscs);
+          setHistoricalData(newCscs);
         }
       })
       .finally(() => {
@@ -57,16 +50,10 @@ function CSCStates({ report, cscs: cscsProp }) {
   };
 
   useEffect(() => {
-    if (!isReportOld) {
-      setCscs(cscsProp);
-    }
-  }, [cscsProp, isReportOld]);
-
-  useEffect(() => {
     if (report && isReportOld) {
       fetchHistoricalData();
     }
-  }, [report?.date_sent, report?.id]);
+  }, [report?.id, isReportOld]);
 
   return (
     <div className={styles.cscStatesContainer}>
