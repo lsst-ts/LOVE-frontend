@@ -6,10 +6,10 @@ import Error from './Icons/Error';
 
 function ConnectionIcon(props) {
   const mapStateToRender = (state) => {
-    if (state === 'enabled') return <Enabled/>;
-    if (state === 'disabled') return <Disabled/>;
-    if (state === 'danger') return <Danger/>;
-    if (state === 'error') return <Error/>;
+    if (state === 'enabled') return <Enabled />;
+    if (state === 'disabled') return <Disabled />;
+    if (state === 'danger') return <Danger />;
+    if (state === 'error') return <Error />;
     return <></>;
   };
   const { state } = props;
