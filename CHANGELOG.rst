@@ -5,6 +5,7 @@ Version History
 v6.9.0
 ------
 
+* Update package.json version to v6.9.0. `<https://github.com/lsst-ts/LOVE-frontend/pull/734>`_
 * Extra tweaks to components of CreateNightReport. `<https://github.com/lsst-ts/LOVE-frontend/pull/732>`_
 * Update Jenkins pipeline. `<https://github.com/lsst-ts/LOVE-frontend/pull/733>`_
 * Extend the CreateNightReport component to allow editing and sending not sent reports. `<https://github.com/lsst-ts/LOVE-frontend/pull/731>`_
