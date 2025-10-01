@@ -424,46 +424,49 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
     return currentStep === STEPS.SENT || propsLoading;
   };
 
-  const handleFieldChange = (newValue) => {
-    updateReport({ ...report, ...newValue });
-    setChangesNotSaved(true);
-  };
+  const handleFieldChange = useCallback(
+    (newValue) => {
+      updateReport({ ...report, ...newValue });
+      setChangesNotSaved(true);
+    },
+    [report],
+  );
 
   const handleConfluenceURLChange = useCallback(
     (value) => {
       handleFieldChange({ confluence_url: value });
     },
-    [report],
+    [handleFieldChange],
   );
   const handleSelectedUsersChange = useCallback(
     (value) => {
       handleFieldChange({ observers_crew: value });
     },
-    [report],
+    [handleFieldChange],
   );
   const handleSummaryChange = useCallback(
     (value) => {
       handleFieldChange({ summary: value });
     },
-    [report],
+    [handleFieldChange],
   );
   const handleWeatherChange = useCallback(
     (value) => {
       handleFieldChange({ weather: value });
     },
-    [report],
+    [handleFieldChange],
   );
   const handleSimonyiStatusChange = useCallback(
     (value) => {
       handleFieldChange({ maintel_summary: value });
     },
-    [report],
+    [handleFieldChange],
   );
   const handleAuxtelStatusChange = useCallback(
     (value) => {
       handleFieldChange({ auxtel_summary: value });
     },
-    [report],
+    [handleFieldChange],
   );
 
   return (
