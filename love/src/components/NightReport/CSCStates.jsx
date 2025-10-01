@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Moment from 'moment';
 import ManagerInterface, { getEFDInstanceForHost, isNightReportOld, getCutDateFromNightReport } from 'Utils';
 import { ISO_STRING_DATE_TIME_FORMAT, NIGHTREPORT_CSCS_TO_REPORT } from 'Config';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
@@ -9,11 +8,11 @@ import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import styles from './CreateNightReport.module.css';
 
 function CSCStates({ report, cscs: cscsProp }) {
-  const [historicalData, setHistoricalData] = useState();
+  const [historicalData, setHistoricalData] = useState({});
   const [loading, setLoading] = useState(false);
 
   const isReportOld = isNightReportOld(report);
-  const cscs = historicalData ?? cscsProp;
+  const cscs = isReportOld ? historicalData : cscsProp;
 
   const fetchHistoricalData = () => {
     const cutDate = getCutDateFromNightReport(report);
@@ -64,7 +63,7 @@ function CSCStates({ report, cscs: cscsProp }) {
         <SpinnerIcon className={styles.spinner} />
       ) : (
         <div className={styles.cscStates}>
-          {Object.keys(cscs).map((cscNameIndex) => {
+          {NIGHTREPORT_CSCS_TO_REPORT.map((cscNameIndex) => {
             const cscState = cscs[cscNameIndex];
             const stateObject = CSCDetail.states[cscState ?? 0];
             return (

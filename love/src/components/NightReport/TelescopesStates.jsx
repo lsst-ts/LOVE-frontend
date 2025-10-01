@@ -103,11 +103,11 @@ const parseTelescopesStatesFromEFD = (efdResponse) => {
 };
 
 function TelescopesStates({ report, observatoryState: observatoryStateProp }) {
-  const [historicalData, setHistoricalData] = useState();
+  const [historicalData, setHistoricalData] = useState({});
   const [loading, setLoading] = useState(false);
 
   const isReportOld = isNightReportOld(report);
-  const observatoryState = historicalData ?? observatoryStateProp;
+  const observatoryState = isReportOld ? historicalData : observatoryStateProp;
 
   const fetchHistoricalData = () => {
     const cutDate = getCutDateFromNightReport(report);
