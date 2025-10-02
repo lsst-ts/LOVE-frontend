@@ -2903,3 +2903,7 @@ export const getLastAlarm = (state) => {
 export const getObservingLogs = (state) => {
   return state.observingLogs.logMessages;
 };
+
+export const getNightReportState = (state) => {
+  return state.nightReport;
+};

@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
+import isEqual from 'lodash/isEqual';
+import debounce from 'lodash.debounce';
 import ManagerInterface, {
   fixedFloat,
   getObsDayFromDate,
@@ -296,9 +298,16 @@ function getReportStatusStep(report) {
   return STEPS.NOTSAVED;
 }
 
-function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpdate, loading: propsLoading }) {
+function ObservatoryForm({
+  report,
+  observatoryState,
+  cscStates,
+  nightReportState,
+  handleReportUpdate,
+  handleReportStore,
+  loading: propsLoading,
+}) {
   const [userOptions, setUserOptions] = useState([]);
-  const [changesNotSaved, setChangesNotSaved] = useState(false);
   const [loading, setLoading] = useState({
     save: false,
     send: false,
@@ -307,10 +316,7 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
   const [refreshWarningActive, setRefreshWarningActive] = useState(false);
 
   const currentStep = getReportStatusStep(report);
-
-  const updateReport = (report) => {
-    handleReportUpdate(report);
-  };
+  const changesNotSaved = nightReportState?.changesNotSaved;
 
   const selectedUsers = useMemo(() => report?.observers_crew ?? [], [report]);
 
@@ -361,7 +367,8 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
 
       ManagerInterface.sendCurrentNightReport(report.id, parsedObservatoryState, parsedCSCStates).then((report) => {
         if (report) {
-          updateReport(report);
+          // handleReportUpdate(report);
+          handleReportStore(report);
         }
         setLoading({ ...loading, send: false });
       });
@@ -382,8 +389,8 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
       )
         .then((report) => {
           if (report) {
-            updateReport(report);
-            setChangesNotSaved(false);
+            // handleReportUpdate(report);
+            handleReportStore(report);
           }
         })
         .finally(() => {
@@ -402,8 +409,8 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
       )
         .then((report) => {
           if (report) {
-            updateReport(report);
-            setChangesNotSaved(false);
+            // handleReportUpdate(report);
+            handleReportStore(report);
           }
         })
         .finally(() => {
@@ -426,8 +433,7 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
 
   const handleFieldChange = useCallback(
     (newValue) => {
-      updateReport({ ...report, ...newValue });
-      setChangesNotSaved(true);
+      handleReportUpdate({ ...report, ...newValue });
     },
     [report],
   );
@@ -523,6 +529,8 @@ function ObservatoryData({ report, observatoryState, cscStates }) {
 function NightReport({
   observatoryState,
   cscStates,
+  nightReportState,
+  broadcastNightReport,
   subscribeToStreams,
   unsubscribeToStreams,
   allowSendingOldReports,
@@ -553,8 +561,10 @@ function NightReport({
         const currentObsDayReport = reports.find((r) => r.day_obs === currentObsDay);
         if (!currentObsDayReport) {
           setReports([{ day_obs: currentObsDay }, ...reports]);
+          // broadcastNightReport({ day_obs: currentObsDay });
         } else {
           setReports(reports);
+          // broadcastNightReport(currentObsDayReport);
         }
       })
       .finally(() => {
@@ -567,20 +577,41 @@ function NightReport({
     };
   }, []);
 
+  const debouncedBroadcastNightReport = debounce(broadcastNightReport, 500);
+
   const handleReportUpdate = useCallback((report) => {
     if (report) {
-      setReports((prevReports) => {
-        return prevReports.map((r) => (r.day_obs === report.day_obs ? report : r));
-      });
+      if (!isNightReportOld(report)) {
+        // broadcastNightReport(report);
+        debouncedBroadcastNightReport(report);
+      }
     }
   }, []);
+
+  const handleReportStore = (report) => {
+    if (report) {
+      broadcastNightReport(report, true);
+    }
+  };
 
   const handleObsDayChange = (value) => {
     setSelectedObsDay(parseInt(value, 10));
   };
 
   const reportOptions = reports.sort((a, b) => b.day_obs - a.day_obs).map(({ day_obs }) => day_obs.toString());
-  const selectedReport = reports.find((r) => r.day_obs === selectedObsDay);
+
+  // const selectedReport = reports.find((r) => r.day_obs === selectedObsDay);
+  const selectedReport = useMemo(() => {
+    if (selectedObsDay === currentObsDay && nightReportState.report) {
+      return nightReportState.report;
+    }
+    return reports.find((r) => r.day_obs === selectedObsDay);
+  }, [reports, selectedObsDay, currentObsDay, nightReportState]);
+
+  // console.log(nightReportState);
+  useEffect(() => {
+    console.log('NightReport nightReportState changed');
+  }, [nightReportState]);
 
   return (
     <>
@@ -600,7 +631,9 @@ function NightReport({
           report={selectedReport}
           observatoryState={observatoryState}
           cscStates={cscStates}
+          nightReportState={nightReportState}
           handleReportUpdate={handleReportUpdate}
+          handleReportStore={handleReportStore}
           loading={loading}
         />
         <ObservatoryData

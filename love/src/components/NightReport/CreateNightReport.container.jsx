@@ -19,7 +19,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getSummaryStateValue, getNightreportObservatoryState } from 'redux/selectors/selectors';
+import { nightReportUpdate, nightReportSuccess, broadcastNightReport } from 'redux/actions/nightReport';
+import { getSummaryStateValue, getNightreportObservatoryState, getNightReportState } from 'redux/selectors/selectors';
 import { NIGHTREPORT_CSCS_TO_REPORT } from 'Config';
 import CreateNightReport from './CreateNightReport';
 
@@ -70,9 +71,11 @@ const mapStateToProps = (state) => {
     return acc;
   }, {});
   const observatoryState = getNightreportObservatoryState(state);
+  const nightReportState = getNightReportState(state);
   return {
     cscStates,
     observatoryState,
+    nightReportState,
   };
 };
 
@@ -96,7 +99,10 @@ const mapDispatchToProps = (dispatch) => {
     'event-ATPneumatics-0-m1CoverState',
   ];
 
-  const subscriptions = [...subscriptionsSummaryState, ...subscriptionsObservatoryState];
+  const nightReportSubscriptions = ['event-LOVE-0-nightReportUpdates'];
+
+  const subscriptions = [...subscriptionsSummaryState, ...subscriptionsObservatoryState, ...nightReportSubscriptions];
+
   return {
     subscriptions,
     subscribeToStreams: () => {
@@ -105,6 +111,9 @@ const mapDispatchToProps = (dispatch) => {
     unsubscribeToStreams: () => {
       subscriptions.forEach((s) => dispatch(removeGroup(s)));
     },
+    updateNightReport: (report) => dispatch(nightReportUpdate(report)),
+    storeNightReport: (report) => dispatch(nightReportSuccess(report)),
+    broadcastNightReport: (report, persisted = false) => dispatch(broadcastNightReport(report, persisted)),
   };
 };
 

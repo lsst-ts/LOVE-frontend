@@ -44,6 +44,7 @@ import { receiveLogMessageData, receiveErrorCodeData } from './summaryData';
 import { receiveAlarm, receiveAllAlarms } from './alarms';
 import { receiveServerTime } from './time';
 import { receiveObservingLog } from './observingLogs';
+import { nightReportUpdate, nightReportSuccess } from './nightReport';
 import { getConnectionStatus, getTokenStatus, getToken, getSubscriptions, getSubscription } from '../selectors';
 import { tokenStates } from '../reducers/auth';
 
@@ -271,6 +272,15 @@ export const openWebsocketConnection = () => {
           if (data.data[0].csc === 'Watcher') {
             if (stream.alarm) dispatch(receiveAlarm(stream.alarm[0]));
             else if (stream.stream) dispatch(receiveAllAlarms(stream.stream.alarms));
+          }
+
+          if (data.data[0].csc === 'LOVE' && data.data[0].data.nightReportUpdates) {
+            const { report, persisted } = data.data[0].data.nightReportUpdates;
+            if (persisted) {
+              dispatch(nightReportSuccess(report));
+            } else {
+              dispatch(nightReportUpdate(report));
+            }
           }
 
           if (data.data[0].data.logMessage) {
@@ -563,6 +573,32 @@ export const sendAction = (action) => {
     dispatch({
       type: SEND_ACTION,
       action,
+    });
+  };
+};
+
+/**
+ * Sends an event to the server if the connection is open.
+ */
+export const sendEvent = (csc, salindex, stream, data) => {
+  return (dispatch, getState) => {
+    if (getConnectionStatus(getState()) !== connectionStates.OPEN) {
+      return;
+    }
+
+    const eventObject = {
+      csc,
+      salindex,
+      data: {
+        [stream]: {
+          ...data,
+        },
+      },
+    };
+
+    socket.json({
+      category: 'event',
+      data: [eventObject],
     });
   };
 };

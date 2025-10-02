@@ -2615,7 +2615,7 @@ export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y', salFie
  * @returns {boolean} Returns true if the report is old, otherwise false.
  */
 export function isNightReportOld(report) {
-  if (!report) return false;
+  if (!report || !report.day_obs) return false;
 
   const currentObsDay = parseInt(getObsDayFromDate(Moment(), 10));
   return !!(report.day_obs !== currentObsDay || report.date_sent);

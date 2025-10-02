@@ -29,6 +29,7 @@ import time from './time';
 import uif from './uif';
 import observatoryState from './observatoryState';
 import salinfo from './salinfo';
+import nightReport from './nightReport';
 import { UPDATE_EDITED_VIEW } from '../actions/actionTypes';
 
 export default combineReducers({
@@ -45,4 +46,5 @@ export default combineReducers({
   time,
   observatoryState,
   salinfo,
+  nightReport,
 });
