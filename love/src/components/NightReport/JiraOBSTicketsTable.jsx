@@ -106,7 +106,7 @@ function JiraOBSTicketsTable({ report }) {
       <div className={styles.reportObsTicketsTitle}>
         <div>
           <div>Faults</div>
-          <div>(last updated: {lastUpdated?.format(TIME_FORMAT)} local)</div>
+          {!isReportOld && <div>(last updated: {lastUpdated?.format(TIME_FORMAT)} local)</div>}
           <Button
             title="Refresh tickets"
             onClick={() => {

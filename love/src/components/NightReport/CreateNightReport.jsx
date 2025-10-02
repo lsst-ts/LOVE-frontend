@@ -189,7 +189,7 @@ function WeatherField({ report, setWeather }) {
       <div className={styles.reportWeatherTitle}>
         <div>
           <div>Weather Conditions</div>
-          <div>(last updated: {lastUpdated?.format(TIME_FORMAT)} local)</div>
+          {!isReportOld && <div>(last updated: {lastUpdated?.format(TIME_FORMAT)} local)</div>}
           <Button
             title="Refresh weather time loss"
             onClick={() => {
