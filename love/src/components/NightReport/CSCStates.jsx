@@ -18,7 +18,7 @@ function CSCStates({ report, cscs: cscsProp }) {
     const cutDate = getCutDateFromNightReport(report);
     const timeCutdate = cutDate.utc().format(ISO_STRING_DATE_TIME_FORMAT);
     const cscsPayload = {};
-    Object.keys(cscs).forEach((cscName) => {
+    NIGHTREPORT_CSCS_TO_REPORT.forEach((cscName) => {
       const [csc, index] = cscName.split(':');
       cscsPayload[csc] = {
         [index]: {

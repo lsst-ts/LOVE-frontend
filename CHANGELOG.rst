@@ -2,6 +2,12 @@
 Version History
 ===============
 
+v6.9.2
+------
+
+* Update package.json version to v6.9.2. `<https://github.com/lsst-ts/LOVE-frontend/pull/738>`_
+* Fix payload arrangement for nightreport CSC states EFD query. `<https://github.com/lsst-ts/LOVE-frontend/pull/737>`_
+
 v6.9.1
 ------
 
