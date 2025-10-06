@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.9.2
+------
+
+* Fix payload arrangement for nightreport CSC states EFD query. `<https://github.com/lsst-ts/LOVE-frontend/pull/737>`_
+
 v6.9.1
 ------
 
