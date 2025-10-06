@@ -2,6 +2,12 @@
 Version History
 ===============
 
+v6.9.1
+------
+
+* Update package.json version to v6.9.1. `<https://github.com/lsst-ts/LOVE-frontend/pull/736>`_
+* Hotfix to CreateNightReport flow for updates. `<https://github.com/lsst-ts/LOVE-frontend/pull/735>`_
+
 v6.9.0
 ------
 
