@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.9.1
+------
+
+* Hotfix to CreateNightReport flow for updates. `<https://github.com/lsst-ts/LOVE-frontend/pull/735>`_
+
 v6.9.0
 ------
 
