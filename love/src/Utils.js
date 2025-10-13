@@ -1042,8 +1042,9 @@ export default class ManagerInterface {
     });
   }
 
-  static updateCurrentNightReport(
+  static updateNightReport(
     nightreport_id,
+    day_obs,
     summary,
     weather,
     maintel_summary,
@@ -1061,6 +1062,7 @@ export default class ManagerInterface {
       method: 'PUT',
       headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
+        day_obs,
         summary,
         weather,
         maintel_summary,

@@ -391,8 +391,9 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
         });
     } else {
       setLoading({ ...loading, save: true });
-      ManagerInterface.updateCurrentNightReport(
+      ManagerInterface.updateNightReport(
         report.id,
+        report.day_obs,
         report.summary ?? '',
         report.weather ?? '',
         report.maintel_summary ?? '',
