@@ -2132,6 +2132,12 @@ export function checkJSONResponse(response, onSuccess) {
     toast.error('Not found.');
     return false;
   }
+  if (response.status === 409) {
+    return response.json().then((resp) => {
+      toast.error(resp.error);
+      return false;
+    });
+  }
   if (response.status === 413) {
     toast.error('File too large.');
     return false;
