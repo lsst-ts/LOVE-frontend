@@ -990,7 +990,7 @@ export default class ManagerInterface {
     });
   }
 
-  static getLastNightReports({ min_day_obs, limit = 7 }) {
+  static getLastNightReports(min_day_obs, limit = 7) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));

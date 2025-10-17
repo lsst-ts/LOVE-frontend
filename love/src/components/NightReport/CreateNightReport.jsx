@@ -543,10 +543,7 @@ function NightReport({
     const oldestObsDayWithEFDData = parseInt(getObsDayFromDate(Moment().subtract(efdRetentionDays, 'days')), 10);
 
     setLoading(true);
-    ManagerInterface.getLastNightReports({
-      min_day_obs: oldestObsDayWithEFDData,
-      limit: efdRetentionDays,
-    })
+    ManagerInterface.getLastNightReports(oldestObsDayWithEFDData, efdRetentionDays)
       .then((reports) => {
         const currentObsDayReport = reports.find((r) => r.day_obs === currentObsDay);
         if (!currentObsDayReport) {
