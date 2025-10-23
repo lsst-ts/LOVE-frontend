@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo, memo } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import ManagerInterface, {
@@ -34,8 +34,7 @@ import CSCStates from './CSCStates';
 import styles from './CreateNightReport.module.css';
 
 const MULTI_SELECT_OPTION_LENGTH = 50;
-const LAST_REFRESHED_WARNING_THRESHOLD_MINUTES = 60;
-const LAST_REFRESHED_WARNING_CHECK_INTERVAL_MS = 10000; // 1 minute
+const LAST_REFRESHED_WARNING_CHECK_INTERVAL_MS = 10000; // 10 seconds
 const NARRATIVE_LOGS_POLLING_INTERVAL_MS = 30000; // 30 seconds
 
 const STEPS = {
@@ -262,29 +261,35 @@ function ConfluenceURLField({ isEditDisabled, confluenceURL, setConfluenceURL })
   );
 }
 
-function AlertsSection({ refreshWarningActive, changesNotSaved }) {
-  const refreshedWarningThresholdHours = parseInt(LAST_REFRESHED_WARNING_THRESHOLD_MINUTES / 60, 10);
+const AlertsSection = memo(({ refreshWarningActive, changesNotSaved }) => {
+  const warningAlertRef = (ref) => {
+    if (ref && refreshWarningActive) {
+      ref.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className={styles.alerts}>
       {refreshWarningActive && (
-        <Alert type="warning">
-          The page has not been refreshed in the last {refreshedWarningThresholdHours}{' '}
-          {refreshedWarningThresholdHours > 1 ? 'hours' : 'hour'} and someone could have done changes. Please{' '}
-          <a
-            href="#"
-            onClick={() => {
-              location.reload();
-            }}
-          >
-            refresh
-          </a>{' '}
-          the page to get the latest data and don't forget to backup your changes if needed.
-        </Alert>
+        <div ref={warningAlertRef}>
+          <Alert type="warning">
+            Changes have been detected in the database. Please{' '}
+            <a
+              href="#"
+              onClick={() => {
+                location.reload();
+              }}
+            >
+              refresh
+            </a>{' '}
+            the page to get the latest data and don't forget to backup your changes if needed.
+          </Alert>
+        </div>
       )}
       {changesNotSaved && <Alert type="error">Changes on the current draft have not been saved yet.</Alert>}
     </div>
   );
-}
+});
 
 function getReportStatusStep(report) {
   if (report?.date_sent) {
@@ -319,17 +324,35 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
     ManagerInterface.getUsers().then((users) => {
       setUserOptions(users.map((u) => `${u.first_name} ${u.last_name}`));
     });
+  }, []);
 
+  const checkLastReport = () => {
+    const currentObsDay = parseInt(getObsDayFromDate(Moment()), 10);
+    ManagerInterface.getLastNightReports(currentObsDay).then((reports) => {
+      if (reports && reports.length > 0) {
+        const latestReport = reports[0];
+        if (report && latestReport.id !== report.id) {
+          setRefreshWarningActive(true);
+        }
+      }
+    });
+  };
+
+  useEffect(() => {
     // Set interval to trigger renders
-    const interval = setInterval(() => {
-      const warningActive = Moment().diff(lastRefreshed, 'minutes') > LAST_REFRESHED_WARNING_THRESHOLD_MINUTES;
-      setRefreshWarningActive(warningActive);
-    }, LAST_REFRESHED_WARNING_CHECK_INTERVAL_MS);
+    let interval;
+    if (!refreshWarningActive) {
+      interval = setInterval(() => {
+        checkLastReport();
+      }, LAST_REFRESHED_WARNING_CHECK_INTERVAL_MS);
+    }
 
     return () => {
-      clearInterval(interval);
+      if (interval) {
+        clearInterval(interval);
+      }
     };
-  }, []);
+  }, [refreshWarningActive]);
 
   const handleSent = (event) => {
     event.preventDefault();
@@ -391,8 +414,9 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
         });
     } else {
       setLoading({ ...loading, save: true });
-      ManagerInterface.updateCurrentNightReport(
+      ManagerInterface.updateNightReport(
         report.id,
+        report.day_obs,
         report.summary ?? '',
         report.weather ?? '',
         report.maintel_summary ?? '',
@@ -542,10 +566,7 @@ function NightReport({
     const oldestObsDayWithEFDData = parseInt(getObsDayFromDate(Moment().subtract(efdRetentionDays, 'days')), 10);
 
     setLoading(true);
-    ManagerInterface.getLastNightReports({
-      min_day_obs: oldestObsDayWithEFDData,
-      limit: efdRetentionDays,
-    })
+    ManagerInterface.getLastNightReports(oldestObsDayWithEFDData, efdRetentionDays)
       .then((reports) => {
         const currentObsDayReport = reports.find((r) => r.day_obs === currentObsDay);
         if (!currentObsDayReport) {
