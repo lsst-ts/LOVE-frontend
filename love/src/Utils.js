@@ -31,7 +31,8 @@ import {
   OLE_OBS_SUBSYSTEMS,
   OLE_OBS_SUBSYSTEMS_COMPONENTS,
   EFD_INSTANCES,
-} from 'Config.js';
+} from 'Config';
+import { HTTP_STATUS } from 'Constants';
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -252,10 +253,10 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
+      if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
         return false;
       }
-      if (response.status === 401) {
+      if (response.status === HTTP_STATUS.UNAUTHORIZED) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -284,11 +285,10 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
-        // console.error('Error communicating with the server.);
+      if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
         return false;
       }
-      if (response.status === 401) {
+      if (response.status === HTTP_STATUS.UNAUTHORIZED) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -308,10 +308,10 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
+      if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
         return false;
       }
-      if (response.status === 401) {
+      if (response.status === HTTP_STATUS.UNAUTHORIZED) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -331,10 +331,10 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
+      if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
         return false;
       }
-      if (response.status === 401) {
+      if (response.status === HTTP_STATUS.UNAUTHORIZED) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -354,10 +354,10 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
+      if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
         return false;
       }
-      if (response.status === 401) {
+      if (response.status === HTTP_STATUS.UNAUTHORIZED) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -380,10 +380,10 @@ export default class ManagerInterface {
         config_id: id,
       }),
     }).then((response) => {
-      if (response.status >= 500) {
+      if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
         return false;
       }
-      if (response.status === 401) {
+      if (response.status === HTTP_STATUS.UNAUTHORIZED) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -403,10 +403,10 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
+      if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
         return false;
       }
-      if (response.status === 401) {
+      if (response.status === HTTP_STATUS.UNAUTHORIZED) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -424,7 +424,7 @@ export default class ManagerInterface {
     }
     return fetchWithTimeout(url, { method: 'GET' })
       .then((result) => {
-        if (result.status !== 200) {
+        if (result.status !== HTTP_STATUS.OK) {
           throw new Error('EFD service not available');
         }
 
@@ -444,7 +444,7 @@ export default class ManagerInterface {
     }
     return fetchWithTimeout(url, { method: 'GET' })
       .then((result) => {
-        if (result.status !== 200) {
+        if (result.status !== HTTP_STATUS.OK) {
           throw new Error('SAL service not available');
         }
 
@@ -485,14 +485,14 @@ export default class ManagerInterface {
         efd_instance,
       }),
     }).then((response) => {
-      if (response.status >= 500) {
+      if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
         return false;
       }
-      if (response.status === 401) {
+      if (response.status === HTTP_STATUS.UNAUTHORIZED) {
         ManagerInterface.removeToken();
         return false;
       }
-      if (response.status === 400) {
+      if (response.status === HTTP_STATUS.BAD_REQUEST) {
         return response.json().then((resp) => {
           toast.error(resp.ack);
           return false;
@@ -542,15 +542,15 @@ export default class ManagerInterface {
         scale,
       }),
     }).then((response) => {
-      if (response.status >= 500) {
+      if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
         toast.error('Server error.');
         return false;
       }
-      if (response.status === 401) {
+      if (response.status === HTTP_STATUS.UNAUTHORIZED) {
         ManagerInterface.removeToken();
         return false;
       }
-      if (response.status === 400) {
+      if (response.status === HTTP_STATUS.BAD_REQUEST) {
         return response.json().then((resp) => {
           toast.error(resp.ack);
           return false;
@@ -572,10 +572,10 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
+      if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
         return false;
       }
-      if (response.status === 401) {
+      if (response.status === HTTP_STATUS.UNAUTHORIZED) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -621,15 +621,15 @@ export default class ManagerInterface {
         params,
       }),
     }).then((response) => {
-      if (response.status >= 500) {
+      if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
         toast.error('Error communicating with the server.');
         return false;
       }
-      if (response.status === 401) {
+      if (response.status === HTTP_STATUS.UNAUTHORIZED) {
         ManagerInterface.removeToken();
         return false;
       }
-      if (response.status === 400) {
+      if (response.status === HTTP_STATUS.BAD_REQUEST) {
         return response.json().then((resp) => {
           toast.error(resp.ack);
         });
@@ -651,10 +651,10 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
+      if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
         return false;
       }
-      if (response.status === 401) {
+      if (response.status === HTTP_STATUS.UNAUTHORIZED) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -678,15 +678,15 @@ export default class ManagerInterface {
         params,
       }),
     }).then((response) => {
-      if (response.status >= 500) {
+      if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
         toast.error('Error communicating with the server.');
         return false;
       }
-      if (response.status === 401) {
+      if (response.status === HTTP_STATUS.UNAUTHORIZED) {
         ManagerInterface.removeToken();
         return false;
       }
-      if (response.status === 400) {
+      if (response.status === HTTP_STATUS.BAD_REQUEST) {
         return response.json().then((resp) => {
           toast.error(resp.ack);
         });
@@ -708,10 +708,10 @@ export default class ManagerInterface {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
+      if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
         return false;
       }
-      if (response.status === 401) {
+      if (response.status === HTTP_STATUS.UNAUTHORIZED) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -1143,10 +1143,10 @@ export default class ManagerInterface {
       method: 'GET',
       headers: this.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
+      if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
         return false;
       }
-      if (response.status === 401) {
+      if (response.status === HTTP_STATUS.UNAUTHORIZED) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -1170,14 +1170,14 @@ export default class ManagerInterface {
         schema: schema,
       }),
     }).then((response) => {
-      if (response.status >= 500) {
+      if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
         return false;
       }
-      if (response.status === 401) {
+      if (response.status === HTTP_STATUS.UNAUTHORIZED) {
         ManagerInterface.removeToken();
         return false;
       }
-      if (response.status === 400) {
+      if (response.status === HTTP_STATUS.BAD_REQUEST) {
         return response.json().then((resp) => {
           toast.error(resp.title);
           return false;
@@ -1206,14 +1206,14 @@ export default class ManagerInterface {
         schema: schema,
       }),
     }).then((response) => {
-      if (response.status >= 500) {
+      if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
         return false;
       }
-      if (response.status === 401) {
+      if (response.status === HTTP_STATUS.UNAUTHORIZED) {
         ManagerInterface.removeToken();
         return false;
       }
-      if (response.status === 400) {
+      if (response.status === HTTP_STATUS.BAD_REQUEST) {
         return response.json().then((resp) => {
           toast.error(resp.title);
           return false;
@@ -1236,10 +1236,10 @@ export default class ManagerInterface {
       method: 'GET',
       headers: this.getHeaders(),
     }).then((response) => {
-      if (response.status >= 500) {
+      if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
         return false;
       }
-      if (response.status === 401) {
+      if (response.status === HTTP_STATUS.UNAUTHORIZED) {
         ManagerInterface.removeToken();
         return false;
       }
@@ -2113,37 +2113,41 @@ export function getEntryAccessorString(isArray, arrayIndex) {
  * - 200, 201 and 204 responses are handled and the onSuccess function is executed.
  */
 export function checkJSONResponse(response, onSuccess) {
-  if (response.status >= 500) {
+  if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
     toast.error('Error communicating with the server.');
     return false;
   }
-  if (response.status === 400) {
+  if (response.status === HTTP_STATUS.BAD_REQUEST) {
     return response.json().then((resp) => {
       const errorMsg = resp.error ? `${resp.ack}: ${resp.error}` : resp.ack;
       toast.error(errorMsg);
       return false;
     });
   }
-  if (response.status === 401) {
+  if (response.status === HTTP_STATUS.UNAUTHORIZED) {
     ManagerInterface.removeToken();
     return false;
   }
-  if (response.status === 404) {
+  if (response.status === HTTP_STATUS.NOT_FOUND) {
     toast.error('Not found.');
     return false;
   }
-  if (response.status === 409) {
+  if (response.status === HTTP_STATUS.CONFLICT) {
     return response.json().then((resp) => {
       toast.error(resp.error);
       return false;
     });
   }
-  if (response.status === 413) {
+  if (response.status === HTTP_STATUS.PAYLOAD_TOO_LARGE) {
     toast.error('File too large.');
     return false;
   }
 
-  if (response.status === 200 || response.status === 201 || response.status === 204) {
+  if (
+    response.status === HTTP_STATUS.OK ||
+    response.status === HTTP_STATUS.CREATED ||
+    response.status === HTTP_STATUS.NO_CONTENT
+  ) {
     if (onSuccess) onSuccess();
   }
 
