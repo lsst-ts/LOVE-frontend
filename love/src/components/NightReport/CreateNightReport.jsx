@@ -308,7 +308,6 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
     save: false,
     send: false,
   });
-  const [lastRefreshed, setLastRefreshed] = useState(Moment());
   const [refreshWarningActive, setRefreshWarningActive] = useState(false);
 
   const currentStep = getReportStatusStep(report);
