@@ -21,6 +21,7 @@ import {
 } from 'Config';
 import Alert from 'components/GeneralPurpose/Alert/Alert';
 import Button from 'components/GeneralPurpose/Button/Button';
+import ConfirmationModal from 'components/GeneralPurpose/ConfirmationModal/ConfirmationModal';
 import MultiSelect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import Select from 'components/GeneralPurpose/Select/Select';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
@@ -41,6 +42,21 @@ const STEPS = {
   NOTSAVED: 1,
   SAVED: 2,
   SENT: 3,
+};
+
+const observatoryStateLabelsMapping = {
+  simonyiAzimuth: 'Simonyi Az',
+  simonyiElevation: 'Simonyi El',
+  simonyiDomeAzimuth: 'Simonyi Dome Az',
+  simonyiRotator: 'Camera Rotator position',
+  simonyiMirrorCoversState: 'Simonyi Mirror Covers State',
+  simonyiOilSupplySystemState: 'OSS State',
+  simonyiPowerSupplySystemState: 'Power Supply State',
+  simonyiLockingPinsSystemState: 'Locking Pins State',
+  auxtelAzimuth: 'AuxTel Az',
+  auxtelElevation: 'AuxTel El',
+  auxtelDomeAzimuth: 'AuxTel Dome Az',
+  auxtelMirrorCoversState: 'AuxTel Mirror Covers State',
 };
 
 const getCurrentStatusText = (currentStep) => {
@@ -301,6 +317,55 @@ function getReportStatusStep(report) {
   return STEPS.NOTSAVED;
 }
 
+function checkObservatoryDataLoading(observatoryState, cscStates) {
+  const observatoryStateLoading = Object.values(observatoryState).some((v) => v === undefined || v === null);
+  const cscStatesLoading = Object.values(cscStates).some((v) => v === undefined || v === null);
+  return observatoryStateLoading || cscStatesLoading;
+}
+
+function findMissingObservatoryData(observatoryState, cscStates) {
+  const missingObservatoryState = Object.keys(observatoryState).filter(
+    (k) => observatoryState[k] === undefined || observatoryState[k] === null,
+  );
+  const missingCscStates = Object.keys(cscStates).filter((k) => cscStates[k] === undefined || cscStates[k] === null);
+  return {
+    missingObservatoryState,
+    missingCscStates,
+  };
+}
+
+function ConfirmationModalContent({ missingObservatoryData }) {
+  return (
+    <div className={styles.confirmationModalContent}>
+      There is missing observatory data required to send the report:
+      {missingObservatoryData?.missingObservatoryState?.length > 0 && (
+        <div>
+          <strong>Observatory State:</strong>
+          <ul>
+            {missingObservatoryData?.missingObservatoryState?.map((state) => (
+              <li key={state}>{observatoryStateLabelsMapping[state]}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {missingObservatoryData?.missingCscStates?.length > 0 && (
+        <div>
+          <strong>CSC States:</strong>
+          <ul>
+            {missingObservatoryData.missingCscStates.map((state) => (
+              <li key={state}>{state}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      This data might be still loading if you just opened the view, you might need waiting a minute. If the missing data
+      is expected for any known reason, then you can proceed safely, but please make sure to inform that in the report.
+      <br></br>
+      Are you sure you want to send the report?
+    </div>
+  );
+}
+
 function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpdate, loading: propsLoading }) {
   const [userOptions, setUserOptions] = useState([]);
   const [changesNotSaved, setChangesNotSaved] = useState(false);
@@ -310,8 +375,10 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
   });
   const [lastRefreshed, setLastRefreshed] = useState(Moment());
   const [refreshWarningActive, setRefreshWarningActive] = useState(false);
+  const [sendingState, setSendingState] = useState(false);
 
   const currentStep = getReportStatusStep(report);
+  const isObservatoryDataLoading = checkObservatoryDataLoading(observatoryState, cscStates);
 
   const updateReport = (report) => {
     handleReportUpdate(report);
@@ -327,8 +394,8 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
   }, []);
 
   const checkLastReport = () => {
-    const currentObsDay = parseInt(getObsDayFromDate(Moment()), 10);
-    ManagerInterface.getLastNightReports(currentObsDay).then((reports) => {
+    // Limit parameter only allows values > 1
+    ManagerInterface.getLastNightReports(report.day_obs, 'date_added', 2).then((reports) => {
       if (reports && reports.length > 0) {
         const latestReport = reports[0];
         if (report && latestReport.id !== report.id) {
@@ -341,7 +408,7 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
   useEffect(() => {
     // Set interval to trigger renders
     let interval;
-    if (!refreshWarningActive) {
+    if (!refreshWarningActive && report) {
       interval = setInterval(() => {
         checkLastReport();
       }, LAST_REFRESHED_WARNING_CHECK_INTERVAL_MS);
@@ -354,8 +421,16 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
     };
   }, [refreshWarningActive]);
 
-  const handleSent = (event) => {
-    event.preventDefault();
+  const triggerSend = () => {
+    if (isObservatoryDataLoading) {
+      setSendingState(true);
+    } else {
+      handleSend();
+    }
+  };
+
+  const handleSend = (event) => {
+    if (event) event.preventDefault();
     if (currentStep === STEPS.SAVED) {
       setLoading({ ...loading, send: true });
 
@@ -490,44 +565,61 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
     [report],
   );
 
-  return (
-    <form className={styles.formContainer}>
-      <ProgressBarSection currentStep={currentStep} currentStatusText={getCurrentStatusText(currentStep)} />
-      <TitleField report={report} />
-      <ConfluenceURLField
-        isEditDisabled={isEditDisabled()}
-        confluenceURL={report?.confluence_url}
-        setConfluenceURL={handleConfluenceURLChange}
-      />
-      <ObserversField
-        isEditDisabled={isEditDisabled()}
-        userOptions={userOptions}
-        selectedUsers={selectedUsers}
-        setSelectedUsers={handleSelectedUsersChange}
-      />
-      <SummaryField isEditDisabled={isEditDisabled()} summary={report?.summary} setSummary={handleSummaryChange} />
-      <WeatherField report={report} setWeather={handleWeatherChange} />
-      <SimonyiStatusField
-        isEditDisabled={isEditDisabled()}
-        simonyiStatus={report?.maintel_summary}
-        setSimonyiStatus={handleSimonyiStatusChange}
-      />
-      <AuxTelStatusField
-        isEditDisabled={isEditDisabled()}
-        auxtelStatus={report?.auxtel_summary}
-        setAuxtelStatus={handleAuxtelStatusChange}
-      />
+  const handleSendConfirmation = (confirm) => {
+    if (confirm) {
+      handleSend();
+    }
+    setSendingState(false);
+  };
 
-      <AlertsSection refreshWarningActive={refreshWarningActive} changesNotSaved={changesNotSaved} />
-      <div className={styles.buttons}>
-        <Button onClick={handleSave} disabled={!isAbleToSave()}>
-          {loading.save ? 'Saving...' : 'Save'}
-        </Button>
-        <Button onClick={handleSent} disabled={!isAbleToSend()}>
-          {loading.send ? 'Sending...' : 'Send'}
-        </Button>
-      </div>
-    </form>
+  const missingObservatoryData = findMissingObservatoryData(observatoryState, cscStates);
+
+  return (
+    <>
+      <form className={styles.formContainer}>
+        <ProgressBarSection currentStep={currentStep} currentStatusText={getCurrentStatusText(currentStep)} />
+        <TitleField report={report} />
+        <ConfluenceURLField
+          isEditDisabled={isEditDisabled()}
+          confluenceURL={report?.confluence_url}
+          setConfluenceURL={handleConfluenceURLChange}
+        />
+        <ObserversField
+          isEditDisabled={isEditDisabled()}
+          userOptions={userOptions}
+          selectedUsers={selectedUsers}
+          setSelectedUsers={handleSelectedUsersChange}
+        />
+        <SummaryField isEditDisabled={isEditDisabled()} summary={report?.summary} setSummary={handleSummaryChange} />
+        <WeatherField report={report} setWeather={handleWeatherChange} />
+        <SimonyiStatusField
+          isEditDisabled={isEditDisabled()}
+          simonyiStatus={report?.maintel_summary}
+          setSimonyiStatus={handleSimonyiStatusChange}
+        />
+        <AuxTelStatusField
+          isEditDisabled={isEditDisabled()}
+          auxtelStatus={report?.auxtel_summary}
+          setAuxtelStatus={handleAuxtelStatusChange}
+        />
+
+        <AlertsSection refreshWarningActive={refreshWarningActive} changesNotSaved={changesNotSaved} />
+        <div className={styles.buttons}>
+          <Button onClick={handleSave} disabled={!isAbleToSave()}>
+            {loading.save ? 'Saving...' : 'Save'}
+          </Button>
+          <Button onClick={triggerSend} disabled={!isAbleToSend()}>
+            {loading.send ? 'Sending...' : 'Send'}
+          </Button>
+        </div>
+      </form>
+      <ConfirmationModal
+        isOpen={isObservatoryDataLoading && sendingState}
+        message={<ConfirmationModalContent missingObservatoryData={missingObservatoryData} />}
+        confirmCallback={() => handleSendConfirmation(true)}
+        cancelCallback={() => handleSendConfirmation(false)}
+      />
+    </>
   );
 }
 
@@ -566,7 +658,7 @@ function NightReport({
     const oldestObsDayWithEFDData = parseInt(getObsDayFromDate(Moment().subtract(efdRetentionDays, 'days')), 10);
 
     setLoading(true);
-    ManagerInterface.getLastNightReports(oldestObsDayWithEFDData, efdRetentionDays)
+    ManagerInterface.getLastNightReports(oldestObsDayWithEFDData, '-date_added', efdRetentionDays)
       .then((reports) => {
         const currentObsDayReport = reports.find((r) => r.day_obs === currentObsDay);
         if (!currentObsDayReport) {

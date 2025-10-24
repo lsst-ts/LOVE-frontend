@@ -277,3 +277,10 @@
   height: 1.5em;
   width: 1.5em;
 }
+
+.confirmationModalContent {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: var(--content-padding);
+}
