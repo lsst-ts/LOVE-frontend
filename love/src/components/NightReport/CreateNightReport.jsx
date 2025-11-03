@@ -353,35 +353,11 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
     };
   }, [refreshWarningActive, report]);
 
-  const handleSent = (event) => {
+  const handleSend = (event) => {
     event.preventDefault();
     if (currentStep === STEPS.SAVED) {
       setLoading({ ...loading, send: true });
-
-      const parsedObservatoryState = {
-        simonyiAzimuth: fixedFloat(observatoryState.simonyiAzimuth, 2),
-        simonyiElevation: fixedFloat(observatoryState.simonyiElevation, 2),
-        simonyiDomeAzimuth: fixedFloat(observatoryState.simonyiDomeAzimuth, 2),
-        simonyiRotator: fixedFloat(Math.abs(observatoryState.simonyiRotator, 2)),
-        simonyiMirrorCoversState:
-          mtMountDeployableMotionStateMap[observatoryState.simonyiMirrorCoversState] ?? 'UNKNOWN',
-        simonyiOilSupplySystemState: mtMountPowerStateMap[observatoryState.simonyiOilSupplySystemState] ?? 'UNKNOWN',
-        simonyiPowerSupplySystemState:
-          mtMountPowerStateMap[observatoryState.simonyiPowerSupplySystemState] ?? 'UNKNOWN',
-        simonyiLockingPinsSystemState:
-          mtMountElevationLockingPinMotionStateMap[observatoryState.simonyiLockingPinsSystemState] ?? 'UNKNOWN',
-        auxtelAzimuth: fixedFloat(observatoryState.auxtelAzimuth, 2),
-        auxtelElevation: fixedFloat(observatoryState.auxtelElevation, 2),
-        auxtelDomeAzimuth: fixedFloat(observatoryState.auxtelDomeAzimuth, 2),
-        auxtelMirrorCoversState: atPneumaticsMirrorCoverStateMap[observatoryState.auxtelMirrorCoversState] ?? 'UNKNOWN',
-      };
-      const parsedCSCStates = Object.keys(cscStates).reduce((acc, csc) => {
-        const state = cscStates[csc];
-        acc[csc] = CSCDetail.states[state ?? 0].name;
-        return acc;
-      }, {});
-
-      ManagerInterface.sendCurrentNightReport(report.id, parsedObservatoryState, parsedCSCStates).then((report) => {
+      ManagerInterface.sendCurrentNightReport(report.id).then((report) => {
         if (report) {
           updateReport(report);
         }
@@ -522,7 +498,7 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
         <Button onClick={handleSave} disabled={!isAbleToSave()}>
           {loading.save ? 'Saving...' : 'Save'}
         </Button>
-        <Button onClick={handleSent} disabled={!isAbleToSend()}>
+        <Button onClick={handleSend} disabled={!isAbleToSend()}>
           {loading.send ? 'Sending...' : 'Send'}
         </Button>
       </div>

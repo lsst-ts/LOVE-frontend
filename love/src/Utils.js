@@ -1077,7 +1077,7 @@ export default class ManagerInterface {
     });
   }
 
-  static sendCurrentNightReport(report_id, observatory_status, cscs_status) {
+  static sendCurrentNightReport(report_id, day_obs) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
@@ -1088,8 +1088,7 @@ export default class ManagerInterface {
       method: 'POST',
       headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
-        observatory_status,
-        cscs_status,
+        day_obs,
       }),
     }).then((response) => {
       return checkJSONResponse(response, () => {
