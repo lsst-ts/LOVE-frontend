@@ -326,8 +326,8 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
   }, []);
 
   const checkLastReport = () => {
-    const currentObsDay = parseInt(getObsDayFromDate(Moment()), 10);
-    ManagerInterface.getLastNightReports(currentObsDay).then((reports) => {
+    // Limit parameter only allows values > 1
+    ManagerInterface.getLastNightReports(report.day_obs, 'day_obs', 2).then((reports) => {
       if (reports && reports.length > 0) {
         const latestReport = reports[0];
         if (report && latestReport.id !== report.id) {
@@ -565,7 +565,7 @@ function NightReport({
     const oldestObsDayWithEFDData = parseInt(getObsDayFromDate(Moment().subtract(efdRetentionDays, 'days')), 10);
 
     setLoading(true);
-    ManagerInterface.getLastNightReports(oldestObsDayWithEFDData, efdRetentionDays)
+    ManagerInterface.getLastNightReports(oldestObsDayWithEFDData, '-day_obs', efdRetentionDays)
       .then((reports) => {
         const currentObsDayReport = reports.find((r) => r.day_obs === currentObsDay);
         if (!currentObsDayReport) {
