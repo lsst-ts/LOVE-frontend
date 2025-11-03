@@ -2113,8 +2113,14 @@ export function getEntryAccessorString(isArray, arrayIndex) {
  */
 export function checkJSONResponse(response, onSuccess) {
   if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
-    toast.error('Error communicating with the server.');
-    return false;
+    return response.json().then((resp) => {
+      if (resp.error) {
+        toast.error(resp.error);
+      } else {
+        toast.error('Error communicating with the server.');
+      }
+      return false;
+    });
   }
   if (response.status === HTTP_STATUS.BAD_REQUEST) {
     return response.json().then((resp) => {
