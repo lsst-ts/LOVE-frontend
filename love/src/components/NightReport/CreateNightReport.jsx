@@ -340,7 +340,7 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
   useEffect(() => {
     // Set interval to trigger renders
     let interval;
-    if (!refreshWarningActive) {
+    if (!refreshWarningActive && report) {
       interval = setInterval(() => {
         checkLastReport();
       }, LAST_REFRESHED_WARNING_CHECK_INTERVAL_MS);
@@ -351,7 +351,7 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
         clearInterval(interval);
       }
     };
-  }, [refreshWarningActive]);
+  }, [refreshWarningActive, report]);
 
   const handleSent = (event) => {
     event.preventDefault();
