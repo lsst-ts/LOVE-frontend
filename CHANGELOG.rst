@@ -5,6 +5,7 @@ Version History
 v6.9.3
 ------
 
+* Fix query to last night report when looking into old night reports. `<https://github.com/lsst-ts/LOVE-frontend/pull/740>`_
 * Fix issue with the night report not being properly saved into the database `<https://github.com/lsst-ts/LOVE-frontend/pull/739>`_
 
 v6.9.2
