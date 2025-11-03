@@ -357,7 +357,7 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
     event.preventDefault();
     if (currentStep === STEPS.SAVED) {
       setLoading({ ...loading, send: true });
-      ManagerInterface.sendCurrentNightReport(report.id).then((report) => {
+      ManagerInterface.sendCurrentNightReport(report.id, report.day_obs).then((report) => {
         if (report) {
           updateReport(report);
         }
