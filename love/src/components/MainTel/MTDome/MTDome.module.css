@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -21,8 +23,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   display: flex;
   flex-direction: column;
   position: relative;
-  width: 100%;
-  overflow: auto;
+  gap: var(--content-padding);
 }
 
 .skymapGridContainer {
@@ -45,16 +46,13 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 }
 
 .topRow {
-  row-gap: 2em;
-  padding: 1em 0;
-  grid-template-columns: minmax(0, 1fr) minmax(22em, 24em);
+  display: flex;
 }
 
 .svgOverlay {
   position: absolute;
-  left: calc(50% - 130px);
+  left: calc(50% - 12.5em);
   top: 7%;
-  width: auto;
   overflow: visible;
 }
 
@@ -84,9 +82,9 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .svgLouvers {
   position: absolute;
-  left: calc(50% - 308px);
+  left: calc(50% - 24.5em);
   top: 65%;
-  width: auto;
+  height: 17em;
 }
 
 .svgLouvers .rotatingDome {
@@ -115,9 +113,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .svgAzimuth {
   position: absolute;
-  left: calc(50% - 134px);
+  left: calc(50% - 13em);
   top: 8%;
-  width: auto;
   overflow: visible;
   transform-origin: center;
   transform: scale(1.05);
@@ -151,15 +148,17 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .windRoseContainer {
   position: absolute;
-  left: 3%;
-  top: 1%;
-  width: 4%;
+  left: var(--content-padding);
+  top: var(--content-padding);
+  width: 4em;
 }
+
 .elevationContainer {
   position: absolute;
-  left: calc(100% - 600px);
-  top: 14%;
+  right: 2em;
+  top: 10em;
 }
+
 .azimuthContainer {
   position: absolute;
   left: calc(50% - 299px);
@@ -190,20 +189,16 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 }
 
 .divDome {
-  display: grid;
-  grid-template-columns: 1fr 0.8fr;
-  padding-bottom: 50px;
-}
-
-.divSummaryTable {
-  margin-left: auto;
-  margin-right: 0;
-  height: auto;
+  display: flex;
+  flex-grow: 1;
+  gap: var(--content-padding);
 }
 
 .divDomeLouvers {
   position: relative;
-  width: 100%;
+  flex-grow: 1;
+  min-width: 50em;
+  overflow: hidden;
 }
 
 /* shutter svg styles */
@@ -310,11 +305,10 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .plotSection {
   display: grid;
-  grid-template-columns: minmax(auto, 1fr) minmax(auto, 1fr);
-  margin-bottom: calc(2 * var(--content-padding));
+  grid-template-columns: minmax(10em, 1fr) minmax(10em, 1fr);
+  margin-bottom: var(--content-padding);
 }
 
-.plotSection > div {
-  display: grid;
-  grid-template-rows: min-content minmax(auto, 18em);
+.plotSection > div > :last-child {
+  height: 18em;
 }

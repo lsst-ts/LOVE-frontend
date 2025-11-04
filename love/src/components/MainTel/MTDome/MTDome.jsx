@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -173,6 +175,10 @@ const elevationPlotInputs = {
   },
 };
 
+function renderLouversTableCell(position) {
+  return !isNaN(position) ? `${position.toFixed(3)}` : '-';
+}
+
 export default class MTDome extends Component {
   static propTypes = {
     /** Function to subscribe to streams to receive */
@@ -296,7 +302,8 @@ export default class MTDome extends Component {
     if (prevProps.actualPositionLouvers !== this.props.actualPositionLouvers) {
       const dataLouversAFActual = {};
       MTDomeLouversMapAF.forEach((l, i) => {
-        dataLouversAFActual[l] = `${this.props.actualPositionLouvers[i].toFixed(3)}`;
+        const position = this.props.actualPositionLouvers[i];
+        dataLouversAFActual[l] = renderLouversTableCell(position);
       });
       this.setState((state) => ({
         dataLouversAF: [{ ...state.dataLouversAF[0], ...dataLouversAFActual }, { ...state.dataLouversAF[1] }],
@@ -304,7 +311,8 @@ export default class MTDome extends Component {
 
       const dataLouversGNActual = {};
       MTDomeLouversMapGN.forEach((l, i) => {
-        dataLouversGNActual[l] = `${this.props.actualPositionLouvers[i + 17].toFixed(3)}`;
+        const position = this.props.actualPositionLouvers[i + 17];
+        dataLouversGNActual[l] = renderLouversTableCell(position);
       });
       this.setState((state) => ({
         dataLouversGN: [{ ...state.dataLouversGN[0], ...dataLouversGNActual }, { ...state.dataLouversGN[1] }],
@@ -314,7 +322,8 @@ export default class MTDome extends Component {
     if (prevProps.commandedPositionLouvers !== this.props.commandedPositionLouvers) {
       const dataLouversAFCommanded = {};
       MTDomeLouversMapAF.forEach((l, i) => {
-        dataLouversAFCommanded[l] = `${this.props.commandedPositionLouvers[i].toFixed(3)}`;
+        const position = this.props.commandedPositionLouvers[i];
+        dataLouversAFCommanded[l] = renderLouversTableCell(position);
       });
       this.setState((state) => ({
         dataLouversAF: [{ ...state.dataLouversAF[0] }, { ...state.dataLouversAF[1], ...dataLouversAFCommanded }],
@@ -322,7 +331,8 @@ export default class MTDome extends Component {
 
       const dataLouversGNCommanded = {};
       MTDomeLouversMapGN.forEach((l, i) => {
-        dataLouversGNCommanded[l] = `${this.props.commandedPositionLouvers[i + 17].toFixed(3)}`;
+        const position = this.props.commandedPositionLouvers[i + 17];
+        dataLouversGNCommanded[l] = renderLouversTableCell(position);
       });
       this.setState((state) => ({
         dataLouversGN: [{ ...state.dataLouversGN[0] }, { ...state.dataLouversGN[1], ...dataLouversGNCommanded }],
@@ -589,27 +599,27 @@ export default class MTDome extends Component {
     return (
       <div className={styles.domeContainer}>
         <div className={styles.topRow}>
-          <div className={styles.windRoseContainer}>
-            <WindRose />
-          </div>
-          <div className={styles.elevationContainer} height={`${height / 2}px`}>
-            <Elevation
-              height={height * 0.75}
-              radius={width * 0.75}
-              maxL3={86.5}
-              maxL2={85}
-              maxL1={84}
-              minL1={18}
-              minL2={19}
-              minL3={20}
-              currentValue={positionActualLightWindScreen}
-              targetValue={positionCommandedLightWindScreen}
-              className={styles.svgElevation}
-            />
-          </div>
-
           <div className={styles.divDome}>
             <div className={styles.divDomeLouvers}>
+              <div className={styles.windRoseContainer}>
+                <WindRose />
+              </div>
+
+              <div className={styles.elevationContainer}>
+                <Elevation
+                  height={250}
+                  radius={250}
+                  maxL3={86.5}
+                  maxL2={85}
+                  maxL1={84}
+                  minL1={18}
+                  minL2={19}
+                  minL3={20}
+                  currentValue={currentPointing.el}
+                  targetValue={targetPointing.el}
+                />
+              </div>
+
               <Azimuth
                 className={styles.svgAzimuth}
                 width={width}
@@ -627,7 +637,6 @@ export default class MTDome extends Component {
                 positionActualLightWindScreen={positionActualLightWindScreen}
                 positionCommandedLightWindScreen={positionCommandedLightWindScreen}
               />
-
               <MTDomePointing
                 width={width}
                 height={height}
