@@ -21,12 +21,51 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { MTDomeLouversIndexMap } from 'Config';
 import styles from './MTDome.module.css';
 
 const heightsLouvers = [
-  19, 35, 19, 35, 35, 35, 35, 35, 35, 35, 35, 19, 35, 35, 19, 19, 35, 19, 19, 35, 19, 35, 35, 35, 35, 35, 35, 35, 35,
-  19, 35, 35, 19, 35,
+  35, 19, 35, 35, 19, 35, 35, 35, 35, 35, 35, 35, 35, 19, 35, 19, 19, 35, 19, 19, 35, 35, 19, 35, 35, 35, 35, 35, 35,
+  35, 35, 19, 35, 19,
 ];
+
+function Louver({ className, x, y, width, height, openPercentage }) {
+  return (
+    <rect
+      className={className}
+      x={x}
+      y={y}
+      width={width}
+      height={height}
+      style={{
+        transformOrigin: 'top center',
+        transformBox: 'fill-box',
+        transform: `scaleY(${1 - openPercentage})`,
+      }}
+    />
+  );
+}
+
+function LouverCommanded({ className, x1, y1, x2, y2, height, openPercentage }) {
+  return (
+    <line
+      className={className}
+      x1={x1}
+      y1={y1}
+      x2={x2}
+      y2={y2}
+      style={{
+        transformOrigin: 'top center',
+        transformBox: 'fill-box',
+        transform: `translateY(${height * (1 - openPercentage)}px)`,
+      }}
+    />
+  );
+}
+
+function isPositionActualEqualsCommanded(actualPositionLouvers, commandedPositionLouvers, index) {
+  return actualPositionLouvers[index] === commandedPositionLouvers[index];
+}
 
 export default class MTDomeLouvers extends Component {
   static propTypes = {
@@ -47,7 +86,6 @@ export default class MTDomeLouvers extends Component {
 
     return (
       <svg className={styles.svgLouvers} viewBox="0 0 560 192">
-        {/* from left to right (1) */}
         {/* A1, A2, A3 */}
         <g>
           <polygon
@@ -58,64 +96,59 @@ export default class MTDomeLouvers extends Component {
           <rect className={styles.louver3} x="34.52" y="105.15" width="27" height="19" />
 
           {/* A2 */}
-          <rect
+          <Louver
             className={styles.louver4}
             x="34.52"
             y="105.15"
             width="27"
             height="19"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `scaleY(${1 - actualPositionLouvers[0] / 100})`,
-            }}
+            openPercentage={actualPositionLouvers[MTDomeLouversIndexMap.A2] / 100}
           />
+
           {/* A1 */}
-          <rect
+          <Louver
             className={styles.louver4}
             x="34.52"
             y="134.15"
             width="27"
             height="35"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `scaleY(${1 - actualPositionLouvers[1] / 100})`,
-            }}
+            openPercentage={actualPositionLouvers[MTDomeLouversIndexMap.A1] / 100}
           />
+
           {/* A2 */}
-          {commandedPositionLouvers[0] !== actualPositionLouvers[0] && (
-            <line
+          {!isPositionActualEqualsCommanded(
+            actualPositionLouvers,
+            commandedPositionLouvers,
+            MTDomeLouversIndexMap.A2,
+          ) && (
+            <LouverCommanded
               className={styles.louver5}
               x1="34.52"
               y1="105.15"
               x2="61.52"
               y2="105.15"
-              style={{
-                transformOrigin: 'top center',
-                transformBox: 'fill-box',
-                transform: `translateY(${(heightsLouvers[0] / 100) * commandedPositionLouvers[0]}px)`,
-              }}
+              height={heightsLouvers[MTDomeLouversIndexMap.A2]}
+              openPercentage={commandedPositionLouvers[MTDomeLouversIndexMap.A2] / 100}
             />
           )}
           {/* A1 */}
-          {commandedPositionLouvers[1] !== actualPositionLouvers[1] && (
-            <line
+          {!isPositionActualEqualsCommanded(
+            actualPositionLouvers,
+            commandedPositionLouvers,
+            MTDomeLouversIndexMap.A1,
+          ) && (
+            <LouverCommanded
               className={styles.louver5}
               x1="34.52"
               y1="134.15"
               x2="61.52"
               y2="134.15"
-              style={{
-                transformOrigin: 'top center',
-                transformBox: 'fill-box',
-                transform: `translateY(${(heightsLouvers[1] / 100) * commandedPositionLouvers[1]}px)`,
-              }}
+              height={heightsLouvers[MTDomeLouversIndexMap.A1]}
+              openPercentage={commandedPositionLouvers[MTDomeLouversIndexMap.A1] / 100}
             />
           )}
         </g>
 
-        {/* from left to right (2) */}
         {/* B1, B2, B3 */}
         <g>
           <polygon
@@ -128,43 +161,31 @@ export default class MTDomeLouvers extends Component {
           <rect className={styles.louver3} x="73.27" y="134.15" width="27" height="35" />
 
           {/* B3 */}
-          <rect
+          <Louver
             className={styles.louver4}
             x="73.27"
             y="60.15"
             width="27"
             height="19"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `scaleY(${1 - actualPositionLouvers[2] / 100})`,
-            }}
+            openPercentage={actualPositionLouvers[MTDomeLouversIndexMap.B3] / 100}
           />
           {/* B2 */}
-          <rect
+          <Louver
             className={styles.louver4}
             x="73.27"
             y="89.15"
             width="27"
             height="35"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `scaleY(${1 - actualPositionLouvers[3] / 100})`,
-            }}
+            openPercentage={actualPositionLouvers[MTDomeLouversIndexMap.B2] / 100}
           />
           {/* B1 */}
-          <rect
+          <Louver
             className={styles.louver4}
             x="73.27"
             y="134.15"
             width="27"
             height="35"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `scaleY(${1 - actualPositionLouvers[4] / 100})`,
-            }}
+            openPercentage={actualPositionLouvers[MTDomeLouversIndexMap.B1] / 100}
           />
 
           {/* B3 */}
