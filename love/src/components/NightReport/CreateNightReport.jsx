@@ -308,7 +308,6 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
     save: false,
     send: false,
   });
-  const [lastRefreshed, setLastRefreshed] = useState(Moment());
   const [refreshWarningActive, setRefreshWarningActive] = useState(false);
 
   const currentStep = getReportStatusStep(report);
@@ -327,8 +326,8 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
   }, []);
 
   const checkLastReport = () => {
-    const currentObsDay = parseInt(getObsDayFromDate(Moment()), 10);
-    ManagerInterface.getLastNightReports(currentObsDay).then((reports) => {
+    // Limit parameter only allows values > 1
+    ManagerInterface.getLastNightReports(report.day_obs, 'day_obs', 2).then((reports) => {
       if (reports && reports.length > 0) {
         const latestReport = reports[0];
         if (report && latestReport.id !== report.id) {
@@ -341,7 +340,7 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
   useEffect(() => {
     // Set interval to trigger renders
     let interval;
-    if (!refreshWarningActive) {
+    if (!refreshWarningActive && report) {
       interval = setInterval(() => {
         checkLastReport();
       }, LAST_REFRESHED_WARNING_CHECK_INTERVAL_MS);
@@ -352,37 +351,13 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
         clearInterval(interval);
       }
     };
-  }, [refreshWarningActive]);
+  }, [refreshWarningActive, report]);
 
-  const handleSent = (event) => {
+  const handleSend = (event) => {
     event.preventDefault();
     if (currentStep === STEPS.SAVED) {
       setLoading({ ...loading, send: true });
-
-      const parsedObservatoryState = {
-        simonyiAzimuth: fixedFloat(observatoryState.simonyiAzimuth, 2),
-        simonyiElevation: fixedFloat(observatoryState.simonyiElevation, 2),
-        simonyiDomeAzimuth: fixedFloat(observatoryState.simonyiDomeAzimuth, 2),
-        simonyiRotator: fixedFloat(Math.abs(observatoryState.simonyiRotator, 2)),
-        simonyiMirrorCoversState:
-          mtMountDeployableMotionStateMap[observatoryState.simonyiMirrorCoversState] ?? 'UNKNOWN',
-        simonyiOilSupplySystemState: mtMountPowerStateMap[observatoryState.simonyiOilSupplySystemState] ?? 'UNKNOWN',
-        simonyiPowerSupplySystemState:
-          mtMountPowerStateMap[observatoryState.simonyiPowerSupplySystemState] ?? 'UNKNOWN',
-        simonyiLockingPinsSystemState:
-          mtMountElevationLockingPinMotionStateMap[observatoryState.simonyiLockingPinsSystemState] ?? 'UNKNOWN',
-        auxtelAzimuth: fixedFloat(observatoryState.auxtelAzimuth, 2),
-        auxtelElevation: fixedFloat(observatoryState.auxtelElevation, 2),
-        auxtelDomeAzimuth: fixedFloat(observatoryState.auxtelDomeAzimuth, 2),
-        auxtelMirrorCoversState: atPneumaticsMirrorCoverStateMap[observatoryState.auxtelMirrorCoversState] ?? 'UNKNOWN',
-      };
-      const parsedCSCStates = Object.keys(cscStates).reduce((acc, csc) => {
-        const state = cscStates[csc];
-        acc[csc] = CSCDetail.states[state ?? 0].name;
-        return acc;
-      }, {});
-
-      ManagerInterface.sendCurrentNightReport(report.id, parsedObservatoryState, parsedCSCStates).then((report) => {
+      ManagerInterface.sendCurrentNightReport(report.id, report.day_obs).then((report) => {
         if (report) {
           updateReport(report);
         }
@@ -523,7 +498,7 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
         <Button onClick={handleSave} disabled={!isAbleToSave()}>
           {loading.save ? 'Saving...' : 'Save'}
         </Button>
-        <Button onClick={handleSent} disabled={!isAbleToSend()}>
+        <Button onClick={handleSend} disabled={!isAbleToSend()}>
           {loading.send ? 'Sending...' : 'Send'}
         </Button>
       </div>
@@ -566,7 +541,7 @@ function NightReport({
     const oldestObsDayWithEFDData = parseInt(getObsDayFromDate(Moment().subtract(efdRetentionDays, 'days')), 10);
 
     setLoading(true);
-    ManagerInterface.getLastNightReports(oldestObsDayWithEFDData, efdRetentionDays)
+    ManagerInterface.getLastNightReports(oldestObsDayWithEFDData, '-day_obs', efdRetentionDays)
       .then((reports) => {
         const currentObsDayReport = reports.find((r) => r.day_obs === currentObsDay);
         if (!currentObsDayReport) {

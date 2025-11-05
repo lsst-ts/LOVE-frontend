@@ -990,7 +990,7 @@ export default class ManagerInterface {
     });
   }
 
-  static getLastNightReports(min_day_obs, limit = 7) {
+  static getLastNightReports(min_day_obs, order_by = '-date_added', limit = 7) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
@@ -998,7 +998,7 @@ export default class ManagerInterface {
 
     const url =
       `${this.getApiBaseUrl()}ole/nightreport/reports` +
-      `?order_by=-date_added` +
+      `?order_by=${order_by}` +
       `&limit=${limit}` +
       (min_day_obs ? `&min_day_obs=${min_day_obs}` : '');
 
@@ -1077,7 +1077,7 @@ export default class ManagerInterface {
     });
   }
 
-  static sendCurrentNightReport(report_id, observatory_status, cscs_status) {
+  static sendCurrentNightReport(report_id, day_obs) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
@@ -1088,8 +1088,7 @@ export default class ManagerInterface {
       method: 'POST',
       headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
-        observatory_status,
-        cscs_status,
+        day_obs,
       }),
     }).then((response) => {
       return checkJSONResponse(response, () => {
@@ -2114,8 +2113,14 @@ export function getEntryAccessorString(isArray, arrayIndex) {
  */
 export function checkJSONResponse(response, onSuccess) {
   if (response.status >= HTTP_STATUS.INTERNAL_SERVER_ERROR) {
-    toast.error('Error communicating with the server.');
-    return false;
+    return response.json().then((resp) => {
+      if (resp.error) {
+        toast.error(resp.error);
+      } else {
+        toast.error('Error communicating with the server.');
+      }
+      return false;
+    });
   }
   if (response.status === HTTP_STATUS.BAD_REQUEST) {
     return response.json().then((resp) => {
