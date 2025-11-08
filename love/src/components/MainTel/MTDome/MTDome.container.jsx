@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -85,6 +87,8 @@ const MTDomeContainer = ({
   telescopeDecDeg,
   telescopeRotatorDeg,
   raDecHourFormat,
+  louversMotionState,
+  louversInPosition,
   ...props
 }) => {
   if (props.isRaw) {
@@ -119,6 +123,8 @@ const MTDomeContainer = ({
       telescopeDecDeg={telescopeDecDeg}
       telescopeRotatorDeg={telescopeRotatorDeg}
       raDecHourFormat={raDecHourFormat}
+      louversMotionState={louversMotionState}
+      louversInPosition={louversInPosition}
     />
   );
 };
@@ -160,6 +166,7 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTDome-0-summaryState',
     'event-MTMount-0-summaryState',
     'event-MTPtg-0-currentTarget',
+    'event-MTDome-0-louversMotion',
   ];
   return {
     subscriptions,

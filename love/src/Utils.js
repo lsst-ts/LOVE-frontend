@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -2668,4 +2670,21 @@ export function getCutDateFromNightReport(report) {
     return sentDate;
   }
   return obsDayEnd;
+}
+
+/**
+ * Function to acronymize a string
+ * @param {string} str string to be acronymized
+ * @returns {string} acronymized string
+ */
+export function acronymizeString(str) {
+  if (!str) return '';
+  const words = str.split(' ');
+  let acronym = '';
+  words.forEach((word) => {
+    if (word.length > 0) {
+      acronym += word.charAt(0).toUpperCase();
+    }
+  });
+  return acronym;
 }

@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -2810,7 +2812,6 @@ export const hexapodConnectedStatetoStyle = {
 };
 
 // MTDome
-
 export const mtDomeModeStatetoStyle = {
   DEGRADED: 'warning',
   NORMAL: 'ok',
@@ -2823,39 +2824,62 @@ export const mtDomeAzimuthEnabledStatetoStyle = {
 };
 
 export const mtDomeMotionStatetoStyle = {
-  CLOSED: 'undefined',
-  CRAWLING: 'warning',
-  MOVING: 'warning',
+  UNKNOWN: 'invalid',
+  ERROR: 'alert',
+  CLOSED: 'alert',
+  CLOSING: 'running',
+  CRAWLING: 'running',
+  MOVING: 'running',
   OPEN: 'ok',
+  OPENING: 'running',
   PARKED: 'ok',
-  PARKING: 'warning',
-  STOPPED: 'ok',
-  STOPPING: 'warning',
-  'STOPPING BRAKING': 'warning',
-  'STOPPED BRAKED': 'ok',
-  'BRAKES DISENGAGED': 'ok',
-  'BRAKES ENGAGED': 'alert',
-  DEFLATED: 'undefined',
-  DEFLATING: 'warning',
-  'DISABLING MOTOR POWER': 'warning',
-  'DISENGAGING BRAKES': 'warning',
-  'ENABLING MOTOR POWER': 'warning',
-  'ENGAGING BRAKES': 'warning',
-  'GO DEGRADED': 'warning',
-  'GO NORMAL': 'ok',
-  'GO STATIONARY': 'ok',
+  PARKING: 'running',
+  STOPPED: 'warning',
+  STOPPING: 'running',
+  STOPPING_BRAKING: 'running',
+  STOPPED_BRAKED: 'warning',
+  BRAKE_DISENGAGED: 'ok',
+  BRAKES_DISENGAGED: 'ok',
+  BRAKE_ENGAGED: 'ok',
+  BRAKES_ENGAGED: 'ok',
+  DEFLATED: 'ok',
+  DEFLATING: 'running',
+  DISABLING_MOTOR_POWER: 'running',
+  DISENGAGING_BRAKE: 'running',
+  DISENGAGING_BRAKES: 'running',
+  ENABLING_MOTOR_POWER: 'running',
+  ENGAGING_BRAKE: 'running',
+  ENGAGING_BRAKES: 'running',
+  FINAL_LOW_CLOSE_LS_ENGAGED: 'ok',
+  FINAL_LOW_OPEN_LS_ENGAGED: 'ok',
+  FINAL_UP_CLOSE_LS_ENGAGED: 'ok',
+  FINAL_UP_OPEN_LS_ENGAGED: 'ok',
+  GLYCOL_FLOWING: 'running',
+  GO_DEGRADED: 'alert',
+  GO_NORMAL: 'ok',
+  GO_STATIONARY: 'warning',
+  INCLINED: 'ok',
   INFLATED: 'ok',
-  INFLATING: 'warning',
-  'LP DISENGAGED': 'undefined',
-  'LP DISENGAGING': 'warning',
-  'LP ENGAGED': 'ok',
-  'LP ENGAGING': 'warning',
-  'MOTOR COOLING OFF': 'undefined',
-  'MOTOR COOLING ON': 'ok',
-  'MOTOR POWER OFF': 'undefined',
-  'MOTOR POWER ON': 'ok',
-  'STARTING MOTOR COOLING': 'warning',
-  'STOPPING MOTOR COOLING': 'warning',
+  INFLATING: 'running',
+  LP_DISENGAGED: 'ok',
+  LP_DISENGAGING: 'running',
+  LP_ENGAGED: 'ok',
+  LP_ENGAGING: 'running',
+  MOTOR_COOLING_OFF: 'alert',
+  MOTOR_COOLING_ON: 'ok',
+  MOTOR_POWER_OFF: 'alert',
+  MOTOR_POWER_ON: 'ok',
+  PROXIMITY_CLOSED_LS_ENGAGED: 'ok',
+  PROXIMITY_OPEN_LS_ENGAGED: 'ok',
+  STARTING_MOTOR_COOLING: 'running',
+  STOPPING_MOTOR_COOLING: 'running',
+  UNDETERMINED: 'invalid',
+  VERTICAL: 'ok',
+  WAITING_AMCS_STATIONARY: 'warning',
+  DISABLED: 'invalid',
+  DISABLING: 'running',
+  ENABLED: 'ok',
+  ENABLING: 'running',
 };
 
 export const mtDomeTrackingStatetoStyle = {
@@ -3151,7 +3175,6 @@ export const m1m3HardpointActuatorMotionStateMap = {
   0: 'STANDBY',
 };
 
-// MTDome
 export const domeAzimuthStateMap = {
   1: 'NOT MOVING',
   2: 'MOVING CW',
@@ -3177,8 +3200,68 @@ export const mainDoorStateMap = {
   0: 'UNKNOWN',
 };
 
+// MTDome
 export const mtDomeTrackingStateMap = {
   0: 'UNKNOWN',
+};
+
+export const mtDomeMotionStateMap = {
+  0: 'UNKNOWN',
+  1: 'ERROR',
+  2: 'CLOSED',
+  3: 'CLOSING',
+  4: 'CRAWLING',
+  5: 'MOVING',
+  6: 'OPEN',
+  7: 'OPENING',
+  8: 'PARKED',
+  9: 'PARKING',
+  10: 'STOPPED',
+  11: 'STOPPING',
+  12: 'STOPPING_BRAKING',
+  13: 'STOPPED_BRAKED',
+  14: 'BRAKE_DISENGAGED',
+  15: 'BRAKES_DISENGAGED',
+  16: 'BRAKE_ENGAGED',
+  17: 'BRAKES_ENGAGED',
+  18: 'DEFLATED',
+  19: 'DEFLATING',
+  20: 'DISABLING_MOTOR_POWER',
+  21: 'DISENGAGING_BRAKE',
+  22: 'DISENGAGING_BRAKES',
+  23: 'ENABLING_MOTOR_POWER',
+  24: 'ENGAGING_BRAKE',
+  25: 'ENGAGING_BRAKES',
+  26: 'FINAL_LOW_CLOSE_LS_ENGAGED',
+  27: 'FINAL_LOW_OPEN_LS_ENGAGED',
+  28: 'FINAL_UP_CLOSE_LS_ENGAGED',
+  29: 'FINAL_UP_OPEN_LS_ENGAGED',
+  30: 'GLYCOL_FLOWING',
+  31: 'GO_DEGRADED',
+  32: 'GO_NORMAL',
+  33: 'GO_STATIONARY',
+  34: 'INCLINED',
+  35: 'INFLATED',
+  36: 'INFLATING',
+  37: 'LP_DISENGAGED',
+  38: 'LP_DISENGAGING',
+  39: 'LP_ENGAGED',
+  40: 'LP_ENGAGING',
+  41: 'MOTOR_COOLING_OFF',
+  42: 'MOTOR_COOLING_ON',
+  43: 'MOTOR_POWER_OFF',
+  44: 'MOTOR_POWER_ON',
+  45: 'PROXIMITY_CLOSED_LS_ENGAGED',
+  46: 'PROXIMITY_OPEN_LS_ENGAGED',
+  47: 'STARTING_MOTOR_COOLING',
+  48: 'STOPPING_MOTOR_COOLING',
+  49: 'UNDETERMINED',
+  50: 'VERTICAL',
+  51: 'WAITING_AMCS_STATIONARY',
+  52: 'DISABLED',
+  53: 'DISABLING',
+  54: 'ENABLED',
+  55: 'ENABLING',
 };
 
 export const atDomeTrackingStateMap = {
@@ -3436,42 +3519,6 @@ export const mtDomeAzimuthEnabledStateMap = {
   1: 'DISABLED',
   2: 'ENABLED',
   3: 'FAULT',
-};
-
-export const mtDomeAzimuthMotionStateMap = {
-  0: 'CLOSED',
-  1: 'CRAWLING',
-  2: 'MOVING',
-  3: 'OPEN',
-  4: 'PARKED',
-  5: 'PARKING',
-  6: 'STOPPED',
-  7: 'STOPPING',
-  8: 'STOPPING BRAKING',
-  9: 'STOPPED BRAKED',
-  10: 'BRAKES DISENGAGED',
-  11: 'BRAKES ENGAGED',
-  12: 'DEFLATED',
-  13: 'DEFLATING',
-  14: 'DISABLING MOTOR POWER',
-  15: 'DISENGAGING BRAKES',
-  16: 'ENABLING MOTOR POWER',
-  17: 'ENGAGING BRAKES',
-  18: 'GO DEGRADED',
-  19: 'GO NORMAL',
-  20: 'GO STATIONARY',
-  21: 'INFLATED',
-  22: 'INFLATING',
-  23: 'LP DISENGAGED',
-  24: 'LP DISENGAGING',
-  25: 'LP ENGAGED',
-  26: 'LP ENGAGING',
-  27: 'MOTOR COOLING OFF',
-  28: 'MOTOR COOLING ON',
-  29: 'MOTOR POWER OFF',
-  30: 'MOTOR POWER ON',
-  31: 'STARTING MOTOR COOLING',
-  32: 'STOPPING MOTOR COOLING',
 };
 
 // Aircraft Tracker

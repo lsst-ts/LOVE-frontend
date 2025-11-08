@@ -80,11 +80,16 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   transition: x 0.5s, width 0.5s;
 }
 
-.svgLouvers {
-  position: absolute;
+.svgLouversContainer {
+  position: relative;
+  width: fit-content;
   left: calc(50% - 24.5em);
   top: 65%;
+}
+
+.svgLouvers {
   height: 17em;
+  overflow: visible;
 }
 
 .svgLouvers .rotatingDome {
@@ -109,6 +114,38 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .svgLouvers rect {
   transition: x 0.5s, width 0.5s;
+}
+
+.louversHover {
+  background-color: var(--second-quaternary-background-dimmed-color);
+  border-radius: 0.5em;
+  font-size: var(--font-size-small);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: var(--content-padding);
+  row-gap: var(--small-padding);
+  padding: var(--content-padding);
+  align-items: center;
+}
+
+.louversHover > div > div:nth-child(odd) {
+  justify-self: left;
+}
+
+.louversHover > div > div:nth-child(even) {
+  justify-self: center;
+}
+
+.louversHover .title {
+  grid-column: span 2;
+  font-size: var(--font-size-medium);
+  font-weight: bold;
+  color: var(--base-font-color);
+  justify-self: center;
+}
+
+.louversHover .value {
+  color: var(--highlighted-font-color);
 }
 
 .svgAzimuth {
@@ -239,7 +276,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   stroke: #36d0e7;
 }
 
-/* louvers svg styles */
 .louver1,
 .louver2 {
   fill: #15242d;

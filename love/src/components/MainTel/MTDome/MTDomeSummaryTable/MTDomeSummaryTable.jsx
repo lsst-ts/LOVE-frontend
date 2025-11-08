@@ -35,7 +35,7 @@ import {
   mtDomeModeStatetoStyle,
   mtDomeAzimuthEnabledStateMap,
   mtDomeAzimuthEnabledStatetoStyle,
-  mtDomeAzimuthMotionStateMap,
+  mtDomeMotionStateMap,
   mtDomeMotionStatetoStyle,
   MTMountLimits,
 } from 'Config';
@@ -120,7 +120,7 @@ export default class MTDomeSummaryTable extends Component {
     const mtDomeStatusText = summaryStateMap[mtDomeSummaryState];
     const modeDomeStatusText = mtDomeModeStateMap[modeDomeStatus];
     const azimuthDomeStateText = mtDomeAzimuthEnabledStateMap[azimuthDomeState];
-    const azimuthDomeMotionText = mtDomeAzimuthMotionStateMap[azimuthDomeMotion];
+    const azimuthDomeMotionText = mtDomeMotionStateMap[azimuthDomeMotion];
     const mtMountStatusText = summaryStateMap[mtMountSummaryState];
 
     const { az: mountActualAz, el: mountActualEl } = currentPointing;
