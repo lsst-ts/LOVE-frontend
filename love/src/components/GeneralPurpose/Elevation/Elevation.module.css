@@ -18,7 +18,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 .svgElevation {
-  overflow: visible;
+  transform: rotate(90deg);
+  overflow: hidden;
 }
 
 .svgElevation text {
