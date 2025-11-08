@@ -2809,14 +2809,7 @@ export const hexapodConnectedStatetoStyle = {
   CONNECTED: 'ok',
 };
 
-export const mtdomeStatusStatetoStyle = {
-  UNKNOWN: 'undefined',
-  DISABLED: 'invalid',
-  ENABLED: 'enabled',
-  FAULT: 'fault',
-  OFFLINE: 'invalid',
-  STANDBY: 'standby',
-};
+// MTDome
 
 export const mtDomeModeStatetoStyle = {
   DEGRADED: 'warning',
@@ -2863,12 +2856,6 @@ export const mtdomeMotionStatetoStyle = {
   'MOTOR POWER ON': 'ok',
   'STARTING MOTOR COOLING': 'warning',
   'STOPPING MOTOR COOLING': 'warning',
-};
-
-export const mtdomeElevationEnabledStatetoStyle = {
-  DISABLED: 'undefined',
-  ENABLED: 'ok',
-  FAULT: 'fault',
 };
 
 export const mtDomeTrackingStatetoStyle = {
@@ -3491,12 +3478,6 @@ export const mtdomeMotionStateMap = {
 export const aircraftTrackerStateToMap = {
   0: 'DISCONNECTED',
   1: 'CONNECTED',
-};
-
-export const mtdomeElevationEnabledStateToMap = {
-  0: 'DISABLED',
-  1: 'ENABLED',
-  2: 'FAULT',
 };
 
 //Observatory
