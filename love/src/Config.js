@@ -2822,7 +2822,7 @@ export const mtDomeAzimuthEnabledStatetoStyle = {
   FAULT: 'fault',
 };
 
-export const mtdomeMotionStatetoStyle = {
+export const mtDomeMotionStatetoStyle = {
   CLOSED: 'undefined',
   CRAWLING: 'warning',
   MOVING: 'warning',
@@ -3438,7 +3438,7 @@ export const mtDomeAzimuthEnabledStateMap = {
   3: 'FAULT',
 };
 
-export const mtdomeMotionStateMap = {
+export const mtDomeAzimuthMotionStateMap = {
   0: 'CLOSED',
   1: 'CRAWLING',
   2: 'MOVING',
