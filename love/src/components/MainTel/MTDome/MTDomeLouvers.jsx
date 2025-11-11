@@ -30,6 +30,8 @@ const heightsLouvers = [
   35, 35, 19, 35, 19,
 ];
 
+const louversEnabledStates = [54, 55];
+
 function parsedPercentage(value) {
   let parsedPercentage = 0;
   if (!isNaN(value) && value >= 0 && value <= 100) {
@@ -104,6 +106,18 @@ function LouversHover({
   );
 }
 
+function TimesIcon({ x, y, width, height }) {
+  const iconSize = 8;
+  const posX = x + width / 2 - iconSize / 2;
+  const posY = y + height / 2 - iconSize / 2;
+  return (
+    <g className={styles.timesIcon}>
+      <line x1={posX} y1={posY} x2={posX + iconSize} y2={posY + iconSize} strokeWidth="3" strokeLinecap="round" />
+      <line x1={posX + iconSize} y1={posY} x2={posX} y2={posY + iconSize} strokeWidth="3" strokeLinecap="round" />
+    </g>
+  );
+}
+
 function Louver({
   className,
   x,
@@ -118,6 +132,7 @@ function Louver({
   handleLouversHover = () => {},
   orientation = 'right',
 }) {
+  const isLouverEnabled = motionState != null && louversEnabledStates.includes(motionState);
   return (
     <g
       onMouseEnter={() => {
@@ -135,18 +150,23 @@ function Louver({
       onMouseLeave={() => handleLouversHover(false)}
     >
       <rect className={styles.louver3} x={x} y={y} width={width} height={height} />
-      <rect
-        className={className}
-        x={x}
-        y={y}
-        width={width}
-        height={height}
-        style={{
-          transformOrigin: 'top center',
-          transformBox: 'fill-box',
-          transform: `scaleY(${1 - parsedPercentage(openPercentage)})`,
-        }}
-      />
+
+      {isLouverEnabled ? (
+        <rect
+          className={className}
+          x={x}
+          y={y}
+          width={width}
+          height={height}
+          style={{
+            transformOrigin: 'top center',
+            transformBox: 'fill-box',
+            transform: `scaleY(${1 - parsedPercentage(openPercentage)})`,
+          }}
+        />
+      ) : (
+        <TimesIcon x={x} y={y} width={width} height={height} />
+      )}
     </g>
   );
 }

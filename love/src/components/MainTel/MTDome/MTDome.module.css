@@ -348,3 +348,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .plotSection > div > :last-child {
   height: 18em;
 }
+
+.timesIcon {
+  stroke: var(--secondary-font-dimmed-color);
+}
