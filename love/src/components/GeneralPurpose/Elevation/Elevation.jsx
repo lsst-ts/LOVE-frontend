@@ -22,6 +22,12 @@ import PropTypes from 'prop-types';
 import { fixedFloat } from 'Utils';
 import styles from './Elevation.module.css';
 
+function clampElevation(elevation) {
+  if (elevation < 0) return 0;
+  if (elevation > 90) return 90;
+  return elevation;
+}
+
 export default class Limits extends Component {
   static propTypes = {
     /** Maximum limit 3, start of fault gauge */
@@ -71,8 +77,8 @@ export default class Limits extends Component {
 
   render() {
     const {
-      currentValue,
-      targetValue,
+      currentValue: currentValueProp,
+      targetValue: targetValueProp,
       height,
       maxL3,
       maxL2,
@@ -81,9 +87,10 @@ export default class Limits extends Component {
       minL2,
       minL3,
       radius,
-      valueOrigin,
-      displayLabels,
     } = this.props;
+
+    const currentValue = clampElevation(currentValueProp);
+    const targetValue = clampElevation(targetValueProp);
 
     {
       /* Convert Angles to pie % */
