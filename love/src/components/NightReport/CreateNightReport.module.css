@@ -3,7 +3,6 @@
   background-color: var(--second-secondary-background-color);
   border: 1px solid var(--second-senary-background-dimmed-color);
   border-radius: 0.5em;
-  overflow: hidden;
   text-align: left;
 }
 

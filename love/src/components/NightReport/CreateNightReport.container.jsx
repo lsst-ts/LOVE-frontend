@@ -24,14 +24,14 @@ import { NIGHTREPORT_CSCS_TO_REPORT } from 'Config';
 import CreateNightReport from './CreateNightReport';
 
 export const schema = {
-  description: 'Night report writting service',
+  description: 'Interface to write the observatory night reports.',
   defaultSize: [77, 32],
   props: {
     title: {
       type: 'string',
       description: 'Name displayed in the title bar (if visible)',
       isPrivate: false,
-      default: 'Log Service',
+      default: 'Night report logging service',
     },
     hasRawMode: {
       type: 'boolean',

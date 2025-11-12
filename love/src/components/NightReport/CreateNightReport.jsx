@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo, memo } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import ManagerInterface, {
@@ -34,8 +34,7 @@ import CSCStates from './CSCStates';
 import styles from './CreateNightReport.module.css';
 
 const MULTI_SELECT_OPTION_LENGTH = 50;
-const LAST_REFRESHED_WARNING_THRESHOLD_MINUTES = 60;
-const LAST_REFRESHED_WARNING_CHECK_INTERVAL_MS = 10000; // 1 minute
+const LAST_REFRESHED_WARNING_CHECK_INTERVAL_MS = 10000; // 10 seconds
 const NARRATIVE_LOGS_POLLING_INTERVAL_MS = 30000; // 30 seconds
 
 const STEPS = {
@@ -262,29 +261,35 @@ function ConfluenceURLField({ isEditDisabled, confluenceURL, setConfluenceURL })
   );
 }
 
-function AlertsSection({ refreshWarningActive, changesNotSaved }) {
-  const refreshedWarningThresholdHours = parseInt(LAST_REFRESHED_WARNING_THRESHOLD_MINUTES / 60, 10);
+const AlertsSection = memo(({ refreshWarningActive, changesNotSaved }) => {
+  const warningAlertRef = (ref) => {
+    if (ref && refreshWarningActive) {
+      ref.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className={styles.alerts}>
       {refreshWarningActive && (
-        <Alert type="warning">
-          The page has not been refreshed in the last {refreshedWarningThresholdHours}{' '}
-          {refreshedWarningThresholdHours > 1 ? 'hours' : 'hour'} and someone could have done changes. Please{' '}
-          <a
-            href="#"
-            onClick={() => {
-              location.reload();
-            }}
-          >
-            refresh
-          </a>{' '}
-          the page to get the latest data and don't forget to backup your changes if needed.
-        </Alert>
+        <div ref={warningAlertRef}>
+          <Alert type="warning">
+            Changes have been detected in the database. Please{' '}
+            <a
+              href="#"
+              onClick={() => {
+                location.reload();
+              }}
+            >
+              refresh
+            </a>{' '}
+            the page to get the latest data and don't forget to backup your changes if needed.
+          </Alert>
+        </div>
       )}
       {changesNotSaved && <Alert type="error">Changes on the current draft have not been saved yet.</Alert>}
     </div>
   );
-}
+});
 
 function getReportStatusStep(report) {
   if (report?.date_sent) {
@@ -303,7 +308,6 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
     save: false,
     send: false,
   });
-  const [lastRefreshed, setLastRefreshed] = useState(Moment());
   const [refreshWarningActive, setRefreshWarningActive] = useState(false);
 
   const currentStep = getReportStatusStep(report);
@@ -319,47 +323,41 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
     ManagerInterface.getUsers().then((users) => {
       setUserOptions(users.map((u) => `${u.first_name} ${u.last_name}`));
     });
-
-    // Set interval to trigger renders
-    const interval = setInterval(() => {
-      const warningActive = Moment().diff(lastRefreshed, 'minutes') > LAST_REFRESHED_WARNING_THRESHOLD_MINUTES;
-      setRefreshWarningActive(warningActive);
-    }, LAST_REFRESHED_WARNING_CHECK_INTERVAL_MS);
-
-    return () => {
-      clearInterval(interval);
-    };
   }, []);
 
-  const handleSent = (event) => {
+  const checkLastReport = () => {
+    // Limit parameter only allows values > 1
+    ManagerInterface.getLastNightReports(report.day_obs, 'day_obs', 2).then((reports) => {
+      if (reports && reports.length > 0) {
+        const latestReport = reports[0];
+        if (report && latestReport.id !== report.id) {
+          setRefreshWarningActive(true);
+        }
+      }
+    });
+  };
+
+  useEffect(() => {
+    // Set interval to trigger renders
+    let interval;
+    if (!refreshWarningActive && report) {
+      interval = setInterval(() => {
+        checkLastReport();
+      }, LAST_REFRESHED_WARNING_CHECK_INTERVAL_MS);
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [refreshWarningActive, report]);
+
+  const handleSend = (event) => {
     event.preventDefault();
     if (currentStep === STEPS.SAVED) {
       setLoading({ ...loading, send: true });
-
-      const parsedObservatoryState = {
-        simonyiAzimuth: fixedFloat(observatoryState.simonyiAzimuth, 2),
-        simonyiElevation: fixedFloat(observatoryState.simonyiElevation, 2),
-        simonyiDomeAzimuth: fixedFloat(observatoryState.simonyiDomeAzimuth, 2),
-        simonyiRotator: fixedFloat(Math.abs(observatoryState.simonyiRotator, 2)),
-        simonyiMirrorCoversState:
-          mtMountDeployableMotionStateMap[observatoryState.simonyiMirrorCoversState] ?? 'UNKNOWN',
-        simonyiOilSupplySystemState: mtMountPowerStateMap[observatoryState.simonyiOilSupplySystemState] ?? 'UNKNOWN',
-        simonyiPowerSupplySystemState:
-          mtMountPowerStateMap[observatoryState.simonyiPowerSupplySystemState] ?? 'UNKNOWN',
-        simonyiLockingPinsSystemState:
-          mtMountElevationLockingPinMotionStateMap[observatoryState.simonyiLockingPinsSystemState] ?? 'UNKNOWN',
-        auxtelAzimuth: fixedFloat(observatoryState.auxtelAzimuth, 2),
-        auxtelElevation: fixedFloat(observatoryState.auxtelElevation, 2),
-        auxtelDomeAzimuth: fixedFloat(observatoryState.auxtelDomeAzimuth, 2),
-        auxtelMirrorCoversState: atPneumaticsMirrorCoverStateMap[observatoryState.auxtelMirrorCoversState] ?? 'UNKNOWN',
-      };
-      const parsedCSCStates = Object.keys(cscStates).reduce((acc, csc) => {
-        const state = cscStates[csc];
-        acc[csc] = CSCDetail.states[state ?? 0].name;
-        return acc;
-      }, {});
-
-      ManagerInterface.sendCurrentNightReport(report.id, parsedObservatoryState, parsedCSCStates).then((report) => {
+      ManagerInterface.sendCurrentNightReport(report.id, report.day_obs).then((report) => {
         if (report) {
           updateReport(report);
         }
@@ -391,8 +389,9 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
         });
     } else {
       setLoading({ ...loading, save: true });
-      ManagerInterface.updateCurrentNightReport(
+      ManagerInterface.updateNightReport(
         report.id,
+        report.day_obs,
         report.summary ?? '',
         report.weather ?? '',
         report.maintel_summary ?? '',
@@ -499,7 +498,7 @@ function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpda
         <Button onClick={handleSave} disabled={!isAbleToSave()}>
           {loading.save ? 'Saving...' : 'Save'}
         </Button>
-        <Button onClick={handleSent} disabled={!isAbleToSend()}>
+        <Button onClick={handleSend} disabled={!isAbleToSend()}>
           {loading.send ? 'Sending...' : 'Send'}
         </Button>
       </div>
@@ -542,10 +541,7 @@ function NightReport({
     const oldestObsDayWithEFDData = parseInt(getObsDayFromDate(Moment().subtract(efdRetentionDays, 'days')), 10);
 
     setLoading(true);
-    ManagerInterface.getLastNightReports({
-      min_day_obs: oldestObsDayWithEFDData,
-      limit: efdRetentionDays,
-    })
+    ManagerInterface.getLastNightReports(oldestObsDayWithEFDData, '-day_obs', efdRetentionDays)
       .then((reports) => {
         const currentObsDayReport = reports.find((r) => r.day_obs === currentObsDay);
         if (!currentObsDayReport) {

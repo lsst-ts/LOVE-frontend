@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -1274,7 +1276,7 @@ export const getPointingStatus = (state) => {
 };
 
 export const getLouversStatus = (state) => {
-  const subscriptions = ['telemetry-MTDome-0-louvers', 'telemetry-ATDome-0-position'];
+  const subscriptions = ['telemetry-MTDome-0-louvers', 'event-MTDome-0-louversMotion'];
   const louvers = getStreamsData(state, subscriptions);
   return {
     actualPositionLouvers: louvers['telemetry-MTDome-0-louvers']
@@ -1284,7 +1286,12 @@ export const getLouversStatus = (state) => {
       ? louvers['telemetry-MTDome-0-louvers'].positionCommanded.value
       : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     powerDrawLouvers: louvers['telemetry-MTDome-0-louvers'] ? louvers['telemetry-MTDome-0-louvers'] : {},
-    atDomePosition: louvers['telemetry-ATDome-0-position'] ? louvers['telemetry-ATDome-0-position'] : {},
+    louversMotionState: louvers['event-MTDome-0-louversMotion']
+      ? louvers['event-MTDome-0-louversMotion'][0].state.value
+      : [],
+    louversInPosition: louvers['event-MTDome-0-louversMotion']
+      ? louvers['event-MTDome-0-louversMotion'][0].inPosition.value
+      : [],
   };
 };
 
@@ -2650,20 +2657,18 @@ export const getNightreportObservatoryState = (state) => {
   ];
   const streamData = getStreamsData(state, subscriptions);
   return {
-    simonyiAzimuth: streamData['telemetry-MTMount-0-azimuth']?.actualPosition.value ?? 0.0,
-    simonyiElevation: streamData['telemetry-MTMount-0-elevation']?.actualPosition.value ?? 0.0,
-    simonyiDomeAzimuth: streamData['telemetry-MTDome-0-azimuth']?.positionActual.value ?? 0.0,
-    simonyiRotator: streamData['telemetry-MTRotator-0-rotation']?.actualPosition.value ?? 0.0,
-    simonyiMirrorCoversState: streamData['event-MTMount-0-mirrorCoversMotionState']?.[0]?.state.value ?? null,
-    simonyiOilSupplySystemState: streamData['event-MTMount-0-oilSupplySystemState']?.[0]?.powerState.value ?? null,
-    simonyiPowerSupplySystemState:
-      streamData['event-MTMount-0-mainAxesPowerSupplySystemState']?.[0]?.powerState.value ?? null,
-    simonyiLockingPinsSystemState:
-      streamData['event-MTMount-0-elevationLockingPinMotionState']?.[0]?.state.value ?? null,
-    auxtelAzimuth: streamData['telemetry-ATMCS-0-mount_AzEl_Encoders']?.azimuthCalculatedAngle?.value[0] ?? 0.0,
-    auxtelElevation: streamData['telemetry-ATMCS-0-mount_AzEl_Encoders']?.elevationCalculatedAngle?.value[0] ?? 0.0,
-    auxtelDomeAzimuth: streamData['telemetry-ATDome-0-position']?.azimuthPosition?.value ?? 0.0,
-    auxtelMirrorCoversState: streamData['event-ATPneumatics-0-m1CoverState']?.[0]?.state.value ?? null,
+    simonyiAzimuth: streamData['telemetry-MTMount-0-azimuth']?.actualPosition.value,
+    simonyiElevation: streamData['telemetry-MTMount-0-elevation']?.actualPosition.value,
+    simonyiDomeAzimuth: streamData['telemetry-MTDome-0-azimuth']?.positionActual.value,
+    simonyiRotator: streamData['telemetry-MTRotator-0-rotation']?.actualPosition.value,
+    simonyiMirrorCoversState: streamData['event-MTMount-0-mirrorCoversMotionState']?.[0]?.state.value,
+    simonyiOilSupplySystemState: streamData['event-MTMount-0-oilSupplySystemState']?.[0]?.powerState.value,
+    simonyiPowerSupplySystemState: streamData['event-MTMount-0-mainAxesPowerSupplySystemState']?.[0]?.powerState.value,
+    simonyiLockingPinsSystemState: streamData['event-MTMount-0-elevationLockingPinMotionState']?.[0]?.state.value,
+    auxtelAzimuth: streamData['telemetry-ATMCS-0-mount_AzEl_Encoders']?.azimuthCalculatedAngle?.value[0],
+    auxtelElevation: streamData['telemetry-ATMCS-0-mount_AzEl_Encoders']?.elevationCalculatedAngle?.value[0],
+    auxtelDomeAzimuth: streamData['telemetry-ATDome-0-position']?.azimuthPosition?.value,
+    auxtelMirrorCoversState: streamData['event-ATPneumatics-0-m1CoverState']?.[0]?.state.value,
   };
 };
 

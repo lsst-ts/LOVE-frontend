@@ -35,7 +35,7 @@ const Value = ({ children, raw = false }) => {
           {children.map((c, i) => {
             return (
               <span key={i} className={styles.value}>
-                {c}
+                {typeof c === 'boolean' ? JSON.stringify(c) : c}
               </span>
             );
           })}
