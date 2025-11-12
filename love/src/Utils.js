@@ -2677,9 +2677,9 @@ export function getCutDateFromNightReport(report) {
  * @param {string} str string to be acronymized
  * @returns {string} acronymized string
  */
-export function acronymizeString(str) {
+export function acronymizeString(str, separator = '_') {
   if (!str) return '';
-  const words = str.split(' ');
+  const words = str.split(separator);
   let acronym = '';
   words.forEach((word) => {
     if (word.length > 0) {
