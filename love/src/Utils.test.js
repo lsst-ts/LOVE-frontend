@@ -7,6 +7,7 @@ import {
   getObsDayEnd,
   isNightReportOld,
   getCutDateFromNightReport,
+  acronymizeString,
 } from './Utils';
 import { JIRA_TICKETS_BASE_URL } from './Config';
 
@@ -224,5 +225,26 @@ describe('convertJiraTicketNamesToHyperlinks', () => {
       `This is a ticket name not yet formatted [DM-41184|${JIRA_TICKETS_BASE_URL}/DM-41184].\r\n` +
       'This is an already parsed link [DM-41184|https://jira.lsstcorp.org/browse/DM-41184].\r\n';
     expect(convertJiraTicketNamesToHyperlinks(input)).toEqual(expectedOutput);
+  });
+});
+
+describe('acronymizeString', () => {
+  it('should return an empty string if input is null or undefined', () => {
+    expect(acronymizeString(null)).toBe('');
+    expect(acronymizeString(undefined)).toBe('');
+  });
+
+  it('should return the acronymized string using default separator: "_"', () => {
+    expect(acronymizeString('STATE')).toBe('S');
+    expect(acronymizeString('DETAILED_STATE')).toBe('DS');
+    expect(acronymizeString('DETAILED_STATE_B')).toBe('DSB');
+    expect(acronymizeString('DETAILED STATE')).toBe('D');
+  });
+
+  it('should return the acronymized string using custom separator: " "', () => {
+    expect(acronymizeString('STATE', ' ')).toBe('S');
+    expect(acronymizeString('DETAILED STATE', ' ')).toBe('DS');
+    expect(acronymizeString('DETAILED STATE B', ' ')).toBe('DSB');
+    expect(acronymizeString('DETAILED_STATE', ' ')).toBe('D');
   });
 });
