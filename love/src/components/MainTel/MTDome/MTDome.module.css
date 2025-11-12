@@ -231,6 +231,10 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   gap: var(--content-padding);
 }
 
+.divSummaryTable {
+  flex: 0 0 25em;
+}
+
 .divDomeLouvers {
   position: relative;
   flex-grow: 1;

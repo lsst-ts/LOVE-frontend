@@ -154,21 +154,27 @@ export default class MTDomeSummaryTable extends Component {
           <Value>{parsedTelescopeRotatorDeg}</Value>
           <Title>MTDome CSC</Title>
           <Value>
-            <StatusText status={summaryStateToStyle[mtDomeStatusText]}>{mtDomeStatusText}</StatusText>
+            <StatusText title={mtDomeStatusText} status={summaryStateToStyle[mtDomeStatusText]}>
+              {mtDomeStatusText}
+            </StatusText>
           </Value>
           <Label>Mode</Label>
           <Value>
-            <StatusText status={mtDomeModeStatetoStyle[modeDomeStatusText]}>{modeDomeStatusText}</StatusText>
+            <StatusText title={modeDomeStatusText} status={mtDomeModeStatetoStyle[modeDomeStatusText]}>
+              {modeDomeStatusText}
+            </StatusText>
           </Value>
           <Label>Az State</Label>
           <Value>
-            <StatusText status={mtDomeAzimuthEnabledStatetoStyle[azimuthDomeStateText]}>
+            <StatusText title={azimuthDomeStateText} status={mtDomeAzimuthEnabledStatetoStyle[azimuthDomeStateText]}>
               {azimuthDomeStateText}
             </StatusText>
           </Value>
           <Label>Az Motion</Label>
           <Value>
-            <StatusText status={mtDomeMotionStatetoStyle[azimuthDomeMotionText]}>{azimuthDomeMotionText}</StatusText>
+            <StatusText title={azimuthDomeMotionText} status={mtDomeMotionStatetoStyle[azimuthDomeMotionText]}>
+              {azimuthDomeMotionText}
+            </StatusText>
           </Value>
           <Label>Az</Label>
           <Value>
@@ -181,7 +187,9 @@ export default class MTDomeSummaryTable extends Component {
 
           <Title>MTMount CSC</Title>
           <Value>
-            <StatusText status={summaryStateToStyle[mtMountStatusText]}>{mtMountStatusText}</StatusText>
+            <StatusText title={mtMountStatusText} status={summaryStateToStyle[mtMountStatusText]}>
+              {mtMountStatusText}
+            </StatusText>
           </Value>
           <Label>Elevation</Label>
           <Value>

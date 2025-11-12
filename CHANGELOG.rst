@@ -5,6 +5,7 @@ Version History
 v6.9.3
 ------
 
+* Improve states displays for the MTDome components. `<https://github.com/lsst-ts/LOVE-frontend/pull/743>`_
 * Refactor MTDomeLouvers component and fix louvers mapping. `<https://github.com/lsst-ts/LOVE-frontend/pull/741>`_
 * Fix query to last night report when looking into old night reports. `<https://github.com/lsst-ts/LOVE-frontend/pull/740>`_
 * Fix issue with the night report not being properly saved into the database `<https://github.com/lsst-ts/LOVE-frontend/pull/739>`_
