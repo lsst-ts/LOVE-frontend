@@ -102,6 +102,9 @@ export default class MTDomeShutter extends Component {
       (rightShutterPositionCommanded * widthShutterInPixels) / 100,
     );
 
+    const showCommandedPosition =
+      !isNaN(positionCommandedDomeAz) && fixedFloat(positionCommandedDomeAz, 1) !== fixedFloat(positionActualDomeAz, 1);
+
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 235 235">
         {/* Dome, actual position */}
@@ -231,7 +234,7 @@ export default class MTDomeShutter extends Component {
         </g>
 
         {/* Dome, commanded position */}
-        {fixedFloat(positionCommandedDomeAz, 1) !== fixedFloat(positionActualDomeAz, 1) && (
+        {showCommandedPosition && (
           <g
             style={{
               transformOrigin: `50% 50%`,

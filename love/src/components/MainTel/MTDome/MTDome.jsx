@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -26,9 +28,17 @@ import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import Azimuth from 'components/GeneralPurpose/Azimuth/Azimuth';
 import Elevation from 'components/GeneralPurpose/Elevation/Elevation';
+import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import WindRose from '../../icons/WindRose/WindRose';
 import MTDomeSummaryTable from './MTDomeSummaryTable/MTDomeSummaryTable';
-import { MTDomeLouversMapAF, MTDomeLouversMapGN } from 'Config';
+import {
+  MTDomeLouversMapAF,
+  MTDomeLouversMapGN,
+  MTDomeLouversIndexMap,
+  mtDomeMotionStateMap,
+  mtDomeMotionStatetoStyle,
+} from 'Config';
+import { acronymizeString } from 'Utils';
 import styles from './MTDome.module.css';
 
 const defaultValuesAF = {
@@ -173,6 +183,20 @@ const elevationPlotInputs = {
   },
 };
 
+function renderLouversTableCell(position) {
+  return !isNaN(position) ? `${position.toFixed(3)}` : '-';
+}
+
+function renderLouversTableStatusCell(state) {
+  const motionState = mtDomeMotionStateMap[state] ?? 'UNKNOWN';
+  const style = mtDomeMotionStatetoStyle[motionState] ?? 'undefined';
+  return (
+    <StatusText title={motionState} status={style}>
+      {acronymizeString(motionState)}
+    </StatusText>
+  );
+}
+
 export default class MTDome extends Component {
   static propTypes = {
     /** Function to subscribe to streams to receive */
@@ -227,6 +251,10 @@ export default class MTDome extends Component {
     telescopeRotatorDeg: PropTypes.number,
     /** Whether to display the RA and DEC in hour format */
     raDecHourFormat: PropTypes.bool,
+    /** Louvers motion state array */
+    louversMotionState: PropTypes.arrayOf(PropTypes.number),
+    /** Louvers in position array */
+    louversInPosition: PropTypes.arrayOf(PropTypes.bool),
   };
 
   static defaultProps = {
@@ -253,7 +281,9 @@ export default class MTDome extends Component {
     heightLouvers: 400,
     isProjected: true,
     mtDomeSummaryState: 0,
-    mtMountSummaryState: 0,
+    mtMountSummardataLouversAFyState: 0,
+    louversMotionState: [],
+    louversInPosition: [],
   };
 
   constructor(props) {
@@ -268,6 +298,14 @@ export default class MTDome extends Component {
           Louvers: 'Cmd. [%]',
           ...defaultValuesAF,
         },
+        {
+          Louvers: 'In Position',
+          ...defaultValuesAF,
+        },
+        {
+          Louvers: 'Motion State',
+          ...defaultValuesAF,
+        },
       ],
       dataLouversGN: [
         {
@@ -276,6 +314,14 @@ export default class MTDome extends Component {
         },
         {
           Louvers: 'Cmd. [%]',
+          ...defaultValuesGN,
+        },
+        {
+          Louvers: 'In Position',
+          ...defaultValuesGN,
+        },
+        {
+          Louvers: 'Motion State',
           ...defaultValuesGN,
         },
       ],
@@ -295,37 +341,122 @@ export default class MTDome extends Component {
   componentDidUpdate = (prevProps, prevState) => {
     if (prevProps.actualPositionLouvers !== this.props.actualPositionLouvers) {
       const dataLouversAFActual = {};
-      MTDomeLouversMapAF.forEach((l, i) => {
-        dataLouversAFActual[l] = `${this.props.actualPositionLouvers[i].toFixed(3)}`;
+      MTDomeLouversMapAF.forEach((l) => {
+        const position = this.props.actualPositionLouvers[MTDomeLouversIndexMap[l]];
+        dataLouversAFActual[l] = renderLouversTableCell(position);
       });
       this.setState((state) => ({
-        dataLouversAF: [{ ...state.dataLouversAF[0], ...dataLouversAFActual }, { ...state.dataLouversAF[1] }],
+        dataLouversAF: [
+          { ...state.dataLouversAF[0], ...dataLouversAFActual },
+          { ...state.dataLouversAF[1] },
+          { ...state.dataLouversAF[2] },
+          { ...state.dataLouversAF[3] },
+        ],
       }));
 
       const dataLouversGNActual = {};
-      MTDomeLouversMapGN.forEach((l, i) => {
-        dataLouversGNActual[l] = `${this.props.actualPositionLouvers[i + 17].toFixed(3)}`;
+      MTDomeLouversMapGN.forEach((l) => {
+        const position = this.props.actualPositionLouvers[MTDomeLouversIndexMap[l]];
+        dataLouversGNActual[l] = renderLouversTableCell(position);
       });
       this.setState((state) => ({
-        dataLouversGN: [{ ...state.dataLouversGN[0], ...dataLouversGNActual }, { ...state.dataLouversGN[1] }],
+        dataLouversGN: [
+          { ...state.dataLouversGN[0], ...dataLouversGNActual },
+          { ...state.dataLouversGN[1] },
+          { ...state.dataLouversGN[2] },
+          { ...state.dataLouversGN[3] },
+        ],
       }));
     }
 
     if (prevProps.commandedPositionLouvers !== this.props.commandedPositionLouvers) {
       const dataLouversAFCommanded = {};
-      MTDomeLouversMapAF.forEach((l, i) => {
-        dataLouversAFCommanded[l] = `${this.props.commandedPositionLouvers[i].toFixed(3)}`;
+      MTDomeLouversMapAF.forEach((l) => {
+        const position = this.props.commandedPositionLouvers[MTDomeLouversIndexMap[l]];
+        dataLouversAFCommanded[l] = renderLouversTableCell(position);
       });
       this.setState((state) => ({
-        dataLouversAF: [{ ...state.dataLouversAF[0] }, { ...state.dataLouversAF[1], ...dataLouversAFCommanded }],
+        dataLouversAF: [
+          { ...state.dataLouversAF[0] },
+          { ...state.dataLouversAF[1], ...dataLouversAFCommanded },
+          { ...state.dataLouversAF[2] },
+          { ...state.dataLouversAF[3] },
+        ],
       }));
 
       const dataLouversGNCommanded = {};
-      MTDomeLouversMapGN.forEach((l, i) => {
-        dataLouversGNCommanded[l] = `${this.props.commandedPositionLouvers[i + 17].toFixed(3)}`;
+      MTDomeLouversMapGN.forEach((l) => {
+        const position = this.props.commandedPositionLouvers[MTDomeLouversIndexMap[l]];
+        dataLouversGNCommanded[l] = renderLouversTableCell(position);
       });
       this.setState((state) => ({
-        dataLouversGN: [{ ...state.dataLouversGN[0] }, { ...state.dataLouversGN[1], ...dataLouversGNCommanded }],
+        dataLouversGN: [
+          { ...state.dataLouversGN[0] },
+          { ...state.dataLouversGN[1], ...dataLouversGNCommanded },
+          { ...state.dataLouversGN[2] },
+          { ...state.dataLouversGN[3] },
+        ],
+      }));
+    }
+
+    if (prevProps.louversInPosition !== this.props.louversInPosition) {
+      const dataLouversAFInPosition = {};
+      MTDomeLouversMapAF.forEach((l) => {
+        const inPosition = this.props.louversInPosition[MTDomeLouversIndexMap[l]];
+        dataLouversAFInPosition[l] = inPosition ? 'Yes' : 'No';
+      });
+      this.setState((state) => ({
+        dataLouversAF: [
+          { ...state.dataLouversAF[0] },
+          { ...state.dataLouversAF[1] },
+          { ...state.dataLouversAF[2], ...dataLouversAFInPosition },
+          { ...state.dataLouversAF[3] },
+        ],
+      }));
+      const dataLouversGNInPosition = {};
+      MTDomeLouversMapGN.forEach((l) => {
+        const inPosition = this.props.louversInPosition[MTDomeLouversIndexMap[l]];
+        dataLouversGNInPosition[l] = inPosition ? 'Yes' : 'No';
+      });
+      this.setState((state) => ({
+        dataLouversGN: [
+          { ...state.dataLouversGN[0] },
+          { ...state.dataLouversGN[1] },
+          { ...state.dataLouversGN[2], ...dataLouversGNInPosition },
+          { ...state.dataLouversGN[3] },
+        ],
+      }));
+    }
+
+    if (prevProps.louversMotionState !== this.props.louversMotionState) {
+      const dataLouversAFMotionState = {};
+      MTDomeLouversMapAF.forEach((l) => {
+        dataLouversAFMotionState[l] = renderLouversTableStatusCell(
+          this.props.louversMotionState[MTDomeLouversIndexMap[l]],
+        );
+      });
+      this.setState((state) => ({
+        dataLouversAF: [
+          { ...state.dataLouversAF[0] },
+          { ...state.dataLouversAF[1] },
+          { ...state.dataLouversAF[2] },
+          { ...state.dataLouversAF[3], ...dataLouversAFMotionState },
+        ],
+      }));
+
+      const dataLouversGNMotionState = {};
+      MTDomeLouversMapGN.forEach((l) => {
+        dataLouversGNMotionState[l] = renderLouversTableStatusCell(
+          this.props.louversMotionState[MTDomeLouversIndexMap[l]],
+        );
+      });
+      this.setState((state) => ({
+        dataLouversGN: [
+          { ...state.dataLouversGN[0] },
+          { ...state.dataLouversGN[1] },
+          { ...state.dataLouversGN[2] },
+          { ...state.dataLouversGN[3], ...dataLouversGNMotionState },
+        ],
       }));
     }
   };
@@ -574,6 +705,8 @@ export default class MTDome extends Component {
       telescopeDecDeg,
       telescopeRotatorDeg,
       raDecHourFormat,
+      louversMotionState,
+      louversInPosition,
     } = this.props;
 
     const currentPointing = {
@@ -589,27 +722,27 @@ export default class MTDome extends Component {
     return (
       <div className={styles.domeContainer}>
         <div className={styles.topRow}>
-          <div className={styles.windRoseContainer}>
-            <WindRose />
-          </div>
-          <div className={styles.elevationContainer} height={`${height / 2}px`}>
-            <Elevation
-              height={height * 0.75}
-              radius={width * 0.75}
-              maxL3={86.5}
-              maxL2={85}
-              maxL1={84}
-              minL1={18}
-              minL2={19}
-              minL3={20}
-              currentValue={positionActualLightWindScreen}
-              targetValue={positionCommandedLightWindScreen}
-              className={styles.svgElevation}
-            />
-          </div>
-
           <div className={styles.divDome}>
             <div className={styles.divDomeLouvers}>
+              <div className={styles.windRoseContainer}>
+                <WindRose />
+              </div>
+
+              <div className={styles.elevationContainer}>
+                <Elevation
+                  height={250}
+                  radius={250}
+                  maxL3={86.5}
+                  maxL2={85}
+                  maxL1={84}
+                  minL1={18}
+                  minL2={19}
+                  minL3={20}
+                  currentValue={currentPointing.el}
+                  targetValue={targetPointing.el}
+                />
+              </div>
+
               <Azimuth
                 className={styles.svgAzimuth}
                 width={width}
@@ -627,7 +760,6 @@ export default class MTDome extends Component {
                 positionActualLightWindScreen={positionActualLightWindScreen}
                 positionCommandedLightWindScreen={positionCommandedLightWindScreen}
               />
-
               <MTDomePointing
                 width={width}
                 height={height}
@@ -638,6 +770,8 @@ export default class MTDome extends Component {
               <MTDomeLouvers
                 actualPositionLouvers={actualPositionLouvers}
                 commandedPositionLouvers={commandedPositionLouvers}
+                louversMotionState={louversMotionState}
+                louversInPosition={louversInPosition}
               />
             </div>
             <div className={styles.divSummaryTable}>

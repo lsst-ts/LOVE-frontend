@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -1274,7 +1276,7 @@ export const getPointingStatus = (state) => {
 };
 
 export const getLouversStatus = (state) => {
-  const subscriptions = ['telemetry-MTDome-0-louvers', 'telemetry-ATDome-0-position'];
+  const subscriptions = ['telemetry-MTDome-0-louvers', 'event-MTDome-0-louversMotion'];
   const louvers = getStreamsData(state, subscriptions);
   return {
     actualPositionLouvers: louvers['telemetry-MTDome-0-louvers']
@@ -1284,7 +1286,12 @@ export const getLouversStatus = (state) => {
       ? louvers['telemetry-MTDome-0-louvers'].positionCommanded.value
       : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     powerDrawLouvers: louvers['telemetry-MTDome-0-louvers'] ? louvers['telemetry-MTDome-0-louvers'] : {},
-    atDomePosition: louvers['telemetry-ATDome-0-position'] ? louvers['telemetry-ATDome-0-position'] : {},
+    louversMotionState: louvers['event-MTDome-0-louversMotion']
+      ? louvers['event-MTDome-0-louversMotion'][0].state.value
+      : [],
+    louversInPosition: louvers['event-MTDome-0-louversMotion']
+      ? louvers['event-MTDome-0-louversMotion'][0].inPosition.value
+      : [],
   };
 };
 

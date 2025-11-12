@@ -35,8 +35,8 @@ import {
   mtDomeModeStatetoStyle,
   mtDomeAzimuthEnabledStateMap,
   mtDomeAzimuthEnabledStatetoStyle,
-  mtdomeMotionStateMap,
-  mtdomeMotionStatetoStyle,
+  mtDomeMotionStateMap,
+  mtDomeMotionStatetoStyle,
   MTMountLimits,
 } from 'Config';
 import { formatHoursToDigital, degreesToDMS, degrees, defaultNumberFormatter } from 'Utils';
@@ -120,7 +120,7 @@ export default class MTDomeSummaryTable extends Component {
     const mtDomeStatusText = summaryStateMap[mtDomeSummaryState];
     const modeDomeStatusText = mtDomeModeStateMap[modeDomeStatus];
     const azimuthDomeStateText = mtDomeAzimuthEnabledStateMap[azimuthDomeState];
-    const azimuthDomeMotionText = mtdomeMotionStateMap[azimuthDomeMotion];
+    const azimuthDomeMotionText = mtDomeMotionStateMap[azimuthDomeMotion];
     const mtMountStatusText = summaryStateMap[mtMountSummaryState];
 
     const { az: mountActualAz, el: mountActualEl } = currentPointing;
@@ -168,7 +168,7 @@ export default class MTDomeSummaryTable extends Component {
           </Value>
           <Label>Az Motion</Label>
           <Value>
-            <StatusText status={mtdomeMotionStatetoStyle[azimuthDomeMotionText]}>{azimuthDomeMotionText}</StatusText>
+            <StatusText status={mtDomeMotionStatetoStyle[azimuthDomeMotionText]}>{azimuthDomeMotionText}</StatusText>
           </Value>
           <Label>Az</Label>
           <Value>
