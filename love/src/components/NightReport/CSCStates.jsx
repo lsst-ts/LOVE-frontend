@@ -20,10 +20,11 @@ function CSCStates({ report, cscs: cscsProp }) {
     const cscsPayload = {};
     NIGHTREPORT_CSCS_TO_REPORT.forEach((cscName) => {
       const [csc, index] = cscName.split(':');
-      cscsPayload[csc] = {
-        [index]: {
-          logevent_summaryState: ['summaryState'],
-        },
+      if (!cscsPayload[csc]) {
+        cscsPayload[csc] = {};
+      }
+      cscsPayload[csc][index] = {
+        logevent_summaryState: ['summaryState'],
       };
     });
     const efdInstance = getEFDInstanceForHost();
