@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.9.4
+------
+
+* Adjust louvers enabled state in MTDomeLouvers. `<https://github.com/lsst-ts/LOVE-frontend/pull/744>`_
+
 v6.9.3
 ------
 
