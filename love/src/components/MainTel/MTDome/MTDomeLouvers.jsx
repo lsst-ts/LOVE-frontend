@@ -30,7 +30,7 @@ const heightsLouvers = [
   35, 35, 19, 35, 19,
 ];
 
-const louversEnabledStates = [54, 55];
+const DISABLED_LOUVERS_STATE = 52;
 
 function parsedPercentage(value) {
   let parsedPercentage = 0;
@@ -132,7 +132,7 @@ function Louver({
   handleLouversHover = () => {},
   orientation = 'right',
 }) {
-  const isLouverEnabled = motionState != null && louversEnabledStates.includes(motionState);
+  const isLouverEnabled = motionState != null && motionState !== DISABLED_LOUVERS_STATE;
   return (
     <g
       onMouseEnter={() => {
