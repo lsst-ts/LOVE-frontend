@@ -114,26 +114,27 @@ export default class Camera extends Component {
    *
    */
   reduceImagesInSequence = (cameraState, stream) => {
+    console.log('Reducing images in sequence for state:', cameraState, stream);
     const { imageSequence } = this.state;
     if (imageSequence.images === undefined) {
       imageSequence.images = {};
     }
 
     imageSequence.name = 'test';
-    imageSequence.imagesInSequence = stream.imagesInSequence.value;
-    imageSequence.images[stream.imageName.value] = {
+    imageSequence.imagesInSequence = stream.imagesInSequence;
+    imageSequence.images[stream.imageName] = {
       state: cameraState,
-      imageIndex: stream.imageIndex.value,
-      source: stream.imageSource.value,
-      controller: stream.imageController.value,
-      timeStamp: stream.timestampAcquisitionStart.value,
-      exposureTime: stream.exposureTime?.value ?? 0,
-      tag: stream.imageTag?.value ?? '-',
-      obsDate: stream.timestampDateObs?.value ?? '-',
-      endObsDate: stream.timestampDateEnd?.value ?? '-',
-      darkTime: stream.darkTime?.value ?? '-',
-      emulatedImage: stream.emulatedImage?.value ?? '-',
-      shutterOpenTime: stream.measuredShutterOpenTime?.value ?? '-',
+      imageIndex: stream.imageIndex,
+      source: stream.imageSource,
+      controller: stream.imageController,
+      timeStamp: stream.timestampAcquisitionStart,
+      exposureTime: stream.exposureTime ?? 0,
+      tag: stream.imageTag ?? '-',
+      obsDate: stream.timestampDateObs ?? '-',
+      endObsDate: stream.timestampDateEnd ?? '-',
+      darkTime: stream.darkTime ?? '-',
+      emulatedImage: stream.emulatedImage ?? '-',
+      shutterOpenTime: stream.measuredShutterOpenTime ?? '-',
     };
 
     this.setState({ imageSequence });
@@ -163,6 +164,9 @@ export default class Camera extends Component {
     const shutterState = mtcameraShutterDetailedStateMap[this.props.mtCameraShutterDetailedState];
     const filterChangerStatus = mtcameraFilterChangerDetailedStateMap[this.props.mtCameraFilterChangerDetailedState];
     const raftsStatus = mtCameraRaftsDetailedStateMap[this.props.mtCameraRaftsDetailedState];
+
+    const { imageSequence } = this.state;
+    console.log(imageSequence);
 
     return (
       <div className={styles.cameraContainer}>
@@ -209,25 +213,22 @@ export default class Camera extends Component {
           </div>
         </div>
         <div>
-          {/* <div className={styles.imageSequenceName}>{this.props.imageSequence?.name}</div> */}
+          {/* <div className={styles.imageSequenceName}>{imageSequence?.name}</div> */}
           <div className={styles.imageTableWrapper}>
             <table className={styles.imageTable}>
               <thead>
                 <tr>
-                  <th></th>
-                  <th>Image</th>
                   <th>Timestamp</th>
                   <th>Image name</th>
-                  <th>Secuence</th>
                   <th className={styles.narrowCol}>Exposure time</th>
                   <th className={styles.mediumCol}>State</th>
                 </tr>
               </thead>
               <tbody>
-                {this.props.imageSequence?.images &&
-                  Object.keys(this.props.imageSequence?.images).map((imageName) => {
-                    const image = this.props.imageSequence?.images[imageName];
-                    const imageKey = `${this.props.imageSequence?.name}-${imageName}`;
+                {imageSequence?.images &&
+                  Object.keys(imageSequence.images).map((imageName) => {
+                    const image = imageSequence.images[imageName];
+                    const imageKey = `${imageSequence.name}-${imageName}`;
                     const isIntegrating = image.state === 'INTEGRATING';
                     let currentExposureTime =
                       this.state.timers[imageKey] !== undefined
@@ -239,11 +240,8 @@ export default class Camera extends Component {
                     return (
                       <React.Fragment key={imageKey}>
                         <tr>
-                          <td></td>
-                          <td></td>
                           <td className={styles.string}>{formatTimestamp(image.timeStamp * 1000)}</td>
                           <td className={styles.string}>{imageName}</td>
-                          <td></td>
                           <td className={[styles.narrowCol].join(' ')}>
                             <LoadingBar
                               percentage={(currentExposureTime / image.exposureTime) * 100}

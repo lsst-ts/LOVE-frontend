@@ -82,10 +82,10 @@ const mapStateToProps = (state) => {
   const endOfImageTelemetry = getEndOfImageTelemetry(state);
   return {
     ...summaryStatus,
-    ...startIntegration,
-    ...startReadout,
-    ...endReadout,
-    ...endOfImageTelemetry,
+    startIntegration,
+    startReadout,
+    endReadout,
+    endOfImageTelemetry,
   };
 };
 
