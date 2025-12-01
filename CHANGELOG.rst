@@ -5,6 +5,7 @@ Version History
 v6.9.4
 ------
 
+* Bump node-forge from 1.3.1 to 1.3.2 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/747>`_
 * Adjust louvers enabled state in MTDomeLouvers. `<https://github.com/lsst-ts/LOVE-frontend/pull/744>`_
 
 v6.9.3
