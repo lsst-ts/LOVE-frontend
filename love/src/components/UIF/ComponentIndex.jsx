@@ -548,6 +548,16 @@ export const mainIndex = {
       },
     },
   },
+  GlycolDeviceTable: {
+    component: require('../MainTel/GlycolSystem/GlycolDeviceTable.container').default,
+    schema: {
+      ...require('../MainTel/GlycolSystem/GlycolDeviceTable.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/GlycolSystem/GlycolDeviceTable.container').schema.props,
+      },
+    },
+  },
   M1M3BumpTests: {
     component: require('../MainTel/M1M3/BumpTests.container').default,
     schema: {
