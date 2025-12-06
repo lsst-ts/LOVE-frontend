@@ -254,7 +254,7 @@ const pressureReturnPlotInputs = {
   },
 };
 
-const telemetriesMapping = {
+export const telemetriesMapping = {
   'Chiller 1': {
     flow: 'glycolCH01flow',
     tempIn: 'glycolCH01temperatureIn',
@@ -456,7 +456,7 @@ const devicesQuerySelectorMapping = {
   // TMA: '#Dome > #underneath-tma',
 };
 
-const deviceHeatSurpassThreshold = (device, heat) => {
+export const deviceHeatSurpassThreshold = (device, heat) => {
   return heat >= devicesHeatThresholds[device];
 };
 
@@ -476,7 +476,7 @@ const devicePressureDifferenceIsValid = (diff) => {
  * @returns {number} Heat exchange in kW
  * @returns {undefined} If any of the parameters is undefined
  */
-const calculateHeatExchange = (flowRate, tempIn, tempOut) => {
+export const calculateHeatExchange = (flowRate, tempIn, tempOut) => {
   if (flowRate === undefined || tempIn === undefined || tempOut === undefined) {
     return;
   }
