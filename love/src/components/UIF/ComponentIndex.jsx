@@ -549,12 +549,12 @@ export const mainIndex = {
     },
   },
   GlycolDeviceTable: {
-    component: require('../MainTel/GlycolSystem/GlycolDeviceTable.container').default,
+    component: require('../MainTel/GlycolSystem/DeviceTable.container').default,
     schema: {
-      ...require('../MainTel/GlycolSystem/GlycolDeviceTable.container').schema,
+      ...require('../MainTel/GlycolSystem/DeviceTable.container').schema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/GlycolSystem/GlycolDeviceTable.container').schema.props,
+        ...require('../MainTel/GlycolSystem/DeviceTable.container').schema.props,
       },
     },
   },
