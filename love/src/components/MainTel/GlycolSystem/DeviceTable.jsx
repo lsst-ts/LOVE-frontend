@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import { defaultNumberFormatter } from 'Utils';
-import { telemetriesMapping, calculateHeatExchange, deviceHeatSurpassThreshold } from './GlycolSystem';
+import { telemetriesMapping, calculateHeatExchange, deviceHeatSurpassThreshold } from './HeatMonitor';
 import styles from './GlycolSystem.module.css';
 
 const devicesPipesMapping = {

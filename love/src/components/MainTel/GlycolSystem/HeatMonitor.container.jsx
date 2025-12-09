@@ -17,20 +17,21 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { addGroup, removeGroup, requestSALCommand } from 'redux/actions/ws';
+import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getGlycolSystemData } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
-import GlycolSystem from './GlycolSystem';
+import HeatMonitor from './HeatMonitor';
 
 export const schema = {
-  description: 'Glycol system interface',
+  description:
+    'Displays energy consumption of devices in the HVAC glycol cooling system. Based on telemetry from HVAC glycol sensors.',
   defaultSize: [77, 32],
   props: {
     title: {
       type: 'string',
       description: 'Name displayed in the title bar (if visible)',
       isPrivate: false,
-      default: 'LOVE Glycol System Monitor',
+      default: 'Glycol Heat Monitor',
     },
     hasRawMode: {
       type: 'boolean',
@@ -38,20 +39,14 @@ export const schema = {
       isPrivate: true,
       default: true,
     },
-    showTableDifferences: {
-      type: 'boolean',
-      description: 'Whether to show the Temperature and Pressure differences in the table for glycol measurements.',
-      isPrivate: false,
-      default: true,
-    },
   },
 };
 
-const GlycolSystemContainer = (props) => {
+const Container = (props) => {
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
-  return <GlycolSystem {...props} />;
+  return <HeatMonitor {...props} />;
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -71,10 +66,7 @@ const mapDispatchToProps = (dispatch) => {
     unsubscribeToStreams: () => {
       subscriptions.forEach((s) => dispatch(removeGroup(s)));
     },
-    requestSALCommand: (cmd) => {
-      return dispatch(requestSALCommand(cmd));
-    },
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(GlycolSystemContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(Container);

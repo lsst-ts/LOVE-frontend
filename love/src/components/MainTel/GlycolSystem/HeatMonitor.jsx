@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { uniqueId } from 'lodash';
-import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
-import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
-import { COLORS } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.jsx';
 import TrendValue from 'components/GeneralPurpose/TrendValue/TrendValue';
 import EyeIcon from 'components/icons/EyeIcon/EyeIcon';
 import Map from 'components/MainTel/GlycolSystem/Map/Map';
@@ -13,246 +10,6 @@ import { defaultNumberFormatter } from 'Utils';
 import styles from './GlycolSystem.module.css';
 
 const dummySummaryState = 2;
-
-const flowPlotInputs = {
-  CH01: {
-    type: 'line',
-    color: COLORS[0],
-    values: [
-      {
-        variable: 'y',
-        category: 'telemetry',
-        csc: 'HVAC',
-        salindex: '0',
-        topic: 'glycolSensor',
-        item: 'supplyFlowChiller01',
-        accessor: '(x) => x',
-      },
-    ],
-  },
-  CH02: {
-    type: 'line',
-    color: COLORS[1],
-    values: [
-      {
-        variable: 'y',
-        category: 'telemetry',
-        csc: 'HVAC',
-        salindex: '0',
-        topic: 'glycolSensor',
-        item: 'supplyFlowChiller02',
-        accessor: '(x) => x',
-      },
-    ],
-  },
-  CH03: {
-    type: 'line',
-    color: COLORS[2],
-    values: [
-      {
-        variable: 'y',
-        category: 'telemetry',
-        csc: 'HVAC',
-        salindex: '0',
-        topic: 'glycolSensor',
-        item: 'supplyFlowChiller03',
-        accessor: '(x) => x',
-      },
-    ],
-  },
-};
-
-const temperatureSupplyPlotInputs = {
-  CH01: {
-    type: 'line',
-    color: COLORS[0],
-    values: [
-      {
-        variable: 'y',
-        category: 'telemetry',
-        csc: 'HVAC',
-        salindex: '0',
-        topic: 'glycolSensor',
-        item: 'supplyTempChiller01',
-        accessor: '(x) => x',
-      },
-    ],
-  },
-  CH02: {
-    type: 'line',
-    color: COLORS[1],
-    values: [
-      {
-        variable: 'y',
-        category: 'telemetry',
-        csc: 'HVAC',
-        salindex: '0',
-        topic: 'glycolSensor',
-        item: 'supplyTempChiller02',
-        accessor: '(x) => x',
-      },
-    ],
-  },
-  CH03: {
-    type: 'line',
-    color: COLORS[2],
-    values: [
-      {
-        variable: 'y',
-        category: 'telemetry',
-        csc: 'HVAC',
-        salindex: '0',
-        topic: 'glycolSensor',
-        item: 'supplyTempChiller03',
-        accessor: '(x) => x',
-      },
-    ],
-  },
-};
-
-const temperatureReturnPlotInputs = {
-  CH01: {
-    type: 'line',
-    color: COLORS[0],
-    values: [
-      {
-        variable: 'y',
-        category: 'telemetry',
-        csc: 'HVAC',
-        salindex: '0',
-        topic: 'glycolSensor',
-        item: 'retTempChiller01',
-        accessor: '(x) => x',
-      },
-    ],
-  },
-  CH02: {
-    type: 'line',
-    color: COLORS[1],
-    values: [
-      {
-        variable: 'y',
-        category: 'telemetry',
-        csc: 'HVAC',
-        salindex: '0',
-        topic: 'glycolSensor',
-        item: 'retTempChiller02',
-        accessor: '(x) => x',
-      },
-    ],
-  },
-  CH03: {
-    type: 'line',
-    color: COLORS[2],
-    values: [
-      {
-        variable: 'y',
-        category: 'telemetry',
-        csc: 'HVAC',
-        salindex: '0',
-        topic: 'glycolSensor',
-        item: 'retTempChiller03',
-        accessor: '(x) => x',
-      },
-    ],
-  },
-};
-
-const pressureSupplyPlotInputs = {
-  CH01: {
-    type: 'line',
-    color: COLORS[0],
-    values: [
-      {
-        variable: 'y',
-        category: 'telemetry',
-        csc: 'HVAC',
-        salindex: '0',
-        topic: 'glycolSensor',
-        item: 'supplyPressChiller01',
-        accessor: '(x) => x',
-      },
-    ],
-  },
-  CH02: {
-    type: 'line',
-    color: COLORS[1],
-    values: [
-      {
-        variable: 'y',
-        category: 'telemetry',
-        csc: 'HVAC',
-        salindex: '0',
-        topic: 'glycolSensor',
-        item: 'supplyPressChiller02',
-        accessor: '(x) => x',
-      },
-    ],
-  },
-  CH03: {
-    type: 'line',
-    color: COLORS[2],
-    values: [
-      {
-        variable: 'y',
-        category: 'telemetry',
-        csc: 'HVAC',
-        salindex: '0',
-        topic: 'glycolSensor',
-        item: 'supplyPressChiller03',
-        accessor: '(x) => x',
-      },
-    ],
-  },
-};
-
-const pressureReturnPlotInputs = {
-  CH01: {
-    type: 'line',
-    color: COLORS[0],
-    values: [
-      {
-        variable: 'y',
-        category: 'telemetry',
-        csc: 'HVAC',
-        salindex: '0',
-        topic: 'glycolSensor',
-        item: 'retPressChiller01',
-        accessor: '(x) => x',
-      },
-    ],
-  },
-  CH02: {
-    type: 'line',
-    color: COLORS[1],
-    values: [
-      {
-        variable: 'y',
-        category: 'telemetry',
-        csc: 'HVAC',
-        salindex: '0',
-        topic: 'glycolSensor',
-        item: 'retPressChiller02',
-        accessor: '(x) => x',
-      },
-    ],
-  },
-  CH03: {
-    type: 'line',
-    color: COLORS[2],
-    values: [
-      {
-        variable: 'y',
-        category: 'telemetry',
-        csc: 'HVAC',
-        salindex: '0',
-        topic: 'glycolSensor',
-        item: 'retPressChiller03',
-        accessor: '(x) => x',
-      },
-    ],
-  },
-};
 
 export const telemetriesMapping = {
   'Chiller 1': {
@@ -376,26 +133,6 @@ export const telemetriesMapping = {
   // },
 };
 
-const devicesPipesMapping = {
-  'Chiller 1': 1,
-  'Chiller 2': 2,
-  'Chiller 3': 3,
-  OSS: 4,
-  MRCR: 5,
-  'L2 CRACS': 6,
-  'L2 Fan Coils': 7,
-  'AHU CR': 8,
-  'AHU WR': 9,
-  'DOME AHU 1': 11,
-  'DOME AHU 2': 12,
-  'DOME AHU 3': 13,
-  'DOME AHU 4': 14,
-  // 'Cable Wrap': 15,
-  // 'Dynalene 1': 16,
-  // 'Dynalene 2': 17,
-  // TMA: 18,
-};
-
 const devicesLevelMapping = {
   'Chiller 1': 1,
   'Chiller 2': 1,
@@ -458,14 +195,6 @@ const devicesQuerySelectorMapping = {
 
 export const deviceHeatSurpassThreshold = (device, heat) => {
   return heat >= devicesHeatThresholds[device];
-};
-
-const deviceTemperatureDifferenceIsValid = (diff) => {
-  return diff >= 0;
-};
-
-const devicePressureDifferenceIsValid = (diff) => {
-  return diff >= 0;
 };
 
 /**
@@ -690,7 +419,6 @@ GlycolSummary.propTypes = {
 };
 
 function GlycolMap({ data = {}, device }) {
-  const [showMap, setShowMap] = useState(true);
   const componentId = uniqueId('glycol-system-map-');
 
   useEffect(() => {
@@ -718,28 +446,14 @@ function GlycolMap({ data = {}, device }) {
         });
       };
     }
-  }, [device, showMap]);
+  }, [device]);
 
   const level = devicesLevelMapping[device];
 
   return (
-    <>
-      {device && (
-        <div
-          title={!showMap ? 'Show Map' : 'Hide Map'}
-          className={styles.showMapButtonContainer}
-          onClick={() => setShowMap(!showMap)}
-        >
-          <div>{!showMap ? 'Show Map' : 'Hide Map'}</div>
-          <div className={showMap ? '' : styles.hidden}>▲</div>
-        </div>
-      )}
-      {showMap && (
-        <div id={componentId} className={styles.mapContainer}>
-          <Map level={level} />
-        </div>
-      )}
-    </>
+    <div id={componentId} className={styles.mapContainer}>
+      <Map level={level} />
+    </div>
   );
 }
 
@@ -748,178 +462,7 @@ GlycolMap.propTypes = {
   device: PropTypes.string,
 };
 
-function GlycolTable({ data = {}, device, showTableDifferences }) {
-  const headers = [
-    {
-      field: 'number',
-      title: '#',
-    },
-    {
-      field: 'device',
-      title: 'Device',
-    },
-    {
-      field: 'pressureIn',
-      title: 'Pressure Supply [Bar]',
-      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value / 100000, 2) : '-'),
-    },
-    {
-      field: 'pressureOut',
-      title: 'Pressure Return [Bar]',
-      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value / 100000, 2) : '-'),
-    },
-    ...(showTableDifferences
-      ? [
-          {
-            field: 'pressureDiff',
-            title: 'Pressure Diff [Bar]',
-            render: (value) => {
-              if (isNaN(value)) return '-';
-              const formattedValue = defaultNumberFormatter(value / 100000, 2);
-              const diffIsValid = devicePressureDifferenceIsValid(value);
-              if (!diffIsValid) {
-                return <div className={styles.pressureDiffWarning}>{formattedValue}</div>;
-              }
-              return formattedValue;
-            },
-          },
-        ]
-      : []),
-    {
-      field: 'temperatureIn',
-      title: 'Temperature Supply [°C]',
-      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value, 2) : '-'),
-    },
-    {
-      field: 'temperatureOut',
-      title: 'Temperature Return [°C]',
-      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value, 2) : '-'),
-    },
-    ...(showTableDifferences
-      ? [
-          {
-            field: 'temperatureDiff',
-            title: 'Temperature Diff [°C]',
-            render: (value) => {
-              if (isNaN(value)) return '-';
-              const formattedValue = defaultNumberFormatter(value, 2);
-              const diffIsValid = deviceTemperatureDifferenceIsValid(value);
-              if (!diffIsValid) {
-                return <div className={styles.temperatureDiffWarning}>{formattedValue}</div>;
-              }
-              return formattedValue;
-            },
-          },
-        ]
-      : []),
-    {
-      field: 'flowRate',
-      title: 'Flow Rate [L/min]',
-      render: (value) => (!isNaN(value) ? defaultNumberFormatter(value, 2) : '-'),
-    },
-    {
-      field: 'heatExchange',
-      title: 'Heat Exchange (Q) [kW]',
-      render: (value, row) => {
-        if (isNaN(value)) {
-          return '-';
-        }
-        const overThreshold = deviceHeatSurpassThreshold(row.device, value);
-        return <span className={overThreshold ? styles.heatWarningText : ''}>{defaultNumberFormatter(value)}</span>;
-      },
-    },
-  ];
-
-  const devicesData = Object.keys(telemetriesMapping).map((device) => ({
-    number: devicesPipesMapping[device],
-    device,
-    pressureIn: data[telemetriesMapping[device]?.pressIn],
-    pressureOut: data[telemetriesMapping[device]?.pressOut],
-    pressureDiff: data[telemetriesMapping[device]?.pressIn] - data[telemetriesMapping[device]?.pressOut],
-    temperatureIn: data[telemetriesMapping[device]?.tempIn],
-    temperatureOut: data[telemetriesMapping[device]?.tempOut],
-    temperatureDiff: data[telemetriesMapping[device]?.tempOut] - data[telemetriesMapping[device]?.tempIn],
-    flowRate: data[telemetriesMapping[device]?.flow],
-    heatExchange: calculateHeatExchange(
-      data[telemetriesMapping[device]?.flow],
-      data[telemetriesMapping[device]?.tempIn],
-      data[telemetriesMapping[device]?.tempOut],
-    ),
-  }));
-
-  const dataWithSelectedDevice = devicesData.map((row) => {
-    return {
-      ...row,
-      rowClass: row.device === device ? styles.selectedRow : '',
-    };
-  });
-
-  return (
-    <div className={styles.glycolTableContainer}>
-      <SimpleTable headers={headers} data={device ? dataWithSelectedDevice : devicesData} />
-    </div>
-  );
-}
-
-GlycolTable.propTypes = {
-  /** Dict with telemetries parameters */
-  data: PropTypes.object.isRequired,
-  /** Device selected */
-  device: PropTypes.string,
-  /** Show table differences
-   * If true, it will show the difference between supply and return pressure and temperature
-   */
-  showTableDifferences: PropTypes.bool,
-};
-
-function GlycolPlots({ data }) {
-  return (
-    <div className={styles.glycolPlotsContainer}>
-      <div className={[styles.plotContainer, styles.wide].join(' ')}>
-        <div className={styles.highlight}>Glycol Flow</div>
-        <div className={styles.plot}>
-          <PlotContainer inputs={flowPlotInputs} controls={false} legendPosition="bottom" xAxisTitle="Time" />
-        </div>
-      </div>
-      <div className={styles.plotContainer}>
-        <div className={styles.highlight}>Glycol Temperature In</div>
-        <div className={styles.plot}>
-          <PlotContainer
-            inputs={temperatureSupplyPlotInputs}
-            controls={false}
-            legendPosition="bottom"
-            xAxisTitle="Time"
-          />
-        </div>
-      </div>
-      <div className={styles.plotContainer}>
-        <div className={styles.highlight}>Glycol Temperature Out</div>
-        <div className={styles.plot}>
-          <PlotContainer
-            inputs={temperatureReturnPlotInputs}
-            controls={false}
-            legendPosition="bottom"
-            xAxisTitle="Time"
-          />
-        </div>
-      </div>
-      <div className={styles.plotContainer}>
-        <div className={styles.highlight}>Glycol Pressure In</div>
-        <div className={styles.plot}>
-          <PlotContainer inputs={pressureSupplyPlotInputs} controls={false} legendPosition="bottom" xAxisTitle="Time" />
-        </div>
-      </div>
-      <div className={styles.plotContainer}>
-        <div className={styles.highlight}>Glycol Pressure Out</div>
-        <div className={styles.plot}>
-          <PlotContainer inputs={pressureReturnPlotInputs} controls={false} legendPosition="bottom" xAxisTitle="Time" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function GlycolSystem({ subscribeToStreams, unsubscribeToStreams, showTableDifferences, ...props }) {
+function HeatMonitor({ subscribeToStreams, unsubscribeToStreams, showTableDifferences, ...props }) {
   const [selectedDevice, setSelectedDevice] = useState();
 
   useEffect(() => {
@@ -933,18 +476,16 @@ function GlycolSystem({ subscribeToStreams, unsubscribeToStreams, showTableDiffe
     <div className={styles.container}>
       <HVACStatus data={props} summaryState={dummySummaryState} />
       <GlycolSummary data={props} selectedDevice={selectedDevice} selectDevice={setSelectedDevice} />
-      {selectedDevice && <GlycolMap data={props} device={selectedDevice} />}
-      <GlycolTable data={props} device={selectedDevice} showTableDifferences={showTableDifferences} />
-      <GlycolPlots data={props} />
+      <GlycolMap data={props} device={selectedDevice} />
     </div>
   );
 }
 
-GlycolSystem.propTypes = {
+HeatMonitor.propTypes = {
   /** Function to subscribe to streams */
   subscribeToStreams: PropTypes.func.isRequired,
   /** Function to unsubscribe to streams */
   unsubscribeToStreams: PropTypes.func.isRequired,
 };
 
-export default GlycolSystem;
+export default HeatMonitor;

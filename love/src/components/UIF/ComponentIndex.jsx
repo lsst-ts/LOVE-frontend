@@ -538,13 +538,13 @@ export const mainIndex = {
       },
     },
   },
-  GlycolSystem: {
-    component: require('../MainTel/GlycolSystem/GlycolSystem.container').default,
+  GlycolHeatMonitor: {
+    component: require('../MainTel/GlycolSystem/HeatMonitor.container').default,
     schema: {
-      ...require('../MainTel/GlycolSystem/GlycolSystem.container').schema,
+      ...require('../MainTel/GlycolSystem/HeatMonitor.container').schema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/GlycolSystem/GlycolSystem.container').schema.props,
+        ...require('../MainTel/GlycolSystem/HeatMonitor.container').schema.props,
       },
     },
   },
