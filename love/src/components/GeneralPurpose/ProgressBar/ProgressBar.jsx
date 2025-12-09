@@ -21,7 +21,7 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import styles from './ProgressBar.module.css';
 
-const ProgressBar = ({ targetValue, completed, hideCompleted = false, height = 20 }) => {
+const ProgressBar = ({ targetValue, completed = 0, hideCompleted = false, height = 20 }) => {
   const ref = useRef(null);
   const padding = 4;
   const width = ref.current?.clientWidth ?? 0;
