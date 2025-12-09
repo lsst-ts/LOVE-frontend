@@ -193,6 +193,26 @@ const devicesQuerySelectorMapping = {
   // TMA: '#Dome > #underneath-tma',
 };
 
+const devicesWideMapping = {
+  'Chiller 1': 'wide3',
+  'Chiller 2': 'wide3',
+  'Chiller 3': 'wide3',
+  OSS: 'wide2',
+  MRCR: 'wide2',
+  'L2 CRACS': 'wide2',
+  'L2 Fan Coils': 'wide2',
+  'AHU CR': 'wide2',
+  'AHU WR': 'wide2',
+  'DOME AHU 1': 'wide4',
+  'DOME AHU 2': 'wide4',
+  'DOME AHU 3': 'wide4',
+  'DOME AHU 4': 'wide4',
+  // 'Cable Wrap': '',
+  // 'Dynalene 1': '',
+  // 'Dynalene 2': '',
+  // TMA: '',
+};
+
 export const deviceHeatSurpassThreshold = (device, heat) => {
   return heat >= devicesHeatThresholds[device];
 };
@@ -385,10 +405,11 @@ function GlycolSummary({ data = {}, selectedDevice, selectDevice }) {
           const roundedHeat = Math.round(heat * 100) / 100;
           const roundedPrevHeat = Math.round(prevHeat * 100) / 100;
           const heatChange = roundedHeat - roundedPrevHeat;
+          const wideClass = styles[devicesWideMapping[device]];
           return (
             <div
               key={device}
-              className={[styles.deviceBox, overThreshold ? styles.heatWarningBackground : ''].join(' ')}
+              className={[styles.deviceBox, wideClass, overThreshold ? styles.heatWarningBackground : ''].join(' ')}
             >
               <div className={styles.highlightTitle}>{device}</div>
               <div className={[styles.highlight, styles.bigger].join(' ')}>

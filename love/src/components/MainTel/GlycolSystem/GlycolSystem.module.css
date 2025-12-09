@@ -71,11 +71,24 @@
 }
 
 .deviceBox {
+  box-sizing: border-box;
   flex: 1 0 10em;
   background-color: var(--boxesBackgroundColor);
   border-radius: 0.2em;
   border: 0.2em solid var(--second-tertiary-background-color);
   padding: var(--small-padding);
+}
+
+.deviceBox.wide4 {
+  min-width: calc((100% - var(--small-padding) * 3) / 4);
+}
+
+.deviceBox.wide3 {
+  min-width: calc((100% - var(--small-padding) * 2) / 3);
+}
+
+.deviceBox.wide2 {
+  min-width: calc((100% - var(--small-padding) * 1) / 2);
 }
 
 .mapContainer {
