@@ -21,7 +21,14 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import styles from './ProgressBar.module.css';
 
-const ProgressBar = ({ targetValue, completed = 0, hideCompleted = false, height = 20 }) => {
+const ProgressBar = ({
+  targetValue,
+  completed = 0,
+  hideCompleted = false,
+  height = 20,
+  containerClassName = '',
+  fillerClassName = '',
+}) => {
   const ref = useRef(null);
   const padding = 4;
   const width = ref.current?.clientWidth ?? 0;
@@ -37,7 +44,11 @@ const ProgressBar = ({ targetValue, completed = 0, hideCompleted = false, height
       ) : (
         <></>
       )}
-      <div ref={ref} className={styles.containerStyles} style={{ height: `${height}px` }}>
+      <div
+        ref={ref}
+        className={[styles.containerStyles, containerClassName].join(' ')}
+        style={{ height: `${height}px` }}
+      >
         <svg width={width > 0 ? width - 2 * padding : 0} height={height} className={styles.progressCommandedLine}>
           {targetValue ? (
             <line
@@ -51,7 +62,11 @@ const ProgressBar = ({ targetValue, completed = 0, hideCompleted = false, height
             <></>
           )}
         </svg>
-        {completed ? <div className={styles.fillerStyles} style={{ width: `${completed}%` }}></div> : <></>}
+        {completed ? (
+          <div className={[styles.fillerStyles, fillerClassName].join(' ')} style={{ width: `${completed}%` }}></div>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );
