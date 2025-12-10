@@ -2,6 +2,10 @@
   --boxesBackgroundColor: var(--second-quaternary-background-dimmed-color);
 }
 
+.container {
+  min-width: 71em;
+}
+
 .highlight {
   font-weight: bold;
   color: var(--highlighted-font-color);
@@ -48,10 +52,6 @@
   align-items: center;
 }
 
-.summaryContainer {
-  margin-bottom: var(--small-padding);
-}
-
 .chillers {
   display: flex;
   gap: var(--content-padding);
@@ -67,7 +67,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--small-padding);
-  margin-bottom: var(--small-padding);
 }
 
 .deviceBox {
@@ -108,6 +107,48 @@
 
 .progressBarHigh {
   background-color: var(--status-alert-color);
+}
+
+.breadcrumbs {
+  color: var(--base-font-color);
+  font-weight: bold;
+  padding: var(--content-padding);
+  background-color: var(--second-quaternary-background-dimmed-color);
+  margin-bottom: var(--small-padding);
+}
+
+.breadcrumbs,
+.breadcrumbs > :first-child {
+  display: flex;
+  align-items: center;
+  gap: var(--small-padding);
+}
+
+.breadcrumbs > :first-child {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.breadcrumbs .backArrow svg {
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+  margin-right: 0.2em;
+}
+
+.breadcrumbs .telemetries {
+  margin-left: auto;
+  display: flex;
+  gap: var(--small-padding);
+}
+
+.breadcrumbs .telemetries > div > :first-child {
+  color: var(--secondary-font-color);
+}
+
+.breadcrumbs .telemetries > div > :last-child {
+  font-size: var(--font-size-small);
+  font-weight: lighter;
 }
 
 .mapContainer {

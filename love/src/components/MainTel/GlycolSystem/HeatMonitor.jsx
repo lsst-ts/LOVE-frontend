@@ -5,6 +5,7 @@ import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import TrendValue from 'components/GeneralPurpose/TrendValue/TrendValue';
 import ProgressBar from 'components/GeneralPurpose/ProgressBar/ProgressBar';
 import EyeIcon from 'components/icons/EyeIcon/EyeIcon';
+import BackArrowIcon from 'components/icons/BackArrowIcon/BackArrowIcon';
 import Map from 'components/MainTel/GlycolSystem/Map/Map';
 import { summaryStateMap, summaryStateToStyle } from 'Config';
 import { defaultNumberFormatter } from 'Utils';
@@ -510,7 +511,29 @@ GlycolMap.propTypes = {
   device: PropTypes.string,
 };
 
-function HeatMonitor({ subscribeToStreams, unsubscribeToStreams, showTableDifferences, ...props }) {
+function DeviceTelemetriesSummary({ data }) {
+  return (
+    <div className={styles.telemetries}>
+      <div>
+        <span>Flow:</span> <span>{data.flow}</span> <span>L/min</span>
+      </div>
+      <div>
+        <span>Temperature In:</span> <span>{data.tempIn}</span> <span>°C</span>
+      </div>
+      <div>
+        <span>Temperature Out:</span> <span>{data.tempOut}</span> <span>°C</span>
+      </div>
+      <div>
+        <span>Pressure In:</span> <span>{data.pressIn}</span> <span>bar</span>
+      </div>
+      <div>
+        <span>Pressure Out:</span> <span>{data.pressOut}</span> <span>bar</span>
+      </div>
+    </div>
+  );
+}
+
+function HeatMonitor({ subscribeToStreams, unsubscribeToStreams, devicesHeatThresholds, ...props }) {
   const [selectedDevice, setSelectedDevice] = useState();
 
   useEffect(() => {
@@ -520,11 +543,37 @@ function HeatMonitor({ subscribeToStreams, unsubscribeToStreams, showTableDiffer
     };
   }, []);
 
+  const selectedDeviceFields = selectedDevice ? telemetriesMapping[selectedDevice] : null;
+  const selectedDeviceTelemetries = selectedDevice
+    ? {
+        flow: defaultNumberFormatter(props[selectedDeviceFields.flow], 2),
+        tempIn: defaultNumberFormatter(props[selectedDeviceFields.tempIn], 2),
+        tempOut: defaultNumberFormatter(props[selectedDeviceFields.tempOut], 2),
+        pressIn: defaultNumberFormatter(props[selectedDeviceFields.pressIn] / 100000, 2),
+        pressOut: defaultNumberFormatter(props[selectedDeviceFields.pressOut] / 100000, 2),
+      }
+    : null;
   return (
     <div className={styles.container}>
       <HVACStatus data={props} summaryState={dummySummaryState} />
-      <GlycolSummary data={props} selectedDevice={selectedDevice} selectDevice={setSelectedDevice} />
-      <GlycolMap data={props} device={selectedDevice} />
+      {!selectedDevice ? (
+        <GlycolSummary data={props} selectedDevice={selectedDevice} selectDevice={setSelectedDevice} />
+      ) : (
+        <>
+          <div className={styles.breadcrumbs}>
+            <div onClick={() => setSelectedDevice(null)}>
+              <div className={styles.backArrow}>
+                <BackArrowIcon />
+              </div>
+              <div>Devices</div>
+            </div>
+            <div>&gt;</div>
+            <div>Location {selectedDevice}</div>
+            <DeviceTelemetriesSummary data={selectedDeviceTelemetries} />
+          </div>
+          <GlycolMap data={props} device={selectedDevice} />
+        </>
+      )}
     </div>
   );
 }
