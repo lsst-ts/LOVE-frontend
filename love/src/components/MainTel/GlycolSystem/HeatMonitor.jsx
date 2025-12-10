@@ -157,13 +157,19 @@ const devicesLevelMapping = {
 };
 
 const devicesQuerySelectorMapping = {
-  'Chiller 1': '#Machines > :nth-child(3)',
+  'Chiller 1': '#Machines > :nth-child(1)',
   'Chiller 2': '#Machines > :nth-child(2)',
-  'Chiller 3': '#Machines > :nth-child(1)',
+  'Chiller 3': '#Machines > :nth-child(3)',
   OSS: '#Machines > :nth-child(4) > :first-child',
   MRCR: '#Building > #camera-maintenance-room',
   'L2 CRACS': '#Building #computer-room',
-  'L2 Fan Coils': '#Building #open-office-space',
+  'L2 Fan Coils':
+    '#Building #open-office-space, ' +
+    '#Building #computer-lab, ' +
+    '#Building #break-room, ' +
+    '#Building #control-room, ' +
+    '#Building #office-rooms, ' +
+    '#Building #conference-room',
   'AHU CR': '#Building > #camera-maintenance-room',
   'AHU WR': '#Building > #camera-maintenance-room',
   'DOME AHU 1': '#Dome > #ahu-zone',
