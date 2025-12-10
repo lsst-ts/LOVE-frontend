@@ -3,7 +3,7 @@
 }
 
 .container {
-  min-width: 71em;
+  min-width: 73em;
 }
 
 .highlight {
@@ -61,6 +61,16 @@
   display: flex;
   align-items: center;
   gap: var(--content-padding);
+}
+
+.infoIcon {
+  margin-left: auto;
+}
+
+.infoIcon svg {
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
 }
 
 .devicesBoxes {

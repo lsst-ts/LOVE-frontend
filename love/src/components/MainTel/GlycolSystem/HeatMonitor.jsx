@@ -6,6 +6,7 @@ import TrendValue from 'components/GeneralPurpose/TrendValue/TrendValue';
 import ProgressBar from 'components/GeneralPurpose/ProgressBar/ProgressBar';
 import EyeIcon from 'components/icons/EyeIcon/EyeIcon';
 import BackArrowIcon from 'components/icons/BackArrowIcon/BackArrowIcon';
+import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
 import Map from 'components/MainTel/GlycolSystem/Map/Map';
 import { summaryStateMap, summaryStateToStyle } from 'Config';
 import { defaultNumberFormatter } from 'Utils';
@@ -361,6 +362,21 @@ function HVACStatus({ data = {}, summaryState = 0 }) {
           )}
         </div>
       </div>
+      <div className={styles.infoIcon}>
+        <InfoIcon
+          title={
+            'This components displays heat exchange of devices by calculating the heat balance equation.\n' +
+            'The heat exchange values for Chiller 1 and Chiller 2 are combined to represent the Low Temperature (LT) Chiller total.\n' +
+            'The heat exchange for Chiller 3 represents the General Purpose (GP) Chiller total.\n' +
+            'The Devices total sums the heat exchange of all other glycol system devices.\n' +
+            'Each device heat exchange is displayed too, additionally showing: a trend indicator that compares the previous value with the current one, ' +
+            "a progress bar showing the energy consumption as a percentage of the device's maximum power capacity (defined in component configurations), and " +
+            'an eye icon button to highlight the device location in the Facilities Map and its detailed glycol sensors measurements.\n' +
+            "If a device's heat exchange surpasses 80% of its max capacity, it is highlighted in the map and device box. " +
+            'The progress bar also changes color accordingly: at 50% (yellow) and at 80% (red).'
+          }
+        />
+      </div>
     </div>
   );
 }
@@ -552,13 +568,15 @@ function HeatMonitor({ subscribeToStreams, unsubscribeToStreams, devicesHeatThre
   );
 
   const selectedDeviceFields = selectedDevice ? telemetriesMapping[selectedDevice] : null;
-  const selectedDeviceTelemetries = selectedDevice ? {
-    flow: defaultNumberFormatter(props[selectedDeviceFields.flow], 2),
-    tempIn: defaultNumberFormatter(props[selectedDeviceFields.tempIn], 2),
-    tempOut: defaultNumberFormatter(props[selectedDeviceFields.tempOut], 2),
-    pressIn: defaultNumberFormatter(props[selectedDeviceFields.pressIn] / 100000, 2),
-    pressOut: defaultNumberFormatter(props[selectedDeviceFields.pressOut] / 100000, 2),
-  }  : null;
+  const selectedDeviceTelemetries = selectedDevice
+    ? {
+        flow: defaultNumberFormatter(props[selectedDeviceFields.flow], 2),
+        tempIn: defaultNumberFormatter(props[selectedDeviceFields.tempIn], 2),
+        tempOut: defaultNumberFormatter(props[selectedDeviceFields.tempOut], 2),
+        pressIn: defaultNumberFormatter(props[selectedDeviceFields.pressIn] / 100000, 2),
+        pressOut: defaultNumberFormatter(props[selectedDeviceFields.pressOut] / 100000, 2),
+      }
+    : null;
 
   return (
     <div className={styles.container}>
