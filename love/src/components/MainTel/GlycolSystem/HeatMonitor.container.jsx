@@ -26,7 +26,7 @@ import HeatMonitor from './HeatMonitor';
 export const schema = {
   description:
     'Displays energy consumption of devices in the HVAC glycol cooling system. Based on telemetry from HVAC glycol sensors.',
-  defaultSize: [77, 32],
+  defaultSize: [60, 35],
   props: {
     title: {
       type: 'string',
