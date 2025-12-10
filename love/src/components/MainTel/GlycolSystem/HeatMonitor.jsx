@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { uniqueId } from 'lodash';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
@@ -155,26 +155,6 @@ const devicesLevelMapping = {
   // TMA: 5,
 };
 
-const devicesHeatThresholds = {
-  'Chiller 1': 183,
-  'Chiller 2': 183,
-  'Chiller 3': 183,
-  OSS: 1000,
-  MRCR: 1000,
-  'L2 CRACS': 1000,
-  'L2 Fan Coils': 1000,
-  'AHU CR': 1000,
-  'AHU WR': 1000,
-  'DOME AHU 1': 1000,
-  'DOME AHU 2': 1000,
-  'DOME AHU 3': 1000,
-  'DOME AHU 4': 1000,
-  // 'Cable Wrap': 1000,
-  // 'Dynalene 1': 1000,
-  // 'Dynalene 2': 1000,
-  // TMA: 1000,
-};
-
 const devicesQuerySelectorMapping = {
   'Chiller 1': '#Machines > :nth-child(3)',
   'Chiller 2': '#Machines > :nth-child(2)',
@@ -215,11 +195,11 @@ const devicesWideMapping = {
   // TMA: '',
 };
 
-export const deviceHeatSurpassThreshold = (device, heat) => {
-  return heat >= devicesHeatThresholds[device];
+export const deviceHeatSurpassThreshold = (device, heat, devicesHeatThresholds) => {
+  return heat >= devicesHeatThresholds[device] * 0.8;
 };
 
-const deviceEnergyPercentage = (device, heat) => {
+export const deviceEnergyPercentage = (device, heat, devicesHeatThresholds) => {
   const percent = (heat / devicesHeatThresholds[device]) * 100;
   return Math.max(0, Math.min(100, percent));
 };
@@ -392,7 +372,13 @@ HVACStatus.propTypes = {
   summaryState: PropTypes.number.isRequired,
 };
 
-function GlycolSummary({ data = {}, selectedDevice, selectDevice }) {
+function GlycolSummary({
+  data = {},
+  selectedDevice,
+  selectDevice,
+  deviceHeatSurpassThreshold,
+  deviceEnergyPercentage,
+}) {
   const prevData = useRef();
 
   useEffect(() => {
@@ -465,9 +451,13 @@ GlycolSummary.propTypes = {
   selectedDevice: PropTypes.string,
   /** Function to select a device */
   selectDevice: PropTypes.func.isRequired,
+  /** Function to check if device heat surpasses threshold */
+  deviceHeatSurpassThreshold: PropTypes.func.isRequired,
+  /** Function to get device energy percentage */
+  deviceEnergyPercentage: PropTypes.func.isRequired,
 };
 
-function GlycolMap({ data = {}, device }) {
+function GlycolMap({ data = {}, device, deviceHeatSurpassThreshold }) {
   const componentId = uniqueId('glycol-system-map-');
 
   useEffect(() => {
@@ -507,8 +497,12 @@ function GlycolMap({ data = {}, device }) {
 }
 
 GlycolMap.propTypes = {
+  /** Dict with telemetries parameters */
+  data: PropTypes.object,
   /** Device selected */
   device: PropTypes.string,
+  /** Function to check if device heat surpasses threshold */
+  deviceHeatSurpassThreshold: PropTypes.func.isRequired,
 };
 
 function DeviceTelemetriesSummary({ data }) {
@@ -543,21 +537,40 @@ function HeatMonitor({ subscribeToStreams, unsubscribeToStreams, devicesHeatThre
     };
   }, []);
 
+  const deviceHeatSurpassThresholdCallback = useCallback(
+    (device, heat) => {
+      return deviceHeatSurpassThreshold(device, heat, devicesHeatThresholds);
+    },
+    [devicesHeatThresholds],
+  );
+
+  const deviceEnergyPercentageCallback = useCallback(
+    (device, heat) => {
+      return deviceEnergyPercentage(device, heat, devicesHeatThresholds);
+    },
+    [devicesHeatThresholds],
+  );
+
   const selectedDeviceFields = selectedDevice ? telemetriesMapping[selectedDevice] : null;
-  const selectedDeviceTelemetries = selectedDevice
-    ? {
-        flow: defaultNumberFormatter(props[selectedDeviceFields.flow], 2),
-        tempIn: defaultNumberFormatter(props[selectedDeviceFields.tempIn], 2),
-        tempOut: defaultNumberFormatter(props[selectedDeviceFields.tempOut], 2),
-        pressIn: defaultNumberFormatter(props[selectedDeviceFields.pressIn] / 100000, 2),
-        pressOut: defaultNumberFormatter(props[selectedDeviceFields.pressOut] / 100000, 2),
-      }
-    : null;
+  const selectedDeviceTelemetries = selectedDevice ? {
+    flow: defaultNumberFormatter(props[selectedDeviceFields.flow], 2),
+    tempIn: defaultNumberFormatter(props[selectedDeviceFields.tempIn], 2),
+    tempOut: defaultNumberFormatter(props[selectedDeviceFields.tempOut], 2),
+    pressIn: defaultNumberFormatter(props[selectedDeviceFields.pressIn] / 100000, 2),
+    pressOut: defaultNumberFormatter(props[selectedDeviceFields.pressOut] / 100000, 2),
+  }  : null;
+
   return (
     <div className={styles.container}>
       <HVACStatus data={props} summaryState={dummySummaryState} />
       {!selectedDevice ? (
-        <GlycolSummary data={props} selectedDevice={selectedDevice} selectDevice={setSelectedDevice} />
+        <GlycolSummary
+          data={props}
+          selectedDevice={selectedDevice}
+          selectDevice={setSelectedDevice}
+          deviceHeatSurpassThreshold={deviceHeatSurpassThresholdCallback}
+          deviceEnergyPercentage={deviceEnergyPercentageCallback}
+        />
       ) : (
         <>
           <div className={styles.breadcrumbs}>
@@ -571,7 +584,11 @@ function HeatMonitor({ subscribeToStreams, unsubscribeToStreams, devicesHeatThre
             <div>Location {selectedDevice}</div>
             <DeviceTelemetriesSummary data={selectedDeviceTelemetries} />
           </div>
-          <GlycolMap data={props} device={selectedDevice} />
+          <GlycolMap
+            data={props}
+            device={selectedDevice}
+            deviceHeatSurpassThreshold={deviceHeatSurpassThresholdCallback}
+          />
         </>
       )}
     </div>
@@ -579,6 +596,8 @@ function HeatMonitor({ subscribeToStreams, unsubscribeToStreams, devicesHeatThre
 }
 
 HeatMonitor.propTypes = {
+  /** Devices heat thresholds or max power capacity in Kw per device */
+  devicesHeatThresholds: PropTypes.object.isRequired,
   /** Function to subscribe to streams */
   subscribeToStreams: PropTypes.func.isRequired,
   /** Function to unsubscribe to streams */

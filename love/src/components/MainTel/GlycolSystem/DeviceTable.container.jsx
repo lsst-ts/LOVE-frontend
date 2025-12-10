@@ -20,6 +20,7 @@ import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getGlycolSystemData } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+import { hvacDevicesMaxPowerKw } from 'Config';
 import GlycolDeviceTable from './DeviceTable';
 
 export const schema = {
@@ -44,6 +45,12 @@ export const schema = {
       description: 'Whether to show the Temperature and Pressure differences in the table for glycol measurements.',
       isPrivate: false,
       default: true,
+    },
+    devicesHeatThresholds: {
+      type: 'object',
+      description: 'Power max capacity (in kW) for each device to compute energy consumption percentage',
+      isPrivate: false,
+      default: hvacDevicesMaxPowerKw,
     },
   },
 };

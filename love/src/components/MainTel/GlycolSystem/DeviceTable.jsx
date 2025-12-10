@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import { defaultNumberFormatter } from 'Utils';
@@ -33,7 +33,13 @@ const devicePressureDifferenceIsValid = (diff) => {
   return diff >= 0;
 };
 
-function GlycolDeviceTable({ data = {}, showTableDifferences, subscribeToStreams, unsubscribeToStreams }) {
+function GlycolDeviceTable({
+  data = {},
+  showTableDifferences,
+  devicesHeatThresholds,
+  subscribeToStreams,
+  unsubscribeToStreams,
+}) {
   const selectedDevice = useState();
 
   useEffect(() => {
@@ -42,6 +48,13 @@ function GlycolDeviceTable({ data = {}, showTableDifferences, subscribeToStreams
       unsubscribeToStreams();
     };
   }, []);
+
+  const deviceHeatSurpassThresholdCallback = useCallback(
+    (device, heat) => {
+      return deviceHeatSurpassThreshold(device, heat, devicesHeatThresholds);
+    },
+    [devicesHeatThresholds],
+  );
 
   const headers = [
     {
@@ -118,7 +131,7 @@ function GlycolDeviceTable({ data = {}, showTableDifferences, subscribeToStreams
         if (isNaN(value)) {
           return '-';
         }
-        const overThreshold = deviceHeatSurpassThreshold(row.device, value);
+        const overThreshold = deviceHeatSurpassThresholdCallback(row.device, value);
         return <span className={overThreshold ? styles.heatWarningText : ''}>{defaultNumberFormatter(value)}</span>;
       },
     },
@@ -162,6 +175,12 @@ GlycolDeviceTable.propTypes = {
    * If true, it will show the difference between supply and return pressure and temperature
    */
   showTableDifferences: PropTypes.bool,
+  /** Devices heat thresholds or max power capacity in Kw per device */
+  devicesHeatThresholds: PropTypes.object.isRequired,
+  /** Function to subscribe to streams */
+  subscribeToStreams: PropTypes.func.isRequired,
+  /** Function to unsubscribe to streams */
+  unsubscribeToStreams: PropTypes.func.isRequired,
 };
 
 export default GlycolDeviceTable;

@@ -20,6 +20,7 @@ import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getGlycolSystemData } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+import { hvacDevicesMaxPowerKw } from 'Config';
 import HeatMonitor from './HeatMonitor';
 
 export const schema = {
@@ -38,6 +39,12 @@ export const schema = {
       description: 'Whether the component has a raw mode version',
       isPrivate: true,
       default: true,
+    },
+    devicesHeatThresholds: {
+      type: 'object',
+      description: 'Power max capacity (in kW) for each device to compute energy consumption percentage',
+      isPrivate: false,
+      default: hvacDevicesMaxPowerKw,
     },
   },
 };
