@@ -71,6 +71,9 @@
 }
 
 .deviceBox {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--small-padding) / 2);
   box-sizing: border-box;
   flex: 1 0 10em;
   background-color: var(--boxesBackgroundColor);
@@ -89,6 +92,22 @@
 
 .deviceBox.wide2 {
   min-width: calc((100% - var(--small-padding) * 1) / 2);
+}
+
+.deviceBox .progressBar {
+  padding: 2px;
+}
+
+.progressBarLow {
+  background-color: var(--status-ok-color);
+}
+
+.progressBarMedium {
+  background-color: var(--status-warning-color);
+}
+
+.progressBarHigh {
+  background-color: var(--status-alert-color);
 }
 
 .mapContainer {

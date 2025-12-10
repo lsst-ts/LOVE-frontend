@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { uniqueId } from 'lodash';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import TrendValue from 'components/GeneralPurpose/TrendValue/TrendValue';
+import ProgressBar from 'components/GeneralPurpose/ProgressBar/ProgressBar';
 import EyeIcon from 'components/icons/EyeIcon/EyeIcon';
 import Map from 'components/MainTel/GlycolSystem/Map/Map';
 import { summaryStateMap, summaryStateToStyle } from 'Config';
@@ -217,6 +218,22 @@ export const deviceHeatSurpassThreshold = (device, heat) => {
   return heat >= devicesHeatThresholds[device];
 };
 
+const deviceEnergyPercentage = (device, heat) => {
+  const percent = (heat / devicesHeatThresholds[device]) * 100;
+  return Math.max(0, Math.min(100, percent));
+};
+
+const deviceEnergyProgressBarClassName = (percent) => {
+  if (percent >= 80) {
+    return styles.progressBarHigh;
+  }
+  if (percent >= 50) {
+    return styles.progressBarMedium;
+  }
+
+  return styles.progressBarLow;
+};
+
 /**
  * Calculate heat exchange
  * @param {number} flowRate
@@ -406,6 +423,7 @@ function GlycolSummary({ data = {}, selectedDevice, selectDevice }) {
           const roundedPrevHeat = Math.round(prevHeat * 100) / 100;
           const heatChange = roundedHeat - roundedPrevHeat;
           const wideClass = styles[devicesWideMapping[device]];
+          const energyPercent = deviceEnergyPercentage(device, heat);
           return (
             <div
               key={device}
@@ -418,6 +436,15 @@ function GlycolSummary({ data = {}, selectedDevice, selectDevice }) {
                 ) : (
                   '-'
                 )}
+              </div>
+              <div>
+                <ProgressBar
+                  completed={energyPercent}
+                  height={5}
+                  containerClassName={styles.progressBar}
+                  fillerClassName={deviceEnergyProgressBarClassName(energyPercent)}
+                  hideCompleted
+                />
               </div>
               <div title="Show device location" onClick={() => selectDevice(device)}>
                 <EyeIcon className={styles.selectDeviceButton} active={selectedDevice === device} />
