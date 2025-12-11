@@ -21,6 +21,8 @@ function TrendValue({ change, children }) {
       setArrowType(ARROW_TYPES.INCREASED);
     } else if (change < 0) {
       setArrowType(ARROW_TYPES.DECREASED);
+    } else {
+      setArrowType(null);
     }
   }, [change]);
 
