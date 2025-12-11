@@ -241,11 +241,49 @@ export const calculateHeatExchange = (flowRate, tempIn, tempOut) => {
   return flowRate * 0.067 * (tempOut - tempIn);
 };
 
+/**
+ * Calculate historical heats for a device from historical data
+ * @param {Array} historicalData - Array of historical data objects
+ * @param {string} device - Device name
+ * @returns {Array} Array of historical heat exchange values for the device
+ */
+function calculateHistoricalHeats(historicalData, device) {
+  return historicalData
+    .map((data) => {
+      return (
+        Math.round(
+          calculateHeatExchange(
+            data[telemetriesMapping[device]?.flow],
+            data[telemetriesMapping[device]?.tempIn],
+            data[telemetriesMapping[device]?.tempOut],
+          ) * 100,
+        ) / 100
+      );
+    })
+    .filter((h) => h !== undefined && !isNaN(h));
+}
+
+/**
+ * Calculate cummulative momentum of heat changes
+ * @param {Array} historicalHeats - Array of historical heat exchange values
+ * @returns {number} Cummulative momentum of heat changes
+ */
+function calculateHeatCummulativeMomentum(historicalHeats) {
+  return historicalHeats.reduce((acc, h, index) => {
+    if (index === 0) return acc;
+    const prevH = historicalHeats[index - 1];
+    return acc + (h - prevH);
+  }, 0);
+}
+
 function HVACStatus({ data = {}, summaryState = 0 }) {
-  const prevData = useRef();
+  const [historicalData, setHistoricalData] = useState([]);
 
   useEffect(() => {
-    prevData.current = data;
+    setHistoricalData((prev) => {
+      const next = [...prev, data];
+      return next.length > 10 ? next.slice(-10) : next;
+    });
   }, [data]);
 
   const stateName = summaryStateMap[summaryState];
@@ -256,47 +294,23 @@ function HVACStatus({ data = {}, summaryState = 0 }) {
     data[telemetriesMapping['Chiller 1']?.tempIn],
     data[telemetriesMapping['Chiller 1']?.tempOut],
   );
-  const prevChiller1Heat = prevData.current
-    ? calculateHeatExchange(
-        prevData.current[telemetriesMapping['Chiller 1']?.flow],
-        prevData.current[telemetriesMapping['Chiller 1']?.tempIn],
-        prevData.current[telemetriesMapping['Chiller 1']?.tempOut],
-      )
-    : 0;
 
   const chiller2Heat = calculateHeatExchange(
     data[telemetriesMapping['Chiller 2']?.flow],
     data[telemetriesMapping['Chiller 2']?.tempIn],
     data[telemetriesMapping['Chiller 2']?.tempOut],
   );
-  const prevChiller2Heat = prevData.current
-    ? calculateHeatExchange(
-        prevData.current[telemetriesMapping['Chiller 2']?.flow],
-        prevData.current[telemetriesMapping['Chiller 2']?.tempIn],
-        prevData.current[telemetriesMapping['Chiller 2']?.tempOut],
-      )
-    : 0;
 
   const chiller3Heat = calculateHeatExchange(
     data[telemetriesMapping['Chiller 3']?.flow],
     data[telemetriesMapping['Chiller 3']?.tempIn],
     data[telemetriesMapping['Chiller 3']?.tempOut],
   );
-  const prevChiller3Heat = prevData.current
-    ? calculateHeatExchange(
-        prevData.current[telemetriesMapping['Chiller 3']?.flow],
-        prevData.current[telemetriesMapping['Chiller 3']?.tempIn],
-        prevData.current[telemetriesMapping['Chiller 3']?.tempOut],
-      )
-    : 0;
 
   const LTChillerTotalHeat = chiller1Heat + chiller2Heat;
-  const prevLTChillerTotalHeat = prevChiller1Heat + prevChiller2Heat;
   const GPChillerTotalHeat = chiller3Heat;
-  const prevGPChillerTotalHeat = prevChiller3Heat;
 
   let devicesTotalHeat = 0;
-  let prevDevicesTotalHeat = 0;
   Object.keys(telemetriesMapping).forEach((device) => {
     if (device === 'Chiller 1' || device === 'Chiller 2' || device === 'Chiller 3') {
       return;
@@ -306,21 +320,58 @@ function HVACStatus({ data = {}, summaryState = 0 }) {
       data[telemetriesMapping[device]?.tempIn],
       data[telemetriesMapping[device]?.tempOut],
     );
-    const prevHeat = prevData.current
-      ? calculateHeatExchange(
-          prevData.current[telemetriesMapping[device]?.flow],
-          prevData.current[telemetriesMapping[device]?.tempIn],
-          prevData.current[telemetriesMapping[device]?.tempOut],
-        )
-      : 0;
 
     devicesTotalHeat += heat;
-    prevDevicesTotalHeat += prevHeat;
   });
 
-  const heatChangeLTChiller = LTChillerTotalHeat - prevLTChillerTotalHeat;
-  const heatChangeGPChiller = GPChillerTotalHeat - prevGPChillerTotalHeat;
-  const heatChangeDevices = devicesTotalHeat - prevDevicesTotalHeat;
+  // Calculate a cummulative momentum indicator for heat change
+  const chiller1HistoricalHeats = calculateHistoricalHeats(historicalData, 'Chiller 1');
+  const chiller2HistoricalHeats = calculateHistoricalHeats(historicalData, 'Chiller 2');
+  const chiller3HistoricalHeats = calculateHistoricalHeats(historicalData, 'Chiller 3');
+
+  const devicesHistoricalHeats = Object.keys(telemetriesMapping).reduce((acc, device) => {
+    if (device === 'Chiller 1' || device === 'Chiller 2' || device === 'Chiller 3') {
+      return acc;
+    }
+    acc[device] = calculateHistoricalHeats(historicalData, device);
+    return acc;
+  }, {});
+
+  const chiller1RoundedHeat = Math.round(chiller1Heat * 100) / 100;
+  const chiller2RoundedHeat = Math.round(chiller2Heat * 100) / 100;
+  const chiller3RoundedHeat = Math.round(chiller3Heat * 100) / 100;
+  const chiller1RoundedPrevHeat =
+    chiller1HistoricalHeats.length > 1 ? chiller1HistoricalHeats[chiller1HistoricalHeats.length - 1] : 0;
+  const chiller2RoundedPrevHeat =
+    chiller2HistoricalHeats.length > 1 ? chiller2HistoricalHeats[chiller2HistoricalHeats.length - 1] : 0;
+  const chiller3RoundedPrevHeat =
+    chiller3HistoricalHeats.length > 1 ? chiller3HistoricalHeats[chiller3HistoricalHeats.length - 1] : 0;
+
+  const chiller1HeatCummulativeMomentum =
+    calculateHeatCummulativeMomentum(chiller1HistoricalHeats) + (chiller1RoundedHeat - chiller1RoundedPrevHeat);
+  const chiller2HeatCummulativeMomentum =
+    calculateHeatCummulativeMomentum(chiller2HistoricalHeats) + (chiller2RoundedHeat - chiller2RoundedPrevHeat);
+  const chiller3HeatCummulativeMomentum =
+    calculateHeatCummulativeMomentum(chiller3HistoricalHeats) + (chiller3RoundedHeat - chiller3RoundedPrevHeat);
+
+  const devicesHeatCummulativeMomentums = Object.keys(devicesHistoricalHeats).reduce((acc, device) => {
+    const historicalHeats = devicesHistoricalHeats[device];
+    const roundedPrevHeat = historicalHeats.length > 0 ? historicalHeats[historicalHeats.length - 1] : 0;
+    const roundedCurrentHeat =
+      Math.round(
+        calculateHeatExchange(
+          data[telemetriesMapping[device]?.flow],
+          data[telemetriesMapping[device]?.tempIn],
+          data[telemetriesMapping[device]?.tempOut],
+        ) * 100,
+      ) / 100;
+    acc += calculateHeatCummulativeMomentum(historicalHeats) + (roundedCurrentHeat - roundedPrevHeat);
+    return acc;
+  }, 0);
+
+  const heatChangeLTChiller = chiller1HeatCummulativeMomentum + chiller2HeatCummulativeMomentum;
+  const heatChangeGPChiller = chiller3HeatCummulativeMomentum;
+  const heatChangeDevices = devicesHeatCummulativeMomentums;
 
   const highLightBiggerClassName = [styles.highlight, styles.bigger].join(' ');
   return (
@@ -375,7 +426,7 @@ function HVACStatus({ data = {}, summaryState = 0 }) {
             'The heat exchange values for Chiller 1 and Chiller 2 are combined to represent the Low Temperature (LT) Chiller total.\n' +
             'The heat exchange for Chiller 3 represents the General Purpose (GP) Chiller total.\n' +
             'The Devices total sums the heat exchange of all other glycol system devices.\n' +
-            'Each device heat exchange is displayed too, additionally showing: a trend indicator that compares the previous value with the current one, ' +
+            'Each device heat exchange is displayed too, additionally showing: a cumulative momentum trend indicator that tracks heat change patterns over the last 10 data points, ' +
             "a progress bar showing the energy consumption as a percentage of the device's maximum power capacity (defined in component configurations), and " +
             'an eye icon button to highlight the device location in the Facilities Map and its detailed glycol sensors measurements.\n' +
             "If a device's heat exchange surpasses 80% of its max capacity, it is highlighted in the map and device box. " +
@@ -401,10 +452,13 @@ function GlycolSummary({
   deviceHeatSurpassThreshold,
   deviceEnergyPercentage,
 }) {
-  const prevData = useRef();
+  const [historicalData, setHistoricalData] = useState([]);
 
   useEffect(() => {
-    prevData.current = data;
+    setHistoricalData((prev) => {
+      const next = [...prev, data];
+      return next.length > 10 ? next.slice(-10) : next;
+    });
   }, [data]);
 
   const devicesHeats = Object.keys(telemetriesMapping).map((device) => ({
@@ -414,13 +468,6 @@ function GlycolSummary({
       data[telemetriesMapping[device]?.tempIn],
       data[telemetriesMapping[device]?.tempOut],
     ),
-    prevHeat: prevData.current
-      ? calculateHeatExchange(
-          prevData.current[telemetriesMapping[device]?.flow],
-          prevData.current[telemetriesMapping[device]?.tempIn],
-          prevData.current[telemetriesMapping[device]?.tempOut],
-        )
-      : 0,
   }));
 
   return (
@@ -429,8 +476,14 @@ function GlycolSummary({
         {devicesHeats.map(({ device, heat, prevHeat }) => {
           const overThreshold = deviceHeatSurpassThreshold(device, heat);
           const roundedHeat = Math.round(heat * 100) / 100;
-          const roundedPrevHeat = Math.round(prevHeat * 100) / 100;
-          const heatChange = roundedHeat - roundedPrevHeat;
+
+          // Calculate a cummulative momentum indicator for heat change
+          const deviceHistoricalHeats = calculateHistoricalHeats(historicalData, device);
+          const roundedPrevHeat =
+            deviceHistoricalHeats.length > 0 ? deviceHistoricalHeats[deviceHistoricalHeats.length - 1] : 0;
+          const heatCummulativeMomentum =
+            calculateHeatCummulativeMomentum(deviceHistoricalHeats) + (roundedHeat - roundedPrevHeat);
+
           const wideClass = styles[devicesWideMapping[device]];
           const energyPercent = deviceEnergyPercentage(device, heat);
           return (
@@ -441,7 +494,7 @@ function GlycolSummary({
               <div className={styles.highlightTitle}>{device}</div>
               <div className={[styles.highlight, styles.bigger].join(' ')}>
                 {!isNaN(heat) ? (
-                  <TrendValue change={heatChange}>{`${defaultNumberFormatter(heat, 2)} kW`}</TrendValue>
+                  <TrendValue change={heatCummulativeMomentum}>{`${defaultNumberFormatter(heat, 2)} kW`}</TrendValue>
                 ) : (
                   '-'
                 )}
