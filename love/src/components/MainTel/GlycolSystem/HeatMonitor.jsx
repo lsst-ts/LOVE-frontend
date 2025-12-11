@@ -238,7 +238,8 @@ export const calculateHeatExchange = (flowRate, tempIn, tempOut) => {
   // const density = 1050; // EGW Density
   // const vdot = (flowRate * 0.001) / 60; // L/min to m^3/s
   // return (cp * density * vdot * (tempOut - tempIn)) / 1000;
-  return flowRate * 0.067 * (tempOut - tempIn);
+  const heat = flowRate * 0.067 * (tempOut - tempIn);
+  return Math.max(0, heat);
 };
 
 /**
@@ -483,6 +484,11 @@ function GlycolSummary({
             deviceHistoricalHeats.length > 0 ? deviceHistoricalHeats[deviceHistoricalHeats.length - 1] : 0;
           const heatCummulativeMomentum =
             calculateHeatCummulativeMomentum(deviceHistoricalHeats) + (roundedHeat - roundedPrevHeat);
+
+          if (device === 'OSS') {
+            console.log('OSS Heat:', heat, 'Momentum:', heatCummulativeMomentum);
+            console.log('Historical Heats:', deviceHistoricalHeats);
+          }
 
           const wideClass = styles[devicesWideMapping[device]];
           const energyPercent = deviceEnergyPercentage(device, heat);
