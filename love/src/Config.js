@@ -114,19 +114,19 @@ export const URL_REGEX =
 /*****************************HVAC configurations*****************************/
 /*****************************************************************************/
 export const hvacDevicesMaxPowerKw = {
-  'Chiller 1': 203,
-  'Chiller 2': 203,
-  'Chiller 3': 203,
-  OSS: 1000,
-  MRCR: 1000,
-  'L2 CRACS': 1000,
-  'L2 Fan Coils': 1000,
-  'AHU CR': 1000,
-  'AHU WR': 1000,
-  'DOME AHU 1': 1000,
-  'DOME AHU 2': 1000,
-  'DOME AHU 3': 1000,
-  'DOME AHU 4': 1000,
+  'Chiller 1': 200,
+  'Chiller 2': 200,
+  'Chiller 3': 200,
+  OSS: 100,
+  MRCR: 12,
+  'L2 CRACS': 54,
+  'L2 Fan Coils': 28,
+  'AHU CR': 12,
+  'AHU WR': 12,
+  'DOME AHU 1': 60,
+  'DOME AHU 2': 60,
+  'DOME AHU 3': 60,
+  'DOME AHU 4': 60,
 };
 
 /*****************************************************************************/
