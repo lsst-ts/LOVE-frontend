@@ -1,0 +1,252 @@
+:root {
+  --boxesBackgroundColor: var(--second-quaternary-background-dimmed-color);
+}
+
+.container {
+  min-width: 73em;
+}
+
+.highlight {
+  font-weight: bold;
+  color: var(--highlighted-font-color);
+}
+
+.highlightTitle {
+  font-weight: bold;
+}
+
+.bigger {
+  font-size: var(--font-size-larger);
+}
+
+.heatWarningBackground {
+  background-color: var(--status-alert-dimmed-color-2) !important;
+}
+
+.heatWarningText {
+  color: var(--status-alert-color);
+}
+
+.temperatureDiffWarning,
+.pressureDiffWarning {
+  color: var(--status-alert-color);
+}
+
+.hvacStatusContainer {
+  display: flex;
+  gap: var(--content-padding);
+  align-items: center;
+  padding: var(--content-padding);
+  background-color: var(--second-quaternary-background-dimmed-color);
+  margin-bottom: var(--small-padding);
+}
+
+.hvacStatusContainer > *:not(:last-child) {
+  padding-right: var(--content-padding);
+  border-right: 1px solid var(--second-quaternary-background-color);
+}
+
+.summaryState {
+  display: flex;
+  gap: var(--content-padding);
+  align-items: center;
+}
+
+.chillers {
+  display: flex;
+  gap: var(--content-padding);
+}
+
+.chillerInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--content-padding);
+}
+
+.infoIcon {
+  margin-left: auto;
+}
+
+.infoIcon svg {
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+
+.devicesBoxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--small-padding);
+}
+
+.deviceBox {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--small-padding) / 2);
+  box-sizing: border-box;
+  flex: 1 0 10em;
+  background-color: var(--boxesBackgroundColor);
+  border-radius: 0.2em;
+  border: 0.2em solid var(--second-tertiary-background-color);
+  padding: var(--small-padding);
+}
+
+.deviceBox.wide4 {
+  min-width: calc((100% - var(--small-padding) * 3) / 4);
+}
+
+.deviceBox.wide3 {
+  min-width: calc((100% - var(--small-padding) * 2) / 3);
+}
+
+.deviceBox.wide2 {
+  min-width: calc((100% - var(--small-padding) * 1) / 2);
+}
+
+.deviceBox .progressBar {
+  padding: 2px;
+}
+
+.progressBarLow {
+  background-color: var(--status-ok-color);
+}
+
+.progressBarMedium {
+  background-color: var(--status-warning-color);
+}
+
+.progressBarHigh {
+  background-color: var(--status-alert-color);
+}
+
+.breadcrumbs {
+  color: var(--base-font-color);
+  font-weight: bold;
+  padding: var(--content-padding);
+  background-color: var(--second-quaternary-background-dimmed-color);
+  margin-bottom: var(--small-padding);
+}
+
+.breadcrumbs,
+.breadcrumbs > :first-child {
+  display: flex;
+  align-items: center;
+  gap: var(--small-padding);
+}
+
+.breadcrumbs > :first-child {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.breadcrumbs .backArrow svg {
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+  margin-right: 0.2em;
+}
+
+.breadcrumbs .telemetries {
+  margin-left: auto;
+  display: flex;
+  gap: var(--small-padding);
+}
+
+.breadcrumbs .telemetries > div > :first-child {
+  color: var(--secondary-font-color);
+}
+
+.breadcrumbs .telemetries > div > :last-child {
+  font-size: var(--font-size-small);
+  font-weight: lighter;
+}
+
+.mapContainer {
+  /* border: 1px solid red; */
+  position: relative;
+}
+
+.mapContainer .deviceOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.selectedRow {
+  color: var(--highlighted-font-color);
+  font-weight: bold;
+  background-color: var(--second-quaternary-background-dimmed-color) !important;
+}
+
+.devicesBoxes .selectDeviceButton {
+  height: 1em;
+  cursor: pointer;
+}
+
+.showMapButtonContainer {
+  display: flex;
+  padding: var(--small-padding);
+  justify-content: space-between;
+  background-color: var(--second-quaternary-background-dimmed-color);
+  margin-bottom: var(--small-padding);
+  cursor: pointer;
+}
+
+.showMapButtonContainer .hidden {
+  transform: rotate(180deg);
+}
+
+.glycolTableContainer {
+  margin-bottom: var(--small-padding);
+}
+
+.glycolPlotsContainer {
+  display: flex;
+  gap: var(--small-padding);
+  flex-wrap: wrap;
+  margin-bottom: var(--small-padding);
+}
+
+.glycolPlotsContainer > * {
+  box-sizing: border-box;
+  flex: 1 1 calc(50% - var(--small-padding) * 3);
+  width: 100px;
+  padding: var(--small-padding);
+  border: 0.2em solid var(--second-tertiary-background-color);
+  border-radius: 0.25em;
+}
+
+.plotContainer.wide {
+  flex: 1 1 100%;
+}
+
+.glycolPlotsContainer .plot {
+  height: 200px;
+}
+
+.highlightFill {
+  --pulse-color-start: rgba(255, 255, 255, 0.2);
+  --pulse-color-mid: rgba(255, 255, 255, 0.5);
+  --pulse-color-end: rgba(255, 255, 255, 0.2);
+  animation: highlightPulse 2s infinite;
+}
+
+.highlightFill.alert {
+  --pulse-color-start: hsla(23, 99%, 44%, 0.2);
+  --pulse-color-mid: hsla(23, 99%, 44%, 0.5);
+  --pulse-color-end: hsla(23, 99%, 44%, 0.2);
+}
+
+@keyframes highlightPulse {
+  0% {
+    fill: var(--pulse-color-start);
+  }
+  50% {
+    fill: var(--pulse-color-mid);
+  }
+  100% {
+    fill: var(--pulse-color-end);
+  }
+}

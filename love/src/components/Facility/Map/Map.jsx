@@ -29,6 +29,13 @@ import Level7 from './Levels/Level7.jsx';
 import Level8 from './Levels/Level8.jsx';
 
 export default class Map extends Component {
+  static defaultProps = {
+    HVACDataLevel1: {},
+    HVACDataLevel2: {},
+    HVACDataLevel4: {},
+    HVACDataLevel5: {},
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -446,11 +453,11 @@ export default class Map extends Component {
     }
 
     const alarms_5 = [
-      dynaleneP05Events.dynMainGridAlarm?.value,
-      dynaleneP05Events.dynMainGridFailureFlag?.value,
-      dynaleneP05Events.dynSafetyResetFlag?.value,
-      dynaleneP05Events.dynTAalarm?.value,
-      dynaleneP05Events.dynTMAalarm?.value,
+      dynaleneP05Events?.dynMainGridAlarm?.value,
+      dynaleneP05Events?.dynMainGridFailureFlag?.value,
+      dynaleneP05Events?.dynSafetyResetFlag?.value,
+      dynaleneP05Events?.dynTAalarm?.value,
+      dynaleneP05Events?.dynTMAalarm?.value,
       dynaleneP05Events?.dynaleneTankLevel?.value === 0,
       lowerAHU01P05.generalAlarm?.value,
       lowerAHU01P05.filterAlarm?.value,

@@ -1,0 +1,482 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 882.42 461.23">
+    <g transform="translate(0,0) scale(1)">
+        <g id="Building">
+            <polygon id="open-office-space" points="705,106 705,204 814,204 814,106" fill="none" />
+            <polygon id="computer-room" points="635,40 635,128 702,128 702,108 695,108 695,40" fill="none"></polygon>
+            <polygon id="computer-lab" points="635,130 635,180 695,180 695,130" fill="none"></polygon>
+            <polygon id="break-room" points="635,181 635,264 695,264 695,181" fill="none"></polygon>
+            <polygon id="control-room" points="695,205 695,265 865,265 865,205" fill="none"></polygon>
+            <polygon id="office-rooms" points="814,115 814,204 865,204 865,115" fill="none"></polygon>
+            <polygon id="conference-room" points="816,40 816,116 865,116 865,40" fill="none"></polygon>
+            <polygon id="Floor" class="Level2_cls4__rR+E2"
+                points="633.77 38.75 633.77 266.56 648.56 266.56 648.56 279.21 628.66 279.21 628.66 328.33 707.22 328.33 707.22 282.56 693.82 282.56 693.82 266.56 707.22 266.56 717.82 266.56 867.14 266.56 867.14 38.75 633.77 38.75">
+            </polygon>
+            <g id="Ourside_Deck" data-name="Ourside Deck">
+                <g>
+                    <line class="Level2_cls5__ZUOiG" x1="565.92" y1="325.77" x2="565.92" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="568.92" y1="325.77" x2="568.92" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="571.93" y1="325.77" x2="571.93" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="574.93" y1="325.77" x2="574.93" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="577.93" y1="325.77" x2="577.93" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="580.93" y1="325.77" x2="580.93" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="583.93" y1="325.77" x2="583.93" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="586.93" y1="325.77" x2="586.93" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="589.93" y1="325.77" x2="589.93" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="592.93" y1="325.77" x2="592.93" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="595.93" y1="325.77" x2="595.93" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="598.94" y1="325.77" x2="598.94" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="601.94" y1="325.77" x2="601.94" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="604.94" y1="325.77" x2="604.94" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="607.94" y1="325.77" x2="607.94" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="610.94" y1="325.77" x2="610.94" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="613.94" y1="325.77" x2="613.94" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="616.94" y1="325.77" x2="616.94" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="619.94" y1="325.77" x2="619.94" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="622.94" y1="325.77" x2="622.94" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="625.95" y1="325.77" x2="625.95" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="628.95" y1="325.77" x2="628.95" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="562.92" y1="325.77" x2="562.92" y2="313.76"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="628.97" y1="325.77" x2="560.92" y2="325.77"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="628.97" y1="313.76" x2="560.92" y2="313.76"></line>
+                    <polygon class="Level2_cls12__hkgXp" points="564.9 315.93 564.9 323.6 562.34 319.77 564.9 315.93">
+                    </polygon>
+                    <line class="Level2_cls6__XeSbr" x1="564.97" y1="319.77" x2="627.16" y2="319.77"></line>
+                </g>
+                <g>
+                    <polyline class="Level2_cls5__ZUOiG"
+                        points="623.32 325.99 623.32 332.63 712.72 332.63 712.72 283.95"></polyline>
+                    <polyline class="Level2_cls5__ZUOiG"
+                        points="624.32 326.13 624.32 331.63 711.72 331.63 711.72 283.95"></polyline>
+                    <line class="Level2_cls5__ZUOiG" x1="623.32" y1="282.84" x2="623.32" y2="313.85"></line>
+                    <line class="Level2_cls5__ZUOiG" x1="624.32" y1="282.84" x2="624.32" y2="313.85"></line>
+                    <g>
+                        <rect class="Level2_cls5__ZUOiG" x="629.32" y="285.42" width="77.06" height="42.21"></rect>
+                        <g>
+                            <line class="Level2_cls11__hUlwq" x1="630.05" y1="285.76" x2="630.05" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="631.52" y1="285.76" x2="631.52" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="633.71" y1="285.76" x2="633.71" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="635.91" y1="285.76" x2="635.91" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="638.11" y1="285.76" x2="638.11" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="655.69" y1="285.76" x2="655.69" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="673.27" y1="285.76" x2="673.27" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="690.85" y1="285.76" x2="690.85" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="653.49" y1="285.76" x2="653.49" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="671.07" y1="285.76" x2="671.07" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="688.65" y1="285.76" x2="688.65" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="651.29" y1="285.76" x2="651.29" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="668.87" y1="285.76" x2="668.87" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="686.45" y1="285.76" x2="686.45" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="704.03" y1="285.76" x2="704.03" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="649.1" y1="285.76" x2="649.1" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="666.67" y1="285.76" x2="666.67" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="684.25" y1="285.76" x2="684.25" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="701.83" y1="285.76" x2="701.83" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="646.9" y1="285.76" x2="646.9" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="664.48" y1="285.76" x2="664.48" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="682.06" y1="285.76" x2="682.06" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="699.63" y1="285.76" x2="699.63" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="644.7" y1="285.76" x2="644.7" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="662.28" y1="285.76" x2="662.28" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="679.86" y1="285.76" x2="679.86" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="697.44" y1="285.76" x2="697.44" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="642.5" y1="285.76" x2="642.5" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="660.08" y1="285.76" x2="660.08" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="677.66" y1="285.76" x2="677.66" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="695.24" y1="285.76" x2="695.24" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="640.31" y1="285.76" x2="640.31" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="657.88" y1="285.76" x2="657.88" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="675.46" y1="285.76" x2="675.46" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="693.04" y1="285.76" x2="693.04" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="632.25" y1="285.76" x2="632.25" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="634.45" y1="285.76" x2="634.45" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="636.64" y1="285.76" x2="636.64" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="638.84" y1="285.76" x2="638.84" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="656.42" y1="285.76" x2="656.42" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="674" y1="285.76" x2="674" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="691.58" y1="285.76" x2="691.58" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="654.22" y1="285.76" x2="654.22" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="671.8" y1="285.76" x2="671.8" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="689.38" y1="285.76" x2="689.38" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="652.03" y1="285.76" x2="652.03" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="669.6" y1="285.76" x2="669.6" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="687.18" y1="285.76" x2="687.18" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="704.76" y1="285.76" x2="704.76" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="649.83" y1="285.76" x2="649.83" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="667.41" y1="285.76" x2="667.41" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="684.99" y1="285.76" x2="684.99" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="702.56" y1="285.76" x2="702.56" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="647.63" y1="285.76" x2="647.63" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="665.21" y1="285.76" x2="665.21" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="682.79" y1="285.76" x2="682.79" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="700.37" y1="285.76" x2="700.37" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="645.43" y1="285.76" x2="645.43" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="663.01" y1="285.76" x2="663.01" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="680.59" y1="285.76" x2="680.59" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="698.17" y1="285.76" x2="698.17" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="643.24" y1="285.76" x2="643.24" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="660.81" y1="285.76" x2="660.81" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="678.39" y1="285.76" x2="678.39" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="695.97" y1="285.76" x2="695.97" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="641.04" y1="285.76" x2="641.04" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="658.62" y1="285.76" x2="658.62" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="676.2" y1="285.76" x2="676.2" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="693.77" y1="285.76" x2="693.77" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="630.78" y1="285.76" x2="630.78" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="632.98" y1="285.76" x2="632.98" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="635.18" y1="285.76" x2="635.18" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="637.38" y1="285.76" x2="637.38" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="654.95" y1="285.76" x2="654.95" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="672.53" y1="285.76" x2="672.53" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="690.11" y1="285.76" x2="690.11" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="652.76" y1="285.76" x2="652.76" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="670.34" y1="285.76" x2="670.34" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="687.92" y1="285.76" x2="687.92" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="705.49" y1="285.76" x2="705.49" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="650.56" y1="285.76" x2="650.56" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="668.14" y1="285.76" x2="668.14" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="685.72" y1="285.76" x2="685.72" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="703.3" y1="285.76" x2="703.3" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="648.36" y1="285.76" x2="648.36" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="665.94" y1="285.76" x2="665.94" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="683.52" y1="285.76" x2="683.52" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="701.1" y1="285.76" x2="701.1" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="646.17" y1="285.76" x2="646.17" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="663.74" y1="285.76" x2="663.74" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="681.32" y1="285.76" x2="681.32" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="698.9" y1="285.76" x2="698.9" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="643.97" y1="285.76" x2="643.97" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="661.55" y1="285.76" x2="661.55" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="679.13" y1="285.76" x2="679.13" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="696.7" y1="285.76" x2="696.7" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="641.77" y1="285.76" x2="641.77" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="659.35" y1="285.76" x2="659.35" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="676.93" y1="285.76" x2="676.93" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="694.51" y1="285.76" x2="694.51" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="639.57" y1="285.76" x2="639.57" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="657.15" y1="285.76" x2="657.15" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="674.73" y1="285.76" x2="674.73" y2="327.46"></line>
+                            <line class="Level2_cls11__hUlwq" x1="692.31" y1="285.76" x2="692.31" y2="327.46"></line>
+                        </g>
+                    </g>
+                </g>
+            </g>
+            <g id="SolidWall">
+                <rect class="Level2_cls13__zsAK6" x="692.09" y="98.58" width="8.16" height="8.37"></rect>
+                <rect class="Level2_cls13__zsAK6" x="692.09" y="178.49" width="8.16" height="8.16"></rect>
+                <rect class="Level2_cls13__zsAK6" x="741.95" y="178.49" width="8.16" height="8.16"></rect>
+                <rect class="Level2_cls13__zsAK6" x="811.72" y="178.49" width="8.16" height="8.16"></rect>
+                <rect class="Level2_cls13__zsAK6" x="858.98" y="98.58" width="8.16" height="8.37"></rect>
+                <rect class="Level2_cls13__zsAK6" x="858.98" y="178.49" width="8.16" height="8.16"></rect>
+                <rect class="Level2_cls13__zsAK6" x="741.95" y="98.58" width="8.16" height="8.37"></rect>
+                <rect class="Level2_cls6__XeSbr" x="669.73" y="336.63" width="39.93" height="87.85"></rect>
+                <rect class="Level2_cls6__XeSbr" x="667.65" y="333.21" width="44.08" height="93.26"></rect>
+                <g>
+                    <circle class="Level2_cls6__XeSbr" cx="689.69" cy="358.42" r="11.16"></circle>
+                    <circle class="Level2_cls6__XeSbr" cx="689.69" cy="402.69" r="11.16"></circle>
+                </g>
+                <rect class="Level2_cls13__zsAK6" x="767.91" y="101.36" width="33.77" height="2.53"></rect>
+                <g>
+                    <polygon class="Level2_cls13__zsAK6"
+                        points="867.14 38.75 867.14 44.35 864.19 44.35 864.19 41.23 818.24 41.23 818.24 46.75 816.75 46.75 816.75 103.89 810.8 103.89 810.8 101.54 814.66 101.54 814.66 78.79 767.91 78.79 767.91 76.37 814.66 76.37 814.66 46.75 813.17 46.75 813.17 41.23 767.91 41.23 767.91 38.75 867.14 38.75">
+                    </polygon>
+                    <rect class="Level2_cls13__zsAK6" x="743.45" y="38.75" width="5.02" height="8.05"></rect>
+                </g>
+                <polygon class="Level2_cls13__zsAK6"
+                    points="633.77 38.75 633.77 264 602.49 264 602.49 266.56 648.56 266.56 648.56 258.23 643.59 258.23 643.59 264 636.75 264 636.75 242.45 642.33 242.45 642.33 233.95 636.75 233.95 636.75 227.86 642.33 227.86 642.33 219.18 636.75 219.18 636.75 165.87 642.33 165.87 642.33 157.08 636.75 157.08 636.75 151.08 642.33 151.08 642.33 142.64 636.75 142.64 636.75 41.37 643.82 41.37 643.82 46.79 648.61 46.79 648.61 41.37 693.68 41.37 693.68 46.79 698.52 46.79 698.52 38.75 633.77 38.75">
+                </polygon>
+                <polygon class="Level2_cls13__zsAK6"
+                    points="693.45 266.56 693.45 258.23 698.52 258.23 698.52 264 743.44 264 743.44 258.27 748.78 258.27 748.78 264 813.07 264 813.07 258.27 818.41 258.27 818.41 264 864.19 264 864.19 260.9 867.14 260.9 867.14 266.56 693.45 266.56">
+                </polygon>
+                <rect class="Level2_cls13__zsAK6" x="727.14" y="245.42" width="5.54" height="72.93"
+                    transform="translate(448.03 1011.8) rotate(-90)"></rect>
+                <rect class="Level2_cls13__zsAK6" x="622.68" y="258.77" width="5.54" height="46.23"
+                    transform="translate(343.56 907.33) rotate(-90)"></rect>
+            </g>
+            <g id="Wall">
+                <line class="Level2_cls7__kZ+Hx" x1="813.26" y1="46.56" x2="813.26" y2="76.51"></line>
+                <polygon class="Level2_cls7__kZ+Hx"
+                    points="767.91 54.32 800.25 54.32 800.25 63.25 767.91 63.25 767.91 64.43 801.4 64.43 801.4 53.02 767.91 53.02 767.91 54.32">
+                </polygon>
+                <rect class="Level2_cls7__kZ+Hx" x="767.91" y="77.26" width="1.12" height="5.39"></rect>
+                <rect class="Level2_cls7__kZ+Hx" x="767.91" y="94.57" width="1.12" height="8.26"></rect>
+                <rect class="Level2_cls7__kZ+Hx" x="795.92" y="78.47" width="1.81" height="23.67"></rect>
+                <polygon class="Level2_cls7__kZ+Hx"
+                    points="746.7 44.09 746.7 82.69 744.26 82.69 744.26 84.09 746.7 84.09 748.1 84.09 748.1 82.69 748.1 44.09 746.7 44.09">
+                </polygon>
+                <polygon class="Level2_cls7__kZ+Hx"
+                    points="698.42 82.69 695.99 82.69 695.99 44.09 694.59 44.09 694.59 82.69 694.59 84.09 694.59 99.09 695.99 99.09 695.99 84.09 698.42 84.09 698.42 82.69">
+                </polygon>
+                <polygon class="Level2_cls7__kZ+Hx"
+                    points="724.16 82.69 724.16 41.07 721.16 41.07 721.16 82.69 708.54 82.69 708.54 84.09 721.16 84.09 724.16 84.09 734.54 84.09 734.54 82.69 724.16 82.69">
+                </polygon>
+                <rect class="Level2_cls7__kZ+Hx" x="643.74" y="120.21" width="1.4" height="16.61"
+                    transform="translate(515.93 772.96) rotate(-90)"></rect>
+                <polygon class="Level2_cls7__kZ+Hx"
+                    points="698.76 106.96 702.68 106.96 702.68 127.81 676.67 127.81 676.67 129.21 702.68 129.21 704.08 129.21 704.08 127.81 704.08 106.96 704.08 105.09 728.68 105.09 730.08 105.09 742.07 105.09 742.07 103.69 730.08 103.69 730.08 96.33 728.68 96.33 728.68 103.69 698.76 103.69 698.76 106.96">
+                </polygon>
+                <polygon class="Level2_cls7__kZ+Hx"
+                    points="704.08 146.28 694.47 146.28 693.07 146.28 693.07 147.68 693.07 179.05 694.47 179.05 694.47 147.68 704.08 147.68 704.08 146.28">
+                </polygon>
+                <rect class="Level2_cls7__kZ+Hx" x="663.31" y="151.11" width="1.4" height="57.32"
+                    transform="translate(484.24 843.78) rotate(-90)"></rect>
+                <polygon class="Level2_cls7__kZ+Hx"
+                    points="704.08 203.81 695.54 203.81 694.14 203.81 694.14 205.21 694.14 260.79 695.54 260.79 695.54 205.21 704.08 205.21 704.08 203.81">
+                </polygon>
+                <rect class="Level2_cls7__kZ+Hx" x="697.88" y="180.26" width="1.4" height="11"
+                    transform="translate(512.81 884.34) rotate(-90)"></rect>
+                <rect class="Level2_cls7__kZ+Hx" x="839.63" y="91.63" width="1.4" height="51.63"
+                    transform="translate(722.89 957.77) rotate(-90)"></rect>
+                <rect class="Level2_cls7__kZ+Hx" x="839.63" y="120.47" width="1.4" height="51.63"
+                    transform="translate(694.05 986.61) rotate(-90)"></rect>
+                <rect class="Level2_cls7__kZ+Hx" x="839.63" y="149.49" width="1.4" height="51.63"
+                    transform="translate(665.03 1015.64) rotate(-90)"></rect>
+                <rect class="Level2_cls7__kZ+Hx" x="839.63" y="178.7" width="1.4" height="51.63"
+                    transform="translate(635.82 1044.84) rotate(-90)"></rect>
+                <rect class="Level2_cls7__kZ+Hx" x="675.44" y="244.49" width="1.4" height="21.77"></rect>
+                <rect class="Level2_cls7__kZ+Hx" x="646.95" y="264.85" width="1.4" height="14.81"></rect>
+                <rect class="Level2_cls7__kZ+Hx" x="693.83" y="265.44" width="1.4" height="14.22"></rect>
+                <polygon class="Level2_cls7__kZ+Hx"
+                    points="865.35 44.28 865.35 42.48 870.62 42.48 870.62 38.75 633.68 38.75 633.68 36.29 872.42 36.29 872.42 44.28 865.35 44.28">
+                </polygon>
+                <polygon class="Level2_cls7__kZ+Hx"
+                    points="870.62 260.56 870.62 266.75 695.23 266.75 695.23 268.55 872.42 268.55 872.42 267.63 872.42 266.75 872.42 260.56 870.62 260.56">
+                </polygon>
+                <rect class="Level2_cls7__kZ+Hx" x="748" y="94.54" width="1.4" height="7.37"></rect>
+                <rect class="Level2_cls7__kZ+Hx" x="647.99" y="263.82" width="1.4" height="3.47"
+                    transform="translate(383.13 914.24) rotate(-90)"></rect>
+            </g>
+            <g id="Doors">
+                <path class="Level2_cls15__pjOSD"
+                    d="m801.1,113.05c-.2,0-.35-.16-.35-.35v-9.63c0-.2.16-.35.35-.35h.1c.2,0,.35.16.35.35v9.26c4.9-.3,8.72-4.33,8.72-9.26,0-.2.16-.35.35-.35s.35.16.35.35c0,5.37-4.21,9.76-9.57,9.99-.04,0-.08,0-.12-.02-.03,0-.06.02-.09.02h-.1.01Z">
+                </path>
+                <path class="Level2_cls15__pjOSD"
+                    d="m744.11,73.99c.2,0,.35.16.35.35v9.63c0,.2-.16.35-.35.35h-.1c-.2,0-.35-.16-.35-.35v-9.26c-4.9.3-8.72,4.33-8.72,9.26,0,.2-.16.35-.35.35s-.35-.16-.35-.35c0-5.37,4.21-9.76,9.57-9.99.04,0,.08,0,.12.02.03,0,.06-.02.09-.02h.1-.01Z">
+                </path>
+                <path class="Level2_cls15__pjOSD"
+                    d="m698.76,73.99c-.2,0-.35.16-.35.35v9.63c0,.2.16.35.35.35h.1c.2,0,.35-.16.35-.35v-9.26c4.9.3,8.72,4.33,8.72,9.26,0,.2.16.35.35.35s.35-.16.35-.35c0-5.37-4.21-9.76-9.57-9.99-.04,0-.08,0-.12.02-.03,0-.06-.02-.09-.02h-.1.01Z">
+                </path>
+                <path class="Level2_cls15__pjOSD"
+                    d="m825.06,115.83c0,.2-.16.35-.35.35h-9.63c-.2,0-.35-.16-.35-.35v-.1c0-.2.16-.35.35-.35h9.26c-.3-4.9-4.33-8.72-9.26-8.72-.2,0-.35-.16-.35-.35s.16-.35.35-.35c5.37,0,9.76,4.21,9.99,9.57,0,.04,0,.08-.02.12,0,.03.02.06.02.09v.1h-.01Z">
+                </path>
+                <path class="Level2_cls15__pjOSD"
+                    d="m825.06,143.92c0,.2-.16.35-.35.35h-9.63c-.2,0-.35-.16-.35-.35v-.1c0-.2.16-.35.35-.35h9.26c-.3-4.9-4.33-8.72-9.26-8.72-.2,0-.35-.16-.35-.35s.16-.35.35-.35c5.37,0,9.76,4.21,9.99,9.57,0,.04,0,.08-.02.12,0,.03.02.06.02.09v.1h-.01Z">
+                </path>
+                <path class="Level2_cls15__pjOSD"
+                    d="m825.06,201.41c0,.2-.16.35-.35.35h-9.63c-.2,0-.35-.16-.35-.35v-.1c0-.2.16-.35.35-.35h9.26c-.3-4.9-4.33-8.72-9.26-8.72-.2,0-.35-.16-.35-.35s.16-.35.35-.35c5.37,0,9.76,4.21,9.99,9.57,0,.04,0,.08-.02.12,0,.03.02.06.02.09v.1h-.01Z">
+                </path>
+                <path class="Level2_cls15__pjOSD"
+                    d="m825.06,148.53c0-.2-.16-.35-.35-.35h-9.63c-.2,0-.35.16-.35.35v.1c0,.2.16.35.35.35h9.26c-.3,4.9-4.33,8.72-9.26,8.72-.2,0-.35.16-.35.35s.16.35.35.35c5.37,0,9.76-4.21,9.99-9.57,0-.04,0-.08-.02-.12,0-.03.02-.06.02-.09v-.1h-.01Z">
+                </path>
+                <path class="Level2_cls15__pjOSD"
+                    d="m801.03,214.91c.2,0,.35-.16.35-.35v-9.63c0-.2-.16-.35-.35-.35h-.1c-.2,0-.35.16-.35.35v9.26c-4.9-.3-8.72-4.33-8.72-9.26,0-.2-.16-.35-.35-.35s-.35.16-.35.35c0,5.37,4.21,9.76,9.57,9.99.04,0,.08,0,.12-.02.03,0,.06.02.09.02h.1-.01Z">
+                </path>
+                <path class="Level2_cls15__pjOSD"
+                    d="m715.12,214.91c-.2,0-.35-.16-.35-.35v-9.63c0-.2.16-.35.35-.35h.1c.2,0,.35.16.35.35v9.26c4.9-.3,8.72-4.33,8.72-9.26,0-.2.16-.35.35-.35s.35.16.35.35c0,5.37-4.21,9.76-9.57,9.99-.04,0-.08,0-.12-.02-.03,0-.06.02-.09.02h-.1.01Z">
+                </path>
+                <path class="Level2_cls15__pjOSD"
+                    d="m653.26,138.54c-.2,0-.35-.16-.35-.35v-9.63c0-.2.16-.35.35-.35h.1c.2,0,.35.16.35.35v9.26c4.9-.3,8.72-4.33,8.72-9.26,0-.2.16-.35.35-.35s.35.16.35.35c0,5.37-4.21,9.76-9.57,9.99-.04,0-.08,0-.12-.02-.03,0-.06.02-.09.02h-.1.01Z">
+                </path>
+                <path class="Level2_cls8__6pag0" d="m693.76,137.74h0c4.29-.01,7.77,3.45,7.79,7.74h0s-7.76.03-7.76.03">
+                </path>
+                <path class="Level2_cls8__6pag0" d="m693.76,137.74h0c4.29.01,7.77-3.45,7.79-7.74h0s-7.76-.03-7.76-.03">
+                </path>
+                <g>
+                    <path class="Level2_cls8__6pag0" d="m703.68,195.05h0c-4.43.01-8.04-3.57-8.06-8h0s8.03-.03,8.03-.03">
+                    </path>
+                    <path class="Level2_cls8__6pag0" d="m703.68,195.05h0c-4.43-.01-8.04,3.57-8.06,8h0s8.03.03,8.03.03">
+                    </path>
+                </g>
+                <g>
+                    <path class="Level2_cls8__6pag0"
+                        d="m759,101.46h0c.01,4.48-3.61,8.13-8.09,8.14h0s-.03-8.11-.03-8.11"></path>
+                    <path class="Level2_cls8__6pag0" d="m759,101.46h0c-.01,4.48,3.61,8.13,8.09,8.14h0s.03-8.11.03-8.11">
+                    </path>
+                </g>
+                <g>
+                    <path class="Level2_cls8__6pag0" d="m685.56,252.7h0c-.01-4.42,3.56-8.01,7.98-8.03h0s.03,8,.03,8">
+                    </path>
+                    <path class="Level2_cls8__6pag0" d="m685.56,252.7h0c.01-4.42-3.56-8.01-7.98-8.03h0s-.03,8-.03,8">
+                    </path>
+                </g>
+                <g>
+                    <path class="Level2_cls8__6pag0" d="m685.56,266.81h0c.01,4.42-3.56,8.01-7.98,8.03h0s-.03-8-.03-8">
+                    </path>
+                    <path class="Level2_cls8__6pag0" d="m685.56,266.81h0c-.01,4.42,3.56,8.01,7.98,8.03h0s.03-8,.03-8">
+                    </path>
+                </g>
+            </g>
+            <g id="Stairs">
+                <polygon class="Level2_cls20__JXRa8"
+                    points="768.82 64.47 768.82 76.4 812.8 76.4 812.8 42.23 770.52 42.23 770.52 52.93 801.49 52.93 801.49 64.47 768.82 64.47">
+                </polygon>
+                <line class="Level2_cls20__JXRa8" x1="771.82" y1="64.47" x2="771.82" y2="76.4"></line>
+                <line class="Level2_cls20__JXRa8" x1="795.86" y1="64.47" x2="795.86" y2="76.4"></line>
+                <line class="Level2_cls20__JXRa8" x1="774.83" y1="64.47" x2="774.83" y2="76.4"></line>
+                <line class="Level2_cls20__JXRa8" x1="777.83" y1="64.47" x2="777.83" y2="76.4"></line>
+                <line class="Level2_cls20__JXRa8" x1="786.85" y1="64.47" x2="786.85" y2="76.4"></line>
+                <line class="Level2_cls20__JXRa8" x1="780.84" y1="64.47" x2="780.84" y2="76.4"></line>
+                <line class="Level2_cls20__JXRa8" x1="783.84" y1="64.47" x2="783.84" y2="76.4"></line>
+                <line class="Level2_cls20__JXRa8" x1="789.85" y1="64.47" x2="789.85" y2="76.4"></line>
+                <line class="Level2_cls20__JXRa8" x1="792.85" y1="64.47" x2="792.85" y2="76.4"></line>
+                <line class="Level2_cls20__JXRa8" x1="798.86" y1="64.47" x2="798.86" y2="76.4"></line>
+                <line class="Level2_cls20__JXRa8" x1="801.87" y1="64.47" x2="801.87" y2="76.4"></line>
+                <line class="Level2_cls20__JXRa8" x1="773.52" y1="42.23" x2="773.52" y2="52.93"></line>
+                <line class="Level2_cls20__JXRa8" x1="797.56" y1="42.23" x2="797.56" y2="52.93"></line>
+                <line class="Level2_cls20__JXRa8" x1="776.53" y1="42.23" x2="776.53" y2="52.93"></line>
+                <line class="Level2_cls20__JXRa8" x1="779.53" y1="42.23" x2="779.53" y2="52.93"></line>
+                <line class="Level2_cls20__JXRa8" x1="788.54" y1="42.23" x2="788.54" y2="52.93"></line>
+                <line class="Level2_cls20__JXRa8" x1="782.53" y1="42.23" x2="782.53" y2="52.93"></line>
+                <line class="Level2_cls20__JXRa8" x1="785.54" y1="42.23" x2="785.54" y2="52.93"></line>
+                <line class="Level2_cls20__JXRa8" x1="791.55" y1="42.23" x2="791.55" y2="52.93"></line>
+                <line class="Level2_cls20__JXRa8" x1="794.55" y1="42.23" x2="794.55" y2="52.93"></line>
+                <line class="Level2_cls20__JXRa8" x1="800.56" y1="42.23" x2="800.56" y2="52.93"></line>
+                <line class="Level2_cls20__JXRa8" x1="812.98" y1="64.84" x2="801.49" y2="64.84"></line>
+                <line class="Level2_cls20__JXRa8" x1="812.98" y1="61.86" x2="801.49" y2="61.86"></line>
+                <line class="Level2_cls20__JXRa8" x1="812.98" y1="58.89" x2="801.49" y2="58.89"></line>
+                <line class="Level2_cls20__JXRa8" x1="812.98" y1="55.91" x2="801.49" y2="55.91"></line>
+                <line class="Level2_cls20__JXRa8" x1="801.49" y1="52.93" x2="812.98" y2="52.93"></line>
+                <polygon class="Level2_cls12__hkgXp" points="772.47 43.75 772.47 51.42 769.91 47.58 772.47 43.75">
+                </polygon>
+                <polyline class="Level2_cls6__XeSbr" points="767.56 70.43 807.24 70.43 807.24 47.58 772.53 47.58">
+                </polyline>
+            </g>
+            <g id="Glass">
+                <g>
+                    <line class="Level2_cls7__kZ+Hx" x1="704.15" y1="204.79" x2="714.29" y2="204.79"></line>
+                    <line class="Level2_cls7__kZ+Hx" x1="714.29" y1="204.29" x2="714.29" y2="205.29"></line>
+                </g>
+                <g id="Glass-2" data-name="Glass">
+                    <line class="Level2_cls7__kZ+Hx" x1="725.4" y1="204.79" x2="790.98" y2="204.79"></line>
+                    <line class="Level2_cls7__kZ+Hx" x1="790.98" y1="204.29" x2="790.98" y2="205.29"></line>
+                    <line class="Level2_cls7__kZ+Hx" x1="725.4" y1="204.29" x2="725.4" y2="205.29"></line>
+                </g>
+                <g>
+                    <line class="Level2_cls7__kZ+Hx" x1="814.52" y1="204.79" x2="801.68" y2="204.79"></line>
+                    <line class="Level2_cls7__kZ+Hx" x1="801.68" y1="205.29" x2="801.68" y2="204.29"></line>
+                </g>
+                <g>
+                    <line class="Level2_cls7__kZ+Hx" x1="814.49" y1="178.61" x2="814.49" y2="158.58"></line>
+                    <line class="Level2_cls7__kZ+Hx" x1="813.99" y1="158.58" x2="814.99" y2="158.58"></line>
+                </g>
+                <g>
+                    <line class="Level2_cls7__kZ+Hx" x1="814.49" y1="118.19" x2="814.49" y2="134.23"></line>
+                    <line class="Level2_cls7__kZ+Hx" x1="814.99" y1="134.23" x2="813.99" y2="134.23"></line>
+                </g>
+                <g>
+                    <line class="Level2_cls7__kZ+Hx" x1="814.49" y1="145.44" x2="814.49" y2="144.14"></line>
+                    <line class="Level2_cls7__kZ+Hx" x1="813.99" y1="144.14" x2="814.99" y2="144.14"></line>
+                </g>
+                <g>
+                    <line class="Level2_cls7__kZ+Hx" x1="814.49" y1="146.7" x2="814.49" y2="148"></line>
+                    <line class="Level2_cls7__kZ+Hx" x1="814.99" y1="148" x2="813.99" y2="148"></line>
+                </g>
+                <g>
+                    <line class="Level2_cls7__kZ+Hx" x1="814.49" y1="183.54" x2="814.49" y2="191.41"></line>
+                    <line class="Level2_cls7__kZ+Hx" x1="814.99" y1="191.41" x2="813.99" y2="191.41"></line>
+                </g>
+                <g>
+                    <line class="Level2_cls7__kZ+Hx" x1="814.49" y1="103.68" x2="814.49" y2="106.17"></line>
+                    <line class="Level2_cls7__kZ+Hx" x1="814.99" y1="106.17" x2="813.99" y2="106.17"></line>
+                </g>
+                <g>
+                    <line class="Level2_cls7__kZ+Hx" x1="814.49" y1="204.79" x2="814.49" y2="202"></line>
+                    <line class="Level2_cls7__kZ+Hx" x1="813.99" y1="202" x2="814.99" y2="202"></line>
+                </g>
+                <g>
+                    <line class="Level2_cls7__kZ+Hx" x1="814.49" y1="117.3" x2="814.49" y2="116"></line>
+                    <line class="Level2_cls7__kZ+Hx" x1="813.99" y1="116" x2="814.99" y2="116"></line>
+                </g>
+                <line class="Level2_cls7__kZ+Hx" x1="663.33" y1="128.51" x2="676.67" y2="128.51"></line>
+            </g>
+            <g id="Windows">
+                <rect class="Level2_cls14__SKD6M" x="731.38" y="3.04" width="2.28" height="73.68"
+                    transform="translate(692.64 772.41) rotate(-90)"></rect>
+                <rect class="Level2_cls14__SKD6M" x="865.03" y="38.75" width="2.11" height="227.81"></rect>
+                <rect class="Level2_cls14__SKD6M" x="662.23" y="253.05" width="1.4" height="25.02"
+                    transform="translate(397.38 928.49) rotate(-90)"></rect>
+            </g>
+            <g id="Machines">
+                <rect id="elev" class="Level2_cls10__HimWt" x="769.73" y="80.72" width="21.7" height="14.86"></rect>
+                <g id="Machines-2" data-name="Machines">
+                    <rect id="elev-2" data-name="elev" class="Level2_cls10__HimWt" x="649.06" y="54.25" width="10.85"
+                        height="59.9"></rect>
+                </g>
+                <g id="Machines-3" data-name="Machines">
+                    <rect id="elev-3" data-name="elev" class="Level2_cls10__HimWt" x="671.81" y="54.25" width="10.85"
+                        height="59.9"></rect>
+                </g>
+                <g id="Machines-4" data-name="Machines">
+                    <rect id="elev-4" data-name="elev" class="Level2_cls10__HimWt" x="647.91" y="180.42" width="43.8"
+                        height="5.86"></rect>
+                </g>
+            </g>
+        </g>
+        <g id="Dome">
+            <line class="Level2_cls7__kZ+Hx" x1="170.53" y1="192.71" x2="150.53" y2="192.71"></line>
+            <line class="Level2_cls7__kZ+Hx" x1="160.53" y1="202.71" x2="160.53" y2="182.71"></line>
+            <path class="Level2_cls9__-J5pl"
+                d="m621.96,266.24l-328.92.47c-37.56,67.25-119.54,95.7-190.68,66.18C24.94,300.76-11.78,211.96,20.35,134.54,52.48,57.12,141.28,20.4,218.7,52.53l5.44-13.94h407.81">
+            </path>
+        </g>
+        <g id="text">
+            <g id="t1">
+                <g><text class="Level2_svgText__zFoDb" transform="translate(649.42 81.67)">
+                        <tspan x="0" y="0">Computer</tspan>
+                        <tspan x="6.27" y="7.2">Room</tspan>
+                    </text></g>
+                <g><text class="Level2_svgText__zFoDb" transform="translate(755.06 234.13)">
+                        <tspan x="0" y="0">Control Room</tspan>
+                    </text></g>
+                <g><text class="Level2_svgText__zFoDb" transform="translate(749.6 144.61)">
+                        <tspan x="0" y="0">Open</tspan>
+                        <tspan x="-10.58" y="7.2">Office Space</tspan>
+                    </text></g>
+                <g><text class="Level2_svgText__zFoDb" transform="translate(823.54 77.69)">
+                        <tspan x="0" y="0">Conference</tspan>
+                        <tspan x="8.18" y="7.2">Room</tspan>
+                    </text></g>
+                <g><text class="Level2_svgText__zFoDb" transform="translate(829.58 133.44)">
+                        <tspan x="0" y="0">Office 1</tspan>
+                    </text></g>
+                <g><text class="Level2_svgText__zFoDb" transform="translate(828.96 162.18)">
+                        <tspan x="0" y="0">Office 2</tspan>
+                    </text></g>
+                <g><text class="Level2_svgText__zFoDb" transform="translate(828.97 191.69)">
+                        <tspan x="0" y="0">Office 3</tspan>
+                    </text></g>
+                <g><text class="Level2_svgText__zFoDb" transform="translate(652.87 157.69)">
+                        <tspan x="0" y="0">Computer</tspan>
+                        <tspan x="9.8" y="7.2">Lab</tspan>
+                    </text></g>
+                <g><text class="Level2_svgText__zFoDb" transform="translate(654.04 213.18)">
+                        <tspan x="0" y="0">Break</tspan>
+                        <tspan x="-.35" y="7.2">Room</tspan>
+                    </text></g>
+                <g><text class="Level2_svgText__zFoDb" transform="translate(657.85 296.73)">
+                        <tspan x="0" y="0">Deck</tspan>
+                    </text></g>
+            </g>
+            <g id="t2" class="Level2_opacity50__N9ioj">
+                <g><text class="Level2_svgTextSmall__SwRnf" transform="translate(774.92 59.94)">
+                        <tspan x="0" y="0">Wet Shaft</tspan>
+                    </text></g>
+                <g><text class="Level2_svgTextSmall__SwRnf" transform="translate(802.06 92.28)">
+                        <tspan x="0" y="0">Dry</tspan>
+                        <tspan x="-1.69" y="4.8">Shaft</tspan>
+                    </text></g>
+                <g><text class="Level2_svgTextSmall__SwRnf" transform="translate(774.48 87.54)">
+                        <tspan x="0" y="0">Elev. 1</tspan>
+                    </text></g>
+                <g><text class="Level2_svgTextSmall__SwRnf" transform="translate(733.96 91.3)">
+                        <tspan x="0" y="0">Hallway</tspan>
+                    </text></g>
+                <g><text class="Level2_svgTextSmall__SwRnf" transform="translate(697.97 60.77)">
+                        <tspan x="0" y="0">Bathroom</tspan>
+                    </text></g>
+                <g><text class="Level2_svgTextSmall__SwRnf" transform="translate(725.18 60.77)">
+                        <tspan x="0" y="0">Bathroom</tspan>
+                    </text></g>
+            </g>
+        </g>
+    </g><text fill="white" x="10" y="20">LEVEL 2</text>
+</svg>

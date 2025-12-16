@@ -538,6 +538,26 @@ export const mainIndex = {
       },
     },
   },
+  GlycolHeatMonitor: {
+    component: require('../MainTel/GlycolSystem/HeatMonitor.container').default,
+    schema: {
+      ...require('../MainTel/GlycolSystem/HeatMonitor.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/GlycolSystem/HeatMonitor.container').schema.props,
+      },
+    },
+  },
+  GlycolDeviceTable: {
+    component: require('../MainTel/GlycolSystem/DeviceTable.container').default,
+    schema: {
+      ...require('../MainTel/GlycolSystem/DeviceTable.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/GlycolSystem/DeviceTable.container').schema.props,
+      },
+    },
+  },
   M1M3BumpTests: {
     component: require('../MainTel/M1M3/BumpTests.container').default,
     schema: {
