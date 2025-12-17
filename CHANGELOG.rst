@@ -2,9 +2,10 @@
 Version History
 ===============
 
-v6.9.4
-------
+v6.10.0
+-------
 
+* Update package.json version to v6.10.0. `<https://github.com/lsst-ts/LOVE-frontend/pull/749>`_
 * Implement LOVE components for glycol sensors display. `<https://github.com/lsst-ts/LOVE-frontend/pull/748>`_
 * Adjust louvers enabled state in MTDomeLouvers. `<https://github.com/lsst-ts/LOVE-frontend/pull/744>`_
 
