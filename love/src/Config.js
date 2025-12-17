@@ -36,9 +36,6 @@ export const TOPIC_TIMESTAMP_ATTRIBUTE = 'private_sndStamp';
 // Subpath
 export const SUBPATH = process.env.PUBLIC_URL ?? '';
 
-// Commands Configurations
-export const hasCommandPrivileges = true;
-
 // Time rate for polling external APIs
 export const POLLING_RATE_MS = 10000;
 
@@ -112,6 +109,25 @@ export const DATE_TIME_FORMAT = 'YYYY/MM/DD, HH:mm:ss';
 // Regex
 export const URL_REGEX =
   /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
+
+/*****************************************************************************/
+/*****************************HVAC configurations*****************************/
+/*****************************************************************************/
+export const hvacDevicesMaxPowerKw = {
+  'Chiller 1': 200,
+  'Chiller 2': 200,
+  'Chiller 3': 200,
+  OSS: 100,
+  MRCR: 12,
+  'L2 CRACS': 54,
+  'L2 Fan Coils': 28,
+  'AHU CR': 12,
+  'AHU WR': 12,
+  'DOME AHU 1': 60,
+  'DOME AHU 2': 60,
+  'DOME AHU 3': 60,
+  'DOME AHU 4': 60,
+};
 
 /*****************************************************************************/
 /***************************Mirrors configurations****************************/
