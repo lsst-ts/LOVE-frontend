@@ -25,7 +25,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   border-radius: 0.43rem;
   width: 100%;
   display: grid;
-  grid-template-rows: 2rem minmax(1rem, 1fr);
+  grid-template-rows: auto minmax(1rem, 1fr);
   box-sizing: border-box;
   overflow: auto;
 }
