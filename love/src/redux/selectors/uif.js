@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -50,7 +52,9 @@ export const getViews = (state) => {
 
   return state.uif.present.views.map((v) => {
     let screenSize = 'desktop';
-    v.screen ? (screenSize = v.screen) : '';
+    if (v.screen) {
+      screenSize = v.screen;
+    }
     return { ...v, screen: screenSize };
   });
 };
