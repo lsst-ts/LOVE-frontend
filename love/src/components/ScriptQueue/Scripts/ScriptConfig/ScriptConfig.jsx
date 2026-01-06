@@ -17,7 +17,7 @@ function ScriptConfig({ index, timestampProcessStart, timestampConfigureEnd }) {
         setCoppiedToClipboard(false);
       }, 2000);
     });
-  }, []);
+  }, [appliedConfiguration]);
 
   const getAppliedConfiguration = useCallback((scriptIndex, start, end) => {
     const efdInstance = getEFDInstanceForHost();
