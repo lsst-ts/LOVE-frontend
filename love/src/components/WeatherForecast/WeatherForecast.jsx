@@ -88,17 +88,15 @@ export default class WeatherForecast extends Component {
   getTemporalFormat(frecuency) {
     if (frecuency === this.frecuencyOptions[0] || frecuency === this.frecuencyOptions[1]) {
       return this.temporalFormatOptions[frecuency];
-    } else {
-      this.temporalFormatOptions[this.frecuencyOptions[0]]; // DEFAULT
     }
+    return this.temporalFormatOptions[this.frecuencyOptions[0]]; // DEFAULT
   }
 
   getSliceSize(frecuency) {
     if (frecuency === this.frecuencyOptions[0] || frecuency === this.frecuencyOptions[1]) {
       return this.sliceSizeOptions[frecuency];
-    } else {
-      return this.sliceSizeOptions[this.frecuencyOptions[0]]; // DEFAULT
     }
+    return this.sliceSizeOptions[this.frecuencyOptions[0]]; // DEFAULT
   }
 
   getInput(plotName, frecuency) {
