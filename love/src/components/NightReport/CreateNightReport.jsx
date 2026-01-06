@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect, useCallback, useMemo, memo } from '
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import ManagerInterface, {
-  fixedFloat,
   getObsDayFromDate,
   getObsDayStartFromDate,
   getObsDayISO,
@@ -10,15 +9,7 @@ import ManagerInterface, {
   isNightReportOld,
   getCutDateFromNightReport,
 } from 'Utils';
-import {
-  ISO_STRING_DATE_TIME_FORMAT,
-  TIME_FORMAT,
-  EFD_RETENTION_DAYS_PER_INSTANCE,
-  mtMountDeployableMotionStateMap,
-  mtMountPowerStateMap,
-  mtMountElevationLockingPinMotionStateMap,
-  atPneumaticsMirrorCoverStateMap,
-} from 'Config';
+import { ISO_STRING_DATE_TIME_FORMAT, TIME_FORMAT, EFD_RETENTION_DAYS_PER_INSTANCE } from 'Config';
 import Alert from 'components/GeneralPurpose/Alert/Alert';
 import Button from 'components/GeneralPurpose/Button/Button';
 import MultiSelect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
@@ -26,7 +17,6 @@ import Select from 'components/GeneralPurpose/Select/Select';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import RefreshIcon from 'components/icons/RefreshIcon/RefreshIcon';
-import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import TimeLossField from './TimeLossField';
 import TelescopesStates from './TelescopesStates';
 import JiraOBSTicketsTable from './JiraOBSTicketsTable';
