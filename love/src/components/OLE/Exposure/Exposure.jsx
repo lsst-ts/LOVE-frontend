@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -27,6 +29,7 @@ import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
+import ClipIcon from 'components/icons/ClipIcon/ClipIcon';
 import OrderableTable from 'components/GeneralPurpose/OrderableTable/OrderableTable';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
