@@ -277,7 +277,7 @@ const AlertsSection = memo(({ refreshWarningActive, changesNotSaved }) => {
             <a
               href="#"
               onClick={() => {
-                location.reload();
+                window.location.reload();
               }}
             >
               refresh
