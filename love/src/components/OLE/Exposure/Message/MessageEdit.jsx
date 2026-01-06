@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -45,10 +47,10 @@ export default class MessageEdit extends Component {
   static propTypes = {
     /** Message oject */
     message: PropTypes.object,
-    /** Function to edit a message */
-    cancel: PropTypes.func,
-    /** Function to remove a message */
+    /** Function to save changes to a message */
     save: PropTypes.func,
+    /** Function to cancel editing a message */
+    cancel: PropTypes.func,
   };
 
   static defaultProps = {
@@ -90,6 +92,7 @@ export default class MessageEdit extends Component {
 
   handleSubmit() {
     const { save } = this.props;
+    const { message } = this.state;
     this.setState({ updatingLog: true });
     save(message, () => this.setState({ updatingLog: false }));
   }
