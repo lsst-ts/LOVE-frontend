@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -21,7 +23,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PlayIcon from 'components/icons/MicsIcon/Play/PlayIcon';
 import DownloadIcon from 'components/icons/MicsIcon/Download/DownloadIcon';
-import PauseIcon from 'components/icons/MicsIcon/Pause/PauseIcon';
 import StopIcon from 'components/icons/MicsIcon/Stop/StopIcon';
 import styles from './Record.module.css';
 
@@ -42,10 +43,10 @@ export default class Record extends Component {
     this.state = {
       play: false,
     };
-    this.aCtx;
-    this.source;
-    this.songSource;
-    this.masterGain;
+    this.aCtx = null;
+    this.source = null;
+    this.songSource = null;
+    this.masterGain = null;
   }
 
   componentDidMount = () => {
