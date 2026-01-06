@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -27,6 +29,7 @@ import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import RefreshIcon from 'components/icons/RefreshIcon/RefreshIcon';
+import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import RichTextEditor from 'components/GeneralPurpose/RichTextEditor/RichTextEditor';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -36,7 +39,14 @@ import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange
 import Modal from 'components/GeneralPurpose/Modal/Modal';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
 import { EXPOSURE_FLAG_OPTIONS, exposureFlagStateToStyle, ISO_INTEGER_DATE_FORMAT } from 'Config';
-import ManagerInterface, { getFilesURLs, getLinkJira, htmlToJiraMarkdown, jiraMarkdownToHtml } from 'Utils';
+import ManagerInterface, {
+  getFilesURLs,
+  getLinkJira,
+  htmlToJiraMarkdown,
+  jiraMarkdownToHtml,
+  openInNewTab,
+  getFilename,
+} from 'Utils';
 import styles from './Exposure.module.css';
 
 class ExposureAdd extends Component {
