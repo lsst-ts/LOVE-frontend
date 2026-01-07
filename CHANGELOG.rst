@@ -5,6 +5,7 @@ Version History
 v6.10.1
 -------
 
+* Improve applied configuration display in ScriptConfig component. `<https://github.com/lsst-ts/LOVE-frontend/pull/755>`_
 * Update vega-lite and its subdependencies. `<https://github.com/lsst-ts/LOVE-frontend/pull/757>`_
 * Bump vega from 5.32.0 to 6.2.0 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/750>`_
 * Fix ESLint compilation errors. `<https://github.com/lsst-ts/LOVE-frontend/pull/756>`_

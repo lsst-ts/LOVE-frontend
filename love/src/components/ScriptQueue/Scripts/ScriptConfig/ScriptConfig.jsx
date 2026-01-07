@@ -17,7 +17,7 @@ function ScriptConfig({ index, timestampProcessStart, timestampConfigureEnd }) {
         setCoppiedToClipboard(false);
       }, 2000);
     });
-  }, []);
+  }, [appliedConfiguration]);
 
   const getAppliedConfiguration = useCallback((scriptIndex, start, end) => {
     const efdInstance = getEFDInstanceForHost();
@@ -51,6 +51,17 @@ function ScriptConfig({ index, timestampProcessStart, timestampConfigureEnd }) {
       setAppliedConfiguration('');
     }
   }, [index, timestampProcessStart, timestampConfigureEnd]);
+
+  if (!appliedConfiguration) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.title}>
+          <span>APPLIED CONFIGURATION</span>
+          <div>No applied configuration found</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
