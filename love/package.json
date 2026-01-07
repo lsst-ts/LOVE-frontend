@@ -51,7 +51,7 @@
     "react-scripts": "5.0.0",
     "react-toastify": "^5.3.2",
     "react-uid": "^2.2.0",
-    "react-vega": "^7.4.1",
+    "react-vega": "^7.7.1",
     "redux": "^4.0.1",
     "redux-batched-subscribe": "^0.1.6",
     "redux-logger": "^3.0.6",
@@ -63,8 +63,8 @@
     "rfdc": "^1.1.4",
     "three": "^0.133.0",
     "vega": "^6.2.0",
-    "vega-embed": "^6.12.2",
-    "vega-lite": "^5.2.0",
+    "vega-embed": "^7.1.0",
+    "vega-lite": "^6.4.1",
     "websocket-playback": "^1.0.0"
   },
   "resolutions": {

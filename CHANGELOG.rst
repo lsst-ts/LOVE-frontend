@@ -5,6 +5,7 @@ Version History
 v6.10.1
 -------
 
+* Update vega-lite and its subdependencies. `<https://github.com/lsst-ts/LOVE-frontend/pull/757>`_
 * Bump vega from 5.32.0 to 6.2.0 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/750>`_
 * Fix ESLint compilation errors. `<https://github.com/lsst-ts/LOVE-frontend/pull/756>`_
 * Add missing D3 louvers column in MTDome component. `<https://github.com/lsst-ts/LOVE-frontend/pull/751>`_
