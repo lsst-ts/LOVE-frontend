@@ -5,6 +5,7 @@ Version History
 v6.10.1
 -------
 
+* Fix ESLint compilation errors. `<https://github.com/lsst-ts/LOVE-frontend/pull/756>`_
 * Add missing D3 louvers column in MTDome component. `<https://github.com/lsst-ts/LOVE-frontend/pull/751>`_
 * Bump js-yaml from 4.1.0 to 4.1.1 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/746>`_
 * Bump node-forge from 1.3.1 to 1.3.3 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/753>`_

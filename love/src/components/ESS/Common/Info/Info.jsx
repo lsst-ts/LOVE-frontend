@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -81,7 +83,7 @@ const comparator = (prevProps, nextProps) => {
   return isEqual(nextProps.sensor, prevProps.sensor);
 };
 
-Info.PropTypes = {
+Info.propTypes = {
   sensor: PropTypes.shape({
     sensorId: PropTypes.number,
     sensorName: PropTypes.string,

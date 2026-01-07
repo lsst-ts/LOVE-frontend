@@ -250,11 +250,11 @@ const ForecastPlotContainer = ({ containerNode, ...props }) => {
    * so this is the safe way to pass the node. See:
    * https://react.dev/learn/referencing-values-with-refs
    */
+  const containerRef = React.useRef(null);
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
   if (!containerNode) {
-    const containerRef = React.useRef(null);
     return (
       <div style={{ height: '100%', overflow: 'hidden' }} ref={containerRef}>
         <ForecastPlot containerNode={containerRef?.current} {...props} />
