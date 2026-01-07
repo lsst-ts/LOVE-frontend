@@ -64,7 +64,7 @@
     "three": "^0.133.0",
     "vega": "^6.2.0",
     "vega-embed": "^6.12.2",
-    "vega-lite": "^5.2.0",
+    "vega-lite": "^6.4.1",
     "websocket-playback": "^1.0.0"
   },
   "resolutions": {
