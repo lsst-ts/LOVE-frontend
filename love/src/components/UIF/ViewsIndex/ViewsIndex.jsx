@@ -61,8 +61,13 @@ class ViewsIndex extends Component {
     this.props.history.push('/uif/view-editor?id=' + id);
   };
 
-  openView = (id) => {
-    this.props.history.push('/uif/view?id=' + id);
+  openView = (id, event) => {
+    const url = '/uif/view?id=' + id;
+    if (event && (event.ctrlKey || event.metaKey)) {
+      window.open(url, '_blank');
+    } else {
+      this.props.history.push(url);
+    }
   };
 
   changeViewToDelete = (view) => {

@@ -5,6 +5,7 @@ Version History
 v6.10.1
 -------
 
+* Extend ViewIndex component to allow view to be opened in new tabs. `<https://github.com/lsst-ts/LOVE-frontend/pull/752>`_
 * Make components title height dynamic to avoid content overflow. `<https://github.com/lsst-ts/LOVE-frontend/pull/758>`_
 * Improve applied configuration display in ScriptConfig component. `<https://github.com/lsst-ts/LOVE-frontend/pull/755>`_
 * Update vega-lite and its subdependencies. `<https://github.com/lsst-ts/LOVE-frontend/pull/757>`_
