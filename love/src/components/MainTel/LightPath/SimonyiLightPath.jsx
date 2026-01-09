@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -50,15 +52,15 @@ export default class SimonyiLightPath extends Component {
     /** Name of the ComCam filter once it's in its final position */
     cCameraFilter: PropTypes.string,
     /** Enum of detailed state for the ComCam Filter Changer  */
-    cCameraFilterState: PropTypes.int,
+    cCameraFilterState: PropTypes.number,
     /** Enum of detailed state for the ComCam Image Readiness State */
-    cCameraImageState: PropTypes.int,
+    cCameraImageState: PropTypes.number,
     /** Enum of detailed state for the ComCam Shutter */
-    cCameraShutterState: PropTypes.int,
+    cCameraShutterState: PropTypes.number,
     /** Does the component display the Light Path or not */
     lightPath: PropTypes.bool,
     /** Enum of M1M3 Detailed State */
-    m1m3DetailedState: PropTypes.int,
+    m1m3DetailedState: PropTypes.number,
     /** Is the M2 in the correct position or not */
     m2AssemblyInPosition: PropTypes.bool,
     /** Array of 4 Enum State of each Mirror Cover */

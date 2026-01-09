@@ -39,7 +39,7 @@ export default function ({
       title="Open"
       key={index}
       className={styles.view}
-      onClick={() => openView(view.id)}
+      onClick={(event) => openView(view.id, event)}
       onMouseEnter={showButtons}
       onTouchStart={showButtons}
       onTouchMove={showButtons}

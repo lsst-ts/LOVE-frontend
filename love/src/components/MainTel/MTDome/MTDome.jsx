@@ -528,6 +528,12 @@ export default class MTDome extends Component {
       type: 'number',
     },
     {
+      field: 'D3',
+      title: 'D3',
+      className: styles.columns,
+      type: 'number',
+    },
+    {
       field: 'E1',
       title: 'E1',
       className: styles.columns,

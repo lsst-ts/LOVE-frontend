@@ -2,6 +2,20 @@
 Version History
 ===============
 
+v6.10.1
+-------
+
+* Update package.json version to v6.10.1. `<https://github.com/lsst-ts/LOVE-frontend/pull/759>`_
+* Extend ViewIndex component to allow view to be opened in new tabs. `<https://github.com/lsst-ts/LOVE-frontend/pull/752>`_
+* Make components title height dynamic to avoid content overflow. `<https://github.com/lsst-ts/LOVE-frontend/pull/758>`_
+* Improve applied configuration display in ScriptConfig component. `<https://github.com/lsst-ts/LOVE-frontend/pull/755>`_
+* Update vega-lite and its subdependencies. `<https://github.com/lsst-ts/LOVE-frontend/pull/757>`_
+* Bump vega from 5.32.0 to 6.2.0 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/750>`_
+* Fix ESLint compilation errors. `<https://github.com/lsst-ts/LOVE-frontend/pull/756>`_
+* Add missing D3 louvers column in MTDome component. `<https://github.com/lsst-ts/LOVE-frontend/pull/751>`_
+* Bump js-yaml from 4.1.0 to 4.1.1 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/746>`_
+* Bump node-forge from 1.3.1 to 1.3.3 in /love `<https://github.com/lsst-ts/LOVE-frontend/pull/753>`_
+
 v6.10.0
 -------
 

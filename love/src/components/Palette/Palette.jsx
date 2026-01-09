@@ -18,7 +18,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React from 'react';
-import { isConcatSpec } from 'vega-lite/build/src/spec/concat';
 import Button from '../GeneralPurpose/Button/Button';
 
 import AddIcon from 'components/icons/AddIcon/AddIcon';
