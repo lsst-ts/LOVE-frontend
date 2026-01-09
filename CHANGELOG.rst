@@ -5,6 +5,7 @@ Version History
 v6.10.2
 -------
 
+* Update package.json version to v6.10.2. `<https://github.com/lsst-ts/LOVE-frontend/pull/761>`_
 * Fix openView call for new tabs. `<https://github.com/lsst-ts/LOVE-frontend/pull/760>`_
 
 v6.10.1
