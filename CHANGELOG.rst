@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.10.2
+-------
+
+* Fix openView call for new tabs. `<https://github.com/lsst-ts/LOVE-frontend/pull/760>`_
+
 v6.10.1
 -------
 
