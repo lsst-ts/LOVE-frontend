@@ -62,7 +62,7 @@ class ViewsIndex extends Component {
   };
 
   openView = (id, event) => {
-    const url = '/uif/view?id=' + id;
+    const url = 'uif/view?id=' + id;
     if (event && (event.ctrlKey || event.metaKey)) {
       window.open(url, '_blank');
     } else {
