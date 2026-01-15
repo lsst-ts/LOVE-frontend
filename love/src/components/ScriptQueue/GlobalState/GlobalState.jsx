@@ -42,10 +42,13 @@ const ALLOWED_COMMANDS = {
 const GlobalState = ({
   summaryState,
   queueState,
+  schedulerSummaryState,
+  observatoryState,
   requestSummaryStateCommand,
   commandExecutePermission,
   resumeScriptQueue,
   pauseScriptQueue,
+  updateObservatoryState,
 }) => {
   const [contextMenuIsOpen, setContextMenuIsOpen] = useState(false);
   const [contextMenuData, setContextMenuData] = useState({});
@@ -110,6 +113,30 @@ const GlobalState = ({
     ];
   }, [summaryState, requestSummaryStateCommand]);
 
+  const observatoryStateContextMenuOptions = [
+    {
+      icon: <ResumeIcon />,
+      text: 'Good',
+      action: () => {
+        updateObservatoryState('GOOD');
+      },
+    },
+    {
+      icon: <PauseIcon />,
+      text: 'Fault',
+      action: () => {
+        updateObservatoryState('FAULT');
+      },
+    },
+    {
+      icon: <PauseIcon />,
+      text: 'Weather',
+      action: () => {
+        updateObservatoryState('WEATHER');
+      },
+    },
+  ];
+
   return (
     <div className={styles.globalStateWrapper}>
       <div className={styles.globalStateContainer}>
@@ -155,6 +182,35 @@ const GlobalState = ({
                   </div>
                 </>
               )}
+            </div>
+          </div>
+
+          <div className={styles.row}>
+            <span className={styles.stateLabel}>Observatory State</span>
+            <div className={styles.stateCell}>
+              <StatusText status={observatoryState.statusText}>{observatoryState.name}</StatusText>
+              {schedulerSummaryState.name === 'ENABLED' &&
+                observatoryState.name === 'Stopped' &&
+                commandExecutePermission && (
+                  <>
+                    <div className={styles.pauseIconContainer} onClick={resumeScriptQueue}>
+                      <div className={styles.pauseIconWrapper} title="Resume ScriptQueue">
+                        <ResumeIcon />
+                      </div>
+                    </div>
+                  </>
+                )}
+              {schedulerSummaryState.name === 'ENABLED' &&
+                observatoryState.name === 'Running' &&
+                commandExecutePermission && (
+                  <>
+                    <div className={styles.pauseIconContainer} onClick={pauseScriptQueue}>
+                      <div className={styles.pauseIconWrapper} title="Pause ScriptQueue">
+                        <PauseIcon />
+                      </div>
+                    </div>
+                  </>
+                )}
             </div>
           </div>
         </div>
