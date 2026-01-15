@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,7 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import styles from './GlobalState.module.css';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText.jsx';
@@ -47,18 +49,18 @@ const GlobalState = ({
   resumeScriptQueue,
   pauseScriptQueue,
 }) => {
-  const [contextMenuIsOpen, setContextMenuIsOpen] = React.useState(false);
-  const [contextMenuData, setContextMenuData] = React.useState({});
-  const [contextMenuTarget, setContextMenuTarget] = React.useState(undefined);
+  const [contextMenuIsOpen, setContextMenuIsOpen] = useState(false);
+  const [contextMenuData, setContextMenuData] = useState({});
+  const [contextMenuTarget, setContextMenuTarget] = useState();
 
-  const onClickContextMenu = React.useCallback((event) => {
+  const onClickContextMenu = useCallback((event) => {
     event.stopPropagation();
     setContextMenuIsOpen((state) => !state);
     setContextMenuData(event.currentTarget.getBoundingClientRect());
     setContextMenuTarget(event.currentTarget);
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handler = () => {
       setContextMenuIsOpen(false);
     };
@@ -68,7 +70,7 @@ const GlobalState = ({
     };
   }, []);
 
-  const contextMenuOptions = React.useMemo(() => {
+  const contextMenuOptions = useMemo(() => {
     const allowedCommands = ALLOWED_COMMANDS[summaryState.name.toUpperCase()] ?? [];
     return [
       {
