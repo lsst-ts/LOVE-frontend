@@ -134,7 +134,7 @@ const GlobalState = ({
           </div>
 
           <div className={styles.row}>
-            <span className={styles.stateLabel}>Queue State</span>
+            <span className={styles.stateLabel}>Observatory State</span>
             <div className={styles.stateCell}>
               <StatusText status={queueState.statusText}>{queueState.name}</StatusText>
               {summaryState.name === 'ENABLED' && queueState.name === 'Stopped' && commandExecutePermission && (
