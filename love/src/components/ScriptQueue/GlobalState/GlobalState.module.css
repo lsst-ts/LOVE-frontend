@@ -59,7 +59,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .stateCell {
   display: grid;
-  grid-template-columns: 8em 1fr;
+  grid-template-columns: 9em 1fr;
   align-items: center;
   grid-column-gap: 0.5rem;
 }
@@ -97,4 +97,32 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .pauseIconWrapper {
   width: 2em;
   border-radius: 100%;
+}
+
+.observatoryStatesContainer {
+  display: flex;
+  gap: 0.5em;
+}
+
+.observatoryStatesContainer > * {
+  padding: 0.2em 0.5em;
+  border-radius: 0.5em;
+  text-overflow: unset;
+}
+
+.infoIconContainer {
+  display: flex;
+  align-items: center;
+  cursor: help;
+}
+
+.infoIconContainer svg {
+  width: 1em;
+  height: 1em;
+}
+
+.stateLabel:has(.infoIconContainer) {
+  display: flex;
+  align-items: center;
+  gap: 0.2em;
 }

@@ -57,6 +57,7 @@ const ScriptQueueContainer = ({
   requestSALCommand,
   summaryStateValue,
   queueState,
+  schedulerSummaryStateValue,
   scriptHeartbeats,
   commandExecutePermission,
   lastSALCommand,
@@ -75,6 +76,7 @@ const ScriptQueueContainer = ({
       unsubscribeToStreams={unsubscribeToStreams}
       requestSALCommand={requestSALCommand}
       summaryStateValue={summaryStateValue}
+      schedulerSummaryStateValue={schedulerSummaryStateValue}
       current={queueState.current}
       finishedScriptList={queueState.finishedScriptList}
       availableScriptList={queueState.availableScriptList}
@@ -96,6 +98,7 @@ const mapStateToProps = (state, ownProps) => {
   const queueState = getScriptQueueState(state, ownProps.salindex);
   const scriptHeartbeats = getScriptHeartbeats(state, ownProps.salindex);
   const summaryStateValue = getSummaryStateValue(state, `event-ScriptQueue-${ownProps.salindex}-summaryState`);
+  const schedulerSummaryStateValue = getSummaryStateValue(state, `event-Scheduler-${ownProps.salindex}-summaryState`);
   const commandExecutePermission = getPermCmdExec(state);
   const lastSALCommand = getLastSALCommand(state);
   const username = getUsername(state);
@@ -103,6 +106,7 @@ const mapStateToProps = (state, ownProps) => {
     queueState,
     scriptHeartbeats,
     summaryStateValue,
+    schedulerSummaryStateValue,
     commandExecutePermission,
     lastSALCommand,
     username,
@@ -115,6 +119,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     `event-ScriptQueueState-${ownProps.salindex}-scriptsStream`,
     `event-ScriptQueueState-${ownProps.salindex}-availableScriptsStream`,
     `event-ScriptQueue-${ownProps.salindex}-summaryState`,
+    `event-Scheduler-${ownProps.salindex}-summaryState`,
     `event-ScriptHeartbeats-${ownProps.salindex}-stream`,
   ];
   return {
@@ -129,7 +134,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       if (cmd.csc === 'Script') {
         return dispatch(requestSALCommand({ ...cmd, component: 'Script', salindex: 0 }));
       }
-      return dispatch(requestSALCommand({ ...cmd, component: 'ScriptQueue', salindex: ownProps.salindex }, callback));
+      return dispatch(requestSALCommand({ ...cmd, component: cmd.csc, salindex: ownProps.salindex }, callback));
     },
   };
 };
