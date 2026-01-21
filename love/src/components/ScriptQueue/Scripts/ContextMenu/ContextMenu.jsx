@@ -24,13 +24,6 @@ import styles from './ContextMenu.module.css';
 
 export default class ContextMenu extends PureComponent {
   static propTypes = {
-    /**Position data for the context menu.
-     * Usually from event.target.getBoundingClientRect()
-     */
-    contextMenuData: PropTypes.shape({
-      right: PropTypes.number,
-      bottom: PropTypes.number,
-    }),
     isOpen: PropTypes.bool,
     /** List of clickable options to be displayed */
     options: PropTypes.arrayOf(
@@ -50,7 +43,6 @@ export default class ContextMenu extends PureComponent {
   };
 
   static defaultProps = {
-    contextMenuData: {},
     isOpen: false,
     options: [],
     target: undefined,
@@ -63,9 +55,9 @@ export default class ContextMenu extends PureComponent {
     };
   }
 
-  componentDidUpdate = (nextState, nextProps) => {
-    if (this.props.target !== nextProps.target) {
-      const parentCustomView = this.props.target ? this.props.target.closest('.react-grid-item') : undefined;
+  componentDidUpdate = (prevProps) => {
+    if (prevProps.target !== this.props.target) {
+      const parentCustomView = this.props.target?.closest('.react-grid-item');
       const offset = parentCustomView ? parentCustomView.getBoundingClientRect().x : 0;
       this.setState({
         offset,
@@ -74,13 +66,17 @@ export default class ContextMenu extends PureComponent {
   };
 
   render() {
+    const { target } = this.props;
+    const { offset } = this.state;
+    const targetBoundingRect = target ? target.getBoundingClientRect() : { right: 0, bottom: 0 };
+
     return (
       this.props.isOpen && (
         <div
           className={styles.container}
           style={{
-            left: this.props.contextMenuData.right - this.state.offset,
-            top: `calc( -3.3em + ${this.props.contextMenuData.bottom}px)`,
+            left: targetBoundingRect.right - offset,
+            top: `calc( -3.3em + ${targetBoundingRect.bottom}px)`,
           }}
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}

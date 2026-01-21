@@ -56,7 +56,6 @@ const GlobalState = ({
   const onClickContextMenu = useCallback((event) => {
     event.stopPropagation();
     setContextMenuIsOpen((state) => !state);
-    setContextMenuData(event.currentTarget.getBoundingClientRect());
     setContextMenuTarget(event.currentTarget);
   }, []);
 
@@ -160,12 +159,7 @@ const GlobalState = ({
             </div>
           </div>
         </div>
-        <ContextMenu
-          isOpen={contextMenuIsOpen}
-          contextMenuData={contextMenuData}
-          options={contextMenuOptions}
-          target={contextMenuTarget}
-        />
+        <ContextMenu isOpen={contextMenuIsOpen} options={contextMenuOptions} target={contextMenuTarget} />
       </div>
     </div>
   );
