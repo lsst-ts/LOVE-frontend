@@ -114,6 +114,7 @@ export default class ScriptQueue extends Component {
 
   static defaultProps = {
     summaryStateValue: 0,
+    schedulerSummaryStateValue: 0,
     heartbeats: {},
     availableScriptList: [],
     waitingScriptList: [],
@@ -524,6 +525,18 @@ export default class ScriptQueue extends Component {
       params: {},
     });
   };
+
+  observatoryStateCommand = (newState, note) => {
+    this.props.requestSALCommand({
+      csc: 'Scheduler',
+      cmd: 'cmd_updateObservatoryStatus',
+      params: {
+        status: newState,
+        note: note ?? '',
+      },
+    });
+  };
+
   onClickContextMenu = (event, index, currentMenuSelected = false) => {
     event.stopPropagation();
     this.setState({ isContextMenuOpen: !this.state.isContextMenuOpen });
@@ -649,6 +662,8 @@ export default class ScriptQueue extends Component {
       return script.path.toLowerCase().includes(this.state.availableScriptsFilter.toLowerCase());
     });
 
+    const observatoryStateValue = 13;
+
     return (
       <div
         id="container"
@@ -688,10 +703,13 @@ export default class ScriptQueue extends Component {
             statusText: ScriptQueue.stateStyleDict[this.props.state],
             name: this.props.state,
           }}
+          schedulerSummaryState={ScriptQueue.summaryStates[this.props.schedulerSummaryStateValue]}
           requestSummaryStateCommand={this.summaryStateCommand}
           commandExecutePermission={this.props.commandExecutePermission}
           resumeScriptQueue={this.resumeScriptQueue}
           pauseScriptQueue={this.pauseScriptQueue}
+          observatoryStateValue={observatoryStateValue}
+          updateObservatoryStateCommand={this.observatoryStateCommand}
         />
 
         <div className={styles.currentScriptWrapper}>

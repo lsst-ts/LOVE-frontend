@@ -19,13 +19,16 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import styles from './GlobalState.module.css';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText.jsx';
 import ResumeIcon from 'components/icons/ScriptQueue/ResumeIcon/ResumeIcon';
 import PauseIcon from 'components/icons/ScriptQueue/PauseIcon/PauseIcon';
 import GearIcon from 'components/icons/ScriptQueue/GearIcon/GearIcon.jsx';
+import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
 import ContextMenu from '../Scripts/ContextMenu/ContextMenu';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail.jsx';
+import { OBSERVATORY_STATES } from 'Config';
+import { acronymizeString } from 'Utils';
+import styles from './GlobalState.module.css';
 
 const summaryStateToStylesMap = Object.values(CSCDetail.states).reduce((prevDict, value) => {
   const { name } = value;
@@ -39,13 +42,75 @@ const ALLOWED_COMMANDS = {
   STANDBY: ['start'],
 };
 
+const OBSERVATORY_STATE_DETAIL = {
+  0: {
+    name: 'UNKNOWN',
+    statusText: 'invalid',
+  },
+  1: {
+    name: 'DAYTIME',
+    statusText: 'ok',
+  },
+  2: {
+    name: 'OPERATIONAL',
+    statusText: 'ok',
+  },
+  4: {
+    name: 'FAULT',
+    statusText: 'alert',
+  },
+  8: {
+    name: 'WEATHER',
+    statusText: 'alert',
+  },
+  16: {
+    name: 'DOWNTIME',
+    statusText: 'warning',
+  },
+};
+
+function getActiveObservatoryStates(decimalValue) {
+  const activeStatuses = [];
+
+  for (const [name, bitValue] of Object.entries(OBSERVATORY_STATES)) {
+    if ((decimalValue & bitValue) !== 0) {
+      activeStatuses.push(bitValue);
+    }
+  }
+
+  return activeStatuses;
+}
+
+function renderObservatoryState(state, statusClass) {
+  return (
+    <StatusText title={state} status={statusClass} small>
+      {acronymizeString(state)}
+    </StatusText>
+  );
+}
+
+const observatoryStateTooltip =
+  'Current states of the observatory. ' +
+  'Inactive states are shown in grey, active states are color-coded according to their status. ' +
+  'Each following letter represents a different state:' +
+  '\n(D)aytime: daytime when on, nighttime when off, automatically set by the Scheduler CSC.' +
+  '\n(O)perational: set when the observatory is operating in normal state.' +
+  '\n(F)ault: set when a fault is detected in any subsystem. Automatically set by the Scheduler CSC, but can also be changed manually.' +
+  '\n(W)eather: set when weather conditions are not suitable for observations.' +
+  '\n(D)owntime: set during scheduled maintenance or upgrades.' +
+  '\nHover over each state to see its full name.';
+
 const GlobalState = ({
   summaryState,
   queueState,
+  schedulerSummaryState,
+  observatoryStateValue,
   requestSummaryStateCommand,
+  updateObservatoryStateCommand,
   commandExecutePermission,
   resumeScriptQueue,
   pauseScriptQueue,
+  // updateObservatoryState,
 }) => {
   const [contextMenuIsOpen, setContextMenuIsOpen] = useState(false);
   const [contextMenuTarget, setContextMenuTarget] = useState(undefined);
@@ -66,7 +131,7 @@ const GlobalState = ({
     };
   }, []);
 
-  const contextMenuOptions = useMemo(() => {
+  const summaryStatecontextMenuOptions = useMemo(() => {
     const allowedCommands = ALLOWED_COMMANDS[summaryState.name.toUpperCase()] ?? [];
     return [
       {
@@ -108,6 +173,62 @@ const GlobalState = ({
     ];
   }, [summaryState, requestSummaryStateCommand]);
 
+  const updateObservatoryState = (state) => {
+    console.log('Current value:', observatoryStateValue);
+    const newValue = observatoryStateValue ^ state;
+    console.log('New value:', newValue);
+    updateObservatoryStateCommand(newValue, '');
+    setContextMenuIsOpen(false);
+  };
+
+  const observatoryStateContextMenuOptions = useMemo(() => {
+    return [
+      {
+        icon: <ResumeIcon />,
+        text: 'Operational',
+        action: () => {
+          updateObservatoryState(OBSERVATORY_STATES.OPERATIONAL);
+        },
+      },
+      {
+        icon: <PauseIcon />,
+        text: 'Fault',
+        action: () => {
+          updateObservatoryState(OBSERVATORY_STATES.FAULT);
+        },
+      },
+      {
+        icon: <PauseIcon />,
+        text: 'Weather',
+        action: () => {
+          updateObservatoryState(OBSERVATORY_STATES.WEATHER);
+        },
+      },
+      {
+        icon: <PauseIcon />,
+        text: 'Downtime',
+        action: () => {
+          updateObservatoryState(OBSERVATORY_STATES.DOWNTIME);
+        },
+      },
+    ];
+  }, []);
+
+  const getContextMenuOptions = (element) => {
+    if (element?.classList.contains('summaryState')) {
+      return summaryStatecontextMenuOptions;
+    }
+    if (element?.classList.contains('observatoryState')) {
+      return observatoryStateContextMenuOptions;
+    }
+    return null;
+  };
+
+  const contextMenuOptions = getContextMenuOptions(contextMenuTarget);
+  const availableObservatoryStates = Object.keys(OBSERVATORY_STATES).slice(1);
+  const activeObservatoryStateValues = getActiveObservatoryStates(observatoryStateValue);
+  const activeObservatoryStates = activeObservatoryStateValues.map((state) => OBSERVATORY_STATE_DETAIL[state]);
+
   return (
     <div className={styles.globalStateWrapper}>
       <div className={styles.globalStateContainer}>
@@ -121,7 +242,10 @@ const GlobalState = ({
               </span>
               {commandExecutePermission && (
                 <>
-                  <div className={styles.pauseIconContainer} onClick={(e) => onClickContextMenu(e, true)}>
+                  <div
+                    className={[styles.pauseIconContainer, 'summaryState'].join(' ')}
+                    onClick={(e) => onClickContextMenu(e, true)}
+                  >
                     <div className={styles.pauseIconWrapper} title="Change summaryState">
                       <GearIcon className={styles.gearIcon} />
                     </div>
@@ -152,6 +276,36 @@ const GlobalState = ({
                     </div>
                   </div>
                 </>
+              )}
+            </div>
+          </div>
+
+          <div className={styles.row}>
+            <div className={styles.stateLabel}>
+              <span>Observatory States</span>
+              <span className={styles.infoIconContainer}>
+                <InfoIcon className={styles.infoIcon} title={observatoryStateTooltip} />
+              </span>
+            </div>
+            <div className={styles.stateCell}>
+              <div className={styles.observatoryStatesContainer}>
+                {availableObservatoryStates.map((state) => {
+                  const stateDetail = activeObservatoryStates.find((activeState) => activeState.name === state);
+                  if (!stateDetail) {
+                    return renderObservatoryState(state, 'invalid');
+                  }
+                  return renderObservatoryState(stateDetail.name, stateDetail.statusText);
+                })}
+              </div>
+              {schedulerSummaryState.name === 'ENABLED' && commandExecutePermission && (
+                <div
+                  className={[styles.pauseIconContainer, 'observatoryState'].join(' ')}
+                  onClick={(e) => onClickContextMenu(e, true)}
+                >
+                  <div className={styles.pauseIconWrapper} title="Change observatoryState">
+                    <GearIcon className={styles.gearIcon} />
+                  </div>
+                </div>
               )}
             </div>
           </div>
