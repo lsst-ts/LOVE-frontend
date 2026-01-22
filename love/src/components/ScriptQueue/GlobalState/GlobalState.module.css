@@ -126,3 +126,10 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   align-items: center;
   gap: 0.2em;
 }
+
+.observatoryStateNote {
+  height: 8em;
+  width: calc(100% - 0.5em);
+  margin-top: 0.5em;
+  resize: vertical;
+}

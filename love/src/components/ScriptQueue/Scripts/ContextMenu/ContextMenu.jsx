@@ -66,7 +66,7 @@ export default class ContextMenu extends PureComponent {
   };
 
   render() {
-    const { target } = this.props;
+    const { target, children } = this.props;
     const { offset } = this.state;
     const targetBoundingRect = target ? target.getBoundingClientRect() : { right: 0, bottom: 0 };
 
@@ -77,22 +77,26 @@ export default class ContextMenu extends PureComponent {
           style={{
             left: targetBoundingRect.right - offset,
             top: `calc( -3.3em + ${targetBoundingRect.bottom}px)`,
+            width: children ? '20em' : 'auto',
           }}
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
         >
-          {this.props.options.map((child, index) => {
-            return (
-              <div
-                className={[styles.row, child.disabled ? '' : styles.enabled].join(' ')}
-                key={index}
-                onClick={!child.disabled ? child.action : undefined}
-              >
-                <div className={[styles.iconWrapper].join(' ')}>{child.icon}</div>
-                <div className={[styles.buttonText].join(' ')}>{child.text}</div>
-              </div>
-            );
-          })}
+          <div className={styles.options}>
+            {this.props.options.map((child, index) => {
+              return (
+                <div
+                  className={[styles.row, child.disabled ? '' : styles.enabled].join(' ')}
+                  key={index}
+                  onClick={!child.disabled ? child.action : undefined}
+                >
+                  <div className={[styles.iconWrapper].join(' ')}>{child.icon}</div>
+                  <div className={[styles.buttonText].join(' ')}>{child.text}</div>
+                </div>
+              );
+            })}
+          </div>
+          {children}
         </div>
       )
     );
