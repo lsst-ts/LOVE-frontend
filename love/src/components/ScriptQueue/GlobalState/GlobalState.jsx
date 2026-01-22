@@ -98,7 +98,27 @@ const observatoryStateTooltip =
   '\n(F)ault: set when a fault is detected in any subsystem. Automatically set by the Scheduler CSC, but can also be changed manually.' +
   '\n(W)eather: set when weather conditions are not suitable for observations.' +
   '\n(D)owntime: set during scheduled maintenance or upgrades.' +
-  '\nHover over each state to see its full name.';
+  '\nHover over each state to see its full name.' +
+  '\n\nClick the gear icon to change the observatory states. You can additionally provide a note for the change, ' +
+  'please write any comment before applying the new state.';
+
+const ObserversNote = ({ note, setNote }) => {
+  const handleNoteChange = (event) => {
+    setNote(event.target.value);
+    console.log('Note changed:', event.target.value);
+  };
+  return (
+    <div>
+      <span>Observer note:</span>
+      <textarea
+        className={styles.observatoryStateNote}
+        placeholder="Enter a note for this change..."
+        value={note}
+        onChange={handleNoteChange}
+      />
+    </div>
+  );
+};
 
 const GlobalState = ({
   summaryState,
@@ -114,6 +134,7 @@ const GlobalState = ({
 }) => {
   const [contextMenuIsOpen, setContextMenuIsOpen] = useState(false);
   const [contextMenuTarget, setContextMenuTarget] = useState(undefined);
+  const [observatoryStateNote, setObservatoryStateNote] = useState();
 
   const onClickContextMenu = useCallback((event) => {
     event.stopPropagation();
@@ -177,42 +198,42 @@ const GlobalState = ({
     console.log('Current value:', observatoryStateValue);
     const newValue = observatoryStateValue ^ state;
     console.log('New value:', newValue);
-    updateObservatoryStateCommand(newValue, '');
+    console.log('Note:', observatoryStateNote);
+    // updateObservatoryStateCommand(newValue, observatoryStateNote);
     setContextMenuIsOpen(false);
+    setObservatoryStateNote();
   };
 
-  const observatoryStateContextMenuOptions = useMemo(() => {
-    return [
-      {
-        icon: <ResumeIcon />,
-        text: 'Operational',
-        action: () => {
-          updateObservatoryState(OBSERVATORY_STATES.OPERATIONAL);
-        },
+  const observatoryStateContextMenuOptions = [
+    {
+      icon: <ResumeIcon />,
+      text: 'Operational',
+      action: () => {
+        updateObservatoryState(OBSERVATORY_STATES.OPERATIONAL);
       },
-      {
-        icon: <PauseIcon />,
-        text: 'Fault',
-        action: () => {
-          updateObservatoryState(OBSERVATORY_STATES.FAULT);
-        },
+    },
+    {
+      icon: <PauseIcon />,
+      text: 'Fault',
+      action: () => {
+        updateObservatoryState(OBSERVATORY_STATES.FAULT);
       },
-      {
-        icon: <PauseIcon />,
-        text: 'Weather',
-        action: () => {
-          updateObservatoryState(OBSERVATORY_STATES.WEATHER);
-        },
+    },
+    {
+      icon: <PauseIcon />,
+      text: 'Weather',
+      action: () => {
+        updateObservatoryState(OBSERVATORY_STATES.WEATHER);
       },
-      {
-        icon: <PauseIcon />,
-        text: 'Downtime',
-        action: () => {
-          updateObservatoryState(OBSERVATORY_STATES.DOWNTIME);
-        },
+    },
+    {
+      icon: <PauseIcon />,
+      text: 'Downtime',
+      action: () => {
+        updateObservatoryState(OBSERVATORY_STATES.DOWNTIME);
       },
-    ];
-  }, []);
+    },
+  ];
 
   const getContextMenuOptions = (element) => {
     if (element?.classList.contains('summaryState')) {
@@ -225,6 +246,8 @@ const GlobalState = ({
   };
 
   const contextMenuOptions = getContextMenuOptions(contextMenuTarget);
+  const observatoryStateOptionsSelected = contextMenuTarget?.classList.contains('observatoryState');
+
   const availableObservatoryStates = Object.keys(OBSERVATORY_STATES).slice(1);
   const activeObservatoryStateValues = getActiveObservatoryStates(observatoryStateValue);
   const activeObservatoryStates = activeObservatoryStateValues.map((state) => OBSERVATORY_STATE_DETAIL[state]);
@@ -310,7 +333,11 @@ const GlobalState = ({
             </div>
           </div>
         </div>
-        <ContextMenu isOpen={contextMenuIsOpen} options={contextMenuOptions} target={contextMenuTarget} />
+        <ContextMenu isOpen={contextMenuIsOpen} options={contextMenuOptions} target={contextMenuTarget}>
+          {observatoryStateOptionsSelected && (
+            <ObserversNote note={observatoryStateNote} setNote={setObservatoryStateNote} />
+          )}
+        </ContextMenu>
       </div>
     </div>
   );
