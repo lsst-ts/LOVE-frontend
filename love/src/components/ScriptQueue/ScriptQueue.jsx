@@ -117,6 +117,7 @@ export default class ScriptQueue extends Component {
   static defaultProps = {
     summaryStateValue: 0,
     schedulerSummaryStateValue: 0,
+    observatoryStatuses: {},
     heartbeats: {},
     availableScriptList: [],
     waitingScriptList: [],
@@ -665,6 +666,8 @@ export default class ScriptQueue extends Component {
     });
 
     const observatoryStateValue = 13;
+    const observatoryStateTimestamp = this.props.observatoryStatuses.private_sndStamp?.value;
+    console.log(observatoryStateTimestamp);
 
     return (
       <div
@@ -711,6 +714,7 @@ export default class ScriptQueue extends Component {
           resumeScriptQueue={this.resumeScriptQueue}
           pauseScriptQueue={this.pauseScriptQueue}
           observatoryStateValue={observatoryStateValue}
+          observatoryStateTimestamp={observatoryStateTimestamp}
           updateObservatoryStateCommand={this.observatoryStateCommand}
         />
 
