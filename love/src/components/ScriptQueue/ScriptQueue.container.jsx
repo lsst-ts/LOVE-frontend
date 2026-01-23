@@ -29,6 +29,7 @@ import {
   getPermCmdExec,
   getLastSALCommand,
   getUsername,
+  getObservatoryStatuses,
 } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import ScriptQueue from './ScriptQueue';
@@ -60,6 +61,7 @@ const ScriptQueueContainer = ({
   summaryStateValue,
   queueState,
   schedulerSummaryStateValue,
+  observatoryStatuses,
   scriptHeartbeats,
   commandExecutePermission,
   lastSALCommand,
@@ -79,6 +81,7 @@ const ScriptQueueContainer = ({
       requestSALCommand={requestSALCommand}
       summaryStateValue={summaryStateValue}
       schedulerSummaryStateValue={schedulerSummaryStateValue}
+      observatoryStatuses={observatoryStatuses}
       current={queueState.current}
       finishedScriptList={queueState.finishedScriptList}
       availableScriptList={queueState.availableScriptList}
@@ -104,6 +107,7 @@ const mapStateToProps = (state, ownProps) => {
   const commandExecutePermission = getPermCmdExec(state);
   const lastSALCommand = getLastSALCommand(state);
   const username = getUsername(state);
+  const observatoryStatuses = getObservatoryStatuses(state, ownProps.salindex);
   return {
     queueState,
     scriptHeartbeats,
@@ -112,6 +116,7 @@ const mapStateToProps = (state, ownProps) => {
     commandExecutePermission,
     lastSALCommand,
     username,
+    observatoryStatuses,
   };
 };
 
@@ -123,6 +128,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     `event-ScriptQueue-${ownProps.salindex}-summaryState`,
     `event-Scheduler-${ownProps.salindex}-summaryState`,
     `event-ScriptHeartbeats-${ownProps.salindex}-stream`,
+    `event-Scheduler-${ownProps.salindex}-observatoryStatus`,
   ];
   return {
     subscriptions,
