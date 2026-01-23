@@ -27,7 +27,7 @@ import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
 import ContextMenu from '../Scripts/ContextMenu/ContextMenu';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail.jsx';
 import { OBSERVATORY_STATES } from 'Config';
-import { acronymizeString } from 'Utils';
+import { acronymizeString, formatSecondsToDigital } from 'Utils';
 import styles from './GlobalState.module.css';
 
 const summaryStateToStylesMap = Object.values(CSCDetail.states).reduce((prevDict, value) => {
@@ -125,6 +125,7 @@ const GlobalState = ({
   queueState,
   schedulerSummaryState,
   observatoryStateValue,
+  observatoryStateTimestamp,
   requestSummaryStateCommand,
   updateObservatoryStateCommand,
   commandExecutePermission,
@@ -252,6 +253,10 @@ const GlobalState = ({
   const activeObservatoryStateValues = getActiveObservatoryStates(observatoryStateValue);
   const activeObservatoryStates = activeObservatoryStateValues.map((state) => OBSERVATORY_STATE_DETAIL[state]);
 
+  const secondsSinceLastEvent = observatoryStateTimestamp
+    ? ((Date.now() - new Date(observatoryStateTimestamp * 1000).getTime()) / 1000).toFixed(1)
+    : null;
+
   return (
     <div className={styles.globalStateWrapper}>
       <div className={styles.globalStateContainer}>
@@ -332,7 +337,12 @@ const GlobalState = ({
               )}
             </div>
           </div>
+          <div className={styles.row}>
+            <div className={styles.stateLabel}>Time since last event:</div>
+            <div className={styles.stateCell}>{formatSecondsToDigital(secondsSinceLastEvent)}</div>
+          </div>
         </div>
+
         <ContextMenu isOpen={contextMenuIsOpen} options={contextMenuOptions} target={contextMenuTarget}>
           {observatoryStateOptionsSelected && (
             <ObserversNote note={observatoryStateNote} setNote={setObservatoryStateNote} />
