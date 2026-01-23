@@ -91,8 +91,8 @@ function renderObservatoryState(state, statusClass) {
 
 const observatoryStateTooltip =
   'Current states of the observatory. ' +
-  'Inactive states are shown in grey, active states are color-coded according to their status. ' +
-  'Each following letter represents a different state:' +
+  'Only active states are color-coded and shown, ' +
+  'each following letter represents a different state:' +
   '\n(D)aytime: daytime when on, nighttime when off, automatically set by the Scheduler CSC.' +
   '\n(O)perational: set when the observatory is operating in normal state.' +
   '\n(F)ault: set when a fault is detected in any subsystem. Automatically set by the Scheduler CSC, but can also be changed manually.' +
@@ -317,8 +317,7 @@ const GlobalState = ({
             </div>
             <div className={styles.stateCell}>
               <div className={styles.observatoryStatesContainer}>
-                {availableObservatoryStates.map((state) => {
-                  const stateDetail = activeObservatoryStates.find((activeState) => activeState.name === state);
+                {activeObservatoryStates.map((stateDetail) => {
                   if (!stateDetail) {
                     return renderObservatoryState(state, 'invalid');
                   }
