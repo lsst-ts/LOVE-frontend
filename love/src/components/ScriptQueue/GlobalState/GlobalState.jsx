@@ -317,8 +317,7 @@ const GlobalState = ({
             </div>
             <div className={styles.stateCell}>
               <div className={styles.observatoryStatesContainer}>
-                {availableObservatoryStates.map((state) => {
-                  const stateDetail = activeObservatoryStates.find((activeState) => activeState.name === state);
+                {activeObservatoryStates.map((stateDetail) => {
                   if (!stateDetail) {
                     return renderObservatoryState(state, 'invalid');
                   }
