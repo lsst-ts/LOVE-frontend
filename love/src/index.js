@@ -18,7 +18,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import Simulator from 'websocket-playback';
@@ -45,13 +45,15 @@ store.dispatch(doGetTokenFromStorage());
 const getUserConfirmation = (message, callback) => {
   const container = document.createElement('div');
   document.body.appendChild(container);
+  const root = createRoot(container);
 
   const closeModal = (allowUrlChange) => {
-    ReactDOM.unmountComponentAtNode(container);
+    root.unmount();
+    document.body.removeChild(container);
     callback(allowUrlChange);
   };
 
-  ReactDOM.render(
+  root.render(
     <ConfirmationModal
       isOpen={true}
       message={message}
@@ -60,7 +62,6 @@ const getUserConfirmation = (message, callback) => {
       confirmCallback={() => closeModal(true)}
       cancelCallback={() => closeModal(false)}
     />,
-    container,
   );
 };
 
@@ -75,13 +76,13 @@ if (WEBSOCKET_SIMULATION) {
   }, 500);
 }
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('root'));
+root.render(
   <Provider store={store}>
     <BrowserRouter basename={SUBPATH} getUserConfirmation={getUserConfirmation}>
       <AppContainer />
     </BrowserRouter>
   </Provider>,
-  document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change

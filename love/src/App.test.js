@@ -18,7 +18,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import AppContainer from './App.container';
@@ -26,13 +26,13 @@ import store from './redux/store';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(
+  const root = createRoot(div);
+  root.render(
     <Provider store={store}>
       <BrowserRouter>
         <AppContainer />
       </BrowserRouter>
     </Provider>,
-    div,
   );
-  ReactDOM.unmountComponentAtNode(div);
+  root.unmount();
 });

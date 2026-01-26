@@ -17,9 +17,8 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import * as d3 from 'd3';
-import ReactDOM from 'react-dom';
 import debounce from 'lodash.debounce';
 import { radians, degrees } from 'Utils';
 import { MAX_CCW_FOLLOWING_ERROR } from 'Constants';
@@ -48,6 +47,7 @@ class CameraCableWrap extends Component {
   constructor(props) {
     super(props);
     this.g = null;
+    this.containerRef = createRef();
   }
 
   removeCameraCableWrap() {
@@ -181,8 +181,7 @@ class CameraCableWrap extends Component {
   debouncedUpdateCameraCableWrap = debounce(() => this.updateCameraCableWrap(), ARC_TRANSITION_DURATION);
 
   componentDidMount() {
-    const dom = ReactDOM.findDOMNode(this);
-    this.createCameraCableWrap(dom);
+    this.createCameraCableWrap(this.containerRef.current);
   }
 
   componentDidUpdate(prevProps) {
@@ -196,7 +195,7 @@ class CameraCableWrap extends Component {
   }
 
   render() {
-    return <div ref="az-cable-wrap-container"></div>;
+    return <div ref={this.containerRef}></div>;
   }
 }
 
