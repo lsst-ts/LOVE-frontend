@@ -58,14 +58,21 @@ function createTextCanvas(text, color) {
   return canvas;
 }
 
-const Scene = (props) => {
+const Scene = ({
+  initialCameraPosition: initialCamPos = {
+    x: INITIAL_CAMERA_POSITION[0],
+    y: INITIAL_CAMERA_POSITION[2],
+    z: INITIAL_CAMERA_POSITION[1],
+  },
+  children,
+}) => {
   const canvas = createTextCanvas('N', 'white');
   const textTexture = new THREE.CanvasTexture(canvas);
 
   const initialCameraPosition = [
-    props.initialCameraPosition?.x ?? INITIAL_CAMERA_POSITION[0],
-    props.initialCameraPosition?.z ?? INITIAL_CAMERA_POSITION[1],
-    props.initialCameraPosition?.y ?? INITIAL_CAMERA_POSITION[2],
+    initialCamPos?.x ?? INITIAL_CAMERA_POSITION[0],
+    initialCamPos?.z ?? INITIAL_CAMERA_POSITION[1],
+    initialCamPos?.y ?? INITIAL_CAMERA_POSITION[2],
   ];
 
   return (
@@ -92,7 +99,7 @@ const Scene = (props) => {
             <meshBasicMaterial map={textTexture} side={THREE.DoubleSide} transparent />
           </mesh>
 
-          {props.children}
+          {children}
         </Suspense>
       </Canvas>
     </>
@@ -105,14 +112,6 @@ Scene.propTypes = {
     y: PropTypes.number,
     z: PropTypes.number,
   }),
-};
-
-Scene.defaultProps = {
-  initialCameraPosition: {
-    x: INITIAL_CAMERA_POSITION[0],
-    y: INITIAL_CAMERA_POSITION[2],
-    z: INITIAL_CAMERA_POSITION[1],
-  },
 };
 
 const comparator = (prevProps, nextProps) => {

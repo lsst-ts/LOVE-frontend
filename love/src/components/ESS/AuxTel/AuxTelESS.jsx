@@ -94,7 +94,22 @@ const prevParseToArraySensors = (prevParse, option) => {
   return sorted;
 };
 
-const AuxTelESS = (props) => {
+const AuxTelESS = ({
+  subscribeToStreams = () => console.log('default subscribeToStreams'),
+  unsubscribeToStreams = () => console.log('default unsubscribeToStreams'),
+  temperature = [],
+  relativeHumidity = [],
+  airFlow = [],
+  airTurbulence = [],
+  minGradiantLimit = -20,
+  maxGradiantLimit = 40,
+  option = 'temperature',
+  percentOpenDropoutDoor = 0,
+  percentOpenMainDoor = 0,
+  azimuthPosition = 0,
+  initialCameraPosition,
+  ...props
+}) => {
   const [selectedSensor, setSelectedSensor] = useState(0);
   const [selectedSensorData, setSelectedSensorData] = useState({});
   const [inputsPlot, setInputsPlot] = useState({});
@@ -103,15 +118,16 @@ const AuxTelESS = (props) => {
   const plotRef = useRef();
 
   useEffect(() => {
-    props.subscribeToStreams();
+    subscribeToStreams();
     return () => {
-      props.unsubscribeToStreams();
+      unsubscribeToStreams();
     };
   }, []);
 
+  const optionData = { temperature, relativeHumidity, airFlow, airTurbulence };
+
   useEffect(() => {
-    const option = props.option;
-    props[option].forEach((parse) => {
+    optionData[option].forEach((parse) => {
       if (!prevParseSensors[option]) {
         const opt = {};
         opt[option] = {};
@@ -133,7 +149,7 @@ const AuxTelESS = (props) => {
     });
     setSensors(prevParseToArraySensors(prevParseSensors, option));
     return () => {};
-  }, [props.option, props[props.option]]);
+  }, [option, optionData[option]]);
 
   const fans = [
     {
@@ -182,16 +198,6 @@ const AuxTelESS = (props) => {
     },
   ];
 
-  const {
-    minGradiantLimit,
-    maxGradiantLimit,
-    percentOpenDropoutDoor,
-    percentOpenMainDoor,
-    azimuthPosition,
-    initialCameraPosition,
-  } = props;
-
-  const option = props.option ?? 'temperature';
   const positions = [];
   for (let i = 0; i < sensors.length; i++) {
     positions.push({
@@ -367,21 +373,6 @@ AuxTelESS.propTypes = {
   percentOpenDropoutDoor: PropTypes.number,
   percentOpenMainDoor: PropTypes.number,
   azimuthPosition: PropTypes.number,
-};
-
-AuxTelESS.defaultProps = {
-  subscribeToStreams: () => console.log('default subscribeToStreams'),
-  unsubscribeToStreams: () => console.log('default unsubscribeToStreams'),
-  temperature: [],
-  relativeHumidity: [],
-  airFlow: [],
-  airTurbulence: [],
-  minGradiantLimit: -20,
-  maxGradiantLimit: 40,
-  option: 'temperature',
-  percentOpenDropoutDoor: 0,
-  percentOpenMainDoor: 0,
-  azimuthPosition: 0,
 };
 
 const comparator = (prevProps, nextProps) => {

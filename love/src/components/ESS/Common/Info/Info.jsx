@@ -28,9 +28,16 @@ import Label from 'components/GeneralPurpose/SummaryPanel/Label';
 import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import { fixedFloat } from 'Utils';
 
-function Info(props) {
-  const { sensor } = props;
-
+function Info({
+  sensor = {
+    sensorId: 0,
+    sensorName: '',
+    temperature: 0,
+    location: '',
+    numChannels: 0,
+    telemetry: '',
+  },
+}) {
   return (
     <>
       <SummaryPanel>
@@ -92,17 +99,6 @@ Info.propTypes = {
     numChannels: PropTypes.number,
     telemetry: PropTypes.string,
   }),
-};
-
-Info.defaultProps = {
-  sensor: {
-    sensorId: 0,
-    sensorName: '',
-    temperature: 0,
-    location: '',
-    numChannels: 0,
-    telemetry: '',
-  },
 };
 
 export default React.memo(Info, comparator);

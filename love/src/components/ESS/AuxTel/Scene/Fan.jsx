@@ -22,16 +22,23 @@ import PropTypes from 'prop-types';
 import { isEqual } from 'lodash';
 import * as THREE from 'three';
 
-export function Fan(props) {
-  const angleRadians = THREE.MathUtils.degToRad(props.angle); //degree to radians
+export function Fan({
+  position = { x: 0, y: 0, z: 0 },
+  name = '',
+  id = 1,
+  angle = 0,
+  percentOpen = 100,
+  width = 2,
+  height = 2,
+}) {
+  const angleRadians = THREE.MathUtils.degToRad(angle); //degree to radians
 
-  const { width, height } = props;
   const frame = [width, height];
-  const window = [width, height * ((100 - props.percentOpen) / 100) + 0.15];
+  const window = [width, height * ((100 - percentOpen) / 100) + 0.15];
 
   return (
     <>
-      <group position={[props.position.x, props.position.z, props.position.y]} rotation-y={angleRadians}>
+      <group position={[position.x, position.z, position.y]} rotation-y={angleRadians}>
         <group>
           <mesh position={[0, frame[1] / 2 + 0.15 - window[1] / 2, 0]}>
             <planeBufferGeometry attach="geometry" args={window} />
@@ -59,16 +66,6 @@ Fan.propTypes = {
   percentOpen: PropTypes.number,
   width: PropTypes.number,
   height: PropTypes.number,
-};
-
-Fan.defaultProps = {
-  position: { x: 0, y: 0, z: 0 },
-  name: '',
-  id: 1,
-  angle: 0,
-  percentOpen: 100,
-  width: 2,
-  height: 2,
 };
 
 const comparator = (prevProps, nextProps) => {

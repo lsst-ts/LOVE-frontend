@@ -22,11 +22,15 @@ import PropTypes from 'prop-types';
 import { LouversPositionESS } from 'Config';
 import Louver from './Louver';
 
-export function Louvers(props) {
-  const ids = props.ids ?? [1];
-  const percentOpen = props.percentOpen ?? [0];
+export function Louvers({
+  louvers = [{ id: 1, position: { x: 0, y: 0, z: 0 }, name: '', angle: 0, type: 'I' }],
+  percentOpen = [],
+  ids = [1],
+}) {
+  const idsToUse = ids ?? [1];
+  const percentOpenToUse = percentOpen ?? [0];
   return LouversPositionESS.map((louver) => {
-    const index = ids.indexOf(louver.id ?? 1);
+    const index = idsToUse.indexOf(louver.id ?? 1);
     return (
       <Louver
         key={`louver-${index}`}
@@ -35,7 +39,7 @@ export function Louvers(props) {
         name={louver.name}
         angle={louver.angle}
         type={louver.type}
-        percentOpen={percentOpen[index]}
+        percentOpen={percentOpenToUse[index]}
       />
     );
   });
@@ -56,18 +60,4 @@ Louvers.propTypes = {
   ),
   percentOpen: PropTypes.arrayOf(PropTypes.number),
   ids: PropTypes.arrayOf(PropTypes.number),
-};
-
-Louvers.defaultProps = {
-  louvers: [
-    {
-      id: 1,
-      position: { x: 0, y: 0, z: 0 },
-      name: '',
-      angle: 0,
-      type: 'I',
-    },
-  ],
-  percentOpen: [],
-  ids: [1],
 };

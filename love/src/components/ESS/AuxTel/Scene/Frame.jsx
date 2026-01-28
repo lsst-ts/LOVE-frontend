@@ -25,16 +25,20 @@ import isEqual from 'lodash/isEqual';
 
 import * as THREE from 'three';
 
-export function Frame(props) {
+export function Frame({
+  position = { x: 0, y: 0, z: 0 },
+  thetaStart: thetaStartDeg = 0,
+  thetaLength: thetaLengthDeg = 100,
+  height = 0.1,
+  radialSegments = 16,
+  heightSegments = 1,
+}) {
   const ref = useRef();
 
   const radius = 9.4 / 2;
-  const { height = 0.1 } = props;
-  const { radialSegments = 16 } = props;
-  const { heightSegments = 1 } = props;
   const openEnded = true;
-  const thetaStart = THREE.MathUtils.degToRad(props.thetaStart);
-  const thetaLength = THREE.MathUtils.degToRad(props.thetaLength);
+  const thetaStart = THREE.MathUtils.degToRad(thetaStartDeg);
+  const thetaLength = THREE.MathUtils.degToRad(thetaLengthDeg);
   const args = [radius, radius, height, radialSegments, heightSegments, openEnded, thetaStart, thetaLength];
 
   const args2 = [
@@ -50,7 +54,7 @@ export function Frame(props) {
 
   return (
     <>
-      <group position={[props.position.x, props.position.z, props.position.y]}>
+      <group position={[position.x, position.z, position.y]}>
         <group position={[0, 0, 0]}>
           <group position={[0, 0, 0]}>
             <mesh ref={ref} rotation-z={THREE.MathUtils.degToRad(90)} position={[0, 0, 0]}>
@@ -90,16 +94,6 @@ Frame.propTypes = {
   }),
   thetaStart: PropTypes.number,
   thetaLength: PropTypes.number,
-};
-
-Frame.defaultProps = {
-  position: {
-    x: 0,
-    y: 0,
-    z: 0,
-  },
-  thetaStart: 0,
-  thetaLength: 100,
 };
 
 const comparator = (prevProps, nextProps) => {

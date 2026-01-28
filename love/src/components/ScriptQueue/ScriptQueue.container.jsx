@@ -61,7 +61,7 @@ const ScriptQueueContainer = ({
   commandExecutePermission,
   lastSALCommand,
   username,
-  salindex,
+  salindex = 1,
   fit,
   embedded,
   ...props
@@ -134,9 +134,5 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 const connectedContainer = connect(mapStateToProps, mapDispatchToProps)(ScriptQueueContainer);
-
-connectedContainer.defaultProps = {
-  salindex: 1,
-};
 
 export default connectedContainer;

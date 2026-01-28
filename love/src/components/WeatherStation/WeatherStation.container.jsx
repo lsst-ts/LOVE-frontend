@@ -51,11 +51,11 @@ export const schema = {
   },
 };
 
-const WeatherStationContainer = ({ ...props }) => {
+const WeatherStationContainer = ({ salindex = 301, ...props }) => {
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
-  return <WeatherStation {...props} />;
+  return <WeatherStation salindex={salindex} {...props} />;
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -98,9 +98,5 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 const connectedContainer = connect(mapStateToProps, mapDispatchToProps)(WeatherStationContainer);
-
-connectedContainer.defaultProps = {
-  salindex: 301,
-};
 
 export default connectedContainer;

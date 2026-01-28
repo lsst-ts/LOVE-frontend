@@ -42,23 +42,27 @@ Modal.propTypes = {
   displayFooter: PropTypes.bool,
 };
 
-Modal.defaultProps = {
-  displayTopBar: true,
-  displayFooter: true,
-};
-
-export default function Modal(props) {
+export default function Modal({
+  children,
+  modalClassName,
+  footerChildren,
+  displayTopBar = true,
+  displayFooter = true,
+  size,
+  onRequestClose,
+  ...other
+}) {
   ReactModal.setAppElement('#root');
-  const { children, modalClassName, footerChildren, displayTopBar, displayFooter, size, ...other } = props;
   return (
     <ReactModal
       {...other}
+      onRequestClose={onRequestClose}
       className={[styles.modal, modalClassName, size ? styles['modal-' + size] : ''].join(' ')}
       overlayClassName={styles.overlay}
     >
       {displayTopBar && (
         <div className={styles.topbar}>
-          <Button title="Close" status="transparent" onClick={props.onRequestClose}>
+          <Button title="Close" status="transparent" onClick={onRequestClose}>
             &#10005;
           </Button>
         </div>
