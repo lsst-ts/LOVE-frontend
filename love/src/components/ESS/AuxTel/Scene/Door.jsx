@@ -25,7 +25,13 @@ import isEqual from 'lodash/isEqual';
 import { Frame } from './Frame';
 import * as THREE from 'three';
 
-export function Door(props) {
+export function Door({
+  position = { x: 0, y: 0, z: 0 },
+  openPercent = 40,
+  thetaStart: thetaStartDeg = 20,
+  thetaLength: thetaLengthDeg = 80,
+  isMainDoor = true,
+}) {
   const ref = useRef();
 
   const radius = 9.4 / 2;
@@ -33,21 +39,21 @@ export function Door(props) {
   const radialSegments = 32;
   const heightSegments = 1;
   const openEnded = true;
-  const thetaStart = THREE.MathUtils.degToRad(props.thetaStart);
-  const thetaLength = THREE.MathUtils.degToRad(props.thetaLength);
+  const thetaStart = THREE.MathUtils.degToRad(thetaStartDeg);
+  const thetaLength = THREE.MathUtils.degToRad(thetaLengthDeg);
   const args = [radius, radius, height, radialSegments, heightSegments, openEnded, thetaStart, thetaLength];
 
-  const frameLengthAngle = props.thetaStart + props.thetaLength;
+  const frameLengthAngle = thetaStartDeg + thetaLengthDeg;
 
-  const openDoor = props.isMainDoor
-    ? THREE.MathUtils.degToRad((-1 * props.thetaLength * props.openPercent) / 100)
-    : THREE.MathUtils.degToRad((90 * props.openPercent) / 100);
+  const openDoor = isMainDoor
+    ? THREE.MathUtils.degToRad((-1 * thetaLengthDeg * openPercent) / 100)
+    : THREE.MathUtils.degToRad((90 * openPercent) / 100);
 
   return (
     <>
-      <group position={[props.position.x, props.position.z, props.position.y]}>
-        <group position={[0, 0, !props.isMainDoor ? radius : 0]} rotation-x={openDoor}>
-          <group position={[0, 0, !props.isMainDoor ? -1 * radius : 0]}>
+      <group position={[position.x, position.z, position.y]}>
+        <group position={[0, 0, !isMainDoor ? radius : 0]} rotation-x={openDoor}>
+          <group position={[0, 0, !isMainDoor ? -1 * radius : 0]}>
             <mesh ref={ref} rotation-z={THREE.MathUtils.degToRad(90)} position={[0, 0, 0]}>
               <cylinderBufferGeometry attach="geometry" args={args} />
               <meshBasicMaterial attach="material" color={0x3f7b9d} transparent opacity={0.6} side={THREE.DoubleSide} />
@@ -56,7 +62,7 @@ export function Door(props) {
         </group>
 
         {/** Frame Door */}
-        {props.isMainDoor ? (
+        {isMainDoor ? (
           <>
             <Frame position={{ x: -height / 2, y: 0, z: 0 }} thetaStart={0} thetaLength={frameLengthAngle} />
             <Frame
@@ -100,18 +106,6 @@ Door.propTypes = {
   thetaStart: PropTypes.number,
   thetaLength: PropTypes.number,
   isMainDoor: PropTypes.bool,
-};
-
-Door.defaultProps = {
-  position: {
-    x: 0,
-    y: 0,
-    z: 0,
-  },
-  openPercent: 40,
-  thetaStart: 20,
-  thetaLength: 80,
-  isMainDoor: true,
 };
 
 const comparator = (prevProps, nextProps) => {

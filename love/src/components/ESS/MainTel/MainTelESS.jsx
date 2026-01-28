@@ -96,7 +96,22 @@ const prevParseToArraySensors = (prevParse, option) => {
   return sorted;
 };
 
-const MainTelESS = (props) => {
+const MainTelESS = ({
+  subscribeToStreams,
+  unsubscribeToStreams,
+  temperature = [],
+  relativeHumidity = [],
+  airFlow = [],
+  airTurbulence = [],
+  minGradiantLimit = -20,
+  maxGradiantLimit = 40,
+  option = 'temperature',
+  percentOpenLouvers = [],
+  percentOpenShutter = [],
+  positionActualDomeAz = 0,
+  initialCameraPosition,
+  ...props
+}) => {
   const [selectedSensor, setSelectedSensor] = useState(0);
   const [selectedSensorData, setSelectedSensorData] = useState({});
   const [inputsPlot, setInputsPlot] = useState({});
@@ -105,15 +120,16 @@ const MainTelESS = (props) => {
 
   const plotRef = useRef();
   useEffect(() => {
-    props.subscribeToStreams();
+    subscribeToStreams();
     return () => {
-      props.unsubscribeToStreams();
+      unsubscribeToStreams();
     };
   }, []);
 
+  const optionData = { temperature, relativeHumidity, airFlow, airTurbulence };
+
   useEffect(() => {
-    const option = props.option;
-    props[option].forEach((parse) => {
+    optionData[option].forEach((parse) => {
       if (!prevParseSensors[option]) {
         const opt = {};
         opt[option] = {};
@@ -135,18 +151,7 @@ const MainTelESS = (props) => {
     });
     setSensors(prevParseToArraySensors(prevParseSensors, option));
     return () => {};
-  }, [props.option, props[props.option]]);
-
-  const {
-    minGradiantLimit,
-    maxGradiantLimit,
-    percentOpenLouvers,
-    percentOpenShutter,
-    positionActualDomeAz,
-    initialCameraPosition,
-  } = props;
-
-  const option = props.option ?? 'temperature';
+  }, [option, optionData[option]]);
   const positions = [];
   for (let i = 0; i < sensors.length; i++) {
     positions.push({
@@ -310,19 +315,6 @@ MainTelESS.propTypes = {
   percentOpenLouvers: PropTypes.arrayOf(PropTypes.number),
   percentOpenShutter: PropTypes.arrayOf(PropTypes.number),
   positionActualDomeAz: PropTypes.number,
-};
-
-MainTelESS.defaultProps = {
-  temperature: [],
-  relativeHumidity: [],
-  airFlow: [],
-  airTurbulence: [],
-  minGradiantLimit: -20,
-  maxGradiantLimit: 40,
-  option: 'temperature',
-  percentOpenLouvers: [],
-  percentOpenShutter: [],
-  positionActualDomeAz: 0,
 };
 
 const comparator = (prevProps, nextProps) => {

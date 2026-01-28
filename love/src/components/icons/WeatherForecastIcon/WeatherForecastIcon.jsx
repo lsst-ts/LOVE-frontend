@@ -1233,6 +1233,3 @@ function WeatherForecastIcon(props) {
 }
 
 export default WeatherForecastIcon;
-WeatherForecastIcon.defaultProps = {
-  pictocode: 0,
-};
