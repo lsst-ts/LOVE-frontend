@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -57,17 +59,7 @@ export default class PredictedTarget extends Component {
   ];
 
   render() {
-    const {
-      isOpen,
-      predTargetsNumTargets,
-      predTargetsRa,
-      predTargetsDecl,
-      predTargetsRotSkyPos,
-      predTargetsMjd,
-      predTargetsExpTime,
-      predTargetsInstrConfig,
-      predTargetsNexp,
-    } = this.props;
+    const { isOpen, predTargetsNumTargets, predTargetsRa, predTargetsDecl, predTargetsRotSkyPos } = this.props;
 
     const predData = [];
     for (let i = 0; i < predTargetsNumTargets; i++) {

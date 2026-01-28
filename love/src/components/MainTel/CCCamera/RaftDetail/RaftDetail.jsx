@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -18,198 +20,195 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import Neighbors from 'components/GeneralPurpose/Neighbors/Neighbors';
-import CCDDetail from '../CCDDetail/CCDDetail';
 import styles from './RaftDetail.module.css';
 
-const COLOR_MAPPING = {
-  1: 'var(--status-ok-dimmed-color-3)',
-  2: 'var(--status-warning-dimmed-color-3)',
-  3: 'var(--status-alert-dimmed-color-3)',
-};
+// const COLOR_MAPPING = {
+//   1: 'var(--status-ok-dimmed-color-3)',
+//   2: 'var(--status-warning-dimmed-color-3)',
+//   3: 'var(--status-alert-dimmed-color-3)',
+// };
 
-function getRebPlots(index) {
-  return {
-    hVBiasSwitch: {
-      type: 'line',
-      values: [
-        {
-          variable: 'y',
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'hVBiasSwitch',
-          accessor: (x) => x[index],
-        },
-      ],
-    },
-    anaV: {
-      type: 'line',
-      values: [
-        {
-          variable: 'y',
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'anaV',
-          accessor: (x) => x[index],
-        },
-      ],
-    },
-    power: {
-      type: 'line',
-      values: [
-        {
-          variable: 'y',
-          category: 'telemetry',
-          csc: 'CCCamera',
-          salindex: 0,
-          topic: 'focal_plane_Reb',
-          item: 'power',
-          accessor: (x) => x[index],
-        },
-      ],
-    },
-  };
-}
+// function getRebPlots(index) {
+//   return {
+//     hVBiasSwitch: {
+//       type: 'line',
+//       values: [
+//         {
+//           variable: 'y',
+//           category: 'telemetry',
+//           csc: 'CCCamera',
+//           salindex: 0,
+//           topic: 'focal_plane_Reb',
+//           item: 'hVBiasSwitch',
+//           accessor: (x) => x[index],
+//         },
+//       ],
+//     },
+//     anaV: {
+//       type: 'line',
+//       values: [
+//         {
+//           variable: 'y',
+//           category: 'telemetry',
+//           csc: 'CCCamera',
+//           salindex: 0,
+//           topic: 'focal_plane_Reb',
+//           item: 'anaV',
+//           accessor: (x) => x[index],
+//         },
+//       ],
+//     },
+//     power: {
+//       type: 'line',
+//       values: [
+//         {
+//           variable: 'y',
+//           category: 'telemetry',
+//           csc: 'CCCamera',
+//           salindex: 0,
+//           topic: 'focal_plane_Reb',
+//           item: 'power',
+//           accessor: (x) => x[index],
+//         },
+//       ],
+//     },
+//   };
+// }
 
 class RaftDetail extends Component {
   constructor(props) {
     super(props);
-    const plotsRebs0 = [
-      {
-        hVBiasSwitch: {
-          type: 'line',
-          values: [
-            {
-              category: 'telemetry',
-              csc: 'CCCamera',
-              salindex: 0,
-              topic: 'focal_plane_Reb',
-              item: 'hVBiasSwitch',
-              accessor: (x) => x[0],
-            },
-          ],
-        },
-        anaV: {
-          type: 'line',
-          values: [
-            {
-              category: 'telemetry',
-              csc: 'CCCamera',
-              salindex: 0,
-              topic: 'focal_plane_Reb',
-              item: 'anaV',
-              accessor: (x) => x[0],
-            },
-          ],
-        },
-        power: {
-          type: 'line',
-          values: [
-            {
-              category: 'telemetry',
-              csc: 'CCCamera',
-              salindex: 0,
-              topic: 'focal_plane_Reb',
-              item: 'power',
-              accessor: (x) => x[0],
-            },
-          ],
-        },
-      },
-    ];
-    const plotsRebs1 = [
-      {
-        hVBiasSwitch: {
-          type: 'line',
-          values: [
-            {
-              category: 'telemetry',
-              csc: 'CCCamera',
-              salindex: 0,
-              topic: 'focal_plane_Reb',
-              item: 'hVBiasSwitch',
-              accessor: (x) => x[1],
-            },
-          ],
-        },
-        anaV: {
-          type: 'line',
-          values: [
-            {
-              category: 'telemetry',
-              csc: 'CCCamera',
-              salindex: 0,
-              topic: 'focal_plane_Reb',
-              item: 'anaV',
-              accessor: (x) => x[1],
-            },
-          ],
-        },
-        power: {
-          type: 'line',
-          values: [
-            {
-              category: 'telemetry',
-              csc: 'CCCamera',
-              salindex: 0,
-              topic: 'focal_plane_Reb',
-              item: 'power',
-              accessor: (x) => x[1],
-            },
-          ],
-        },
-      },
-    ];
-
-    const plotsRebs2 = [
-      {
-        hVBiasSwitch: {
-          type: 'line',
-          values: [
-            {
-              category: 'telemetry',
-              csc: 'CCCamera',
-              salindex: 0,
-              topic: 'focal_plane_Reb',
-              item: 'hVBiasSwitch',
-              accessor: (x) => x[2],
-            },
-          ],
-        },
-        anaV: {
-          type: 'line',
-          values: [
-            {
-              category: 'telemetry',
-              csc: 'CCCamera',
-              salindex: 0,
-              topic: 'focal_plane_Reb',
-              item: 'anaV',
-              accessor: (x) => x[2],
-            },
-          ],
-        },
-        power: {
-          type: 'line',
-          values: [
-            {
-              category: 'telemetry',
-              csc: 'CCCamera',
-              salindex: 0,
-              topic: 'focal_plane_Reb',
-              item: 'power',
-              accessor: (x) => x[2],
-            },
-          ],
-        },
-      },
-    ];
+    // const plotsRebs0 = [
+    //   {
+    //     hVBiasSwitch: {
+    //       type: 'line',
+    //       values: [
+    //         {
+    //           category: 'telemetry',
+    //           csc: 'CCCamera',
+    //           salindex: 0,
+    //           topic: 'focal_plane_Reb',
+    //           item: 'hVBiasSwitch',
+    //           accessor: (x) => x[0],
+    //         },
+    //       ],
+    //     },
+    //     anaV: {
+    //       type: 'line',
+    //       values: [
+    //         {
+    //           category: 'telemetry',
+    //           csc: 'CCCamera',
+    //           salindex: 0,
+    //           topic: 'focal_plane_Reb',
+    //           item: 'anaV',
+    //           accessor: (x) => x[0],
+    //         },
+    //       ],
+    //     },
+    //     power: {
+    //       type: 'line',
+    //       values: [
+    //         {
+    //           category: 'telemetry',
+    //           csc: 'CCCamera',
+    //           salindex: 0,
+    //           topic: 'focal_plane_Reb',
+    //           item: 'power',
+    //           accessor: (x) => x[0],
+    //         },
+    //       ],
+    //     },
+    //   },
+    // ];
+    // const plotsRebs1 = [
+    //   {
+    //     hVBiasSwitch: {
+    //       type: 'line',
+    //       values: [
+    //         {
+    //           category: 'telemetry',
+    //           csc: 'CCCamera',
+    //           salindex: 0,
+    //           topic: 'focal_plane_Reb',
+    //           item: 'hVBiasSwitch',
+    //           accessor: (x) => x[1],
+    //         },
+    //       ],
+    //     },
+    //     anaV: {
+    //       type: 'line',
+    //       values: [
+    //         {
+    //           category: 'telemetry',
+    //           csc: 'CCCamera',
+    //           salindex: 0,
+    //           topic: 'focal_plane_Reb',
+    //           item: 'anaV',
+    //           accessor: (x) => x[1],
+    //         },
+    //       ],
+    //     },
+    //     power: {
+    //       type: 'line',
+    //       values: [
+    //         {
+    //           category: 'telemetry',
+    //           csc: 'CCCamera',
+    //           salindex: 0,
+    //           topic: 'focal_plane_Reb',
+    //           item: 'power',
+    //           accessor: (x) => x[1],
+    //         },
+    //       ],
+    //     },
+    //   },
+    // ];
+    // const plotsRebs2 = [
+    //   {
+    //     hVBiasSwitch: {
+    //       type: 'line',
+    //       values: [
+    //         {
+    //           category: 'telemetry',
+    //           csc: 'CCCamera',
+    //           salindex: 0,
+    //           topic: 'focal_plane_Reb',
+    //           item: 'hVBiasSwitch',
+    //           accessor: (x) => x[2],
+    //         },
+    //       ],
+    //     },
+    //     anaV: {
+    //       type: 'line',
+    //       values: [
+    //         {
+    //           category: 'telemetry',
+    //           csc: 'CCCamera',
+    //           salindex: 0,
+    //           topic: 'focal_plane_Reb',
+    //           item: 'anaV',
+    //           accessor: (x) => x[2],
+    //         },
+    //       ],
+    //     },
+    //     power: {
+    //       type: 'line',
+    //       values: [
+    //         {
+    //           category: 'telemetry',
+    //           csc: 'CCCamera',
+    //           salindex: 0,
+    //           topic: 'focal_plane_Reb',
+    //           item: 'power',
+    //           accessor: (x) => x[2],
+    //         },
+    //       ],
+    //     },
+    //   },
+    // ];
 
     this.CCDsrefs = [
       React.createRef(),
@@ -365,7 +364,7 @@ class RaftDetail extends Component {
   }
 
   render() {
-    const { raft, showNeighbors, selectedReb, selectNeighborRaft } = this.props;
+    const { showNeighbors, selectNeighborRaft } = this.props;
 
     const edgesColors = {
       // top: raft.neighbors.top ? COLOR_MAPPING[raft.neighbors.top.status] : 'transparent',

@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -48,8 +50,6 @@ export default class Level1 extends Component {
   };
 
   componentDidMount() {
-    const deviceId = '#' + this.deviceId;
-    const mapId = '#' + this.mapId;
     const overlayId = '#' + this.overlayId;
     const transformData = this.props.transformData;
 
@@ -97,16 +97,12 @@ export default class Level1 extends Component {
   };
 
   getDevices() {
-    const compressorInfo1 = this.checkArray(this.props.HVACData.compressorInfo1);
-    const connectionStatus1 = this.checkArray(this.props.HVACData.connectionStatus1);
     const errors1 = this.checkArray(this.props.HVACData.errors1);
     const status1 = this.checkArray(this.props.HVACData.status1);
     const warnings1 = this.checkArray(this.props.HVACData.warnings1);
     const timerInfo1 = this.checkArray(this.props.HVACData.timerInfo1);
     const analogData1 = this.checkArray(this.props.HVACData.analogData1);
 
-    const compressorInfo2 = this.checkArray(this.props.HVACData.compressorInfo2);
-    const connectionStatus2 = this.checkArray(this.props.HVACData.connectionStatus2);
     const errors2 = this.checkArray(this.props.HVACData.errors2);
     const status2 = this.checkArray(this.props.HVACData.status2);
     const warnings2 = this.checkArray(this.props.HVACData.warnings2);
@@ -984,8 +980,8 @@ export default class Level1 extends Component {
               value: status2?.minAllowedSpeedAchieved
                 ? 'Max Speed'
                 : status2?.minAllowedSpeedAchieved
-                ? 'Min Speed'
-                : 'Nominal',
+                  ? 'Min Speed'
+                  : 'Nominal',
             },
             limitSpeed: {
               type: 'single',
@@ -1391,8 +1387,8 @@ export default class Level1 extends Component {
               value: status1?.minAllowedSpeedAchieved
                 ? 'Max Speed'
                 : status1?.minAllowedSpeedAchieved
-                ? 'Min Speed'
-                : 'Nominal',
+                  ? 'Min Speed'
+                  : 'Nominal',
             },
             limitSpeed: {
               type: 'single',

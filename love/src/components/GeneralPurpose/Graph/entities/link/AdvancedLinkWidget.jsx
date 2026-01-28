@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -171,7 +173,7 @@ export class AdvancedLinkWidget extends React.Component {
 
         {/* middle points */}
         {points.length > 2 &&
-          points.slice(0, -1).map((point, index) => {
+          points.slice(0, -1).map((point) => {
             return (
               <LinkPointWidget
                 key={point.getID()}

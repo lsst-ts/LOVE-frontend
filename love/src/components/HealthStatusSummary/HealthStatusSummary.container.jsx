@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -107,7 +109,6 @@ const HealthStatusSummaryContainer = ({
   subscribeToStreams,
   unsubscribeToStreams,
   isRaw,
-  ...props
 }) => {
   const parsedTelemetryConfiguration = Object.keys(topicConfiguration).reduce((prevDict, subscriptionName) => {
     const [category, component, salindex, topic] = subscriptionName.split('-');

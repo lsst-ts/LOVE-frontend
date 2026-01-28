@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -619,7 +621,7 @@ export default class ConfigPanel extends Component {
         disabled={saveButtonDisabled()}
         status="transparent"
         className={styles.saveConfigurationButton}
-        onClick={(e) => {
+        onClick={() => {
           const scriptPath = configPanel?.script?.path ?? '';
           const scriptType = configPanel?.script?.type ?? '';
           const configName = inputConfigurationName;
@@ -734,7 +736,7 @@ export default class ConfigPanel extends Component {
           yamlData = {};
         }
         const value = configuration?.config_schema ?? DEFAULT_CONFIG_VALUE;
-        this.setState((state) => ({
+        this.setState(() => ({
           configurationList: data,
           configurationOptions: options,
           selectedConfiguration: configuration ? { label: configuration.config_name, value: configuration.id } : null,
@@ -905,8 +907,6 @@ export default class ConfigPanel extends Component {
             <div
               className={[styles.divider, dividerClassName[orientation]].join(' ')}
               onMouseDown={this.startResizingWithMouse}
-              // onMouseLeave={this.stopResizingWithMouse}
-              // onMouseOut={this.stopResizingWithMouse}
             ></div>
 
             <div className={styles.sidePanel}>

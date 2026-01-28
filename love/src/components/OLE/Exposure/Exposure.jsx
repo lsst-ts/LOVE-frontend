@@ -225,7 +225,7 @@ export default class Exposure extends Component {
         title: 'Flags',
         type: 'string',
         className: styles.tableHead,
-        render: (value, _) => {
+        render: (value) => {
           const flags = this.state.exposureFlags[value];
           // Render object
           if (flags) {

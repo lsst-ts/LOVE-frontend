@@ -24,7 +24,7 @@ import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import * as THREE from 'three';
 
-export function Shutter({ name = 'shutter 1', position = { x: 0, y: 3.3, z: 7 }, openPercent = 100 }) {
+export function Shutter({ position = { x: 0, y: 3.3, z: 7 }, openPercent = 100 }) {
   const width = 6.55;
   const window = 11.3 / 2;
   const open = position.y > 0 ? (window * openPercent) / 100 : (-1 * window * openPercent) / 100;
@@ -82,7 +82,6 @@ export function Shutter({ name = 'shutter 1', position = { x: 0, y: 3.3, z: 7 },
 }
 
 Shutter.propTypes = {
-  name: PropTypes.string,
   position: PropTypes.shape({
     x: PropTypes.number,
     y: PropTypes.number,
@@ -92,11 +91,7 @@ Shutter.propTypes = {
 };
 
 const comparator = (prevProps, nextProps) => {
-  return (
-    prevProps.name === nextProps.name &&
-    prevProps.openPercent === nextProps.openPercent &&
-    isEqual(prevProps.position, nextProps.position)
-  );
+  return prevProps.openPercent === nextProps.openPercent && isEqual(prevProps.position, nextProps.position);
 };
 
 export default React.memo(Shutter, comparator);

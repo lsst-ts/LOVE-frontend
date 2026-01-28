@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -21,7 +23,6 @@ import React, { Component } from 'react';
 import lodash from 'lodash';
 import PropTypes from 'prop-types';
 import styles from './Level6.module.css';
-import Device from '../Device.jsx';
 import * as d3 from 'd3';
 
 export default class Level6 extends Component {
@@ -47,8 +48,6 @@ export default class Level6 extends Component {
   };
 
   componentDidMount() {
-    const deviceId = '#' + this.deviceId;
-    const mapId = '#' + this.mapId;
     const overlayId = '#' + this.overlayId;
     const transformData = this.props.transformData;
 
