@@ -19,6 +19,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 const path = require('path');
 const webpack = require('webpack');
+const reactDocgen = require('react-docgen');
 
 const commonIgnored = [
   'src/components/Watcher/AlarmUtils.js',
@@ -49,7 +50,7 @@ module.exports = {
   usageMode: 'collapse', // 'hide' | 'collapse' | 'expand'm
   styleguideDir: '../docs',
   propsParser(filePath, source, resolver, handlers) {
-    return require('react-docgen').parse(source, resolver, handlers);
+    return reactDocgen.parse(source, resolver, handlers);
   },
   sections: [
     {
