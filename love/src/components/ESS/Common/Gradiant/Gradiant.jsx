@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -163,7 +165,7 @@ export default class Gradiant extends Component {
   }
 
   setGradiant = (sensor) => {
-    const { minGradiantLimit, maxGradiantLimit, setpoint, showDifferentialTemp } = this.props;
+    const { minGradiantLimit, maxGradiantLimit, showDifferentialTemp } = this.props;
 
     const svg = d3.select(`#${this.uniqueColorScale} svg`);
     const absoluteText = d3.select(`#${this.uniqueColorScale} svg #absolute-text`);

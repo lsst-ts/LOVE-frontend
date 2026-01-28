@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -48,7 +50,7 @@ export default class StopAllTSCButton extends Component {
               : "Command is not allowed while queue is running either you don't have command execution permissions"
           }
           disabled={!isAvailable}
-          onClick={(e) => this.callTSCStopAll()}
+          onClick={() => this.callTSCStopAll()}
         >
           <svg className={styles.svg} viewBox="0 0 108.5 130">
             <path

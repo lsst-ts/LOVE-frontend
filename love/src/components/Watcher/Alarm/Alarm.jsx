@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -23,7 +25,7 @@ import StatusText from '../../GeneralPurpose/AlarmLabelText/AlarmLabelText';
 import Button from '../../GeneralPurpose/Button/Button';
 import { severityToStatus } from '../../../Config';
 
-export default function Alarm({ severity, ackButtonLocation, acknowledged, muted, ackAlarm }) {
+export default function Alarm({ severity, ackButtonLocation, acknowledged, ackAlarm }) {
   const status = severityToStatus[severity];
   const ackButton = !acknowledged ? (
     <Button

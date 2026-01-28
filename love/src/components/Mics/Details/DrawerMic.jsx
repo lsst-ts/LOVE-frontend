@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -29,49 +31,27 @@ import styles from './DrawerMic.module.css';
 
 export default class DrawerMic extends Component {
   static propTypes = {
-    /**
-     * ID of the current mic selected
-     */
+    /* ID of the current mic selected */
     id: PropTypes.string,
-    /**
-     * Name of the current mic selected
-     */
+    /* Name of the current mic selected */
     name: PropTypes.string,
-    /**
-     * Plot's info of the current mic to render
-     */
+    /* Plot's info of the current mic to render */
     infoPlot: PropTypes.object,
-    /**
-     * Function that allows to set the heat map container node of the current mic to render
-     */
+    /* Function that allows to set the heat map container node of the current mic to render */
     setContainerNode: PropTypes.func,
-    /**
-     * Function to play or pause the selected mic
-     */
+    /* Function to play or pause the selected mic */
     play: PropTypes.func,
-    /**
-     * Function to set the volume of the current mic playing
-     */
+    /* Function to set the volume of the current mic playing */
     setVolume: PropTypes.func,
-    /**
-     * The initial volume of the mic
-     */
+    /* The initial volume of the mic */
     volume: PropTypes.object,
-    /**
-     * State that say if there is some mic playing
-     */
+    /* State that say if there is some mic playing */
     isPlaying: PropTypes.bool,
-    /**
-     * State that say if there is some mic recording
-     */
+    /* State that say if there is some mic recording */
     isRecording: PropTypes.bool,
-    /**
-     * Function to start or stop record
-     */
+    /* Function to start or stop record */
     record: PropTypes.func,
-    /**
-     * Array of records made previously
-     */
+    /* Array of records made previously */
     records: PropTypes.array,
   };
 
@@ -100,7 +80,7 @@ export default class DrawerMic extends Component {
   }
 
   render() {
-    const { id, name, drawerDetailCss, play, setVolume, volume, isPlaying, isRecording, record, records } = this.props;
+    const { name, drawerDetailCss, play, setVolume, volume, isPlaying, isRecording, record, records } = this.props;
 
     if (!this.props.infoPlot) {
       return <></>;

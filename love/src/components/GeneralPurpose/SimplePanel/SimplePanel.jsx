@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -22,9 +24,6 @@ import React, { Component } from 'react';
 export default class Panel extends Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    //     height: 0
-    // };
   }
 
   componentDidMount() {
@@ -38,8 +37,7 @@ export default class Panel extends Component {
   }
 
   render() {
-    const { label, content, maxHeight, isActive } = this.props;
-    // const { height } = this.state;
+    const { content, maxHeight, isActive } = this.props;
     const innerStyle = {
       height: `${isActive ? maxHeight : 0}px`,
       willChange: 'height',
@@ -53,11 +51,6 @@ export default class Panel extends Component {
         role="tabpanel"
         aria-expanded={isActive}
       >
-        {/* <button className='panel__label'
-					role='tab'
-					onClick={ activateTab }>
-					{ label }
-				</button> */}
         <div className="panel__inner" style={innerStyle} aria-hidden={!isActive}>
           <p className="panel__content">{content}</p>
         </div>

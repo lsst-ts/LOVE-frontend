@@ -25,7 +25,6 @@ import 'brace/theme/solarized_dark';
 import Select from 'components/GeneralPurpose/Select/Select';
 import styles from './ConfigPanel.module.css';
 import ManagerInterface, { formatTimestamp } from 'Utils';
-// import RequeueIcon from 'components/icons/ScriptQueue/RequeueIcon/RequeueIcon';
 import ScriptIcon from '../../icons/ScriptIcon/ScriptIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
 

@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -124,7 +126,7 @@ export default class Map extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const { chiller01P01, chiller02P01, chiller03P01, status1, status2, warnings1, warnings2, errors1, errors2 } =
       this.props.HVACDataLevel1;
 
@@ -544,9 +546,8 @@ export default class Map extends Component {
   }
 
   render() {
-    const { hasAlarm, alarms } = this.state;
+    const { alarms } = this.state;
     const isAlarmed = alarms[this.state.selectedTab];
-    const margin = 60;
 
     return (
       <div className={styles.tabsWrapper}>

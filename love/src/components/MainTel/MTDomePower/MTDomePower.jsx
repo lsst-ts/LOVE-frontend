@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -32,7 +34,6 @@ export default class MTDomePower extends Component {
     powerDrawLWS: PropTypes.number,
     /** Shutters power draw (W) */
     powerDrawShutter: PropTypes.number,
-
     /** Node to be used to track width and height.
      *  Use this instead of props.width and props.height for responsive plots.
      *  Will be ignored if both props.width and props.height are provided */
@@ -108,7 +109,7 @@ export default class MTDomePower extends Component {
     }
   };
 
-  componentDidUpdate = (prevProps, prevState) => {
+  componentDidUpdate = (prevProps) => {
     //Calibration Screen
     if (prevProps.timestampCalibration !== this.props.timestampCalibration) {
       const newValue = {

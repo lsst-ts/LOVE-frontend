@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -31,12 +33,10 @@ const Vector = ({
   setSensor = (id) => {
     console.log('Sensor Arrow default setSensor(', id, ')');
   },
-  selectedSensor,
   ...restProps
 }) => {
   const ref = useRef();
   const [hovered, setHover] = useState(false);
-  const isSelected = selectedSensor === sensorId;
 
   useEffect(() => {
     document.body.style.cursor = hovered ? 'pointer' : 'auto';
@@ -68,9 +68,9 @@ const Vector = ({
   return (
     <>
       <group
-        onPointerEnter={(e) => setHover(true)}
-        onPointerLeave={(e) => setHover(false)}
-        onClick={(e) => {
+        onPointerEnter={() => setHover(true)}
+        onPointerLeave={() => setHover(false)}
+        onClick={() => {
           setSensor(sensorId);
           setHover(true);
         }}
