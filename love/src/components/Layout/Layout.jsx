@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -22,7 +24,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import isEqual from 'lodash/isEqual';
 import { ToastContainer, toast, Slide } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
+// import 'react-toastify/dist/ReactToastify.min.css';
 import MessageIcon from 'components/icons/MessageIcon/MessageIcon';
 import OLEMenu from 'components/OLE/Menu/OLEMenu';
 import ExposureAdd from 'components/OLE/Exposure/ExposureAdd';
@@ -915,7 +917,7 @@ class Layout extends Component {
           <AboutPanel />
         </Modal>
 
-        <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} hideProgressBar />
+        <ToastContainer position="bottom-center" transition={Slide} hideProgressBar />
       </>
     );
   }

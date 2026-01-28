@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -20,11 +22,13 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React, { Component } from 'react';
 import Moment from 'moment';
 import Button from 'components/GeneralPurpose/Button/Button';
+import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
+import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
 import Exposure from './Exposure/Exposure';
 import NonExposure from './NonExposure/NonExposure';
 import ExposureAdd from './Exposure/ExposureAdd';
 import NonExposureEdit from './NonExposure/NonExposureEdit';
-import { OLE_COMMENT_TYPE_OPTIONS, OLE_DEFAULT_SYSTEMS_FILTER_OPTION, iconLevelOLE } from 'Config';
+import { OLE_COMMENT_TYPE_OPTIONS, OLE_DEFAULT_SYSTEMS_FILTER_OPTION } from 'Config';
 import ManagerInterface from 'Utils';
 import styles from './OLE.module.css';
 
@@ -32,6 +36,11 @@ const tabs = [
   { name: 'Narrative Logs', value: 'non-exposure' },
   { name: 'Exposure Logs', value: 'exposure' },
 ];
+
+export const iconLevelOLE = {
+  info: <InfoIcon />,
+  urgent: <WarningIcon />,
+};
 
 export function getIconLevel(level) {
   const icon = iconLevelOLE[level >= 100 ? 'urgent' : 'info'];
@@ -98,8 +107,6 @@ export default class OLE extends Component {
 
   /** Exposure functions */
   changeInstrumentSelect(value) {
-    const { instruments } = this.state;
-    const index = instruments.indexOf(value);
     this.setState({ selectedInstrument: value });
   }
 
@@ -226,7 +233,7 @@ export default class OLE extends Component {
         <div className={styles.tabsRow}>
           {html}
           <div className={styles.btnNew}>
-            <Button className={styles.btn} onClick={() => this.setState((prevState) => ({ clickNewLog: true }))}>
+            <Button className={styles.btn} onClick={() => this.setState(() => ({ clickNewLog: true }))}>
               + New {tabs.filter((tab) => tab.value === selectedTab)[0].name.slice(0, -1)}
             </Button>
           </div>

@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -26,7 +28,8 @@ import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
-import { iconLevelOLE, ISO_STRING_DATE_TIME_FORMAT } from 'Config';
+import { iconLevelOLE } from '../OLE';
+import { ISO_STRING_DATE_TIME_FORMAT } from 'Config';
 import ManagerInterface, {
   getLinkJira,
   getFilesURLs,
@@ -233,7 +236,7 @@ export default class NonExposureDetail extends Component {
               <div className={styles.label}>Files Attached:</div>
               <div>
                 {filesUrls.length > 0
-                  ? filesUrls.map((fileurl, index) => (
+                  ? filesUrls.map((fileurl) => (
                       <div key={fileurl} className={styles.buttonWraper}>
                         <Button
                           className={styles.fileButton}

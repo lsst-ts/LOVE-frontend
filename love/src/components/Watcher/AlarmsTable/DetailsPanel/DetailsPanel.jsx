@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -56,8 +58,8 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
   const acknowledgedBy = !acked
     ? 'Not acknowledged'
     : alarm.acknowledgedBy?.value
-    ? alarm.acknowledgedBy?.value
-    : 'Nobody';
+      ? alarm.acknowledgedBy?.value
+      : 'Nobody';
   const ackTimeTitle = acked ? 'Acknowledged at:' : 'Un-acknowledged at:';
   const ackTime = alarm.timestampAcknowledged?.value;
   const willAutoAckTime = alarm.timestampAutoAcknowledge?.value;
