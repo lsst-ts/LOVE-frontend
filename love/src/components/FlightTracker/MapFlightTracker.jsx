@@ -24,12 +24,12 @@ import PropTypes from 'prop-types';
 import styles from './FlightTracker.module.css';
 import { isEqual } from 'lodash';
 import * as d3 from 'd3';
-import CoquimboURL from './Maps/Coquimbo.geojson';
-import ValparaisoURL from './Maps/Valparaiso.geojson';
-import AtacamaURL from './Maps/Atacama.geojson';
-import { ReactComponent as Map200 } from './Maps/Map200.svg';
-import { ReactComponent as Map160 } from './Maps/Map160.svg';
-import { ReactComponent as Map100 } from './Maps/Map100.svg';
+import CoquimboURL from './Maps/Coquimbo.json';
+import ValparaisoURL from './Maps/Valparaiso.json';
+import AtacamaURL from './Maps/Atacama.json';
+import Map200 from './Maps/Map200.svg?react';
+import Map160 from './Maps/Map160.svg?react';
+import Map100 from './Maps/Map100.svg?react';
 
 const LON_LAT_TELESCOPE = [-70.73709442008416, -30.240476801377167];
 
@@ -252,8 +252,6 @@ export default class MapFlightTracker extends Component {
     /* Remove the g airCraft previous.*/
     svg.select(`#id${id}`).remove();
     svg.select('point').remove();
-
-    var tooltip = d3.select('#tooltip');
 
     /* Add plane in map part 1*/
     svg

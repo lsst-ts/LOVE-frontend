@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -61,8 +63,16 @@ this program. If not, see <http://www.gnu.org/licenses/>.
     linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%),
     linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%);
   background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
-  background-size: 10px 1px, 10px 1px, 1px 10px, 1px 10px;
-  background-position: 0px 0px, 100% 100%, 0px 100%, 100% 0px;
+  background-size:
+    10px 1px,
+    10px 1px,
+    1px 10px,
+    1px 10px;
+  background-position:
+    0px 0px,
+    100% 100%,
+    0px 100%,
+    100% 0px;
 }
 
 .dragging > div {
@@ -122,16 +132,32 @@ this program. If not, see <http://www.gnu.org/licenses/>.
     linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%),
     linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%);
   background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
-  background-size: 10px 1px, 10px 1px, 1px 10px, 1px 10px;
-  background-position: 0px 0px, 100% 100%, 0px 100%, 100% 0px;
+  background-size:
+    10px 1px,
+    10px 1px,
+    1px 10px,
+    1px 10px;
+  background-position:
+    0px 0px,
+    100% 100%,
+    0px 100%,
+    100% 0px;
   animation: border-dance 12s infinite linear;
 }
 
 @keyframes border-dance {
   0% {
-    background-position: 0px 0px, 100% 100%, 0px 200%, 100% 0px;
+    background-position:
+      0px 0px,
+      100% 100%,
+      0px 200%,
+      100% 0px;
   }
   100% {
-    background-position: 100% 0px, 0px 100%, 0px 0px, 100% 200%;
+    background-position:
+      100% 0px,
+      0px 100%,
+      0px 0px,
+      100% 200%;
   }
 }

@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -337,8 +339,8 @@ export default class Selector extends Component {
                   selectedActuator === act.id
                     ? this.strokeActuatorSelected(act.id)
                     : showCommandedForce
-                    ? this.getActuator(act.id)?.colorForceApplied
-                    : 'none'
+                      ? this.getActuator(act.id)?.colorForceApplied
+                      : 'none'
                 }
                 strokeWidth={act.id === selectedActuator ? 6 : 4}
                 r={(this.state.maxRadius * scale) / 16}
@@ -390,8 +392,8 @@ export default class Selector extends Component {
             selectedActuatorTangent === actuatorID
               ? this.strokeActuatorTangentSelected(actuatorID)
               : showCommandedForce
-              ? this.getActuatorTangent(actuatorID)?.colorForceApplied
-              : 'none';
+                ? this.getActuatorTangent(actuatorID)?.colorForceApplied
+                : 'none';
           return (
             <g
               key={actuatorID}

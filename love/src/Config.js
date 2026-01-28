@@ -18,9 +18,6 @@ This program is distributed in the hope that it will be useful,but WITHOUT ANY
 You should have received a copy of the GNU General Public License along with 
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
-
-import InfoIcon from 'components/icons/CSCExpanded/InfoIcon/InfoIcon';
-import WarningIcon from 'components/icons/CSCExpanded/WarningIcon/WarningIcon';
 import { VALUE_TYPES } from 'Constants';
 
 // Cerro Pachon max wind speed
@@ -34,7 +31,7 @@ export const EMPTY_SCHEMA = '# empty schema';
 export const TOPIC_TIMESTAMP_ATTRIBUTE = 'private_sndStamp';
 
 // Subpath
-export const SUBPATH = process.env.PUBLIC_URL ?? '';
+export const SUBPATH = import.meta.env.BASE_URL ?? '/';
 
 // Time rate for polling external APIs
 export const POLLING_RATE_MS = 10000;
@@ -107,8 +104,10 @@ export const TIME_FORMAT = 'HH:mm:ss';
 export const DATE_TIME_FORMAT = 'YYYY/MM/DD, HH:mm:ss';
 
 // Regex
+/* eslint-disable no-useless-escape */
 export const URL_REGEX =
   /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
+/* eslint-disable no-useless-escape */
 
 /*****************************************************************************/
 /*****************************HVAC configurations*****************************/
@@ -456,11 +455,6 @@ export const exposureFlagStateToStyle = {
   questionable: 'warning',
 };
 
-export const iconLevelOLE = {
-  info: <InfoIcon />,
-  urgent: <WarningIcon />,
-};
-
 /**
  * The following constants:
  * OLE_JIRA_COMPONENTS, OLE_JIRA_PRIMARY_SOFTWARE_COMPONENTS and OLE_JIRA_PRIMARY_HARDWARE_COMPONENTS
@@ -654,7 +648,7 @@ export const OLE_OBS_SUBSYSTEMS = {
     id: '19',
     children: ['194', '195', '196', '197', '198', '199'],
   },
-  'M2 Systems': {
+  'S: M2 Systems': {
     id: '20',
     children: ['200', '201', '202', '203', '204', '205', '206', '207'],
   },
@@ -840,7 +834,7 @@ export const OLE_OBS_SUBSYSTEMS = {
     id: '62',
     children: ['415', '416', '417', '418', '419', '420', '421'],
   },
-  'M2 Systems': {
+  'AT: M2 Systems': {
     id: '63',
     children: ['422', '423', '424', '425'],
   },

@@ -38,12 +38,12 @@ import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import Select from 'components/GeneralPurpose/Select/Select';
 import NonExposureDetail from './NonExposureDetail';
 import NonExposureEdit from './NonExposureEdit';
+import { iconLevelOLE } from '../OLE';
 import {
   TIME_FORMAT,
   OLE_COMMENT_TYPE_OPTIONS,
   OLE_DEFAULT_SYSTEMS_FILTER_OPTION,
   OLE_OBS_SYSTEMS,
-  iconLevelOLE,
   ISO_INTEGER_DATE_FORMAT,
   ISO_STRING_DATE_TIME_FORMAT,
   LOG_REFRESH_INTERVAL_MS,

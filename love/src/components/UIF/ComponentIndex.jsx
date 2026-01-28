@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,12 +19,147 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-/* eslint-disable global-require */
 /**
  * Important!!
  *
  * Two or more instances with the same name cannot exist. For example, there cannot be two M1M3
  */
+
+// Observatory imports
+import ScriptQueueContainer, { schema as ScriptQueueSchema } from '../ScriptQueue/ScriptQueue.container';
+import DataManagementFlowContainer, {
+  schema as DataManagementFlowSchema,
+} from '../DataManagementFlow/DataManagementFlow.container';
+import CSCDetailContainer, { schema as CSCDetailSchema } from '../CSCSummary/CSCDetail/CSCDetail.container';
+import FlightTrackerContainer, { schema as FlightTrackerSchema } from '../FlightTracker/FlightTracker.container';
+import CSCExpandedContainer, { schema as CSCExpandedSchema } from '../CSCSummary/CSCExpanded/CSCExpanded.container';
+import CSCGroupLogContainer, { schema as CSCGroupLogSchema } from '../CSCSummary/CSCGroupLog/CSCGroupLog.container';
+import CSCGroupContainer, { schema as CSCGroupSchema } from '../CSCSummary/CSCGroup/CSCGroup.container';
+import CSCSummaryContainer, { schema as CSCSummarySchema } from '../CSCSummary/CSCSummary.container';
+import WatcherContainer, { schema as WatcherSchema } from '../Watcher/Watcher.container';
+import GenericCameraViewContainer, {
+  schema as GenericCameraViewSchema,
+} from '../GenericCamera/GenericCameraView.container';
+import ObservingLogInputContainer, {
+  schema as ObservingLogInputSchema,
+} from '../ObservingLog/ObservingLogInput.container';
+import ObservingLogMessagesContainer, {
+  schema as ObservingLogMessagesSchema,
+} from '../ObservingLog/ObservingLogMessages.container';
+import SchedulerContainer, { schema as SchedulerSchema } from '../Scheduler/Scheduler.container';
+import EnvironmentSummaryContainer, {
+  schema as EnvironmentSummarySchema,
+} from '../EnvironmentSummary/EnvironmentSummary.container';
+import WindDirectionContainer, {
+  schema as WindDirectionSchema,
+} from '../EnvironmentSummary/Cartoons/WindDirection.container';
+import GISContainer, { schema as GISSchema } from '../GIS/GIS.container';
+import NetworkContainer, { schema as NetworkSchema } from '../Network/Network.container';
+import MicsContainer, { schema as MicsSchema } from '../Mics/Mics.container';
+import WeatherStationContainer, { schema as WeatherStationSchema } from '../WeatherStation/WeatherStation.container';
+import FacilityMapContainer, { schema as FacilityMapSchema } from '../Facility/FacilityMap.container';
+import DynaleneContainer, { schema as DynaleneSchema } from '../Dynalene/Dynalene.container';
+import WeatherForecastContainer, {
+  schema as WeatherForecastSchema,
+} from '../WeatherForecast/WeatherForecast.container';
+import ForecastPlotContainer from '../GeneralPurpose/Plot/ForecastPlot/ForecastPlot.container';
+import { schema as WindPlotSchema } from '../WeatherForecast/PlotsContainer/WindPlot.container';
+import { schema as TemperaturePlotSchema } from '../WeatherForecast/PlotsContainer/TemperaturePlot.container';
+import { schema as RainPlotSchema } from '../WeatherForecast/PlotsContainer/RainPlot.container';
+import { schema as CloudPlotSchema } from '../WeatherForecast/PlotsContainer/CloudPlot.container';
+import InfoHeaderContainer, { schema as InfoHeaderSchema } from '../WeatherForecast/InfoHeader/InfoHeader.container';
+import TimeDisplayContainer, { schema as TimeDisplaySchema } from '../Time/TimeDisplay.container';
+import GenericCameraControlsContainer, {
+  schema as GenericCameraControlsSchema,
+} from '../GenericCamera/GenericCameraControls.container';
+import OLEContainer, { schema as OLESchema } from '../OLE/OLE.container';
+import CreateOLEContainer, { schema as CreateOLESchema } from '../OLE/CreateOLE.container';
+import CreateNightReportContainer, {
+  schema as CreateNightReportSchema,
+} from '../NightReport/CreateNightReport.container';
+import HistoricNightReportContainer, {
+  schema as HistoricNightReportSchema,
+} from '../NightReport/HistoricNightReport.container';
+import ObservatorySummaryContainer, {
+  schema as ObservatorySummarySchema,
+} from '../ObservatorySummary/ObservatorySummary.container';
+
+// AuxTel imports
+import MountSummaryPanelContainer, {
+  schema as MountSummaryPanelSchema,
+} from '../AuxTel/Mount/SummaryPanel/SummaryPanel.container';
+import LightPathContainer, { schema as LightPathSchema } from '../AuxTel/Mount/LightPath.container';
+import MotorTableContainer, { schema as MotorTableSchema } from '../AuxTel/Mount/MotorTable/MotorTable.container';
+import CameraContainer, { schema as CameraSchema } from '../AuxTel/Camera/Camera.container';
+import DomeContainer, { schema as DomeSchema } from '../AuxTel/Dome/Dome.container';
+import LATISSContainer, { schema as LATISSSchema } from '../AuxTel/LATISS/LATISS.container';
+import AuxTelESSContainer, { schema as AuxTelESSSchema } from '../ESS/AuxTel/AuxTelESS.container';
+
+// MainTel imports
+import CableWrapsContainer, { schema as CableWrapsSchema } from '../MainTel/CableWraps/CableWraps.container';
+import M1M3Container, { schema as M1M3Schema } from '../MainTel/M1M3/M1M3.container';
+import M1M3TableContainer, { schema as M1M3TableSchema } from '../MainTel/M1M3/M1M3Table.container';
+import M1M3TSContainer, { schema as M1M3TSSchema } from '../MainTel/M1M3TS/M1M3TS.container';
+import M1M3CompactContainer, { schema as M1M3CompactSchema } from '../MainTel/M1M3/M1M3Compact.container';
+import M1M3HardpointsDataTableContainer, {
+  schema as M1M3HardpointsDataTableSchema,
+} from '../MainTel/M1M3/M1M3HardpointsDataTable.container';
+import GlycolLoopContainer, { schema as GlycolLoopSchema } from '../MainTel/GlycolLoop/GlycolLoop.container';
+import HeatMonitorContainer, { schema as HeatMonitorSchema } from '../MainTel/GlycolSystem/HeatMonitor.container';
+import DeviceTableContainer, { schema as DeviceTableSchema } from '../MainTel/GlycolSystem/DeviceTable.container';
+import BumpTestsContainer, { schema as BumpTestsSchema } from '../MainTel/M1M3/BumpTests.container';
+import M2Container, { schema as M2Schema } from '../MainTel/M2/M2.container';
+import M2TableContainer, { schema as M2TableSchema } from '../MainTel/M2/M2Table.container';
+import M2CompactContainer, { schema as M2CompactSchema } from '../MainTel/M2/M2Compact.container';
+import MTDomeContainer, { schema as MTDomeSchema } from '../MainTel/MTDome/MTDome.container';
+import MTDomePowerContainer, { schema as MTDomePowerSchema } from '../MainTel/MTDomePower/MTDomePower.container';
+import TMAContainer, { schema as TMASchema } from '../MainTel/TMA/TMA.container';
+import MTISContainer, { schema as MTISSchema } from '../MainTel/MTIS/MTIS.container';
+
+// MainCamera imports
+import CameraHexapodContainer, {
+  schema as CameraHexapodSchema,
+} from '../MainTel/CameraHexapod/CameraHexapod.container';
+import SimonyiLightPathContainer, {
+  schema as SimonyiLightPathSchema,
+} from '../MainTel/LightPath/SimonyiLightPath.container';
+import MTCameraContainer, { schema as MTCameraSchema } from '../MainTel/MTCamera/MTCamera.container';
+import MTCameraSummaryDetailContainer, {
+  schema as MTCameraSummaryDetailSchema,
+} from '../MainTel/MTCameraSummaryDetail/MTCameraSummaryDetail.container';
+import CCCameraContainer, { schema as CCCameraSchema } from '../MainTel/CCCamera/CCCamera.container';
+import CCCameraSummaryDetailContainer, {
+  schema as CCCameraSummaryDetailSchema,
+} from '../MainTel/CCCameraSummaryDetail/CCCameraSummaryDetail.container';
+import MainTelESSContainer, { schema as MainTelESSSchema } from '../ESS/MainTel/MainTelESS.container';
+
+// Environment imports
+import CloudMapViewContainer, { schema as CloudMapViewSchema } from '../EmbeddedView/custom/CloudMapView.container';
+
+// Utilities imports
+import LabeledStatusTextContainer, {
+  schema as LabeledStatusTextSchema,
+} from '../GeneralPurpose/LabeledStatusText/LabeledStatusText.container';
+import HealthStatusSummaryContainer, {
+  schema as HealthStatusSummarySchema,
+} from '../HealthStatusSummary/HealthStatusSummary.container';
+import ClockContainer, { schema as ClockSchema } from '../Time/Clock/Clock.container';
+import VegaCustomPlotContainer, {
+  schema as VegaCustomPlotSchema,
+} from '../GeneralPurpose/Plot/VegaCustomPlot/VegaCustomPlot.container';
+import PlotContainer, { schema as PlotSchema } from '../GeneralPurpose/Plot/Plot.container.jsx';
+import PolarPlotContainer, { schema as PolarPlotSchema } from '../GeneralPurpose/Plot/PolarPlot/PolarPlot.container';
+import EmbeddedViewContainer, { schema as EmbeddedViewSchema } from '../EmbeddedView/EmbeddedView.container';
+import SubscriptionTableContainer, {
+  schema as SubscriptionTableSchema,
+} from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+import EventLogContainer, { schema as EventLogSchema } from '../EventLog/EventLog.container';
+import CommandPanelContainer, { schema as CommandPanelSchema } from '../CommandPanel/CommandPanel.container';
+import TCSCommandsContainer, { schema as TCSCommandsSchema } from '../TCSCommands/TCSCommands.container';
+import TCSOffsetContainer, { schema as TCSOffsetSchema } from '../TCSCommands/TCSOffset/TCSOffset.container';
+
+// Internal imports
+import TelemetryLogContainer, { schema as TelemetryLogSchema } from '../TelemetryLog/TelemetryLog.container';
 
 const defaultSchemaProps = {
   titleBar: {
@@ -59,336 +196,336 @@ const defaultSchemaProps = {
 
 export const observatoryIndex = {
   ScriptQueue: {
-    component: require('../ScriptQueue/ScriptQueue.container').default,
+    component: ScriptQueueContainer,
     schema: {
-      ...require('../ScriptQueue/ScriptQueue.container').schema,
+      ...ScriptQueueSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../ScriptQueue/ScriptQueue.container').schema.props,
+        ...ScriptQueueSchema.props,
       },
     },
   },
   DataManagementFlow: {
-    component: require('../DataManagementFlow/DataManagementFlow.container').default,
+    component: DataManagementFlowContainer,
     schema: {
-      ...require('../DataManagementFlow/DataManagementFlow.container').schema,
+      ...DataManagementFlowSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../DataManagementFlow/DataManagementFlow.container').schema.props,
+        ...DataManagementFlowSchema.props,
       },
     },
   },
   CSCDetail: {
-    component: require('../CSCSummary/CSCDetail/CSCDetail.container').default,
+    component: CSCDetailContainer,
     schema: {
-      ...require('../CSCSummary/CSCDetail/CSCDetail.container').schema,
+      ...CSCDetailSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../CSCSummary/CSCDetail/CSCDetail.container').schema.props,
+        ...CSCDetailSchema.props,
       },
     },
   },
   AircraftTracker: {
-    component: require('../FlightTracker/FlightTracker.container').default,
+    component: FlightTrackerContainer,
     schema: {
-      ...require('../FlightTracker/FlightTracker.container').schema,
+      ...FlightTrackerSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../FlightTracker/FlightTracker.container').schema.props,
+        ...FlightTrackerSchema.props,
       },
     },
   },
   CSCExpanded: {
-    component: require('../CSCSummary/CSCExpanded/CSCExpanded.container').default,
+    component: CSCExpandedContainer,
     schema: {
-      ...require('../CSCSummary/CSCExpanded/CSCExpanded.container').schema,
+      ...CSCExpandedSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../CSCSummary/CSCExpanded/CSCExpanded.container').schema.props,
+        ...CSCExpandedSchema.props,
       },
     },
   },
   CSCGroupLog: {
-    component: require('../CSCSummary/CSCGroupLog/CSCGroupLog.container').default,
+    component: CSCGroupLogContainer,
     schema: {
-      ...require('../CSCSummary/CSCGroupLog/CSCGroupLog.container').schema,
+      ...CSCGroupLogSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../CSCSummary/CSCGroupLog/CSCGroupLog.container').schema.props,
+        ...CSCGroupLogSchema.props,
       },
     },
   },
   CSCGroup: {
-    component: require('../CSCSummary/CSCGroup/CSCGroup.container').default,
+    component: CSCGroupContainer,
     schema: {
-      ...require('../CSCSummary/CSCGroup/CSCGroup.container').schema,
+      ...CSCGroupSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../CSCSummary/CSCGroup/CSCGroup.container').schema.props,
+        ...CSCGroupSchema.props,
       },
     },
   },
   CSCSummary: {
-    component: require('../CSCSummary/CSCSummary.container').default,
+    component: CSCSummaryContainer,
     schema: {
-      ...require('../CSCSummary/CSCSummary.container').schema,
+      ...CSCSummarySchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../CSCSummary/CSCSummary.container').schema.props,
+        ...CSCSummarySchema.props,
       },
     },
   },
   Watcher: {
-    component: require('../Watcher/Watcher.container').default,
+    component: WatcherContainer,
     schema: {
-      ...require('../Watcher/Watcher.container').schema,
+      ...WatcherSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../Watcher/Watcher.container').schema.props,
+        ...WatcherSchema.props,
       },
     },
   },
   GenericCameraView: {
-    component: require('../GenericCamera/GenericCameraView.container').default,
+    component: GenericCameraViewContainer,
     schema: {
-      ...require('../GenericCamera/GenericCameraView.container').schema,
+      ...GenericCameraViewSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../GenericCamera/GenericCameraView.container').schema.props,
+        ...GenericCameraViewSchema.props,
       },
     },
   },
   ObservingLogInput: {
-    component: require('../ObservingLog/ObservingLogInput.container').default,
+    component: ObservingLogInputContainer,
     schema: {
-      ...require('../ObservingLog/ObservingLogInput.container').schema,
+      ...ObservingLogInputSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../ObservingLog/ObservingLogInput.container').schema.props,
+        ...ObservingLogInputSchema.props,
       },
     },
   },
   ObservingLogMessages: {
-    component: require('../ObservingLog/ObservingLogMessages.container').default,
+    component: ObservingLogMessagesContainer,
     schema: {
-      ...require('../ObservingLog/ObservingLogMessages.container').schema,
+      ...ObservingLogMessagesSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../ObservingLog/ObservingLogMessages.container').schema.props,
+        ...ObservingLogMessagesSchema.props,
       },
     },
   },
   Scheduler: {
-    component: require('../Scheduler/Scheduler.container').default,
+    component: SchedulerContainer,
     schema: {
-      ...require('../Scheduler/Scheduler.container').schema,
+      ...SchedulerSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../Scheduler/Scheduler.container').schema.props,
+        ...SchedulerSchema.props,
       },
     },
   },
   EnvironmentSummary: {
-    component: require('../EnvironmentSummary/EnvironmentSummary.container').default,
+    component: EnvironmentSummaryContainer,
     schema: {
-      ...require('../EnvironmentSummary/EnvironmentSummary.container').schema,
+      ...EnvironmentSummarySchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../EnvironmentSummary/EnvironmentSummary.container').schema.props,
+        ...EnvironmentSummarySchema.props,
       },
     },
   },
   WindDirection: {
-    component: require('../EnvironmentSummary/Cartoons/WindDirection.container').default,
+    component: WindDirectionContainer,
     schema: {
-      ...require('../EnvironmentSummary/Cartoons/WindDirection.container').schema,
+      ...WindDirectionSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../EnvironmentSummary/Cartoons/WindDirection.container').schema.props,
+        ...WindDirectionSchema.props,
       },
     },
   },
   GIS: {
-    component: require('../GIS/GIS.container').default,
+    component: GISContainer,
     schema: {
-      ...require('../GIS/GIS.container').schema,
+      ...GISSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../GIS/GIS.container').schema.props,
+        ...GISSchema.props,
       },
     },
   },
   Network: {
-    component: require('../Network/Network.container').default,
+    component: NetworkContainer,
     schema: {
-      ...require('../Network/Network.container').schema,
+      ...NetworkSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../Network/Network.container').schema.props,
+        ...NetworkSchema.props,
       },
     },
   },
   Microphones: {
-    component: require('../Mics/Mics.container').default,
+    component: MicsContainer,
     schema: {
-      ...require('../Mics/Mics.container').schema,
+      ...MicsSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../Mics/Mics.container').schema.props,
+        ...MicsSchema.props,
       },
     },
   },
   WeatherStation: {
-    component: require('../WeatherStation/WeatherStation.container').default,
+    component: WeatherStationContainer,
     schema: {
-      ...require('../WeatherStation/WeatherStation.container').schema,
+      ...WeatherStationSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../WeatherStation/WeatherStation.container').schema.props,
+        ...WeatherStationSchema.props,
       },
     },
   },
   FacilityMap: {
-    component: require('../Facility/FacilityMap.container').default,
+    component: FacilityMapContainer,
     schema: {
-      ...require('../Facility/FacilityMap.container').schema,
+      ...FacilityMapSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../Facility/FacilityMap.container').schema.props,
+        ...FacilityMapSchema.props,
       },
     },
   },
   Dynalene: {
-    component: require('../Dynalene/Dynalene.container').default,
+    component: DynaleneContainer,
     schema: {
-      ...require('../Dynalene/Dynalene.container').schema,
+      ...DynaleneSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../Dynalene/Dynalene.container').schema.props,
+        ...DynaleneSchema.props,
       },
     },
   },
   WeatherForecast: {
-    component: require('../WeatherForecast/WeatherForecast.container').default,
+    component: WeatherForecastContainer,
     schema: {
-      ...require('../WeatherForecast/WeatherForecast.container').schema,
+      ...WeatherForecastSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../WeatherForecast/WeatherForecast.container').schema.props,
+        ...WeatherForecastSchema.props,
       },
     },
   },
   WindPlotForecast: {
-    component: require('../GeneralPurpose/Plot/ForecastPlot/ForecastPlot.container').default,
+    component: ForecastPlotContainer,
     schema: {
-      ...require('../WeatherForecast/PlotsContainer/WindPlot.container').schema,
+      ...WindPlotSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../WeatherForecast/PlotsContainer/WindPlot.container').schema.props,
+        ...WindPlotSchema.props,
       },
     },
   },
   TemperaturePlotForecast: {
-    component: require('../GeneralPurpose/Plot/ForecastPlot/ForecastPlot.container').default,
+    component: ForecastPlotContainer,
     schema: {
-      ...require('../WeatherForecast/PlotsContainer/TemperaturePlot.container').schema,
+      ...TemperaturePlotSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../WeatherForecast/PlotsContainer/TemperaturePlot.container').schema.props,
+        ...TemperaturePlotSchema.props,
       },
     },
   },
   RainPlotForecast: {
-    component: require('../GeneralPurpose/Plot/ForecastPlot/ForecastPlot.container').default,
+    component: ForecastPlotContainer,
     schema: {
-      ...require('../WeatherForecast/PlotsContainer/RainPlot.container').schema,
+      ...RainPlotSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../WeatherForecast/PlotsContainer/RainPlot.container').schema.props,
+        ...RainPlotSchema.props,
       },
     },
   },
   CloudPlotForecast: {
-    component: require('../GeneralPurpose/Plot/ForecastPlot/ForecastPlot.container').default,
+    component: ForecastPlotContainer,
     schema: {
-      ...require('../WeatherForecast/PlotsContainer/CloudPlot.container').schema,
+      ...CloudPlotSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../WeatherForecast/PlotsContainer/CloudPlot.container').schema.props,
+        ...CloudPlotSchema.props,
       },
     },
   },
   InfoHeaderForecast: {
-    component: require('../WeatherForecast/InfoHeader/InfoHeader.container').default,
+    component: InfoHeaderContainer,
     schema: {
-      ...require('../WeatherForecast/InfoHeader/InfoHeader.container').schema,
+      ...InfoHeaderSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../WeatherForecast/InfoHeader/InfoHeader.container').schema.props,
+        ...InfoHeaderSchema.props,
       },
     },
   },
   TimeDisplay: {
-    component: require('../Time/TimeDisplay.container').default,
-    schema: require('../Time/TimeDisplay.container').schema,
+    component: TimeDisplayContainer,
+    schema: TimeDisplaySchema,
   },
   GenericCameraControls: {
-    component: require('../GenericCamera/GenericCameraControls.container').default,
+    component: GenericCameraControlsContainer,
     schema: {
-      ...require('../GenericCamera/GenericCameraControls.container').schema,
+      ...GenericCameraControlsSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../GenericCamera/GenericCameraControls.container').schema.props,
+        ...GenericCameraControlsSchema.props,
       },
     },
   },
   OLE: {
-    component: require('../OLE/OLE.container').default,
+    component: OLEContainer,
     schema: {
-      ...require('../OLE/OLE.container').schema,
+      ...OLESchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../OLE/OLE.container').schema.props,
+        ...OLESchema.props,
       },
     },
   },
   CreateOLE: {
-    component: require('../OLE/CreateOLE.container').default,
+    component: CreateOLEContainer,
     schema: {
-      ...require('../OLE/CreateOLE.container').schema,
+      ...CreateOLESchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../OLE/CreateOLE.container').schema.props,
+        ...CreateOLESchema.props,
       },
     },
   },
   CreateNightReport: {
-    component: require('../NightReport/CreateNightReport.container').default,
+    component: CreateNightReportContainer,
     schema: {
-      ...require('../NightReport/CreateNightReport.container').schema,
+      ...CreateNightReportSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../NightReport/CreateNightReport.container').schema.props,
+        ...CreateNightReportSchema.props,
       },
     },
   },
   HistoricNightReport: {
-    component: require('../NightReport/HistoricNightReport.container').default,
+    component: HistoricNightReportContainer,
     schema: {
-      ...require('../NightReport/HistoricNightReport.container').schema,
+      ...HistoricNightReportSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../NightReport/HistoricNightReport.container').schema.props,
+        ...HistoricNightReportSchema.props,
       },
     },
   },
   ObservatorySummary: {
-    component: require('../ObservatorySummary/ObservatorySummary.container').default,
+    component: ObservatorySummaryContainer,
     schema: {
-      ...require('../ObservatorySummary/ObservatorySummary.container').schema,
+      ...ObservatorySummarySchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../ObservatorySummary/ObservatorySummary.container').schema.props,
+        ...ObservatorySummarySchema.props,
       },
     },
   },
@@ -396,72 +533,72 @@ export const observatoryIndex = {
 
 export const auxtelIndex = {
   MountSummaryPanel: {
-    component: require('../AuxTel/Mount/SummaryPanel/SummaryPanel.container').default,
+    component: MountSummaryPanelContainer,
     schema: {
-      ...require('../AuxTel/Mount/SummaryPanel/SummaryPanel.container').schema,
+      ...MountSummaryPanelSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../AuxTel/Mount/SummaryPanel/SummaryPanel.container').schema.props,
+        ...MountSummaryPanelSchema.props,
       },
     },
   },
   LightPath: {
-    component: require('../AuxTel/Mount/LightPath.container').default,
+    component: LightPathContainer,
     schema: {
-      ...require('../AuxTel/Mount/LightPath.container').schema,
+      ...LightPathSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../AuxTel/Mount/LightPath.container').schema.props,
+        ...LightPathSchema.props,
       },
     },
   },
   MotorTable: {
-    component: require('../AuxTel/Mount/MotorTable/MotorTable.container').default,
+    component: MotorTableContainer,
     schema: {
-      ...require('../AuxTel/Mount/MotorTable/MotorTable.container').schema,
+      ...MotorTableSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../AuxTel/Mount/MotorTable/MotorTable.container').schema.props,
+        ...MotorTableSchema.props,
       },
     },
   },
   Camera: {
-    component: require('../AuxTel/Camera/Camera.container').default,
+    component: CameraContainer,
     schema: {
-      ...require('../AuxTel/Camera/Camera.container').schema,
+      ...CameraSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../AuxTel/Camera/Camera.container').schema.props,
+        ...CameraSchema.props,
       },
     },
   },
   Dome: {
-    component: require('../AuxTel/Dome/Dome.container').default,
+    component: DomeContainer,
     schema: {
-      ...require('../AuxTel/Dome/Dome.container').schema,
+      ...DomeSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../AuxTel/Dome/Dome.container').schema.props,
+        ...DomeSchema.props,
       },
     },
   },
   LATISS: {
-    component: require('../AuxTel/LATISS/LATISS.container').default,
+    component: LATISSContainer,
     schema: {
-      ...require('../AuxTel/LATISS/LATISS.container').schema,
+      ...LATISSSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../AuxTel/LATISS/LATISS.container').schema.props,
+        ...LATISSSchema.props,
       },
     },
   },
   AuxTelESS: {
-    component: require('../ESS/AuxTel/AuxTelESS.container').default,
+    component: AuxTelESSContainer,
     schema: {
-      ...require('../ESS/AuxTel/AuxTelESS.container').schema,
+      ...AuxTelESSSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../ESS/AuxTel/AuxTelESS.container').schema.props,
+        ...AuxTelESSSchema.props,
       },
     },
   },
@@ -469,172 +606,172 @@ export const auxtelIndex = {
 
 export const mainIndex = {
   CableWraps: {
-    component: require('../MainTel/CableWraps/CableWraps.container').default,
+    component: CableWrapsContainer,
     schema: {
-      ...require('../MainTel/CableWraps/CableWraps.container').schema,
+      ...CableWrapsSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/CableWraps/CableWraps.container').schema.props,
+        ...CableWrapsSchema.props,
       },
     },
   },
   M1M3: {
-    component: require('../MainTel/M1M3/M1M3.container').default,
+    component: M1M3Container,
     schema: {
-      ...require('../MainTel/M1M3/M1M3.container').schema,
+      ...M1M3Schema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/M1M3/M1M3.container').schema.props,
+        ...M1M3Schema.props,
       },
     },
   },
   M1M3Table: {
-    component: require('../MainTel/M1M3/M1M3Table.container').default,
+    component: M1M3TableContainer,
     schema: {
-      ...require('../MainTel/M1M3/M1M3Table.container').schema,
+      ...M1M3TableSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/M1M3/M1M3Table.container').schema.props,
+        ...M1M3TableSchema.props,
       },
     },
   },
   M1M3TS: {
-    component: require('../MainTel/M1M3TS/M1M3TS.container').default,
+    component: M1M3TSContainer,
     schema: {
-      ...require('../MainTel/M1M3TS/M1M3TS.container').schema,
+      ...M1M3TSSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/M1M3TS/M1M3TS.container').schema.props,
+        ...M1M3TSSchema.props,
       },
     },
   },
   M1M3Compact: {
-    component: require('../MainTel/M1M3/M1M3Compact.container').default,
+    component: M1M3CompactContainer,
     schema: {
-      ...require('../MainTel/M1M3/M1M3Compact.container').schema,
+      ...M1M3CompactSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/M1M3/M1M3Compact.container').schema.props,
+        ...M1M3CompactSchema.props,
       },
     },
   },
   M1M3HardpointsDataTable: {
-    component: require('../MainTel/M1M3/M1M3HardpointsDataTable.container').default,
+    component: M1M3HardpointsDataTableContainer,
     schema: {
-      ...require('../MainTel/M1M3/M1M3HardpointsDataTable.container').schema,
+      ...M1M3HardpointsDataTableSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/M1M3/M1M3HardpointsDataTable.container').schema.props,
+        ...M1M3HardpointsDataTableSchema.props,
       },
     },
   },
   GlycolLoop: {
-    component: require('../MainTel/GlycolLoop/GlycolLoop.container').default,
+    component: GlycolLoopContainer,
     schema: {
-      ...require('../MainTel/GlycolLoop/GlycolLoop.container').schema,
+      ...GlycolLoopSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/GlycolLoop/GlycolLoop.container').schema.props,
+        ...GlycolLoopSchema.props,
       },
     },
   },
   GlycolHeatMonitor: {
-    component: require('../MainTel/GlycolSystem/HeatMonitor.container').default,
+    component: HeatMonitorContainer,
     schema: {
-      ...require('../MainTel/GlycolSystem/HeatMonitor.container').schema,
+      ...HeatMonitorSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/GlycolSystem/HeatMonitor.container').schema.props,
+        ...HeatMonitorSchema.props,
       },
     },
   },
   GlycolDeviceTable: {
-    component: require('../MainTel/GlycolSystem/DeviceTable.container').default,
+    component: DeviceTableContainer,
     schema: {
-      ...require('../MainTel/GlycolSystem/DeviceTable.container').schema,
+      ...DeviceTableSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/GlycolSystem/DeviceTable.container').schema.props,
+        ...DeviceTableSchema.props,
       },
     },
   },
   M1M3BumpTests: {
-    component: require('../MainTel/M1M3/BumpTests.container').default,
+    component: BumpTestsContainer,
     schema: {
-      ...require('../MainTel/M1M3/BumpTests.container').schema,
+      ...BumpTestsSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/M1M3/BumpTests.container').schema.props,
+        ...BumpTestsSchema.props,
       },
     },
   },
   M2: {
-    component: require('../MainTel/M2/M2.container').default,
+    component: M2Container,
     schema: {
-      ...require('../MainTel/M2/M2.container').schema,
+      ...M2Schema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/M2/M2.container').schema.props,
+        ...M2Schema.props,
       },
     },
   },
   M2Table: {
-    component: require('../MainTel/M2/M2Table.container').default,
+    component: M2TableContainer,
     schema: {
-      ...require('../MainTel/M2/M2Table.container').schema,
+      ...M2TableSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/M2/M2Table.container').schema.props,
+        ...M2TableSchema.props,
       },
     },
   },
   M2Compact: {
-    component: require('../MainTel/M2/M2Compact.container').default,
+    component: M2CompactContainer,
     schema: {
-      ...require('../MainTel/M2/M2Compact.container').schema,
+      ...M2CompactSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/M2/M2Compact.container').schema.props,
+        ...M2CompactSchema.props,
       },
     },
   },
   SimonyiDome: {
-    component: require('../MainTel/MTDome/MTDome.container').default,
+    component: MTDomeContainer,
     schema: {
-      ...require('../MainTel/MTDome/MTDome.container').schema,
+      ...MTDomeSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/MTDome/MTDome.container').schema.props,
+        ...MTDomeSchema.props,
       },
     },
   },
   SimonyiDomePower: {
-    component: require('../MainTel/MTDomePower/MTDomePower.container').default,
+    component: MTDomePowerContainer,
     schema: {
-      ...require('../MainTel/MTDomePower/MTDomePower.container').schema,
+      ...MTDomePowerSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/MTDomePower/MTDomePower.container').schema.props,
+        ...MTDomePowerSchema.props,
       },
     },
   },
   TMA: {
-    component: require('../MainTel/TMA/TMA.container').default,
+    component: TMAContainer,
     schema: {
-      ...require('../MainTel/TMA/TMA.container').schema,
+      ...TMASchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/TMA/TMA.container').schema.props,
+        ...TMASchema.props,
       },
     },
   },
   MTIS: {
-    component: require('../MainTel/MTIS/MTIS.container').default,
+    component: MTISContainer,
     schema: {
-      ...require('../MainTel/MTIS/MTIS.container').schema,
+      ...MTISSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/MTIS/MTIS.container').schema.props,
+        ...MTISSchema.props,
       },
     },
   },
@@ -642,72 +779,72 @@ export const mainIndex = {
 
 export const mainCameraIndex = {
   CameraHexapod: {
-    component: require('../MainTel/CameraHexapod/CameraHexapod.container').default,
+    component: CameraHexapodContainer,
     schema: {
-      ...require('../MainTel/CameraHexapod/CameraHexapod.container').schema,
+      ...CameraHexapodSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/CameraHexapod/CameraHexapod.container').schema.props,
+        ...CameraHexapodSchema.props,
       },
     },
   },
   SimonyiLightPath: {
-    component: require('../MainTel/LightPath/SimonyiLightPath.container').default,
+    component: SimonyiLightPathContainer,
     schema: {
-      ...require('../MainTel/LightPath/SimonyiLightPath.container').schema,
+      ...SimonyiLightPathSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/LightPath/SimonyiLightPath.container').schema.props,
+        ...SimonyiLightPathSchema.props,
       },
     },
   },
   MTCamera: {
-    component: require('../MainTel/MTCamera/MTCamera.container').default,
+    component: MTCameraContainer,
     schema: {
-      ...require('../MainTel/MTCamera/MTCamera.container').schema,
+      ...MTCameraSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/MTCamera/MTCamera.container').schema.props,
+        ...MTCameraSchema.props,
       },
     },
   },
   MTCameraSummaryDetail: {
-    component: require('../MainTel/MTCameraSummaryDetail/MTCameraSummaryDetail.container').default,
+    component: MTCameraSummaryDetailContainer,
     schema: {
-      ...require('../MainTel/MTCameraSummaryDetail/MTCameraSummaryDetail.container').schema,
+      ...MTCameraSummaryDetailSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/MTCameraSummaryDetail/MTCameraSummaryDetail.container').schema.props,
+        ...MTCameraSummaryDetailSchema.props,
       },
     },
   },
   CCCamera: {
-    component: require('../MainTel/CCCamera/CCCamera.container').default,
+    component: CCCameraContainer,
     schema: {
-      ...require('../MainTel/CCCamera/CCCamera.container').schema,
+      ...CCCameraSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/CCCamera/CCCamera.container').schema.props,
+        ...CCCameraSchema.props,
       },
     },
   },
   CCCameraSummaryDetail: {
-    component: require('../MainTel/CCCameraSummaryDetail/CCCameraSummaryDetail.container').default,
+    component: CCCameraSummaryDetailContainer,
     schema: {
-      ...require('../MainTel/CCCameraSummaryDetail/CCCameraSummaryDetail.container').schema,
+      ...CCCameraSummaryDetailSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/CCCameraSummaryDetail/CCCameraSummaryDetail.container').schema.props,
+        ...CCCameraSummaryDetailSchema.props,
       },
     },
   },
   MainTelESS: {
-    component: require('../ESS/MainTel/MainTelESS.container').default,
+    component: MainTelESSContainer,
     schema: {
-      ...require('../ESS/MainTel/MainTelESS.container').schema,
+      ...MainTelESSSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../ESS/MainTel/MainTelESS.container').schema.props,
+        ...MainTelESSSchema.props,
       },
     },
   },
@@ -715,12 +852,12 @@ export const mainCameraIndex = {
 
 const environmentIndex = {
   CloudMap: {
-    component: require('../EmbeddedView/custom/CloudMapView.container').default,
+    component: CloudMapViewContainer,
     schema: {
-      ...require('../EmbeddedView/custom/CloudMapView.container').schema,
+      ...CloudMapViewSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../EmbeddedView/custom/CloudMapView.container').schema.props,
+        ...CloudMapViewSchema.props,
       },
     },
   },
@@ -728,98 +865,98 @@ const environmentIndex = {
 
 export const utilitiesIndex = {
   LabeledStatusText: {
-    component: require('../GeneralPurpose/LabeledStatusText/LabeledStatusText.container').default,
+    component: LabeledStatusTextContainer,
     schema: {
-      ...require('../GeneralPurpose/LabeledStatusText/LabeledStatusText.container').schema,
+      ...LabeledStatusTextSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../GeneralPurpose/LabeledStatusText/LabeledStatusText.container').schema.props,
+        ...LabeledStatusTextSchema.props,
       },
     },
   },
   HealthStatusSummary: {
-    component: require('../HealthStatusSummary/HealthStatusSummary.container').default,
+    component: HealthStatusSummaryContainer,
     schema: {
-      ...require('../HealthStatusSummary/HealthStatusSummary.container').schema,
+      ...HealthStatusSummarySchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../HealthStatusSummary/HealthStatusSummary.container').schema.props,
+        ...HealthStatusSummarySchema.props,
       },
     },
   },
   Clock: {
-    component: require('../Time/Clock/Clock.container').default,
-    schema: require('../Time/Clock/Clock.container').schema,
+    component: ClockContainer,
+    schema: ClockSchema,
   },
   VegaCustomPlot: {
-    component: require('../GeneralPurpose/Plot/VegaCustomPlot/VegaCustomPlot.container').default,
-    schema: require('../GeneralPurpose/Plot/VegaCustomPlot/VegaCustomPlot.container').schema,
+    component: VegaCustomPlotContainer,
+    schema: VegaCustomPlotSchema,
   },
   VegaTimeSeriesPlot: {
-    component: require('../GeneralPurpose/Plot/Plot.container.jsx').default,
-    schema: require('../GeneralPurpose/Plot/Plot.container.jsx').schema,
+    component: PlotContainer,
+    schema: PlotSchema,
   },
   PolarPlot: {
-    component: require('../GeneralPurpose/Plot/PolarPlot/PolarPlot.container').default,
-    schema: require('../GeneralPurpose/Plot/PolarPlot/PolarPlot.container').schema,
+    component: PolarPlotContainer,
+    schema: PolarPlotSchema,
   },
   EmbeddedView: {
-    component: require('../EmbeddedView/EmbeddedView.container').default,
+    component: EmbeddedViewContainer,
     schema: {
-      ...require('../EmbeddedView/EmbeddedView.container').schema,
+      ...EmbeddedViewSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../EmbeddedView/EmbeddedView.container').schema.props,
+        ...EmbeddedViewSchema.props,
       },
     },
   },
   SubscriptionTable: {
-    component: require('../GeneralPurpose/SubscriptionTable/SubscriptionTable.container').default,
+    component: SubscriptionTableContainer,
     schema: {
-      ...require('../GeneralPurpose/SubscriptionTable/SubscriptionTable.container').schema,
+      ...SubscriptionTableSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../GeneralPurpose/SubscriptionTable/SubscriptionTable.container').schema.props,
+        ...SubscriptionTableSchema.props,
       },
     },
   },
   EventLog: {
-    component: require('../EventLog/EventLog.container').default,
+    component: EventLogContainer,
     schema: {
-      ...require('../EventLog/EventLog.container').schema,
+      ...EventLogSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../EventLog/EventLog.container').schema.props,
+        ...EventLogSchema.props,
       },
     },
   },
   CommandPanel: {
-    component: require('../CommandPanel/CommandPanel.container').default,
+    component: CommandPanelContainer,
     schema: {
-      ...require('../CommandPanel/CommandPanel.container').schema,
+      ...CommandPanelSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../CommandPanel/CommandPanel.container').schema.props,
+        ...CommandPanelSchema.props,
       },
     },
   },
   TCSCommands: {
-    component: require('../TCSCommands/TCSCommands.container').default,
+    component: TCSCommandsContainer,
     schema: {
-      ...require('../TCSCommands/TCSCommands.container').schema,
+      ...TCSCommandsSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../TCSCommands/TCSCommands.container').schema.props,
+        ...TCSCommandsSchema.props,
       },
     },
   },
   TCSOffset: {
-    component: require('../TCSCommands/TCSOffset/TCSOffset.container').default,
+    component: TCSOffsetContainer,
     schema: {
-      ...require('../TCSCommands/TCSOffset/TCSOffset.container').schema,
+      ...TCSOffsetSchema,
       props: {
         ...defaultSchemaProps,
-        ...require('../TCSCommands/TCSOffset/TCSOffset.container').schema.props,
+        ...TCSOffsetSchema.props,
       },
     },
   },
@@ -827,18 +964,18 @@ export const utilitiesIndex = {
 
 export const internalIndex = {
   // TelemetryLog: {
-  //   component: require('../TelemetryLog/TelemetryLog.container').default,
+  //   component: TelemetryLogContainer,
   //   schema: {
-  //     ...require('../TelemetryLog/TelemetryLog.container').schema,
+  //     ...TelemetryLogSchema,
   //     props: {
   //       ...defaultSchemaProps,
-  //       ...require('../TelemetryLog/TelemetryLog.container').schema.props,
+  //       ...TelemetryLogSchema.props,
   //     }
   //   },
   // },
   TelemetryLog: {
-    component: require('../TelemetryLog/TelemetryLog.container').default,
-    schema: require('../TelemetryLog/TelemetryLog.container').schema,
+    component: TelemetryLogContainer,
+    schema: TelemetryLogSchema,
   },
 };
 

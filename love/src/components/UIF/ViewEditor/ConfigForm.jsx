@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -25,6 +27,9 @@ import Modal from 'components/GeneralPurpose/Modal/Modal';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Input from 'components/GeneralPurpose/Input/Input';
 import { indexes } from '../ComponentIndex';
+import HealthStatusConfig from '../../../components/HealthStatusSummary/HealthStatusConfig/HealthStatusConfig';
+import TimeSeriesConfigure from '../../../components/GeneralPurpose/Plot/TimeSeriesConfigure/TimeSeriesConfigure';
+import PolarPlotConfig from '../../../components/GeneralPurpose/Plot/PolarPlotConfig/PolarPlotConfig';
 
 import JSONPretty from 'react-json-pretty';
 import 'brace/mode/javascript';
@@ -32,10 +37,9 @@ import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 
 const externalStepComponents = {
-  HealthStatusConfig: require('../../../components/HealthStatusSummary/HealthStatusConfig/HealthStatusConfig').default,
-  TimeSeriesConfigure: require('../../../components/GeneralPurpose/Plot/TimeSeriesConfigure/TimeSeriesConfigure')
-    .default,
-  PolarPlotConfig: require('../../../components/GeneralPurpose/Plot/PolarPlotConfig/PolarPlotConfig').default,
+  HealthStatusConfig,
+  TimeSeriesConfigure,
+  PolarPlotConfig,
 };
 function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, onCancel, onSaveConfig }) {
   const componentDict = indexes.map((index) => index.index[componentName]).find((elem) => elem !== undefined);
