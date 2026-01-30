@@ -19,14 +19,14 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import { defaultNumberFormatter } from 'Utils';
-import lodash from 'lodash';
+import { uniqueId } from 'lodash';
 import PropTypes from 'prop-types';
 import styles from './Device.module.css';
 
 export default class Device extends Component {
   constructor(props) {
     super(props);
-    this.id = lodash.uniqueId('Mask-');
+    this.id = uniqueId('Mask-');
     this.state = {
       hidden: true,
     };

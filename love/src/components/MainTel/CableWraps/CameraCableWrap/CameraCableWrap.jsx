@@ -19,7 +19,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component, createRef } from 'react';
 import * as d3 from 'd3';
-import debounce from 'lodash.debounce';
+import { debounce } from 'lodash';
 import { radians, degrees } from 'Utils';
 import { MAX_CCW_FOLLOWING_ERROR } from 'Constants';
 

@@ -19,7 +19,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
+import { isEqual } from 'lodash';
 import { getCameraStatusStyle } from 'Utils';
 import { IMAGE_STATES } from 'Constants';
 import styles from './MTCameraSummaryDetail.module.css';

@@ -19,7 +19,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
+import { isEqual } from 'lodash';
 import * as d3 from 'd3';
 import * as THREE from 'three';
 import Scene from './Scene/Scene';

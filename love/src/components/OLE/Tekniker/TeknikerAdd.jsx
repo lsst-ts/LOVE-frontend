@@ -1,6 +1,6 @@
 import React, { Component, memo } from 'react';
 import PropTypes from 'prop-types';
-import lodash from 'lodash';
+import { uniqueId } from 'lodash';
 import Moment from 'moment';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
@@ -96,8 +96,8 @@ class TeknikerAdd extends Component {
     this.multiselectSubsystemsRef = React.createRef();
     this.multiselectComponentsRef = React.createRef();
 
-    this.id = lodash.uniqueId('tekniker-add-');
-    this.multiselectSystemId = lodash.uniqueId('multiselect-systems-');
+    this.id = uniqueId('tekniker-add-');
+    this.multiselectSystemId = uniqueId('multiselect-systems-');
 
     this.dateBeginInputRef = React.createRef();
     this.dateEndInputRef = React.createRef();

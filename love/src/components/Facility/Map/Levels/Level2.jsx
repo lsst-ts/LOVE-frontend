@@ -18,7 +18,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { Component } from 'react';
-import lodash from 'lodash';
+import { uniqueId } from 'lodash';
 import PropTypes from 'prop-types';
 import styles from './Level2.module.css';
 import Device from '../Device.jsx';

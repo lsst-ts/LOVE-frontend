@@ -21,7 +21,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import lodash from 'lodash';
+import { uniqueId } from 'lodash';
 import moment from 'moment';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
@@ -75,7 +75,7 @@ export default class NonExposureDetail extends Component {
 
   constructor(props) {
     super(props);
-    this.id = lodash.uniqueId('nonexposure-detail-');
+    this.id = uniqueId('nonexposure-detail-');
     this.state = {
       confirmationModalShown: false,
       confirmationModalText: '',

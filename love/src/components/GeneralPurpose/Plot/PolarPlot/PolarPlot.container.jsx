@@ -19,7 +19,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import { isEqual } from 'lodash';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getStreamsData, getTaiToUtc } from 'redux/selectors/selectors';
 import { TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
@@ -189,11 +189,11 @@ class PolarPlotContainer extends React.Component {
     const { timeSeriesControlsProps, inputs, streams, subscribeToStreams, unsubscribeToStreams } = this.props;
     const { data } = this.state;
 
-    if (!_.isEqual(prevProps.timeSeriesControlsProps, timeSeriesControlsProps)) {
+    if (!isEqual(prevProps.timeSeriesControlsProps, timeSeriesControlsProps)) {
       this.setState({ ...timeSeriesControlsProps });
     }
 
-    if (!_.isEqual(prevProps.inputs, inputs)) {
+    if (!isEqual(prevProps.inputs, inputs)) {
       unsubscribeToStreams();
       subscribeToStreams();
       const data = {};
@@ -203,7 +203,7 @@ class PolarPlotContainer extends React.Component {
       this.setState({ data });
     }
 
-    if (!_.isEqual(prevProps.inputs, inputs) || !_.isEqual(prevProps.streams, streams)) {
+    if (!isEqual(prevProps.inputs, inputs) || !isEqual(prevProps.streams, streams)) {
       const newData = {};
       for (const [inputName, inputConfig] of Object.entries(inputs)) {
         const { category, csc, salindex, topic, item, accessor } = inputConfig;

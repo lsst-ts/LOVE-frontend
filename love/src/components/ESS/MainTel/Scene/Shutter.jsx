@@ -21,7 +21,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
+import { isEqual } from 'lodash';
 import * as THREE from 'three';
 
 export function Shutter({ position = { x: 0, y: 3.3, z: 7 }, openPercent = 100 }) {

@@ -24,7 +24,7 @@ import Value from '../GeneralPurpose/SummaryPanel/Value';
 import Title from '../GeneralPurpose/SummaryPanel/Title';
 import StatusText from '../GeneralPurpose/StatusText/StatusText';
 import Button from '../GeneralPurpose/Button/Button';
-import isEqual from 'lodash';
+import { isEqual } from 'lodash';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import ZoomInIcon from 'components/icons/Zoom/ZoomInIcon';
 import ZoomOutIcon from 'components/icons/Zoom/ZoomOutIcon';

@@ -21,7 +21,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component, memo } from 'react';
 import PropTypes from 'prop-types';
-import lodash from 'lodash';
+import { uniqueId } from 'lodash';
 import Moment from 'moment';
 import MultiSelect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import BulkSelect from 'components/GeneralPurpose/BulkSelect/BulkSelect';
@@ -93,7 +93,7 @@ class ExposureAdd extends Component {
 
   constructor(props) {
     super(props);
-    this.id = lodash.uniqueId('exposure-message-create-');
+    this.id = uniqueId('exposure-message-create-');
     const { newMessage } = props;
 
     this.state = {

@@ -20,11 +20,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Howl } from 'howler';
-import isEqual from 'lodash/isEqual';
-import { throttle } from 'lodash';
-
+import { isEqual, throttle } from 'lodash';
 import { severityEnum, ALARM_SOUND_THROTLING_TIME_MS } from 'Config';
-
 import { isAcknowledged, isMuted, isActive } from '../AlarmUtils';
 import newWarningFile from '../../../sounds/new_warning.mp3';
 import newSeriousFile from '../../../sounds/new_serious.mp3';

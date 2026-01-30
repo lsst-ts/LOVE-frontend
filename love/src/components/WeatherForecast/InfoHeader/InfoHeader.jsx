@@ -20,7 +20,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
-import _ from 'lodash';
+import { isEqual } from 'lodash';
 import { fixedFloat } from 'Utils';
 import { Table, Tr, Td } from 'components/GeneralPurpose/SimpleTable/TableBorder';
 import WeatherForecastIcon from 'components/icons/WeatherForecastIcon/WeatherForecastIcon';
@@ -146,8 +146,8 @@ export default class InfoHeader extends Component {
 
   componentDidUpdate = (prevProps) => {
     if (
-      !_.isEqual(prevProps.daily, this.props.daily) ||
-      !_.isEqual(prevProps.hourly, this.props.hourly) ||
+      !isEqual(prevProps.daily, this.props.daily) ||
+      !isEqual(prevProps.hourly, this.props.hourly) ||
       prevProps.frecuency !== this.props.frecuency
     ) {
       this.setState({

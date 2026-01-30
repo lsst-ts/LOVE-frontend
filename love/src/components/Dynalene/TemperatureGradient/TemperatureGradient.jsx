@@ -20,7 +20,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { Component } from 'react';
-import lodash from 'lodash';
+import { uniqueId } from 'lodash';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 import { fixedFloat } from 'Utils';
@@ -73,7 +73,7 @@ export default class TemperatureGradient extends Component {
     this.state = {
       width: 350,
     };
-    this.colorScaleId = lodash.uniqueId('color-scale-');
+    this.colorScaleId = uniqueId('color-scale-');
   }
 
   componentDidMount() {

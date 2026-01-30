@@ -21,7 +21,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component, memo } from 'react';
 import PropTypes from 'prop-types';
-// import isEqual from 'lodash/isEqual';
 import { uniqueId } from 'lodash';
 import styles from './SkyMap.module.css';
 import Select from 'components/GeneralPurpose/Select/Select';

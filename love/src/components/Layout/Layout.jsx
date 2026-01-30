@@ -22,7 +22,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import isEqual from 'lodash/isEqual';
+import { isEqual } from 'lodash';
 import { ToastContainer, toast, Slide } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.min.css';
 import MessageIcon from 'components/icons/MessageIcon/MessageIcon';

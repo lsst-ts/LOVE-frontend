@@ -19,7 +19,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
+import { isEqual } from 'lodash';
 import RowExpansionIcon from 'components/icons/RowExpansionIcon/RowExpansionIcon';
 import AvailableScript from '../Scripts/AvailableScript/AvailableScript';
 import styles from './RecursiveScriptsTree.module.css';

@@ -18,7 +18,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { Component } from 'react';
-import lodash from 'lodash';
+import { uniqueId } from 'lodash';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 import styles from './TemperatureGradient.module.css';
@@ -45,8 +45,8 @@ export default class TemperatureGradient extends Component {
 
   constructor(props) {
     super(props);
-    this.colorScaleId = lodash.uniqueId('color-scale-');
-    this.gradientId = lodash.uniqueId('gradient-');
+    this.colorScaleId = uniqueId('color-scale-');
+    this.gradientId = uniqueId('gradient-');
   }
 
   componentDidMount() {

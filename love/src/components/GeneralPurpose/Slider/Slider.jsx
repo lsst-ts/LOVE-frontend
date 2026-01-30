@@ -19,7 +19,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import debounce from 'lodash.debounce';
+import { debounce } from 'lodash';
 import styles from './Slider.module.css';
 
 const WAITTIME = 300;

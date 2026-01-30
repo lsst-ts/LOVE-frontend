@@ -21,7 +21,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
-import lodash from 'lodash';
+import { uniqueId } from 'lodash';
 import { CSVLink } from 'react-csv';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -65,7 +65,7 @@ export default class ExposureDetail extends Component {
 
   constructor(props) {
     super(props);
-    this.id = lodash.uniqueId('exposure-detail-');
+    this.id = uniqueId('exposure-detail-');
     this.state = {
       selectedMessage: undefined,
       selectedFlag: 'All',

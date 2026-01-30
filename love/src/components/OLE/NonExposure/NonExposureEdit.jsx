@@ -19,7 +19,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component, memo } from 'react';
 import PropTypes from 'prop-types';
-import lodash from 'lodash';
+import { uniqueId } from 'lodash';
 import Moment from 'moment';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
@@ -127,8 +127,8 @@ class NonExposureEdit extends Component {
     this.multiselectComponentsRef = React.createRef();
 
     this.richTextEditorRef = React.createRef();
-    this.id = lodash.uniqueId('nonexposure-edit-');
-    this.multiselectSystemId = lodash.uniqueId('multiselect-systems-');
+    this.id = uniqueId('nonexposure-edit-');
+    this.multiselectSystemId = uniqueId('multiselect-systems-');
 
     this.dateBeginInputRef = React.createRef();
     this.dateEndInputRef = React.createRef();
