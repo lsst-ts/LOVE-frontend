@@ -19,9 +19,15 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { UID } from 'react-uid';
+import uniqueId from 'lodash/uniqueId';
 import TextField from 'components/TextField/TextField';
 import styles from './TimeWindow.module.css';
+
+const TIMEWINDOW_PRESETS = [
+  ['60', '1h'],
+  ['15', '15min'],
+  ['1', '1min'],
+];
 
 export default class TimeWindow extends PureComponent {
   static propTypes = {
@@ -40,6 +46,9 @@ export default class TimeWindow extends PureComponent {
     this.state = {
       isCustom: false,
     };
+    this.timeWindowPresetIds = TIMEWINDOW_PRESETS.map(() => uniqueId('time-window-preset-'));
+    this.customRadioId = uniqueId('time-window-custom-radio-');
+    this.customInputId = uniqueId('time-window-custom-input-');
   }
 
   handleCustomInput = (e) => {
@@ -55,78 +64,61 @@ export default class TimeWindow extends PureComponent {
   };
 
   render() {
-    const timewindowPresets = [
-      ['60', '1h'],
-      ['15', '15min'],
-      ['1', '1min'],
-    ];
     return (
       <div className={styles.timeWindowOptionsContainer}>
         <span>Time window:</span>
-        {timewindowPresets.map((preset) => {
+        {TIMEWINDOW_PRESETS.map((preset, index) => {
           const [duration, label] = preset;
+          const id = this.timeWindowPresetIds[index];
           return (
-            <UID key={label}>
-              {(id) => (
-                <div className={styles.timeWindowOption}>
-                  <div className={styles.timeWindowOption}>
-                    <input
-                      type="radio"
-                      value={duration}
-                      id={id}
-                      checked={!this.state.isCustom && this.props.timeWindow == duration}
-                      onChange={(e) => this.handleTimeWindowSelection(e.target.value, false)}
-                    />
-                    <label htmlFor={id} onClick={() => this.handleTimeWindowSelection(duration, false)}>
-                      {label}
-                    </label>
-                  </div>
-                </div>
-              )}
-            </UID>
+            <div className={styles.timeWindowOption} key={label}>
+              <div className={styles.timeWindowOption}>
+                <input
+                  type="radio"
+                  value={duration}
+                  id={id}
+                  checked={!this.state.isCustom && this.props.timeWindow == duration}
+                  onChange={(e) => this.handleTimeWindowSelection(e.target.value, false)}
+                />
+                <label htmlFor={id} onClick={() => this.handleTimeWindowSelection(duration, false)}>
+                  {label}
+                </label>
+              </div>
+            </div>
           );
         })}
         <div className={styles.timeWindowOption}>
-          <UID>
-            {(id) => (
-              <React.Fragment>
-                <input
-                  type="radio"
-                  value={this.props.timeWindow}
-                  id={id}
-                  checked={this.state.isCustom}
-                  onChange={(e) => this.handleTimeWindowSelection(e.target.value, true)}
-                />
-              </React.Fragment>
-            )}
-          </UID>
-          <UID>
-            {(id) => (
-              <>
-                <label htmlFor={id} onClick={() => this.handleTimeWindowSelection(this.props.timeWindow, true)}>
-                  Custom
-                </label>
-                <div
-                  className={[styles.customTimeWindowContainer, this.state.isCustom ? styles.customVisible : ''].join(
-                    ' ',
-                  )}
-                >
-                  <label htmlFor={id}>: </label>
-                  <TextField
-                    id={id}
-                    className={styles.customTimeWindowInput}
-                    type="text"
-                    value={this.props.timeWindow}
-                    onChange={this.handleCustomInput}
-                    onFocus={(e) => {
-                      e.target.select();
-                    }}
-                  />
-                  <label htmlFor={id}> minutes</label>
-                </div>
-              </>
-            )}
-          </UID>
+          <input
+            type="radio"
+            value={this.props.timeWindow}
+            id={this.customRadioId}
+            checked={this.state.isCustom}
+            onChange={(e) => this.handleTimeWindowSelection(e.target.value, true)}
+          />
+          <>
+            <label
+              htmlFor={this.customInputId}
+              onClick={() => this.handleTimeWindowSelection(this.props.timeWindow, true)}
+            >
+              Custom
+            </label>
+            <div
+              className={[styles.customTimeWindowContainer, this.state.isCustom ? styles.customVisible : ''].join(' ')}
+            >
+              <label htmlFor={this.customInputId}>: </label>
+              <TextField
+                id={this.customInputId}
+                className={styles.customTimeWindowInput}
+                type="text"
+                value={this.props.timeWindow}
+                onChange={this.handleCustomInput}
+                onFocus={(e) => {
+                  e.target.select();
+                }}
+              />
+              <label htmlFor={this.customInputId}> minutes</label>
+            </div>
+          </>
         </div>
       </div>
     );

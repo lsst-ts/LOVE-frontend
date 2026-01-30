@@ -39,7 +39,6 @@
     "react-rnd": "^10.0.0",
     "react-router-dom": "^5.0.0",
     "react-toastify": "^11.0.5",
-    "react-uid": "^2.2.0",
     "react-vega": "^7.7.1",
     "redux": "^4.0.1",
     "redux-batched-subscribe": "^0.1.6",
