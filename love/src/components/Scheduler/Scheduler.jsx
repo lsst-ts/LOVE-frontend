@@ -31,7 +31,6 @@ import Moon from './Summary/Moon/Moon';
 import Sun from './Summary/Sun/Sun';
 import CurrentTarget from './CurrentTarget/CurrentTarget';
 import SkyMap from './SkyMap/SkyMap';
-import Plots from './Plots/Plots';
 import AccordionSummary from './AccordionSummary/AccordionSummary';
 
 export default class Scheduler extends Component {
@@ -223,6 +222,7 @@ export default class Scheduler extends Component {
     /** The full block definition */
     blockDef: PropTypes.string,
   };
+
   static defaultProps = {
     schedulerState: 0.0,
     subState: 0.0,
@@ -320,60 +320,36 @@ export default class Scheduler extends Component {
 
   constructor(props) {
     super(props);
-    // dict with predicted targets
-    const targets = this.props?.predTargetsDecl.map((id, i) => ({
-      id: i + 1,
-      lat: this.props.predTargetsDecl[i],
-      long: this.props.predTargetsRa[i],
-    }));
-
     this.state = {
-      predTargets: targets,
+      predTargets: [],
     };
   }
 
   componentDidMount = () => {
     this.props.subscribeToStream();
-
-    this.skyMap = (
-      <SkyMap
-        targets={this.state.predTargets}
-        pointingRa={this.props?.pointingRa}
-        pointingDecl={this.props?.pointingDecl}
-      />
-    );
   };
-
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      !isEqual(prevProps.predTargetsDecl, this.props.predTargetsDecl) ||
-      !isEqual(prevProps.predTargetsRa, this.props.predTargetsRa)
-    ) {
-      const targets = this.props?.predTargetsDecl.map((id, i) => ({
-        id: i + 1,
-        lat: this.props.predTargetsDecl[i],
-        long: this.props.predTargetsRa[i],
-      }));
-
-      this.setState({
-        predTargets: targets,
-      });
-    }
-
-    if (!isEqual(prevState.predTargets, this.state.predTargets)) {
-      this.skyMap = (
-        <SkyMap
-          targets={this.state.predTargets}
-          pointingRa={this.props?.pointingRa}
-          pointingDecl={this.props?.pointingDecl}
-        />
-      );
-    }
-  }
 
   componentWillUnmount = () => {
     this.props.unsubscribeToStream();
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevProps.predTargetsDecl !== this.props.predTargetsDecl ||
+      prevProps.predTargetsRa !== this.props.predTargetsRa
+    ) {
+      console.log('Targets changed...');
+      const newTargets = this.props?.predTargetsDecl.map((id, i) => ({
+        id: i + 1,
+        dec: this.props.predTargetsDecl[i],
+        ra: this.props.predTargetsRa[i],
+      }));
+      console.log('New targets', newTargets);
+      this.setState({
+        predTargets: newTargets,
+      });
+    }
+  }
 
   render() {
     const {
@@ -470,6 +446,8 @@ export default class Scheduler extends Component {
       salindex,
     } = this.props;
 
+    const { predTargets } = this.state;
+
     return (
       <div className={styles.container}>
         <Headers
@@ -549,7 +527,8 @@ export default class Scheduler extends Component {
               rotSkyPos={rotSkyPos}
               filterToMount={filterToMount}
             />
-            {this.skyMap ?? ''}
+
+            <SkyMap targets={predTargets} pointingRa={pointingRa} pointingDecl={pointingDecl} />
           </div>
           {/* column 3 */}
           <div className={styles.rigthDiv}>
