@@ -79,6 +79,7 @@ export const EFD_INSTANCES = {
   'summit-lsp.lsst.codes': 'summit_efd',
   'base-lsp.lsst.codes': 'base_efd',
   'tucson-teststand.lsst.codes': 'tucson_teststand_efd',
+  localhost: 'base_efd',
 };
 
 export const EFD_RETENTION_DAYS_PER_INSTANCE = {

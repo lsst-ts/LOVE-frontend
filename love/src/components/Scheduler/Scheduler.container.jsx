@@ -17,11 +17,17 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import Scheduler from './Scheduler';
 import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+
+import RatioDisplay from 'components/MainTel/RatioDisplay/RatioDisplay';
+import EFDQuery from 'components/GeneralPurpose/EFDQuery/EFDQuery';
+import { ISO_STRING_DATE_TIME_FORMAT, TOPIC_TIMESTAMP_ATTRIBUTE } from 'Config';
+import ManagerInterface, { getEFDInstanceForHost, parseCommanderData } from 'Utils';
 import {
   getSchedulerSummaryState,
   getDetailedState,
@@ -156,6 +162,55 @@ const SchedulerContainer = ({
   salindex,
   ...props
 }) => {
+  const [response, setResponse] = useState(null);
+
+  const efdManagerInterface = (startDate) => {
+    const cscInputs = {
+      MTMount: {
+        0: {
+          azimuth: ['actualPosition'],
+        },
+      },
+      MTDome: {
+        0: {
+          azimuth: ['positionActual'],
+        },
+      },
+    };
+
+    const parsedStartDate = startDate.format(ISO_STRING_DATE_TIME_FORMAT);
+    return ManagerInterface.getEFDTimeseries(parsedStartDate, 60 * 12, cscInputs, '1min', 'summit_efd').then(
+      (response) => {
+        setResponse(parseCommanderData(response));
+      },
+    );
+  };
+
+  const dateToQuery = '2026-01-17T23:00:00.000Z';
+  useEffect(() => {
+    efdManagerInterface(moment(dateToQuery));
+  }, []);
+
+  // const timeSeriesData = [
+  //   { timestamp: '2026-02-10T10:00:00', outerAzimuth: 0, innerAzimuth: 120.3 },
+  //   { timestamp: '2026-02-10T10:01:00', outerAzimuth: 50, innerAzimuth: 121.1 },
+  //   { timestamp: '2026-02-10T10:02:00', outerAzimuth: 80, innerAzimuth: 122.5 },
+  //   { timestamp: '2026-02-10T10:03:00', outerAzimuth: 90, innerAzimuth: 123.8 },
+  // ];
+
+  const timeSeriesData = [];
+  if (response) {
+    for (let i = 0; i < response['MTMount-0-azimuth']['actualPosition'].length; i++) {
+      timeSeriesData.push({
+        timestamp: response['MTMount-0-azimuth']['actualPosition'][i].x.toISO(),
+        innerAzimuth: response['MTMount-0-azimuth']['actualPosition'][i].y,
+        outerAzimuth: response['MTDome-0-azimuth']['positionActual'][i].y,
+      });
+    }
+  }
+
+  console.log('Time Series Data:', timeSeriesData);
+  return <RatioDisplay timeSeriesData={timeSeriesData} />;
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
