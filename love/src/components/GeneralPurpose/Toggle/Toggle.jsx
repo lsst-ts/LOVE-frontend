@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -19,10 +21,9 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
 import styles from './Toggle.module.css';
 
-const Toggle = ({ toggled = false, labels = [], onToggle = () => {} }) => {
+const Toggle = ({ toggled = false, labels = [], onToggle = () => {}, activeColorClassName = '' }) => {
   const handleChangeChk = () => {
     onToggle(!toggled);
   };
@@ -43,7 +44,7 @@ const Toggle = ({ toggled = false, labels = [], onToggle = () => {} }) => {
           checked={toggled}
           onChange={handleChangeChk}
         />
-        <span className={[styles.slider, styles.round].join(' ')} />
+        <span className={[styles.slider, styles.round, activeColorClassName].join(' ')} />
       </label>
 
       <span
@@ -63,10 +64,8 @@ Toggle.propTypes = {
   labels: PropTypes.arrayOf(PropTypes.string),
   /** The function to set the live mode */
   onToggle: PropTypes.func,
+  /** The class name for the active color of the slider */
+  activeColorClassName: PropTypes.string,
 };
 
-function propsAreEqual(prevProps, nextProps) {
-  return nextProps.toggled === prevProps.toggled && isEqual(nextProps.labels, prevProps.labels);
-}
-
-export default memo(Toggle, propsAreEqual);
+export default memo(Toggle);
