@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import PropTypes from 'prop-types';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText.jsx';
 import ResumeIcon from 'components/icons/ScriptQueue/ResumeIcon/ResumeIcon';
@@ -28,6 +28,8 @@ import GearIcon from 'components/icons/ScriptQueue/GearIcon/GearIcon.jsx';
 import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
 import ContextMenu from '../Scripts/ContextMenu/ContextMenu';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail.jsx';
+import Toggle from 'components/GeneralPurpose/Toggle/Toggle.jsx';
+import Button from 'components/GeneralPurpose/Button/Button.jsx';
 import { OBSERVATORY_STATES } from 'Config';
 import { acronymizeString, formatSecondsToDigital } from 'Utils';
 import styles from './GlobalState.module.css';
@@ -101,8 +103,7 @@ const observatoryStateTooltip =
   '\n(W)eather: set when weather conditions are not suitable for observations.' +
   '\n(D)owntime: set during scheduled maintenance or upgrades.' +
   '\nHover over each state to see its full name.' +
-  '\n\nClick the gear icon to change the observatory states. You can additionally provide a note for the change, ' +
-  'please write any comment before applying the new state.';
+  '\n\nClick the gear icon to change the observatory states. Note you can additionally provide a note to the change.';
 
 const ObserversNote = ({ note, setNote }) => {
   const handleNoteChange = (event) => {
@@ -121,6 +122,41 @@ const ObserversNote = ({ note, setNote }) => {
   );
 };
 
+const ObservatoryStatusMenu = memo(({ observatoryStateValue, updateObservatoryState }) => {
+  const [newState, setNewState] = useState(observatoryStateValue);
+  const [note, setNote] = useState();
+
+  const hasChanged = newState !== observatoryStateValue || note?.trim().length > 0;
+
+  const MenuOption = ({ label, status }) => {
+    const isStatusActive = (newState & status) !== 0;
+    const onToggleState = () => {
+      const updatedState = newState ^ status;
+      setNewState(updatedState);
+    };
+    return (
+      <div className={styles.observatoryStatusContextMenu}>
+        <Toggle toggled={isStatusActive} onToggle={onToggleState} activeColorClassName={styles.sliderActiveState} />
+        <span className={isStatusActive ? styles.highlightedSliderLabel : ''}>{label}</span>
+      </div>
+    );
+  };
+  return (
+    <>
+      <div>
+        <MenuOption label="Operational" status={OBSERVATORY_STATES.OPERATIONAL} />
+        <MenuOption label="Fault" status={OBSERVATORY_STATES.FAULT} />
+        <MenuOption label="Weather" status={OBSERVATORY_STATES.WEATHER} />
+        <MenuOption label="Downtime" status={OBSERVATORY_STATES.DOWNTIME} />
+      </div>
+      <ObserversNote note={note} setNote={setNote} />
+      <Button disabled={!hasChanged} onClick={() => updateObservatoryState(newState, note)}>
+        Update observatory state
+      </Button>
+    </>
+  );
+});
+
 const GlobalState = ({
   summaryState,
   queueState,
@@ -132,12 +168,9 @@ const GlobalState = ({
   commandExecutePermission,
   resumeScriptQueue,
   pauseScriptQueue,
-  // updateObservatoryState,
 }) => {
   const [contextMenuIsOpen, setContextMenuIsOpen] = useState(false);
-  const [contextMenuData, setContextMenuData] = useState({});
   const [contextMenuTarget, setContextMenuTarget] = useState();
-  const [observatoryStateNote, setObservatoryStateNote] = useState();
 
   const onClickContextMenu = useCallback((event) => {
     event.stopPropagation();
@@ -197,66 +230,25 @@ const GlobalState = ({
     ];
   }, [summaryState, requestSummaryStateCommand]);
 
-  const updateObservatoryState = (state) => {
-    console.log('Current value:', observatoryStateValue);
-    const newValue = observatoryStateValue ^ state;
-    console.log('New value:', newValue);
-    console.log('Note:', observatoryStateNote);
-    // updateObservatoryStateCommand(newValue, observatoryStateNote);
+  const updateObservatoryState = useCallback((state, note) => {
+    updateObservatoryStateCommand(state, note);
     setContextMenuIsOpen(false);
-    setObservatoryStateNote();
-  };
-
-  const observatoryStateContextMenuOptions = [
-    {
-      icon: <ResumeIcon />,
-      text: 'Operational',
-      action: () => {
-        updateObservatoryState(OBSERVATORY_STATES.OPERATIONAL);
-      },
-    },
-    {
-      icon: <PauseIcon />,
-      text: 'Fault',
-      action: () => {
-        updateObservatoryState(OBSERVATORY_STATES.FAULT);
-      },
-    },
-    {
-      icon: <PauseIcon />,
-      text: 'Weather',
-      action: () => {
-        updateObservatoryState(OBSERVATORY_STATES.WEATHER);
-      },
-    },
-    {
-      icon: <PauseIcon />,
-      text: 'Downtime',
-      action: () => {
-        updateObservatoryState(OBSERVATORY_STATES.DOWNTIME);
-      },
-    },
-  ];
+  }, []);
 
   const getContextMenuOptions = (element) => {
     if (element?.classList.contains('summaryState')) {
       return summaryStatecontextMenuOptions;
-    }
-    if (element?.classList.contains('observatoryState')) {
-      return observatoryStateContextMenuOptions;
     }
     return [];
   };
 
   const contextMenuOptions = getContextMenuOptions(contextMenuTarget);
   const observatoryStateOptionsSelected = contextMenuTarget?.classList.contains('observatoryState');
-
-  const availableObservatoryStates = Object.keys(OBSERVATORY_STATES).slice(1);
   const activeObservatoryStateValues = getActiveObservatoryStates(observatoryStateValue);
   const activeObservatoryStates = activeObservatoryStateValues.map((state) => OBSERVATORY_STATE_DETAIL[state]);
 
   const secondsSinceLastEvent = observatoryStateTimestamp
-    ? ((Date.now() - new Date(observatoryStateTimestamp * 1000).getTime()) / 1000).toFixed(1)
+    ? (Date.now() - observatoryStateTimestamp * 1000) / 1000
     : null;
 
   return (
@@ -346,7 +338,11 @@ const GlobalState = ({
 
         <ContextMenu isOpen={contextMenuIsOpen} options={contextMenuOptions} target={contextMenuTarget}>
           {observatoryStateOptionsSelected && (
-            <ObserversNote note={observatoryStateNote} setNote={setObservatoryStateNote} />
+            <ObservatoryStatusMenu
+              key={observatoryStateTimestamp}
+              observatoryStateValue={observatoryStateValue}
+              updateObservatoryState={updateObservatoryState}
+            />
           )}
         </ContextMenu>
       </div>
@@ -366,11 +362,27 @@ GlobalState.propTypes = {
     /** Type of the <StatusText/> */
     statusText: PropTypes.string,
   }),
+  schedulerSummaryState: PropTypes.shape({
+    /** UpperCase name of the summaryState of the scheduler
+     */
+    name: PropTypes.oneOf(['ENABLED', 'DISABLED', 'STANDBY', 'OFFLINE', 'FAULT', 'UNKNOWN']),
+  }),
+  /** Decimal value representing the current observatory states */
+  observatoryStateValue: PropTypes.number,
+  /** Timestamp of the last change in the observatory states, in seconds since epoch */
+  observatoryStateTimestamp: PropTypes.number,
   /**
    * Callback used to request summaryState changes
    * @param {string} name to be attached to the command as `cmd_<name>`
    */
   requestSummaryStateCommand: PropTypes.func,
+  /**
+   * Callback used to request observatoryState changes, it will be called
+   * with the new state value and the note provided by the user in the context menu
+   * @param {number} state Decimal value representing the new observatory states
+   * @param {string} note Note provided by the user in the context menu, it can be an empty string if the user didn't provide any note
+   */
+  updateObservatoryStateCommand: PropTypes.func,
   /** If true, then and only then command-related buttons will be shown */
   commandExecutePermission: PropTypes.bool,
   /**
