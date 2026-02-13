@@ -663,9 +663,9 @@ export default class ScriptQueue extends Component {
       return script.path.toLowerCase().includes(this.state.availableScriptsFilter.toLowerCase());
     });
 
-    const observatoryStateValue = 13;
-    const observatoryStateTimestamp = this.props.observatoryStatuses.private_sndStamp?.value;
-    console.log(observatoryStateTimestamp);
+    const observatoryStateValue = this.props.observatoryStatuses?.status?.value ?? 0;
+    const observatoryStateTimestamp =
+      this.props.observatoryStatuses?.private_sndStamp?.value + (this.props.taiToUtc ?? -37);
 
     return (
       <div
