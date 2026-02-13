@@ -98,7 +98,7 @@ const observatoryStateTooltip =
   'Only active states are color-coded and shown, ' +
   'each following letter represents a different state:' +
   '\n(D)aytime: daytime when on, nighttime when off, automatically set by the Scheduler CSC.' +
-  '\n(O)perational: set when the observatory is operating in normal state.' +
+  '\n(O)perational: set when the observatory is operating in normal state. Note this state can only be set during Nighttime.' +
   '\n(F)ault: set when a fault is detected in any subsystem. Automatically set by the Scheduler CSC, but can also be changed manually.' +
   '\n(W)eather: set when weather conditions are not suitable for observations.' +
   '\n(D)owntime: set during scheduled maintenance or upgrades.' +
@@ -127,11 +127,24 @@ const ObservatoryStatusMenu = memo(({ observatoryStateValue, updateObservatorySt
   const [note, setNote] = useState();
 
   const hasChanged = newState !== observatoryStateValue || note?.trim().length > 0;
+  const isDayTime = (observatoryStateValue & OBSERVATORY_STATES.DAYTIME) !== 0;
 
   const MenuOption = ({ label, status }) => {
     const isStatusActive = (newState & status) !== 0;
     const onToggleState = () => {
-      const updatedState = newState ^ status;
+      let updatedState;
+      if (status === OBSERVATORY_STATES.OPERATIONAL) {
+        // OPERATIONAL state is mutually exclusive with FAULT & WEATHER & DOWNTIME states.
+        updatedState =
+          (newState ^ status) & ~(OBSERVATORY_STATES.FAULT | OBSERVATORY_STATES.WEATHER | OBSERVATORY_STATES.DOWNTIME);
+      } else if (
+        status === OBSERVATORY_STATES.FAULT ||
+        status === OBSERVATORY_STATES.WEATHER ||
+        status === OBSERVATORY_STATES.DOWNTIME
+      ) {
+        // FAULT & WEATHER & DOWNTIME states are mutually exclusive with OPERATIONAL state.
+        updatedState = (newState ^ status) & ~OBSERVATORY_STATES.OPERATIONAL;
+      }
       setNewState(updatedState);
     };
     return (
@@ -144,7 +157,7 @@ const ObservatoryStatusMenu = memo(({ observatoryStateValue, updateObservatorySt
   return (
     <>
       <div>
-        <MenuOption label="Operational" status={OBSERVATORY_STATES.OPERATIONAL} />
+        {!isDayTime && <MenuOption label="Operational" status={OBSERVATORY_STATES.OPERATIONAL} />}
         <MenuOption label="Fault" status={OBSERVATORY_STATES.FAULT} />
         <MenuOption label="Weather" status={OBSERVATORY_STATES.WEATHER} />
         <MenuOption label="Downtime" status={OBSERVATORY_STATES.DOWNTIME} />
