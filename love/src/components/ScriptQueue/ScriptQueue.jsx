@@ -666,6 +666,7 @@ export default class ScriptQueue extends Component {
     const observatoryStateValue = this.props.observatoryStatuses?.status?.value ?? 0;
     const observatoryStateTimestamp =
       this.props.observatoryStatuses?.private_sndStamp?.value + (this.props.taiToUtc ?? -37);
+    const observatoryStateNote = this.props.observatoryStatuses?.note?.value ?? '';
 
     return (
       <div
@@ -713,6 +714,7 @@ export default class ScriptQueue extends Component {
           pauseScriptQueue={this.pauseScriptQueue}
           observatoryStateValue={observatoryStateValue}
           observatoryStateTimestamp={observatoryStateTimestamp}
+          observatoryStateNote={observatoryStateNote}
           updateObservatoryStateCommand={this.observatoryStateCommand}
         />
 

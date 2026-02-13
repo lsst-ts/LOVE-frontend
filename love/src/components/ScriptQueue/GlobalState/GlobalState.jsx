@@ -24,6 +24,7 @@ import ResumeIcon from 'components/icons/ScriptQueue/ResumeIcon/ResumeIcon';
 import PauseIcon from 'components/icons/ScriptQueue/PauseIcon/PauseIcon';
 import GearIcon from 'components/icons/ScriptQueue/GearIcon/GearIcon.jsx';
 import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
+import MessageIcon from 'components/icons/MessageIcon/MessageIcon';
 import ContextMenu from '../Scripts/ContextMenu/ContextMenu';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail.jsx';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle.jsx';
@@ -103,6 +104,12 @@ const observatoryStateTooltip =
   '\nHover over each state to see its full name.' +
   '\n\nClick the gear icon to change the observatory states. Note you can additionally provide a note to the change.';
 
+const observatoryStatusTimerTooltip =
+  'Time since the last change in the observatory states. ' +
+  'This timer resets every time there is a change in any of the observatory states, ' +
+  'and it can be used to track how long the observatory has been in the current states. ' +
+  'Hover over the message bubble to see the note attached to the last change in the observatory states, if any.';
+
 const ObserversNote = ({ note, setNote }) => {
   const handleNoteChange = (event) => {
     setNote(event.target.value);
@@ -175,6 +182,7 @@ const GlobalState = ({
   schedulerSummaryState,
   observatoryStateValue,
   observatoryStateTimestamp,
+  observatoryStateNote,
   requestSummaryStateCommand,
   updateObservatoryStateCommand,
   commandExecutePermission,
@@ -351,8 +359,23 @@ const GlobalState = ({
             </div>
           </div>
           <div className={styles.row}>
-            <div className={styles.stateLabel}>Time since last event:</div>
-            <div className={styles.stateCell}>{formatSecondsToDigital(secondsSinceLastEvent)}</div>
+            <div className={styles.stateLabel}>
+              <span>Time since last event</span>
+              <span className={styles.infoIconContainer}>
+                <InfoIcon className={styles.infoIcon} title={observatoryStatusTimerTooltip} />
+              </span>
+            </div>
+            <div className={styles.stateCell}>
+              <div className={styles.observatoryStateEventContainer}>
+                {formatSecondsToDigital(secondsSinceLastEvent)}
+                <div
+                  title={observatoryStateNote ? observatoryStateNote : 'No note available.'}
+                  className={styles.observatoryStateNoteIcon}
+                >
+                  <MessageIcon />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

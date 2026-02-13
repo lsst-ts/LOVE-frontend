@@ -151,3 +151,19 @@ input:checked + .sliderActiveState {
   color: var(--highlighted-font-color);
   font-weight: bold;
 }
+
+.observatoryStateEventContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--content-padding);
+}
+
+.observatoryStateNoteIcon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.observatoryStateNoteIcon svg {
+  width: 1em;
+  height: 1em;
+}
