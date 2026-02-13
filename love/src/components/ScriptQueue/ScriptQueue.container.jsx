@@ -28,6 +28,7 @@ import {
   getLastSALCommand,
   getUsername,
   getObservatoryStatuses,
+  getTaiToUtc,
 } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import ScriptQueue from './ScriptQueue';
@@ -67,6 +68,7 @@ const ScriptQueueContainer = ({
   salindex,
   fit,
   embedded,
+  taiToUtc,
   ...props
 }) => {
   if (props.isRaw) {
@@ -93,6 +95,7 @@ const ScriptQueueContainer = ({
       fit={fit}
       embedded={embedded}
       running={queueState.running}
+      taiToUtc={taiToUtc}
     />
   );
 };
@@ -106,6 +109,7 @@ const mapStateToProps = (state, ownProps) => {
   const lastSALCommand = getLastSALCommand(state);
   const username = getUsername(state);
   const observatoryStatuses = getObservatoryStatuses(state, ownProps.salindex);
+  const taiToUtc = getTaiToUtc(state);
   return {
     queueState,
     scriptHeartbeats,
@@ -115,6 +119,7 @@ const mapStateToProps = (state, ownProps) => {
     lastSALCommand,
     username,
     observatoryStatuses,
+    taiToUtc,
   };
 };
 
