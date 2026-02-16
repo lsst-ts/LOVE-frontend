@@ -160,6 +160,10 @@ input:checked + .sliderActiveState {
   gap: var(--content-padding);
 }
 
+.stateCell:has(.observatoryStateEventContainer) {
+  justify-items: center;
+}
+
 .observatoryStateNoteIcon {
   display: inline-flex;
   align-items: center;

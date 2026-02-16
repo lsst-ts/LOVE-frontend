@@ -103,7 +103,10 @@ const observatoryStateTooltip =
   '\n(F)ault: set when a fault is detected in any subsystem. Automatically set by the Scheduler CSC, but can also be changed manually.' +
   '\n(W)eather: set when weather conditions are not suitable for observations.' +
   '\n(D)owntime: set during scheduled maintenance or upgrades.' +
-  '\nHover over each state to see its full name.' +
+  "\n\nHover over each state to see its full name. Additionally, 'UNKNOWN' state will be set and shown " +
+  ' when transitioning from daytime to nighttime. ' +
+  'It is responsability of the observers to set it to operational when in nighttime. This state can be also shown when ' +
+  ' the observatory status feature is disabled in the Scheduler CSC.' +
   '\n\nClick the gear icon to change the observatory states. Note you can additionally provide a note to the change.';
 
 const observatoryStatusTimerTooltip =
@@ -272,6 +275,22 @@ const GlobalState = ({
     ? (Date.now() - observatoryStateTimestamp * 1000) / 1000
     : null;
 
+  const ObservatoryStateStatusText = ({ state }) => {
+    if (state === 0) {
+      return <StatusText status="invalid">UNKNOWN</StatusText>;
+    }
+    return (
+      <div className={styles.observatoryStatesContainer}>
+        {activeObservatoryStates.map((stateDetail) => {
+          if (!stateDetail) {
+            return renderObservatoryState(state, 'invalid');
+          }
+          return renderObservatoryState(stateDetail.name, stateDetail.statusText);
+        })}
+      </div>
+    );
+  };
+
   return (
     <div className={styles.globalStateWrapper}>
       <div className={styles.globalStateContainer}>
@@ -331,14 +350,7 @@ const GlobalState = ({
               </span>
             </div>
             <div className={styles.stateCell}>
-              <div className={styles.observatoryStatesContainer}>
-                {activeObservatoryStates.map((stateDetail) => {
-                  if (!stateDetail) {
-                    return renderObservatoryState(state, 'invalid');
-                  }
-                  return renderObservatoryState(stateDetail.name, stateDetail.statusText);
-                })}
-              </div>
+              <ObservatoryStateStatusText state={observatoryStateValue} />
               {schedulerSummaryState.name === 'ENABLED' && commandExecutePermission && (
                 <div
                   className={[styles.pauseIconContainer, 'observatoryState'].join(' ')}
