@@ -279,6 +279,34 @@ const GlobalState = ({
     ? (Date.now() - observatoryStateTimestamp * 1000) / 1000
     : null;
 
+  const ObservatoryStateStatusText = ({ state }) => {
+    if (state === 0) {
+      return <StatusText status="invalid">UNKNOWN</StatusText>;
+    }
+    return (
+      <>
+        <div className={styles.observatoryStatesContainer}>
+          {activeObservatoryStates.map((stateDetail) => {
+            if (!stateDetail) {
+              return renderObservatoryState(state, 'invalid');
+            }
+            return renderObservatoryState(stateDetail.name, stateDetail.statusText);
+          })}
+        </div>
+        {schedulerSummaryState.name === 'ENABLED' && commandExecutePermission && (
+          <div
+            className={[styles.pauseIconContainer, 'observatoryState'].join(' ')}
+            onClick={(e) => onClickContextMenu(e, true)}
+          >
+            <div className={styles.pauseIconWrapper} title="Change observatoryState">
+              <GearIcon className={styles.gearIcon} />
+            </div>
+          </div>
+        )}
+      </>
+    );
+  };
+
   return (
     <div className={styles.globalStateWrapper}>
       <div className={styles.globalStateContainer}>
@@ -338,24 +366,7 @@ const GlobalState = ({
               </span>
             </div>
             <div className={styles.stateCell}>
-              <div className={styles.observatoryStatesContainer}>
-                {activeObservatoryStates.map((stateDetail) => {
-                  if (!stateDetail) {
-                    return renderObservatoryState(state, 'invalid');
-                  }
-                  return renderObservatoryState(stateDetail.name, stateDetail.statusText);
-                })}
-              </div>
-              {schedulerSummaryState.name === 'ENABLED' && commandExecutePermission && (
-                <div
-                  className={[styles.pauseIconContainer, 'observatoryState'].join(' ')}
-                  onClick={(e) => onClickContextMenu(e, true)}
-                >
-                  <div className={styles.pauseIconWrapper} title="Change observatoryState">
-                    <GearIcon className={styles.gearIcon} />
-                  </div>
-                </div>
-              )}
+              <ObservatoryStateStatusText state={observatoryStateValue} />
             </div>
           </div>
           <div className={styles.row}>
