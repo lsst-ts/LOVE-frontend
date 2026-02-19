@@ -95,25 +95,25 @@ function renderObservatoryState(state, statusClass) {
 }
 
 const observatoryStateTooltip =
-  'Current states of the observatory. ' +
-  'Only active states are color-coded and shown, ' +
-  'each following letter represents a different state:' +
-  '\n(D)aytime: daytime when on, nighttime when off, automatically set by the Scheduler CSC.' +
-  '\n(O)perational: set when the observatory is operating in normal state. Note this state can only be set during Nighttime.' +
-  '\n(F)ault: set when a fault is detected in any subsystem. Automatically set by the Scheduler CSC, but can also be changed manually.' +
-  '\n(W)eather: set when weather conditions are not suitable for observations.' +
-  '\n(D)owntime: set during scheduled maintenance or upgrades.' +
-  "\n\nHover over each state to see its full name. Additionally, 'UNKNOWN' state will be set and shown " +
+  'Current state of the observatory. ' +
+  'Only active statuses are color-coded and shown, ' +
+  'each following letter represents a different status:' +
+  '\n(D)aytime (green): daytime when on, nighttime when off, automatically set by the Scheduler CSC.' +
+  '\n(O)perational (green): set when the observatory is operating in normal state. Note this status can only be set during nighttime.' +
+  '\n(F)ault (red): set when a fault is detected in any subsystem. Automatically set by the Scheduler CSC, but can also be changed manually.' +
+  '\n(W)eather (red): set when weather conditions are not suitable for observations.' +
+  '\n(D)owntime (yellow): set during scheduled maintenance or upgrades.' +
+  "\n\nHover over each status to see its full name. Additionally, 'UNKNOWN' status will be set and shown " +
   ' when transitioning from daytime to nighttime. ' +
-  'It is responsability of the observers to set it to operational when in nighttime. This state can be also shown when ' +
-  ' the observatory status feature is disabled in the Scheduler CSC.' +
-  '\n\nClick the gear icon to change the observatory states. Note you can additionally provide a note to the change.';
+  'It is responsibility of the observers to set it to operational when in nighttime. This status can be also shown when ' +
+  ' the observatory state feature is disabled in the Scheduler CSC.' +
+  '\n\nClick the gear icon to change the observatory statuses. Note you can additionally provide a note to the change.';
 
 const observatoryStatusTimerTooltip =
-  'Time since the last change in the observatory states. ' +
-  'This timer resets every time there is a change in any of the observatory states, ' +
-  'and it can be used to track how long the observatory has been in the current states. ' +
-  'Hover over the message bubble to see the note attached to the last change in the observatory states, if any.';
+  'Time since the last change in the observatory state. ' +
+  'This timer resets every time there is a change in any of the observatory statuses, ' +
+  'and it can be used to track how long the observatory has been in the current state.' +
+  '\nHover over the message bubble to see the note attached to the last change in the observatory state, if any.';
 
 const ObserversNote = ({ note, setNote }) => {
   const handleNoteChange = (event) => {
