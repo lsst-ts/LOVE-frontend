@@ -167,6 +167,7 @@ input:checked + .sliderActiveState {
 .observatoryStateNoteIcon {
   display: inline-flex;
   align-items: center;
+  cursor: context-menu;
 }
 
 .observatoryStateNoteIcon svg {
