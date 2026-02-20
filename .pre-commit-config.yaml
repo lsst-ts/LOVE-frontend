@@ -20,7 +20,7 @@ repos:
       - id: eslint
         files: \.[j]sx?$  # *.js and *.jsx
         types: [file]
-        exclude: docs/
+        exclude: (docs/|love/public/)
         additional_dependencies:
         - 'eslint@9.25.0'
         - 'eslint-plugin-vitest@0.5.4'

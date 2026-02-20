@@ -6,7 +6,7 @@ import vitest from 'eslint-plugin-vitest';
 
 export default [
   { 
-    ignores: ['dist', 'build', 'node_modules', 'coverage'] 
+    ignores: ['dist', 'build', 'node_modules', 'coverage', 'public'] 
   },
   {
     files: ['**/*.{js,jsx}'],
