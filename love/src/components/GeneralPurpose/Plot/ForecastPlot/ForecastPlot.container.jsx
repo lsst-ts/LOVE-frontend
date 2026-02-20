@@ -15,10 +15,10 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
+import { useRef } from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getStreamsData, getTaiToUtc } from 'redux/selectors';
+import { getStreamsData } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import ForecastPlot from './ForecastPlot';
 
@@ -250,7 +250,7 @@ const ForecastPlotContainer = ({ containerNode, ...props }) => {
    * so this is the safe way to pass the node. See:
    * https://react.dev/learn/referencing-values-with-refs
    */
-  const containerRef = React.useRef(null);
+  const containerRef = useRef(null);
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }

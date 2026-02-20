@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useState, useEffect, useCallback, useMemo, memo } from 'react';
+import { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import PropTypes from 'prop-types';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText.jsx';
 import ResumeIcon from 'components/icons/ScriptQueue/ResumeIcon/ResumeIcon';
@@ -79,7 +79,7 @@ const OBSERVATORY_STATE_DETAIL = {
 function getActiveObservatoryStates(decimalValue) {
   const activeStatuses = [];
 
-  for (const [name, bitValue] of Object.entries(OBSERVATORY_STATES)) {
+  for (const [_, bitValue] of Object.entries(OBSERVATORY_STATES)) {
     if ((decimalValue & bitValue) !== 0) {
       activeStatuses.push(bitValue);
     }

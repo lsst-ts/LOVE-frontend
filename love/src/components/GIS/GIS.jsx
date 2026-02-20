@@ -19,12 +19,13 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './GIS.module.css';
-import { signals, effects, alertSignalIndexes, signalBypassIndexes } from '../../Config';
+import { signals, effects, alertSignalIndexes, signalBypassIndexes } from 'Config';
 import GISContainerSignals from './GISContainerDetectionSignals';
 import GISContainerEffects from './GISContainerEffectsActuation';
+import styles from './GIS.module.css';
+
 export default class GIS extends Component {
   static propTypes = {
     /** Function to subscribe to streams to receive */

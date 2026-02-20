@@ -60,14 +60,14 @@ const OrderableTable = function ({ data, headers, ...otherProps }) {
     } else if (sortDirections[column] === SORT_ASCENDING) {
       newDirection = SORT_DESCENDING;
     }
-    setSortDirections((sortDirections) => ({
+    setSortDirections(() => ({
       ...initialSortDirections,
       [column]: newDirection,
     }));
     setSortingColumn(column);
   };
 
-  const newHeaders = headers.map((header, index) => {
+  const newHeaders = headers.map((header) => {
     const sortDirection = sortDirections[header.field];
     return {
       ...header,

@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -18,18 +20,9 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import Neighbors from 'components/GeneralPurpose/Neighbors/Neighbors';
-import CCDDetail from '../CCDDetail/CCDDetail';
 import styles from './RaftDetail.module.css';
-import { mtcameraRaftsNeighborsMapping } from 'Config';
-
-const COLOR_MAPPING = {
-  1: 'var(--status-ok-dimmed-color-3)',
-  2: 'var(--status-warning-dimmed-color-3)',
-  3: 'var(--status-alert-dimmed-color-3)',
-};
 
 function getRebPlots(index) {
   return {
@@ -171,16 +164,12 @@ class RaftDetail extends Component {
   }
 
   render() {
-    const { raft, showNeighbors, selectedReb, selectNeighborRaft } = this.props;
+    const { showNeighbors, selectNeighborRaft } = this.props;
 
     const edgesColors = {
-      // top: raft.neighbors.top ? COLOR_MAPPING[raft.neighbors.top.status] : 'transparent',
       top: 'transparent',
-      // right: raft.neighbors.right ? COLOR_MAPPING[raft.neighbors.right.status] : 'transparent',
       right: 'transparent',
-      // bottom: raft.neighbors.bottom ? COLOR_MAPPING[raft.neighbors.bottom.status] : 'transparent',
       bottom: 'transparent',
-      // left: raft.neighbors.left ? COLOR_MAPPING[raft.neighbors.left.status] : 'transparent',
       left: 'transparent',
     };
     return showNeighbors ? (

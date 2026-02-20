@@ -1,12 +1,25 @@
-import React, { useState, useEffect } from 'react';
+/** 
+This file is part of LOVE-frontend.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Moment from 'moment';
-import ManagerInterface, {
-  fixedFloat,
-  getEFDInstanceForHost,
-  isNightReportOld,
-  getCutDateFromNightReport,
-} from 'Utils';
+import Input from 'components/GeneralPurpose/Input/Input';
+import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
+import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import {
   ISO_STRING_DATE_TIME_FORMAT,
   mtMountDeployableMotionStateMap,
@@ -18,10 +31,12 @@ import {
   stateToStyleMTMountElevationLockingPinMotionState,
   stateToStyleATPneumaticsMirrorCoverState,
 } from 'Config';
-import Input from 'components/GeneralPurpose/Input/Input';
-import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
-import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
-
+import ManagerInterface, {
+  fixedFloat,
+  getEFDInstanceForHost,
+  isNightReportOld,
+  getCutDateFromNightReport,
+} from 'Utils';
 import styles from './CreateNightReport.module.css';
 
 export const observatoryStateTelemetriesMapping = {

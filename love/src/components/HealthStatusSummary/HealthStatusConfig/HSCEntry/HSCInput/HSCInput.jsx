@@ -19,11 +19,11 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import Input from 'components/GeneralPurpose/Input/Input';
+import Select from 'components/GeneralPurpose/Select/Select';
 import styles from './HSCInput.module.css';
-import Input from '../../../../GeneralPurpose/Input/Input';
-import Select from '../../../../GeneralPurpose/Select/Select';
 
 /**
  * Component to configure the Health Status Summary

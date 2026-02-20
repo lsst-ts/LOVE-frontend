@@ -19,17 +19,17 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
+import PropTypes from 'prop-types';
+import { uniqueId } from 'lodash';
 import * as d3 from 'd3';
+import Button from 'components/GeneralPurpose/Button/Button';
 import RaftDetail from './RaftDetail/RaftDetail';
 import FocalPlane from './FocalPlane/FocalPlane';
 import CCDDetail from './CCDDetail/CCDDetail';
-import PropTypes from 'prop-types';
-import styles from './CCCamera.module.css';
 import FocalPlaneSummaryDetail from './FocalPlaneSummaryDetail/FocalPlaneSummaryDetail';
-import Button from 'components/GeneralPurpose/Button/Button';
 import RebDetail from './RebDetail/RebDetail';
-import { uniqueId } from 'lodash';
+import styles from './CCCamera.module.css';
 
 const rafts = [];
 

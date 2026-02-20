@@ -19,9 +19,16 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
-import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
+import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
+import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
+import Row from 'components/GeneralPurpose/SummaryPanel/Row';
+import Label from 'components/GeneralPurpose/SummaryPanel/Label';
+import Value from 'components/GeneralPurpose/SummaryPanel/Value';
+import Title from 'components/GeneralPurpose/SummaryPanel/Title';
+import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
+import Limits from 'components/GeneralPurpose/Limits/Limits';
 import {
   m3RotatorStateMap,
   m3PortSelectedStateMap,
@@ -35,14 +42,7 @@ import {
   ataosCorrectionsStateToStyle,
   stateToStyleMount,
   ATPneumaticsLimits,
-} from '../../../../Config';
-import SummaryPanel from '../../../GeneralPurpose/SummaryPanel/SummaryPanel';
-import Row from '../../../GeneralPurpose/SummaryPanel/Row';
-import Label from '../../../GeneralPurpose/SummaryPanel/Label';
-import Value from '../../../GeneralPurpose/SummaryPanel/Value';
-import Title from '../../../GeneralPurpose/SummaryPanel/Title';
-import SimpleTable from '../../../GeneralPurpose/SimpleTable/SimpleTable';
-import Limits from '../../../GeneralPurpose/Limits/Limits';
+} from 'Config';
 import styles from './SummaryPanel.module.css';
 
 const M3PORTNASMYTH1 = 1;

@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -163,7 +165,7 @@ describe('GIVEN we have no alarms in the state', () => {
       async () => {
         // Arrange:
         const expectedAlarms = [];
-        alarms.forEach((alarm, index) => {
+        alarms.forEach((alarm) => {
           // Act:
           server.send({
             category: 'event',
@@ -259,7 +261,7 @@ describe('GIVEN we have some alarms in the state', () => {
   });
 });
 
-describe('GIVEN we have no alarms in the state', () => {
+describe('GIVEN we have no alarms in the state we dispatch...', () => {
   const initialState = {
     auth: {
       username: '',
@@ -285,7 +287,7 @@ describe('GIVEN we have no alarms in the state', () => {
   });
 
   describe('WHEN we dispatch a receiveAlarms event with 1 alarm', () => {
-    it('THEN the alarm is stored in the watcher state accordingly ', async () => {
+    it('THEN the alarm is stored in the watcher state accordingly', async () => {
       // Act:
       await store.dispatch(receiveAlarm(alarms[0]));
       // Assert:
@@ -295,7 +297,7 @@ describe('GIVEN we have no alarms in the state', () => {
   });
 
   describe('WHEN we dispatch a receiveAlarms event with multiple alarms', () => {
-    it('THEN all the alarms are stored in the watcher state accordingly ', async () => {
+    it('THEN all the alarms are stored in the watcher state accordingly', async () => {
       // Act:
       await store.dispatch(receiveAllAlarms(alarms));
       // Assert:

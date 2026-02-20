@@ -238,17 +238,6 @@ const AzWrapStrategy = [
   { label: 'OPTIMIZE', value: 2 },
 ];
 
-const RotFrame = [
-  { label: 'TARGET', value: 1 }, // self.RotFrame.TARGET
-  { label: 'AZEL', value: 2 }, // self.RotFrame.AZEL
-  { label: 'FIXED', value: 3 }, // self.RotFrame.FIXED
-];
-
-const RotMode = [
-  { label: 'FIELD', value: 1 }, // self.RotMode.FIELD
-  { label: 'SLIT', value: 2 }, // self.RotMode.SLIT
-];
-
 const Planets = [
   { label: 'JUPITER', value: 5 },
   { label: 'MARS', value: 4 },

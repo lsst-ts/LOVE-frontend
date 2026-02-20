@@ -19,14 +19,14 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
-import * as d3 from 'd3';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
+import * as d3 from 'd3';
 import { uniqueId } from 'lodash';
 import { M2ActuatorPositions, M2ActuatorTangentAngles } from 'Config';
 import { radians } from 'Utils';
-import ForceGradient from '../ForceGradient/ForceGradient';
 import Button from 'components/GeneralPurpose/Button/Button';
+import ForceGradient from '../ForceGradient/ForceGradient';
 import styles from './Selector.module.css';
 
 export default class Selector extends Component {

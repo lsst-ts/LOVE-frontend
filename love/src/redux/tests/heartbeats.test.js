@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,6 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { it, expect, beforeEach, afterEach } from 'vitest';
 import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import thunkMiddleware from 'redux-thunk';
@@ -85,7 +88,7 @@ beforeEach(async () => {
 describe('GIVEN are not subscribed to the manager heartbeat', () => {
   // Arrange:
   describe('WHEN we query for the last heartbeat received', () => {
-    it('THEN we get undefined ', async () => {
+    it('THEN we get undefined', async () => {
       // Arrange:
       const lastManagerHeartbeat = getLastManagerHeartbeat(store);
       // Assert:
@@ -101,7 +104,7 @@ describe('GIVEN we are subscribed to the manager heartbeat', () => {
   });
 
   describe('WHEN we receive a manager heartbeat', () => {
-    it('THEN we store it the state ', async () => {
+    it('THEN we store it the state', async () => {
       // Arrange:
       await server.send(heartbeatsInfo[0]);
       const lastManagerHeartbeat = getLastManagerHeartbeat(store.getState());
@@ -111,7 +114,7 @@ describe('GIVEN we are subscribed to the manager heartbeat', () => {
   });
 
   describe('WHEN we receive 2 manager heartbeats', () => {
-    it('THEN we store the last one ', async () => {
+    it('THEN we store the last one', async () => {
       // Arrange:
       await server.send(heartbeatsInfo[0]);
       await server.send(heartbeatsInfo[1]);
@@ -122,7 +125,7 @@ describe('GIVEN we are subscribed to the manager heartbeat', () => {
   });
 
   describe('WHEN we receive a commander heartbeat', () => {
-    it('THEN we store it the state ', async () => {
+    it('THEN we store it the state', async () => {
       // Arrange:
       await server.send(heartbeatsInfo[2]);
       const lastProducerHeartbeat = getLastComponentHeartbeat(store.getState(), HEARTBEAT_COMPONENTS.COMMANDER);
@@ -132,7 +135,7 @@ describe('GIVEN we are subscribed to the manager heartbeat', () => {
   });
 
   describe('WHEN we lose server connection', () => {
-    it('THEN we dont receive new manager heartbeats ', async () => {
+    it('THEN we dont receive new manager heartbeats', async () => {
       // Arrange:
       await server.send(heartbeatsInfo[0]);
       server.close();

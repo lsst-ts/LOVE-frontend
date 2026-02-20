@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,7 +19,16 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
+import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
+import InfoPanel from 'components/GeneralPurpose/InfoPanel/InfoPanel';
+import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
+import Label from 'components/GeneralPurpose/SummaryPanel/Label';
+import Value from 'components/GeneralPurpose/SummaryPanel/Value';
+import Row from 'components/GeneralPurpose/SummaryPanel/Row';
+import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
+import CurrentTargetValue from 'components/GeneralPurpose/CurrentTargetValue/CurrentTargetValue';
+import Limits from 'components/GeneralPurpose/Limits/Limits';
 import {
   m3RotatorStateMap,
   m3PortSelectedStateMap,
@@ -28,18 +39,8 @@ import {
   stateToStyleMount,
   m1CoverLimitSwitchesStateMap,
   stateToStyleLightpath,
-} from '../../../Config';
-
+} from 'Config';
 import styles from './LightPath.module.css';
-import Hoverable from '../../GeneralPurpose/Hoverable/Hoverable';
-import InfoPanel from '../../GeneralPurpose/InfoPanel/InfoPanel';
-import SummaryPanel from '../../GeneralPurpose/SummaryPanel/SummaryPanel';
-import Label from '../../GeneralPurpose/SummaryPanel/Label';
-import Value from '../../GeneralPurpose/SummaryPanel/Value';
-import Row from '../../GeneralPurpose/SummaryPanel/Row';
-import StatusText from '../../GeneralPurpose/StatusText/StatusText';
-import CurrentTargetValue from '../../GeneralPurpose/CurrentTargetValue/CurrentTargetValue';
-import Limits from '../../GeneralPurpose/Limits/Limits';
 
 const M3PORTNASMYTH1 = 1;
 const M3PORTNASMYTH2 = 2;
@@ -517,10 +518,7 @@ export default class LightPath extends Component {
     );
   };
 
-  drawLightPath2 = (props) => {
-    // const m1Position = 230;
-    // const m1CoverPosition = 187;
-    // const isM1CoverOpen = true;
+  drawLightPath2 = () => {
     return (
       <svg viewBox="0 0 100 10" x={121.5 - 140 / 2} y={0} width={140} height={15}>
         <path

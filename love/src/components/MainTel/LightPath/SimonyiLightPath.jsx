@@ -19,8 +19,13 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
+import InfoPanel from 'components/GeneralPurpose/InfoPanel/InfoPanel';
+import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
+import Label from 'components/GeneralPurpose/SummaryPanel/Label';
+import Value from 'components/GeneralPurpose/SummaryPanel/Value';
+import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import {
   mtMountDeployableMotionStateMap,
   stateToStyleMTMountMirrorCoversState,
@@ -34,14 +39,8 @@ import {
   ccCameraShutterDetailedStateToStyle,
   ccCameraFilterChangerDetailedStateMap,
   ccCameraFilterChangerDetailedStateToStyle,
-} from '../../../Config';
-
+} from 'Config';
 import styles from './SimonyiLightPath.module.css';
-import InfoPanel from '../../GeneralPurpose/InfoPanel/InfoPanel';
-import SummaryPanel from '../../GeneralPurpose/SummaryPanel/SummaryPanel';
-import Label from '../../GeneralPurpose/SummaryPanel/Label';
-import Value from '../../GeneralPurpose/SummaryPanel/Value';
-import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 
 export default class SimonyiLightPath extends Component {
   static propTypes = {

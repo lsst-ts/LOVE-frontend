@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,13 +19,13 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { PureComponent } from 'react';
+import { PureComponent, createRef } from 'react';
 import PropTypes from 'prop-types';
-import ManagerInterface, { getEntryAccessorString } from 'Utils';
 import Button from 'components/GeneralPurpose/Button/Button';
-import { defaultStyles } from 'components/GeneralPurpose/Plot/Plot.container';
-import { COLORS } from '../VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
+import { defaultStyles } from 'components/GeneralPurpose/Plot/Plot.container';
+import ManagerInterface from 'Utils';
+import { COLORS } from '../VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import Entry from './Entry/Entry';
 import styles from './TimeSeriesConfigure.module.css';
 /**
@@ -100,7 +102,7 @@ export default class TimeSeriesConfigure extends PureComponent {
     const entry = entries[index];
     const changedEntry = refs[index]?.current?.getInfo();
     const newEntry = { ...entry };
-    const newRef = React.createRef();
+    const newRef = createRef();
 
     // Update values if there are changes on the original entry
     const plotLevelParams = ['color', 'dash', 'filled', 'name', 'orient', 'shape', 'type'];
@@ -167,7 +169,7 @@ export default class TimeSeriesConfigure extends PureComponent {
       return input;
     });
 
-    const refs = entries.map(() => React.createRef());
+    const refs = entries.map(() => createRef());
     this.setState({ entries, refs });
 
     // Get the options for the dropdowns from SAL info endpoint
@@ -212,7 +214,7 @@ export default class TimeSeriesConfigure extends PureComponent {
               onClick={() => {
                 this.setState((prevState) => ({
                   entries: [...prevState.entries, TimeSeriesConfigure.defaultEntry],
-                  refs: [...prevState.refs, React.createRef()],
+                  refs: [...prevState.refs, createRef()],
                 }));
               }}
               className={styles.button}

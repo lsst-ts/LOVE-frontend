@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -26,28 +28,27 @@ import 'brace/theme/solarized_dark';
 import { Rnd } from 'react-rnd';
 import { toast } from 'react-toastify';
 import { withRouter, Prompt } from 'react-router-dom';
-// import queryString from 'query-string';
 import { editViewStates, viewsStates, modes } from '../../../redux/reducers/uif';
-import Button from '../../GeneralPurpose/Button/Button';
-import Input from '../../GeneralPurpose/Input/Input';
-import Loader from '../../GeneralPurpose/Loader/Loader';
+import Button from 'components/GeneralPurpose/Button/Button';
+import Input from 'components/GeneralPurpose/Input/Input';
+import Loader from 'components/GeneralPurpose/Loader/Loader';
 import CustomView from '../CustomView';
 import ComponentSelector from '../ComponentSelector/ComponentSelector';
 import html2canvas from 'html2canvas';
-import styles from './ViewEditor.module.css';
-import customViewStyles from '../CustomView.module.css';
-import SaveIcon from '../../icons/SaveIcon/SaveIcon';
-import AddIcon from '../../icons/AddIcon/AddIcon';
-import UndoIcon from '../../icons/UndoIcon/UndoIcon';
-import RedoIcon from '../../icons/RedoIcon/RedoIcon';
-import DebugIcon from '../../icons/DebugIcon/DebugIcon';
-import ExitModeIcon from '../../icons/ExitModeIcon/ExitModeIcon';
-import ThumbnailIcon from '../../icons/ThumbnailIcon/ThumbnailIcon';
-import Select from '../../GeneralPurpose/Select/Select';
-import ConfirmationModal from '../../GeneralPurpose/ConfirmationModal/ConfirmationModal';
-import { LAYOUT_CONTAINER_ID } from '../../Layout/Layout';
+import SaveIcon from 'components/icons/SaveIcon/SaveIcon';
+import AddIcon from 'components/icons/AddIcon/AddIcon';
+import UndoIcon from 'components/icons/UndoIcon/UndoIcon';
+import RedoIcon from 'components/icons/RedoIcon/RedoIcon';
+import DebugIcon from 'components/icons/DebugIcon/DebugIcon';
+import ExitModeIcon from 'components/icons/ExitModeIcon/ExitModeIcon';
+import ThumbnailIcon from 'components/icons/ThumbnailIcon/ThumbnailIcon';
+import Select from 'components/GeneralPurpose/Select/Select';
+import ConfirmationModal from 'components/GeneralPurpose/ConfirmationModal/ConfirmationModal';
+import { LAYOUT_CONTAINER_ID } from 'components/Layout/Layout';
 import { DEVICE_TO_SIZE, DEVICE_TO_COLS, DEVICE_TO_SCREEN } from '../CustomView';
 import ConfigForm from './ConfigForm';
+import styles from './ViewEditor.module.css';
+import customViewStyles from '../CustomView.module.css';
 
 const deviceOptions = [
   { label: 'Device size', value: Infinity },
@@ -209,7 +210,7 @@ class ViewEditor extends Component {
     let parsedLayout = {};
     try {
       parsedLayout = JSON.parse(this.state.layout);
-    } catch (error) {
+    } catch {
       parsedLayout = {};
     }
     this.updateEditedViewLayout(parsedLayout);
@@ -296,7 +297,7 @@ class ViewEditor extends Component {
     this.setState({ showSelectionModal: false });
   };
 
-  showSelectionModal = (e) => {
+  showSelectionModal = () => {
     this.setState({ showSelectionModal: true });
   };
 
@@ -304,19 +305,19 @@ class ViewEditor extends Component {
     this.setState({ showConfigModal: false });
   };
 
-  showConfigModal = (e) => {
+  showConfigModal = () => {
     this.setState({ showConfigModal: true });
   };
 
-  showEditor = (e) => {
+  showEditor = () => {
     this.setState({ editorVisible: true });
   };
 
-  hideEditor = (e) => {
+  hideEditor = () => {
     this.setState({ editorVisible: false });
   };
 
-  exitEditMode = (e) => {
+  exitEditMode = () => {
     const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
     const isSaved = this.viewIsSaved();
     if (!isSaved) {
@@ -430,8 +431,6 @@ class ViewEditor extends Component {
 
   saveBackendView = (thumbnail) => {
     this.props.saveEditedView(thumbnail).then((response) => {
-      const isSaved = this.viewIsSaved(); // && this.viewWithThumbnail();
-
       this.setState({ isLeavingWithChanges: false }, () => {
         const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
         if (response?.id && Number.isNaN(id)) this.props.history.push(`?id=${response.id}`);

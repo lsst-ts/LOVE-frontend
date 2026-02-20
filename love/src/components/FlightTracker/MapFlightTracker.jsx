@@ -19,9 +19,8 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './FlightTracker.module.css';
 import { isEqual } from 'lodash';
 import * as d3 from 'd3';
 import CoquimboURL from './Maps/Coquimbo.json';
@@ -30,6 +29,7 @@ import AtacamaURL from './Maps/Atacama.json';
 import Map200 from './Maps/Map200.svg?react';
 import Map160 from './Maps/Map160.svg?react';
 import Map100 from './Maps/Map100.svg?react';
+import styles from './FlightTracker.module.css';
 
 const LON_LAT_TELESCOPE = [-70.73709442008416, -30.240476801377167];
 

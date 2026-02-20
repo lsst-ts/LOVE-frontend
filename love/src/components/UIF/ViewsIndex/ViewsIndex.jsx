@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,15 +19,14 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import Input from '../../GeneralPurpose/Input/Input';
-import ConfirmationModal from '../../GeneralPurpose/ConfirmationModal/ConfirmationModal';
+import Input from 'components/GeneralPurpose/Input/Input';
+import ConfirmationModal from 'components/GeneralPurpose/ConfirmationModal/ConfirmationModal';
+import ManagerInterface from 'Utils';
 import ViewLauncher from './ViewLauncher/ViewLauncher';
-import ManagerInterface from '../../../Utils';
-
 import styles from './ViewsIndex.module.css';
 import viewLauncherStyles from './ViewLauncher/ViewLauncher.module.css';
 

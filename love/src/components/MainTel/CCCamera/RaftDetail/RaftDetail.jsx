@@ -24,192 +24,9 @@ import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import Neighbors from 'components/GeneralPurpose/Neighbors/Neighbors';
 import styles from './RaftDetail.module.css';
 
-// const COLOR_MAPPING = {
-//   1: 'var(--status-ok-dimmed-color-3)',
-//   2: 'var(--status-warning-dimmed-color-3)',
-//   3: 'var(--status-alert-dimmed-color-3)',
-// };
-
-// function getRebPlots(index) {
-//   return {
-//     hVBiasSwitch: {
-//       type: 'line',
-//       values: [
-//         {
-//           variable: 'y',
-//           category: 'telemetry',
-//           csc: 'CCCamera',
-//           salindex: 0,
-//           topic: 'focal_plane_Reb',
-//           item: 'hVBiasSwitch',
-//           accessor: (x) => x[index],
-//         },
-//       ],
-//     },
-//     anaV: {
-//       type: 'line',
-//       values: [
-//         {
-//           variable: 'y',
-//           category: 'telemetry',
-//           csc: 'CCCamera',
-//           salindex: 0,
-//           topic: 'focal_plane_Reb',
-//           item: 'anaV',
-//           accessor: (x) => x[index],
-//         },
-//       ],
-//     },
-//     power: {
-//       type: 'line',
-//       values: [
-//         {
-//           variable: 'y',
-//           category: 'telemetry',
-//           csc: 'CCCamera',
-//           salindex: 0,
-//           topic: 'focal_plane_Reb',
-//           item: 'power',
-//           accessor: (x) => x[index],
-//         },
-//       ],
-//     },
-//   };
-// }
-
 class RaftDetail extends Component {
   constructor(props) {
     super(props);
-    // const plotsRebs0 = [
-    //   {
-    //     hVBiasSwitch: {
-    //       type: 'line',
-    //       values: [
-    //         {
-    //           category: 'telemetry',
-    //           csc: 'CCCamera',
-    //           salindex: 0,
-    //           topic: 'focal_plane_Reb',
-    //           item: 'hVBiasSwitch',
-    //           accessor: (x) => x[0],
-    //         },
-    //       ],
-    //     },
-    //     anaV: {
-    //       type: 'line',
-    //       values: [
-    //         {
-    //           category: 'telemetry',
-    //           csc: 'CCCamera',
-    //           salindex: 0,
-    //           topic: 'focal_plane_Reb',
-    //           item: 'anaV',
-    //           accessor: (x) => x[0],
-    //         },
-    //       ],
-    //     },
-    //     power: {
-    //       type: 'line',
-    //       values: [
-    //         {
-    //           category: 'telemetry',
-    //           csc: 'CCCamera',
-    //           salindex: 0,
-    //           topic: 'focal_plane_Reb',
-    //           item: 'power',
-    //           accessor: (x) => x[0],
-    //         },
-    //       ],
-    //     },
-    //   },
-    // ];
-    // const plotsRebs1 = [
-    //   {
-    //     hVBiasSwitch: {
-    //       type: 'line',
-    //       values: [
-    //         {
-    //           category: 'telemetry',
-    //           csc: 'CCCamera',
-    //           salindex: 0,
-    //           topic: 'focal_plane_Reb',
-    //           item: 'hVBiasSwitch',
-    //           accessor: (x) => x[1],
-    //         },
-    //       ],
-    //     },
-    //     anaV: {
-    //       type: 'line',
-    //       values: [
-    //         {
-    //           category: 'telemetry',
-    //           csc: 'CCCamera',
-    //           salindex: 0,
-    //           topic: 'focal_plane_Reb',
-    //           item: 'anaV',
-    //           accessor: (x) => x[1],
-    //         },
-    //       ],
-    //     },
-    //     power: {
-    //       type: 'line',
-    //       values: [
-    //         {
-    //           category: 'telemetry',
-    //           csc: 'CCCamera',
-    //           salindex: 0,
-    //           topic: 'focal_plane_Reb',
-    //           item: 'power',
-    //           accessor: (x) => x[1],
-    //         },
-    //       ],
-    //     },
-    //   },
-    // ];
-    // const plotsRebs2 = [
-    //   {
-    //     hVBiasSwitch: {
-    //       type: 'line',
-    //       values: [
-    //         {
-    //           category: 'telemetry',
-    //           csc: 'CCCamera',
-    //           salindex: 0,
-    //           topic: 'focal_plane_Reb',
-    //           item: 'hVBiasSwitch',
-    //           accessor: (x) => x[2],
-    //         },
-    //       ],
-    //     },
-    //     anaV: {
-    //       type: 'line',
-    //       values: [
-    //         {
-    //           category: 'telemetry',
-    //           csc: 'CCCamera',
-    //           salindex: 0,
-    //           topic: 'focal_plane_Reb',
-    //           item: 'anaV',
-    //           accessor: (x) => x[2],
-    //         },
-    //       ],
-    //     },
-    //     power: {
-    //       type: 'line',
-    //       values: [
-    //         {
-    //           category: 'telemetry',
-    //           csc: 'CCCamera',
-    //           salindex: 0,
-    //           topic: 'focal_plane_Reb',
-    //           item: 'power',
-    //           accessor: (x) => x[2],
-    //         },
-    //       ],
-    //     },
-    //   },
-    // ];
-
     this.CCDsrefs = [
       React.createRef(),
       React.createRef(),
@@ -262,7 +79,6 @@ class RaftDetail extends Component {
           <div
             key={`c${i}`}
             ref={this.CCDsrefs[i]}
-            // style={{ border: `4px solid ${COLOR_MAPPING[raft.ccds[i].status]}` }}
             style={{ border: selectedCCD?.id === raft.ccds[i].id ? '1px solid white' : `none` }}
             className={styles.plot}
             onClick={() => {
@@ -367,13 +183,9 @@ class RaftDetail extends Component {
     const { showNeighbors, selectNeighborRaft } = this.props;
 
     const edgesColors = {
-      // top: raft.neighbors.top ? COLOR_MAPPING[raft.neighbors.top.status] : 'transparent',
       top: 'transparent',
-      // right: raft.neighbors.right ? COLOR_MAPPING[raft.neighbors.right.status] : 'transparent',
       right: 'transparent',
-      // bottom: raft.neighbors.bottom ? COLOR_MAPPING[raft.neighbors.bottom.status] : 'transparent',
       bottom: 'transparent',
-      // left: raft.neighbors.left ? COLOR_MAPPING[raft.neighbors.left.status] : 'transparent',
       left: 'transparent',
     };
     return showNeighbors ? (

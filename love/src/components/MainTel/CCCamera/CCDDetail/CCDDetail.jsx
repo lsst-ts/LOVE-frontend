@@ -20,7 +20,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import Neighbors from 'components/GeneralPurpose/Neighbors/Neighbors';
 import styles from './CCDDetail.module.css';

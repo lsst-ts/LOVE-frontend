@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,15 +19,15 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import Button from '../GeneralPurpose/Button/Button';
-import Input from '../GeneralPurpose/Input/Input';
-import LogoIcon from '../icons/LogoIcon/LogoIcon';
-import LSSTLogos from '../icons/LSSTLogos/LSSTLogos';
+import { tokenStates } from 'redux/reducers/auth';
+import Button from 'components/GeneralPurpose/Button/Button';
+import Input from 'components/GeneralPurpose/Input/Input';
+import LogoIcon from 'components/icons/LogoIcon/LogoIcon';
+import LSSTLogos from 'components/icons/LSSTLogos/LSSTLogos';
 import styles from './Login.module.css';
-import { tokenStates } from '../../redux/reducers/auth';
 
 export default class Login extends Component {
   static propTypes = {

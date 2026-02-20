@@ -19,17 +19,17 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import Moment from 'moment';
 import Button from 'components/GeneralPurpose/Button/Button';
 import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
 import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
+import { OLE_COMMENT_TYPE_OPTIONS, OLE_DEFAULT_SYSTEMS_FILTER_OPTION } from 'Config';
+import ManagerInterface from 'Utils';
 import Exposure from './Exposure/Exposure';
 import NonExposure from './NonExposure/NonExposure';
 import ExposureAdd from './Exposure/ExposureAdd';
 import NonExposureEdit from './NonExposure/NonExposureEdit';
-import { OLE_COMMENT_TYPE_OPTIONS, OLE_DEFAULT_SYSTEMS_FILTER_OPTION } from 'Config';
-import ManagerInterface from 'Utils';
 import styles from './OLE.module.css';
 
 const tabs = [

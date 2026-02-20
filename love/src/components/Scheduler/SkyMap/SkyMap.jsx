@@ -19,14 +19,14 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component, memo } from 'react';
+import { Component, memo } from 'react';
 import PropTypes from 'prop-types';
 import { uniqueId } from 'lodash';
-import styles from './SkyMap.module.css';
 import Select from 'components/GeneralPurpose/Select/Select';
 import CircleIcon from 'components/icons/CircleIcon/CircleIcon';
 import PlusIcon from 'components/icons/PlusIcon/PlusIcon';
 import { loadScript } from 'Utils';
+import styles from './SkyMap.module.css';
 
 const STYLES = {
   lineStyle: {

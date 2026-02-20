@@ -21,7 +21,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import { DiamondNodeWidget } from './DiamondNodeWidget';
 import { DiamondNodeModel } from './DiamondNodeModel';
-import * as React from 'react';
 import { AbstractReactFactory } from '@projectstorm/react-canvas-core';
 
 export class DiamondNodeFactory extends AbstractReactFactory {

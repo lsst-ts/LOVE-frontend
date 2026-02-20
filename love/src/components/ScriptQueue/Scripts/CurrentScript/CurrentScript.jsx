@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,16 +19,16 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import LoadingBar from '../../../GeneralPurpose/LoadingBar/LoadingBar';
-import scriptStyles from '../Scripts.module.css';
-import styles from './CurrentScript.module.css';
-import ScriptStatus from '../../ScriptStatus/ScriptStatus';
+import LoadingBar from 'components/GeneralPurpose/LoadingBar/LoadingBar';
+import HeartbeatIcon from 'components/icons/HeartbeatIcon/HeartbeatIcon';
+import StopIcon from 'components/icons/ScriptQueue/StopIcon/StopIcon';
+import ResumeIcon from 'components/icons/ScriptQueue/ResumeIcon/ResumeIcon';
 import { getStatusStyle } from '../Scripts';
-import HeartbeatIcon from '../../../icons/HeartbeatIcon/HeartbeatIcon';
-import StopIcon from '../../../icons/ScriptQueue/StopIcon/StopIcon';
-import ResumeIcon from '../../../icons/ScriptQueue/ResumeIcon/ResumeIcon';
+import ScriptStatus from '../../ScriptStatus/ScriptStatus';
+import styles from './CurrentScript.module.css';
+import scriptStyles from '../Scripts.module.css';
 
 export default class CurrentScript extends Component {
   static propTypes = {

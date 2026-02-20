@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,16 +19,14 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component, memo } from 'react';
+import { Component, memo } from 'react';
 import PropTypes from 'prop-types';
 import { isEqual } from 'lodash';
-import styles from './SummaryInformation.module.css';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
-import TemperatureIcon from 'components/icons/TemperatureIcon/TemperatureIcon';
-import Label from '../../GeneralPurpose/SummaryPanel/Label';
-import Value from '../../GeneralPurpose/SummaryPanel/Value';
-import Title from '../../GeneralPurpose/SummaryPanel/Title';
+import Label from 'components/GeneralPurpose/SummaryPanel/Label';
+import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import { fixedFloat } from 'Utils';
+import styles from './SummaryInformation.module.css';
 
 class TemperaturesSummary extends Component {
   static propTypes = {

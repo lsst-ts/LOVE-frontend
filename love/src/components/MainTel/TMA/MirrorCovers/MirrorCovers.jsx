@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,18 +19,18 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { closestEquivalentAngle, fixedFloat } from 'Utils';
-import WindRose from '../../../icons/WindRose/WindRose';
-import { mtMountDeployableMotionStateMap, stateToStyleMTMountMirrorCoversState } from 'Config';
+import { uniqueId } from 'lodash';
 import InfoPanel from 'components/GeneralPurpose/InfoPanel/InfoPanel';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Label from 'components/GeneralPurpose/SummaryPanel/Label';
 import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
+import WindRose from 'components/icons/WindRose/WindRose';
+import { mtMountDeployableMotionStateMap, stateToStyleMTMountMirrorCoversState } from 'Config';
+import { closestEquivalentAngle, fixedFloat } from 'Utils';
 import styles from './MirrorCovers.module.css';
-import { uniqueId } from 'lodash';
 
 export default class MirrorCovers extends Component {
   static propTypes = {
@@ -293,7 +295,7 @@ export default class MirrorCovers extends Component {
     );
   }
 
-  getLimitsGauge(x0, y0, radius, radiusInner, rotationOffset, azimuthActualPosition, azimuthDemandPosition) {
+  getLimitsGauge(x0, y0, radius, radiusInner, rotationOffset, azimuthActualPosition) {
     const maxL3 = 270;
     const maxL2 = 265;
     const maxL1 = 260;
@@ -453,12 +455,10 @@ export default class MirrorCovers extends Component {
     const radiusInner = radius * 0.78;
     const rotationOffset = -90;
 
-    const maxL3 = 270;
     const maxL2 = 265;
     const maxL1 = 260;
     const minL1 = -260;
     const minL2 = -265;
-    const minL3 = -270;
 
     const isTargetWarningZone = azimuthDemandPosition > maxL1 || azimuthDemandPosition < minL1;
     const isTargetDangerZone = azimuthDemandPosition > maxL2 || azimuthDemandPosition < minL2;

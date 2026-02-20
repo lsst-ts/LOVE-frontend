@@ -235,13 +235,15 @@ export default class GlycolLoop extends Component {
     const cscs = {
       MTM1M3TS: {
         0: {
-          glycolLoopTemperature: ['insideCellTemperature1'],
-          glycolLoopTemperature: ['insideCellTemperature2'],
-          glycolLoopTemperature: ['insideCellTemperature3'],
-          glycolLoopTemperature: ['telescopeCoolantSupplyTemperature'],
-          glycolLoopTemperature: ['telescopeCoolantReturnTemperature'],
-          glycolLoopTemperature: ['mirrorCoolantSupplyTemperature'],
-          glycolLoopTemperature: ['mirrorCoolantReturnTemperature'],
+          glycolLoopTemperature: [
+            'insideCellTemperature1',
+            'insideCellTemperature2',
+            'insideCellTemperature3',
+            'telescopeCoolantSupplyTemperature',
+            'telescopeCoolantReturnTemperature',
+            'mirrorCoolantSupplyTemperature',
+            'mirrorCoolantReturnTemperature',
+          ],
         },
       },
     };
@@ -275,7 +277,6 @@ export default class GlycolLoop extends Component {
       telescopeCoolantReturnTemperature,
       mirrorCoolantSupplyTemperature,
       mirrorCoolantReturnTemperature,
-      width,
       COLOURS,
       valvePosition,
       rawValvePosition,

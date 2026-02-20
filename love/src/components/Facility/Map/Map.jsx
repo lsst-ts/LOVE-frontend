@@ -19,8 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
-import styles from './Map.module.css';
+import { Component } from 'react';
 import Level1 from './Levels/Level1.jsx';
 import Level2 from './Levels/Level2.jsx';
 import Level3 from './Levels/Level3.jsx';
@@ -29,6 +28,7 @@ import Level5 from './Levels/Level5.jsx';
 import Level6 from './Levels/Level6.jsx';
 import Level7 from './Levels/Level7.jsx';
 import Level8 from './Levels/Level8.jsx';
+import styles from './Map.module.css';
 
 export default class Map extends Component {
   static defaultProps = {

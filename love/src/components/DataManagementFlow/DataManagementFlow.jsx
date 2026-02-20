@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,10 +19,8 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './DataManagementFlow.module.css';
-import { dmFlowStatusMap, stateToStyleDMFlow } from 'Config';
 import PaginatedTable from 'components/GeneralPurpose/PaginatedTable/PaginatedTable';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import PipelineIcon from 'components/icons/DMFlowIcon/PipelineIcon';
@@ -28,6 +28,8 @@ import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Title from 'components/GeneralPurpose/SummaryPanel/Title';
 import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import Label from 'components/GeneralPurpose/SummaryPanel/Label';
+import { dmFlowStatusMap, stateToStyleDMFlow } from 'Config';
+import styles from './DataManagementFlow.module.css';
 
 let dataMock = [];
 for (let i = 1; i < 100; i++) {
@@ -49,26 +51,6 @@ for (let i = 1; i < 100; i++) {
     status: Math.floor(Math.random() * 7),
   });
 }
-
-let schema = {
-  $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-  width: 300,
-  height: 200,
-  data: { url: 'data/unemployment-across-industries.json' },
-  mark: 'area',
-  encoding: {
-    x: {
-      timeUnit: 'yearmonth',
-      field: 'date',
-      axis: { format: '%Y' },
-    },
-    y: {
-      aggregate: 'sum',
-      field: 'count',
-      title: 'count',
-    },
-  },
-};
 export default class DMFlow extends Component {
   static propTypes = {
     nombre: PropTypes.string,

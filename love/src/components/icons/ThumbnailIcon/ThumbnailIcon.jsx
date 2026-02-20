@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,12 +19,10 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
 import styles from './ThumbnailIcon.module.css';
 
-export default function ThumbnailIcon(props) {
-  const status = props.active ? styles.active : styles.inactive;
-  const className = [styles.thumbnailIcon, props.className, props.style].join(' ');
+export default function ThumbnailIcon({ className: propClassName }) {
+  const className = [styles.thumbnailIcon, propClassName].join(' ');
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31.76 24.78" className={className}>
       <path

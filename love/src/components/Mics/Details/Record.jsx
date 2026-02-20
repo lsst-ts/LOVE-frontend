@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import PlayIcon from 'components/icons/MicsIcon/Play/PlayIcon';
 import DownloadIcon from 'components/icons/MicsIcon/Download/DownloadIcon';

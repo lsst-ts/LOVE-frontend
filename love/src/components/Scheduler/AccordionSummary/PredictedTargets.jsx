@@ -19,12 +19,12 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
-import styles from './AccordionSummary.module.css';
+import { Component } from 'react';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 import MinusIcon from 'components/icons/MinusIcon/MinusIcon';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import { fixedFloat } from 'Utils';
+import styles from './AccordionSummary.module.css';
 
 export default class PredictedTarget extends Component {
   HEADERS_PREDTARGETS = [

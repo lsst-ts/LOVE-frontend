@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,9 +19,8 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useRef, useState, useLayoutEffect } from 'react';
+import { useRef, memo } from 'react';
 import PropTypes from 'prop-types';
-import { isEqual } from 'lodash';
 import * as THREE from 'three';
 
 function createTextCanvas(text, color) {
@@ -45,7 +46,6 @@ function angleOfPercentOpen(percent) {
 const Louver = ({
   position = { x: 0, y: 0, z: 0 },
   name = '',
-  id = 1,
   angle = 0,
   percentOpen = 50,
   type = 'I',
@@ -71,7 +71,7 @@ const Louver = ({
 
   return (
     <>
-      <group position={[position.x, position.z, position.y]} onClick={(e) => setLouver(name)} rotation-y={angleRadians}>
+      <group position={[position.x, position.z, position.y]} onClick={() => setLouver(name)} rotation-y={angleRadians}>
         <group rotation-x={angleOpen}>
           <mesh ref={textRef} position={[0, 0, 0.2]}>
             <planeGeometry args={[0.5, 0.5]} />
@@ -102,19 +102,9 @@ Louver.propTypes = {
     z: PropTypes.number,
   }),
   name: PropTypes.string,
-  id: PropTypes.number,
   angle: PropTypes.number,
   percentOpen: PropTypes.number,
   type: PropTypes.string,
 };
 
-const comparator = (prevProps, nextProps) => {
-  return (
-    isEqual(nextProps.position, prevProps.position) &&
-    prevProps.name === nextProps.name &&
-    prevProps.angle === nextProps.angle &&
-    prevProps.percentOpen === nextProps.percentOpen
-  );
-};
-
-export default React.memo(Louver, comparator);
+export default memo(Louver);

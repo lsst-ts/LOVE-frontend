@@ -2399,7 +2399,7 @@ export function getOBSSystemsSubsystemsComponentsIds(systemsHierarchy) {
     if (system.children) {
       const availableSubsystemsIds = OLE_OBS_SYSTEMS[systemName]?.children;
       const availableSubsystems = Object.entries(OLE_OBS_SUBSYSTEMS)
-        .filter(([ssn, ss]) => {
+        .filter(([_, ss]) => {
           return availableSubsystemsIds.includes(ss.id);
         })
         .map(([ssn, ss]) => ({ name: ssn, ...ss }));
@@ -2416,7 +2416,7 @@ export function getOBSSystemsSubsystemsComponentsIds(systemsHierarchy) {
         if (subsystem.children) {
           const availableComponentsIds = OLE_OBS_SUBSYSTEMS[subsystemName]?.children;
           const availableComponents = Object.entries(OLE_OBS_SUBSYSTEMS_COMPONENTS)
-            .filter(([cn, c]) => {
+            .filter(([_, c]) => {
               return availableComponentsIds.includes(c.id);
             })
             .map(([cn, c]) => ({ name: cn, ...c }));

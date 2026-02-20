@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -18,10 +20,9 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import * as rtl from 'react-testing-library';
-import React from 'react';
 import 'jest-dom/extend-expect';
+import { CSCSummaryHierarchy } from 'Config';
 import CSCSummary from '../CSCSummary';
-import { CSCSummaryHierarchy } from '../../../Config';
 
 describe('GIVEN the CSCSummary was loaded and rendered', () => {
   let cscSummary;

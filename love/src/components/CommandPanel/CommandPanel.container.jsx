@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,10 +19,9 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
 import { connect } from 'react-redux';
-import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
-import { getPermCmdExec, getScriptQueueState } from '../../redux/selectors';
+import { addGroup, removeGroup, requestSALCommand } from 'redux/actions/ws';
+import { getPermCmdExec, getScriptQueueState } from 'redux/selectors';
 import CommandPanel from './CommandPanel';
 
 export const schema = {
@@ -46,7 +47,7 @@ const CommandPanelContainer = ({ ...props }) => {
   return <CommandPanel {...props} />;
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
   const subscriptions = [`event-ScriptQueueState-1-stream`, `event-ScriptQueueState-2-stream`];
   return {
     subscriptions,
@@ -62,7 +63,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const commandExecutePermission = getPermCmdExec(state);
   const mainQueueState = getScriptQueueState(state, 1);
   const auxQueueState = getScriptQueueState(state, 2);

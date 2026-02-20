@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,6 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import thunkMiddleware from 'redux-thunk';
@@ -57,7 +60,7 @@ afterEach(() => {
 });
 
 // TEST ONLY WEBSOCKET CONNECTION / DISCONNECTION
-describe('Given the token is EMPTY and the connection is CLOSED, ', () => {
+describe('Given the token is EMPTY and the connection is CLOSED,', () => {
   it('When a CONNECTION IS DISPACHED, then the connection remains CLOSED and the Server DID NOT CONNECT', async () => {
     // ACT
     await store.dispatch(openWebsocketConnection());
@@ -141,7 +144,7 @@ describe('Given the token is EMPTY and the connection is CLOSED, ', () => {
   });
 });
 
-describe('Given a connection is OPEN, ', () => {
+describe('Given a connection is OPEN,', () => {
   beforeEach(async () => {
     await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
     await server.connected;
@@ -266,7 +269,7 @@ describe('Given a connection is OPEN, ', () => {
 });
 
 // TEST SUBSCRIPTIONS AND HOW THEY INTERACT WITH CONNECTION
-describe('Given the CONNECTION is CLOSED and the SUBSCRIPTIONS are EMPTY, ', () => {
+describe('Given the CONNECTION is CLOSED and the SUBSCRIPTIONS are EMPTY,', () => {
   it('When a SUBSCRIPTION is DISPATCHED, then it is added to the list of subscriptions as PENDING', async () => {
     expect(getSubscriptions(store.getState())).toEqual([]);
     // ACT
@@ -284,7 +287,7 @@ describe('Given the CONNECTION is CLOSED and the SUBSCRIPTIONS are EMPTY, ', () 
   });
 });
 
-describe('Given the CONNECTION is CLOSED and there are PENDING SUBSCRIPTIONS, ', () => {
+describe('Given the CONNECTION is CLOSED and there are PENDING SUBSCRIPTIONS,', () => {
   beforeEach(async () => {
     await store.dispatch(addGroup('telemetry-all-all-all'));
     await store.dispatch(addGroup('event-all-all-all'));
@@ -367,7 +370,7 @@ describe('Given the CONNECTION is CLOSED and there are PENDING SUBSCRIPTIONS, ',
 });
 
 // TEST SUBSCRIPTIONS
-describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () => {
+describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS 1,', () => {
   beforeEach(async () => {
     await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
     await store.dispatch(addGroup('telemetry-all-all-all'));
@@ -810,7 +813,7 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
 });
 
 // TEST SUBSCRIPTIONS RESET
-describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () => {
+describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS 2,', () => {
   beforeEach(async () => {
     await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
     await store.dispatch(addGroup('telemetry-all-all-all'));
@@ -852,9 +855,9 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
   });
 
   it('RESET_SUBS_PERIOD time after resetting subscriptions the subscriptions are reset again', async () => {
-    jest.useFakeTimers();
-    jest.spyOn(global, 'clearInterval');
-    jest.spyOn(global, 'setInterval');
+    vi.useFakeTimers();
+    vi.spyOn(global, 'clearInterval');
+    vi.spyOn(global, 'setInterval');
     expect(clearInterval).toHaveBeenCalledTimes(0);
     expect(setInterval).toHaveBeenCalledTimes(0);
 
@@ -877,7 +880,7 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
       },
     ]);
     // After RESET_SUBS_PERIOD the timer should have been cleared and reset
-    jest.advanceTimersByTime(RESET_SUBS_PERIOD + 100);
+    vi.advanceTimersByTime(RESET_SUBS_PERIOD + 100);
     expect(clearInterval).toHaveBeenCalledTimes(2);
     expect(setInterval).toHaveBeenCalledTimes(2);
   });

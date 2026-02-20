@@ -19,7 +19,6 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
 import { connect } from 'react-redux';
 import { getUsername, getAllAlarms, getTaiToUtc, getAllTime } from '../../redux/selectors';
 import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';

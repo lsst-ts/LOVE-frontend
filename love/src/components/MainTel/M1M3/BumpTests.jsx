@@ -15,19 +15,17 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useState, memo } from 'react';
+import { useState, memo } from 'react';
 import moment from 'moment';
-import { ISO_STRING_DATE_FORMAT, ISO_STRING_DATE_TIME_FORMAT } from 'Config';
-import ManagerInterface, { firstLetterToUpperCase } from 'Utils';
 import Button from 'components/GeneralPurpose/Button/Button';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Select from 'components/GeneralPurpose/Select/Select';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
-
 import ExternalLinkIcon from 'components/icons/ExternalLinkIcon/ExternalLinkIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
-
+import { ISO_STRING_DATE_FORMAT, ISO_STRING_DATE_TIME_FORMAT } from 'Config';
+import ManagerInterface, { firstLetterToUpperCase } from 'Utils';
 import styles from './BumpTests.module.css';
 
 const AVAILABLE_EFD_CLIENTS = ['usdf_efd', 'summit_efd', 'base_efd', 'tucson_efd'];

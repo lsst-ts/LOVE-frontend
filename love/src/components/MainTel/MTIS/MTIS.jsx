@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,7 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './MTIS.module.css';
 export default class MTIS extends Component {
@@ -47,14 +49,9 @@ export default class MTIS extends Component {
 
   flattenMtDome = () => {
     const { mtDome } = this.props;
-    //const mtDome = '0010011000001101';
-    //const mtDomeSignals = Object.entries();
-    //const mtDomeArray = mtDome[0].split("");
     const mtDomeArray = Array.from(String(mtDome), Number);
     return mtDomeArray;
   };
-
-  componentDidUpdate = (prevProps, prevState) => {};
 
   componentDidMount = () => {
     this.props.subscribeToStream();

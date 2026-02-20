@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -36,7 +38,7 @@ export default class HealpixOverlay extends PureComponent {
     const points = {
       type: 'FeatureCollection',
       features:
-        props.azelData?.map((data, index) => {
+        props.azelData?.map((data) => {
           return {
             type: 'Point',
             coordinates: data.azel,
@@ -58,13 +60,13 @@ export default class HealpixOverlay extends PureComponent {
       .enter()
       .append('path')
       .attr('d', path)
-      .attr('fill', function (d, i) {
+      .attr('fill', function () {
         return props.baseColor ?? 'white';
       })
-      .attr('fill-opacity', function (d, i) {
+      .attr('fill-opacity', function (d) {
         return d?.properties?.site?.value ?? 0;
       })
-      .attr('stroke', function (d, i) {
+      .attr('stroke', function (_, i) {
         const selectedCell = props.selectedCell;
         return selectedCell?.index === i && selectedCell?.layerName === props.name ? 'white' : 'none';
       })

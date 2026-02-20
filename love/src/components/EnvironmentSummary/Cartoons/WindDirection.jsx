@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ArrowIcon from 'components/icons/ArrowIcon/ArrowIcon';
 import { MAX_WIND_SPEED_MS } from 'Config';

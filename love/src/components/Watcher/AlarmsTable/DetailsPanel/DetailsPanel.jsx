@@ -19,12 +19,12 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
-import Button from '../../../GeneralPurpose/Button/Button';
-import TimestampDisplay from '../../../GeneralPurpose/TimestampDisplay/TimestampDisplay';
-import { severityToStatus } from '../../../../Config';
+import Button from 'components/GeneralPurpose/Button/Button';
+import TimestampDisplay from 'components/GeneralPurpose/TimestampDisplay/TimestampDisplay';
+import { severityToStatus } from 'Config';
 import { isAcknowledged, hasMuteConfig } from '../../AlarmUtils';
 import styles from './DetailsPanel.module.css';
 

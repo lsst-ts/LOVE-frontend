@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,10 +19,10 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
+import { useState } from 'react';
 import { connect } from 'react-redux';
-import { getAllTelemetries } from 'redux/selectors';
 import { addGroup, removeGroup } from 'redux/actions/ws';
+import { getStreamData } from 'redux/selectors/selectors';
 import TimeSeriesConfigure from './TimeSeriesConfigure';
 
 export const schema = {
@@ -40,11 +42,12 @@ const TimeSeriesConfigureContainer = ({
   subscriptions,
   subscribeToStreams,
   unsubscribeToStreams,
+  getStreamData,
   onSave,
   onCancel,
   ...props
 }) => {
-  const [telemetries, setTelemetries] = React.useState({});
+  const [telemetries, setTelemetries] = useState({});
   if (subscriptions && Object.keys(subscriptions).length > 4 && Object.keys(telemetries).length === 0) {
     setTelemetries(subscriptions);
   }
@@ -61,7 +64,7 @@ const TimeSeriesConfigureContainer = ({
   );
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const getStreamDataProp = (groupName) => getStreamData(state, groupName);
   return { getStreamData: getStreamDataProp };
 };

@@ -15,7 +15,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { uniqueId } from 'lodash';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
@@ -491,7 +491,7 @@ function GlycolSummary({
   return (
     <div className={styles.summaryContainer}>
       <div className={styles.devicesBoxes}>
-        {devicesHeats.map(({ device, heat, prevHeat }) => {
+        {devicesHeats.map(({ device, heat }) => {
           const overThreshold = deviceHeatSurpassThreshold(device, heat);
           const roundedHeat = Math.round(heat * 100) / 100;
 
@@ -501,11 +501,6 @@ function GlycolSummary({
             deviceHistoricalHeats.length > 0 ? deviceHistoricalHeats[deviceHistoricalHeats.length - 1] : 0;
           const heatCummulativeMomentum =
             calculateHeatCummulativeMomentum(deviceHistoricalHeats) + (roundedHeat - roundedPrevHeat);
-
-          if (device === 'OSS') {
-            console.log('OSS Heat:', heat, 'Momentum:', heatCummulativeMomentum);
-            console.log('Historical Heats:', deviceHistoricalHeats);
-          }
 
           const wideClass = styles[devicesWideMapping[device]];
           const energyPercent = deviceEnergyPercentage(device, heat);

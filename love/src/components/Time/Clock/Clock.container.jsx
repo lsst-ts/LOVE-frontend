@@ -19,9 +19,8 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
 import { connect } from 'react-redux';
-import { getClock } from '../../../redux/selectors';
+import { getClock } from 'redux/selectors';
 import Clock from './Clock';
 
 export const schema = {

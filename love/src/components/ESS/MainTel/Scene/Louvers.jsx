@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,16 +19,11 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useRef, useState, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 import { LouversPositionESS } from 'Config';
 import Louver from './Louver';
 
-export function Louvers({
-  louvers = [{ id: 1, position: { x: 0, y: 0, z: 0 }, name: '', angle: 0, type: 'I' }],
-  percentOpen = [],
-  ids = [1],
-}) {
+export function Louvers({ percentOpen = [], ids = [1] }) {
   const idsToUse = ids ?? [1];
   const percentOpenToUse = percentOpen ?? [0];
   return LouversPositionESS.map((louver) => {

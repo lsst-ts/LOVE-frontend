@@ -19,10 +19,8 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { isEqual } from 'lodash';
-import styles from './Scheduler.module.css';
 import Headers from './Headers/Headers';
 import Filters from './Filters/Filters';
 import Pointing from './Summary/Pointing/Pointing';
@@ -32,6 +30,7 @@ import Sun from './Summary/Sun/Sun';
 import CurrentTarget from './CurrentTarget/CurrentTarget';
 import SkyMap from './SkyMap/SkyMap';
 import AccordionSummary from './AccordionSummary/AccordionSummary';
+import styles from './Scheduler.module.css';
 
 export default class Scheduler extends Component {
   static propTypes = {
@@ -333,7 +332,7 @@ export default class Scheduler extends Component {
     this.props.unsubscribeToStream();
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (
       prevProps.predTargetsDecl !== this.props.predTargetsDecl ||
       prevProps.predTargetsRa !== this.props.predTargetsRa

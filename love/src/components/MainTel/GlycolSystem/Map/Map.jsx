@@ -15,7 +15,6 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
 import PropTypes from 'prop-types';
 import Level1 from './Level1.svg?react';
 import Level2 from './Level2.svg?react';

@@ -19,9 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
 import { connect } from 'react-redux';
-import MTDome from './MTDome';
 import {
   getDomeStatus,
   getLouversStatus,
@@ -30,9 +28,10 @@ import {
   getLightWindScreen,
   getPointingStatus,
   getMainTelescopeState,
-} from '../../../redux/selectors';
-import { addGroup, removeGroup } from '../../../redux/actions/ws';
-import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+} from 'redux/selectors';
+import { addGroup, removeGroup } from 'redux/actions/ws';
+import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+import MTDome from './MTDome';
 
 export const schema = {
   description: 'Summary view of the Simonyi Dome. Contains general information about the dome and louvers state',

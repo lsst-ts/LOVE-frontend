@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -25,7 +27,6 @@ import SimonyiTelescope from './Cartoons/SimonyiTelescope';
 import AuxTelescope from './Cartoons/AuxTelescope';
 import WindDirection from './Cartoons/WindDirection';
 import WeatherForecastIcon from 'components/icons/WeatherForecastIcon/WeatherForecastIcon';
-import { MAX_WIND_SPEED_MS } from 'Config';
 import { defaultNumberFormatter } from 'Utils';
 import Summary from './Summary/Summary';
 
@@ -191,8 +192,6 @@ export default class EnvironmentSummary extends Component {
       humidity,
       seeing,
     } = this.props;
-
-    const windSpeedPercent = windSpeed / MAX_WIND_SPEED_MS;
 
     return (
       <div>

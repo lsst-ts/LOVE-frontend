@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,11 +19,11 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import Panel from '../GeneralPurpose/Panel/Panel';
-import styles from './AuxTel.module.css';
 import Summary from './Summary/Summary';
 import Skymap from './Skymap/Skymap';
+import styles from './AuxTel.module.css';
 
 export default class AuxTel extends Component {
   render() {

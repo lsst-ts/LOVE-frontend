@@ -19,21 +19,11 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 
 export default class Panel extends Component {
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
-    // window.setTimeout(() => {
-    // 	const el = ReactDOM.findDOMNode(this);
-    // 	const height = el.querySelector('.panel__inner').scrollHeight;
-    // 	this.setState({
-    // 		height
-    // 	});
-    // }, 333);
   }
 
   render() {

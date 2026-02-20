@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -47,8 +49,6 @@ export default class Level5 extends Component {
   };
 
   componentDidMount() {
-    const deviceId = '#' + this.deviceId;
-    const mapId = '#' + this.mapId;
     const overlayId = '#' + this.overlayId;
     const transformData = this.props.transformData;
 
@@ -1078,7 +1078,7 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Supply',
                   state: null,
-                  unit: dynaleneP05.dynTAsupPS03 ? ' ' + dynaleneP05.dynTAretPS04.units : null,
+                  unit: dynaleneP05.dynTAsupPS03 ? ' ' + dynaleneP05.dynTAsupPS03.units : null,
                   value: dynaleneP05.dynTAsupPS03 ? dynaleneP05.dynTAsupPS03.value : null,
                 },
                 testAreaDynaleneReturnPressure: {
@@ -1091,7 +1091,7 @@ export default class Level5 extends Component {
                 },
               },
             },
-            testAreaTemperatura: {
+            testAreaTemperature: {
               type: 'group',
               name: 'Test Area Temperature',
               unit: null,
@@ -1134,9 +1134,9 @@ export default class Level5 extends Component {
               unit: dynaleneP05.dynTMAtpd ? ' ' + dynaleneP05.dynTMAtpd.units : null,
               value: dynaleneP05.dynTMAtpd ? dynaleneP05.dynTMAtpd.value : null,
             },
-            testAreaPressure: {
+            TMAPressure: {
               type: 'group',
-              name: 'Test Area Pressure',
+              name: 'TMA Pressure',
               unit: null,
               value: null,
               params: {
@@ -1160,7 +1160,7 @@ export default class Level5 extends Component {
             },
             TMATemperature: {
               type: 'group',
-              name: 'Test Area Temperature',
+              name: 'TMA Temperature',
               unit: null,
               value: null,
               params: {

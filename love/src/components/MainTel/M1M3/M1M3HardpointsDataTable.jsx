@@ -1,9 +1,7 @@
 /** 
 This file is part of LOVE-frontend.
 
-Developed for the LSST Telescope and Site Systems.
-This product includes software developed by the LSST Project
- (https://www.lsst.org).
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,7 +15,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SimpleTable from 'components//GeneralPurpose/SimpleTable/SimpleTable';
 import { defaultNumberFormatter } from 'Utils';
@@ -138,8 +136,6 @@ function M1M3HardpointsDataTable({
   hardpointsSmcPowerFault,
   hardpointsIlcFault,
   hardpointsBroadcastCounterWarning,
-  hardpointMeasuredForceWarningHigh,
-  hardpointMeasuredForceWarningLow,
   hardpointMeasuredForceFaultHigh,
   hardpointMeasuredForceFaultLow,
   hardpointMeasuredForceFSBWarningHigh,
@@ -148,7 +144,6 @@ function M1M3HardpointsDataTable({
   hardpointBreakawayFaultHigh,
   subscribeToStreams,
   unsubscribeToStreams,
-  ...props
 }) {
   useEffect(() => {
     subscribeToStreams();
@@ -317,10 +312,6 @@ M1M3HardpointsDataTable.propTypes = {
   hardpointsIlcFault: PropTypes.arrayOf(PropTypes.bool),
   /** Broadcast counter warning warning data */
   hardpointsBroadcastCounterWarning: PropTypes.arrayOf(PropTypes.bool),
-  /** Measured force operational warning high limit */
-  hardpointMeasuredForceWarningHigh: PropTypes.number,
-  /** Measured force operational warning low limit */
-  hardpointMeasuredForceWarningLow: PropTypes.number,
   /** Measured force operational fault high limit */
   hardpointMeasuredForceFaultHigh: PropTypes.number,
   /** Measured force operational fault low limit */

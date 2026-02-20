@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,33 +19,33 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, withRouter } from 'react-router-dom';
+import ComponentIndexContainer from 'components/ComponentIndex/ComponentIndex.container';
+import ViewsIndexContainer from 'components/UIF/ViewsIndex/ViewsIndex.container';
+import HealthStatusSummaryContainer from 'components/HealthStatusSummary/HealthStatusSummary.container';
+import LayoutContainer from 'components/Layout/Layout.container';
+import LoginContainer from 'components/Login/Login.container';
+import PrivateRoute from 'components/GeneralPurpose/PrivateRoute/PrivateRoute';
+import ScriptQueueContainer from 'components/ScriptQueue/ScriptQueue.container';
+import Panel from 'components/GeneralPurpose/Panel/Panel';
+import TelemetryLogContainer from 'components/TelemetryLog/TelemetryLog.container';
+import CSCSummaryContainer from 'components/CSCSummary/CSCSummary.container';
+import AuxTel from 'components/AuxTel/AuxTel';
+import CameraContainer from 'components/AuxTel/Camera/Camera.container';
+import DomeContainer from 'components/AuxTel/Dome/Dome.container';
+import DomeAndMountView from 'components/AuxTel/DomeAndMountView/DomeAndMountView';
+import LightPath from 'components/AuxTel/Mount/LightPath.container';
+import Mount from 'components/AuxTel/Mount/Mount';
+import LATISSContainer from 'components/AuxTel/LATISS/LATISS.container';
+import ViewEditorContainer from 'components/UIF/ViewEditor/ViewEditor.container';
+import WatcherContainer from 'components/Watcher/Watcher.container';
+import GenericCameraView from 'components/GenericCamera/GenericCameraView';
+import CustomViewContainer from 'components/UIF/CustomView.container';
+import Palette from 'components/Palette/Palette';
 import 'styles/react-datetime.css';
 import './App.css';
-import ComponentIndexContainer from './components/ComponentIndex/ComponentIndex.container';
-import ViewsIndexContainer from './components/UIF/ViewsIndex/ViewsIndex.container';
-import HealthStatusSummaryContainer from './components/HealthStatusSummary/HealthStatusSummary.container';
-import LayoutContainer from './components/Layout/Layout.container';
-import LoginContainer from './components/Login/Login.container';
-import PrivateRoute from './components/GeneralPurpose/PrivateRoute/PrivateRoute';
-import ScriptQueueContainer from './components/ScriptQueue/ScriptQueue.container';
-import Panel from './components/GeneralPurpose/Panel/Panel';
-import TelemetryLogContainer from './components/TelemetryLog/TelemetryLog.container';
-import CSCSummaryContainer from './components/CSCSummary/CSCSummary.container';
-import AuxTel from './components/AuxTel/AuxTel';
-import CameraContainer from './components/AuxTel/Camera/Camera.container';
-import DomeContainer from './components/AuxTel/Dome/Dome.container';
-import DomeAndMountView from './components/AuxTel/DomeAndMountView/DomeAndMountView';
-import LightPath from './components/AuxTel/Mount/LightPath.container';
-import Mount from './components/AuxTel/Mount/Mount';
-import LATISSContainer from './components/AuxTel/LATISS/LATISS.container';
-import ViewEditorContainer from './components/UIF/ViewEditor/ViewEditor.container';
-import WatcherContainer from './components/Watcher/Watcher.container';
-import GenericCameraView from './components/GenericCamera/GenericCameraView';
-import CustomViewContainer from './components/UIF/CustomView.container';
-import Palette from './components/Palette/Palette';
 
 class App extends Component {
   static propTypes = {

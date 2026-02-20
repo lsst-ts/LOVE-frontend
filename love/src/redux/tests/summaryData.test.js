@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -149,7 +151,7 @@ it(
   },
 );
 
-it('It should extract all received logMessages from the state for a given CSC', async () => {
+it('Should extract all received logMessages from the state for a given CSC', async () => {
   await store.dispatch(addGroup('event-ATDome-1-logMessage'));
 
   let messages = [];
@@ -175,7 +177,7 @@ it('It should extract all received logMessages from the state for a given CSC', 
   });
 });
 
-it('Should delete all logMessages of a CSC with an action ', async () => {
+it('Should delete all logMessages of a CSC with an action', async () => {
   // Arrange
   await store.dispatch(addGroup('event-ATDome-1-logMessage'));
 
@@ -208,7 +210,7 @@ it('Should delete all logMessages of a CSC with an action ', async () => {
   expect(getCSCLogMessages(store.getState(), 'ATDome', 1)).toEqual([]);
 });
 
-it('It should extract all errorCode event data  from the state for a given CSC', async () => {
+it('Should extract all errorCode event data  from the state for a given CSC', async () => {
   await store.dispatch(addGroup('event-Test-1-errorCode'));
   let messages = [];
 
@@ -233,7 +235,7 @@ it('It should extract all errorCode event data  from the state for a given CSC',
   });
 });
 
-it('It should delete errorCode event data  from the state for a given CSC', async () => {
+it('Should delete errorCode event data  from the state for a given CSC', async () => {
   // Arrange
   await store.dispatch(addGroup('event-Test-1-errorCode'));
   let messages = [];
@@ -265,7 +267,7 @@ it('It should delete errorCode event data  from the state for a given CSC', asyn
   expect(getCSCErrorCodeData(store.getState(), 'Test', 1)).toEqual([]);
 });
 
-it('Should extract a sorted list of a subset of errorCode event data ', async () => {
+it('Should extract a sorted list of a subset of errorCode event data', async () => {
   // Arrange
   await store.dispatch(addGroup('event-Test-1-errorCode'));
   await store.dispatch(addGroup('event-Test-2-errorCode'));

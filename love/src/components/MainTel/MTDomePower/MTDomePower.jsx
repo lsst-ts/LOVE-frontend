@@ -19,12 +19,12 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { VegaLite } from 'react-vega';
+import { parseForPlotTimestamp, fixedFloat } from 'Utils';
 import PowerPlot from './PowerPlot/PowerPlot';
 import styles from './MTDomePower.module.css';
-import { parseForPlotTimestamp, fixedFloat } from 'Utils';
 
 export default class MTDomePower extends Component {
   static propTypes = {

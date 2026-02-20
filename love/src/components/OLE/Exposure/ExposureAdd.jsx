@@ -242,7 +242,7 @@ class ExposureAdd extends Component {
   deleteMessage() {
     const { newMessage } = this.state;
     if (newMessage?.id) {
-      ManagerInterface.deleteMessageExposureLogs(newMessage.id).then((response) => {
+      ManagerInterface.deleteMessageExposureLogs(newMessage.id).then(() => {
         this.setState({ confirmationModalShown: false });
       });
     } else {

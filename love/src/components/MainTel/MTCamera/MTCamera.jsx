@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,24 +19,22 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
-import * as d3 from 'd3';
-import RaftDetail from './RaftDetail/RaftDetail';
-import FocalPlane from './FocalPlane/FocalPlane';
-import CCDDetail from './CCDDetail/CCDDetail';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './MTCamera.module.css';
-import FocalPlaneSummaryDetail from './FocalPlaneSummaryDetail/FocalPlaneSummaryDetail';
+import * as d3 from 'd3';
+import { uniqueId } from 'lodash';
 import Button from 'components/GeneralPurpose/Button/Button';
 import { mtcameraRaftsNeighborsMapping } from 'Config';
 import RebDetail from './RebDetail/RebDetail';
-import { uniqueId } from 'lodash';
+import FocalPlaneSummaryDetail from './FocalPlaneSummaryDetail/FocalPlaneSummaryDetail';
+import RaftDetail from './RaftDetail/RaftDetail';
+import FocalPlane from './FocalPlane/FocalPlane';
+import CCDDetail from './CCDDetail/CCDDetail';
+import styles from './MTCamera.module.css';
 
 const rafts = [];
 const unusedCCDs = [
-  0, 1, 2, 3, 4, /* 5, */ 6 /* 7, */ /* 8, */, 36, 37, 38, /* 39, */ 40, 41, /* 42, */ /* 43, */ 44, 180,
-  /* 181, */ /* 182, */ 183, 184, /* 185, */ 186, 187, 188, /* 216, */ /* 217, */ 218, /* 219, */ 220, 221, 222, 223,
-  224,
+  0, 1, 2, 3, 4, 6, 36, 37, 38, 40, 41, 44, 180, 183, 184, 186, 187, 188, 218, 220, 221, 222, 223, 224,
 ];
 for (let i = 0; i < 25; i++) {
   const ccds = [];
@@ -220,7 +220,6 @@ class MTCamera extends Component {
     const {
       zoomLevel,
       activeViewId: targetId,
-      prevActiveViewId: prevTargetId,
       hoveredRaft,
       hoveredCCD,
       hoveredReb,
@@ -295,7 +294,6 @@ class MTCamera extends Component {
   };
 
   render() {
-    const { selectedCCD, hoveredRaft, selectedRaft, hoveredCCD, hoveredReb } = this.state;
     return this.getComponent();
   }
 
@@ -308,7 +306,6 @@ class MTCamera extends Component {
         <div id={this.uniqueZoomOverlay} className={styles.focalPlanceContainer}>
           <div style={{ display: activeViewId === 'ccdrebdetail' ? 'block' : 'none' }}>
             {selectedCCD && this.getCCDdetail()}
-            {/* {selectedReb && this.getRebDetail()} */}
           </div>
           <div style={{ display: activeViewId === 'raftdetail' ? 'block' : 'none' }}>
             {selectedRaft && this.getRaftdetail()}
@@ -353,7 +350,6 @@ class MTCamera extends Component {
   }
 
   getMTCamera() {
-    const { selectedRaft } = this.state;
     const { hVBiasSwitch, anaV, power, gDV, oDI, oDV, oGV, rDV, temp } = this.props;
     return (
       <div id={this.uniqueFocalplane}>

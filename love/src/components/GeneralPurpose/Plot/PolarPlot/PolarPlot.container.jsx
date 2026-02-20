@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -185,7 +187,7 @@ class PolarPlotContainer extends React.Component {
     this.props.unsubscribeToStreams();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const { timeSeriesControlsProps, inputs, streams, subscribeToStreams, unsubscribeToStreams } = this.props;
     const { data } = this.state;
 
@@ -279,7 +281,7 @@ class PolarPlotContainer extends React.Component {
       };
     });
 
-    const legend = Object.keys(inputs).map((inputName, index) => {
+    const legend = Object.keys(inputs).map((inputName) => {
       return {
         label: inputName,
         name: inputName,

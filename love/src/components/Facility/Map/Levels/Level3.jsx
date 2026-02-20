@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,12 +19,11 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
-import { uniqueId } from 'lodash';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './Level3.module.css';
-import Device from '../Device.jsx';
+import { uniqueId } from 'lodash';
 import * as d3 from 'd3';
+import styles from './Level3.module.css';
 
 export default class Level3 extends Component {
   constructor(props) {
@@ -47,8 +48,6 @@ export default class Level3 extends Component {
   };
 
   componentDidMount() {
-    const deviceId = '#' + this.deviceId;
-    const mapId = '#' + this.mapId;
     const overlayId = '#' + this.overlayId;
     const transformData = this.props.transformData;
 
@@ -78,12 +77,12 @@ export default class Level3 extends Component {
   };
 
   getDevices() {
-    return <React.Fragment></React.Fragment>;
+    return <></>;
   }
   render() {
     const zoomLevel = this.props.transformData.k;
     return (
-      <React.Fragment>
+      <>
         <g id={this.mapId}>
           <g id="Building">
             <path
@@ -899,7 +898,7 @@ export default class Level3 extends Component {
             </text>
           </g>
         )}
-      </React.Fragment>
+      </>
     );
   }
 }

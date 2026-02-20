@@ -19,11 +19,11 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useState } from 'react';
-import Button from '../../../GeneralPurpose/Button/Button';
+import { useState } from 'react';
+import Button from 'components/GeneralPurpose/Button/Button';
+import StatusText from 'components/GeneralPurpose/AlarmLabelText/AlarmLabelText';
+import { severityToStatus } from 'Config';
 import styles from './CompactAlarm.module.css';
-import StatusText from '../../../GeneralPurpose/AlarmLabelText/AlarmLabelText';
-import { severityToStatus } from '../../../../Config';
 
 export default function CompactAlarm({
   user,

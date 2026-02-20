@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
@@ -30,7 +30,7 @@ import Select from 'components/GeneralPurpose/Select/Select';
 import ScriptQueue from 'components/ScriptQueue/ScriptQueue';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText.jsx';
 import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
-import { ATCSCommands, MTCSCommands } from 'Config.js';
+import { ATCSCommands, MTCSCommands } from 'Config';
 import ManagerInterface from 'Utils';
 import styles from './TCSOffset.module.css';
 

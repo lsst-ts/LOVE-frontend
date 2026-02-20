@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,19 +19,19 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import MapFlightTracker from './MapFlightTracker';
-import Value from '../GeneralPurpose/SummaryPanel/Value';
-import Title from '../GeneralPurpose/SummaryPanel/Title';
-import StatusText from '../GeneralPurpose/StatusText/StatusText';
-import Button from '../GeneralPurpose/Button/Button';
 import { isEqual } from 'lodash';
+import moment from 'moment';
+import Value from 'components/GeneralPurpose/SummaryPanel/Value';
+import Title from 'components/GeneralPurpose/SummaryPanel/Title';
+import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
+import Button from 'components/GeneralPurpose/Button/Button';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import ZoomInIcon from 'components/icons/Zoom/ZoomInIcon';
 import ZoomOutIcon from 'components/icons/Zoom/ZoomOutIcon';
-import moment from 'moment';
 import { aircraftTrackerStateToMap, aircraftTrackerStatetoStyle } from 'Config';
+import MapFlightTracker from './MapFlightTracker';
 import styles from './FlightTracker.module.css';
 
 const RADIO_ALERT = 100;
