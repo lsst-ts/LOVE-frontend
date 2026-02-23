@@ -33,6 +33,13 @@ export default [
       'react/jsx-uses-vars': 'error',
       'no-unused-vars': ['error', { varsIgnorePattern: '^_', argsIgnorePattern: '^_$' }],
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      'react-hooks/set-state-in-effect': 'off',
+      'react-hooks/static-components': 'off',
+      'react-hooks/purity': 'off',
+      'react-hooks/preserve-manual-memoization': 'off',
+      'react-hooks/use-memo': 'off',
+      'react-hooks/refs': 'off',
+      'react-hooks/immutability': 'off',
     },
   },
   {
