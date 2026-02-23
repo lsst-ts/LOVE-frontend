@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -27,6 +29,8 @@ import {
   getPermCmdExec,
   getLastSALCommand,
   getUsername,
+  getObservatoryStatuses,
+  getTaiToUtc,
 } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import ScriptQueue from './ScriptQueue';
@@ -57,6 +61,8 @@ const ScriptQueueContainer = ({
   requestSALCommand,
   summaryStateValue,
   queueState,
+  schedulerSummaryStateValue,
+  observatoryStatuses,
   scriptHeartbeats,
   commandExecutePermission,
   lastSALCommand,
@@ -64,6 +70,7 @@ const ScriptQueueContainer = ({
   salindex,
   fit,
   embedded,
+  taiToUtc,
   ...props
 }) => {
   if (props.isRaw) {
@@ -75,6 +82,8 @@ const ScriptQueueContainer = ({
       unsubscribeToStreams={unsubscribeToStreams}
       requestSALCommand={requestSALCommand}
       summaryStateValue={summaryStateValue}
+      schedulerSummaryStateValue={schedulerSummaryStateValue}
+      observatoryStatuses={observatoryStatuses}
       current={queueState.current}
       finishedScriptList={queueState.finishedScriptList}
       availableScriptList={queueState.availableScriptList}
@@ -88,6 +97,7 @@ const ScriptQueueContainer = ({
       fit={fit}
       embedded={embedded}
       running={queueState.running}
+      taiToUtc={taiToUtc}
     />
   );
 };
@@ -96,16 +106,22 @@ const mapStateToProps = (state, ownProps) => {
   const queueState = getScriptQueueState(state, ownProps.salindex);
   const scriptHeartbeats = getScriptHeartbeats(state, ownProps.salindex);
   const summaryStateValue = getSummaryStateValue(state, `event-ScriptQueue-${ownProps.salindex}-summaryState`);
+  const schedulerSummaryStateValue = getSummaryStateValue(state, `event-Scheduler-${ownProps.salindex}-summaryState`);
   const commandExecutePermission = getPermCmdExec(state);
   const lastSALCommand = getLastSALCommand(state);
   const username = getUsername(state);
+  const observatoryStatuses = getObservatoryStatuses(state, ownProps.salindex);
+  const taiToUtc = getTaiToUtc(state);
   return {
     queueState,
     scriptHeartbeats,
     summaryStateValue,
+    schedulerSummaryStateValue,
     commandExecutePermission,
     lastSALCommand,
     username,
+    observatoryStatuses,
+    taiToUtc,
   };
 };
 
@@ -115,7 +131,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     `event-ScriptQueueState-${ownProps.salindex}-scriptsStream`,
     `event-ScriptQueueState-${ownProps.salindex}-availableScriptsStream`,
     `event-ScriptQueue-${ownProps.salindex}-summaryState`,
+    `event-Scheduler-${ownProps.salindex}-summaryState`,
     `event-ScriptHeartbeats-${ownProps.salindex}-stream`,
+    `event-Scheduler-${ownProps.salindex}-observatoryStatus`,
   ];
   return {
     subscriptions,
@@ -128,6 +146,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     requestSALCommand: (cmd, callback) => {
       if (cmd.csc === 'Script') {
         return dispatch(requestSALCommand({ ...cmd, component: 'Script', salindex: 0 }));
+      } else if (cmd.csc === 'Scheduler') {
+        return dispatch(requestSALCommand({ ...cmd, component: 'Scheduler', salindex: ownProps.salindex }, callback));
       }
       return dispatch(requestSALCommand({ ...cmd, component: 'ScriptQueue', salindex: ownProps.salindex }, callback));
     },

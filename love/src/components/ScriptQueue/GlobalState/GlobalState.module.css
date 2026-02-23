@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -59,7 +61,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .stateCell {
   display: grid;
-  grid-template-columns: 8em 1fr;
+  grid-template-columns: 9em 1fr;
   align-items: center;
   grid-column-gap: 0.5rem;
 }
@@ -97,4 +99,78 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .pauseIconWrapper {
   width: 2em;
   border-radius: 100%;
+}
+
+.observatoryStatesContainer {
+  display: flex;
+  gap: 0.5em;
+}
+
+.observatoryStatesContainer > * {
+  padding: 0.2em 0.5em;
+  border-radius: 0.5em;
+  text-overflow: unset;
+}
+
+.infoIconContainer {
+  display: flex;
+  align-items: center;
+  cursor: help;
+}
+
+.infoIconContainer svg {
+  width: 1em;
+  height: 1em;
+}
+
+.stateLabel:has(.infoIconContainer) {
+  display: flex;
+  align-items: center;
+  gap: 0.2em;
+}
+
+.observatoryStateNote {
+  height: 8em;
+  width: calc(100% - 0.5em);
+  margin-top: 0.5em;
+  resize: vertical;
+  background-color: var(--secondary-background-dimmed-color);
+  color: var(--base-font-color);
+  border: 1px solid var(--secondary-font-dimmed-color);
+}
+
+.observatoryStatusContextMenu {
+  display: flex;
+  gap: var(--small-padding);
+  align-items: center;
+}
+
+input:checked + .sliderActiveState {
+  background-color: var(--status-running-color) !important;
+}
+
+.highlightedSliderLabel {
+  color: var(--highlighted-font-color);
+  font-weight: bold;
+}
+
+.observatoryStateEventContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--content-padding);
+}
+
+.stateCell:has(.observatoryStateEventContainer) {
+  justify-items: center;
+}
+
+.observatoryStateNoteIcon {
+  display: inline-flex;
+  align-items: center;
+  cursor: context-menu;
+}
+
+.observatoryStateNoteIcon svg {
+  width: 1em;
+  height: 1em;
 }

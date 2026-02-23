@@ -1632,6 +1632,12 @@ export const getObservatoryStatus = (state, salindex) => {
   };
 };
 
+export const getObservatoryStatuses = (state, salindex) => {
+  const subscriptions = [`event-Scheduler-${salindex}-observatoryStatus`];
+  const data = getStreamsData(state, subscriptions);
+  return data[`event-Scheduler-${salindex}-observatoryStatus`]?.[0];
+};
+
 export const getCurrentTargetInfo = (state, salindex) => {
   const subscriptions = [`event-Scheduler-${salindex}-target`];
   const currentTarget = getStreamsData(state, subscriptions);

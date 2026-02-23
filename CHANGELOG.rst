@@ -2,6 +2,12 @@
 Version History
 ===============
 
+v6.11.0
+-------
+
+* Update package.json version to v6.11.0. `<https://github.com/lsst-ts/LOVE-frontend/pull/771>`_
+* Implement observatory status feature. `<https://github.com/lsst-ts/LOVE-frontend/pull/770>`_
+
 v6.10.2
 -------
 
