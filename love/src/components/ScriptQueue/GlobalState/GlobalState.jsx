@@ -142,17 +142,12 @@ const ObservatoryStatusMenu = memo(({ observatoryStateValue, updateObservatorySt
   const MenuOption = ({ label, status }) => {
     const isStatusActive = (newState & status) !== 0;
     const onToggleState = () => {
-      let updatedState;
+      let updatedState = newState ^ status;
       if (status === OBSERVATORY_STATES.OPERATIONAL) {
-        // OPERATIONAL state is mutually exclusive with FAULT & WEATHER & DOWNTIME states.
-        updatedState =
-          (newState ^ status) & ~(OBSERVATORY_STATES.FAULT | OBSERVATORY_STATES.WEATHER | OBSERVATORY_STATES.DOWNTIME);
-      } else if (
-        status === OBSERVATORY_STATES.FAULT ||
-        status === OBSERVATORY_STATES.WEATHER ||
-        status === OBSERVATORY_STATES.DOWNTIME
-      ) {
-        // FAULT & WEATHER & DOWNTIME states are mutually exclusive with OPERATIONAL state.
+        // OPERATIONAL state is mutually exclusive with FAULT & DOWNTIME states.
+        updatedState = (newState ^ status) & ~(OBSERVATORY_STATES.FAULT | OBSERVATORY_STATES.DOWNTIME);
+      } else if (status === OBSERVATORY_STATES.FAULT || status === OBSERVATORY_STATES.DOWNTIME) {
+        // FAULT & DOWNTIME states are mutually exclusive with OPERATIONAL state.
         updatedState = (newState ^ status) & ~OBSERVATORY_STATES.OPERATIONAL;
       }
       setNewState(updatedState);
