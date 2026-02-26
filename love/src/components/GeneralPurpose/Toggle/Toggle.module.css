@@ -116,3 +116,9 @@ input:checked + .slider:before {
   user-select: none;
   cursor: pointer;
 }
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(100%);
+}

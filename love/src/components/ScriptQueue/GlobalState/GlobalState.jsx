@@ -139,7 +139,7 @@ const ObservatoryStatusMenu = memo(({ observatoryStateValue, updateObservatorySt
   const hasChanged = newState !== observatoryStateValue || note?.trim().length > 0;
   const isDayTime = (observatoryStateValue & OBSERVATORY_STATES.DAYTIME) !== 0;
 
-  const MenuOption = ({ label, status }) => {
+  const MenuOption = ({ label, status, disabled, title }) => {
     const isStatusActive = (newState & status) !== 0;
     const onToggleState = () => {
       let updatedState = newState ^ status;
@@ -153,8 +153,13 @@ const ObservatoryStatusMenu = memo(({ observatoryStateValue, updateObservatorySt
       setNewState(updatedState);
     };
     return (
-      <div className={styles.observatoryStatusContextMenu}>
-        <Toggle toggled={isStatusActive} onToggle={onToggleState} activeColorClassName={styles.sliderActiveState} />
+      <div title={title} className={styles.observatoryStatusContextMenu}>
+        <Toggle
+          toggled={isStatusActive}
+          onToggle={onToggleState}
+          activeColorClassName={styles.sliderActiveState}
+          disabled={disabled}
+        />
         <span className={isStatusActive ? styles.highlightedSliderLabel : ''}>{label}</span>
       </div>
     );
@@ -162,7 +167,12 @@ const ObservatoryStatusMenu = memo(({ observatoryStateValue, updateObservatorySt
   return (
     <>
       <div>
-        {!isDayTime && <MenuOption label="Operational" status={OBSERVATORY_STATES.OPERATIONAL} />}
+        <MenuOption
+          label="Operational"
+          status={OBSERVATORY_STATES.OPERATIONAL}
+          disabled={isDayTime}
+          title={isDayTime ? 'Operational status cannot be set during daytime.' : undefined}
+        />
         <MenuOption label="Fault" status={OBSERVATORY_STATES.FAULT} />
         <MenuOption label="Weather" status={OBSERVATORY_STATES.WEATHER} />
         <MenuOption label="Downtime" status={OBSERVATORY_STATES.DOWNTIME} />
