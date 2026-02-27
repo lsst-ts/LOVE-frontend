@@ -110,6 +110,9 @@ export const DATE_TIME_FORMAT = 'YYYY/MM/DD, HH:mm:ss';
 export const URL_REGEX =
   /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
 
+// List of big camera CSC names
+export const CAMERA_CSC_NAMES = ['ATCamera', 'CCCamera', 'MTCamera'];
+
 /*****************************************************************************/
 /*********************Observatory state configurations************************/
 /*****************************************************************************/
