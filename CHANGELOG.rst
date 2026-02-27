@@ -2,6 +2,12 @@
 Version History
 ===============
 
+v6.11.1
+-------
+
+* Improvements for the observatory status feature. `<https://github.com/lsst-ts/LOVE-frontend/pull/772>`_
+
+
 v6.11.0
 -------
 
