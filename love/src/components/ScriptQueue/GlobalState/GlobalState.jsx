@@ -182,7 +182,12 @@ const ObservatoryStatusMenu = memo(({ observatoryStateValue, updateObservatorySt
         <MenuOption label="Downtime" status={OBSERVATORY_STATES.DOWNTIME} />
       </div>
       <ObserversNote note={note} setNote={setNote} />
-      <Button disabled={!hasChanged} onClick={() => updateObservatoryState(newState, note)}>
+      <Button
+        status="info"
+        disabled={!hasChanged}
+        onClick={() => updateObservatoryState(newState, note)}
+        command={true}
+      >
         Update observatory state
       </Button>
     </>
