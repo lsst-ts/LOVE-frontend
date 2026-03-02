@@ -23,6 +23,7 @@ import CSCExpanded from './CSCExpanded';
 import { addGroup, removeGroup, requestSALCommand } from '../../../redux/actions/ws';
 import { removeCSCLogMessages, removeCSCErrorCodeData } from '../../../redux/actions/summaryData';
 import { getStreamData, getCSCHeartbeat, getCSCLogMessages, getCSCErrorCodeData } from '../../../redux/selectors';
+import { CAMERA_CSC_NAMES } from 'Config';
 
 export const schema = {
   description: 'Displays the error code and message logs for a single CSC',
@@ -127,16 +128,22 @@ const mapDispatchToProps = (dispatch) => {
     'configurationsAvailable',
     'configurationApplied',
     'simulationMode',
-    'offlineDetailedState',
   ];
+
   return {
     subscribeToStreams: (cscName, index) => {
       dispatch(addGroup('event-Heartbeat-0-stream'));
       topics.forEach((topic) => dispatch(addGroup(`event-${cscName}-${index}-${topic}`)));
+      if (CAMERA_CSC_NAMES.includes(cscName)) {
+        dispatch(addGroup(`event-${cscName}-${index}-offlineDetailedState`));
+      }
     },
     unsubscribeToStreams: (cscName, index) => {
       dispatch(removeGroup('event-Heartbeat-0-stream'));
       topics.forEach((topic) => dispatch(removeGroup(`event-${cscName}-${index}-${topic}`)));
+      if (CAMERA_CSC_NAMES.includes(cscName)) {
+        dispatch(removeGroup(`event-${cscName}-${index}-offlineDetailedState`));
+      }
     },
     clearCSCLogMessages: (csc, salindex) => {
       dispatch(removeCSCLogMessages(csc, salindex));
