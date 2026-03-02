@@ -23,6 +23,7 @@ import CSCExpanded from './CSCExpanded';
 import { addGroup, removeGroup, requestSALCommand } from '../../../redux/actions/ws';
 import { removeCSCLogMessages, removeCSCErrorCodeData } from '../../../redux/actions/summaryData';
 import { getStreamData, getCSCHeartbeat, getCSCLogMessages, getCSCErrorCodeData } from '../../../redux/selectors';
+import { CAMERA_CSC_NAMES } from 'Config';
 
 export const schema = {
   description: 'Displays the error code and message logs for a single CSC',
@@ -118,30 +119,31 @@ const CSCExpandedContainer = ({
 };
 
 const mapDispatchToProps = (dispatch) => {
+  const topics = [
+    'summaryState',
+    'logMessage',
+    'logLevel',
+    'errorCode',
+    'softwareVersions',
+    'configurationsAvailable',
+    'configurationApplied',
+    'simulationMode',
+  ];
+
   return {
     subscribeToStreams: (cscName, index) => {
       dispatch(addGroup('event-Heartbeat-0-stream'));
-      dispatch(addGroup(`event-${cscName}-${index}-summaryState`));
-      dispatch(addGroup(`event-${cscName}-${index}-logMessage`));
-      dispatch(addGroup(`event-${cscName}-${index}-logLevel`));
-      dispatch(addGroup(`event-${cscName}-${index}-errorCode`));
-      dispatch(addGroup(`event-${cscName}-${index}-softwareVersions`));
-      dispatch(addGroup(`event-${cscName}-${index}-configurationsAvailable`));
-      dispatch(addGroup(`event-${cscName}-${index}-configurationApplied`));
-      dispatch(addGroup(`event-${cscName}-${index}-simulationMode`));
-      dispatch(addGroup(`event-${cscName}-${index}-offlineDetailedState`));
+      topics.forEach((topic) => dispatch(addGroup(`event-${cscName}-${index}-${topic}`)));
+      if (CAMERA_CSC_NAMES.includes(cscName)) {
+        dispatch(addGroup(`event-${cscName}-${index}-offlineDetailedState`));
+      }
     },
     unsubscribeToStreams: (cscName, index) => {
       dispatch(removeGroup('event-Heartbeat-0-stream'));
-      dispatch(removeGroup(`event-${cscName}-${index}-summaryState`));
-      dispatch(removeGroup(`event-${cscName}-${index}-logMessage`));
-      dispatch(removeGroup(`event-${cscName}-${index}-logLevel`));
-      dispatch(removeGroup(`event-${cscName}-${index}-errorCode`));
-      dispatch(removeGroup(`event-${cscName}-${index}-softwareVersions`));
-      dispatch(removeGroup(`event-${cscName}-${index}-configurationsAvailable`));
-      dispatch(removeGroup(`event-${cscName}-${index}-configurationApplied`));
-      dispatch(removeGroup(`event-${cscName}-${index}-simulationMode`));
-      dispatch(removeGroup(`event-${cscName}-${index}-offlineDetailedState`));
+      topics.forEach((topic) => dispatch(removeGroup(`event-${cscName}-${index}-${topic}`)));
+      if (CAMERA_CSC_NAMES.includes(cscName)) {
+        dispatch(removeGroup(`event-${cscName}-${index}-offlineDetailedState`));
+      }
     },
     clearCSCLogMessages: (csc, salindex) => {
       dispatch(removeCSCLogMessages(csc, salindex));

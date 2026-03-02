@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -114,6 +116,8 @@ export default class ScriptQueue extends Component {
 
   static defaultProps = {
     summaryStateValue: 0,
+    schedulerSummaryStateValue: 0,
+    observatoryStatuses: {},
     heartbeats: {},
     availableScriptList: [],
     waitingScriptList: [],
@@ -524,6 +528,18 @@ export default class ScriptQueue extends Component {
       params: {},
     });
   };
+
+  observatoryStateCommand = (newState, note) => {
+    this.props.requestSALCommand({
+      csc: 'Scheduler',
+      cmd: 'cmd_updateObservatoryStatus',
+      params: {
+        status: newState,
+        note: note ?? '',
+      },
+    });
+  };
+
   onClickContextMenu = (event, index, currentMenuSelected = false) => {
     event.stopPropagation();
     this.setState({ isContextMenuOpen: !this.state.isContextMenuOpen });
@@ -649,6 +665,11 @@ export default class ScriptQueue extends Component {
       return script.path.toLowerCase().includes(this.state.availableScriptsFilter.toLowerCase());
     });
 
+    const observatoryStateValue = this.props.observatoryStatuses?.status?.value ?? 0;
+    const observatoryStateTimestamp =
+      this.props.observatoryStatuses?.private_sndStamp?.value + (this.props.taiToUtc ?? -37);
+    const observatoryStateNote = this.props.observatoryStatuses?.note?.value ?? '';
+
     return (
       <div
         id="container"
@@ -688,10 +709,15 @@ export default class ScriptQueue extends Component {
             statusText: ScriptQueue.stateStyleDict[this.props.state],
             name: this.props.state,
           }}
+          schedulerSummaryState={ScriptQueue.summaryStates[this.props.schedulerSummaryStateValue]}
           requestSummaryStateCommand={this.summaryStateCommand}
           commandExecutePermission={this.props.commandExecutePermission}
           resumeScriptQueue={this.resumeScriptQueue}
           pauseScriptQueue={this.pauseScriptQueue}
+          observatoryStateValue={observatoryStateValue}
+          observatoryStateTimestamp={observatoryStateTimestamp}
+          observatoryStateNote={observatoryStateNote}
+          updateObservatoryStateCommand={this.observatoryStateCommand}
         />
 
         <div className={styles.currentScriptWrapper}>
