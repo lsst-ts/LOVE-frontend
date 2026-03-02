@@ -47,6 +47,8 @@ const ALLOWED_COMMANDS = {
   STANDBY: ['start'],
 };
 
+const FULL_NAME_OBSERVATORY_STATES = ['OPERATIONAL', 'FAULT'];
+
 const OBSERVATORY_STATE_DETAIL = {
   0: {
     name: 'UNKNOWN',
@@ -86,23 +88,25 @@ function getActiveObservatoryStates(decimalValue) {
   return activeStatuses;
 }
 
-function renderObservatoryState(state, statusClass) {
+function renderObservatoryState(state, statusClass, acronymize = true) {
   return (
     <StatusText title={state} status={statusClass} small>
-      {acronymizeString(state)}
+      {acronymize ? acronymizeString(state) : state}
     </StatusText>
   );
 }
 
 const observatoryStateTooltip =
   'Current state of the observatory. ' +
-  'Only active statuses are color-coded and shown, ' +
-  'each following letter represents a different status:' +
-  '\n(D)aytime (green): daytime when on, nighttime when off, automatically set by the Scheduler CSC.' +
-  '\n(O)perational (green): set when the observatory is operating in normal state. Note this status can only be set during nighttime.' +
-  '\n(F)ault (red): set when a fault is detected in any subsystem. Automatically set by the Scheduler CSC, but can also be changed manually.' +
-  '\n(W)eather (red): set when weather conditions are not suitable for observations.' +
-  '\n(D)owntime (yellow): set during scheduled maintenance or upgrades.' +
+  'Only active statuses are color-coded and shown. ' +
+  'Important states like ' +
+  FULL_NAME_OBSERVATORY_STATES.join(' and ') +
+  ' are displayed with their full name, others just with their acronym format:' +
+  '\n· Daytime (green): daytime when on, nighttime when off, automatically set by the Scheduler CSC.' +
+  '\n· Operational (green): set when the observatory is operating in normal state. Note this status can only be set during nighttime.' +
+  '\n· Fault (red): set when a fault is detected in any subsystem. Automatically set by the Scheduler CSC, but can also be changed manually.' +
+  '\n· Weather (red): set when weather conditions are not suitable for observations.' +
+  '\n· Downtime (yellow): set during scheduled maintenance or upgrades.' +
   "\n\nHover over each status to see its full name. Additionally, 'UNKNOWN' status will be set and shown " +
   ' when transitioning from daytime to nighttime. ' +
   'It is responsibility of the observers to set it to operational when in nighttime. This status can be also shown when ' +
@@ -139,27 +143,27 @@ const ObservatoryStatusMenu = memo(({ observatoryStateValue, updateObservatorySt
   const hasChanged = newState !== observatoryStateValue || note?.trim().length > 0;
   const isDayTime = (observatoryStateValue & OBSERVATORY_STATES.DAYTIME) !== 0;
 
-  const MenuOption = ({ label, status }) => {
+  const MenuOption = ({ label, status, disabled, title }) => {
     const isStatusActive = (newState & status) !== 0;
     const onToggleState = () => {
-      let updatedState;
+      let updatedState = newState ^ status;
       if (status === OBSERVATORY_STATES.OPERATIONAL) {
-        // OPERATIONAL state is mutually exclusive with FAULT & WEATHER & DOWNTIME states.
-        updatedState =
-          (newState ^ status) & ~(OBSERVATORY_STATES.FAULT | OBSERVATORY_STATES.WEATHER | OBSERVATORY_STATES.DOWNTIME);
-      } else if (
-        status === OBSERVATORY_STATES.FAULT ||
-        status === OBSERVATORY_STATES.WEATHER ||
-        status === OBSERVATORY_STATES.DOWNTIME
-      ) {
-        // FAULT & WEATHER & DOWNTIME states are mutually exclusive with OPERATIONAL state.
+        // OPERATIONAL state is mutually exclusive with FAULT & DOWNTIME states.
+        updatedState = (newState ^ status) & ~(OBSERVATORY_STATES.FAULT | OBSERVATORY_STATES.DOWNTIME);
+      } else if (status === OBSERVATORY_STATES.FAULT || status === OBSERVATORY_STATES.DOWNTIME) {
+        // FAULT & DOWNTIME states are mutually exclusive with OPERATIONAL state.
         updatedState = (newState ^ status) & ~OBSERVATORY_STATES.OPERATIONAL;
       }
       setNewState(updatedState);
     };
     return (
-      <div className={styles.observatoryStatusContextMenu}>
-        <Toggle toggled={isStatusActive} onToggle={onToggleState} activeColorClassName={styles.sliderActiveState} />
+      <div title={title} className={styles.observatoryStatusContextMenu}>
+        <Toggle
+          toggled={isStatusActive}
+          onToggle={onToggleState}
+          activeColorClassName={styles.sliderActiveState}
+          disabled={disabled}
+        />
         <span className={isStatusActive ? styles.highlightedSliderLabel : ''}>{label}</span>
       </div>
     );
@@ -167,13 +171,23 @@ const ObservatoryStatusMenu = memo(({ observatoryStateValue, updateObservatorySt
   return (
     <>
       <div>
-        {!isDayTime && <MenuOption label="Operational" status={OBSERVATORY_STATES.OPERATIONAL} />}
+        <MenuOption
+          label="Operational"
+          status={OBSERVATORY_STATES.OPERATIONAL}
+          disabled={isDayTime}
+          title={isDayTime ? 'Operational status cannot be set during daytime.' : undefined}
+        />
         <MenuOption label="Fault" status={OBSERVATORY_STATES.FAULT} />
         <MenuOption label="Weather" status={OBSERVATORY_STATES.WEATHER} />
         <MenuOption label="Downtime" status={OBSERVATORY_STATES.DOWNTIME} />
       </div>
       <ObserversNote note={note} setNote={setNote} />
-      <Button disabled={!hasChanged} onClick={() => updateObservatoryState(newState, note)}>
+      <Button
+        status="info"
+        disabled={!hasChanged}
+        onClick={() => updateObservatoryState(newState, note)}
+        command={true}
+      >
         Update observatory state
       </Button>
     </>
@@ -284,6 +298,9 @@ const GlobalState = ({
         {activeObservatoryStates.map((stateDetail) => {
           if (!stateDetail) {
             return renderObservatoryState(state, 'invalid');
+          }
+          if (FULL_NAME_OBSERVATORY_STATES.includes(stateDetail.name)) {
+            return renderObservatoryState(stateDetail.name, stateDetail.statusText, false);
           }
           return renderObservatoryState(stateDetail.name, stateDetail.statusText);
         })}

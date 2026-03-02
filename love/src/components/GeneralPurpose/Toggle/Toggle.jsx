@@ -23,7 +23,7 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Toggle.module.css';
 
-const Toggle = ({ toggled = false, labels = [], onToggle = () => {}, activeColorClassName = '' }) => {
+const Toggle = ({ toggled = false, labels = [], onToggle = () => {}, activeColorClassName = '', disabled = false }) => {
   const handleChangeChk = () => {
     onToggle(!toggled);
   };
@@ -43,8 +43,11 @@ const Toggle = ({ toggled = false, labels = [], onToggle = () => {}, activeColor
           alt={labels.lenght >= 2 ? `${labels[0] - labels[1]}` : ''}
           checked={toggled}
           onChange={handleChangeChk}
+          disabled={disabled}
         />
-        <span className={[styles.slider, styles.round, activeColorClassName].join(' ')} />
+        <span
+          className={[styles.slider, styles.round, activeColorClassName, disabled ? styles.disabled : ''].join(' ')}
+        />
       </label>
 
       <span
@@ -66,6 +69,8 @@ Toggle.propTypes = {
   onToggle: PropTypes.func,
   /** The class name for the active color of the slider */
   activeColorClassName: PropTypes.string,
+  /** Whether the toggle is disabled */
+  disabled: PropTypes.bool,
 };
 
 export default memo(Toggle);
