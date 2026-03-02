@@ -23,6 +23,7 @@ import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getStreamData, getCSCHeartbeat, getCSCWithWarning, getServerTime } from 'redux/selectors';
 import CSCDetail from './CSCDetail';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+import { CAMERA_CSC_NAMES } from 'Config';
 
 export const schema = {
   description: 'Displays heartbeat and Summary State for a single CSC',
@@ -127,8 +128,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     `event-${ownProps.name}-${ownProps.salindex}-errorCode`,
     `event-${ownProps.name}-${ownProps.salindex}-simulationMode`,
     `event-Heartbeat-0-stream`,
-    `event-${ownProps.name}-${ownProps.salindex}-offlineDetailedState`,
   ];
+
+  if (CAMERA_CSC_NAMES.includes(ownProps.name)) {
+    subscriptions.push(`event-${ownProps.name}-${ownProps.salindex}-offlineDetailedState`);
+  }
   return {
     subscriptions,
     subscribeToStreams: () => {

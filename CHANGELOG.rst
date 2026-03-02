@@ -5,8 +5,8 @@ Version History
 v6.11.1
 -------
 
+* Fix CSCDetail & CSCExpanded containers to subscribe to offlineDetailedState event only for big cameras: ATCamera, MTCamera and CCCamera. `<https://github.com/lsst-ts/LOVE-frontend/pull/773>`_
 * Improvements for the observatory status feature. `<https://github.com/lsst-ts/LOVE-frontend/pull/772>`_
-
 
 v6.11.0
 -------
