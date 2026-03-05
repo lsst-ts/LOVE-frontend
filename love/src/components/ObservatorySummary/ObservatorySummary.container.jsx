@@ -20,7 +20,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React from 'react';
 import { connect } from 'react-redux';
 import ObservatorySummary from './ObservatorySummary';
-import { getControlLocation, getObservatoryState, getObservatorySubscriptions } from '../../redux/selectors';
+import { getObservatoryState, getObservatorySubscriptions } from '../../redux/selectors';
 import { addGroup, removeGroup } from '../../redux/actions/ws';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
@@ -47,8 +47,10 @@ const ObservatorySummaryContainer = ({ ...props }) => {
 
 const mapStateToProps = (state) => {
   const observatorySummary = getObservatoryState(state);
-  const controlLocation = getControlLocation(state);
-  return { ...observatorySummary, ...controlLocation };
+  // TODO: roll back this feature if/when required.
+  // See: OSW-1998.
+  // const controlLocation = getControlLocation(state);
+  return { ...observatorySummary };
 };
 
 const mapDispatchToProps = (dispatch) => {

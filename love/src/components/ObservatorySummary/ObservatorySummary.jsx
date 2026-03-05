@@ -24,14 +24,11 @@ import Label from 'components/GeneralPurpose/SummaryPanel/Label';
 import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import Title from 'components/GeneralPurpose/SummaryPanel/Title';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
-import {
-  telescopeTrackingStateMap,
-  telescopeTrackingModeStateMap,
-  telescopeTrackingStateToStyle,
-  telescopeTrackingModeStateToStyle,
-} from 'Config';
+import { telescopeTrackingStateMap, telescopeTrackingModeStateMap, telescopeTrackingStateToStyle } from 'Config';
 import styles from './ObservatorySummary.module.css';
 
+// TODO: roll back this feature if/when required.
+// See: OSW-1998.
 const POOLING_TIME = 3000;
 
 export default class ObservatorySummary extends Component {
@@ -48,10 +45,12 @@ export default class ObservatorySummary extends Component {
     auxtelTrackingState: PropTypes.string,
     /** Auxiliary Telescope Tracking Mode */
     auxtelTrackingMode: PropTypes.string,
+    // TODO: roll back this feature if/when required.
+    // See: OSW-1998.
     /** Control Location */
-    controlLocation: PropTypes.object,
+    // controlLocation: PropTypes.object,
     /** Last Updated Control Location info */
-    lastUpdated: PropTypes.instanceOf(Date),
+    // lastUpdated: PropTypes.instanceOf(Date),
     /** Atmospheric Transmission */
     atmosphericTrans: PropTypes.string,
   };
@@ -63,8 +62,10 @@ export default class ObservatorySummary extends Component {
     auxtelObservingMode: 'UNKNOWN',
     auxtelTrackingState: 'UNKNOWN',
     auxtelTrackingMode: 'UNKNOWN',
-    controlLocation: null,
-    lastUpdated: null,
+    // TODO: roll back this feature if/when required.
+    // See: OSW-1998.
+    // controlLocation: null,
+    // lastUpdated: null,
     atmosphericTrans: 'UNKNOWN',
   };
 
@@ -84,15 +85,17 @@ export default class ObservatorySummary extends Component {
       auxtelObservingMode,
       auxtelTrackingState,
       auxtelTrackingMode,
-      controlLocation,
-      lastUpdated,
+      // TODO: roll back this feature if/when required.
+      // See: OSW-1998.
+      // controlLocation,
+      // lastUpdated,
       degradation,
       atmosphericTrans,
     } = this.props;
 
-    const controlLocationName = controlLocation
-      ? controlLocation.name.charAt(0).toUpperCase() + controlLocation.name.slice(1)
-      : 'UNKNOWN';
+    // const controlLocationName = controlLocation
+    //   ? controlLocation.name.charAt(0).toUpperCase() + controlLocation.name.slice(1)
+    //   : 'UNKNOWN';
 
     const simonyiTrackingStateText = telescopeTrackingStateMap[simonyiTrackingState];
     const simonyiTrackingModeText = telescopeTrackingModeStateMap[simonyiTrackingMode];
@@ -121,10 +124,12 @@ export default class ObservatorySummary extends Component {
 
         <SummaryPanel>
           <Title wide>Vera C. Rubin Observatory</Title>
-          <Label>Control</Label>
+          {/* TODO: roll back this feature if/when required. */}
+          {/* See: OSW-1998. */}
+          {/* <Label>Control</Label>
           <Value>
             <span title={`Last updated: ${lastUpdated?.toUTCString()}`}>{controlLocationName}</span>
-          </Value>
+          </Value> */}
           <Label>Power Source</Label>
           <Value>UNKNOWN</Value>
           <Label>Env. Degradation</Label>

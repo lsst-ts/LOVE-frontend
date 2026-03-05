@@ -37,12 +37,16 @@ import {
   getEfdConfig,
   getSALConfig,
   getObservatoryState,
-  getControlLocation,
+  // TODO: roll back this feature if/when required.
+  // See: OSW-1998.
+  // getControlLocation,
 } from '../../redux/selectors';
 import { logout, receiveConfig, requireSwapToken, cancelSwapToken } from '../../redux/actions/auth';
 import { logAlarm, ackAlarm } from '../../redux/actions/alarms';
-import { addGroup, removeGroup, requestSALCommand, resetSubscriptions } from '../../redux/actions/ws';
-import { fetchControlLocationLoopStart, fetchControlLocationLoopStop } from '../../redux/actions/observatoryState';
+import { addGroup, removeGroup, resetSubscriptions } from '../../redux/actions/ws';
+// TODO: roll back this feature if/when required.
+// See: OSW-1998.
+// import { fetchControlLocationLoopStart, fetchControlLocationLoopStop } from '../../redux/actions/observatoryState';
 import { queryTopicsFieldsInfo } from '../../redux/actions/salinfo';
 import { clearViewToEdit } from '../../redux/actions/uif';
 import Layout from './Layout';
@@ -70,7 +74,9 @@ const mapStateToProps = (state) => {
   const efdConfigFile = getEfdConfig(state);
   const salConfigFile = getSALConfig(state);
   const observatorySummary = getObservatoryState(state);
-  const controlLocation = getControlLocation(state);
+  // TODO: roll back this feature if/when required.
+  // See: OSW-1998.
+  // const controlLocation = getControlLocation(state);
   return {
     user,
     config,
@@ -90,7 +96,7 @@ const mapStateToProps = (state) => {
     efdConfigFile,
     salConfigFile,
     observatorySummary,
-    controlLocation,
+    // controlLocation,
   };
 };
 
@@ -129,12 +135,14 @@ const mapDispatchToProps = (dispatch) => {
       else dispatch(cancelSwapToken);
     },
     setConfig: (config) => dispatch(receiveConfig(config)),
-    startControlLocationLoop: () => {
-      dispatch(fetchControlLocationLoopStart());
-    },
-    stopControlLocationLoop: () => {
-      dispatch(fetchControlLocationLoopStop());
-    },
+    // TODO: roll back this feature if/when required.
+    // See: OSW-1998.
+    // startControlLocationLoop: () => {
+    //   dispatch(fetchControlLocationLoopStart());
+    // },
+    // stopControlLocationLoop: () => {
+    //   dispatch(fetchControlLocationLoopStop());
+    // },
     queryTopicsFieldsInfo: () => dispatch(queryTopicsFieldsInfo()),
   };
 };

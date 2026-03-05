@@ -20,19 +20,16 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 import React from 'react';
 import PropTypes from 'prop-types';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
-import {
-  telescopeTrackingStateMap,
-  telescopeTrackingModeStateMap,
-  telescopeTrackingStateToStyle,
-  telescopeTrackingModeStateToStyle,
-} from 'Config';
+import { telescopeTrackingStateMap, telescopeTrackingModeStateMap, telescopeTrackingStateToStyle } from 'Config';
 import styles from './ObservatorySummaryMenu.module.css';
 
 /** Contents of the ObservatorySummary details Dropdown Menu */
 export default function ObservatorySummaryMenu({
-  location,
-  locationLastUpdate,
-  locationIcon,
+  // TODO: roll back this feature if/when required.
+  // See: OSW-1998.
+  // location,
+  // locationLastUpdate,
+  // locationIcon,
   menuElementClassName,
   dividerClassName,
   simonyiOperationMode,
@@ -55,7 +52,9 @@ export default function ObservatorySummaryMenu({
   return (
     <>
       <div className={[menuElementClassName, styles.menuElement, styles.section].join(' ')}>
-        <div className={styles.bigIconRow}>
+        {/* TODO: roll back this feature if/when required. */}
+        {/* See: OSW-1998. */}
+        {/* <div className={styles.bigIconRow}>
           <div className={styles.iconContainer}>{locationIcon}</div>
           <div className={styles.contentContainer}>
             <span>Observatory control </span>
@@ -65,7 +64,7 @@ export default function ObservatorySummaryMenu({
               </span>
             </div>
           </div>
-        </div>
+        </div> */}
         <span className={styles.label}>Env. Degradation</span>
         <span>{degradation}</span>
       </div>
@@ -149,11 +148,11 @@ export default function ObservatorySummaryMenu({
 
 ObservatorySummaryMenu.propTypes = {
   /** Location from where LOVE is being controlled from */
-  location: PropTypes.string,
+  // location: PropTypes.string,
   /** Location last update */
-  locationLastUpdate: PropTypes.instanceOf(Date),
+  // locationLastUpdate: PropTypes.instanceOf(Date),
   /** An svg representing the location generated on Layout.jsx */
-  locationIcon: PropTypes.object,
+  // locationIcon: PropTypes.object,
   /** Classname to add ot the menu elements */
   menuElementClassName: PropTypes.string,
   /** Classname to add ot the diveiders */
