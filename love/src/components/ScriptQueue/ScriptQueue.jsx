@@ -126,6 +126,7 @@ export default class ScriptQueue extends Component {
     state: 'Unknown',
     username: '',
     embedded: false,
+    showObservatoryStatusControls: false,
   };
 
   static stateStyleDict = {
@@ -718,6 +719,7 @@ export default class ScriptQueue extends Component {
           observatoryStateTimestamp={observatoryStateTimestamp}
           observatoryStateNote={observatoryStateNote}
           updateObservatoryStateCommand={this.observatoryStateCommand}
+          showObservatoryStatusControls={this.props.showObservatoryStatusControls}
         />
 
         <div className={styles.currentScriptWrapper}>
