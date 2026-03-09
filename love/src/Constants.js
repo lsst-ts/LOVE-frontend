@@ -47,3 +47,20 @@ export const HTTP_STATUS = {
   PAYLOAD_TOO_LARGE: 413,
   INTERNAL_SERVER_ERROR: 500,
 };
+
+/*****************************************************************************/
+/* SAL GENERICS **************************************************************/
+/*****************************************************************************/
+
+export const SUMMARY_STATE_COMMANDS = {
+  START: 'start',
+  ENABLE: 'enable',
+  DISABLE: 'disable',
+  STANDBY: 'standby',
+};
+
+export const ALLOWED_SUMMARY_STATE_COMMANDS = {
+  ENABLED: [SUMMARY_STATE_COMMANDS.DISABLE],
+  DISABLED: [SUMMARY_STATE_COMMANDS.ENABLE, SUMMARY_STATE_COMMANDS.STANDBY],
+  STANDBY: [SUMMARY_STATE_COMMANDS.START],
+};
