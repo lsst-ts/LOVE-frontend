@@ -32,6 +32,7 @@ import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail.jsx';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle.jsx';
 import Button from 'components/GeneralPurpose/Button/Button.jsx';
 import { OBSERVATORY_STATES } from 'Config';
+import { ALLOWED_SUMMARY_STATE_COMMANDS } from 'Constants';
 import { acronymizeString, formatSecondsToDigital } from 'Utils';
 import styles from './GlobalState.module.css';
 
@@ -40,12 +41,6 @@ const summaryStateToStylesMap = Object.values(CSCDetail.states).reduce((prevDict
   prevDict[name.toUpperCase()] = value.class;
   return prevDict;
 }, {});
-
-const ALLOWED_COMMANDS = {
-  ENABLED: ['disable'],
-  DISABLED: ['enable', 'standby'],
-  STANDBY: ['start'],
-};
 
 const FULL_NAME_OBSERVATORY_STATES = ['OPERATIONAL', 'FAULT'];
 
@@ -250,7 +245,7 @@ const GlobalState = ({
   }, []);
 
   const summaryStateContextMenuOptions = useMemo(() => {
-    const allowedCommands = ALLOWED_COMMANDS[summaryState.name.toUpperCase()] ?? [];
+    const allowedCommands = ALLOWED_SUMMARY_STATE_COMMANDS[summaryState.name.toUpperCase()] ?? [];
     return [
       {
         icon: <ResumeIcon />,
