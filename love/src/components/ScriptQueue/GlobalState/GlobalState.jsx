@@ -136,6 +136,28 @@ const ObserversNote = ({ note, setNote }) => {
   );
 };
 
+const ObservatoryStateStatusText = ({ state }) => {
+  if (state === 0) {
+    return <StatusText status="invalid">UNKNOWN</StatusText>;
+  }
+
+  const activeObservatoryStateValues = getActiveObservatoryStates(state);
+  const activeObservatoryStates = activeObservatoryStateValues.map((state) => OBSERVATORY_STATE_DETAIL[state]);
+  return (
+    <div className={styles.observatoryStatesContainer}>
+      {activeObservatoryStates.map((stateDetail) => {
+        if (!stateDetail) {
+          return renderObservatoryState(state, 'invalid');
+        }
+        if (FULL_NAME_OBSERVATORY_STATES.includes(stateDetail.name)) {
+          return renderObservatoryState(stateDetail.name, stateDetail.statusText, false);
+        }
+        return renderObservatoryState(stateDetail.name, stateDetail.statusText);
+      })}
+    </div>
+  );
+};
+
 const ObservatoryStatusMenu = memo(({ observatoryStateValue, updateObservatoryState }) => {
   const [newState, setNewState] = useState(observatoryStateValue);
   const [note, setNote] = useState();
@@ -282,31 +304,10 @@ const GlobalState = ({
 
   const contextMenuOptions = getContextMenuOptions(contextMenuTarget);
   const observatoryStateOptionsSelected = contextMenuTarget?.classList.contains('observatoryState');
-  const activeObservatoryStateValues = getActiveObservatoryStates(observatoryStateValue);
-  const activeObservatoryStates = activeObservatoryStateValues.map((state) => OBSERVATORY_STATE_DETAIL[state]);
 
   const secondsSinceLastEvent = observatoryStateTimestamp
     ? (Date.now() - observatoryStateTimestamp * 1000) / 1000
     : null;
-
-  const ObservatoryStateStatusText = ({ state }) => {
-    if (state === 0) {
-      return <StatusText status="invalid">UNKNOWN</StatusText>;
-    }
-    return (
-      <div className={styles.observatoryStatesContainer}>
-        {activeObservatoryStates.map((stateDetail) => {
-          if (!stateDetail) {
-            return renderObservatoryState(state, 'invalid');
-          }
-          if (FULL_NAME_OBSERVATORY_STATES.includes(stateDetail.name)) {
-            return renderObservatoryState(stateDetail.name, stateDetail.statusText, false);
-          }
-          return renderObservatoryState(stateDetail.name, stateDetail.statusText);
-        })}
-      </div>
-    );
-  };
 
   return (
     <div className={styles.globalStateWrapper}>
