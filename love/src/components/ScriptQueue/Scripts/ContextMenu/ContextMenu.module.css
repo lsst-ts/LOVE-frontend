@@ -24,7 +24,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   top: 0;
   background: var(--second-quaternary-background-color);
   z-index: 1;
-  transform: translate(-100%, 0);
   display: flex;
   flex-direction: column;
   padding: 0.5em;
