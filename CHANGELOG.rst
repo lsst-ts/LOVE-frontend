@@ -6,6 +6,7 @@ v6.11.2
 -------
 
 * Add toggle button to the ScriptQueue ConfigPanel component to allow bypassing schema verifications. `<https://github.com/lsst-ts/LOVE-frontend/pull/778>`_
+* Refactor and fix ContextMenu logic in ScriptQueue component. `<https://github.com/lsst-ts/LOVE-frontend/pull/777>`_
 
 v6.11.1
 -------
