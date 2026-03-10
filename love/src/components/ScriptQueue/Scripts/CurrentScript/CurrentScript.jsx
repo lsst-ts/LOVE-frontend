@@ -27,6 +27,7 @@ import { getStatusStyle } from '../Scripts';
 import HeartbeatIcon from '../../../icons/HeartbeatIcon/HeartbeatIcon';
 import StopIcon from '../../../icons/ScriptQueue/StopIcon/StopIcon';
 import ResumeIcon from '../../../icons/ScriptQueue/ResumeIcon/ResumeIcon';
+import ScriptQueue from '../../ScriptQueue';
 
 export default class CurrentScript extends Component {
   static propTypes = {
@@ -222,7 +223,6 @@ export default class CurrentScript extends Component {
                         <div>
                           <StopIcon />
                         </div>
-                        {/* <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Stop'}</div> */}
                       </div>
                     </div>
                     {isPaused ? (
@@ -237,14 +237,15 @@ export default class CurrentScript extends Component {
                           <div>
                             <ResumeIcon />
                           </div>
-                          {/* <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Resume'}</div> */}
                         </div>
                       </div>
                     ) : null}
 
                     <div
                       className={[scriptStyles.buttonContainer, scriptStyles.noBackgroundButton].join(' ')}
-                      onClick={(e) => this.props.onClickContextMenu(e, this.props.index, true)}
+                      onClick={(e) =>
+                        this.props.onClickContextMenu(e, ScriptQueue.CONTEXT_MENU_SECTIONS.CURRENT, this.props.index)
+                      }
                     >
                       <span> &#8943; </span>
                     </div>
