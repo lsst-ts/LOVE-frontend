@@ -34,6 +34,7 @@ import styles from './ScriptQueue.module.css';
 import Loader from '../GeneralPurpose/Loader/Loader';
 import ConfigPanel from './ConfigPanel/ConfigPanel';
 import ContextMenu from './Scripts/ContextMenu/ContextMenu';
+import ResumeIcon from '../icons/ScriptQueue/ResumeIcon/ResumeIcon';
 import RequeueIcon from '../icons/ScriptQueue/RequeueIcon/RequeueIcon';
 import TerminateIcon from '../icons/ScriptQueue/TerminateIcon/TerminateIcon';
 import MoveToTopIcon from '../icons/ScriptQueue/MoveToTopIcon/MoveToTopIcon';
@@ -41,10 +42,18 @@ import MoveToBottomIcon from '../icons/ScriptQueue/MoveToBottomIcon/MoveToBottom
 import { SALCommandStatus } from '../../redux/actions/ws';
 import Input from '../GeneralPurpose/Input/Input';
 import GlobalState from './GlobalState/GlobalState';
+import ObservatoryStatusMenu from './ObservatoryStatusMenu/ObservatoryStatusMenu';
 import ScriptDetails from './Scripts/ScriptDetails';
 import ScriptConfig from './Scripts/ScriptConfig/ScriptConfig';
+import { SUMMARY_STATE_COMMANDS, ALLOWED_SUMMARY_STATE_COMMANDS } from 'Constants';
 
 const CONFIG_PANEL_INITIAL_WIDTH = 590;
+
+const EMPTY_CONTEXT_MENU_STATE = {
+  contextMenuIsOpen: false,
+  contextMenuTarget: null,
+  selectedContextMenu: null,
+};
 
 /**
  * Get the hierarchy of scripts and return it in a dictionary.
@@ -94,9 +103,9 @@ export default class ScriptQueue extends Component {
       summaryStateValue: 0,
       useLocalWaitingList: false,
       waitingScriptList: this.props.waitingScriptList,
-      isContextMenuOpen: false,
-      contextMenuData: {},
-      currentMenuSelected: false,
+      contextMenuIsOpen: false,
+      contextMenuTarget: undefined,
+      selectedContextMenu: undefined,
       availableScriptsStandardExpanded: true,
       availableScriptsExternalExpanded: true,
       availableScriptsFilter: '',
@@ -112,6 +121,7 @@ export default class ScriptQueue extends Component {
     this.observer = null;
     this.scriptQueueContainer = React.createRef();
     this.currentScriptDetailsContainer = React.createRef();
+    this.contextMenuContainer = React.createRef();
   }
 
   static defaultProps = {
@@ -159,6 +169,13 @@ export default class ScriptQueue extends Component {
       name: 'STANDBY',
       statusText: 'warning',
     },
+  };
+
+  static CONTEXT_MENU_SECTIONS = {
+    SUMMARY_STATE: 'summary_state',
+    OBSERVATORY_STATE: 'observatory_state',
+    CURRENT: 'current',
+    WAITING: 'waiting',
   };
 
   componentDidUpdate = (prevProps, _prevState) => {
@@ -245,6 +262,7 @@ export default class ScriptQueue extends Component {
         }));
       }
     }, 100);
+
     this.observer = new ResizeObserver(debouncedResizeCallback);
     if (this.currentScriptDetailsContainer.current) {
       const currentHeight = this.currentScriptDetailsContainer.current.clientHeight;
@@ -257,6 +275,8 @@ export default class ScriptQueue extends Component {
       }));
       this.observer.observe(this.currentScriptDetailsContainer.current);
     }
+
+    document.addEventListener('click', this.onClickOutsideContextMenu);
   };
 
   componentWillUnmount = () => {
@@ -265,6 +285,8 @@ export default class ScriptQueue extends Component {
     if (this.observer) {
       this.observer.unobserve(this.currentScriptDetailsContainer.current);
     }
+
+    document.removeEventListener('click', this.onClickOutsideContextMenu);
   };
 
   handleResizeButton = () => {
@@ -519,14 +541,18 @@ export default class ScriptQueue extends Component {
   };
 
   summaryStateCommand = (commandName) => {
-    if (!['start', 'enable', 'disable', 'standby'].includes(commandName)) {
-      return;
-    }
-
     this.props.requestSALCommand({
       cmd: `cmd_${commandName}`,
       params: {},
     });
+    this.setState({ contextMenuIsOpen: false });
+  };
+
+  isSumaryStateCommandDisabled = (commandName) => {
+    const { summaryStateValue } = this.props;
+    const summaryStateName = ScriptQueue.summaryStates[summaryStateValue]?.name ?? 'UNKNOWN';
+    const allowedCommands = ALLOWED_SUMMARY_STATE_COMMANDS[summaryStateName] ?? [];
+    return !allowedCommands.includes(commandName);
   };
 
   observatoryStateCommand = (newState, note) => {
@@ -538,16 +564,38 @@ export default class ScriptQueue extends Component {
         note: note ?? '',
       },
     });
+    this.setState({ contextMenuIsOpen: false });
   };
 
-  onClickContextMenu = (event, index, currentMenuSelected = false) => {
+  onClickContextMenu = (event, index, selectedContextMenu) => {
     event.stopPropagation();
-    this.setState({ isContextMenuOpen: !this.state.isContextMenuOpen });
-    this.setState({
-      contextMenuData: event.target.getBoundingClientRect(),
-      selectedScriptIndex: index,
-      currentMenuSelected: currentMenuSelected,
+    const target = event.currentTarget;
+    this.setState((state) => {
+      if (state.contextMenuIsOpen && state.contextMenuTarget === target) {
+        return EMPTY_CONTEXT_MENU_STATE;
+      }
+      return {
+        contextMenuIsOpen: true,
+        contextMenuTarget: target,
+        selectedScriptIndex: index,
+        selectedContextMenu,
+      };
     });
+  };
+
+  cleanContextMenuState = () => {
+    this.setState(EMPTY_CONTEXT_MENU_STATE);
+  };
+
+  onClickOutsideContextMenu = (event) => {
+    const { contextMenuIsOpen } = this.state;
+    if (
+      contextMenuIsOpen &&
+      this.contextMenuContainer.current &&
+      !this.contextMenuContainer.current?.contains(event.target)
+    ) {
+      this.cleanContextMenuState();
+    }
   };
 
   requeueSelectedScript = () => {
@@ -556,7 +604,7 @@ export default class ScriptQueue extends Component {
 
   stopSelectedScript = (terminate = false) => {
     this.stopScript(this.state.selectedScriptIndex, terminate);
-    this.setState({ isContextMenuOpen: false });
+    this.setState({ contextMenuIsOpen: false });
   };
 
   moveScriptUp = (scriptIndex) => {
@@ -575,12 +623,12 @@ export default class ScriptQueue extends Component {
 
   moveSelectedScriptToTop = () => {
     this.moveScript(this.state.selectedScriptIndex, 0);
-    this.setState({ isContextMenuOpen: false });
+    this.setState({ contextMenuIsOpen: false });
   };
 
   moveSelectedScriptToBottom = () => {
     this.moveScript(this.state.selectedScriptIndex, Infinity);
-    this.setState({ isContextMenuOpen: false });
+    this.setState({ contextMenuIsOpen: false });
   };
 
   renderAvailableScript = (script) => {
@@ -631,6 +679,44 @@ export default class ScriptQueue extends Component {
     this.setState({ openTree });
   };
 
+  contextMenuOptions = {
+    summary_state: [
+      {
+        icon: <ResumeIcon />,
+        text: 'Start',
+        action: () => this.summaryStateCommand(SUMMARY_STATE_COMMANDS.START),
+        disabled: () => this.isSumaryStateCommandDisabled(SUMMARY_STATE_COMMANDS.START),
+      },
+      {
+        icon: <ResumeIcon />,
+        text: 'Enable',
+        action: () => this.summaryStateCommand(SUMMARY_STATE_COMMANDS.ENABLE),
+        disabled: () => this.isSumaryStateCommandDisabled(SUMMARY_STATE_COMMANDS.ENABLE),
+      },
+      {
+        icon: <ResumeIcon />,
+        text: 'Disable',
+        action: () => this.summaryStateCommand(SUMMARY_STATE_COMMANDS.DISABLE),
+        disabled: () => this.isSumaryStateCommandDisabled(SUMMARY_STATE_COMMANDS.DISABLE),
+      },
+      {
+        icon: <ResumeIcon />,
+        text: 'StandBy',
+        action: () => this.summaryStateCommand(SUMMARY_STATE_COMMANDS.STANDBY),
+        disabled: () => this.isSumaryStateCommandDisabled(SUMMARY_STATE_COMMANDS.STANDBY),
+      },
+    ],
+    current: [
+      { icon: <TerminateIcon />, text: 'Terminate', action: () => this.stopSelectedScript(true) },
+      { icon: <RequeueIcon />, text: 'Requeue', action: this.requeueSelectedScript },
+    ],
+    waiting: [
+      { icon: <MoveToTopIcon />, text: 'Move to top', action: this.moveSelectedScriptToTop },
+      { icon: <MoveToBottomIcon />, text: 'Move to bottom', action: this.moveSelectedScriptToBottom },
+      { icon: <RequeueIcon />, text: 'Requeue', action: this.requeueSelectedScript },
+    ],
+  };
+
   render() {
     const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
     const availableScriptListClass = this.state.isAvailableScriptListVisible ? '' : styles.collapsedScriptList;
@@ -648,17 +734,8 @@ export default class ScriptQueue extends Component {
       if (typeof currentElement.expected_duration !== 'number') return previousSum;
       return currentElement.expected_duration + previousSum;
     }, 0);
-    const currentContextMenu = [
-      { icon: <TerminateIcon />, text: 'Terminate', action: () => this.stopSelectedScript(true) },
-      { icon: <RequeueIcon />, text: 'Requeue', action: this.requeueSelectedScript },
-    ];
-    const waitingContextMenu = [
-      { icon: <MoveToTopIcon />, text: 'Move to top', action: this.moveSelectedScriptToTop },
-      { icon: <MoveToBottomIcon />, text: 'Move to bottom', action: this.moveSelectedScriptToBottom },
-      { icon: <RequeueIcon />, text: 'Requeue', action: this.requeueSelectedScript },
-    ];
 
-    const contextMenuOption = this.state.currentMenuSelected ? currentContextMenu : waitingContextMenu;
+    const contextMenuOption = this.contextMenuOptions[this.state.selectedContextMenu];
 
     const filteredAvailableScripts = this.props.availableScriptList.filter((script) => {
       if (!this.state.availableScriptsFilter) return true;
@@ -674,12 +751,6 @@ export default class ScriptQueue extends Component {
       <div
         id="container"
         ref={this.scriptQueueContainer}
-        onClick={(e) => {
-          this.setState({ isContextMenuOpen: false });
-        }}
-        onScroll={() => {
-          this.setState({ isContextMenuOpen: false });
-        }}
         className={[styles.scriptQueueContainer, styles.threeColumns, this.props.embedded ? styles.embedded : ''].join(
           ' ',
         )}
@@ -698,10 +769,20 @@ export default class ScriptQueue extends Component {
           configPanel={this.state.configPanel}
         />
         <ContextMenu
-          isOpen={this.state.isContextMenuOpen}
-          contextMenuData={this.state.contextMenuData}
+          key={this.state.selectedContextMenu}
+          ref={this.contextMenuContainer}
+          isOpen={this.state.contextMenuIsOpen}
+          target={this.state.contextMenuTarget}
           options={contextMenuOption}
-        />
+        >
+          {this.state.selectedContextMenu === ScriptQueue.CONTEXT_MENU_SECTIONS.OBSERVATORY_STATE && (
+            <ObservatoryStatusMenu
+              key={observatoryStateTimestamp}
+              observatoryStateValue={observatoryStateValue}
+              updateObservatoryState={this.observatoryStateCommand}
+            />
+          )}
+        </ContextMenu>
 
         <GlobalState
           summaryState={ScriptQueue.summaryStates[this.props.summaryStateValue]}
@@ -717,7 +798,7 @@ export default class ScriptQueue extends Component {
           observatoryStateValue={observatoryStateValue}
           observatoryStateTimestamp={observatoryStateTimestamp}
           observatoryStateNote={observatoryStateNote}
-          updateObservatoryStateCommand={this.observatoryStateCommand}
+          onClickContextMenu={this.onClickContextMenu}
         />
 
         <div className={styles.currentScriptWrapper}>

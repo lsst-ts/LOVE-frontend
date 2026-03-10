@@ -19,11 +19,11 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import styles from './ContextMenu.module.css';
 
-export default class ContextMenu extends PureComponent {
+class ContextMenu extends PureComponent {
   static propTypes = {
     isOpen: PropTypes.bool,
     /** List of clickable options to be displayed */
@@ -35,61 +35,73 @@ export default class ContextMenu extends PureComponent {
         icon: PropTypes.node,
         /** Callback passed to the onClick event of each option */
         action: PropTypes.func,
-        /** If `true` the button will be disabled*/
-        disabled: PropTypes.bool,
+        /** Callback that returns a boolean to determine if the option should be disabled or not. */
+        disabled: PropTypes.func,
       }),
     ),
     /** Target element which triggered the contextmenu */
     target: PropTypes.object,
+    /** Ref forwarded to the context menu container */
+    forwardedRef: PropTypes.object,
   };
 
   static defaultProps = {
     isOpen: false,
     options: [],
     target: undefined,
+    forwardedRef: undefined,
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      offset: 0,
+      width: 0,
     };
   }
 
-  componentDidUpdate = (prevProps) => {
-    if (prevProps.target !== this.props.target) {
-      const parentCustomView = this.props.target?.closest('.react-grid-item');
-      const offset = parentCustomView ? parentCustomView.getBoundingClientRect().x : 0;
-      this.setState({
-        offset,
-      });
+  handleRef = (node) => {
+    const { forwardedRef } = this.props;
+    if (node) {
+      const { width } = node.getBoundingClientRect();
+      this.setState({ width });
+      if (forwardedRef) {
+        forwardedRef.current = node;
+      }
     }
   };
 
   render() {
     const { isOpen, options, target, children } = this.props;
-    const { offset } = this.state;
+    const { width } = this.state;
+
     const targetBoundingRect = target ? target.getBoundingClientRect() : { right: 0, bottom: 0 };
+    const parentCustomView = this.props.target?.closest('.react-grid-item');
+    const parentBoundingRect = parentCustomView ? parentCustomView.getBoundingClientRect() : { left: 0, top: 0 };
+
+    const absoluteTop = targetBoundingRect.bottom - parentBoundingRect.top;
+    const absoluteLeft = targetBoundingRect.right - parentBoundingRect.left - width;
 
     return (
       isOpen && (
         <div
+          ref={this.handleRef}
           className={styles.container}
           style={{
-            left: targetBoundingRect.right - offset,
-            top: `calc( -3.3em + ${targetBoundingRect.bottom}px)`,
+            left: absoluteLeft,
+            top: `calc(${absoluteTop}px + var(--small-padding))`,
             width: children ? '20em' : 'auto',
           }}
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
         >
           <div className={styles.options}>
-            {options.map((child, index) => {
+            {options?.map((child, index) => {
+              const disabled = child.disabled?.();
               return (
                 <div
-                  className={[styles.row, child.disabled ? '' : styles.enabled].join(' ')}
+                  className={[styles.row, disabled ? '' : styles.enabled].join(' ')}
                   key={index}
-                  onClick={!child.disabled ? child.action : undefined}
+                  onClick={!disabled ? child.action : undefined}
                 >
                   <div className={[styles.iconWrapper].join(' ')}>{child.icon}</div>
                   <div className={[styles.buttonText].join(' ')}>{child.text}</div>
@@ -103,3 +115,7 @@ export default class ContextMenu extends PureComponent {
     );
   }
 }
+
+const ForwardedRefContextMenu = forwardRef((props, ref) => <ContextMenu {...props} forwardedRef={ref} />);
+
+export default ForwardedRefContextMenu;
