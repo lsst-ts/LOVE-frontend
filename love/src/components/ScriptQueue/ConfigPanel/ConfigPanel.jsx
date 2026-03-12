@@ -145,6 +145,7 @@ export default class ConfigPanel extends Component {
       updatingScriptSchema: false,
       queueToTop: false,
       updatingConfigScriptSchema: false,
+      bypassSchemaVerification: false,
     };
   }
 
@@ -422,6 +423,7 @@ export default class ConfigPanel extends Component {
   closeConfigPanel = () => {
     this.setState({
       queueToTop: false,
+      bypassSchemaVerification: false,
     });
     this.props.closeConfigPanel();
   };
@@ -706,6 +708,9 @@ export default class ConfigPanel extends Component {
       if (!this.props.configPanel.configSchema) {
         this.onReloadSchema();
       }
+
+      // Reset the state of the toggle buttons in the config panel when configuring a new script
+      this.setState({ queueToTop: false, bypassSchemaVerification: false });
     }
 
     if (
@@ -763,7 +768,7 @@ export default class ConfigPanel extends Component {
   };
 
   render() {
-    const { orientation, showSchema, queueToTop } = this.state;
+    const { orientation, showSchema, queueToTop, bypassSchemaVerification } = this.state;
     const scriptName = this.props.configPanel?.name ?? '';
     const scriptPath = this.props.configPanel?.script?.path ?? '';
     const isStandard = this.props.configPanel?.script ? this.props.configPanel.script?.type === 'standard' : false;
@@ -1007,13 +1012,27 @@ export default class ConfigPanel extends Component {
                 labels={['Bottom', 'Top']}
                 onToggle={(value) => this.setState({ queueToTop: value })}
               />
+
+              {/* 
+                TODO: remove schema verification bypass when issues with ScriptQueue CSC schema loads are fixed.
+                See OSW-1977.
+               */}
+              <span className={styles.logLevelLabel}>Bypass schema verification</span>
+              <Toggle
+                toggled={bypassSchemaVerification}
+                labels={['No', 'Yes']}
+                onToggle={(value) => this.setState({ bypassSchemaVerification: value })}
+              />
             </div>
             <div className={styles.addBtnContainer}>
               <Button
                 title="Enqueue script"
                 size="large"
                 onClick={this.onLaunch}
-                disabled={[ERROR, VALIDATING, NEED_REVALIDATION, EMPTY].includes(this.state.validationStatus)}
+                disabled={
+                  !bypassSchemaVerification &&
+                  [ERROR, VALIDATING, NEED_REVALIDATION, EMPTY].includes(this.state.validationStatus)
+                }
                 command
               >
                 Add
