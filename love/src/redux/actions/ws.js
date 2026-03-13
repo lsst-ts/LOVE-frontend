@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -317,7 +319,7 @@ export const closeWebsocketConnection = () => {
  * Add a group to the list of subscriptions, groups are added in PENDING state
  */
 export const addGroup = (groupName) => {
-  return (dispatch, _getState) => {
+  return (dispatch) => {
     dispatch({
       type: ADD_GROUP,
       groupName,
@@ -422,7 +424,7 @@ export const updateLastSALCommandStatus = (status, statusCode, result) => {
  *
  */
 export const requestSALCommand = (data, callback) => {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     const url = `${ManagerInterface.getApiBaseUrl()}cmd/`;
     const commandID = `${Date.now()}-${data.cmd}`;
     const commandStatus = {
@@ -506,7 +508,7 @@ export const _requestSALCommand = (data) => {
  *
  */
 export const sendLOVECscObservingLogs = (observingLogMsg) => {
-  return (dispatch, getState) => {
+  return () => {
     const url = `${ManagerInterface.getApiBaseUrl()}lovecsc/observinglog`;
 
     return fetch(url, {
@@ -515,7 +517,7 @@ export const sendLOVECscObservingLogs = (observingLogMsg) => {
       headers: ManagerInterface.getHeaders(),
     })
       .then((r) => r.json())
-      .then((data) => {
+      .then(() => {
         // TODO: confirmation to the user? what kind?
         // console.log(data);
       });

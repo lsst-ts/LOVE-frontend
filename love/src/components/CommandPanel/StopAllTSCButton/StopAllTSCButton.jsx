@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,10 +19,8 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import styles from './StopAllTSCButton.module.css';
-import ManagerInterface from 'Utils';
-// import { TCSCommands } from 'Config.js';
 
 export default class StopAllTSCButton extends Component {
   constructor(props) {
@@ -48,7 +48,7 @@ export default class StopAllTSCButton extends Component {
               : "Command is not allowed while queue is running either you don't have command execution permissions"
           }
           disabled={!isAvailable}
-          onClick={(e) => this.callTSCStopAll()}
+          onClick={() => this.callTSCStopAll()}
         >
           <svg className={styles.svg} viewBox="0 0 108.5 130">
             <path

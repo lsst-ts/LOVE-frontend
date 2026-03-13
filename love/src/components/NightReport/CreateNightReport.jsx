@@ -15,9 +15,10 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useState, useRef, useEffect, useCallback, useMemo, memo } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo, memo } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
+import { ISO_STRING_DATE_TIME_FORMAT, TIME_FORMAT, EFD_RETENTION_DAYS_PER_INSTANCE } from 'Config';
 import ManagerInterface, {
   getObsDayFromDate,
   getObsDayStartFromDate,
@@ -26,7 +27,6 @@ import ManagerInterface, {
   isNightReportOld,
   getCutDateFromNightReport,
 } from 'Utils';
-import { ISO_STRING_DATE_TIME_FORMAT, TIME_FORMAT, EFD_RETENTION_DAYS_PER_INSTANCE } from 'Config';
 import Alert from 'components/GeneralPurpose/Alert/Alert';
 import Button from 'components/GeneralPurpose/Button/Button';
 import MultiSelect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
@@ -308,7 +308,7 @@ function getReportStatusStep(report) {
   return STEPS.NOTSAVED;
 }
 
-function ObservatoryForm({ report, observatoryState, cscStates, handleReportUpdate, loading: propsLoading }) {
+function ObservatoryForm({ report, handleReportUpdate, loading: propsLoading }) {
   const [userOptions, setUserOptions] = useState([]);
   const [changesNotSaved, setChangesNotSaved] = useState(false);
   const [loading, setLoading] = useState({

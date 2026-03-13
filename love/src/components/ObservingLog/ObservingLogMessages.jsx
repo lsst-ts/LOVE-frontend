@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -83,12 +85,30 @@ export default class ObservingLogInput extends Component {
 
   componentDidMount = () => {
     this.props.subscribeToStreams();
+    if (this.state.timeFilterMode === TIME_FILTER_LIVE) {
+      this.setLiveMode(this.state.timeWindow);
+      this.liveModeInterval = setInterval(this.setLiveMode, 1000);
+    }
+
+    this.resizeObserver = new ResizeObserver((entries) => {
+      const container = entries[0];
+      this.setState({
+        containerWidth: container.contentRect.width,
+        containerHeight: container.contentRect.height,
+      });
+    });
+
+    this.resizeObserver.observe(this.containerRef.current);
   };
 
   componentWillUnmount = () => {
     this.props.unsubscribeToStreams();
-
-    this.observer.disconnect();
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+    if (this.liveModeInterval) {
+      clearInterval(this.liveModeInterval);
+    }
   };
 
   changeContentFilter = (event) => {
@@ -170,30 +190,6 @@ export default class ObservingLogInput extends Component {
     this.setState({
       timeFilterDateEnd: value.toDate(),
     });
-  };
-
-  componentWillUnmount = () => {
-    if (this.liveModeInterval) {
-      clearInterval(this.liveModeInterval);
-    }
-  };
-
-  componentDidMount = () => {
-    if (this.state.timeFilterMode === TIME_FILTER_LIVE) {
-      this.setLiveMode(this.state.timeWindow);
-      this.liveModeInterval = setInterval(this.setLiveMode, 1000);
-    }
-
-    this.resizeObserver = new ResizeObserver((entries) => {
-      const container = entries[0];
-      console.log(container.contentRect);
-      this.setState({
-        containerWidth: container.contentRect.width,
-        containerHeight: container.contentRect.height,
-      });
-    });
-
-    this.resizeObserver.observe(this.containerRef.current);
   };
 
   render() {

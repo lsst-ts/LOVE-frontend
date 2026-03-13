@@ -338,7 +338,7 @@ export default class MTDome extends Component {
     this.props.unsubscribeToStream();
   };
 
-  componentDidUpdate = (prevProps, prevState) => {
+  componentDidUpdate = (prevProps) => {
     if (prevProps.actualPositionLouvers !== this.props.actualPositionLouvers) {
       const dataLouversAFActual = {};
       MTDomeLouversMapAF.forEach((l) => {

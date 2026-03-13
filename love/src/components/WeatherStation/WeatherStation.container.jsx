@@ -19,7 +19,6 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from '../../redux/actions/ws';
 import { getESSstate } from '../../redux/selectors';
@@ -51,11 +50,11 @@ export const schema = {
   },
 };
 
-const WeatherStationContainer = ({ ...props }) => {
+const WeatherStationContainer = ({ salindex = 301, ...props }) => {
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
-  return <WeatherStation {...props} />;
+  return <WeatherStation salindex={salindex} {...props} />;
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -98,9 +97,5 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 const connectedContainer = connect(mapStateToProps, mapDispatchToProps)(WeatherStationContainer);
-
-connectedContainer.defaultProps = {
-  salindex: 301,
-};
 
 export default connectedContainer;

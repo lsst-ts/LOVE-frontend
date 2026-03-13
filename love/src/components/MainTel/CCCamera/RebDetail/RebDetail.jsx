@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -18,7 +20,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import Neighbors from 'components/GeneralPurpose/Neighbors/Neighbors';
 import styles from './RebDetail.module.css';
@@ -590,7 +591,7 @@ class RebDetail extends Component {
         },
       },
     ];
-    this.refs = plotsRebs.map((plot) => {
+    this.refs = plotsRebs.map(() => {
       return React.createRef();
     });
 
@@ -619,7 +620,7 @@ class RebDetail extends Component {
   }
 
   render() {
-    const { reb, showNeighbors, selectNeighborReb } = this.props;
+    const { showNeighbors, selectNeighborReb } = this.props;
     return showNeighbors ? (
       <Neighbors selectNeighbor={selectNeighborReb}>{this.renderPlots()}</Neighbors>
     ) : (

@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,10 +19,9 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
-// import DomeCloseButton from './DomeCloseButton/DomeCloseButton';
-import StopAllTSCButton from './StopAllTSCButton/StopAllTSCButton';
+import { Component } from 'react';
 import ManagerInterface from 'Utils';
+import StopAllTSCButton from './StopAllTSCButton/StopAllTSCButton';
 import styles from './CommandPanel.module.css';
 
 export default class CommandPanel extends Component {
@@ -36,7 +37,6 @@ export default class CommandPanel extends Component {
     const { commandExecutePermission, mainQueueState, auxQueueState } = this.props;
     return (
       <div className={styles.container}>
-        {/* <DomeCloseButton {...this.props}></DomeCloseButton> */}
         <StopAllTSCButton
           title="MTCS Stop All"
           commandExecutePermission={commandExecutePermission}

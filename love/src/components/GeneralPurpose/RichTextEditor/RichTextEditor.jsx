@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,9 +19,9 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useState, useEffect, useRef, memo, forwardRef, useImperativeHandle } from 'react';
+import { useState, useEffect, useRef, memo, forwardRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
-import ReactQuill, { Quill } from 'react-quill';
+import ReactQuill from 'react-quill';
 import styles from './RichTextEditor.module.css';
 import 'react-quill/dist/quill.snow.css';
 
@@ -40,7 +42,7 @@ const RichTextEditor = forwardRef(
     const [isControlPressed, setIsControlPressed] = useState(false);
     const reactQuillRef = useRef(null);
 
-    const handleChange = (value, delta, source, editor) => {
+    const handleChange = (value, _, source) => {
       if (source === 'user') {
         onChange(value);
       }

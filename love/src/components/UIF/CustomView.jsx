@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,19 +19,19 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
-import { Responsive as ResponsiveGridLayout } from 'react-grid-layout'; // GridLayout
+import { Component } from 'react';
+import { Responsive as ResponsiveGridLayout } from 'react-grid-layout';
 import PropTypes from 'prop-types';
-import styles from './CustomView.module.css';
-import '../AuxTel/Mount/MotorTable/MotorTable.container';
 import componentIndex from './ComponentIndex';
-import Button from '../GeneralPurpose/Button/Button';
-import GearIcon from '../icons/GearIcon/GearIcon';
+import Button from 'components/GeneralPurpose/Button/Button';
+import GearIcon from 'components/icons/GearIcon/GearIcon';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon.jsx';
 import CopyIcon from 'components/icons/CopyIcon/CopyIcon';
-import ErrorBoundary from '../GeneralPurpose/ErrorBoundary/ErrorBoundary';
-import Panel from '../GeneralPurpose/Panel/Panel';
-import DashedBox from '../GeneralPurpose/DashedBox/DashedBox';
+import ErrorBoundary from 'components/GeneralPurpose/ErrorBoundary/ErrorBoundary';
+import Panel from 'components/GeneralPurpose/Panel/Panel';
+import DashedBox from 'components/GeneralPurpose/DashedBox/DashedBox';
+import styles from './CustomView.module.css';
+import '../AuxTel/Mount/MotorTable/MotorTable.container';
 
 export const DEVICE_TO_SIZE = {
   '4K': 2560,
@@ -265,7 +267,7 @@ class CustomView extends Component {
       return previousMinKey;
     }, '');
 
-    const entry = Object.entries(DEVICE_TO_SIZE).find(([key, deviceOptionWidth]) => {
+    const entry = Object.entries(DEVICE_TO_SIZE).find(([_, deviceOptionWidth]) => {
       if (deviceOptionWidth <= width) {
         return true;
       }

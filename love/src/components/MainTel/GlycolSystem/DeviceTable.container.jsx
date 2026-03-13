@@ -15,7 +15,6 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getGlycolSystemData } from 'redux/selectors';
@@ -62,7 +61,7 @@ const Container = (props) => {
   return <GlycolDeviceTable {...props} />;
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const data = getGlycolSystemData(state);
   return { data };
 };

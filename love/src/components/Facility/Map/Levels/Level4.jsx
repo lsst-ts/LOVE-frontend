@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,19 +19,19 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
-import lodash from 'lodash';
-import PropTypes from 'prop-types';
-import styles from './Level4.module.css';
-import Device from '../Device.jsx';
+import { Component } from 'react';
+import { uniqueId } from 'lodash';
 import * as d3 from 'd3';
+import PropTypes from 'prop-types';
+import Device from '../Device.jsx';
+import styles from './Level4.module.css';
 
 export default class Level4 extends Component {
   constructor(props) {
     super(props);
-    this.mapId = lodash.uniqueId('Map-');
-    this.overlayId = lodash.uniqueId('Overlay-');
-    this.deviceId = lodash.uniqueId('Devices-');
+    this.mapId = uniqueId('Map-');
+    this.overlayId = uniqueId('Overlay-');
+    this.deviceId = uniqueId('Devices-');
   }
 
   static propTypes = {
@@ -47,8 +49,6 @@ export default class Level4 extends Component {
   };
 
   componentDidMount() {
-    const deviceId = '#' + this.deviceId;
-    const mapId = '#' + this.mapId;
     const overlayId = '#' + this.overlayId;
     const transformData = this.props.transformData;
 
@@ -81,7 +81,7 @@ export default class Level4 extends Component {
     const { whiteRoomAHU01P05, cleanRoomAHU01P05, lowerDamperFan03P04, loadingBayFan04P04 } = this.props.HVACData;
 
     return (
-      <React.Fragment>
+      <>
         <Device
           title={'White Room AHU'}
           id={501}
@@ -425,14 +425,14 @@ export default class Level4 extends Component {
             switch: lowerDamperFan03P04.selectorState ? lowerDamperFan03P04.selectorState.value : null,
           }}
         />
-      </React.Fragment>
+      </>
     );
   }
 
   render() {
     const zoomLevel = this.props.transformData.k;
     return (
-      <React.Fragment>
+      <>
         <g id={this.mapId}>
           <g id="Building">
             <path
@@ -916,7 +916,7 @@ export default class Level4 extends Component {
             </text>
           </g>
         )}
-      </React.Fragment>
+      </>
     );
   }
 }

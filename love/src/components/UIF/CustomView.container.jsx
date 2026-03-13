@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,11 +19,10 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
 import { connect } from 'react-redux';
-import { getView } from '../../redux/selectors';
+import { getView } from 'redux/selectors';
+import { requestView } from 'redux/actions/uif';
 import CustomView from './CustomView';
-import { requestView } from '../../redux/actions/uif';
 
 const ViewEditorContainer = ({ ...props }) => {
   return <CustomView {...props} />;

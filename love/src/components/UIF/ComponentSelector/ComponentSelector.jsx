@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,13 +19,13 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Button from '../../GeneralPurpose/Button/Button';
-import Input from '../../GeneralPurpose/Input/Input';
-import styles from './ComponentSelector.module.css';
+import Button from 'components/GeneralPurpose/Button/Button';
+import Input from 'components/GeneralPurpose/Input/Input';
+import Modal from 'components/GeneralPurpose/Modal/Modal';
 import { indexes } from '../ComponentIndex';
-import Modal from '../../GeneralPurpose/Modal/Modal';
+import styles from './ComponentSelector.module.css';
 
 export default class ComponentSelector extends Component {
   static propTypes = {

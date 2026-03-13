@@ -19,7 +19,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import debounce from 'lodash.debounce';
+import { debounce } from 'lodash';
 import Input from 'components/GeneralPurpose/Input/Input';
 import RecIcon from 'components/icons/MicsIcon/Rec/RecIcon';
 import PauseIcon from 'components/icons/MicsIcon/Pause/PauseIcon';

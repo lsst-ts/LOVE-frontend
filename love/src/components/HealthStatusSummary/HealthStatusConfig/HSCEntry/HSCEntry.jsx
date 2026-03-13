@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,16 +19,16 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import 'brace/mode/javascript';
 import 'brace/theme/solarized_dark';
-import styles from './HSCEntry.module.css';
+import Button from 'components/GeneralPurpose/Button/Button';
+import Input from 'components/GeneralPurpose/Input/Input';
 import HSCInput from './HSCInput/HSCInput';
-import Button from '../../../GeneralPurpose/Button/Button';
-import Input from '../../../GeneralPurpose/Input/Input';
 import { HEALTH_STATUS_VARIABLES_DECLARATION } from '../HealthStatusConfig';
+import styles from './HSCEntry.module.css';
 
 /**
  * Component to configure the Health Status Summary
@@ -82,7 +84,7 @@ export default class HSCEntry extends PureComponent {
     inputs: [],
     name: null,
     funcBody: null,
-    onChange: (name, inputs, funcBody) => {},
+    onChange: () => {},
     onRemove: null,
   };
 
@@ -120,7 +122,7 @@ export default class HSCEntry extends PureComponent {
     return (
       <>
         {header}
-        <p>{preLines.map((line, index) => `${line}; `)}</p>
+        <p>{preLines.map((line) => `${line}; `)}</p>
       </>
     );
   };

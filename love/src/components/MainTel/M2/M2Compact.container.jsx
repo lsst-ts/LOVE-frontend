@@ -1,9 +1,7 @@
 /** 
 This file is part of LOVE-frontend.
 
-Developed for the LSST Telescope and Site Systems.
-This product includes software developed by the LSST Project
- (https://www.lsst.org).
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,13 +15,12 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getM2ActuatorForceTopics } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
-import M2Compact from './M2Compact';
 import { EUIs } from 'Config';
+import M2Compact from './M2Compact';
 
 export const schema = {
   description: 'View of M2 actuators in compact mode (only show forces on actuators)',

@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,7 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Remarkable } from 'remarkable';
 import AceEditor from 'react-ace';
@@ -31,7 +33,7 @@ import ScriptQueue from 'components/ScriptQueue/ScriptQueue';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText.jsx';
 import HelpIcon from 'components/icons/HelpIcon/HelpIcon';
 import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
-import { ATCSCommands, MTCSCommands } from 'Config.js';
+import { ATCSCommands, MTCSCommands } from 'Config';
 import ManagerInterface from 'Utils';
 import styles from './TCSCommands.module.css';
 import JSONPretty from 'react-json-pretty';
@@ -103,7 +105,7 @@ export default class CommandPanel extends Component {
     this.props.unsubscribeToStreams();
   };
 
-  updateParamValue = (name, value, paramType) => {
+  updateParamValue = (name, value) => {
     this.setState({
       paramValues: {
         ...this.state.paramValues,

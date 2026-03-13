@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,7 +19,6 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import Button from '../Button/Button';
@@ -42,23 +43,27 @@ Modal.propTypes = {
   displayFooter: PropTypes.bool,
 };
 
-Modal.defaultProps = {
-  displayTopBar: true,
-  displayFooter: true,
-};
-
-export default function Modal(props) {
+export default function Modal({
+  children,
+  modalClassName,
+  footerChildren,
+  displayTopBar = true,
+  displayFooter = true,
+  size,
+  onRequestClose,
+  ...other
+}) {
   ReactModal.setAppElement('#root');
-  const { children, modalClassName, footerChildren, displayTopBar, displayFooter, size, ...other } = props;
   return (
     <ReactModal
       {...other}
+      onRequestClose={onRequestClose}
       className={[styles.modal, modalClassName, size ? styles['modal-' + size] : ''].join(' ')}
       overlayClassName={styles.overlay}
     >
       {displayTopBar && (
         <div className={styles.topbar}>
-          <Button title="Close" status="transparent" onClick={props.onRequestClose}>
+          <Button title="Close" status="transparent" onClick={onRequestClose}>
             &#10005;
           </Button>
         </div>

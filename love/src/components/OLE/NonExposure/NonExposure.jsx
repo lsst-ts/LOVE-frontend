@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
@@ -36,14 +36,11 @@ import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/Acknowledg
 import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import Select from 'components/GeneralPurpose/Select/Select';
-import NonExposureDetail from './NonExposureDetail';
-import NonExposureEdit from './NonExposureEdit';
 import {
   TIME_FORMAT,
   OLE_COMMENT_TYPE_OPTIONS,
   OLE_DEFAULT_SYSTEMS_FILTER_OPTION,
   OLE_OBS_SYSTEMS,
-  iconLevelOLE,
   ISO_INTEGER_DATE_FORMAT,
   ISO_STRING_DATE_TIME_FORMAT,
   LOG_REFRESH_INTERVAL_MS,
@@ -58,6 +55,9 @@ import ManagerInterface, {
   pipe,
   convertJiraTicketNamesToHyperlinks,
 } from 'Utils';
+import NonExposureDetail from './NonExposureDetail';
+import NonExposureEdit from './NonExposureEdit';
+import { iconLevelOLE } from '../OLE';
 import styles from './NonExposure.module.css';
 
 const moment = extendMoment(Moment);

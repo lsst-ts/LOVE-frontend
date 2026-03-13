@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,12 +19,11 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component, createRef } from 'react';
 import * as d3 from 'd3';
-import ReactDOM from 'react-dom';
-import debounce from 'lodash.debounce';
-import { radians, degrees } from 'Utils';
+import { debounce } from 'lodash';
 import { MAX_CCW_FOLLOWING_ERROR } from 'Constants';
+import { radians, degrees } from 'Utils';
 
 const ARC_TRANSITION_DURATION = 200;
 const COLOR_CABLE_INITIAL = '#29414B';
@@ -48,6 +49,7 @@ class CameraCableWrap extends Component {
   constructor(props) {
     super(props);
     this.g = null;
+    this.containerRef = createRef();
   }
 
   removeCameraCableWrap() {
@@ -181,8 +183,7 @@ class CameraCableWrap extends Component {
   debouncedUpdateCameraCableWrap = debounce(() => this.updateCameraCableWrap(), ARC_TRANSITION_DURATION);
 
   componentDidMount() {
-    const dom = ReactDOM.findDOMNode(this);
-    this.createCameraCableWrap(dom);
+    this.createCameraCableWrap(this.containerRef.current);
   }
 
   componentDidUpdate(prevProps) {
@@ -196,7 +197,7 @@ class CameraCableWrap extends Component {
   }
 
   render() {
-    return <div ref="az-cable-wrap-container"></div>;
+    return <div ref={this.containerRef}></div>;
   }
 }
 

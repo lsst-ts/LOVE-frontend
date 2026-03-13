@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -19,7 +21,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React, { Component, memo } from 'react';
 import PropTypes from 'prop-types';
-import lodash from 'lodash';
+import { uniqueId } from 'lodash';
 import Moment from 'moment';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
@@ -127,8 +129,8 @@ class NonExposureEdit extends Component {
     this.multiselectComponentsRef = React.createRef();
 
     this.richTextEditorRef = React.createRef();
-    this.id = lodash.uniqueId('nonexposure-edit-');
-    this.multiselectSystemId = lodash.uniqueId('multiselect-systems-');
+    this.id = uniqueId('nonexposure-edit-');
+    this.multiselectSystemId = uniqueId('multiselect-systems-');
 
     this.dateBeginInputRef = React.createRef();
     this.dateEndInputRef = React.createRef();

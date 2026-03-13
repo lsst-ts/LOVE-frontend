@@ -18,4 +18,5 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 // create-react-app handles this import
-global.fetch = require('jest-fetch-mock');
+import fetchMock from 'jest-fetch-mock';
+global.fetch = fetchMock;

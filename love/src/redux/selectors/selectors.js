@@ -114,7 +114,7 @@ export const getLastSALCommand = (state) => {
 };
 
 // Optical Alignment Alarm
-export const getAlignmentState = (state) => {
+export const getAlignmentState = () => {
   //This is a mock event that returns a parameter that does not yet exist.
   //Whenever OAS is implemented and a CSC or Topic is published for it
   //this selector should be updated and connected to the proper CSC
@@ -2728,7 +2728,7 @@ export const getESSstate = (state, salindex) => {
 };
 
 // DM selectors
-export const getDMFlowState = (state) => {
+export const getDMFlowState = () => {
   return {
     dmFlowState: 0,
     oodsState: 0,

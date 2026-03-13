@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,12 +19,11 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
 import { connect } from 'react-redux';
+import { addGroup, removeGroup } from 'redux/actions/ws';
+import { getStreamsData } from 'redux/selectors/selectors.js';
+import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import HealthStatusSummary from './HealthStatusSummary';
-import { addGroup, removeGroup } from '../../redux/actions/ws';
-import { getStreamsData } from '../../redux/selectors/selectors.js';
-import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import { HEALTH_STATUS_VARIABLES_DECLARATION } from './HealthStatusConfig/HealthStatusConfig';
 
 const defaultHealthFunction = `return Math.floor(new Date().getSeconds()  / 4) % 5 ;`;
@@ -107,7 +108,6 @@ const HealthStatusSummaryContainer = ({
   subscribeToStreams,
   unsubscribeToStreams,
   isRaw,
-  ...props
 }) => {
   const parsedTelemetryConfiguration = Object.keys(topicConfiguration).reduce((prevDict, subscriptionName) => {
     const [category, component, salindex, topic] = subscriptionName.split('-');

@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,7 +19,6 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, Thead, Tr, Td, Th, Tbody } from './Table';
 export { Table, Thead, Tr, Td, Th, Tbody };
@@ -26,7 +27,7 @@ export { Table, Thead, Tr, Td, Th, Tbody };
  * Renders a table from data and headers configuration
  */
 function SimpleTable({ className, headers, data }) {
-  const defaultRenderMethod = (value, row) => value;
+  const defaultRenderMethod = (value) => value;
 
   return (
     <Table className={className}>

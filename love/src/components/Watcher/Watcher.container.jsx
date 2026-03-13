@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,14 +19,12 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
 import { connect } from 'react-redux';
 import { getUsername, getAllAlarms, getTaiToUtc, getAllTime } from '../../redux/selectors';
 import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
 import { logAlarm } from '../../redux/actions/alarms';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import Watcher from './Watcher';
-// import mockAlarms from './AlarmsTable/mock'
 
 export const schema = {
   description: `Table containing alarms triggered by all CSCs, with the corresponding
@@ -52,16 +52,16 @@ export const schema = {
   },
 };
 
-const WatcherContainer = ({ alarms, user, subscribeToStream, unsubscribeToStream, ...props }) => {
+const WatcherContainer = ({ alarms, subscribeToStream, unsubscribeToStream, ...props }) => {
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
   return (
     <Watcher
-      {...props}
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
       alarms={alarms}
+      {...props}
     />
   );
 };

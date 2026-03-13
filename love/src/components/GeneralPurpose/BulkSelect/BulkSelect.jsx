@@ -1,4 +1,21 @@
-import React, { useState, useEffect } from 'react';
+/** 
+This file is part of LOVE-frontend.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Input from 'components/GeneralPurpose/Input/Input';
@@ -11,7 +28,7 @@ function BulkSelect({ options = [], selectedOptions = [], onSelect = () => {}, c
   const selected = new Set(selectedOptions);
   const filteredOptions = options.filter((option) => option.toLowerCase().includes(search.toLowerCase()));
   const filteredSet = new Set(filteredOptions);
-  const tableOptions = filteredOptions.map((option, index) => ({
+  const tableOptions = filteredOptions.map((option) => ({
     key: option,
     value: option,
   }));
@@ -29,13 +46,13 @@ function BulkSelect({ options = [], selectedOptions = [], onSelect = () => {}, c
     }
   };
 
-  const handleMouseClick = (event, option) => {
+  const handleMouseClick = (_, option) => {
     const newSet = new Set([...selected]);
     newSet.add(option);
     onSelect([...newSet]);
   };
 
-  const handleMouseDown = (event, option) => {
+  const handleMouseDown = (_, option) => {
     const newSet = new Set([...selected]);
     newSet.add(option);
     onSelect([...newSet]);
@@ -66,7 +83,7 @@ function BulkSelect({ options = [], selectedOptions = [], onSelect = () => {}, c
       <Input
         type="checkbox"
         checked={allSelected}
-        onChange={(e) => {
+        onChange={() => {
           if (allSelected) {
             handleDeselectAll();
           } else {
@@ -82,7 +99,7 @@ function BulkSelect({ options = [], selectedOptions = [], onSelect = () => {}, c
       field: 'key',
       title: <AllCheckbox />,
       className: styles.checkboxHeader,
-      render: (value, option) => {
+      render: (_, option) => {
         const isSelected = selected.has(option.value);
         return (
           <div

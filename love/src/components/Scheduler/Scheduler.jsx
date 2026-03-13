@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,10 +19,8 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
-import styles from './Scheduler.module.css';
 import Headers from './Headers/Headers';
 import Filters from './Filters/Filters';
 import Pointing from './Summary/Pointing/Pointing';
@@ -29,8 +29,8 @@ import Moon from './Summary/Moon/Moon';
 import Sun from './Summary/Sun/Sun';
 import CurrentTarget from './CurrentTarget/CurrentTarget';
 import SkyMap from './SkyMap/SkyMap';
-import Plots from './Plots/Plots';
 import AccordionSummary from './AccordionSummary/AccordionSummary';
+import styles from './Scheduler.module.css';
 
 export default class Scheduler extends Component {
   static propTypes = {
@@ -221,6 +221,7 @@ export default class Scheduler extends Component {
     /** The full block definition */
     blockDef: PropTypes.string,
   };
+
   static defaultProps = {
     schedulerState: 0.0,
     subState: 0.0,
@@ -318,60 +319,36 @@ export default class Scheduler extends Component {
 
   constructor(props) {
     super(props);
-    // dict with predicted targets
-    const targets = this.props?.predTargetsDecl.map((id, i) => ({
-      id: i + 1,
-      lat: this.props.predTargetsDecl[i],
-      long: this.props.predTargetsRa[i],
-    }));
-
     this.state = {
-      predTargets: targets,
+      predTargets: [],
     };
   }
 
   componentDidMount = () => {
     this.props.subscribeToStream();
-
-    this.skyMap = (
-      <SkyMap
-        targets={this.state.predTargets}
-        pointingRa={this.props?.pointingRa}
-        pointingDecl={this.props?.pointingDecl}
-      />
-    );
   };
-
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      !isEqual(prevProps.predTargetsDecl, this.props.predTargetsDecl) ||
-      !isEqual(prevProps.predTargetsRa, this.props.predTargetsRa)
-    ) {
-      const targets = this.props?.predTargetsDecl.map((id, i) => ({
-        id: i + 1,
-        lat: this.props.predTargetsDecl[i],
-        long: this.props.predTargetsRa[i],
-      }));
-
-      this.setState({
-        predTargets: targets,
-      });
-    }
-
-    if (!isEqual(prevState.predTargets, this.state.predTargets)) {
-      this.skyMap = (
-        <SkyMap
-          targets={this.state.predTargets}
-          pointingRa={this.props?.pointingRa}
-          pointingDecl={this.props?.pointingDecl}
-        />
-      );
-    }
-  }
 
   componentWillUnmount = () => {
     this.props.unsubscribeToStream();
   };
+
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.predTargetsDecl !== this.props.predTargetsDecl ||
+      prevProps.predTargetsRa !== this.props.predTargetsRa
+    ) {
+      console.log('Targets changed...');
+      const newTargets = this.props?.predTargetsDecl.map((id, i) => ({
+        id: i + 1,
+        dec: this.props.predTargetsDecl[i],
+        ra: this.props.predTargetsRa[i],
+      }));
+      console.log('New targets', newTargets);
+      this.setState({
+        predTargets: newTargets,
+      });
+    }
+  }
 
   render() {
     const {
@@ -430,9 +407,6 @@ export default class Scheduler extends Component {
       cloud,
       seeing,
       rotSkyPos,
-      predictedTargetsRa,
-      predictedTargetsDecl,
-      predictedTargetsRotSkyPos,
       lastTargetId,
       lastTargetRa,
       lastTargetDecl,
@@ -470,6 +444,8 @@ export default class Scheduler extends Component {
       blockDef,
       salindex,
     } = this.props;
+
+    const { predTargets } = this.state;
 
     return (
       <div className={styles.container}>
@@ -550,7 +526,8 @@ export default class Scheduler extends Component {
               rotSkyPos={rotSkyPos}
               filterToMount={filterToMount}
             />
-            {this.skyMap ?? ''}
+
+            <SkyMap targets={predTargets} pointingRa={pointingRa} pointingDecl={pointingDecl} />
           </div>
           {/* column 3 */}
           <div className={styles.rigthDiv}>

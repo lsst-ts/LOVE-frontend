@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,14 +19,14 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
-import * as d3 from 'd3';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
+import * as d3 from 'd3';
 import { uniqueId } from 'lodash';
 import { M2ActuatorPositions, M2ActuatorTangentAngles } from 'Config';
 import { radians } from 'Utils';
-import ForceGradient from '../ForceGradient/ForceGradient';
 import Button from 'components/GeneralPurpose/Button/Button';
+import ForceGradient from '../ForceGradient/ForceGradient';
 import styles from './Selector.module.css';
 
 export default class Selector extends Component {
@@ -337,8 +339,8 @@ export default class Selector extends Component {
                   selectedActuator === act.id
                     ? this.strokeActuatorSelected(act.id)
                     : showCommandedForce
-                    ? this.getActuator(act.id)?.colorForceApplied
-                    : 'none'
+                      ? this.getActuator(act.id)?.colorForceApplied
+                      : 'none'
                 }
                 strokeWidth={act.id === selectedActuator ? 6 : 4}
                 r={(this.state.maxRadius * scale) / 16}
@@ -390,8 +392,8 @@ export default class Selector extends Component {
             selectedActuatorTangent === actuatorID
               ? this.strokeActuatorTangentSelected(actuatorID)
               : showCommandedForce
-              ? this.getActuatorTangent(actuatorID)?.colorForceApplied
-              : 'none';
+                ? this.getActuatorTangent(actuatorID)?.colorForceApplied
+                : 'none';
           return (
             <g
               key={actuatorID}

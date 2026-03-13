@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,9 +19,9 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, memo } from 'react';
 import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
+import { isEqual } from 'lodash';
 import * as d3 from 'd3';
 import * as THREE from 'three';
 import Scene from './Scene/Scene';
@@ -96,7 +98,21 @@ const prevParseToArraySensors = (prevParse, option) => {
   return sorted;
 };
 
-const MainTelESS = (props) => {
+const MainTelESS = ({
+  subscribeToStreams,
+  unsubscribeToStreams,
+  temperature = [],
+  relativeHumidity = [],
+  airFlow = [],
+  airTurbulence = [],
+  minGradiantLimit = -20,
+  maxGradiantLimit = 40,
+  option = 'temperature',
+  percentOpenLouvers = [],
+  percentOpenShutter = [],
+  positionActualDomeAz = 0,
+  initialCameraPosition,
+}) => {
   const [selectedSensor, setSelectedSensor] = useState(0);
   const [selectedSensorData, setSelectedSensorData] = useState({});
   const [inputsPlot, setInputsPlot] = useState({});
@@ -105,15 +121,16 @@ const MainTelESS = (props) => {
 
   const plotRef = useRef();
   useEffect(() => {
-    props.subscribeToStreams();
+    subscribeToStreams();
     return () => {
-      props.unsubscribeToStreams();
+      unsubscribeToStreams();
     };
   }, []);
 
+  const optionData = { temperature, relativeHumidity, airFlow, airTurbulence };
+
   useEffect(() => {
-    const option = props.option;
-    props[option].forEach((parse) => {
+    optionData[option].forEach((parse) => {
       if (!prevParseSensors[option]) {
         const opt = {};
         opt[option] = {};
@@ -135,18 +152,7 @@ const MainTelESS = (props) => {
     });
     setSensors(prevParseToArraySensors(prevParseSensors, option));
     return () => {};
-  }, [props.option, props[props.option]]);
-
-  const {
-    minGradiantLimit,
-    maxGradiantLimit,
-    percentOpenLouvers,
-    percentOpenShutter,
-    positionActualDomeAz,
-    initialCameraPosition,
-  } = props;
-
-  const option = props.option ?? 'temperature';
+  }, [option, optionData[option]]);
   const positions = [];
   for (let i = 0; i < sensors.length; i++) {
     positions.push({
@@ -312,19 +318,6 @@ MainTelESS.propTypes = {
   positionActualDomeAz: PropTypes.number,
 };
 
-MainTelESS.defaultProps = {
-  temperature: [],
-  relativeHumidity: [],
-  airFlow: [],
-  airTurbulence: [],
-  minGradiantLimit: -20,
-  maxGradiantLimit: 40,
-  option: 'temperature',
-  percentOpenLouvers: [],
-  percentOpenShutter: [],
-  positionActualDomeAz: 0,
-};
-
 const comparator = (prevProps, nextProps) => {
   return (
     isEqual(prevProps.subscriptions, nextProps.subscriptions) &&
@@ -336,4 +329,4 @@ const comparator = (prevProps, nextProps) => {
   );
 };
 
-export default React.memo(MainTelESS, comparator);
+export default memo(MainTelESS, comparator);

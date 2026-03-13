@@ -420,7 +420,7 @@ export default class ManagerInterface {
 
   static getEFDStatus(url) {
     if (!url) {
-      return new Promise(function (resolve, _) {
+      return new Promise(function (resolve) {
         resolve({ label: 'EFD Status URL is not present in LOVE Configuration File', style: 'invalid' });
       });
     }
@@ -440,7 +440,7 @@ export default class ManagerInterface {
 
   static getSALStatus(url, expectedKafkaBrokers = []) {
     if (!url) {
-      return new Promise(function (resolve, _) {
+      return new Promise(function (resolve) {
         resolve({ label: 'SAL Status URL is not present in LOVE Configuration File', style: 'invalid' });
       });
     }
@@ -1503,7 +1503,7 @@ export const diffHours = (hour1, hour2, unit) => {
 export const getStringRegExp = (str) => {
   try {
     return new RegExp(str, 'i');
-  } catch (e) {
+  } catch {
     return new RegExp('');
   }
 };
@@ -1615,7 +1615,7 @@ export function calculateTimeoutToNow(startDate, shift = 0) {
 export function getUserHost(user, host) {
   try {
     return `${user}@${host}`;
-  } catch (e) {
+  } catch {
     return '';
   }
 }
@@ -1708,8 +1708,8 @@ export const getCameraStatusStyle = (status) => {
 let booleanArray = undefined;
 export function arrayRandomBoolean(len, probability = 0.1) {
   if (!booleanArray) {
-    let arr = Array.from({ length: len }, (i) => false);
-    arr = arr.map((v) => {
+    let arr = Array.from({ length: len }, () => false);
+    arr = arr.map(() => {
       const rnd = Math.floor(Math.random() * 100);
       if (rnd < probability * 100) return true;
       return false;
@@ -2216,13 +2216,13 @@ export function swapKeysAndValues(obj) {
  */
 export function arrangeJiraOBSSystemsSubsystemsComponentsSelection(systemsIds, subsystemsIds, componentsIds) {
   const systems = Object.entries(OLE_OBS_SYSTEMS)
-    .filter(([k, s]) => systemsIds?.includes(s.id))
+    .filter(([_, s]) => systemsIds?.includes(s.id))
     .map(([k, s]) => ({ name: k, ...s }));
   const subsystems = Object.entries(OLE_OBS_SUBSYSTEMS)
-    .filter(([k, ss]) => subsystemsIds?.includes(ss.id))
+    .filter(([_, ss]) => subsystemsIds?.includes(ss.id))
     .map(([k, ss]) => ({ name: k, ...ss }));
   const components = Object.entries(OLE_OBS_SUBSYSTEMS_COMPONENTS)
-    .filter(([k, c]) => componentsIds?.includes(c.id))
+    .filter(([_, c]) => componentsIds?.includes(c.id))
     .map(([k, c]) => ({ name: k, ...c }));
 
   return JSON.stringify({ selection: [systems, subsystems, components] });
@@ -2259,17 +2259,17 @@ export function arrangeJiraOBSSystemsSubsystemsComponentsSelection(systemsIds, s
 export function arrangeNarrativelogOBSSystemsSubsystemsComponents(systemsIds, subsystemsIds, componentsIds) {
   const prefixPattern = /^[A-Z]+:\s*/;
   const hierarchy = Object.entries(OLE_OBS_SYSTEMS)
-    .filter(([k, s]) => systemsIds?.includes(s.id))
-    .map(([k, s]) => {
+    .filter(([_, s]) => systemsIds?.includes(s.id))
+    .map(([k, _]) => {
       const subsystems = Object.entries(OLE_OBS_SUBSYSTEMS)
-        .filter(([k, ss]) => subsystemsIds?.includes(ss.id))
-        .map(([k, ss]) => {
+        .filter(([_, ss]) => subsystemsIds?.includes(ss.id))
+        .map(([k, _]) => {
           // Subsystems have a prefix to differentiate identical name ones
           // Here we remove the prefix to make the hierarchy more readable
           const ssName = k.replace(prefixPattern, '');
           const components = Object.entries(OLE_OBS_SUBSYSTEMS_COMPONENTS)
-            .filter(([k, c]) => componentsIds?.includes(c.id))
-            .map(([k, c]) => {
+            .filter(([_, c]) => componentsIds?.includes(c.id))
+            .map(([k, _]) => {
               // Components have a prefix to differentiate identical name ones
               // Here we remove the prefix to make the hierarchy more readable
               const cName = k.replace(prefixPattern, '');
@@ -2399,7 +2399,7 @@ export function getOBSSystemsSubsystemsComponentsIds(systemsHierarchy) {
     if (system.children) {
       const availableSubsystemsIds = OLE_OBS_SYSTEMS[systemName]?.children;
       const availableSubsystems = Object.entries(OLE_OBS_SUBSYSTEMS)
-        .filter(([ssn, ss]) => {
+        .filter(([_, ss]) => {
           return availableSubsystemsIds.includes(ss.id);
         })
         .map(([ssn, ss]) => ({ name: ssn, ...ss }));
@@ -2416,7 +2416,7 @@ export function getOBSSystemsSubsystemsComponentsIds(systemsHierarchy) {
         if (subsystem.children) {
           const availableComponentsIds = OLE_OBS_SUBSYSTEMS[subsystemName]?.children;
           const availableComponents = Object.entries(OLE_OBS_SUBSYSTEMS_COMPONENTS)
-            .filter(([cn, c]) => {
+            .filter(([_, c]) => {
               return availableComponentsIds.includes(c.id);
             })
             .map(([cn, c]) => ({ name: cn, ...c }));
@@ -2687,4 +2687,27 @@ export function acronymizeString(str, separator = '_') {
     }
   });
   return acronym;
+}
+
+/**
+ * Dynamically loads an external script once and resolves when it finishes loading.
+ * If the script already exists in the document, it resolves immediately.
+ *
+ * @param {string} src - Script URL to load.
+ * @returns {Promise<void>} Promise that resolves on load or rejects on error.
+ */
+export function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    // Check if script already exists to avoid duplicates
+    const srcPath = `${SUBPATH}${src}`;
+    if (document.querySelector(`script[src="${srcPath}"]`)) {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = srcPath;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
 }

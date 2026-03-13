@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import debounce from 'lodash.debounce';
+import { debounce } from 'lodash';
 import Input from 'components/GeneralPurpose/Input/Input';
 import styles from './DualSlider.module.css';
 

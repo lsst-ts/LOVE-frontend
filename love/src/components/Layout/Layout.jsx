@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,18 +19,41 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import isEqual from 'lodash/isEqual';
+import { isEqual } from 'lodash';
 import { ToastContainer, toast, Slide } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
+import { SALCommandStatus } from 'redux/actions/ws';
+import { tokenSwapStates } from 'redux/reducers/auth';
+import { viewsStates, modes } from 'redux/reducers/uif';
 import MessageIcon from 'components/icons/MessageIcon/MessageIcon';
 import OLEMenu from 'components/OLE/Menu/OLEMenu';
 import ExposureAdd from 'components/OLE/Exposure/ExposureAdd';
 import NonExposureEdit from 'components/OLE/NonExposure/NonExposureEdit';
 import TeknikerAdd from 'components/OLE/Tekniker/TeknikerAdd';
 import ObservatorySummaryMenu from 'components/ObservatorySummary/Menu/ObservatorySummaryMenu';
+import Button from 'components/GeneralPurpose/Button/Button';
+import DropdownMenu from 'components/GeneralPurpose/DropdownMenu/DropdownMenu';
+import NotificationIcon from 'components/icons/NotificationIcon/NotificationIcon';
+import UserIcon from 'components/icons/UserIcon/UserIcon';
+import LogoIcon from 'components/icons/LogoIcon/LogoIcon';
+import MenuIcon from 'components/icons/MenuIcon/MenuIcon';
+import InriaLogo from 'components/icons/InriaLogo/InriaLogo';
+import IconBadge from 'components/icons/IconBadge/IconBadge';
+import HeartbeatIcon from 'components/icons/HeartbeatIcon/HeartbeatIcon';
+import EditIcon from 'components/icons/EditIcon/EditIcon';
+import ClockContainer from 'components/Time/Clock/Clock.container';
+import AlarmAudioContainer from 'components/Watcher/AlarmAudio/AlarmAudio.container';
+import AlarmsList from 'components/Watcher/AlarmsList/AlarmsList';
+import { isAcknowledged, isMuted, isActive } from 'components/Watcher/AlarmUtils';
+import Modal from 'components/GeneralPurpose/Modal/Modal';
+import UserSwapContainer from 'components/Login/UserSwap.container';
+import CactusIcon from 'components/icons/CactusIcon/CactusIcon';
+import UnknownLocationIcon from 'components/icons/UnknownLocationIcon/UnknownLocationIcon';
+import BeachIcon from 'components/icons/BeachIcon/BeachIcon';
+import MountainIcon from 'components/icons/MountainIcon/MountainIcon';
+import { severityEnum, POLLING_RATE_MS, HEARTBEAT_COMPONENTS } from 'Config';
 import ManagerInterface, {
   getNotificationMessage,
   relativeTime,
@@ -36,38 +61,12 @@ import ManagerInterface, {
   parseTimestamp,
   formatTimestamp,
 } from 'Utils';
-import { severityEnum, POLLING_RATE_MS } from 'Config';
-
-import { viewsStates, modes } from '../../redux/reducers/uif';
-import { tokenSwapStates } from '../../redux/reducers/auth';
-import { SALCommandStatus } from '../../redux/actions/ws';
-import Button from '../GeneralPurpose/Button/Button';
-import DropdownMenu from '../GeneralPurpose/DropdownMenu/DropdownMenu';
-import NotificationIcon from '../icons/NotificationIcon/NotificationIcon';
-import UserIcon from '../icons/UserIcon/UserIcon';
-import LogoIcon from '../icons/LogoIcon/LogoIcon';
-import MenuIcon from '../icons/MenuIcon/MenuIcon';
-import InriaLogo from '../icons/InriaLogo/InriaLogo';
-import IconBadge from '../icons/IconBadge/IconBadge';
-import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
-import EditIcon from '../icons/EditIcon/EditIcon';
-import ClockContainer from '../Time/Clock/Clock.container';
-import { HEARTBEAT_COMPONENTS } from '../../Config';
-import AlarmAudioContainer from '../Watcher/AlarmAudio/AlarmAudio.container';
-import AlarmsList from '../Watcher/AlarmsList/AlarmsList';
-import { isAcknowledged, isMuted, isActive } from '../Watcher/AlarmUtils';
-import Modal from '../GeneralPurpose/Modal/Modal';
 import ConfigPanel from './ConfigPanel/ConfigPanel';
 import EmergencyContactsPanel from './EmergencyContactsPanel/EmergencyContactsPanel';
 import AboutPanel from './AboutPanel/AboutPanel';
 import UserDetails from './UserDetails/UserDetails';
-import UserSwapContainer from '../Login/UserSwap.container';
 import styles from './Layout.module.css';
-import CactusIcon from '../icons/CactusIcon/CactusIcon';
-import UnknownLocationIcon from '../icons/UnknownLocationIcon/UnknownLocationIcon';
-import BeachIcon from '../icons/BeachIcon/BeachIcon';
-import MountainIcon from '../icons/MountainIcon/MountainIcon';
 
 export const LAYOUT_CONTAINER_ID = 'layoutContainer';
 const BREAK_1 = 865;
@@ -915,7 +914,7 @@ class Layout extends Component {
           <AboutPanel />
         </Modal>
 
-        <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} hideProgressBar />
+        <ToastContainer position="bottom-center" transition={Slide} hideProgressBar />
       </>
     );
   }

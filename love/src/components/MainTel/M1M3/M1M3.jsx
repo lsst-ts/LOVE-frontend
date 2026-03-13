@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,10 +19,19 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import * as d3 from 'd3';
 import { uniqueId, isEqual } from 'lodash';
-import { defaultNumberFormatter } from 'Utils';
+import ArrowIcon from 'components/icons/ArrowIcon/ArrowIcon';
+import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
+import Button from 'components/GeneralPurpose/Button/Button';
+import Select from 'components/GeneralPurpose/Select/Select';
+import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
+import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
+import Label from 'components/GeneralPurpose/SummaryPanel/Label';
+import Value from 'components/GeneralPurpose/SummaryPanel/Value';
+import Title from 'components/GeneralPurpose/SummaryPanel/Title';
+import ProgressBar from 'components/GeneralPurpose/ProgressBar/ProgressBar';
 import {
   summaryStateMap,
   summaryStateToStyle,
@@ -35,16 +46,7 @@ import {
   alignedStateToStyle,
   mirrorsForceGradientcolors as colors,
 } from 'Config';
-import ArrowIcon from 'components/icons/ArrowIcon/ArrowIcon';
-import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
-import Button from 'components/GeneralPurpose/Button/Button';
-import Select from 'components/GeneralPurpose/Select/Select';
-import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
-import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
-import Label from 'components/GeneralPurpose/SummaryPanel/Label';
-import Value from 'components/GeneralPurpose/SummaryPanel/Value';
-import Title from 'components/GeneralPurpose/SummaryPanel/Title';
-import ProgressBar from 'components/GeneralPurpose/ProgressBar/ProgressBar';
+import { defaultNumberFormatter } from 'Utils';
 import styles from './M1M3.module.css';
 
 const FORCE_GRADIENT_WIDTH = 400;

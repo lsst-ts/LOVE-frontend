@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,18 +19,18 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
+import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
+import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
+import Label from 'components/GeneralPurpose/SummaryPanel/Label';
+import Value from 'components/GeneralPurpose/SummaryPanel/Value';
+import Title from 'components/GeneralPurpose/SummaryPanel/Title';
 import { MAX_CCW_FOLLOWING_ERROR } from 'Constants';
 import { fixedFloat } from 'Utils';
-import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
-import styles from './CableWraps.module.css';
 import CameraCableWrap from './CameraCableWrap/CameraCableWrap';
-import SummaryPanel from '../../GeneralPurpose/SummaryPanel/SummaryPanel';
-import Label from '../../GeneralPurpose/SummaryPanel/Label';
-import Value from '../../GeneralPurpose/SummaryPanel/Value';
-import Title from '../../GeneralPurpose/SummaryPanel/Title';
+import styles from './CableWraps.module.css';
 
 class CableWraps extends Component {
   static propTypes = {
@@ -117,8 +119,6 @@ class CableWraps extends Component {
 
   render() {
     const { ccwFollowingErrorState } = this.state;
-    const rotatorSummaryState = CSCDetail.states[this.props.rotatorSummaryState];
-    const mountSummaryState = CSCDetail.states[this.props.mountSummaryState];
     const cameraCableWrapState = CSCDetail.states[this.props.cameraCableWrapState];
     const rotatorPosition = fixedFloat(this.props.rotatorPosition ?? 0, 4);
     const ccwPosition = fixedFloat(this.props.ccwPosition ?? 0, 4);
@@ -127,20 +127,6 @@ class CableWraps extends Component {
       <div className={styles.cableWrapsContainer}>
         <div className={styles.divSummaryPanel}>
           <SummaryPanel className={styles.summaryPanelStates}>
-            {/* <Title>MTMount</Title>
-            <Value>
-              <span className={[mountSummaryState.class, styles.summaryState].join(' ')}>
-                {mountSummaryState.name}
-              </span>
-            </Value>
-
-            <Title>MTRotator</Title>
-            <Value>
-              <span className={[rotatorSummaryState.class, styles.summaryState].join(' ')}>
-                {rotatorSummaryState.name}
-              </span>
-            </Value> */}
-
             <Title>Camera Cable Wrap</Title>
             <Value>
               <span className={[cameraCableWrapState.class, styles.summaryState].join(' ')}>

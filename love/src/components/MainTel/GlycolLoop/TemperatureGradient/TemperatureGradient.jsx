@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,9 +19,9 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
-import lodash from 'lodash';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { uniqueId } from 'lodash';
 import * as d3 from 'd3';
 import styles from './TemperatureGradient.module.css';
 
@@ -45,8 +47,8 @@ export default class TemperatureGradient extends Component {
 
   constructor(props) {
     super(props);
-    this.colorScaleId = lodash.uniqueId('color-scale-');
-    this.gradientId = lodash.uniqueId('gradient-');
+    this.colorScaleId = uniqueId('color-scale-');
+    this.gradientId = uniqueId('gradient-');
   }
 
   componentDidMount() {

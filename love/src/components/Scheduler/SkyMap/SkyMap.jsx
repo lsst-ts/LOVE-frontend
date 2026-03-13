@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,37 +19,69 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component, memo } from 'react';
 import PropTypes from 'prop-types';
-import celestial from 'd3-celestial';
-import isEqual from 'lodash/isEqual';
-import styles from './SkyMap.module.css';
+import { uniqueId } from 'lodash';
 import Select from 'components/GeneralPurpose/Select/Select';
 import CircleIcon from 'components/icons/CircleIcon/CircleIcon';
 import PlusIcon from 'components/icons/PlusIcon/PlusIcon';
+import { loadScript } from 'Utils';
+import styles from './SkyMap.module.css';
 
-const Celestial = celestial.Celestial();
-window.Celestial = Celestial;
+const STYLES = {
+  lineStyle: {
+    stroke: 'white',
+    fill: 'rgba(255, 255, 255, 0.1)',
+    width: 3,
+  },
+  lineTargetStyle: {
+    stroke: 'white',
+    fill: 'none',
+    width: 1,
+  },
+  textStyle: {
+    fill: 'white',
+    font: 'bold 8px Helvetica, Arial, sans-serif',
+    align: 'center',
+    baseline: 'middle',
+  },
+  pointStyle: {
+    stroke: '#1ecfe8',
+    width: 1,
+    fill: 'rgba(0, 0, 0, 0.0)',
+  },
+  pointTextStyle: {
+    fill: '#1ecfe8',
+    font: 'bold 7.5px Helvetica, Arial, sans-serif',
+    align: 'center',
+    baseline: 'middle',
+  },
+};
 
-export default class SkyMap extends Component {
+class SkyMap extends Component {
   static propTypes = {
-    /** Function to subscribe to streams to receive */
-    subscribeToStreams: PropTypes.func,
-    /** Pointing position of objetive */
-    pointing: PropTypes.array,
-    /** Targets */
+    /** Dec pointing position of objetive */
+    pointingDecl: PropTypes.number,
+    /** RA pointing position of objetive */
+    pointingRa: PropTypes.number,
+    /** Targets, an array with ra and dec coordinates */
     targets: PropTypes.array,
-    /** Dark zones, with the coords to draw the polygons */
+    /** Dark zones, array with the coordinates to draw the polygons */
     darkZones: PropTypes.array,
   };
 
   static defaultProps = {
-    subscribeToStreams: (value) => console.log(value),
+    pointingDecl: 0,
+    pointingRa: 0,
+    targets: [],
     darkZones: [],
   };
 
   constructor(props) {
     super(props);
+    this.Celestial = null;
+    this.celestialWaitTimeout = null;
+    this.mapId = uniqueId('skymap-');
     this.state = {
       //Config from https://github.com/ofrohn/d3-celestial
       config: {
@@ -60,7 +94,7 @@ export default class SkyMap extends Component {
         form: false,
         location: false,
         controls: false,
-        container: 'map',
+        container: this.mapId,
         datapath: '../SkyMap/Data/',
         // STARS
         stars: {
@@ -198,175 +232,198 @@ export default class SkyMap extends Component {
     };
   }
 
-  // Asterisms canvas style of polygons lines
-  lineStyle = {
-    stroke: 'white',
-    fill: 'rgba(255, 255, 255, 0.1)',
-    width: 3,
-  };
-  // Asterisms canvas style of targets lines
-  lineTargetStyle = {
-    stroke: 'white',
-    fill: 'none',
-    width: 3,
-  };
-  // Asterisms canvas style of targets text
-  textStyle = {
-    fill: 'white',
-    font: 'bold 15px Helvetica, Arial, sans-serif',
-    align: 'center',
-    baseline: 'middle',
-  };
-  // Asterisms canvas style of pointing
-  pointStyle = {
-    stroke: '#1ecfe8',
-    width: 1,
-    fill: 'rgba(0, 0, 0, 0.0)',
-  };
-
-  //JSON with the pointing position
-  jsonPointing = {
-    type: 'FeatureCollection',
-    features: [
-      {
-        type: 'Feature',
-        id: 'SomeDesignator',
-        properties: {
-          name: 'Some Name',
-          mag: 10,
-          dim: 250,
-        },
-        geometry: {
-          type: 'Point',
-          coordinates: [this.props.pointingDecl, this.props.pointingRa],
-        },
-      },
-    ],
-  };
-
-  //targets features
-  features = [];
-
-  //JSON with the targets position in the format of celestial
-  jsonTargets = {};
-
   /**
    * Function to change the transformation to view the skymap
    * @param {*} transformUpdated : the new transform get from select input
    */
   actConfig = (transformUpdated) => {
-    const changeTransform = (prevState) => {
-      let { config } = prevState;
-      config.transform = transformUpdated;
-      Celestial.display(config);
-      return { config: config };
-    };
-    this.setState((prevState) => changeTransform(prevState));
+    this.setState((prevState) => ({
+      config: { ...prevState.config, transform: transformUpdated },
+    }));
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    const config = this.state.config;
-    if (!isEqual(prevProps.targets, this.props.targets)) {
-      this.addObjects(config);
-      Celestial.display(config);
+    const { targets } = this.props;
+    const { config } = this.state;
+
+    if (prevProps.targets !== targets && targets && targets.length > 0 /* && this.Celestial */) {
+      if (!this.celestialWaitTimeout) {
+        console.log('Updating targets in 5 secs...');
+        setTimeout(() => {
+          console.log('Calling delayed adding targets...');
+          this.addObjects();
+          this.Celestial.reload(config);
+        }, 5000);
+      }
+    }
+
+    if (prevState.config.transform !== config.transform && this.Celestial) {
+      console.log('Updating transform...');
+      // this.Celestial.display(config);
+      this.Celestial.reload(config);
     }
   };
 
-  componentDidMount = () => {
-    const config = this.state.config;
-    //Add objects only one time
-    this.addObjects(config);
-    Celestial.display(config);
+  componentDidMount = async () => {
+    const { config } = this.state;
+    try {
+      await loadScript('d3.v3.min.js');
+      await loadScript('celestial.min.js');
+      await loadScript('d3.geo.projection.v0.min.js');
+
+      if (window.Celestial) {
+        this.Celestial = window.Celestial;
+        this.Celestial.display(config);
+      }
+    } catch (err) {
+      console.error('Script loading failed:', err);
+    }
   };
 
-  addObjects = (config) => {
-    let jsonPolygons = this.jsonPolygons,
-      jsonPointing = this.jsonPointing,
-      jsonTargets = this.jsonTargets,
-      lineStyle = this.lineStyle,
-      lineTargetStyle = this.lineTargetStyle,
-      textStyle = this.textStyle,
-      pointStyle = this.pointStyle,
-      features = this.features;
+  componentWillUnmount = () => {
+    // Clean up Celestial container
+    if (this.Celestial) {
+      this.Celestial.container.selectAll('*').remove();
+    }
+  };
 
-    //Generate dic to draw with celestial from targets
-    this.props.targets?.map((t, index) => {
-      const [lat, long] = [t.lat, t.long];
-      let coords1 = [
-          [lat - 1, long],
-          [lat + 1, long],
-        ],
-        coords2 = [
-          [lat, long - 1],
-          [lat, long + 1],
-        ];
+  addObjects = () => {
+    const { pointingDecl, pointingRa, targets, darkZones } = this.props;
+    const { config } = this.state;
+    const { lineStyle, lineTargetStyle, textStyle, pointStyle, pointTextStyle } = STYLES;
+    const Celestial = this.Celestial;
 
-      features.push({
+    // Generate dic to draw celestial targets as crosses, with a text with the target id next to it.
+    const jsonTargets = {
+      type: 'FeatureCollection',
+      features: targets
+        .map(({ id, dec, ra }) => {
+          if (isNaN(dec) || isNaN(ra)) return;
+
+          const coords1 = [
+            [ra, dec - 1],
+            [ra, dec + 1],
+          ];
+          const coords2 = [
+            [ra - 1, dec],
+            [ra + 1, dec],
+          ];
+
+          return {
+            type: 'Feature',
+            id,
+            properties: {
+              n: id,
+              // As features are cross shaped, the loc is defined with a shift to position the text next to the center of the cross.
+              loc: [ra - 0.5, dec - 0.5],
+              style: {},
+            },
+            geometry: {
+              type: 'MultiLineString',
+              coordinates: [coords1, coords2],
+            },
+          };
+        })
+        .filter((feature) => feature !== undefined),
+    };
+
+    // Generate dic to draw dark zones as polygons
+    const jsonPolygons = {
+      type: 'FeatureCollection',
+      features: darkZones.map(({ coordinates }, index) => ({
         type: 'Feature',
-        id: t.id,
+        id: `dark-zone-${index}`,
         properties: {
-          n: t.id,
-          // Location of name text on the map
-          loc: [lat - 2, long + 2],
+          n: `Dark Zone ${index + 1}`,
+          loc: coordinates[0],
           style: {},
         },
         geometry: {
-          // the line object as an array of point coordinates
-          type: 'MultiLineString',
-          // This is an array of array of coords. One array represent a polygon
-          coordinates: [coords1, coords2],
+          type: 'Polygon',
+          coordinates: [coordinates],
         },
-      });
-    });
-
-    //Make the dicc with the celestial format to render on the map
-    jsonTargets = {
-      type: 'FeatureCollection',
-      features: features,
+      })),
     };
-    //Add the polygons
+
+    // Generate dic to draw the pointing as a point, with a size depending on the magnitude (dim property)
+    const jsonPointing = {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          id: 'pointing',
+          properties: {
+            name: 'Pointing',
+            mag: 10,
+            dim: 250,
+          },
+          geometry: {
+            type: 'Point',
+            coordinates: [pointingRa, pointingDecl],
+          },
+        },
+      ],
+    };
+
+    //Add the dark zones as polygons
     Celestial.add({
       type: 'line',
-
-      callback: (error, json) => {
+      callback: (error) => {
         if (error) return console.warn(error);
 
-        // Load the geoJSON file and transform to correct coordinate system, if necessary
-        let jsonPolygonsCopy = structuredClone(jsonPolygons);
-        // getData modifica el diccionario por lo que es necesario pasarle una copia
-        var asterism = Celestial.getData(jsonPolygonsCopy, config.transform);
-
-        // Add to celestial objects container in d3
-        if (asterism) {
-          Celestial.container
-            .selectAll('.asterisms')
-            .data(asterism.features)
-            .enter()
-            .append('path')
-            .attr('class', 'ast');
-        }
-        // Trigger redraw to display changes
+        var objects = Celestial.getData(jsonPolygons, config.transform);
+        Celestial.container
+          .selectAll('.darkZones')
+          .data(objects.features)
+          .enter()
+          .append('path')
+          .attr('class', 'darkZone');
         Celestial.redraw();
       },
       redraw: () => {
-        // Select the added objects by class name as given previously
-        Celestial.container.selectAll('.ast').each(function (d) {
-          // Set line styles
-          Celestial.setStyle(lineStyle);
-          // Project objects on map
-          Celestial.map(d);
-          // draw on canvas
-          Celestial.context.fill();
-          Celestial.context.stroke();
+        Celestial.container.selectAll('.darkZone').each(function (d) {
+          // Draw on canvas
+          Celestial.setStyle(lineStyle); // Set object styles
+          Celestial.map(d); // Project objects on map
+          Celestial.context.fill(); // Fill the object path with the prevoiusly set fill color
+          Celestial.context.stroke(); // Draw a line along the path with the prevoiusly set stroke color and line width
 
-          // If point is visible (this doesn't work automatically for points)
           if (Celestial.clip(d.properties.loc)) {
-            // get point coordinates
             let pt = Celestial.getPoint(d.properties.loc, config.transform);
             pt = Celestial.mapProjection(pt);
-            // Set text styles
+
+            // Draw text on canvas
             Celestial.setTextStyle(textStyle);
-            // and draw text on canvas
+            Celestial.context.fillText(d.properties.n, pt[0], pt[1]);
+          }
+        });
+      },
+    });
+
+    //Add the targets
+    Celestial.add({
+      type: 'line',
+      callback: (error) => {
+        if (error) return console.warn(error);
+
+        var objects = Celestial.getData(jsonTargets, config.transform);
+        Celestial.container.selectAll('.targets').data(objects.features).enter().append('path').attr('class', 'target');
+        Celestial.redraw();
+      },
+      redraw: () => {
+        Celestial.container.selectAll('.target').each(function (d) {
+          // Draw on canvas
+          Celestial.setStyle(lineTargetStyle); // Set object styles
+          Celestial.map(d); // Project objects on map
+          Celestial.context.fill(); // Fill the object path with the prevoiusly set fill color
+          Celestial.context.stroke(); // Draw a line along the path with the prevoiusly set stroke color and line width
+
+          if (Celestial.clip(d.properties.loc)) {
+            let pt = Celestial.getPoint(d.properties.loc, config.transform);
+            pt = Celestial.mapProjection(pt);
+
+            // Draw text on canvas
+            Celestial.setTextStyle(textStyle);
             Celestial.context.fillText(d.properties.n, pt[0], pt[1]);
           }
         });
@@ -376,103 +433,35 @@ export default class SkyMap extends Component {
     //Add the pointing
     Celestial.add({
       type: 'line',
-
-      callback: function (error, json) {
-        if (error) return console.warn(error);
-        // Load the geoJSON file and transform to correct coordinate system, if necessary
-        let jsonPointingCopy = structuredClone(jsonPointing);
-        var dsos = Celestial.getData(jsonPointingCopy, config.transform);
-        // Add to celestiasl objects container in d3
-        Celestial.container.selectAll('.snrs').data(dsos.features).enter().append('path').attr('class', 'snr');
-        // Trigger redraw to display changes
-        Celestial.redraw();
-      },
-
-      redraw: function () {
-        // Select the added objects by class name as given previously
-        Celestial.container.selectAll('.snr').each(function (d) {
-          // If point is visible (this doesn't work automatically for points)
-          if (Celestial.clip(d.geometry.coordinates)) {
-            // get point coordinates
-            var pt = Celestial.mapProjection(d.geometry.coordinates);
-            // object radius in pixel, could be varable depending on e.g. magnitude
-            var r = Math.pow(parseInt(d.properties.dim) * 0.25, 0.5);
-
-            // draw on canvas
-            // Set object styles
-            Celestial.setStyle(pointStyle);
-            // Start the drawing path
-            Celestial.context.beginPath();
-            // Thats a circle in html5 canvas
-            Celestial.context.arc(pt[0], pt[1], r, 0, 2 * Math.PI);
-            // Finish the drawing path
-            Celestial.context.closePath();
-            // Draw a line along the path with the prevoiusly set stroke color and line width
-            Celestial.context.stroke();
-            // Fill the object path with the prevoiusly set fill color
-            Celestial.context.fill();
-
-            //ADD TEXT
-            // Set text styles
-            Celestial.setTextStyle({
-              fill: '#1ecfe8',
-              font: 'bold 7.5px Helvetica, Arial, sans-serif',
-              align: 'center',
-              baseline: 'middle',
-            });
-            // and draw text on canvas
-            Celestial.context.fillText('POINTING', pt[0], pt[1] - 15);
-          }
-        });
-      },
-    });
-
-    //Add the targets
-    Celestial.add({
-      type: 'line',
-
-      callback: (error, json) => {
+      callback: function (error) {
         if (error) return console.warn(error);
 
-        // Load the geoJSON file and transform to correct coordinate system, if necessary
-        let jsonTargetsCopy = structuredClone(jsonTargets);
-        var asterism = Celestial.getData(jsonTargetsCopy, config.transform);
-
-        // Add to celestial objects container in d3
+        var objects = Celestial.getData(jsonPointing, config.transform);
         Celestial.container
-          .selectAll('.targets')
-          .data(asterism.features)
+          .selectAll('.pointings')
+          .data(objects.features)
           .enter()
           .append('path')
-          .attr('class', 'target');
-        // Trigger redraw to display changes
+          .attr('class', 'pointing');
         Celestial.redraw();
       },
-      redraw: () => {
-        // Select the added objects by class name as given previously
-        Celestial.container.selectAll('.target').each(function (d) {
-          // Set line styles
-          Celestial.setStyle(lineTargetStyle);
-          // Project objects on map
-          Celestial.map(d);
-          // draw on canvas
-          Celestial.context.fill();
-          Celestial.context.stroke();
+      redraw: function () {
+        Celestial.container.selectAll('.pointing').each(function (d) {
+          if (Celestial.clip(d.geometry.coordinates)) {
+            var pt = Celestial.mapProjection(d.geometry.coordinates);
+            var r = Math.pow(parseInt(d.properties.dim) * 0.25, 0.5);
 
-          // If point is visible (this doesn't work automatically for points)
-          if (Celestial.clip(d.properties.loc)) {
-            // get point coordinates
-            let pt = Celestial.getPoint(d.properties.loc, config.transform);
-            pt = Celestial.mapProjection(pt);
-            // Set text styles
-            Celestial.setTextStyle({
-              fill: 'white',
-              font: '15px Helvetica, Arial, sans-serif',
-              align: 'center',
-              baseline: 'middle',
-            });
-            // and draw text on canvas
-            Celestial.context.fillText(d.properties.n, pt[0], pt[1]);
+            // Draw on canvas
+            Celestial.setStyle(pointStyle); // Set object styles
+            Celestial.context.beginPath(); // Start the drawing path
+            Celestial.context.arc(pt[0], pt[1], r, 0, 2 * Math.PI); // Thats a circle in html5 canvas
+            Celestial.context.closePath(); // Finish the drawing path
+            Celestial.context.fill(); // Fill the object path with the prevoiusly set fill color
+            Celestial.context.stroke(); // Draw a line along the path with the prevoiusly set stroke color and line width
+
+            // Draw text on canvas
+            Celestial.setTextStyle(pointTextStyle);
+            Celestial.context.fillText('POINTING', pt[0], pt[1] - 15);
           }
         });
       },
@@ -499,9 +488,11 @@ export default class SkyMap extends Component {
           </div>
         </div>
         <div id="map-container">
-          <div id="map"></div>
+          <div id={this.mapId}></div>
         </div>
       </div>
     );
   }
 }
+
+export default memo(SkyMap);

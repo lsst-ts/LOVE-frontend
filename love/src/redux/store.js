@@ -19,10 +19,8 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-// import logger from 'redux-logger';
-// const middleWares = [thunkMiddleware, logger];
 import { batchedSubscribe } from 'redux-batched-subscribe';
-import throttle from 'lodash.throttle';
+import { throttle } from 'lodash';
 import rootReducer from './reducers';
 
 const THROTTLED = true; // Whether or not to throttle redux updates

@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,19 +19,18 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
+import { useMemo, useCallback, memo } from 'react';
 import PropTypes from 'prop-types';
 import createEngine, { DiagramModel } from '@projectstorm/react-diagrams';
-// import the custom models
 import { DiamondNodeModel } from './entities/node/DiamondNodeModel';
 import { DiamondNodeFactory } from './entities/node/DiamondNodeFactory';
 import { DiamondPortModel, PortModelAlignment } from './entities/port/DiamondPortModel';
 import { SimplePortFactory } from './entities/port/SimplePortFactory';
 import { CanvasWidget } from '@projectstorm/react-canvas-core';
-import styles from './Graph.module.css';
 import { EditableLabelModel } from './entities/label/EditableLabelModel';
 import { EditableLabelFactory } from './entities/label/EditableLabelFactory';
 import { AdvancedLinkFactory, AdvancedLinkModel } from './entities/link';
+import styles from './Graph.module.css';
 
 const transformSerialized = (serialized) => {
   const nodesLayer = serialized.layers.find((layer) => layer.type === 'diagram-nodes');
@@ -82,22 +83,22 @@ const Graph = ({
   getSerializedOnEvent = () => {},
   unlocked = false,
 }) => {
-  const getSerializedOnEventWrapper = React.useCallback(
-    (serialized, event) => {
+  const getSerializedOnEventWrapper = useCallback(
+    (serialized) => {
       const transformed = transformSerialized(serialized);
       getSerializedOnEvent(transformed);
     },
     [getSerializedOnEvent],
   );
 
-  const engine = React.useMemo(() => {
+  const engine = useMemo(() => {
     //1) setup the diagram engine
     const engine = createEngine();
 
     // register some other factories as well
     engine
       .getPortFactories()
-      .registerFactory(new SimplePortFactory('diamond', (config) => new DiamondPortModel(PortModelAlignment.LEFT)));
+      .registerFactory(new SimplePortFactory('diamond', () => new DiamondPortModel(PortModelAlignment.LEFT)));
     engine.getNodeFactories().registerFactory(new DiamondNodeFactory());
     engine.getLabelFactories().registerFactory(new EditableLabelFactory());
     engine.getLinkFactories().registerFactory(new AdvancedLinkFactory());
@@ -247,4 +248,4 @@ Graph.propTypes = {
   getSerializedOnEvent: PropTypes.func,
 };
 
-export default React.memo(Graph);
+export default memo(Graph);

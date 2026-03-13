@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,10 +19,10 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './LoopCartoon.module.css';
 import { fixedFloat } from 'Utils';
+import styles from './LoopCartoon.module.css';
 
 export default class LoopCartoon extends Component {
   static propTypes = {
@@ -131,13 +133,14 @@ export default class LoopCartoon extends Component {
     let newColours = '';
     //First we see how many stops there are
     const stops = Math.abs(value1 - value2) - 1;
+    let minStop, maxStop;
     if (stops > 0) {
       if (value1 < value2) {
-        var minStop = value1;
-        var maxStop = value2;
+        minStop = value1;
+        maxStop = value2;
       } else {
-        var minStop = value2;
-        var maxStop = value1;
+        minStop = value2;
+        maxStop = value1;
       }
       //we slice the colours array to get the missing stops
       newColours = colours.slice(minStop + 1, maxStop);
@@ -270,7 +273,7 @@ export default class LoopCartoon extends Component {
       direction,
     } = this.props;
 
-    const [ts1Hex, ts1Stop] = this.tempToHex(ts1, minTemperatureLimit, maxTemperatureLimit, colours);
+    const [ts1Hex, _] = this.tempToHex(ts1, minTemperatureLimit, maxTemperatureLimit, colours);
     const [ts2Hex, ts2Stop] = this.tempToHex(ts2, minTemperatureLimit, maxTemperatureLimit, colours);
     const [ts3Hex, ts3Stop] = this.tempToHex(ts3, minTemperatureLimit, maxTemperatureLimit, colours);
     const [ts4Hex, ts4Stop] = this.tempToHex(ts4, minTemperatureLimit, maxTemperatureLimit, colours);

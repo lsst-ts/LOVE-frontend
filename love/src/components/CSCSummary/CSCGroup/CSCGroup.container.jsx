@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,12 +19,11 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
 import { connect } from 'react-redux';
+import { addGroup, removeGroup } from 'redux/actions/ws';
+import { removeCSCLogMessages, removeCSCErrorCodeData } from 'redux/actions/summaryData';
+import { getStreamData, getCSCHeartbeat, getCSCLogMessages, getCSCErrorCodeData } from 'redux/selectors';
 import CSCGroup from './CSCGroup';
-import { addGroup, removeGroup } from '../../../redux/actions/ws';
-import { removeCSCLogMessages, removeCSCErrorCodeData } from '../../../redux/actions/summaryData';
-import { getStreamData, getCSCHeartbeat, getCSCLogMessages, getCSCErrorCodeData } from '../../../redux/selectors';
 
 export const schema = {
   description: 'Summary of a set of CSCs, including heartbeats and summary state',

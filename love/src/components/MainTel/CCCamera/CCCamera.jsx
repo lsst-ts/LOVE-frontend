@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,18 +19,17 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
+import PropTypes from 'prop-types';
+import { uniqueId } from 'lodash';
 import * as d3 from 'd3';
+import Button from 'components/GeneralPurpose/Button/Button';
 import RaftDetail from './RaftDetail/RaftDetail';
 import FocalPlane from './FocalPlane/FocalPlane';
 import CCDDetail from './CCDDetail/CCDDetail';
-import PropTypes from 'prop-types';
-import styles from './CCCamera.module.css';
 import FocalPlaneSummaryDetail from './FocalPlaneSummaryDetail/FocalPlaneSummaryDetail';
-import Button from 'components/GeneralPurpose/Button/Button';
-import { cccameraRaftsNeighborsMapping } from 'Config';
 import RebDetail from './RebDetail/RebDetail';
-import { uniqueId } from 'lodash';
+import styles from './CCCamera.module.css';
 
 const rafts = [];
 
@@ -210,7 +211,6 @@ class CCCamera extends Component {
     const {
       zoomLevel,
       activeViewId: targetId,
-      prevActiveViewId: prevTargetId,
       hoveredRaft,
       hoveredCCD,
       hoveredReb,
@@ -285,14 +285,13 @@ class CCCamera extends Component {
   };
 
   render() {
-    const { selectedCCD, hoveredRaft, selectedRaft, hoveredCCD, hoveredReb } = this.state;
     return this.getComponent();
   }
 
   getComponent() {
     const { selectedRaft, selectedCCD, selectedReb, selectedCCDVar, selectedRebVar, zoomLevel, activeViewId } =
       this.state;
-    const { tempControlActive, hVBiasSwitch, anaV, power, gDV, oDI, oDV, oGV, rDV, temp } = this.props;
+    const { tempControlActive, hVBiasSwitch, anaV, power, gDV, oDV, oGV, rDV, temp } = this.props;
 
     return (
       <div className={styles.container}>
@@ -343,8 +342,7 @@ class CCCamera extends Component {
   }
 
   getCCCamera() {
-    const { selectedRaft } = this.state;
-    const { hVBiasSwitch, anaV, power, gDV, oDI, oDV, oGV, rDV, temp } = this.props;
+    const { hVBiasSwitch, anaV, power, gDV, oDV, oGV, rDV, temp } = this.props;
     return (
       <div id={this.uniqueFocalplane}>
         <FocalPlane

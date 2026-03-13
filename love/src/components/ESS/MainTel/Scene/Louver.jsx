@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,9 +19,8 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { useRef, useState, useLayoutEffect } from 'react';
+import { useRef, memo } from 'react';
 import PropTypes from 'prop-types';
-import { isEqual } from 'lodash';
 import * as THREE from 'three';
 
 function createTextCanvas(text, color) {
@@ -42,30 +43,35 @@ function angleOfPercentOpen(percent) {
   return (-1 * percent * 90) / 100;
 }
 
-const Louver = (props) => {
+const Louver = ({
+  position = { x: 0, y: 0, z: 0 },
+  name = '',
+  angle = 0,
+  percentOpen = 50,
+  type = 'I',
+  setLouver = (louverName) => {
+    console.log('name', louverName);
+  },
+}) => {
   const textRef = useRef();
   const textShadowRef = useRef();
-  const canvas = createTextCanvas(props.name, 'white');
-  const canvas2 = createTextCanvas(props.name, 'black');
+  const canvas = createTextCanvas(name, 'white');
+  const canvas2 = createTextCanvas(name, 'black');
 
   const textTexture = new THREE.CanvasTexture(canvas);
   const textTexture2 = new THREE.CanvasTexture(canvas2);
 
-  const angleRadians = THREE.MathUtils.degToRad(props.angle); //degree to radians
-  const angleOpen = THREE.MathUtils.degToRad(angleOfPercentOpen(props.percentOpen));
+  const angleRadians = THREE.MathUtils.degToRad(angle); //degree to radians
+  const angleOpen = THREE.MathUtils.degToRad(angleOfPercentOpen(percentOpen));
 
   const frame = {
     I: [6.15, 4.1],
     II: [5.125, 3.28],
-  }[props.type];
+  }[type];
 
   return (
     <>
-      <group
-        position={[props.position.x, props.position.z, props.position.y]}
-        onClick={(e) => props.setLouver(props.name)}
-        rotation-y={angleRadians}
-      >
+      <group position={[position.x, position.z, position.y]} onClick={() => setLouver(name)} rotation-y={angleRadians}>
         <group rotation-x={angleOpen}>
           <mesh ref={textRef} position={[0, 0, 0.2]}>
             <planeGeometry args={[0.5, 0.5]} />
@@ -96,31 +102,9 @@ Louver.propTypes = {
     z: PropTypes.number,
   }),
   name: PropTypes.string,
-  id: PropTypes.number,
   angle: PropTypes.number,
   percentOpen: PropTypes.number,
   type: PropTypes.string,
 };
 
-Louver.defaultProps = {
-  position: { x: 0, y: 0, z: 0 },
-  name: '',
-  id: 1,
-  angle: 0,
-  percentOpen: 50,
-  type: 'I',
-  setLouver: (name) => {
-    console.log('name', name);
-  },
-};
-
-const comparator = (prevProps, nextProps) => {
-  return (
-    isEqual(nextProps.position, prevProps.position) &&
-    prevProps.name === nextProps.name &&
-    prevProps.angle === nextProps.angle &&
-    prevProps.percentOpen === nextProps.percentOpen
-  );
-};
-
-export default React.memo(Louver, comparator);
+export default memo(Louver);

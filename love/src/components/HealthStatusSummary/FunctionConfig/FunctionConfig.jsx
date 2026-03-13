@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,7 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styles from './FunctionConfig.module.css';
 
@@ -44,7 +46,7 @@ export default class FunctionConfig extends PureComponent {
   render() {
     return (
       <div className={styles.container}>
-        {Object.entries(this.props.topics).map(([topic, data], _) => (
+        {Object.entries(this.props.topics).map(([topic, _]) => (
           <div className={styles.topic}>
             <div className={styles.topicName}>{topic}</div>
           </div>

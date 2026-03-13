@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,9 +19,8 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { defaultNumberFormatter } from 'Utils';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Title from 'components/GeneralPurpose/SummaryPanel/Title';
 import Label from 'components/GeneralPurpose/SummaryPanel/Label';
@@ -27,19 +28,18 @@ import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
-import styles from './Info.module.css';
 import {
   m1m3tsActuatorILCStateMap,
-  m1m3tsEnabledStateMap,
   mtm1m3tsFanBreakerStateMap,
   mtm1m3HeaterDisabledStateMap,
-  m1m3tsEnabledStateToStyle,
   m1m3tsILCStateToStyle,
   mtm1m3tsFanBreakerStateToStyle,
   mtm1m3tsHeaterDisabledStateToStyle,
   M1M3TSFanCoilPositions,
   MessagesWarningM1M3ThermalSystem,
 } from 'Config';
+import { defaultNumberFormatter } from 'Utils';
+import styles from './Info.module.css';
 
 export default class Info extends Component {
   static propTypes = {

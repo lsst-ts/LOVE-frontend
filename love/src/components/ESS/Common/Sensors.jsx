@@ -19,14 +19,21 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
 import PropTypes from 'prop-types';
 import Vector from './Vector';
 import Sensor from './Sensor';
 
-export function Sensors(props) {
-  const { selectedSensor, setSensor, positions, values, speeds, directions, getGradiantColorX } = props;
-
+export function Sensors({
+  positions = [],
+  setSensor = () => {
+    console.log('Sensors default setSensor');
+  },
+  selectedSensor = undefined,
+  values = [],
+  speeds = [],
+  directions = [],
+  getGradiantColorX = () => 0xffff00,
+}) {
   const RGBToHex = (rgb) => {
     // Choose correct separator
     let sep = rgb?.indexOf(',') > -1 ? ',' : ' ';
@@ -121,16 +128,4 @@ Sensors.propTypes = {
   ),
   directions: PropTypes.arrayOf(PropTypes.number),
   getGradiantColorX: PropTypes.func,
-};
-
-Sensors.defaultProps = {
-  positions: [],
-  setSensor: () => {
-    console.log('Sensors default setSensor');
-  },
-  selectedSensor: undefined,
-  values: [],
-  speeds: [],
-  directions: [],
-  getGradiantColorX: () => 0xffff00,
 };

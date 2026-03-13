@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -173,7 +175,7 @@ export const savedEditedView = (view) => {
  * @return {object}  the dispatched action
  */
 export function requestWorkspaces() {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     const url = `${ManagerInterface.getUifBaseUrl()}workspaces/with_view_name/`;
     return fetch(url, {
       method: 'GET',
@@ -201,7 +203,7 @@ export function requestWorkspaces() {
  * @return {object}  the dispatched action
  */
 export function requestViews() {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch(loadingViews);
     const url = `${ManagerInterface.getUifBaseUrl()}views/summary/`;
     return fetch(url, {
@@ -230,7 +232,7 @@ export function requestViews() {
  * @return {object}  the dispatched action
  */
 export function requestView(id) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch(loadingViews);
     const url = `${ManagerInterface.getUifBaseUrl()}views/${id}/`;
     return fetch(url, {
@@ -259,7 +261,7 @@ export function requestView(id) {
  * @return {object}  the dispatched action
  */
 export function requestViewToEdit(id) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch(loadingViews);
     const url = `${ManagerInterface.getUifBaseUrl()}views/${id}/`;
     return fetch(url, {
@@ -290,7 +292,7 @@ export function requestViewToEdit(id) {
  * @return {object}    the dispatched action
  */
 export function requestWorkspace(id) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     const url = `${ManagerInterface.getUifBaseUrl()}workspaces/${id}/full/`;
     return fetch(url, {
       method: 'GET',
@@ -355,7 +357,7 @@ export function saveEditedView(thumbnail) {
  * @return {object}    the dispatched action
  */
 export function deleteView(id) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     const url = `${ManagerInterface.getUifBaseUrl()}views/${id}/`;
     const expectedCode = 204;
     return fetch(url, {

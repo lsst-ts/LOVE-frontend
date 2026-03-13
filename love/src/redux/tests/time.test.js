@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,10 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-/* eslint camelcase: 0 */
-/* eslint no-await-in-loop: 0 */
-/* eslint no-restricted-syntax: 0 */
-
+import { describe, it, expect, vi, beforeAll, beforeEach, afterEach } from 'vitest';
 import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import thunkMiddleware from 'redux-thunk';
@@ -53,17 +52,17 @@ beforeEach(async () => {
   // ARRANGE
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
   await store.dispatch(emptyToken);
-  jest.useFakeTimers();
-  jest.spyOn(global, 'clearInterval');
-  jest.spyOn(global, 'setInterval');
+  vi.useFakeTimers();
+  vi.spyOn(global, 'clearInterval');
+  vi.spyOn(global, 'setInterval');
 });
 
 afterEach(() => {
-  jest.useRealTimers();
+  vi.useRealTimers();
 });
 
 // TEST TIME INDEPENDENTLY
-describe('Given the inital state', () => {
+describe('Given the inital state 1', () => {
   const serverTime = {
     utc: 1587747218.377,
     tai: 1587747255.377,
@@ -159,7 +158,7 @@ describe('Given the inital state', () => {
 });
 
 // TEST TIME PASS
-describe('Given the inital state', () => {
+describe('Given the inital state 2', () => {
   const server_time = {
     utc: 1587747218.377,
     tai: 1587747255.377,
@@ -197,7 +196,7 @@ describe('Given the inital state', () => {
     for (let diff = 2; diff < 10; diff++) {
       tick_time += 1; // tick_time == server_time.utc + 1
       Settings.now = () => new Date(tick_time * 1000).valueOf();
-      jest.advanceTimersByTime(1000);
+      vi.advanceTimersByTime(1000);
       time = getAllTime(store.getState());
       expect(time.clock).not.toEqual(initialState.clock);
       expect(time.clock.utc.toSeconds()).toEqual(server_time.utc + diff);
@@ -219,7 +218,7 @@ describe('Given the inital state', () => {
 });
 
 // TEST TIME PASS
-describe('Given the inital state', () => {
+describe('Given the inital state 3', () => {
   const server_time = [
     {
       utc: 1587747218.377,
@@ -293,7 +292,7 @@ describe('Given the inital state', () => {
       doReceiveToken('username', 'love-token', {}, server_time[serverIndex], DateTime.utc().toSeconds()),
     );
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPENING);
-    jest.advanceTimersByTime(10);
+    vi.advanceTimersByTime(10);
     const connected = await server.connected;
     expect(connected.readyState).toEqual(WebSocket.OPEN);
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
@@ -303,7 +302,7 @@ describe('Given the inital state', () => {
     expect(time.server_time).toEqual(server_time[serverIndex]);
 
     for (let count = 1; count < 4; count++) {
-      jest.advanceTimersByTime(SYNC_PERIOD);
+      vi.advanceTimersByTime(SYNC_PERIOD);
       time = getAllTime(store.getState());
       expect(time.server_time).toEqual(server_time[count]);
     }

@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,11 +19,10 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
-import { extendMoment } from 'moment-range';
-import lodash from 'lodash';
+import { uniqueId } from 'lodash';
 import { CSVLink } from 'react-csv';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -32,11 +33,9 @@ import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
 import ManagerInterface from 'Utils';
 import { EXPOSURE_FLAG_OPTIONS } from 'Config';
-import styles from './Exposure.module.css';
 import MessageDetail from './Message/MessageDetail';
 import MessageEdit from './Message/MessageEdit';
-
-const moment = extendMoment(Moment);
+import styles from './Exposure.module.css';
 
 export default class ExposureDetail extends Component {
   static propTypes = {
@@ -65,7 +64,7 @@ export default class ExposureDetail extends Component {
 
   constructor(props) {
     super(props);
-    this.id = lodash.uniqueId('exposure-detail-');
+    this.id = uniqueId('exposure-detail-');
     this.state = {
       selectedMessage: undefined,
       selectedFlag: 'All',

@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,7 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Suspense, useRef, useState, useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -59,14 +61,21 @@ function createTextCanvas(text, color) {
   return canvas;
 }
 
-const Scene = (props) => {
+const Scene = ({
+  initialCameraPosition: initialCamPos = {
+    x: INITIAL_CAMERA_POSITION[0],
+    y: INITIAL_CAMERA_POSITION[2],
+    z: INITIAL_CAMERA_POSITION[1],
+  },
+  children,
+}) => {
   const canvas = createTextCanvas('N', 'white');
   const textTexture = new THREE.CanvasTexture(canvas);
 
   const initialCameraPosition = [
-    props.initialCameraPosition?.x ?? INITIAL_CAMERA_POSITION[0],
-    props.initialCameraPosition?.z ?? INITIAL_CAMERA_POSITION[1],
-    props.initialCameraPosition?.y ?? INITIAL_CAMERA_POSITION[2],
+    initialCamPos?.x ?? INITIAL_CAMERA_POSITION[0],
+    initialCamPos?.z ?? INITIAL_CAMERA_POSITION[1],
+    initialCamPos?.y ?? INITIAL_CAMERA_POSITION[2],
   ];
 
   return (
@@ -95,7 +104,7 @@ const Scene = (props) => {
 
           <FirstFloor />
 
-          {props.children}
+          {children}
         </Suspense>
       </Canvas>
     </>
@@ -108,14 +117,6 @@ Scene.propTypes = {
     y: PropTypes.number,
     z: PropTypes.number,
   }),
-};
-
-Scene.defaultProps = {
-  initialCameraPosition: {
-    x: INITIAL_CAMERA_POSITION[0],
-    y: INITIAL_CAMERA_POSITION[2],
-    z: INITIAL_CAMERA_POSITION[1],
-  },
 };
 
 const comparator = (prevProps, nextProps) => {

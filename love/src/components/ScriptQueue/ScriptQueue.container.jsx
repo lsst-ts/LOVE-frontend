@@ -19,7 +19,6 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup, requestSALCommand } from 'redux/actions/ws';
 import {
@@ -67,7 +66,7 @@ const ScriptQueueContainer = ({
   commandExecutePermission,
   lastSALCommand,
   username,
-  salindex,
+  salindex = 1,
   fit,
   embedded,
   taiToUtc,
@@ -154,9 +153,5 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 const connectedContainer = connect(mapStateToProps, mapDispatchToProps)(ScriptQueueContainer);
-
-connectedContainer.defaultProps = {
-  salindex: 1,
-};
 
 export default connectedContainer;

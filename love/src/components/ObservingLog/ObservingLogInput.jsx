@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,11 +19,11 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
+import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
+import Button from 'components/GeneralPurpose/Button/Button';
 import styles from './ObservingLogInput.module.css';
-import TextArea from '../GeneralPurpose/TextArea/TextArea';
-import Button from '../GeneralPurpose/Button/Button';
 
 export default class ObservingLogInput extends Component {
   static propTypes = {
@@ -55,7 +57,7 @@ export default class ObservingLogInput extends Component {
     this.props.unsubscribeToStreams();
   };
 
-  sendMessage = (username, message) => {
+  sendMessage = () => {
     this.props.sendMessage(this.props.username, this.state.message);
     this.setState({
       message: '',
@@ -112,7 +114,7 @@ export default class ObservingLogInput extends Component {
             onKeyUp={this.onKeyUp}
           ></TextArea>
         </div>
-        <Button onClick={(e) => this.sendMessage(this.props.username, this.state.message)}>Save (Ctrl+Enter)</Button>
+        <Button onClick={() => this.sendMessage()}>Save (Ctrl+Enter)</Button>
       </div>
     );
   }

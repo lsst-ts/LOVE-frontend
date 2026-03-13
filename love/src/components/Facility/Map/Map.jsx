@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,8 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
-import styles from './Map.module.css';
+import { Component } from 'react';
 import Level1 from './Levels/Level1.jsx';
 import Level2 from './Levels/Level2.jsx';
 import Level3 from './Levels/Level3.jsx';
@@ -27,6 +28,7 @@ import Level5 from './Levels/Level5.jsx';
 import Level6 from './Levels/Level6.jsx';
 import Level7 from './Levels/Level7.jsx';
 import Level8 from './Levels/Level8.jsx';
+import styles from './Map.module.css';
 
 export default class Map extends Component {
   static defaultProps = {
@@ -124,7 +126,7 @@ export default class Map extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const { chiller01P01, chiller02P01, chiller03P01, status1, status2, warnings1, warnings2, errors1, errors2 } =
       this.props.HVACDataLevel1;
 
@@ -544,9 +546,8 @@ export default class Map extends Component {
   }
 
   render() {
-    const { hasAlarm, alarms } = this.state;
+    const { alarms } = this.state;
     const isAlarmed = alarms[this.state.selectedTab];
-    const margin = 60;
 
     return (
       <div className={styles.tabsWrapper}>

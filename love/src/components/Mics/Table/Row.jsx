@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,10 +19,8 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import ManagerInterface, { parseCommanderData } from 'Utils';
-import styles from './Table.module.css';
 import { DateTime } from 'luxon';
 import moment from 'moment';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
@@ -30,6 +30,7 @@ import AlarmOffIcon from 'components/icons/MicsIcon/AlarmOff/AlarmOffIcon';
 import NotificationSoundOffIcon from 'components/icons/NotificationSoundIcon/NotificationSoundOffIcon';
 import NotificationSoundOnIcon from 'components/icons/NotificationSoundIcon/NotificationSoundOnIcon';
 import VolumeIcon from 'components/icons/MicsIcon/Volume/VolumeIcon';
+import styles from './Table.module.css';
 
 export default class Row extends Component {
   static propTypes = {
@@ -423,7 +424,7 @@ export default class Row extends Component {
     let mindB = 0;
     let freqMindB = 0;
 
-    const freqAmpArray = this.frequencyData.map(function (freq, i) {
+    const freqAmpArray = this.frequencyData.map(function (freq) {
       let index = Math.round((freq / halfSR) * ampArray.length);
       if (ampArray[index] > maxdB) {
         maxdB = ampArray[index];

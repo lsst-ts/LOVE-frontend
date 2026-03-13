@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,12 +19,12 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import PropTypes from 'prop-types';
+import FilterButton from 'components/HealthStatusSummary/TelemetrySelectionTable/ColumnHeader/FilterButton/FilterButton';
+import FilterDialog from 'components/HealthStatusSummary/TelemetrySelectionTable/FilterDialog/FilterDialog';
 import PaginatedTable from '../PaginatedTable/PaginatedTable';
 import styles from './ActionableTable.module.css';
-import FilterButton from '../../HealthStatusSummary/TelemetrySelectionTable/ColumnHeader/FilterButton/FilterButton';
-import FilterDialog from '../../HealthStatusSummary/TelemetrySelectionTable/FilterDialog/FilterDialog';
-import PropTypes from 'prop-types';
 
 import {
   ASCENDING,
@@ -42,12 +44,12 @@ const defaultSort = (row1, row2, sortingColumn, sortDirection) => {
   return 0;
 };
 
-const defaultColumnFilter = (filterString, value, row) => {
+const defaultColumnFilter = (filterString, value) => {
   try {
     const regexp =
       filterString === '' || filterString === undefined ? new RegExp('(?:)') : new RegExp(filterString, 'i');
     return regexp.test(value);
-  } catch (e) {
+  } catch {
     console.warn('Invalid filter value in regexp', value);
   }
   return true;
@@ -60,12 +62,12 @@ const defaultColumnFilter = (filterString, value, row) => {
  * It is built with <a href="/#/API?id=simpletable">SimpleTable<a/>
  */
 const ActionableTable = function ({ data, headers, ...otherProps }) {
-  const [activeFilterDialogIndex, setActiveFilterDialogIndex] = React.useState(null);
-  const [filters, setFilters] = React.useState({});
-  const [sortDirections, setSortDirections] = React.useState({});
-  const [sortingColumn, setSortingColumn] = React.useState(null);
+  const [activeFilterDialogIndex, setActiveFilterDialogIndex] = useState(null);
+  const [filters, setFilters] = useState({});
+  const [sortDirections, setSortDirections] = useState({});
+  const [sortingColumn, setSortingColumn] = useState(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const initialFilters = headers.reduce((prevDict, header) => {
       prevDict[header.field] = '';
       return prevDict;
@@ -142,7 +144,7 @@ const ActionableTable = function ({ data, headers, ...otherProps }) {
   });
 
   // only recalculate when necessary.
-  const transformedData = React.useMemo(() => {
+  const transformedData = useMemo(() => {
     const newData = data
       .filter((row) => {
         return headers.reduce((prevBool, header) => {

@@ -20,8 +20,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import React, { Component } from 'react';
-import debounce from 'lodash.debounce';
-import isEqual from 'lodash/isEqual';
+import { debounce, isEqual } from 'lodash';
 import CSCExpandedContainer from 'components/CSCSummary/CSCExpanded/CSCExpanded.container';
 import RecursiveScriptsTree from './RecursiveScriptsTree/RecursiveScriptsTree';
 import WaitingScript from './Scripts/WaitingScript/WaitingScript';
@@ -277,7 +276,7 @@ export default class ScriptQueue extends Component {
     }));
   };
 
-  onShowScriptDetails = (script) => {};
+  onShowScriptDetails = () => {};
 
   displayAvailableScripts = () => {
     this.setState({
@@ -674,7 +673,7 @@ export default class ScriptQueue extends Component {
       <div
         id="container"
         ref={this.scriptQueueContainer}
-        onClick={(e) => {
+        onClick={() => {
           this.setState({ isContextMenuOpen: false });
         }}
         onScroll={() => {

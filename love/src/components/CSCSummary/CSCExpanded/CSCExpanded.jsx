@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,7 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import HeartbeatIcon from 'components/icons/HeartbeatIcon/HeartbeatIcon';
 import BackArrowIcon from 'components/icons/BackArrowIcon/BackArrowIcon';
@@ -105,7 +107,7 @@ export default class CSCExpanded extends PureComponent {
     unsubscribeToStreams(name, salindex);
   };
 
-  componentDidUpdate = (prevProps, prevState) => {
+  componentDidUpdate = (prevProps) => {
     const { name, salindex, subscribeToStreams, unsubscribeToStreams } = this.props;
     if (prevProps.name !== name || prevProps.salindex !== salindex) {
       unsubscribeToStreams(prevProps.name, prevProps.salindex);
@@ -228,7 +230,7 @@ export default class CSCExpanded extends PureComponent {
     });
   }
 
-  sendSummaryStateCommand(event) {
+  sendSummaryStateCommand() {
     const { name, salindex, requestSALCommand } = this.props;
     const { summaryStateCommand, configurationOverride } = this.state;
     requestSALCommand({
@@ -239,7 +241,7 @@ export default class CSCExpanded extends PureComponent {
     });
   }
 
-  sendSetLogLevel(event) {
+  sendSetLogLevel() {
     const { name, salindex, requestSALCommand } = this.props;
     const { logLevel } = this.state;
     requestSALCommand({

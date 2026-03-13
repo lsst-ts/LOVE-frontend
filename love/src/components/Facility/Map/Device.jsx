@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,16 +19,16 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
-import { defaultNumberFormatter } from 'Utils';
-import lodash from 'lodash';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { uniqueId } from 'lodash';
+import { defaultNumberFormatter } from 'Utils';
 import styles from './Device.module.css';
 
 export default class Device extends Component {
   constructor(props) {
     super(props);
-    this.id = lodash.uniqueId('Mask-');
+    this.id = uniqueId('Mask-');
     this.state = {
       hidden: true,
     };
@@ -158,7 +160,7 @@ export default class Device extends Component {
         // id={this.id}
         transform={'translate(' + (width - 14) + ' 4)'}
         pointerEvents="all"
-        onClick={(e) => this.toggle()}
+        onClick={() => this.toggle()}
       >
         <rect className={styles.arrowBg} width={10} height={10} />
         <polyline
@@ -178,16 +180,15 @@ export default class Device extends Component {
     const alarmsKeys = Object.keys(alarms);
     const rowLength = Math.round(width / 42 - 1);
 
-    let transX, transY, currentRow, currentCol, currentAlarm;
+    let transX, transY, currentRow, currentAlarm;
     transX = 0;
     transY = 0;
     currentAlarm = 0;
 
-    return alarmsKeys.map((x, k) => {
+    return alarmsKeys.map((x) => {
       if (alarms[x].state) {
         currentAlarm++;
         currentRow = Math.ceil(currentAlarm / rowLength);
-        currentCol = currentAlarm % currentRow;
         transX = 42 * (currentAlarm - rowLength * (currentRow - 1)) - 42;
 
         if (hidden) {

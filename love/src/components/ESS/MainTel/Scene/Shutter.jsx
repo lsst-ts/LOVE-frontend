@@ -21,13 +21,13 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
+import { isEqual } from 'lodash';
 import * as THREE from 'three';
 
-export function Shutter(props) {
+export function Shutter({ position = { x: 0, y: 3.3, z: 7 }, openPercent = 100 }) {
   const width = 6.55;
   const window = 11.3 / 2;
-  const open = props.position.y > 0 ? (window * props.openPercent) / 100 : (-1 * window * props.openPercent) / 100;
+  const open = position.y > 0 ? (window * openPercent) / 100 : (-1 * window * openPercent) / 100;
 
   const frame = [
     [width, 1.4],
@@ -61,7 +61,7 @@ export function Shutter(props) {
 
   return (
     <>
-      <group position={[props.position.x, props.position.z, props.position.y + open]}>
+      <group position={[position.x, position.z, position.y + open]}>
         {positions.map((pos, index) => {
           return (
             <mesh
@@ -82,7 +82,6 @@ export function Shutter(props) {
 }
 
 Shutter.propTypes = {
-  name: PropTypes.string,
   position: PropTypes.shape({
     x: PropTypes.number,
     y: PropTypes.number,
@@ -91,22 +90,8 @@ Shutter.propTypes = {
   openPercent: PropTypes.number,
 };
 
-Shutter.defaultProps = {
-  name: 'shutter 1',
-  position: {
-    x: 0,
-    y: 3.3,
-    z: 7,
-  },
-  openPercent: 100,
-};
-
 const comparator = (prevProps, nextProps) => {
-  return (
-    prevProps.name === nextProps.name &&
-    prevProps.openPercent === nextProps.openPercent &&
-    isEqual(prevProps.position, nextProps.position)
-  );
+  return prevProps.openPercent === nextProps.openPercent && isEqual(prevProps.position, nextProps.position);
 };
 
 export default React.memo(Shutter, comparator);
