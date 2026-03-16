@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.11.3
+-------
+
+* Temporary disable control location feature. `<https://github.com/lsst-ts/LOVE-frontend/pull/780>`_
+
 v6.11.2
 -------
 
