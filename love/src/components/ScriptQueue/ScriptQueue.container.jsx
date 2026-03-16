@@ -52,6 +52,12 @@ export const schema = {
       isPrivate: false,
       default: 1,
     },
+    showObservatoryStatusControls: {
+      type: 'boolean',
+      description: 'Whether to display the observatory status and its controls.',
+      isPrivate: false,
+      default: false,
+    },
   },
 };
 
@@ -68,6 +74,7 @@ const ScriptQueueContainer = ({
   lastSALCommand,
   username,
   salindex,
+  showObservatoryStatusControls,
   fit,
   embedded,
   taiToUtc,
@@ -94,6 +101,7 @@ const ScriptQueueContainer = ({
       lastSALCommand={lastSALCommand}
       username={username}
       salindex={salindex}
+      showObservatoryStatusControls={showObservatoryStatusControls}
       fit={fit}
       embedded={embedded}
       running={queueState.running}
@@ -133,8 +141,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     `event-ScriptQueue-${ownProps.salindex}-summaryState`,
     `event-Scheduler-${ownProps.salindex}-summaryState`,
     `event-ScriptHeartbeats-${ownProps.salindex}-stream`,
-    `event-Scheduler-${ownProps.salindex}-observatoryStatus`,
   ];
+
+  if (ownProps.showObservatoryStatusControls) {
+    subscriptions.push(`event-Scheduler-${ownProps.salindex}-observatoryStatus`);
+  }
+
   return {
     subscriptions,
     subscribeToStreams: () => {

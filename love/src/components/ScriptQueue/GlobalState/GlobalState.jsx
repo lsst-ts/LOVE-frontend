@@ -206,6 +206,7 @@ const GlobalState = ({
   commandExecutePermission,
   resumeScriptQueue,
   pauseScriptQueue,
+  showObservatoryStatusControls,
 }) => {
   const [contextMenuIsOpen, setContextMenuIsOpen] = useState(false);
   const [contextMenuTarget, setContextMenuTarget] = useState();
@@ -359,46 +360,50 @@ const GlobalState = ({
             </div>
           </div>
 
-          <div className={styles.row}>
-            <div className={styles.stateLabel}>
-              <span>Observatory States</span>
-              <span className={styles.infoIconContainer}>
-                <InfoIcon className={styles.infoIcon} title={observatoryStateTooltip} />
-              </span>
-            </div>
-            <div className={styles.stateCell}>
-              <ObservatoryStateStatusText state={observatoryStateValue} />
-              {schedulerSummaryState.name === 'ENABLED' && commandExecutePermission && (
-                <div
-                  className={[styles.pauseIconContainer, 'observatoryState'].join(' ')}
-                  onClick={(e) => onClickContextMenu(e, true)}
-                >
-                  <div className={styles.pauseIconWrapper} title="Change observatoryState">
-                    <GearIcon className={styles.gearIcon} />
-                  </div>
+          {showObservatoryStatusControls && (
+            <>
+              <div className={styles.row}>
+                <div className={styles.stateLabel}>
+                  <span>Observatory States</span>
+                  <span className={styles.infoIconContainer}>
+                    <InfoIcon className={styles.infoIcon} title={observatoryStateTooltip} />
+                  </span>
                 </div>
-              )}
-            </div>
-          </div>
-          <div className={styles.row}>
-            <div className={styles.stateLabel}>
-              <span>Time since last event</span>
-              <span className={styles.infoIconContainer}>
-                <InfoIcon className={styles.infoIcon} title={observatoryStatusTimerTooltip} />
-              </span>
-            </div>
-            <div className={styles.stateCell}>
-              <div className={styles.observatoryStateEventContainer}>
-                {formatSecondsToDigital(secondsSinceLastEvent)}
-                <div
-                  title={observatoryStateNote ? observatoryStateNote : 'No note available.'}
-                  className={styles.observatoryStateNoteIcon}
-                >
-                  <MessageIcon />
+                <div className={styles.stateCell}>
+                  <ObservatoryStateStatusText state={observatoryStateValue} />
+                  {schedulerSummaryState.name === 'ENABLED' && commandExecutePermission && (
+                    <div
+                      className={[styles.pauseIconContainer, 'observatoryState'].join(' ')}
+                      onClick={(e) => onClickContextMenu(e, true)}
+                    >
+                      <div className={styles.pauseIconWrapper} title="Change observatoryState">
+                        <GearIcon className={styles.gearIcon} />
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          </div>
+              <div className={styles.row}>
+                <div className={styles.stateLabel}>
+                  <span>Time since last event</span>
+                  <span className={styles.infoIconContainer}>
+                    <InfoIcon className={styles.infoIcon} title={observatoryStatusTimerTooltip} />
+                  </span>
+                </div>
+                <div className={styles.stateCell}>
+                  <div className={styles.observatoryStateEventContainer}>
+                    {formatSecondsToDigital(secondsSinceLastEvent)}
+                    <div
+                      title={observatoryStateNote ? observatoryStateNote : 'No note available.'}
+                      className={styles.observatoryStateNoteIcon}
+                    >
+                      <MessageIcon />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         <ContextMenu isOpen={contextMenuIsOpen} options={contextMenuOptions} target={contextMenuTarget}>
@@ -460,6 +465,10 @@ GlobalState.propTypes = {
    * @param {event} onclick event object
    */
   pauseScriptQueue: PropTypes.func,
+  /**
+   * Whether to show controls for the observatory status
+   */
+  showObservatoryStatusControls: PropTypes.bool,
 };
 
 export default GlobalState;
