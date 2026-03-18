@@ -53,6 +53,12 @@ export const schema = {
       isPrivate: false,
       default: 1,
     },
+    hideTitle: {
+      type: 'boolean',
+      description: 'Whether to hide the title of the component',
+      isPrivate: false,
+      default: false,
+    },
     _functionProps: {
       type: 'array',
       description: 'Array containing the props that are functions',
@@ -88,7 +94,6 @@ const CSCExpandedContainer = ({
   unsubscribeToStreams,
   heartbeatData,
   simulationMode,
-  displaySummaryState = true,
   hideTitle = false,
 }) => {
   return (
@@ -112,37 +117,51 @@ const CSCExpandedContainer = ({
       heartbeatData={heartbeatData}
       clearCSCLogMessages={clearCSCLogMessages}
       simulationMode={simulationMode}
-      displaySummaryState={displaySummaryState}
       hideTitle={hideTitle}
     />
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
-  const topics = [
-    'summaryState',
-    'logMessage',
-    'logLevel',
-    'errorCode',
-    'softwareVersions',
-    'configurationsAvailable',
-    'configurationApplied',
-    'simulationMode',
-  ];
+const mapDispatchToProps = (dispatch, ownProps) => {
+  const topics = ['logMessage', 'logLevel', 'errorCode'];
+
+  if (!ownProps.hideTitle) {
+    topics.push('summaryState', 'simulationMode');
+  }
 
   return {
     subscribeToStreams: (cscName, index) => {
-      dispatch(addGroup('event-Heartbeat-0-stream'));
       topics.forEach((topic) => dispatch(addGroup(`event-${cscName}-${index}-${topic}`)));
+
+      if (cscName !== 'Script') {
+        dispatch(addGroup(`event-${cscName}-${index}-softwareVersions`));
+        dispatch(addGroup(`event-${cscName}-${index}-configurationsAvailable`));
+        dispatch(addGroup(`event-${cscName}-${index}-configurationApplied`));
+      }
+
       if (CAMERA_CSC_NAMES.includes(cscName)) {
         dispatch(addGroup(`event-${cscName}-${index}-offlineDetailedState`));
       }
+
+      if (!ownProps.hideTitle) {
+        dispatch(addGroup('event-Heartbeat-0-stream'));
+      }
     },
     unsubscribeToStreams: (cscName, index) => {
-      dispatch(removeGroup('event-Heartbeat-0-stream'));
       topics.forEach((topic) => dispatch(removeGroup(`event-${cscName}-${index}-${topic}`)));
+
+      if (cscName !== 'Script') {
+        dispatch(removeGroup(`event-${cscName}-${index}-softwareVersions`));
+        dispatch(removeGroup(`event-${cscName}-${index}-configurationsAvailable`));
+        dispatch(removeGroup(`event-${cscName}-${index}-configurationApplied`));
+      }
+
       if (CAMERA_CSC_NAMES.includes(cscName)) {
         dispatch(removeGroup(`event-${cscName}-${index}-offlineDetailedState`));
+      }
+
+      if (!ownProps.hideTitle) {
+        dispatch(removeGroup('event-Heartbeat-0-stream'));
       }
     },
     clearCSCLogMessages: (csc, salindex) => {

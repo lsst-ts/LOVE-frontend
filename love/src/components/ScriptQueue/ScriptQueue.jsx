@@ -830,14 +830,7 @@ export default class ScriptQueue extends Component {
               <ScriptDetails {...current} />
             </div>
             <div className={styles.currentScriptLogs}>
-              <CSCExpandedContainer
-                group={''}
-                name={'Script'}
-                salindex={current.index ?? 0}
-                onCSCClick={() => null}
-                displaySummaryState={false}
-                hideTitle={true}
-              />
+              <CSCExpandedContainer name={'Script'} salindex={current.index ?? 0} hideTitle={true} />
             </div>
           </div>
         </div>
