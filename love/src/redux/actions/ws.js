@@ -338,7 +338,7 @@ const _requestSubscriptions = () => {
     }
     const subscriptions = getSubscriptions(state);
     subscriptions.forEach((subscription) => {
-      if (subscription.status !== groupStates.PENDING && subscription.status !== groupStates.UNSUBSCRIBING) return;
+      if (subscription.status !== groupStates.PENDING) return;
       const [category, csc, salindex, stream] = subscription.groupName.split('-');
       socket.json({
         option: 'subscribe',
