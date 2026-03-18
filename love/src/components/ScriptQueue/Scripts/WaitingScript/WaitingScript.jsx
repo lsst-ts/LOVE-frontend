@@ -29,6 +29,7 @@ import MoveUpIcon from '../../../icons/ScriptQueue/MoveUpIcon/MoveUpIcon';
 import MoveDownIcon from '../../../icons/ScriptQueue/MoveDownIcon/MoveDownIcon';
 import ScriptDetails from '../ScriptDetails';
 import ScriptConfig from '../ScriptConfig/ScriptConfig';
+import ScriptQueue from '../../ScriptQueue';
 
 export default class WaitingScript extends PureComponent {
   static propTypes = {
@@ -217,7 +218,9 @@ export default class WaitingScript extends PureComponent {
                   </div>
                   <div
                     className={[scriptStyles.buttonContainer, scriptStyles.noBackgroundButton].join(' ')}
-                    onClick={(e) => this.props.onClickContextMenu(e, this.props.index)}
+                    onClick={(e) =>
+                      this.props.onClickContextMenu(e, ScriptQueue.CONTEXT_MENU_SECTIONS.WAITING, this.props.index)
+                    }
                   >
                     <span style={{ width: '100%' }}>&#8943;</span>
                   </div>
