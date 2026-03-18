@@ -328,28 +328,25 @@ export default class CSCExpanded extends PureComponent {
     return (
       <div className={styles.CSCGroupContainer}>
         <div className={styles.CSCExpandedContainer}>
-          <div className={styles.topBarContainerWrapper}>
-            <div className={styles.topBarContainer}>
-              <div className={styles.breadcrumContainer}>
-                {group && (
-                  <>
-                    <div className={styles.backArrowIconWrapper} onClick={() => onCSCClick({ group: group })}>
-                      <BackArrowIcon />
-                    </div>
-                    <span className={styles.breadcrumbGroup} onClick={() => onCSCClick({ group: group, csc: 'all' })}>
-                      {group}
-                    </span>
-                    <span> &#62; </span>
-                  </>
-                )}
-                {!hideTitle && (
-                  <>
-                    <span>{cscText(name, salindex)}</span>
-                    {isSimulated ? <span className={styles.simulatedLabel}> (SIMULATED)</span> : ''}
-                  </>
-                )}
-              </div>
-              {displaySummaryState && (
+          {!hideTitle && (
+            <div className={styles.topBarContainerWrapper}>
+              <div className={styles.topBarContainer}>
+                <div className={styles.breadcrumContainer}>
+                  {group && (
+                    <>
+                      <div className={styles.backArrowIconWrapper} onClick={() => onCSCClick({ group: group })}>
+                        <BackArrowIcon />
+                      </div>
+                      <span className={styles.breadcrumbGroup} onClick={() => onCSCClick({ group: group, csc: 'all' })}>
+                        {group}
+                      </span>
+                      <span> &#62; </span>
+                    </>
+                  )}
+
+                  <span>{cscText(name, salindex)}</span>
+                  {isSimulated ? <span className={styles.simulatedLabel}> (SIMULATED)</span> : ''}
+                </div>
                 <div className={[styles.stateContainer].join(' ')}>
                   <div>
                     <span
@@ -373,9 +370,10 @@ export default class CSCExpanded extends PureComponent {
                     <HeartbeatIcon className={styles.heartbeatIcon} status={heartbeatStatus} title={heartbeatTitle} />
                   </div>
                 </div>
-              )}
+              </div>
             </div>
-          </div>
+          )}
+
           {name !== 'Script' && (
             <div className={styles.topBarContainerWrapper}>
               <div className={styles.topBarContainer}>
