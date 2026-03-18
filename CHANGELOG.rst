@@ -2,6 +2,13 @@
 Version History
 ===============
 
+v6.11.2
+-------
+
+* Refactor and fix ContextMenu logic in ScriptQueue component. `<https://github.com/lsst-ts/LOVE-frontend/pull/777>`_
+* Add ScriptQueue component property to control wether to display or not the observatory status.  `<https://github.com/lsst-ts/LOVE-frontend/pull/776>`_
+* Add toggle button to the ScriptQueue ConfigPanel component to allow bypassing schema verifications. `<https://github.com/lsst-ts/LOVE-frontend/pull/778>`_
+
 v6.11.1
 -------
 
