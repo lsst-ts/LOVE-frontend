@@ -98,7 +98,8 @@ export default function (state = initialState, action) {
       const subscriptions = action.subscriptions.map((subscription) => ({
         ...subscription,
         status:
-          subscription.status === groupStates.PENDING || subscription.status === groupStates.UNSUBSCRIBING
+          subscription.status === groupStates.PENDING ||
+          (subscription.status === groupStates.UNSUBSCRIBING && subscription.counter > 0)
             ? groupStates.REQUESTING
             : subscription.status,
       }));
