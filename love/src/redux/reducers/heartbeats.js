@@ -84,7 +84,7 @@ export default function (state = initialState, action) {
       };
     }
     case RECEIVE_HEARTBEAT_INFO: {
-      const heartbeatDict = {};
+      const heartbeatDict = { ...state.lastHeartbeatInfo };
       action.data.heartbeat.forEach((heartbeat) => {
         const name = heartbeat?.csc;
         if (name === undefined) return;
