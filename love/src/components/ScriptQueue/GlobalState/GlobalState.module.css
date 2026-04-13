@@ -174,3 +174,7 @@ input:checked + .sliderActiveState {
   width: 1em;
   height: 1em;
 }
+
+.observatoryStateWarningIconWrapper {
+  width: 2em;
+}
