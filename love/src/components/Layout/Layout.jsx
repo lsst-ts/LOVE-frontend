@@ -28,7 +28,6 @@ import OLEMenu from 'components/OLE/Menu/OLEMenu';
 import ExposureAdd from 'components/OLE/Exposure/ExposureAdd';
 import NonExposureEdit from 'components/OLE/NonExposure/NonExposureEdit';
 import TeknikerAdd from 'components/OLE/Tekniker/TeknikerAdd';
-import ObservatorySummaryMenu from 'components/ObservatorySummary/Menu/ObservatorySummaryMenu';
 import ManagerInterface, {
   getNotificationMessage,
   relativeTime,
@@ -45,6 +44,7 @@ import Button from '../GeneralPurpose/Button/Button';
 import DropdownMenu from '../GeneralPurpose/DropdownMenu/DropdownMenu';
 import NotificationIcon from '../icons/NotificationIcon/NotificationIcon';
 import UserIcon from '../icons/UserIcon/UserIcon';
+import ObservatorySummaryMenu from 'components/ObservatorySummary/Menu/ObservatorySummaryMenu';
 import LogoIcon from '../icons/LogoIcon/LogoIcon';
 import MenuIcon from '../icons/MenuIcon/MenuIcon';
 import InriaLogo from '../icons/InriaLogo/InriaLogo';
@@ -64,10 +64,12 @@ import AboutPanel from './AboutPanel/AboutPanel';
 import UserDetails from './UserDetails/UserDetails';
 import UserSwapContainer from '../Login/UserSwap.container';
 import styles from './Layout.module.css';
-import CactusIcon from '../icons/CactusIcon/CactusIcon';
 import UnknownLocationIcon from '../icons/UnknownLocationIcon/UnknownLocationIcon';
-import BeachIcon from '../icons/BeachIcon/BeachIcon';
-import MountainIcon from '../icons/MountainIcon/MountainIcon';
+// TODO: roll back this feature if/when required.
+// See: OSW-1998.
+// import CactusIcon from '../icons/CactusIcon/CactusIcon';
+// import BeachIcon from '../icons/BeachIcon/BeachIcon';
+// import MountainIcon from '../icons/MountainIcon/MountainIcon';
 
 export const LAYOUT_CONTAINER_ID = 'layoutContainer';
 const BREAK_1 = 865;
@@ -159,7 +161,9 @@ class Layout extends Component {
   componentDidMount = () => {
     this.moveCustomTopbar();
     this.props.subscribeToStreams();
-    this.props.startControlLocationLoop();
+    // TODO: roll back this feature if/when required.
+    // See: OSW-1998.
+    // this.props.startControlLocationLoop();
 
     this.heartbeatInterval = setInterval(() => {
       this.checkHeartbeat();
@@ -179,7 +183,9 @@ class Layout extends Component {
     window.clearInterval(this.heartbeatInterval);
     window.clearInterval(this.externalServicesInterval);
     this.props.unsubscribeToStreams();
-    this.props.stopControlLocationLoop();
+    // TODO: roll back this feature if/when required.
+    // See: OSW-1998.
+    // this.props.stopControlLocationLoop();
   };
 
   componentDidUpdate = (prevProps, prevState) => {
@@ -329,22 +335,24 @@ class Layout extends Component {
   };
 
   /** Returns the corresponding svg based on Observatory Control Location * */
-  getObsLocationIcon = (style) => {
-    const { controlLocation } = this.props.controlLocation;
+  // TODO: roll back this feature if/when required.
+  // See: OSW-1998.
+  // getObsLocationIcon = (style) => {
+  //   const { controlLocation } = this.props.controlLocation;
 
-    switch (controlLocation ? controlLocation.name : 'unknown') {
-      case 'unknown':
-        return <UnknownLocationIcon className={style} />;
-      case 'tucson':
-        return <CactusIcon className={style} />;
-      case 'base':
-        return <BeachIcon className={style} />;
-      case 'summit':
-        return <MountainIcon className={style} />;
-      default:
-        return <UnknownLocationIcon className={style} />;
-    }
-  };
+  //   switch (controlLocation ? controlLocation.name : 'unknown') {
+  //     case 'unknown':
+  //       return <UnknownLocationIcon className={style} />;
+  //     case 'tucson':
+  //       return <CactusIcon className={style} />;
+  //     case 'base':
+  //       return <BeachIcon className={style} />;
+  //     case 'summit':
+  //       return <MountainIcon className={style} />;
+  //     default:
+  //       return <UnknownLocationIcon className={style} />;
+  //   }
+  // };
 
   handleClick = (event) => {
     if (
@@ -474,16 +482,17 @@ class Layout extends Component {
   };
 
   renderRightSideMenu = () => {
-    const { controlLocation, lastUpdated } = this.props.controlLocation;
     const filteredAlarms = this.props.alarms.filter((a) => {
       return (
         isActive(a) && !isAcknowledged(a) && !isMuted(a) && a.severity?.value >= this.state.minSeverityNotification
       );
     });
 
-    const controlLocationName = controlLocation
-      ? controlLocation.name.charAt(0).toUpperCase() + controlLocation.name.slice(1)
-      : 'Unknown';
+    // TODO: roll back this feature if/when required.
+    // See: OSW-1998.
+    // const controlLocationName = controlLocation
+    //   ? controlLocation.name.charAt(0).toUpperCase() + controlLocation.name.slice(1)
+    //   : 'Unknown';
 
     return (
       <div className={styles.rightTopbar}>
@@ -583,15 +592,24 @@ class Layout extends Component {
 
         {/** Observatory Summary  * */}
         <DropdownMenu className={styles.settingsDropdown}>
-          <Button className={styles.iconBtn} title="Settings" status="transparent">
-            {this.getObsLocationIcon(`${styles.icon} ${styles.locationIcon}`)}
+          <Button className={styles.iconBtn} title="Observatory Summary" status="transparent">
+            {/* TODO: roll back this feature if/when required.
+            * Remove the UnknownLocationIcon and uncomment the getObsLocationIcon function to show
+            * the actual control location icon when the feature is re-enabled.
+            * /}
+            {/* See: OSW-1998. */}
+            {/* {this.getObsLocationIcon(`${styles.icon} ${styles.locationIcon}`)} */}
+            <UnknownLocationIcon className={`${styles.icon} ${styles.locationIcon}`} />
           </Button>
+
           <div className={styles.observatorySummaryMenu}>
             <ObservatorySummaryMenu
               dividerClassName={styles.divider}
-              locationIcon={this.getObsLocationIcon()}
-              location={controlLocationName}
-              locationLastUpdate={lastUpdated}
+              // TODO: roll back this feature if/when required.
+              // See: OSW-1998.
+              // locationIcon={this.getObsLocationIcon()}
+              // location={controlLocationName}
+              // locationLastUpdate={lastUpdated}
               simonyiOperationMode={'UNKNOWN'}
               simonyiTrackingState={this.props.observatorySummary?.simonyiTrackingState}
               simonyiTrackingMode={this.props.observatorySummary?.simonyiTrackingMode}
@@ -604,7 +622,7 @@ class Layout extends Component {
               degradation={this.props.observatorySummary?.degradation}
               auxtelPower={'UNKNOWN'}
               atmosphericTrans={this.props.observatorySummary?.atmosphericTrans}
-            ></ObservatorySummaryMenu>
+            />
           </div>
         </DropdownMenu>
 
@@ -657,26 +675,35 @@ class Layout extends Component {
   };
 
   renderMobileRightSideMenu = () => {
-    const { controlLocation, lastUpdated } = this.props.controlLocation;
-
-    const controlLocationName = controlLocation
-      ? controlLocation.name.charAt(0).toUpperCase() + controlLocation.name.slice(1)
-      : 'Unknown';
+    // TODO: roll back this feature if/when required.
+    // See: OSW-1998.
+    // const controlLocationName = controlLocation
+    //   ? controlLocation.name.charAt(0).toUpperCase() + controlLocation.name.slice(1)
+    //   : 'Unknown';
 
     return (
       <div className={styles.rightTopbarMobile}>
         {this.renderHeartbeatsMenu()}
         <DropdownMenu className={styles.settingsDropdown} disabledToggle={true}>
-          <Button className={styles.iconBtn} title="Settings" status="transparent">
-            {this.getObsLocationIcon(`${styles.icon} ${styles.locationIcon}`)}
+          {/** Observatory Summary  * */}
+          <Button className={styles.iconBtn} title="Observatory Summary" status="transparent">
+            {/* TODO: roll back this feature if/when required.
+            * Remove the UnknownLocationIcon and uncomment the getObsLocationIcon function to show
+            * the actual control location icon when the feature is re-enabled.
+            * /}
+            {/* See: OSW-1998. */}
+            {/* {this.getObsLocationIcon(`${styles.icon} ${styles.locationIcon}`)} */}
+            <UnknownLocationIcon className={`${styles.icon} ${styles.locationIcon}`} />
           </Button>
 
           <div className={styles.observatorySummaryMenu}>
             <ObservatorySummaryMenu
               dividerClassName={styles.divider}
-              locationIcon={this.getObsLocationIcon()}
-              location={controlLocationName}
-              locationLastUpdate={lastUpdated}
+              // TODO: roll back this feature if/when required.
+              // See: OSW-1998.
+              // locationIcon={this.getObsLocationIcon()}
+              // location={controlLocationName}
+              // locationLastUpdate={lastUpdated}
               simonyiOperationMode={'UNKNOWN'}
               simonyiTrackingState={this.props.observatorySummary?.simonyiTrackingState}
               simonyiTrackingMode={this.props.observatorySummary?.simonyiTrackingMode}
@@ -686,8 +713,10 @@ class Layout extends Component {
               auxtelTrackingState={this.props.observatorySummary?.auxtelTrackingState}
               auxtelTrackingMode={this.props.observatorySummary?.auxtelTrackingMode}
               auxtelObsMode={this.props.observatorySummary?.auxtelObservingMode}
+              degradation={this.props.observatorySummary?.degradation}
               auxtelPower={'UNKNOWN'}
-            ></ObservatorySummaryMenu>
+              atmosphericTrans={this.props.observatorySummary?.atmosphericTrans}
+            />
           </div>
           <div className={styles.userMenu}>
             <UserDetails

@@ -107,7 +107,7 @@ export default class CSCExpanded extends PureComponent {
 
   componentDidUpdate = (prevProps, prevState) => {
     const { name, salindex, subscribeToStreams, unsubscribeToStreams } = this.props;
-    if (prevProps.name !== name || prevProps.salindex !== salindex) {
+    if (prevProps.name !== this.props.name || prevProps.salindex !== this.props.salindex) {
       unsubscribeToStreams(prevProps.name, prevProps.salindex);
       subscribeToStreams(name, salindex);
     }
@@ -268,7 +268,6 @@ export default class CSCExpanded extends PureComponent {
       onCSCClick,
       clearCSCErrorCodes,
       clearCSCLogMessages,
-      displaySummaryState,
       hideTitle,
     } = this.props;
     const { summaryStateCommand } = this.state;
@@ -328,28 +327,25 @@ export default class CSCExpanded extends PureComponent {
     return (
       <div className={styles.CSCGroupContainer}>
         <div className={styles.CSCExpandedContainer}>
-          <div className={styles.topBarContainerWrapper}>
-            <div className={styles.topBarContainer}>
-              <div className={styles.breadcrumContainer}>
-                {group && (
-                  <>
-                    <div className={styles.backArrowIconWrapper} onClick={() => onCSCClick({ group: group })}>
-                      <BackArrowIcon />
-                    </div>
-                    <span className={styles.breadcrumbGroup} onClick={() => onCSCClick({ group: group, csc: 'all' })}>
-                      {group}
-                    </span>
-                    <span> &#62; </span>
-                  </>
-                )}
-                {!hideTitle && (
-                  <>
-                    <span>{cscText(name, salindex)}</span>
-                    {isSimulated ? <span className={styles.simulatedLabel}> (SIMULATED)</span> : ''}
-                  </>
-                )}
-              </div>
-              {displaySummaryState && (
+          {!hideTitle && (
+            <div className={styles.topBarContainerWrapper}>
+              <div className={styles.topBarContainer}>
+                <div className={styles.breadcrumContainer}>
+                  {group && (
+                    <>
+                      <div className={styles.backArrowIconWrapper} onClick={() => onCSCClick({ group: group })}>
+                        <BackArrowIcon />
+                      </div>
+                      <span className={styles.breadcrumbGroup} onClick={() => onCSCClick({ group: group, csc: 'all' })}>
+                        {group}
+                      </span>
+                      <span> &#62; </span>
+                    </>
+                  )}
+
+                  <span>{cscText(name, salindex)}</span>
+                  {isSimulated ? <span className={styles.simulatedLabel}> (SIMULATED)</span> : ''}
+                </div>
                 <div className={[styles.stateContainer].join(' ')}>
                   <div>
                     <span
@@ -373,9 +369,10 @@ export default class CSCExpanded extends PureComponent {
                     <HeartbeatIcon className={styles.heartbeatIcon} status={heartbeatStatus} title={heartbeatTitle} />
                   </div>
                 </div>
-              )}
+              </div>
             </div>
-          </div>
+          )}
+
           {name !== 'Script' && (
             <div className={styles.topBarContainerWrapper}>
               <div className={styles.topBarContainer}>
