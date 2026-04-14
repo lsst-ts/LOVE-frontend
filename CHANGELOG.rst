@@ -5,6 +5,7 @@ Version History
 v6.11.3
 -------
 
+* Update package.json version to v6.11.3. `<https://github.com/lsst-ts/LOVE-frontend/pull/789>`_
 * Remove loop in group subscription state machine. `<https://github.com/lsst-ts/LOVE-frontend/pull/787>`_
 * Temporary disable control location feature. `<https://github.com/lsst-ts/LOVE-frontend/pull/780>`_
 
