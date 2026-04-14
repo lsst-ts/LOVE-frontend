@@ -8,6 +8,7 @@ import {
   isNightReportOld,
   getCutDateFromNightReport,
   acronymizeString,
+  getActiveObservatoryStates,
 } from './Utils';
 import { JIRA_TICKETS_BASE_URL } from './Config';
 
@@ -246,5 +247,40 @@ describe('acronymizeString', () => {
     expect(acronymizeString('DETAILED STATE', ' ')).toBe('DS');
     expect(acronymizeString('DETAILED STATE B', ' ')).toBe('DSB');
     expect(acronymizeString('DETAILED_STATE', ' ')).toBe('D');
+  });
+});
+
+describe('getActiveObservatoryStates', () => {
+  it('should return an empty array if no states are active', () => {
+    expect(getActiveObservatoryStates(0)).toEqual([]);
+  });
+
+  it('should return the active states for a given decimal value', () => {
+    // Single active states
+    expect(getActiveObservatoryStates(1)).toEqual([1]); // DAYTIME
+    expect(getActiveObservatoryStates(2)).toEqual([2]); // OPERATIONAL
+    expect(getActiveObservatoryStates(4)).toEqual([4]); // FAULT
+    expect(getActiveObservatoryStates(8)).toEqual([8]); // WEATHER
+    expect(getActiveObservatoryStates(16)).toEqual([16]); // DOWNTIME
+
+    // Multiple active states in daytime
+    expect(getActiveObservatoryStates(5)).toEqual([1, 4]); // DAYTIME + FAULT
+    expect(getActiveObservatoryStates(9)).toEqual([1, 8]); // DAYTIME + WEATHER
+    expect(getActiveObservatoryStates(17)).toEqual([1, 16]); // DAYTIME + DOWNTIME
+
+    expect(getActiveObservatoryStates(13)).toEqual([1, 4, 8]); // DAYTIME + FAULT + WEATHER
+    expect(getActiveObservatoryStates(21)).toEqual([1, 4, 16]); // DAYTIME + FAULT + DOWNTIME
+    expect(getActiveObservatoryStates(25)).toEqual([1, 8, 16]); // DAYTIME + WEATHER + DOWNTIME
+
+    expect(getActiveObservatoryStates(29)).toEqual([1, 4, 8, 16]); // DAYTIME + FAULT + WEATHER + DOWNTIME
+
+    // Multiple active states in nighttime
+    expect(getActiveObservatoryStates(10)).toEqual([2, 8]); // OPERATIONAL + WEATHER
+
+    expect(getActiveObservatoryStates(12)).toEqual([4, 8]); // FAULT + WEATHER
+    expect(getActiveObservatoryStates(20)).toEqual([4, 16]); // FAULT + DOWNTIME
+    expect(getActiveObservatoryStates(24)).toEqual([8, 16]); // WEATHER + DOWNTIME
+
+    expect(getActiveObservatoryStates(28)).toEqual([4, 8, 16]); // FAULT + WEATHER + DOWNTIME
   });
 });
