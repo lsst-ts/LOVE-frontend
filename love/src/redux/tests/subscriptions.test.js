@@ -279,4 +279,145 @@ describe('Test subscription to Telemetries and Events, given the connection is o
     });
     expect(getSubscription(store.getState(), 'event-ATDome-1-stream1')).toBeFalsy();
   });
+
+  it('When unsubscription is requested, then the subscription status is UNSUBSCRIBING, and when confirmation is received, then the subscription is removed', async () => {
+    const eventStream = 'event-CSC-1-stream1';
+
+    // Subscribe to stream
+    await store.dispatch(addGroup(eventStream));
+
+    // Add group triggers _requestSubscriptions, which sets status to REQUESTING
+    // and sends subscription message to server.
+    expect(getSubscription(store.getState(), eventStream)).toEqual({
+      groupName: eventStream,
+      counter: 1,
+      status: groupStates.REQUESTING,
+    });
+    await expect(server).toReceiveMessage({
+      category: 'event',
+      csc: 'CSC',
+      option: 'subscribe',
+      salindex: '1',
+      stream: 'stream1',
+    });
+
+    // Receive confirmation message, which sets status to SUBSCRIBED
+    server.send({
+      data: `Successfully subscribed to ${eventStream}`,
+    });
+    expect(getSubscription(store.getState(), eventStream)).toEqual({
+      groupName: eventStream,
+      counter: 1,
+      status: groupStates.SUBSCRIBED,
+      confirmationMessage: `Successfully subscribed to ${eventStream}`,
+    });
+
+    // Unsubscribe from stream
+    await store.dispatch(removeGroup(eventStream));
+
+    // Remove group sets status to UNSUBSCRIBING, but subscription is not removed until confirmation is received
+    expect(getSubscription(store.getState(), eventStream)).toEqual({
+      groupName: eventStream,
+      counter: 0,
+      status: groupStates.UNSUBSCRIBING,
+      confirmationMessage: `Successfully subscribed to ${eventStream}`,
+    });
+    await expect(server).toReceiveMessage({
+      category: 'event',
+      csc: 'CSC',
+      option: 'unsubscribe',
+      salindex: '1',
+      stream: 'stream1',
+    });
+
+    // Receive unsubscription confirmation, which removes subscription
+    server.send({
+      data: `Successfully unsubscribed to ${eventStream}`,
+    });
+    expect(getSubscription(store.getState(), eventStream)).toBeFalsy();
+  });
+
+  it('Unsusbscription is handled correctly even when _requestSubscriptions is called in the middle with multiple streams', async () => {
+    const eventStream1 = 'event-CSC-1-stream1';
+    const eventStream2 = 'event-CSC-1-stream2';
+
+    // Subscribe to stream 1
+    await store.dispatch(addGroup(eventStream1));
+
+    // Add group triggers _requestSubscriptions, which sets status to REQUESTING
+    expect(getSubscription(store.getState(), eventStream1)).toEqual({
+      groupName: eventStream1,
+      counter: 1,
+      status: groupStates.REQUESTING,
+    });
+    await expect(server).toReceiveMessage({
+      category: 'event',
+      csc: 'CSC',
+      option: 'subscribe',
+      salindex: '1',
+      stream: 'stream1',
+    });
+
+    // Receive confirmation message, which sets status to SUBSCRIBED
+    server.send({
+      data: `Successfully subscribed to ${eventStream1}`,
+    });
+    expect(getSubscription(store.getState(), eventStream1)).toEqual({
+      groupName: eventStream1,
+      counter: 1,
+      status: groupStates.SUBSCRIBED,
+      confirmationMessage: `Successfully subscribed to ${eventStream1}`,
+    });
+
+    // Unsusbscribe from stream 1 and subscribe to stream 2
+    await store.dispatch(removeGroup(eventStream1));
+    await store.dispatch(addGroup(eventStream2));
+
+    // Remove group sets status to UNSUBSCRIBING, but subscription is not removed until confirmation is received
+    expect(getSubscription(store.getState(), eventStream1)).toEqual({
+      groupName: eventStream1,
+      counter: 0,
+      status: groupStates.UNSUBSCRIBING,
+      confirmationMessage: `Successfully subscribed to ${eventStream1}`,
+    });
+    await expect(server).toReceiveMessage({
+      category: 'event',
+      csc: 'CSC',
+      option: 'unsubscribe',
+      salindex: '1',
+      stream: 'stream1',
+    });
+
+    // Add group triggers _requestSubscriptions, which sets status to REQUESTING.
+    // This should only set status to REQUESTING for eventStream2, but not change the status of eventStream1, which is UNSUBSCRIBING.
+    expect(getSubscription(store.getState(), eventStream2)).toEqual({
+      groupName: eventStream2,
+      counter: 1,
+      status: groupStates.REQUESTING,
+    });
+    await expect(server).toReceiveMessage({
+      category: 'event',
+      csc: 'CSC',
+      option: 'subscribe',
+      salindex: '1',
+      stream: 'stream2',
+    });
+
+    // Receive unsubscription confirmation for stream1, which removes subscription
+    server.send({
+      data: `Successfully unsubscribed to ${eventStream1}`,
+    });
+    expect(getSubscription(store.getState(), eventStream1)).toBeFalsy();
+
+    // Receive subscription confirmation for stream2, which sets status to SUBSCRIBED
+    server.send({
+      data: `Successfully subscribed to ${eventStream2}`,
+    });
+    expect(getSubscription(store.getState(), eventStream2)).toEqual({
+      groupName: eventStream2,
+      counter: 1,
+      status: groupStates.SUBSCRIBED,
+      confirmationMessage: `Successfully subscribed to ${eventStream2}`,
+    });
+  });
 });
