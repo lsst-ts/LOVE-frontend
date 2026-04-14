@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.11.4
+-------
+
+* Add visual cue to ScriptQueue observatory state to indicate the Scheduler CSC is pending to be enabled `<https://github.com/lsst-ts/LOVE-frontend/pull/788>`_
+
 v6.11.3
 -------
 

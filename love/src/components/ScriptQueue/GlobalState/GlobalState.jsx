@@ -27,6 +27,7 @@ import ResumeIcon from 'components/icons/ScriptQueue/ResumeIcon/ResumeIcon';
 import PauseIcon from 'components/icons/ScriptQueue/PauseIcon/PauseIcon';
 import GearIcon from 'components/icons/ScriptQueue/GearIcon/GearIcon.jsx';
 import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
+import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
 import MessageIcon from 'components/icons/MessageIcon/MessageIcon';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail.jsx';
 import { OBSERVATORY_STATES } from 'Config';
@@ -217,6 +218,11 @@ const GlobalState = ({
                       <div className={styles.pauseIconWrapper} title="Change observatoryState">
                         <GearIcon className={styles.gearIcon} />
                       </div>
+                    </div>
+                  )}
+                  {schedulerSummaryState.name !== 'ENABLED' && (
+                    <div className={styles.observatoryStateWarningIconWrapper}>
+                      <WarningIcon title="Observatory state controls are disabled because the Scheduler CSC is not enabled." />
                     </div>
                   )}
                 </div>
