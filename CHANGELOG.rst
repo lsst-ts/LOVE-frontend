@@ -5,6 +5,7 @@ Version History
 v6.11.4
 -------
 
+* Integrate narrative log creation with observatory states feature. `<https://github.com/lsst-ts/LOVE-frontend/pull/791>`_
 * Add visual cue to ScriptQueue observatory state to indicate the Scheduler CSC is pending to be enabled `<https://github.com/lsst-ts/LOVE-frontend/pull/788>`_
 
 v6.11.3
