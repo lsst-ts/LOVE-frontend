@@ -459,7 +459,7 @@ export const requestSALCommand = (data, callback) => {
         }));
       })
       .then(({ statusCode, data }) => {
-        if (callback) callback();
+        if (callback) callback(statusCode, data);
         dispatch(updateLastSALCommandStatus(SALCommandStatus.ACK, statusCode, data?.ack));
       });
   };
