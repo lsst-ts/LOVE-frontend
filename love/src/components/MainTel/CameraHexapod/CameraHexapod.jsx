@@ -42,6 +42,8 @@ import {
   hexapodControllerStatetoStyle,
 } from 'Config';
 
+const MT_HEXAPOD_CONTROLLER_STATE_ENABLED = 2;
+
 class CameraHexapod extends Component {
   static propTypes = {
     /** Function to subscribe to streams to receive */
@@ -284,7 +286,7 @@ class CameraHexapod extends Component {
 
     // controllerState
     let controllerSubstate = '';
-    if (controllerState === 'Enabled') {
+    if (this.props.hexapodControllerState === MT_HEXAPOD_CONTROLLER_STATE_ENABLED) {
       controllerSubstate = hexapodControllerStateEnabledSubstateMap[this.props.hexapodConstrollerStateEnabledSubstate];
     } else {
       controllerSubstate = 'Offline';
