@@ -5,6 +5,7 @@ Version History
 v6.11.4
 -------
 
+* Fix CameraHexapod ControllerSubstate display. `<https://github.com/lsst-ts/LOVE-frontend/pull/793>`_
 * Fix ScriptQueue CurrentScript elapsed time to use TAI scale. `<https://github.com/lsst-ts/LOVE-frontend/pull/792>`_
 * Integrate narrative log creation with observatory states feature. `<https://github.com/lsst-ts/LOVE-frontend/pull/791>`_
 * Add visual cue to ScriptQueue observatory state to indicate the Scheduler CSC is pending to be enabled `<https://github.com/lsst-ts/LOVE-frontend/pull/788>`_
