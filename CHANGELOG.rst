@@ -5,6 +5,7 @@ Version History
 v6.11.4
 -------
 
+* Update package.json version to v6.11.4. `<https://github.com/lsst-ts/LOVE-frontend/pull/794>`_
 * Fix CameraHexapod ControllerSubstate display. `<https://github.com/lsst-ts/LOVE-frontend/pull/793>`_
 * Fix ScriptQueue CurrentScript elapsed time to use TAI scale. `<https://github.com/lsst-ts/LOVE-frontend/pull/792>`_
 * Integrate narrative log creation with observatory states feature. `<https://github.com/lsst-ts/LOVE-frontend/pull/791>`_
