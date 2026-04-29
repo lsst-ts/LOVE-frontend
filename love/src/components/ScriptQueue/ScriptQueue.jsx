@@ -757,6 +757,8 @@ export default class ScriptQueue extends Component {
       this.props.observatoryStatuses?.private_sndStamp?.value + (this.props.taiToUtc ?? -37);
     const observatoryStateNote = this.props.observatoryStatuses?.note?.value ?? '';
 
+    const currentScriptTimestampRunStart = current.timestampRunStart + (this.props.taiToUtc ?? -37);
+
     return (
       <div
         id="container"
@@ -825,7 +827,7 @@ export default class ScriptQueue extends Component {
                 isStandard={current.type ? current.type.toUpperCase() === 'STANDARD' : undefined}
                 estimatedTime={current.expected_duration}
                 heartbeatData={this.state.indexedHeartbeats[current.index]}
-                timestampRunStart={current.timestampRunStart}
+                timestampRunStart={currentScriptTimestampRunStart}
                 stopScript={this.stopScript}
                 pauseScript={this.pauseScript}
                 onClickContextMenu={this.onClickContextMenu}
