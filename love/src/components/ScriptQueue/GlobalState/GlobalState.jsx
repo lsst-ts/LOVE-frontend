@@ -27,10 +27,11 @@ import ResumeIcon from 'components/icons/ScriptQueue/ResumeIcon/ResumeIcon';
 import PauseIcon from 'components/icons/ScriptQueue/PauseIcon/PauseIcon';
 import GearIcon from 'components/icons/ScriptQueue/GearIcon/GearIcon.jsx';
 import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
+import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
 import MessageIcon from 'components/icons/MessageIcon/MessageIcon';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail.jsx';
-import { OBSERVATORY_STATES } from 'Config';
-import { acronymizeString, formatSecondsToDigital } from 'Utils';
+import { OBSERVATORY_STATE_DETAIL } from 'Config';
+import { acronymizeString, formatSecondsToDigital, getActiveObservatoryStates } from 'Utils';
 import styles from './GlobalState.module.css';
 
 const summaryStateToStylesMap = Object.values(CSCDetail.states).reduce((prevDict, value) => {
@@ -40,33 +41,6 @@ const summaryStateToStylesMap = Object.values(CSCDetail.states).reduce((prevDict
 }, {});
 
 const FULL_NAME_OBSERVATORY_STATES = ['OPERATIONAL', 'FAULT'];
-
-const OBSERVATORY_STATE_DETAIL = {
-  0: {
-    name: 'UNKNOWN',
-    statusText: 'invalid',
-  },
-  1: {
-    name: 'DAYTIME',
-    statusText: 'ok',
-  },
-  2: {
-    name: 'OPERATIONAL',
-    statusText: 'ok',
-  },
-  4: {
-    name: 'FAULT',
-    statusText: 'alert',
-  },
-  8: {
-    name: 'WEATHER',
-    statusText: 'alert',
-  },
-  16: {
-    name: 'DOWNTIME',
-    statusText: 'warning',
-  },
-};
 
 const observatoryStateTooltip =
   'Current state of the observatory. ' +
@@ -90,16 +64,6 @@ const observatoryStatusTimerTooltip =
   'This timer resets every time there is a change in any of the observatory statuses, ' +
   'and it can be used to track how long the observatory has been in the current state.' +
   '\nHover over the message bubble to see the note attached to the last change in the observatory state, if any.';
-
-function getActiveObservatoryStates(decimalValue) {
-  const activeStatuses = [];
-  for (const [_, bitValue] of Object.entries(OBSERVATORY_STATES)) {
-    if ((decimalValue & bitValue) !== 0) {
-      activeStatuses.push(bitValue);
-    }
-  }
-  return activeStatuses;
-}
 
 function renderObservatoryState(state, statusClass, acronymize = true) {
   return (
@@ -217,6 +181,11 @@ const GlobalState = ({
                       <div className={styles.pauseIconWrapper} title="Change observatoryState">
                         <GearIcon className={styles.gearIcon} />
                       </div>
+                    </div>
+                  )}
+                  {schedulerSummaryState.name !== 'ENABLED' && (
+                    <div className={styles.observatoryStateWarningIconWrapper}>
+                      <WarningIcon title="Observatory state controls are disabled because the Scheduler CSC is not enabled." />
                     </div>
                   )}
                 </div>

@@ -33,6 +33,7 @@ import {
   OLE_OBS_SUBSYSTEMS,
   OLE_OBS_SUBSYSTEMS_COMPONENTS,
   EFD_INSTANCES,
+  OBSERVATORY_STATES,
 } from 'Config';
 import { HTTP_STATUS } from 'Constants';
 
@@ -2687,4 +2688,21 @@ export function acronymizeString(str, separator = '_') {
     }
   });
   return acronym;
+}
+
+/**
+ * Function to get the active observatory states from a decimal value.
+ * The function receives a decimal value which represents the combination of the different observatory states
+ * through bitwise operations. It returns an array with the active states.
+ * @param {number} decimalValue - The decimal value representing the combination of observatory states.
+ * @returns {Array} - An array of active (numeric) observatory states.
+ */
+export function getActiveObservatoryStates(decimalValue) {
+  const activeStatuses = [];
+  for (const [_, bitValue] of Object.entries(OBSERVATORY_STATES)) {
+    if ((decimalValue & bitValue) !== 0) {
+      activeStatuses.push(bitValue);
+    }
+  }
+  return activeStatuses;
 }

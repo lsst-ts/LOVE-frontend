@@ -45,7 +45,9 @@ import GlobalState from './GlobalState/GlobalState';
 import ObservatoryStatusMenu from './ObservatoryStatusMenu/ObservatoryStatusMenu';
 import ScriptDetails from './Scripts/ScriptDetails';
 import ScriptConfig from './Scripts/ScriptConfig/ScriptConfig';
+import { OBSERVATORY_STATE_DETAIL } from 'Config';
 import { SUMMARY_STATE_COMMANDS, ALLOWED_SUMMARY_STATE_COMMANDS } from 'Constants';
+import ManagerInterface, { getActiveObservatoryStates } from 'Utils';
 
 const CONFIG_PANEL_INITIAL_WIDTH = 590;
 
@@ -553,14 +555,36 @@ export default class ScriptQueue extends Component {
   };
 
   observatoryStateCommand = (newState, note) => {
-    this.props.requestSALCommand({
-      csc: 'Scheduler',
-      cmd: 'cmd_updateObservatoryStatus',
-      params: {
-        status: newState,
-        note: note ?? '',
+    this.props.requestSALCommand(
+      {
+        csc: 'Scheduler',
+        cmd: 'cmd_updateObservatoryStatus',
+        params: {
+          status: newState,
+          note: note ?? '',
+        },
       },
-    });
+      (statusCode, ackData) => {
+        if (statusCode === 200) {
+          const observatoryStatusLabels = getActiveObservatoryStates(newState)
+            .map((status) => OBSERVATORY_STATE_DETAIL[status]?.name ?? status)
+            .join(' | ');
+          const messageText =
+            `Observatory status updated to: ${observatoryStatusLabels}.\n` + `Note: ${note ?? 'Not provided.'}`;
+          const now = new Date();
+          ManagerInterface.createMessageNarrativeLogs({
+            level: 0,
+            date_begin: now.toISOString().slice(0, -1),
+            date_end: now.toISOString().slice(0, -1),
+            message_text: messageText,
+            is_human: true,
+            category: 'None',
+            time_lost_type: 'fault',
+            request_type: 'narrative',
+          });
+        }
+      },
+    );
     this.closeContextMenu();
   };
 
@@ -733,6 +757,8 @@ export default class ScriptQueue extends Component {
       this.props.observatoryStatuses?.private_sndStamp?.value + (this.props.taiToUtc ?? -37);
     const observatoryStateNote = this.props.observatoryStatuses?.note?.value ?? '';
 
+    const currentScriptTimestampRunStart = current.timestampRunStart + (this.props.taiToUtc ?? -37);
+
     return (
       <div
         id="container"
@@ -801,7 +827,7 @@ export default class ScriptQueue extends Component {
                 isStandard={current.type ? current.type.toUpperCase() === 'STANDARD' : undefined}
                 estimatedTime={current.expected_duration}
                 heartbeatData={this.state.indexedHeartbeats[current.index]}
-                timestampRunStart={current.timestampRunStart}
+                timestampRunStart={currentScriptTimestampRunStart}
                 stopScript={this.stopScript}
                 pauseScript={this.pauseScript}
                 onClickContextMenu={this.onClickContextMenu}

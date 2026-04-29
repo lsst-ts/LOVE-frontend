@@ -118,12 +118,39 @@ export const CAMERA_CSC_NAMES = ['ATCamera', 'CCCamera', 'MTCamera'];
 /*****************************************************************************/
 
 export const OBSERVATORY_STATES = {
-  UNKNOWN: 0,
-  DAYTIME: 1 << 0,
-  OPERATIONAL: 1 << 1,
-  FAULT: 1 << 2,
-  WEATHER: 1 << 3,
-  DOWNTIME: 1 << 4,
+  UNKNOWN: 0, // 0
+  DAYTIME: 1 << 0, // 1
+  OPERATIONAL: 1 << 1, // 2
+  FAULT: 1 << 2, // 4
+  WEATHER: 1 << 3, // 8
+  DOWNTIME: 1 << 4, // 16
+};
+
+export const OBSERVATORY_STATE_DETAIL = {
+  0: {
+    name: 'UNKNOWN',
+    statusText: 'invalid',
+  },
+  1: {
+    name: 'DAYTIME',
+    statusText: 'ok',
+  },
+  2: {
+    name: 'OPERATIONAL',
+    statusText: 'ok',
+  },
+  4: {
+    name: 'FAULT',
+    statusText: 'alert',
+  },
+  8: {
+    name: 'WEATHER',
+    statusText: 'alert',
+  },
+  16: {
+    name: 'DOWNTIME',
+    statusText: 'warning',
+  },
 };
 
 /*****************************************************************************/
