@@ -554,7 +554,7 @@ export default class ScriptQueue extends Component {
     return !allowedCommands.includes(commandName);
   };
 
-  observatoryStateCommand = (newState, note) => {
+  observatoryStateCommand = (newState, note, sendNarrativelog = false) => {
     this.props.requestSALCommand(
       {
         csc: 'Scheduler',
@@ -565,7 +565,7 @@ export default class ScriptQueue extends Component {
         },
       },
       (statusCode, ackData) => {
-        if (statusCode === 200) {
+        if (statusCode === 200 && sendNarrativelog) {
           const observatoryStatusLabels = getActiveObservatoryStates(newState)
             .map((status) => OBSERVATORY_STATE_DETAIL[status]?.name ?? status)
             .join(' | ');
