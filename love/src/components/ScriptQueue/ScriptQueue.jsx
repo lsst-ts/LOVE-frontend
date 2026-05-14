@@ -572,10 +572,11 @@ export default class ScriptQueue extends Component {
           const messageText =
             `Observatory status updated to: ${observatoryStatusLabels}.\n` + `Note: ${note ?? 'Not provided.'}`;
           const now = new Date();
+          const nowTai = new Date(now.getTime() - this.props.taiToUtc * 1000); // this.props.taiToUtc is negative
           ManagerInterface.createMessageNarrativeLogs({
             level: 0,
-            date_begin: now.toISOString().slice(0, -1),
-            date_end: now.toISOString().slice(0, -1),
+            date_begin: nowTai.toISOString().slice(0, -1),
+            date_end: nowTai.toISOString().slice(0, -1),
             message_text: messageText,
             is_human: true,
             category: 'None',
