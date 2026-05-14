@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.11.5
+-------
+
+* Add a toggle to the ObservatoryStatusMenu component to control whether to create a narrative log entries on observatory status transitions triggered by users. `<https://github.com/lsst-ts/LOVE-frontend/pull/795>`_
+
 v6.11.4
 -------
 
