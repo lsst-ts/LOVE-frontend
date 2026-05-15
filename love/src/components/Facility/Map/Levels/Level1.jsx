@@ -119,7 +119,6 @@ export default class Level1 extends Component {
       coldGlycolChiller02,
       comfortGlycolChiller03,
       ambientFloor1,
-      glycolChiller03SwitchValves,
       airCirculationFan01ElectricalRoom,
       airExtractionFan01MRCR,
       airIntakeFan01MainBuilding,
@@ -234,54 +233,6 @@ export default class Level1 extends Component {
             working: ambientFloor1.workingState ? ambientFloor1.workingState.value : null,
             unit: ambientFloor1.unitState ? ambientFloor1.unitState.value : null,
             switch: ambientFloor1.selectorState ? ambientFloor1.selectorState.value : null,
-          }}
-        />
-
-        <Device
-          title={'Valves'}
-          id={3}
-          width={70}
-          height={54}
-          posX={762}
-          posY={237}
-          collapsible={true}
-          states={{
-            command: glycolChiller03SwitchValves.switchedOn ? glycolChiller03SwitchValves.switchedOn.value : null,
-            working: glycolChiller03SwitchValves.workingState ? glycolChiller03SwitchValves.workingState.value : null,
-            unit: glycolChiller03SwitchValves.unitState ? glycolChiller03SwitchValves.unitState.value : null,
-            switch: glycolChiller03SwitchValves.selectorState ? glycolChiller03SwitchValves.selectorState.value : null,
-          }}
-          parameters={{
-            valve03State: {
-              type: 'status',
-              name: 'State Valve 03',
-              unit: null,
-              value: glycolChiller03SwitchValves.valve03State ? glycolChiller03SwitchValves.valve03State.value : null,
-            },
-            valve04State: {
-              type: 'status',
-              name: 'State Valve 04',
-              unit: null,
-              value: glycolChiller03SwitchValves.valve04State ? glycolChiller03SwitchValves.valve04State.value : null,
-            },
-            valve05State: {
-              type: 'status',
-              name: 'State Valve 05',
-              unit: null,
-              value: glycolChiller03SwitchValves.valve05State ? glycolChiller03SwitchValves.valve05State.value : null,
-            },
-            valve06State: {
-              type: 'status',
-              name: 'State Valve 06',
-              unit: null,
-              value: glycolChiller03SwitchValves.valve06State ? glycolChiller03SwitchValves.valve06State.value : null,
-            },
-            valve12State: {
-              type: 'status',
-              name: 'State Valve 12',
-              unit: null,
-              value: glycolChiller03SwitchValves.valve12State ? glycolChiller03SwitchValves.valve12State.value : null,
-            },
           }}
         />
 
