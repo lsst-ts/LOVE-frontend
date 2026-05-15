@@ -64,7 +64,11 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  const subscriptions = ['event-HVAC-0-summaryState', 'telemetry-HVAC-0-glycolSensor', 'telemetry-HVAC-0-dynaleneP05'];
+  const subscriptions = [
+    'event-HVAC-0-summaryState',
+    'telemetry-HVAC-0-glycolLineSensors',
+    'telemetry-HVAC-0-dynalene',
+  ];
   return {
     subscriptions,
     subscribeToStreams: () => {

@@ -114,15 +114,15 @@ export default class Level1 extends Component {
     const analogData2 = this.checkArray(this.props.HVACData.analogData2);
 
     const {
-      coldWaterPump01,
-      chiller01P01,
-      chiller02P01,
-      chiller03P01,
-      generalP01,
-      valveP01,
-      airInletFan01P01,
-      centrifugalExtractionFan01P01,
-      centrifugalSupplyFan01P01,
+      glycolChiller03BoosterPump,
+      coldGlycolChiller01,
+      coldGlycolChiller02,
+      comfortGlycolChiller03,
+      ambientFloor1,
+      glycolChiller03SwitchValves,
+      airCirculationFan01ElectricalRoom,
+      airExtractionFan01MRCR,
+      airIntakeFan01MainBuilding,
     } = this.props.HVACData;
 
     const data01 = {
@@ -157,14 +157,10 @@ export default class Level1 extends Component {
           posY={148}
           collapsible={false}
           states={{
-            command: centrifugalExtractionFan01P01.switchedOn ? centrifugalExtractionFan01P01.switchedOn.value : null,
-            working: centrifugalExtractionFan01P01.workingState
-              ? centrifugalExtractionFan01P01.workingState.value
-              : null,
-            unit: centrifugalExtractionFan01P01.unitState ? centrifugalExtractionFan01P01.unitState.value : null,
-            switch: centrifugalExtractionFan01P01.selectorState
-              ? centrifugalExtractionFan01P01.selectorState.value
-              : null,
+            command: airExtractionFan01MRCR.switchedOn ? airExtractionFan01MRCR.switchedOn.value : null,
+            working: airExtractionFan01MRCR.workingState ? airExtractionFan01MRCR.workingState.value : null,
+            unit: airExtractionFan01MRCR.unitState ? airExtractionFan01MRCR.unitState.value : null,
+            switch: airExtractionFan01MRCR.selectorState ? airExtractionFan01MRCR.selectorState.value : null,
           }}
         />
 
@@ -177,10 +173,18 @@ export default class Level1 extends Component {
           posY={235}
           collapsible={false}
           states={{
-            command: airInletFan01P01.switchedOn ? airInletFan01P01.switchedOn.value : null,
-            working: airInletFan01P01.workingState ? airInletFan01P01.workingState.value : null,
-            unit: airInletFan01P01.unitState ? airInletFan01P01.unitState.value : null,
-            switch: airInletFan01P01.selectorState ? airInletFan01P01.selectorState.value : null,
+            command: airCirculationFan01ElectricalRoom.switchedOn
+              ? airCirculationFan01ElectricalRoom.switchedOn.value
+              : null,
+            working: airCirculationFan01ElectricalRoom.workingState
+              ? airCirculationFan01ElectricalRoom.workingState.value
+              : null,
+            unit: airCirculationFan01ElectricalRoom.unitState
+              ? airCirculationFan01ElectricalRoom.unitState.value
+              : null,
+            switch: airCirculationFan01ElectricalRoom.selectorState
+              ? airCirculationFan01ElectricalRoom.selectorState.value
+              : null,
           }}
         />
 
@@ -193,10 +197,10 @@ export default class Level1 extends Component {
           posY={24}
           collapsible={false}
           states={{
-            command: centrifugalSupplyFan01P01.switchedOn ? centrifugalSupplyFan01P01.switchedOn.value : null,
-            working: centrifugalSupplyFan01P01.workingState ? centrifugalSupplyFan01P01.workingState.value : null,
-            unit: centrifugalSupplyFan01P01.unitState ? centrifugalSupplyFan01P01.unitState.value : null,
-            switch: centrifugalSupplyFan01P01.selectorState ? centrifugalSupplyFan01P01.selectorState.value : null,
+            command: airIntakeFan01MainBuilding.switchedOn ? airIntakeFan01MainBuilding.switchedOn.value : null,
+            working: airIntakeFan01MainBuilding.workingState ? airIntakeFan01MainBuilding.workingState.value : null,
+            unit: airIntakeFan01MainBuilding.unitState ? airIntakeFan01MainBuilding.unitState.value : null,
+            switch: airIntakeFan01MainBuilding.selectorState ? airIntakeFan01MainBuilding.selectorState.value : null,
           }}
         />
 
@@ -209,10 +213,10 @@ export default class Level1 extends Component {
           posY={237}
           collapsible={false}
           states={{
-            command: coldWaterPump01.switchedOn ? coldWaterPump01.switchedOn.value : null,
-            working: coldWaterPump01.workingState ? coldWaterPump01.workingState.value : null,
-            unit: coldWaterPump01.unitState ? coldWaterPump01.unitState.value : null,
-            switch: coldWaterPump01.selectorState ? coldWaterPump01.selectorState.value : null,
+            command: glycolChiller03BoosterPump.switchedOn ? glycolChiller03BoosterPump.switchedOn.value : null,
+            working: glycolChiller03BoosterPump.workingState ? glycolChiller03BoosterPump.workingState.value : null,
+            unit: glycolChiller03BoosterPump.unitState ? glycolChiller03BoosterPump.unitState.value : null,
+            switch: glycolChiller03BoosterPump.selectorState ? glycolChiller03BoosterPump.selectorState.value : null,
           }}
         />
 
@@ -226,10 +230,10 @@ export default class Level1 extends Component {
           posY={210}
           collapsible={false}
           states={{
-            command: generalP01.switchedOn ? generalP01.switchedOn.value : null,
-            working: generalP01.workingState ? generalP01.workingState.value : null,
-            unit: generalP01.unitState ? generalP01.unitState.value : null,
-            switch: generalP01.selectorState ? generalP01.selectorState.value : null,
+            command: ambientFloor1.switchedOn ? ambientFloor1.switchedOn.value : null,
+            working: ambientFloor1.workingState ? ambientFloor1.workingState.value : null,
+            unit: ambientFloor1.unitState ? ambientFloor1.unitState.value : null,
+            switch: ambientFloor1.selectorState ? ambientFloor1.selectorState.value : null,
           }}
         />
 
@@ -242,41 +246,41 @@ export default class Level1 extends Component {
           posY={237}
           collapsible={true}
           states={{
-            command: valveP01.switchedOn ? valveP01.switchedOn.value : null,
-            working: valveP01.workingState ? valveP01.workingState.value : null,
-            unit: valveP01.unitState ? valveP01.unitState.value : null,
-            switch: valveP01.selectorState ? valveP01.selectorState.value : null,
+            command: glycolChiller03SwitchValves.switchedOn ? glycolChiller03SwitchValves.switchedOn.value : null,
+            working: glycolChiller03SwitchValves.workingState ? glycolChiller03SwitchValves.workingState.value : null,
+            unit: glycolChiller03SwitchValves.unitState ? glycolChiller03SwitchValves.unitState.value : null,
+            switch: glycolChiller03SwitchValves.selectorState ? glycolChiller03SwitchValves.selectorState.value : null,
           }}
           parameters={{
             valve03State: {
               type: 'status',
               name: 'State Valve 03',
               unit: null,
-              value: valveP01.valve03State ? valveP01.valve03State.value : null,
+              value: glycolChiller03SwitchValves.valve03State ? glycolChiller03SwitchValves.valve03State.value : null,
             },
             valve04State: {
               type: 'status',
               name: 'State Valve 04',
               unit: null,
-              value: valveP01.valve04State ? valveP01.valve04State.value : null,
+              value: glycolChiller03SwitchValves.valve04State ? glycolChiller03SwitchValves.valve04State.value : null,
             },
             valve05State: {
               type: 'status',
               name: 'State Valve 05',
               unit: null,
-              value: valveP01.valve05State ? valveP01.valve05State.value : null,
+              value: glycolChiller03SwitchValves.valve05State ? glycolChiller03SwitchValves.valve05State.value : null,
             },
             valve06State: {
               type: 'status',
               name: 'State Valve 06',
               unit: null,
-              value: valveP01.valve06State ? valveP01.valve06State.value : null,
+              value: glycolChiller03SwitchValves.valve06State ? glycolChiller03SwitchValves.valve06State.value : null,
             },
             valve12State: {
               type: 'status',
               name: 'State Valve 12',
               unit: null,
-              value: valveP01.valve12State ? valveP01.valve12State.value : null,
+              value: glycolChiller03SwitchValves.valve12State ? glycolChiller03SwitchValves.valve12State.value : null,
             },
           }}
         />
@@ -292,55 +296,61 @@ export default class Level1 extends Component {
           alarms={{
             alarm1: {
               name: 'General',
-              state: chiller01P01.generalAlarm ? chiller01P01.generalAlarm.value : null,
+              state: coldGlycolChiller01.generalAlarm ? coldGlycolChiller01.generalAlarm.value : null,
             },
             alarm2: {
               name: 'Compresor 01',
-              state: chiller01P01.compressor01Alarm ? chiller01P01.compressor01Alarm.value : null,
+              state: coldGlycolChiller01.compressor01Alarm ? coldGlycolChiller01.compressor01Alarm.value : null,
             },
             alarm3: {
               name: 'Compresor 02',
-              state: chiller01P01.compressor02Alarm ? chiller01P01.compressor02Alarm.value : null,
+              state: coldGlycolChiller01.compressor02Alarm ? coldGlycolChiller01.compressor02Alarm.value : null,
             },
             alarm4: {
               name: 'Compresor 03',
-              state: chiller01P01.compressor03Alarm ? chiller01P01.compressor03Alarm.value : null,
+              state: coldGlycolChiller01.compressor03Alarm ? coldGlycolChiller01.compressor03Alarm.value : null,
             },
             alarm5: {
               name: 'Compresor 04',
-              state: chiller01P01.compressor04Alarm ? chiller01P01.compressor04Alarm.value : null,
+              state: coldGlycolChiller01.compressor04Alarm ? coldGlycolChiller01.compressor04Alarm.value : null,
             },
           }}
           states={{
-            command: chiller01P01.switchedOn ? chiller01P01.switchedOn.value : null,
-            working: chiller01P01.workingState ? chiller01P01.workingState.value : null,
-            unit: chiller01P01.unitState ? chiller01P01.unitState.value : null,
-            switch: chiller01P01.selectorState ? chiller01P01.selectorState.value : null,
+            command: coldGlycolChiller01.switchedOn ? coldGlycolChiller01.switchedOn.value : null,
+            working: coldGlycolChiller01.workingState ? coldGlycolChiller01.workingState.value : null,
+            unit: coldGlycolChiller01.unitState ? coldGlycolChiller01.unitState.value : null,
+            switch: coldGlycolChiller01.selectorState ? coldGlycolChiller01.selectorState.value : null,
           }}
           parameters={{
             operationalMode: {
               type: 'text',
               name: 'Mode Operation',
               unit: null,
-              value: chiller01P01.operationalMode ? operatingModeStateMap[chiller01P01.operationalMode.value] : null,
+              value: coldGlycolChiller01.operationalMode
+                ? operatingModeStateMap[coldGlycolChiller01.operationalMode.value]
+                : null,
             },
             workingCapacity: {
               type: 'single',
               name: 'Power Work',
-              unit: chiller01P01.workingCapacity ? chiller01P01.workingCapacity.units : null,
-              value: chiller01P01.workingCapacity ? chiller01P01.workingCapacity.value : null,
+              unit: coldGlycolChiller01.workingCapacity ? coldGlycolChiller01.workingCapacity.units : null,
+              value: coldGlycolChiller01.workingCapacity ? coldGlycolChiller01.workingCapacity.value : null,
             },
             availableChillerCapacity: {
               type: 'single',
               name: 'Power Available',
-              unit: chiller01P01.availableChillerCapacity ? chiller01P01.availableChillerCapacity.units : null,
-              value: chiller01P01.availableChillerCapacity ? chiller01P01.availableChillerCapacity.value : null,
+              unit: coldGlycolChiller01.availableChillerCapacity
+                ? coldGlycolChiller01.availableChillerCapacity.units
+                : null,
+              value: coldGlycolChiller01.availableChillerCapacity
+                ? coldGlycolChiller01.availableChillerCapacity.value
+                : null,
             },
             activeSetpoint: {
               type: 'single',
               name: 'Setpoint Active',
-              unit: chiller01P01.activeSetpoint ? 'Cº' : null,
-              value: chiller01P01.activeSetpoint ? chiller01P01.activeSetpoint.value : null,
+              unit: coldGlycolChiller01.activeSetpoint ? 'Cº' : null,
+              value: coldGlycolChiller01.activeSetpoint ? coldGlycolChiller01.activeSetpoint.value : null,
             },
             presionBajaCto: {
               type: 'group',
@@ -353,16 +363,16 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: '01',
                   state: null,
-                  unit: chiller01P01.cto1LowerPressure ? chiller01P01.cto1LowerPressure.units : null,
-                  value: chiller01P01.cto1LowerPressure ? chiller01P01.cto1LowerPressure.value : null,
+                  unit: coldGlycolChiller01.cto1LowerPressure ? coldGlycolChiller01.cto1LowerPressure.units : null,
+                  value: coldGlycolChiller01.cto1LowerPressure ? coldGlycolChiller01.cto1LowerPressure.value : null,
                 },
                 cto2LowerPressure: {
                   type: 'box',
                   alarm: null,
                   name: '02',
                   state: null,
-                  unit: chiller01P01.cto2LowerPressure ? chiller01P01.cto2LowerPressure.units : null,
-                  value: chiller01P01.cto2LowerPressure ? chiller01P01.cto2LowerPressure.value : null,
+                  unit: coldGlycolChiller01.cto2LowerPressure ? coldGlycolChiller01.cto2LowerPressure.units : null,
+                  value: coldGlycolChiller01.cto2LowerPressure ? coldGlycolChiller01.cto2LowerPressure.value : null,
                 },
               },
             },
@@ -377,56 +387,62 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: '01',
                   state: null,
-                  unit: chiller01P01.waterEvaporatorReturnTemp ? ' ºC Impulse' : null,
-                  value: chiller01P01.waterEvaporatorSupplyTemp ? chiller01P01.waterEvaporatorSupplyTemp.value : null,
+                  unit: coldGlycolChiller01.waterEvaporatorReturnTemp ? ' ºC Impulse' : null,
+                  value: coldGlycolChiller01.waterEvaporatorSupplyTemp
+                    ? coldGlycolChiller01.waterEvaporatorSupplyTemp.value
+                    : null,
                 },
                 waterEvaporatorReturnTemp: {
                   type: 'badge',
                   alarm: null,
                   name: '02',
                   state: null,
-                  unit: chiller01P01.waterEvaporatorReturnTemp ? ' ºC Return' : null,
-                  value: chiller01P01.waterEvaporatorReturnTemp ? chiller01P01.waterEvaporatorReturnTemp.value : null,
+                  unit: coldGlycolChiller01.waterEvaporatorReturnTemp ? ' ºC Return' : null,
+                  value: coldGlycolChiller01.waterEvaporatorReturnTemp
+                    ? coldGlycolChiller01.waterEvaporatorReturnTemp.value
+                    : null,
                 },
               },
             },
             Compressors: {
               type: 'group',
               name: 'Compressors',
-              unit: chiller01P01.averageCompressorHours ? 'h mean' : null,
-              value: chiller01P01.averageCompressorHours ? chiller01P01.averageCompressorHours.value : null,
+              unit: coldGlycolChiller01.averageCompressorHours ? 'h mean' : null,
+              value: coldGlycolChiller01.averageCompressorHours
+                ? coldGlycolChiller01.averageCompressorHours.value
+                : null,
               params: {
                 compresor01: {
                   type: 'box',
                   alarm: 0,
                   name: '01',
-                  state: chiller01P01.compressor01Working ? chiller01P01.compressor01Working.value : null,
-                  unit: chiller01P01.compressor01Hours ? chiller01P01.compressor01Hours.units : null,
-                  value: chiller01P01.compressor01Hours ? chiller01P01.compressor01Hours.value : null,
+                  state: coldGlycolChiller01.compressor01Working ? coldGlycolChiller01.compressor01Working.value : null,
+                  unit: coldGlycolChiller01.compressor01Hours ? coldGlycolChiller01.compressor01Hours.units : null,
+                  value: coldGlycolChiller01.compressor01Hours ? coldGlycolChiller01.compressor01Hours.value : null,
                 },
                 compresor02: {
                   type: 'box',
                   alarm: 0,
                   name: '02',
-                  state: chiller01P01.compressor02Working ? chiller01P01.compressor02Working.value : null,
-                  unit: chiller01P01.compressor02Hours ? chiller01P01.compressor02Hours.units : null,
-                  value: chiller01P01.compressor02Hours ? chiller01P01.compressor02Hours.value : null,
+                  state: coldGlycolChiller01.compressor02Working ? coldGlycolChiller01.compressor02Working.value : null,
+                  unit: coldGlycolChiller01.compressor02Hours ? coldGlycolChiller01.compressor02Hours.units : null,
+                  value: coldGlycolChiller01.compressor02Hours ? coldGlycolChiller01.compressor02Hours.value : null,
                 },
                 compresor03: {
                   type: 'box',
                   alarm: 0,
                   name: '02',
-                  state: chiller01P01.compressor03Working ? chiller01P01.compressor03Working.value : null,
-                  unit: chiller01P01.compressor03Hours ? chiller01P01.compressor03Hours.units : null,
-                  value: chiller01P01.compressor03Hours ? chiller01P01.compressor03Hours.value : null,
+                  state: coldGlycolChiller01.compressor03Working ? coldGlycolChiller01.compressor03Working.value : null,
+                  unit: coldGlycolChiller01.compressor03Hours ? coldGlycolChiller01.compressor03Hours.units : null,
+                  value: coldGlycolChiller01.compressor03Hours ? coldGlycolChiller01.compressor03Hours.value : null,
                 },
                 compresor04: {
                   type: 'box',
                   alarm: 0,
                   name: '02',
-                  state: chiller01P01.compressor04Working ? chiller01P01.compressor04Working.value : null,
-                  unit: chiller01P01.compressor04Hours ? chiller01P01.compressor04Hours.units : null,
-                  value: chiller01P01.compressor04Hours ? chiller01P01.compressor04Hours.value : null,
+                  state: coldGlycolChiller01.compressor04Working ? coldGlycolChiller01.compressor04Working.value : null,
+                  unit: coldGlycolChiller01.compressor04Hours ? coldGlycolChiller01.compressor04Hours.units : null,
+                  value: coldGlycolChiller01.compressor04Hours ? coldGlycolChiller01.compressor04Hours.value : null,
                 },
               },
             },
@@ -444,55 +460,61 @@ export default class Level1 extends Component {
           alarms={{
             alarm1: {
               name: 'General',
-              state: chiller02P01.generalAlarm ? chiller02P01.generalAlarm.value : null,
+              state: coldGlycolChiller02.generalAlarm ? coldGlycolChiller02.generalAlarm.value : null,
             },
             alarm2: {
               name: 'Compresor 01',
-              state: chiller02P01.compressor01Alarm ? chiller02P01.compressor01Alarm.value : null,
+              state: coldGlycolChiller02.compressor01Alarm ? coldGlycolChiller02.compressor01Alarm.value : null,
             },
             alarm3: {
               name: 'Compresor 02',
-              state: chiller02P01.compressor02Alarm ? chiller02P01.compressor02Alarm.value : null,
+              state: coldGlycolChiller02.compressor02Alarm ? coldGlycolChiller02.compressor02Alarm.value : null,
             },
             alarm4: {
               name: 'Compresor 03',
-              state: chiller02P01.compressor03Alarm ? chiller02P01.compressor03Alarm.value : null,
+              state: coldGlycolChiller02.compressor03Alarm ? coldGlycolChiller02.compressor03Alarm.value : null,
             },
             alarm5: {
               name: 'Compresor 04',
-              state: chiller02P01.compressor04Alarm ? chiller02P01.compressor04Alarm.value : null,
+              state: coldGlycolChiller02.compressor04Alarm ? coldGlycolChiller02.compressor04Alarm.value : null,
             },
           }}
           states={{
-            command: chiller02P01.switchedOn ? chiller02P01.switchedOn.value : null,
-            working: chiller02P01.workingState ? chiller02P01.workingState.value : null,
-            unit: chiller02P01.unitState ? chiller02P01.unitState.value : null,
-            switch: chiller02P01.selectorState ? chiller02P01.selectorState.value : null,
+            command: coldGlycolChiller02.switchedOn ? coldGlycolChiller02.switchedOn.value : null,
+            working: coldGlycolChiller02.workingState ? coldGlycolChiller02.workingState.value : null,
+            unit: coldGlycolChiller02.unitState ? coldGlycolChiller02.unitState.value : null,
+            switch: coldGlycolChiller02.selectorState ? coldGlycolChiller02.selectorState.value : null,
           }}
           parameters={{
             operationalMode: {
               type: 'text',
               name: 'Mode Operation',
               unit: null,
-              value: chiller02P01.operationalMode ? operatingModeStateMap[chiller02P01.operationalMode.value] : null,
+              value: coldGlycolChiller02.operationalMode
+                ? operatingModeStateMap[coldGlycolChiller02.operationalMode.value]
+                : null,
             },
             workingCapacity: {
               type: 'single',
               name: 'Power Work',
-              unit: chiller02P01.workingCapacity ? chiller02P01.workingCapacity.units : null,
-              value: chiller02P01.workingCapacity ? chiller02P01.workingCapacity.value : null,
+              unit: coldGlycolChiller02.workingCapacity ? coldGlycolChiller02.workingCapacity.units : null,
+              value: coldGlycolChiller02.workingCapacity ? coldGlycolChiller02.workingCapacity.value : null,
             },
             availableChillerCapacity: {
               type: 'single',
               name: 'Power Available',
-              unit: chiller02P01.availableChillerCapacity ? chiller02P01.availableChillerCapacity.units : null,
-              value: chiller02P01.availableChillerCapacity ? chiller02P01.availableChillerCapacity.value : null,
+              unit: coldGlycolChiller02.availableChillerCapacity
+                ? coldGlycolChiller02.availableChillerCapacity.units
+                : null,
+              value: coldGlycolChiller02.availableChillerCapacity
+                ? coldGlycolChiller02.availableChillerCapacity.value
+                : null,
             },
             activeSetpoint: {
               type: 'single',
               name: 'Setpoint Active',
-              unit: chiller02P01.activeSetpoint ? 'Cº' : null,
-              value: chiller02P01.activeSetpoint ? chiller02P01.activeSetpoint.value : null,
+              unit: coldGlycolChiller02.activeSetpoint ? 'Cº' : null,
+              value: coldGlycolChiller02.activeSetpoint ? coldGlycolChiller02.activeSetpoint.value : null,
             },
             presionBajaCto: {
               type: 'group',
@@ -505,16 +527,16 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: '01',
                   state: null,
-                  unit: chiller02P01.cto1LowerPressure ? chiller02P01.cto1LowerPressure.units : null,
-                  value: chiller02P01.cto1LowerPressure ? chiller02P01.cto1LowerPressure.value : null,
+                  unit: coldGlycolChiller02.cto1LowerPressure ? coldGlycolChiller02.cto1LowerPressure.units : null,
+                  value: coldGlycolChiller02.cto1LowerPressure ? coldGlycolChiller02.cto1LowerPressure.value : null,
                 },
                 cto2LowerPressure: {
                   type: 'box',
                   alarm: null,
                   name: '02',
                   state: null,
-                  unit: chiller02P01.cto2LowerPressure ? chiller02P01.cto2LowerPressure.units : null,
-                  value: chiller02P01.cto2LowerPressure ? chiller02P01.cto2LowerPressure.value : null,
+                  unit: coldGlycolChiller02.cto2LowerPressure ? coldGlycolChiller02.cto2LowerPressure.units : null,
+                  value: coldGlycolChiller02.cto2LowerPressure ? coldGlycolChiller02.cto2LowerPressure.value : null,
                 },
               },
             },
@@ -529,56 +551,62 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: '01',
                   state: null,
-                  unit: chiller02P01.waterEvaporatorReturnTemp ? 'ºC Impulse' : null,
-                  value: chiller02P01.waterEvaporatorSupplyTemp ? chiller02P01.waterEvaporatorSupplyTemp.value : null,
+                  unit: coldGlycolChiller02.waterEvaporatorReturnTemp ? 'ºC Impulse' : null,
+                  value: coldGlycolChiller02.waterEvaporatorSupplyTemp
+                    ? coldGlycolChiller02.waterEvaporatorSupplyTemp.value
+                    : null,
                 },
                 waterEvaporatorReturnTemp: {
                   type: 'badge',
                   alarm: null,
                   name: '02',
                   state: null,
-                  unit: chiller02P01.waterEvaporatorReturnTemp ? 'ºC Return' : null,
-                  value: chiller02P01.waterEvaporatorReturnTemp ? chiller02P01.waterEvaporatorReturnTemp.value : null,
+                  unit: coldGlycolChiller02.waterEvaporatorReturnTemp ? 'ºC Return' : null,
+                  value: coldGlycolChiller02.waterEvaporatorReturnTemp
+                    ? coldGlycolChiller02.waterEvaporatorReturnTemp.value
+                    : null,
                 },
               },
             },
             Compressors: {
               type: 'group',
               name: 'Compressors',
-              unit: chiller02P01.averageCompressorHours ? 'h mean' : null,
-              value: chiller02P01.averageCompressorHours ? chiller02P01.averageCompressorHours.value : null,
+              unit: coldGlycolChiller02.averageCompressorHours ? 'h mean' : null,
+              value: coldGlycolChiller02.averageCompressorHours
+                ? coldGlycolChiller02.averageCompressorHours.value
+                : null,
               params: {
                 compresor01: {
                   type: 'box',
                   alarm: 0,
                   name: '01',
-                  state: chiller02P01.compressor01Working ? chiller02P01.compressor01Working.value : null,
-                  unit: chiller02P01.compressor01Hours ? chiller02P01.compressor01Hours.units : null,
-                  value: chiller02P01.compressor01Hours ? chiller02P01.compressor01Hours.value : null,
+                  state: coldGlycolChiller02.compressor01Working ? coldGlycolChiller02.compressor01Working.value : null,
+                  unit: coldGlycolChiller02.compressor01Hours ? coldGlycolChiller02.compressor01Hours.units : null,
+                  value: coldGlycolChiller02.compressor01Hours ? coldGlycolChiller02.compressor01Hours.value : null,
                 },
                 compresor02: {
                   type: 'box',
                   alarm: 0,
                   name: '02',
-                  state: chiller02P01.compressor02Working ? chiller02P01.compressor02Working.value : null,
-                  unit: chiller02P01.compressor02Hours ? chiller02P01.compressor02Hours.units : null,
-                  value: chiller02P01.compressor02Hours ? chiller02P01.compressor02Hours.value : null,
+                  state: coldGlycolChiller02.compressor02Working ? coldGlycolChiller02.compressor02Working.value : null,
+                  unit: coldGlycolChiller02.compressor02Hours ? coldGlycolChiller02.compressor02Hours.units : null,
+                  value: coldGlycolChiller02.compressor02Hours ? coldGlycolChiller02.compressor02Hours.value : null,
                 },
                 compresor03: {
                   type: 'box',
                   alarm: 0,
                   name: '02',
-                  state: chiller02P01.compressor03Working ? chiller02P01.compressor03Working.value : null,
-                  unit: chiller02P01.compressor03Hours ? chiller02P01.compressor03Hours.units : null,
-                  value: chiller02P01.compressor03Hours ? chiller02P01.compressor03Hours.value : null,
+                  state: coldGlycolChiller02.compressor03Working ? coldGlycolChiller02.compressor03Working.value : null,
+                  unit: coldGlycolChiller02.compressor03Hours ? coldGlycolChiller02.compressor03Hours.units : null,
+                  value: coldGlycolChiller02.compressor03Hours ? coldGlycolChiller02.compressor03Hours.value : null,
                 },
                 compresor04: {
                   type: 'box',
                   alarm: 0,
                   name: '02',
-                  state: chiller02P01.compressor04Working ? chiller02P01.compressor04Working.value : null,
-                  unit: chiller02P01.compressor04Hours ? chiller02P01.compressor04Hours.units : null,
-                  value: chiller02P01.compressor04Hours ? chiller02P01.compressor04Hours.value : null,
+                  state: coldGlycolChiller02.compressor04Working ? coldGlycolChiller02.compressor04Working.value : null,
+                  unit: coldGlycolChiller02.compressor04Hours ? coldGlycolChiller02.compressor04Hours.units : null,
+                  value: coldGlycolChiller02.compressor04Hours ? coldGlycolChiller02.compressor04Hours.value : null,
                 },
               },
             },
@@ -596,55 +624,61 @@ export default class Level1 extends Component {
           alarms={{
             alarm1: {
               name: 'General',
-              state: chiller03P01.generalAlarm ? chiller03P01.generalAlarm.value : null,
+              state: comfortGlycolChiller03.generalAlarm ? comfortGlycolChiller03.generalAlarm.value : null,
             },
             alarm2: {
               name: 'Compresor 01',
-              state: chiller03P01.compressor01Alarm ? chiller03P01.compressor01Alarm.value : null,
+              state: comfortGlycolChiller03.compressor01Alarm ? comfortGlycolChiller03.compressor01Alarm.value : null,
             },
             alarm3: {
               name: 'Compresor 02',
-              state: chiller03P01.compressor02Alarm ? chiller03P01.compressor02Alarm.value : null,
+              state: comfortGlycolChiller03.compressor02Alarm ? comfortGlycolChiller03.compressor02Alarm.value : null,
             },
             alarm4: {
               name: 'Compresor 03',
-              state: chiller03P01.compressor03Alarm ? chiller03P01.compressor03Alarm.value : null,
+              state: comfortGlycolChiller03.compressor03Alarm ? comfortGlycolChiller03.compressor03Alarm.value : null,
             },
             alarm5: {
               name: 'Compresor 04',
-              state: chiller03P01.compressor04Alarm ? chiller03P01.compressor04Alarm.value : null,
+              state: comfortGlycolChiller03.compressor04Alarm ? comfortGlycolChiller03.compressor04Alarm.value : null,
             },
           }}
           states={{
-            command: chiller03P01.switchedOn ? chiller03P01.switchedOn.value : null,
-            working: chiller03P01.workingState ? chiller03P01.workingState.value : null,
-            unit: chiller03P01.unitState ? chiller03P01.unitState.value : null,
-            switch: chiller03P01.selectorState ? chiller03P01.selectorState.value : null,
+            command: comfortGlycolChiller03.switchedOn ? comfortGlycolChiller03.switchedOn.value : null,
+            working: comfortGlycolChiller03.workingState ? comfortGlycolChiller03.workingState.value : null,
+            unit: comfortGlycolChiller03.unitState ? comfortGlycolChiller03.unitState.value : null,
+            switch: comfortGlycolChiller03.selectorState ? comfortGlycolChiller03.selectorState.value : null,
           }}
           parameters={{
             operationalMode: {
               type: 'text',
               name: 'Mode Operation',
               unit: null,
-              value: chiller03P01.operationalMode ? operatingModeStateMap[chiller03P01.operationalMode.value] : null,
+              value: comfortGlycolChiller03.operationalMode
+                ? operatingModeStateMap[comfortGlycolChiller03.operationalMode.value]
+                : null,
             },
             workingCapacity: {
               type: 'single',
               name: 'Power Work',
-              unit: chiller03P01.workingCapacity ? chiller03P01.workingCapacity.units : null,
-              value: chiller03P01.workingCapacity ? chiller03P01.workingCapacity.value : null,
+              unit: comfortGlycolChiller03.workingCapacity ? comfortGlycolChiller03.workingCapacity.units : null,
+              value: comfortGlycolChiller03.workingCapacity ? comfortGlycolChiller03.workingCapacity.value : null,
             },
             availableChillerCapacity: {
               type: 'single',
               name: 'Power Available',
-              unit: chiller03P01.availableChillerCapacity ? chiller03P01.availableChillerCapacity.units : null,
-              value: chiller03P01.availableChillerCapacity ? chiller03P01.availableChillerCapacity.value : null,
+              unit: comfortGlycolChiller03.availableChillerCapacity
+                ? comfortGlycolChiller03.availableChillerCapacity.units
+                : null,
+              value: comfortGlycolChiller03.availableChillerCapacity
+                ? comfortGlycolChiller03.availableChillerCapacity.value
+                : null,
             },
             activeSetpoint: {
               type: 'single',
               name: 'Setpoint Active',
-              unit: chiller03P01.activeSetpoint ? 'Cº' : null,
-              value: chiller03P01.activeSetpoint ? chiller03P01.activeSetpoint.value : null,
+              unit: comfortGlycolChiller03.activeSetpoint ? 'Cº' : null,
+              value: comfortGlycolChiller03.activeSetpoint ? comfortGlycolChiller03.activeSetpoint.value : null,
             },
             presionBajaCto: {
               type: 'group',
@@ -657,16 +691,24 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: '01',
                   state: null,
-                  unit: chiller03P01.cto1LowerPressure ? chiller03P01.cto1LowerPressure.units : null,
-                  value: chiller03P01.cto1LowerPressure ? chiller03P01.cto1LowerPressure.value : null,
+                  unit: comfortGlycolChiller03.cto1LowerPressure
+                    ? comfortGlycolChiller03.cto1LowerPressure.units
+                    : null,
+                  value: comfortGlycolChiller03.cto1LowerPressure
+                    ? comfortGlycolChiller03.cto1LowerPressure.value
+                    : null,
                 },
                 cto2LowerPressure: {
                   type: 'box',
                   alarm: null,
                   name: '02',
                   state: null,
-                  unit: chiller03P01.cto2LowerPressure ? chiller03P01.cto2LowerPressure.units : null,
-                  value: chiller03P01.cto2LowerPressure ? chiller03P01.cto2LowerPressure.value : null,
+                  unit: comfortGlycolChiller03.cto2LowerPressure
+                    ? comfortGlycolChiller03.cto2LowerPressure.units
+                    : null,
+                  value: comfortGlycolChiller03.cto2LowerPressure
+                    ? comfortGlycolChiller03.cto2LowerPressure.value
+                    : null,
                 },
               },
             },
@@ -681,56 +723,86 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: '01',
                   state: null,
-                  unit: chiller03P01.waterEvaporatorReturnTemp ? 'ºC Impulse' : null,
-                  value: chiller03P01.waterEvaporatorSupplyTemp ? chiller03P01.waterEvaporatorSupplyTemp.value : null,
+                  unit: comfortGlycolChiller03.waterEvaporatorReturnTemp ? 'ºC Impulse' : null,
+                  value: comfortGlycolChiller03.waterEvaporatorSupplyTemp
+                    ? comfortGlycolChiller03.waterEvaporatorSupplyTemp.value
+                    : null,
                 },
                 waterEvaporatorReturnTemp: {
                   type: 'badge',
                   alarm: null,
                   name: '02',
                   state: null,
-                  unit: chiller03P01.waterEvaporatorReturnTemp ? 'ºC Return' : null,
-                  value: chiller03P01.waterEvaporatorReturnTemp ? chiller03P01.waterEvaporatorReturnTemp.value : null,
+                  unit: comfortGlycolChiller03.waterEvaporatorReturnTemp ? 'ºC Return' : null,
+                  value: comfortGlycolChiller03.waterEvaporatorReturnTemp
+                    ? comfortGlycolChiller03.waterEvaporatorReturnTemp.value
+                    : null,
                 },
               },
             },
             Compressors: {
               type: 'group',
               name: 'Compressors',
-              unit: chiller03P01.averageCompressorHours ? 'h mean' : null,
-              value: chiller03P01.averageCompressorHours ? chiller03P01.averageCompressorHours.value : null,
+              unit: comfortGlycolChiller03.averageCompressorHours ? 'h mean' : null,
+              value: comfortGlycolChiller03.averageCompressorHours
+                ? comfortGlycolChiller03.averageCompressorHours.value
+                : null,
               params: {
                 compresor01: {
                   type: 'box',
                   alarm: 0,
                   name: '01',
-                  state: chiller03P01.compressor01Working ? chiller03P01.compressor01Working.value : null,
-                  unit: chiller03P01.compressor01Hours ? chiller03P01.compressor01Hours.units : null,
-                  value: chiller03P01.compressor01Hours ? chiller03P01.compressor01Hours.value : null,
+                  state: comfortGlycolChiller03.compressor01Working
+                    ? comfortGlycolChiller03.compressor01Working.value
+                    : null,
+                  unit: comfortGlycolChiller03.compressor01Hours
+                    ? comfortGlycolChiller03.compressor01Hours.units
+                    : null,
+                  value: comfortGlycolChiller03.compressor01Hours
+                    ? comfortGlycolChiller03.compressor01Hours.value
+                    : null,
                 },
                 compresor02: {
                   type: 'box',
                   alarm: 0,
                   name: '02',
-                  state: chiller03P01.compressor02Working ? chiller03P01.compressor02Working.value : null,
-                  unit: chiller03P01.compressor02Hours ? chiller03P01.compressor02Hours.units : null,
-                  value: chiller03P01.compressor02Hours ? chiller03P01.compressor02Hours.value : null,
+                  state: comfortGlycolChiller03.compressor02Working
+                    ? comfortGlycolChiller03.compressor02Working.value
+                    : null,
+                  unit: comfortGlycolChiller03.compressor02Hours
+                    ? comfortGlycolChiller03.compressor02Hours.units
+                    : null,
+                  value: comfortGlycolChiller03.compressor02Hours
+                    ? comfortGlycolChiller03.compressor02Hours.value
+                    : null,
                 },
                 compresor03: {
                   type: 'box',
                   alarm: 0,
                   name: '02',
-                  state: chiller03P01.compressor03Working ? chiller03P01.compressor03Working.value : null,
-                  unit: chiller03P01.compressor03Hours ? chiller03P01.compressor03Hours.units : null,
-                  value: chiller03P01.compressor03Hours ? chiller03P01.compressor03Hours.value : null,
+                  state: comfortGlycolChiller03.compressor03Working
+                    ? comfortGlycolChiller03.compressor03Working.value
+                    : null,
+                  unit: comfortGlycolChiller03.compressor03Hours
+                    ? comfortGlycolChiller03.compressor03Hours.units
+                    : null,
+                  value: comfortGlycolChiller03.compressor03Hours
+                    ? comfortGlycolChiller03.compressor03Hours.value
+                    : null,
                 },
                 compresor04: {
                   type: 'box',
                   alarm: 0,
                   name: '02',
-                  state: chiller03P01.compressor04Working ? chiller03P01.compressor04Working.value : null,
-                  unit: chiller03P01.compressor04Hours ? chiller03P01.compressor04Hours.units : null,
-                  value: chiller03P01.compressor04Hours ? chiller03P01.compressor04Hours.value : null,
+                  state: comfortGlycolChiller03.compressor04Working
+                    ? comfortGlycolChiller03.compressor04Working.value
+                    : null,
+                  unit: comfortGlycolChiller03.compressor04Hours
+                    ? comfortGlycolChiller03.compressor04Hours.units
+                    : null,
+                  value: comfortGlycolChiller03.compressor04Hours
+                    ? comfortGlycolChiller03.compressor04Hours.value
+                    : null,
                 },
               },
             },
