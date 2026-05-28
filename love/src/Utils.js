@@ -2706,3 +2706,12 @@ export function getActiveObservatoryStates(decimalValue) {
   }
   return activeStatuses;
 }
+
+/**
+ * Function to validate if all the provided arguments are valid numbers (not NaN).
+ * @param  {...any} numbers
+ * @returns {boolean} Returns true if all arguments are valid numbers, otherwise false.
+ */
+export function validNumbers(...numbers) {
+  return numbers.every((num) => typeof num === 'number' && !isNaN(num));
+}
