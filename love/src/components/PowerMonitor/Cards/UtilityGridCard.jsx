@@ -21,12 +21,27 @@ import { POWER_MONITOR_STATUS_MAPPING } from 'Config';
 import { validNumbers } from 'Utils';
 import styles from '../PowerMonitor.module.css';
 
-function UtilityGridCard({ status, title, label, voltageLL, voltageLN, frequency, conditions }) {
+function UtilityGridCard({
+  status,
+  title,
+  label,
+  voltageLL,
+  voltageLN,
+  frequency,
+  conditions,
+  hovered,
+  onMouseEnter,
+  onMouseLeave,
+}) {
   const isOk = POWER_MONITOR_STATUS_MAPPING[status] === 'ok';
   const statusClass = isOk ? styles.ok : styles.alert;
-  const opacityClass = isOk ? '' : styles.hiddenOpacity;
+  const opacityClass = isOk || hovered ? '' : styles.hiddenOpacity;
   return (
-    <div className={[styles.card, styles.utilityGridCard, statusClass, opacityClass].join(' ')}>
+    <div
+      className={[styles.card, styles.utilityGridCard, statusClass, opacityClass].join(' ')}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       <div className={styles.deviceName}>
         <span>{title}</span>
         <span>{label}</span>
@@ -72,6 +87,12 @@ UtilityGridCard.propTypes = {
   frequency: PropTypes.number,
   /** Additional conditions to show in the card */
   conditions: PropTypes.arrayOf(PropTypes.string),
+  /** Whether the card is currently hovered or not. If null, the card will always be fully opaque */
+  hovered: PropTypes.bool,
+  /** Mouse enter event handler */
+  onMouseEnter: PropTypes.func,
+  /** Mouse leave event handler */
+  onMouseLeave: PropTypes.func,
 };
 
 export default UtilityGridCard;

@@ -34,10 +34,18 @@ function ATSCard({
   outputUPS,
   mode,
   power,
+  hovered,
+  onMouseEnter,
+  onMouseLeave,
 }) {
   const statusClass = POWER_MONITOR_STATUS_MAPPING[status] === 'ok' ? styles.ok : styles.alert;
+  const opacityClass = hovered == null || hovered ? '' : styles.hiddenOpacity;
   return (
-    <div className={[styles.card, styles.atsCard, statusClass].join(' ')}>
+    <div
+      className={[styles.card, styles.atsCard, statusClass, opacityClass].join(' ')}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       <div className={styles.deviceName}>
         <span>{title}</span>
         <span>{label}</span>
@@ -105,6 +113,12 @@ ATSCard.propTypes = {
   power: PropTypes.number,
   /** Additional conditions to show in the card */
   conditions: PropTypes.arrayOf(PropTypes.string),
+  /** Whether the card is currently hovered or not. If null, the card will always be fully opaque */
+  hovered: PropTypes.bool,
+  /** Mouse enter event handler */
+  onMouseEnter: PropTypes.func,
+  /** Mouse leave event handler */
+  onMouseLeave: PropTypes.func,
 };
 
 export default ATSCard;

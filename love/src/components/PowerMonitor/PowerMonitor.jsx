@@ -47,6 +47,62 @@ const GENERATOR_LOADTAKEOVER_THRESHOLD_KVA = 100;
 
 const DEVICE_VOLTAGE_CACHE_SIZE = 6;
 
+const DEVICE_HOVER_GROUP = {
+  ATS: [
+    'ATS',
+    'GRID',
+    'PRIMARY_GENERATOR',
+    'SECONDARY_GENERATOR',
+    'MAIN_UPS',
+    'AUX_UPS',
+    'SERVER_ROOM_UPS',
+    'CRITICAL_LOAD',
+    'NON_CRITICAL_LOAD',
+    'SERVER_ROOM_LOAD',
+    'AUXTEL_LOAD',
+  ],
+  GRID: [
+    'GRID',
+    'ATS',
+    'MAIN_UPS',
+    'AUX_UPS',
+    'SERVER_ROOM_UPS',
+    'CRITICAL_LOAD',
+    'NON_CRITICAL_LOAD',
+    'SERVER_ROOM_LOAD',
+    'AUXTEL_LOAD',
+  ],
+  PRIMARY_GENERATOR: [
+    'PRIMARY_GENERATOR',
+    'ATS',
+    'MAIN_UPS',
+    'AUX_UPS',
+    'SERVER_ROOM_UPS',
+    'CRITICAL_LOAD',
+    'NON_CRITICAL_LOAD',
+    'SERVER_ROOM_LOAD',
+    'AUXTEL_LOAD',
+  ],
+  SECONDARY_GENERATOR: [
+    'SECONDARY_GENERATOR',
+    'ATS',
+    'MAIN_UPS',
+    'AUX_UPS',
+    'SERVER_ROOM_UPS',
+    'CRITICAL_LOAD',
+    'NON_CRITICAL_LOAD',
+    'SERVER_ROOM_LOAD',
+    'AUXTEL_LOAD',
+  ],
+  MAIN_UPS: ['MAIN_UPS', 'ATS', 'CRITICAL_LOAD'],
+  AUX_UPS: ['AUX_UPS', 'ATS', 'AUXTEL_LOAD'],
+  SERVER_ROOM_UPS: ['SERVER_ROOM_UPS', 'ATS', 'SERVER_ROOM_LOAD'],
+  CRITICAL_LOAD: ['CRITICAL_LOAD', 'ATS', 'MAIN_UPS'],
+  NON_CRITICAL_LOAD: ['NON_CRITICAL_LOAD', 'ATS'],
+  SERVER_ROOM_LOAD: ['SERVER_ROOM_LOAD', 'ATS', 'SERVER_ROOM_UPS'],
+  AUXTEL_LOAD: ['AUXTEL_LOAD', 'ATS', 'AUX_UPS'],
+};
+
 function getGeneratorMode(blockMode, testMode, manualMode, semiAutoMode, autoMode) {
   if (blockMode) return 'BLOCK';
   if (testMode) return 'TEST';
@@ -199,6 +255,7 @@ function PowerMonitor({
       batteryTimeRemaining: null,
     },
   });
+
   const [voltageCache, setVoltageCache] = useState({
     [DEVICE_SENSOR_NAME.MAIN_UPS]: {
       outputVoltage1: [],
@@ -226,6 +283,8 @@ function PowerMonitor({
       outputVoltage3: [],
     },
   });
+
+  const [hoveredDevices, setHoveredDevices] = useState([]);
 
   useEffect(() => {
     subscribeToStreams();
@@ -548,6 +607,21 @@ function PowerMonitor({
   const serverRoomLoadConditions = [];
   const auxtelLoadConditions = [];
 
+  const hoveredGrid = hoveredDevices.length > 0 ? hoveredDevices.includes('GRID') : null;
+  const hoveredPrimaryGenerator = hoveredDevices.length > 0 ? hoveredDevices.includes('PRIMARY_GENERATOR') : null;
+  const hoveredSecondaryGenerator = hoveredDevices.length > 0 ? hoveredDevices.includes('SECONDARY_GENERATOR') : null;
+  const hoveredATS = hoveredDevices.length > 0 ? hoveredDevices.includes('ATS') : null;
+  const hoveredMainUPS = hoveredDevices.length > 0 ? hoveredDevices.includes('MAIN_UPS') : null;
+  const hoveredAuxUPS = hoveredDevices.length > 0 ? hoveredDevices.includes('AUX_UPS') : null;
+  const hoveredServerRoomUPS = hoveredDevices.length > 0 ? hoveredDevices.includes('SERVER_ROOM_UPS') : null;
+  const hoveredCriticalLoad = hoveredDevices.length > 0 ? hoveredDevices.includes('CRITICAL_LOAD') : null;
+  const hoveredNonCriticalLoad = hoveredDevices.length > 0 ? hoveredDevices.includes('NON_CRITICAL_LOAD') : null;
+  const hoveredServerRoomLoad = hoveredDevices.length > 0 ? hoveredDevices.includes('SERVER_ROOM_LOAD') : null;
+  const hoveredAuxTelLoad = hoveredDevices.length > 0 ? hoveredDevices.includes('AUXTEL_LOAD') : null;
+
+  const handleDeviceMouseLeave = () => {
+    setHoveredDevices([]);
+  };
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
@@ -561,6 +635,9 @@ function PowerMonitor({
             voltageLN={gridVoltageLN}
             frequency={gridFrequency}
             conditions={gridConditions}
+            hovered={hoveredGrid}
+            onMouseEnter={() => setHoveredDevices(DEVICE_HOVER_GROUP.GRID)}
+            onMouseLeave={handleDeviceMouseLeave}
           />
           <GeneratorCard
             title="Caterpillar 1100 kVA"
@@ -579,6 +656,9 @@ function PowerMonitor({
               primaryGeneratorAutoMode,
             )}
             conditions={primaryGeneratorConditions}
+            hovered={hoveredPrimaryGenerator}
+            onMouseEnter={() => setHoveredDevices(DEVICE_HOVER_GROUP.PRIMARY_GENERATOR)}
+            onMouseLeave={handleDeviceMouseLeave}
           />
           <GeneratorCard
             title="Mitsubishi 750 kVA"
@@ -597,6 +677,9 @@ function PowerMonitor({
               secondaryGeneratorAutoMode,
             )}
             conditions={secondaryGeneratorConditions}
+            hovered={hoveredSecondaryGenerator}
+            onMouseEnter={() => setHoveredDevices(DEVICE_HOVER_GROUP.SECONDARY_GENERATOR)}
+            onMouseLeave={handleDeviceMouseLeave}
           />
         </div>
         <div className={styles.section}>
@@ -614,6 +697,9 @@ function PowerMonitor({
             mode={getATSMode(atsAutomaticMainsFailure, atsLoadTakeover, atsFixedPower)}
             power={atsMainsPower}
             conditions={atsConditions}
+            hovered={hoveredATS}
+            onMouseEnter={() => setHoveredDevices(DEVICE_HOVER_GROUP.ATS)}
+            onMouseLeave={handleDeviceMouseLeave}
           />
           <UPSCard
             title="Main UPS 825 kVA"
@@ -630,6 +716,9 @@ function PowerMonitor({
             battery={mainUPSCache.battery}
             batteryTimeRemaining={mainUPSCache.batteryTimeRemaining}
             conditions={mainUPSConditions}
+            hovered={hoveredMainUPS}
+            onMouseEnter={() => setHoveredDevices(DEVICE_HOVER_GROUP.MAIN_UPS)}
+            onMouseLeave={handleDeviceMouseLeave}
           />
           <div className={styles.device2Cols}>
             <UPSCard
@@ -647,6 +736,9 @@ function PowerMonitor({
               battery={serverRoommUPS1Battery}
               batteryTimeRemaining={serverRoomUPS1BatteryTimeRemaining}
               conditions={serverRoomUPS1Conditions}
+              hovered={hoveredServerRoomUPS}
+              onMouseEnter={() => setHoveredDevices(DEVICE_HOVER_GROUP.SERVER_ROOM_UPS)}
+              onMouseLeave={handleDeviceMouseLeave}
             />
             <UPSCard
               title="Servers UPS 2 20 kVA"
@@ -663,6 +755,9 @@ function PowerMonitor({
               battery={serverRoomUPS2Battery}
               batteryTimeRemaining={serverRoomUPS2BatteryTimeRemaining}
               conditions={serverRoomUPS2Conditions}
+              hovered={hoveredServerRoomUPS}
+              onMouseEnter={() => setHoveredDevices(DEVICE_HOVER_GROUP.SERVER_ROOM_UPS)}
+              onMouseLeave={handleDeviceMouseLeave}
             />
           </div>
           <UPSCard
@@ -680,6 +775,9 @@ function PowerMonitor({
             battery={auxUPSCache.battery}
             batteryTimeRemaining={auxUPSCache.batteryTimeRemaining}
             conditions={auxUPSConditions}
+            hovered={hoveredAuxUPS}
+            onMouseEnter={() => setHoveredDevices(DEVICE_HOVER_GROUP.AUX_UPS)}
+            onMouseLeave={handleDeviceMouseLeave}
           />
         </div>
         <div className={styles.section}>
@@ -693,6 +791,9 @@ function PowerMonitor({
             usage={criticalLoadUsage}
             voltageStdDev={mainUPSOutputVoltageStdDevMean}
             conditions={criticalLoadConditions}
+            hovered={hoveredCriticalLoad}
+            onMouseEnter={() => setHoveredDevices(DEVICE_HOVER_GROUP.CRITICAL_LOAD)}
+            onMouseLeave={handleDeviceMouseLeave}
           />
           <LoadCard
             status={serverRoomLoadStatus}
@@ -703,6 +804,9 @@ function PowerMonitor({
             usage={serverRoomLoadUsage}
             voltageStdDev={serverRoomUPSOutputVoltageStdDevMean}
             conditions={serverRoomLoadConditions}
+            hovered={hoveredServerRoomLoad}
+            onMouseEnter={() => setHoveredDevices(DEVICE_HOVER_GROUP.SERVER_ROOM_LOAD)}
+            onMouseLeave={handleDeviceMouseLeave}
           />
           <LoadCard
             status={auxTelLoadStatus}
@@ -713,6 +817,9 @@ function PowerMonitor({
             usage={auxtelLoadUsage}
             voltageStdDev={auxUPSOutputVoltageStdDevMean}
             conditions={auxtelLoadConditions}
+            hovered={hoveredAuxTelLoad}
+            onMouseEnter={() => setHoveredDevices(DEVICE_HOVER_GROUP.AUXTEL_LOAD)}
+            onMouseLeave={handleDeviceMouseLeave}
           />
           <LoadCard
             status={nonCriticalLoadStatus}
@@ -723,6 +830,9 @@ function PowerMonitor({
             usage={nonCriticalLoadUsage}
             voltageStdDev={dp1OutputVoltageStdDevMean}
             conditions={nonCriticalLoadConditions}
+            hovered={hoveredNonCriticalLoad}
+            onMouseEnter={() => setHoveredDevices(DEVICE_HOVER_GROUP.NON_CRITICAL_LOAD)}
+            onMouseLeave={handleDeviceMouseLeave}
           />
         </div>
       </div>

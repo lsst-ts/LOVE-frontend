@@ -38,6 +38,9 @@ function UPSCard({
   battery,
   batteryTimeRemaining,
   conditions,
+  hovered,
+  onMouseEnter,
+  onMouseLeave,
 }) {
   const batteryBarClass =
     battery >= 60 ? styles.segmentedBarOk : battery >= 30 ? styles.segmentedBarWarning : styles.segmentedBarCritical;
@@ -45,8 +48,13 @@ function UPSCard({
   const batteryTimeRemainingText = validNumbers(batteryTimeRemaining)
     ? formatSecondsToDigital(batteryTimeRemaining).slice(0, -3)
     : 'N/A';
+  const opacityClass = hovered == null || hovered ? '' : styles.hiddenOpacity;
   return (
-    <div className={[styles.card, styles.upsCard, statusClass].join(' ')}>
+    <div
+      className={[styles.card, styles.upsCard, statusClass, opacityClass].join(' ')}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       <div className={styles.deviceName}>
         <span>{title}</span>
         <span>{label}</span>
@@ -138,6 +146,12 @@ UPSCard.propTypes = {
   batteryTimeRemaining: PropTypes.number,
   /** Additional conditions to show in the card */
   conditions: PropTypes.arrayOf(PropTypes.string),
+  /** Whether the card is currently hovered or not. If null, the card will always be fully opaque */
+  hovered: PropTypes.bool,
+  /** Mouse enter event handler */
+  onMouseEnter: PropTypes.func,
+  /** Mouse leave event handler */
+  onMouseLeave: PropTypes.func,
 };
 
 export default UPSCard;

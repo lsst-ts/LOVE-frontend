@@ -23,15 +23,33 @@ import { validNumbers } from 'Utils';
 import DeviceStatus from '../DeviceStatus';
 import styles from '../PowerMonitor.module.css';
 
-function GeneratorCard({ status, cscState, cscIndex, title, label, activePower, load, fuel, mode, conditions }) {
+function GeneratorCard({
+  status,
+  cscState,
+  cscIndex,
+  title,
+  label,
+  activePower,
+  load,
+  fuel,
+  mode,
+  conditions,
+  hovered,
+  onMouseEnter,
+  onMouseLeave,
+}) {
   const fuelBarClass =
     fuel > 50 ? styles.segmentedBarOk : fuel > 20 ? styles.segmentedBarWarning : styles.segmentedBarCritical;
   const isOk = POWER_MONITOR_STATUS_MAPPING[status] === 'ok';
   const statusClass = isOk ? styles.ok : '';
-  const opacityClass = isOk ? '' : styles.hiddenOpacity;
+  const opacityClass = isOk || hovered ? '' : styles.hiddenOpacity;
   const roundedLoad = validNumbers(load) ? `${Math.round(load)} %` : 'N/A';
   return (
-    <div className={[styles.card, styles.generatorCard, statusClass, opacityClass].join(' ')}>
+    <div
+      className={[styles.card, styles.generatorCard, statusClass, opacityClass].join(' ')}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       <div className={styles.deviceName}>
         <span>{title}</span>
         <span>{label}</span>
@@ -99,6 +117,12 @@ GeneratorCard.propTypes = {
   mode: PropTypes.string,
   /** Additional conditions to show in the card */
   conditions: PropTypes.arrayOf(PropTypes.string),
+  /** Whether the card is currently hovered or not. If null, the card will always be fully opaque */
+  hovered: PropTypes.bool,
+  /** Mouse enter event handler */
+  onMouseEnter: PropTypes.func,
+  /** Mouse leave event handler */
+  onMouseLeave: PropTypes.func,
 };
 
 export default GeneratorCard;
