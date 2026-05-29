@@ -39,6 +39,9 @@ function UPSCard({
   battery,
   batteryTimeRemaining,
   conditions,
+  hovered,
+  onMouseEnter,
+  onMouseLeave,
 }) {
   const batteryBarClass =
     battery >= 60 ? styles.segmentedBarOk : battery >= 30 ? styles.segmentedBarWarning : styles.segmentedBarCritical;
@@ -46,8 +49,13 @@ function UPSCard({
   const batteryTimeRemainingText = validNumbers(batteryTimeRemaining)
     ? formatSecondsToDigital(batteryTimeRemaining).slice(0, -3)
     : 'N/A';
+  const opacityClass = hovered == null || hovered ? '' : styles.hiddenOpacity;
   return (
-    <div className={[styles.card, styles.upsCard, statusClass].join(' ')}>
+    <div
+      className={[styles.card, styles.upsCard, statusClass, opacityClass].join(' ')}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       <div className={styles.deviceName}>
         <span>{title}</span>
         <span>{label}</span>

@@ -35,6 +35,9 @@ function LoadCard({
   usage,
   voltageStdDev,
   conditions,
+  hovered,
+  onMouseEnter,
+  onMouseLeave,
 }) {
   const inputPresent = POWER_MONITOR_STATUS_MAPPING[status] === 'ok';
   const inputTitle = inputPresent ? 'Input present' : 'Input not present';
@@ -42,8 +45,13 @@ function LoadCard({
   const usageText = usage > 80 ? 'HIGH' : usage > 50 ? 'MEDIUM' : 'LOW';
   const stabilityText = voltageStdDev >= 8 ? 'HIGHLY UNSTABLE' : voltageStdDev >= 6 ? 'UNSTABLE' : 'STABLE';
   const roundedVoltageStdDev = validNumbers(voltageStdDev) ? `${voltageStdDev.toFixed(2)} V` : 'N/A';
+  const opacityClass = hovered == null || hovered ? '' : styles.hiddenOpacity;
   return (
-    <div className={[styles.card, styles.loadCard, statusClass].join(' ')}>
+    <div
+      className={[styles.card, styles.loadCard, statusClass, opacityClass].join(' ')}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       <div className={styles.deviceName}>
         <span>{title}</span>
         <span>{label}</span>

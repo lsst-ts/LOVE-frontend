@@ -24,15 +24,33 @@ import { POWER_MONITOR_STATUS_MAPPING } from 'Config';
 import { validNumbers } from 'Utils';
 import styles from '../PowerMonitor.module.css';
 
-function GeneratorCard({ status, cscState, cscIndex, title, label, activePower, load, fuel, mode, conditions }) {
+function GeneratorCard({
+  status,
+  cscState,
+  cscIndex,
+  title,
+  label,
+  activePower,
+  load,
+  fuel,
+  mode,
+  conditions,
+  hovered,
+  onMouseEnter,
+  onMouseLeave,
+}) {
   const fuelBarClass =
     fuel > 50 ? styles.segmentedBarOk : fuel > 20 ? styles.segmentedBarWarning : styles.segmentedBarCritical;
   const isOk = POWER_MONITOR_STATUS_MAPPING[status] === 'ok';
   const statusClass = isOk ? styles.ok : '';
-  const opacityClass = isOk ? '' : styles.hiddenOpacity;
+  const opacityClass = isOk || hovered ? '' : styles.hiddenOpacity;
   const roundedLoad = validNumbers(load) ? `${Math.round(load)} %` : 'N/A';
   return (
-    <div className={[styles.card, styles.generatorCard, statusClass, opacityClass].join(' ')}>
+    <div
+      className={[styles.card, styles.generatorCard, statusClass, opacityClass].join(' ')}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       <div className={styles.deviceName}>
         <span>{title}</span>
         <span>{label}</span>

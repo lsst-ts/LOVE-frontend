@@ -22,12 +22,27 @@ import { validNumbers } from 'Utils';
 import styles from '../PowerMonitor.module.css';
 
 
-function UtilityGridCard({ status, title, label, voltageLL, voltageLN, frequency, conditions }) {
+function UtilityGridCard({
+  status,
+  title,
+  label,
+  voltageLL,
+  voltageLN,
+  frequency,
+  conditions,
+  hovered,
+  onMouseEnter,
+  onMouseLeave,
+}) {
   const isOk = POWER_MONITOR_STATUS_MAPPING[status] === 'ok';
   const statusClass = isOk ? styles.ok : styles.alert;
-  const opacityClass = isOk ? '' : styles.hiddenOpacity;
+  const opacityClass = isOk || hovered ? '' : styles.hiddenOpacity;
   return (
-    <div className={[styles.card, styles.utilityGridCard, statusClass, opacityClass].join(' ')}>
+    <div
+      className={[styles.card, styles.utilityGridCard, statusClass, opacityClass].join(' ')}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       <div className={styles.deviceName}>
         <span>{title}</span>
         <span>{label}</span>
