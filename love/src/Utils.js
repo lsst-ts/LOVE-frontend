@@ -2715,3 +2715,17 @@ export function getActiveObservatoryStates(decimalValue) {
 export function validNumbers(...numbers) {
   return numbers.every((num) => typeof num === 'number' && !isNaN(num));
 }
+
+/**
+ * Function to calculate the standard deviation of an array of numbers.
+ * @param {Array<number>} data - The array of numbers.
+ * @param {boolean} [isSample=true] - Whether to calculate the sample standard deviation (default: true).
+ * @returns {number} The standard deviation of the numbers. Returns null if the input is null, not an array, or empty, and 0 if the array has less than 2 elements.
+ */
+export function getStandardDeviation(data, isSample = true) {
+  if (data == null || !Array.isArray(data) || data.length === 0) return null;
+  if (data.length < 2) return 0;
+  const mean = data.reduce((acc, val) => acc + val, 0) / data.length;
+  const variance = data.reduce((acc, val) => acc + (val - mean) ** 2, 0) / (isSample ? data.length - 1 : data.length);
+  return Math.sqrt(variance);
+}

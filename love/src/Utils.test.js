@@ -10,6 +10,7 @@ import {
   acronymizeString,
   getActiveObservatoryStates,
   validNumbers,
+  getStandardDeviation,
 } from './Utils';
 import { JIRA_TICKETS_BASE_URL } from './Config';
 
@@ -319,5 +320,26 @@ describe('validNumbers', () => {
     expect(validNumbers(1, 'string', 3)).toBe(false);
     expect(validNumbers(3.14, NaN)).toBe(false);
     expect(validNumbers(undefined, 2.71)).toBe(false);
+  });
+});
+
+describe('getStandardDeviation', () => {
+  it('should return null for null or undefined input', () => {
+    expect(getStandardDeviation(null)).toBe(null);
+    expect(getStandardDeviation(undefined)).toBe(null);
+  });
+
+  it('should return null for empty array', () => {
+    expect(getStandardDeviation([])).toBe(null);
+  });
+
+  it('should return 0 for an array with one number', () => {
+    expect(getStandardDeviation([5])).toBe(0);
+  });
+
+  it('should return the correct standard deviation for an array of numbers', () => {
+    const data = [2, 4, 4, 4, 5, 5, 7, 9];
+    const expectedStdDev = 2.14;
+    expect(getStandardDeviation(data)).toBeCloseTo(expectedStdDev, 2);
   });
 });
