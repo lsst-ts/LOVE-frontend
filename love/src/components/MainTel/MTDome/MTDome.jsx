@@ -713,6 +713,7 @@ export default class MTDome extends Component {
       raDecHourFormat,
       louversMotionState,
       louversInPosition,
+      controlMode,
     } = this.props;
 
     const currentPointing = {
@@ -803,6 +804,7 @@ export default class MTDome extends Component {
                 telescopeDecDeg={telescopeDecDeg}
                 telescopeRotatorDeg={telescopeRotatorDeg}
                 raDecHourFormat={raDecHourFormat}
+                controlMode={controlMode}
               />
             </div>
           </div>
