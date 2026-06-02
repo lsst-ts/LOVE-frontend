@@ -40,7 +40,7 @@ const summaryStateToStylesMap = Object.values(CSCDetail.states).reduce((prevDict
   return prevDict;
 }, {});
 
-const FULL_NAME_OBSERVATORY_STATES = ['OPERATIONAL', 'FAULT'];
+const FULL_NAME_OBSERVATORY_STATES = ['OPERATIONAL', 'FAULT', 'IDLE'];
 
 const observatoryStateTooltip =
   'Current state of the observatory. ' +
@@ -53,6 +53,7 @@ const observatoryStateTooltip =
   '\n· Fault (red): set when a fault is detected in any subsystem. Automatically set by the Scheduler CSC, but can also be changed manually.' +
   '\n· Weather (red): set when weather conditions are not suitable for observations.' +
   '\n· Downtime (yellow): set during scheduled maintenance or upgrades.' +
+  '\n· Idle (yellow): set when the observatory is not actively observing.' +
   "\n\nHover over each status to see its full name. Additionally, 'UNKNOWN' status will be set and shown " +
   ' when transitioning from daytime to nighttime. ' +
   'It is responsibility of the observers to set it to operational when in nighttime. This status can be also shown when ' +

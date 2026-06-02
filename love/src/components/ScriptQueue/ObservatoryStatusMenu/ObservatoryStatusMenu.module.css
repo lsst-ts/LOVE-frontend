@@ -48,3 +48,24 @@ input:checked + .sliderActiveState {
   width: 1em;
   height: 1em;
 }
+
+.menuOptionsContainer {
+  display: flex;
+  gap: var(--content-padding);
+}
+
+.warningMessage {
+  align-self: center;
+  border: 1px solid var(--second-tertiary-background-color);
+  border-radius: 1em;
+  padding: var(--small-padding);
+  font-size: var(--font-size-small);
+  text-align: center;
+  /* background-color: var(--secondary-background-dimmed-color); */
+  background-color: var(--secondary-background-color);
+}
+
+.warningMessage > :first-child {
+  width: 1.2em;
+  height: 1.2em;
+}
