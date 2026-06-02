@@ -27,6 +27,7 @@ export default class StatusText extends Component {
     title: PropTypes.string,
     children: PropTypes.string,
     small: PropTypes.bool,
+    flash: PropTypes.bool,
   };
 
   render() {
@@ -40,7 +41,12 @@ export default class StatusText extends Component {
     return (
       <span
         title={this.props.title}
-        className={[styles.status, statusStyle, this.props.small ? styles.small : ''].join(' ')}
+        className={[
+          styles.status,
+          statusStyle,
+          this.props.small ? styles.small : '',
+          this.props.flash ? styles.flash : '',
+        ].join(' ')}
       >
         {this.props.children}
       </span>
