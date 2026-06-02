@@ -124,6 +124,7 @@ export const OBSERVATORY_STATES = {
   FAULT: 1 << 2, // 4
   WEATHER: 1 << 3, // 8
   DOWNTIME: 1 << 4, // 16
+  IDLE: 1 << 5, // 32
 };
 
 export const OBSERVATORY_STATE_DETAIL = {
@@ -149,6 +150,10 @@ export const OBSERVATORY_STATE_DETAIL = {
   },
   16: {
     name: 'DOWNTIME',
+    statusText: 'warning',
+  },
+  32: {
+    name: 'IDLE',
     statusText: 'warning',
   },
 };
