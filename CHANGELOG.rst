@@ -2,9 +2,10 @@
 Version History
 ===============
 
-v6.11.5
+v6.12.0
 -------
 
+* Include MTDome controlMode event in the MTDome component. `<https://github.com/lsst-ts/LOVE-frontend/pull/797>`_
 * Implement PowerMonitor component. `<https://github.com/lsst-ts/LOVE-frontend/pull/796>`_
 * Add a toggle to the ObservatoryStatusMenu component to control whether to create a narrative log entries on observatory status transitions triggered by users. `<https://github.com/lsst-ts/LOVE-frontend/pull/795>`_
 
