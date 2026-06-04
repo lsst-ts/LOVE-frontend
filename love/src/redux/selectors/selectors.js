@@ -2727,6 +2727,116 @@ export const getESSstate = (state, salindex) => {
   };
 };
 
+// Power Monitor
+export const getPowerMonitorSubscriptions = () => {
+  return [
+    'event-ESS-303-summaryState',
+    'event-ESS-305-summaryState',
+    'event-ESS-306-summaryState',
+    'event-ESS-309-summaryState',
+    'event-ESS-310-summaryState',
+    'event-ESS-311-summaryState',
+    'telemetry-ESS-303-xups',
+    'telemetry-ESS-305-agcGenset150',
+    'telemetry-ESS-306-agcGenset150',
+    'telemetry-ESS-309-agcMains150',
+    'telemetry-ESS-310-e9sxups',
+    'telemetry-ESS-311-e9sxups',
+  ];
+};
+
+export const getPowerMonitorStream = (state) => {
+  const stream = getStreamsData(state, getPowerMonitorSubscriptions());
+  return {
+    upsState: stream['event-ESS-303-summaryState']?.[0]?.summaryState?.value ?? 0,
+    secondaryGeneratorState: stream['event-ESS-305-summaryState']?.[0]?.summaryState?.value ?? 0,
+    primaryGeneratorState: stream['event-ESS-306-summaryState']?.[0]?.summaryState?.value ?? 0,
+    atsState: stream['event-ESS-309-summaryState']?.[0]?.summaryState?.value ?? 0,
+    serverRoommUPS1State: stream['event-ESS-310-summaryState']?.[0]?.summaryState?.value ?? 0,
+    serverRoomUPS2State: stream['event-ESS-311-summaryState']?.[0]?.summaryState?.value ?? 0,
+
+    atsMainsFailure: stream['telemetry-ESS-309-agcMains150']?.mainsFailure?.value,
+    atsAutomaticMainsFailure: stream['telemetry-ESS-309-agcMains150']?.automaticMainsFailure?.value,
+    atsLoadTakeover: stream['telemetry-ESS-309-agcMains150']?.loadTakeover?.value,
+    atsFixedPower: stream['telemetry-ESS-309-agcMains150']?.fixedPower?.value,
+
+    atsMainsVoltageL1L2: stream['telemetry-ESS-309-agcMains150']?.mainsVoltageL1L2?.value,
+    atsMainsVoltageL2L3: stream['telemetry-ESS-309-agcMains150']?.mainsVoltageL2L3?.value,
+    atsMainsVoltageL3L1: stream['telemetry-ESS-309-agcMains150']?.mainsVoltageL3L1?.value,
+    atsMainsVoltageL1N: stream['telemetry-ESS-309-agcMains150']?.mainsVoltageL1N?.value,
+    atsMainsVoltageL2N: stream['telemetry-ESS-309-agcMains150']?.mainsVoltageL2N?.value,
+    atsMainsVoltageL3N: stream['telemetry-ESS-309-agcMains150']?.mainsVoltageL3N?.value,
+    atsMainsFrequencyL1: stream['telemetry-ESS-309-agcMains150']?.mainsFrequencyL1?.value,
+    atsMainsFrequencyL2: stream['telemetry-ESS-309-agcMains150']?.mainsFrequencyL2?.value,
+    atsMainsFrequencyL3: stream['telemetry-ESS-309-agcMains150']?.mainsFrequencyL3?.value,
+    atsMainsPower: stream['telemetry-ESS-309-agcMains150']?.mainsPower?.value,
+
+    secondaryGeneratorRunning: stream['telemetry-ESS-305-agcGenset150']?.running?.value,
+    primaryGeneratorRunning: stream['telemetry-ESS-306-agcGenset150']?.running?.value,
+    secondaryGeneratorBlockMode: stream['telemetry-ESS-305-agcGenset150']?.blockMode?.value,
+    primaryGeneratorBlockMode: stream['telemetry-ESS-306-agcGenset150']?.blockMode?.value,
+    secondaryGeneratorTestMode: stream['telemetry-ESS-305-agcGenset150']?.testMode?.value,
+    primaryGeneratorTestMode: stream['telemetry-ESS-306-agcGenset150']?.testMode?.value,
+    secondaryGeneratorManualMode: stream['telemetry-ESS-305-agcGenset150']?.manualMode?.value,
+    primaryGeneratorManualMode: stream['telemetry-ESS-306-agcGenset150']?.manualMode?.value,
+    secondaryGeneratorSemiAutoMode: stream['telemetry-ESS-305-agcGenset150']?.semiAutoMode?.value,
+    primaryGeneratorSemiAutoMode: stream['telemetry-ESS-306-agcGenset150']?.semiAutoMode?.value,
+    secondaryGeneratorAutoMode: stream['telemetry-ESS-305-agcGenset150']?.autoMode?.value,
+    primaryGeneratorAutoMode: stream['telemetry-ESS-306-agcGenset150']?.autoMode?.value,
+
+    secondaryGeneratorActivePower: stream['telemetry-ESS-305-agcGenset150']?.generatorPower?.value,
+    primaryGeneratorActivePower: stream['telemetry-ESS-306-agcGenset150']?.generatorPower?.value,
+    secondaryGeneratorApparentPower: stream['telemetry-ESS-305-agcGenset150']?.generatorApparentPower?.value,
+    primaryGeneratorApparentPower: stream['telemetry-ESS-306-agcGenset150']?.generatorApparentPower?.value,
+    secondaryGeneratorFuelLevel: stream['telemetry-ESS-305-agcGenset150']?.multiInput22?.value,
+    primaryGeneratorFuelLevel: stream['telemetry-ESS-306-agcGenset150']?.multiInput22?.value,
+
+    upsInputVoltage1: stream['telemetry-ESS-303-xups']?.inputVoltage?.value[0],
+    upsInputVoltage2: stream['telemetry-ESS-303-xups']?.inputVoltage?.value[1],
+    upsInputVoltage3: stream['telemetry-ESS-303-xups']?.inputVoltage?.value[2],
+    upsOutputVoltage1: stream['telemetry-ESS-303-xups']?.outputVoltage?.value[0],
+    upsOutputVoltage2: stream['telemetry-ESS-303-xups']?.outputVoltage?.value[1],
+    upsOutputVoltage3: stream['telemetry-ESS-303-xups']?.outputVoltage?.value[2],
+    upsInputFrequency: stream['telemetry-ESS-303-xups']?.inputFrequency?.value,
+    upsOutputFrequency: stream['telemetry-ESS-303-xups']?.outputFrequency?.value,
+    upsInputPower1: stream['telemetry-ESS-303-xups']?.inputPower?.value[0],
+    upsInputPower2: stream['telemetry-ESS-303-xups']?.inputPower?.value[1],
+    upsInputPower3: stream['telemetry-ESS-303-xups']?.inputPower?.value[2],
+    upsOutputPower1: stream['telemetry-ESS-303-xups']?.outputPower?.value[0],
+    upsOutputPower2: stream['telemetry-ESS-303-xups']?.outputPower?.value[1],
+    upsOutputPower3: stream['telemetry-ESS-303-xups']?.outputPower?.value[2],
+    upsBatteryLevel: stream['telemetry-ESS-303-xups']?.batteryCapacity?.value,
+    upsBatteryTimeRemaining: stream['telemetry-ESS-303-xups']?.batteryTimeRemaining?.value,
+    upsSensorName: stream['telemetry-ESS-303-xups']?.sensorName?.value,
+    upsTimestamp: stream['telemetry-ESS-303-xups']?.[TOPIC_TIMESTAMP_ATTRIBUTE]?.value,
+
+    serverRoomUPS1InputVoltage1: stream['telemetry-ESS-310-e9sxups']?.voltageMain1Phase1?.value,
+    serverRoomUPS2InputVoltage1: stream['telemetry-ESS-311-e9sxups']?.voltageMain1Phase1?.value,
+    serverRoomUPS1InputVoltage2: stream['telemetry-ESS-310-e9sxups']?.voltageMain1Phase2?.value,
+    serverRoomUPS2InputVoltage2: stream['telemetry-ESS-311-e9sxups']?.voltageMain1Phase2?.value,
+    serverRoomUPS1InputVoltage3: stream['telemetry-ESS-310-e9sxups']?.voltageMain1Phase3?.value,
+    serverRoomUPS2InputVoltage3: stream['telemetry-ESS-311-e9sxups']?.voltageMain1Phase3?.value,
+    serverRoomUPS1InputFrequency: stream['telemetry-ESS-310-e9sxups']?.main1Frequency?.value,
+    serverRoomUPS2InputFrequency: stream['telemetry-ESS-311-e9sxups']?.main1Frequency?.value,
+    serverRoomUPS1OutputVoltage1: stream['telemetry-ESS-310-e9sxups']?.outputVoltage1N?.value,
+    serverRoomUPS2OutputVoltage1: stream['telemetry-ESS-311-e9sxups']?.outputVoltage1N?.value,
+    serverRoomUPS1OutputVoltage2: stream['telemetry-ESS-310-e9sxups']?.outputVoltage2N?.value,
+    serverRoomUPS2OutputVoltage2: stream['telemetry-ESS-311-e9sxups']?.outputVoltage2N?.value,
+    serverRoomUPS1OutputVoltage3: stream['telemetry-ESS-310-e9sxups']?.outputVoltage3N?.value,
+    serverRoomUPS2OutputVoltage3: stream['telemetry-ESS-311-e9sxups']?.outputVoltage3N?.value,
+    serverRoomUPS1OutputFrequency: stream['telemetry-ESS-310-e9sxups']?.outputFrequency?.value,
+    serverRoomUPS2OutputFrequency: stream['telemetry-ESS-311-e9sxups']?.outputFrequency?.value,
+    serverRoomUPS1OutputPower: stream['telemetry-ESS-310-e9sxups']?.outputTotalActivePower?.value,
+    serverRoomUPS2OutputPower: stream['telemetry-ESS-311-e9sxups']?.outputTotalActivePower?.value,
+    serverRoommUPS1Battery: stream['telemetry-ESS-310-e9sxups']?.batteryChargingLevel?.value,
+    serverRoomUPS2Battery: stream['telemetry-ESS-311-e9sxups']?.batteryChargingLevel?.value,
+    serverRoommUPS1BatteryBackupTime: stream['telemetry-ESS-310-e9sxups']?.batteryBackupTime?.value,
+    serverRoomUPS2BatteryBackupTime: stream['telemetry-ESS-311-e9sxups']?.batteryBackupTime?.value,
+    serverRoomUPS1Timestamp: stream['telemetry-ESS-310-e9sxups']?.[TOPIC_TIMESTAMP_ATTRIBUTE]?.value,
+    serverRoomUPS2Timestamp: stream['telemetry-ESS-311-e9sxups']?.[TOPIC_TIMESTAMP_ATTRIBUTE]?.value,
+  };
+};
+
 // DM selectors
 export const getDMFlowState = (state) => {
   return {

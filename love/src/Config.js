@@ -3092,6 +3092,31 @@ export const schedulerBlocksStateToStyle = {
   INTERRUPTED: 'alert',
 };
 
+// POWER MONITOR
+export const POWER_MONITOR_STATUS_MAPPING = {
+  ONLINE: 'ok',
+  OFFLINE: 'alert',
+  RUNNING: 'ok',
+  STOPPED: 'invalid',
+  HEALTHY: 'ok',
+  'NO SOURCE': 'alert',
+  'ON BATTERY': 'alert',
+  'NO POWER': 'alert',
+  UNKNOWN: 'unknown',
+};
+
+export const POWER_MONITOR_CRITICALITY_MAPPING = {
+  HIGH: 'alert',
+  MEDIUM: 'warning',
+  LOW: 'ok',
+};
+
+export const POWER_MONITOR_STABILITY_MAPPING = {
+  STABLE: 'ok',
+  UNSTABLE: 'warning',
+  'HIGHLY UNSTABLE': 'alert',
+};
+
 /*****************************************************************************/
 /*******************************STATE MAPPINGS********************************/
 /*****************************************************************************/

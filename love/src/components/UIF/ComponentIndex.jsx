@@ -392,6 +392,16 @@ export const observatoryIndex = {
       },
     },
   },
+  PowerManagement: {
+    component: require('../PowerMonitor/PowerMonitor.container').default,
+    schema: {
+      ...require('../PowerMonitor/PowerMonitor.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../PowerMonitor/PowerMonitor.container').schema.props,
+      },
+    },
+  },
 };
 
 export const auxtelIndex = {
