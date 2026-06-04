@@ -9,6 +9,8 @@ import {
   getCutDateFromNightReport,
   acronymizeString,
   getActiveObservatoryStates,
+  validNumbers,
+  getStandardDeviation,
 } from './Utils';
 import { JIRA_TICKETS_BASE_URL } from './Config';
 
@@ -282,5 +284,62 @@ describe('getActiveObservatoryStates', () => {
     expect(getActiveObservatoryStates(24)).toEqual([8, 16]); // WEATHER + DOWNTIME
 
     expect(getActiveObservatoryStates(28)).toEqual([4, 8, 16]); // FAULT + WEATHER + DOWNTIME
+  });
+});
+
+describe('validNumbers', () => {
+  it('should return false for null or undefined', () => {
+    expect(validNumbers(null)).toBe(false);
+    expect(validNumbers(undefined)).toBe(false);
+  });
+
+  it('should return false for NaN', () => {
+    expect(validNumbers(NaN)).toBe(false);
+  });
+
+  it('should return false for non-numeric values', () => {
+    expect(validNumbers('string')).toBe(false);
+    expect(validNumbers('3.14')).toBe(false);
+    expect(validNumbers({})).toBe(false);
+    expect(validNumbers([])).toBe(false);
+  });
+
+  it('should return true for valid numbers', () => {
+    expect(validNumbers(0)).toBe(true);
+    expect(validNumbers(1)).toBe(true);
+    expect(validNumbers(-1)).toBe(true);
+    expect(validNumbers(3.14)).toBe(true);
+  });
+
+  it('should return true if all arguments are valid numbers', () => {
+    expect(validNumbers(1, 2, 3)).toBe(true);
+    expect(validNumbers(3.14, 2.71)).toBe(true);
+  });
+
+  it('should return false if any argument is not a valid number', () => {
+    expect(validNumbers(1, 'string', 3)).toBe(false);
+    expect(validNumbers(3.14, NaN)).toBe(false);
+    expect(validNumbers(undefined, 2.71)).toBe(false);
+  });
+});
+
+describe('getStandardDeviation', () => {
+  it('should return null for null or undefined input', () => {
+    expect(getStandardDeviation(null)).toBe(null);
+    expect(getStandardDeviation(undefined)).toBe(null);
+  });
+
+  it('should return null for empty array', () => {
+    expect(getStandardDeviation([])).toBe(null);
+  });
+
+  it('should return 0 for an array with one number', () => {
+    expect(getStandardDeviation([5])).toBe(0);
+  });
+
+  it('should return the correct standard deviation for an array of numbers', () => {
+    const data = [2, 4, 4, 4, 5, 5, 7, 9];
+    const expectedStdDev = 2.14;
+    expect(getStandardDeviation(data)).toBeCloseTo(expectedStdDev, 2);
   });
 });

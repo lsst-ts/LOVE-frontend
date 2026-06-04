@@ -8,10 +8,15 @@
   border: 1px solid var(--secondary-font-dimmed-color);
 }
 
-.observatoryStatusContextMenu {
+.toggleContainer {
   display: flex;
   gap: var(--small-padding);
   align-items: center;
+}
+
+/* Style for customizing toggle */
+.toggleContainer > div > label {
+  margin: 0;
 }
 
 input:checked + .sliderActiveState {

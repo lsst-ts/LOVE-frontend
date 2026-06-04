@@ -53,6 +53,7 @@ ObserversNote.propTypes = {
 const ObservatoryStatusMenu = ({ observatoryStateValue, updateObservatoryState }) => {
   const [newState, setNewState] = useState(observatoryStateValue);
   const [note, setNote] = useState();
+  const [sendNarrativelog, setSendNarrativelog] = useState(false);
 
   const hasChanged = newState !== observatoryStateValue || note?.trim().length > 0;
   const isDayTime = (observatoryStateValue & OBSERVATORY_STATES.DAYTIME) !== 0;
@@ -71,7 +72,7 @@ const ObservatoryStatusMenu = ({ observatoryStateValue, updateObservatoryState }
       setNewState(updatedState);
     };
     return (
-      <div title={title} className={styles.observatoryStatusContextMenu}>
+      <div title={title} className={styles.toggleContainer}>
         <Toggle
           toggled={isStatusActive}
           onToggle={onToggleState}
@@ -96,10 +97,19 @@ const ObservatoryStatusMenu = ({ observatoryStateValue, updateObservatoryState }
         <MenuOption label="Downtime" status={OBSERVATORY_STATES.DOWNTIME} />
       </div>
       <ObserversNote note={note} setNote={setNote} />
+      <div title="Create a narrative log upon observatory state transition." className={styles.toggleContainer}>
+        <Toggle
+          toggled={sendNarrativelog}
+          onToggle={() => setSendNarrativelog(!sendNarrativelog)}
+          activeColorClassName={styles.sliderActiveState}
+          disabled={!hasChanged}
+        />
+        <span className={sendNarrativelog ? styles.highlightedSliderLabel : ''}>Create narrative log</span>
+      </div>
       <Button
         status="info"
         disabled={!hasChanged}
-        onClick={() => updateObservatoryState(newState, note)}
+        onClick={() => updateObservatoryState(newState, note, sendNarrativelog)}
         command={true}
       >
         Update observatory state

@@ -1,0 +1,196 @@
+/** 
+This file is part of LOVE-frontend.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
+
+This program is free software: you can redistribute it and/or modify it under 
+the terms of the GNU General Public License as published by the Free Software 
+Foundation, either version 3 of the License, or at your option) any later version.
+
+This program is distributed in the hope that it will be useful,but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with 
+this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+.wrapper {
+  container-type: inline-size;
+  container-name: component-wrapper;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--content-padding);
+  text-align: left;
+}
+
+@container component-wrapper (min-width: 100em) {
+  .container {
+    grid-template-columns: 1fr 2fr 1fr;
+  }
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--content-padding);
+}
+
+.section > :first-child {
+  color: var(--base-font-color);
+  font-size: var(--font-size-large);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.section > .device2Cols {
+  display: flex;
+  gap: var(--content-padding);
+}
+
+.section > .device2Cols > div {
+  flex-grow: 1;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--content-padding);
+  border: 0.5px solid var(--tertiary-font-color);
+  border-radius: 8px;
+  padding: var(--content-padding);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--second-quaternary-background-dimmed-color);
+}
+
+.card.ok {
+  border-color: var(--status-ok-color);
+}
+
+.card.alert {
+  border-color: var(--status-alert-color);
+}
+
+.deviceName {
+  display: flex;
+  align-items: center;
+  gap: var(--content-padding);
+}
+
+.deviceName > :first-child {
+  font-weight: bold;
+  color: var(--highlighted-font-color);
+}
+
+.deviceName > :nth-child(2) {
+  color: #3ec2fb;
+}
+
+.deviceName > :last-child {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--small-padding);
+}
+
+.heartbeatIcon {
+  width: 1.4em;
+  height: 1.4em;
+}
+
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9em, 1fr));
+  justify-content: space-evenly;
+  gap: var(--content-padding);
+}
+
+.valueColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--small-padding);
+}
+
+.valueRow {
+  display: flex;
+  align-items: baseline;
+  flex-direction: row;
+  gap: var(--small-padding);
+}
+
+.valueColumn > :nth-child(2),
+.valueRow > :nth-child(2) {
+  font-size: var(--font-size-larger);
+  font-weight: bold;
+  color: var(--highlighted-font-color);
+  white-space: nowrap;
+}
+
+.valueColumn > :nth-child(2).statusValue,
+.valueRow > :nth-child(2).statusValue {
+  font-weight: normal;
+}
+
+.batteryInfoContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.progressBarContainer {
+  background-color: black !important;
+  border-radius: 1em;
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.progressBar {
+  background-color: #3ec2fb !important;
+  border-radius: 1em;
+}
+
+.segmentedBarOk {
+  background-color: #67f1c9 !important;
+}
+
+.segmentedBarWarning {
+  background-color: #fbc53e !important;
+}
+
+.segmentedBarCritical {
+  background-color: #fb3e3e !important;
+}
+
+.conditions {
+  display: flex;
+  gap: var(--content-padding);
+}
+
+.conditions > div {
+  padding: var(--small-padding) var(--content-padding);
+  border-radius: 1em;
+  color: var(--base-font-color);
+  background-color: var(--overlay-background-color);
+}
+
+.hiddenOpacity {
+  opacity: 0.33;
+}
+
+.circleInput {
+  width: 1.2em;
+  height: 1.2em;
+  border-radius: 50%;
+  display: inline-block;
+  background: var(--secondary-font-color);
+}
+
+.circleInput.ok {
+  background: var(--status-ok-color);
+}
+
+.circleInput.alert {
+  background: var(--status-alert-color);
+}

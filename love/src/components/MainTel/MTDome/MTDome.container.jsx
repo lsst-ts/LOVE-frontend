@@ -89,6 +89,7 @@ const MTDomeContainer = ({
   raDecHourFormat,
   louversMotionState,
   louversInPosition,
+  controlMode,
   ...props
 }) => {
   if (props.isRaw) {
@@ -125,6 +126,7 @@ const MTDomeContainer = ({
       raDecHourFormat={raDecHourFormat}
       louversMotionState={louversMotionState}
       louversInPosition={louversInPosition}
+      controlMode={controlMode}
     />
   );
 };
@@ -167,6 +169,7 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTMount-0-summaryState',
     'event-MTPtg-0-currentTarget',
     'event-MTDome-0-louversMotion',
+    'event-MTDome-0-controlMode',
   ];
   return {
     subscriptions,
