@@ -2945,6 +2945,14 @@ export const mtDomeTrackingStatetoStyle = {
   UNKNOWN: 'invalid',
 };
 
+export const mtDomeControlModeStateToStyle = {
+  UNKNOWN: 'invalid',
+  REMOTE: 'ok',
+  'LOCAL PUSH BUTTONS': 'alert',
+  'LOCAL KEBA': 'alert',
+  'LOCAL EUI': 'alert',
+};
+
 export const atDomeTrackingStatetoStyle = {
   UNKNOWN: 'invalid',
 };
@@ -3346,6 +3354,14 @@ export const mtDomeMotionStateMap = {
   53: 'DISABLING',
   54: 'ENABLED',
   55: 'ENABLING',
+};
+
+export const mtDomeControlModeStateMap = {
+  0: 'UNKNOWN',
+  1: 'REMOTE',
+  2: 'LOCAL PUSH BUTTONS',
+  3: 'LOCAL KEBA',
+  4: 'LOCAL EUI',
 };
 
 export const atDomeTrackingStateMap = {

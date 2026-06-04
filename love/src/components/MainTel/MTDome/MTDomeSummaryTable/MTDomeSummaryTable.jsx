@@ -37,6 +37,8 @@ import {
   mtDomeAzimuthEnabledStatetoStyle,
   mtDomeMotionStateMap,
   mtDomeMotionStatetoStyle,
+  mtDomeControlModeStateMap,
+  mtDomeControlModeStateToStyle,
   MTMountLimits,
 } from 'Config';
 import { formatHoursToDigital, degreesToDMS, degrees, defaultNumberFormatter } from 'Utils';
@@ -78,6 +80,8 @@ export default class MTDomeSummaryTable extends Component {
     telescopeRotatorDeg: PropTypes.number,
     /** Whether to display the RA and DEC in hour format */
     raDecHourFormat: PropTypes.bool,
+    /** Control mode of the dome */
+    controlMode: PropTypes.number,
   };
 
   static defaultProps = {
@@ -93,6 +97,7 @@ export default class MTDomeSummaryTable extends Component {
     targetPointing: { az: 0, el: 0 },
     positionActualShutter: [],
     positionCommandedShutter: [],
+    controlMode: 0,
   };
 
   render() {
@@ -115,6 +120,7 @@ export default class MTDomeSummaryTable extends Component {
       telescopeDecDeg,
       telescopeRotatorDeg,
       raDecHourFormat,
+      controlMode,
     } = this.props;
 
     const mtDomeStatusText = summaryStateMap[mtDomeSummaryState];
@@ -122,6 +128,7 @@ export default class MTDomeSummaryTable extends Component {
     const azimuthDomeStateText = mtDomeAzimuthEnabledStateMap[azimuthDomeState];
     const azimuthDomeMotionText = mtDomeMotionStateMap[azimuthDomeMotion];
     const mtMountStatusText = summaryStateMap[mtMountSummaryState];
+    const controlModeText = mtDomeControlModeStateMap[controlMode];
 
     const { az: mountActualAz, el: mountActualEl } = currentPointing;
     const { az: mountCommandedAz, el: mountCommandedEl } = targetPointing;
@@ -162,6 +169,16 @@ export default class MTDomeSummaryTable extends Component {
           <Value>
             <StatusText title={modeDomeStatusText} status={mtDomeModeStatetoStyle[modeDomeStatusText]}>
               {modeDomeStatusText}
+            </StatusText>
+          </Value>
+          <Label>Control Mode</Label>
+          <Value>
+            <StatusText
+              title={controlModeText}
+              status={mtDomeControlModeStateToStyle[controlModeText]}
+              flash={mtDomeControlModeStateToStyle[controlModeText] === 'alert'}
+            >
+              {controlModeText}
             </StatusText>
           </Value>
           <Label>Az State</Label>

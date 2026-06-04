@@ -52,3 +52,45 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   color: var(--secondary-font-color);
   background: var(--second-tertiary-background-color);
 }
+
+.ok.flash {
+  animation: ok-flash 0.8s infinite;
+  animation-direction: alternate;
+}
+
+.warning.flash {
+  animation: warning-flash 0.8s infinite;
+  animation-direction: alternate;
+}
+
+.alert.flash {
+  animation: alert-flash 0.8s infinite;
+  animation-direction: alternate;
+}
+
+@keyframes ok-flash {
+  from {
+    background: var(--status-ok-dimmed-color-3);
+  }
+  to {
+    background: var(--status-ok-dimmed-color-2);
+  }
+}
+
+@keyframes warning-flash {
+  from {
+    background: var(--status-warning-dimmed-color-3);
+  }
+  to {
+    background: var(--status-warning-dimmed-color-2);
+  }
+}
+
+@keyframes alert-flash {
+  from {
+    background: var(--status-alert-dimmed-color-3);
+  }
+  to {
+    background: var(--status-alert-dimmed-color-2);
+  }
+}
