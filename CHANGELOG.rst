@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.12.1
+-------
+
+* Add IDLE state for observatory status tracking. `<https://github.com/lsst-ts/LOVE-frontend/pull/799>`_
+
 v6.12.0
 -------
 
