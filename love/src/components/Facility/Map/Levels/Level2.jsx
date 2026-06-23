@@ -23,6 +23,7 @@ import PropTypes from 'prop-types';
 import styles from './Level2.module.css';
 import Device from '../Device.jsx';
 import * as d3 from 'd3';
+import { operatingModeStateMap, unitStateMap, unitStateBooleanMap } from 'Config';
 
 export default class Level2 extends Component {
   constructor(props) {
@@ -305,7 +306,7 @@ export default class Level2 extends Component {
         />
 
         <Device
-          title={'Crack 02'}
+          title={'CRAC 02'}
           width={110}
           height={130}
           posX={612}
@@ -313,22 +314,22 @@ export default class Level2 extends Component {
           collapsible={true}
           alarms={{
             alarm1: {
-              name: 'State Presense',
+              name: 'State Presence',
               state: crac02.alarmPresentState ? crac02.alarmPresentState.value : null,
             },
           }}
           states={{
             command: crac02.switchedOn ? crac02.switchedOn.value : null,
             working: crac02.workingState ? crac02.workingState.value : null,
-            unit: crac02.unitState ? crac02.unitState.value : null,
-            switch: crac02.selectorState ? crac02.selectorState.value : null,
+            unit: crac02.unitState ? unitStateBooleanMap[unitStateMap[crac02.unitState.value]] : null,
+            switch: null,
           }}
           parameters={{
             unitOperationalMode: {
-              type: 'single',
+              type: 'text',
               name: 'Mode of Operation',
               unit: null,
-              value: crac02.unitOperationalMode ? crac02.unitOperationalMode.value : null,
+              value: crac02.operationalMode ? operatingModeStateMap[crac02.operationalMode.value] : null,
             },
             valveOpening: {
               type: 'single',
@@ -342,9 +343,15 @@ export default class Level2 extends Component {
               unit: crac02.roomHumidity ? crac02.roomHumidity.units : null,
               value: crac02.roomHumidity ? crac02.roomHumidity.value : null,
             },
+            humidifierRequirement: {
+              type: 'single',
+              name: 'Requirement Humidifier',
+              unit: crac02.humidifierRequirement ? crac02.humidifierRequirement.units : null,
+              value: crac02.humidifierRequirement ? crac02.humidifierRequirement.value : null,
+            },
             hourMeasure: {
               type: 'single',
-              name: 'HOROMETRO',
+              name: 'Running Hours',
               unit: crac02.hourMeasure ? crac02.hourMeasure.units : null,
               value: crac02.hourMeasure ? crac02.hourMeasure.value : null,
             },
@@ -353,18 +360,6 @@ export default class Level2 extends Component {
               name: 'Number Circuits',
               unit: null,
               value: crac02.numberOfCircuits ? crac02.numberOfCircuits.value : null,
-            },
-            humidifierRequirement: {
-              type: 'single',
-              name: 'Requirement Humidifier',
-              unit: crac02.humidifierRequirement ? crac02.humidifierRequirement.units : null,
-              value: crac02.humidifierRequirement ? crac02.humidifierRequirement.value : null,
-            },
-            activeSetpoint: {
-              type: 'single',
-              name: 'Setpoint Active',
-              unit: crac02.activeSetpoint ? 'ºC' : null,
-              value: crac02.activeSetpoint ? crac02.activeSetpoint.value : null,
             },
             setpoint: {
               type: 'group',
@@ -377,7 +372,7 @@ export default class Level2 extends Component {
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: crac02.coolingSetpoint ? 'ºC' : null,
+                  unit: crac02.coolingSetpoint ? '°C' : null,
                   value: crac02.coolingSetpoint ? crac02.coolingSetpoint.value : null,
                 },
                 heatingSetpoint: {
@@ -385,7 +380,7 @@ export default class Level2 extends Component {
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: crac02.heatingSetpoint ? 'ºC' : null,
+                  unit: crac02.heatingSetpoint ? '°C' : null,
                   value: crac02.heatingSetpoint ? crac02.heatingSetpoint.value : null,
                 },
                 humidifierSetpoint: {
@@ -417,7 +412,7 @@ export default class Level2 extends Component {
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: crac02.supplyTemperature ? 'ºC Injection' : null,
+                  unit: crac02.supplyTemperature ? '°C Supply' : null,
                   value: crac02.supplyTemperature ? crac02.supplyTemperature.value : null,
                 },
                 returnTemperature: {
@@ -425,7 +420,7 @@ export default class Level2 extends Component {
                   alarm: null,
                   name: '02',
                   state: null,
-                  unit: crac02.returnTemperature ? '% Return' : null,
+                  unit: crac02.returnTemperature ? '°C Return' : null,
                   value: crac02.returnTemperature ? crac02.returnTemperature.value : null,
                 },
               },
@@ -434,7 +429,7 @@ export default class Level2 extends Component {
         />
 
         <Device
-          title={'Crack 01'}
+          title={'CRAC 01'}
           width={110}
           height={130}
           posX={612}
@@ -442,22 +437,22 @@ export default class Level2 extends Component {
           collapsible={true}
           alarms={{
             alarm1: {
-              name: 'State Presense',
+              name: 'State Presence',
               state: crac01.alarmPresentState ? crac01.alarmPresentState.value : null,
             },
           }}
           states={{
             command: crac01.switchedOn ? crac01.switchedOn.value : null,
             working: crac01.workingState ? crac01.workingState.value : null,
-            unit: crac01.unitState ? crac01.unitState.value : null,
-            switch: crac01.selectorState ? crac01.selectorState.value : null,
+            unit: crac01.unitState ? unitStateBooleanMap[unitStateMap[crac01.unitState.value]] : null,
+            switch: null,
           }}
           parameters={{
             unitOperationalMode: {
-              type: 'single',
+              type: 'text',
               name: 'Mode of Operation',
               unit: null,
-              value: crac01.unitOperationalMode ? crac01.unitOperationalMode.value : null,
+              value: crac01.operationalMode ? operatingModeStateMap[crac01.operationalMode.value] : null,
             },
             valveOpening: {
               type: 'single',
@@ -471,9 +466,15 @@ export default class Level2 extends Component {
               unit: crac01.roomHumidity ? crac01.roomHumidity.units : null,
               value: crac01.roomHumidity ? crac01.roomHumidity.value : null,
             },
+            humidifierRequirement: {
+              type: 'single',
+              name: 'Requirement Humidifier',
+              unit: crac01.humidifierRequirement ? crac01.humidifierRequirement.units : null,
+              value: crac01.humidifierRequirement ? crac01.humidifierRequirement.value : null,
+            },
             hourMeasure: {
               type: 'single',
-              name: 'HOROMETRO',
+              name: 'Running Hours',
               unit: crac01.hourMeasure ? crac01.hourMeasure.units : null,
               value: crac01.hourMeasure ? crac01.hourMeasure.value : null,
             },
@@ -482,18 +483,6 @@ export default class Level2 extends Component {
               name: 'Number Circuits',
               unit: null,
               value: crac01.numberOfCircuits ? crac01.numberOfCircuits.value : null,
-            },
-            humidifierRequirement: {
-              type: 'single',
-              name: 'Requirement Humidifier',
-              unit: crac01.humidifierRequirement ? crac01.humidifierRequirement.units : null,
-              value: crac01.humidifierRequirement ? crac01.humidifierRequirement.value : null,
-            },
-            activeSetpoint: {
-              type: 'single',
-              name: 'Setpoint Active',
-              unit: crac01.activeSetpoint ? 'ºC' : null,
-              value: crac01.activeSetpoint ? crac01.activeSetpoint.value : null,
             },
             setpoint: {
               type: 'group',
@@ -506,7 +495,7 @@ export default class Level2 extends Component {
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: crac01.coolingSetpoint ? 'ºC' : null,
+                  unit: crac01.coolingSetpoint ? '°C' : null,
                   value: crac01.coolingSetpoint ? crac01.coolingSetpoint.value : null,
                 },
                 heatingSetpoint: {
@@ -514,7 +503,7 @@ export default class Level2 extends Component {
                   alarm: null,
                   name: 'Heating',
                   state: null,
-                  unit: crac01.heatingSetpoint ? 'ºC' : null,
+                  unit: crac01.heatingSetpoint ? '°C' : null,
                   value: crac01.heatingSetpoint ? crac01.heatingSetpoint.value : null,
                 },
                 humidifierSetpoint: {
@@ -546,7 +535,7 @@ export default class Level2 extends Component {
                   alarm: null,
                   name: 'Cooling',
                   state: null,
-                  unit: crac01.supplyTemperature ? 'ºC Injection' : null,
+                  unit: crac01.supplyTemperature ? '°C Supply' : null,
                   value: crac01.supplyTemperature ? crac01.supplyTemperature.value : null,
                 },
                 returnTemperature: {
@@ -554,7 +543,7 @@ export default class Level2 extends Component {
                   alarm: null,
                   name: '02',
                   state: null,
-                  unit: crac01.returnTemperature ? '% Return' : null,
+                  unit: crac01.returnTemperature ? '°C Return' : null,
                   value: crac01.returnTemperature ? crac01.returnTemperature.value : null,
                 },
               },
