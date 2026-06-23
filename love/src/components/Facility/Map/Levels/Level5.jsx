@@ -47,8 +47,6 @@ export default class Level5 extends Component {
   };
 
   componentDidMount() {
-    const deviceId = '#' + this.deviceId;
-    const mapId = '#' + this.mapId;
     const overlayId = '#' + this.overlayId;
     const transformData = this.props.transformData;
 
@@ -129,9 +127,9 @@ export default class Level5 extends Component {
           title={'Dome AHU 01'}
           id={401}
           width={108}
-          height={130}
+          height={150}
           posX={0}
-          posY={70}
+          posY={60}
           collapsible={true}
           alarms={{
             alarm1: {
@@ -150,15 +148,19 @@ export default class Level5 extends Component {
           states={{
             command: airHandlingUnit01Dome.switchedOn ? airHandlingUnit01Dome.switchedOn.value : null,
             working: airHandlingUnit01Dome.workingState ? airHandlingUnit01Dome.workingState.value : null,
-            unit: airHandlingUnit01Dome.unitState ? airHandlingUnit01Dome.unitState.value : null,
-            switch: airHandlingUnit01Dome.selectorState ? airHandlingUnit01Dome.selectorState.value : null,
+            unit: null,
+            switch: null,
           }}
           parameters={{
             damperstate: {
               type: 'status',
               name: 'Damper',
               unit: null,
-              value: airHandlingUnit01Dome.damperstate ? airHandlingUnit01Dome.damperstate.value : null,
+              value: airHandlingUnit01Dome.damperstate
+                ? airHandlingUnit01Dome.damperstate.value
+                  ? 'Open'
+                  : 'Closed'
+                : null,
             },
             supplyFanCapacity: {
               type: 'single',
@@ -172,24 +174,36 @@ export default class Level5 extends Component {
               unit: airHandlingUnit01Dome.valveState ? airHandlingUnit01Dome.valveState.units : null,
               value: airHandlingUnit01Dome.valveState ? airHandlingUnit01Dome.valveState.value : null,
             },
+            supplyTemperature: {
+              type: 'single',
+              name: 'Supply Temperature',
+              unit: airHandlingUnit01Dome.supplyTemperature ? '°C' : null,
+              value: airHandlingUnit01Dome.supplyTemperature ? airHandlingUnit01Dome.supplyTemperature.value : null,
+            },
+            returnTemperature: {
+              type: 'single',
+              name: 'Return Temperature',
+              unit: airHandlingUnit01Dome.returnTemperature ? '°C' : null,
+              value: airHandlingUnit01Dome.returnTemperature ? airHandlingUnit01Dome.returnTemperature.value : null,
+            },
             hourMeasure: {
               type: 'single',
-              name: 'HOROMETRO',
+              name: 'Running Hours',
               unit: airHandlingUnit01Dome.hourMeasure ? airHandlingUnit01Dome.hourMeasure.units : null,
               value: airHandlingUnit01Dome.hourMeasure ? airHandlingUnit01Dome.hourMeasure.value : null,
             },
             setpoint: {
               type: 'group',
               name: 'Setpoint',
-              unit: airHandlingUnit01Dome.roomSetpoint ? 'ºC' : null,
+              unit: airHandlingUnit01Dome.roomSetpoint ? '°C' : null,
               value: airHandlingUnit01Dome.roomSetpoint ? airHandlingUnit01Dome.roomSetpoint.value : null,
               params: {
                 workingSetpoint: {
                   type: 'noBox',
                   alarm: null,
-                  name: 'Work',
+                  name: 'Working',
                   state: null,
-                  unit: airHandlingUnit01Dome.workingSetpoint ? 'ºC' : null,
+                  unit: airHandlingUnit01Dome.workingSetpoint ? '°C' : null,
                   value: airHandlingUnit01Dome.workingSetpoint ? airHandlingUnit01Dome.workingSetpoint.value : null,
                 },
                 maxFanSetpoint: {
@@ -221,21 +235,19 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Anti-Freeze',
                   state: null,
-                  unit: airHandlingUnit01Dome.antiFreezeTemperature ? 'ºC' : null,
+                  unit: airHandlingUnit01Dome.antiFreezeTemperature ? '°C' : null,
                   value: airHandlingUnit01Dome.antiFreezeTemperature
                     ? airHandlingUnit01Dome.antiFreezeTemperature.value
                     : null,
                 },
-                // TODO: change exteriorAmbienteTemperature -> externalAmbientTemperature after XML v23.2 release.
-                // see DM-50720.
-                exteriorAmbienteTemperature: {
+                externalAmbientTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Exterior',
                   state: null,
-                  unit: airHandlingUnit01Dome.exteriorAmbienteTemperature ? 'ºC' : null,
-                  value: airHandlingUnit01Dome.exteriorAmbienteTemperature
-                    ? airHandlingUnit01Dome.exteriorAmbienteTemperature.value
+                  unit: airHandlingUnit01Dome.externalAmbientTemperature ? '°C' : null,
+                  value: airHandlingUnit01Dome.externalAmbientTemperature
+                    ? airHandlingUnit01Dome.externalAmbientTemperature.value
                     : null,
                 },
               },
@@ -271,14 +283,14 @@ export default class Level5 extends Component {
           title={'Dome AHU 02'}
           id={402}
           width={108}
-          height={130}
+          height={150}
           posX={190}
-          posY={40}
+          posY={30}
           collapsible={true}
           alarms={{
             alarm1: {
               name: 'General',
-              state: airHandlingUnit02Dome.filterAlarm ? airHandlingUnit02Dome.filterAlarm.value : null,
+              state: airHandlingUnit02Dome.generalAlarm ? airHandlingUnit02Dome.generalAlarm.value : null,
             },
             alarm2: {
               name: 'Filtro',
@@ -286,25 +298,29 @@ export default class Level5 extends Component {
             },
             alarm3: {
               name: 'Reset',
-              state: airHandlingUnit02Dome.filterAlarm ? airHandlingUnit02Dome.filterAlarm.value : null,
+              state: airHandlingUnit02Dome.alarmReset ? airHandlingUnit02Dome.alarmReset.value : null,
             },
           }}
           states={{
             command: airHandlingUnit02Dome.switchedOn ? airHandlingUnit02Dome.switchedOn.value : null,
             working: airHandlingUnit02Dome.workingState ? airHandlingUnit02Dome.workingState.value : null,
-            unit: airHandlingUnit02Dome.unitState ? airHandlingUnit02Dome.unitState.value : null,
-            switch: airHandlingUnit02Dome.selectorState ? airHandlingUnit02Dome.selectorState.value : null,
+            unit: null,
+            switch: null,
           }}
           parameters={{
             damperstate: {
               type: 'status',
               name: 'Damper',
               unit: null,
-              value: airHandlingUnit02Dome.damperstate ? airHandlingUnit02Dome.damperstate.value : null,
+              value: airHandlingUnit02Dome.damperstate
+                ? airHandlingUnit02Dome.damperstate.value
+                  ? 'Open'
+                  : 'Closed'
+                : null,
             },
             supplyFanCapacity: {
               type: 'single',
-              name: 'Yield Fan Impulse',
+              name: 'Supply Fan Capacity',
               unit: airHandlingUnit02Dome.supplyFanCapacity ? airHandlingUnit02Dome.supplyFanCapacity.units : null,
               value: airHandlingUnit02Dome.supplyFanCapacity ? airHandlingUnit02Dome.supplyFanCapacity.value : null,
             },
@@ -314,16 +330,28 @@ export default class Level5 extends Component {
               unit: airHandlingUnit02Dome.valveState ? airHandlingUnit02Dome.valveState.units : null,
               value: airHandlingUnit02Dome.valveState ? airHandlingUnit02Dome.valveState.value : null,
             },
+            supplyTemperature: {
+              type: 'single',
+              name: 'Supply Temperature',
+              unit: airHandlingUnit02Dome.supplyTemperature ? '°C' : null,
+              value: airHandlingUnit02Dome.supplyTemperature ? airHandlingUnit02Dome.supplyTemperature.value : null,
+            },
+            returnTemperature: {
+              type: 'single',
+              name: 'Return Temperature',
+              unit: airHandlingUnit02Dome.returnTemperature ? '°C' : null,
+              value: airHandlingUnit02Dome.returnTemperature ? airHandlingUnit02Dome.returnTemperature.value : null,
+            },
             hourMeasure: {
               type: 'single',
-              name: 'HOROMETRO',
+              name: 'Running Hours',
               unit: airHandlingUnit02Dome.hourMeasure ? airHandlingUnit02Dome.hourMeasure.units : null,
               value: airHandlingUnit02Dome.hourMeasure ? airHandlingUnit02Dome.hourMeasure.value : null,
             },
             setpoint: {
               type: 'group',
               name: 'Setpoint',
-              unit: airHandlingUnit02Dome.roomSetpoint ? 'ºC' : null,
+              unit: airHandlingUnit02Dome.roomSetpoint ? '°C' : null,
               value: airHandlingUnit02Dome.roomSetpoint ? airHandlingUnit02Dome.roomSetpoint.value : null,
               params: {
                 workingSetpoint: {
@@ -331,7 +359,7 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Work',
                   state: null,
-                  unit: airHandlingUnit02Dome.workingSetpoint ? 'ºC' : null,
+                  unit: airHandlingUnit02Dome.workingSetpoint ? '°C' : null,
                   value: airHandlingUnit02Dome.workingSetpoint ? airHandlingUnit02Dome.workingSetpoint.value : null,
                 },
                 maxFanSetpoint: {
@@ -363,21 +391,19 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Anti-Freeze',
                   state: null,
-                  unit: airHandlingUnit02Dome.antiFreezeTemperature ? 'ºC' : null,
+                  unit: airHandlingUnit02Dome.antiFreezeTemperature ? '°C' : null,
                   value: airHandlingUnit02Dome.antiFreezeTemperature
                     ? airHandlingUnit02Dome.antiFreezeTemperature.value
                     : null,
                 },
-                // TODO: change exteriorAmbienteTemperature -> externalAmbientTemperature after XML v23.2 release.
-                // see DM-50720.
-                exteriorAmbienteTemperature: {
+                externalAmbientTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Exterior',
                   state: null,
-                  unit: airHandlingUnit02Dome.exteriorAmbienteTemperature ? 'ºC' : null,
-                  value: airHandlingUnit02Dome.exteriorAmbienteTemperature
-                    ? airHandlingUnit02Dome.exteriorAmbienteTemperature.value
+                  unit: airHandlingUnit02Dome.externalAmbientTemperature ? '°C' : null,
+                  value: airHandlingUnit02Dome.externalAmbientTemperature
+                    ? airHandlingUnit02Dome.externalAmbientTemperature.value
                     : null,
                 },
               },
@@ -413,14 +439,14 @@ export default class Level5 extends Component {
           title={'Dome AHU 03'}
           id={403}
           width={108}
-          height={130}
+          height={150}
           posX={0}
-          posY={200}
+          posY={190}
           collapsible={true}
           alarms={{
             alarm1: {
               name: 'General',
-              state: airHandlingUnit03Dome.filterAlarm ? airHandlingUnit03Dome.filterAlarm.value : null,
+              state: airHandlingUnit03Dome.generalAlarm ? airHandlingUnit03Dome.generalAlarm.value : null,
             },
             alarm2: {
               name: 'Filtro',
@@ -428,25 +454,29 @@ export default class Level5 extends Component {
             },
             alarm3: {
               name: 'Reset',
-              state: airHandlingUnit03Dome.filterAlarm ? airHandlingUnit03Dome.filterAlarm.value : null,
+              state: airHandlingUnit03Dome.alarmReset ? airHandlingUnit03Dome.alarmReset.value : null,
             },
           }}
           states={{
             command: airHandlingUnit03Dome.switchedOn ? airHandlingUnit03Dome.switchedOn.value : null,
             working: airHandlingUnit03Dome.workingState ? airHandlingUnit03Dome.workingState.value : null,
-            unit: airHandlingUnit03Dome.unitState ? airHandlingUnit03Dome.unitState.value : null,
-            switch: airHandlingUnit03Dome.selectorState ? airHandlingUnit03Dome.selectorState.value : null,
+            unit: null,
+            switch: null,
           }}
           parameters={{
             damperstate: {
               type: 'status',
               name: 'Damper',
               unit: null,
-              value: airHandlingUnit03Dome.damperstate ? airHandlingUnit03Dome.damperstate.value : null,
+              value: airHandlingUnit03Dome.damperstate
+                ? airHandlingUnit03Dome.damperstate.value
+                  ? 'Open'
+                  : 'Closed'
+                : null,
             },
             supplyFanCapacity: {
               type: 'single',
-              name: 'Yield Fan Impulse',
+              name: 'Supply Fan Capacity',
               unit: airHandlingUnit03Dome.supplyFanCapacity ? airHandlingUnit03Dome.supplyFanCapacity.units : null,
               value: airHandlingUnit03Dome.supplyFanCapacity ? airHandlingUnit03Dome.supplyFanCapacity.value : null,
             },
@@ -456,16 +486,28 @@ export default class Level5 extends Component {
               unit: airHandlingUnit03Dome.valveState ? airHandlingUnit03Dome.valveState.units : null,
               value: airHandlingUnit03Dome.valveState ? airHandlingUnit03Dome.valveState.value : null,
             },
+            supplyTemperature: {
+              type: 'single',
+              name: 'Supply Temperature',
+              unit: airHandlingUnit03Dome.supplyTemperature ? '°C' : null,
+              value: airHandlingUnit03Dome.supplyTemperature ? airHandlingUnit03Dome.supplyTemperature.value : null,
+            },
+            returnTemperature: {
+              type: 'single',
+              name: 'Return Temperature',
+              unit: airHandlingUnit03Dome.returnTemperature ? '°C' : null,
+              value: airHandlingUnit03Dome.returnTemperature ? airHandlingUnit03Dome.returnTemperature.value : null,
+            },
             hourMeasure: {
               type: 'single',
-              name: 'HOROMETRO',
+              name: 'Running Hours',
               unit: airHandlingUnit03Dome.hourMeasure ? airHandlingUnit03Dome.hourMeasure.units : null,
               value: airHandlingUnit03Dome.hourMeasure ? airHandlingUnit03Dome.hourMeasure.value : null,
             },
             setpoint: {
               type: 'group',
               name: 'Setpoint',
-              unit: airHandlingUnit03Dome.roomSetpoint ? 'ºC' : null,
+              unit: airHandlingUnit03Dome.roomSetpoint ? '°C' : null,
               value: airHandlingUnit03Dome.roomSetpoint ? airHandlingUnit03Dome.roomSetpoint.value : null,
               params: {
                 workingSetpoint: {
@@ -473,7 +515,7 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Work',
                   state: null,
-                  unit: airHandlingUnit03Dome.workingSetpoint ? 'ºC' : null,
+                  unit: airHandlingUnit03Dome.workingSetpoint ? '°C' : null,
                   value: airHandlingUnit03Dome.workingSetpoint ? airHandlingUnit03Dome.workingSetpoint.value : null,
                 },
                 maxFanSetpoint: {
@@ -505,21 +547,19 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Anti-Freeze',
                   state: null,
-                  unit: airHandlingUnit03Dome.antiFreezeTemperature ? 'ºC' : null,
+                  unit: airHandlingUnit03Dome.antiFreezeTemperature ? '°C' : null,
                   value: airHandlingUnit03Dome.antiFreezeTemperature
                     ? airHandlingUnit03Dome.antiFreezeTemperature.value
                     : null,
                 },
-                // TODO: change exteriorAmbienteTemperature -> externalAmbientTemperature after XML v23.2 release.
-                // see DM-50720.
-                exteriorAmbienteTemperature: {
+                externalAmbientTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Exterior',
                   state: null,
-                  unit: airHandlingUnit03Dome.exteriorAmbienteTemperature ? 'ºC' : null,
-                  value: airHandlingUnit03Dome.exteriorAmbienteTemperature
-                    ? airHandlingUnit03Dome.exteriorAmbienteTemperature.value
+                  unit: airHandlingUnit03Dome.externalAmbientTemperature ? '°C' : null,
+                  value: airHandlingUnit03Dome.externalAmbientTemperature
+                    ? airHandlingUnit03Dome.externalAmbientTemperature.value
                     : null,
                 },
               },
@@ -555,14 +595,14 @@ export default class Level5 extends Component {
           title={'Dome AHU 04'}
           id={404}
           width={108}
-          height={130}
+          height={150}
           posX={210}
-          posY={200}
+          posY={190}
           collapsible={true}
           alarms={{
             alarm1: {
               name: 'General',
-              state: airHandlingUnit04Dome.filterAlarm ? airHandlingUnit04Dome.filterAlarm.value : null,
+              state: airHandlingUnit04Dome.generalAlarm ? airHandlingUnit04Dome.generalAlarm.value : null,
             },
             alarm2: {
               name: 'Filtro',
@@ -570,25 +610,29 @@ export default class Level5 extends Component {
             },
             alarm3: {
               name: 'Reset',
-              state: airHandlingUnit04Dome.filterAlarm ? airHandlingUnit04Dome.filterAlarm.value : null,
+              state: airHandlingUnit04Dome.alarmReset ? airHandlingUnit04Dome.alarmReset.value : null,
             },
           }}
           states={{
             command: airHandlingUnit04Dome.switchedOn ? airHandlingUnit04Dome.switchedOn.value : null,
             working: airHandlingUnit04Dome.workingState ? airHandlingUnit04Dome.workingState.value : null,
-            unit: airHandlingUnit04Dome.unitState ? airHandlingUnit04Dome.unitState.value : null,
-            switch: airHandlingUnit04Dome.selectorState ? airHandlingUnit04Dome.selectorState.value : null,
+            unit: null,
+            switch: null,
           }}
           parameters={{
             damperstate: {
               type: 'status',
               name: 'Damper',
               unit: null,
-              value: airHandlingUnit04Dome.damperstate ? airHandlingUnit04Dome.damperstate.value : null,
+              value: airHandlingUnit04Dome.damperstate
+                ? airHandlingUnit04Dome.damperstate.value
+                  ? 'Open'
+                  : 'Closed'
+                : null,
             },
             supplyFanCapacity: {
               type: 'single',
-              name: 'Yield Fan Impulse',
+              name: 'Supply Fan Capacity',
               unit: airHandlingUnit04Dome.supplyFanCapacity ? airHandlingUnit04Dome.supplyFanCapacity.units : null,
               value: airHandlingUnit04Dome.supplyFanCapacity ? airHandlingUnit04Dome.supplyFanCapacity.value : null,
             },
@@ -598,16 +642,28 @@ export default class Level5 extends Component {
               unit: airHandlingUnit04Dome.valveState ? airHandlingUnit04Dome.valveState.units : null,
               value: airHandlingUnit04Dome.valveState ? airHandlingUnit04Dome.valveState.value : null,
             },
+            supplyTemperature: {
+              type: 'single',
+              name: 'Supply Temperature',
+              unit: airHandlingUnit04Dome.supplyTemperature ? '°C' : null,
+              value: airHandlingUnit04Dome.supplyTemperature ? airHandlingUnit04Dome.supplyTemperature.value : null,
+            },
+            returnTemperature: {
+              type: 'single',
+              name: 'Return Temperature',
+              unit: airHandlingUnit04Dome.returnTemperature ? '°C' : null,
+              value: airHandlingUnit04Dome.returnTemperature ? airHandlingUnit04Dome.returnTemperature.value : null,
+            },
             hourMeasure: {
               type: 'single',
-              name: 'HOROMETRO',
+              name: 'Running Hours',
               unit: airHandlingUnit04Dome.hourMeasure ? airHandlingUnit04Dome.hourMeasure.units : null,
               value: airHandlingUnit04Dome.hourMeasure ? airHandlingUnit04Dome.hourMeasure.value : null,
             },
             setpoint: {
               type: 'group',
               name: 'Setpoint',
-              unit: airHandlingUnit04Dome.roomSetpoint ? 'ºC' : null,
+              unit: airHandlingUnit04Dome.roomSetpoint ? '°C' : null,
               value: airHandlingUnit04Dome.roomSetpoint ? airHandlingUnit04Dome.roomSetpoint.value : null,
               params: {
                 workingSetpoint: {
@@ -615,7 +671,7 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Work',
                   state: null,
-                  unit: airHandlingUnit04Dome.workingSetpoint ? 'ºC' : null,
+                  unit: airHandlingUnit04Dome.workingSetpoint ? '°C' : null,
                   value: airHandlingUnit04Dome.workingSetpoint ? airHandlingUnit04Dome.workingSetpoint.value : null,
                 },
                 maxFanSetpoint: {
@@ -647,21 +703,19 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Anti-Freeze',
                   state: null,
-                  unit: airHandlingUnit04Dome.antiFreezeTemperature ? 'ºC' : null,
+                  unit: airHandlingUnit04Dome.antiFreezeTemperature ? '°C' : null,
                   value: airHandlingUnit04Dome.antiFreezeTemperature
                     ? airHandlingUnit04Dome.antiFreezeTemperature.value
                     : null,
                 },
-                // TODO: change exteriorAmbienteTemperature -> externalAmbientTemperature after XML v23.2 release.
-                // see DM-50720.
-                exteriorAmbienteTemperature: {
+                externalAmbientTemperature: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Exterior',
                   state: null,
-                  unit: airHandlingUnit04Dome.exteriorAmbienteTemperature ? 'ºC' : null,
-                  value: airHandlingUnit04Dome.exteriorAmbienteTemperature
-                    ? airHandlingUnit04Dome.exteriorAmbienteTemperature.value
+                  unit: airHandlingUnit04Dome.externalAmbientTemperature ? '°C' : null,
+                  value: airHandlingUnit04Dome.externalAmbientTemperature
+                    ? airHandlingUnit04Dome.externalAmbientTemperature.value
                     : null,
                 },
               },
@@ -710,8 +764,8 @@ export default class Level5 extends Component {
           states={{
             command: airCirculationFan01Lab.switchedOn ? airCirculationFan01Lab.switchedOn.value : null,
             working: airCirculationFan01Lab.workingState ? airCirculationFan01Lab.workingState.value : null,
-            unit: airCirculationFan01Lab.unitState ? airCirculationFan01Lab.unitState.value : null,
-            switch: airCirculationFan01Lab.selectorState ? airCirculationFan01Lab.selectorState.value : null,
+            unit: null,
+            switch: null,
           }}
         />
 
@@ -732,8 +786,8 @@ export default class Level5 extends Component {
           states={{
             command: airCirculationFan08Pier.switchedOn ? airCirculationFan08Pier.switchedOn.value : null,
             working: airCirculationFan08Pier.workingState ? airCirculationFan08Pier.workingState.value : null,
-            unit: airCirculationFan08Pier.unitState ? airCirculationFan08Pier.unitState.value : null,
-            switch: airCirculationFan08Pier.selectorState ? airCirculationFan08Pier.selectorState.value : null,
+            unit: null,
+            switch: null,
           }}
         />
 
@@ -754,8 +808,8 @@ export default class Level5 extends Component {
           states={{
             command: airCirculationFan09Pier.switchedOn ? airCirculationFan09Pier.switchedOn.value : null,
             working: airCirculationFan09Pier.workingState ? airCirculationFan09Pier.workingState.value : null,
-            unit: airCirculationFan09Pier.unitState ? airCirculationFan09Pier.unitState.value : null,
-            switch: airCirculationFan09Pier.selectorState ? airCirculationFan09Pier.selectorState.value : null,
+            unit: null,
+            switch: null,
           }}
         />
 
@@ -776,8 +830,8 @@ export default class Level5 extends Component {
           states={{
             command: airCirculationFan10Pier.switchedOn ? airCirculationFan10Pier.switchedOn.value : null,
             working: airCirculationFan10Pier.workingState ? airCirculationFan10Pier.workingState.value : null,
-            unit: airCirculationFan10Pier.unitState ? airCirculationFan10Pier.unitState.value : null,
-            switch: airCirculationFan10Pier.selectorState ? airCirculationFan10Pier.selectorState.value : null,
+            unit: null,
+            switch: null,
           }}
         />
 
@@ -798,8 +852,8 @@ export default class Level5 extends Component {
           states={{
             command: airCirculationFan11Pier.switchedOn ? airCirculationFan11Pier.switchedOn.value : null,
             working: airCirculationFan11Pier.workingState ? airCirculationFan11Pier.workingState.value : null,
-            unit: airCirculationFan11Pier.unitState ? airCirculationFan11Pier.unitState.value : null,
-            switch: airCirculationFan11Pier.selectorState ? airCirculationFan11Pier.selectorState.value : null,
+            unit: null,
+            switch: null,
           }}
         />
 
@@ -820,8 +874,8 @@ export default class Level5 extends Component {
           states={{
             command: airCirculationFan12Pier.switchedOn ? airCirculationFan12Pier.switchedOn.value : null,
             working: airCirculationFan12Pier.workingState ? airCirculationFan12Pier.workingState.value : null,
-            unit: airCirculationFan12Pier.unitState ? airCirculationFan12Pier.unitState.value : null,
-            switch: airCirculationFan12Pier.selectorState ? airCirculationFan12Pier.selectorState.value : null,
+            unit: null,
+            switch: null,
           }}
         />
 
@@ -842,8 +896,8 @@ export default class Level5 extends Component {
           states={{
             command: airCirculationFan13Pier.switchedOn ? airCirculationFan13Pier.switchedOn.value : null,
             working: airCirculationFan13Pier.workingState ? airCirculationFan13Pier.workingState.value : null,
-            unit: airCirculationFan13Pier.unitState ? airCirculationFan13Pier.unitState.value : null,
-            switch: airCirculationFan13Pier.selectorState ? airCirculationFan13Pier.selectorState.value : null,
+            unit: null,
+            switch: null,
           }}
         />
 
@@ -864,8 +918,8 @@ export default class Level5 extends Component {
           states={{
             command: airCirculationFan14Pier.switchedOn ? airCirculationFan14Pier.switchedOn.value : null,
             working: airCirculationFan14Pier.workingState ? airCirculationFan14Pier.workingState.value : null,
-            unit: airCirculationFan14Pier.unitState ? airCirculationFan14Pier.unitState.value : null,
-            switch: airCirculationFan14Pier.selectorState ? airCirculationFan14Pier.selectorState.value : null,
+            unit: null,
+            switch: null,
           }}
         />
 
@@ -886,8 +940,8 @@ export default class Level5 extends Component {
           states={{
             command: airCirculationFan15Pier.switchedOn ? airCirculationFan15Pier.switchedOn.value : null,
             working: airCirculationFan15Pier.workingState ? airCirculationFan15Pier.workingState.value : null,
-            unit: airCirculationFan15Pier.unitState ? airCirculationFan15Pier.unitState.value : null,
-            switch: airCirculationFan15Pier.selectorState ? airCirculationFan15Pier.selectorState.value : null,
+            unit: null,
+            switch: null,
           }}
         />
 
@@ -908,8 +962,8 @@ export default class Level5 extends Component {
           states={{
             command: airCirculationFan16Lab.switchedOn ? airCirculationFan16Lab.switchedOn.value : null,
             working: airCirculationFan16Lab.workingState ? airCirculationFan16Lab.workingState.value : null,
-            unit: airCirculationFan16Lab.unitState ? airCirculationFan16Lab.unitState.value : null,
-            switch: airCirculationFan16Lab.selectorState ? airCirculationFan16Lab.selectorState.value : null,
+            unit: null,
+            switch: null,
           }}
         />
 
@@ -930,8 +984,8 @@ export default class Level5 extends Component {
           states={{
             command: airCirculationFan17Lab.switchedOn ? airCirculationFan17Lab.switchedOn.value : null,
             working: airCirculationFan17Lab.workingState ? airCirculationFan17Lab.workingState.value : null,
-            unit: airCirculationFan17Lab.unitState ? airCirculationFan17Lab.unitState.value : null,
-            switch: airCirculationFan17Lab.selectorState ? airCirculationFan17Lab.selectorState.value : null,
+            unit: null,
+            switch: null,
           }}
         />
 
@@ -1017,7 +1071,7 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Temperature',
                   state: null,
-                  unit: dynalene.dynCH01supTS05 ? ' ºC' : null,
+                  unit: dynalene.dynCH01supTS05 ? ' °C' : null,
                   value: dynalene.dynCH01supTS05 ? dynalene.dynCH01supTS05.value : null,
                 },
               },
@@ -1049,7 +1103,7 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Temperature',
                   state: null,
-                  unit: dynalene.dynCH02supTS07 ? ' ºC' : null,
+                  unit: dynalene.dynCH02supTS07 ? ' °C' : null,
                   value: dynalene.dynCH02supTS07 ? dynalene.dynCH02supTS07.value : null,
                 },
               },
@@ -1108,7 +1162,7 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Supply',
                   state: null,
-                  unit: dynalene.dynTAsupTS03 ? 'ºC' : null,
+                  unit: dynalene.dynTAsupTS03 ? '°C' : null,
                   value: dynalene.dynTAsupTS03 ? dynalene.dynTAsupTS03.value : null,
                 },
                 testAreaDynaleneReturnTemp: {
@@ -1116,7 +1170,7 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Return',
                   state: null,
-                  unit: dynalene.dynTAretTS04 ? 'ºC' : null,
+                  unit: dynalene.dynTAretTS04 ? '°C' : null,
                   value: dynalene.dynTAretTS04 ? dynalene.dynTAretTS04.value : null,
                 },
               },
@@ -1175,7 +1229,7 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Supply',
                   state: null,
-                  unit: dynalene.dynTMAsupTS01 ? 'ºC' : null,
+                  unit: dynalene.dynTMAsupTS01 ? '°C' : null,
                   value: dynalene.dynTMAsupTS01 ? dynalene.dynTMAsupTS01.value : null,
                 },
                 TMAReturnTemp: {
@@ -1183,7 +1237,7 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Return',
                   state: null,
-                  unit: dynalene.dynTMAretTS02 ? 'ºC' : null,
+                  unit: dynalene.dynTMAretTS02 ? '°C' : null,
                   value: dynalene.dynTMAretTS02 ? dynalene.dynTMAretTS02.value : null,
                 },
               },
