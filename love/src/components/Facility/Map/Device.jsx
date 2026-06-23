@@ -303,13 +303,16 @@ export default class Device extends Component {
       if (parameters[x].type === 'text') {
         i = j;
         j = j + rowHeight;
+        const truncatedText =
+          parameters[x].value?.length > 12 ? parameters[x].value.substring(0, 12) + '...' : parameters[x].value;
         return (
           <g transform={'translate(0 ' + i + ')'}>
             <text className={styles.param} transform={'translate(4 0)'} textAnchor="start">
               <tspan>{parameters[x].name}</tspan>
             </text>
             <text className={styles.paramVal} transform={'translate(' + (width - 19) + ' 0)'} textAnchor="middle">
-              <tspan>{parameters[x].value}</tspan>
+              <title>{parameters[x].value}</title>
+              <tspan>{truncatedText}</tspan>
             </text>
           </g>
         );
