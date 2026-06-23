@@ -106,10 +106,12 @@ export default class Device extends Component {
       case 'Initialized':
       case 'Powered On':
       case 'Nominal':
+      case 'Open':
         return `${styles.bgStatusOk}`;
       case 'false':
       case 'Alarm':
       case 'Powered Off':
+      case 'Closed':
         return `${styles.bgStatusAlert}`;
       case 'Shutting Down':
       case 'Powering On':
@@ -131,10 +133,12 @@ export default class Device extends Component {
       case 'Initialized':
       case 'Powered On':
       case 'Nominal':
+      case 'Open':
         return `${styles.statusOk}`;
       case 'false':
       case 'Alarm':
       case 'Powered Off':
+      case 'Closed':
         return `${styles.statusAlert}`;
       case 'Shutting Down':
       case 'Powering On':
