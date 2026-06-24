@@ -2509,16 +2509,12 @@ export const getHVACTelemetry = (state) => {
   const HVACData = getStreamsData(state, subscriptions);
   return {
     //Level 1//
-    compressorInfo1: HVACData['event-MTAirCompressor-1-compressorInfo'] ?? {},
-    connectionStatus1: HVACData['event-MTAirCompressor-1-connectionStatus'] ?? {},
     errors1: HVACData['event-MTAirCompressor-1-errors'] ?? {},
     status1: HVACData['event-MTAirCompressor-1-status'] ?? {},
     timerInfo1: HVACData['event-MTAirCompressor-1-timerInfo'] ?? {},
     warnings1: HVACData['event-MTAirCompressor-1-warnings'] ?? {},
     analogData1: HVACData['telemetry-MTAirCompressor-1-analogData'] ?? {},
 
-    compressorInfo2: HVACData['event-MTAirCompressor-2-compressorInfo'] ?? {},
-    connectionStatus2: HVACData['event-MTAirCompressor-2-connectionStatus'] ?? {},
     errors2: HVACData['event-MTAirCompressor-2-errors'] ?? {},
     status2: HVACData['event-MTAirCompressor-2-status'] ?? {},
     timerInfo2: HVACData['event-MTAirCompressor-2-timerInfo'] ?? {},

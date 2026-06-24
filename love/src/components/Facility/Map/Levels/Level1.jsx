@@ -97,16 +97,12 @@ export default class Level1 extends Component {
   };
 
   getDevices() {
-    const compressorInfo1 = this.checkArray(this.props.HVACData.compressorInfo1);
-    const connectionStatus1 = this.checkArray(this.props.HVACData.connectionStatus1);
     const errors1 = this.checkArray(this.props.HVACData.errors1);
     const status1 = this.checkArray(this.props.HVACData.status1);
     const warnings1 = this.checkArray(this.props.HVACData.warnings1);
     const timerInfo1 = this.checkArray(this.props.HVACData.timerInfo1);
     const analogData1 = this.checkArray(this.props.HVACData.analogData1);
 
-    const compressorInfo2 = this.checkArray(this.props.HVACData.compressorInfo2);
-    const connectionStatus2 = this.checkArray(this.props.HVACData.connectionStatus2);
     const errors2 = this.checkArray(this.props.HVACData.errors2);
     const status2 = this.checkArray(this.props.HVACData.status2);
     const warnings2 = this.checkArray(this.props.HVACData.warnings2);
@@ -976,8 +972,6 @@ export default class Level1 extends Component {
           states={{
             command: status2?.readyToStart?.value,
             working: status2?.operating?.value,
-            command: null,
-            working: null,
             unit: null,
             switch: null,
           }}
@@ -990,30 +984,30 @@ export default class Level1 extends Component {
             },
             runOnTimerBool: {
               type: 'status',
-              name: 'Power managed by Timer',
+              name: 'Power Managed by Timer',
               unit: null,
-              value: status2?.runOnTimer ? (status2.runOnTimer.value ? true : false) : null,
+              value: status2?.runOnTimer ? status2.runOnTimer.value : null,
             },
             waterLevel: {
               type: 'single',
               name: 'Water Level',
-              unit: analogData2?.waterLevel ? ' ' + analogData2.waterLevel.units : null,
+              unit: analogData2?.waterLevel ? analogData2.waterLevel.units : null,
               value: analogData2?.waterLevel ? analogData2.waterLevel.value : null,
             },
             speedStatus: {
               type: 'status',
               name: 'Speed Status',
               unit: null,
-              value: status2?.minAllowedSpeedAchieved
+              value: status2?.maxAllowedSpeedAchieved?.value
                 ? 'Max Speed'
-                : status2?.minAllowedSpeedAchieved
+                : status2?.minAllowedSpeedAchieved?.value
                 ? 'Min Speed'
                 : 'Nominal',
             },
             limitSpeed: {
               type: 'single',
               name: 'Speed Target',
-              unit: analogData2?.targetSpeed ? ' min-1' : null,
+              unit: analogData2?.targetSpeed ? analogData2.targetSpeed.units : null,
               value: analogData2?.targetSpeed ? analogData2.targetSpeed.value : null,
             },
             MotorSpeed1: {
@@ -1027,7 +1021,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: 'Current',
                   state: null,
-                  unit: analogData2?.motorCurrent ? ' ' + analogData2.motorCurrent.units : null,
+                  unit: analogData2?.motorCurrent ? analogData2.motorCurrent.units : null,
                   value: analogData2?.motorCurrent ? analogData2.motorCurrent.value : null,
                 },
                 motorInput1: {
@@ -1035,7 +1029,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: 'Input',
                   state: null,
-                  unit: analogData2?.motorInput ? ' ' + analogData2.motorInput.units : null,
+                  unit: analogData2?.motorInput ? analogData2.motorInput.units : null,
                   value: analogData2?.motorInput ? analogData2.motorInput.value : null,
                 },
               },
@@ -1051,7 +1045,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: 'Speed %',
                   state: null,
-                  unit: analogData2?.motorSpeedPercentage ? ' ' + analogData2.motorSpeedPercentage.units : null,
+                  unit: analogData2?.motorSpeedPercentage ? analogData2.motorSpeedPercentage.units : null,
                   value: analogData2?.motorSpeedPercentage ? analogData2.motorSpeedPercentage.value : null,
                 },
                 motorSpeedRPM1: {
@@ -1059,7 +1053,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: 'Speed RPM',
                   state: null,
-                  unit: analogData2?.motorSpeedRPM ? ' ' + analogData2.motorSpeedRPM.units : null,
+                  unit: analogData2?.motorSpeedRPM ? analogData2.motorSpeedRPM.units : null,
                   value: analogData2?.motorSpeedRPM ? analogData2.motorSpeedRPM.value : null,
                 },
               },
@@ -1075,9 +1069,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: 'Compressor',
                   state: null,
-                  unit: analogData2?.compressorVolumePercentage
-                    ? ' ' + analogData2.compressorVolumePercentage.units
-                    : null,
+                  unit: analogData2?.compressorVolumePercentage ? analogData2.compressorVolumePercentage.units : null,
                   value: analogData2?.compressorVolumePercentage ? analogData2.compressorVolumePercentage.value : null,
                 },
                 compressorVolume: {
@@ -1085,7 +1077,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: 'Compressor',
                   state: null,
-                  unit: analogData2?.compressorVolume ? ' ' + analogData2.compressorVolume.units : null,
+                  unit: analogData2?.compressorVolume ? analogData2.compressorVolume.units : null,
                   value: analogData2?.compressorVolume ? analogData2.compressorVolume.value : null,
                 },
                 groupVolume: {
@@ -1093,7 +1085,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: 'Group',
                   state: null,
-                  unit: analogData2?.groupVolume ? ' ' + analogData2.groupVolume.units : null,
+                  unit: analogData2?.groupVolume ? analogData2.groupVolume.units : null,
                   value: analogData2?.groupVolume ? analogData2.groupVolume.value : null,
                 },
               },
@@ -1109,7 +1101,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: 'Compressor',
                   state: null,
-                  unit: analogData2?.stage1OutputPressure ? ' ' + analogData2.stage1OutputPressure.units : null,
+                  unit: analogData2?.stage1OutputPressure ? analogData2.stage1OutputPressure.units : null,
                   value: analogData2?.stage1OutputPressure ? analogData2.stage1OutputPressure.value : null,
                 },
                 compressorVolume: {
@@ -1117,7 +1109,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: 'Compressor',
                   state: null,
-                  unit: analogData2?.stage1OutputTemperature ? ' ºC' : null,
+                  unit: analogData2?.stage1OutputTemperature ? '°C' : null,
                   value: analogData2?.stage1OutputTemperature ? analogData2.stage1OutputTemperature.value : null,
                 },
               },
@@ -1125,43 +1117,43 @@ export default class Level1 extends Component {
             linePressure: {
               type: 'single',
               name: 'Line Pressure',
-              unit: analogData2?.linePressure ? ' ' + analogData2.linePressure.units : null,
+              unit: analogData2?.linePressure ? analogData2.linePressure.units : null,
               value: analogData2?.linePressure ? analogData2.linePressure.value : null,
             },
             heatsinkTemperature: {
               type: 'single',
               name: 'Heatsink Temperature',
-              unit: analogData2?.heatsinkTemperature ? ' ºC' : null,
+              unit: analogData2?.heatsinkTemperature ? '°C' : null,
               value: analogData2?.heatsinkTemperature ? analogData2.heatsinkTemperature.value : null,
             },
             dclinkVoltage: {
               type: 'single',
               name: 'DC Link Voltage',
-              unit: analogData2?.dclinkVoltage ? ' ' + analogData2.dclinkVoltage.units : null,
+              unit: analogData2?.dclinkVoltage ? analogData2.dclinkVoltage.units : null,
               value: analogData2?.dclinkVoltage ? analogData2.dclinkVoltage.value : null,
             },
             runningHours: {
               type: 'single',
               name: 'Time Running',
-              unit: timerInfo2?.runningHours ? ' ' + timerInfo2.runningHours.units : null,
+              unit: timerInfo2?.runningHours ? timerInfo2.runningHours.units : null,
               value: timerInfo2?.runningHours ? timerInfo2.runningHours.value : null,
             },
             loadedHours: {
               type: 'single',
               name: 'Time Loaded',
-              unit: timerInfo2?.loadedHours ? ' ' + timerInfo2.loadedHours.units : null,
+              unit: timerInfo2?.loadedHours ? timerInfo2.loadedHours.units : null,
               value: timerInfo2?.loadedHours ? timerInfo2.loadedHours.value : null,
             },
             lowestServiceCounter: {
               type: 'single',
               name: 'Lowes service counter',
-              unit: timerInfo2?.lowestServiceCounter ? ' ' + timerInfo2.lowestServiceCounter.units : null,
+              unit: timerInfo2?.lowestServiceCounter ? timerInfo2.lowestServiceCounter.units : null,
               value: timerInfo2?.lowestServiceCounter ? timerInfo2.lowestServiceCounter.value : null,
             },
             runOnTimer: {
               type: 'single',
               name: 'Run-on timer',
-              unit: timerInfo2?.runOnTimer ? ' ' + timerInfo2.runOnTimer.units : null,
+              unit: timerInfo2?.runOnTimer ? timerInfo2.runOnTimer.units : null,
               value: timerInfo2?.runOnTimer ? timerInfo2.runOnTimer.value : null,
             },
           }}
@@ -1383,8 +1375,6 @@ export default class Level1 extends Component {
           states={{
             command: status1?.readyToStart?.value,
             working: status1?.operating?.value,
-            command: null,
-            working: null,
             unit: null,
             switch: null,
           }}
@@ -1397,30 +1387,30 @@ export default class Level1 extends Component {
             },
             runOnTimerBool: {
               type: 'status',
-              name: 'Power managed by Timer',
+              name: 'Power Managed by Timer',
               unit: null,
-              value: status1?.runOnTimer ? (status1.runOnTimer.value ? true : false) : null,
+              value: status1?.runOnTimer ? status1.runOnTimer.value : null,
             },
             waterLevel: {
               type: 'single',
               name: 'Water Level',
-              unit: analogData1?.waterLevel ? ' ' + analogData1.waterLevel.units : null,
+              unit: analogData1?.waterLevel ? analogData1.waterLevel.units : null,
               value: analogData1?.waterLevel ? analogData1.waterLevel.value : null,
             },
             speedStatus: {
               type: 'status',
               name: 'Speed Status',
               unit: null,
-              value: status1?.minAllowedSpeedAchieved
+              value: status1?.maxAllowedSpeedAchieved?.value
                 ? 'Max Speed'
-                : status1?.minAllowedSpeedAchieved
+                : status1?.minAllowedSpeedAchieved?.value
                 ? 'Min Speed'
                 : 'Nominal',
             },
             limitSpeed: {
               type: 'single',
               name: 'Speed Target',
-              unit: analogData1?.targetSpeed ? ' min-1' : null,
+              unit: analogData1?.targetSpeed ? analogData1.targetSpeed.units : null,
               value: analogData1?.targetSpeed ? analogData1.targetSpeed.value : null,
             },
             MotorSpeed1: {
@@ -1434,7 +1424,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: 'Current',
                   state: null,
-                  unit: analogData1?.motorCurrent ? ' ' + analogData1.motorCurrent.units : null,
+                  unit: analogData1?.motorCurrent ? analogData1.motorCurrent.units : null,
                   value: analogData1?.motorCurrent ? analogData1.motorCurrent.value : null,
                 },
                 motorInput1: {
@@ -1442,7 +1432,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: 'Input',
                   state: null,
-                  unit: analogData1?.motorInput ? ' ' + analogData1.motorInput.units : null,
+                  unit: analogData1?.motorInput ? analogData1.motorInput.units : null,
                   value: analogData1?.motorInput ? analogData1.motorInput.value : null,
                 },
               },
@@ -1458,7 +1448,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: 'Speed %',
                   state: null,
-                  unit: analogData1?.motorSpeedPercentage ? ' ' + analogData1.motorSpeedPercentage.units : null,
+                  unit: analogData1?.motorSpeedPercentage ? analogData1.motorSpeedPercentage.units : null,
                   value: analogData1?.motorSpeedPercentage ? analogData1.motorSpeedPercentage.value : null,
                 },
                 motorSpeedRPM1: {
@@ -1466,7 +1456,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: 'Speed RPM',
                   state: null,
-                  unit: analogData1?.motorSpeedRPM ? ' ' + analogData1.motorSpeedRPM.units : null,
+                  unit: analogData1?.motorSpeedRPM ? analogData1.motorSpeedRPM.units : null,
                   value: analogData1?.motorSpeedRPM ? analogData1.motorSpeedRPM.value : null,
                 },
               },
@@ -1482,9 +1472,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: 'Compressor',
                   state: null,
-                  unit: analogData1?.compressorVolumePercentage
-                    ? ' ' + analogData1.compressorVolumePercentage.units
-                    : null,
+                  unit: analogData1?.compressorVolumePercentage ? analogData1.compressorVolumePercentage.units : null,
                   value: analogData1?.compressorVolumePercentage ? analogData1.compressorVolumePercentage.value : null,
                 },
                 compressorVolume: {
@@ -1492,7 +1480,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: 'Compressor',
                   state: null,
-                  unit: analogData1?.compressorVolume ? ' ' + analogData1.compressorVolume.units : null,
+                  unit: analogData1?.compressorVolume ? analogData1.compressorVolume.units : null,
                   value: analogData1?.compressorVolume ? analogData1.compressorVolume.value : null,
                 },
                 groupVolume: {
@@ -1500,7 +1488,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: 'Group',
                   state: null,
-                  unit: analogData1?.groupVolume ? ' ' + analogData1.groupVolume.units : null,
+                  unit: analogData1?.groupVolume ? analogData1.groupVolume.units : null,
                   value: analogData1?.groupVolume ? analogData1.groupVolume.value : null,
                 },
               },
@@ -1516,7 +1504,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: 'Compressor',
                   state: null,
-                  unit: analogData1?.stage1OutputPressure ? ' ' + analogData1.stage1OutputPressure.units : null,
+                  unit: analogData1?.stage1OutputPressure ? analogData1.stage1OutputPressure.units : null,
                   value: analogData1?.stage1OutputPressure ? analogData1.stage1OutputPressure.value : null,
                 },
                 compressorVolume: {
@@ -1524,7 +1512,7 @@ export default class Level1 extends Component {
                   alarm: null,
                   name: 'Compressor',
                   state: null,
-                  unit: analogData1?.stage1OutputTemperature ? ' ºC' : null,
+                  unit: analogData1?.stage1OutputTemperature ? '°C' : null,
                   value: analogData1?.stage1OutputTemperature ? analogData1.stage1OutputTemperature.value : null,
                 },
               },
@@ -1532,43 +1520,43 @@ export default class Level1 extends Component {
             linePressure: {
               type: 'single',
               name: 'Line Pressure',
-              unit: analogData1?.linePressure ? ' ' + analogData1.linePressure.units : null,
+              unit: analogData1?.linePressure ? analogData1.linePressure.units : null,
               value: analogData1?.linePressure ? analogData1.linePressure.value : null,
             },
             heatsinkTemperature: {
               type: 'single',
               name: 'Heatsink Temperature',
-              unit: analogData1?.heatsinkTemperature ? ' ºC' : null,
+              unit: analogData1?.heatsinkTemperature ? ' °C' : null,
               value: analogData1?.heatsinkTemperature ? analogData1.heatsinkTemperature.value : null,
             },
             dclinkVoltage: {
               type: 'single',
               name: 'DC Link Voltage',
-              unit: analogData1?.dclinkVoltage ? ' ' + analogData1.dclinkVoltage.units : null,
+              unit: analogData1?.dclinkVoltage ? analogData1.dclinkVoltage.units : null,
               value: analogData1?.dclinkVoltage ? analogData1.dclinkVoltage.value : null,
             },
             runningHours: {
               type: 'single',
               name: 'Time Running',
-              unit: timerInfo1?.runningHours ? ' ' + timerInfo1.runningHours.units : null,
+              unit: timerInfo1?.runningHours ? timerInfo1.runningHours.units : null,
               value: timerInfo1?.runningHours ? timerInfo1.runningHours.value : null,
             },
             loadedHours: {
               type: 'single',
               name: 'Time Loaded',
-              unit: timerInfo1?.loadedHours ? ' ' + timerInfo1.loadedHours.units : null,
+              unit: timerInfo1?.loadedHours ? timerInfo1.loadedHours.units : null,
               value: timerInfo1?.loadedHours ? timerInfo1.loadedHours.value : null,
             },
             lowestServiceCounter: {
               type: 'single',
               name: 'Lowes service counter',
-              unit: timerInfo1?.lowestServiceCounter ? ' ' + timerInfo1.lowestServiceCounter.units : null,
+              unit: timerInfo1?.lowestServiceCounter ? timerInfo1.lowestServiceCounter.units : null,
               value: timerInfo1?.lowestServiceCounter ? timerInfo1.lowestServiceCounter.value : null,
             },
             runOnTimer: {
               type: 'single',
               name: 'Run-on timer',
-              unit: timerInfo1?.runOnTimer ? ' ' + timerInfo1.runOnTimer.units : null,
+              unit: timerInfo1?.runOnTimer ? timerInfo1.runOnTimer.units : null,
               value: timerInfo1?.runOnTimer ? timerInfo1.runOnTimer.value : null,
             },
           }}

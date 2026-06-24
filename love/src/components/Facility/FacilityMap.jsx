@@ -204,16 +204,12 @@ export default class FacilityMap extends Component {
   render() {
     const { showHVAC, showPower } = this.state;
     const HVACDataLevel1 = {
-      compressorInfo1: this.checkArray(this.props.compressorInfo1),
-      connectionStatus1: this.checkArray(this.props.connectionStatus1),
       errors1: this.checkArray(this.props.errors1),
       status1: this.checkArray(this.props.status1),
       timerInfo1: this.checkArray(this.props.timerInfo1),
       warnings1: this.checkArray(this.props.warnings1),
       analogData1: this.checkArray(this.props.analogData1),
 
-      compressorInfo2: this.checkArray(this.props.compressorInfo2),
-      connectionStatus2: this.checkArray(this.props.connectionStatus2),
       errors2: this.checkArray(this.props.errors2),
       status2: this.checkArray(this.props.status2),
       timerInfo2: this.checkArray(this.props.timerInfo2),
