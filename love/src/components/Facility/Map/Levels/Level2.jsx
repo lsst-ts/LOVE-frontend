@@ -99,208 +99,106 @@ export default class Level2 extends Component {
       <React.Fragment>
         <Device
           title={'Fancoil 02'}
-          temp={fancoilUnit02BreakRoom.roomTemperature ? fancoilUnit02BreakRoom.roomTemperature.value : null}
+          temp={fancoilUnit02BreakRoom.internalTemperature ? fancoilUnit02BreakRoom.internalTemperature.value : null}
           width={84}
           height={112}
           posX={620}
           posY={146}
           collapsible={true}
           states={{
-            command: fancoilUnit02BreakRoom.switchedOn ? fancoilUnit02BreakRoom.switchedOn.value : null,
-            working: fancoilUnit02BreakRoom.workingState ? fancoilUnit02BreakRoom.workingState.value : null,
-            unit: fancoilUnit02BreakRoom.unitState ? fancoilUnit02BreakRoom.unitState.value : null,
-            switch: fancoilUnit02BreakRoom.selectorState ? fancoilUnit02BreakRoom.selectorState.value : null,
+            command: null,
+            working: fancoilUnit02BreakRoom.fanDemand ? fancoilUnit02BreakRoom.fanDemand.value : null,
+            unit: null,
+            switch: null,
           }}
           parameters={{
             heatingState: {
-              type: 'status',
-              name: 'Heater',
+              type: 'text',
+              name: 'Mode',
               unit: null,
-              value: fancoilUnit02BreakRoom.heatingState ? fancoilUnit02BreakRoom.heatingState.value : null,
+              value: fancoilUnit02BreakRoom?.heatingMode?.value
+                ? 'Heating'
+                : fancoilUnit02BreakRoom?.coolingMode?.value
+                ? 'Cooling'
+                : 'Unknown',
             },
-            operationalState: {
-              type: 'status',
-              name: 'Operation',
+            fanContact: {
+              type: 'text',
+              name: 'Fan Contact Mode',
               unit: null,
-              value: fancoilUnit02BreakRoom.operationalState ? fancoilUnit02BreakRoom.operationalState.value : null,
+              value: fancoilUnit02BreakRoom?.highFanContact?.value
+                ? 'High'
+                : fancoilUnit02BreakRoom?.mediumFanContact?.value
+                ? 'Medium'
+                : fancoilUnit02BreakRoom?.lowFanContact?.value
+                ? 'Low'
+                : 'Unknown',
             },
-            fanState: {
-              type: 'status',
-              name: 'Fan',
-              unit: null,
-              value: fancoilUnit02BreakRoom.fanState ? fancoilUnit02BreakRoom.fanState.value : null,
-            },
-            coldValveOpening: {
+            internalTemperature: {
               type: 'single',
-              name: 'Opening Valve Cold',
-              unit: fancoilUnit02BreakRoom.coldValveOpening ? fancoilUnit02BreakRoom.coldValveOpening.units : null,
-              value: fancoilUnit02BreakRoom.coldValveOpening ? fancoilUnit02BreakRoom.coldValveOpening.value : null,
+              name: 'Internal Temperature',
+              unit: fancoilUnit02BreakRoom.internalTemperature ? '°C' : null,
+              value: fancoilUnit02BreakRoom.internalTemperature
+                ? fancoilUnit02BreakRoom.internalTemperature.value
+                : null,
             },
-            roomTemperature: {
+            internalHumidity: {
               type: 'single',
-              name: 'Temperature Room',
-              unit: fancoilUnit02BreakRoom.roomTemperature ? 'ºC' : null,
-              value: fancoilUnit02BreakRoom.roomTemperature ? fancoilUnit02BreakRoom.roomTemperature.value : null,
-            },
-            setpointDay: {
-              type: 'group',
-              name: 'Setpoint Day',
-              unit: null,
-              value: null,
-              params: {
-                dayCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit02BreakRoom.dayCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit02BreakRoom.dayCoolingSetpoint
-                    ? fancoilUnit02BreakRoom.dayCoolingSetpoint.value
-                    : null,
-                },
-                dayHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit02BreakRoom.dayHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit02BreakRoom.dayHeatingSetpoint
-                    ? fancoilUnit02BreakRoom.dayHeatingSetpoint.value
-                    : null,
-                },
-              },
-            },
-            setpointNight: {
-              type: 'group',
-              name: 'Setpoint Night',
-              unit: null,
-              value: null,
-              params: {
-                nightCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit02BreakRoom.nightCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit02BreakRoom.nightCoolingSetpoint
-                    ? fancoilUnit02BreakRoom.nightCoolingSetpoint.value
-                    : null,
-                },
-                nightHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit02BreakRoom.nightHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit02BreakRoom.nightHeatingSetpoint
-                    ? fancoilUnit02BreakRoom.nightHeatingSetpoint.value
-                    : null,
-                },
-              },
+              name: 'Internal Humidity',
+              unit: fancoilUnit02BreakRoom.internalHumidity ? fancoilUnit02BreakRoom.internalHumidity.units : null,
+              value: fancoilUnit02BreakRoom.internalHumidity ? fancoilUnit02BreakRoom.internalHumidity.value : null,
             },
           }}
         />
 
         <Device
           title={'Fancoil 01'}
-          temp={fancoilUnit01ITOffice.roomTemperature ? fancoilUnit01ITOffice.roomTemperature.value : null}
+          temp={fancoilUnit01ITOffice.internalTemperature ? fancoilUnit01ITOffice.internalTemperature.value : null}
           width={84}
           height={112}
           posX={632}
           posY={92}
           collapsible={true}
           states={{
-            command: fancoilUnit01ITOffice.switchedOn ? fancoilUnit01ITOffice.switchedOn.value : null,
-            working: fancoilUnit01ITOffice.workingState ? fancoilUnit01ITOffice.workingState.value : null,
-            unit: fancoilUnit01ITOffice.unitState ? fancoilUnit01ITOffice.unitState.value : null,
-            switch: fancoilUnit01ITOffice.selectorState ? fancoilUnit01ITOffice.selectorState.value : null,
+            command: null,
+            working: fancoilUnit01ITOffice.fanDemand ? fancoilUnit01ITOffice.fanDemand.value : null,
+            unit: null,
+            switch: null,
           }}
           parameters={{
             heatingState: {
               type: 'status',
-              name: 'Heater',
+              name: 'Mode',
               unit: null,
-              value: fancoilUnit01ITOffice.heatingState ? fancoilUnit01ITOffice.heatingState.value : null,
+              value: fancoilUnit01ITOffice.heatingMode?.value
+                ? 'Heating'
+                : fancoilUnit01ITOffice.coolingMode?.value
+                ? 'Cooling'
+                : 'Unknown',
             },
-            operationalState: {
-              type: 'status',
-              name: 'Operation',
+            fanContact: {
+              type: 'text',
+              name: 'Fan Contact Mode',
               unit: null,
-              value: fancoilUnit01ITOffice.operationalState ? fancoilUnit01ITOffice.operationalState.value : null,
+              value: fancoilUnit01ITOffice?.highFanContact?.value
+                ? 'High'
+                : fancoilUnit01ITOffice?.mediumFanContact?.value
+                ? 'Medium'
+                : fancoilUnit01ITOffice?.lowFanContact?.value
+                ? 'Low'
+                : 'Unknown',
             },
-            fanState: {
-              type: 'status',
-              name: 'Fan',
-              unit: null,
-              value: fancoilUnit01ITOffice.fanState ? fancoilUnit01ITOffice.fanState.value : null,
-            },
-            coldValveOpening: {
+            internalTemperature: {
               type: 'single',
-              name: 'Opening Valve Cold',
-              unit: fancoilUnit01ITOffice.coldValveOpening ? fancoilUnit01ITOffice.coldValveOpening.units : null,
-              value: fancoilUnit01ITOffice.coldValveOpening ? fancoilUnit01ITOffice.coldValveOpening.value : null,
+              name: 'Internal Temperature',
+              unit: fancoilUnit01ITOffice.internalTemperature ? '°C' : null,
+              value: fancoilUnit01ITOffice.internalTemperature ? fancoilUnit01ITOffice.internalTemperature.value : null,
             },
-            roomTemperature: {
+            internalHumidity: {
               type: 'single',
-              name: 'Temperature Room',
-              unit: fancoilUnit01ITOffice.roomTemperature ? 'ºC' : null,
-              value: fancoilUnit01ITOffice.roomTemperature ? fancoilUnit01ITOffice.roomTemperature.value : null,
-            },
-            setpointDay: {
-              type: 'group',
-              name: 'Setpoint Day',
-              unit: null,
-              value: null,
-              params: {
-                dayCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit01ITOffice.dayCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit01ITOffice.dayCoolingSetpoint
-                    ? fancoilUnit01ITOffice.dayCoolingSetpoint.value
-                    : null,
-                },
-                dayHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit01ITOffice.dayHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit01ITOffice.dayHeatingSetpoint
-                    ? fancoilUnit01ITOffice.dayHeatingSetpoint.value
-                    : null,
-                },
-              },
-            },
-            setpointNight: {
-              type: 'group',
-              name: 'Setpoint Night',
-              unit: null,
-              value: null,
-              params: {
-                nightCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit01ITOffice.nightCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit01ITOffice.nightCoolingSetpoint
-                    ? fancoilUnit01ITOffice.nightCoolingSetpoint.value
-                    : null,
-                },
-                nightHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit01ITOffice.nightHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit01ITOffice.nightHeatingSetpoint
-                    ? fancoilUnit01ITOffice.nightHeatingSetpoint.value
-                    : null,
-                },
-              },
+              name: 'Internal Humidity',
+              unit: fancoilUnit01ITOffice.internalHumidity ? fancoilUnit01ITOffice.internalHumidity.units : null,
+              value: fancoilUnit01ITOffice.internalHumidity ? fancoilUnit01ITOffice.internalHumidity.value : null,
             },
           }}
         />
@@ -553,7 +451,9 @@ export default class Level2 extends Component {
 
         <Device
           title={'Fancoil 05'}
-          temp={fancoilUnit05ControlRoom.roomTemperature ? fancoilUnit05ControlRoom.roomTemperature.value : null}
+          temp={
+            fancoilUnit05ControlRoom.internalTemperature ? fancoilUnit05ControlRoom.internalTemperature.value : null
+          }
           width={84}
           height={112}
           posX={800}
@@ -561,97 +461,47 @@ export default class Level2 extends Component {
           alarm={0}
           collapsible={true}
           states={{
-            command: fancoilUnit05ControlRoom.switchedOn ? fancoilUnit05ControlRoom.switchedOn.value : null,
-            working: fancoilUnit05ControlRoom.workingState ? fancoilUnit05ControlRoom.workingState.value : null,
-            unit: fancoilUnit05ControlRoom.unitState ? fancoilUnit05ControlRoom.unitState.value : null,
-            switch: fancoilUnit05ControlRoom.selectorState ? fancoilUnit05ControlRoom.selectorState.value : null,
+            command: null,
+            working: fancoilUnit05ControlRoom.fanDemand ? fancoilUnit05ControlRoom.fanDemand.value : null,
+            unit: null,
+            switch: null,
           }}
           parameters={{
             heatingState: {
               type: 'status',
-              name: 'Heater',
+              name: 'Mode',
               unit: null,
-              value: fancoilUnit05ControlRoom.heatingState ? fancoilUnit05ControlRoom.heatingState.value : null,
+              value: fancoilUnit05ControlRoom.heatingMode?.value
+                ? 'Heating'
+                : fancoilUnit05ControlRoom.coolingMode?.value
+                ? 'Cooling'
+                : 'Unknown',
             },
-            operationalState: {
-              type: 'status',
-              name: 'Operation',
+            fanContact: {
+              type: 'text',
+              name: 'Fan Contact Mode',
               unit: null,
-              value: fancoilUnit05ControlRoom.operationalState ? fancoilUnit05ControlRoom.operationalState.value : null,
+              value: fancoilUnit05ControlRoom?.highFanContact?.value
+                ? 'High'
+                : fancoilUnit05ControlRoom?.mediumFanContact?.value
+                ? 'Medium'
+                : fancoilUnit05ControlRoom?.lowFanContact?.value
+                ? 'Low'
+                : 'Unknown',
             },
-            fanState: {
-              type: 'status',
-              name: 'Fan',
-              unit: null,
-              value: fancoilUnit05ControlRoom.fanState ? fancoilUnit05ControlRoom.fanState.value : null,
-            },
-            coldValveOpening: {
+            internalTemperature: {
               type: 'single',
-              name: 'Opening Valve Cold',
-              unit: fancoilUnit05ControlRoom.coldValveOpening ? fancoilUnit05ControlRoom.coldValveOpening.units : null,
-              value: fancoilUnit05ControlRoom.coldValveOpening ? fancoilUnit05ControlRoom.coldValveOpening.value : null,
+              name: 'Internal Temperature',
+              unit: fancoilUnit05ControlRoom.internalTemperature ? '°C' : null,
+              value: fancoilUnit05ControlRoom.internalTemperature
+                ? fancoilUnit05ControlRoom.internalTemperature.value
+                : null,
             },
-            roomTemperature: {
+            internalHumidity: {
               type: 'single',
-              name: 'Temperature Room',
-              unit: fancoilUnit05ControlRoom.roomTemperature ? 'ºC' : null,
-              value: fancoilUnit05ControlRoom.roomTemperature ? fancoilUnit05ControlRoom.roomTemperature.value : null,
-            },
-            setpointDay: {
-              type: 'group',
-              name: 'Setpoint Day',
-              unit: null,
-              value: null,
-              params: {
-                dayCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit05ControlRoom.dayCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit05ControlRoom.dayCoolingSetpoint
-                    ? fancoilUnit05ControlRoom.dayCoolingSetpoint.value
-                    : null,
-                },
-                dayHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit05ControlRoom.dayHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit05ControlRoom.dayHeatingSetpoint
-                    ? fancoilUnit05ControlRoom.dayHeatingSetpoint.value
-                    : null,
-                },
-              },
-            },
-            setpointNight: {
-              type: 'group',
-              name: 'Setpoint Night',
-              unit: null,
-              value: null,
-              params: {
-                nightCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit05ControlRoom.nightCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit05ControlRoom.nightCoolingSetpoint
-                    ? fancoilUnit05ControlRoom.nightCoolingSetpoint.value
-                    : null,
-                },
-                nightHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit05ControlRoom.nightHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit05ControlRoom.nightHeatingSetpoint
-                    ? fancoilUnit05ControlRoom.nightHeatingSetpoint.value
-                    : null,
-                },
-              },
+              name: 'Internal Humidity',
+              unit: fancoilUnit05ControlRoom.internalHumidity ? fancoilUnit05ControlRoom.internalHumidity.units : null,
+              value: fancoilUnit05ControlRoom.internalHumidity ? fancoilUnit05ControlRoom.internalHumidity.value : null,
             },
           }}
         />
@@ -659,7 +509,9 @@ export default class Level2 extends Component {
         <Device
           title={'Fancoil 08'}
           temp={
-            fancoilUnit08ElectricalOffice.roomTemperature ? fancoilUnit08ElectricalOffice.roomTemperature.value : null
+            fancoilUnit08ElectricalOffice.internalTemperature
+              ? fancoilUnit08ElectricalOffice.internalTemperature.value
+              : null
           }
           width={84}
           height={112}
@@ -668,118 +520,60 @@ export default class Level2 extends Component {
           alarm={0}
           collapsible={true}
           states={{
-            command: fancoilUnit08ElectricalOffice.switchedOn ? fancoilUnit08ElectricalOffice.switchedOn.value : null,
-            working: fancoilUnit08ElectricalOffice.workingState
-              ? fancoilUnit08ElectricalOffice.workingState.value
-              : null,
-            unit: fancoilUnit08ElectricalOffice.unitState ? fancoilUnit08ElectricalOffice.unitState.value : null,
-            switch: fancoilUnit08ElectricalOffice.selectorState
-              ? fancoilUnit08ElectricalOffice.selectorState.value
-              : null,
+            command: null,
+            working: fancoilUnit08ElectricalOffice.fanDemand ? fancoilUnit08ElectricalOffice.fanDemand.value : null,
+            unit: null,
+            switch: null,
           }}
           parameters={{
             heatingState: {
               type: 'status',
-              name: 'Heater',
+              name: 'Mode',
               unit: null,
-              value: fancoilUnit08ElectricalOffice.heatingState
-                ? fancoilUnit08ElectricalOffice.heatingState.value
-                : null,
+              value: fancoilUnit08ElectricalOffice.heatingMode?.value
+                ? 'Heating'
+                : fancoilUnit08ElectricalOffice.coolingMode?.value
+                ? 'Cooling'
+                : 'Unknown',
             },
-            operationalState: {
-              type: 'status',
-              name: 'Operation',
+            fanContact: {
+              type: 'text',
+              name: 'Fan Contact Mode',
               unit: null,
-              value: fancoilUnit08ElectricalOffice.operationalState
-                ? fancoilUnit08ElectricalOffice.operationalState.value
-                : null,
+              value: fancoilUnit08ElectricalOffice?.highFanContact?.value
+                ? 'High'
+                : fancoilUnit08ElectricalOffice?.mediumFanContact?.value
+                ? 'Medium'
+                : fancoilUnit08ElectricalOffice?.lowFanContact?.value
+                ? 'Low'
+                : 'Unknown',
             },
-            fanState: {
-              type: 'status',
-              name: 'Fan',
-              unit: null,
-              value: fancoilUnit08ElectricalOffice.fanState ? fancoilUnit08ElectricalOffice.fanState.value : null,
-            },
-            coldValveOpening: {
+            internalTemperature: {
               type: 'single',
-              name: 'Opening Valve Cold',
-              unit: fancoilUnit08ElectricalOffice.coldValveOpening
-                ? fancoilUnit08ElectricalOffice.coldValveOpening.units
-                : null,
-              value: fancoilUnit08ElectricalOffice.coldValveOpening
-                ? fancoilUnit08ElectricalOffice.coldValveOpening.value
+              name: 'Internal Temperature',
+              unit: fancoilUnit08ElectricalOffice.internalTemperature ? '°C' : null,
+              value: fancoilUnit08ElectricalOffice.internalTemperature
+                ? fancoilUnit08ElectricalOffice.internalTemperature.value
                 : null,
             },
-            roomTemperature: {
+            internalHumidity: {
               type: 'single',
-              name: 'Temperature Room',
-              unit: fancoilUnit08ElectricalOffice.roomTemperature ? 'ºC' : null,
-              value: fancoilUnit08ElectricalOffice.roomTemperature
-                ? fancoilUnit08ElectricalOffice.roomTemperature.value
+              name: 'Internal Humidity',
+              unit: fancoilUnit08ElectricalOffice.internalHumidity
+                ? fancoilUnit08ElectricalOffice.internalHumidity.units
                 : null,
-            },
-            setpointDay: {
-              type: 'group',
-              name: 'Setpoint Day',
-              unit: null,
-              value: null,
-              params: {
-                dayCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit08ElectricalOffice.dayCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit08ElectricalOffice.dayCoolingSetpoint
-                    ? fancoilUnit08ElectricalOffice.dayCoolingSetpoint.value
-                    : null,
-                },
-                dayHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit08ElectricalOffice.dayHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit08ElectricalOffice.dayHeatingSetpoint
-                    ? fancoilUnit08ElectricalOffice.dayHeatingSetpoint.value
-                    : null,
-                },
-              },
-            },
-            setpointNight: {
-              type: 'group',
-              name: 'Setpoint Night',
-              unit: null,
-              value: null,
-              params: {
-                nightCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit08ElectricalOffice.nightCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit08ElectricalOffice.nightCoolingSetpoint
-                    ? fancoilUnit08ElectricalOffice.nightCoolingSetpoint.value
-                    : null,
-                },
-                nightHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit08ElectricalOffice.nightHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit08ElectricalOffice.nightHeatingSetpoint
-                    ? fancoilUnit08ElectricalOffice.nightHeatingSetpoint.value
-                    : null,
-                },
-              },
+              value: fancoilUnit08ElectricalOffice.internalHumidity
+                ? fancoilUnit08ElectricalOffice.internalHumidity.value
+                : null,
             },
           }}
         />
 
         <Device
           title={'Fancoil 07'}
-          temp={fancoilUnit07SafetyOffice.roomTemperature ? fancoilUnit07SafetyOffice.roomTemperature.value : null}
+          temp={
+            fancoilUnit07SafetyOffice.internalTemperature ? fancoilUnit07SafetyOffice.internalTemperature.value : null
+          }
           width={84}
           height={122}
           posX={800}
@@ -787,110 +581,60 @@ export default class Level2 extends Component {
           alarm={0}
           collapsible={true}
           states={{
-            command: fancoilUnit07SafetyOffice.switchedOn ? fancoilUnit07SafetyOffice.switchedOn.value : null,
-            working: fancoilUnit07SafetyOffice.workingState ? fancoilUnit07SafetyOffice.workingState.value : null,
-            unit: fancoilUnit07SafetyOffice.unitState ? fancoilUnit07SafetyOffice.unitState.value : null,
-            switch: fancoilUnit07SafetyOffice.selectorState ? fancoilUnit07SafetyOffice.selectorState.value : null,
+            command: null,
+            working: fancoilUnit07SafetyOffice.fanDemand ? fancoilUnit07SafetyOffice.fanDemand.value : null,
+            unit: null,
+            switch: null,
           }}
           parameters={{
             heatingState: {
               type: 'status',
-              name: 'Heater',
+              name: 'Mode',
               unit: null,
-              value: fancoilUnit07SafetyOffice.heatingState ? fancoilUnit07SafetyOffice.heatingState.value : null,
+              value: fancoilUnit07SafetyOffice.heatingMode?.value
+                ? 'Heating'
+                : fancoilUnit07SafetyOffice.coolingMode?.value
+                ? 'Cooling'
+                : 'Unknown',
             },
-            operationalState: {
-              type: 'status',
-              name: 'Operation',
+            fanContact: {
+              type: 'text',
+              name: 'Fan Contact Mode',
               unit: null,
-              value: fancoilUnit07SafetyOffice.operationalState
-                ? fancoilUnit07SafetyOffice.operationalState.value
-                : null,
+              value: fancoilUnit07SafetyOffice?.highFanContact?.value
+                ? 'High'
+                : fancoilUnit07SafetyOffice?.mediumFanContact?.value
+                ? 'Medium'
+                : fancoilUnit07SafetyOffice?.lowFanContact?.value
+                ? 'Low'
+                : 'Unknown',
             },
-            fanState: {
-              type: 'status',
-              name: 'Fan',
-              unit: null,
-              value: fancoilUnit07SafetyOffice.fanState ? fancoilUnit07SafetyOffice.fanState.value : null,
-            },
-            coldValveOpening: {
+            internalTemperature: {
               type: 'single',
-              name: 'Opening Valve Cold',
-              unit: fancoilUnit07SafetyOffice.coldValveOpening
-                ? fancoilUnit07SafetyOffice.coldValveOpening.units
-                : null,
-              value: fancoilUnit07SafetyOffice.coldValveOpening
-                ? fancoilUnit07SafetyOffice.coldValveOpening.value
+              name: 'Internal Temperature',
+              unit: fancoilUnit07SafetyOffice.internalTemperature ? '°C' : null,
+              value: fancoilUnit07SafetyOffice.internalTemperature
+                ? fancoilUnit07SafetyOffice.internalTemperature.value
                 : null,
             },
-            roomTemperature: {
+            internalHumidity: {
               type: 'single',
-              name: 'Temperature Room',
-              unit: fancoilUnit07SafetyOffice.roomTemperature ? 'ºC' : null,
-              value: fancoilUnit07SafetyOffice.roomTemperature ? fancoilUnit07SafetyOffice.roomTemperature.value : null,
-            },
-            setpointDay: {
-              type: 'group',
-              name: 'Setpoint Day',
-              unit: null,
-              value: null,
-              params: {
-                dayCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit07SafetyOffice.dayCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit07SafetyOffice.dayCoolingSetpoint
-                    ? fancoilUnit07SafetyOffice.dayCoolingSetpoint.value
-                    : null,
-                },
-                dayHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit07SafetyOffice.dayHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit07SafetyOffice.dayHeatingSetpoint
-                    ? fancoilUnit07SafetyOffice.dayHeatingSetpoint.value
-                    : null,
-                },
-              },
-            },
-            setpointNight: {
-              type: 'group',
-              name: 'Setpoint Night',
-              unit: null,
-              value: null,
-              params: {
-                nightCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit07SafetyOffice.nightCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit07SafetyOffice.nightCoolingSetpoint
-                    ? fancoilUnit07SafetyOffice.nightCoolingSetpoint.value
-                    : null,
-                },
-                nightHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit07SafetyOffice.nightHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit07SafetyOffice.nightHeatingSetpoint
-                    ? fancoilUnit07SafetyOffice.nightHeatingSetpoint.value
-                    : null,
-                },
-              },
+              name: 'Internal Humidity',
+              unit: fancoilUnit07SafetyOffice.internalHumidity
+                ? fancoilUnit07SafetyOffice.internalHumidity.units
+                : null,
+              value: fancoilUnit07SafetyOffice.internalHumidity
+                ? fancoilUnit07SafetyOffice.internalHumidity.value
+                : null,
             },
           }}
         />
 
         <Device
           title={'Fancoil 03'}
-          temp={fancoilUnit03ControlRoom.roomTemperature ? fancoilUnit03ControlRoom.roomTemperature.value : null}
+          temp={
+            fancoilUnit03ControlRoom.internalTemperature ? fancoilUnit03ControlRoom.internalTemperature.value : null
+          }
           width={84}
           height={112}
           posX={682}
@@ -898,104 +642,56 @@ export default class Level2 extends Component {
           alarm={0}
           collapsible={true}
           states={{
-            command: fancoilUnit03ControlRoom.switchedOn ? fancoilUnit03ControlRoom.switchedOn.value : null,
-            working: fancoilUnit03ControlRoom.workingState ? fancoilUnit03ControlRoom.workingState.value : null,
-            unit: fancoilUnit03ControlRoom.unitState ? fancoilUnit03ControlRoom.unitState.value : null,
-            switch: fancoilUnit03ControlRoom.selectorState ? fancoilUnit03ControlRoom.selectorState.value : null,
+            command: null,
+            working: fancoilUnit03ControlRoom.fanDemand ? fancoilUnit03ControlRoom.fanDemand.value : null,
+            unit: null,
+            switch: null,
           }}
           parameters={{
             heatingState: {
               type: 'status',
-              name: 'Heater',
+              name: 'Mode',
               unit: null,
-              value: fancoilUnit03ControlRoom.heatingState ? fancoilUnit03ControlRoom.heatingState.value : null,
+              value: fancoilUnit03ControlRoom.heatingMode?.value
+                ? 'Heating'
+                : fancoilUnit03ControlRoom.coolingMode?.value
+                ? 'Cooling'
+                : 'Unknown',
             },
-            operationalState: {
-              type: 'status',
-              name: 'Operation',
+            fanContact: {
+              type: 'text',
+              name: 'Fan Contact Mode',
               unit: null,
-              value: fancoilUnit03ControlRoom.operationalState ? fancoilUnit03ControlRoom.operationalState.value : null,
+              value: fancoilUnit03ControlRoom?.highFanContact?.value
+                ? 'High'
+                : fancoilUnit03ControlRoom?.mediumFanContact?.value
+                ? 'Medium'
+                : fancoilUnit03ControlRoom?.lowFanContact?.value
+                ? 'Low'
+                : 'Unknown',
             },
-            fanState: {
-              type: 'status',
-              name: 'Fan',
-              unit: null,
-              value: fancoilUnit03ControlRoom.fanState ? fancoilUnit03ControlRoom.fanState.value : null,
-            },
-            coldValveOpening: {
+            internalTemperature: {
               type: 'single',
-              name: 'Opening Valve Cold',
-              unit: fancoilUnit03ControlRoom.coldValveOpening ? fancoilUnit03ControlRoom.coldValveOpening.units : null,
-              value: fancoilUnit03ControlRoom.coldValveOpening ? fancoilUnit03ControlRoom.coldValveOpening.value : null,
+              name: 'Internal Temperature',
+              unit: fancoilUnit03ControlRoom.internalTemperature ? '°C' : null,
+              value: fancoilUnit03ControlRoom.internalTemperature
+                ? fancoilUnit03ControlRoom.internalTemperature.value
+                : null,
             },
-            roomTemperature: {
+            internalHumidity: {
               type: 'single',
-              name: 'Temperature Room',
-              unit: fancoilUnit03ControlRoom.roomTemperature ? 'ºC' : null,
-              value: fancoilUnit03ControlRoom.roomTemperature ? fancoilUnit03ControlRoom.roomTemperature.value : null,
-            },
-            setpointDay: {
-              type: 'group',
-              name: 'Setpoint Day',
-              unit: null,
-              value: null,
-              params: {
-                dayCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit03ControlRoom.dayCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit03ControlRoom.dayCoolingSetpoint
-                    ? fancoilUnit03ControlRoom.dayCoolingSetpoint.value
-                    : null,
-                },
-                dayHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit03ControlRoom.dayHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit03ControlRoom.dayHeatingSetpoint
-                    ? fancoilUnit03ControlRoom.dayHeatingSetpoint.value
-                    : null,
-                },
-              },
-            },
-            setpointNight: {
-              type: 'group',
-              name: 'Setpoint Night',
-              unit: null,
-              value: null,
-              params: {
-                nightCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit03ControlRoom.nightCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit03ControlRoom.nightCoolingSetpoint
-                    ? fancoilUnit03ControlRoom.nightCoolingSetpoint.value
-                    : null,
-                },
-                nightHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit03ControlRoom.nightHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit03ControlRoom.nightHeatingSetpoint
-                    ? fancoilUnit03ControlRoom.nightHeatingSetpoint.value
-                    : null,
-                },
-              },
+              name: 'Internal Humidity',
+              unit: fancoilUnit03ControlRoom.internalHumidity ? fancoilUnit03ControlRoom.internalHumidity.units : null,
+              value: fancoilUnit03ControlRoom.internalHumidity ? fancoilUnit03ControlRoom.internalHumidity.value : null,
             },
           }}
         />
 
         <Device
           title={'Fancoil 04'}
-          temp={fancoilUnit04ControlRoom.roomTemperature ? fancoilUnit04ControlRoom.roomTemperature.value : null}
+          temp={
+            fancoilUnit04ControlRoom.internalTemperature ? fancoilUnit04ControlRoom.internalTemperature.value : null
+          }
           width={84}
           height={112}
           posX={736}
@@ -1003,104 +699,54 @@ export default class Level2 extends Component {
           alarm={0}
           collapsible={true}
           states={{
-            command: fancoilUnit04ControlRoom.switchedOn ? fancoilUnit04ControlRoom.switchedOn.value : null,
-            working: fancoilUnit04ControlRoom.workingState ? fancoilUnit04ControlRoom.workingState.value : null,
-            unit: fancoilUnit04ControlRoom.unitState ? fancoilUnit04ControlRoom.unitState.value : null,
-            switch: fancoilUnit04ControlRoom.selectorState ? fancoilUnit04ControlRoom.selectorState.value : null,
+            command: null,
+            working: fancoilUnit04ControlRoom.fanDemand ? fancoilUnit04ControlRoom.fanDemand.value : null,
+            unit: null,
+            switch: null,
           }}
           parameters={{
             heatingState: {
               type: 'status',
-              name: 'Heater',
+              name: 'Mode',
               unit: null,
-              value: fancoilUnit04ControlRoom.heatingState ? fancoilUnit04ControlRoom.heatingState.value : null,
+              value: fancoilUnit04ControlRoom.heatingMode?.value
+                ? 'Heating'
+                : fancoilUnit04ControlRoom.coolingMode?.value
+                ? 'Cooling'
+                : 'Unknown',
             },
-            operationalState: {
-              type: 'status',
-              name: 'Operation',
+            fanContact: {
+              type: 'text',
+              name: 'Fan Contact Mode',
               unit: null,
-              value: fancoilUnit04ControlRoom.operationalState ? fancoilUnit04ControlRoom.operationalState.value : null,
+              value: fancoilUnit04ControlRoom?.highFanContact?.value
+                ? 'High'
+                : fancoilUnit04ControlRoom?.mediumFanContact?.value
+                ? 'Medium'
+                : fancoilUnit04ControlRoom?.lowFanContact?.value
+                ? 'Low'
+                : 'Unknown',
             },
-            fanState: {
-              type: 'status',
-              name: 'Fan',
-              unit: null,
-              value: fancoilUnit04ControlRoom.fanState ? fancoilUnit04ControlRoom.fanState.value : null,
-            },
-            coldValveOpening: {
+            internalTemperature: {
               type: 'single',
-              name: 'Opening Valve Cold',
-              unit: fancoilUnit04ControlRoom.coldValveOpening ? fancoilUnit04ControlRoom.coldValveOpening.units : null,
-              value: fancoilUnit04ControlRoom.coldValveOpening ? fancoilUnit04ControlRoom.coldValveOpening.value : null,
+              name: 'Internal Temperature',
+              unit: fancoilUnit04ControlRoom.internalTemperature ? '°C' : null,
+              value: fancoilUnit04ControlRoom.internalTemperature
+                ? fancoilUnit04ControlRoom.internalTemperature.value
+                : null,
             },
-            roomTemperature: {
+            internalHumidity: {
               type: 'single',
-              name: 'Temperature Room',
-              unit: fancoilUnit04ControlRoom.roomTemperature ? 'ºC' : null,
-              value: fancoilUnit04ControlRoom.roomTemperature ? fancoilUnit04ControlRoom.roomTemperature.value : null,
-            },
-            setpointDay: {
-              type: 'group',
-              name: 'Setpoint Day',
-              unit: null,
-              value: null,
-              params: {
-                dayCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit04ControlRoom.dayCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit04ControlRoom.dayCoolingSetpoint
-                    ? fancoilUnit04ControlRoom.dayCoolingSetpoint.value
-                    : null,
-                },
-                dayHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit04ControlRoom.dayHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit04ControlRoom.dayHeatingSetpoint
-                    ? fancoilUnit04ControlRoom.dayHeatingSetpoint.value
-                    : null,
-                },
-              },
-            },
-            setpointNight: {
-              type: 'group',
-              name: 'Setpoint Night',
-              unit: null,
-              value: null,
-              params: {
-                nightCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit04ControlRoom.nightCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit04ControlRoom.nightCoolingSetpoint
-                    ? fancoilUnit04ControlRoom.nightCoolingSetpoint.value
-                    : null,
-                },
-                nightHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit04ControlRoom.nightHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit04ControlRoom.nightHeatingSetpoint
-                    ? fancoilUnit04ControlRoom.nightHeatingSetpoint.value
-                    : null,
-                },
-              },
+              name: 'Internal Humidity',
+              unit: fancoilUnit04ControlRoom.internalHumidity ? fancoilUnit04ControlRoom.internalHumidity.units : null,
+              value: fancoilUnit04ControlRoom.internalHumidity ? fancoilUnit04ControlRoom.internalHumidity.value : null,
             },
           }}
         />
 
         <Device
           title={'Fancoil 10'}
-          temp={fancoilUnit10WorkRoom.roomTemperature ? fancoilUnit10WorkRoom.roomTemperature.value : null}
+          temp={fancoilUnit10WorkRoom.internalTemperature ? fancoilUnit10WorkRoom.internalTemperature.value : null}
           width={84}
           height={112}
           posX={692}
@@ -1108,104 +754,52 @@ export default class Level2 extends Component {
           alarm={0}
           collapsible={true}
           states={{
-            command: fancoilUnit10WorkRoom.switchedOn ? fancoilUnit10WorkRoom.switchedOn.value : null,
-            working: fancoilUnit10WorkRoom.workingState ? fancoilUnit10WorkRoom.workingState.value : null,
-            unit: fancoilUnit10WorkRoom.unitState ? fancoilUnit10WorkRoom.unitState.value : null,
-            switch: fancoilUnit10WorkRoom.selectorState ? fancoilUnit10WorkRoom.selectorState.value : null,
+            command: null,
+            working: fancoilUnit10WorkRoom.fanDemand ? fancoilUnit10WorkRoom.fanDemand.value : null,
+            unit: null,
+            switch: null,
           }}
           parameters={{
             heatingState: {
               type: 'status',
-              name: 'Heater',
+              name: 'Mode',
               unit: null,
-              value: fancoilUnit10WorkRoom.heatingState ? fancoilUnit10WorkRoom.heatingState.value : null,
+              value: fancoilUnit10WorkRoom.heatingMode?.value
+                ? 'Heating'
+                : fancoilUnit10WorkRoom.coolingMode?.value
+                ? 'Cooling'
+                : 'Unknown',
             },
-            operationalState: {
-              type: 'status',
-              name: 'Operation',
+            fanContact: {
+              type: 'text',
+              name: 'Fan Contact Mode',
               unit: null,
-              value: fancoilUnit10WorkRoom.operationalState ? fancoilUnit10WorkRoom.operationalState.value : null,
+              value: fancoilUnit10WorkRoom?.highFanContact?.value
+                ? 'High'
+                : fancoilUnit10WorkRoom?.mediumFanContact?.value
+                ? 'Medium'
+                : fancoilUnit10WorkRoom?.lowFanContact?.value
+                ? 'Low'
+                : 'Unknown',
             },
-            fanState: {
-              type: 'status',
-              name: 'Fan',
-              unit: null,
-              value: fancoilUnit10WorkRoom.fanState ? fancoilUnit10WorkRoom.fanState.value : null,
-            },
-            coldValveOpening: {
+            internalTemperature: {
               type: 'single',
-              name: 'Opening Valve Cold',
-              unit: fancoilUnit10WorkRoom.coldValveOpening ? fancoilUnit10WorkRoom.coldValveOpening.units : null,
-              value: fancoilUnit10WorkRoom.coldValveOpening ? fancoilUnit10WorkRoom.coldValveOpening.value : null,
+              name: 'Internal Temperature',
+              unit: fancoilUnit10WorkRoom.internalTemperature ? '°C' : null,
+              value: fancoilUnit10WorkRoom.internalTemperature ? fancoilUnit10WorkRoom.internalTemperature.value : null,
             },
-            roomTemperature: {
+            internalHumidity: {
               type: 'single',
-              name: 'Temperature Room',
-              unit: fancoilUnit10WorkRoom.roomTemperature ? 'ºC' : null,
-              value: fancoilUnit10WorkRoom.roomTemperature ? fancoilUnit10WorkRoom.roomTemperature.value : null,
-            },
-            setpointDay: {
-              type: 'group',
-              name: 'Setpoint Day',
-              unit: null,
-              value: null,
-              params: {
-                dayCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit10WorkRoom.dayCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit10WorkRoom.dayCoolingSetpoint
-                    ? fancoilUnit10WorkRoom.dayCoolingSetpoint.value
-                    : null,
-                },
-                dayHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit10WorkRoom.dayHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit10WorkRoom.dayHeatingSetpoint
-                    ? fancoilUnit10WorkRoom.dayHeatingSetpoint.value
-                    : null,
-                },
-              },
-            },
-            setpointNight: {
-              type: 'group',
-              name: 'Setpoint Night',
-              unit: null,
-              value: null,
-              params: {
-                nightCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit10WorkRoom.nightCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit10WorkRoom.nightCoolingSetpoint
-                    ? fancoilUnit10WorkRoom.nightCoolingSetpoint.value
-                    : null,
-                },
-                nightHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit10WorkRoom.nightHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit10WorkRoom.nightHeatingSetpoint
-                    ? fancoilUnit10WorkRoom.nightHeatingSetpoint.value
-                    : null,
-                },
-              },
+              name: 'Internal Humidity',
+              unit: fancoilUnit10WorkRoom.internalHumidity ? fancoilUnit10WorkRoom.internalHumidity.units : null,
+              value: fancoilUnit10WorkRoom.internalHumidity ? fancoilUnit10WorkRoom.internalHumidity.value : null,
             },
           }}
         />
 
         <Device
           title={'Fancoil 11'}
-          temp={fancoilUnit11WorkRoom.roomTemperature ? fancoilUnit11WorkRoom.roomTemperature.value : null}
+          temp={fancoilUnit11WorkRoom.internalTemperature ? fancoilUnit11WorkRoom.internalTemperature.value : null}
           width={84}
           height={112}
           posX={742}
@@ -1213,104 +807,56 @@ export default class Level2 extends Component {
           alarm={0}
           collapsible={true}
           states={{
-            command: fancoilUnit11WorkRoom.switchedOn ? fancoilUnit11WorkRoom.switchedOn.value : null,
-            working: fancoilUnit11WorkRoom.workingState ? fancoilUnit11WorkRoom.workingState.value : null,
-            unit: fancoilUnit11WorkRoom.unitState ? fancoilUnit11WorkRoom.unitState.value : null,
-            switch: fancoilUnit11WorkRoom.selectorState ? fancoilUnit11WorkRoom.selectorState.value : null,
+            command: null,
+            working: fancoilUnit11WorkRoom.fanDemand ? fancoilUnit11WorkRoom.fanDemand.value : null,
+            unit: null,
+            switch: null,
           }}
           parameters={{
             heatingState: {
               type: 'status',
-              name: 'Heater',
+              name: 'Mode',
               unit: null,
-              value: fancoilUnit11WorkRoom.heatingState ? fancoilUnit11WorkRoom.heatingState.value : null,
+              value: fancoilUnit11WorkRoom.heatingMode?.value
+                ? 'Heating'
+                : fancoilUnit11WorkRoom.coolingMode?.value
+                ? 'Cooling'
+                : 'Unknown',
             },
-            operationalState: {
-              type: 'status',
-              name: 'Operation',
+            fanContact: {
+              type: 'text',
+              name: 'Fan Contact Mode',
               unit: null,
-              value: fancoilUnit11WorkRoom.operationalState ? fancoilUnit11WorkRoom.operationalState.value : null,
+              value: fancoilUnit11WorkRoom?.highFanContact?.value
+                ? 'High'
+                : fancoilUnit11WorkRoom?.mediumFanContact?.value
+                ? 'Medium'
+                : fancoilUnit11WorkRoom?.lowFanContact?.value
+                ? 'Low'
+                : 'Unknown',
             },
-            fanState: {
-              type: 'status',
-              name: 'Fan',
-              unit: null,
-              value: fancoilUnit11WorkRoom.fanState ? fancoilUnit11WorkRoom.fanState.value : null,
-            },
-            coldValveOpening: {
+            internalTemperature: {
               type: 'single',
-              name: 'Opening Valve Cold',
-              unit: fancoilUnit11WorkRoom.coldValveOpening ? fancoilUnit11WorkRoom.coldValveOpening.units : null,
-              value: fancoilUnit11WorkRoom.coldValveOpening ? fancoilUnit11WorkRoom.coldValveOpening.value : null,
+              name: 'Internal Temperature',
+              unit: fancoilUnit11WorkRoom.internalTemperature ? '°C' : null,
+              value: fancoilUnit11WorkRoom.internalTemperature ? fancoilUnit11WorkRoom.internalTemperature.value : null,
             },
-            roomTemperature: {
+            internalHumidity: {
               type: 'single',
-              name: 'Temperature Room',
-              unit: fancoilUnit11WorkRoom.roomTemperature ? 'ºC' : null,
-              value: fancoilUnit11WorkRoom.roomTemperature ? fancoilUnit11WorkRoom.roomTemperature.value : null,
-            },
-            setpointDay: {
-              type: 'group',
-              name: 'Setpoint Day',
-              unit: null,
-              value: null,
-              params: {
-                dayCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit11WorkRoom.dayCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit11WorkRoom.dayCoolingSetpoint
-                    ? fancoilUnit11WorkRoom.dayCoolingSetpoint.value
-                    : null,
-                },
-                dayHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit11WorkRoom.dayHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit11WorkRoom.dayHeatingSetpoint
-                    ? fancoilUnit11WorkRoom.dayHeatingSetpoint.value
-                    : null,
-                },
-              },
-            },
-            setpointNight: {
-              type: 'group',
-              name: 'Setpoint Night',
-              unit: null,
-              value: null,
-              params: {
-                nightCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit11WorkRoom.nightCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit11WorkRoom.nightCoolingSetpoint
-                    ? fancoilUnit11WorkRoom.nightCoolingSetpoint.value
-                    : null,
-                },
-                nightHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit11WorkRoom.nightHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit11WorkRoom.nightHeatingSetpoint
-                    ? fancoilUnit11WorkRoom.nightHeatingSetpoint.value
-                    : null,
-                },
-              },
+              name: 'Internal Humidity',
+              unit: fancoilUnit11WorkRoom.internalHumidity ? fancoilUnit11WorkRoom.internalHumidity.units : null,
+              value: fancoilUnit11WorkRoom.internalHumidity ? fancoilUnit11WorkRoom.internalHumidity.value : null,
             },
           }}
         />
 
         <Device
           title={'Fancoil 06'}
-          temp={fancoilUnit06ManagersOffice.roomTemperature ? fancoilUnit06ManagersOffice.roomTemperature.value : null}
+          temp={
+            fancoilUnit06ManagersOffice.internalTemperature
+              ? fancoilUnit06ManagersOffice.internalTemperature.value
+              : null
+          }
           width={84}
           height={112}
           posX={800}
@@ -1318,112 +864,60 @@ export default class Level2 extends Component {
           alarm={0}
           collapsible={true}
           states={{
-            command: fancoilUnit06ManagersOffice.switchedOn ? fancoilUnit06ManagersOffice.switchedOn.value : null,
-            working: fancoilUnit06ManagersOffice.workingState ? fancoilUnit06ManagersOffice.workingState.value : null,
-            unit: fancoilUnit06ManagersOffice.unitState ? fancoilUnit06ManagersOffice.unitState.value : null,
-            switch: fancoilUnit06ManagersOffice.selectorState ? fancoilUnit06ManagersOffice.selectorState.value : null,
+            command: null,
+            working: fancoilUnit06ManagersOffice.fanDemand ? fancoilUnit06ManagersOffice.fanDemand.value : null,
+            unit: null,
+            switch: null,
           }}
           parameters={{
             heatingState: {
               type: 'status',
-              name: 'Heater',
+              name: 'Mode',
               unit: null,
-              value: fancoilUnit06ManagersOffice.heatingState ? fancoilUnit06ManagersOffice.heatingState.value : null,
+              value: fancoilUnit06ManagersOffice.heatingMode?.value
+                ? 'Heating'
+                : fancoilUnit06ManagersOffice.coolingMode?.value
+                ? 'Cooling'
+                : 'Unknown',
             },
-            operationalState: {
-              type: 'status',
-              name: 'Operation',
+            fanContact: {
+              type: 'text',
+              name: 'Fan Contact Mode',
               unit: null,
-              value: fancoilUnit06ManagersOffice.operationalState
-                ? fancoilUnit06ManagersOffice.operationalState.value
-                : null,
+              value: fancoilUnit06ManagersOffice?.highFanContact?.value
+                ? 'High'
+                : fancoilUnit06ManagersOffice?.mediumFanContact?.value
+                ? 'Medium'
+                : fancoilUnit06ManagersOffice?.lowFanContact?.value
+                ? 'Low'
+                : 'Unknown',
             },
-            fanState: {
-              type: 'status',
-              name: 'Fan',
-              unit: null,
-              value: fancoilUnit06ManagersOffice.fanState ? fancoilUnit06ManagersOffice.fanState.value : null,
-            },
-            coldValveOpening: {
+            internalTemperature: {
               type: 'single',
-              name: 'Opening Valve Cold',
-              unit: fancoilUnit06ManagersOffice.coldValveOpening
-                ? fancoilUnit06ManagersOffice.coldValveOpening.units
-                : null,
-              value: fancoilUnit06ManagersOffice.coldValveOpening
-                ? fancoilUnit06ManagersOffice.coldValveOpening.value
+              name: 'Internal Temperature',
+              unit: fancoilUnit06ManagersOffice.internalTemperature ? '°C' : null,
+              value: fancoilUnit06ManagersOffice.internalTemperature
+                ? fancoilUnit06ManagersOffice.internalTemperature.value
                 : null,
             },
-            roomTemperature: {
+            internalHumidity: {
               type: 'single',
-              name: 'Temperature Room',
-              unit: fancoilUnit06ManagersOffice.roomTemperature ? 'ºC' : null,
-              value: fancoilUnit06ManagersOffice.roomTemperature
-                ? fancoilUnit06ManagersOffice.roomTemperature.value
+              name: 'Internal Humidity',
+              unit: fancoilUnit06ManagersOffice.internalHumidity
+                ? fancoilUnit06ManagersOffice.internalHumidity.units
                 : null,
-            },
-            setpointDay: {
-              type: 'group',
-              name: 'Setpoint Day',
-              unit: null,
-              value: null,
-              params: {
-                dayCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit06ManagersOffice.dayCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit06ManagersOffice.dayCoolingSetpoint
-                    ? fancoilUnit06ManagersOffice.dayCoolingSetpoint.value
-                    : null,
-                },
-                dayHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit06ManagersOffice.dayHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit06ManagersOffice.dayHeatingSetpoint
-                    ? fancoilUnit06ManagersOffice.dayHeatingSetpoint.value
-                    : null,
-                },
-              },
-            },
-            setpointNight: {
-              type: 'group',
-              name: 'Setpoint Night',
-              unit: null,
-              value: null,
-              params: {
-                nightCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit06ManagersOffice.nightCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit06ManagersOffice.nightCoolingSetpoint
-                    ? fancoilUnit06ManagersOffice.nightCoolingSetpoint.value
-                    : null,
-                },
-                nightHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit06ManagersOffice.nightHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit06ManagersOffice.nightHeatingSetpoint
-                    ? fancoilUnit06ManagersOffice.nightHeatingSetpoint.value
-                    : null,
-                },
-              },
+              value: fancoilUnit06ManagersOffice.internalHumidity
+                ? fancoilUnit06ManagersOffice.internalHumidity.value
+                : null,
             },
           }}
         />
 
         <Device
           title={'Fancoil 09'}
-          temp={fancoilUnit09MeetingRoom.roomTemperature ? fancoilUnit09MeetingRoom.roomTemperature.value : null}
+          temp={
+            fancoilUnit09MeetingRoom.internalTemperature ? fancoilUnit09MeetingRoom.internalTemperature.value : null
+          }
           width={84}
           height={112}
           posX={800}
@@ -1431,97 +925,47 @@ export default class Level2 extends Component {
           alarm={0}
           collapsible={true}
           states={{
-            command: fancoilUnit09MeetingRoom.switchedOn ? fancoilUnit09MeetingRoom.switchedOn.value : null,
-            working: fancoilUnit09MeetingRoom.workingState ? fancoilUnit09MeetingRoom.workingState.value : null,
-            unit: fancoilUnit09MeetingRoom.unitState ? fancoilUnit09MeetingRoom.unitState.value : null,
-            switch: fancoilUnit09MeetingRoom.selectorState ? fancoilUnit09MeetingRoom.selectorState.value : null,
+            command: null,
+            working: fancoilUnit09MeetingRoom.fanDemand ? fancoilUnit09MeetingRoom.fanDemand.value : null,
+            unit: null,
+            switch: null,
           }}
           parameters={{
             heatingState: {
               type: 'status',
-              name: 'Heater',
+              name: 'Mode',
               unit: null,
-              value: fancoilUnit09MeetingRoom.heatingState ? fancoilUnit09MeetingRoom.heatingState.value : null,
+              value: fancoilUnit09MeetingRoom.heatingMode?.value
+                ? 'Heating'
+                : fancoilUnit09MeetingRoom.coolingMode?.value
+                ? 'Cooling'
+                : 'Unknown',
             },
-            operationalState: {
-              type: 'status',
-              name: 'Operation',
+            fanContact: {
+              type: 'text',
+              name: 'Fan Contact Mode',
               unit: null,
-              value: fancoilUnit09MeetingRoom.operationalState ? fancoilUnit09MeetingRoom.operationalState.value : null,
+              value: fancoilUnit09MeetingRoom?.highFanContact?.value
+                ? 'High'
+                : fancoilUnit09MeetingRoom?.mediumFanContact?.value
+                ? 'Medium'
+                : fancoilUnit09MeetingRoom?.lowFanContact?.value
+                ? 'Low'
+                : 'Unknown',
             },
-            fanState: {
-              type: 'status',
-              name: 'Fan',
-              unit: null,
-              value: fancoilUnit09MeetingRoom.fanState ? fancoilUnit09MeetingRoom.fanState.value : null,
-            },
-            coldValveOpening: {
+            internalTemperature: {
               type: 'single',
-              name: 'Opening Valve Cold',
-              unit: fancoilUnit09MeetingRoom.coldValveOpening ? fancoilUnit09MeetingRoom.coldValveOpening.units : null,
-              value: fancoilUnit09MeetingRoom.coldValveOpening ? fancoilUnit09MeetingRoom.coldValveOpening.value : null,
+              name: 'Internal Temperature',
+              unit: fancoilUnit09MeetingRoom.internalTemperature ? '°C' : null,
+              value: fancoilUnit09MeetingRoom.internalTemperature
+                ? fancoilUnit09MeetingRoom.internalTemperature.value
+                : null,
             },
-            roomTemperature: {
+            internalHumidity: {
               type: 'single',
-              name: 'Temperature Room',
-              unit: fancoilUnit09MeetingRoom.roomTemperature ? 'ºC' : null,
-              value: fancoilUnit09MeetingRoom.roomTemperature ? fancoilUnit09MeetingRoom.roomTemperature.value : null,
-            },
-            setpointDay: {
-              type: 'group',
-              name: 'Setpoint Day',
-              unit: null,
-              value: null,
-              params: {
-                dayCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit09MeetingRoom.dayCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit09MeetingRoom.dayCoolingSetpoint
-                    ? fancoilUnit09MeetingRoom.dayCoolingSetpoint.value
-                    : null,
-                },
-                dayHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit09MeetingRoom.dayHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit09MeetingRoom.dayHeatingSetpoint
-                    ? fancoilUnit09MeetingRoom.dayHeatingSetpoint.value
-                    : null,
-                },
-              },
-            },
-            setpointNight: {
-              type: 'group',
-              name: 'Setpoint Night',
-              unit: null,
-              value: null,
-              params: {
-                nightCoolingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Cooling',
-                  state: null,
-                  unit: fancoilUnit09MeetingRoom.nightCoolingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit09MeetingRoom.nightCoolingSetpoint
-                    ? fancoilUnit09MeetingRoom.nightCoolingSetpoint.value
-                    : null,
-                },
-                nightHeatingSetpoint: {
-                  type: 'noBox',
-                  alarm: null,
-                  name: 'Heating',
-                  state: null,
-                  unit: fancoilUnit09MeetingRoom.nightHeatingSetpoint ? 'ºC' : null,
-                  value: fancoilUnit09MeetingRoom.nightHeatingSetpoint
-                    ? fancoilUnit09MeetingRoom.nightHeatingSetpoint.value
-                    : null,
-                },
-              },
+              name: 'Internal Humidity',
+              unit: fancoilUnit09MeetingRoom.internalHumidity ? fancoilUnit09MeetingRoom.internalHumidity.units : null,
+              value: fancoilUnit09MeetingRoom.internalHumidity ? fancoilUnit09MeetingRoom.internalHumidity.value : null,
             },
           }}
         />
