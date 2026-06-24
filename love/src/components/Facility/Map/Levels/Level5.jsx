@@ -75,29 +75,35 @@ export default class Level5 extends Component {
     d3.select(overlayId).call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1)).call(zoom);
   };
 
-  dynaleneStatetoText(ctx) {
-    switch (ctx) {
-      case 0:
-        return `${'Initialized'}`;
-      case 1:
-        return `${'Shutting Down'}`;
-      case 2:
-        return `${'Powering On'}`;
-      case 3:
-        return `${'Powered On'}`;
-      case 4:
-        return `${'Powering Off'}`;
-      case 5:
-        return `${'Powered Off'}`;
-      case 6:
-        return `${'Warning'}`;
-      case 7:
-        return `${'Alarm'}`;
-      case 8:
-        return `${'Shut Off'}`;
-      default:
-        return `${'Undefined'}`;
+  dynaleneStatetoText(topicData) {
+    if (topicData?.dynInitialized?.value) {
+      return 'Initialized';
     }
+    if (topicData?.dynShuttingDown?.value) {
+      return 'Shutting Down';
+    }
+    if (topicData?.dynPoweringOn?.value) {
+      return 'Powering On';
+    }
+    if (topicData?.dynPoweredOn?.value) {
+      return 'Powered On';
+    }
+    if (topicData?.dynPoweringOff?.value) {
+      return 'Powering Off';
+    }
+    if (topicData?.dynPoweredOff?.value) {
+      return 'Powered Off';
+    }
+    if (topicData?.dynWarning?.value) {
+      return 'Warning';
+    }
+    if (topicData?.dynAlarm?.value) {
+      return 'Alarm';
+    }
+    if (topicData?.dynShutOff?.value) {
+      return 'Shut Off';
+    }
+    return 'Unknown';
   }
 
   getDevices() {
@@ -993,7 +999,7 @@ export default class Level5 extends Component {
           title={'Dynalene'}
           id={4}
           width={108}
-          height={220}
+          height={250}
           posX={75}
           posY={130}
           collapsible={true}
@@ -1019,27 +1025,19 @@ export default class Level5 extends Component {
               state: dynaleneEvents?.dynTMAalarm?.value,
             },
             alarm6: {
-              name: 'Tank Level',
-              state: dynaleneEvents.dynaleneTankLevel
-                ? !dynaleneEvents.dynaleneTankLevel.value === 0
-                  ? true
-                  : false
-                : null,
+              name: 'Tank Level Alarm',
+              state: dynaleneEvents?.dynaleneTankLevelAlarm?.value,
             },
           }}
           states={{
-            command: false,
-            working: dynaleneEvents.dynaleneState
-              ? dynaleneEvents.dynaleneState.value === 0 || dynaleneEvents.dynaleneState.value === 3
-                ? true
-                : false
-              : null,
+            command: dynaleneEvents.dynaleneState?.dynInitialized?.value,
+            working: dynaleneEvents.dynaleneState?.dynPoweredOn?.value,
             unit: null,
             switch: null,
           }}
           parameters={{
             dynaleneState: {
-              type: 'status',
+              type: 'text',
               name: 'Dynalene State',
               unit: null,
               value: dynaleneEvents.dynaleneState ? this.dynaleneStatetoText(dynaleneEvents.dynaleneState.value) : null,
@@ -1047,7 +1045,7 @@ export default class Level5 extends Component {
             chiller01: {
               type: 'group',
               name: 'Chiller 01 Supply',
-              unit: dynalene.dynCH01LS01 ? ' % Tank Level' : null,
+              unit: dynalene.dynCH01LS01 ? dynalene.dynCH01LS01.units : null,
               value: dynalene.dynCH01LS01 ? dynalene.dynCH01LS01.value : null,
               params: {
                 dynCH01supFS01: {
@@ -1055,7 +1053,7 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Flowrate',
                   state: null,
-                  unit: dynalene.dynCH01supFS01 ? ' ' + dynalene.dynCH01supFS01.units : null,
+                  unit: dynalene.dynCH01supFS01 ? dynalene.dynCH01supFS01.units : null,
                   value: dynalene.dynCH01supFS01 ? dynalene.dynCH01supFS01.value : null,
                 },
                 dynCH01supPS11: {
@@ -1063,7 +1061,7 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Pressure',
                   state: null,
-                  unit: dynalene.dynCH01supPS11 ? ' ' + dynalene.dynCH01supPS11.units : null,
+                  unit: dynalene.dynCH01supPS11 ? dynalene.dynCH01supPS11.units : null,
                   value: dynalene.dynCH01supPS11 ? dynalene.dynCH01supPS11.value : null,
                 },
                 dynCH01supTS05: {
@@ -1071,7 +1069,7 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Temperature',
                   state: null,
-                  unit: dynalene.dynCH01supTS05 ? ' °C' : null,
+                  unit: dynalene.dynCH01supTS05 ? '°C' : null,
                   value: dynalene.dynCH01supTS05 ? dynalene.dynCH01supTS05.value : null,
                 },
               },
@@ -1079,7 +1077,7 @@ export default class Level5 extends Component {
             chiller02: {
               type: 'group',
               name: 'Chiller 02 Supply',
-              unit: dynalene.dynCH02LS02 ? ' % Tank Level' : null,
+              unit: dynalene.dynCH02LS02 ? dynalene.dynCH02LS02.units : null,
               value: dynalene.dynCH02LS02 ? dynalene.dynCH02LS02.value : null,
               params: {
                 dynCH02supFS02: {
@@ -1087,7 +1085,7 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Flowrate',
                   state: null,
-                  unit: dynalene.dynCH02supFS02 ? ' ' + dynalene.dynCH02supFS02.units : null,
+                  unit: dynalene.dynCH02supFS02 ? dynalene.dynCH02supFS02.units : null,
                   value: dynalene.dynCH02supFS02 ? dynalene.dynCH02supFS02.value : null,
                 },
                 dynCH02supPS13: {
@@ -1095,7 +1093,7 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Pressure',
                   state: null,
-                  unit: dynalene.dynCH02supPS13 ? ' ' + dynalene.dynCH02supPS13.units : null,
+                  unit: dynalene.dynCH02supPS13 ? dynalene.dynCH02supPS13.units : null,
                   value: dynalene.dynCH02supPS13 ? dynalene.dynCH02supPS13.value : null,
                 },
                 dynCH02supTS07: {
@@ -1103,7 +1101,7 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Temperature',
                   state: null,
-                  unit: dynalene.dynCH02supTS07 ? ' °C' : null,
+                  unit: dynalene.dynCH02supTS07 ? '°C' : null,
                   value: dynalene.dynCH02supTS07 ? dynalene.dynCH02supTS07.value : null,
                 },
               },
@@ -1111,20 +1109,17 @@ export default class Level5 extends Component {
             testArea: {
               type: 'title',
               name: 'TestArea',
-              unit: null,
-              value: null,
-              params: null,
             },
             dynTAsupFS04: {
               type: 'single',
               name: 'Flow Rate',
-              unit: dynalene.dynTAsupFS04 ? ' ' + dynalene.dynTAsupFS04.units : null,
+              unit: dynalene.dynTAsupFS04 ? dynalene.dynTAsupFS04.units : null,
               value: dynalene.dynTAsupFS04 ? dynalene.dynTAsupFS04.value : null,
             },
             dynTAtpd: {
               type: 'single',
               name: 'Thermal Power Dissipation',
-              unit: dynalene.dynTAtpd ? ' ' + dynalene.dynTAtpd.units : null,
+              unit: dynalene.dynTAtpd ? dynalene.dynTAtpd.units : null,
               value: dynalene.dynTAtpd ? dynalene.dynTAtpd.value : null,
             },
             testAreaPressure: {
@@ -1138,7 +1133,7 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Supply',
                   state: null,
-                  unit: dynalene.dynTAsupPS03 ? ' ' + dynalene.dynTAretPS04.units : null,
+                  unit: dynalene.dynTAsupPS03 ? dynalene.dynTAsupPS03.units : null,
                   value: dynalene.dynTAsupPS03 ? dynalene.dynTAsupPS03.value : null,
                 },
                 testAreaDynaleneReturnPressure: {
@@ -1146,7 +1141,7 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Return',
                   state: null,
-                  unit: dynalene.dynTAretPS04 ? ' ' + dynalene.dynTAretPS04.units : null,
+                  unit: dynalene.dynTAretPS04 ? dynalene.dynTAretPS04.units : null,
                   value: dynalene.dynTAretPS04 ? dynalene.dynTAretPS04.value : null,
                 },
               },
@@ -1178,25 +1173,22 @@ export default class Level5 extends Component {
             TMA: {
               type: 'title',
               name: 'TMA',
-              unit: null,
-              value: null,
-              params: null,
             },
             dynTMAsupFS03: {
               type: 'single',
               name: 'Flow Rate to L6',
-              unit: dynalene.dynTMAsupFS03 ? ' ' + dynalene.dynTMAsupFS03.units : null,
+              unit: dynalene.dynTMAsupFS03 ? dynalene.dynTMAsupFS03.units : null,
               value: dynalene.dynTMAsupFS03 ? dynalene.dynTMAsupFS03.value : null,
             },
             dynTMAtpd: {
               type: 'single',
               name: 'Thermal Power Dissipation',
-              unit: dynalene.dynTMAtpd ? ' ' + dynalene.dynTMAtpd.units : null,
+              unit: dynalene.dynTMAtpd ? dynalene.dynTMAtpd.units : null,
               value: dynalene.dynTMAtpd ? dynalene.dynTMAtpd.value : null,
             },
-            testAreaPressure: {
+            TMAPressure: {
               type: 'group',
-              name: 'Test Area Pressure',
+              name: 'TMA Pressure',
               unit: null,
               value: null,
               params: {
@@ -1205,7 +1197,7 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Supply',
                   state: null,
-                  unit: dynalene.dynTMAsupPS01 ? ' ' + dynalene.dynTMAsupPS01.units : null,
+                  unit: dynalene.dynTMAsupPS01 ? dynalene.dynTMAsupPS01.units : null,
                   value: dynalene.dynTMAsupPS01 ? dynalene.dynTMAsupPS01.value : null,
                 },
                 TMAReturnPressure: {
@@ -1213,14 +1205,14 @@ export default class Level5 extends Component {
                   alarm: null,
                   name: 'Return',
                   state: null,
-                  unit: dynalene.dynTMAretPS02 ? ' ' + dynalene.dynTMAretPS02.units : null,
+                  unit: dynalene.dynTMAretPS02 ? dynalene.dynTMAretPS02.units : null,
                   value: dynalene.dynTMAretPS02 ? dynalene.dynTMAretPS02.value : null,
                 },
               },
             },
             TMATemperature: {
               type: 'group',
-              name: 'Test Area Temperature',
+              name: 'TMA Temperature',
               unit: null,
               value: null,
               params: {

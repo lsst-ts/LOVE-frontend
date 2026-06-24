@@ -253,13 +253,13 @@ export default class FacilityMap extends Component {
 
     const HVACDataLevel5 = {
       dynaleneEvents: {
-        dynMainGridAlarm: this.props.dynMainGridAlarm,
-        dynMainGridFailureFlag: this.props.dynMainGridFailureFlag,
-        dynSafetyResetFlag: this.props.dynSafetyResetFlag,
-        dynTAalarm: this.props.dynTAalarm,
-        dynTMAalarm: this.props.dynTMAalarm,
+        dynMainGridAlarm: this.props.dynaleneSafeties.dynMainGridAlarm,
+        dynMainGridFailureFlag: this.props.dynaleneSafeties.dynMainGridFailureFlag,
+        dynSafetyResetFlag: this.props.dynaleneSafeties.dynSafetyResetFlag,
+        dynTAalarm: this.props.dynaleneSafeties.dynTAalarm,
+        dynTMAalarm: this.props.dynaleneSafeties.dynTMAalarm,
+        dynaleneTankLevelAlarm: this.props.dynaleneSafeties.dynTankLevelAlarm,
         dynaleneState: this.props.dynaleneState,
-        dynaleneTankLevel: this.props.dynaleneTankLevel,
       },
       dynalene: this.props.dynalene,
       airHandlingUnit01Dome: this.props.airHandlingUnit01Dome,
