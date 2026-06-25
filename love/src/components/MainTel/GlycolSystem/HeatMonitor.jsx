@@ -484,12 +484,6 @@ function GlycolSummary({
             deviceHistoricalHeats.length > 0 ? deviceHistoricalHeats[deviceHistoricalHeats.length - 1] : 0;
           const heatCummulativeMomentum =
             calculateHeatCummulativeMomentum(deviceHistoricalHeats) + (roundedHeat - roundedPrevHeat);
-
-          if (device === 'OSS') {
-            console.log('OSS Heat:', heat, 'Momentum:', heatCummulativeMomentum);
-            console.log('Historical Heats:', deviceHistoricalHeats);
-          }
-
           const wideClass = styles[devicesWideMapping[device]];
           const energyPercent = deviceEnergyPercentage(device, heat);
           return (

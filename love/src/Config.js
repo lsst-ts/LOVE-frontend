@@ -3762,6 +3762,34 @@ export const operatingModeStateMap = {
   16: 'WINTER_AUTO',
 };
 
+export const unitStateMap = {
+  0: 'ON_FROM_KEYBOARD',
+  1: 'ON_FROM_DIGITAL_INPUT',
+  2: 'ON_FROM_TIME_BANDS',
+  3: 'ON_FROM_SUPERVISOR',
+  4: 'OFF_FROM_ALARM',
+  5: 'OFF_FROM_SUPERVISOR',
+  6: 'OFF_FROM_TIME_BANDS',
+  7: 'OFF_FROM_DIGITAL_INPUTS',
+  8: 'OFF_FROM_KEYBOARD',
+  9: 'MANUAL_MODE',
+  10: 'OFF',
+};
+
+export const unitStateBooleanMap = {
+  ON_FROM_KEYBOARD: true,
+  ON_FROM_DIGITAL_INPUT: true,
+  ON_FROM_TIME_BANDS: true,
+  ON_FROM_SUPERVISOR: true,
+  OFF_FROM_ALARM: false,
+  OFF_FROM_SUPERVISOR: false,
+  OFF_FROM_TIME_BANDS: false,
+  OFF_FROM_DIGITAL_INPUTS: false,
+  OFF_FROM_KEYBOARD: false,
+  MANUAL_MODE: true,
+  OFF: false,
+};
+
 /*****************************************************************************/
 /**************************MTM3 actuator and forces***************************/
 /*****************************************************************************/

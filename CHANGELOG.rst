@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.12.2
+-------
+
+* Update HVAC XML interface. `<https://github.com/lsst-ts/LOVE-frontend/pull/800>`_
+
 v6.12.1
 -------
 
