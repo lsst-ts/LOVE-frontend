@@ -2,14 +2,11 @@
 Version History
 ===============
 
-v6.12.2
--------
-
-* Update HVAC XML interface. `<https://github.com/lsst-ts/LOVE-frontend/pull/800>`_
-
 v6.12.1
 -------
 
+* Update package.json version to v6.12.1. `<https://github.com/lsst-ts/LOVE-frontend/pull/801>`_
+* Update HVAC XML interface. `<https://github.com/lsst-ts/LOVE-frontend/pull/800>`_
 * Add IDLE state for observatory status tracking. `<https://github.com/lsst-ts/LOVE-frontend/pull/799>`_
 
 v6.12.0
