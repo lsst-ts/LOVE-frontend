@@ -23,6 +23,7 @@ import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle.jsx';
 import Button from 'components/GeneralPurpose/Button/Button.jsx';
+import WarningIcon from 'components/icons/WarningIcon/WarningIcon.jsx';
 import { OBSERVATORY_STATES } from 'Config';
 import styles from './ObservatoryStatusMenu.module.css';
 
@@ -62,11 +63,17 @@ const ObservatoryStatusMenu = ({ observatoryStateValue, updateObservatoryState }
     const isStatusActive = (newState & status) !== 0;
     const onToggleState = () => {
       let updatedState = newState ^ status;
+      console.log(status);
       if (status === OBSERVATORY_STATES.OPERATIONAL) {
-        // OPERATIONAL state is mutually exclusive with FAULT & DOWNTIME states.
-        updatedState = (newState ^ status) & ~(OBSERVATORY_STATES.FAULT | OBSERVATORY_STATES.DOWNTIME);
-      } else if (status === OBSERVATORY_STATES.FAULT || status === OBSERVATORY_STATES.DOWNTIME) {
-        // FAULT & DOWNTIME states are mutually exclusive with OPERATIONAL state.
+        // OPERATIONAL state is mutually exclusive with FAULT, DOWNTIME & IDLE states.
+        updatedState =
+          (newState ^ status) & ~(OBSERVATORY_STATES.FAULT | OBSERVATORY_STATES.DOWNTIME | OBSERVATORY_STATES.IDLE);
+      } else if (
+        status === OBSERVATORY_STATES.FAULT ||
+        status === OBSERVATORY_STATES.DOWNTIME ||
+        status === OBSERVATORY_STATES.IDLE
+      ) {
+        // FAULT, DOWNTIME & IDLE states are mutually exclusive with OPERATIONAL state.
         updatedState = (newState ^ status) & ~OBSERVATORY_STATES.OPERATIONAL;
       }
       setNewState(updatedState);
@@ -83,18 +90,28 @@ const ObservatoryStatusMenu = ({ observatoryStateValue, updateObservatoryState }
       </div>
     );
   };
+  const newStateIsUknown = newState === 0;
   return (
     <>
-      <div>
-        <MenuOption
-          label="Operational"
-          status={OBSERVATORY_STATES.OPERATIONAL}
-          disabled={isDayTime}
-          title={isDayTime ? 'Operational status cannot be set during daytime.' : undefined}
-        />
-        <MenuOption label="Fault" status={OBSERVATORY_STATES.FAULT} />
-        <MenuOption label="Weather" status={OBSERVATORY_STATES.WEATHER} />
-        <MenuOption label="Downtime" status={OBSERVATORY_STATES.DOWNTIME} />
+      <div className={styles.menuOptionsContainer}>
+        <div>
+          <MenuOption
+            label="Operational"
+            status={OBSERVATORY_STATES.OPERATIONAL}
+            disabled={isDayTime}
+            title={isDayTime ? 'Operational status cannot be set during daytime.' : undefined}
+          />
+          <MenuOption label="Idle" status={OBSERVATORY_STATES.IDLE} />
+          <MenuOption label="Fault" status={OBSERVATORY_STATES.FAULT} />
+          <MenuOption label="Weather" status={OBSERVATORY_STATES.WEATHER} />
+          <MenuOption label="Downtime" status={OBSERVATORY_STATES.DOWNTIME} />
+        </div>
+        {newStateIsUknown && (
+          <div className={styles.warningMessage}>
+            <WarningIcon />
+            <div>Are you missing to set OPERATIONAL or IDLE?</div>
+          </div>
+        )}
       </div>
       <ObserversNote note={note} setNote={setNote} />
       <div title="Create a narrative log upon observatory state transition." className={styles.toggleContainer}>

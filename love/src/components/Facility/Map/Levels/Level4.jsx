@@ -78,7 +78,12 @@ export default class Level4 extends Component {
   };
 
   getDevices() {
-    const { whiteRoomAHU01P05, cleanRoomAHU01P05, lowerDamperFan03P04, loadingBayFan04P04 } = this.props.HVACData;
+    const {
+      airHandlingUnit05WhiteRoom,
+      airHandlingUnit06CleanRoom,
+      airExtractionFan03HighBay,
+      airExtractionFan04Dome,
+    } = this.props.HVACData;
 
     return (
       <React.Fragment>
@@ -86,84 +91,118 @@ export default class Level4 extends Component {
           title={'White Room AHU'}
           id={501}
           width={90}
-          height={130}
+          height={150}
           posX={338}
-          posY={20}
+          posY={10}
           collapsible={true}
           alarms={{
             alarm1: {
               name: 'General',
-              state: whiteRoomAHU01P05.generalAlarm ? whiteRoomAHU01P05.generalAlarm.value : null,
+              state: airHandlingUnit05WhiteRoom.generalAlarm ? airHandlingUnit05WhiteRoom.generalAlarm.value : null,
             },
             alarm2: {
               name: 'Filtro',
-              state: whiteRoomAHU01P05.filterAlarm ? whiteRoomAHU01P05.filterAlarm.value : null,
+              state: airHandlingUnit05WhiteRoom.filterAlarm ? airHandlingUnit05WhiteRoom.filterAlarm.value : null,
             },
             alarm3: {
               name: 'Reset',
-              state: whiteRoomAHU01P05.alarmReset ? whiteRoomAHU01P05.alarmReset.value : null,
+              state: airHandlingUnit05WhiteRoom.alarmReset ? airHandlingUnit05WhiteRoom.alarmReset.value : null,
             },
           }}
           states={{
-            command: whiteRoomAHU01P05.switchedOn ? whiteRoomAHU01P05.switchedOn.value : null,
-            working: whiteRoomAHU01P05.workingState ? whiteRoomAHU01P05.workingState.value : null,
-            unit: whiteRoomAHU01P05.unitState ? whiteRoomAHU01P05.unitState.value : null,
-            switch: whiteRoomAHU01P05.selectorState ? whiteRoomAHU01P05.selectorState.value : null,
+            command: airHandlingUnit05WhiteRoom.switchedOn ? airHandlingUnit05WhiteRoom.switchedOn.value : null,
+            working: airHandlingUnit05WhiteRoom.workingState ? airHandlingUnit05WhiteRoom.workingState.value : null,
+            unit: null,
+            switch: null,
           }}
           parameters={{
             damperstate: {
               type: 'status',
               name: 'Damper',
               unit: null,
-              value: whiteRoomAHU01P05.damperstate ? whiteRoomAHU01P05.damperstate.value : null,
+              value: airHandlingUnit05WhiteRoom.damperstate
+                ? airHandlingUnit05WhiteRoom.damperstate.value
+                  ? 'Open'
+                  : 'Closed'
+                : null,
             },
             supplyFanCapacity: {
               type: 'single',
               name: 'Supply Fan Capacity',
-              unit: whiteRoomAHU01P05.supplyFanCapacity ? whiteRoomAHU01P05.supplyFanCapacity.units : null,
-              value: whiteRoomAHU01P05.supplyFanCapacity ? whiteRoomAHU01P05.supplyFanCapacity.value : null,
+              unit: airHandlingUnit05WhiteRoom.supplyFanCapacity
+                ? airHandlingUnit05WhiteRoom.supplyFanCapacity.units
+                : null,
+              value: airHandlingUnit05WhiteRoom.supplyFanCapacity
+                ? airHandlingUnit05WhiteRoom.supplyFanCapacity.value
+                : null,
             },
             valveState: {
               type: 'single',
-              name: 'State Valve',
-              unit: whiteRoomAHU01P05.valveState ? whiteRoomAHU01P05.valveState.units : null,
-              value: whiteRoomAHU01P05.valveState ? whiteRoomAHU01P05.valveState.value : null,
+              name: 'Valve State',
+              unit: airHandlingUnit05WhiteRoom.valveState ? airHandlingUnit05WhiteRoom.valveState.units : null,
+              value: airHandlingUnit05WhiteRoom.valveState ? airHandlingUnit05WhiteRoom.valveState.value : null,
+            },
+            supplyTemperatura: {
+              type: 'single',
+              name: 'Supply Temperature',
+              unit: airHandlingUnit06CleanRoom.supplyTemperature ? '°C' : null,
+              value: airHandlingUnit06CleanRoom.supplyTemperature
+                ? airHandlingUnit06CleanRoom.supplyTemperature.value
+                : null,
+            },
+            returnTemperature: {
+              type: 'single',
+              name: 'Return Temperature',
+              unit: airHandlingUnit06CleanRoom.returnTemperature ? '°C' : null,
+              value: airHandlingUnit06CleanRoom.returnTemperature
+                ? airHandlingUnit06CleanRoom.returnTemperature.value
+                : null,
             },
             hourMeasure: {
               type: 'single',
-              name: 'HOROMETRO',
-              unit: whiteRoomAHU01P05.hourMeasure ? whiteRoomAHU01P05.hourMeasure.units : null,
-              value: whiteRoomAHU01P05.hourMeasure ? whiteRoomAHU01P05.hourMeasure.value : null,
+              name: 'Running Hours',
+              unit: airHandlingUnit05WhiteRoom.hourMeasure ? airHandlingUnit05WhiteRoom.hourMeasure.units : null,
+              value: airHandlingUnit05WhiteRoom.hourMeasure ? airHandlingUnit05WhiteRoom.hourMeasure.value : null,
             },
             setpoint: {
               type: 'group',
               name: 'Setpoint',
-              unit: whiteRoomAHU01P05.roomSetpoint ? ' ºC' : null,
-              value: whiteRoomAHU01P05.roomSetpoint ? whiteRoomAHU01P05.roomSetpoint.value : null,
+              unit: airHandlingUnit05WhiteRoom.roomSetpoint ? '°C' : null,
+              value: airHandlingUnit05WhiteRoom.roomSetpoint ? airHandlingUnit05WhiteRoom.roomSetpoint.value : null,
               params: {
                 workingSetpoint: {
                   type: 'noBox',
                   alarm: null,
-                  name: 'Work',
+                  name: 'Working',
                   state: null,
-                  unit: whiteRoomAHU01P05.workingSetpoint ? ' ºC' : null,
-                  value: whiteRoomAHU01P05.workingSetpoint ? whiteRoomAHU01P05.workingSetpoint.value : null,
+                  unit: airHandlingUnit05WhiteRoom.workingSetpoint ? '°C' : null,
+                  value: airHandlingUnit05WhiteRoom.workingSetpoint
+                    ? airHandlingUnit05WhiteRoom.workingSetpoint.value
+                    : null,
                 },
                 maxFanSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Fan Max',
                   state: null,
-                  unit: whiteRoomAHU01P05.maxFanSetpoint ? whiteRoomAHU01P05.maxFanSetpoint.units : null,
-                  value: whiteRoomAHU01P05.maxFanSetpoint ? whiteRoomAHU01P05.maxFanSetpoint.value : null,
+                  unit: airHandlingUnit05WhiteRoom.maxFanSetpoint
+                    ? airHandlingUnit05WhiteRoom.maxFanSetpoint.units
+                    : null,
+                  value: airHandlingUnit05WhiteRoom.maxFanSetpoint
+                    ? airHandlingUnit05WhiteRoom.maxFanSetpoint.value
+                    : null,
                 },
                 minFanSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Fan Min',
                   state: null,
-                  unit: whiteRoomAHU01P05.minFanSetpoint ? whiteRoomAHU01P05.minFanSetpoint.units : null,
-                  value: whiteRoomAHU01P05.minFanSetpoint ? whiteRoomAHU01P05.minFanSetpoint.value : null,
+                  unit: airHandlingUnit05WhiteRoom.minFanSetpoint
+                    ? airHandlingUnit05WhiteRoom.minFanSetpoint.units
+                    : null,
+                  value: airHandlingUnit05WhiteRoom.minFanSetpoint
+                    ? airHandlingUnit05WhiteRoom.minFanSetpoint.value
+                    : null,
                 },
               },
             },
@@ -178,9 +217,9 @@ export default class Level4 extends Component {
                   alarm: null,
                   name: 'Ambient',
                   state: null,
-                  unit: whiteRoomAHU01P05.ambientTemperatureState ? ' ºC' : null,
-                  value: whiteRoomAHU01P05.ambientTemperatureState
-                    ? whiteRoomAHU01P05.ambientTemperatureState.value
+                  unit: airHandlingUnit05WhiteRoom.ambientTemperatureState ? '°C' : null,
+                  value: airHandlingUnit05WhiteRoom.ambientTemperatureState
+                    ? airHandlingUnit05WhiteRoom.ambientTemperatureState.value
                     : null,
                 },
                 antiFreezeTemperatureState: {
@@ -188,9 +227,9 @@ export default class Level4 extends Component {
                   alarm: null,
                   name: 'Anti-Freeze',
                   state: null,
-                  unit: whiteRoomAHU01P05.antiFreezeTemperatureState ? ' ºC' : null,
-                  value: whiteRoomAHU01P05.antiFreezeTemperatureState
-                    ? whiteRoomAHU01P05.antiFreezeTemperatureState.value
+                  unit: airHandlingUnit05WhiteRoom.antiFreezeTemperatureState ? '°C' : null,
+                  value: airHandlingUnit05WhiteRoom.antiFreezeTemperatureState
+                    ? airHandlingUnit05WhiteRoom.antiFreezeTemperatureState.value
                     : null,
                 },
                 externalTemperatureState: {
@@ -198,9 +237,9 @@ export default class Level4 extends Component {
                   alarm: null,
                   name: 'Exterior',
                   state: null,
-                  unit: whiteRoomAHU01P05.externalTemperatureState ? ' ºC' : null,
-                  value: whiteRoomAHU01P05.externalTemperatureState
-                    ? whiteRoomAHU01P05.externalTemperatureState.value
+                  unit: airHandlingUnit05WhiteRoom.externalTemperatureState ? '°C' : null,
+                  value: airHandlingUnit05WhiteRoom.externalTemperatureState
+                    ? airHandlingUnit05WhiteRoom.externalTemperatureState.value
                     : null,
                 },
               },
@@ -215,7 +254,9 @@ export default class Level4 extends Component {
                   type: 'box',
                   alarm: 0,
                   name: '01',
-                  state: whiteRoomAHU01P05.stageHeating01 ? whiteRoomAHU01P05.stageHeating01.value : null,
+                  state: airHandlingUnit05WhiteRoom.stageHeating01
+                    ? airHandlingUnit05WhiteRoom.stageHeating01.value
+                    : null,
                   unit: null,
                   value: null,
                 },
@@ -223,7 +264,9 @@ export default class Level4 extends Component {
                   type: 'box',
                   alarm: 0,
                   name: '02',
-                  state: whiteRoomAHU01P05.stageHeating01 ? whiteRoomAHU01P05.stageHeating01.value : null,
+                  state: airHandlingUnit05WhiteRoom.stageHeating02
+                    ? airHandlingUnit05WhiteRoom.stageHeating02.value
+                    : null,
                   unit: null,
                   value: null,
                 },
@@ -236,84 +279,118 @@ export default class Level4 extends Component {
           title={'Clean Room AHU'}
           id={502}
           width={90}
-          height={130}
+          height={150}
           posX={275}
-          posY={57}
+          posY={50}
           collapsible={true}
           alarms={{
             alarm1: {
               name: 'General',
-              state: cleanRoomAHU01P05.generalAlarm ? cleanRoomAHU01P05.generalAlarm.value : null,
+              state: airHandlingUnit06CleanRoom.generalAlarm ? airHandlingUnit06CleanRoom.generalAlarm.value : null,
             },
             alarm2: {
               name: 'Filtro',
-              state: cleanRoomAHU01P05.filterAlarm ? cleanRoomAHU01P05.filterAlarm.value : null,
+              state: airHandlingUnit06CleanRoom.filterAlarm ? airHandlingUnit06CleanRoom.filterAlarm.value : null,
             },
             alarm3: {
               name: 'Reset',
-              state: cleanRoomAHU01P05.alarmReset ? cleanRoomAHU01P05.alarmReset.value : null,
+              state: airHandlingUnit06CleanRoom.alarmReset ? airHandlingUnit06CleanRoom.alarmReset.value : null,
             },
           }}
           states={{
-            command: cleanRoomAHU01P05.switchedOn ? cleanRoomAHU01P05.switchedOn.value : null,
-            working: cleanRoomAHU01P05.workingState ? cleanRoomAHU01P05.workingState.value : null,
-            unit: cleanRoomAHU01P05.unitState ? cleanRoomAHU01P05.unitState.value : null,
-            switch: cleanRoomAHU01P05.selectorState ? cleanRoomAHU01P05.selectorState.value : null,
+            command: airHandlingUnit06CleanRoom.switchedOn ? airHandlingUnit06CleanRoom.switchedOn.value : null,
+            working: airHandlingUnit06CleanRoom.workingState ? airHandlingUnit06CleanRoom.workingState.value : null,
+            unit: null,
+            switch: null,
           }}
           parameters={{
             damperstate: {
               type: 'status',
               name: 'Damper',
               unit: null,
-              value: cleanRoomAHU01P05.damperstate ? cleanRoomAHU01P05.damperstate.value : null,
+              value: airHandlingUnit06CleanRoom.damperstate
+                ? airHandlingUnit06CleanRoom.damperstate.value
+                  ? 'Open'
+                  : 'Closed'
+                : null,
             },
             supplyFanCapacity: {
               type: 'single',
-              name: 'Yield Fan Impulse',
-              unit: cleanRoomAHU01P05.supplyFanCapacity ? cleanRoomAHU01P05.supplyFanCapacity.units : null,
-              value: cleanRoomAHU01P05.supplyFanCapacity ? cleanRoomAHU01P05.supplyFanCapacity.value : null,
+              name: 'Supply Fan Capacity',
+              unit: airHandlingUnit06CleanRoom.supplyFanCapacity
+                ? airHandlingUnit06CleanRoom.supplyFanCapacity.units
+                : null,
+              value: airHandlingUnit06CleanRoom.supplyFanCapacity
+                ? airHandlingUnit06CleanRoom.supplyFanCapacity.value
+                : null,
             },
             valveState: {
               type: 'single',
               name: 'State Valve',
-              unit: cleanRoomAHU01P05.valveState ? cleanRoomAHU01P05.valveState.units : null,
-              value: cleanRoomAHU01P05.valveState ? cleanRoomAHU01P05.valveState.value : null,
+              unit: airHandlingUnit06CleanRoom.valveState ? airHandlingUnit06CleanRoom.valveState.units : null,
+              value: airHandlingUnit06CleanRoom.valveState ? airHandlingUnit06CleanRoom.valveState.value : null,
+            },
+            supplyTemperatura: {
+              type: 'single',
+              name: 'Supply Temperature',
+              unit: airHandlingUnit06CleanRoom.supplyTemperature ? '°C' : null,
+              value: airHandlingUnit06CleanRoom.supplyTemperature
+                ? airHandlingUnit06CleanRoom.supplyTemperature.value
+                : null,
+            },
+            returnTemperature: {
+              type: 'single',
+              name: 'Return Temperature',
+              unit: airHandlingUnit06CleanRoom.returnTemperature ? '°C' : null,
+              value: airHandlingUnit06CleanRoom.returnTemperature
+                ? airHandlingUnit06CleanRoom.returnTemperature.value
+                : null,
             },
             hourMeasure: {
               type: 'single',
-              name: 'HOROMETRO',
-              unit: cleanRoomAHU01P05.hourMeasure ? cleanRoomAHU01P05.hourMeasure.units : null,
-              value: cleanRoomAHU01P05.hourMeasure ? cleanRoomAHU01P05.hourMeasure.value : null,
+              name: 'Running Hours',
+              unit: airHandlingUnit06CleanRoom.hourMeasure ? airHandlingUnit06CleanRoom.hourMeasure.units : null,
+              value: airHandlingUnit06CleanRoom.hourMeasure ? airHandlingUnit06CleanRoom.hourMeasure.value : null,
             },
             setpoint: {
               type: 'group',
               name: 'Setpoint',
-              unit: cleanRoomAHU01P05.roomSetpoint ? 'ºC' : null,
-              value: cleanRoomAHU01P05.roomSetpoint ? cleanRoomAHU01P05.roomSetpoint.value : null,
+              unit: airHandlingUnit06CleanRoom.roomSetpoint ? '°C' : null,
+              value: airHandlingUnit06CleanRoom.roomSetpoint ? airHandlingUnit06CleanRoom.roomSetpoint.value : null,
               params: {
                 workingSetpoint: {
                   type: 'noBox',
                   alarm: null,
-                  name: 'Work',
+                  name: 'Working',
                   state: null,
-                  unit: cleanRoomAHU01P05.workingSetpoint ? 'ºC' : null,
-                  value: cleanRoomAHU01P05.workingSetpoint ? cleanRoomAHU01P05.workingSetpoint.value : null,
+                  unit: airHandlingUnit06CleanRoom.workingSetpoint ? '°C' : null,
+                  value: airHandlingUnit06CleanRoom.workingSetpoint
+                    ? airHandlingUnit06CleanRoom.workingSetpoint.value
+                    : null,
                 },
                 maxFanSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Fan Max',
                   state: null,
-                  unit: cleanRoomAHU01P05.maxFanSetpoint ? cleanRoomAHU01P05.maxFanSetpoint.units : null,
-                  value: cleanRoomAHU01P05.maxFanSetpoint ? cleanRoomAHU01P05.maxFanSetpoint.value : null,
+                  unit: airHandlingUnit06CleanRoom.maxFanSetpoint
+                    ? airHandlingUnit06CleanRoom.maxFanSetpoint.units
+                    : null,
+                  value: airHandlingUnit06CleanRoom.maxFanSetpoint
+                    ? airHandlingUnit06CleanRoom.maxFanSetpoint.value
+                    : null,
                 },
                 minFanSetpoint: {
                   type: 'noBox',
                   alarm: null,
                   name: 'Fan Min',
                   state: null,
-                  unit: cleanRoomAHU01P05.minFanSetpoint ? cleanRoomAHU01P05.minFanSetpoint.units : null,
-                  value: cleanRoomAHU01P05.minFanSetpoint ? cleanRoomAHU01P05.minFanSetpoint.value : null,
+                  unit: airHandlingUnit06CleanRoom.minFanSetpoint
+                    ? airHandlingUnit06CleanRoom.minFanSetpoint.units
+                    : null,
+                  value: airHandlingUnit06CleanRoom.minFanSetpoint
+                    ? airHandlingUnit06CleanRoom.minFanSetpoint.value
+                    : null,
                 },
               },
             },
@@ -328,9 +405,9 @@ export default class Level4 extends Component {
                   alarm: null,
                   name: 'Ambient',
                   state: null,
-                  unit: cleanRoomAHU01P05.ambientTemperatureState ? 'ºC' : null,
-                  value: cleanRoomAHU01P05.ambientTemperatureState
-                    ? cleanRoomAHU01P05.ambientTemperatureState.value
+                  unit: airHandlingUnit06CleanRoom.ambientTemperatureState ? '°C' : null,
+                  value: airHandlingUnit06CleanRoom.ambientTemperatureState
+                    ? airHandlingUnit06CleanRoom.ambientTemperatureState.value
                     : null,
                 },
                 antiFreezeTemperatureState: {
@@ -338,9 +415,9 @@ export default class Level4 extends Component {
                   alarm: null,
                   name: 'Anti-Freeze',
                   state: null,
-                  unit: cleanRoomAHU01P05.antiFreezeTemperatureState ? 'ºC' : null,
-                  value: cleanRoomAHU01P05.antiFreezeTemperatureState
-                    ? cleanRoomAHU01P05.antiFreezeTemperatureState.value
+                  unit: airHandlingUnit06CleanRoom.antiFreezeTemperatureState ? '°C' : null,
+                  value: airHandlingUnit06CleanRoom.antiFreezeTemperatureState
+                    ? airHandlingUnit06CleanRoom.antiFreezeTemperatureState.value
                     : null,
                 },
                 externalTemperatureState: {
@@ -348,9 +425,9 @@ export default class Level4 extends Component {
                   alarm: null,
                   name: 'Exterior',
                   state: null,
-                  unit: cleanRoomAHU01P05.externalTemperatureState ? 'ºC' : null,
-                  value: cleanRoomAHU01P05.externalTemperatureState
-                    ? cleanRoomAHU01P05.externalTemperatureState.value
+                  unit: airHandlingUnit06CleanRoom.externalTemperatureState ? '°C' : null,
+                  value: airHandlingUnit06CleanRoom.externalTemperatureState
+                    ? airHandlingUnit06CleanRoom.externalTemperatureState.value
                     : null,
                 },
               },
@@ -365,7 +442,9 @@ export default class Level4 extends Component {
                   type: 'box',
                   alarm: 0,
                   name: '01',
-                  state: cleanRoomAHU01P05.stageHeating01 ? cleanRoomAHU01P05.stageHeating01.value : null,
+                  state: airHandlingUnit06CleanRoom.stageHeating01
+                    ? airHandlingUnit06CleanRoom.stageHeating01.value
+                    : null,
                   unit: null,
                   value: null,
                 },
@@ -373,7 +452,9 @@ export default class Level4 extends Component {
                   type: 'box',
                   alarm: 0,
                   name: '02',
-                  state: cleanRoomAHU01P05.stageHeating01 ? cleanRoomAHU01P05.stageHeating01.value : null,
+                  state: airHandlingUnit06CleanRoom.stageHeating02
+                    ? airHandlingUnit06CleanRoom.stageHeating02.value
+                    : null,
                   unit: null,
                   value: null,
                 },
@@ -383,7 +464,7 @@ export default class Level4 extends Component {
         />
 
         <Device
-          title={'Vex 04 Carga'}
+          title={'Vex 04 Dome'}
           id={802}
           width={60}
           height={122}
@@ -393,19 +474,19 @@ export default class Level4 extends Component {
           alarms={{
             alarm1: {
               name: 'Thermal Error',
-              state: loadingBayFan04P04.thermalFault ? loadingBayFan04P04.thermalFault.value : null,
+              state: airExtractionFan04Dome.thermalFault ? airExtractionFan04Dome.thermalFault.value : null,
             },
           }}
           states={{
-            command: loadingBayFan04P04.switchedOn ? loadingBayFan04P04.switchedOn.value : null,
-            working: loadingBayFan04P04.workingState ? loadingBayFan04P04.workingState.value : null,
-            unit: loadingBayFan04P04.unitState ? loadingBayFan04P04.unitState.value : null,
-            switch: loadingBayFan04P04.selectorState ? loadingBayFan04P04.selectorState.value : null,
+            command: airExtractionFan04Dome.switchedOn ? airExtractionFan04Dome.switchedOn.value : null,
+            working: airExtractionFan04Dome.workingState ? airExtractionFan04Dome.workingState.value : null,
+            unit: null,
+            switch: null,
           }}
         />
 
         <Device
-          title={'Vex 03 Lower'}
+          title={'Vex 03 High Bay'}
           id={801}
           width={60}
           height={122}
@@ -415,14 +496,14 @@ export default class Level4 extends Component {
           alarms={{
             alarm1: {
               name: 'Thermal Error',
-              state: lowerDamperFan03P04.thermalFault ? lowerDamperFan03P04.thermalFault.value : null,
+              state: airExtractionFan03HighBay.thermalFault ? airExtractionFan03HighBay.thermalFault.value : null,
             },
           }}
           states={{
-            command: lowerDamperFan03P04.switchedOn ? lowerDamperFan03P04.switchedOn.value : null,
-            working: lowerDamperFan03P04.workingState ? lowerDamperFan03P04.workingState.value : null,
-            unit: lowerDamperFan03P04.unitState ? lowerDamperFan03P04.unitState.value : null,
-            switch: lowerDamperFan03P04.selectorState ? lowerDamperFan03P04.selectorState.value : null,
+            command: airExtractionFan03HighBay.switchedOn ? airExtractionFan03HighBay.switchedOn.value : null,
+            working: airExtractionFan03HighBay.workingState ? airExtractionFan03HighBay.workingState.value : null,
+            unit: null,
+            switch: null,
           }}
         />
       </React.Fragment>

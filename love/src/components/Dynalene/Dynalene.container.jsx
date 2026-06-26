@@ -96,7 +96,7 @@ const mapDispatchToProps = (dispatch) => {
     'event-HVAC-0-dynTelemetryEnable',
     'event-HVAC-0-dynTmaRemoteSP',
     'event-HVAC-0-dynaleneTankLevel',
-    'telemetry-HVAC-0-dynaleneP05',
+    'telemetry-HVAC-0-dynalene',
   ];
   return {
     subscriptions,
