@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.12.2
+-------
+
+* Fix Watcher component not properly passing the acknowledgedBy parameter. `<https://github.com/lsst-ts/LOVE-frontend/pull/802>`_
+
 v6.12.1
 -------
 
