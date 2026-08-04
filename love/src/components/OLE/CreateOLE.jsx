@@ -21,13 +21,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ExposureAdd from './Exposure/ExposureAdd';
 import NonExposureEdit from './NonExposure/NonExposureEdit';
-import TeknikerAdd from './Tekniker/TeknikerAdd';
+import JiraTicketAdd from './NonExposure/JiraTicketAdd';
 import styles from './OLE.module.css';
 
 const tabs = [
   { name: 'Narrative Logs', value: 'non-exposure' },
   { name: 'Exposure Logs', value: 'exposure' },
-  { name: 'TMA Logs', value: 'tekniker' },
+  { name: 'Jira Tickets', value: 'jira-tickets' },
 ];
 
 export default class CreateOLE extends Component {
@@ -65,13 +65,13 @@ export default class CreateOLE extends Component {
       return <ExposureAdd isLogCreate={isLogCreate} props={this.props} />;
     } else if (tab === 'non-exposure') {
       return <NonExposureEdit isLogCreate={isLogCreate} props={this.props} />;
-    } else if (tab === 'tekniker') {
-      return <TeknikerAdd isLogCreate={isLogCreate} props={this.props} />;
+    } else if (tab === 'jira-tickets') {
+      return <JiraTicketAdd props={this.props} />;
     }
   }
 
   render() {
-    const selectedTab = this.state.selectedTab;
+    const { selectedTab } = this.state;
 
     const html = tabs.map((item, index) => {
       return (
