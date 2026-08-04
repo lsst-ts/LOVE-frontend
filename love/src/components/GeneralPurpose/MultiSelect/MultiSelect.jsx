@@ -43,6 +43,7 @@ const MultiSelect = ({
       style={{
         chips: {
           backgroundColor: 'var(--second-senary-background-dimmed-color)',
+          color: 'var(--highlighted-font-color)',
         },
         multiselectContainer: {
           backgroundColor: 'var(--second-secondary-background-color)',
@@ -58,7 +59,6 @@ const MultiSelect = ({
           borderRadius: '0px',
         },
         inputField: {
-          width: '100%',
           color: 'var(--base-font-color)',
         },
       }}
