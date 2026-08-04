@@ -280,6 +280,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   font-size: inherit;
   border: 1px solid var(--secondary-font-dimmed-color);
   color: var(--base-font-color);
+  padding: var(--small-padding);
 }
 
 .contentRight textarea:focus {
@@ -289,6 +290,27 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .contentRight .textArea {
   height: calc(100% - 2.1em);
+}
+
+.contentRight:has(.messageGroup) {
+  display: flex;
+  flex-direction: column;
+}
+
+.contentRight .messageGroup {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.contentRight .messageGroup:not(:last-child) {
+  margin-bottom: var(--small-padding);
+}
+
+.contentRight .messageGroup textarea {
+  height: auto;
+  min-height: auto;
+  flex: 1;
 }
 
 .mb1 {
@@ -436,7 +458,7 @@ td.messageColumn {
 }
 
 .inputError {
-  border-color: var(--status-alert-color);
+  border-color: var(--status-alert-color) !important;
 }
 
 .incidentTimeTypeContainer {
@@ -488,9 +510,6 @@ td.messageColumn {
 .footerMenu .jira {
   text-align: left;
   white-space: nowrap;
-}
-
-.footerMenu .jira {
   margin-bottom: var(--small-padding);
 }
 
@@ -651,4 +670,8 @@ table.table tr {
     left: 184px;
     top: -161px;
   }
+}
+
+:global(.searchBox) {
+  width: 28ch;
 }
