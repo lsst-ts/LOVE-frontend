@@ -27,7 +27,7 @@ import MessageIcon from 'components/icons/MessageIcon/MessageIcon';
 import OLEMenu from 'components/OLE/Menu/OLEMenu';
 import ExposureAdd from 'components/OLE/Exposure/ExposureAdd';
 import NonExposureEdit from 'components/OLE/NonExposure/NonExposureEdit';
-import TeknikerAdd from 'components/OLE/Tekniker/TeknikerAdd';
+import TeknikerAdd from 'components/OLE/NonExposure/JiraTicketAdd';
 import ManagerInterface, {
   getNotificationMessage,
   relativeTime,
