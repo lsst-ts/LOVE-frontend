@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
@@ -38,18 +38,19 @@ import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import Select from 'components/GeneralPurpose/Select/Select';
 import NonExposureDetail from './NonExposureDetail';
 import NonExposureEdit from './NonExposureEdit';
+import { getIconLevel } from '../OLE';
 import {
   TIME_FORMAT,
   OLE_COMMENT_TYPE_OPTIONS,
   OLE_DEFAULT_SYSTEMS_FILTER_OPTION,
   OLE_OBS_SYSTEMS,
-  iconLevelOLE,
   ISO_INTEGER_DATE_FORMAT,
   ISO_STRING_DATE_TIME_FORMAT,
   LOG_REFRESH_INTERVAL_MS,
 } from 'Config';
 import ManagerInterface, {
   formatSecondsToDigital,
+  parseTaiToUtc,
   getLinkJira,
   getFilesURLs,
   jiraMarkdownToHtml,
@@ -62,117 +63,88 @@ import styles from './NonExposure.module.css';
 
 const moment = extendMoment(Moment);
 
-export default class NonExposure extends Component {
-  static propTypes = {
-    /** Start date of the date range filter */
-    selectedDateStart: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-    /** End date of the date range filter */
-    selectedDateEnd: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-    /** Function to handle the date range filter */
-    changeDayNarrative: PropTypes.func,
-    /** Selected comment type of the comment type filter */
-    selectedCommentType: PropTypes.shape({
-      value: PropTypes.oneOf(['all', 0, 100]),
-      label: PropTypes.string,
-    }),
-    /** Function to handle the comment type filter */
-    changeCommentTypeSelect: PropTypes.func,
-    /** Selected system of the systems filter */
-    selectedSystem: PropTypes.string,
-    /** Function to handle the systems filter */
-    changeSystemSelect: PropTypes.func,
-    /** Selected obs time loss of the obs time loss filter */
-    selectedObsTimeLoss: PropTypes.bool,
-    /** Selected jira ticket of the jira ticket filter */
-    selectedJiraTickets: PropTypes.bool,
-    /** Function to handle the obs time loss filter */
-    changeObsTimeLossSelect: PropTypes.func,
-    /** Function to handle the jira ticket filter */
-    changeJiraTicketsSelect: PropTypes.func,
-    /** Difference in seconds between UTC and TAI */
-    taiToUtc: PropTypes.number,
-  };
+const exportedCsvParams = [
+  'obs_day',
+  'message_text',
+  'level',
+  'urls',
+  'date_begin',
+  'date_end',
+  'time_lost',
+  'system',
+  'user_id',
+];
 
-  static defaultProps = {
-    selectedDateStart: null,
-    selectedDateEnd: null,
-    changeDayNarrative: () => {},
-    selectedCommentType: OLE_COMMENT_TYPE_OPTIONS[0],
-    changeCommentTypeSelect: () => {},
-    selectedSystem: OLE_DEFAULT_SYSTEMS_FILTER_OPTION,
-    changeSystemSelect: () => {},
-    selectedObsTimeLoss: false,
-    changeObsTimeLossSelect: () => {},
-    selectedJiraTickets: false,
-    changeJiraTicketsSelect: () => {},
-  };
+function NonExposure({
+  selectedDayNarrativeStart,
+  selectedDayNarrativeEnd,
+  changeDayNarrative,
+  changeCommentTypeSelect,
+  changeSystemSelect,
+  changeObsTimeLossSelect,
+  changeJiraTicketsSelect,
+  selectedCommentType,
+  selectedSystem,
+  taiToUtc,
+  selectedObsTimeLoss = false,
+  selectedJiraTickets = false,
+}) {
+  const bothSelectedDays = Boolean(selectedDayNarrativeStart && selectedDayNarrativeEnd);
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      modeView: false,
-      modeEdit: false,
-      selected: null,
-      updatingLogs: false,
-      lastUpdated: null,
-      logs: [],
-      range: [],
-    };
+  const [modeView, setModeView] = useState(false);
+  const [modeEdit, setModeEdit] = useState(false);
+  const [selectedLog, setSelectedLog] = useState();
+  const [updatingLogs, setUpdatingLogs] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState();
+  const [logs, setLogs] = useState([]);
 
-    this.queryLogsInterval = null;
-  }
-
-  view(index) {
-    if (index) {
-      this.setState({
-        modeView: true,
-        selected: index,
-      });
-    }
-  }
-
-  edit(index) {
-    if (index) {
-      this.setState({
-        modeEdit: true,
-        selected: index,
-      });
-    }
-  }
-
-  getLevel(value) {
-    const label = value >= 100 ? 'urgent' : 'info';
-    const icon = iconLevelOLE[label] ?? undefined;
+  const getLevelIcon = (value) => {
+    const icon = getIconLevel(value);
     return (
-      <span title={label} className={styles.levelIcon}>
+      <span title={value >= 100 ? 'urgent' : 'info'} className={styles.levelIcon}>
         {icon}
       </span>
     );
-  }
+  };
 
-  refreshLogsRemove(nonExposure) {
-    const logs = this.state.logs.filter((log) => log.id !== nonExposure.id);
-    this.setState({ logs });
-  }
+  const renderDateTimeInput = (props) => {
+    return <input {...props} readOnly />;
+  };
 
-  refreshLogs(nonExposure) {
-    const logs = this.state.logs.filter((log) => log.id !== this.state.selected.id);
-    this.setState({
-      logs: [nonExposure, ...logs],
-      selected: nonExposure,
-    });
-  }
+  const goBack = () => {
+    setModeView(false);
+    setModeEdit(false);
+    setSelectedLog(undefined);
+  };
 
-  getHeaders = () => {
-    const { taiToUtc } = this.props;
+  const viewLog = (log) => {
+    setModeView(true);
+    setModeEdit(false);
+    setSelectedLog(log);
+  };
 
+  const editLog = (log) => {
+    setModeEdit(true);
+    setModeView(false);
+    setSelectedLog(log);
+  };
+
+  const saveLog = (_log) => {
+    queryNarrativeLogs();
+  };
+
+  const removeLog = (_log) => {
+    queryNarrativeLogs();
+  };
+
+  const getHeaders = () => {
     return [
       {
         field: 'date_begin',
         title: 'Time of incident (UTC)',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => moment(value).add(taiToUtc, 'seconds').format(ISO_STRING_DATE_TIME_FORMAT),
+        render: (value) => parseTaiToUtc(value, taiToUtc).format(ISO_STRING_DATE_TIME_FORMAT),
       },
       {
         field: 'time_lost',
@@ -180,8 +152,8 @@ export default class NonExposure extends Component {
         type: 'string',
         className: styles.tableHead,
         render: (value, row) => {
-          const dateBeginUTC = moment(row.date_begin).add(taiToUtc, 'seconds');
-          const dateEndUTC = moment(row.date_end).add(taiToUtc, 'seconds');
+          const dateBeginUTC = parseTaiToUtc(row.date_begin, taiToUtc);
+          const dateEndUTC = parseTaiToUtc(row.date_end, taiToUtc);
           const dateBeginUTCString = dateBeginUTC.format(ISO_STRING_DATE_TIME_FORMAT);
           const dateEndUTCString = dateEndUTC.format(ISO_STRING_DATE_TIME_FORMAT);
           return (
@@ -206,14 +178,14 @@ export default class NonExposure extends Component {
         ),
         type: 'string',
         className: styles.tableHead,
-        render: (value) => getObsDayFromDate(moment(value + 'Z')),
+        render: (value) => getObsDayFromDate(parseTaiToUtc(value, taiToUtc)),
       },
       {
         field: 'level',
         title: 'Level',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => this.getLevel(value),
+        render: (value) => getLevelIcon(value),
       },
       {
         field: 'components_json',
@@ -279,7 +251,7 @@ export default class NonExposure extends Component {
         title: 'Action',
         type: 'string',
         className: styles.tableHead,
-        render: (_, index) => {
+        render: (_, row) => {
           return (
             <>
               <span className={styles.margin}>
@@ -287,7 +259,7 @@ export default class NonExposure extends Component {
                   className={styles.iconBtn}
                   title="View"
                   onClick={() => {
-                    this.view(index);
+                    viewLog(row);
                   }}
                   status="transparent"
                 >
@@ -299,7 +271,7 @@ export default class NonExposure extends Component {
                   className={styles.iconBtn}
                   title="Edit"
                   onClick={() => {
-                    this.edit(index);
+                    editLog(row);
                   }}
                   status="transparent"
                 >
@@ -313,96 +285,67 @@ export default class NonExposure extends Component {
     ];
   };
 
-  queryNarrativeLogs() {
-    const { selectedDayNarrativeStart, selectedDayNarrativeEnd } = this.props;
+  const queryNarrativeLogs = () => {
     const dateFrom = moment(selectedDayNarrativeStart).utc().hours(12).format(ISO_STRING_DATE_TIME_FORMAT);
     const dateTo = moment(selectedDayNarrativeEnd).utc().add(1, 'day').hours(12).format(ISO_STRING_DATE_TIME_FORMAT);
 
     // Get list of narrative logs
-    this.setState({ updatingLogs: true });
-    ManagerInterface.getListMessagesNarrativeLogs(dateFrom, dateTo).then((data) => {
-      this.setQueryNarritveLogsInterval();
-      this.setState({
-        logs: data,
-        updatingLogs: false,
-        lastUpdated: moment(),
+    setUpdatingLogs(true);
+    ManagerInterface.getListMessagesNarrativeLogs(dateFrom, dateTo)
+      .then((data) => {
+        setLogs(data);
+        setLastUpdated(moment());
+      })
+      .finally(() => {
+        setUpdatingLogs(false);
       });
-    });
-  }
+  };
 
-  parseCsvData(data) {
+  const parseCsvData = (data) => {
     const csvData = data.map((row) => {
       const obsDay = getObsDayFromDate(moment(row.date_added + 'Z'));
       const escapedMessageText = row.message_text.replace(/"/g, '""');
       const parsedLevel = OLE_COMMENT_TYPE_OPTIONS.find((option) => option.value === row.level)?.label ?? 'Undefined';
+      const system = row.components_json.name;
       return {
         ...row,
         obs_day: obsDay,
         message_text: escapedMessageText,
         level: parsedLevel,
+        system,
       };
     });
     return csvData;
-  }
+  };
 
-  setQueryNarritveLogsInterval() {
-    clearInterval(this.queryLogsInterval);
-    this.queryLogsInterval = setInterval(() => {
-      this.queryNarrativeLogs();
+  const setQueryNarritveLogsInterval = () => {
+    return setInterval(() => {
+      queryNarrativeLogs();
     }, LOG_REFRESH_INTERVAL_MS);
-  }
+  };
 
-  componentDidMount() {
-    this.queryNarrativeLogs();
-    this.setQueryNarritveLogsInterval();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (
-      (this.props.selectedDayNarrativeStart &&
-        !this.props.selectedDayNarrativeStart.isSame(prevProps.selectedDayNarrativeStart)) ||
-      (this.props.selectedDayNarrativeEnd &&
-        !this.props.selectedDayNarrativeEnd.isSame(prevProps.selectedDayNarrativeEnd))
-    ) {
-      this.queryNarrativeLogs();
-      if (!this.queryLogsInterval) {
-        this.setQueryNarritveLogsInterval();
-      }
+  useEffect(() => {
+    if (bothSelectedDays) {
+      queryNarrativeLogs();
+      const intervalId = setQueryNarritveLogsInterval();
+      return () => clearInterval(intervalId);
     }
-  }
+  }, [selectedDayNarrativeStart, selectedDayNarrativeEnd]);
 
-  componentWillUnmount() {
-    clearInterval(this.queryLogsInterval);
-  }
-
-  render() {
-    const {
-      selectedDayNarrativeStart,
-      selectedDayNarrativeEnd,
-      selectedCommentType,
-      selectedSystem,
-      selectedObsTimeLoss,
-      selectedJiraTickets,
-      changeDayNarrative,
-      changeCommentTypeSelect,
-      changeSystemSelect,
-      changeObsTimeLossSelect,
-      changeJiraTicketsSelect,
-    } = this.props;
-    const { logs: tableData, modeView, modeEdit } = this.state;
-
-    const headers = this.getHeaders();
-    let filteredData = [...(tableData ?? [])];
+  const getFilteredData = useMemo(() => {
+    let filteredData = [...logs];
 
     // Filter by type
-    if (selectedCommentType.value !== OLE_COMMENT_TYPE_OPTIONS[0].value) {
+    if (selectedCommentType && selectedCommentType.value !== OLE_COMMENT_TYPE_OPTIONS[0].value) {
       filteredData = filteredData.filter((log) => log.level === selectedCommentType.value);
     }
 
     // Filter by system
-    if (selectedSystem !== OLE_DEFAULT_SYSTEMS_FILTER_OPTION) {
-      // Note that systems come inside the components_json.systems field
-      filteredData = filteredData.filter((log) => log.components_json?.systems?.includes(selectedSystem));
+    if (selectedSystem && selectedSystem !== OLE_DEFAULT_SYSTEMS_FILTER_OPTION) {
+      // Note we currently support only 1 system, represented
+      // by the root level of log.components_json.
+      // Use log.component_json.name to filter
+      filteredData = filteredData.filter((log) => log.components_json?.name === selectedSystem);
     }
 
     // Filter by obs time loss
@@ -416,152 +359,154 @@ export default class NonExposure extends Component {
         return getLinkJira(log.urls) !== '';
       });
     }
+    return filteredData;
+  }, [logs, selectedCommentType, selectedSystem, selectedObsTimeLoss, selectedJiraTickets]);
+  const filteredData = getFilteredData;
 
-    // Obtain headers to create csv report
-    // obs_day, message_text and level are parsed by this.parseCsvData
-    let csvHeaders = null;
-    let csvData = "There aren't logs created for the current search...";
-    let csvTitle = 'narrative_logs.csv';
-    if (filteredData.length > 0) {
-      const exportedParams = [
-        'obs_day',
-        'message_text',
-        'level',
-        'urls',
-        'date_begin',
-        'date_end',
-        'time_lost',
-        // Systems
-        'components',
-        // Subsystems
-        'primary_software_components',
-        // Components
-        'primary_hardware_components',
-        'user_id',
-      ];
-      csvHeaders = exportedParams.map((key) => ({ label: key, key }));
-      csvData = this.parseCsvData(filteredData);
-    }
-
-    if (selectedDayNarrativeStart && selectedDayNarrativeEnd) {
-      csvTitle = `narrative_logs_from_${selectedDayNarrativeStart.format(
+  // Obtain headers to create csv report
+  // obs_day, message_text and level are parsed by this.parseCsvData
+  const csvHeaders = filteredData.length > 0 ? exportedCsvParams.map((key) => ({ label: key, key })) : [];
+  const csvData =
+    filteredData.length > 0 ? parseCsvData(filteredData) : "There aren't logs created for the current search...";
+  const csvTitle = bothSelectedDays
+    ? `narrative_logs_from_${selectedDayNarrativeStart.format(
         ISO_INTEGER_DATE_FORMAT,
-      )}_to_${selectedDayNarrativeEnd.format(ISO_INTEGER_DATE_FORMAT)}.csv`;
-    }
+      )}_to_${selectedDayNarrativeEnd.format(ISO_INTEGER_DATE_FORMAT)}.csv`
+    : 'narrative_logs.csv';
 
-    const systemOptions = [OLE_DEFAULT_SYSTEMS_FILTER_OPTION, ...Object.keys(OLE_OBS_SYSTEMS).sort()];
+  const systemOptions = [OLE_DEFAULT_SYSTEMS_FILTER_OPTION, ...Object.keys(OLE_OBS_SYSTEMS).sort()];
 
-    const renderDateTimeInput = (props) => {
-      return <input {...props} readOnly />;
-    };
+  return modeView && !modeEdit ? (
+    <NonExposureDetail
+      key={selectedLog?.id}
+      log={selectedLog}
+      back={goBack}
+      edit={editLog}
+      remove={removeLog}
+      taiToUtc={taiToUtc}
+    />
+  ) : modeEdit && !modeView ? (
+    <NonExposureEdit
+      key={selectedLog?.id}
+      log={selectedLog}
+      back={goBack}
+      view={viewLog}
+      save={saveLog}
+      taiToUtc={taiToUtc}
+    />
+  ) : (
+    <div className={styles.container}>
+      <div className={styles.filters}>
+        <DateTimeRange
+          label="From"
+          className={styles.dateRange}
+          startDate={selectedDayNarrativeStart}
+          endDate={selectedDayNarrativeEnd}
+          startDateProps={{
+            timeFormat: false,
+            className: styles.rangeDateOnly,
+            maxDate: Moment(),
+            renderInput: renderDateTimeInput,
+          }}
+          endDateProps={{
+            timeFormat: false,
+            className: styles.rangeDateOnly,
+            maxDate: Moment(),
+            renderInput: renderDateTimeInput,
+          }}
+          onChange={changeDayNarrative}
+        />
 
-    return modeView && !modeEdit ? (
-      <NonExposureDetail
-        back={() => {
-          this.setState({ modeView: false, modeEdit: false });
-        }}
-        logDetail={this.state.selected}
-        edit={(isClicked) => {
-          if (isClicked) {
-            this.setState({ modeEdit: true, modeView: false });
-          }
-        }}
-        remove={(nonExposure) => {
-          this.refreshLogsRemove(nonExposure);
-          this.setState({ modeView: false });
-        }}
-      />
-    ) : modeEdit && !modeView ? (
-      <NonExposureEdit
-        back={() => {
-          this.setState({ modeView: false, modeEdit: false });
-        }}
-        logEdit={this.state.selected}
-        view={(isClicked) => {
-          if (isClicked) {
-            this.setState({ modeEdit: false, modeView: true });
-          }
-        }}
-        save={(nonExposure) => {
-          this.refreshLogs(nonExposure);
-          this.setState({ modeEdit: false, modeView: true });
-        }}
-      />
-    ) : (
-      <div className={styles.container}>
-        <div className={styles.filters}>
-          <DateTimeRange
-            label="From"
-            className={styles.dateRange}
-            startDate={selectedDayNarrativeStart}
-            endDate={selectedDayNarrativeEnd}
-            startDateProps={{
-              timeFormat: false,
-              className: styles.rangeDateOnly,
-              maxDate: Moment(),
-              renderInput: renderDateTimeInput,
-            }}
-            endDateProps={{
-              timeFormat: false,
-              className: styles.rangeDateOnly,
-              maxDate: Moment(),
-              renderInput: renderDateTimeInput,
-            }}
-            onChange={changeDayNarrative}
+        <div className={styles.checkboxText}>
+          <Input
+            type="checkbox"
+            checked={selectedObsTimeLoss}
+            onChange={(event) => changeObsTimeLossSelect(event.target.checked)}
           />
-
-          <div className={styles.checkboxText}>
-            <Input
-              type="checkbox"
-              checked={selectedObsTimeLoss}
-              onChange={(event) => changeObsTimeLossSelect(event.target.checked)}
-            />
-            Show only with time loss
-          </div>
-
-          <div className={styles.checkboxText}>
-            <Input
-              type="checkbox"
-              checked={selectedJiraTickets}
-              onChange={(event) => changeJiraTicketsSelect(event.target.checked)}
-            />
-            Show only with jira tickets
-          </div>
-
-          <Select
-            options={OLE_COMMENT_TYPE_OPTIONS}
-            option={selectedCommentType}
-            onChange={(value) => changeCommentTypeSelect(value)}
-            className={styles.selectComment}
-          />
-
-          <Select
-            options={systemOptions}
-            option={selectedSystem}
-            onChange={({ value }) => changeSystemSelect(value)}
-            className={styles.selectComponent}
-          />
-
-          <div className={styles.divExportBtn}>
-            <CSVLink data={csvData} headers={csvHeaders} filename={csvTitle}>
-              <Hoverable top={true} left={true} inside={true}>
-                <span className={styles.infoIcon}>
-                  <DownloadIcon className={styles.iconCSV} />
-                </span>
-                <div className={styles.hover}>Download this report as csv file</div>
-              </Hoverable>
-            </CSVLink>
-          </div>
+          Show only with time loss
         </div>
-        <div className={styles.lastUpdated}>
-          <Button disabled={this.state.updatingLogs} onClick={() => this.queryNarrativeLogs()}>
-            Refresh data
-          </Button>
-          <span>Last updated: {this.state.lastUpdated ? this.state.lastUpdated.format(TIME_FORMAT) : ''}</span>
-          {this.state.updatingLogs && <SpinnerIcon className={styles.spinnerIcon} />}
+
+        <div className={styles.checkboxText}>
+          <Input
+            type="checkbox"
+            checked={selectedJiraTickets}
+            onChange={(event) => changeJiraTicketsSelect(event.target.checked)}
+          />
+          Show only with jira tickets
         </div>
-        <OrderableTable className={styles.table} headers={headers} data={filteredData} />
+
+        <Select
+          options={OLE_COMMENT_TYPE_OPTIONS}
+          option={selectedCommentType}
+          onChange={(option) => changeCommentTypeSelect(option)}
+          className={styles.selectComment}
+        />
+
+        <Select
+          options={systemOptions}
+          option={selectedSystem}
+          onChange={({ value }) => changeSystemSelect(value)}
+          className={styles.selectComponent}
+        />
+
+        <div className={styles.divExportBtn}>
+          <CSVLink data={csvData} headers={csvHeaders} filename={csvTitle}>
+            <Hoverable top={true} left={true} inside={true}>
+              <span className={styles.infoIcon}>
+                <DownloadIcon className={styles.iconCSV} />
+              </span>
+              <div className={styles.hover}>Download this report as csv file</div>
+            </Hoverable>
+          </CSVLink>
+        </div>
       </div>
-    );
-  }
+      <div className={styles.lastUpdated}>
+        <Button disabled={updatingLogs} onClick={() => queryNarrativeLogs()}>
+          Refresh data
+        </Button>
+        <span>Last updated: {lastUpdated ? lastUpdated.format(TIME_FORMAT) : ''}</span>
+        {updatingLogs && <SpinnerIcon className={styles.spinnerIcon} />}
+      </div>
+      <OrderableTable className={styles.table} headers={getHeaders()} data={filteredData} />
+    </div>
+  );
 }
+
+NonExposure.propTypes = {
+  /** The selected start obs day to filter displayed narrative logs,
+   * in YYYYMMDD or Moment format */
+  selectedDayNarrativeStart: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+  /** The selected end obs day to filter displayed narrative logs,
+   * in YYYYMMDD or Moment format */
+  selectedDayNarrativeEnd: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+  /** Function to change the selected narrative obs day range
+   * @param {number} day - The new obs day, in YYYYMMDD
+   * @param {string|object} type - The type of date being changed (e.g., 'start' or 'end') */
+  changeDayNarrative: PropTypes.func,
+  /** The selected comment **option** (object with `value` and `label` properties)
+   * to filter displayed narrative logs */
+  selectedCommentType: PropTypes.shape({
+    value: PropTypes.oneOf(['all', 0, 100]),
+    label: PropTypes.string,
+  }),
+  /** Function to change the selected comment type
+   * @param {object} option - The new selected comment type **option**,
+   * with `value` and `label` properties */
+  changeCommentTypeSelect: PropTypes.func,
+  /** The selected system to filter displayed narrative logs */
+  selectedSystem: PropTypes.string,
+  /** Function to change the selected system. */
+  changeSystemSelect: PropTypes.func,
+  /** Whether to display narrative logs with time loss or not */
+  selectedObsTimeLoss: PropTypes.bool,
+  /** Whether to display narrative logs with Jira tickets or not */
+  selectedJiraTickets: PropTypes.bool,
+  /** Function to toggle time loss checkbox */
+  changeObsTimeLossSelect: PropTypes.func,
+  /** Function to toggle Jira tickets checkbox */
+  changeJiraTicketsSelect: PropTypes.func,
+  /** Seconds offset between TAI and UTC. */
+  taiToUtc: PropTypes.number,
+};
+
+export default NonExposure;

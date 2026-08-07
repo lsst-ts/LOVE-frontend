@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -17,9 +19,8 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component, memo } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import lodash from 'lodash';
 import Moment from 'moment';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
@@ -40,6 +41,8 @@ import ManagerInterface, {
   getLinkJira,
   getFilename,
   openInNewTab,
+  parseTaiToUtc,
+  diffDates,
   htmlToJiraMarkdown,
   jiraMarkdownToHtml,
   arrangeJiraOBSSystemsSubsystemsComponentsSelection,
@@ -50,215 +53,172 @@ import ManagerInterface, {
 import { getIconLevel, closeCalendar } from '../OLE';
 import styles from './NonExposure.module.css';
 
-class NonExposureEdit extends Component {
-  static propTypes = {
-    /** Log to edit object */
-    logEdit: PropTypes.object,
-    /** Flag to show the creation components */
-    isLogCreate: PropTypes.bool,
-    /** Flag to show the menu components */
-    isMenu: PropTypes.bool,
-    /** Function to go back */
-    back: PropTypes.func,
-    /** Function to save a log */
-    save: PropTypes.func,
-    /** Function to view a log */
-    view: PropTypes.func,
-  };
+const emptyLog = {
+  id: undefined,
+  level: 0,
+  date_begin: '',
+  date_end: '',
+  components_json: undefined,
+  time_lost: 0,
+  jira_issue_id: '',
+  file: undefined,
+  urls: [],
+  tags: [],
+  message_text: '',
+  is_human: true,
+  category: 'None',
+  time_lost_type: 'fault',
+};
 
-  static defaultProps = {
-    logEdit: {
-      id: undefined,
-      level: 0,
-      date_begin: '',
-      date_end: '',
-      components_json: undefined,
-      systems_ids: [],
-      subsystems_ids: [],
-      components_ids: [],
-      user: undefined,
-      time_lost: 0,
-      jira: false,
-      jira_new: true,
-      jira_issue_title: '',
-      jira_issue_id: '',
-      file: undefined,
-      urls: [],
-      tags: [],
-      message_text: '',
-      is_human: true,
-      category: 'None',
-      time_lost_type: 'fault',
-    },
-    isLogCreate: false,
-    isMenu: false,
-    back: undefined,
-    save: () => {},
-    view: () => {},
-  };
+function NonExposureEdit({ log: propLog = emptyLog, isLogCreate = false, isMenu = false, back, save, view, taiToUtc }) {
+  const [log, setLog] = useState(() => ({
+    ...emptyLog,
+    ...propLog,
+    // Narrative log dates come in TAI time so we parse them
+    // inmediately after receiving them
+    date_begin: parseTaiToUtc(propLog?.date_begin, taiToUtc),
+    date_end: parseTaiToUtc(propLog?.date_end, taiToUtc),
+  }));
+  console.log(log);
+  const [savingLog, setSavingLog] = useState(false);
+  const [tryingToSave, setTryingToSave] = useState(false);
 
-  constructor(props) {
-    super(props);
-    const { logEdit } = props;
-
-    logEdit['date_begin'] = logEdit['date_begin'] ? Moment(logEdit['date_begin'] + 'Z') : '';
-    logEdit['date_end'] = logEdit['date_end'] ? Moment(logEdit['date_end'] + 'Z') : '';
-
-    if (logEdit['components_json']) {
-      const { systemsIds, subsystemsIds, componentsIds } = getOBSSystemsSubsystemsComponentsIds([
-        logEdit['components_json'],
-      ]);
-      logEdit['systems_ids'] = systemsIds;
-      logEdit['subsystems_ids'] = subsystemsIds;
-      logEdit['components_ids'] = componentsIds;
+  const componentsJSONEmpty = Object.keys(log?.components_json ?? {}).length === 0;
+  const componentsJSONIds = !componentsJSONEmpty ? getOBSSystemsSubsystemsComponentsIds([log.components_json]) : null;
+  const [systemIds, setSystemIds] = useState(() => {
+    if (componentsJSONIds) {
+      return componentsJSONIds.systemsIds;
     }
+    return [];
+  });
+  const [subsystemIds, setSubsystemIds] = useState(() => {
+    if (componentsJSONIds) {
+      return componentsJSONIds.subsystemsIds;
+    }
+    return [];
+  });
+  const [componentIds, setComponentIds] = useState(() => {
+    if (componentsJSONIds) {
+      return componentsJSONIds.componentsIds;
+    }
+    return [];
+  });
 
-    this.state = {
-      logEdit: { ...NonExposureEdit.defaultProps.logEdit, ...logEdit },
-      savingLog: false,
-      datesAreValid: true,
-      jiraIssueError: false,
-    };
+  const multiselectSystemsRef = useRef();
+  const multiselectSubsystemsRef = useRef();
+  const multiselectComponentsRef = useRef();
+  const richTextEditorRef = useRef();
+  const dateBeginInputRef = useRef();
+  const dateEndInputRef = useRef();
 
-    this.handleSubmit = this.handleSubmit.bind(this);
+  const isEditForm = !!log.id;
 
-    this.multiselectSystemsRef = React.createRef();
-    this.multiselectSubsystemsRef = React.createRef();
-    this.multiselectComponentsRef = React.createRef();
+  const messageEmpty = !log?.message_text?.trim();
+  const isSendAllowed = !messageEmpty;
+  const isSubmitDisabled = tryingToSave && !isSendAllowed;
 
-    this.richTextEditorRef = React.createRef();
-    this.id = lodash.uniqueId('nonexposure-edit-');
-    this.multiselectSystemId = lodash.uniqueId('multiselect-systems-');
-
-    this.dateBeginInputRef = React.createRef();
-    this.dateEndInputRef = React.createRef();
-  }
-
-  cleanForm() {
-    // Reset RichTextEditor component value
-    this.richTextEditorRef.current?.cleanContent();
-
-    // Reset time of incident datetime pickers
-    this.clearDates();
-
-    // Reset logEdit values
-    // Keep previously saved systems for persistence
-    this.setState((prevState) => ({
-      logEdit: {
-        ...NonExposureEdit.defaultProps.logEdit,
-        systems_ids: prevState.logEdit.systems_ids,
-        subsystems_ids: [],
-        components_ids: [],
-      },
-    }));
-  }
-
-  clearSystemsInput() {
-    this.setState((prevState) => ({
-      logEdit: {
-        ...prevState.logEdit,
-        systems_ids: [],
-        subsystems_ids: [],
-        components_ids: [],
-      },
-    }));
-
-    this.multiselectSystemsRef.current?.resetSelectedValues();
-  }
-
-  clearSubsystemsInput() {
-    this.setState((prevState) => ({
-      logEdit: {
-        ...prevState.logEdit,
-        subsystems_ids: [],
-        components_ids: [],
-      },
-    }));
-
-    this.multiselectSubsystemsRef.current?.resetSelectedValues();
-  }
-
-  clearComponentsInput() {
-    this.setState((prevState) => {
-      return {
-        logEdit: {
-          ...prevState.logEdit,
-          components_ids: [],
-        },
-      };
-    });
-
-    this.multiselectComponentsRef.current?.resetSelectedValues();
-  }
-
-  updateDates() {
-    this.setState((prevState) => ({
-      logEdit: { ...prevState.logEdit, date_begin: Moment(), date_end: Moment() },
-    }));
-  }
-
-  updateDateBeginToNow() {
-    this.setState(
-      (prevState) => ({
-        logEdit: { ...prevState.logEdit, date_begin: Moment() },
-      }),
-      () => {
-        closeCalendar(this.dateBeginInputRef?.current);
-      },
-    );
-  }
-
-  updateDateEndToNow() {
-    this.setState(
-      (prevState) => ({
-        logEdit: { ...prevState.logEdit, date_end: Moment() },
-      }),
-      () => {
-        closeCalendar(this.dateEndInputRef?.current);
-      },
-    );
-  }
-
-  clearDates() {
-    // For some reason setting logEdit.date_begin to '' does not work
+  const clearDates = () => {
+    // For some reason setting message.date_begin to '' does not work
     // thus we clear the date by calling the onClick function of the clear button
     // of each DateTime component
-    const dateBeginElement = this.dateBeginInputRef.current;
-    const dateEndElement = this.dateEndInputRef.current;
+    const dateBeginElement = dateBeginInputRef.current;
+    const dateEndElement = dateEndInputRef.current;
 
     const dateBeginButtons = dateBeginElement?.querySelectorAll('button');
     const dateEndButtons = dateEndElement?.querySelectorAll('button');
 
     const clickEvent = new Event('click', { bubbles: true });
 
-    if (dateBeginButtons && dateBeginButtons.length > 0) {
+    if (dateBeginButtons && dateBeginButtons.length > 2) {
       dateBeginButtons[0].dispatchEvent(clickEvent);
       dateBeginButtons[2].dispatchEvent(clickEvent);
     }
 
-    if (dateEndButtons && dateEndButtons.length > 0) {
+    if (dateEndButtons && dateEndButtons.length > 2) {
       dateEndButtons[0].dispatchEvent(clickEvent);
       dateEndButtons[2].dispatchEvent(clickEvent);
     }
-  }
+  };
 
-  updateOrCreateMessageNarrativeLogs() {
-    const { logEdit } = this.state;
-    const payload = { ...logEdit };
+  const clearForm = () => {
+    // Reset RichTextEditor component value
+    richTextEditorRef.current?.cleanContent();
 
+    setLog({ ...emptyLog });
+    setSubsystemIds([]);
+    setComponentIds([]);
+    setTryingToSave(false);
+    clearDates();
+  };
+
+  const clearSystemsInput = () => {
+    setSystemIds([]);
+    setSubsystemIds([]);
+    setComponentIds([]);
+    multiselectSystemsRef.current?.resetSelectedValues();
+  };
+
+  const clearSubsystemsInput = () => {
+    setSubsystemIds([]);
+    setComponentIds([]);
+    multiselectSubsystemsRef.current?.resetSelectedValues();
+  };
+
+  const clearComponentsInput = () => {
+    setComponentIds([]);
+    multiselectComponentsRef.current?.resetSelectedValues();
+  };
+
+  const updateDateBeginToNow = () => {
+    handleTimeOfIncident(Moment(), 'start');
+    closeCalendar(dateBeginInputRef?.current);
+  };
+
+  const updateDateEndToNow = () => {
+    handleTimeOfIncident(Moment(), 'end');
+    closeCalendar(dateEndInputRef?.current);
+  };
+
+  // The following function is used to fix a bug with the ReactMultiselect component.
+  // When setting the singleSelect prop to true, clicks on the select box are dismissed.
+  // This function replaces the search box with a simple input box and removes the caret.
+  // Check: https://github.com/srigar/multiselect-react-dropdown/issues/262
+  const fixSingleSelectBox = (node) => {
+    if (!node) return;
+
+    const searchBox = node.getElementsByClassName('searchBox')[0];
+    const caret = node.getElementsByClassName('icon_down_dir')[0];
+    const newSearchBox = document.createElement('input');
+    newSearchBox.setAttribute('type', 'text');
+    newSearchBox.setAttribute('placeholder', 'Select zero or one system');
+
+    if (systemIds.length === 0 && searchBox) {
+      searchBox.replaceWith(newSearchBox);
+    }
+    if (caret) {
+      caret.remove();
+    }
+  };
+
+  const updateOrCreateNarrativeLog = () => {
+    setTryingToSave(true);
+    if (!isSendAllowed) return;
+
+    const payload = { ...log };
     const nowMoment = Moment();
-    payload['request_type'] = 'narrative';
+    payload.request_type = 'narrative';
+    payload.jira = payload.jira_issue_id !== '';
 
-    // Handle dates saving
-    let beginDateISO, endDateISO;
-    beginDateISO = payload.date_begin != '' ? Moment(payload.date_begin).toISOString() : nowMoment.toISOString();
-    endDateISO = payload.date_end != '' ? Moment(payload.date_end).toISOString() : nowMoment.toISOString();
+    const beginDate = payload.date_begin ? Moment(payload.date_begin) : nowMoment;
+    const endDate = payload.date_end ? Moment(payload.date_end) : nowMoment;
 
-    payload['date_begin'] = beginDateISO.substring(0, beginDateISO.length - 1); // remove Zone due to backend standard
-    payload['date_end'] = endDateISO.substring(0, endDateISO.length - 1); // remove Zone due to backend standard
+    // We remove the 'Z' at the end of the ISO string because the backend
+    // expects the date in UTC but without the 'Z' suffix.
+    payload.date_begin = beginDate.toISOString().slice(0, -1);
+    payload.date_end = endDate.toISOString().slice(0, -1);
 
     // Transform &amp; back to '&'. This is a workaround due to Quill editor encoding '&'.}
-    payload['message_text'] = payload['message_text'].replace(/&amp;/g, '&');
+    payload.message_text = payload.message_text.replace(/&amp;/g, '&');
 
     // Clean null and empty values to avoid API errors
     Object.keys(payload).forEach((key) => {
@@ -267,158 +227,78 @@ class NonExposureEdit extends Component {
       }
     });
 
-    // Handle systems, subsystems and components for JIRA payload
-    const selection = arrangeJiraOBSSystemsSubsystemsComponentsSelection(
-      payload.systems_ids,
-      payload.subsystems_ids,
-      payload.components_ids,
+    // We arrange the OBS systems, subsystems, and components selection for the Jira ticket payload.
+    payload.jira_obs_selection = arrangeJiraOBSSystemsSubsystemsComponentsSelection(
+      systemIds,
+      subsystemIds,
+      componentIds,
     );
-    payload['jira_obs_selection'] = selection;
 
-    const componentsJSON = arrangeNarrativelogOBSSystemsSubsystemsComponents(
-      payload.systems_ids,
-      payload.subsystems_ids,
-      payload.components_ids,
-    );
-    payload['components_json'] = componentsJSON;
+    // We arrange the OBS systems, subsystems, and components selection for the narrative log payload.
+    payload.components_json = arrangeNarrativelogOBSSystemsSubsystemsComponents(systemIds, subsystemIds, componentIds);
 
-    // Avoid API confusion with deprecated parameters
-    delete payload['components'];
-    delete payload['primary_software_components'];
-    delete payload['primary_hardware_components'];
-    delete payload['systems'];
-    delete payload['subsystems'];
-    delete payload['systems_ids'];
-    delete payload['subsystems_ids'];
-    delete payload['components_ids'];
-
-    this.setState({ savingLog: true });
-    if (this.state.logEdit.id) {
-      ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
-        this.setState({ savingLog: false });
-        if (response) {
-          this.props.save(response);
-        }
-      });
+    setSavingLog(true);
+    // If log contains an id, we are updating an existing narrative log, otherwise we are creating a new one.
+    if (isEditForm) {
+      ManagerInterface.updateMessageNarrativeLogs(log.id, payload)
+        .then((response) => {
+          setSavingLog(false);
+          if (response) {
+            clearForm();
+            if (save) save(response);
+            if (view) view(response);
+          }
+        })
+        .finally(() => {
+          setSavingLog(false);
+        });
     } else {
-      ManagerInterface.createMessageNarrativeLogs(payload).then((response) => {
-        this.setState({ savingLog: false });
-        // Calbacks only if the response is successful
-        if (response) {
-          this.cleanForm();
-          this.props.save(response);
-          if (this.props.back) this.props.back();
-        }
-      });
+      ManagerInterface.createMessageNarrativeLogs(payload)
+        .then((response) => {
+          setSavingLog(false);
+          if (response) {
+            clearForm();
+            if (save) save(response);
+            if (back) back();
+          }
+        })
+        .finally(() => {
+          setSavingLog(false);
+        });
     }
-  }
-
-  handleSubmit(event) {
-    if (event) event.preventDefault();
-    this.updateOrCreateMessageNarrativeLogs();
-  }
-
-  isSubmitDisabled() {
-    const { logEdit, datesAreValid, savingLog, jiraIssueError } = this.state;
-    return !datesAreValid || jiraIssueError || savingLog || !logEdit?.message_text?.trim();
-  }
-
-  handleTimeOfIncident(date, type) {
-    if (type === 'start') {
-      this.setState((prevState) => ({
-        logEdit: { ...prevState.logEdit, date_begin: date },
-      }));
-    } else if (type === 'end') {
-      this.setState((prevState) => ({
-        logEdit: { ...prevState.logEdit, date_end: date },
-      }));
-    }
-  }
-
-  handleTimeLost() {
-    const { date_begin, date_end } = this.state.logEdit;
-    if (date_begin === '' || date_end === '') {
-      return;
-    }
-    const start = Moment(date_begin);
-    const end = Moment(date_end);
-    const duration_hr = end.diff(start, 'hours', true);
-    this.setState((prevState) => ({
-      logEdit: {
-        ...prevState.logEdit,
-        time_lost: duration_hr.toFixed(2),
-      },
-    }));
-  }
-
-  // The following function is used to fix a bug with the ReactMultiselect component.
-  // When setting the singleSelect prop to true, clicks on the select box are dismissed.
-  // This function replaces the search box with a simple input box and removes the caret.
-  // Check: https://github.com/srigar/multiselect-react-dropdown/issues/262
-  fixSingleSelectBox = () => {
-    const { logEdit } = this.state;
-    const msParent = document.getElementById(this.multiselectSystemId);
-    const searchBox = msParent.getElementsByClassName('searchBox')[0];
-    const caret = msParent.getElementsByClassName('icon_down_dir')[0];
-
-    const newSearchBox = document.createElement('input');
-    newSearchBox.setAttribute('type', 'text');
-    newSearchBox.setAttribute('placeholder', 'Select zero or one system');
-
-    if (logEdit.systems_ids.length == 0) {
-      searchBox.replaceWith(newSearchBox);
-    }
-    caret.remove();
   };
 
-  componentDidMount() {
-    this.fixSingleSelectBox();
-  }
+  const handleSubmit = (event) => {
+    if (event) event.preventDefault();
+    updateOrCreateNarrativeLog();
+  };
 
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      prevState.logEdit?.date_begin !== this.state.logEdit?.date_begin ||
-      prevState.logEdit?.date_end !== this.state.logEdit?.date_end
-    ) {
-      this.handleTimeLost();
+  const handleTimeOfIncident = (date, type) => {
+    if (type === 'start') {
+      setLog((prevLog) => {
+        const timeLost = diffDates(date, prevLog.date_end ?? Moment(), 'hours');
+        return { ...prevLog, date_begin: date, time_lost: timeLost };
+      });
+    } else if (type === 'end') {
+      setLog((prevLog) => {
+        const timeLost = diffDates(log.date_begin ?? Moment(), date, 'hours');
+        return { ...prevLog, date_end: date, time_lost: timeLost };
+      });
     }
+  };
 
-    if (this.state.logEdit) {
-      const { jira, jira_new, jira_issue_title, jira_issue_id } = this.state.logEdit;
-
-      if (
-        prevState.logEdit?.jira !== jira ||
-        prevState.logEdit?.jira_new !== jira_new ||
-        prevState.logEdit?.jira_issue_title !== jira_issue_title ||
-        prevState.logEdit?.jira_issue_id !== jira_issue_id
-      ) {
-        if (jira) {
-          if ((jira_new && jira_issue_title === '') || (!jira_new && jira_issue_id === '')) {
-            this.setState({ jiraIssueError: true });
-          }
-          if ((jira_new && jira_issue_title !== '') || (!jira_new && jira_issue_id !== '')) {
-            this.setState({ jiraIssueError: false });
-          }
-        } else {
-          this.setState({ jiraIssueError: false });
-        }
-      }
-    }
-
-    this.fixSingleSelectBox();
-  }
-
-  renderCategoryField() {
+  const renderCategoryField = () => {
     return (
       <>
         <span className={styles.label}>Type of observing time</span>
         <span className={styles.value}>
           <Select
             options={['None', 'ENG', 'SCIENCE']}
-            option={this.state.logEdit?.category}
+            option={log?.category}
             onChange={({ value }) => {
-              this.setState((prevState) => ({
-                logEdit: { ...prevState.logEdit, category: value },
+              setLog((prevLog) => ({
+                ...prevLog,
+                category: value,
               }));
             }}
             className={styles.select}
@@ -426,9 +306,9 @@ class NonExposureEdit extends Component {
         </span>
       </>
     );
-  }
+  };
 
-  renderUrgentField() {
+  const renderUrgentField = () => {
     return (
       <>
         <span className={styles.label}>Urgent?</span>
@@ -436,35 +316,28 @@ class NonExposureEdit extends Component {
           <div style={{ display: 'inline-block', marginRight: '0.5em' }}>
             <Toggle
               labels={['No', 'Yes']}
-              toggled={this.state.logEdit.level >= 100}
+              toggled={log.level >= 100}
               onToggle={(event) =>
-                this.setState((prevState) => ({
-                  logEdit: { ...prevState.logEdit, level: event ? 100 : 0 },
+                setLog((prevLog) => ({
+                  ...prevLog,
+                  level: event ? 100 : 0,
                 }))
               }
             />
           </div>
-          <span className={styles.levelIcon}>{getIconLevel(this.state.logEdit.level)}</span>
+          <span className={styles.levelIcon}>{getIconLevel(log.level)}</span>
         </span>
       </>
     );
-  }
+  };
 
-  renderComponentsFields() {
-    const { logEdit } = this.state;
-
-    const selectedSystemsIds = logEdit?.systems_ids;
-    const selectedSubsystemsIds = logEdit?.subsystems_ids;
-    const selectedComponentsIds = logEdit?.components_ids;
-
-    const selectedSystems = Object.keys(OLE_OBS_SYSTEMS).filter((s) =>
-      selectedSystemsIds?.includes(OLE_OBS_SYSTEMS[s].id),
-    );
+  const renderComponentsFields = () => {
+    const selectedSystems = Object.keys(OLE_OBS_SYSTEMS).filter((s) => systemIds?.includes(OLE_OBS_SYSTEMS[s].id));
     const selectedSubsystems = Object.keys(OLE_OBS_SUBSYSTEMS).filter((ss) =>
-      selectedSubsystemsIds?.includes(OLE_OBS_SUBSYSTEMS[ss].id),
+      subsystemIds?.includes(OLE_OBS_SUBSYSTEMS[ss].id),
     );
     const selectedComponents = Object.keys(OLE_OBS_SUBSYSTEMS_COMPONENTS).filter((c) =>
-      selectedComponentsIds?.includes(OLE_OBS_SUBSYSTEMS_COMPONENTS[c].id),
+      componentIds?.includes(OLE_OBS_SUBSYSTEMS_COMPONENTS[c].id),
     );
 
     const systemOptions = Object.keys(OLE_OBS_SYSTEMS).sort();
@@ -493,119 +366,89 @@ class NonExposureEdit extends Component {
       })
       .sort();
 
-    const setLogEditSystems = (selectedOptions) => {
+    const handleSystemIdsChange = (selectedOptions) => {
       const selectedSystemsIds = selectedOptions.map((s) => OLE_OBS_SYSTEMS[s].id);
-      this.setState((prevState) => {
-        const validComponentsIds = validateOBSSystemsSubsystemsComponentsIds(
-          selectedSystemsIds,
-          prevState.logEdit.subsystems_ids,
-          prevState.logEdit.components_ids,
-        );
-
-        return {
-          logEdit: {
-            ...prevState.logEdit,
-            systems_ids: validComponentsIds.systemsIds,
-            subsystems_ids: validComponentsIds.subsystemsIds,
-            components_ids: validComponentsIds.componentsIds,
-          },
-        };
-      });
+      const validIds = validateOBSSystemsSubsystemsComponentsIds(selectedSystemsIds, subsystemIds, componentIds);
+      setSystemIds(validIds.systemsIds);
+      setSubsystemIds(validIds.subsystemsIds);
+      setComponentIds(validIds.componentsIds);
     };
 
-    const setLogEditSubsystems = (selectedOptions) => {
+    const handleSubsystemIdsChange = (selectedOptions) => {
       const selectedSubsystemsIds = selectedOptions.map((ss) => OLE_OBS_SUBSYSTEMS[ss].id);
-      this.setState((prevState) => {
-        const validComponentsIds = validateOBSSystemsSubsystemsComponentsIds(
-          prevState.logEdit.systems_ids,
-          selectedSubsystemsIds,
-          prevState.logEdit.components_ids,
-        );
-
-        return {
-          logEdit: {
-            ...prevState.logEdit,
-            subsystems_ids: validComponentsIds.subsystemsIds,
-            components_ids: validComponentsIds.componentsIds,
-          },
-        };
-      });
+      const validIds = validateOBSSystemsSubsystemsComponentsIds(systemIds, selectedSubsystemsIds, componentIds);
+      setSystemIds(validIds.systemsIds);
+      setSubsystemIds(validIds.subsystemsIds);
+      setComponentIds(validIds.componentsIds);
     };
 
-    const setLogEditComponents = (selectedOptions) => {
+    const handleComponentIdsChange = (selectedOptions) => {
       const selectedComponentsIds = selectedOptions.map((c) => OLE_OBS_SUBSYSTEMS_COMPONENTS[c].id);
-      this.setState((prevState) => {
-        const validComponentsIds = validateOBSSystemsSubsystemsComponentsIds(
-          prevState.logEdit.systems_ids,
-          prevState.logEdit.subsystems_ids,
-          selectedComponentsIds,
-        );
-
-        return {
-          logEdit: {
-            ...prevState.logEdit,
-            components_ids: validComponentsIds.componentsIds,
-          },
-        };
-      });
+      const validIds = validateOBSSystemsSubsystemsComponentsIds(systemIds, subsystemIds, selectedComponentsIds);
+      setSystemIds(validIds.systemsIds);
+      setSubsystemIds(validIds.subsystemsIds);
+      setComponentIds(validIds.componentsIds);
     };
 
     return (
       <>
         <span className={styles.label}>System</span>
         <span className={styles.value}>
-          <div className={styles.inputGroup} id={this.multiselectSystemId}>
+          <div className={styles.inputGroup}>
             <Multiselect
-              innerRef={this.multiselectSystemsRef}
+              innerRef={(node) => {
+                if (!node) return;
+                multiselectSystemsRef.current = node;
+                fixSingleSelectBox(node.searchWrapper.current);
+              }}
               className={styles.select}
               options={systemOptions}
               selectedValues={selectedSystems}
-              onSelect={setLogEditSystems}
-              onRemove={setLogEditSystems}
+              onSelect={handleSystemIdsChange}
+              onRemove={handleSystemIdsChange}
               singleSelect={true}
             />
-            <Button onClick={() => this.clearSystemsInput()}>Clear</Button>
+            <Button onClick={() => clearSystemsInput()}>Clear</Button>
           </div>
         </span>
         <span className={styles.label}>Subsystems</span>
         <span className={styles.value}>
           <div className={styles.inputGroup}>
             <Multiselect
-              innerRef={this.multiselectSubsystemsRef}
+              innerRef={multiselectSubsystemsRef}
               className={styles.select}
               options={subsystemOptions}
               selectedValues={selectedSubsystems}
-              onSelect={setLogEditSubsystems}
-              onRemove={setLogEditSubsystems}
+              onSelect={handleSubsystemIdsChange}
+              onRemove={handleSubsystemIdsChange}
               placeholder="Select zero or more subsystems"
               selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
             />
-            <Button onClick={() => this.clearSubsystemsInput()}>Clear</Button>
+            <Button onClick={() => clearSubsystemsInput()}>Clear</Button>
           </div>
         </span>
         <span className={styles.label}>Components</span>
         <span className={styles.value}>
           <div className={styles.inputGroup}>
             <Multiselect
-              innerRef={this.multiselectComponentsRef}
+              innerRef={multiselectComponentsRef}
               className={styles.select}
               options={componentOptions}
               selectedValues={selectedComponents}
-              onSelect={setLogEditComponents}
-              onRemove={setLogEditComponents}
+              onSelect={handleComponentIdsChange}
+              onRemove={handleComponentIdsChange}
               placeholder="Select zero or more components"
               selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
             />
-            <Button onClick={() => this.clearComponentsInput()}>Clear</Button>
+            <Button onClick={() => clearComponentsInput()}>Clear</Button>
           </div>
         </span>
       </>
     );
-  }
+  };
 
-  renderTimeOfIncidentFields() {
-    const { date_begin, date_end, time_lost, time_lost_type } = this.state.logEdit ?? {};
-    const { datesAreValid } = this.state;
+  const renderTimeOfIncidentFields = () => {
+    const { date_begin, date_end, time_lost, time_lost_type } = log;
 
     const renderDateTimeInput = (ref) => {
       return (props, openCalendar, closeCalendar) => {
@@ -629,9 +472,9 @@ class NonExposureEdit extends Component {
       return (mode, renderDefault) => {
         const updateToNow = () => {
           if (dateBegin) {
-            this.updateDateBeginToNow();
+            updateDateBeginToNow();
           } else {
-            this.updateDateEndToNow();
+            updateDateEndToNow();
           }
         };
 
@@ -667,9 +510,9 @@ class NonExposureEdit extends Component {
               className={styles.dateTimeRangeStyle}
               startDate={date_begin}
               endDate={date_end}
-              onChange={(date, type) => this.handleTimeOfIncident(date, type)}
+              onChange={(date, type) => handleTimeOfIncident(date, type)}
               startDateProps={{
-                renderInput: renderDateTimeInput(this.dateBeginInputRef),
+                renderInput: renderDateTimeInput(dateBeginInputRef),
                 renderView: renderDatePickerView(true),
                 inputProps: {
                   title: 'This field is optional. If it is not filled, the current time will be used.',
@@ -677,11 +520,11 @@ class NonExposureEdit extends Component {
                   className: styles.timeOfIncidentInput,
                 },
                 dateFormat: 'YYYY/MM/DD',
-                timeFormat: 'HH:mm A',
+                timeFormat: 'HH:mm',
                 closeOnSelect: false,
               }}
               endDateProps={{
-                renderInput: renderDateTimeInput(this.dateEndInputRef),
+                renderInput: renderDateTimeInput(dateEndInputRef),
                 renderView: renderDatePickerView(false),
                 inputProps: {
                   title: 'This field is optional. If it is not filled, the current time will be used.',
@@ -689,12 +532,11 @@ class NonExposureEdit extends Component {
                   className: styles.timeOfIncidentInput,
                 },
                 dateFormat: 'YYYY/MM/DD',
-                timeFormat: 'HH:mm A',
+                timeFormat: 'HH:mm',
                 closeOnSelect: false,
               }}
             />
           </div>
-          {!datesAreValid && <div className={styles.inputError}>Error: dates must be input in valid ISO format</div>}
         </span>
         <span className={styles.label}>Obs. Time Loss Type</span>
         <span className={styles.value}>
@@ -702,8 +544,9 @@ class NonExposureEdit extends Component {
             labels={['Fault', 'Weather']}
             toggled={time_lost_type === 'weather'}
             onToggle={(event) =>
-              this.setState((prevState) => ({
-                logEdit: { ...prevState.logEdit, time_lost_type: event ? 'weather' : 'fault' },
+              setLog((prevLog) => ({
+                ...prevLog,
+                time_lost_type: event ? 'weather' : 'fault',
               }))
             }
           />
@@ -717,156 +560,90 @@ class NonExposureEdit extends Component {
             value={time_lost}
             className={styles.input}
             onChange={(event) =>
-              this.setState((prevState) => ({
-                logEdit: { ...prevState.logEdit, time_lost: event.target.value },
+              setLog((prevLog) => ({
+                ...prevLog,
+                time_lost: event.target.value,
               }))
             }
           />
         </span>
       </>
     );
-  }
+  };
 
-  renderMessageField() {
-    const { logEdit } = this.state;
-    const htmlMessage = jiraMarkdownToHtml(logEdit?.message_text);
-
+  const renderMessageField = () => {
+    const htmlMessage = jiraMarkdownToHtml(log?.message_text);
+    const inputError = tryingToSave && messageEmpty;
     return (
       <>
         <div className={styles.mb1}>
           <div className={styles.title}>Message</div>
         </div>
         <RichTextEditor
-          ref={this.richTextEditorRef}
-          className={styles.textArea}
+          ref={richTextEditorRef}
+          className={[styles.textArea, inputError ? styles.inputError : ''].join(' ')}
           defaultValue={htmlMessage}
           onChange={(value) => {
             const parsedValue = htmlToJiraMarkdown(value);
-            this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, message_text: parsedValue } }));
+            setLog((prevLog) => ({ ...prevLog, message_text: parsedValue }));
           }}
           onKeyCombination={(combination) => {
             if (combination === 'ctrl+enter') {
-              if (!this.isSubmitDisabled()) {
-                this.handleSubmit();
+              if (!isSubmitDisabled) {
+                handleSubmit();
               }
             }
           }}
         />
       </>
     );
-  }
+  };
 
-  renderFilesField() {
-    const { logEdit } = this.state;
-
+  const renderFilesField = () => {
     return (
       <>
         <div className={styles.toAttachFiles}>
           <MultiFileUploader
-            values={logEdit?.file}
-            handleFiles={(files) => this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: files } }))}
+            values={log?.file}
+            handleFiles={(files) => setLog((prevLog) => ({ ...prevLog, file: files }))}
             handleDelete={(file) => {
-              const files = { ...logEdit?.file };
+              const files = { ...log?.file };
               delete files[file];
-              this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: files } }));
+              setLog((prevLog) => ({ ...prevLog, file: files }));
             }}
-            handleDeleteAll={() =>
-              this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: undefined } }))
-            }
+            handleDeleteAll={() => setLog((prevLog) => ({ ...prevLog, file: undefined }))}
           />
         </div>
       </>
     );
-  }
+  };
 
-  renderJiraFields() {
-    const { logEdit, jiraIssueError } = this.state;
-    const logHasJira = getLinkJira(logEdit.urls) !== '';
+  const renderJiraFields = () => {
+    const logHasJira = getLinkJira(log.urls) !== '';
     return (
       <>
         <div className={styles.jira}>
           {!logHasJira && (
-            <>
-              <div className={styles.checkboxText}>
-                <Input
-                  type="checkbox"
-                  checked={logEdit?.jira}
-                  onChange={(event) => {
-                    this.setState((prevState) => ({
-                      logEdit: { ...prevState.logEdit, jira: event.target.checked },
-                    }));
-                  }}
-                />
-                <span>link Jira ticket</span>
-              </div>
-              {logEdit?.jira && (
-                <div className={styles.radioText}>
-                  <div>
-                    <input
-                      type="radio"
-                      name="jira"
-                      value="new"
-                      checked={logEdit?.jira_new}
-                      onChange={() => {
-                        this.setState((prevState) => ({
-                          logEdit: { ...prevState.logEdit, jira_new: true },
-                        }));
-                      }}
-                    />
-                    <span>New</span>
-                  </div>
-                  <div>
-                    <input
-                      type="radio"
-                      name="jira"
-                      value="existent"
-                      checked={!logEdit?.jira_new}
-                      onChange={() => {
-                        this.setState((prevState) => ({
-                          logEdit: { ...prevState.logEdit, jira_new: false },
-                        }));
-                      }}
-                    />
-                    <span>Existent</span>
-                  </div>
-                </div>
-              )}
-              {logEdit?.jira && (
-                <div className={styles.textInput}>
-                  {logEdit?.jira_new ? (
-                    <Input
-                      value={logEdit?.jira_issue_title}
-                      className={jiraIssueError ? styles.inputError : ''}
-                      placeholder="Jira ticket title"
-                      onChange={(event) =>
-                        this.setState((prevState) => ({
-                          logEdit: { ...prevState.logEdit, jira_issue_title: event.target.value },
-                        }))
-                      }
-                    />
-                  ) : (
-                    <Input
-                      value={logEdit?.jira_issue_id}
-                      className={jiraIssueError ? styles.inputError : ''}
-                      placeholder="Jira ticket id"
-                      onChange={(event) =>
-                        this.setState((prevState) => ({
-                          logEdit: { ...prevState.logEdit, jira_issue_id: event.target.value },
-                        }))
-                      }
-                    />
-                  )}
-                </div>
-              )}
-            </>
+            <div className={styles.textInput}>
+              <Input
+                value={log?.jira_issue_id}
+                placeholder="Jira ticket id"
+                onChange={(event) =>
+                  setLog((prevLog) => ({
+                    ...prevLog,
+                    jira_issue_id: event.target.value,
+                  }))
+                }
+              />
+            </div>
           )}
         </div>
       </>
     );
-  }
+  };
 
-  renderAttachedFiles() {
-    const filesUrls = getFilesURLs(this.state.logEdit.urls);
+  const renderAttachedFiles = () => {
+    const filesUrls = getFilesURLs(log.urls);
 
     return (
       <>
@@ -892,70 +669,62 @@ class NonExposureEdit extends Component {
         </div>
       </>
     );
-  }
+  };
 
-  renderSubmitButton() {
-    const { savingLog } = this.state;
-
+  const renderSubmitButton = () => {
     return (
       <>
-        <Button disabled={this.isSubmitDisabled()} type="submit">
+        <Button disabled={isSubmitDisabled} type="submit">
           {savingLog ? <SpinnerIcon className={styles.spinnerIcon} /> : <span className={styles.title}>Save</span>}
         </Button>
       </>
     );
-  }
+  };
 
-  renderMenu() {
+  const renderMenu = () => {
     return (
       <>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <div className={styles.detailContainerMenu}>
-            <div id={this.id} className={styles.contentMenu}>
+            <div className={styles.contentMenu}>
               <div className={styles.contentLeft}>
-                {this.renderUrgentField()}
-                {this.renderComponentsFields()}
-                {this.renderTimeOfIncidentFields()}
-                {this.renderCategoryField()}
+                {renderUrgentField()}
+                {renderComponentsFields()}
+                {renderTimeOfIncidentFields()}
+                {renderCategoryField()}
               </div>
-              <div className={styles.contentRight}>{this.renderMessageField()}</div>
+              <div className={styles.contentRight}>{renderMessageField()}</div>
             </div>
           </div>
           <div className={styles.footerMenu}>
             <div className={styles.footerLeftMenu}>
-              {this.renderJiraFields()}
-              {this.renderFilesField()}
+              {renderJiraFields()}
+              {renderFilesField()}
             </div>
-            <span className={styles.footerRightMenu}>{this.renderSubmitButton()}</span>
+            <span className={styles.footerRightMenu}>{renderSubmitButton()}</span>
           </div>
         </form>
       </>
     );
-  }
+  };
 
-  renderComponent() {
-    const { back, isLogCreate, view } = this.props;
-    const jiraUrl = getLinkJira(this.state.logEdit.urls);
+  const renderComponent = () => {
+    const jiraUrl = getLinkJira(log.urls);
 
     return (
       <>
         {back && (
           <div className={styles.returnToLogs}>
-            <Button
-              status="link"
-              onClick={() => {
-                back();
-              }}
-            >
+            <Button status="link" onClick={() => back()}>
               <span className={styles.title}>{`< Return to Logs`}</span>
             </Button>
           </div>
         )}
 
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <div className={styles.detailContainer}>
             <div className={styles.header}>
-              {this.state.logEdit.id && <span className={styles.bold}>#{this.state.logEdit.id}</span>}
+              {isEditForm && <span className={styles.bold}>#{log.id}</span>}
               {jiraUrl && (
                 <span>
                   <Button status="link" title={jiraUrl} onClick={() => openInNewTab(jiraUrl)}>
@@ -963,13 +732,13 @@ class NonExposureEdit extends Component {
                   </Button>
                 </span>
               )}
-              {this.state.logEdit.id && (
+              {isEditForm && (
                 <span className={styles.floatRight}>
                   <Button
                     className={styles.iconBtn}
                     title="View"
                     onClick={() => {
-                      view(true);
+                      if (view) view(propLog);
                     }}
                     status="transparent"
                   >
@@ -979,34 +748,48 @@ class NonExposureEdit extends Component {
               )}
             </div>
 
-            <div id={this.id} className={styles.content}>
+            <div className={styles.content}>
               <div className={styles.contentLeft}>
-                {this.renderUrgentField()}
-                {this.renderComponentsFields()}
-                {this.renderTimeOfIncidentFields()}
-                {this.renderCategoryField()}
+                {renderUrgentField()}
+                {renderComponentsFields()}
+                {renderTimeOfIncidentFields()}
+                {renderCategoryField()}
               </div>
-              <div className={styles.contentRight}>{this.renderMessageField()}</div>
+              <div className={styles.contentRight}>{renderMessageField()}</div>
             </div>
 
             <div className={styles.footer}>
               <div className={styles.footerLeft}>
-                {this.renderJiraFields()}
-                {!isLogCreate && this.renderAttachedFiles()}
-                {this.renderFilesField()}
+                {renderJiraFields()}
+                {!isLogCreate && renderAttachedFiles()}
+                {renderFilesField()}
               </div>
-              <span className={styles.footerRight}>{this.renderSubmitButton()}</span>
+              <span className={styles.footerRight}>{renderSubmitButton()}</span>
             </div>
           </div>
         </form>
       </>
     );
-  }
+  };
 
-  render() {
-    const { isMenu } = this.props;
-    return isMenu ? this.renderMenu() : this.renderComponent();
-  }
+  return isMenu ? renderMenu() : renderComponent();
 }
+
+NonExposureEdit.propTypes = {
+  /** Log object with narrative log data */
+  log: PropTypes.object,
+  /** Flag to show the creation components */
+  isLogCreate: PropTypes.bool,
+  /** Flag to show the menu components */
+  isMenu: PropTypes.bool,
+  /** Function to go back */
+  back: PropTypes.func,
+  /** Function to save a log */
+  save: PropTypes.func,
+  /** Function to view a log */
+  view: PropTypes.func,
+  /** Seconds offset between TAI and UTC. */
+  taiToUtc: PropTypes.number,
+};
 
 export default memo(NonExposureEdit);
