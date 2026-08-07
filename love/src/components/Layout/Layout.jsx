@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -27,7 +29,6 @@ import MessageIcon from 'components/icons/MessageIcon/MessageIcon';
 import OLEMenu from 'components/OLE/Menu/OLEMenu';
 import ExposureAdd from 'components/OLE/Exposure/ExposureAdd';
 import NonExposureEdit from 'components/OLE/NonExposure/NonExposureEdit';
-import TeknikerAdd from 'components/OLE/NonExposure/JiraTicketAdd';
 import ManagerInterface, {
   getNotificationMessage,
   relativeTime,
@@ -498,7 +499,7 @@ class Layout extends Component {
       <div className={styles.rightTopbar}>
         {this.renderHeartbeatsMenu()}
         <DropdownMenu className={styles.settingsDropdown} disabledToggle={true}>
-          <Button className={styles.iconBtn} title="Exposure, Narrative and TMA Logs" status="transparent">
+          <Button className={styles.iconBtn} title="Exposure and Narrative logs" status="transparent">
             <MessageIcon className={styles.icon} />
           </Button>
           <div className={styles.userMenu}>
@@ -509,9 +510,6 @@ class Layout extends Component {
                 }}
                 newExposureLogClick={() => {
                   this.setState({ oleTabOpen: 'exposure' });
-                }}
-                newTMALogClick={() => {
-                  this.setState({ oleTabOpen: 'tma' });
                 }}
               />
             )}
@@ -551,25 +549,6 @@ class Layout extends Component {
                 </div>
                 <div className={styles.divider}></div>
                 <ExposureAdd isMenu={true} back={this.goBackFromOLETab} />
-              </>
-            )}
-            {this.state.oleTabOpen === 'tma' && (
-              <>
-                <div className={styles.title}>
-                  <span className={styles.bold}>New TMA Log</span>
-                  <span className={styles.floatRight}>
-                    <Button
-                      status="link"
-                      onClick={() => {
-                        this.setState({ oleTabOpen: null });
-                      }}
-                    >
-                      <span className={styles.bold}>{'< Back'}</span>
-                    </Button>
-                  </span>
-                </div>
-                <div className={styles.divider}></div>
-                <TeknikerAdd isMenu={true} back={this.goBackFromOLETab} />
               </>
             )}
           </div>
