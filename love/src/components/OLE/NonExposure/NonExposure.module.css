@@ -458,7 +458,7 @@ td.messageColumn {
 }
 
 .inputError {
-  border-color: var(--status-alert-color) !important;
+  border: 1px solid var(--status-alert-color) !important;
 }
 
 .incidentTimeTypeContainer {
