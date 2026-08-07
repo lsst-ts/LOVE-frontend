@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -46,6 +48,18 @@ export function closeCalendar(ref) {
     // hidden by default so it can only be clicked programatically
     buttons[2].dispatchEvent(clickEvent);
   }
+}
+
+/**
+ * Narrative logs date_begin and date_end are stored in TAI time.
+ * The UI displays the date in UTC time, so we need to convert the TAI time to UTC time.
+ * Note we add 'Z' to the date string to indicate that it is in UTC time, and then we subtract 37 seconds to convert from TAI to UTC.
+ * @param {string} date - The date in TAI time, without the 'Z' suffix.
+ * @returns {Moment} - The date in UTC time as a moment object or an empty string if the date is not provided.
+ */
+export function parseTaiToUtc(date, secondsOffset = 37) {
+  const dateTAI = date ? Moment(date + 'Z').subtract(secondsOffset, 'seconds') : '';
+  return dateTAI;
 }
 
 export default class OLE extends Component {
