@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -23,7 +25,7 @@ import styles from './OLEMenu.module.css';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 
 /** Contents of the User details Dropdown Menu */
-const OLEMenu = ({ newNarrativeLogClick, newExposureLogClick, newTMALogClick }) => {
+const OLEMenu = ({ newNarrativeLogClick, newExposureLogClick }) => {
   return (
     <>
       <div className={styles.menuElement}>
@@ -42,12 +44,6 @@ const OLEMenu = ({ newNarrativeLogClick, newExposureLogClick, newTMALogClick }) 
           <span>New Exposure Log</span>
         </div>
       </div>
-      <div className={[styles.menuElement, styles.highlight].join(' ')} onClick={newTMALogClick}>
-        <div className={styles.smallIconRow}>
-          <AddIcon className={styles.addIcon} />
-          <span>New TMA Log</span>
-        </div>
-      </div>
     </>
   );
 };
@@ -57,8 +53,6 @@ OLEMenu.propTypes = {
   newNarrativeLogClick: PropTypes.func,
   /** Function to handle the click on the new Exposure Log option */
   newExposureLogClick: PropTypes.func,
-  /** Function to handle the click on the new TMA Log option */
-  newTMALogClick: PropTypes.func,
 };
 
 export default OLEMenu;
