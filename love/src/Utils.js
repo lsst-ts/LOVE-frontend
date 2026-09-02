@@ -1443,6 +1443,20 @@ export const relativeTime = (timestamp, taiToUtc) => {
 };
 
 /**
+ * Convert a TAI date string to a UTC date moment object
+ * @param {string} date - The date string in TAI time, without timezone suffix.
+ * @param {number} taiToUtcOffset - The offset in seconds to convert from
+ * TAI to UTC. Default is -37.
+ * @returns {Moment} - The date in UTC time as a moment object.
+ * Return the input date if it is not provided.
+ */
+export const parseTaiToUtc = (date, taiToUtcOffset = -37) => {
+  if (!date) return date;
+  const dateTAI = Moment.utc(date).add(taiToUtcOffset, 'seconds');
+  return dateTAI;
+};
+
+/**
  * Convert seconds to digital format as '00:00:00'
  * @param {number} time seconds to be converted
  * @returns {string} seconds in digitial format
@@ -1494,6 +1508,22 @@ export const diffHours = (hour1, hour2, unit) => {
   const date2 = Moment().add(formatDigitalToSeconds(hour2), 'seconds');
   let diff = Moment(date1).diff(Moment(date2), unit);
   return diff;
+};
+
+/**
+ * Function to calculate the difference between two dates in the specified unit
+ * @param {string|Date|Moment} from the first date
+ * @param {string|Date|Moment} to the second date
+ * @param {string} unit the unit to calculate the difference (e.g., 'hours', 'minutes', 'seconds')
+ * @param {boolean} truncate whether to truncate the result to an integer (default: false)
+ * @returns {number} the difference between the two dates in the specified unit
+ */
+export const diffDates = (from, to, unit, truncate = false, fixedTo = 2) => {
+  const d1 = Moment(from);
+  const d2 = Moment(to);
+  const diff = d2.diff(d1, unit, !truncate);
+  console.log('diffDates from:', from, 'to:', to, 'diff:', diff);
+  return Number.parseFloat(!truncate ? fixedFloat(diff, fixedTo) : diff);
 };
 
 /**
@@ -2396,12 +2426,11 @@ export function getOBSSystemsSubsystemsComponentsIds(systemsHierarchy) {
   systems.forEach((system) => {
     const systemName = system.name;
     systemsIds.push(system.id);
-
     if (system.children) {
       const availableSubsystemsIds = OLE_OBS_SYSTEMS[systemName]?.children;
       const availableSubsystems = Object.entries(OLE_OBS_SUBSYSTEMS)
         .filter(([ssn, ss]) => {
-          return availableSubsystemsIds.includes(ss.id);
+          return availableSubsystemsIds?.includes(ss.id);
         })
         .map(([ssn, ss]) => ({ name: ssn, ...ss }));
 
@@ -2413,12 +2442,11 @@ export function getOBSSystemsSubsystemsComponentsIds(systemsHierarchy) {
       subsystems.forEach((subsystem) => {
         const subsystemName = subsystem.name;
         subsystemsIds.push(subsystem.id);
-
         if (subsystem.children) {
           const availableComponentsIds = OLE_OBS_SUBSYSTEMS[subsystemName]?.children;
           const availableComponents = Object.entries(OLE_OBS_SUBSYSTEMS_COMPONENTS)
             .filter(([cn, c]) => {
-              return availableComponentsIds.includes(c.id);
+              return availableComponentsIds?.includes(c.id);
             })
             .map(([cn, c]) => ({ name: cn, ...c }));
 
