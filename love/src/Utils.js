@@ -1443,6 +1443,20 @@ export const relativeTime = (timestamp, taiToUtc) => {
 };
 
 /**
+ * Convert a TAI date string to a UTC date moment object
+ * @param {string} date - The date string in TAI time, without timezone suffix.
+ * @param {number} taiToUtcOffset - The offset in seconds to convert from
+ * TAI to UTC. Default is -37.
+ * @returns {Moment} - The date in UTC time as a moment object.
+ * Return the input date if it is not provided.
+ */
+export const parseTaiToUtc = (date, taiToUtcOffset = -37) => {
+  if (!date) return date;
+  const dateTAI = Moment.utc(date).add(taiToUtcOffset, 'seconds');
+  return dateTAI;
+};
+
+/**
  * Convert seconds to digital format as '00:00:00'
  * @param {number} time seconds to be converted
  * @returns {string} seconds in digitial format
@@ -2396,12 +2410,11 @@ export function getOBSSystemsSubsystemsComponentsIds(systemsHierarchy) {
   systems.forEach((system) => {
     const systemName = system.name;
     systemsIds.push(system.id);
-
     if (system.children) {
       const availableSubsystemsIds = OLE_OBS_SYSTEMS[systemName]?.children;
       const availableSubsystems = Object.entries(OLE_OBS_SUBSYSTEMS)
         .filter(([ssn, ss]) => {
-          return availableSubsystemsIds.includes(ss.id);
+          return availableSubsystemsIds?.includes(ss.id);
         })
         .map(([ssn, ss]) => ({ name: ssn, ...ss }));
 
@@ -2413,12 +2426,11 @@ export function getOBSSystemsSubsystemsComponentsIds(systemsHierarchy) {
       subsystems.forEach((subsystem) => {
         const subsystemName = subsystem.name;
         subsystemsIds.push(subsystem.id);
-
         if (subsystem.children) {
           const availableComponentsIds = OLE_OBS_SUBSYSTEMS[subsystemName]?.children;
           const availableComponents = Object.entries(OLE_OBS_SUBSYSTEMS_COMPONENTS)
             .filter(([cn, c]) => {
-              return availableComponentsIds.includes(c.id);
+              return availableComponentsIds?.includes(c.id);
             })
             .map(([cn, c]) => ({ name: cn, ...c }));
 
