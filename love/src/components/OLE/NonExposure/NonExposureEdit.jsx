@@ -126,29 +126,6 @@ function NonExposureEdit({ log: propLog = emptyLog, isLogCreate = false, isMenu 
     }));
   }, [log?.date_begin, log?.date_end]);
 
-  const clearDates = () => {
-    // For some reason setting message.date_begin to '' does not work
-    // thus we clear the date by calling the onClick function of the clear button
-    // of each DateTime component
-    const dateBeginElement = dateBeginInputRef.current;
-    const dateEndElement = dateEndInputRef.current;
-
-    const dateBeginButtons = dateBeginElement?.querySelectorAll('button');
-    const dateEndButtons = dateEndElement?.querySelectorAll('button');
-
-    const clickEvent = new Event('click', { bubbles: true });
-
-    if (dateBeginButtons && dateBeginButtons.length > 2) {
-      dateBeginButtons[0].dispatchEvent(clickEvent);
-      dateBeginButtons[2].dispatchEvent(clickEvent);
-    }
-
-    if (dateEndButtons && dateEndButtons.length > 2) {
-      dateEndButtons[0].dispatchEvent(clickEvent);
-      dateEndButtons[2].dispatchEvent(clickEvent);
-    }
-  };
-
   const clearForm = () => {
     // Reset RichTextEditor component value
     richTextEditorRef.current?.cleanContent();
@@ -157,7 +134,6 @@ function NonExposureEdit({ log: propLog = emptyLog, isLogCreate = false, isMenu 
     setSubsystemIds([]);
     setComponentIds([]);
     setTryingToSave(false);
-    clearDates();
   };
 
   const clearSystemsInput = () => {
