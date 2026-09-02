@@ -100,29 +100,11 @@ function JiraTicketAdd() {
     }));
   }, [log.date_begin, log.date_end]);
 
-  const clearDates = () => {
-    const dateBeginButtons = dateBeginInputRef.current?.querySelectorAll('button');
-    const dateEndButtons = dateEndInputRef.current?.querySelectorAll('button');
-
-    const clickEvent = new Event('click', { bubbles: true });
-
-    if (dateBeginButtons && dateBeginButtons.length > 0) {
-      dateBeginButtons[0].dispatchEvent(clickEvent);
-      dateBeginButtons[2].dispatchEvent(clickEvent);
-    }
-
-    if (dateEndButtons && dateEndButtons.length > 0) {
-      dateEndButtons[0].dispatchEvent(clickEvent);
-      dateEndButtons[2].dispatchEvent(clickEvent);
-    }
-  };
-
   const clearForm = () => {
     setLog(emptyLog);
     setSubsystemIds([]);
     setComponentIds([]);
     setTryingToSave(false);
-    clearDates();
   };
 
   const clearSystemsInput = () => {
