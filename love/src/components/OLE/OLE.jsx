@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import Moment from 'moment';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Exposure from './Exposure/Exposure';
@@ -50,153 +50,28 @@ export function closeCalendar(ref) {
   }
 }
 
-/**
- * Narrative logs date_begin and date_end are stored in TAI time.
- * The UI displays the date in UTC time, so we need to convert the TAI time to UTC time.
- * Note we add 'Z' to the date string to indicate that it is in UTC time, and then we subtract 37 seconds to convert from TAI to UTC.
- * @param {string} date - The date in TAI time, without the 'Z' suffix.
- * @returns {Moment} - The date in UTC time as a moment object or an empty string if the date is not provided.
- */
-export function parseTaiToUtc(date, secondsOffset = 37) {
-  const dateTAI = date ? Moment(date + 'Z').subtract(secondsOffset, 'seconds') : '';
-  return dateTAI;
-}
+function OLE({ taiToUtc }) {
+  const [selectedTab, setSelectedTab] = useState(tabs[0].value);
+  const [clickNewLog, setClickNewLog] = useState(false);
 
-export default class OLE extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedTab: tabs[0].value,
-      clickNewLog: false,
-      // Non Exposure filters
-      selectedDayNarrativeStart: Moment().subtract(1, 'days'),
-      selectedDayNarrativeEnd: Moment(),
-      selectedCommentType: OLE_COMMENT_TYPE_OPTIONS[0],
-      selectedSystem: OLE_DEFAULT_SYSTEMS_FILTER_OPTION,
-      selectedObsTimeLoss: false,
-      selectedJiraTickets: false,
-      // Exposure filters
-      instruments: [],
-      selectedInstrument: null,
-      selectedDayExposureStart: Moment().subtract(1, 'days'),
-      selectedDayExposureEnd: Moment(),
-      selectedExposureType: 'all',
-      registryMap: {},
-    };
-  }
+  const now = Moment();
+  const oneDayAgo = Moment().subtract(1, 'days');
+  const [selectedDayNarrativeStart, setSelectedDayNarrativeStart] = useState(oneDayAgo);
+  const [selectedDayExposureStart, setSelectedDayExposureStart] = useState(oneDayAgo);
+  const [selectedDayNarrativeEnd, setSelectedDayNarrativeEnd] = useState(now);
+  const [selectedDayExposureEnd, setSelectedDayExposureEnd] = useState(now);
 
-  /** Non Exposure functions */
-  changeDayNarrative(day, type) {
-    if (type === 'start') {
-      this.setState({ selectedDayNarrativeStart: day });
-    } else if (type === 'end') {
-      this.setState({ selectedDayNarrativeEnd: day });
-    }
-  }
+  const [selectedCommentType, setSelectedCommentType] = useState(OLE_COMMENT_TYPE_OPTIONS[0]);
+  const [selectedSystem, setSelectedSystem] = useState(OLE_DEFAULT_SYSTEMS_FILTER_OPTION);
+  const [selectedObsTimeLoss, setSelectedObsTimeLoss] = useState(false);
+  const [selectedJiraTickets, setSelectedJiraTickets] = useState(false);
+  const [instruments, setInstruments] = useState([]);
+  const [selectedInstrument, setSelectedInstrument] = useState(null);
 
-  changeCommentTypeSelect(value) {
-    this.setState({ selectedCommentType: value });
-  }
+  const [selectedExposureType, setSelectedExposureType] = useState('all');
+  const [registryMap, setRegistryMap] = useState({});
 
-  changeSystemSelect(value) {
-    this.setState({ selectedSystem: value });
-  }
-
-  changeObsTimeLossSelect(value) {
-    this.setState({ selectedObsTimeLoss: value });
-  }
-
-  changeJiraTicketsSelect(value) {
-    this.setState({ selectedJiraTickets: value });
-  }
-
-  /** Exposure functions */
-  changeInstrumentSelect(value) {
-    const { instruments } = this.state;
-    const index = instruments.indexOf(value);
-    this.setState({ selectedInstrument: value });
-  }
-
-  changeExposureTypeSelect(value) {
-    this.setState({ selectedExposureType: value });
-  }
-
-  changeDayExposure(day, type) {
-    if (type === 'start') {
-      this.setState({ selectedDayExposureStart: day });
-    } else if (type === 'end') {
-      this.setState({ selectedDayExposureEnd: day });
-    }
-  }
-
-  changeTab(tab) {
-    this.setState({ selectedTab: tab });
-  }
-
-  getComponent(clickNewLog, tab) {
-    const { taiToUtc } = this.props;
-    if (clickNewLog === true) {
-      if (tab === 'exposure') {
-        return (
-          <ExposureAdd
-            back={() => {
-              this.setState({ clickNewLog: false });
-            }}
-            isLogCreate={true}
-            props={this.props}
-          />
-        );
-      }
-      if (tab === 'non-exposure') {
-        return (
-          <NonExposureEdit
-            back={() => {
-              this.setState({ clickNewLog: false });
-            }}
-            isLogCreate={true}
-            props={this.props}
-          />
-        );
-      }
-    } else {
-      if (tab === 'exposure') {
-        return (
-          <Exposure
-            instruments={this.state.instruments}
-            selectedInstrument={this.state.selectedInstrument}
-            changeInstrumentSelect={(value) => this.changeInstrumentSelect(value)}
-            selectedExposureType={this.state.selectedExposureType}
-            changeExposureTypeSelect={(value) => this.changeExposureTypeSelect(value)}
-            selectedDayExposureStart={this.state.selectedDayExposureStart}
-            selectedDayExposureEnd={this.state.selectedDayExposureEnd}
-            changeDayExposure={(day, type) => this.changeDayExposure(day, type)}
-            registryMap={this.state.registryMap}
-          />
-        );
-      }
-      if (tab === 'non-exposure') {
-        return (
-          <NonExposure
-            selectedDayNarrativeStart={this.state.selectedDayNarrativeStart}
-            selectedDayNarrativeEnd={this.state.selectedDayNarrativeEnd}
-            changeDayNarrative={(day, type) => this.changeDayNarrative(day, type)}
-            selectedCommentType={this.state.selectedCommentType}
-            changeCommentTypeSelect={(value) => this.changeCommentTypeSelect(value)}
-            selectedSystem={this.state.selectedSystem}
-            changeSystemSelect={(value) => this.changeSystemSelect(value)}
-            selectedObsTimeLoss={this.state.selectedObsTimeLoss}
-            changeObsTimeLossSelect={(value) => this.changeObsTimeLossSelect(value)}
-            selectedJiraTickets={this.state.selectedJiraTickets}
-            changeJiraTicketsSelect={(value) => this.changeJiraTicketsSelect(value)}
-            taiToUtc={taiToUtc}
-          />
-        );
-      }
-    }
-  }
-
-  componentDidMount() {
-    this.props.subscribeToStreams();
+  useEffect(() => {
     ManagerInterface.getListExposureInstruments().then((data) => {
       const registryMap = {};
       Object.entries(data).forEach(([key, value]) => {
@@ -205,48 +80,94 @@ export default class OLE extends Component {
           registryMap[instrument] = key;
         });
       });
-
       const instrumentsArray = Object.keys(registryMap);
-
-      this.setState({
-        instruments: instrumentsArray,
-        selectedInstrument: instrumentsArray[0],
-        registryMap: registryMap,
-      });
+      setInstruments(instrumentsArray);
+      setSelectedInstrument(instrumentsArray[0]);
+      setRegistryMap(registryMap);
     });
-  }
+  }, []);
 
-  componentWillUnmount() {
-    this.props.unsubscribeToStreams();
-  }
+  const handleDayExposureChange = (day, type) => {
+    if (type === 'start') setSelectedDayExposureStart(day);
+    if (type === 'end') setSelectedDayExposureEnd(day);
+  };
 
-  render() {
-    const selectedTab = this.state.selectedTab;
+  const handleDayNarrativeChange = (day, type) => {
+    if (type === 'start') setSelectedDayNarrativeStart(day);
+    if (type === 'end') setSelectedDayNarrativeEnd(day);
+  };
 
-    const html = tabs.map((item, index) => {
+  const getComponent = (isNewLog, tab) => {
+    if (isNewLog) {
+      if (tab === 'exposure') {
+        return <ExposureAdd isLogCreate={true} back={() => setClickNewLog(false)} taiToUtc={taiToUtc} />;
+      }
+      if (tab === 'non-exposure') {
+        return <NonExposureEdit isLogCreate={true} back={() => setClickNewLog(false)} taiToUtc={taiToUtc} />;
+      }
+    }
+
+    if (tab === 'exposure') {
       return (
-        <div
-          className={[styles.tab, selectedTab === item.value ? styles.selected : ''].join(' ')}
-          key={index}
-          onClick={() => this.changeTab(item.value)}
-        >
-          <div className={styles.tabLabel}>{item.name}</div>
-        </div>
+        <Exposure
+          instruments={instruments}
+          selectedInstrument={selectedInstrument}
+          changeInstrumentSelect={setSelectedInstrument}
+          selectedExposureType={selectedExposureType}
+          changeExposureTypeSelect={setSelectedExposureType}
+          selectedDayExposureStart={selectedDayExposureStart}
+          selectedDayExposureEnd={selectedDayExposureEnd}
+          changeDayExposure={handleDayExposureChange}
+          registryMap={registryMap}
+          taiToUtc={taiToUtc}
+        />
       );
-    });
+    }
+    if (tab === 'non-exposure') {
+      return (
+        <NonExposure
+          selectedDayNarrativeStart={selectedDayNarrativeStart}
+          selectedDayNarrativeEnd={selectedDayNarrativeEnd}
+          changeDayNarrative={handleDayNarrativeChange}
+          selectedCommentType={selectedCommentType}
+          changeCommentTypeSelect={setSelectedCommentType}
+          selectedSystem={selectedSystem}
+          changeSystemSelect={setSelectedSystem}
+          selectedObsTimeLoss={selectedObsTimeLoss}
+          changeObsTimeLossSelect={setSelectedObsTimeLoss}
+          selectedJiraTickets={selectedJiraTickets}
+          changeJiraTicketsSelect={setSelectedJiraTickets}
+          taiToUtc={taiToUtc}
+        />
+      );
+    }
+  };
 
+  const html = tabs.map((item, index) => {
     return (
-      <div className={styles.tabsWrapper}>
-        <div className={styles.tabsRow}>
-          {html}
-          <div className={styles.btnNew}>
-            <Button className={styles.btn} onClick={() => this.setState((prevState) => ({ clickNewLog: true }))}>
-              + New {tabs.filter((tab) => tab.value === selectedTab)[0].name.slice(0, -1)}
-            </Button>
-          </div>
-        </div>
-        <div className={styles.tableWrapper}>{this.getComponent(this.state.clickNewLog, selectedTab)}</div>
+      <div
+        className={[styles.tab, selectedTab === item.value ? styles.selected : ''].join(' ')}
+        key={index}
+        onClick={() => setSelectedTab(item.value)}
+      >
+        <div className={styles.tabLabel}>{item.name}</div>
       </div>
     );
-  }
+  });
+
+  return (
+    <div className={styles.tabsWrapper}>
+      <div className={styles.tabsRow}>
+        {html}
+        <div className={styles.btnNew}>
+          <Button className={styles.btn} onClick={() => setClickNewLog(true)}>
+            + New {tabs.filter((tab) => tab.value === selectedTab)[0].name.slice(0, -1)}
+          </Button>
+        </div>
+      </div>
+      <div className={styles.tableWrapper}>{getComponent(clickNewLog, selectedTab)}</div>
+    </div>
+  );
 }
+
+export default OLE;
