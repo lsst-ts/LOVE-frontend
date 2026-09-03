@@ -5,6 +5,7 @@ Version History
 v6.12.2
 -------
 
+* Update Dockerfile-dev to use new javascript development image as base. `<https://github.com/lsst-ts/LOVE-frontend/pull/803>`_
 * Fix Watcher component not properly passing the acknowledgedBy parameter. `<https://github.com/lsst-ts/LOVE-frontend/pull/802>`_
 
 v6.12.1
