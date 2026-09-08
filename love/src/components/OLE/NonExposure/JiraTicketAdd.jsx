@@ -201,28 +201,6 @@ function JiraTicketAdd() {
     }
   };
 
-  // The following function is used to fix a bug with the ReactMultiselect component.
-  // When setting the singleSelect prop to true, clicks on the select box are dismissed.
-  // This function replaces the search box with a simple input box and removes the caret.
-  // Check: https://github.com/srigar/multiselect-react-dropdown/issues/262
-  const fixSingleSelectBox = (node) => {
-    if (!node) return;
-
-    const searchBox = node.getElementsByClassName('searchBox')[0];
-    const caret = node.getElementsByClassName('icon_down_dir')[0];
-    const newSearchBox = document.createElement('input');
-    newSearchBox.setAttribute('type', 'text');
-    newSearchBox.setAttribute('placeholder', 'Select zero or one system');
-
-    if (systemIds.length === 0 && searchBox) {
-      searchBox.replaceWith(newSearchBox);
-    }
-
-    if (caret) {
-      caret.remove();
-    }
-  };
-
   const renderCategoryField = () => (
     <>
       <span className={styles.label}>Type of observing time</span>
@@ -320,17 +298,14 @@ function JiraTicketAdd() {
         <span className={styles.value}>
           <div className={styles.inputGroup}>
             <Multiselect
-              innerRef={(node) => {
-                if (!node) return;
-                multiselectSystemsRef.current = node;
-                fixSingleSelectBox(node.searchWrapper.current);
-              }}
+              innerRef={multiselectSystemsRef}
               className={styles.select}
               options={systemOptions}
               selectedValues={selectedSystems}
               onSelect={handleSystemIdsChange}
               onRemove={handleSystemIdsChange}
-              singleSelect={true}
+              placeholder="Select zero or one system"
+              selectionLimit={1}
             />
             <Button onClick={() => clearSystemsInput()}>Clear</Button>
           </div>
