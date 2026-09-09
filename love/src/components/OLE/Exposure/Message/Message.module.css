@@ -17,55 +17,29 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-/******/
-.mb1 {
-  margin-bottom: 0.5em;
-}
-/******/
-
 .message {
   background-color: var(--second-quaternary-background-color);
-  border-radius: 6px;
-  display: grid;
+  border-radius: 0.5em;
   padding: var(--small-padding);
-  margin-bottom: var(--content-padding);
 }
 
 .header {
-  font-weight: bold;
-  text-align: left;
-  font-size: 15px;
-  margin-top: 5px;
-  margin: 2px;
+  padding-bottom: var(--small-padding);
   border-bottom: 1px solid var(--secondary-font-color);
-  color: var(--secondary-font-color);
+  margin-bottom: var(--small-padding);
+  display: flex;
+  align-items: center;
+}
+
+.header > :last-child {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
 }
 
 .footer {
-  padding-top: 7px;
+  padding-top: var(--small-padding);
   border-top: 1px solid var(--secondary-font-color);
-  margin: 2px;
-}
-
-.floatLeft {
-  float: left;
-}
-
-.floatRight {
-  float: right;
-}
-
-.margin3 {
-  margin: 3px;
-}
-
-.margin {
-  margin: 0.4em;
-}
-
-.tags {
-  text-align: left;
-  margin-bottom: var(--small-padding);
 }
 
 .textDescription {
@@ -83,12 +57,11 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   font-weight: bold;
   color: var(--secondary-font-color);
   text-align: left;
-  margin-left: 5px;
+  margin-right: var(--small-padding);
 }
 
 .value {
   text-align: left;
-  margin-left: 10px;
 }
 
 .icon {
@@ -97,12 +70,16 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 }
 
 .iconBtn {
-  display: inline;
   border-radius: 50%;
-  padding: 0.3em;
-  height: 1.8em;
-  width: 1.8em;
+  padding: 0.2em;
+  display: inline-flex;
+  align-items: center;
   background-color: var(--default-background-color);
+}
+
+.iconBtn svg {
+  height: 1.2em;
+  width: 1.2em;
 }
 
 .iconFlag {
@@ -114,15 +91,21 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .title {
   color: white;
   font-weight: bold;
-  text-align: left;
-}
-
-.vertAlign {
-  vertical-align: middle;
+  margin-right: var(--small-padding);
 }
 
 .capitalize {
   text-transform: capitalize;
+}
+
+.description {
+  text-align: left;
+}
+
+.description .author > :nth-child(2),
+.description .author > :nth-child(3) {
+  color: var(--secondary-font-color);
+  font-weight: bold;
 }
 
 .description textarea {
@@ -149,17 +132,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .textArea {
   height: calc(100% - 2.5em);
-}
-
-.input {
-  width: 100%;
-  box-sizing: border-box;
-  border-radius: 3px;
-  padding: 0.4em;
-  font-family: inherit;
-  font-size: inherit;
-  background-color: var(--second-secondary-background-color);
-  color: var(--base-font-color);
 }
 
 .select {
@@ -189,21 +161,30 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   text-align: right;
 }
 
-.inline {
-  display: inline-flex;
-}
-
 .paddingTop {
   padding-top: 5px;
-}
-
-.marginLeft {
-  margin-left: 15px;
 }
 
 .spinnerIcon {
   height: var(--font-size-small);
   width: var(--font-size-small);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+}
+
+.footer.editable {
+  align-items: start;
+  flex-direction: column;
+  gap: var(--small-padding);
+}
+
+.footer > :last-child:not(:first-child) {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
 }
 
 .footer .attachedFiles {

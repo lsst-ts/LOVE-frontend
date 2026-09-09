@@ -19,13 +19,12 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component, memo } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import lodash from 'lodash';
+import { uniqueId } from 'lodash';
 import Moment from 'moment';
 import MultiSelect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import BulkSelect from 'components/GeneralPurpose/BulkSelect/BulkSelect';
-import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import SpinnerIcon from 'components/icons/SpinnerIcon/SpinnerIcon';
 import RefreshIcon from 'components/icons/RefreshIcon/RefreshIcon';
@@ -36,7 +35,6 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import MultiFileUploader from 'components/GeneralPurpose/MultiFileUploader/MultiFileUploader';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
-import Modal from 'components/GeneralPurpose/Modal/Modal';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
 import { EXPOSURE_FLAG_OPTIONS, exposureFlagStateToStyle, ISO_INTEGER_DATE_FORMAT } from 'Config';
 import ManagerInterface, {
@@ -49,116 +47,73 @@ import ManagerInterface, {
 } from 'Utils';
 import styles from './Exposure.module.css';
 
-class ExposureAdd extends Component {
-  static propTypes = {
-    /** Exposure object to which a log is going to be added */
-    exposure: PropTypes.object,
-    /** New message object */
-    newMessage: PropTypes.object,
-    /** Flag to show the creation components */
-    isLogCreate: PropTypes.bool,
-    /** Flag to show the menu components */
-    isMenu: PropTypes.bool,
-    /** Array of observation ids */
-    observationIds: PropTypes.arrayOf(PropTypes.string),
-    /** Function to go back */
-    back: PropTypes.func,
-    /** Function to view a log */
-    view: PropTypes.func,
+const renderDateTimeInput = (props) => <input {...props} readOnly />;
+
+const emptyLog = {
+  obs_id: [],
+  message_text: '',
+  level: 0,
+  is_human: true,
+  exposure_flag: 'none',
+  jira_issue_id: '',
+  jira: false,
+  // TODO: remove deprecated parameter
+  // See: OSW-2932
+  is_new: true,
+};
+
+const ExposureAdd = ({ exposure, log: propLog = emptyLog, isLogCreate = false, isMenu = false, back, view }) => {
+  const [log, setLog] = useState(() => ({
+    ...emptyLog,
+    ...propLog,
+    obs_id: exposure ? [exposure.obs_id] : emptyLog.obs_id,
+  }));
+  const [instruments, setInstruments] = useState([]);
+  const [selectedInstrument, setSelectedInstrument] = useState(exposure?.instrument);
+  const [tagOptions, setTagOptions] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedDayExposureStart, setSelectedDayExposureStart] = useState(Moment().subtract(1, 'days'));
+  const [selectedDayExposureEnd, setSelectedDayExposureEnd] = useState(Moment());
+  const [registryMap, setRegistryMap] = useState({});
+  const [updatingExposures, setUpdatingExposures] = useState(false);
+  const [savingLog, setSavingLog] = useState(false);
+  const [tryingToSave, setTryingToSave] = useState(false);
+  const [showBulkSelector, setShowBulkSelector] = useState(false);
+  const [exposureIds, setExposureIds] = useState([]);
+
+  const [containerId, _] = useState(uniqueId('exposure-add-container-'));
+
+  const richTextEditorRef = useRef(null);
+
+  useEffect(() => {
+    queryInstruments();
+    queryExposureTags();
+  }, []);
+
+  useEffect(() => {
+    if (selectedInstrument && registryMap[selectedInstrument]) {
+      queryExposures();
+    }
+  }, [selectedInstrument, registryMap, selectedDayExposureStart, selectedDayExposureEnd]);
+
+  const clearForm = () => {
+    richTextEditorRef.current?.cleanContent();
+    setSelectedTags([]);
+    setLog({ ...emptyLog });
+    setTryingToSave(false);
   };
 
-  static defaultProps = {
-    newMessage: {
-      obs_id: [],
-      instrument: undefined,
-      message_text: undefined,
-      level: 10,
-      user_id: undefined,
-      user_agent: undefined,
-      is_human: true,
-      is_new: false,
-      exposure_flag: 'none',
-      jira: false,
-      jira_new: true,
-      jira_issue_title: '',
-      jira_issue_id: '',
-      tags: undefined,
-    },
-    isLogCreate: false,
-    isMenu: false,
-    observationIds: [],
-    back: () => {},
-    view: () => {},
-  };
-
-  constructor(props) {
-    super(props);
-    this.id = lodash.uniqueId('exposure-message-create-');
-    const { newMessage } = props;
-
-    this.state = {
-      newMessage,
-      instruments: [],
-      selectedInstrument: null,
-      confirmationModalShown: false,
-      confirmationModalText: '',
-      imageTags: [],
-      selectedDayExposureStart: Moment(Date.now() + 37 * 1000).subtract(1, 'days'),
-      selectedDayExposureEnd: Moment(Date.now() + 37 * 1000),
-      registryMap: {},
-      updatingExposures: false,
-      savingLog: false,
-      jiraIssueError: false,
-      formHeight: null,
-      showBulkSelector: false,
-    };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.multiselectImageTagsComponentRef = React.createRef();
-    this.multiselectExposuresComponentRef = React.createRef();
-    this.richTextEditorRef = React.createRef();
-    this.formRef = React.createRef();
-  }
-
-  statusFlag(flag) {
-    return exposureFlagStateToStyle[flag] ? exposureFlagStateToStyle[flag] : 'unknown';
-  }
-
-  /**
-   * Reset the form by resetting the values of MultiSelect components and RichTextEditor component.
-   * Also set the state of `newMessage` to the default value.
-   */
-  cleanForm() {
-    // Reset MultiSelect components value
-    this.cleanTagsMultiSelection();
-    this.cleanExposuresMultiSelection();
-    // Reset RichTextEditor component value
-    this.richTextEditorRef.current?.cleanContent();
-    this.setState({ newMessage: ExposureAdd.defaultProps.newMessage });
-  }
-
-  cleanTagsMultiSelection() {
-    this.multiselectImageTagsComponentRef.current?.resetSelectedValues();
-  }
-
-  cleanExposuresMultiSelection() {
-    this.multiselectExposuresComponentRef.current?.resetSelectedValues();
-  }
-
-  /**
-   * Query the exposure tags and updates the component state with the retrieved data.
-   */
-  queryExposureTags() {
+  const queryExposureTags = () => {
     ManagerInterface.getListImageTags().then((data) => {
-      this.setState({
-        imageTags: data.map((tag) => ({ name: tag.label, id: tag.key })),
-      });
+      const tagOptions = data.map((tag) => ({ name: tag.label, id: tag.key }));
+      setTagOptions(tagOptions);
+      if (log.id) {
+        setSelectedTags(tagOptions.filter((tag) => log.tags.includes(tag.id)));
+      }
     });
-  }
+  };
 
-  /**
-   * Query the exposure instruments and updates the component state with the retrieved data.
-   */
-  queryInstruments() {
+  const queryInstruments = () => {
     ManagerInterface.getListExposureInstruments().then((data) => {
       const registryMap = {};
       Object.entries(data).forEach(([key, value]) => {
@@ -169,156 +124,103 @@ class ExposureAdd extends Component {
       });
 
       const instrumentsArray = Object.keys(registryMap);
-
-      this.setState({
-        instruments: instrumentsArray,
-        selectedInstrument: instrumentsArray[0],
-        registryMap: registryMap,
-      });
+      setInstruments(instrumentsArray);
+      setRegistryMap(registryMap);
+      if (!selectedInstrument) {
+        setSelectedInstrument(instrumentsArray[0]);
+      }
     });
-  }
+  };
 
-  /**
-   * Query exposures based on selected instrument, start and end dates, and registry.
-   * Update the component state with the retrieved data.
-   */
-  queryExposures() {
-    const { selectedInstrument, selectedDayExposureStart, selectedDayExposureEnd, registryMap } = this.state;
+  const queryExposures = () => {
     const startObsDay = Moment(selectedDayExposureStart).format(ISO_INTEGER_DATE_FORMAT);
     const endObsDay = Moment(selectedDayExposureEnd).add(1, 'days').format(ISO_INTEGER_DATE_FORMAT);
     const registry = registryMap[selectedInstrument].split('_')[2];
 
-    // Get the list of exposures
-    this.setState({ updatingExposures: true });
-    ManagerInterface.getListExposureLogs(selectedInstrument, startObsDay, endObsDay, registry).then((data) => {
-      const observationIds = data.map((exposure) => exposure.obs_id);
-      const dayObs = data.map((exposure) => ({
-        obs_id: exposure.obs_id,
-        day_obs: exposure.day_obs,
-      }));
-
-      this.setState({
-        updatingExposures: false,
-        observationIds,
-        dayObs,
+    setUpdatingExposures(true);
+    ManagerInterface.getListExposureLogs(selectedInstrument, startObsDay, endObsDay, registry)
+      .then((data) => {
+        setExposureIds(data.map((exposure) => exposure.obs_id));
+      })
+      .finally(() => {
+        setUpdatingExposures(false);
       });
-    });
-  }
+  };
 
-  /**
-   * Save the exposure log to the DB with the payload from the form.
-   */
-  saveMessage() {
-    const { exposure, isLogCreate, isMenu } = this.props;
-    const payload = { ...this.state.newMessage };
-    payload['request_type'] = 'exposure';
+  const saveMessage = () => {
+    setTryingToSave(true);
+    if (!isSendAllowed) return;
 
-    if (payload['tags']) {
-      payload['tags'] = payload['tags'].map((tag) => tag.id);
-    }
+    const payload = { ...log };
+
+    payload.request_type = 'exposure';
+    payload.instrument = selectedInstrument;
+    payload.tags = selectedTags.length > 0 ? selectedTags.map((tag) => tag.id) : undefined;
+    payload.jira = !!payload.jira_issue_id;
 
     // Transform &amp; back to '&'. This is a workaround due to Quill editor encoding '&'.}
-    payload['message_text'] = payload['message_text'].replace(/&amp;/g, '&');
+    payload.message_text = payload.message_text.replace(/&amp;/g, '&');
 
-    this.setState({ savingLog: true });
-    ManagerInterface.createMessageExposureLogs(payload).then((result) => {
-      this.setState({ savingLog: false });
-      if (isLogCreate || isMenu || !exposure.obs_id) {
-        this.props.back();
-      } else {
-        this.props.view();
-      }
+    setSavingLog(true);
+    if (log.id) {
+      ManagerInterface.updateMessageExposureLogs(log.id, payload)
+        .then((result) => {
+          if (result) {
+            clearForm();
 
-      // Clean form only if the response is successful
-      if (result) {
-        this.cleanForm();
-      }
-    });
-  }
-
-  /**
-   * Delete a message and updates the component state accordingly.
-   */
-  deleteMessage() {
-    const { newMessage } = this.state;
-    if (newMessage?.id) {
-      ManagerInterface.deleteMessageExposureLogs(newMessage.id).then((response) => {
-        this.setState({ confirmationModalShown: false });
-      });
+            if (view) view();
+          }
+        })
+        .finally(() => {
+          setSavingLog(false);
+        });
     } else {
-      this.props.back();
+      ManagerInterface.createMessageExposureLogs(payload)
+        .then((result) => {
+          if (result) {
+            clearForm();
+            if (back) back();
+          }
+        })
+        .finally(() => {
+          setSavingLog(false);
+        });
     }
-  }
+  };
 
-  confirmDelete() {
-    const modalText = (
-      <span>
-        You are about to <b>delete</b> this message of Exposure Logs
-        <br />
-        Are you sure?
-      </span>
-    );
-    this.setState({
-      confirmationModalShown: true,
-      confirmationModalText: modalText,
-    });
-  }
-
-  changeDayExposure(day, type) {
+  const changeDayExposure = (day, type) => {
     if (type === 'start') {
-      this.setState({ selectedDayExposureStart: day });
+      setSelectedDayExposureStart(day);
     } else if (type === 'end') {
-      this.setState({ selectedDayExposureEnd: day });
+      setSelectedDayExposureEnd(day);
     }
-  }
+  };
 
-  handleSubmit(event) {
+  const handleSubmit = (event) => {
     if (event) event.preventDefault();
-    this.saveMessage();
-  }
+    saveMessage();
+  };
 
-  isSubmitDisabled() {
-    const { jiraIssueError, savingLog, newMessage, selectedInstrument } = this.state;
-    return (
-      jiraIssueError ||
-      savingLog ||
-      newMessage.obs_id.length === 0 ||
-      !selectedInstrument ||
-      !newMessage.message_text?.trim()
-    );
-  }
-
-  setNewMessageObsId = (selectedOptions) => {
-    this.setState((prevState) => ({
-      newMessage: { ...prevState.newMessage, obs_id: selectedOptions },
+  const setNewMessageObsId = (selectedOptions) => {
+    setLog((prevLog) => ({
+      ...prevLog,
+      obs_id: selectedOptions,
     }));
   };
 
-  renderInstrumentsSelect() {
-    const { instruments, selectedInstrument } = this.state;
+  const renderInstrumentsSelect = () => {
     return (
       <Select
         value={selectedInstrument}
-        onChange={({ value }) =>
-          this.setState((prevState) => ({
-            selectedInstrument: value,
-            newMessage: { ...prevState.newMessage, instrument: value },
-          }))
-        }
+        onChange={({ value }) => setSelectedInstrument(value)}
         options={instruments}
         className={styles.select}
         small
       />
     );
-  }
+  };
 
-  renderDateTimeRangeSelect() {
-    const { selectedDayExposureStart, selectedDayExposureEnd } = this.state;
-
-    const renderDateTimeInput = (props) => {
-      return <input {...props} readOnly />;
-    };
-
+  const renderDateTimeRangeSelect = () => {
     return (
       <DateTimeRange
         label="From"
@@ -337,176 +239,93 @@ class ExposureAdd extends Component {
           maxDate: Moment(),
           renderInput: renderDateTimeInput,
         }}
-        onChange={(day, type) => this.changeDayExposure(day, type)}
+        onChange={(day, type) => changeDayExposure(day, type)}
       />
     );
-  }
+  };
 
-  renderImageTagsSelect() {
-    const { imageTags, newMessage } = this.state;
-
-    const setNewMessageTags = (selectedOptions) => {
-      this.setState((prevState) => ({
-        newMessage: { ...prevState.newMessage, tags: selectedOptions },
-      }));
-    };
-
-    return (
-      <MultiSelect
-        innerRef={this.multiselectImageTagsComponentRef}
-        options={imageTags}
-        selectedValues={newMessage.tags}
-        isObject={true}
-        displayValue="name"
-        onSelect={setNewMessageTags}
-        onRemove={setNewMessageTags}
-        placeholder="Select zero or more tags"
-        selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
-      />
-    );
-  }
-
-  renderExposuresSelect() {
-    const { observationIds, newMessage, showBulkSelector } = this.state;
-
-    const toggleBulkSelector = () => {
-      this.setState((prevState) => ({
-        showBulkSelector: !prevState.showBulkSelector,
-      }));
-    };
-
+  const renderImageTagsSelect = () => {
     return (
       <>
-        <MultiSelect
-          className={styles.exposuresMultiSelect}
-          innerRef={this.multiselectExposuresComponentRef}
-          options={observationIds}
-          selectedValues={newMessage.obs_id}
-          onSelect={this.setNewMessageObsId}
-          onRemove={this.setNewMessageObsId}
-          placeholder="Select one or several observations"
-          selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
-          disable={showBulkSelector}
-        />
+        <span className={styles.label}>Tags</span>
+        <span className={styles.tags}>
+          <MultiSelect
+            options={tagOptions}
+            selectedValues={selectedTags}
+            isObject={true}
+            displayValue="name"
+            onSelect={setSelectedTags}
+            onRemove={setSelectedTags}
+            placeholder="Select zero or more tags"
+          />
+        </span>
+      </>
+    );
+  };
+
+  const renderExposuresSelect = () => {
+    const toggleBulkSelector = () => {
+      setShowBulkSelector((prevState) => !prevState);
+    };
+
+    const inputError = tryingToSave && notSelectedExposure;
+    return (
+      <>
+        <div
+          title={`Selected ${log.obs_id.length} exposures`}
+          className={[
+            styles.exposuresMultiSelect,
+            showBulkSelector ? styles.hideOverflow : '',
+            inputError ? styles.inputError : '',
+          ].join(' ')}
+        >
+          <MultiSelect
+            options={exposureIds}
+            selectedValues={log.obs_id}
+            onSelect={setNewMessageObsId}
+            onRemove={setNewMessageObsId}
+            placeholder="Select one or several observations"
+            selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
+            disable={showBulkSelector}
+            title="test"
+          />
+        </div>
         <Button size="extra-small" onClick={toggleBulkSelector}>
           {showBulkSelector ? 'Hide' : 'Show'} bulk selector
         </Button>
       </>
     );
-  }
+  };
 
-  renderJiraFields() {
-    const { newMessage, jiraIssueError } = this.state;
-    const logHasJira = getLinkJira(newMessage.urls) !== '';
+  const renderJiraFields = () => {
+    const logHasJira = getLinkJira(log.urls) !== '';
     return (
-      <>
-        <div className={styles.jira}>
-          {!logHasJira && (
-            <>
-              <div className={styles.checkboxText}>
-                <Input
-                  type="checkbox"
-                  checked={newMessage?.jira}
-                  onChange={(event) => {
-                    this.setState((prevState) => ({
-                      newMessage: { ...prevState.newMessage, jira: event.target.checked },
-                    }));
-                  }}
-                />
-                <span>link Jira ticket</span>
-              </div>
-              {newMessage?.jira && (
-                <div className={styles.radioText}>
-                  <div>
-                    <input
-                      type="radio"
-                      name="jira"
-                      value="new"
-                      checked={newMessage?.jira_new}
-                      onChange={() => {
-                        this.setState((prevState) => ({
-                          newMessage: { ...prevState.newMessage, jira_new: true },
-                        }));
-                      }}
-                    />
-                    <span>New</span>
-                  </div>
-                  <div>
-                    <input
-                      type="radio"
-                      name="jira"
-                      value="existent"
-                      checked={!newMessage?.jira_new}
-                      onChange={() => {
-                        this.setState((prevState) => ({
-                          newMessage: { ...prevState.newMessage, jira_new: false },
-                        }));
-                      }}
-                    />
-                    <span>Existent</span>
-                  </div>
-                </div>
-              )}
-              {newMessage?.jira && (
-                <div className={styles.textInput}>
-                  {newMessage?.jira_new ? (
-                    <Input
-                      value={newMessage?.jira_issue_title}
-                      className={jiraIssueError ? styles.inputError : ''}
-                      placeholder="Jira ticket title"
-                      onChange={(event) =>
-                        this.setState((prevState) => ({
-                          newMessage: { ...prevState.newMessage, jira_issue_title: event.target.value },
-                        }))
-                      }
-                    />
-                  ) : (
-                    <Input
-                      value={newMessage?.jira_issue_id}
-                      className={jiraIssueError ? styles.inputError : ''}
-                      placeholder="Jira ticket id"
-                      onChange={(event) =>
-                        this.setState((prevState) => ({
-                          newMessage: { ...prevState.newMessage, jira_issue_id: event.target.value },
-                        }))
-                      }
-                    />
-                  )}
-                </div>
-              )}
-            </>
-          )}
-        </div>
-      </>
-    );
-  }
-
-  renderModalFooter() {
-    return (
-      <div className={styles.modalFooter}>
-        <Button
-          className={styles.borderedButton}
-          onClick={() => this.setState({ confirmationModalShown: false })}
-          status="transparent"
-        >
-          Go back
-        </Button>
-        <Button onClick={() => this.deleteMessage()} status="default">
-          Yes
-        </Button>
+      <div className={styles.jira}>
+        {!logHasJira && (
+          <div className={styles.textInput}>
+            <Input
+              value={log?.jira_issue_id}
+              placeholder="Jira ticket id"
+              onChange={(event) => {
+                setLog((prevLog) => ({
+                  ...prevLog,
+                  jira_issue_id: event.target.value,
+                }));
+              }}
+            />
+          </div>
+        )}
       </div>
     );
-  }
+  };
 
-  renderRefreshLogsButton() {
-    const { updatingExposures } = this.state;
-
+  const renderRefreshLogsButton = () => {
     return (
       <Button
         className={styles.refreshDataBtn}
         title="Refresh exposures"
         disabled={updatingExposures}
-        onClick={() => this.queryExposures()}
+        onClick={() => queryExposures()}
       >
         {updatingExposures ? (
           <SpinnerIcon className={styles.spinnerIcon} />
@@ -515,320 +334,250 @@ class ExposureAdd extends Component {
         )}
       </Button>
     );
-  }
+  };
 
-  componentDidMount() {
-    // If exposure is not empty, then add a log
-    // to a specific exposure selected from the Exposure (parent) component
-    if (this.props.exposure) {
-      this.setState((state) => ({
-        newMessage: {
-          ...state.newMessage,
-          obs_id: [this.props.exposure.obs_id],
-          instrument: this.props.exposure.instrument,
-        },
-      }));
-    }
+  const renderBackButton = () => {
+    return (
+      <div className={styles.returnToLogs}>
+        <Button status="link" onClick={() => back()}>
+          <span className={styles.title}>{`< Return to Observations`}</span>
+        </Button>
+      </div>
+    );
+  };
 
-    this.queryInstruments();
-    this.queryExposureTags();
-
-    // Create resizeObserver to observe the form node
-    // and update the formHeight state accordingly.
-    // This will be used to set the height of the exposures
-    // bulk selector component.
-    const resizeObserver = new ResizeObserver((entries) => {
-      window.requestAnimationFrame(() => {
-        const form = entries[0];
-        this.setState({ formHeight: form.contentRect.height });
-      });
-    });
-    // The first children of the form node will be observed
-    // as it controls the height of the form.
-    resizeObserver.observe(this.formRef?.current?.children[0]);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (!this.props.exposure) {
-      // If exposure is empty, then set the newMessage.instrument
-      // to the selectedInstrument in case it was changed
-      if (this.state.selectedInstrument && prevState.selectedInstrument !== this.state.selectedInstrument) {
-        this.setState((state) => ({
-          observationIds: [],
-          newMessage: { ...state.newMessage, instrument: this.state.selectedInstrument },
-        }));
-      }
-    }
-
-    // If the selected instrument, start or end date changes, then query the exposures
-    if (
-      (this.state.selectedInstrument && prevState.selectedInstrument !== this.state.selectedInstrument) ||
-      this.state.selectedDayExposureStart !== prevState.selectedDayExposureStart ||
-      this.state.selectedDayExposureEnd !== prevState.selectedDayExposureEnd
-    ) {
-      this.queryExposures();
-    }
-
-    if (this.state.newMessage) {
-      const { jira, jira_new, jira_issue_title, jira_issue_id } = this.state.newMessage;
-      // Check if the jira fields are filled correctly
-      if (
-        prevState.newMessage?.jira !== jira ||
-        prevState.newMessage?.jira_new !== jira_new ||
-        prevState.newMessage?.jira_issue_title !== jira_issue_title ||
-        prevState.newMessage?.jira_issue_id !== jira_issue_id
-      ) {
-        if (jira) {
-          if ((jira_new && jira_issue_title === '') || (!jira_new && jira_issue_id === '')) {
-            this.setState({ jiraIssueError: true });
-          }
-          if ((jira_new && jira_issue_title !== '') || (!jira_new && jira_issue_id !== '')) {
-            this.setState({ jiraIssueError: false });
-          }
-        } else {
-          this.setState({ jiraIssueError: false });
-        }
-      }
-    }
-  }
-
-  render() {
-    const { isLogCreate, isMenu, back, view } = this.props;
-    const {
-      newMessage,
-      confirmationModalShown,
-      confirmationModalText,
-      observationIds,
-      savingLog,
-      formHeight,
-      showBulkSelector,
-    } = this.state;
-    const filesUrls = getFilesURLs(newMessage?.urls);
-    const htmlMessage = jiraMarkdownToHtml(newMessage?.message_text);
+  const renderTextEditor = () => {
+    const inputError = tryingToSave && messageEmpty;
     return (
       <>
-        {back && !isMenu && (
-          <div className={styles.returnToLogs}>
-            <Button
-              status="link"
-              onClick={() => {
-                back();
-              }}
-            >
-              <span className={styles.title}>{`< Return to Observations`}</span>
-            </Button>
-          </div>
-        )}
-        <div className={styles.formWrapper}>
-          <div style={{ height: formHeight }} className={showBulkSelector ? styles.bulkSelectorShown : ''}>
-            <BulkSelect
-              options={observationIds}
-              selectedOptions={newMessage.obs_id}
-              onSelect={this.setNewMessageObsId}
-            />
-          </div>
-          <form ref={this.formRef} onSubmit={this.handleSubmit}>
-            <div id={this.id} className={isMenu ? styles.detailContainerMenu : styles.detailContainer}>
-              {isMenu ? (
-                <div className={styles.headerMenu}>
-                  <span className={[styles.label, styles.paddingTop].join(' ')}>Instruments</span>
-                  <span className={styles.value}>{this.renderInstrumentsSelect()}</span>
+        <span className={styles.title}>Message</span>
+        <RichTextEditor
+          ref={richTextEditorRef}
+          className={[styles.textArea, inputError ? styles.inputError : ''].join(' ')}
+          defaultValue={htmlMessage}
+          onChange={(value) => {
+            const parsedValue = htmlToJiraMarkdown(value);
+            setLog((prevLog) => ({
+              ...prevLog,
+              message_text: parsedValue,
+            }));
+          }}
+          onKeyCombination={(combination) => {
+            if (combination === 'ctrl+enter' && !isSubmitDisabled) {
+              handleSubmit();
+            }
+          }}
+        />
+      </>
+    );
+  };
 
-                  <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. day</span>
-                  <span className={styles.value}>{this.renderDateTimeRangeSelect()}</span>
+  const renderMultiFileUploader = () => {
+    return (
+      <div className={styles.toAttachFiles}>
+        <MultiFileUploader
+          values={log?.file}
+          handleFiles={(files) =>
+            setLog((prevLog) => ({
+              ...prevLog,
+              file: files,
+            }))
+          }
+          handleDelete={(file) => {
+            const files = { ...log?.file };
+            delete files[file];
+            setLog((prevLog) => ({
+              ...prevLog,
+              file: files,
+            }));
+          }}
+          handleDeleteAll={() =>
+            setLog((prevLog) => ({
+              ...prevLog,
+              file: undefined,
+            }))
+          }
+        />
+      </div>
+    );
+  };
 
-                  <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
-                  <span className={[styles.value, styles.obsIdSelector].join(' ')}>
-                    {this.renderRefreshLogsButton()}
-                    {this.renderExposuresSelect()}
-                  </span>
-
-                  <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
-                  <span className={styles.value}>{this.renderImageTagsSelect()}</span>
-                </div>
-              ) : (
-                <div className={[styles.header, !this.props.exposure?.obs_id ? styles.inline : ''].join(' ')}>
-                  {this.props.exposure?.obs_id ? (
-                    <span>{this.props.exposure.obs_id}</span>
-                  ) : (
-                    <>
-                      <span className={[styles.label, styles.paddingTop].join(' ')}>Instruments</span>
-                      <span className={styles.value}>{this.renderInstrumentsSelect()}</span>
-
-                      {this.renderDateTimeRangeSelect()}
-
-                      <span className={styles.label}>Obs. Id</span>
-                      <span className={styles.obsIdSelector}>
-                        {this.renderRefreshLogsButton()}
-                        {this.renderExposuresSelect()}
-                      </span>
-                    </>
-                  )}
-
-                  {newMessage?.id ? (
-                    <>
-                      <span className={styles.floatRight}>
-                        <Button
-                          className={styles.iconBtn}
-                          title="Delete"
-                          onClick={() => {
-                            this.confirmDelete();
-                          }}
-                          status="transparent"
-                        >
-                          <DeleteIcon className={styles.icon} />
-                        </Button>
-                      </span>
-                      <span className={styles.floatRight}>[{this.props.exposure?.observation_type}]</span>
-                    </>
-                  ) : (
-                    this.props.exposure?.observation_type && (
-                      <>
-                        <span className={styles.floatRight}>
-                          <Button
-                            className={styles.iconBtn}
-                            title="View"
-                            onClick={() => {
-                              view(true);
-                            }}
-                            status="transparent"
-                          >
-                            <CloseIcon className={styles.icon} />
-                          </Button>
-                        </span>
-                        <span className={styles.floatRight}>[{this.props.exposure.observation_type}]</span>
-                      </>
-                    )
-                  )}
-                </div>
-              )}
-
-              {!isMenu && (
-                <div className={[styles.header, styles.inline].join(' ')}>
-                  <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
-                  <span className={styles.value} style={{ flex: 1 }}>
-                    {this.renderImageTagsSelect()}
-                  </span>
-                </div>
-              )}
-
-              <div className={isMenu ? styles.contentMenu : styles.content}>
-                <div className={styles.mb1}>
-                  <span className={styles.title}>Message</span>
-                </div>
-
-                <RichTextEditor
-                  ref={this.richTextEditorRef}
-                  className={styles.textArea}
-                  defaultValue={htmlMessage}
-                  onChange={(value) => {
-                    const parsedValue = htmlToJiraMarkdown(value);
-                    this.setState((prevState) => ({
-                      newMessage: { ...prevState.newMessage, message_text: parsedValue },
-                    }));
-                  }}
-                  onKeyCombination={(combination) => {
-                    if (combination === 'ctrl+enter') {
-                      if (!this.isSubmitDisabled()) {
-                        this.handleSubmit();
-                      }
-                    }
-                  }}
-                />
-              </div>
-
-              <div className={isMenu ? styles.footerMenu : styles.footer}>
-                <div>
-                  {!isLogCreate && !isMenu && (
-                    <div className={styles.attachedFiles}>
-                      <div className={styles.label}>Files Attached:</div>
-                      <div>
-                        {filesUrls.length > 0
-                          ? filesUrls.map((fileurl) => (
-                              <div key={fileurl} className={styles.buttonWraper}>
-                                <Button
-                                  className={styles.fileButton}
-                                  title={fileurl}
-                                  onClick={() => openInNewTab(fileurl)}
-                                  status="default"
-                                >
-                                  <DownloadIcon className={styles.downloadIcon} />
-                                  {getFilename(fileurl)}
-                                </Button>
-                              </div>
-                            ))
-                          : 'no files attached'}
-                      </div>
-                    </div>
-                  )}
-
-                  <div className={styles.toAttachFiles}>
-                    <MultiFileUploader
-                      values={newMessage?.file}
-                      handleFiles={(files) =>
-                        this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: files } }))
-                      }
-                      handleDelete={(file) => {
-                        const files = { ...newMessage?.file };
-                        delete files[file];
-                        this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: files } }));
-                      }}
-                      handleDeleteAll={() =>
-                        this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: undefined } }))
-                      }
-                    />
-                  </div>
-
-                  <div className={styles.flag}>
-                    <span className={styles.label}>Exposure Flag</span>
-                    <Select
-                      value={newMessage?.exposure_flag}
-                      onChange={(event) =>
-                        this.setState((prevState) => ({
-                          newMessage: { ...prevState.newMessage, exposure_flag: event.value },
-                        }))
-                      }
-                      options={EXPOSURE_FLAG_OPTIONS}
-                      className={[styles.select, styles.capitalize].join(' ')}
-                      small
-                    />
-                    <FlagIcon
-                      title={newMessage?.exposure_flag}
-                      status={this.statusFlag(newMessage?.exposure_flag)}
-                      className={styles.iconFlag}
-                    />
-                  </div>
-
-                  {this.renderJiraFields()}
-                </div>
-
-                <div className={isMenu ? styles.footerRightMenu : styles.footerRight}>
-                  <Button disabled={this.isSubmitDisabled()} type="submit">
-                    {savingLog ? (
-                      <SpinnerIcon className={styles.spinnerIcon} />
-                    ) : (
-                      <span className={styles.title}>Save</span>
-                    )}
-                  </Button>
-                </div>
-              </div>
-
-              <Modal
-                displayTopBar={false}
-                isOpen={!!confirmationModalShown}
-                onRequestClose={() => this.setState({ confirmationModalShown: false })}
-                parentSelector={() => document.querySelector(`#${this.id}`)}
-                size={50}
-              >
-                <p style={{ textAlign: 'center' }}>{confirmationModalText}</p>
-                {this.renderModalFooter()}
-              </Modal>
-            </div>
-          </form>
+  const renderExposureFlags = () => {
+    return (
+      <>
+        <div className={styles.label}>Exposure Flag</div>
+        <div className={[styles.value, styles.flags].join(' ')}>
+          <Select
+            value={log?.exposure_flag}
+            onChange={(event) =>
+              setLog((prevLog) => ({
+                ...prevLog,
+                exposure_flag: event.value,
+              }))
+            }
+            options={EXPOSURE_FLAG_OPTIONS}
+            className={[styles.select, styles.capitalize].join(' ')}
+            small
+          />
+          <FlagIcon title={log?.exposure_flag} status={statusFlag} className={styles.iconFlag} />
         </div>
       </>
     );
+  };
+
+  const renderAttachedFiles = () => {
+    return (
+      <div className={styles.attachedFiles}>
+        <div className={styles.label}>Files Attached:</div>
+        <div>
+          {filesUrls.length > 0
+            ? filesUrls.map((fileurl) => (
+                <div key={fileurl} className={styles.buttonWraper}>
+                  <Button
+                    className={styles.fileButton}
+                    title={fileurl}
+                    onClick={() => openInNewTab(fileurl)}
+                    status="default"
+                  >
+                    <DownloadIcon className={styles.downloadIcon} />
+                    {getFilename(fileurl)}
+                  </Button>
+                </div>
+              ))
+            : 'no files attached'}
+        </div>
+      </div>
+    );
+  };
+
+  const renderSaveButton = () => {
+    return (
+      <Button disabled={isSubmitDisabled} type="Submit">
+        {savingLog ? <SpinnerIcon className={styles.spinnerIcon} /> : <span className={styles.title}>Save</span>}
+      </Button>
+    );
+  };
+
+  const filesUrls = getFilesURLs(log?.urls);
+  const htmlMessage = jiraMarkdownToHtml(log?.message_text);
+  const statusFlag = exposureFlagStateToStyle[log.exposure_flag] ?? 'unknown';
+
+  const messageEmpty = !log?.message_text?.trim();
+  const notSelectedExposure = log.obs_id.length === 0;
+  const isSendAllowed = !messageEmpty && !notSelectedExposure;
+  const isSubmitDisabled = tryingToSave && !isSendAllowed;
+
+  if (isMenu) {
+    return (
+      <div id={containerId}>
+        <div className={styles.formWrapper}>
+          {showBulkSelector && (
+            <BulkSelect options={exposureIds} selectedOptions={log.obs_id} onSelect={setNewMessageObsId} />
+          )}
+          <form onSubmit={handleSubmit}>
+            <div className={styles.detailContainerMenu}>
+              <div className={styles.headerMenu}>
+                <span className={styles.label}>Instruments</span>
+                <span className={styles.instrument}>{renderInstrumentsSelect()}</span>
+
+                <span className={styles.label}>Obs. day</span>
+                <span>{renderDateTimeRangeSelect()}</span>
+
+                <span className={styles.label}>Obs. Id</span>
+                <span className={styles.obsIdSelector}>
+                  {renderRefreshLogsButton()}
+                  {renderExposuresSelect()}
+                </span>
+                {renderImageTagsSelect()}
+              </div>
+              <div className={styles.contentMenu}>{renderTextEditor()}</div>
+              <div className={styles.footerMenu}>
+                <div>
+                  {renderMultiFileUploader()}
+                  {renderExposureFlags()}
+                  {renderJiraFields()}
+                </div>
+
+                <div className={styles.footerRightMenu}>{renderSaveButton()}</div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
   }
-}
+
+  return (
+    <div id={containerId} className={styles.container}>
+      {back && renderBackButton()}
+      <div className={styles.formWrapper}>
+        {showBulkSelector && (
+          <BulkSelect options={exposureIds} selectedOptions={log.obs_id} onSelect={setNewMessageObsId} />
+        )}
+        <form onSubmit={handleSubmit}>
+          <div className={styles.detailContainer}>
+            <div className={styles.header}>
+              {log?.id ? (
+                <span className={styles.title}>#{log.id}</span>
+              ) : (
+                <>
+                  <span className={styles.label}>Instruments</span>
+                  <span className={styles.instrument}>{renderInstrumentsSelect()}</span>
+
+                  {renderDateTimeRangeSelect()}
+
+                  <span className={styles.label}>Obs. Id</span>
+                  <span className={styles.obsIdSelector}>
+                    {renderRefreshLogsButton()}
+                    {renderExposuresSelect()}
+                  </span>
+                </>
+              )}
+
+              {log?.id && (
+                <div className={styles.rightSection}>
+                  <Button className={styles.iconBtn} title="View" onClick={() => view()} status="transparent">
+                    <CloseIcon className={styles.icon} />
+                  </Button>
+                </div>
+              )}
+            </div>
+
+            <div className={styles.header}>
+              {renderExposureFlags()}
+              {renderImageTagsSelect()}
+            </div>
+
+            <div className={styles.content}>{renderTextEditor()}</div>
+
+            <div className={styles.footer}>
+              <div>
+                {!isLogCreate && renderAttachedFiles()}
+                {renderJiraFields()}
+                {renderMultiFileUploader()}
+              </div>
+              {renderSaveButton()}
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+ExposureAdd.propTypes = {
+  /** Exposure object to which a log is going to be added */
+  exposure: PropTypes.object,
+  /** Log object */
+  log: PropTypes.object,
+  /** Flag to show the creation components */
+  isLogCreate: PropTypes.bool,
+  /** Flag to show the menu components */
+  isMenu: PropTypes.bool,
+  /** Function to go back */
+  back: PropTypes.func,
+  /** Function to view a log */
+  view: PropTypes.func,
+};
 
 export default memo(ExposureAdd);
