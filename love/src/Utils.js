@@ -2157,8 +2157,13 @@ export function checkJSONResponse(response, onSuccess) {
   }
   if (response.status === HTTP_STATUS.BAD_REQUEST) {
     return response.json().then((resp) => {
-      const errorMsg = resp.error ? `${resp.ack}: ${resp.error}` : resp.ack;
-      toast.error(errorMsg);
+      if (resp.error) {
+        toast.error(`${resp.ack}: ${resp.error}`);
+      } else if (resp.detail) {
+        toast.error(resp.detail);
+      } else {
+        toast.error(resp.ack);
+      }
       return false;
     });
   }
