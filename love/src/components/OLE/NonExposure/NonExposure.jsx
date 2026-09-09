@@ -63,6 +63,12 @@ import styles from './NonExposure.module.css';
 
 const moment = extendMoment(Moment);
 
+const MODES = {
+  VIEW: 'view',
+  ADD: 'add',
+  DEFAULT: 'default',
+};
+
 const exportedCsvParams = [
   'obs_day',
   'message_text',
@@ -74,6 +80,19 @@ const exportedCsvParams = [
   'system',
   'user_id',
 ];
+
+function getLevelIcon(value) {
+  const icon = getIconLevel(value);
+  return (
+    <span title={value >= 100 ? 'urgent' : 'info'} className={styles.levelIcon}>
+      {icon}
+    </span>
+  );
+}
+
+function renderDateTimeInput(props) {
+  return <input {...props} readOnly />;
+}
 
 function NonExposure({
   selectedDayNarrativeStart,
@@ -89,43 +108,27 @@ function NonExposure({
   selectedObsTimeLoss = false,
   selectedJiraTickets = false,
 }) {
-  const bothSelectedDays = Boolean(selectedDayNarrativeStart && selectedDayNarrativeEnd);
-
-  const [modeView, setModeView] = useState(false);
-  const [modeEdit, setModeEdit] = useState(false);
+  const [mode, setMode] = useState(MODES.DEFAULT);
   const [selectedLog, setSelectedLog] = useState();
   const [updatingLogs, setUpdatingLogs] = useState(false);
   const [lastUpdated, setLastUpdated] = useState();
   const [logs, setLogs] = useState([]);
 
-  const getLevelIcon = (value) => {
-    const icon = getIconLevel(value);
-    return (
-      <span title={value >= 100 ? 'urgent' : 'info'} className={styles.levelIcon}>
-        {icon}
-      </span>
-    );
-  };
+  const bothSelectedDays = Boolean(selectedDayNarrativeStart && selectedDayNarrativeEnd);
 
-  const renderDateTimeInput = (props) => {
-    return <input {...props} readOnly />;
-  };
-
+  // Helper functions to manage the state and actions related to narrative logs
   const goBack = () => {
-    setModeView(false);
-    setModeEdit(false);
+    setMode(MODES.DEFAULT);
     setSelectedLog(undefined);
   };
 
   const viewLog = (log) => {
-    setModeView(true);
-    setModeEdit(false);
+    setMode(MODES.VIEW);
     setSelectedLog(log);
   };
 
   const editLog = (log) => {
-    setModeEdit(true);
-    setModeView(false);
+    setMode(MODES.EDIT);
     setSelectedLog(log);
   };
 
@@ -137,154 +140,7 @@ function NonExposure({
     queryNarrativeLogs();
   };
 
-  const getHeaders = () => {
-    return [
-      {
-        field: 'date_begin',
-        title: 'Time of incident (UTC)',
-        type: 'string',
-        className: styles.tableHead,
-        render: (value) => parseTaiToUtc(value, taiToUtc).format(ISO_STRING_DATE_TIME_FORMAT),
-      },
-      {
-        field: 'time_lost',
-        title: 'Obs. Time Loss',
-        type: 'string',
-        className: styles.tableHead,
-        render: (value, row) => {
-          const dateBeginUTC = parseTaiToUtc(row.date_begin, taiToUtc);
-          const dateEndUTC = parseTaiToUtc(row.date_end, taiToUtc);
-          const dateBeginUTCString = dateBeginUTC.format(ISO_STRING_DATE_TIME_FORMAT);
-          const dateEndUTCString = dateEndUTC.format(ISO_STRING_DATE_TIME_FORMAT);
-          return (
-            <span title={formatOLETimeOfIncident(dateBeginUTCString, dateEndUTCString) + ' (UTC)'}>
-              {formatSecondsToDigital(value * 3600)}
-            </span>
-          );
-        },
-      },
-      {
-        field: 'date_begin',
-        title: (
-          <div className={styles.obsDayTableHeader}>
-            <span>Obs Day</span>
-            <div className={styles.infoIcon}>
-              <InfoIcon
-                title="This is a calculated field based on the time of the incident set by the user.
-              Constrained from 12 UTC of a day to 12 UTC of the next one."
-              />
-            </div>
-          </div>
-        ),
-        type: 'string',
-        className: styles.tableHead,
-        render: (value) => getObsDayFromDate(parseTaiToUtc(value, taiToUtc)),
-      },
-      {
-        field: 'level',
-        title: 'Level',
-        type: 'string',
-        className: styles.tableHead,
-        render: (value) => getLevelIcon(value),
-      },
-      {
-        field: 'components_json',
-        title: 'System',
-        type: 'string',
-        className: styles.tableHead,
-        render: (value) => {
-          const system = value?.name ?? '';
-          return system;
-        },
-      },
-      {
-        field: 'message_text',
-        title: 'Message',
-        type: 'string',
-        className: [styles.tableHead, styles.messageColumn].join(' '),
-        render: (value, row) => {
-          const files = getFilesURLs(row.urls);
-          // We ensure to convert Jira ticket names to hyperlinks before converting the markdown to html
-          const parsedValue = pipe(convertJiraTicketNamesToHyperlinks, jiraMarkdownToHtml)(value);
-          return (
-            <>
-              <div
-                className={['ql-editor', styles.wikiMarkupText].join(' ')}
-                dangerouslySetInnerHTML={{ __html: parsedValue }}
-              />
-              {value.length > 500 && <input className={styles.expandBtn} type="checkbox" />}
-              {files.length > 0 && (
-                <h3>
-                  Attachments:{' '}
-                  {files.map((file, index) => {
-                    return (
-                      <a key={index} target="_blank" href={file} title={file}>
-                        <ClipIcon className={styles.attachmentIcon} />
-                      </a>
-                    );
-                  })}
-                </h3>
-              )}
-            </>
-          );
-        },
-      },
-      {
-        field: 'urls',
-        title: 'Jira',
-        type: 'link',
-        className: styles.tableHead,
-        render: (value) => {
-          const link = getLinkJira(value);
-          if (link) {
-            const ticket = link.split('/').pop();
-            return (
-              <a target="_blank" href={link}>
-                {ticket}
-              </a>
-            );
-          }
-        },
-      },
-      {
-        field: 'action',
-        title: 'Action',
-        type: 'string',
-        className: styles.tableHead,
-        render: (_, row) => {
-          return (
-            <>
-              <span className={styles.margin}>
-                <Button
-                  className={styles.iconBtn}
-                  title="View"
-                  onClick={() => {
-                    viewLog(row);
-                  }}
-                  status="transparent"
-                >
-                  <AcknowledgeIcon className={styles.icon} />
-                </Button>
-              </span>
-              <span className={styles.margin}>
-                <Button
-                  className={styles.iconBtn}
-                  title="Edit"
-                  onClick={() => {
-                    editLog(row);
-                  }}
-                  status="transparent"
-                >
-                  <EditIcon className={styles.icon} />
-                </Button>
-              </span>
-            </>
-          );
-        },
-      },
-    ];
-  };
-
+  // Define functions to query narrative logs
   const queryNarrativeLogs = () => {
     const dateFrom = moment(selectedDayNarrativeStart).utc().hours(12).format(ISO_STRING_DATE_TIME_FORMAT);
     const dateTo = moment(selectedDayNarrativeEnd).utc().add(1, 'day').hours(12).format(ISO_STRING_DATE_TIME_FORMAT);
@@ -301,36 +157,22 @@ function NonExposure({
       });
   };
 
-  const parseCsvData = (data) => {
-    return data.map((row) => {
-      const obsDay = getObsDayFromDate(moment(row.date_added + 'Z'));
-      const escapedMessageText = row.message_text.replace(/"/g, '""');
-      const parsedLevel = OLE_COMMENT_TYPE_OPTIONS.find((option) => option.value === row.level)?.label ?? 'Undefined';
-      const system = row.components_json.name;
-      return {
-        ...row,
-        obs_day: obsDay,
-        message_text: escapedMessageText,
-        level: parsedLevel,
-        system,
-      };
-    });
-  };
-
-  const setQueryNarritveLogsInterval = () => {
+  const setQueryNarrativeLogsInterval = () => {
     return setInterval(() => {
       queryNarrativeLogs();
     }, LOG_REFRESH_INTERVAL_MS);
   };
 
+  // Set up interval to periodically query narrative logs
   useEffect(() => {
     if (bothSelectedDays) {
       queryNarrativeLogs();
-      const intervalId = setQueryNarritveLogsInterval();
+      const intervalId = setQueryNarrativeLogsInterval();
       return () => clearInterval(intervalId);
     }
   }, [selectedDayNarrativeStart, selectedDayNarrativeEnd]);
 
+  // Get filtered data
   const filteredData = useMemo(() => {
     let filteredData = [...logs];
 
@@ -361,8 +203,23 @@ function NonExposure({
     return filteredData;
   }, [logs, selectedCommentType, selectedSystem, selectedObsTimeLoss, selectedJiraTickets]);
 
-  // Obtain headers to create csv report
-  // obs_day, message_text and level are parsed by this.parseCsvData
+  // Obtain headers and parsed data to create csv report
+  const parseCsvData = (data) => {
+    return data.map((row) => {
+      const obsDay = getObsDayFromDate(moment(row.date_added + 'Z'));
+      const escapedMessageText = row.message_text.replace(/"/g, '""');
+      const parsedLevel = OLE_COMMENT_TYPE_OPTIONS.find((option) => option.value === row.level)?.label ?? 'Undefined';
+      const system = row.components_json.name;
+      return {
+        ...row,
+        obs_day: obsDay,
+        message_text: escapedMessageText,
+        level: parsedLevel,
+        system,
+      };
+    });
+  };
+
   const csvHeaders = filteredData.length > 0 ? exportedCsvParams.map((key) => ({ label: key, key })) : [];
   const csvData =
     filteredData.length > 0 ? parseCsvData(filteredData) : "There aren't logs created for the current search...";
@@ -372,27 +229,183 @@ function NonExposure({
       )}_to_${selectedDayNarrativeEnd.format(ISO_INTEGER_DATE_FORMAT)}.csv`
     : 'narrative_logs.csv';
 
+  // Get the list of system options for the filter
   const systemOptions = [OLE_DEFAULT_SYSTEMS_FILTER_OPTION, ...Object.keys(OLE_OBS_SYSTEMS).sort()];
 
-  return modeView && !modeEdit ? (
-    <NonExposureDetail
-      key={selectedLog?.id}
-      log={selectedLog}
-      back={goBack}
-      edit={editLog}
-      remove={removeLog}
-      taiToUtc={taiToUtc}
-    />
-  ) : modeEdit && !modeView ? (
-    <NonExposureEdit
-      key={selectedLog?.id}
-      log={selectedLog}
-      back={goBack}
-      view={viewLog}
-      save={saveLog}
-      taiToUtc={taiToUtc}
-    />
-  ) : (
+  // Define the headers for the table displaying the filtered logs
+  const headers = [
+    {
+      field: 'date_begin',
+      title: 'Time of incident (UTC)',
+      type: 'string',
+      className: styles.tableHead,
+      render: (value) => parseTaiToUtc(value, taiToUtc).format(ISO_STRING_DATE_TIME_FORMAT),
+    },
+    {
+      field: 'time_lost',
+      title: 'Obs. Time Loss',
+      type: 'string',
+      className: styles.tableHead,
+      render: (value, row) => {
+        const dateBeginUTC = parseTaiToUtc(row.date_begin, taiToUtc);
+        const dateEndUTC = parseTaiToUtc(row.date_end, taiToUtc);
+        const dateBeginUTCString = dateBeginUTC.format(ISO_STRING_DATE_TIME_FORMAT);
+        const dateEndUTCString = dateEndUTC.format(ISO_STRING_DATE_TIME_FORMAT);
+        return (
+          <span title={formatOLETimeOfIncident(dateBeginUTCString, dateEndUTCString) + ' (UTC)'}>
+            {formatSecondsToDigital(value * 3600)}
+          </span>
+        );
+      },
+    },
+    {
+      field: 'date_begin',
+      title: (
+        <div className={styles.obsDayTableHeader}>
+          <span>Obs Day</span>
+          <div className={styles.infoIcon}>
+            <InfoIcon
+              title="This is a calculated field based on the time of the incident set by the user.
+            Constrained from 12 UTC of a day to 12 UTC of the next one."
+            />
+          </div>
+        </div>
+      ),
+      type: 'string',
+      className: styles.tableHead,
+      render: (value) => getObsDayFromDate(parseTaiToUtc(value, taiToUtc)),
+    },
+    {
+      field: 'level',
+      title: 'Level',
+      type: 'string',
+      className: styles.tableHead,
+      render: (value) => getLevelIcon(value),
+    },
+    {
+      field: 'components_json',
+      title: 'System',
+      type: 'string',
+      className: styles.tableHead,
+      render: (value) => {
+        const system = value?.name ?? '';
+        return system;
+      },
+    },
+    {
+      field: 'message_text',
+      title: 'Message',
+      type: 'string',
+      className: [styles.tableHead, styles.messageColumn].join(' '),
+      render: (value, row) => {
+        const files = getFilesURLs(row.urls);
+        // We ensure to convert Jira ticket names to hyperlinks before converting the markdown to html
+        const parsedValue = pipe(convertJiraTicketNamesToHyperlinks, jiraMarkdownToHtml)(value);
+        return (
+          <>
+            <div
+              className={['ql-editor', styles.wikiMarkupText].join(' ')}
+              dangerouslySetInnerHTML={{ __html: parsedValue }}
+            />
+            {value.length > 500 && <input className={styles.expandBtn} type="checkbox" />}
+            {files.length > 0 && (
+              <h3>
+                Attachments:{' '}
+                {files.map((file, index) => {
+                  return (
+                    <a key={index} target="_blank" href={file} title={file}>
+                      <ClipIcon className={styles.attachmentIcon} />
+                    </a>
+                  );
+                })}
+              </h3>
+            )}
+          </>
+        );
+      },
+    },
+    {
+      field: 'urls',
+      title: 'Jira',
+      type: 'link',
+      className: styles.tableHead,
+      render: (value) => {
+        const link = getLinkJira(value);
+        if (link) {
+          const ticket = link.split('/').pop();
+          return (
+            <a target="_blank" href={link}>
+              {ticket}
+            </a>
+          );
+        }
+      },
+    },
+    {
+      field: 'action',
+      title: 'Action',
+      type: 'string',
+      className: styles.tableHead,
+      render: (_, row) => {
+        return (
+          <>
+            <span className={styles.margin}>
+              <Button
+                className={styles.iconBtn}
+                title="View"
+                onClick={() => {
+                  viewLog(row);
+                }}
+                status="transparent"
+              >
+                <AcknowledgeIcon className={styles.icon} />
+              </Button>
+            </span>
+            <span className={styles.margin}>
+              <Button
+                className={styles.iconBtn}
+                title="Edit"
+                onClick={() => {
+                  editLog(row);
+                }}
+                status="transparent"
+              >
+                <EditIcon className={styles.icon} />
+              </Button>
+            </span>
+          </>
+        );
+      },
+    },
+  ];
+
+  if (mode === MODES.VIEW) {
+    return (
+      <NonExposureDetail
+        key={selectedLog?.id}
+        log={selectedLog}
+        back={goBack}
+        edit={editLog}
+        remove={removeLog}
+        taiToUtc={taiToUtc}
+      />
+    );
+  }
+
+  if (mode === MODES.EDIT) {
+    return (
+      <NonExposureEdit
+        key={selectedLog?.id}
+        log={selectedLog}
+        back={goBack}
+        view={viewLog}
+        save={saveLog}
+        taiToUtc={taiToUtc}
+      />
+    );
+  }
+
+  return (
     <div className={styles.container}>
       <div className={styles.filters}>
         <DateTimeRange
@@ -465,7 +478,7 @@ function NonExposure({
         <span>Last updated: {lastUpdated ? lastUpdated.format(TIME_FORMAT) : ''}</span>
         {updatingLogs && <SpinnerIcon className={styles.spinnerIcon} />}
       </div>
-      <OrderableTable className={styles.table} headers={getHeaders()} data={filteredData} />
+      <OrderableTable className={styles.table} headers={headers} data={filteredData} />
     </div>
   );
 }
