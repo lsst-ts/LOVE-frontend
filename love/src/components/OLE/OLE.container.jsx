@@ -3,7 +3,9 @@ This file is part of LOVE-frontend.
 
 Copyright (c) 2023 Inria Chile.
 
-Developed by Inria Chile.
+Developed by Inria Chile and the Telescope and Site Software team.
+
+Developed for the Vera C. Rubin Observatory Telescope and Site Systems.
 
 This program is free software: you can redistribute it and/or modify it under 
 the terms of the GNU General Public License as published by the Free Software 
@@ -19,20 +21,18 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 import React from 'react';
 import { connect } from 'react-redux';
-import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
-import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getTaiToUtc } from 'redux/selectors';
 import OLE from './OLE';
 
 export const schema = {
-  description: 'View of Log service',
+  description: 'Logging monitor component. Includes options for viewing narrative logs and exposure logs',
   defaultSize: [77, 32],
   props: {
     title: {
       type: 'string',
       description: 'Name displayed in the title bar (if visible)',
       isPrivate: false,
-      default: 'Log Service',
+      default: 'Logging monitor',
     },
     hasRawMode: {
       type: 'boolean',
@@ -40,27 +40,11 @@ export const schema = {
       isPrivate: true,
       default: false,
     },
-    isLogCreate: {
-      type: 'boolean',
-      description: 'if this component used for create Logs',
-      isPrivate: true,
-      default: false,
-    },
   },
 };
 
-const OLEContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
-  if (props.isRaw) {
-    return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
-  }
-  return (
-    <OLE
-      isLogCreate={props.isLogCreate}
-      subscribeToStreams={subscribeToStreams}
-      unsubscribeToStreams={unsubscribeToStreams}
-      {...props}
-    />
-  );
+const OLEContainer = (props) => {
+  return <OLE taiToUtc={props.taiToUtc} />;
 };
 
 const mapStateToProps = (state) => {
@@ -70,17 +54,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  const subscriptions = [];
-  return {
-    subscriptions,
-    subscribeToStreams: () => {
-      subscriptions.forEach((s) => dispatch(addGroup(s)));
-    },
-    unsubscribeToStreams: () => {
-      subscriptions.forEach((s) => dispatch(removeGroup(s)));
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(OLEContainer);
+export default connect(mapStateToProps)(OLEContainer);

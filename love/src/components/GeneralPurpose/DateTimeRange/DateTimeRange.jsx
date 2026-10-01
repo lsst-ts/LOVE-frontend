@@ -44,10 +44,10 @@ const DateTimeRange = ({
 
   // Effect used to update startDate and endDate
   useEffect(() => {
-    if (startDate) {
+    if (startDate != null) {
       setDateStart(startDate);
     }
-    if (endDate) {
+    if (endDate != null) {
       setDateEnd(endDate);
     }
   }, [startDate, endDate]);
