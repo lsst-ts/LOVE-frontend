@@ -1,4 +1,6 @@
-FROM node:lts as builder
+FROM rubincr.lsst.org/develop-env-javascript:ec-develop
+
+RUN npm install -g yarn
 
 # Set working directory
 WORKDIR /usr/src/love
@@ -7,9 +9,6 @@ WORKDIR /usr/src/love
 COPY love/package.json .
 COPY love/yarn.lock .
 RUN yarn install
-
-# Change ownership of node_modules folder to avoid permission errors
-RUN chown -R node:node /usr/src/love/node_modules
 
 # Expose port
 EXPOSE 3000

@@ -2,6 +2,17 @@
 Version History
 ===============
 
+v6.13.0
+-------
+
+* Refactor OLE components into functional and include JiraTicketsAdd component. `<https://github.com/lsst-ts/LOVE-frontend/pull/804>`_
+
+v6.12.2
+-------
+
+* Update Dockerfile-dev to use new javascript development image as base. `<https://github.com/lsst-ts/LOVE-frontend/pull/803>`_
+* Fix Watcher component not properly passing the acknowledgedBy parameter. `<https://github.com/lsst-ts/LOVE-frontend/pull/802>`_
+
 v6.12.1
 -------
 

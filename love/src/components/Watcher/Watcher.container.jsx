@@ -62,6 +62,7 @@ const WatcherContainer = ({ alarms, user, subscribeToStream, unsubscribeToStream
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
       alarms={alarms}
+      user={user}
     />
   );
 };
