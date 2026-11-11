@@ -17,11 +17,10 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import React, { Component } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
-import lodash from 'lodash';
 import { CSVLink } from 'react-csv';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -34,292 +33,208 @@ import ManagerInterface from 'Utils';
 import { EXPOSURE_FLAG_OPTIONS } from 'Config';
 import styles from './Exposure.module.css';
 import MessageDetail from './Message/MessageDetail';
-import MessageEdit from './Message/MessageEdit';
+import ExposureAdd from './ExposureAdd';
 
 const moment = extendMoment(Moment);
 
-export default class ExposureDetail extends Component {
-  static propTypes = {
-    /** Log to edit object */
-    logDetail: PropTypes.object,
-    /** List of messages to display */
-    logMessages: PropTypes.arrayOf(PropTypes.object),
-    /** Function to go back */
-    back: PropTypes.func,
-    /** Function to handle log adding */
-    handleAddLog: PropTypes.func,
-  };
+const emptyExposure = {
+  obs_id: 'string',
+  instrument: 'LATISS',
+  observation_type: 'Engtest',
+  observation_reason: 'extra',
+  observation_day: undefined,
+};
 
-  static defaultProps = {
-    logDetail: {
-      obs_id: 'string',
-      instrument: 'LATISS',
-      observation_type: 'Engtest',
-      observation_reason: 'extra',
-      observation_day: undefined,
-    },
-    logMessages: [],
-    back: () => {},
-    handleAddLog: () => {},
-  };
+const flagsOptions = [
+  { label: 'All exposure flags', value: 'All' },
+  ...EXPOSURE_FLAG_OPTIONS.map((flag) => ({ label: flag, value: flag })),
+];
 
-  constructor(props) {
-    super(props);
-    this.id = lodash.uniqueId('exposure-detail-');
-    this.state = {
-      selectedMessage: undefined,
-      selectedFlag: 'All',
-      selectedUser: 'All',
-      selectedDateStart: null,
-      selectedDateEnd: null,
-      textFilter: '',
-      newMessage: undefined,
-      logMessages: props.logMessages ? props.logMessages : ExposureDetail.defaultProps.logMessages,
-      confirmationModalShown: false,
-      confirmationModalText: '',
-      actionModal: () => {},
-    };
-  }
+const ExposureDetail = ({ exposure = emptyExposure, logMessages: propLogMessages = [], back, add }) => {
+  const [selectedLog, setSelectedLog] = useState();
+  const [selectedFlag, setSelectedFlag] = useState('All');
+  const [selectedUser, setSelectedUser] = useState('All');
+  const [textFilter, setTextFilter] = useState('');
+  const [logMessages, setLogMessages] = useState(propLogMessages);
+  const [confirmationModalShown, setConfirmationModalShown] = useState(false);
+  const [confirmationModalText, setConfirmationModalText] = useState('');
+  const [confirmationModalAction, setConfirmationModalAction] = useState(() => {});
 
-  saveMessage(message, callback) {
-    const payload = { ...message };
+  const isEditMode = !!selectedLog;
 
-    // Clean payload
-    if (payload['tags']) {
-      payload['tags'] = payload['tags'].map((tag) => tag.id);
-    }
+  const userOptions = useMemo(() => {
+    const options = new Set();
+    logMessages.forEach((log) => options.add(log.user_id));
+    return [{ label: 'All users', value: 'All' }, ...Array.from(options).map((user) => ({ label: user, value: user }))];
+  }, [logMessages]);
 
-    // Transform &amp; back to '&'. This is a workaround due to Quill editor encoding '&'.}
-    payload['message_text'] = payload['message_text'].replace(/&amp;/g, '&');
-
-    ManagerInterface.updateMessageExposureLogs(message.id, payload).then((response) => {
-      if (response) {
-        this.setState((state) => {
-          const logMessages = state.logMessages.filter((msg) => message.id !== msg.id);
-          return {
-            logMessages: [response, ...logMessages],
-            confirmationModalShown: false,
-          };
-        });
-      }
-      if (callback) callback();
-    });
-  }
-
-  deleteMessage(message) {
+  const deleteMessage = (message) => {
     ManagerInterface.deleteMessageExposureLogs(message.id).then((response) => {
       if (response) {
-        this.setState((state) => {
-          const newLogMessages = state.logMessages.filter((msg) => message.id !== msg.id);
-          return {
-            logMessages: newLogMessages,
-            confirmationModalShown: false,
-          };
+        setLogMessages((prevLogMessages) => {
+          return prevLogMessages.filter((msg) => message.id !== msg.id);
         });
+        setConfirmationModalShown(false);
       }
     });
-  }
+  };
 
-  confirmDelete(message) {
+  const confirmDelete = (message) => {
     const modalText = (
-      <span>
-        You are about to <b>Delete</b> this message of Exposure Logs
+      <div className={styles.modalContent}>
+        You are about to <b>delete</b> a log from exposure <b>{exposure.obs_id}</b>
         <br />
         Are you sure?
-      </span>
+      </div>
     );
+    const deleteMessageThunk = () => deleteMessage(message);
+    setConfirmationModalShown(true);
+    setConfirmationModalText(modalText);
+    setConfirmationModalAction(() => deleteMessageThunk);
+  };
 
-    this.setState({
-      confirmationModalShown: true,
-      confirmationModalText: modalText,
-      actionModal: () => this.deleteMessage(message),
-    });
-  }
-
-  renderModalFooter() {
+  const renderModalFooter = () => {
     return (
       <div className={styles.modalFooter}>
-        <Button
-          className={styles.borderedButton}
-          onClick={() => this.setState({ confirmationModalShown: false })}
-          status="transparent"
-        >
+        <Button className={styles.borderedButton} onClick={() => setConfirmationModalShown(false)} status="transparent">
           Go back
         </Button>
-        <Button onClick={() => this.state.actionModal()} status="default">
+        <Button onClick={() => confirmationModalAction()} status="default">
           Yes
         </Button>
       </div>
     );
-  }
+  };
 
-  handleDateTimeRange(date, type) {
-    if (type === 'start') {
-      this.setState({ selectedDateStart: date });
-    } else if (type === 'end') {
-      this.setState({ selectedDateEnd: date });
-    }
-  }
-
-  render() {
-    const { back, logDetail, handleAddLog } = this.props;
-    const { logMessages } = this.state;
-
-    const flagsOptions = [
-      { label: 'All exposure flags', value: 'All' },
-      ...EXPOSURE_FLAG_OPTIONS.map((flag) => ({ label: flag, value: flag })),
-    ];
-    const selectedFlag = this.state.selectedFlag;
-
-    let userOptions = new Set();
-    logMessages.forEach((log) => userOptions.add(log.user_id));
-    userOptions = [
-      { label: 'All users', value: 'All' },
-      ...Array.from(userOptions).map((user) => ({ label: user, value: user })),
-    ];
-    const selectedUser = this.state.selectedUser;
-
+  // Get filtered data
+  const filteredLogMessages = useMemo(() => {
+    let filtered = logMessages;
     // Filter by exposure flag
-    let filteredLogMessages =
-      selectedFlag !== 'All' ? logMessages.filter((log) => log.exposure_flag === selectedFlag) : logMessages;
-
-    // Filter by user
-    filteredLogMessages =
-      selectedUser !== 'All' ? logMessages.filter((log) => log.user_id === selectedUser) : filteredLogMessages;
-
-    // Filter by text
-    filteredLogMessages = filteredLogMessages.filter((log) => {
-      return log.message_text.includes(this.state.textFilter) || log.id.includes(this.state.textFilter);
-    });
-
-    // Obtain headers to create csv report
-    let csvHeaders = null;
-    let csvData = "There aren't logs created for the current search...";
-    if (filteredLogMessages.length > 0) {
-      const logExampleKeys = Object.keys(filteredLogMessages?.[0] ?? {});
-      csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
-      csvData = filteredLogMessages;
+    if (selectedFlag !== 'All') {
+      filtered = filtered.filter((log) => log.exposure_flag === selectedFlag);
     }
+    // Filter by user
+    if (selectedUser !== 'All') {
+      filtered = filtered.filter((log) => log.user_id === selectedUser);
+    }
+    // Filter by text
+    if (textFilter) {
+      filtered = filtered.filter((log) => log.message_text.includes(textFilter) || log.id.includes(textFilter));
+    }
+    return filtered;
+  }, [logMessages, selectedFlag, selectedUser, textFilter]);
 
-    const duration = Moment(logDetail.timespan_end).diff(Moment(logDetail.timespan_begin), 'seconds', true);
+  // Obtain headers and parsed data to create csv report
+  const csvHeaders =
+    filteredLogMessages.length > 0 ? Object.keys(filteredLogMessages[0]).map((key) => ({ label: key, key })) : [];
+  const csvData =
+    filteredLogMessages.length > 0 ? filteredLogMessages : 'There are no logs found by the current search...';
 
-    return (
-      <>
-        <div className={styles.returnToLogs}>
-          <Button
-            status="link"
-            onClick={() => {
-              back();
-            }}
-          >
-            <span className={styles.title}>{`< Return to Observations`}</span>
-          </Button>
+  const duration = Moment(exposure.timespan_end).diff(Moment(exposure.timespan_begin), 'seconds', true);
+
+  const detailContainerId = `exposure-detail-${exposure.obs_id}`;
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.returnToLogs}>
+        <Button status="link" onClick={() => back()}>
+          <span className={styles.title}>{`< Return to Observations`}</span>
+        </Button>
+      </div>
+      <div id={detailContainerId} className={styles.detailContainer}>
+        <div className={styles.header}>
+          <span>
+            {exposure.obs_id} - Duration: {duration}
+          </span>
+          <span className={styles.rightSection}>[{exposure.observation_type}]</span>
+          <span>
+            <Button className={styles.iconBtn} title="Add Message" onClick={() => add()} status="transparent">
+              <AddIcon className={styles.icon} />
+            </Button>
+          </span>
         </div>
-        <div id={this.id} className={styles.detailContainer}>
-          <div className={styles.header}>
-            <span>
-              {logDetail.obs_id} - Duration: {duration}
-            </span>
-            <span className={styles.floatRight}>
-              <Button
-                className={styles.iconBtn}
-                title="Add Message"
-                onClick={() => {
-                  handleAddLog();
-                }}
-                status="transparent"
-              >
-                <AddIcon className={styles.icon} />
-              </Button>
-            </span>
-            <span className={styles.floatRight}>[{logDetail.observation_type}]</span>
+        <div className={styles.body}>
+          <div className={styles.title}>Messages ({logMessages ? logMessages.length : 0})</div>
+
+          <div className={styles.filters}>
+            <Select
+              options={flagsOptions}
+              option={selectedFlag}
+              onChange={({ value }) => setSelectedFlag(value)}
+              className={styles.select}
+              disabled={isEditMode}
+            />
+
+            <Select
+              options={userOptions}
+              option={selectedUser}
+              onChange={({ value }) => setSelectedUser(value)}
+              className={styles.select}
+              disabled={isEditMode}
+            />
+
+            <Input
+              type="text"
+              value={textFilter}
+              className={styles.input}
+              onChange={(e) => setTextFilter(e.target.value)}
+              placeholder="Enter a word or phrase to find messages with that text on their id or message fields"
+              disabled={isEditMode}
+            />
+
+            <div className={[styles.divExportBtn, isEditMode ? styles.hidden : ''].join(' ')}>
+              <CSVLink data={csvData} headers={csvHeaders} filename="exposureDetailLogMessages.csv">
+                <Hoverable top={true} left={true} center={true} inside={true}>
+                  <span className={styles.infoIcon}>
+                    <DownloadIcon className={styles.iconCSV} />
+                  </span>
+                  <div className={styles.hover}>Download this report as csv file</div>
+                </Hoverable>
+              </CSVLink>
+            </div>
           </div>
-          <div className={styles.body}>
-            <div className={[styles.floatLeft, styles.title].join(' ')}>
-              Messages ({logMessages ? logMessages.length : 0})
-            </div>
 
-            <div className={styles.filters}>
-              <Select
-                options={flagsOptions}
-                option={selectedFlag}
-                onChange={({ value }) => this.setState({ selectedFlag: value })}
-                className={styles.select}
-              />
-
-              <Select
-                options={userOptions}
-                option={selectedUser}
-                onChange={({ value }) => this.setState({ selectedUser: value })}
-                className={styles.select}
-              />
-
-              <Input
-                type="text"
-                value={this.state.textFilter}
-                className={styles.input}
-                onChange={(e) => this.setState({ textFilter: e.target.value })}
-                placeholder="Enter a word or phrase to find messages with that text on their id or message fields"
-              />
-              <div className={styles.divExportBtn}>
-                <CSVLink data={csvData} headers={csvHeaders} filename="exposureDetailLogMessages.csv">
-                  <Hoverable top={true} left={true} center={true} inside={true}>
-                    <span className={styles.infoIcon}>
-                      <DownloadIcon className={styles.iconCSV} />
-                    </span>
-                    <div className={styles.hover}>Download this report as csv file</div>
-                  </Hoverable>
-                </CSVLink>
-              </div>
-            </div>
-
+          <div className={styles.logsContainer}>
             {filteredLogMessages.map((message) => {
-              if (this.state.selectedMessage && this.state.selectedMessage.id === message.id) {
+              if (selectedLog && selectedLog.id === message.id) {
                 return (
-                  <MessageEdit
-                    message={this.state.selectedMessage}
-                    cancel={() => {
-                      this.setState({ selectedMessage: undefined });
-                    }}
-                    save={(message, callback) => {
-                      if (message) {
-                        this.saveMessage(message, () => {
-                          this.setState({ selectedMessage: undefined });
-                          if (callback) callback();
-                        });
-                      }
-                    }}
+                  <ExposureAdd
+                    key={exposure?.obs_id}
+                    exposure={exposure}
+                    log={selectedLog}
+                    view={() => setSelectedLog(null)}
                   />
                 );
               } else {
-                return (
-                  <MessageDetail
-                    message={message}
-                    editMessage={(messageEdit) => {
-                      this.setState({ selectedMessage: messageEdit });
-                    }}
-                    deleteMessage={(_message) => {
-                      if (_message) {
-                        this.confirmDelete(_message);
-                      }
-                    }}
-                  />
-                );
+                return <MessageDetail log={message} edit={setSelectedLog} remove={confirmDelete} />;
               }
             })}
           </div>
-          <Modal
-            displayTopBar={false}
-            isOpen={!!this.state.confirmationModalShown}
-            onRequestClose={() => this.setState({ confirmationModalShown: false })}
-            parentSelector={() => document.querySelector(`#${this.id}`)}
-            size={50}
-          >
-            {this.state.confirmationModalText}
-            {this.renderModalFooter()}
-          </Modal>
         </div>
-      </>
-    );
-  }
-}
+        <Modal
+          displayTopBar={false}
+          isOpen={confirmationModalShown}
+          onRequestClose={() => setConfirmationModalShown(false)}
+          parentSelector={() => document.querySelector(`#${detailContainerId}`)}
+          size={50}
+        >
+          {confirmationModalText}
+          {renderModalFooter()}
+        </Modal>
+      </div>
+    </div>
+  );
+};
+
+ExposureDetail.propTypes = {
+  /** Log to edit object */
+  exposure: PropTypes.object,
+  /** List of messages to display */
+  logMessages: PropTypes.arrayOf(PropTypes.object),
+  /** Function to go back */
+  back: PropTypes.func,
+  /** Function to handle log adding */
+  add: PropTypes.func,
+};
+
+export default ExposureDetail;

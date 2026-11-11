@@ -2,6 +2,11 @@
 Version History
 ===============
 
+v6.13.0
+-------
+
+* Refactor OLE components into functional and include JiraTicketsAdd component. `<https://github.com/lsst-ts/LOVE-frontend/pull/804>`_
+
 v6.12.2
 -------
 

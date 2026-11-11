@@ -18,59 +18,26 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 .container {
-  margin-left: 10px;
-  margin-right: 10px;
+  text-align: left;
 }
 
 .formWrapper {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
 }
 
-.formWrapper > :first-child {
-  display: none;
-  width: 0px;
-  transition-property: display, width;
-  transition-duration: 0.3s;
-  transition-behavior: allow-discrete;
-  overflow: hidden;
-  flex-shrink: 0;
+.formWrapper:has(> :only-child) {
+  grid-template-columns: 1fr;
 }
 
-.formWrapper > :first-child.bulkSelectorShown {
-  margin-left: var(--content-padding);
-  display: block;
-  width: 372px;
-
-  @starting-style {
-    width: 0px;
-  }
-}
-
-.formWrapper > form {
-  flex-grow: 1;
+.formWrapper:not(:has(> :only-child)) > :first-child {
+  height: 0;
+  min-height: 100%;
 }
 
 .title {
   color: white;
   font-weight: bold;
-  text-align: left;
-  font-size: 15px;
-}
-
-.returnToLogs {
-  display: flex;
-  padding-left: 0.5em;
-  min-height: 2em;
-}
-
-.margin {
-  margin-left: 3px;
-  margin-right: 3px;
-}
-
-.margin10 {
-  margin-left: 10px;
-  margin-right: 10px;
 }
 
 .filters {
@@ -103,7 +70,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 }
 
 .lastUpdated {
-  text-align: left;
   margin-bottom: 0.5em;
   color: var(--primary-font-color);
 }
@@ -113,24 +79,18 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   color: var(--secondary-font-color);
 }
 
-.label {
-  font-weight: bold;
-  color: var(--secondary-font-color);
-  text-align: left;
-  margin-left: 15px;
-}
-
-.value {
-  text-align: left;
-}
-
 .icon {
   fill: var(--default-font-color) !important;
   opacity: 1 !important;
 }
 
+.actionButtons {
+  display: flex;
+  align-items: center;
+  gap: var(--small-padding);
+}
+
 .iconBtn {
-  display: inline;
   border-radius: 50%;
   padding: 0.3em;
   height: 1.8em;
@@ -150,40 +110,43 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   justify-content: flex-end;
 }
 
+.logsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--content-padding);
+}
+
 .detailContainer {
-  /* height: 100%; */
   background-color: var(--second-tertiary-background-color);
   color: var(--base-font-color);
-  border: 1px solid hsl(199, 43%, 16%);
   border-radius: 6px;
-  display: grid;
-  box-sizing: border-box;
-  margin-left: var(--content-padding);
-  margin-right: var(--content-padding);
+  margin: 0 var(--content-padding);
+  padding: var(--content-padding) var(--small-padding);
+}
+
+.logsContainer .detailContainer {
+  margin: unset;
+  background-color: var(--second-quaternary-background-color);
+  border-radius: 0.5em;
 }
 
 .detailContainerMenu {
   padding: var(--content-padding);
 }
 
-.detailContainer,
-.detailContainerMenu {
-  text-align: left;
-}
-
 .header {
   font-weight: bold;
-  text-align: left;
-  font-size: 15px;
-  margin-top: 5px;
-  margin-left: 7px;
-  margin-right: 7px;
-  margin-bottom: 7px;
-  padding-left: 3px;
-  padding-right: 3px;
   border-bottom: 2px solid var(--secondary-font-color);
   color: var(--secondary-font-color);
-  min-height: 1.9em;
+  display: flex;
+  align-items: center;
+  gap: var(--content-padding);
+  padding: 0 var(--small-padding) var(--content-padding) var(--small-padding);
+  margin-bottom: var(--content-padding);
+}
+
+.header .rightSection {
+  margin-left: auto;
 }
 
 .headerMenu {
@@ -195,36 +158,23 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   margin-bottom: var(--content-padding);
 }
 
-.detailContainerMenu .exposuresMultiSelect {
-  max-height: 324px;
-  overflow: auto;
+.exposuresMultiSelect {
+  flex-grow: 1;
+  width: 0;
+}
+
+.exposuresMultiSelect.hideOverflow {
+  white-space: nowrap;
+  overflow: hidden;
+  /* max-width: 400px; */
 }
 
 .body {
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-top: 4px;
-  margin-bottom: 5px;
-  display: grid;
-}
-
-.floatLeft {
-  float: left;
+  padding: 0 var(--small-padding);
 }
 
 .floatRight {
   float: right;
-  margin: 3px;
-}
-
-.mb1 {
-  margin-bottom: 0.5em;
-}
-
-.inline {
-  display: inline-flex;
-  align-items: center;
-  column-gap: 10px;
 }
 
 .input {
@@ -243,16 +193,15 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .select {
   background-color: var(--second-secondary-background-color);
   color: var(--base-font-color);
-  text-align: left;
-  border-radius: 3px;
-  width: 100%;
-  border-radius: 0.2em;
+}
+
+.instrument .select {
+  width: 10em;
 }
 
 .content {
   display: flow-root;
-  padding-right: var(--content-padding);
-  padding-left: var(--content-padding);
+  padding: 0 var(--small-padding);
 }
 
 .contentMenu {
@@ -310,25 +259,28 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 .label {
   font-weight: bold;
   color: var(--secondary-font-color);
-  text-align: left;
-  margin-left: 15px;
 }
 
 .detailContainerMenu .label {
   margin-left: 0px;
 }
 
-.value {
-  text-align: left;
-}
-
 .footer {
   display: flex;
-  flex-flow: row;
-  flex-direction: row;
-  padding-top: var(--content-padding);
-  margin: var(--small-padding) var(--content-padding);
+  align-items: flex-start;
+  padding: var(--content-padding) var(--small-padding) 0 var(--small-padding);
+  margin-top: var(--content-padding);
   border-top: 2px solid var(--secondary-font-color);
+}
+
+.footer > :first-child {
+  display: flex;
+  flex-direction: column;
+  gap: var(--small-padding);
+}
+
+.footer > :last-child {
+  margin-left: auto;
 }
 
 .footerMenu {
@@ -342,10 +294,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 
 .footerMenu button {
   margin: 0;
-}
-
-.footerRight {
-  margin-left: auto;
 }
 
 .footerRightMenu {
@@ -375,27 +323,6 @@ this program. If not, see <http://www.gnu.org/licenses/>.
   margin-bottom: var(--small-padding);
 }
 
-.paddingTop {
-  padding-top: 5px;
-}
-
-.w50 {
-  width: 50%;
-}
-
-.w30 {
-  width: 30%;
-}
-
-.w20 {
-  width: 20%;
-}
-
-.header.inline .value {
-  width: 15em;
-  padding-bottom: 5px;
-}
-
 .rangeDateOnly {
   width: 15ch;
 }
@@ -422,6 +349,10 @@ th.tableHead {
   margin-left: auto;
 }
 
+.divExportBtn.hidden {
+  visibility: hidden;
+}
+
 .infoIcon {
   position: relative;
 }
@@ -441,6 +372,10 @@ th.tableHead {
   background-color: var(--second-senary-background-dimmed-color);
 }
 
+.modalContent {
+  text-align: center;
+}
+
 .modalFooter {
   display: flex;
   justify-content: space-between;
@@ -449,16 +384,6 @@ th.tableHead {
 
 .capitalize {
   text-transform: capitalize;
-}
-
-.iconFlag {
-  padding: 0.1em;
-  height: 1.5em;
-  width: 1.5em;
-}
-
-.margin3 {
-  margin: 3px;
 }
 
 .badge {
@@ -475,6 +400,15 @@ th.tableHead {
 .flags {
   display: flex;
   align-items: center;
+  gap: var(--small-padding);
+}
+
+.flags .select {
+  width: 9em;
+}
+
+.tags {
+  flex-grow: 1;
 }
 
 .refreshDataBtn {
@@ -487,14 +421,6 @@ th.tableHead {
 .refreshIcon {
   height: var(--font-size-small);
   width: var(--font-size-small);
-}
-
-.exposuresSelect {
-  display: flex;
-}
-
-.exposuresSelect :first-child {
-  flex-grow: 1;
 }
 
 .dateTimeRangeStyle :global(.rdtPicker) {
@@ -561,17 +487,17 @@ th.tableHead {
 }
 
 .inputError {
-  border-color: var(--status-alert-color);
+  border: 1px solid var(--status-alert-color) !important;
 }
 
 .obsIdSelector {
   display: flex;
+  flex-grow: 1;
 }
 
 /* Following is related to the use of the RichTextEditor component */
 .wikiMarkupText {
   white-space: pre;
-  text-align: left;
   overflow-x: auto;
 }
 
