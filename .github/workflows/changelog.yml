@@ -4,16 +4,10 @@ on:
     types: [assigned, opened, synchronize, reopened, labeled, unlabeled]
     branches:
       - develop
+permissions:
+  contents: read
 jobs:
   build:
     name: Check Actions
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: Changelog check
-        uses: Zomzog/changelog-checker@v1.2.0
-        with:
-          fileName: CHANGELOG.rst
-          checkNotification: Simple
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'skip-changelog') }}
+    uses: lsst-ts/tssw_workflows/.github/workflows/news_creation.yaml@main

@@ -1,0 +1,36 @@
+[tool.towncrier]
+directory = "doc/news"
+filename = "version_history.rst"
+title_format = "{version} ({project_date})"
+underlines = ["-", "~", "^"]
+issue_format = "`{issue} <https://rubinobs.atlassian.net/browse/{issue}>`__"
+
+[[tool.towncrier.type]]
+directory = "feature"
+name = "New Features"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "bugfix"
+name = "Bug Fixes"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "perf"
+name = "Performance Enhancement"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "doc"
+name = "Documentation"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "removal"
+name = "API Removal or Deprecation"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "misc"
+name = "Other Changes and Additions"
+showcontent = true
