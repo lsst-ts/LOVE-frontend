@@ -6,8 +6,29 @@ on:
       - develop
 permissions:
   contents: read
+env:
+  PYTHON_VERSION: '3.13'
 jobs:
   build:
     name: Check Actions
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'skip-changelog') }}
-    uses: lsst-ts/tssw_workflows/.github/workflows/news_creation.yaml@main
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Towncrier
+        run: conda install -c conda-forge towncrier=23 -y
+
+      - name: Check release notes
+        run: towncrier check --compare-with origin/develop --config towncrier.toml
