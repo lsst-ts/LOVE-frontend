@@ -1,3 +1,6 @@
+default_language_version:
+  node: "24"
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
@@ -25,4 +28,7 @@ repos:
         - '@babel/core@^7.17.10'
         - '@babel/eslint-parser@^7.17.0'
         - '@babel/preset-react@^7.16.7'
-        - 'eslint-config-airbnb@^18.1.0'
+        - 'eslint-config-airbnb-base@15.0.0'
+        - 'eslint-plugin-import@2.32.0'
+        - 'eslint-plugin-only-warn@1.1.0'
+        - 'eslint-plugin-react@7.37.5'

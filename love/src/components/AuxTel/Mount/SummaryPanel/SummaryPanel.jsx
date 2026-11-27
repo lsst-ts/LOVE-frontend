@@ -77,8 +77,8 @@ export default class SummaryTable extends Component {
       eStopTriggered === true
         ? E_STOP_STATE.TRIGGERED
         : eStopTriggered === false
-          ? E_STOP_STATE.NOT_TRIGGERED
-          : E_STOP_STATE.UNKNOWN;
+        ? E_STOP_STATE.NOT_TRIGGERED
+        : E_STOP_STATE.UNKNOWN;
 
     //ATMCS
     const m3State = m3RotatorStateMap[this.props.m3State] || m3RotatorStateMap[0];
