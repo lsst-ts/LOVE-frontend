@@ -791,6 +791,7 @@ export const getMountSubscriptions = (index) => {
     `event-ATHexapod-${index}-readyForCommand`,
     `telemetry-ATHexapod-${index}-positionStatus`,
     // ATPneumatics
+    `event-ATPneumatics-${index}-eStop`,
     `event-ATPneumatics-${index}-m1CoverState`,
     `event-ATPneumatics-${index}-m1SetPressure`,
     `event-ATPneumatics-${index}-mainValveState`,
@@ -833,6 +834,7 @@ export const getMountState = (state, index) => {
   const positionLimits = mountData[`event-ATMCS-${index}-positionLimits`];
   const mountEncoders = mountData[`telemetry-ATMCS-${index}-mountEncoders`];
   const hexapodInPosition = mountData[`event-ATHexapod-${index}-inPosition`];
+  const eStop = mountData[`event-ATPneumatics-${index}-eStop`];
   const m1CoverState = mountData[`event-ATPneumatics-${index}-m1CoverState`];
   const mainValveState = mountData[`event-ATPneumatics-${index}-mainValveState`];
   const instrumentState = mountData[`event-ATPneumatics-${index}-instrumentState`];
@@ -853,6 +855,7 @@ export const getMountState = (state, index) => {
       ? mountData[`telemetry-ATHexapod-${index}-positionStatus`].reportedPosition
       : 'Unknown',
     // ATPneumatics
+    eStopTriggered: eStop?.[eStop.length - 1]?.triggered?.value,
     m1CoverState: m1CoverState ? m1CoverState[m1CoverState.length - 1].state.value : 0,
 
     m1SetPressure: mountData[`event-ATPneumatics-${index}-m1SetPressure`]

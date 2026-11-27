@@ -25,6 +25,7 @@ import {
   m3PortSelectedStateMap,
   m3InPositionStateMap,
   atPneumaticsMirrorCoverStateMap,
+  E_STOP_STATE,
   mainValveStateMap,
   instrumentStateMap,
   nasmythRotatorInPositionStateMap,
@@ -56,6 +57,7 @@ export default class SummaryTable extends Component {
     dropoutDoorState: PropTypes.number,
     mainDoorState: PropTypes.number,
     mountTrackingState: PropTypes.number,
+    eStopTriggered: PropTypes.bool,
     systemAirPressure: PropTypes.number,
   };
 
@@ -70,6 +72,14 @@ export default class SummaryTable extends Component {
   };
 
   render() {
+    const { eStopTriggered } = this.props;
+    const eStopState =
+      eStopTriggered === true
+        ? E_STOP_STATE.TRIGGERED
+        : eStopTriggered === false
+        ? E_STOP_STATE.NOT_TRIGGERED
+        : E_STOP_STATE.UNKNOWN;
+
     //ATMCS
     const m3State = m3RotatorStateMap[this.props.m3State] || m3RotatorStateMap[0];
     const m3PortSelected = m3PortSelectedStateMap[this.props.m3PortSelected] || m3PortSelectedStateMap[0];
@@ -180,7 +190,12 @@ export default class SummaryTable extends Component {
 
     return (
       <SummaryPanel>
-        {/* Dome */}
+        <Title>E-Stop</Title>
+        <Value>
+          <StatusText status={eStopState.status} flash={eStopState === E_STOP_STATE.TRIGGERED}>
+            {eStopState.label}
+          </StatusText>
+        </Value>
         <Title wide>ATMCS</Title>
         <Label>M3 state</Label>
         <Value>

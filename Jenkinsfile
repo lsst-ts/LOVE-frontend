@@ -16,35 +16,29 @@ properties(
 )
 
 pipeline {
-  agent{
+  agent {
     docker {
       alwaysPull true
-      image 'lsstts/develop-env:develop'
-      args "--entrypoint=''"
+      image 'rubincr.lsst.org/develop-env-node:develop'
     }
   }
   environment {
-    dockerImage = ""
-    // LTD credentials
-    user_ci = credentials('lsst-io')
-    LTD_USERNAME="${user_ci_USR}"
-    LTD_PASSWORD="${user_ci_PSW}"
+    NODE_VERSION = '24'
   }
   stages {
     stage("Run pre-commit hooks and tests") {
       steps {
-        script {
-          sh """
-            source /home/saluser/.setup_dev.sh
+        sh '''#!/bin/bash
+          set -eo pipefail
+          export NVM_DIR=/home/saluser/.nvm
+          . "$NVM_DIR/nvm.sh" --no-use
+          nvm install "$NODE_VERSION"
 
-            cd ./love
-            
-            yarn install
-            pre-commit run --all-files
-            
-            CI=true yarn test --testPathPattern="(redux|Utils.test.js)"
-          """
-        }
+          (cd love && npm exec --yes --package=yarn@1.22.22 -- yarn install --frozen-lockfile --non-interactive)
+          /home/saluser/.local/bin/pre-commit run --all-files
+          cd love
+          CI=true npm test -- --testPathPattern='(redux|Utils.test.js)'
+        '''
       }
     }
 
@@ -56,27 +50,18 @@ pipeline {
         }
       }
       steps {
-        script {
-          sh """
-            source /home/saluser/.setup_dev.sh
+        sh '''#!/bin/bash
+          set -eo pipefail
+          export NVM_DIR=/home/saluser/.nvm
+          . "$NVM_DIR/nvm.sh" --no-use
+          nvm use "$NODE_VERSION"
 
-            # Remove old docs folder
-            rm -rf ./docs
-
-            # Install dependencies
-            cd ./love
-
-            npm install
-
-            # Create docs
-            npx styleguidist build
-
-            cd ..
-
-            # Upload docs
-            pip install ltd-conveyor
-            ltd upload --product love-frontend --git-ref ${GIT_BRANCH} --dir ./docs
-          """
+          rm -rf ./docs
+          cd love
+          npm run guide:build
+        '''
+        withCredentials([usernamePassword(credentialsId: 'lsst-io', usernameVariable: 'LTD_USERNAME', passwordVariable: 'LTD_PASSWORD')]) {
+          sh 'uvx --from ltd-conveyor ltd upload --product love-frontend --git-ref "$GIT_BRANCH" --dir ./docs'
         }
       }
     }

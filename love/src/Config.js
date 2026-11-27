@@ -3172,6 +3172,12 @@ export const cameraStates = {
 };
 
 // ATPneumatics
+export const E_STOP_STATE = {
+  TRIGGERED: { label: 'TRIGGERED', status: 'alert' },
+  NOT_TRIGGERED: { label: 'NOT TRIGGERED', status: 'ok' },
+  UNKNOWN: { label: 'UNKNOWN', status: 'invalid' },
+};
+
 export const atPneumaticsMirrorCoverStateMap = {
   1: 'DISABLED',
   2: 'ENABLED',

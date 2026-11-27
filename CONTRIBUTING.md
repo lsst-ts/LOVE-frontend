@@ -2,24 +2,41 @@
 
 When contributing to this repository, please consider the following aspects
 
+## Recording changes for a release
+
+Add a Towncrier news fragment to each PR that changes what ships in the frontend. From the repository root, use Towncrier 26.9.0. You can install it with `uv tool install towncrier==26.9.0` or with `python -m pip install towncrier==26.9.0` in a virtual environment.
+
+```sh
+towncrier create SSW-12345.feature.rst
+```
+
+Use the Rubin Jira ticket key and a category such as `feature` or `bugfix`. If there is no matching ticket, use `towncrier create +.feature.rst` to create an unlinked fragment. Describe the change from the operator's perspective and commit the fragment in [`doc/news/`](doc/news/README.rst) with your PR. Use the `skip-changelog` label for PRs that need no release note.
+
 ## Making a release (creating a tag)
 
-In order to make a release of the frontend, you need to create a tag in the repository. The tag should be named `vX.Y.Z` where `X.Y.Z` is the version number. The version number should follow [semantic versioning](https://semver.org/). The tag should be created from the `master` branch.
+For guidance on choosing a version and tagging prereleases and stable releases, see the [TSSW Developer Guide on versioning](https://tssw-developer.lsst.io/development-guidelines/versioning.html).
 
-Before creating the tag, make sure to:
-- Create a PR that updates the `love/package.json` file with the new version number `X.Y.Z`.
-- Check the `CHANGELOG.md` file is updated with the changes that are going to be released.
+1. Create a release branch from up-to-date `develop`. Choose the next [semantic version](https://semver.org/) and set it in `love/package.json`.
+2. From the repository root, preview and generate the release notes for that version:
 
-Once the PR is merged, create the tag with the following command:
+   ```sh
+   version=$(node -p 'require("./love/package.json").version')
+   towncrier build --version "$version" --draft
+   towncrier build --version "$version" --yes
+   ```
 
-```
+3. Review and commit the manifest bump, the update to `version_history.rst`, and the removal of the consumed fragments. Open a PR to `develop`. Towncrier accepts the changelog update for a release PR.
+4. After merging the release PR, merge `develop` into `main` and tag the release with the exact version in `love/package.json`. The tag is the release input for the Docker cycle build.
+
+```sh
 git checkout develop
-git pull
+git pull --ff-only
 git checkout main
-git pull
+git pull --ff-only
 git merge --no-ff develop
-git tag -a vX.Y.Z -m "Release vX.Y.Z"
-git push origin vX.Y.Z
+version=$(node -p 'require("./love/package.json").version')
+git tag -a "v$version" -m "Release v$version"
+git push origin "v$version"
 ```
 
 ## Adding a new Container component
